@@ -4,6 +4,19 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Development server
 
+### Clone & Initial Setup:
+
+```
+git clone git@github.com:canyaio/can-work.git
+cd can-work
+npm install
+cp src/environments/environment.ts.sample src/environments/environment.ts
+```
+
+Now, go to your firebase account and obtain the database credentials, and update the `firebase` block in `src/environments/environment.ts`
+
+### Start your app
+
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
