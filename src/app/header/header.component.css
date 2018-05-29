@@ -1,0 +1,16 @@
+.flex-icon span {
+    margin-top: -4px !important;
+}
+/* 
+.flex-icon span:hover {
+    background-image: url('/assets/img/CONTENT CREATORS.svg');
+    background-size: auto 60%;
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    border-radius: 5px;
+}
+
+
+.flex-icon span:hover::after { 
+    content: "";
+} */

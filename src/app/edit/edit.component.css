@@ -1,0 +1,17 @@
+input[type="color"] {
+	-webkit-appearance: none;
+	width: 50px;
+	height: 30px;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+	padding: 0px;
+}
+input[type="color"]::-webkit-color-swatch {
+	border: 1px solid #e8e8e8;
+	border-radius: 2px;
+}
+
+.form-color {
+    display: inline-block;
+    border: none !important;
+}

@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+* {
+-webkit-box-sizing: border-box;
+        box-sizing: border-box;
+}
+
+/* **
+-- BotUI styling
+** */
+.botui-container,
+.botui-messages-container {
+    background: transparent;
+}
+
+.human.botui-message-content.text {
+    background: white;
+    color: #33ccff;
+}
+
+.botui-message-content {
+    font-size: 18px;
+    font-size: 1rem;
+    font-family: 'Montserrat';
+    background: #33ccff;
+    color: white;
+}
+
+.botui-messages-container {
+    overflow-y: auto;
+}
+
+.botui-actions-buttons-button {
+    background-color: #33ccff;
+    font-size: 21.599px;
+    font-size: 1.2rem ;
+    font-family: 'Montserrat';
+    font-weight: bold;
+    -webkit-transition: 300ms ease-in-out;
+    transition: 300ms ease-in-out
+}
+
+.botui-actions-buttons-button:focus {
+color: #33ccff;
+background-color: white;
+}
+
+.botui-actions-buttons-button:not(:focus) {
+-webkit-box-shadow: none;
+        box-shadow: none;
+}
+
+.botui-actions-text-input {
+    color: #CDACE0;
+    font-size: 21.599px;
+    font-size: 1.2rem ;
+    border-bottom: solid 2px currentColor;
+    font-family: 'Montserrat';
+    font-weight: bold;
+    -webkit-transition: 300ms ease-in-out;
+    transition: 300ms ease-in-out
+}
+
+.botui-actions-text-input:not(:focus) {
+font-style: italic;
+}
+
+.botui-action-text-icon {
+    color: currentColor;
+}
+
+/* **
+-- Global styling
+** */
+html {
+    font-size: 18px;
+}
+
+body {
+    margin: 0 auto;
+    font-size: 18px;
+    font-size: 1rem;
+    font-family: 'Montserrat';
+    background-color:  white;
+    color: #FFFFFF;
+}
+
+header {
+	text-align: center;
+}
+
+.logo-wrapper {
+	display: -webkit-inline-box;
+	display: -ms-inline-flexbox;
+	display: inline-flex;
+	-webkit-box-pack: center;
+	    -ms-flex-pack: center;
+	        justify-content: center;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
+	margin: -30px 50px 0;
+	font-style: italic;
+}
+
+.logo {
+  max-width: 200px;
+  height: auto;
+  filter: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="filter"><feColorMatrix type="matrix" color-interpolation-filters="sRGB" values="0.2126 0.7152 0.0722 0 0 0.2126 0.7152 0.0722 0 0 0.2126 0.7152 0.0722 0 0 0 0 0 1 0" /><feComponentTransfer color-interpolation-filters="sRGB"><feFuncR type="linear" slope="4.5" /><feFuncG type="linear" slope="4.5" /><feFuncB type="linear" slope="4.5" /></feComponentTransfer></filter></svg>#filter');
+  -webkit-filter: grayscale(1) brightness(450%);
+          filter: grayscale(1) brightness(450%);
+}
+
+.bot-wrapper {
+	margin: 0 25%;
+}
+
+  
+  

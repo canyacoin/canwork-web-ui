@@ -1,0 +1,7 @@
+[min-340] {
+    min-height: 340px;
+}
+
+.card {
+    border-radius: 5px !important;
+}

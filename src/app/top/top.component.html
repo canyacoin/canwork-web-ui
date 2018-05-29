@@ -1,0 +1,125 @@
+<!-- Topbar -->
+<nav class="topbar topbar-expand-md topbar-sticky" id="section-top">
+  <div class="container">
+    
+    <div class="topbar-left">
+      <button class="topbar-toggler text-gray">&#9776;</button>
+      <a class="topbar-brand" [routerLink]="['/home']">
+        <!-- <img class="logo-inverse" src="assets/img/logo.svg" width="136px" alt="logo"> -->
+        <img class="logo-default" src="assets/img/logo.svg" width="auto" height="36px" alt="logo">
+      </a>
+
+      <!-- *ngIf="currentUser" -->
+      <div class="search-container mx-40 hidden-sm-down">
+        
+        <!-- <form class="form-inline justify-content-center" method="post" (ngSubmit)="onSubmit(inputSearch.value);">
+            
+            <input #inputSearch
+            placeholder="Find services..." 
+            (keyup)="onKeyUp(inputSearch.value);"
+            type="text" class="search" size="30">
+            <!-- <img src="assets/img/search.svg" class="search-icon"> -->
+            <!-- style="display: none;" --
+              <button class="btn" 
+                style="border: none;"
+                type="submit">Search</button>
+            
+        </form> -->
+
+        <!-- <form class="form-inline form-round justify-content-center justify-content-lg-end" action="" method="post" target="_blank">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+              <input type="text" name="EMAIL" class="form-control" placeholder="Email Address">
+              <span class="input-group-btn">
+                <button class="btn btn-info">Subscribe</button>
+              </span>
+            </div>
+          </form> -->
+
+        <form class="form-inline justify-content-center justify-content-lg-end" method="post" (ngSubmit)="onSubmit(inputSearch.value);">
+          <div class="input-group">
+            <!-- <span class="input-group-addon" border-none><img src="assets/img/search-icon.svg" class="search-icon" border-5></span> -->
+            <input #inputSearch
+              (keyup)="onKeyUp(inputSearch.value);"
+              (focus)="onFocus(inputSearch.value);"
+              (blur)="onBlur(inputSearch.value);"
+              type="text" 
+              size="20"
+              class="search-input" 
+              placeholder="Find services...">
+            <span class="input-group-btn">
+              <!-- <img src="assets/img/search-icon.svg" class="search-icon"> -->
+              <button class="btn btn-default btn-search" type="submit" border-none>
+                <img src="assets/img/search-icon.svg" class="search-icon" border-5>
+              </button>
+            </span>
+          </div>
+        </form>
+
+      </div>
+
+    </div>
+
+    <div class="topbar-right">
+      <ul class="topbar-nav nav">
+        <!-- *ngIf="currentUser" -->
+        <li class="nav-item"><a class="nav-link" [routerLink]="['/home']" (click)="closeMenu();" data-scrollto="section-home">Home</a></li>
+        <li *ngIf="!currentUser" class="nav-item"><a class="nav-link" href="https://blog.canya.com.au/" target="_blank">Blog</a></li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/tools']" style="opacity: 1.0;" (click)="closeMenu();">
+            <img class="mb-5" src="assets/img/CanApps.svg" width="auto" height="18px">
+          </a>
+        </li>
+        <!-- <li class="nav-item"><a class="nav-link" href="https://forum.canya.io" target="_blank">Forum</a></li> -->
+        <!-- <span class="badge badge-round badge-danger"></span> -->
+        <li *ngIf="currentUser" class="nav-item"><a class="nav-link" [routerLink]="['/chat']" (click)="closeMenu();">Requests</a></li>
+       
+        <li *ngIf="currentUser" class="nav-item"><a class="nav-link" [routerLink]="['/profile']" (click)="closeMenu();">Profile</a></li>
+
+        <!-- <li *ngIf="currentUser" class="nav-item"><a class="nav-link" [routerLink]="['/chat']" (click)="closeMenu();">Requests</a></li> -->
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="https://t.me/canyacoin" target="_blank">
+            Telegram
+            <i class="fa fa-telegram" aria-hidden="true"></i>
+          </a>
+        </li> -->
+      </ul>
+      &nbsp;&nbsp;
+      <!-- -->
+      <!-- <a class="btn btn-sm btn-white mr-4" href="#">JOIN US</a> -->
+      <!-- (click)="onConnect();" -->
+      <a *ngIf="!currentUser" 
+        [routerLink]="['/login']"
+        class="btn btn-canya-tools btn-sm text-white hidden-sm-down">
+        Join
+      </a>
+
+      <div *ngIf="currentUser" class="btn-group">
+        <a [routerLink]="['/console']" class="nav-link icon-bot hidden-lg-down">
+          <!-- <img #bot src="assets/img/bot-hover.svg" width="auto" height="21px" alt="CanYaBot" style="margin-top: -3px;"> -->
+        </a>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;
+
+        <a href="" data-toggle="modal" data-target="#areYouSureLogoutModal" class="nav-link icon-sign-out hidden-lg-down"></a>
+      </div>
+
+      <!-- <div *ngIf="currentUser" class="btn-group">
+        <!-- data-toggle="dropdown" --
+        <a [routerLink]="['/console']" class="nav-link icon-bot">
+          <!-- <i class="ti-bell" aria-hidden="true"></i> --
+        </a>
+        <!-- &nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="" (click)="onLogout();" class="nav-link icon-sign-out">
+          <!-- <i class="fa fa-sign-out" aria-hidden="true"></i> --
+        </a> -->
+        <!-- <div class="dropdown-menu">
+          
+        </div>--
+      </div> -->
+        
+    </div>
+
+  </div>
+</nav>
+<!-- END Topbar -->

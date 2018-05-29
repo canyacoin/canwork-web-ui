@@ -1,0 +1,120 @@
+<app-top style="display: block; height: 90px;"></app-top>
+
+<!-- Main container -->
+<main class="main-content">
+
+  <!--
+  |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+  | Bot
+  |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
+  !-->
+  <!-- @logoAnimation -->
+  <section class="section bg-white my-1 py-0">
+    <div class="container">
+      <div class="row align-items-center pb-5">
+        <div class="col-12 text-center">
+          <h2 *ngIf="logo" class="fw-300">Welcome to
+            <img class="logo-default" src="assets/img/logo.svg" width="auto" height="28px" alt="logo" style="margin-top: -8px;">
+          </h2>
+
+          <a href="javascript:history.back()">
+            <i class="ti-angle-left text-default fs-24" style="position: fixed; top: 105px; left: 18%;"></i>
+          </a>
+          <h2 *ngIf="header" class="fw-300">{{ header }}</h2>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-5">
+
+          <!-- [@listAnimation]="bot.length" -->
+          <div #botui class="botui botui-container bot-wrapper" [@listAnimation]="bot.length">
+
+            <ng-template ngFor let-i="index" let-item [ngForOf]="bot">
+
+              <div class="botui-messages-container">
+                <div *ngIf="!item.typing && item.message" class="botui-message">
+                  <div class="botui-message-content text" [ngClass]="{'from-bot': item.from === 'bot', 'from-me': item.from === 'me'}">
+                    <span [innerHTML]="(item.innerHTML || item.message) | sanitizeHtml">{{ item.message }}</span>
+                    <img *ngIf="item.image" class="botui-message-content-image" [src]="item.image" alt="CanYa">
+                  </div>
+                </div>
+
+                <div *ngIf="item.typing" class="botui-message">
+                  <div class="botui-message-content loading">
+                    <i class="dot"></i>
+                    <i class="dot"></i>
+                    <i class="dot"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="!item.typing && item.input" class="botui-actions-container">
+                <div class="">
+                  <form #frm (ngSubmit)="onAction(i, item.field, botInput.value)" class="botui-actions-text">
+                    <i class="botui-icon botui-action-text-icon" [ngClass]="item.icon"></i>
+                    <input #botInput 
+                      [type]="item.type" 
+                      [placeholder]="item.placeholder" 
+                      [size]="item.size" 
+                      [attr.minlength]="item.minlength"
+                      [attr.maxlength]="item.maxlength || 256"
+                      [attr.pattern]="item.pattern"
+                      (keyup)="onKeyUp(botInput, btnSubmit);"
+                      class="botui-actions-text-input" autofocus="autofocus" required>
+                    <!-- [disabled]="!botInput.validity.valid"  -->
+                    <!--  class="botui-actions-text-submit" -->
+                    <button #btnSubmit type="submit" class="botui-actions-buttons-button mt-2 mx-2 mb-2">
+                      <span>NEXT</span>
+                    </button>
+                  </form>
+                </div>
+              </div>
+
+              <div *ngIf="!item.typing && (item.actions && item.actions.length > 0)" class="container botui-actions-container">
+                <!-- style="overflow-x: scroll;" flex-row flex-nowrap -->
+                <div class="row">
+                  <div *ngFor="let action of item.actions" class="col-auto botui-actions-buttons">
+                    <button *ngIf="!action.innerHTML"
+                      (click)="onAction(i, item.field, action.colors || action.caption);" 
+                      type="button" class="botui-actions-buttons-button mx-2 mb-2">
+                      <i [class]="action.icon"></i>
+                      {{ action.hideCaption ? '':action.caption }}
+                    </button>
+
+                    <button 
+                      *ngIf="action.innerHTML"
+                      (click)="onAction(i, item.field, action.colors || action.caption);" 
+                      [innerHTML]="(action.innerHTML || action.caption) | sanitizeHtml"
+                      type="button" class="botui-actions-buttons-button mx-2 mb-2">
+                    </button>
+
+                  </div>
+                  <!-- <div id="scroll-cover">&nbsp;</div> -->
+                </div>
+              </div>
+
+            </ng-template>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<!-- Scroll to bottom section -->
+<div id="section-end">&nbsp;</div>

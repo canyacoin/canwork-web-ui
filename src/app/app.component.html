@@ -1,0 +1,259 @@
+<router-outlet></router-outlet>
+
+<!-- Browser Modal -->
+<div class="modal fade" id="web3NotAvailable" tabindex="-1" role="dialog" data-keyboard="true" data-backdrop="true" aria-labelledby="web3NotAvailableLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title" id="subscribeModalLabel">Oops!</h6>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- <h6 class="text-dark fs-14 fw-600"></h6> -->
+        <div class="d-flex flex-column justify-content-center align-self-center align-items-center text-center my-10">
+          <h2 class="fw-400 mb-0">Install MetaMask Wallet</h2>
+          <img src="assets/img/metamask.svg" width="140px" height="140px">
+          <h4 class="fw-300 mb-10">Why MetaMask needed!?</h4>
+          <div class="alert alert-info" role="alert">
+              With MetaMask you can interract with the Ethereum network. Moreover, the benefit of MetaMask is that
+              <strong>YOU are storing your private keys</strong> instead of letting us to hold to your keys.
+          </div>
+
+          <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn" target="_blank">
+            <img src="assets/img/metamask.png" width="auto" height="64px" alt="Install MetaMask">
+          </a>
+
+          <small class="lead text-danger">
+            <i class="fa fa-exclamation-triangle"></i>&nbsp;
+            <strong>IMPORTANT:</strong> remember to switch your MetaMask Wallet to Main Ethereum Network.
+          </small>
+
+          <div class="row my-0 py-0">
+
+              <div class="col-12 col-md-6 col-xl-4 feature-1">
+                <p class="feature-icon">
+                  <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn" target="_blank">
+                    <img src="assets/img/metamask.png" width="auto" height="64px" alt="Install MetaMask">
+                  </a>
+                </p>
+                <p class="fs-60 fw-900 opacity-10">1</p>
+                <h5>Install MetaMask on a desktop browser like&nbsp;<img src="assets/img/chrome.svg" width="18px" height="18px" style="margin-top: -3px;">&nbsp;<span class="fw-500">Chrome</span>.</h5>
+                <!-- <p class="text-muted"></p> -->
+                <!-- <div class="text-center gap-multiline-items-2 my-30">
+                    <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn" target="_blank">
+                      <img class="img-fadein" src="assets/img/metamask.png" alt="Install MetaMask">
+                    </a>
+                  </div> -->
+              </div>
+      
+              <div class="col-12 col-md-6 col-xl-4 feature-1">
+                <p class="feature-icon">
+                  <img src="assets/img/metamask-action.png" width="auto" height="64px" alt="MetaMask Wallet">
+                </p>
+                <p class="fs-60 fw-900 opacity-10">2</p>
+                <h5>Open <img src="assets/img/metamask-icon.png" width="18px" height="18px" style="margin-top: -3px;">&nbsp;MetaMask and create your Ethereum address where you'll deposit your ETH or CAN.</h5>
+                <p class="text-muted"></p>
+              </div>
+      
+              <div class="col-12 col-md-6 col-xl-4 feature-1">
+                <p class="feature-icon">
+                  <img src="assets/img/metamask-pay.png" width="auto" height="64px" alt="MetaMask Wallet">
+                </p>
+                <p class="fs-60 fw-900 opacity-10">3</p>
+                <h5>Unlock your MetaMask Wallet (if needed) and reload the page.</h5>
+                <p class="text-muted"></p>
+              </div>
+      
+            </div>
+
+
+          <!-- <h4 class="fw-300 mb-10">You can only use CanYa on a desktop browser like
+            <img src="assets/img/chrome.svg" width="18px" height="18px" style="margin-top: -3px;"> Chrome.</h4> -->
+          <!-- <small class="lead text-danger">
+            <i class="fa fa-exclamation-triangle"></i>&nbsp;Seems you're using a PRE-ALPHA version. Please, remember to switch your MetaMask Wallet to Ropsten
+            Testnet.
+          </small> -->
+        </div>
+        <div id="accordion" role="tablist" aria-multiselectable="true">
+          <div class="card">
+            <div class="card-header bg-lighter" role="tab" id="headingOne">
+              <h5 class="mb-0">
+                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                  What do I need to use CanYa?
+                </a>
+              </h5>
+            </div>
+            <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+              <div class="card-block">
+                <p class="lead">Here’s what you need to get started:</p>
+                <ul>
+                  <li>A computer or laptop running the desktop version of Chrome.</li>
+                  <li>MetaMask, a digital wallet used specifically with web apps (
+                    <a href="https://metamask.io/" target="_blank">Install MetaMask</a> ).</li>
+                  <li>CanYaCoins, a form of digital payment that powers CanYa.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header bg-lighter" role="tab" id="headingTwo">
+              <h5 class="mb-0">
+                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  Installing MetaMask
+                </a>
+              </h5>
+            </div>
+            <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+              <div class="card-block">
+                <p class="lead">To use CanYa, you will need to install MetaMask, a digital wallet. You will need to put money in it to make
+                  your first purchase.</p>
+                <p class="lead text-danger">
+                  <strong>Note:</strong> A digital wallet like MetaMask acts like a bank account—treat it with respect and make sure
+                  you don’t forget your password or the seed words.</p>
+                <iframe width="100%" height="315" src="https://www.youtube.com/embed/tfETpi-9ORs?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen=""></iframe>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header bg-lighter" role="tab" id="headingThree">
+              <h5 class="mb-0">
+                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  Why is MetaMask locked?
+                </a>
+              </h5>
+            </div>
+            <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+              <div class="card-block">
+                <p class="lead">Occasionally the page displays a lock screen. This happens because MetaMask automatically locks your account
+                  after a certain period of time. To unlock simply click on the MetaMask extension and type in your password.</p>
+                <img src="assets/img/metamask-locked.png">
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header bg-lighter" role="tab" id="headingFour">
+              <h5 class="mb-0">
+                <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                  Getting CanYaCoins
+                </a>
+              </h5>
+            </div>
+            <div id="collapseFour" class="collapse" role="tabpanel" aria-labelledby="headingFour">
+              <div class="card-block">
+                <p class="lead">You will need to purchase CAN from an exchange, and then transfer the CAN from your exchange wallet to your
+                  MetaMask Wallet. Unfortunately, you cannot use CanYa with only an exchange account.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Switch to MainNet Modal -->
+<div class="modal fade" id="switchToMainNetModal" tabindex="-1" role="dialog" data-keyboard="true" data-backdrop="true" aria-labelledby="switchToMainNetLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title" id="subscribeModalLabel">Oops!</h6>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- <h6 class="text-dark fs-14 fw-600"></h6> -->
+        <div class="d-flex flex-column justify-content-center align-self-center align-items-center text-center my-10">
+          <h2 class="fw-300">Switch your MetaMask to MainNet!</h2>
+          <img src="assets/img/metamask.svg" width="140px" height="140px">
+          <!-- <h4 class="fw-300 mb-10">Your MetaMask is not connected to Main Ethereum Network.</h4> -->
+          <h4 class="fw-300 mb-30">Open your wallet, switch your wallet to
+            <span class="fw-500">Main Ethereum Network</span> and reload the page.</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Wallet Modal -->
+<div class="modal fade" id="walletLocked" tabindex="-1" role="dialog" data-keyboard="true" data-backdrop="true" aria-labelledby="walletLockedLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title" id="subscribeModalLabel">Oops!</h6>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- <h6 class="text-dark fs-14 fw-600"></h6> -->
+        <div class="d-flex flex-column justify-content-center align-self-center align-items-center text-center my-10">
+          <h2 class="fw-400 mb-0">Your MetaMask is locked!</h2>
+          <img src="assets/img/metamask.svg" width="140px" height="140px">
+          <h4 class="fw-300 mb-10">Simply open MetaMask follow the instructions to unlock it, reload the page and try again.</h4>
+          <small class="lead text-danger">
+            <i class="fa fa-exclamation-triangle"></i>&nbsp;Seems you're using a PRE-ALPHA version. Please, remember to switch your MetaMask Wallet to Ropsten
+            Testnet.
+          </small>
+          <small class="lead text-danger">
+            <strong>Remember:</strong>&nbsp;You can 'buy' ether (ETH) in MetaMask (Ropsten Network Faucet).
+          </small>
+          <img src="assets/img/metamask-buy.png">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Logout - Are you sure? -->
+<div class="modal fade" id="areYouSureLogoutModal" tabindex="-1" role="dialog" data-keyboard="true" data-backdrop="true" aria-labelledby="areYouSureLogoutLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Sign out</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to sign out of your account?</p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="onLogout();" type="button" class="btn btn-danger" data-dismiss="modal">Yes</button>
+        <button (click)="onCancel();" type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Changelly Modal -->
+<div class="modal fade" id="changellyModal" tabindex="-1" role="dialog" data-keyboard="true" data-backdrop="false" aria-labelledby="changellyModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content"></div>
+    <div class="changellyModal-content">
+      <span class="changellyModal-close close" data-dismiss="modal" aria-label="Close">x</span>
+      <iframe src="https://changelly.com/widget/v1?auth=email&from=USD&to=ETH&merchant_id=1a710f431157&address=&amount=10&ref_id=1a710f431157&color=33ccff"
+        width="600" height="500" class="changelly" scrolling="no" style="overflow-y: hidden; border: none;">
+        Can't load widget
+      </iframe>
+    </div>
+  </div>
+</div>
+
+
+<!-- Bancor Modal -->
+<div class="modal fade" id="bancorModal" tabindex="-1" role="dialog" data-keyboard="true" data-backdrop="false" aria-labelledby="bancorModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content"></div>
+    <div class="modal-body">
+      <div id="bancor-wc"></div>
+    </div>
+  </div>
+</div>
