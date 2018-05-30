@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AngularFirestore } from 'angularfire2/firestore';
@@ -6,14 +6,20 @@ import { AngularFireAuth } from 'angularfire2/auth';
 
 import { UserService } from '../user.service';
 
+import {Subscription} from 'rxjs/Subscription';
+
 @Component({
   selector: 'app-top',
   templateUrl: './top.component.html',
   styleUrls: ['./top.component.css']
 })
-export class TopComponent implements OnInit {
+export class TopComponent implements OnInit, OnDestroy {
 
-  currentUser: any = JSON.parse( localStorage.getItem('credentials') );
+  currentUser: any = JSON.parse(localStorage.getItem('credentials'));
+  hasUnreadMessages = false;
+  messagesSubscription: Subscription;
+
+  
 
   @Output() searchKeyUp: EventEmitter<any> = new EventEmitter();
   @Output() searchFocus: EventEmitter<any> = new EventEmitter();
@@ -26,6 +32,19 @@ export class TopComponent implements OnInit {
   }
 
   ngOnInit() {
+    const unreadConversations = this.afs.collection('chats').doc(this.currentUser.address).collection('channels', ref => ref.where('unreadMessages', '==', true));
+    console.log("got unread conversations");
+    this.messagesSubscription = unreadConversations.valueChanges().subscribe(x => {
+      console.log("hit the value changes"); 
+      console.log(x.length); 
+      this.hasUnreadMessages = x.length > 0;
+    });
+  }
+
+  ngOnDestroy(){
+    if(this.messagesSubscription){
+      this.messagesSubscription.unsubscribe();
+    }
   }
 
   closeMenu() {
@@ -35,13 +54,13 @@ export class TopComponent implements OnInit {
 
   onConnect() {
     try {
-      this.userService.connect().then( (credentials) => {
+      this.userService.connect().then((credentials) => {
         this.currentUser = credentials;
         // this.router.navigate(['/home']);
 
-        this.afs.collection<any>('users').doc( this.currentUser.address ).valueChanges().subscribe( (user: any) => {
+        this.afs.collection<any>('users').doc(this.currentUser.address).valueChanges().subscribe((user: any) => {
           console.log('onConnect - user', user);
-          if ( user.state !== 'Done' ) {
+          if (user.state !== 'Done') {
             this.router.navigate(['/bot']);
           } else {
             this.router.navigate(['/home']);
@@ -70,14 +89,14 @@ export class TopComponent implements OnInit {
   }
 
   onBlur(event: any) {
-    setTimeout( () => {
+    setTimeout(() => {
       this.searchBlur.emit(event);
     }, 50);
   }
 
   onSubmit(event: any) {
-    if ( (<any>window).$('html, body') ) {
-      (<any>window).$('html, body').animate({scrollTop : -10}, 600);
+    if ((<any>window).$('html, body')) {
+      (<any>window).$('html, body').animate({ scrollTop: -10 }, 600);
     }
     this.router.navigate(['search', event]);
   }

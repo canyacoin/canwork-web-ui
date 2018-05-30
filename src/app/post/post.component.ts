@@ -92,6 +92,7 @@ export class PostComponent implements OnInit, AfterViewInit {
         name: this.userModel.name,
         title: this.userModel.title,
         message: 'No messages',
+        unreadMessages: false,
         timestamp: moment().format('x')
       };
       console.log('createChannels - current', currentUserChannel);
@@ -106,6 +107,7 @@ export class PostComponent implements OnInit, AfterViewInit {
         name: this.currentUser.name,
         title: this.currentUser.title,
         message: 'No messages',
+        unreadMessages: true,
         timestamp: moment().format('x')
       };
       console.log('createChannels - userModel', userModelChannel);
