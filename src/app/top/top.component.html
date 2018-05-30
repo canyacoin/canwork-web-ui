@@ -71,8 +71,13 @@
           </a>
         </li>
         <!-- <li class="nav-item"><a class="nav-link" href="https://forum.canya.io" target="_blank">Forum</a></li> -->
-        <!-- <span class="badge badge-round badge-danger"></span> -->
-        <li *ngIf="currentUser" class="nav-item"><a class="nav-link" [routerLink]="['/chat']" (click)="closeMenu();">Requests</a></li>
+        
+        <li *ngIf="currentUser" class="nav-item">
+          <a class="nav-link" [routerLink]="['/chat']" (click)="closeMenu();">
+            Requests
+          </a>
+          <span *ngIf="hasUnreadMessages" class="badge badge-round badge-danger"></span>
+        </li>
        
         <li *ngIf="currentUser" class="nav-item"><a class="nav-link" [routerLink]="['/profile']" (click)="closeMenu();">Profile</a></li>
 
