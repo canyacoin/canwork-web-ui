@@ -141,7 +141,7 @@ export class PostComponent implements OnInit, AfterViewInit {
       avatar: this.currentUser.avatar,
       name: this.currentUser.name,
       title: this.currentUser.title,
-      message: 'I\'ve sent you a request. Please, let me know if you CanYa do something, ok?',
+      message: 'I\'ve just sent you a request, is this something you can do?',
       type: 'MESSAGE',
       timestamp: moment().format('x')
     };
