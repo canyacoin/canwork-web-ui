@@ -389,6 +389,13 @@
   border-radius: 50%;
 }
 
+.badge-notification {
+  padding: 4px;
+  width:12px;
+  height:12px;
+  border-radius: 50%;
+}
+
 .banner-canya {
   position: fixed; 
   right: 45px; 

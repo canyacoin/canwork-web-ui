@@ -43,6 +43,7 @@
 
                 <a *ngIf="selectedChannel && channel" (click)="onSelect(channel);" class="list-group-item list-group-item-action" [ngClass]="{ 'active': selectedChannel.address === channel.address }"
                   style="cursor: pointer;">
+                  <span *ngIf="channel.unreadMessages" class="badge-notification badge-danger"></span>
                   <div class="media">
                     <img [src]="channel.avatar.uri || 'assets/img/placeholder.png'" class="avatar avatar-sm mt-8" alt="Canya - avatar">
                     <div class="media-body ml-2">
@@ -54,6 +55,7 @@
                         <div>
                           <small class="text-muted">{{ channel.timestamp | date:'dd MMM' }}</small>
                         </div>
+
                       </div>
                       <!-- text-truncate d-block -->
                       <span class="text-dark text-small col-11 p-0">{{ channel.message.length > 30 ? (channel.message | slice:0:30)+'...':(channel.message) }}</span>
@@ -177,7 +179,7 @@
               </div> -->
             </div>
             <!--end card header-->
-            <div id="section-messages" class="card-block" style="overflow-y: auto">
+            <div id="section-messages" class="card-block" style="overflow-y: auto" (click)="readIfUnread()">
 
               <div *ngIf="selectedChannel" class="row justify-content-end mb-0">
                 <div class="col text-center">
@@ -349,7 +351,7 @@
 
                   </div>
                   <!-- (ngModelChange)="onKeyUp($event);"  -->
-                  <input #msgInput [(ngModel)]="message" [disabled]="isLoading || channels.length < 1" class="form-control" minlength="2" maxlength="500"
+                  <input #msgInput [(ngModel)]="message" (focus)="readIfUnread()" [disabled]="isLoading || channels.length < 1" class="form-control" minlength="2" maxlength="500"
                     type="text" placeholder="Type a message" name="message" autofocus="autofocus" required>
                 </div>
                 <button [disabled]="!msgInput.validity.valid || isLoading || channels.length < 1" type="submit" class="btn btn-light" style="border: none;">

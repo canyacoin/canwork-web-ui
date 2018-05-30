@@ -30,7 +30,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
   message = '';
   channels: any = [];
   chats: any = [];
-  selectedChannel: any = JSON.parse(localStorage.getItem('selectedChannel'));
+  selectedChannel: any;
   macros: any = [
     { type: 'MESSAGE', text: 'Hello' },
     { type: 'MESSAGE', text: 'Ok' },
@@ -44,7 +44,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
   queryChannels: any = [];
   tabIndex = 0;
   balance = '0';
-  state =  'loading';
+  state = 'loading';
 
   // Forms
   postForm: FormGroup = null;
@@ -74,9 +74,11 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
     console.log('ethService - chat constructor', this.ethService);
 
-    this.userService.getCurrentUser().subscribe( (user: any) => {
+    this.userService.getCurrentUser().subscribe((user: any) => {
       this.currentUser = user;
     });
+
+    this.setSelectedChannel(JSON.parse(localStorage.getItem('selectedChannel')));
   }
 
   ngOnInit() {
@@ -94,7 +96,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
       this.loadChannels();
     });
 
-    this.activatedRoute.url.subscribe( (url) => {
+    this.activatedRoute.url.subscribe((url) => {
       this.getWeb3State();
     });
   }
@@ -106,11 +108,11 @@ export class ChatComponent implements OnInit, AfterViewInit {
         if (!this.selectedChannel) {
           if (this.fAddress !== '') {
             const idx = findIndex(data, { 'address': this.fAddress });
-            if ( idx !== '-1' ) {
-              this.selectedChannel = data[idx];
+            if (idx !== '-1') {
+              this.setSelectedChannel(data[idx]);
             }
           } else {
-            this.selectedChannel = data[0];
+            this.setSelectedChannel(data[0]);
           }
         }
         this.channels = orderBy(data, ['timestamp'], ['desc']);
@@ -124,26 +126,39 @@ export class ChatComponent implements OnInit, AfterViewInit {
     }
   }
 
+  setSelectedChannel(channel: any){
+    if(channel){
+      this.selectedChannel = channel;
+      this.readIfUnread();
+    }
+  }
+
+  readIfUnread(){
+    if(this.selectedChannel && this.selectedChannel.unreadMessages){
+      this.afs.collection('chats').doc(this.currentUser.address).collection('channels').doc(this.selectedChannel.channel).update({ unreadMessages: false });
+    }
+  }
+
   loadChats() {
     this.chats = [];
     if (this.selectedChannel) {
       const collection = this.afs.collection('chats').doc(this.currentUser.address).collection('channels')
         .doc(this.selectedChannel.channel)
         .collection('messages', ref => ref.limit(50).orderBy('timestamp', 'desc'))
-        .valueChanges().map( (array) => array.reverse());
+        .valueChanges().map((array) => array.reverse());
 
-        collection.subscribe((data: any) => {
-          this.isLoading = false;
-          this.chats = data;
-          this.scrollToBottom();
-        });
+      collection.subscribe((data: any) => {
+        this.isLoading = false;
+        this.chats = data;
+        this.scrollToBottom();
+      });
     }
   }
 
   loadUser() {
     if (this.selectedChannel) {
       console.log('loadUser - address', this.selectedChannel.address);
-      this.afs.doc(`users/${this.selectedChannel.address}`).valueChanges().take(1).subscribe( (data: any) => {
+      this.afs.doc(`users/${this.selectedChannel.address}`).valueChanges().take(1).subscribe((data: any) => {
         this.userModel = data;
       });
     }
@@ -151,28 +166,24 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
   getWeb3State() {
     this.ethService.initWeb3();
-    this.ethService.web3InitObservable.subscribe( (state) => {
-      if ( !state.isMetaMaskAvailable ) {
+    this.ethService.web3InitObservable.subscribe((state) => {
+      if (!state.isMetaMaskAvailable) {
         this.state = 'web3NotAvailable';
-      } else if ( state.isMetaMaskAvailable && state.netId !== 1 ) {
+      } else if (state.isMetaMaskAvailable && state.netId !== 1) {
         this.state = 'switchToMainNetModal';
-      } else if ( state.isMetaMaskAvailable && state.netId === 1 && !state.isWalletUnlocked ) {
+      } else if (state.isMetaMaskAvailable && state.netId === 1 && !state.isWalletUnlocked) {
         this.state = 'walletLocked';
       } else {
         this.state = 'buyCAN';
 
-        this.ethService.getBalance().then( (data: any) => {
+        this.ethService.getBalance().then((data: any) => {
           this.balance = data;
-          console.log('getWeb3State - balance',  this.balance);
+          console.log('getWeb3State - balance', this.balance);
         });
       }
     });
   }
 
-  // setChannel(channel: any) {
-  //   this.selectedChannel = channel;
-  //   this.loadChats();
-  // }
 
   scrollToBottom() {
     setTimeout(() => {
@@ -191,8 +202,8 @@ export class ChatComponent implements OnInit, AfterViewInit {
       this.afs.collection('chats').doc(this.currentUser.address).collection('channels').doc(this.selectedChannel.channel).collection('messages').add(messageModel);
       this.afs.collection('chats').doc(this.selectedChannel.address).collection('channels').doc(this.selectedChannel.channel).collection('messages').add(messageModel);
 
-      this.afs.collection('chats').doc(this.currentUser.address).collection('channels').doc(this.selectedChannel.channel).update( { message: messageModel.message, timestamp: moment().format('x') } );
-      this.afs.collection('chats').doc(this.selectedChannel.address).collection('channels').doc(this.selectedChannel.channel).update( { message: messageModel.message, timestamp: moment().format('x') } );
+      this.afs.collection('chats').doc(this.currentUser.address).collection('channels').doc(this.selectedChannel.channel).update({ message: messageModel.message, timestamp: moment().format('x'), unreadMessages: false });
+      this.afs.collection('chats').doc(this.selectedChannel.address).collection('channels').doc(this.selectedChannel.channel).update({ message: messageModel.message, timestamp: moment().format('x'), unreadMessages: true });
 
       this.message = '';
       this.scrollToBottom();
@@ -261,8 +272,8 @@ export class ChatComponent implements OnInit, AfterViewInit {
   }
 
   onSelect(channelModel: any) {
-    this.selectedChannel = channelModel;
-    localStorage.setItem('selectedChannel' , JSON.stringify(this.selectedChannel) );
+    this.setSelectedChannel(channelModel);
+    localStorage.setItem('selectedChannel', JSON.stringify(this.selectedChannel));
     this.loadChats();
     this.loadUser();
   }
@@ -422,11 +433,11 @@ export class ChatComponent implements OnInit, AfterViewInit {
     //   (<any>window).$('#confirmTransaction').modal();
     // }
 
-    if ( this.state === 'web3NotAvailable' ) {
+    if (this.state === 'web3NotAvailable') {
       (<any>window).$('#web3NotAvailable').modal();
-    } else if ( this.state === 'switchToMainNetModal' ) {
+    } else if (this.state === 'switchToMainNetModal') {
       (<any>window).$('#switchToMainNetModal').modal();
-    } else if ( this.state === 'walletLocked' ) {
+    } else if (this.state === 'walletLocked') {
       (<any>window).$('#walletLocked').modal();
     } else {
       (<any>window).$('#confirmTransaction').modal();
@@ -438,7 +449,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
   }
 
   onConfirmTransaction() {
-    this.ethService.payCAN(this.modalData.budget).subscribe( (receipt) => {
+    this.ethService.payCAN(this.modalData.budget).subscribe((receipt) => {
       console.log('payCAN - receipt', receipt);
       this.postTransaction(null, receipt);
     });

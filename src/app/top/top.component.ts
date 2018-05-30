@@ -19,6 +19,8 @@ export class TopComponent implements OnInit, OnDestroy {
   hasUnreadMessages = false;
   messagesSubscription: Subscription;
 
+  
+
   @Output() searchKeyUp: EventEmitter<any> = new EventEmitter();
   @Output() searchFocus: EventEmitter<any> = new EventEmitter();
   @Output() searchBlur: EventEmitter<any> = new EventEmitter();
@@ -40,7 +42,9 @@ export class TopComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(){
-    this.messagesSubscription.unsubscribe();
+    if(this.messagesSubscription){
+      this.messagesSubscription.unsubscribe();
+    }
   }
 
   closeMenu() {
