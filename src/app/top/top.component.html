@@ -74,20 +74,13 @@
         
         <li *ngIf="currentUser" class="nav-item">
           <a class="nav-link" [routerLink]="['/chat']" (click)="closeMenu();">
-            Requests
+            Inbox
           </a>
           <span *ngIf="hasUnreadMessages" class="badge badge-round badge-danger"></span>
         </li>
        
         <li *ngIf="currentUser" class="nav-item"><a class="nav-link" [routerLink]="['/profile']" (click)="closeMenu();">Profile</a></li>
 
-        <!-- <li *ngIf="currentUser" class="nav-item"><a class="nav-link" [routerLink]="['/chat']" (click)="closeMenu();">Requests</a></li> -->
-        <!-- <li class="nav-item">
-          <a class="nav-link" href="https://t.me/canyacoin" target="_blank">
-            Telegram
-            <i class="fa fa-telegram" aria-hidden="true"></i>
-          </a>
-        </li> -->
       </ul>
       &nbsp;&nbsp;
       <!-- -->
