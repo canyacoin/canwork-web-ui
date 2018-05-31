@@ -9,8 +9,8 @@
       <img src="assets/img/loader.svg" height="36px" alt="Loader">
     </div>
 
-    <!-- <a 
-          class="ml-150 fw-500" 
+    <!-- <a
+          class="ml-150 fw-500"
           href="/"><i class="ti-arrow-left fs-18 ml-4"></i></a> -->
 
     <!-- href="javascript:history.back()" -->
@@ -22,17 +22,17 @@
     <div *ngIf="userModel && (userModel.address !== currentUser.address)" class="row my-0 py-0 hidden-md-down" style="cursor: pointer;">
       <div class="col-12 my-0 py-0 text-center">
         <div class="swiper-container swiper-container-horizontal">
-            <div class="swiper-wrapper py-5" style="transition-duration: 500ms;">
-              <div class="swiper-slide" data-swiper-slide-index="0">
-                <a (click)="onCanya();">
-                  <img width="50%" height="auto" src="assets/img/BannerTutorial.png" alt="CanYa - Process" border-5>
-                </a>
-              </div>
+          <div class="swiper-wrapper py-5" style="transition-duration: 500ms;">
+            <div class="swiper-slide" data-swiper-slide-index="0">
+              <a (click)="onCanya();">
+                <img width="50%" height="auto" src="assets/img/BannerTutorial.png" alt="CanYa - Process" border-5>
+              </a>
             </div>
           </div>
+        </div>
       </div>
     </div>
-    
+
     <div class="container">
 
       <div class="row justify-content-center">
@@ -79,15 +79,15 @@
               <!-- <nav *ngIf="userModel && height >= maxHeight">
                 <ul>
                   <li [ngClass]="{'active': selectedTab === 'WORK' }">
-                    <a href="#tab-work" [ngClass]="{'active': selectedTab === 'WORK' }" 
+                    <a href="#tab-work" [ngClass]="{'active': selectedTab === 'WORK' }"
                     data-toggle="tab" data-scrollto="section-profile" (click)="onTab('WORK');">Work</a>
                   </li>
                   <li [ngClass]="{'active': selectedTab === 'COMMENTS' }">
-                    <a href="#tab-comments" [ngClass]="{'active': selectedTab === 'COMMENTS' }" 
+                    <a href="#tab-comments" [ngClass]="{'active': selectedTab === 'COMMENTS' }"
                     data-toggle="tab" data-scrollto="section-profile" (click)="onTab('COMMENTS');">Comments</a>
                   </li>
                   <li [ngClass]="{'active': selectedTab === 'REACTIONS' }">
-                    <a href="#tab-reactions" [ngClass]="{'active': selectedTab === 'REACTIONS' }" 
+                    <a href="#tab-reactions" [ngClass]="{'active': selectedTab === 'REACTIONS' }"
                     data-toggle="tab" data-scrollto="section-profile" (click)="onTab('REACTIONS');">Reactions</a>
                   </li>
                 </ul>
@@ -229,7 +229,8 @@
                 <div class="card-body text-center">
                   <h3 class="fw-500">Set up your wallet to make and receive payments!</h3>
 
-                  <h5 class="fw-400">Your ETH address is:<br>
+                  <h5 class="fw-400">Your ETH address is:
+                    <br>
                     <mark>{{ ethService.account ? ethService.account:'Loading MetaMask...' }}</mark>
                   </h5>
 
@@ -238,21 +239,22 @@
                     <img src="assets/img/round-icon.svg" width="auto" height="16px" style="margin-top: -3px;"> CanYaCoins for all services in CanYa platform using this address.
                   </p>
 
-                  <button (click)="onSetUpYourWallet();" 
-                    type="button" class="btn btn-primary btn-canya-chat">
+                  <button (click)="onSetUpYourWallet();" type="button" class="btn btn-primary btn-canya-chat">
                     Set up your wallet
                   </button>
                 </div>
               </div>
 
-              <div *ngIf="userModel && userModel.description" class="card mb-30 p-20"
-                style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px;">
+              <div *ngIf="userModel && userModel.description" class="card mb-30 p-20" style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px;">
 
                 <a *ngIf="userModel && (userModel.address === currentUser.address)" [routerLink]="['/profile/edit']" data-toggle="tooltip"
                   data-placement="top" title="Edit Profile" class="btn btn-sm btn-circular btn-light icon-edit-description pl-1">
                   <i class="ti-pencil fw-600" aria-hidden="true"></i>
                 </a>
 
+                <div class="card-title">
+                  about
+                </div>
                 <div class="card-img-cover">
                   <img [src]="'assets/img/' + userModel.category + '.svg'" [src-fallback]="cover" alt="CanYa">
                 </div>
@@ -281,9 +283,7 @@
                           <h4 *ngIf="userModel && (userModel.address === currentUser.address) && (userModel.type === 'User')" class="fw-400">10 times less transaction fees (1%)!</h4>
                           <p *ngIf="userModel && (userModel.address === currentUser.address) && (userModel.type === 'User')" class="text-center py-3">
                             <!-- [routerLink]="['/buy']" -->
-                            <a *ngIf="userModel && userModel.colors" class="btn btn-primary btn-add-work text-white" 
-                            (click)="onBuy();"
-                            [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">BUY CAN</a>
+                            <a *ngIf="userModel && userModel.colors" class="btn btn-primary btn-add-work text-white" (click)="onBuy();" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">BUY CAN</a>
                           </p>
 
                           <h3 *ngIf="userModel && (userModel.address !== currentUser.address)" class="fw-500">Ohh, so exciting!</h3>
@@ -299,60 +299,66 @@
                   </div>
 
                   <div *ngIf="userModel && (workModel && workModel.length > 0)" class="container">
+                    <div class="animated {{animation}}">
+                      <!-- border-bottom: 2px dashed #DD2476; -->
+                      <div *ngFor="let work of portfolioWorkDataRecords();let i = index" class="project" [ngStyle]="{ 'border-bottom': '2px dashed ' + userModel.colors[0] }">
 
-                    <!-- border-bottom: 2px dashed #DD2476; -->
-                    <div *ngFor="let work of workModel;let i = index" class="project" [ngStyle]="{ 'border-bottom': '2px dashed ' + userModel.colors[0] }">
+                        <div class="left-content">
+                          <a *ngIf="userModel && (userModel.address === currentUser.address)" [routerLink]="['/project', work.id]" data-toggle="tooltip"
+                            data-placement="top" title="Edit Project" class="btn btn-sm btn-circular btn-light icon-edit-project pl-1">
+                            <i class="ti-pencil fw-600" aria-hidden="true"></i>
+                          </a>
 
-                      <div class="left-content">
-
-                        <a *ngIf="userModel && (userModel.address === currentUser.address)" [routerLink]="['/project', work.id]" data-toggle="tooltip"
-                          data-placement="top" title="Edit Project" class="btn btn-sm btn-circular btn-light icon-edit-project pl-1">
-                          <i class="ti-pencil fw-600" aria-hidden="true"></i>
-                        </a>
-
-                        <a [href]="work.image || '//canya-tests.firebaseapp.com/assets/img/work-placeholder.svg'" class="thumbnail mt-30" data-provide="lightbox">
-                          <img [src]="work.image" [src-fallback]="placeholder" alt="CanYa - Portfolio" class="thumbnail">
-                        </a>
-                        <!-- <ul class="skills"> -->
-                        <div class="row align-items-center justify-content-center text-center my-10">
-                          <div class="col-auto mx-5 my-5" *ngFor="let tag of work.tags | slice:0:4">
-                            <a [routerLink]="['/search', tag]" class="btn btn-round" data-scrollto="section-main" style="background: #E876BC; color: white; border: none;"
-                              [ngStyle]="{ 'background': userModel.colors[0] }">
-                              <i class="fa fa-tag" aria-hidden="true"></i>
-                              {{ tag }}
-                            </a>
+                          <a [href]="work.image || '//canya-tests.firebaseapp.com/assets/img/work-placeholder.svg'" class="thumbnail mt-30" data-provide="lightbox">
+                            <img [src]="work.image" [src-fallback]="placeholder" alt="CanYa - Portfolio" class="thumbnail">
+                          </a>
+                          <!-- <ul class="skills"> -->
+                          <div class="row align-items-center justify-content-center text-center my-10">
+                            <div class="col-auto mx-5 my-5" *ngFor="let tag of work.tags | slice:0:4">
+                              <a [routerLink]="['/search', tag]" class="btn btn-round" data-scrollto="section-main" style="background: #E876BC; color: white; border: none;"
+                                [ngStyle]="{ 'background': userModel.colors[0] }">
+                                <i class="fa fa-tag" aria-hidden="true"></i>
+                                {{ tag }}
+                              </a>
+                            </div>
                           </div>
+                          <!-- </ul> -->
                         </div>
-                        <!-- </ul> -->
-                      </div>
-                      <div class="right-content mx-10">
-                        <h3 *ngIf="work.title" class="title" [ngStyle]="{ 'color': userModel.colors[0] }">
-                          {{ work.title }}
-                        </h3>
-                        <div *ngIf="work.description" class="description">
-                          <p>
-                            {{ work.description }}
-                          </p>
-                        </div>
-                        <!-- <a href="#" class="open-demo">Open
+                        <div class="right-content mx-10">
+                          <h3 *ngIf="work.title" class="title" [ngStyle]="{ 'color': userModel.colors[0] }">
+                            {{ work.title }}
+                          </h3>
+                          <div *ngIf="work.description" class="description">
+                            <p>
+                              {{ work.description }}
+                            </p>
+                          </div>
+                          <!-- <a href="#" class="open-demo">Open
                       <i class="fa fa-external-link" aria-hidden="true"></i>
                     </a> -->
 
-                        <!-- linear-gradient(270deg, #FF512F 0.54%, #DD2476 98.39%); -->
-                        <a *ngIf="work.link" [href]="work.link.toLowerCase().includes('http') ? work.link : 'http://' + work.link" class="btn open-demo"
-                          target="_blank" style="color: white; background: linear-gradient(270deg, #FF512F 0.54%, #DD2476 98.39%); border: none;"
-                          [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">
-                          OPEN
-                          <i class="fa fa-external-link" aria-hidden="true"></i>
-                        </a>
-
+                          <!-- linear-gradient(270deg, #FF512F 0.54%, #DD2476 98.39%); -->
+                          <a *ngIf="work.link" [href]="work.link.toLowerCase().includes('http') ? work.link : 'http://' + work.link" class="btn open-demo"
+                            target="_blank" style="color: white; background: linear-gradient(270deg, #FF512F 0.54%, #DD2476 98.39%); border: none;"
+                            [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">
+                            OPEN
+                            <i class="fa fa-external-link" aria-hidden="true"></i>
+                          </a>
+                        </div>
                       </div>
                     </div>
-
                   </div>
-
                 </div>
-
+              </div>
+              <div class="row">
+                <div class="col-12 d-flex justify-content-center" style="padding-top: 5px">
+                  <button class="btn btn-sm" [disabled]="currentPage == 0" (click)="previousPage()">
+                    <i class="fa fa-chevron-left"></i>
+                  </button>
+                  <button class="btn btn-sm" [disabled]="currentPage == lastPage" (click)="nextPage()">
+                    <i class="fa fa-chevron-right"></i>
+                  </button>
+                </div>
               </div>
               <!-- work -->
 
@@ -493,9 +499,9 @@
 
                       <div class="mx-20 pb-3">
 
-                        <!-- <a *ngIf="userModel && userModel.colors" 
-                          class="btn-add-work" href="#" 
-                          [routerLink]="['/work']" 
+                        <!-- <a *ngIf="userModel && userModel.colors"
+                          class="btn-add-work" href="#"
+                          [routerLink]="['/work']"
                           [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">
                           81 REACTIONS <span class="fw-600">UNIQUE</span>20
                         </a> -->
@@ -507,8 +513,8 @@
                         <!-- <p class="fw-400">What do you love about NAME's service?</p>
                         <div class="btn-group" role="group" style="margin-top: -20px;">
                             <div id="reactions" class="btn-group" role="group">
-                              <button type="button" 
-                                class="btn btn-secondary bg-pale-secondary" 
+                              <button type="button"
+                                class="btn btn-secondary bg-pale-secondary"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 5px;">
                                 <span class="fw-400">81 REACTIONS</span>&nbsp;&nbsp;&nbsp;&nbsp;
                                 <span class="fw-500">GREAT QUALITY 11</span>
@@ -527,8 +533,8 @@
                           <p class="fw-400 my-3">Juan is...</p>
                           <div class="btn-group" role="group" style="margin-top: -20px;">
                               <div id="reactions" class="btn-group" role="group">
-                                <button type="button" 
-                                  class="btn btn-secondary bg-pale-secondary" 
+                                <button type="button"
+                                  class="btn btn-secondary bg-pale-secondary"
                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 5px;">
                                   <span class="fw-400">81 REACTIONS</span>&nbsp;&nbsp;&nbsp;&nbsp;
                                   <span class="fw-500">Versatile 11</span>
@@ -546,8 +552,8 @@
                             <p class="fw-400 my-3">Would you continue to use this service?</p>
                           <div class="btn-group" role="group" style="margin-top: -20px;">
                               <div id="reactions" class="btn-group" role="group">
-                                <button type="button" 
-                                  class="btn btn-secondary bg-pale-secondary" 
+                                <button type="button"
+                                  class="btn btn-secondary bg-pale-secondary"
                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border-radius: 5px;">
                                   <span class="fw-400">81 REACTIONS</span>&nbsp;&nbsp;&nbsp;&nbsp;
                                   <span class="fw-500">Yes 11</span>
@@ -679,9 +685,9 @@
   <!-- <div *ngIf="userModel && (userModel.address !== currentUser.address)" [hidden]="hideBanner" class="banner-canya">
       <a (click)="hideBanner = true;" class="banner-canya-close">×
       </a>
-  
+
       <a class="d-block">
-        <img src="assets/img/BannerUport.png" 
+        <img src="assets/img/BannerUport.png"
           class="b-0 d-block" alt="CanYa+ uPort!" width="318">
       </a>
     </div> -->
