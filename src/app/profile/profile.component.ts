@@ -1,7 +1,5 @@
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-
-// import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -46,14 +44,12 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 
   pageLimit = 2;
   currentPage = 0;
+  lastPage = 0;
   resultLength = 0;
 
+  animation = 'fadeIn';
+
   private portfolioSubscription: Subscription;
-
-
-
-  // usersCollectionRef: AngularFirestoreCollection<any>;
-  // users$: Observable<any[]>;
 
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -161,6 +157,7 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
         ref.orderBy('timestamp', 'desc'));
       this.portfolioSubscription = portfolioRecords.valueChanges().subscribe((data: any) => {
         this.resultLength = data.length;
+        this.lastPage = (Math.ceil(this.resultLength / this.pageLimit) - 1)
         this.allWorkModel = data;
         this.workModel = this.portfolioWorkDataRecords();
         console.log(`works (${this.workModel.length})`, this.workModel);
@@ -405,11 +402,18 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public nextPage() {
+    this.fadeOutAndIn();
     this.currentPage++;
   }
 
   public previousPage() {
+    this.fadeOutAndIn();
     this.currentPage--;
+  }
+
+  private async fadeOutAndIn() {
+    this.animation = 'fadeOut';
+    setTimeout(() => { this.animation = 'fadeIn'; }, 400);
   }
 
 }

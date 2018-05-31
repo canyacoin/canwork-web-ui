@@ -252,6 +252,9 @@
                   <i class="ti-pencil fw-600" aria-hidden="true"></i>
                 </a>
 
+                <div class="card-title">
+                  about
+                </div>
                 <div class="card-img-cover">
                   <img [src]="'assets/img/' + userModel.category + '.svg'" [src-fallback]="cover" alt="CanYa">
                 </div>
@@ -296,64 +299,65 @@
                   </div>
 
                   <div *ngIf="userModel && (workModel && workModel.length > 0)" class="container">
+                    <div class="animated {{animation}}">
+                      <!-- border-bottom: 2px dashed #DD2476; -->
+                      <div *ngFor="let work of portfolioWorkDataRecords();let i = index" class="project" [ngStyle]="{ 'border-bottom': '2px dashed ' + userModel.colors[0] }">
 
-                    <!-- border-bottom: 2px dashed #DD2476; -->
-                    <div *ngFor="let work of portfolioWorkDataRecords();let i = index" class="project" [ngStyle]="{ 'border-bottom': '2px dashed ' + userModel.colors[0] }">
+                        <div class="left-content">
+                          <a *ngIf="userModel && (userModel.address === currentUser.address)" [routerLink]="['/project', work.id]" data-toggle="tooltip"
+                            data-placement="top" title="Edit Project" class="btn btn-sm btn-circular btn-light icon-edit-project pl-1">
+                            <i class="ti-pencil fw-600" aria-hidden="true"></i>
+                          </a>
 
-                      <div class="left-content">
-
-                        <a *ngIf="userModel && (userModel.address === currentUser.address)" [routerLink]="['/project', work.id]" data-toggle="tooltip"
-                          data-placement="top" title="Edit Project" class="btn btn-sm btn-circular btn-light icon-edit-project pl-1">
-                          <i class="ti-pencil fw-600" aria-hidden="true"></i>
-                        </a>
-
-                        <a [href]="work.image || '//canya-tests.firebaseapp.com/assets/img/work-placeholder.svg'" class="thumbnail mt-30" data-provide="lightbox">
-                          <img [src]="work.image" [src-fallback]="placeholder" alt="CanYa - Portfolio" class="thumbnail">
-                        </a>
-                        <!-- <ul class="skills"> -->
-                        <div class="row align-items-center justify-content-center text-center my-10">
-                          <div class="col-auto mx-5 my-5" *ngFor="let tag of work.tags | slice:0:4">
-                            <a [routerLink]="['/search', tag]" class="btn btn-round" data-scrollto="section-main" style="background: #E876BC; color: white; border: none;"
-                              [ngStyle]="{ 'background': userModel.colors[0] }">
-                              <i class="fa fa-tag" aria-hidden="true"></i>
-                              {{ tag }}
-                            </a>
+                          <a [href]="work.image || '//canya-tests.firebaseapp.com/assets/img/work-placeholder.svg'" class="thumbnail mt-30" data-provide="lightbox">
+                            <img [src]="work.image" [src-fallback]="placeholder" alt="CanYa - Portfolio" class="thumbnail">
+                          </a>
+                          <!-- <ul class="skills"> -->
+                          <div class="row align-items-center justify-content-center text-center my-10">
+                            <div class="col-auto mx-5 my-5" *ngFor="let tag of work.tags | slice:0:4">
+                              <a [routerLink]="['/search', tag]" class="btn btn-round" data-scrollto="section-main" style="background: #E876BC; color: white; border: none;"
+                                [ngStyle]="{ 'background': userModel.colors[0] }">
+                                <i class="fa fa-tag" aria-hidden="true"></i>
+                                {{ tag }}
+                              </a>
+                            </div>
                           </div>
+                          <!-- </ul> -->
                         </div>
-                        <!-- </ul> -->
-                      </div>
-                      <div class="right-content mx-10">
-                        <h3 *ngIf="work.title" class="title" [ngStyle]="{ 'color': userModel.colors[0] }">
-                          {{ work.title }}
-                        </h3>
-                        <div *ngIf="work.description" class="description">
-                          <p>
-                            {{ work.description }}
-                          </p>
-                        </div>
-                        <!-- <a href="#" class="open-demo">Open
+                        <div class="right-content mx-10">
+                          <h3 *ngIf="work.title" class="title" [ngStyle]="{ 'color': userModel.colors[0] }">
+                            {{ work.title }}
+                          </h3>
+                          <div *ngIf="work.description" class="description">
+                            <p>
+                              {{ work.description }}
+                            </p>
+                          </div>
+                          <!-- <a href="#" class="open-demo">Open
                       <i class="fa fa-external-link" aria-hidden="true"></i>
                     </a> -->
 
-                        <!-- linear-gradient(270deg, #FF512F 0.54%, #DD2476 98.39%); -->
-                        <a *ngIf="work.link" [href]="work.link.toLowerCase().includes('http') ? work.link : 'http://' + work.link" class="btn open-demo"
-                          target="_blank" style="color: white; background: linear-gradient(270deg, #FF512F 0.54%, #DD2476 98.39%); border: none;"
-                          [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">
-                          OPEN
-                          <i class="fa fa-external-link" aria-hidden="true"></i>
-                        </a>
-
+                          <!-- linear-gradient(270deg, #FF512F 0.54%, #DD2476 98.39%); -->
+                          <a *ngIf="work.link" [href]="work.link.toLowerCase().includes('http') ? work.link : 'http://' + work.link" class="btn open-demo"
+                            target="_blank" style="color: white; background: linear-gradient(270deg, #FF512F 0.54%, #DD2476 98.39%); border: none;"
+                            [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">
+                            OPEN
+                            <i class="fa fa-external-link" aria-hidden="true"></i>
+                          </a>
+                        </div>
                       </div>
                     </div>
-
                   </div>
-
                 </div>
-                <div class="row">
-                  <div class="col-12 d-flex justify-content-center">
-                    <button class="btn btn-info" [disabled]="currentPage == 0" (click)="previousPage()">&lt;</button>
-                    <button class="btn btn-info" (click)="nextPage()">&gt;</button>
-                  </div>
+              </div>
+              <div class="row">
+                <div class="col-12 d-flex justify-content-center" style="padding-top: 5px">
+                  <button class="btn btn-sm" [disabled]="currentPage == 0" (click)="previousPage()">
+                    <i class="fa fa-chevron-left"></i>
+                  </button>
+                  <button class="btn btn-sm" [disabled]="currentPage == lastPage" (click)="nextPage()">
+                    <i class="fa fa-chevron-right"></i>
+                  </button>
                 </div>
               </div>
               <!-- work -->

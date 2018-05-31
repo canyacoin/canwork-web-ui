@@ -752,6 +752,7 @@ video {
   line-height: 1.5;
   letter-spacing: .5px;
   border-bottom: #f1f2f3;
+  text-transform: uppercase;
 }
 
 .card-title strong,

@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "^5.2.8",
     "@angular/router": "^5.2.8",
     "angularfire2": "^5.0.0-rc.6.0-next",
+    "animate.css": "^3.6.1",
     "core-js": "^2.4.1",
     "datastore-level": "^0.7.0",
     "firebase": "^4.12.1",
