@@ -1,91 +1,14 @@
-<app-top (searchFocus)="filter = true" (searchBlur)="filter = false;"></app-top>
+<app-header [allowFilters]="true"></app-header>
 
-<app-header [filter]="currentUser ? filter:null" [empty]="query !== ''"></app-header>
-
-<!-- Main container -->
 <main class="main-content">
-
-  <!--
-  |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
-  | CanYa Ecosystem px-40 
-  |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
-  !-->
-  <section *ngIf="!query && !currentUser" class="section bg-white my-0 py-0" id="section-intro">
-    <div class="container">
-      <div class="row align-items-center">
-
-        <div class="col-12 col-lg-6 text-center text-lg-left">
-          <h3 class="fw-400">CanYa is an ecosystem of services providers and people looking for talent to help get things done!</h3>
-          <!-- <p class="lead"></p> -->
-          <br>
-          <div class="row gap-y">
-            <div class="col-12 col-md-6">
-              <h6 class="text-uppercase mb-3 fw-500">Client</h6>
-              <p class="fs-14">Anyone who is
-                <strong>looking for freelancers</strong> or looking to build their team can use CanYa to find providers.</p>
-            </div>
-
-            <div class="col-12 col-md-6">
-              <h6 class="text-uppercase mb-3 fw-500">Provider</h6>
-              <p class="fs-14">Anyone who has a
-                <strong>digital service</strong> that they're able to provide can use the CanYa ecosystem to find work.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-6">
-          <div id="consult"></div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!--
-  |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
-  | Basic cards
-  |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
-  !-->
   <section class="section bg-gray py-20" id="section-main">
-
     <div class="container min-70">
-
-      <div *ngIf="currentUser && !searching" class="row">
-        <div class="col-12 my-0 py-0">
-          <div class="swiper-container swiper-container-horizontal">
-            <div class="swiper-wrapper py-5" style="transition-duration: 500ms;">
-              <div class="swiper-slide" data-swiper-slide-index="0">
-                <a href="https://www.bountysource.com" target="_blank">
-                  <img src="assets/img/BannerBountySource.png" alt="Bounty Source" style="border-radius: 5px;">
-                </a>
-              </div>
-              <div class="swiper-slide" data-swiper-slide-index="1">
-                <a href="https://t.me/canyacoin" target="_blank">
-                  <img src="assets/img/BannerCommunity.png" alt="CanYa Community" style="border-radius: 5px;">
-                </a>
-              </div>
-              <div class="swiper-slide" data-swiper-slide-index="2">
-                <a [routerLink]="['/tools']">
-                  <img src="assets/img/BannerCanInvoice.png" alt="CanInvoice by CanYa" style="border-radius: 5px;">
-                </a>
-              </div>
-              <div class="swiper-slide" data-swiper-slide-index="3">
-                <a [routerLink]="['/tools']">
-                  <img src="assets/img/BannerCanYa25.png" alt="CanYa25 by CanYa" style="border-radius: 5px;">
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <h4 class="fw-400">Our Latest Providers</h4>
 
       <div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center">
         <img src="assets/img/loader.svg" height="36px" alt="Loader">
       </div>
 
-      <div *ngIf="!loading && (users && users.length < 1)" class="container">
+      <div *ngIf="!loading && filteredProviders.length <= 0" class="container">
         <div class="row">
           <div class="col-12 d-flex flex-column">
             <div class="flexbox-container">
@@ -97,149 +20,46 @@
         </div>
       </div>
 
-      <div class="card-columns">
+      <div *ngIf="!loading && filteredProviders.length > 0" class="card-columns">
+        <h4 class="fw-400">
+          <span *ngIf="filteredProviders.length > 0">CanYa Providers</span>
+          <span *ngIf="filteredProviders.length == 0">Our Latest Providers</span>
+        </h4>
+        <ng-template *ngFor="let provider of filteredProviders; let i = index">
 
-        <ng-template ngFor let-i="index" let-user [ngForOf]="users">
-
-          <div *ngIf="i === 0 || i === 1 || i % 4 !== 0" class="card card-hover-shadow my-15">
+          <div class="card card-hover-shadow my-15">
             <div class="card-block pricing-3">
-              <span *ngIf="user && user.badge"  class="popular-tag" style="background:#3cf; float:right;">{{ user.badge }}</span>
+              <span *ngIf="provider && provider.badge" class="popular-tag" style="background:#3cf; float:right;">{{ provider.badge }}</span>
               <div class="profile">
-                <a [routerLink]="['/profile', user.address]" data-scrollto="section-profile">
-                  <img *ngIf="user && (user.avatar && user.avatar.uri)" class="headshot" src="{{ user.avatar.uri }}" alt="">
+                <a [routerLink]="['/profile', provider.address]" data-scrollto="section-profile">
+                  <img *ngIf="provider && (provider.avatar && provider.avatar.uri)" class="headshot" src="{{ provider.avatar.uri }}" alt="">
                 </a>
                 <div class="title">
-                  <h2 *ngIf="user && user.name">{{ user.name }}</h2>
-                  <h3 *ngIf="user && user.title">{{ user.title }}</h3>
-                  <p *ngIf="user && user.bio">{{ user.bio }}</p>
+                  <h2 *ngIf="provider && provider.name">{{ provider.name }}</h2>
+                  <h3 *ngIf="provider && provider.title">{{ provider.title }}</h3>
+                  <p *ngIf="provider && provider.bio">{{ provider.bio }}</p>
                 </div>
-                <a [routerLink]="['/profile', user.address]" data-scrollto="section-profile" class="btn btn-primary detail">
+                <a [routerLink]="['/profile', provider.address]" data-scrollto="section-profile" class="btn btn-primary detail">
                   <img src="assets/img/canya-button.png" style="margin-top: -2px;" width="16px" height="16px" alt="CanYa"> CANYA?
                 </a>
               </div>
             </div>
           </div>
-
-          <ng-template [ngIf]="(i !== 0 && i !== 1 && i % 4 === 0) && user.bio">
-            <a [routerLink]="['/profile', user.address]" data-scrollto="section-profile">
-              <div class="card card-hover-shadow specialcard-holder my-15" [ngStyle]="{ 'background': user.gradient }">
-                {{ user.bio }}</div>
-            </a>
-          </ng-template>
-
         </ng-template>
-
       </div>
-
-      <ng-template ngFor let-i="index" let-user [ngForOf]="users | slice:0:1">
-
-        <div *ngIf="user.bio.length > 14" class="row justify-content-center py-15">
-          <div class="col-12 col-md-9">
-
-            <a [routerLink]="['/profile', user.address]" data-scrollto="section-profile">
-              <div class="card card-hover-shadow specialcard-holder" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + user.colors[0] + ' 0%, ' + user.colors[1] + ' 93%)' }">
-                {{ user.bio }}</div>
-            </a>
-          </div>
-        </div>
-
-      </ng-template>
-
-    </div>
-  </section>
-
-  <!--
-  |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
-  | Explore
-  |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
-  !-->
-  <!-- As a CanYa user, finding <strong>crypto-friendly freelancers</strong> is easier than ever! -->
-  <section *ngIf="randomAnimation === 0" class="section bg-white py-1 overflow-hidden explore-margin">
-    <div class="container">
-      <div class="row align-items-center text-center text-lg-left">
-        <div class="col-12 col-md-6 align-self-center">
-          <div id="airport"></div>
-        </div>
-
-        <div class="col-12 col-md-6 align-self-center">
-          <!-- <h3 class="fw-400 px-10">Explore the marketplace</h3> -->
-          <img class="mb-5 px-10" src="assets/img/CanInvoice.svg" width="auto" height="36px">
-          <h5 class="fw-300 px-10">Make invoices, send files, track your time, simple to-do list. Try our <img class="mb-5" src="assets/img/CanApps.svg" width="auto" height="18px">.</h5>
-          <a [routerLink]="['/tools']" class="btn btn-lg btn-canya-tools text-white mx-10">
-            CREATE INVOICE
-          </a>
+      <div class="row">
+        <div class="col-12 my-0 py-0">
+          <app-swiper-cards></app-swiper-cards>
         </div>
       </div>
     </div>
   </section>
 
-  <!--
-  |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
-  | Career
-  |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
-  !-->
-  <!-- List your profile and gigs and make yourself known on the CanYa ecosystem. -->
-  <!-- Find work, get paid and manage your freelance career like a boss. -->
-  <section *ngIf="randomAnimation === 1" class="section bg-white py-1 overflow-hidden">
-    <div class="container">
-      <div class="row align-items-center text-center text-lg-left mt-30">
-        <div class="col-12 col-md-7 align-self-center">
-          <!-- <h3 class="fw-400 px-10">Business Tools</h3> -->
-          <img class="mb-5 px-10" src="assets/img/CanYa25.svg" width="auto" height="36px">
-          <h5 class="fw-300 px-10">Need funds for your new business? Shoot your pitch, vote and contribute, raise funds. Try CanYa25!</h5>
-          <a [routerLink]="['/tools']" class="btn btn-lg btn-canya-tools text-white mx-10">SHOOT A PITCH</a>
-        </div>
-
-        <div class="col-12 col-md-5 align-self-center">
-          <div id="home"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!--
-    |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
-    | Blog
-    |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
-    !-->
-  <section class="section bg-gray mt-30 pt-30 pb-0">
-    <div class="container">
-      <h2 class="text-center">Latest news</h2>
-      <br>
-      <br>
-
-      <div class="row gap-y">
-        <ng-template *ngFor="let fx of feed; let i = index">
-          <div class="col-12 col-md-6 col-lg-4" [ngClass]="{'hidden-md-down': i == 2}">
-            <div class="card card-bordered card-hover-shadow">
-              <a [href]="fx.link" target="_blank">
-                <img class="card-img-top" [src]="fx.thumbnail" [src-fallback]="placeholder" [alt]="feed.title" data-aos="fade-in">
-              </a>
-              <div class="card-block">
-                <h4 class="card-title">
-                  <a [href]="fx.link" target="_blank">{{ fx.title }}</a>
-                </h4>
-                <p class="card-text">{{ fx.description }}</p>
-                <a class="fw-600 fs-12" [href]="fx.link" target="_blank">Read more
-                  <i class="fa fa-chevron-right fs-9 pl-8"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </ng-template>
-
-      </div>
-
-      <br>
-      <br>
-      <p class="fw-400 text-center">
-        <a href="https://blog.canya.com.au" target="_blank">Browse all blog posts</a>
-      </p>
-    </div>
-  </section>
-
+  <app-random-animation></app-random-animation>
+  <app-blog-posts></app-blog-posts>
   <app-feedback></app-feedback>
+
 </main>
 
 <app-footer></app-footer>
-<app-scroll-top></app-scroll-top>>
+<app-scroll-top></app-scroll-top>

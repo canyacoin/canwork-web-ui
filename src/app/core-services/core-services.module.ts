@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { AnimationService} from './animation.service';
 import { AuthService } from './auth.service';
 import { FeedService } from './feed.service';
 import { MomentService } from './moment.service';
@@ -11,6 +12,7 @@ import { MomentService } from './moment.service';
   ],
   declarations: [],
   providers: [
+    AnimationService,
     AuthService,
     FeedService,
     MomentService

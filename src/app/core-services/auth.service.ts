@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import { take } from 'rxjs/operator/take';
 
 import { MomentService } from './moment.service';
 
@@ -17,8 +18,11 @@ export class AuthService {
   uport: any = null;
   web3: any = null;
 
+  usersCollectionRef: AngularFirestoreCollection<any>;
+
   constructor(private afs: AngularFirestore, private moment: MomentService) {
     this.initUport();
+    this.usersCollectionRef = this.afs.collection<any>('users');
   }
 
   // TODO: Refactor this into the thing called in auth guard (getCurrentUser)
