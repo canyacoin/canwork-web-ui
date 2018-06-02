@@ -27,7 +27,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   routeSub: Subscription;
   providerSub: Subscription;
 
-  placeholder = 'assets/img/outandabout.png';
 
   constructor(private activatedRoute: ActivatedRoute,
     private afs: AngularFirestore) {
@@ -85,7 +84,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
       this.filteredProviders = selectedProviders;
     } else {
-      console.log('onSearch - allUsers', this.allProviders);
       this.searching = false;
       this.filteredProviders = this.allProviders;
     }

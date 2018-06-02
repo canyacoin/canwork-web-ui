@@ -5,11 +5,10 @@
     <br>
 
     <div class="row gap-y">
-      <ng-template *ngFor="let fx of feed; let i = index">
-        <div class="col-12 col-md-6 col-lg-4" [ngClass]="{'hidden-md-down': i == 2}">
+        <div class="col-12 col-md-6 col-lg-4" *ngFor="let fx of feed; let i = index" [ngClass]="{'hidden-md-down': i == 2}">
           <div class="card card-bordered card-hover-shadow">
             <a [href]="fx.link" target="_blank">
-              <img class="card-img-top" [src]="fx.thumbnail" [src-fallback]="placeholder" [alt]="feed.title" data-aos="fade-in">
+              <img class="card-img-top" src="{{fx.thumbnail}}" [src-fallback]="placeholder" [alt]="feed.title" data-aos="fade-in">
             </a>
             <div class="card-block">
               <h4 class="card-title">
@@ -22,7 +21,6 @@
             </div>
           </div>
         </div>
-      </ng-template>
 
     </div>
 

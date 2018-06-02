@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ImgFallbackModule } from 'ngx-img-fallback';
 
 
 import { FeedbackComponent } from './feedback/feedback.component';
@@ -13,7 +12,6 @@ import { ScrollTopComponent } from './scroll-top/scroll-top.component';
 @NgModule({
   imports: [
     CommonModule,
-    ImgFallbackModule,
     RouterModule
   ],
   declarations: [

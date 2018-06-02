@@ -11,6 +11,8 @@ export class BlogPostsComponent implements OnInit {
 
   feed: any = [];
 
+  placeholder = 'assets/img/outandabout.png';
+
   constructor(private feedService: FeedService) { }
 
   ngOnInit() {

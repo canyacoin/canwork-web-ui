@@ -6,6 +6,7 @@ import { NgModule } from '@angular/core';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 
@@ -21,17 +22,18 @@ import { environment } from '../environments/environment';
     AppComponent
   ],
   imports: [
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule.enablePersistence(),
     RouterModule.forRoot([
       { path: '', redirectTo: '/home', pathMatch: 'full' },
     ]),
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule.enablePersistence(),
     BrowserModule,
     BrowserAnimationsModule,
     CoreComponentsModule,
     CoreServicesModule,
     CoreUtilsModule,
-    HomeModule
+    HomeModule,
+    HttpModule
   ],
   providers: [],
   bootstrap: [AppComponent]

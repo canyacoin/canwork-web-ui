@@ -3,7 +3,7 @@ import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/fires
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { take } from 'rxjs/operator/take';
+import 'rxjs/add/operator/take';
 
 import { MomentService } from './moment.service';
 
