@@ -49,6 +49,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   loadProviders() {
     const providersCollection = this.afs.collection('users', ref => ref.where('state', '==', 'Done').where('type', '==', 'Provider').orderBy('timestamp', 'desc'));
+    if (this.providerSub) { this.providerSub.unsubscribe(); }
     this.providerSub = providersCollection.valueChanges().subscribe((data: any) => {
       this.allProviders = data;
       this.filterProviders();

@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 
-import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
+import { FeedItem } from '../core-classes/feed-item';
 
-import * as moment from 'moment';
+import { environment } from '../../environments/environment';
 
 declare let require: any;
 
@@ -15,54 +12,54 @@ const parseString = require('xml2js').parseString;
 @Injectable()
 export class FeedService {
 
-  feedUrl = 'https://feed.rssunify.com/5a9322f94d907/rss.xml';
+  feedUrl = environment.blogFeedUrl;
 
   constructor(public http: Http) { }
 
-  getItems(): Observable<any[]> {
-    return this.http.get(this.feedUrl)
-      .map(this.extractData)
-      .catch(this.handleError);
+  async getItemsAsync(amount: number): Promise<any[]> {
+    try {
+      const feedData = await this.http.get(this.feedUrl).toPromise();
+      const parsedFeed = await this.parseFeedAsync(amount, feedData.text());
+      return parsedFeed;
+    } catch (error) {
+      const errMsg = (error.message) ? error.message :
+        error.status ? `${error.status} - ${error.statusText}` : 'RSS Server error';
+      return Promise.reject('RSS Server error');
+    }
   }
 
-  extractData(res: Response) {
-    return Observable.create((observer: Observer<any>) => {
-      parseString(res.text(), (err, result) => {
-        const items = result['rss']['channel'][0]['item'];
-        const body = [];
-        const re = /https?:\/\/(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*?[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/ig;
+  async parseFeedAsync(amount: number, xml: string): Promise<FeedItem[]> {
 
-        if (items) {
-          for (let i = 0; i < items.length; i++) {
-            const tmp = {};
-            tmp['title'] = items[i]['title'][0];
-            tmp['timestamp'] = moment(items[i]['pubDate'][0]).format('x');
-            tmp['content'] = items[i]['content:encoded'][0].replace(re, '<iframe width="100%" height="315" src="https://www.youtube.com/embed/$1" frameborder="0" allowfullscreen></iframe>');
-            tmp['link'] = items[i]['link'][0];
+    const parsedXml = await new Promise((resolve, reject) => parseString(xml, (err, result) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(result);
+    }));
 
-            if (items[i]['description'] instanceof Array) {
-              tmp['description'] = items[i]['description']['0'];
-            }
+    const items = parsedXml['rss']['channel'][0]['item'];
+    const parsedFeedData = [];
 
-            if (items[i]['media:thumbnail'] instanceof Array) {
-              tmp['thumbnail'] = items[i]['media:thumbnail']['0'].$.url || 'assets/img/work-placeholder.svg';
-            }
-            if (tmp['thumbnail'] === 'null' || tmp['thumbnail'] === null) {
-              tmp['thumbnail'] = 'assets/img/work-placeholder.svg';
-            }
-            body.push(tmp);
-          }
+    if (items) {
+      for (let i = 0; i < amount; i++) {
+        const tmp = {};
+        tmp['title'] = items[i]['title'][0];
+        tmp['link'] = items[i]['link'][0];
+
+        if (items[i]['description'] instanceof Array) {
+          tmp['description'] = items[i]['description']['0'];
         }
-        observer.next(body || []);
-        observer.complete();
-      });
-    });
-  }
 
-  handleError(error: any) {
-    const errMsg = (error.message) ? error.message :
-      error.status ? `${error.status} - ${error.statusText}` : 'RSS Server error';
-    console.error(error);
-    return Observable.throw(errMsg);
+        if (items[i]['media:thumbnail'] instanceof Array) {
+          tmp['thumbnail'] = items[i]['media:thumbnail']['0'].$.url || 'assets/img/work-placeholder.svg';
+        }
+        if (tmp['thumbnail'] === 'null' || tmp['thumbnail'] === null) {
+          tmp['thumbnail'] = 'assets/img/work-placeholder.svg';
+        }
+        parsedFeedData.push(tmp);
+      }
+    }
+
+    return Promise.resolve(parsedFeedData);
   }
 }

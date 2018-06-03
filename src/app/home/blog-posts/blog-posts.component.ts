@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { FeedService } from '../../core-services/feed.service';
+import { FeedItem } from '../../core-classes/feed-item';
 
 @Component({
   selector: 'app-blog-posts',
@@ -15,14 +16,7 @@ export class BlogPostsComponent implements OnInit {
 
   constructor(private feedService: FeedService) { }
 
-  ngOnInit() {
-    this.feedService.getItems().subscribe((result: any) => {
-      result.subscribe((data) => {
-        data.slice(0, 3).map((item) => {
-          this.feed.push(item);
-        });
-      });
-    });
+  async ngOnInit() {
+    this.feed = await this.feedService.getItemsAsync(3);
   }
-
 }
