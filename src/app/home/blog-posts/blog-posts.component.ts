@@ -10,7 +10,7 @@ import { FeedItem } from '../../core-classes/feed-item';
 })
 export class BlogPostsComponent implements OnInit {
 
-  feed: any = [];
+  feed = new Array<FeedItem>();
 
   placeholder = 'assets/img/outandabout.png';
 

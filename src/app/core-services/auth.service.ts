@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/take';
 
 import { MomentService } from './moment.service';
+import { User } from '../core-classes/user';
 
 import { environment } from '../../environments/environment';
 
@@ -13,7 +14,7 @@ import { environment } from '../../environments/environment';
 @Injectable()
 export class AuthService {
 
-  currentUser: any = JSON.parse(localStorage.getItem('credentials'));
+  currentUser: User = JSON.parse(localStorage.getItem('credentials'));
 
   uport: any = null;
   web3: any = null;
@@ -72,10 +73,10 @@ export class AuthService {
   }
 
   // Formerly saveCredentials
-  initialiseUser(credentials: any, type?: string): Promise<any> {
+  initialiseUser(credentials: User, type?: string): Promise<User> {
     return new Promise(async (resolve: any, reject: any) => {
       try {
-        credentials['timestamp'] = this.moment.get();
+        credentials.timestamp = this.moment.get();
         localStorage.setItem('credentials', JSON.stringify(credentials));
         this.saveUserFirebase(credentials);
         resolve(credentials);
@@ -87,7 +88,7 @@ export class AuthService {
 
   // formerly saveData
   updateUserProperty(key: string, value: any) {
-    const credentials = JSON.parse(localStorage.getItem('credentials'));
+    const credentials: User = JSON.parse(localStorage.getItem('credentials'));
     if (credentials) {
       credentials[key] = value;
       localStorage.setItem('credentials', JSON.stringify(credentials));
@@ -95,7 +96,7 @@ export class AuthService {
     }
   }
 
-  private saveUserFirebase(userModel: any) {
+  private saveUserFirebase(userModel: User) {
     if (userModel && userModel.address) {
       const ref = userModel.address;
       // Firebase: SaveUser

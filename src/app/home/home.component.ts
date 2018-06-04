@@ -6,6 +6,9 @@ import { Observable } from 'rxjs/Observable';
 import { take } from 'rxjs/operator/take';
 import { Subscription } from 'rxjs/Subscription';
 
+import { User } from '../core-classes/user';
+import { Portfolio, Work } from '../core-classes/portfolio';
+
 import * as findIndex from 'lodash/findIndex';
 
 @Component({
@@ -15,10 +18,10 @@ import * as findIndex from 'lodash/findIndex';
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  currentUser: any = JSON.parse(localStorage.getItem('credentials'));
+  currentUser: User = JSON.parse(localStorage.getItem('credentials'));
 
-  allProviders: any = [];
-  filteredProviders: any = [];
+  allProviders: User[] = [];
+  filteredProviders: User[] = [];
 
   query = '';
   loading = true;
@@ -50,7 +53,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   loadProviders() {
     const providersCollection = this.afs.collection('users', ref => ref.where('state', '==', 'Done').where('type', '==', 'Provider').orderBy('timestamp', 'desc'));
     if (this.providerSub) { this.providerSub.unsubscribe(); }
-    this.providerSub = providersCollection.valueChanges().subscribe((data: any) => {
+    this.providerSub = providersCollection.valueChanges().subscribe((data: User[]) => {
       this.allProviders = data;
       this.filterProviders();
     });
@@ -62,18 +65,18 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.searching = true;
 
       const selectedProviders: any = [];
-      this.allProviders.map((item) => {
-        if (JSON.stringify(item).toLowerCase().includes(this.query.toLowerCase())) {
-          selectedProviders.push(item);
+      this.allProviders.map((provider: User) => {
+        if (JSON.stringify(provider).toLowerCase().includes(this.query.toLowerCase())) {
+          selectedProviders.push(provider);
         }
       });
 
-      this.allProviders.map((item) => {
-        this.afs.collection(`portfolio/${item.address}/work`).valueChanges().take(1).subscribe((work: any) => {
+      this.allProviders.map((provider: User) => {
+        this.afs.collection(`portfolio/${provider.address}/work`).valueChanges().take(1).subscribe((work: Work[]) => {
           if (JSON.stringify(work).toLowerCase().includes(this.query.toLowerCase())) {
-            const index: number = findIndex(selectedProviders, { 'address': item.address });
+            const index: number = findIndex(selectedProviders, { 'address': provider.address });
             if (index === -1) {
-              selectedProviders.push(item);
+              selectedProviders.push(provider);
             }
           }
         });

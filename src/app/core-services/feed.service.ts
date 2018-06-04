@@ -16,7 +16,7 @@ export class FeedService {
 
   constructor(public http: Http) { }
 
-  async getItemsAsync(amount: number): Promise<any[]> {
+  async getItemsAsync(amount: number): Promise<FeedItem[]> {
     try {
       const feedData = await this.http.get(this.feedUrl).toPromise();
       const parsedFeed = await this.parseFeedAsync(amount, feedData.text());
