@@ -33,16 +33,16 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private activatedRoute: ActivatedRoute,
     private afs: AngularFirestore) {
+      this.routeSub = this.activatedRoute.params.subscribe((params) => {
+        this.query = params['query'] ? params['query'] : '';
+        this.loadProviders();
+      });
   }
 
   ngOnInit() {
   }
 
   ngAfterViewInit() {
-    this.routeSub = this.activatedRoute.params.subscribe((params) => {
-      this.query = params['query'] ? params['query'] : '';
-      this.loadProviders();
-    });
   }
 
   ngOnDestroy() {

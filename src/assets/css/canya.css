@@ -2625,7 +2625,7 @@ button:focus {
   color: #fff;
   border-radius: 50%;
   opacity: 0;
-  z-index: 980;
+  z-index: 98;
   -webkit-box-shadow: 0 3px 15px rgba(15, 172, 243, 0.4);
           box-shadow: 0 3px 15px rgba(15, 172, 243, 0.4);
   -webkit-transition: .5s ease-in-out;
@@ -4844,7 +4844,7 @@ ul.flexbox {
   background-color: transparent;
   height: 90px;
   border-radius: 0;
-  z-index: 910;
+  z-index: 91;
   -webkit-transition: margin-left .5s;
   transition: margin-left .5s;
 }
@@ -4935,7 +4935,7 @@ ul.flexbox {
   font-weight: 600;
   font-size: .75rem;
   line-height: 90px;
-  z-index: 910;
+  z-index: 91;
 }
 
 .topbar-nav .nav-item {
@@ -5553,7 +5553,7 @@ ul.flexbox {
   right: 0;
   bottom: 0;
   background-color: rgba(255, 255, 255, 0.95);
-  z-index: 909;
+  z-index: 90;
   cursor: pointer;
 }
 
@@ -5646,7 +5646,7 @@ ul.flexbox {
           box-shadow: -2px 0 20px rgba(0, 0, 0, 0.06);
   -webkit-transition: .5s;
   transition: .5s;
-  z-index: 980;
+  z-index: 98;
 }
 
 .drawer-content {
@@ -5689,7 +5689,7 @@ ul.flexbox {
   left: 0;
   right: 300px;
   bottom: 0;
-  z-index: 981;
+  z-index: 98;
   display: none;
 }
 

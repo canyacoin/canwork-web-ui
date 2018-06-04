@@ -67,3 +67,25 @@
     </div>
   </div>
 </header>
+
+
+<!-- Logout - Are you sure? -->
+<div class="modal fade" id="areYouSureLogoutModal" tabindex="-1" role="dialog" data-keyboard="true" data-backdrop="true" aria-labelledby="areYouSureLogoutLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Sign out</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to sign out of your account?</p>
+        </div>
+        <div class="modal-footer">
+          <button (click)="onLogout()" type="button" class="btn btn-danger" data-dismiss="modal">Yes</button>
+          <button (click)="onCancel()" type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
