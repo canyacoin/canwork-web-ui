@@ -22,7 +22,6 @@ export class AuthService {
   usersCollectionRef: AngularFirestoreCollection<any>;
 
   constructor(private afs: AngularFirestore, private moment: MomentService) {
-    this.initUport();
     this.usersCollectionRef = this.afs.collection<any>('users');
   }
 

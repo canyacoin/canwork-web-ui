@@ -41,10 +41,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const unreadConversations = this.afs.collection('chats').doc(this.currentUser.address).collection('channels', ref => ref.where('unreadMessages', '==', true));
-    this.messagesSubscription = unreadConversations.valueChanges().subscribe(x => {
-      this.hasUnreadMessages = x.length > 0;
-    });
+    if (this.currentUser) {
+      const unreadConversations = this.afs.collection('chats').doc(this.currentUser.address).collection('channels', ref => ref.where('unreadMessages', '==', true));
+      this.messagesSubscription = unreadConversations.valueChanges().subscribe(x => {
+        this.hasUnreadMessages = x.length > 0;
+      });
+    }
   }
 
   ngOnDestroy() {

@@ -1,0 +1,20 @@
+<app-header></app-header>
+
+<main class="main-content">
+  <section class="section bg-gray py-20" id="section-main">
+    <div class="container min-70">
+      <div *ngIf="pageInit">
+        <a (click)="onConnect();" class="d-block">
+          <img src="assets/img/BannerUport.png" class="b-0 d-block" alt="CanYa+ uPort!" width="318">
+        </a>
+      </div>
+      <div>
+        <h5 class="text-left" style="width: 100%;">Sign in with alternative services</h5>
+        <firebase-ui (signInSuccess)="onLogin($event);"></firebase-ui>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-footer></app-footer>
+ 

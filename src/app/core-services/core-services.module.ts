@@ -6,6 +6,7 @@ import { AnimationService} from './animation.service';
 import { AuthService } from './auth.service';
 import { FeedService } from './feed.service';
 import { MomentService } from './moment.service';
+import { ScriptService } from './script.service';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { MomentService } from './moment.service';
     AnimationService,
     AuthService,
     FeedService,
-    MomentService
+    MomentService,
+    ScriptService
   ]
 })
 export class CoreServicesModule { }

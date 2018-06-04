@@ -1,6 +1,8 @@
 import { State } from './state.enum';
 
 export class User {
+    '@type': string;
+    '@context': string;
     address: string;
     avatar: Avatar;
     bio: string;
@@ -16,6 +18,10 @@ export class User {
     title: string;
     type: string;
     work: string;
+
+    constructor(init?: Partial<User>) {
+        Object.assign(this, init);
+    }
 }
 
 export class Avatar {
