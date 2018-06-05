@@ -1,21 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 
 import { FirebaseUIModule } from 'firebaseui-angular';
 
 import { CoreComponentsModule } from '../core-components/core-components.module';
 import { CoreServicesModule } from '../core-services/core-services.module';
 import { CoreUtilsModule } from '../core-utils/core-utils.module';
-import { AuthGuard } from '../core-utils/auth.guard';
+import { AuthRoutingModule } from './auth.routing.module';
 
 import { LoginComponent } from './login/login.component';
 
 @NgModule({
   imports: [
-    RouterModule.forRoot([
-      { path: 'login', component: LoginComponent, data: { canAccessWhenLoggedOut: true, canAccessWhenLoggedIn: false }, canActivate: [AuthGuard] }
-    ]),
+    AuthRoutingModule,
     CommonModule,
     CoreComponentsModule,
     CoreServicesModule,
@@ -24,6 +21,9 @@ import { LoginComponent } from './login/login.component';
   ],
   declarations: [
     LoginComponent
+  ],
+  exports: [
+    AuthRoutingModule
   ]
 })
 export class AuthModule { }
