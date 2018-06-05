@@ -1,5 +1,3 @@
-import { State } from './state.enum';
-
 export class User {
     '@type': string;
     '@context': string;
@@ -10,9 +8,14 @@ export class User {
     colors: string[];
     description: string;
     email: string;
+    ethAddress: string;
     name: string;
+    networkAddress: string;
     phone: string;
-    state: State;
+    publicEncKey: string;
+    publicKey: string;
+    pushToken: string;
+    state: UserState;
     timestamp: string;
     timezone: string;
     title: string;
@@ -26,4 +29,8 @@ export class User {
 
 export class Avatar {
     uri: string;
+}
+
+export enum UserState {
+    done = 'Done'
 }

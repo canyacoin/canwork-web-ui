@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/take';
 
 import { MomentService } from './moment.service';
-import { User } from '../core-classes/user';
+import { User, Avatar } from '../core-classes/user';
 
 import { environment } from '../../environments/environment';
 
@@ -17,7 +17,6 @@ export class AuthService {
   currentUser: User = JSON.parse(localStorage.getItem('credentials'));
 
   uport: any = null;
-  web3: any = null;
 
   usersCollectionRef: AngularFirestoreCollection<any>;
 
@@ -46,25 +45,20 @@ export class AuthService {
         clientId: environment.uPort.clientId,
         signer: (<any>window).uportconnect.SimpleSigner(environment.uPort.signer)
       });
-      this.web3 = this.uport.getWeb3();
     } catch (error) {
       console.error('UserService\t initUport\t error', error);
     }
   }
 
-
   // formerly connect
-  async uportConnectAsync(type?: string) {
+  async uportConnectAsync(type?: string): Promise<any> {
     return new Promise((resolve: any, reject: any) => {
       this.uport.requestCredentials({
         requested: ['avatar', 'name', 'email', 'phone', 'country'],
         notifications: true // We want this if we want to receive credentials
       }).then(async (credentials) => {
-        this.initialiseUser(credentials, type).then( (user: any) => {
-          resolve(user);
-        }, (error) => {
-          reject(error);
-        });
+        console.log(JSON.stringify(credentials));
+        resolve(credentials);
       }, (error) => {
         reject(error);
       });
@@ -101,7 +95,7 @@ export class AuthService {
       // Firebase: SaveUser
       this.usersCollectionRef.doc(ref).snapshotChanges().take(1).subscribe((snap: any) => {
         console.log('saveUser - payload', snap.payload.exists);
-        return snap.payload.exists ? this.usersCollectionRef.doc(ref).update(userModel) : this.usersCollectionRef.doc(ref).set(userModel);
+        return snap.payload.exists ? this.usersCollectionRef.doc(ref).update(Object.assign({}, userModel)) : this.usersCollectionRef.doc(ref).set(Object.assign({}, userModel));
       });
     }
   }

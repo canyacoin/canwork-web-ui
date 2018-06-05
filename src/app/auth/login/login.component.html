@@ -9,13 +9,13 @@
       <div class="row">
         <div class="col-sm-0 col-md-0 col-lg-2"></div>
         <div class="col-sm-12 col-md-6 col-lg-4 center-block text-center">
-          <a *ngIf="pageInit" (click)="onConnect();" class="d-block pointer" >
+          <a *ngIf="pageInit" (click)="onUportLogin();" class="d-block pointer" >
             <img src="assets/img/BannerUport.png" class="b-0 d-block img-responsiveness" alt="CanYa+ uPort!" width="318">
           </a>
         </div>
         <div class="col-sm-12 col-md-6 col-lg-4 text-center">
           <h5 style="width: 100%;">Sign in with alternative services</h5>
-          <firebase-ui (signInSuccess)="onLogin($event)"></firebase-ui>
+          <firebase-ui (signInSuccess)="onFirebaseLogin($event)"></firebase-ui>
         </div>
         <div class="col-sm-0 col-md-0 col-lg-2"></div>
       </div>

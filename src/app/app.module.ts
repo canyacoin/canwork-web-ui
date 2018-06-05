@@ -8,7 +8,7 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { FirebaseUIModule } from 'firebaseui-angular';
-import { firebaseUiAuthConfig } from './app-auth-config';
+import { firebaseUiAuthConfig } from './core-config/app-auth-config';
 
 import { CoreComponentsModule } from './core-components/core-components.module';
 import { CoreServicesModule } from './core-services/core-services.module';

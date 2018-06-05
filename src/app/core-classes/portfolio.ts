@@ -1,5 +1,3 @@
-import { State } from './state.enum';
-
 export class Portfolio {
     work: Work[];
 }
@@ -9,8 +7,12 @@ export class Work {
     id: string;
     image: string;
     link: string;
-    state: State;
+    state: WorkState;
     tags: string[];
     timestamp: string;
     title: string;
+}
+
+export enum WorkState {
+    done = 'Done'
 }
