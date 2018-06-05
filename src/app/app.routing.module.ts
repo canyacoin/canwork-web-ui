@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
+import { ToolsComponent } from './tools/tools.component';
+
 @NgModule({
   imports: [
     RouterModule.forRoot([
@@ -17,6 +19,10 @@ import { RouterModule, Routes } from '@angular/router';
       {
         path: 'auth',
         loadChildren: './auth/auth.module#AuthModule'
+      },
+      {
+        path: 'tools',
+        component: ToolsComponent
       },
       {
         path: '**',
