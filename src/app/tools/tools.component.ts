@@ -10,6 +10,7 @@ export class ToolsComponent {
 
   apps: App[] = CanApps;
 
-  constructor() { }
+  constructor() {
+  }
 
 }

@@ -5,15 +5,12 @@
     <div class="container">
       <img class="mb-20" src="assets/img/CanApps.svg" width="auto" height="36px">
       <div class="row">
-        <ng-template *ngFor="let app of apps; let i = index">
-          <div *ngIf="i > 0 && i % 4 == 0" class="col-12 p-2 hidden-sm-down"></div>
-          <div class="col">
-            <app-can-app ></app-can-app>
-          </div>
-        </ng-template>
+        <div class="col mb-20" *ngFor="let app of apps; let i = index">
+          <app-can-app [app]="app"></app-can-app>
+        </div>
       </div>
     </div>
   </section>
 </main>
 
-<app-footer></app-footer>
+<app-footer></app-footer> 

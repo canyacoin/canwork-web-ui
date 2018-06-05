@@ -10,4 +10,7 @@ export class CanAppComponent {
 
   @Input() app: App;
 
+  constructor() {
+  }
+
 }
