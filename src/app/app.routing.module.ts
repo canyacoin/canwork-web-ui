@@ -1,11 +1,10 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { BrandComponent } from './core-components/brand/brand.component';
-import { ToolsComponent } from './core-components/tools/tools.component';
 import { ConsoleComponent } from './core-components/console/console.component';
-
+import { ToolsComponent } from './core-components/tools/tools.component';
 import { AuthGuard } from './core-utils/auth.guard';
 
 @NgModule({
@@ -21,6 +20,10 @@ import { AuthGuard } from './core-utils/auth.guard';
         loadChildren: './home/home.module#HomeModule'
       },
       {
+        path: 'profile',
+        loadChildren: './profile/profile.module#ProfileModule'
+      },
+      {
         path: 'login',
         redirectTo: '/auth',
         pathMatch: 'full'
@@ -29,7 +32,7 @@ import { AuthGuard } from './core-utils/auth.guard';
         path: 'auth',
         loadChildren: './auth/auth.module#AuthModule',
         canActivate: [AuthGuard],
-        data: { requiresLoggedOut: true}
+        data: { requiresLoggedOut: true }
       },
       {
         path: 'tools',
@@ -43,7 +46,7 @@ import { AuthGuard } from './core-utils/auth.guard';
         path: 'console',
         component: ConsoleComponent,
         canActivate: [AuthGuard],
-        data: { requiresLoggedIn: true}
+        data: { requiresLoggedIn: true }
       },
       {
         path: '**',

@@ -1,15 +1,13 @@
-import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-
+import * as findIndex from 'lodash/findIndex';
 import { Observable } from 'rxjs/Observable';
 import { take } from 'rxjs/operator/take';
 import { Subscription } from 'rxjs/Subscription';
 
-import { User } from '../core-classes/user';
 import { Portfolio, Work } from '../core-classes/portfolio';
-
-import * as findIndex from 'lodash/findIndex';
+import { User } from '../core-classes/user';
 
 @Component({
   selector: 'app-home',
@@ -33,10 +31,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private activatedRoute: ActivatedRoute,
     private afs: AngularFirestore) {
-      this.routeSub = this.activatedRoute.params.subscribe((params) => {
-        this.query = params['query'] ? params['query'] : '';
-        this.loadProviders();
-      });
+    this.routeSub = this.activatedRoute.params.subscribe((params) => {
+      this.query = params['query'] ? params['query'] : '';
+      this.loadProviders();
+    });
   }
 
   ngOnInit() {
