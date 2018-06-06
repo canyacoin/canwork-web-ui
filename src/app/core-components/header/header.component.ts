@@ -3,7 +3,8 @@ import { trigger, transition, animate, style } from '@angular/animations';
 import { Router } from '@angular/router';
 
 import { AngularFirestore } from 'angularfire2/firestore';
-import { AngularFireAuth } from 'angularfire2/auth';
+
+import { AuthService } from '../../core-services/auth.service';
 
 import { Subscription } from 'rxjs/Subscription';
 
@@ -36,7 +37,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   providerCategories = ['Content Creators', 'Designers & Creatives', 'Financial experts', 'Marketing & SEO', 'Software developers', 'Virtual assistants'];
 
   constructor(private afs: AngularFirestore,
-    private afAuth: AngularFireAuth,
+    private auth: AuthService,
     private router: Router) {
   }
 
@@ -80,8 +81,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onLogout() {
-    localStorage.clear();
-    this.afAuth.auth.signOut();
-    window.location.reload();
+    this.auth.logout();
   }
 }

@@ -20,8 +20,7 @@ import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    ToolsComponent
+    AppComponent
   ],
   imports: [
     AppRoutingModule,

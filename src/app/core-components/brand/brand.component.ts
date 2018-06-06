@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BrandComponent implements OnInit {
 
-  styleGuideUrl: 'https://canstyle.io';
+  styleGuideUrl = 'https://canstyle.io';
 
   constructor() { }
 

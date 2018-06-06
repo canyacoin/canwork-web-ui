@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -20,7 +21,7 @@ export class AuthService {
 
   usersCollectionRef: AngularFirestoreCollection<any>;
 
-  constructor(private afs: AngularFirestore, private moment: MomentService) {
+  constructor(private afs: AngularFirestore, private moment: MomentService, private afAuth: AngularFireAuth) {
     this.usersCollectionRef = this.afs.collection<any>('users');
   }
 
@@ -37,6 +38,12 @@ export class AuthService {
 
   isAuthenticated() {
     return this.currentUser !== null;
+  }
+
+  logout() {
+    localStorage.clear();
+    this.afAuth.auth.signOut();
+    window.location.reload();
   }
 
   initUport() {

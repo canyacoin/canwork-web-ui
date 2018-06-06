@@ -1,8 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { AngularFireAuth } from 'angularfire2/auth';
-
 import { AuthService } from '../../core-services/auth.service';
 
 @Component({
@@ -35,9 +33,8 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
   hideBanner = false;
 
   constructor(private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private userService: UserService,
-    public afAuth: AngularFireAuth) {
+    private authService: AuthService,
+    private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -47,6 +44,10 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
     this.activatedRoute.url.subscribe((url) => {
       this.rndBanner = Math.floor( Math.random() * 4 );
     });
+  }
+
+  onLogout() {
+    this.authService.logout();
   }
 
   onAction(event: any) {
