@@ -1,16 +1,18 @@
-import { Component } from '@angular/core';
-import { CanApps, App } from '../core-config/can-apps';
+import { Component, OnInit } from '@angular/core';
+
+declare var createCards: any;
 
 @Component({
   selector: 'app-tools',
   templateUrl: './tools.component.html',
   styleUrls: ['./tools.component.css']
 })
-export class ToolsComponent {
-
-  apps: App[] = CanApps;
+export class ToolsComponent implements OnInit {
 
   constructor() {
   }
 
+  ngOnInit() {
+    createCards();
+  }
 }

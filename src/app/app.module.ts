@@ -16,15 +16,13 @@ import { CoreUtilsModule } from './core-utils/core-utils.module';
 
 import { AppComponent } from './app.component';
 import { ToolsComponent } from './tools/tools.component';
-import { CanAppComponent } from './tools/can-app/can-app.component';
 
 import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ToolsComponent,
-    CanAppComponent
+    ToolsComponent
   ],
   imports: [
     AppRoutingModule,
