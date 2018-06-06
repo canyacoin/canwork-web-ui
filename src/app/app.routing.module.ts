@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
-import { ToolsComponent } from './tools/tools.component';
+import { ToolsComponent } from './core-components/tools/tools.component';
+import { ConsoleComponent } from './core-components/console/console.component';
 
 @NgModule({
   imports: [
@@ -23,6 +24,14 @@ import { ToolsComponent } from './tools/tools.component';
       {
         path: 'tools',
         component: ToolsComponent
+      },
+      {
+        path: 'brnad',
+        component: BrandComponent
+      },
+      {
+        path: 'console',
+        component: ConsoleComponent
       },
       {
         path: '**',
