@@ -5,22 +5,22 @@
     <br>
 
     <div class="row gap-y">
-        <div class="col-12 col-md-6 col-lg-4" *ngFor="let fx of feed; let i = index" [ngClass]="{'hidden-md-down': i == 2}">
-          <div class="card card-bordered card-hover-shadow">
-            <a [href]="fx.link" target="_blank">
-              <img class="card-img-top" src="{{fx.thumbnail}}" [src-fallback]="placeholder" [alt]="feed.title" data-aos="fade-in">
+      <div class="col-12 col-md-6 col-lg-4" *ngFor="let fx of feed; let i = index" [ngClass]="{'hidden-md-down': i == 2}">
+        <div class="card card-bordered card-hover-shadow">
+          <a [href]="fx.link" target="_blank">
+            <img class="card-img-top" src="{{fx.thumbnail}}" [src-fallback]="placeholder" [alt]="feed.title" data-aos="fade-in">
+          </a>
+          <div class="card-block">
+            <h4 class="card-title">
+              <a [href]="fx.link" target="_blank">{{ fx.title }}</a>
+            </h4>
+            <p class="card-text">{{ fx.description | sanitizeHtml}}</p>
+            <a class="fw-600 fs-12" [href]="fx.link" target="_blank">Read more
+              <i class="fa fa-chevron-right fs-9 pl-8"></i>
             </a>
-            <div class="card-block">
-              <h4 class="card-title">
-                <a [href]="fx.link" target="_blank">{{ fx.title }}</a>
-              </h4>
-              <p class="card-text">{{ fx.description }}</p>
-              <a class="fw-600 fs-12" [href]="fx.link" target="_blank">Read more
-                <i class="fa fa-chevron-right fs-9 pl-8"></i>
-              </a>
-            </div>
           </div>
         </div>
+      </div>
 
     </div>
 

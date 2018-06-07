@@ -28,19 +28,7 @@
         <div class="col-12 col-md-8 my-5">
           <app-profile-bio *ngIf="userModel && userModel.description" [currentUser]="currentUser" [userModel]="userModel"></app-profile-bio>
 
-          <div class="card" style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px;">
-            <div *ngIf="notMyProfile()">
-              <div #portfolio id="portfolio"></div>
-              <h3 class="fw-500">Ohh, so exciting!</h3>
-              <h4 class="fw-400 mb-20">CanYa do something for you?</h4>
-              <button (click)="postRequest()" class="btn btn-primary btn-canya-chat mb-30" data-scrollto="section-profile">
-                <img src="assets/img/canya-button.png" style="margin-top: -2px;" width="16px" height="16px" alt="CanYa"> CANYA? Post a request
-              </button>
-            </div>
-            <div *ngIf="isMyProfile()" id="page-wrap" class="pt-25">
-              <app-profile-portfolio [userModel]="userModel" [currentUser]="currentUser"></app-profile-portfolio>
-            </div>
-          </div>
+          <app-profile-portfolio *ngIf="userModel" [userModel]="userModel" [currentUser]="currentUser"></app-profile-portfolio>
         </div>
       </div>
     </div>

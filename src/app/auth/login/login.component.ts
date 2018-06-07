@@ -1,13 +1,11 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { FirebaseUISignInSuccess } from 'firebaseui-angular';
 
+import { FirebaseUISignInSuccess } from 'firebaseui-angular';
+import { User } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
 import { ScriptService } from '../../core-services/script.service';
-import { User } from '../../core-classes/user';
-
 
 enum LoginType {
   Uport = 'uport',
@@ -47,7 +45,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       this.authService.uportConnectAsync().then((credentials) => {
         const avatar = credentials['avatar'];
         const randomAvatarUri = `assets/img/animals/${Math.floor(Math.random() * 109) + 1}.png`;
-        credentials['avatar'] = {'uri': avatar ? credentials['avatar']['uri'] || randomAvatarUri : randomAvatarUri};
+        credentials['avatar'] = { 'uri': avatar ? credentials['avatar']['uri'] || randomAvatarUri : randomAvatarUri };
         const parsedUser = new User(credentials);
 
         this.handleLogin(parsedUser);
@@ -78,10 +76,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   handleLogin(userDetails: User) {
-    const options = userDetails.phone ?
-      { field: 'phone', value: userDetails.phone} : { field: 'email', value: userDetails.email };
 
-    this.afs.collection<any>('users', ref => ref.where(options.field, '==', options.value).limit(1)).valueChanges().take(1).subscribe((data: any) => {
+    this.afs.collection<any>('users', ref => ref.where('address', '==', userDetails.address).limit(1)).valueChanges().take(1).subscribe((data: any) => {
       if (data && (data instanceof Array) && data.length > 0) {
         localStorage.setItem('credentials', JSON.stringify(data[0]));
         this.router.navigate(['/home']);

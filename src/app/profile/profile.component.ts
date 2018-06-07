@@ -73,16 +73,12 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  public isMyProfile() {
+  isMyProfile() {
     return (this.userModel && (this.userModel.address === this.currentUser.address));
   }
 
-  public notMyProfile() {
+  notMyProfile() {
     return (this.userModel && (this.userModel.address !== this.currentUser.address));
-  }
-
-  postRequest() {
-    this.router.navigate(['/post', this.userModel.address]);
   }
 }
 

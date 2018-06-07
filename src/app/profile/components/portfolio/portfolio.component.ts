@@ -71,6 +71,10 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     this.router.navigate(['/buy']);
   }
 
+  postRequest() {
+    this.router.navigate(['/post', this.userModel.address]);
+  }
+
   isMyProfile() {
     return (this.userModel && (this.userModel.address === this.currentUser.address));
   }
