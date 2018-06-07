@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Subscription } from 'rxjs/Subscription';
 
-import { DefaultImages } from '../../../core-classes/default-images.enum';
 import { User } from '../../../core-classes/user';
+import { AnimationService } from '../../../core-services/animation.service';
 
 @Component({
   selector: 'app-profile-portfolio',
@@ -16,7 +16,8 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   @Input() userModel: User;
   @Input() currentUser: User;
 
-  allPortfolioItems: any[];
+  allPortfolioItems: any[] = [];
+  loaded = false;
 
   pageLimit = 2;
   currentPage = 0;
@@ -25,9 +26,8 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
   portfolioSubscription: Subscription;
 
-  defaultImage = DefaultImages.workPlaceHolder;
 
-  constructor(private afs: AngularFirestore, private router: Router) { }
+  constructor(private afs: AngularFirestore, private router: Router, private animationService: AnimationService) { }
 
   ngOnInit() {
     this.setPortfolio(this.userModel.address);
@@ -42,6 +42,8 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     this.portfolioSubscription = portfolioRecords.valueChanges().subscribe((data: any) => {
       this.allPortfolioItems = data;
       this.lastPage = (Math.ceil(this.allPortfolioItems.length / this.pageLimit) - 1);
+      this.animationService.loadAnimations();
+      this.loaded = true;
     });
   }
 

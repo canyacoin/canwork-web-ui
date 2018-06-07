@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import 'rxjs/add/operator/take';
@@ -19,13 +20,13 @@ export class AuthService {
 
   usersCollectionRef: AngularFirestoreCollection<any>;
 
-  constructor(private afs: AngularFirestore, private moment: MomentService, private afAuth: AngularFireAuth, private userService: UserService) {
+  constructor(private afs: AngularFirestore, private moment: MomentService, private afAuth: AngularFireAuth, private userService: UserService, private router: Router) {
     this.usersCollectionRef = this.afs.collection<any>('users');
   }
 
   getCurrentUser(): Promise<User> {
     this.currentUser = JSON.parse(localStorage.getItem('credentials'));
-    if (this.currentUser && this.currentUser.address) {
+    if (this.currentUser) {
       return this.userService.getUser(this.currentUser.address);
     }
     return Promise.reject(null);
@@ -38,7 +39,7 @@ export class AuthService {
   logout() {
     localStorage.clear();
     this.afAuth.auth.signOut();
-    window.location.reload();
+    this.router.navigate(['home']);
   }
 
   initUport() {

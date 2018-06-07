@@ -20,9 +20,8 @@ export class UserService {
 
   getUser(address: string): Promise<User> {
     return new Promise((resolve, reject) => {
-      this.afs.doc(`users/${address}`).valueChanges().take(1).subscribe((users: User[]) => {
-        if (users && users.length > 0) {
-          const user = users[0];
+      this.afs.doc(`users/${address}`).valueChanges().take(1).subscribe((user: User) => {
+        if (user) {
           if (user.timezone) {
             user.offset = moment.tz(user.timezone).format('Z');
           }

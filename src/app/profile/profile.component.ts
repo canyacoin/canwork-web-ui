@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs/Subscription';
 
 import * as moment from 'moment-timezone';
 import { User, UserState } from '../core-classes/user';
-import { AnimationService } from '../core-services/animation.service';
 import { UserService } from '../core-services/user.service';
 
 @Component({
@@ -23,7 +22,6 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private router: Router,
     private location: Location,
     private activatedRoute: ActivatedRoute,
-    private animationService: AnimationService,
     private userService: UserService) {
   }
 
@@ -42,7 +40,6 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
       } else if (this.currentUser) {
         this.loadUser(this.currentUser.address);
       }
-      this.animationService.loadAnimations();
     });
   }
 

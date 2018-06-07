@@ -10,20 +10,20 @@ export class UserIsSetupGuard implements CanActivate {
 
   constructor(private authService: AuthService, private router: Router) { }
 
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-
-    this.authService.getCurrentUser().then((user: User) => {
-      if (user) {
-        if (user.state === UserState.done) {
-          return true;
-        } else {
-          this.router.navigate(['/profile/edit']);
-          return false;
+  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.authService.getCurrentUser().then((user: User) => {
+        if (user) {
+          if (user.state === UserState.done) {
+            resolve(true);
+          } else {
+            this.router.navigate(['/profile/edit']);
+          }
         }
-      }
+        resolve(false);
+      }).catch(err => {
+        resolve(false);
+      });
     });
-    return false;
   }
 }

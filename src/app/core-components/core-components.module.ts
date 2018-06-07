@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ImgFallbackModule } from 'ngx-img-fallback';
 
 import { CoreUtilsModule } from '../core-utils/core-utils.module';
 import { BlogPostsComponent } from './blog-posts/blog-posts.component';
@@ -21,6 +22,7 @@ import { ToolsComponent } from './tools/tools.component';
   imports: [
     CommonModule,
     CoreUtilsModule,
+    ImgFallbackModule,
     RouterModule
   ],
   declarations: [

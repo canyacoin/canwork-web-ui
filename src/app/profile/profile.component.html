@@ -1,7 +1,7 @@
 <app-header></app-header>
 
 <main class="main-content">
-  <section class="section bg-gray pt-1 pb-30" id="section-profile">
+  <section class="section bg-gray pt-15 pb-20" id="section-profile">
 
     <div *ngIf="!userModel && !workModel" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
       <img src="assets/img/loader.svg" height="36px" alt="Loader">
@@ -22,7 +22,7 @@
 
           <app-profile-support-me *ngIf="notMyProfile() && userModel.ethAddress" [userModel]="userModel"></app-profile-support-me>
 
-          <app-profile-visitors *ngIf="isMyProfile()" [whoViewProfileCounter]="whoViewProfileCounter"></app-profile-visitors>
+          <app-profile-visitors *ngIf="isMyProfile()"></app-profile-visitors>
         </div>
 
         <div class="col-12 col-md-8 my-5">
@@ -37,8 +37,8 @@
                 <img src="assets/img/canya-button.png" style="margin-top: -2px;" width="16px" height="16px" alt="CanYa"> CANYA? Post a request
               </button>
             </div>
-            <div *ngIf="isMyProfile" id="page-wrap">
-              <app-portfolio></app-portfolio>
+            <div *ngIf="isMyProfile()" id="page-wrap" class="pt-25">
+              <app-profile-portfolio [userModel]="userModel" [currentUser]="currentUser"></app-profile-portfolio>
             </div>
           </div>
         </div>

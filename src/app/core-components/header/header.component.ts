@@ -1,12 +1,10 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { trigger, transition, animate, style } from '@angular/animations';
-import { Router } from '@angular/router';
-
+import { animate, style, transition, trigger } from '@angular/animations';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { Subscription } from 'rxjs/Subscription';
 
 import { AuthService } from '../../core-services/auth.service';
-
-import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-header',
@@ -33,6 +31,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   hasUnreadMessages = false;
   messagesSubscription: Subscription;
+  routerSub: Subscription;
 
   providerCategories = ['Content Creators', 'Designers & Creatives', 'Financial experts', 'Marketing & SEO', 'Software developers', 'Virtual assistants'];
 
@@ -42,6 +41,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.initUser();
+    this.routerSub = this.router.events.subscribe((val) => {
+      if (val instanceof NavigationEnd) {
+        this.initUser();
+      }
+    });
+  }
+
+  initUser() {
+    this.currentUser = JSON.parse(localStorage.getItem('credentials'));
     if (this.currentUser) {
       const unreadConversations = this.afs.collection('chats').doc(this.currentUser.address).collection('channels', ref => ref.where('unreadMessages', '==', true));
       this.messagesSubscription = unreadConversations.valueChanges().subscribe(x => {
