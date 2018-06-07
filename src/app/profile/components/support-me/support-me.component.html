@@ -1,0 +1,35 @@
+<div class="card my-30 p-24" style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px;">
+  <div class="card-body">
+    <p class="lead fw-500 bb-1">Support my work</p>
+    <h6>If you like my work, buy me a
+      <img src="assets/img/coffee.svg" width="auto" height="24px"> to show your support.</h6>
+    <button (click)="onBuyACoffee();" type="button" class="btn btn-block btn-primary btn-canya-chat">
+      Buy me a
+      <img src="assets/img/coffee-white.svg" width="auto" height="24px" style="margin-top: -2px;">
+    </button>
+  </div>
+</div>
+
+
+<!-- Thank you Modal -->
+<div class="modal fade" id="thankYou" tabindex="-1" role="dialog" data-keyboard="true" data-backdrop="true" aria-labelledby="thankYouLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title" id="subscribeModalLabel">&nbsp;</h6>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- <h6 class="text-dark fs-14 fw-600"></h6> -->
+        <div class="d-flex flex-column justify-content-center align-self-center align-items-center text-center my-10">
+          <h2 class="fw-400 mb-0">Thank you!</h2>
+          <img src="assets/img/round-icon.svg" width="140px" height="140px">
+          <h3 class="fw-300 mb-10">You rock!</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

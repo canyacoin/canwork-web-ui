@@ -1,0 +1,56 @@
+<div *ngIf="userModel" class="card pricing-3" style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px;">
+  <span *ngIf="userModel.badge" class="popular-tag" style="background:#3cf; float:right; z-index: 111;">
+    {{ userModel.badge }}
+  </span>
+  <a *ngIf="userModel.address === currentUser.address" [routerLink]="['/work']" data-toggle="tooltip" data-placement="top"
+    title="Add Project" class="btn btn-sm btn-circular icon-add-work pl-1">
+    <i class="ti-plus fw-600" aria-hidden="true"></i>
+  </a>
+
+  <a *ngIf="userModel.address === currentUser.address" [routerLink]="['/profile/edit']" data-toggle="tooltip" data-placement="top"
+    title="Edit Profile" class="btn btn-sm btn-circular btn-light icon-edit-work pl-1">
+    <i class="ti-pencil fw-600" aria-hidden="true"></i>
+  </a>
+
+  <div id="sidebar">
+    <div class="profile">
+      <img *ngIf="userModel.avatar && userModel.avatar.uri" class="headshot" src="{{ userModel.avatar.uri }}" alt="">
+      <div class="title">
+        <h2 *ngIf="userModel.name">{{ userModel.name }}</h2>
+        <h3 *ngIf="userModel.title">{{ userModel.title }}</h3>
+        <p class="fw-400" *ngIf="userModel.bio">{{ userModel.bio }}</p>
+        <button *ngIf="userModel.address !== currentUser.address" (click)="proposeJob()" class="btn btn-primary btn-canya-chat" data-scrollto="section-profile">
+          LET'S CHAT
+        </button>
+      </div>
+    </div>
+    <div class="waves">
+      <svg width="400" height="689" viewBox="0 0 400 689" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g id="Canvas" transform="translate(720 177)">
+          <g id="Waves">
+            <g id="back-wave">
+
+              <use xlink:href="#path0_fill" transform="translate(-720 -158.222)" [attr.fill]="userModel.colors[0] || '#00FFCC'" fill-opacity="0.37"
+              />
+            </g>
+            <g id="front-wave">
+              <use xlink:href="#path1_fill" transform="translate(-720 -176.527)" fill="url(#paint1_linear)" fill-opacity="0.6" />
+            </g>
+          </g>
+        </g>
+        <defs>
+          <linearGradient id="paint1_linear" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(2.44929e-14 221 -400 1.35323e-14 400 7.52681)">
+
+            <stop offset="0" [attr.stop-color]="userModel.colors[0] || '#33ccff'" />
+
+            <stop offset="1" [attr.stop-color]="userModel.colors[1] || '#00FFCC'" />
+          </linearGradient>
+          <path id="path0_fill" d="M 0 60.222C 35.5 20.222 61.3051 -5.20902 92.5 8.22203C 128.5 23.7219 114 42.7219 211 60.222C 268.632 70.6198 308.621 7.02893 343 0.721831C 368.44 -3.94529 387.5 15.2219 400 23.7219L 400 1008.22L 0 1008.22L 0 60.222Z"
+          />
+          <path id="path1_fill" d="M 0 36.4959C 14.0351 50.8858 62.5188 84.4509 95 74.5268C 135.602 62.1217 181.5 -41.9732 257 19.0267C 321.612 71.2295 344 96.5267 400 44.9313L 400 971.527L 0 971.527L 0 36.4959Z"
+          />
+        </defs>
+      </svg>
+    </div>
+  </div>
+</div>

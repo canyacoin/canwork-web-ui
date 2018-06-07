@@ -1,0 +1,51 @@
+<app-header></app-header>
+
+<main class="main-content">
+  <section class="section bg-gray pt-1 pb-30" id="section-profile">
+
+    <div *ngIf="!userModel && !workModel" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
+      <img src="assets/img/loader.svg" height="36px" alt="Loader">
+    </div>
+
+    <button (click)="onBack();" class="text-primary hidden-lg-down" style="border: none; background: none;">
+      <i class="ti-angle-left text-default fs-24" style="position: fixed; top: 105px; left: 11%; z-index: 11; cursor: pointer;"></i>
+    </button>
+
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-3 my-5">
+          <app-profile-about [currentUser]="currentUser" [userModel]="userModel"></app-profile-about>
+
+          <app-profile-timezone *ngIf="notMyProfile() && userModel.timezone && userModel.offset" [userModel]="userModel"></app-profile-timezone>
+
+          <app-profile-social *ngIf="notMyProfile()"></app-profile-social>
+
+          <app-profile-support-me *ngIf="notMyProfile() && userModel.ethAddress" [userModel]="userModel"></app-profile-support-me>
+
+          <app-profile-visitors *ngIf="isMyProfile()" [whoViewProfileCounter]="whoViewProfileCounter"></app-profile-visitors>
+        </div>
+
+        <div class="col-12 col-md-8 my-5">
+          <app-profile-bio *ngIf="userModel && userModel.description" [currentUser]="currentUser" [userModel]="userModel"></app-profile-bio>
+
+          <div class="card" style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px;">
+            <div *ngIf="notMyProfile()">
+              <div #portfolio id="portfolio"></div>
+              <h3 class="fw-500">Ohh, so exciting!</h3>
+              <h4 class="fw-400 mb-20">CanYa do something for you?</h4>
+              <button (click)="postRequest()" class="btn btn-primary btn-canya-chat mb-30" data-scrollto="section-profile">
+                <img src="assets/img/canya-button.png" style="margin-top: -2px;" width="16px" height="16px" alt="CanYa"> CANYA? Post a request
+              </button>
+            </div>
+            <div *ngIf="isMyProfile" id="page-wrap">
+              <app-portfolio></app-portfolio>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-footer></app-footer>
+<app-scroll-top></app-scroll-top>

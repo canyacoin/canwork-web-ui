@@ -1,0 +1,26 @@
+<div *ngIf="workItem" class="left-content">
+  <div class="row">
+    <div class="col-md-6">
+      <a [href]="workItem.image || '//canya-tests.firebaseapp.com/assets/img/work-placeholder.svg'" class="mt-30" data-provide="lightbox">
+        <img [src]="workItem.image" [src-fallback]="defaultImage" alt="CanYa - Portfolio" class="card-img-left thumbnail">
+      </a>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <span class="card-subtitle" style="padding-top: 1em">{{ workItem.title }}</span>
+        <div class="card-body">
+          <p *ngIf="workItem.description" class="card-text p-y-1">
+            {{ workItem.description }}
+          </p>
+          <!-- skill tags -->
+          <skill-tags [skills]="workItem.tags"></skill-tags>
+
+          <a *ngIf="workItem.link" [href]="workItem.link" class="card-link">
+            Check it out!
+            <i class="fa fa-external-link"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

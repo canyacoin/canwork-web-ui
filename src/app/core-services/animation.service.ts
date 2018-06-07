@@ -124,8 +124,23 @@ export class AnimationService {
           this.handAnim = (<any>window).bodymovin.loadAnimation(handData);
           this.handAnim.setSpeed(0.75);
         }
-      }, 0);
 
+        if (document.getElementById('portfolio')) {
+          const portfolioData = {
+            wrapper: document.getElementById('portfolio'),
+            animType: 'html',
+            loop: true,
+            prerender: true,
+            autoplay: true,
+            path: 'assets/data/hand.json',
+            rendererSettings: {
+              progressiveLoad: false
+            }
+          };
+          const portfolioAnim = (<any>window).bodymovin.loadAnimation(portfolioData);
+          portfolioAnim.setSpeed(0.75);
+        }
+      }, 0);
     } catch (error) {
       console.log('loadAnimations - error', error);
     }

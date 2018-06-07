@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { AngularFireAuth } from 'angularfire2/auth';
-
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import 'rxjs/add/operator/take';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/operator/take';
-
-import { MomentService } from './moment.service';
-import { User, Avatar } from '../core-classes/user';
 
 import { environment } from '../../environments/environment';
-
+import { Avatar, User } from '../core-classes/user';
+import { MomentService } from './moment.service';
+import { UserService } from './user.service';
 
 @Injectable()
 export class AuthService {
@@ -21,19 +19,16 @@ export class AuthService {
 
   usersCollectionRef: AngularFirestoreCollection<any>;
 
-  constructor(private afs: AngularFirestore, private moment: MomentService, private afAuth: AngularFireAuth) {
+  constructor(private afs: AngularFirestore, private moment: MomentService, private afAuth: AngularFireAuth, private userService: UserService) {
     this.usersCollectionRef = this.afs.collection<any>('users');
   }
 
-  // TODO: Refactor this into the thing called in auth guard (getCurrentUser)
-  getCurrentUser() {
+  getCurrentUser(): Promise<User> {
     this.currentUser = JSON.parse(localStorage.getItem('credentials'));
-    console.log('getCurrentUser - currentUser', this.currentUser, this.currentUser.address);
     if (this.currentUser && this.currentUser.address) {
-      // Firebase: GetUser
-      return this.afs.collection<any>('users').doc(this.currentUser.address).valueChanges().take(1);
+      return this.userService.getUser(this.currentUser.address);
     }
-    return null;
+    return Promise.reject(null);
   }
 
   isAuthenticated() {

@@ -5,12 +5,13 @@ export class User {
     avatar: Avatar;
     bio: string;
     category: string;
-    colors: string[];
+    colors: string[] = [];
     description: string;
     email: string;
     ethAddress: string;
     name: string;
     networkAddress: string;
+    offset: string;
     phone: string;
     publicEncKey: string;
     publicKey: string;
