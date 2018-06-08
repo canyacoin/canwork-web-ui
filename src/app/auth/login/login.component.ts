@@ -77,13 +77,14 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   handleLogin(userDetails: User) {
 
-    this.afs.collection<any>('users', ref => ref.where('address', '==', userDetails.address).limit(1)).valueChanges().take(1).subscribe((data: any) => {
+    const sub = this.afs.collection<any>('users', ref => ref.where('address', '==', userDetails.address).limit(1)).valueChanges().take(1).subscribe((data: any) => {
       if (data && (data instanceof Array) && data.length > 0) {
         localStorage.setItem('credentials', JSON.stringify(data[0]));
         this.router.navigate(['/home']);
       } else {
         this.initialiseUserAndRedirect(userDetails);
       }
+      sub.unsubscribe();
     });
   }
 

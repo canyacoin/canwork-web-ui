@@ -63,6 +63,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.messagesSubscription) {
       this.messagesSubscription.unsubscribe();
     }
+    if (this.routerSub) {
+      this.routerSub.unsubscribe();
+    }
   }
 
   onKeyUp(event: any) {

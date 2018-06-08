@@ -1,5 +1,6 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 import { AuthService } from '../../core-services/auth.service';
 
@@ -8,7 +9,7 @@ import { AuthService } from '../../core-services/auth.service';
   templateUrl: './console.component.html',
   styleUrls: ['./console.component.css']
 })
-export class ConsoleComponent implements OnInit, AfterViewInit {
+export class ConsoleComponent implements OnInit, AfterViewInit, OnDestroy {
 
   conversation: any = [
     { flow: 'Hi!, CanYa do something for you?', command: 'message' },
@@ -32,6 +33,8 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
   rndBanner = 3;
   hideBanner = false;
 
+  routerSub: Subscription;
+
   constructor(private router: Router,
     private authService: AuthService,
     private activatedRoute: ActivatedRoute) {
@@ -41,9 +44,13 @@ export class ConsoleComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.activatedRoute.url.subscribe((url) => {
-      this.rndBanner = Math.floor( Math.random() * 4 );
+    this.routerSub = this.activatedRoute.url.subscribe((url) => {
+      this.rndBanner = Math.floor(Math.random() * 4);
     });
+  }
+
+  ngOnDestroy() {
+    if (this.routerSub) { this.routerSub.unsubscribe(); }
   }
 
   onLogout() {

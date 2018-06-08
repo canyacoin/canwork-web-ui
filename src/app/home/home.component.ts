@@ -27,6 +27,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   routeSub: Subscription;
   providerSub: Subscription;
+  portfolioSub: Subscription;
 
 
   constructor(private activatedRoute: ActivatedRoute,
@@ -46,6 +47,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     if (this.routeSub) { this.routeSub.unsubscribe(); }
     if (this.providerSub) { this.providerSub.unsubscribe(); }
+    if (this.portfolioSub) { this.portfolioSub.unsubscribe(); }
   }
 
   loadProviders() {
@@ -70,7 +72,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
       this.allProviders.map((provider: User) => {
-        this.afs.collection(`portfolio/${provider.address}/work`).valueChanges().take(1).subscribe((work: Work[]) => {
+        this.portfolioSub = this.afs.collection(`portfolio/${provider.address}/work`).valueChanges().take(1).subscribe((work: Work[]) => {
           if (JSON.stringify(work).toLowerCase().includes(this.query.toLowerCase())) {
             const index: number = findIndex(selectedProviders, { 'address': provider.address });
             if (index === -1) {
