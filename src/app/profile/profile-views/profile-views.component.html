@@ -1,0 +1,52 @@
+<app-header></app-header>
+<main class="main-content">
+  <section class="section bg-gray py-20" id="section-main">
+
+    <div class="container">
+
+      <h4 class="fw-400">Who viewed me?</h4>
+
+      <div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center">
+        <img src="assets/img/loader.svg" height="36px" alt="Loader">
+      </div>
+
+      <div *ngIf="!loading && (users && users.length < 1)" class="container">
+        <div class="row">
+          <div class="col-12 d-flex flex-column">
+            <div class="flexbox-container">
+              <br>
+              <h4 class="fw-400">Uh, oh!</h4>
+              <h5 class="fw-300">No data yet.</h5>
+              <div id="hand" class="mt-80"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-columns">
+        <ng-template ngFor let-i="index" let-user [ngForOf]="users">
+          <div class="card card-hover-shadow my-15">
+            <div class="card-block">
+              <div class="profile">
+                <img *ngIf="user && (user.avatar && user.avatar.uri)" class="headshot" src="{{ user.avatar.uri }}" alt="">
+                <div class="title">
+                  <h2 *ngIf="user && user.name">{{ user.name }}</h2>
+                  <h3 *ngIf="user && user.title">{{ user.title }}</h3>
+                  <p *ngIf="user && user.bio">{{ user.bio }}</p>
+                </div>
+                <a [routerLink]="['/profile/alt', user.address]" data-scrollto="section-profile" class="btn btn-primary detail">
+                  <img src="assets/img/canya-button.png" style="margin-top: -2px;" width="16px" height="16px" alt="CanYa"> CANYA?
+                </a>
+              </div>
+            </div>
+            <div *ngIf="user && user.humanisedDate" class="card-footer bg-white text-center" style="border-top: none;">
+              <small class="text-muted">{{ user.humanisedDate }}</small>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-footer></app-footer>

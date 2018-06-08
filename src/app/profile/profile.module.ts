@@ -15,6 +15,7 @@ import { SupportMeComponent } from './components/support-me/support-me.component
 import { TimezoneComponent } from './components/timezone/timezone.component';
 import { VisitorsComponent } from './components/visitors/visitors.component';
 import { EditComponent } from './edit/edit.component';
+import { ProfileViewsComponent } from './profile-views/profile-views.component';
 import { ProfileComponent } from './profile.component';
 import { ProfileRoutingModule } from './profile.routing.module';
 import { SetupComponent } from './setup/setup.component';
@@ -37,6 +38,7 @@ import { SetupComponent } from './setup/setup.component';
     ItemComponent,
     PortfolioComponent,
     ProfileComponent,
+    ProfileViewsComponent,
     SocialComponent,
     SetupComponent,
     SupportMeComponent,
