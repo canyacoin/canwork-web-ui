@@ -1,0 +1,46 @@
+<app-header></app-header>
+
+<main class="main-content">
+  <section *ngIf="!hasChosenType()" class="section bg-gray py-40">
+    <div class="container">
+      <header class="section-header my-0 py-0" @logoAnimation>
+        <h2 class="welcome-animation fw-300">Welcome to
+          <img class="logo-default" src="assets/img/logo.svg" width="auto" height="28px" alt="logo" style="margin-top: -8px;">
+        </h2>
+        <p class="lead fw-400">What brings you to CanWork today?</p>
+        <hr>
+      </header>
+
+      <div class="row">
+        <div class="col">
+          <div class="card card-hover-shadow bg-white my-5">
+            <div class="card-block">
+              <h3 class="card-title">CLIENT</h3>
+              <p class="card-text">Anyone who is
+                <strong>looking for providers</strong>. Pay with cryptocurrency!</p>
+              <button (click)="setUserType('User')" class="btn btn-primary btn-canya-chat">I AM A CLIENT</button>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card card-hover-shadow bg-white my-5">
+            <div class="card-block">
+              <h3 class="card-title">PROVIDER</h3>
+              <p class="card-text">Anyone who has a
+                <strong>digital service</strong> to offer and want to use CanYa to find work.</p>
+              <a href="https://canyacoin.typeform.com/to/r2Bfb0" target="_blank" class="btn btn-primary btn-canya-chat">I AM A PROVIDER</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section *ngIf="hasChosenType()" class="section bg-white py-40">
+    <div class="container">
+      <app-bot [title]="true" [conversation]="conversation" (action)="formSubmitted($event)"></app-bot>
+    </div>
+  </section>
+</main>
+
+<app-footer></app-footer>

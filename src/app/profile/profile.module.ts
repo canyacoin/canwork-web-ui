@@ -15,6 +15,7 @@ import { TimezoneComponent } from './components/timezone/timezone.component';
 import { VisitorsComponent } from './components/visitors/visitors.component';
 import { ProfileComponent } from './profile.component';
 import { ProfileRoutingModule } from './profile.routing.module';
+import { SetupComponent } from './setup/setup.component';
 
 @NgModule({
   imports: [
@@ -32,6 +33,7 @@ import { ProfileRoutingModule } from './profile.routing.module';
     ItemComponent,
     ProfileComponent,
     SocialComponent,
+    SetupComponent,
     SupportMeComponent,
     TimezoneComponent,
     VisitorsComponent

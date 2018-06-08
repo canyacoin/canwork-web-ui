@@ -35,7 +35,7 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.paramsSub = this.activatedRoute.params.subscribe((params) => {
-      if (params['address']) {
+      if (params['address'] && params['address'] !== 'setup') {
         this.loadUser(params['address']);
       } else if (this.currentUser) {
         this.loadUser(this.currentUser.address);

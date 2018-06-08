@@ -27,7 +27,8 @@ export class AuthService {
   getCurrentUser(): Promise<User> {
     this.currentUser = JSON.parse(localStorage.getItem('credentials'));
     if (this.currentUser) {
-      return this.userService.getUser(this.currentUser.address);
+      // return this.userService.getUser(this.currentUser.address);
+      return Promise.resolve(this.currentUser);
     }
     return Promise.reject(null);
   }

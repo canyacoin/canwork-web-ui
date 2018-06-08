@@ -6,7 +6,7 @@ import { User, UserState } from '../core-classes/user';
 import { AuthService } from '../core-services/auth.service';
 
 @Injectable()
-export class UserIsSetupGuard implements CanActivate {
+export class UserIsNotSetupGuard implements CanActivate {
 
   constructor(private authService: AuthService, private router: Router) { }
 
@@ -14,11 +14,11 @@ export class UserIsSetupGuard implements CanActivate {
     return new Promise((resolve, reject) => {
       this.authService.getCurrentUser().then((user: User) => {
         if (user) {
-          if (user.state === UserState.done) {
+          if (user.state !== UserState.done) {
             resolve(true);
-          } else {
-            this.router.navigate(['/profile/setup']);
           }
+        } else {
+          this.router.navigate(['/login']);
         }
         resolve(false);
       }).catch(err => {

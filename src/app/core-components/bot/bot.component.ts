@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+    animate, keyframes, query, stagger, style, transition, trigger
+} from '@angular/animations';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { trigger, style, transition, animate, keyframes, query, stagger } from '@angular/animations';
-
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/take';
-
 import * as randomColor from 'randomcolor';
+import 'rxjs/add/operator/take';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-bot',
@@ -52,26 +52,26 @@ export class BotComponent implements OnInit {
 
   async init() {
     for (const o of this.conversation) {
-      if ( o.command === 'colors' ) {
-        await this.addBotActions( { field: 'colors', actions: this.randomColors(o.flow) } );
-      } else if ( o.command === 'actions' ) {
-        await this.addBotActions( o.flow );
-      } else if ( o.command === 'input' ) {
-        await this.addBotInput( o.flow );
+      if (o.command === 'colors') {
+        await this.addBotActions({ field: 'colors', actions: this.randomColors(o.flow) });
+      } else if (o.command === 'actions') {
+        await this.addBotActions(o.flow);
+      } else if (o.command === 'input') {
+        await this.addBotInput(o.flow);
       } else {
-        await this.addBotMessage( o.flow );
+        await this.addBotMessage(o.flow);
       }
     }
   }
 
   onAction(i: number, field: string, object: any) {
-    if ( object instanceof Array ) {
-      this.triggerAction.next( { i: i, message: this.setColorsSpan(object)  } );
-    } else {
-      this.triggerAction.next( { i: i, message: object } );
-    }
-    this.action.emit( {field: field, object: object} );
     event.preventDefault();
+    if (object instanceof Array) {
+      this.triggerAction.next({ i: i, message: this.setColorsSpan(object) });
+    } else {
+      this.triggerAction.next({ i: i, message: object });
+    }
+    this.action.emit({ field: field, object: object });
   }
 
   onKeyUp(botInput: any, btnSubmit: any) {
@@ -83,7 +83,7 @@ export class BotComponent implements OnInit {
     const colorActions = [];
     const defaultColors = ['#00FFCC', '#33ccff', '#15EDD8'];
     for (let i = 0; i < n; i++) {
-      const colors = randomColor( { luminosity: 'light', count: 3 });
+      const colors = randomColor({ luminosity: 'light', count: 3 });
       colorActions.push(
         {
           caption: '███',
@@ -103,15 +103,15 @@ export class BotComponent implements OnInit {
   }
 
   setColorsSpan(colors: any) {
-    return `<span style="color: ${ colors[0] }; font-size: 14px; line-height: 1;">█</span>
-            <span style="color: ${ colors[1] }; font-size: 14px; line-height: 1; margin-left: -2.8px">█</span>
-            <span style="color: ${ colors[2] }; font-size: 14px; line-height: 1; margin-left: -2.8px">█</span>`;
+    return `<span style="color: ${colors[0]}; font-size: 14px; line-height: 1;">█</span>
+            <span style="color: ${ colors[1]}; font-size: 14px; line-height: 1; margin-left: -2.8px">█</span>
+            <span style="color: ${ colors[2]}; font-size: 14px; line-height: 1; margin-left: -2.8px">█</span>`;
   }
 
   scrollToBottom() {
-    setTimeout( () => {
-      if ( (<any>window).$('html, body') && ( (<any>window).$('#section-end') && (<any>window).$('#section-end').offset() ) ) {
-        (<any>window).$('html, body').animate({scrollTop: (<any>window).$('#section-end').offset().top - 60}, 1000);
+    setTimeout(() => {
+      if ((<any>window).$('html, body') && ((<any>window).$('#section-end') && (<any>window).$('#section-end').offset())) {
+        (<any>window).$('html, body').animate({ scrollTop: (<any>window).$('#section-end').offset().top - 60 }, 1000);
       }
     }, 300);
   }
@@ -119,7 +119,7 @@ export class BotComponent implements OnInit {
   async addBotMessage(message: string) {
     return new Promise((resolve) => {
       const i = this.bot.push({ message: message, typing: true, from: 'bot' }) - 1;
-      setTimeout( () => {
+      setTimeout(() => {
         this.bot[i].typing = false;
         this.index++;
         this.scrollToBottom();
@@ -135,10 +135,10 @@ export class BotComponent implements OnInit {
       tmpActions['actions'] = object.actions;
       tmpActions['typing'] = false;
       tmpActions['from'] = 'bot';
-      const i = this.bot.push( tmpActions ) - 1;
-      this.triggerAction.take(1).subscribe( (response: any) => {
+      const i = this.bot.push(tmpActions) - 1;
+      this.triggerAction.take(1).subscribe((response: any) => {
         this.bot.splice(response.i, 1);
-        this.bot.push( { message: response.message, typing: false, from: 'me' } );
+        this.bot.push({ message: response.message, typing: false, from: 'me' });
         this.scrollToBottom();
         resolve(response.i);
       });
@@ -152,9 +152,9 @@ export class BotComponent implements OnInit {
       tmpInput['input'] = true;
       tmpInput['from'] = 'bot';
       const i = this.bot.push(tmpInput) - 1;
-      this.triggerAction.take(1).subscribe( (response: any) => {
+      this.triggerAction.take(1).subscribe((response: any) => {
         this.bot.splice(response.i, 1);
-        this.bot.push( { message: response.message, typing: false, from: 'me' } );
+        this.bot.push({ message: response.message, typing: false, from: 'me' });
         this.scrollToBottom();
         resolve(response.i);
       });

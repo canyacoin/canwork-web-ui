@@ -89,7 +89,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   async initialiseUserAndRedirect(user: User) {
     this.authService.initialiseUser(user).then((res) => {
-      this.router.navigate(['/setup']);
+      this.router.navigate(['/profile/setup']);
     }, (err) => {
       console.log('onLogin - err', err);
     });

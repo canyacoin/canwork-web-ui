@@ -20,7 +20,7 @@ export class User {
     timestamp: string;
     timezone: string;
     title: string;
-    type: string;
+    type: UserType;
     work: string;
 
     constructor(init?: Partial<User>) {
@@ -34,4 +34,9 @@ export class Avatar {
 
 export enum UserState {
     done = 'Done'
+}
+
+export enum UserType {
+    client = 'User',
+    provider = 'Provider'
 }

@@ -1,5 +1,3 @@
-<app-header></app-header>
-
 <main class="main-content pb-100">
 
   <section class="section bg-white my-1 py-0">
@@ -50,7 +48,7 @@
                       class="botui-actions-text-input" autofocus="autofocus" required>
                     <!-- [disabled]="!botInput.validity.valid"  -->
                     <!--  class="botui-actions-text-submit" -->
-                    <button #btnSubmit type="submit" class="botui-actions-buttons-button mt-2 mx-2 mb-2">
+                    <button #btnSubmit (click)="onAction(i, item.field, botInput.value)" class="botui-actions-buttons-button mt-2 mx-2 mb-2">
                       <span>NEXT</span>
                     </button>
                   </form>
@@ -78,6 +76,5 @@
       </div>
     </div>
   </section>
+  <div id="section-end">&nbsp;</div>
 </main>
-
-<app-footer></app-footer>

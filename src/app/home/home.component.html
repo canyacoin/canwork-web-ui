@@ -27,7 +27,7 @@
           <div class="card-block pricing-3">
             <span *ngIf="provider && provider.badge" class="popular-tag" style="background:#3cf; float:right;">{{ provider.badge }}</span>
             <div class="profile">
-              <a [routerLink]="['/profile', provider.address]" data-scrollto="section-profile">
+              <a [routerLink]="['/profile/provider', provider.address]" data-scrollto="section-profile">
                 <img *ngIf="provider && (provider.avatar && provider.avatar.uri)" class="headshot" src="{{ provider.avatar.uri }}" alt="">
               </a>
               <div class="title">
@@ -35,7 +35,7 @@
                 <h3 *ngIf="provider && provider.title">{{ provider.title }}</h3>
                 <p *ngIf="provider && provider.bio">{{ provider.bio }}</p>
               </div>
-              <a [routerLink]="['/profile', provider.address]" data-scrollto="section-profile" class="btn btn-primary detail">
+              <a [routerLink]="['/profile/provider', provider.address]" data-scrollto="section-profile" class="btn btn-primary detail">
                 <img src="assets/img/canya-button.png" style="margin-top: -2px;" width="16px" height="16px" alt="CanYa"> CANYA?
               </a>
             </div>

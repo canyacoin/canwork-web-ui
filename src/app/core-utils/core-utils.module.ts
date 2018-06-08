@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AuthGuard } from './auth.guard';
 import { SanitizeHtmlPipe } from './sanitize-html.pipe';
+import { UserIsNotSetupGuard } from './user-is-not-setup.guard';
 import { UserIsSetupGuard } from './user-is-setup.guard';
 
 @NgModule({
@@ -14,7 +15,8 @@ import { UserIsSetupGuard } from './user-is-setup.guard';
   ],
   providers: [
     AuthGuard,
-    UserIsSetupGuard
+    UserIsSetupGuard,
+    UserIsNotSetupGuard
   ],
   exports: [
     SanitizeHtmlPipe

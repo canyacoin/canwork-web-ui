@@ -52,7 +52,7 @@ import { AuthGuard } from './core-utils/auth.guard';
         path: '**',
         loadChildren: './error/error.module#ErrorModule'
       }
-    ], { onSameUrlNavigation: 'reload' })
+    ])
   ],
   exports: [
     RouterModule
