@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { User, UserState, UserType } from '../../core-classes/user';
-import { AuthService } from '../../core-services/auth.service';
+import { UserService } from '../../core-services/user.service';
 
 @Component({
   selector: 'app-setup',
@@ -69,7 +69,7 @@ export class SetupComponent implements OnInit {
     { flow: { field: 'state', actions: [{ caption: 'Done', type: 'button' }] }, command: 'actions' }
   ];
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit() {
 
@@ -81,11 +81,11 @@ export class SetupComponent implements OnInit {
 
   setUserType(type: UserType) {
     this.currentUser.type = type;
-    this.authService.updateUserProperty('type', type);
+    this.userService.updateUserProperty('type', type);
   }
 
   formSubmitted(event: any) {
-    this.authService.updateUserProperty(event.field, event.object);
+    this.userService.updateUserProperty(event.field, event.object);
     if (event.object === 'Done') {
       this.router.navigate(['/profile']);
     }

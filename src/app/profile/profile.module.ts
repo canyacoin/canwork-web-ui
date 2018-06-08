@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ImgFallbackModule } from 'ngx-img-fallback';
 
 import { CoreComponentsModule } from '../core-components/core-components.module';
@@ -13,6 +14,7 @@ import { SocialComponent } from './components/social/social.component';
 import { SupportMeComponent } from './components/support-me/support-me.component';
 import { TimezoneComponent } from './components/timezone/timezone.component';
 import { VisitorsComponent } from './components/visitors/visitors.component';
+import { EditComponent } from './edit/edit.component';
 import { ProfileComponent } from './profile.component';
 import { ProfileRoutingModule } from './profile.routing.module';
 import { SetupComponent } from './setup/setup.component';
@@ -24,13 +26,16 @@ import { SetupComponent } from './setup/setup.component';
     CoreServicesModule,
     CoreUtilsModule,
     ImgFallbackModule,
-    ProfileRoutingModule
+    FormsModule,
+    ProfileRoutingModule,
+    ReactiveFormsModule
   ],
   declarations: [
     AboutComponent,
     BioComponent,
-    PortfolioComponent,
+    EditComponent,
     ItemComponent,
+    PortfolioComponent,
     ProfileComponent,
     SocialComponent,
     SetupComponent,

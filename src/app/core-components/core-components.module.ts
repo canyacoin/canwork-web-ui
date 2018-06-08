@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ImgFallbackModule } from 'ngx-img-fallback';
 
 import { CoreUtilsModule } from '../core-utils/core-utils.module';
+import { BackButtonComponent } from './back-button/back-button.component';
 import { BlogPostsComponent } from './blog-posts/blog-posts.component';
 import { BotComponent } from './bot/bot.component';
 import { BrandComponent } from './brand/brand.component';
@@ -26,6 +27,7 @@ import { ToolsComponent } from './tools/tools.component';
     RouterModule
   ],
   declarations: [
+    BackButtonComponent,
     BotComponent,
     BlogPostsComponent,
     BrandComponent,
@@ -37,8 +39,10 @@ import { ToolsComponent } from './tools/tools.component';
     ScrollTopComponent,
     SkillTagsComponent,
     ToolsComponent,
+    BackButtonComponent,
   ],
   exports: [
+    BackButtonComponent,
     BotComponent,
     BlogPostsComponent,
     FeedbackComponent,

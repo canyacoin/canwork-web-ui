@@ -6,11 +6,7 @@ import { FirebaseUISignInSuccess } from 'firebaseui-angular';
 import { User } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
 import { ScriptService } from '../../core-services/script.service';
-
-enum LoginType {
-  Uport = 'uport',
-  Firebase = 'firebase'
-}
+import { UserService } from '../../core-services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +20,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
   loading = false;
   pageInit = false;
 
-  constructor(private router: Router, private authService: AuthService, private afs: AngularFirestore, private script: ScriptService) {
+  constructor(private router: Router, private authService: AuthService, private userService: UserService,
+    private afs: AngularFirestore, private script: ScriptService) {
     this.script.load('uport').then(data => {
       this.pageInit = true;
       this.authService.initUport();
@@ -76,7 +73,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   handleLogin(userDetails: User) {
-
     const sub = this.afs.collection<any>('users', ref => ref.where('address', '==', userDetails.address).limit(1)).valueChanges().take(1).subscribe((data: any) => {
       if (data && (data instanceof Array) && data.length > 0) {
         localStorage.setItem('credentials', JSON.stringify(data[0]));
@@ -89,7 +85,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   async initialiseUserAndRedirect(user: User) {
-    this.authService.initialiseUser(user).then((res) => {
+    this.userService.saveUser(user).then((res) => {
       this.router.navigate(['/profile/setup']);
     }, (err) => {
       console.log('onLogin - err', err);

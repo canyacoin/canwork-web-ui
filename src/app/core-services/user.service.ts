@@ -7,7 +7,12 @@ import { User } from '../core-classes/user';
 @Injectable()
 export class UserService {
 
-  constructor(private afs: AngularFirestore) { }
+
+  usersCollectionRef: AngularFirestoreCollection<any>;
+
+  constructor(private afs: AngularFirestore) {
+    this.usersCollectionRef = this.afs.collection<any>('users');
+  }
 
   saveProfileView(viewer: User, viewed: string) {
     const ref = this.afs.doc(`who/${viewed}/user/${viewer.address}`);
@@ -30,5 +35,38 @@ export class UserService {
         reject();
       });
     });
+  }
+
+  saveUser(credentials: User, type?: string): Promise<User> {
+    return new Promise(async (resolve: any, reject: any) => {
+      try {
+        credentials.timestamp = moment().format('x');
+        localStorage.setItem('credentials', JSON.stringify(credentials));
+        this.saveUserFirebase(credentials);
+        resolve(credentials);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  updateUserProperty(key: string, value: any) {
+    const credentials: User = JSON.parse(localStorage.getItem('credentials'));
+    if (credentials) {
+      credentials[key] = value;
+      localStorage.setItem('credentials', JSON.stringify(credentials));
+      this.saveUserFirebase(credentials);
+    }
+  }
+
+  private saveUserFirebase(userModel: User) {
+    if (userModel && userModel.address) {
+      const ref = userModel.address;
+      // Firebase: SaveUser
+      this.usersCollectionRef.doc(ref).snapshotChanges().take(1).subscribe((snap: any) => {
+        console.log('saveUser - payload', snap.payload.exists);
+        return snap.payload.exists ? this.usersCollectionRef.doc(ref).update(Object.assign({}, userModel)) : this.usersCollectionRef.doc(ref).set(Object.assign({}, userModel));
+      });
+    }
   }
 }

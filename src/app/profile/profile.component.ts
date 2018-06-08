@@ -65,14 +65,6 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  onBack() {
-    if ((<any>window).history.length > 0) {
-      this.location.back();
-    } else {
-      this.router.navigate(['/home']);
-    }
-  }
-
   isMyProfile() {
     return (this.userModel && (this.userModel.address === this.currentUser.address));
   }

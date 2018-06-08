@@ -30,9 +30,8 @@ import { Subject } from 'rxjs/Subject';
     ])
   ]
 })
-export class BotComponent implements OnInit {
 
-  // @ViewChild('botui') botui: ElementRef;
+export class BotComponent implements OnInit {
 
   index = 0;
   bot: any = [];

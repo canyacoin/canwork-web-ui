@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { UserIsNotSetupGuard } from '../core-utils/user-is-not-setup.guard';
 import { UserIsSetupGuard } from '../core-utils/user-is-setup.guard';
+import { EditComponent } from './edit/edit.component';
 import { ProfileComponent } from './profile.component';
 import { SetupComponent } from './setup/setup.component';
 
@@ -19,14 +20,14 @@ const routes: Routes = [
     canActivate: [UserIsNotSetupGuard]
   },
   {
+    path: 'edit',
+    component: EditComponent,
+    canActivate: [UserIsSetupGuard]
+  },
+  {
     path: 'provider/:address',
     component: ProfileComponent
-  },
-  // {
-  //   path: 'profile/edit',
-  //   component: EditComponent,
-  //   canActivate: [AuthGuard]
-  // },
+  }
 ];
 
 @NgModule({
