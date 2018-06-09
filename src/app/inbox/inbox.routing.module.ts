@@ -8,6 +8,15 @@ import { PostComponent } from './post/post.component';
 const routes: Routes = [
   {
     path: '',
+    redirectTo: '/chat',
+    pathMatch: 'full'
+  },
+  {
+    path: 'chat',
+    component: ChatComponent
+  },
+  {
+    path: 'chat/:address',
     component: ChatComponent
   },
   {

@@ -155,4 +155,15 @@ export class EthService implements OnDestroy {
       resolve();
     }) as Promise<string>;
   }
+
+  payCAN(recipient: string, amount: number) {
+    const transaction = {
+      gasLimit: 48000,
+      gasPrice: '0x04e3b29200',
+      to: canyaContractAddress,
+      data: this.canyaContract.methods.transfer(recipient, this.web3js.utils.toWei(amount.toString(), 'ether')).encodeABI(),
+      value: '0x0'
+    };
+    return Observable.fromPromise(this.web3js.eth.sendTransaction(transaction));
+  }
 }

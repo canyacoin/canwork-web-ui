@@ -28,6 +28,7 @@ export class Message {
   title: string;
   message: string;
   type: MessageType;
+  price: string;
   timestamp: string;
 
   constructor(init?: Partial<Message>) {
@@ -37,7 +38,9 @@ export class Message {
 
 export enum MessageType {
   message = 'MESSAGE',
-  request = 'REQUEST'
+  request = 'REQUEST',
+  offer = 'OFFER',
+  checkout = 'CHECKOUT'
 }
 
 @Injectable()
@@ -90,8 +93,8 @@ export class ChatService {
       this.afs.collection('chats').doc(receiver.address).collection('channels').doc(message.channel).collection('messages').add(Object.assign({}, message));
 
       // Update the channel
-      this.afs.collection('chats').doc(sender.address).collection('channels').doc(message.channel).update({ message: message.message, timestamp: moment().format('x') });
-      this.afs.collection('chats').doc(receiver.address).collection('channels').doc(message.channel).update({ message: message.message, timestamp: moment().format('x') });
+      this.afs.collection('chats').doc(sender.address).collection('channels').doc(message.channel).update({ message: message.message, timestamp: moment().format('x'), unreadMessages: false });
+      this.afs.collection('chats').doc(receiver.address).collection('channels').doc(message.channel).update({ message: message.message, timestamp: moment().format('x'), unreadMessages: true });
     } catch (error) {
       console.error('sendMessage - error', error);
     }
@@ -110,7 +113,7 @@ export class ChatService {
     });
   }
 
-  createMessageObject(channelId: string, user: User, message: string, type: MessageType = MessageType.message, budget: string = '0'): Message {
+  createMessageObject(channelId: string, user: User, message: string, type: MessageType = MessageType.message, budget: string = '', price: string = ''): Message {
     return new Message({
       channel: channelId,
       address: user.address,
