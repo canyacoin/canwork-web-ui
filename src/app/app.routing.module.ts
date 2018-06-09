@@ -35,6 +35,10 @@ import { AuthGuard } from './core-utils/auth.guard';
         data: { requiresLoggedOut: true }
       },
       {
+        path: 'exchange',
+        loadChildren: './exchange/exchange.module#ExchangeModule'
+      },
+      {
         path: 'tools',
         component: ToolsComponent
       },
