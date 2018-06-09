@@ -18,7 +18,7 @@ export class UserIsNotSetupGuard implements CanActivate {
             resolve(true);
           }
         } else {
-          this.router.navigate(['/login']);
+          this.router.navigate(['/auth']);
         }
         resolve(false);
       }).catch(err => {

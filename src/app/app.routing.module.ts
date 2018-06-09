@@ -20,10 +20,6 @@ import { AuthGuard } from './core-utils/auth.guard';
         loadChildren: './home/home.module#HomeModule'
       },
       {
-        path: 'profile',
-        loadChildren: './profile/profile.module#ProfileModule'
-      },
-      {
         path: 'login',
         redirectTo: '/auth',
         pathMatch: 'full'
@@ -37,6 +33,14 @@ import { AuthGuard } from './core-utils/auth.guard';
       {
         path: 'exchange',
         loadChildren: './exchange/exchange.module#ExchangeModule'
+      },
+      {
+        path: 'profile',
+        loadChildren: './profile/profile.module#ProfileModule'
+      },
+      {
+        path: 'inbox',
+        loadChildren: './inbox/inbox.module#InboxModule'
       },
       {
         path: 'tools',

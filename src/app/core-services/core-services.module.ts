@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AnimationService } from './animation.service';
 import { AuthService } from './auth.service';
+import { ChatService } from './chat.service';
 import { EthService } from './eth.service';
 import { FeedService } from './feed.service';
 import { MomentService } from './moment.service';
@@ -17,6 +18,7 @@ import { UserService } from './user.service';
   providers: [
     AnimationService,
     AuthService,
+    ChatService,
     EthService,
     FeedService,
     MomentService,

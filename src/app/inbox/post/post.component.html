@@ -1,0 +1,67 @@
+<app-header></app-header>
+
+<main class="main-content">
+
+  <section class="section bg-white pt-0 pb-30" id="section-main">
+    <app-back-button></app-back-button>
+    <div *ngIf="!sent" class="section bg-white pt-0 pb-30">
+      <div class="container">
+        <header class="section-header my-0 py-0">
+          <h2 class="fw-300">Post a request</h2>
+          <hr>
+        </header>
+        <div class="row">
+          <div class="col-12 col-md-6 offset-md-3">
+            <div class="align-self-center align-items-center my-10">
+              <form [formGroup]="postForm" class="form form-round validate" novalidate>
+                <div class="col-12 col-lg-12">
+                  <div class="form-group">
+                    <label class="text-dark">Describe the service or task you're looking to purchase:</label>
+                    <textarea class="form-control" #description formControlName="description" rows="4" name="description" placeholder="I'm looking for..."
+                      [class.invalid]="!postForm.controls.description.valid && postForm.controls.description.dirty"></textarea>
+                    <small *ngIf="!postForm.controls.description.valid" class="text-primary text-wrap">e.g. 'Custom Logo' or 'Milestone 1 - Wireframes'.</small>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="text-dark">What is your budget for this service?</label>
+                    <input #budget formControlName="budget" class="form-control" type="number" name="budget" min="10" placeholder="10 CanYaCoins minimum"
+                      [class.invalid]="!postForm.controls.budget.valid && postForm.controls.budget.dirty">
+
+                    <small *ngIf="!postForm.controls.budget.valid && postForm.controls.budget.dirty" class="text-primary">Must be 10 CanYaCoins or higher.</small>
+                  </div>
+                </div>
+
+                <div class="modal-footer">
+                  <img *ngIf="isSending" src="assets/img/loader.svg" height="36px" alt="CanYa Coin">
+                  <button type="button" (click)="submitForm()" class="btn btn-primary btn-canya-chat btn-block" [disabled]="!postForm.valid || isSending">POST</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="sent" class="section py-70">
+      <div class="container">
+        <div class="section-header">
+          <img src="assets/img/confirmation.png" class="mb-30" width="100px" height="100px">
+          <h2>Congrats! Your request has been submitted!</h2>
+          <p class="lead fw-400">Your CanYa Provider will be in touch soon. Check your messages/transactions later in order to receive and pay for
+            your service.</p>
+          <hr>
+        </div>
+        <br>
+        <p class="text-center">
+          <a class="btn btn-secondary" [routerLink]="['/home']">Return home</a>
+          &nbsp;&nbsp;
+          <a class="btn btn-canya-tools text-white" [routerLink]="['/inbox/chat', recipientAddress]">Go to inbox</a>
+        </p>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-footer></app-footer>
+<app-scroll-top></app-scroll-top>

@@ -19,7 +19,7 @@ export class AboutComponent implements OnInit {
   ngOnInit() { }
 
   proposeJob() {
-    this.router.navigate(['/post', this.userModel.address]);
+    this.router.navigate(['inbox/post', this.userModel.address]);
   }
 
 
