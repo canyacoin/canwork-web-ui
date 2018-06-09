@@ -3,9 +3,6 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class AnimationService {
 
-  theWindow = (<any>window).$(window);
-  winHeight = this.theWindow.height();
-  animDuration = this.winHeight * 3;
 
   deskAnim = null;
   consultAnim = null;
@@ -15,11 +12,6 @@ export class AnimationService {
   portfolioAnim = null;
 
   constructor() {
-    if (navigator.userAgent.match(/Mobile|Windows Phone|Lumia|Android|webOS|iPhone|iPod|Blackberry|PlayBook|BB10|Opera Mini|\bCrMo\/|Opera Mobi/i)) {
-      this.animDuration = this.winHeight * 8;
-    } else if (navigator.userAgent.match(/Tablet|iPad/i)) {
-      this.animDuration = this.winHeight * 4;
-    }
   }
 
   resetAnimations() {
@@ -144,12 +136,5 @@ export class AnimationService {
     } catch (error) {
       console.log('loadAnimations - error', error);
     }
-  }
-
-  animatebodymovin(duration, animObject) {
-    const scrollPosition = this.theWindow.scrollTop();
-    const maxFrames = animObject.totalFrames;
-    const frame = (maxFrames / 100) * (scrollPosition / (duration / 100));
-    animObject.goToAndStop(frame, true);
   }
 }

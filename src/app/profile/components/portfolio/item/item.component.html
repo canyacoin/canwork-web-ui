@@ -7,12 +7,17 @@
     </div>
     <div class="col-md-6">
       <div class="card">
-        <span class="card-subtitle" style="padding-top: 1em">{{ workItem.title }}</span>
+        <span class="card-subtitle" style="padding-top: 1em">
+          {{ workItem.title }}
+          <a *ngIf="isMyProfile" [routerLink]="['/profile/project/' + workItem.id]" data-toggle="tooltip" data-placement="top" title="Edit item"
+            class="btn btn-sm btn-circular btn-light icon-edit-work pl-1">
+            <i class="ti-pencil fw-600" aria-hidden="true"></i>
+          </a>
+        </span>
         <div class="card-body">
           <p *ngIf="workItem.description" class="card-text p-y-1">
             {{ workItem.description }}
           </p>
-          <!-- skill tags -->
           <app-skill-tags [skills]="workItem.tags"></app-skill-tags>
 
           <a *ngIf="workItem.link" [href]="workItem.link" class="card-link">

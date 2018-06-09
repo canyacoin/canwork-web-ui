@@ -7,6 +7,7 @@ import { UserIsSetupGuard } from '../core-utils/user-is-setup.guard';
 import { EditComponent } from './edit/edit.component';
 import { ProfileViewsComponent } from './profile-views/profile-views.component';
 import { ProfileComponent } from './profile.component';
+import { ProjectComponent } from './project/project.component';
 import { SetupComponent } from './setup/setup.component';
 
 const routes: Routes = [
@@ -23,6 +24,16 @@ const routes: Routes = [
   {
     path: 'edit',
     component: EditComponent,
+    canActivate: [UserIsSetupGuard]
+  },
+  {
+    path: 'project',
+    component: ProjectComponent,
+    canActivate: [UserIsSetupGuard]
+  },
+  {
+    path: 'project/:id',
+    component: ProjectComponent,
     canActivate: [UserIsSetupGuard]
   },
   {

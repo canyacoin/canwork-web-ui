@@ -2,7 +2,7 @@
   <span *ngIf="userModel.badge" class="popular-tag" style="background:#3cf; float:right; z-index: 111;">
     {{ userModel.badge }}
   </span>
-  <a *ngIf="userModel.address === currentUser.address" [routerLink]="['/work']" data-toggle="tooltip" data-placement="top"
+  <a *ngIf="userModel.address === currentUser.address" [routerLink]="['profile/project']" data-toggle="tooltip" data-placement="top"
     title="Add Project" class="btn btn-sm btn-circular icon-add-work pl-1">
     <i class="ti-plus fw-600" aria-hidden="true"></i>
   </a>

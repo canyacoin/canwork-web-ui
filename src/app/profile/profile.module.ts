@@ -18,6 +18,7 @@ import { EditComponent } from './edit/edit.component';
 import { ProfileViewsComponent } from './profile-views/profile-views.component';
 import { ProfileComponent } from './profile.component';
 import { ProfileRoutingModule } from './profile.routing.module';
+import { ProjectComponent } from './project/project.component';
 import { SetupComponent } from './setup/setup.component';
 
 @NgModule({
@@ -39,6 +40,7 @@ import { SetupComponent } from './setup/setup.component';
     PortfolioComponent,
     ProfileComponent,
     ProfileViewsComponent,
+    ProjectComponent,
     SocialComponent,
     SetupComponent,
     SupportMeComponent,

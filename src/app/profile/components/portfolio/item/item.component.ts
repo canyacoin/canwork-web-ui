@@ -10,6 +10,7 @@ import { DefaultImages } from '../../../../core-classes/default-images.enum';
 export class ItemComponent {
 
   @Input() workItem: any;
+  @Input() isMyProfile: boolean;
   defaultImage = DefaultImages.workPlaceHolder;
 
   constructor() { }

@@ -9,7 +9,7 @@
                 <h3 class="fw-500">OMG! Your work is empty!</h3>
                 <h4 class="fw-400">Let's make a portfolio and post your work.</h4>
                 <p class="text-center py-3">
-                  <a class="btn btn-primary btn-add-work" [routerLink]="['/work']" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">ADD WORK</a>
+                  <a class="btn btn-primary btn-add-work" [routerLink]="['profile/project']" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">ADD WORK</a>
                 </p>
               </div>
               <div *ngIf="isMyProfile() && (userModel.type === 'User')">
@@ -41,7 +41,7 @@
           <div class="row animated {{animation}}">
             <div class="col-sm-12">
               <div *ngFor="let item of paginatedPortfolioItems();let i = index" class="">
-                <app-item [workItem]="item"></app-item>
+                <app-item [workItem]="item" [isMyProfile]="isMyProfile()"></app-item>
               </div>
             </div>
           </div>

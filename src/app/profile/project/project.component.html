@@ -1,0 +1,107 @@
+<app-header></app-header>
+
+<main class="main-content">
+  <section class="section my-0 py-0">
+    <div class="container">
+      <header class="section-header my-0 py-0">
+        <h2>Project</h2>
+
+        <app-back-button></app-back-button>
+
+        <p class="lead fw-400">Edit project details:</p>
+        <hr>
+      </header>
+
+      <div class="row">
+
+        <div class="col-12 col-md-4 offset-md-4">
+          <form [formGroup]="projectForm" class="form form-round validate" novalidate>
+
+            <div class="form-group">
+              <label>What's the title of the project?</label>
+              <input class="form-control" #title formControlName="title" type="text" name="title" placeholder="e.g. Mail client app" maxlength="255"
+                [class.invalid]="!projectForm.controls.title.valid && projectForm.controls.title.dirty">
+
+              <small *ngIf="!projectForm.controls.title.valid  && projectForm.controls.title.dirty">Please enter a valid title for your project.</small>
+            </div>
+
+            <div class="form-group">
+              <label>Describe your role in the project. Which parts of the project were you responsible for?</label>
+              <textarea class="form-control" #description formControlName="description" name="description" rows="7" placeholder="Describe your project"
+                maxlength="512" [class.invalid]="!projectForm.controls.description.valid && projectForm.controls.description.dirty"></textarea>
+
+              <small *ngIf="!projectForm.controls.description.valid  && projectForm.controls.description.dirty">Please enter a valid description for your project.</small>
+            </div>
+
+
+            <div class="form-group">
+              <label>Tag the project with relevant skills to help to find your work more easily.</label>
+              <input class="form-control" #tags formControlName="tags" type="text" name="tags" placeholder="e.g. HTML, CSS, Photoshop..."
+                maxlength="255" [class.invalid]="!projectForm.controls.tags.valid && projectForm.controls.tags.dirty">
+
+              <small *ngIf="!projectForm.controls.tags.valid  && projectForm.controls.tags.dirty">Please enter a comma separated list of tags.</small>
+            </div>
+
+            <div class="form-group">
+              <label>Embed an image or video from an URL. (Optional)</label>
+              <input class="form-control" #image formControlName="image" type="text" name="image" placeholder="e.g. https://cdn.dribbble.com/..."
+                maxlength="1024" [class.invalid]="!projectForm.controls.image.valid && projectForm.controls.image.dirty">
+
+              <small *ngIf="!projectForm.controls.image.valid  && projectForm.controls.image.dirty">Please enter a valid URL.</small>
+            </div>
+
+
+            <div class="form-group">
+              <label>Enter project URL so our community has something to interact!</label>
+              <input class="form-control" #link formControlName="link" type="text" name="link" placeholder="https://..." maxlength="1024"
+                [class.invalid]="!projectForm.controls.link.valid && projectForm.controls.link.dirty">
+
+              <small *ngIf="!projectForm.controls.link.valid  && projectForm.controls.link.dirty">Please enter a valid URL.</small>
+            </div>
+
+            <div class="row w-full mb-30">
+              <div class="col-3">
+                <button type="button" data-toggle="modal" data-target="#areYouSureModal" data-role="none" class="btn btn-danger text-white">
+                  Delete
+                </button>
+              </div>
+
+              <div class="offset-2 col-4">
+                <button type="button" (click)="goBack()" class="btn btn-secondary">
+                  Cancel
+                </button>
+              </div>
+              <div class="col-3">
+                <button type="button" [disabled]="!projectForm.valid" (click)="submitForm()" class="btn btn-canya-tools text-white">
+                  Save
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-footer></app-footer>
+
+<div class="modal fade" id="areYouSureModal" tabindex="-1" role="dialog" data-keyboard="true" data-backdrop="true" aria-labelledby="areYouSureLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this project?</p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="onDelete()" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+        <button (click)="onCancel()" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
