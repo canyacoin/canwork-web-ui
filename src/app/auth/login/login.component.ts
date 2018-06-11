@@ -15,8 +15,6 @@ import { UserService } from '../../core-services/user.service';
 })
 export class LoginComponent implements OnInit, AfterViewInit {
 
-  currentUser: User = JSON.parse(localStorage.getItem('credentials'));
-
   loading = false;
   pageInit = false;
 
@@ -75,8 +73,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
   handleLogin(userDetails: User) {
     const sub = this.afs.collection<any>('users', ref => ref.where('address', '==', userDetails.address).limit(1)).valueChanges().take(1).subscribe((data: any) => {
       if (data && (data instanceof Array) && data.length > 0) {
-        localStorage.setItem('credentials', JSON.stringify(data[0]));
-        this.router.navigate(['/home']);
+        this.authService.setUser(data[0]);
+        this.router.navigate(['/home']); // TODO: Add returnURl for when routed here from redirect
       } else {
         this.initialiseUserAndRedirect(userDetails);
       }
@@ -86,6 +84,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   async initialiseUserAndRedirect(user: User) {
     this.userService.saveUser(user).then((res) => {
+      this.authService.setUser(user);
       this.router.navigate(['/profile/setup']);
     }, (err) => {
       console.log('onLogin - err', err);

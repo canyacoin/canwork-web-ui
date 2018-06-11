@@ -11,13 +11,13 @@ import { User } from '../../../core-classes/user';
 })
 export class VisitorsComponent implements OnInit {
 
-  currentUser: User = JSON.parse(localStorage.getItem('credentials'));
+  @Input() userModel: User;
   whoViewProfileCounter = 0;
 
   constructor(private afs: AngularFirestore) { }
 
   ngOnInit() {
-    const ref = this.afs.collection(`who/${this.currentUser.address}/user`);
+    const ref = this.afs.collection(`who/${this.userModel.address}/user`);
     ref.valueChanges().take(1).toPromise().then((data: any) => {
       this.whoViewProfileCounter = data.length;
     });

@@ -1,5 +1,3 @@
-<app-header></app-header>
-
 <main class="main-content">
   <section class="section bg-gray pt-15 pb-20" id="section-profile">
 
@@ -12,7 +10,7 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12 col-md-3 my-5">
-          <app-profile-about [currentUser]="currentUser" [userModel]="userModel"></app-profile-about>
+          <app-profile-about [isMyProfile]="isMyProfile()" [userModel]="userModel"></app-profile-about>
 
           <app-profile-timezone *ngIf="notMyProfile() && userModel.timezone && userModel.offset" [userModel]="userModel"></app-profile-timezone>
 
@@ -20,18 +18,18 @@
 
           <app-profile-support-me *ngIf="notMyProfile() && userModel.ethAddress" [userModel]="userModel"></app-profile-support-me>
 
-          <app-profile-visitors *ngIf="isMyProfile()"></app-profile-visitors>
+          <app-profile-visitors *ngIf="isMyProfile()" [userModel]="currentUser"></app-profile-visitors>
         </div>
 
         <div class="col-12 col-md-8 my-5">
-          <app-profile-bio *ngIf="userModel && userModel.description" [currentUser]="currentUser" [userModel]="userModel"></app-profile-bio>
+          <app-profile-bio *ngIf="userModel && userModel.description" [isMyProfile]="isMyProfile()" [userModel]="userModel"></app-profile-bio>
 
-          <app-profile-portfolio *ngIf="userModel" [userModel]="userModel" [currentUser]="currentUser"></app-profile-portfolio>
+          <app-profile-portfolio *ngIf="userModel" [userModel]="userModel" [notMyProfile]="notMyProfile()" [isMyProfile]="isMyProfile()"></app-profile-portfolio>
         </div>
       </div>
     </div>
   </section>
 </main>
 
-<app-footer></app-footer>
+
 <app-scroll-top></app-scroll-top>

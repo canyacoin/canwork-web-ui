@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 import { User } from '../../core-classes/user';
+import { AuthService } from '../../core-services/auth.service';
 import { ChatService } from '../../core-services/chat.service';
 import { UserService } from '../../core-services/user.service';
 
@@ -11,9 +13,10 @@ import { UserService } from '../../core-services/user.service';
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.css']
 })
-export class PostComponent implements OnInit {
+export class PostComponent implements OnInit, OnDestroy {
 
-  currentUser: User = JSON.parse(localStorage.getItem('credentials'));
+  currentUser: User;
+  authSub: Subscription;
 
   postForm: FormGroup = null;
 
@@ -27,6 +30,7 @@ export class PostComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private userService: UserService,
+    private authService: AuthService,
     private chatService: ChatService) {
     this.postForm = formBuilder.group({
       description: ['', Validators.compose([Validators.required, Validators.maxLength(255)])],
@@ -35,12 +39,19 @@ export class PostComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.activatedRoute.params.subscribe((params) => {
-      if (params['address'] && params['address'] !== this.currentUser.address) {
-        this.recipientAddress = params['address'];
-        this.loadUser(this.recipientAddress);
-      }
+    this.authSub = this.authService.currentUser$.subscribe((user: User) => {
+      this.currentUser = user;
+      this.activatedRoute.params.take(1).subscribe((params) => {
+        if (params['address'] && params['address'] !== this.currentUser.address) {
+          this.recipientAddress = params['address'];
+          this.loadUser(this.recipientAddress);
+        }
+      });
     });
+  }
+
+  ngOnDestroy() {
+    if (this.authSub) { this.authSub.unsubscribe(); }
   }
 
   loadUser(address: string) {

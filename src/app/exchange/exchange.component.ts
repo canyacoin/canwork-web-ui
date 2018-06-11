@@ -12,8 +12,6 @@ import { ScriptService } from '../core-services/script.service';
 })
 export class ExchangeComponent implements AfterViewInit, OnDestroy {
 
-  currentUser: any = JSON.parse(localStorage.getItem('credentials'));
-
   web3LoadingStatus = Web3LoadingStatus;
   web3State: Web3LoadingStatus = Web3LoadingStatus.loading;
   account: string;

@@ -1,13 +1,15 @@
-import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import * as findIndex from 'lodash/findIndex';
 import * as orderBy from 'lodash/orderBy';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 import * as moment from 'moment';
 import { User } from '../../core-classes/user';
+import { AuthService } from '../../core-services/auth.service';
 import { Channel, ChatService, Message, MessageType } from '../../core-services/chat.service';
 import { EthService, Web3LoadingStatus } from '../../core-services/eth.service';
 import { UserService } from '../../core-services/user.service';
@@ -17,10 +19,10 @@ import { UserService } from '../../core-services/user.service';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements AfterViewInit, OnDestroy {
+export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // User
-  currentUser: User = JSON.parse(localStorage.getItem('credentials'));
+  currentUser: User;
   fAddress = '';
 
   // Models
@@ -48,8 +50,9 @@ export class ChatComponent implements AfterViewInit, OnDestroy {
 
   balance = '0';
   web3State: Web3LoadingStatus;
-  web3Subscription: any;
-  accountSubscription: any;
+  web3Subscription: Subscription;
+  accountSubscription: Subscription;
+  authSub: Subscription;
 
   postForm: FormGroup = null;
   offerForm: FormGroup = null;
@@ -64,6 +67,7 @@ export class ChatComponent implements AfterViewInit, OnDestroy {
     private userService: UserService,
     private chatService: ChatService,
     private ethService: EthService,
+    private authService: AuthService,
     private afs: AngularFirestore) {
     this.postForm = formBuilder.group({
       description: ['', Validators.compose([Validators.required, Validators.maxLength(255)])],
@@ -78,13 +82,23 @@ export class ChatComponent implements AfterViewInit, OnDestroy {
     this.setSelectedChannel(JSON.parse(localStorage.getItem('selectedChannel')));
   }
 
-  ngAfterViewInit() {
-    this.activatedRoute.params.subscribe((params) => {
-      if (params['address'] && params['address'] !== this.currentUser.address) {
-        this.fAddress = params['address'];
+  ngOnInit() {
+    this.authSub = this.authService.currentUser$.subscribe((user: User) => {
+      if (user !== this.currentUser) {
+        this.currentUser = user;
+        this.activatedRoute.params.take(1).subscribe((params) => {
+          if (params['address'] && params['address'] !== this.currentUser.address) {
+            this.fAddress = params['address'];
+          }
+          if (this.currentUser) {
+            this.loadChannels();
+          }
+        });
       }
-      this.loadChannels();
     });
+  }
+
+  ngAfterViewInit() {
     this.web3Subscription = this.ethService.web3Status$.subscribe((status: Web3LoadingStatus) => {
       this.web3State = status;
       if (status === Web3LoadingStatus.complete) {
@@ -102,10 +116,9 @@ export class ChatComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.web3Subscription.unsubscribe();
-    if (this.accountSubscription !== undefined) {
-      this.accountSubscription.unsubscribe();
-    }
+    if (this.web3Subscription) { this.web3Subscription.unsubscribe(); }
+    if (this.accountSubscription !== undefined) { this.accountSubscription.unsubscribe(); }
+    if (this.authSub) { this.authSub.unsubscribe(); }
   }
 
   loadChannels() {

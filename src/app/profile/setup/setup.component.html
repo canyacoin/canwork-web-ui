@@ -1,6 +1,6 @@
-<app-header></app-header>
+ 
 
-<main class="main-content">
+<main class="main-content" *ngIf="currentUser">
   <section *ngIf="!hasChosenType()" class="section bg-gray py-40">
     <div class="container">
       <header class="section-header my-0 py-0" @logoAnimation>
@@ -43,4 +43,4 @@
   </section>
 </main>
 
-<app-footer></app-footer>
+ 

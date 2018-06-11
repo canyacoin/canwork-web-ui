@@ -9,8 +9,8 @@ import { User } from 'firebase/app';
 })
 export class BioComponent implements OnInit {
 
-  @Input() userModel: any;
-  @Input() currentUser: User;
+  @Input() userModel: User;
+  @Input() isMyProfile: boolean;
 
   constructor() { }
 

@@ -1,45 +1,53 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import 'rxjs/add/operator/take';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
 import { environment } from '../../environments/environment';
 import { Avatar, User } from '../core-classes/user';
-import { UserService } from './user.service';
 
 @Injectable()
-export class AuthService {
-
-  currentUser: User = JSON.parse(localStorage.getItem('credentials'));
+export class AuthService implements OnInit {
 
   uport: any = null;
 
+  public currentUser = new BehaviorSubject<User>(null);
+  public currentUser$ = this.currentUser.asObservable();
 
-  constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth,
-    private userService: UserService, private router: Router) {
+  constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth, private router: Router) { }
+
+  ngOnInit() {
+    const savedUser = JSON.parse(localStorage.getItem('credentials'));
+    if (savedUser) {
+      this.currentUser.next(savedUser);
+    }
   }
 
   getCurrentUser(): Promise<User> {
-    this.currentUser = JSON.parse(localStorage.getItem('credentials'));
-    if (this.currentUser) {
-      // return this.userService.getUser(this.currentUser.address);
-      return Promise.resolve(this.currentUser);
+    if (this.currentUser.value) {
+      return Promise.resolve(this.currentUser.value);
     }
     return Promise.reject(null);
   }
 
   isAuthenticated() {
-    return this.currentUser !== null;
+    return this.currentUser.value !== null;
+  }
+
+  setUser(user: User) {
+    localStorage.setItem('credentials', JSON.stringify(user));
+    this.currentUser.next(user);
   }
 
   logout() {
     localStorage.clear();
-    this.currentUser = null;
+    this.currentUser.next(null);
     this.afAuth.auth.signOut();
-    this.router.navigate(['home']);
+    this.router.navigate(['home']); // TODO: Change this to reload same route - and hit the auth guards again
   }
 
   initUport() {

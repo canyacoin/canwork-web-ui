@@ -1,20 +1,25 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { Subscription } from 'rxjs/Subscription';
 
 import { User } from '../../core-classes/user';
+import { AuthService } from '../../core-services/auth.service';
 
 @Component({
   selector: 'app-project',
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.css']
 })
-export class ProjectComponent implements OnInit {
+export class ProjectComponent implements OnInit, OnDestroy {
 
-  currentUser: User = JSON.parse(localStorage.getItem('credentials'));
+  currentUser: User;
   projectId = '';
+
+  authSub: Subscription;
+  // paramsSub: Subscription;
 
   projectForm: FormGroup = null;
 
@@ -22,6 +27,7 @@ export class ProjectComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private location: Location,
+    private authService: AuthService,
     private afs: AngularFirestore) {
 
     this.projectForm = formBuilder.group({
@@ -34,12 +40,23 @@ export class ProjectComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.activatedRoute.params.subscribe((params) => {
-      if (params['id']) {
-        this.projectId = params['id'];
-        this.loadProject(this.projectId);
+    this.authSub = this.authService.currentUser$.subscribe((user: User) => {
+      if (user && this.currentUser !== user) {
+        this.currentUser = user;
+        this.activatedRoute.params.take(1).subscribe((params) => {
+          if (params['id']) {
+            this.projectId = params['id'];
+            this.loadProject(this.projectId);
+          }
+        });
       }
     });
+  }
+
+  ngOnDestroy() {
+    // if (this.paramsSub) { this.paramsSub.unsubscribe(); }
+    if (this.authSub) { this.authSub.unsubscribe(); }
+
   }
 
   loadProject(address: string) {

@@ -14,7 +14,8 @@ import { AnimationService } from '../../../core-services/animation.service';
 export class PortfolioComponent implements OnInit, OnDestroy {
 
   @Input() userModel: User;
-  @Input() currentUser: User;
+  @Input() isMyProfile: boolean;
+  @Input() notMyProfile: boolean;
 
   allPortfolioItems: any[] = [];
   loaded = false;
@@ -73,13 +74,5 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
   postRequest() {
     this.router.navigate(['inbox/post', this.userModel.address]);
-  }
-
-  isMyProfile() {
-    return (this.userModel && (this.userModel.address === this.currentUser.address));
-  }
-
-  notMyProfile() {
-    return (this.userModel && (this.userModel.address !== this.currentUser.address));
   }
 }

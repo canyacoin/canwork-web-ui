@@ -1,22 +1,21 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
-
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularFireModule } from 'angularfire2';
-import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
-import { FirebaseUIModule } from 'firebaseui-angular';
-import { firebaseUiAuthConfig } from './core-config/app-auth-config';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
 
+import { FirebaseUIModule } from 'firebaseui-angular';
+import { environment } from '../environments/environment';
+import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing.module';
 import { CoreComponentsModule } from './core-components/core-components.module';
+import { firebaseUiAuthConfig } from './core-config/app-auth-config';
+import { AuthService } from './core-services/auth.service';
 import { CoreServicesModule } from './core-services/core-services.module';
+import { EthService } from './core-services/eth.service';
 import { CoreUtilsModule } from './core-utils/core-utils.module';
-
-import { AppComponent } from './app.component';
-
-import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -35,7 +34,10 @@ import { environment } from '../environments/environment';
     CoreUtilsModule,
     HttpModule
   ],
-  providers: [],
+  providers: [
+    AuthService,
+    EthService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

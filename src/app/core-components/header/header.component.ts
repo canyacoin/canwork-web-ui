@@ -1,9 +1,10 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Subscription } from 'rxjs/Subscription';
 
+import { User } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
 
 @Component({
@@ -24,7 +25,7 @@ import { AuthService } from '../../core-services/auth.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
-  currentUser: any = JSON.parse(localStorage.getItem('credentials'));
+  currentUser: User;
 
   @Input() allowFilters = false;
   showFilters = false;
@@ -32,25 +33,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
   hasUnreadMessages = false;
   messagesSubscription: Subscription;
   routerSub: Subscription;
+  authSub: Subscription;
 
   providerCategories = ['Content Creators', 'Designers & Creatives', 'Financial experts', 'Marketing & SEO', 'Software developers', 'Virtual assistants'];
 
   constructor(private afs: AngularFirestore,
-    private auth: AuthService,
+    private authService: AuthService,
     private router: Router) {
   }
 
   ngOnInit() {
-    this.initUser();
-    this.routerSub = this.router.events.subscribe((val) => {
-      if (val instanceof NavigationEnd) {
+    this.authSub = this.authService.currentUser$.subscribe((user: User) => {
+      if (this.currentUser !== user) {
+        this.currentUser = user;
         this.initUser();
       }
     });
   }
 
   initUser() {
-    this.currentUser = JSON.parse(localStorage.getItem('credentials'));
     if (this.currentUser) {
       const unreadConversations = this.afs.collection('chats').doc(this.currentUser.address).collection('channels', ref => ref.where('unreadMessages', '==', true));
       this.messagesSubscription = unreadConversations.valueChanges().subscribe(x => {
@@ -60,12 +61,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.messagesSubscription) {
-      this.messagesSubscription.unsubscribe();
-    }
-    if (this.routerSub) {
-      this.routerSub.unsubscribe();
-    }
+    if (this.messagesSubscription) { this.messagesSubscription.unsubscribe(); }
+    if (this.routerSub) { this.routerSub.unsubscribe(); }
+    if (this.authSub) { this.authSub.unsubscribe(); }
   }
 
   onKeyUp(event: any) {
@@ -93,6 +91,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onLogout() {
-    this.auth.logout();
+    this.authService.logout();
   }
 }

@@ -16,8 +16,6 @@ import { User } from '../core-classes/user';
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  currentUser: User = JSON.parse(localStorage.getItem('credentials'));
-
   allProviders: User[] = [];
   filteredProviders: User[] = [];
 

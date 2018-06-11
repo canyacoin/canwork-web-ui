@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 import * as moment from 'moment-timezone';
 import { User, UserState } from '../../core-classes/user';
@@ -13,9 +14,10 @@ import { EmailValidator } from './email.validator';
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css']
 })
-export class EditComponent {
+export class EditComponent implements OnInit, OnDestroy {
 
-  currentUser: User = JSON.parse(localStorage.getItem('credentials'));
+  currentUser: User;
+  authSub: Subscription;
 
   profileForm: FormGroup = null;
   sending = false;
@@ -24,7 +26,23 @@ export class EditComponent {
     private formBuilder: FormBuilder,
     private userService: UserService,
     private authService: AuthService) {
-    this.profileForm = formBuilder.group({
+  }
+
+  ngOnInit() {
+    this.authSub = this.authService.currentUser$.subscribe((user: User) => {
+      this.currentUser = user;
+      if (this.currentUser != null) {
+        this.buildForm();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.authSub) { this.authSub.unsubscribe(); }
+  }
+
+  buildForm() {
+    this.profileForm = this.formBuilder.group({
       name: [this.currentUser.name || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
       work: [this.currentUser.work || '', Validators.compose([Validators.required, EmailValidator.isValid])],
       title: [this.currentUser.title || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],

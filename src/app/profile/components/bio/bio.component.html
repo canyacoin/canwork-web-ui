@@ -4,7 +4,7 @@
       <span class="card-title">about</span>
     </div>
     <div class="col-sm-2" id="about-card-controls">
-      <a *ngIf="userModel.address === currentUser.address" routerLink="/profile/edit" class="btn-icon-edit">
+      <a *ngIf="isMyProfile" routerLink="/profile/edit" class="btn-icon-edit">
         <i class="ti-pencil fw-600" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Edit About"></i>
       </a>
     </div>

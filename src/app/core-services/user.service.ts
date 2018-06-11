@@ -50,12 +50,11 @@ export class UserService {
     });
   }
 
-  updateUserProperty(key: string, value: any) {
-    const credentials: User = JSON.parse(localStorage.getItem('credentials'));
-    if (credentials) {
-      credentials[key] = value;
-      localStorage.setItem('credentials', JSON.stringify(credentials));
-      this.saveUserFirebase(credentials);
+  updateUserProperty(user: User, key: string, value: any) {
+    if (user) {
+      user[key] = value;
+      localStorage.setItem('credentials', JSON.stringify(user));
+      this.saveUserFirebase(user);
     }
   }
 

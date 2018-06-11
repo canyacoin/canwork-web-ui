@@ -1,4 +1,4 @@
-<app-header></app-header>
+ 
 
 <main class="main-content">
   <section class="section my-0 py-0">
@@ -11,7 +11,7 @@
         <hr>
       </header>
 
-      <div class="row">
+      <div *ngIf="currentUser" class="row">
 
         <div class="col-12 col-md-6 offset-md-3">
           <form [formGroup]="profileForm" (ngSubmit)="save(category1, category2, category3, category4, category5, category6)" class="form form-round validate"
@@ -127,4 +127,4 @@
     </div>
   </section>
 </main>
-<app-footer></app-footer>
+ 

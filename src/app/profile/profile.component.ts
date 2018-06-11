@@ -1,10 +1,11 @@
 import { Location } from '@angular/common';
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import * as moment from 'moment-timezone';
 import { User, UserState } from '../core-classes/user';
+import { AuthService } from '../core-services/auth.service';
 import { UserService } from '../core-services/user.service';
 
 @Component({
@@ -12,35 +13,44 @@ import { UserService } from '../core-services/user.service';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ProfileComponent implements OnInit, OnDestroy {
 
-  currentUser: User = JSON.parse(localStorage.getItem('credentials'));
-  userModel: User = null;
+  currentUser: User;
+  userModel: User;
+  authSub: Subscription;
 
   paramsSub: Subscription;
 
   constructor(private router: Router,
     private location: Location,
     private activatedRoute: ActivatedRoute,
-    private userService: UserService) {
+    private userService: UserService,
+    private authService: AuthService) {
   }
 
   ngOnInit() {
-    this.setUsersColors(this.currentUser);
+    this.authSub = this.authService.currentUser$.subscribe((user: User) => {
+      if (user !== this.currentUser) {
+        this.currentUser = user;
+        this.setUsersColors(this.currentUser);
+        this.activatedRoute.params.take(1).subscribe((params) => {
+          this.initUsers(this.currentUser, params);
+        });
+      }
+    });
   }
 
   ngOnDestroy() {
     if (this.paramsSub) { this.paramsSub.unsubscribe(); }
+    if (this.authSub) { this.authSub.unsubscribe(); }
   }
 
-  ngAfterViewInit() {
-    this.paramsSub = this.activatedRoute.params.subscribe((params) => {
-      if (params['address'] && params['address'] !== 'setup') {
-        this.loadUser(params['address']);
-      } else if (this.currentUser) {
-        this.loadUser(this.currentUser.address);
-      }
-    });
+  initUsers(user: User, params: any) {
+    if (params['address'] && params['address'] !== 'setup') {
+      this.loadUser(params['address']);
+    } else if (user) {
+      this.loadUser(user.address);
+    }
   }
 
   loadUser(address: string) {
@@ -60,16 +70,22 @@ export class ProfileComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   saveWhoViewProfile() {
-    if (this.notMyProfile()) {
+    if (this.notMyProfile() && this.currentUser) {
       this.userService.saveProfileView(this.currentUser, this.userModel.address);
     }
   }
 
   isMyProfile() {
+    if (this.currentUser == null) {
+      return false;
+    }
     return (this.userModel && (this.userModel.address === this.currentUser.address));
   }
 
   notMyProfile() {
+    if (!this.currentUser && this.userModel) {
+      return true;
+    }
     return (this.userModel && (this.userModel.address !== this.currentUser.address));
   }
 }

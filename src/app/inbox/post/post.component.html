@@ -1,8 +1,8 @@
-<app-header></app-header>
+ 
 
 <main class="main-content">
 
-  <section class="section bg-white pt-0 pb-30" id="section-main">
+  <section *ngIf="currentUser" class="section bg-white pt-0 pb-30" id="section-main">
     <app-back-button></app-back-button>
     <div *ngIf="!sent" class="section bg-white pt-0 pb-30">
       <div class="container">
@@ -63,5 +63,5 @@
   </section>
 </main>
 
-<app-footer></app-footer>
+ 
 <app-scroll-top></app-scroll-top>

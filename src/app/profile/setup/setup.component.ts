@@ -1,10 +1,12 @@
 import {
     animate, keyframes, query, stagger, style, transition, trigger
 } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 import { User, UserState, UserType } from '../../core-classes/user';
+import { AuthService } from '../../core-services/auth.service';
 import { UserService } from '../../core-services/user.service';
 
 @Component({
@@ -31,9 +33,10 @@ import { UserService } from '../../core-services/user.service';
   ]
 })
 
-export class SetupComponent implements OnInit {
+export class SetupComponent implements OnInit, OnDestroy {
 
-  currentUser: User = JSON.parse(localStorage.getItem('credentials'));
+  currentUser: User;
+  authSub: Subscription;
 
   conversation: any = [
     { flow: 'Hi, I\'m CanYa! Welcome to the world’s best blockchain-powered marketplace of services.', command: 'message' },
@@ -69,10 +72,15 @@ export class SetupComponent implements OnInit {
     { flow: { field: 'state', actions: [{ caption: 'Done', type: 'button' }] }, command: 'actions' }
   ];
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(private userService: UserService, private router: Router, private authService: AuthService) { }
 
   ngOnInit() {
-
+    this.authSub = this.authService.currentUser$.subscribe((user: User) => {
+      this.currentUser = user;
+    });
+  }
+  ngOnDestroy() {
+    if (this.authSub) { this.authSub.unsubscribe(); }
   }
 
   hasChosenType(): boolean {
@@ -81,11 +89,11 @@ export class SetupComponent implements OnInit {
 
   setUserType(type: UserType) {
     this.currentUser.type = type;
-    this.userService.updateUserProperty('type', type);
+    this.userService.updateUserProperty(this.currentUser, 'type', type);
   }
 
   formSubmitted(event: any) {
-    this.userService.updateUserProperty(event.field, event.object);
+    this.userService.updateUserProperty(this.currentUser, event.field, event.object);
     if (event.object === 'Done') {
       this.router.navigate(['/profile']);
     }
