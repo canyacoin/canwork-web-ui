@@ -41,7 +41,7 @@ export class UserService {
     return new Promise(async (resolve: any, reject: any) => {
       try {
         credentials.timestamp = moment().format('x');
-        localStorage.setItem('credentials', JSON.stringify(credentials));
+        // localStorage.setItem('credentials', JSON.stringify(credentials));
         this.saveUserFirebase(credentials);
         resolve(credentials);
       } catch (error) {
@@ -53,7 +53,7 @@ export class UserService {
   updateUserProperty(user: User, key: string, value: any) {
     if (user) {
       user[key] = value;
-      localStorage.setItem('credentials', JSON.stringify(user));
+      // localStorage.setItem('credentials', JSON.stringify(user));
       this.saveUserFirebase(user);
     }
   }

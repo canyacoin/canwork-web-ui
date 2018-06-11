@@ -16,7 +16,7 @@ import { AuthService } from '../../core-services/auth.service';
 export class ProjectComponent implements OnInit, OnDestroy {
 
   currentUser: User;
-  projectId = '';
+  projectId = null;
 
   authSub: Subscription;
   // paramsSub: Subscription;
@@ -94,11 +94,26 @@ export class ProjectComponent implements OnInit, OnDestroy {
         state: 'Done'
       };
 
-      this.afs.doc(`portfolio/${this.currentUser.address}/work/${this.projectId}`).update(tmpProject);
+      if (this.projectId == null) {
+        const uid = this.guid();
+        this.afs.doc(`portfolio/${this.currentUser.address}/work/${uid}`).set(tmpProject);
+      } else {
+        this.afs.doc(`portfolio/${this.currentUser.address}/work/${this.projectId}`).update(tmpProject);
+      }
+
       this.router.navigate(['/profile']);
     } catch (error) {
       console.error('submitForm - error', error);
     }
+  }
+
+  guid(): string {
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
   }
 
   onCancel() {

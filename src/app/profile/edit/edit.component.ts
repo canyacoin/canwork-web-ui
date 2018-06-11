@@ -94,6 +94,7 @@ export class EditComponent implements OnInit, OnDestroy {
     }
 
     this.userService.saveUser(this.currentUser);
+    this.authService.setUser(this.currentUser);
     setTimeout(() => {
       this.router.navigate(['/profile']);
       this.sending = false;

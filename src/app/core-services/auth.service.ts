@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
@@ -11,16 +11,14 @@ import { environment } from '../../environments/environment';
 import { Avatar, User } from '../core-classes/user';
 
 @Injectable()
-export class AuthService implements OnInit {
+export class AuthService {
 
   uport: any = null;
 
   public currentUser = new BehaviorSubject<User>(null);
   public currentUser$ = this.currentUser.asObservable();
 
-  constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth, private router: Router) { }
-
-  ngOnInit() {
+  constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth, private router: Router) {
     const savedUser = JSON.parse(localStorage.getItem('credentials'));
     if (savedUser) {
       this.currentUser.next(savedUser);
