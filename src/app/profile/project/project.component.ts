@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Subscription } from 'rxjs/Subscription';
 
+import * as moment from 'moment';
 import { User } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
 
@@ -91,7 +92,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
         tags: tags,
         image: this.projectForm.value.image,
         link: this.projectForm.value.link,
-        state: 'Done'
+        state: 'Done',
+        timestamp: moment().format('x')
       };
 
       if (this.projectId == null) {
