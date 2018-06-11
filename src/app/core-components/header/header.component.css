@@ -1,0 +1,84 @@
+.flex-icon span {
+    margin-top: -4px !important;
+}
+
+.search-container {
+	position:relative; 
+	padding:0; 
+    margin:0;
+}
+.search-input {
+	padding: 9px;
+	font-size: 14px;
+	margin: 0; 
+    padding-left: 10px;
+    padding-right: 20px;
+    height: 36px;
+    /* border: 1px solid #DCE0E6; */
+    border: none;
+    border-radius: 5px;
+    outline: none;
+}
+.search {
+	padding: 9px;
+	font-size: 14px;
+	margin: 0; 
+    padding-left: 10px;
+    padding-right: 20px;
+    height: 36px;
+    border: 1px solid #DCE0E6; 
+    border-radius: 5px;
+}
+.search:focus {
+	outline: none;
+}
+.search-icon {
+    width: 24px;
+    height: 24px;
+}
+.input-group {
+    border-radius: 5px;
+}
+
+.icon-bot {
+    margin-top: -1px;
+    border: none; 
+    opacity: 0.6;
+    width: 24px;
+    height: 24px;
+    background: url('/assets/img/bot.svg') white;
+    background-size: 21px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.icon-bot:hover {
+    background: url('/assets/img/bot-hover.svg');
+    opacity: 1.0; 
+}
+
+.icon-sign-out {
+    margin-top: -1px;
+    border: none; 
+    opacity: 0.6;
+    width: 24px;
+    height: 24px;
+    background: url('/assets/img/signout.svg') white;
+    background-size: 21px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.icon-sign-out:hover {
+    background: url('/assets/img/signout-hover.svg');
+    opacity: 1.0; 
+}
+
+.btn-search {
+    padding: 7px 6px 7px 26px;
+    opacity: 1.0;
+}
+
+.btn-search:hover {
+    opacity: 0.8; 
+}

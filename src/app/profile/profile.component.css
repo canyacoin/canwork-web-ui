@@ -1,3 +1,7 @@
+.border {
+  border: 0.75px solid silver;
+}
+
 #sidebar {
   background: #fff;
   height: 56vh;
@@ -230,7 +234,7 @@
 
 /* linear-gradient(270deg, #FF512F 0.54%, #DD2476 98.39%) */
 #page-wrap .project .right-content .title {
-  font-family: Montserrat,HelveticaNeueLight,HelveticaNeue-Light,"Helvetica Neue Light",HelveticaNeue,"Helvetica Neue",Helvetica,Tahoma,Geneva,Arial,sans-serif;   
+  font-family: Montserrat,HelveticaNeueLight,HelveticaNeue-Light,"Helvetica Neue Light",HelveticaNeue,"Helvetica Neue",Helvetica,Tahoma,Geneva,Arial,sans-serif;
   font-style: normal;
   font-weight: normal;
   line-height: normal;
@@ -245,7 +249,7 @@
   margin-bottom: 1.5rem;
 }
 #page-wrap .project .right-content .description p {
-  font-family: Montserrat,HelveticaNeueLight,HelveticaNeue-Light,"Helvetica Neue Light",HelveticaNeue,"Helvetica Neue",Helvetica,Tahoma,Geneva,Arial,sans-serif;   
+  font-family: Montserrat,HelveticaNeueLight,HelveticaNeue-Light,"Helvetica Neue Light",HelveticaNeue,"Helvetica Neue",Helvetica,Tahoma,Geneva,Arial,sans-serif;
   font-style: normal;
   font-weight: normal;
   line-height: normal;
@@ -298,7 +302,7 @@
 
 /* linear-gradient(270deg, #FF512F 0.54%, #DD2476 98.39%);  */
 .btn-add-work {
-  color: white; 
+  color: white;
   background: linear-gradient(122deg, #00FFCC 0%, #33ccff 93%);
   border: none;
 }

@@ -1,0 +1,92 @@
+<nav class="topbar topbar-expand-md topbar-sticky" id="section-top">
+  <div class="container">
+    <div class="topbar-left">
+      <a class="topbar-brand" [routerLink]="['/home']">
+        <img class="logo-default" src="assets/img/logo.svg" width="auto" height="36px" alt="logo">
+      </a>
+      <div class="search-container mx-40 hidden-sm-down">
+        <form class="form-inline justify-content-center justify-content-lg-end" method="post" (ngSubmit)="onSubmit(inputSearch.value);">
+          <div class="input-group">
+            <input #inputSearch (keyup)="onKeyUp(inputSearch.value);" (focus)="onFocus(inputSearch.value);" (blur)="onBlur(inputSearch.value);"
+              type="text" size="20" class="search-input" placeholder="Find services...">
+            <span class="input-group-btn">
+              <button class="btn btn-default btn-search" type="submit" border-none>
+                <img src="assets/img/search-icon.svg" class="search-icon" border-5>
+              </button>
+            </span>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <ul class="topbar-nav nav">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/home']" data-scrollto="section-home">Home</a>
+        </li>
+        <li *ngIf="!currentUser" class="nav-item">
+          <a class="nav-link" href="https://blog.canya.com.au/" target="_blank">Blog</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/tools']" style="opacity: 1.0;">
+            <img class="mb-5" src="assets/img/CanApps.svg" width="auto" height="18px">
+          </a>
+        </li>
+        <li *ngIf="currentUser" class="nav-item">
+          <a class="nav-link" [routerLink]="['/inbox/chat']">
+            Inbox
+          </a>
+          <span *ngIf="hasUnreadMessages" class="badge badge-round badge-danger"></span>
+        </li>
+        <li *ngIf="currentUser" class="nav-item">
+          <a class="nav-link" [routerLink]="['/profile']">Profile</a>
+        </li>
+      </ul>
+      &nbsp;&nbsp;
+
+      <a *ngIf="!currentUser" [routerLink]="['/auth']" class="btn btn-canya-tools btn-sm text-white hidden-sm-down">
+        Join
+      </a>
+
+      <div *ngIf="currentUser" class="btn-group">
+        <a [routerLink]="['/console']" class="nav-link icon-bot hidden-lg-down">
+        </a>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;
+
+        <a href="" data-toggle="modal" data-target="#areYouSureLogoutModal" class="nav-link icon-sign-out hidden-lg-down"></a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<header class="header fadeout pt-90 pb-0 shadow-1" id="section-home">
+  <div *ngIf="allowFilters && showFilters" class="container w-full bt-1 hidden-lg-down" style="margin-top: -10px;" [@slideInOut]>
+    <div class="row px-30 py-10 text-center">
+      <app-search-filter-option *ngFor="let category of providerCategories" [text]="category" [link]="category"></app-search-filter-option>
+    </div>
+  </div>
+</header>
+
+
+<!-- Logout - Are you sure? -->
+<div class="modal fade" id="areYouSureLogoutModal" tabindex="-1" role="dialog" data-keyboard="true" data-backdrop="true"
+  aria-labelledby="areYouSureLogoutLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Sign out</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to sign out of your account?</p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="onLogout()" type="button" class="btn btn-danger" data-dismiss="modal">Yes</button>
+        <button (click)="onCancel()" type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>

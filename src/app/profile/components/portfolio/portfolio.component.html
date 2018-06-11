@@ -1,0 +1,62 @@
+<div *ngIf="loaded">
+  <div class="card" style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px;">
+    <div id="page-wrap" class="pt-25">
+      <div *ngIf="allPortfolioItems.length < 1">
+        <div class="row flex-row">
+          <div class="col-12">
+            <div class="flexbox-container">
+              <div *ngIf="isMyProfile && (userModel.type === 'Provider')">
+                <h3 class="fw-500">OMG! Your work is empty!</h3>
+                <h4 class="fw-400">Let's make a portfolio and post your work.</h4>
+                <p class="text-center py-3">
+                  <a class="btn btn-primary btn-add-work" [routerLink]="['/profile/project']" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">ADD WORK</a>
+                </p>
+              </div>
+              <div *ngIf="isMyProfile && (userModel.type === 'User')">
+                <h3 class="fw-500">Why CanYaCoin?</h3>
+                <h4 class="fw-400">10 times less transaction fees (1%)!</h4>
+                <p class="text-center py-3">
+                  <a class="btn btn-primary btn-add-work text-white" (click)="onBuy()" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">BUY CAN</a>
+                </p>
+              </div>
+              <div *ngIf="notMyProfile">
+                <div #portfolio id="portfolio"></div>
+                <h3 class="fw-500">Ohh, so exciting!</h3>
+                <h4 class="fw-400 mb-20">CanYa do something for you?</h4>
+                <button (click)="postRequest()" class="btn btn-primary btn-canya-chat mb-30" data-scrollto="section-profile">
+                  <img src="assets/img/canya-button.png" style="margin-top: -2px;" width="16px" height="16px" alt="CanYa"> CANYA? Post a request
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="allPortfolioItems.length > 0">
+        <div class="card p-20">
+          <div class="row">
+            <div class="col-sm-10" id="about-card-title">
+              <span class="card-title">portfolio</span>
+            </div>
+          </div>
+          <div class="row animated {{animation}}">
+            <div class="col-sm-12">
+              <div *ngFor="let item of paginatedPortfolioItems();let i = index" class="">
+                <app-item [workItem]="item" [isMyProfile]="isMyProfile"></app-item>
+              </div>
+            </div>
+          </div>
+          <div class="row pt-35">
+            <div class="col-12 d-flex justify-content-center">
+              <button class="btn btn-sm" [disabled]="currentPage == 0" (click)="previousPage()">
+                <i class="fa fa-chevron-left"></i>
+              </button>
+              <button class="btn btn-sm" [disabled]="currentPage == lastPage" (click)="nextPage()">
+                <i class="fa fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
