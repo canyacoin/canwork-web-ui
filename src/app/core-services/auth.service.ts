@@ -37,6 +37,7 @@ export class AuthService {
 
   logout() {
     localStorage.clear();
+    this.currentUser = null;
     this.afAuth.auth.signOut();
     this.router.navigate(['home']);
   }

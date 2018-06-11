@@ -6,6 +6,7 @@ import { BrandComponent } from './core-components/brand/brand.component';
 import { ConsoleComponent } from './core-components/console/console.component';
 import { ToolsComponent } from './core-components/tools/tools.component';
 import { AuthGuard } from './core-utils/auth.guard';
+import { UserIsSetupGuard } from './core-utils/user-is-setup.guard';
 
 @NgModule({
   imports: [
@@ -40,7 +41,9 @@ import { AuthGuard } from './core-utils/auth.guard';
       },
       {
         path: 'inbox',
-        loadChildren: './inbox/inbox.module#InboxModule'
+        loadChildren: './inbox/inbox.module#InboxModule',
+        canActivate: [AuthGuard, UserIsSetupGuard],
+        data: { requiresLoggedIn: true }
       },
       {
         path: 'tools',
