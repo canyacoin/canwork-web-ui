@@ -32,6 +32,7 @@
                         <div>
                           <small class="text-muted">{{ channel.timestamp | date:'dd MMM' }}</small>
                         </div>
+
                       </div>
                       <span class="text-dark text-small col-11 p-0">{{ channel.message.length > 30 ? (channel.message | slice:0:30)+'...':(channel.message) }}</span>
                     </div>

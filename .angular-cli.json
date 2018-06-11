@@ -20,7 +20,8 @@
       "prefix": "app",
       "styles": [
         "styles.css",
-        "../node_modules/firebaseui/dist/firebaseui.css"
+        "../node_modules/firebaseui/dist/firebaseui.css",
+        "../node_modules/animate.css/animate.css"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
