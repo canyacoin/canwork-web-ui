@@ -88,30 +88,5 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
     return (this.userModel && (this.userModel.address !== this.currentUser.address));
   }
-
-  ngOnDestroy() {
-    console.log('+ destroyer of worlds', null)
-    this.portfolioSubscription.unsubscribe();
-  }
-
-  public portfolioWorkDataRecords() {
-    return this.allWorkModel.slice((this.currentPage * this.pageLimit), ((this.currentPage * this.pageLimit) + this.pageLimit));
-  }
-
-  public nextPage() {
-    this.fadeOutAndIn();
-    this.currentPage++;
-  }
-
-  public previousPage() {
-    this.fadeOutAndIn();
-    this.currentPage--;
-  }
-
-  private async fadeOutAndIn() {
-    this.animation = 'fadeOut';
-    setTimeout(() => { this.animation = 'fadeIn'; }, 400);
-  }
-
 }
 
