@@ -6,6 +6,8 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ### Clone & Initial Setup:
 
+#### Web App:
+
 ```
 git clone git@github.com:canyaio/can-work.git
 cd can-work
@@ -14,6 +16,23 @@ cp src/environments/environment.ts.sample src/environments/environment.ts
 ```
 
 Now, go to your firebase account and obtain the database credentials, and update the `firebase` block in `src/environments/environment.ts`
+
+#### Algolia Full Text Search
+
+Create an account for yourself at: https://www.algolia.com
+
+Within that project, create an 'index' called: `localdev_provider_index`
+
+And get your values for 'Application ID' and 'Admin API Key' to use in firebase functions setup (see below)
+
+
+#### Firbase Functions:
+
+```
+cd functions/
+firebase functions:config:set algolia.appid="UMAFX8JMPW" algolia.apikey="0a791357564f5d9ba99935170fac4f22" algolia.providerindex="localdev_provider_index"
+firebase deploy --only functions
+```
 
 ### Start your app
 
