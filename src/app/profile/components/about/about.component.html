@@ -18,7 +18,8 @@
         <h2 *ngIf="userModel.name">{{ userModel.name }}</h2>
         <h3 *ngIf="userModel.title">{{ userModel.title }}</h3>
         <p class="fw-400" *ngIf="userModel.bio">{{ userModel.bio }}</p>
-        <button *ngIf="!isMyProfile" (click)="proposeJob()" class="btn btn-primary btn-canya-chat" data-scrollto="section-profile">
+        <button *ngIf="!isMyProfile" (click)="proposeJob()" class="btn btn-primary btn-canya-chat" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }"
+          data-scrollto="section-profile">
           LET'S CHAT
         </button>
       </div>

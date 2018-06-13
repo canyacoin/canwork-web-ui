@@ -7074,6 +7074,10 @@ a.text-danger:hover, a.text-danger:focus {
   min-height: 100vh;
 }
 
+.mh-300 {
+  min-height: 300px;
+}
+
 .m-4 {
   margin: 4px !important;
 }

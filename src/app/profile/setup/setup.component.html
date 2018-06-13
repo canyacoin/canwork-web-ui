@@ -1,37 +1,32 @@
- 
-
 <main class="main-content" *ngIf="currentUser">
   <section *ngIf="!hasChosenType()" class="section bg-gray py-40">
     <div class="container">
-      <header class="section-header my-0 py-0" @logoAnimation>
-        <h2 class="welcome-animation fw-300">Welcome to
-          <img class="logo-default" src="assets/img/logo.svg" width="auto" height="28px" alt="logo" style="margin-top: -8px;">
-        </h2>
-        <p class="lead fw-400">What brings you to CanWork today?</p>
+      <header class="section-header my-0 py-0 animated fadeIn">
+        <h5>What brings you to CanWork today?</h5>
         <hr>
       </header>
 
-      <div class="row">
-        <div class="col">
-          <div class="card card-hover-shadow bg-white my-5">
+      <div class="row pb-200">
+        <div class="col-lg 2"></div>
+        <div class="col-lg-8 card-deck">
+          <div class="card text-center card-hover-shadow bg-white my-5">
             <div class="card-block">
-              <h3 class="card-title">CLIENT</h3>
-              <p class="card-text">Anyone who is
-                <strong>looking for providers</strong>. Pay with cryptocurrency!</p>
-              <button (click)="setUserType('User')" class="btn btn-primary btn-canya-chat">I AM A CLIENT</button>
+              <h4 class="card-title">i want to find talent</h4>
+              <p class="card-text">Are you looking for talented
+                <strong>service providers</strong>? Pay with cryptocurrency!</p>
+              <button (click)="setUserType('User')" class="btn btn-primary btn-canya-chat">CLIENT</button>
+            </div>
+          </div>
+          <div class="card text-center card-hover-shadow bg-white my-5">
+            <div class="card-block">
+              <h4 class="card-title">I want to find work</h4>
+              <p class="card-text">Do you have a
+                <strong>digital service</strong> to offer our client base? Paid with cryptocurrency!</p>
+              <a href="https://canyacoin.typeform.com/to/r2Bfb0" target="_blank" class="btn btn-primary btn-canya-chat">PROVIDER</a>
             </div>
           </div>
         </div>
-        <div class="col">
-          <div class="card card-hover-shadow bg-white my-5">
-            <div class="card-block">
-              <h3 class="card-title">PROVIDER</h3>
-              <p class="card-text">Anyone who has a
-                <strong>digital service</strong> to offer and want to use CanYa to find work.</p>
-              <a href="https://canyacoin.typeform.com/to/r2Bfb0" target="_blank" class="btn btn-primary btn-canya-chat">I AM A PROVIDER</a>
-            </div>
-          </div>
-        </div>
+        <div class="col-lg-2"></div>
       </div>
     </div>
   </section>
@@ -42,5 +37,3 @@
     </div>
   </section>
 </main>
-
- 
