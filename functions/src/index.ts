@@ -20,7 +20,6 @@ exports.indexProviderData = functions.firestore
       objectId,
       ...data
     });
-
   });
 
 exports.removeIndexProviderData = functions.firestore

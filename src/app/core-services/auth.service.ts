@@ -15,13 +15,15 @@ export class AuthService {
 
   uport: any = null;
 
+  userSub: Subscription;
+
   public currentUser = new BehaviorSubject<User>(null);
   public currentUser$ = this.currentUser.asObservable();
 
   constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth, private router: Router) {
     const savedUser = JSON.parse(localStorage.getItem('credentials'));
     if (savedUser) {
-      this.currentUser.next(savedUser);
+      this.setUser(savedUser);
     }
   }
 
@@ -37,6 +39,14 @@ export class AuthService {
   }
 
   setUser(user: User) {
+    this.emitUser(user);
+    if (this.userSub) { this.userSub.unsubscribe(); }
+    this.userSub = this.afs.doc(`users/${user.address}`).valueChanges().subscribe((val: User) => {
+      this.emitUser(val);
+    });
+  }
+
+  emitUser(user: User) {
     localStorage.setItem('credentials', JSON.stringify(user));
     this.currentUser.next(user);
   }
