@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore, QueryFn } from 'angularfire2/firestore';
 
 import { FirebaseUISignInSuccess } from 'firebaseui-angular';
 import { User } from '../../core-classes/user';
@@ -71,14 +71,26 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   handleLogin(userDetails: User) {
-    const sub = this.afs.collection<any>('users', ref => ref.where('address', '==', userDetails.address).limit(1)).valueChanges().take(1).subscribe((data: any) => {
-      if (data && (data instanceof Array) && data.length > 0) {
-        this.authService.setUser(data[0]);
+    // let x: QueryFn = null;
+    // if (userDetails.email && userDetails.email !== 'Empty' && userDetails.email !== '') {
+    //   x = ref => ref.where('email', '==', userDetails.email).limit(1);
+    // }
+    this.afs.collection<any>('users', ref => ref.where('address', '==', userDetails.address).limit(1)).valueChanges().take(1).subscribe((usersMatchingId: any) => {
+      if (usersMatchingId && usersMatchingId.length > 0) {
+        this.authService.setUser(usersMatchingId[0]);
         this.router.navigate(['/home']); // TODO: Add returnURl for when routed here from redirect
+      // } else if (x != null) {
+      //   this.afs.collection<any>('users', x).valueChanges().take(1).subscribe((usersMatchingEmail: any) => {
+      //     if (usersMatchingEmail && usersMatchingEmail.length > 0) {
+      //       this.authService.setUser(usersMatchingEmail[0]);
+      //       this.router.navigate(['/home']);
+      //     } else {
+      //       this.initialiseUserAndRedirect(userDetails);
+      //     }
+      //   });
       } else {
         this.initialiseUserAndRedirect(userDetails);
       }
-      sub.unsubscribe();
     });
   }
 

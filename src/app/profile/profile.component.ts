@@ -49,7 +49,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     if (params['address'] && params['address'] !== 'setup') {
       this.loadUser(params['address']);
     } else if (user) {
-      this.loadUser(user.address);
+      this.userModel = this.currentUser;
+      this.setUsersColors(this.userModel);
     }
   }
 

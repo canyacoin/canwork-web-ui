@@ -14,7 +14,7 @@
             <h4 class="card-title">
               <a [href]="fx.link" target="_blank">{{ fx.title }}</a>
             </h4>
-            <p class="card-text">{{ fx.description | sanitizeHtml}}</p>
+            <p class="card-text break-word" [innerHtml]="fx.description | sanitizeHtml"></p>
             <a class="fw-600 fs-12" [href]="fx.link" target="_blank">Read more
               <i class="fa fa-chevron-right fs-9 pl-8"></i>
             </a>

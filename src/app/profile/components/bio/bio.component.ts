@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { User } from 'firebase/app';
+import { User } from '../../../core-classes/user';
 
 @Component({
   selector: 'app-profile-bio',
