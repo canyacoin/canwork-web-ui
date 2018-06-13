@@ -1,6 +1,3 @@
-import {
-    animate, keyframes, query, stagger, style, transition, trigger
-} from '@angular/animations';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
@@ -13,24 +10,6 @@ import { UserService } from '../../core-services/user.service';
   selector: 'app-setup',
   templateUrl: './setup.component.html',
   styleUrls: ['./setup.component.css'],
-  animations: [
-    trigger('logoAnimation', [
-      transition('* => *', [
-        query('.welcome-animation', style({ opacity: 0, transform: 'translateX(-10px)' })),
-        query('.welcome-animation', stagger('0ms', [
-          animate('600ms ease-out', style({ opacity: 1, transform: 'translateX(0)' })),
-        ]))
-      ])
-    ]),
-    trigger('listAnimation', [
-      transition('* => *', [
-        query(':enter', style({ opacity: 0, transform: 'translateX(-15px)' })),
-        query(':enter', stagger('0ms', [
-          animate('300ms ease-out', style({ opacity: 1, transform: 'translateX(0)' }))
-        ]))
-      ])
-    ])
-  ]
 })
 
 export class SetupComponent implements OnInit, OnDestroy {
