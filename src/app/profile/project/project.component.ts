@@ -9,6 +9,10 @@ import * as moment from 'moment';
 import { User } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
 
+export class SkillTag {
+  tag: string;
+}
+
 @Component({
   selector: 'app-project',
   templateUrl: './project.component.html',
@@ -21,6 +25,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   authSub: Subscription;
   // paramsSub: Subscription;
+
+  skillTagsList: string[] = [];
+  tagSelectionInvalid = false;
+  acceptedTags: string[] = [];
+  tagInput = '';
 
   projectForm: FormGroup = null;
 
@@ -52,12 +61,38 @@ export class ProjectComponent implements OnInit, OnDestroy {
         });
       }
     });
+    this.afs.collection<SkillTag>('skill-tags').valueChanges().take(1).subscribe((tags: SkillTag[]) => {
+      this.skillTagsList = tags.map(x => x.tag);
+    });
   }
 
   ngOnDestroy() {
-    // if (this.paramsSub) { this.paramsSub.unsubscribe(); }
     if (this.authSub) { this.authSub.unsubscribe(); }
+  }
 
+  onTagEnter() {
+    const tag = this.tagInput;
+    const indexOfTag = this.skillTagsList.findIndex(x => x === tag);
+    if (indexOfTag !== -1) {
+      if (!this.acceptedTags.includes(tag)) {
+        if (this.acceptedTags.length <= 5) {
+          this.acceptedTags.push(tag);
+          this.projectForm.controls['tags'].setValue(this.acceptedTags.join(','));
+        } else {
+          this.tagSelectionInvalid = true;
+        }
+      }
+      this.tagInput = '';
+      this.tagSelectionInvalid = false;
+    } else if (tag !== '') {
+      this.tagSelectionInvalid = true;
+    }
+  }
+
+  removeTag(tag: string) {
+    const index = this.acceptedTags.indexOf(tag);
+    this.acceptedTags.splice(index, 1);
+    this.projectForm.controls['tags'].setValue(this.acceptedTags.join(','));
   }
 
   loadProject(address: string) {
@@ -66,10 +101,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
         this.projectForm.controls['title'].setValue(data.title);
         this.projectForm.controls['description'].setValue(data.description);
 
+        // on component init
         if (data.tags instanceof Array) {
           this.projectForm.controls['tags'].setValue(data.tags.join());
+          this.acceptedTags = data.tags;
         } else {
-          this.projectForm.controls['tags'].setValue(data.tags);
+          this.projectForm.controls['tags'].setValue('');
         }
 
         this.projectForm.controls['image'].setValue(data.image);
@@ -98,6 +135,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
       if (this.projectId == null) {
         const uid = this.guid();
+        tmpProject['id'] = uid;
         this.afs.doc(`portfolio/${this.currentUser.address}/work/${uid}`).set(tmpProject);
       } else {
         this.afs.doc(`portfolio/${this.currentUser.address}/work/${this.projectId}`).update(tmpProject);

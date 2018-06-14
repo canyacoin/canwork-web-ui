@@ -13,7 +13,7 @@
       <div class="row">
 
         <div class="col-12 col-md-4 offset-md-4">
-          <form [formGroup]="projectForm" class="form form-round validate" novalidate>
+          <form [formGroup]="projectForm" class="form validate" novalidate>
 
             <div class="form-group">
               <label>What's the title of the project?</label>
@@ -29,16 +29,27 @@
                 maxlength="512" [class.invalid]="!projectForm.controls.description.valid && projectForm.controls.description.dirty"></textarea>
 
               <small *ngIf="!projectForm.controls.description.valid  && projectForm.controls.description.dirty">Please enter a valid description for your project.</small>
-            </div>
 
+            </div>
 
             <div class="form-group">
               <label>Tag the project with relevant skills to help to find your work more easily.</label>
-              <input class="form-control" #tags formControlName="tags" type="text" name="tags" placeholder="e.g. HTML, CSS, Photoshop..."
-                maxlength="255" [class.invalid]="!projectForm.controls.tags.valid && projectForm.controls.tags.dirty">
+              <input list="tagsList" class="form-control" placeholder="e.g. HTML, CSS..." [class.invalid]="acceptedTags.length <= 0" (keyup.enter)="onTagEnter()"
+                [(ngModel)]="tagInput" [ngModelOptions]="{standalone: true}">
 
-              <small *ngIf="!projectForm.controls.tags.valid  && projectForm.controls.tags.dirty">Please enter a comma separated list of tags.</small>
+              <input hidden #tags class="form-control" formControlName="tags" type="text" name="tags">
+
+              <small class="form-error" *ngIf="tagSelectionInvalid || acceptedTags.length <= 0">Please enter a tag from our pre-defined list
+              </small>
+              <small class="form-error" *ngIf="acceptedTags.length >= 6">You can only add 6 tags to a project
+              </small>
+
+              <span *ngFor="let tag of acceptedTags" class="skill-tag mr-5 pointer" (click)="removeTag(tag)">
+                <i class="fa fa-tag" aria-hidden="true"></i>&nbsp; {{tag}} </span>
             </div>
+            <datalist id="tagsList">
+              <option *ngFor="let tag of skillTagsList" value="{{tag}}">
+            </datalist>
 
             <div class="form-group">
               <label>Embed an image or video from an URL. (Optional)</label>
