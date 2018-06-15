@@ -39,7 +39,12 @@
                 </div>
                 <div class="row">
                   <span *ngIf="provider.hourlyRate">
-                    <b>${{provider.hourlyRate}}</b>/hr</span>
+                    <b>${{provider.hourlyRate}}</b>/hr
+                    <span *ngIf="canToUsd">
+                      <img class="logo-default" src="assets/img/round-icon.svg" width="auto" height="24px" alt="logo" style="margin-top: -3px;">
+                      <b>{{getUsdToCan(provider.hourlyRate)}}</b>/hr
+                    </span>
+                  </span>
                 </div>
               </div>
             </div>
