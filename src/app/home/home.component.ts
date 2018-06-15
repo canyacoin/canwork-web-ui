@@ -1,7 +1,10 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Http, Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import * as findIndex from 'lodash/findIndex';
+import * as orderBy from 'lodash/orderBy';
+import * as union from 'lodash/union';
 import { Observable } from 'rxjs/Observable';
 import { take } from 'rxjs/operator/take';
 import { Subscription } from 'rxjs/Subscription';
@@ -22,6 +25,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   query = '';
   loading = true;
   searching = false;
+  canToUsd: number;
 
   routeSub: Subscription;
   providerSub: Subscription;
@@ -29,14 +33,18 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   constructor(private activatedRoute: ActivatedRoute,
-    private afs: AngularFirestore) {
+    private afs: AngularFirestore, private http: Http) {
     this.routeSub = this.activatedRoute.params.subscribe((params) => {
       this.query = params['query'] ? params['query'] : '';
       this.loadProviders();
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    const canToUsdResp = await this.http.get('https://min-api.cryptocompare.com/data/price?fsym=CAN&tsyms=AUD').toPromise();
+    if (canToUsdResp.ok) {
+      this.canToUsd = JSON.parse(canToUsdResp.text())['AUD'];
+    }
   }
 
   ngAfterViewInit() {
@@ -55,6 +63,13 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.allProviders = data;
       this.filterProviders();
     });
+  }
+
+  getUsdToCan(usd: number): string {
+    if (this.canToUsd) {
+      return (usd / this.canToUsd).toFixed(2);
+    }
+    return '-';
   }
 
   filterProviders() {
@@ -89,6 +104,15 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.searching = false;
       this.filteredProviders = this.allProviders;
     }
+  }
+
+  getProviderTags(provider: User) {
+    const allTags: string[] = union(provider.skillTags, provider.workSkillTags);
+    if (allTags.length > 6) {
+      const moreSymbol = '+ ' + (allTags.length - 6) + ' more';
+      return allTags.splice(5).push(moreSymbol);
+    }
+    return allTags;
   }
 
   getRandomGradient(colors: any): string {

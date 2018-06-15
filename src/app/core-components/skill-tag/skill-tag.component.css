@@ -1,6 +1,7 @@
 .skill-tag {
   display: inline-block;
   padding: .25em .4em;
+  margin-right: 5px;
   font-size: 75%;
   font-weight: 100;
   line-height: 1;
@@ -8,7 +9,11 @@
   white-space: nowrap;
   vertical-align: baseline;
   border-radius: .50rem;
-  color: rgba(50,60,71,0.61);
+  color: rgba(50, 60, 71, 0.61);
   background-color: #edefec;
   text-transform: uppercase;
+}
+
+.pointer {
+  cursor: pointer;
 }

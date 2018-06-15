@@ -7,6 +7,7 @@ import * as moment from 'moment-timezone';
 import { User, UserState } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
 import { UserService } from '../../core-services/user.service';
+import { CurrencyValidator } from './currency.validator';
 import { EmailValidator } from './email.validator';
 
 @Component({
@@ -21,6 +22,11 @@ export class EditComponent implements OnInit, OnDestroy {
 
   profileForm: FormGroup = null;
   sending = false;
+
+  skillTagsList: string[] = [];
+  tagSelectionInvalid = false;
+  acceptedTags: string[] = [];
+  tagInput = '';
 
   constructor(private router: Router,
     private formBuilder: FormBuilder,
@@ -48,11 +54,17 @@ export class EditComponent implements OnInit, OnDestroy {
       title: [this.currentUser.title || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
       bio: [this.currentUser.bio || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(60)])],
       category: [this.currentUser.category || ''],
+      skillTags: [''],
+      hourlyRate: [this.currentUser.hourlyRate, Validators.compose([CurrencyValidator.isValid])],
       color1: [this.currentUser.colors[0]],
       color2: [this.currentUser.colors[1]],
       color3: [this.currentUser.colors[2]],
       description: [this.currentUser.description || '']
     });
+  }
+
+  skillTagsUpdated(value: string) {
+    this.profileForm.controls['skillTags'].setValue(value);
   }
 
   save(category1: any, category2: any, category3: any, category4: any, category5: any, category6: any) {
@@ -75,6 +87,7 @@ export class EditComponent implements OnInit, OnDestroy {
       category = 'VIRTUAL ASSISTANTS';
     }
 
+    const tags = this.profileForm.value.skillTags === '' ? [] : this.profileForm.value.skillTags.split(',').map(item => item.trim());
     const tmpUser = {
       address: this.currentUser.address,
       name: this.profileForm.value.name,
@@ -82,10 +95,12 @@ export class EditComponent implements OnInit, OnDestroy {
       title: this.profileForm.value.title,
       bio: this.profileForm.value.bio,
       category: category,
+      skillTags: tags,
+      hourlyRate: this.profileForm.value.hourlyRate,
       colors: [this.profileForm.value.color1, this.profileForm.value.color2, this.profileForm.value.color3],
       description: this.profileForm.value.description,
       timezone: moment.tz.guess(),
-      state: UserState.done,
+      state: UserState.done
     };
 
     // tslint:disable-next-line:forin

@@ -13,7 +13,7 @@
       <div class="row">
 
         <div class="col-12 col-md-4 offset-md-4">
-          <form [formGroup]="projectForm" class="form form-round validate" novalidate>
+          <form [formGroup]="projectForm" class="form validate" novalidate>
 
             <div class="form-group">
               <label>What's the title of the project?</label>
@@ -29,16 +29,11 @@
                 maxlength="512" [class.invalid]="!projectForm.controls.description.valid && projectForm.controls.description.dirty"></textarea>
 
               <small *ngIf="!projectForm.controls.description.valid  && projectForm.controls.description.dirty">Please enter a valid description for your project.</small>
+
             </div>
 
-
-            <div class="form-group">
-              <label>Tag the project with relevant skills to help to find your work more easily.</label>
-              <input class="form-control" #tags formControlName="tags" type="text" name="tags" placeholder="e.g. HTML, CSS, Photoshop..."
-                maxlength="255" [class.invalid]="!projectForm.controls.tags.valid && projectForm.controls.tags.dirty">
-
-              <small *ngIf="!projectForm.controls.tags.valid  && projectForm.controls.tags.dirty">Please enter a comma separated list of tags.</small>
-            </div>
+            <app-skill-tags-selection *ngIf="projectLoaded" (tagsUpdated)="skillTagsUpdated($event)" [initialTags]="initialTags"></app-skill-tags-selection>
+            <input hidden #tags class="form-control" formControlName="tags" type="text" name="tags">
 
             <div class="form-group">
               <label>Embed an image or video from an URL. (Optional)</label>

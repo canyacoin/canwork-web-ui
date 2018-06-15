@@ -6,6 +6,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Subscription } from 'rxjs/Subscription';
 
 import * as moment from 'moment';
+import { Work } from '../../core-classes/portfolio';
 import { User } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
 
@@ -20,7 +21,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   projectId = null;
 
   authSub: Subscription;
-  // paramsSub: Subscription;
+
+  initialTags: string[] = [];
+  projectLoaded = false;
 
   projectForm: FormGroup = null;
 
@@ -48,6 +51,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
           if (params['id']) {
             this.projectId = params['id'];
             this.loadProject(this.projectId);
+          } else {
+            this.projectLoaded = true;
           }
         });
       }
@@ -55,25 +60,24 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // if (this.paramsSub) { this.paramsSub.unsubscribe(); }
     if (this.authSub) { this.authSub.unsubscribe(); }
+  }
 
+  skillTagsUpdated(value) {
+    this.projectForm.controls['tags'].setValue(value);
   }
 
   loadProject(address: string) {
     try {
-      this.afs.doc(`portfolio/${this.currentUser.address}/work/${address}`).valueChanges().take(1).subscribe((data: any) => {
+      this.afs.doc(`portfolio/${this.currentUser.address}/work/${address}`).valueChanges().take(1).subscribe((data: Work) => {
         this.projectForm.controls['title'].setValue(data.title);
         this.projectForm.controls['description'].setValue(data.description);
 
-        if (data.tags instanceof Array) {
-          this.projectForm.controls['tags'].setValue(data.tags.join());
-        } else {
-          this.projectForm.controls['tags'].setValue(data.tags);
-        }
+        this.initialTags = data.tags;
 
         this.projectForm.controls['image'].setValue(data.image);
         this.projectForm.controls['link'].setValue(data.link);
+        this.projectLoaded = true;
       });
     } catch (error) {
       console.error('loadProject - error', error);
@@ -82,10 +86,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   submitForm() {
     try {
-      let tags = this.projectForm.value.tags;
-      if (!(this.projectForm.value.tags instanceof Array)) {
-        tags = this.projectForm.value.tags.split(',').map(item => item.trim());
-      }
+      const tags = this.projectForm.value.tags.split(',').map(item => item.trim());
       const tmpProject = {
         title: this.projectForm.value.title,
         description: this.projectForm.value.description,
@@ -98,6 +99,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
       if (this.projectId == null) {
         const uid = this.guid();
+        tmpProject['id'] = uid;
         this.afs.doc(`portfolio/${this.currentUser.address}/work/${uid}`).set(tmpProject);
       } else {
         this.afs.doc(`portfolio/${this.currentUser.address}/work/${this.projectId}`).update(tmpProject);

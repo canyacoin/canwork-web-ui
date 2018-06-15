@@ -4,11 +4,12 @@ export class User {
     address: string;
     avatar: Avatar;
     bio: string;
-    category: string;
+    category: UserCategory;
     colors: string[] = [];
     description: string;
     email: string;
     ethAddress: string;
+    hourlyRate: string;
     name: string;
     networkAddress: string;
     offset: string;
@@ -16,12 +17,14 @@ export class User {
     publicEncKey: string;
     publicKey: string;
     pushToken: string;
+    skillTags: string[] = [];
     state: UserState;
     timestamp: string;
     timezone: string;
     title: string;
     type: UserType;
     work: string;
+    workSkillTags: string[] = [];
 
     constructor(init?: Partial<User>) {
         Object.assign(this, init);
@@ -39,4 +42,13 @@ export enum UserState {
 export enum UserType {
     client = 'User',
     provider = 'Provider'
+}
+
+export enum UserCategory {
+    contentCreator = 'CONTENT CREATORS',
+    designer = 'DESIGNERS & CREATIVES',
+    finance = 'FINANCIAL EXPERTS',
+    marketing = 'MARKETING & SEO',
+    softwareDev = 'SOFTWARE DEVELOPERS',
+    virtualAssistant = 'VIRTUAL ASSISTANTS'
 }

@@ -20,6 +20,7 @@ import { ProfileComponent } from './profile.component';
 import { ProfileRoutingModule } from './profile.routing.module';
 import { ProjectComponent } from './project/project.component';
 import { SetupComponent } from './setup/setup.component';
+import { SkillTagsSelectionComponent } from './skill-tags-selection/skill-tags-selection.component';
 
 @NgModule({
   imports: [
@@ -44,6 +45,7 @@ import { SetupComponent } from './setup/setup.component';
     SocialComponent,
     SetupComponent,
     SupportMeComponent,
+    SkillTagsSelectionComponent,
     TimezoneComponent,
     VisitorsComponent
   ],

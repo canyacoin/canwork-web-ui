@@ -12,7 +12,7 @@
         <div class="col-12 col-md-3 my-5">
           <app-profile-about [isMyProfile]="isMyProfile()" [userModel]="userModel"></app-profile-about>
 
-          <app-profile-timezone *ngIf="notMyProfile() && userModel.timezone && userModel.offset" [userModel]="userModel"></app-profile-timezone>
+          <app-profile-timezone [userModel]="userModel"></app-profile-timezone>
 
           <app-profile-social *ngIf="notMyProfile()"></app-profile-social>
 
