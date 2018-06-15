@@ -2,6 +2,8 @@ import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import * as findIndex from 'lodash/findIndex';
+import * as orderBy from 'lodash/orderBy';
+import * as union from 'lodash/union';
 import { Observable } from 'rxjs/Observable';
 import { take } from 'rxjs/operator/take';
 import { Subscription } from 'rxjs/Subscription';
@@ -89,6 +91,15 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.searching = false;
       this.filteredProviders = this.allProviders;
     }
+  }
+
+  getProviderTags(provider: User) {
+    const allTags: string[] = union(provider.skillTags, provider.workSkillTags);
+    if (allTags.length > 6) {
+      const moreSymbol = '+ ' + (allTags.length - 6) + ' more';
+      return allTags.splice(5).push(moreSymbol);
+    }
+    return allTags;
   }
 
   getRandomGradient(colors: any): string {

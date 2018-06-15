@@ -92,7 +92,7 @@
               <input class="form-control" #hourlyRate formControlName="hourlyRate" type="text" name="hourlyRate" placeholder="e.g. 19"
                 [class.invalid]="!profileForm.controls.hourlyRate.valid && profileForm.controls.hourlyRate.dirty">
 
-              <small *ngIf="!profileForm.controls.hourlyRate.valid  && profileForm.controls.hourlyRate.dirty">Please enter a valid name or company name.</small>
+              <small *ngIf="!profileForm.controls.hourlyRate.valid  && profileForm.controls.hourlyRate.dirty">Please enter a number between 0 - 999</small>
             </div>
 
             <div class="form-group">

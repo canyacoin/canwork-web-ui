@@ -87,7 +87,7 @@ export class EditComponent implements OnInit, OnDestroy {
       category = 'VIRTUAL ASSISTANTS';
     }
 
-    const tags = this.profileForm.value.skillTags.split(',').map(item => item.trim());
+    const tags = this.profileForm.value.skillTags === '' ? [] : this.profileForm.value.skillTags.split(',').map(item => item.trim());
     const tmpUser = {
       address: this.currentUser.address,
       name: this.profileForm.value.name,
@@ -100,7 +100,7 @@ export class EditComponent implements OnInit, OnDestroy {
       colors: [this.profileForm.value.color1, this.profileForm.value.color2, this.profileForm.value.color3],
       description: this.profileForm.value.description,
       timezone: moment.tz.guess(),
-      state: UserState.done,
+      state: UserState.done
     };
 
     // tslint:disable-next-line:forin
