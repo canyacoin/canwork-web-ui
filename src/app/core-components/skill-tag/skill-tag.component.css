@@ -8,7 +8,11 @@
   white-space: nowrap;
   vertical-align: baseline;
   border-radius: .50rem;
-  color: rgba(50,60,71,0.61);
+  color: rgba(50, 60, 71, 0.61);
   background-color: #edefec;
   text-transform: uppercase;
+}
+
+.pointer {
+  cursor: pointer;
 }

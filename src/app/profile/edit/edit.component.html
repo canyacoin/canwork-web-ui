@@ -12,8 +12,7 @@
       <div *ngIf="currentUser" class="row">
 
         <div class="col-12 col-md-6 offset-md-3">
-          <form [formGroup]="profileForm" (ngSubmit)="save(category1, category2, category3, category4, category5, category6)" class="form validate"
-            novalidate>
+          <form [formGroup]="profileForm" class="form validate" novalidate>
             <div class="form-group">
               <label>Full name</label>
               <input class="form-control" #name formControlName="name" type="text" name="name" placeholder="Full name or Company name"
@@ -83,7 +82,9 @@
             </div>
 
             <div [hidden]="currentUser.type !== 'Provider'" class="form-group">
-              <label>Category</label>
+              <app-skill-tags-selection *ngIf="currentUser" (tagsUpdated)="skillTagsUpdated($event)" [initialTags]="currentUser.skillTags"
+                [minimumTags]="0"></app-skill-tags-selection>
+              <input hidden #skillTags class="form-control" formControlName="skillTags" type="text" name="skillTags">
             </div>
 
             <div class="form-group">
@@ -115,7 +116,8 @@
                    " placeholder="Think different! Be creative, be innovative."></textarea>
             </div>
             <div class="form-group">
-              <button [disabled]="!profileForm.valid || sending" type="submit" class="btn btn-canya-tools text-white">
+              <button [disabled]="!profileForm.valid || sending" type="button" (click)="save(category1, category2, category3, category4, category5, category6)"
+                class="btn btn-canya-tools text-white">
                 Save
               </button>
               <a href="#" [routerLink]="[ '/profile']" class="btn btn-secondary">

@@ -13,6 +13,7 @@ export class SkillTag {
 export class SkillTagsSelectionComponent implements OnInit {
 
   @Input() initialTags: string[];
+  @Input() minimumTags: number;
   @Output() tagsUpdated: EventEmitter<string> = new EventEmitter();
 
   skillTagsList: string[] = [];
@@ -26,7 +27,7 @@ export class SkillTagsSelectionComponent implements OnInit {
     this.afs.collection<SkillTag>('skill-tags').valueChanges().take(1).subscribe((tags: SkillTag[]) => {
       this.skillTagsList = tags.map(x => x.tag);
     });
-    this.acceptedTags = this.initialTags;
+    this.acceptedTags = this.initialTags === undefined ? [] : this.initialTags;
     this.tagsUpdated.emit(this.acceptedTags.join(','));
   }
 
@@ -47,6 +48,21 @@ export class SkillTagsSelectionComponent implements OnInit {
     } else if (tag !== '') {
       this.tagSelectionInvalid = true;
       return;
+    }
+    this.tagSelectionInvalid = false;
+  }
+
+  onTagChange() {
+    const tag = this.tagInput;
+    const indexOfTag = this.skillTagsList.findIndex(x => x === tag);
+    if (indexOfTag !== -1) {
+      if (!this.acceptedTags.includes(tag)) {
+        if (this.acceptedTags.length <= 5) {
+          this.acceptedTags.push(tag);
+          this.tagsUpdated.emit(this.acceptedTags.join(','));
+          this.tagInput = '';
+        }
+      }
     }
     this.tagSelectionInvalid = false;
   }

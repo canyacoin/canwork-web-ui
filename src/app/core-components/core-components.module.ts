@@ -17,7 +17,7 @@ import {
     SearchFilterOptionComponent
 } from './header/search-filter-option/search-filter-option.component';
 import { ScrollTopComponent } from './scroll-top/scroll-top.component';
-import { SkillTagsComponent } from './skill-tags/skill-tags.component';
+import { SkillTagComponent } from './skill-tag/skill-tag.component';
 import { ToolsComponent } from './tools/tools.component';
 
 @NgModule({
@@ -40,7 +40,7 @@ import { ToolsComponent } from './tools/tools.component';
     HeaderComponent,
     SearchFilterOptionComponent,
     ScrollTopComponent,
-    SkillTagsComponent,
+    SkillTagComponent,
     ToolsComponent,
     BackButtonComponent,
   ],
@@ -52,7 +52,7 @@ import { ToolsComponent } from './tools/tools.component';
     FooterComponent,
     HeaderComponent,
     ScrollTopComponent,
-    SkillTagsComponent
+    SkillTagComponent
   ]
 })
 export class CoreComponentsModule { }

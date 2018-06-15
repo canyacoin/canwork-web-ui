@@ -35,9 +35,6 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // this.afs.collection<SkillTag>('skill-tags').valueChanges().take(1).subscribe((tags: SkillTag[]) => {
-    //   this.skillTagsList = tags.map(x => x.tag);
-    // });
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       this.currentUser = user;
       if (this.currentUser != null) {
@@ -57,13 +54,17 @@ export class EditComponent implements OnInit, OnDestroy {
       title: [this.currentUser.title || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
       bio: [this.currentUser.bio || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(60)])],
       category: [this.currentUser.category || ''],
-      skillTags: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(255)])],
-      hourlyRate: ['', Validators.compose([Validators.required, CurrencyValidator.isValid])],
+      skillTags: [''],
+      // hourlyRate: ['', Validators.compose([Validators.required, CurrencyValidator.isValid])],
       color1: [this.currentUser.colors[0]],
       color2: [this.currentUser.colors[1]],
       color3: [this.currentUser.colors[2]],
       description: [this.currentUser.description || '']
     });
+  }
+
+  skillTagsUpdated(value: string) {
+    this.profileForm.controls['skillTags'].setValue(value);
   }
 
   save(category1: any, category2: any, category3: any, category4: any, category5: any, category6: any) {
@@ -86,6 +87,7 @@ export class EditComponent implements OnInit, OnDestroy {
       category = 'VIRTUAL ASSISTANTS';
     }
 
+    const tags = this.profileForm.value.skillTags.split(',').map(item => item.trim());
     const tmpUser = {
       address: this.currentUser.address,
       name: this.profileForm.value.name,
@@ -93,6 +95,7 @@ export class EditComponent implements OnInit, OnDestroy {
       title: this.profileForm.value.title,
       bio: this.profileForm.value.bio,
       category: category,
+      skillTags: tags,
       colors: [this.profileForm.value.color1, this.profileForm.value.color2, this.profileForm.value.color3],
       description: this.profileForm.value.description,
       timezone: moment.tz.guess(),

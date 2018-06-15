@@ -1,16 +1,15 @@
 <div class="form-group">
-  <label>Tag the project with relevant skills to help to find your work more easily.</label>
+  <label>Tag with relevant skills to help clients find you more easily.</label>
   <input list="tagsList" class="form-control" placeholder="e.g. HTML, CSS..." [class.invalid]="acceptedTags.length <= 0" (keyup.enter)="onTagEnter()"
-    [(ngModel)]="tagInput" [ngModelOptions]="{standalone: true}">
+    [(ngModel)]="tagInput" [ngModelOptions]="{standalone: true}" (change)="onTagChange()">
 
 
-  <small class="form-error" *ngIf="tagSelectionInvalid || acceptedTags.length <= 0">Please enter a tag from our pre-defined list
+  <small class="form-error" *ngIf="tagSelectionInvalid || acceptedTags.length < minimumTags">Please enter a tag from our pre-defined list
   </small>
   <small class="form-error" *ngIf="acceptedTags.length >= 6 && tagInput != ''">You can only add 6 tags to a project
   </small>
 
-  <span *ngFor="let tag of acceptedTags" class="skill-tag mr-5 pointer" (click)="removeTag(tag)">
-    <i class="fa fa-tag" aria-hidden="true"></i>&nbsp; {{tag}} </span>
+  <app-skill-tag *ngFor="let tag of acceptedTags" class="skill-tag mr-5 pointer" (click)="removeTag(tag)" [skill]="tag"></app-skill-tag>
 </div>
 <datalist id="tagsList">
   <option *ngFor="let tag of skillTagsList" value="{{tag}}">

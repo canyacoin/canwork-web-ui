@@ -18,7 +18,11 @@
           <p *ngIf="workItem.description" class="card-text p-y-1">
             {{ workItem.description }}
           </p>
-          <app-skill-tags [skills]="workItem.tags"></app-skill-tags>
+          <div class="row">
+            <div class="col-auto mx-5 my-5" *ngFor="let skill of workItem.tags | slice:0:8" [routerLink]="['/home', skill]">
+              <app-skill-tag [skill]="skill"></app-skill-tag>
+            </div>
+          </div>
 
           <a *ngIf="workItem.link" [href]="workItem.link" class="card-link">
             Check it out!
