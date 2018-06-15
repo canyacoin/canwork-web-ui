@@ -82,6 +82,10 @@
               </div>
             </div>
 
+            <div [hidden]="currentUser.type !== 'Provider'" class="form-group">
+              <label>Category</label>
+            </div>
+
             <div class="form-group">
               <label>Color scheme (click to choose)</label>
               <p>

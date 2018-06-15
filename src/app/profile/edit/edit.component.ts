@@ -7,6 +7,7 @@ import * as moment from 'moment-timezone';
 import { User, UserState } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
 import { UserService } from '../../core-services/user.service';
+import { CurrencyValidator } from './currency.validator';
 import { EmailValidator } from './email.validator';
 
 @Component({
@@ -22,6 +23,11 @@ export class EditComponent implements OnInit, OnDestroy {
   profileForm: FormGroup = null;
   sending = false;
 
+  skillTagsList: string[] = [];
+  tagSelectionInvalid = false;
+  acceptedTags: string[] = [];
+  tagInput = '';
+
   constructor(private router: Router,
     private formBuilder: FormBuilder,
     private userService: UserService,
@@ -29,6 +35,9 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    // this.afs.collection<SkillTag>('skill-tags').valueChanges().take(1).subscribe((tags: SkillTag[]) => {
+    //   this.skillTagsList = tags.map(x => x.tag);
+    // });
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       this.currentUser = user;
       if (this.currentUser != null) {
@@ -48,6 +57,8 @@ export class EditComponent implements OnInit, OnDestroy {
       title: [this.currentUser.title || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
       bio: [this.currentUser.bio || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(60)])],
       category: [this.currentUser.category || ''],
+      skillTags: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(255)])],
+      hourlyRate: ['', Validators.compose([Validators.required, CurrencyValidator.isValid])],
       color1: [this.currentUser.colors[0]],
       color2: [this.currentUser.colors[1]],
       color3: [this.currentUser.colors[2]],

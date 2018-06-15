@@ -32,24 +32,8 @@
 
             </div>
 
-            <div class="form-group">
-              <label>Tag the project with relevant skills to help to find your work more easily.</label>
-              <input list="tagsList" class="form-control" placeholder="e.g. HTML, CSS..." [class.invalid]="acceptedTags.length <= 0" (keyup.enter)="onTagEnter()"
-                [(ngModel)]="tagInput" [ngModelOptions]="{standalone: true}">
-
-              <input hidden #tags class="form-control" formControlName="tags" type="text" name="tags">
-
-              <small class="form-error" *ngIf="tagSelectionInvalid || acceptedTags.length <= 0">Please enter a tag from our pre-defined list
-              </small>
-              <small class="form-error" *ngIf="acceptedTags.length >= 6">You can only add 6 tags to a project
-              </small>
-
-              <span *ngFor="let tag of acceptedTags" class="skill-tag mr-5 pointer" (click)="removeTag(tag)">
-                <i class="fa fa-tag" aria-hidden="true"></i>&nbsp; {{tag}} </span>
-            </div>
-            <datalist id="tagsList">
-              <option *ngFor="let tag of skillTagsList" value="{{tag}}">
-            </datalist>
+            <app-skill-tags-selection *ngIf="projectLoaded" (tagsUpdated)="skillTagsUpdated($event)" [initialTags]="initialTags"></app-skill-tags-selection>
+            <input hidden #tags class="form-control" formControlName="tags" type="text" name="tags">
 
             <div class="form-group">
               <label>Embed an image or video from an URL. (Optional)</label>

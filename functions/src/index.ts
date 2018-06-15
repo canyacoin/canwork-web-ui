@@ -72,8 +72,6 @@ exports.updateIndexProviderData = functions.firestore
       ...data,
       workData
     });
-
-
   });
 
 /*
@@ -81,9 +79,33 @@ exports.updateIndexProviderData = functions.firestore
  */
 exports.removeIndexProviderData = functions.firestore
   .document('users/{userId}')
-  .onCreate((snap, context) => {
+  .onDelete((snap, context) => {
     const objectId = snap.id;
     return algoliaSearchIndex.deleteObject(objectId);
+  });
+
+/*
+ * Listen for profile (work array) modifications and update the users collection tag set
+ * This in turn should trigger an Algolia update, because it will trigger 'updateIndexProviderData' to execute
+ */
+exports.updateUserSkillsTagData = functions.firestore
+  .document('portfolio/{userId}/work/{workId}')
+  .onWrite(async (snap, context) => {
+    const objectId = snap.after.id;
+
+    const skillsTagData = [];
+    const workDataSnapshot = await db.collection(`portfolio/${context.params.userId}/work`).get();
+    workDataSnapshot.forEach(doc => {
+      for (const tag of doc.data().tags) {
+        skillsTagData.push(tag);
+      }
+    });
+
+    const workSkillTags = Array.from(new Set(skillsTagData.sort()));
+
+    return db.collection(`users/`)
+      .doc(context.params.userId)
+      .update({ workSkillTags });
   });
 
 /*

@@ -9,6 +9,7 @@ export class User {
     description: string;
     email: string;
     ethAddress: string;
+    hourlyRate: string;
     name: string;
     networkAddress: string;
     offset: string;
@@ -16,12 +17,14 @@ export class User {
     publicEncKey: string;
     publicKey: string;
     pushToken: string;
+    skillTags: string[] = [];
     state: UserState;
     timestamp: string;
     timezone: string;
     title: string;
     type: UserType;
     work: string;
+    workSkillTags: string[] = [];
 
     constructor(init?: Partial<User>) {
         Object.assign(this, init);

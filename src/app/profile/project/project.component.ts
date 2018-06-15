@@ -6,12 +6,9 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Subscription } from 'rxjs/Subscription';
 
 import * as moment from 'moment';
+import { Work } from '../../core-classes/portfolio';
 import { User } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
-
-export class SkillTag {
-  tag: string;
-}
 
 @Component({
   selector: 'app-project',
@@ -24,12 +21,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
   projectId = null;
 
   authSub: Subscription;
-  // paramsSub: Subscription;
 
-  skillTagsList: string[] = [];
-  tagSelectionInvalid = false;
-  acceptedTags: string[] = [];
-  tagInput = '';
+  initialTags: string[] = [];
+  projectLoaded = false;
 
   projectForm: FormGroup = null;
 
@@ -57,12 +51,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
           if (params['id']) {
             this.projectId = params['id'];
             this.loadProject(this.projectId);
+          } else {
+            this.projectLoaded = true;
           }
         });
       }
-    });
-    this.afs.collection<SkillTag>('skill-tags').valueChanges().take(1).subscribe((tags: SkillTag[]) => {
-      this.skillTagsList = tags.map(x => x.tag);
     });
   }
 
@@ -70,47 +63,21 @@ export class ProjectComponent implements OnInit, OnDestroy {
     if (this.authSub) { this.authSub.unsubscribe(); }
   }
 
-  onTagEnter() {
-    const tag = this.tagInput;
-    const indexOfTag = this.skillTagsList.findIndex(x => x === tag);
-    if (indexOfTag !== -1) {
-      if (!this.acceptedTags.includes(tag)) {
-        if (this.acceptedTags.length <= 5) {
-          this.acceptedTags.push(tag);
-          this.projectForm.controls['tags'].setValue(this.acceptedTags.join(','));
-        } else {
-          this.tagSelectionInvalid = true;
-        }
-      }
-      this.tagInput = '';
-      this.tagSelectionInvalid = false;
-    } else if (tag !== '') {
-      this.tagSelectionInvalid = true;
-    }
-  }
-
-  removeTag(tag: string) {
-    const index = this.acceptedTags.indexOf(tag);
-    this.acceptedTags.splice(index, 1);
-    this.projectForm.controls['tags'].setValue(this.acceptedTags.join(','));
+  skillTagsUpdated(value) {
+    this.projectForm.controls['tags'].setValue(value);
   }
 
   loadProject(address: string) {
     try {
-      this.afs.doc(`portfolio/${this.currentUser.address}/work/${address}`).valueChanges().take(1).subscribe((data: any) => {
+      this.afs.doc(`portfolio/${this.currentUser.address}/work/${address}`).valueChanges().take(1).subscribe((data: Work) => {
         this.projectForm.controls['title'].setValue(data.title);
         this.projectForm.controls['description'].setValue(data.description);
 
-        // on component init
-        if (data.tags instanceof Array) {
-          this.projectForm.controls['tags'].setValue(data.tags.join());
-          this.acceptedTags = data.tags;
-        } else {
-          this.projectForm.controls['tags'].setValue('');
-        }
+        this.initialTags = data.tags;
 
         this.projectForm.controls['image'].setValue(data.image);
         this.projectForm.controls['link'].setValue(data.link);
+        this.projectLoaded = true;
       });
     } catch (error) {
       console.error('loadProject - error', error);
@@ -119,10 +86,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   submitForm() {
     try {
-      let tags = this.projectForm.value.tags;
-      if (!(this.projectForm.value.tags instanceof Array)) {
-        tags = this.projectForm.value.tags.split(',').map(item => item.trim());
-      }
+      const tags = this.projectForm.value.tags.split(',').map(item => item.trim());
       const tmpProject = {
         title: this.projectForm.value.title,
         description: this.projectForm.value.description,

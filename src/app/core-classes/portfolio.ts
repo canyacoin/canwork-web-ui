@@ -8,7 +8,7 @@ export class Work {
     image: string;
     link: string;
     state: WorkState;
-    tags: string[];
+    tags: string[] = [];
     timestamp: string;
     title: string;
 }
