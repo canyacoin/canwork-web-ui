@@ -4,7 +4,7 @@ export class User {
     address: string;
     avatar: Avatar;
     bio: string;
-    category: string;
+    category: UserCategory;
     colors: string[] = [];
     description: string;
     email: string;
@@ -42,4 +42,13 @@ export enum UserState {
 export enum UserType {
     client = 'User',
     provider = 'Provider'
+}
+
+export enum UserCategory {
+    contentCreator = 'CONTENT CREATORS',
+    designer = 'DESIGNERS & CREATIVES',
+    finance = 'FINANCIAL EXPERTS',
+    marketing = 'MARKETING & SEO',
+    softwareDev = 'SOFTWARE DEVELOPERS',
+    virtualAssistant = 'VIRTUAL ASSISTANTS'
 }
