@@ -2,9 +2,55 @@
   <section class="section bg-gray py-20" id="section-main">
     <div class="container">
 
+      <!-- Algolia Instant Search -->
+      <div class="row">
+        <div class="col-12">
+          <ais-instantsearch [config]="algoliaSearchConfig">
+            <ais-search-box (change)="algoliaSearchChanged($event)"></ais-search-box>
+            <div class="row" *ngIf="algoliaShowResults">
+              <div class="col-md-12">
+                <div class="card-columns">
+                  <ais-hits>
+                    <ng-template let-hits="hits">
+                      <div *ngFor="let hit of hits">
+
+                        <div class="card card-hover-shadow my-15">
+                          <div class="profile">
+                            <!-- TODO: RouterLink not working -->
+                            <a [routerLink]="['/profile/alt', hit.address]" data-scrollto="section-profile">
+                              <img [src]="hit.avatar.uri" class="headshot">
+                            </a>
+                            <div class="title">
+                              <h2>
+                                <ais-highlight attribute="name" [hit]="hit"></ais-highlight>
+                              </h2>
+                              <h3>
+                                <ais-highlight attribute="title" [hit]="hit"></ais-highlight>
+                              </h3>
+                            </div>
+
+                            <!-- TODO: find out a way to cast a 'hit' (from algolia) into type User, so getProviderTags() works
+                              <div class="row">
+                                <app-skill-tag *ngFor="let tag of getProviderTags(hit)" [skill]="tag"></app-skill-tag>
+                              </div> -->
+                          </div>
+                        </div>
+
+
+                      </div>
+                    </ng-template>
+                  </ais-hits>
+                </div>
+              </div>
+            </div>
+          </ais-instantsearch>
+        </div>
+      </div>
+
       <div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center">
         <img src="assets/img/loader.svg" height="36px" alt="Loader">
       </div>
+
       <div *ngIf="!loading && filteredProviders.length <= 0" class="container">
         <div class="row">
           <div class="col-12 d-flex flex-column">
@@ -16,6 +62,7 @@
           </div>
         </div>
       </div>
+
       <div *ngIf="!loading && filteredProviders.length > 0" class="row">
         <h4 class="fw-400">
           <span *ngIf="query != ''">CanYa Providers</span>

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { NgAisModule } from 'angular-instantsearch';
 
 import { CoreComponentsModule } from '../core-components/core-components.module';
 import { CoreServicesModule } from '../core-services/core-services.module';
@@ -13,7 +14,8 @@ import { SwiperCardsComponent } from './swiper-cards/swiper-cards.component';
     CommonModule,
     CoreComponentsModule,
     CoreServicesModule,
-    HomeRoutingModule
+    HomeRoutingModule,
+    NgAisModule
   ],
   declarations: [
     HomeComponent,

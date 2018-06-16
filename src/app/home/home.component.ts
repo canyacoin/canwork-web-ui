@@ -9,6 +9,7 @@ import { Observable } from 'rxjs/Observable';
 import { take } from 'rxjs/operator/take';
 import { Subscription } from 'rxjs/Subscription';
 
+import { environment } from '../../environments/environment';
 import { Portfolio, Work } from '../core-classes/portfolio';
 import { User } from '../core-classes/user';
 
@@ -31,6 +32,13 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   providerSub: Subscription;
   portfolioSub: Subscription;
 
+  algoliaSearchConfig = {
+    ...environment.algolia,
+    indexName: environment.algolia.indexName,
+    routing: true
+  }
+
+  algoliaShowResults = false;
 
   constructor(private activatedRoute: ActivatedRoute,
     private afs: AngularFirestore, private http: Http) {
@@ -54,6 +62,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.routeSub) { this.routeSub.unsubscribe(); }
     if (this.providerSub) { this.providerSub.unsubscribe(); }
     if (this.portfolioSub) { this.portfolioSub.unsubscribe(); }
+  }
+
+  algoliaSearchChanged(query) {
+    (query.length) ? this.algoliaShowResults = true : this.algoliaShowResults = false;
   }
 
   loadProviders() {
@@ -129,4 +141,5 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     ];
     return tmp[Math.floor(Math.random() * (tmp.length - 1))];
   }
+
 }

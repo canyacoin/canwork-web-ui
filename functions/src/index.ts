@@ -16,6 +16,10 @@ import * as algoliasearch from 'algoliasearch';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
+const faker = require('faker');
+
+const Chance = require('chance');
+
 // Firebase connectivity
 admin.initializeApp();
 const db = admin.firestore();
@@ -24,6 +28,8 @@ const env = functions.config();
 // Algolia client, see also: https://www.npmjs.com/package/algoliasearch
 const algoliaClient = algoliasearch(env.algolia.appid, env.algolia.apikey);
 const algoliaSearchIndex = algoliaClient.initIndex(env.algolia.providerindex);
+
+const chance = new Chance();
 
 /*
  * Listen for user creations and created an associated algolia record
@@ -75,16 +81,6 @@ exports.updateIndexProviderData = functions.firestore
   });
 
 /*
- * Listen for user deletions and remove the associated algolia record
- */
-exports.removeIndexProviderData = functions.firestore
-  .document('users/{userId}')
-  .onDelete((snap, context) => {
-    const objectId = snap.id;
-    return algoliaSearchIndex.deleteObject(objectId);
-  });
-
-/*
  * Listen for profile (work array) modifications and update the users collection tag set
  * This in turn should trigger an Algolia update, because it will trigger 'updateIndexProviderData' to execute
  */
@@ -106,6 +102,16 @@ exports.updateUserSkillsTagData = functions.firestore
     return db.collection(`users/`)
       .doc(context.params.userId)
       .update({ workSkillTags });
+  });
+
+/*
+ * Listen for user deletions and remove the associated algolia record
+ */
+exports.removeIndexProviderData = functions.firestore
+  .document('users/{userId}')
+  .onCreate((snap, context) => {
+    const objectId = snap.id;
+    return algoliaSearchIndex.deleteObject(objectId);
   });
 
 /*
@@ -132,7 +138,94 @@ async function buildWorkData(userID: string) {
 }
 
 /*
- * Firebase functions to seed skill tag data (invoke with HTTP GET)
+ * Firebase function to seed providers (users + provider data)
+ */
+exports.seedProviders = functions.https.onRequest(async (request, response) => {
+
+  const qty = request.query.qty || 1;
+
+  const users = [];
+  for (let i = 0; i < qty; i++) {
+    let newUser;
+
+    try {
+      newUser = await admin.auth().createUser({
+        email: chance.email(),
+        emailVerified: true,
+        password: chance.word({ length: 16 }),
+        displayName: chance.name(),
+        photoURL: faker.image.avatar(),
+        disabled: false
+      });
+      users.push({ name: newUser.displayName, email: newUser.email });
+    } catch (error) {
+      console.error('! unable to create auth user record', error)
+    }
+
+    // // Insert into user table
+    let userRecord;
+    try {
+      userRecord = {
+        objectId: newUser.uid,
+        '@content': 'http://schema.org',
+        '@type': 'Person',
+        'type': 'Provider',
+        address: newUser.uid,
+        name: newUser.displayName,
+        email: newUser.email,
+        work: newUser.email,
+        ethAddress: '0xc4e40e873f11510870ed55ebc316e3ed17753b22',
+        avatar: { uri: newUser.photoURL },
+        bio: chance.sentence({ words: Math.floor((Math.random() * 30) + 1) }),
+        category: getCategories()[Math.floor(Math.random() * 6)].toUpperCase(),
+        colors: [],
+        description: chance.paragraph({ sentences: Math.floor((Math.random() * 4) + 1) }),
+        phone: chance.phone({ mobile: true }),
+        timestamp: chance.timestamp(),
+        title: chance.profession(),
+        timezone: chance.timezone().utc[0],
+        state: 'Done',
+        testUser: true
+      };
+      console.log('+ add user record: ', userRecord);
+      await db.collection('users').doc(newUser.uid).set(userRecord);
+    } catch (error) {
+      console.error('! unable to create user record', error)
+      return response.status(500)
+    }
+
+    // Insert into portfolio with work items
+    let workRecords = [];
+
+    for (let index = 0; index < Math.floor((Math.random() * 5) + 1); index++) {
+      const work = {
+        title: chance.word(),
+        description: chance.sentence({ words: 5 }),
+        image: faker.image.image(),
+        link: chance.url({ protocol: 'https' }),
+        state: 'Done',
+        timestamp: chance.timestamp(),
+        tags: getTags().sort(() => { return 0.5 - Math.random() })
+      }
+      try {
+        await db.collection('portfolio').doc(newUser.uid).collection('work').add(work);
+      } catch (error) {
+        console.error('! unable to create portfolio work records', error)
+        return response.status(500)
+      }
+    }
+
+
+  }
+
+  return response.status(201)
+    .type('application/json')
+    .send(users);
+
+});
+
+/*
+ * Firebase function to seed skill tag data (invoke with HTTP GET)
  */
 exports.seedSkillTagsData = functions.https.onRequest(async (request, response) => {
   let tags: string[];
@@ -255,4 +348,15 @@ function getTags(): string[] {
     'Non Fiction',
     'Fiction',
   ];
+}
+
+function getCategories(): string[] {
+  return [
+    'Content Creators',
+    'Designers & Creatives',
+    'Financial experts',
+    'Marketing & SEO',
+    'Software developers',
+    'Virtual assistants'
+  ]
 }
