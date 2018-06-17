@@ -1,19 +1,20 @@
 language: node_js
 node_js:
-  - 9.1.0
+- 9.1.0
 script:
-  - npm install -g npm@6.1.0
-  - npm install -g tslint typescript
-  - npm install
-  - cd functions/ && npm install; cd ../
+- npm install -g npm@6.1.0
+- npm install -g tslint typescript
+- npm install
+- cd functions/ && npm install; cd ../
 install:
-  - npm install -g firebase-tools
+- npm install -g firebase-tools
 after_success:
-  - firebase use staging
-  - echo $ANGULAR_CONFIGURATION_FILE > ./src/environments/environment.ts
-  - firebase functions:config:set algolia.appid=$ALGOLIA_APPID algolia.apikey=$ALGOLIA_APIKEY algolia.providerindex=$ALGOLIA_PROVIDERINDEX
-  - ng build --prod
-  - firebase deploy --token $FIREBASE_TOKEN
+- firebase use staging
+- echo $ANGULAR_CONFIGURATION_FILE > ./src/environments/environment.ts
+- firebase functions:config:set algolia.appid=$ALGOLIA_APPID algolia.apikey=$ALGOLIA_APIKEY
+  algolia.providerindex=$ALGOLIA_PROVIDERINDEX
+- ng build --prod
+- firebase deploy --token $FIREBASE_TOKEN
 notifications:
   slack:
-    secure: Equfw4s1SZ3gyJLF9+chnpZjnn+fIIl/uNEA5Eeo3QFYDNJBNBhahyuwN8J3QowyyyyjB1c3moMTZBloEtd1gh3NMpvAO1EBzh66ccGtDmg28Sk1ZINaEcuKDNIEIQIhE04ggXpZEtuBdpQWy9VYNiPa3TKOb1uS5ODwxxiZF8wpTKxkAON6297jz7znShnEU/soYJeX7rDHZ5GJ4psAO8oLBrpP4ubmVE0rr4ULuhFaDIcrGSYFS9hpfxQ5aZf4DNPgHibNbIeipE2JOkVQKoL80Gsp5bcj205ApttxwRVb9+1EUeGfjQutRSZDa9rkeGlnJnlRtWycyrD3YNjLekdwk0LLTiODN/UNG3ejyktGhaWpEXGulejwrsCu7UR2O85b6o3eZ2vrnzLxBpw0SH3OqXu9b2xTNERwZFvJprClOwFs3vIIUG+JgDHATwT3J5uN4S6ZvIpFT3y0yEKt/sTDRBQSNukonwrK/n3g/o+xhjjLpIaIlXcviKdckqzrNHqOToCaIeyAC/XSipqxYBo5AaKQpqitplTs3OLCRD0gNv3e32+R+nuslAdV5jgME+jvUUc7lXPs8qynTP4hqAE4ZdCfSxkTHjB8c4N/Q0SeE2ymPrUzdt0G7Yk3VJ0Io5sBUabCnlDSaZ/FMHMzf458DilumwzoBLaZnWJfhtI=
+    secure: Hbepw8d4ZEF83DcKa1mJ5cnhdRJFZsb7UfgOaQkwBv8k/pNMavXU5e3N4e7YAotZgnI/XXGHDjqyViw0c3dKXQ2OFg3Qhwvrl15zDCtDEMEyqbrfPxdGxOPqReQFl70TmA3rGFKWD3BwHzj23GFkIenXlvn4cJyzpXsHP+S1hTDu73Kj1cYwAuTEdbSKP81abFTMTUCkxPXNWmhb6gm3WwkUfH9hgTvtNpuOw3TcST6NMKhN3HcTyjYMy4Kwc/fRUrwDy5UqLC0TePTtiFlRvKEmiH5eE82yJFTkNYlzJ+tA3CHWaywA/FXce7vdgGN00zVfUeiZyw4aLL8bjB6NFwaDRVF5MrDjbCmohKsU8FPXReyetDaz892kR8K2LB3+85Ttso/qNpm8AUoFhmHduZ0nH5NwxnrRBrvV4U0VuKObpbCTxWDbOzbRypTJ7ICSlRjW0Hs+6ARs8ETAOO8XJTjkz7f9JaMSEODM0m1PWP02poGvCNrBULXwmrz9iG64TcXoC0ROJ6qS3E1sQ2MxOY8gs35+U0ApAGsNSzwy6NUupLzCNi9U0l0UJRYwLp4lU0jkACPkcFcp+dS5kYknIOl7A0iZr915oAMU/aklfyS9eND59DZbal+f1bFMc2SK9e0ILWbN80qxLSlSHky1kmVKiXdNYAW+qkQ34N8cjxc=
