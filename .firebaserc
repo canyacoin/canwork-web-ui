@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "can-work-cam"
+    "cam": "can-work-cam",
+    "alex": "canwork-alex",
+    "staging": "staging-can-work"
   }
 }

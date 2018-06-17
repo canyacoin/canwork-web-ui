@@ -8,6 +8,12 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 #### Web App
 
+Once only installations:
+
+```
+npm install -g angular-cli firebase-tools
+```
+
 ```
 git clone git@github.com:canyaio/can-work.git
 cd can-work
@@ -16,6 +22,14 @@ cp src/environments/environment.ts.sample src/environments/environment.ts
 ```
 
 Now, go to your firebase account and obtain the database credentials, and update the `firebase` block in `src/environments/environment.ts`
+
+If you have not worked on this project before you will need to create a firebase alias:
+
+```
+firebase use --add
+# ^^^ Enter your firebase project name when prompted, and then an alias. Use <YOUR_NAME> for example
+firebase use <YOUR_NAME>
+```
 
 #### Algolia Full Text Search
 
@@ -54,6 +68,11 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 ## Running end-to-end tests
 
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+
+## Deploying to your firebase instance:
+
+firebase use <YOUR_NAME>
+firebase deploy
 
 ## Further help
 
