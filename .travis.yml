@@ -1,0 +1,19 @@
+language: node_js
+node_js:
+  - 9.1.0
+script:
+  - npm install -g npm@6.1.0
+  - npm install -g tslint typescript
+  - npm install
+  - cd functions/ && npm install; cd ../
+install:
+  - npm install -g firebase-tools
+after_success:
+  - firebase use staging
+  - echo $ANGULAR_CONFIGURATION_FILE > ./src/environments/environment.ts
+  - firebase functions:config:set algolia.appid=$ALGOLIA_APPID algolia.apikey=$ALGOLIA_APIKEY algolia.providerindex=$ALGOLIA_PROVIDERINDEX
+  - ng build --prod
+  - firebase deploy --token $FIREBASE_TOKEN
+notifications:
+  slack:
+    secure: Equfw4s1SZ3gyJLF9+chnpZjnn+fIIl/uNEA5Eeo3QFYDNJBNBhahyuwN8J3QowyyyyjB1c3moMTZBloEtd1gh3NMpvAO1EBzh66ccGtDmg28Sk1ZINaEcuKDNIEIQIhE04ggXpZEtuBdpQWy9VYNiPa3TKOb1uS5ODwxxiZF8wpTKxkAON6297jz7znShnEU/soYJeX7rDHZ5GJ4psAO8oLBrpP4ubmVE0rr4ULuhFaDIcrGSYFS9hpfxQ5aZf4DNPgHibNbIeipE2JOkVQKoL80Gsp5bcj205ApttxwRVb9+1EUeGfjQutRSZDa9rkeGlnJnlRtWycyrD3YNjLekdwk0LLTiODN/UNG3ejyktGhaWpEXGulejwrsCu7UR2O85b6o3eZ2vrnzLxBpw0SH3OqXu9b2xTNERwZFvJprClOwFs3vIIUG+JgDHATwT3J5uN4S6ZvIpFT3y0yEKt/sTDRBQSNukonwrK/n3g/o+xhjjLpIaIlXcviKdckqzrNHqOToCaIeyAC/XSipqxYBo5AaKQpqitplTs3OLCRD0gNv3e32+R+nuslAdV5jgME+jvUUc7lXPs8qynTP4hqAE4ZdCfSxkTHjB8c4N/Q0SeE2ymPrUzdt0G7Yk3VJ0Io5sBUabCnlDSaZ/FMHMzf458DilumwzoBLaZnWJfhtI=
