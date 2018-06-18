@@ -62,13 +62,24 @@ export class SetupComponent implements OnInit, OnDestroy {
     if (this.authSub) { this.authSub.unsubscribe(); }
   }
 
-  hasChosenType(): boolean {
-    return this.currentUser.type === UserType.client || this.currentUser.type === UserType.provider;
+  isClient(): boolean {
+    return this.currentUser.type === UserType.client;
+  }
+
+  isProvider(): boolean {
+    return this.currentUser.type === UserType.provider;
+  }
+
+  isVerified(): boolean {
+    return this.currentUser.state === UserState.done;
   }
 
   setUserType(type: UserType) {
     this.currentUser.type = type;
     this.userService.updateUserProperty(this.currentUser, 'type', type);
+    if (type === UserType.provider) {
+      // window.location.href = 'https://canyacoin.typeform.com/to/r2Bfb0';
+    }
   }
 
   formSubmitted(event: any) {

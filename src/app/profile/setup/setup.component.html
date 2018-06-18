@@ -1,5 +1,5 @@
 <main class="main-content" *ngIf="currentUser">
-  <section *ngIf="!hasChosenType()" class="section bg-gray py-40">
+  <section *ngIf="!isClient() && !isProvider()" class="section bg-gray py-40">
     <div class="container">
       <header class="section-header my-0 py-0 animated fadeIn">
         <h5>What brings you to CanWork today?</h5>
@@ -22,7 +22,8 @@
               <h4 class="card-title">I want to find work</h4>
               <p class="card-text">Do you have a
                 <strong>digital service</strong> to offer our client base? Paid with cryptocurrency!</p>
-              <a href="https://canyacoin.typeform.com/to/r2Bfb0" target="_blank" class="btn btn-primary btn-canya-chat">PROVIDER</a>
+
+              <button (click)="setUserType('Provider')" class="btn btn-primary btn-canya-chat">PROVIDER</button>
             </div>
           </div>
         </div>
@@ -31,8 +32,16 @@
     </div>
   </section>
 
-  <section *ngIf="hasChosenType()" class="section bg-white py-40">
+  <section *ngIf="isClient()" class="section bg-white py-40">
     <div class="container">
+      <app-bot [title]="true" [conversation]="conversation" (action)="formSubmitted($event)"></app-bot>
+    </div>
+  </section>
+  <section *ngIf="isProvider()" class="section bg-white py-40">
+    <div *ngIf="!isVerified()" class="container">
+      <app-provider-state [currentUser]="currentUser"></app-provider-state>
+    </div>
+    <div *ngIf="isVerified()" class="container">
       <app-bot [title]="true" [conversation]="conversation" (action)="formSubmitted($event)"></app-bot>
     </div>
   </section>
