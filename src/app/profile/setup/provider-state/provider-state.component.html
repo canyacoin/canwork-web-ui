@@ -1,0 +1,13 @@
+<div *ngIf="account">
+  <div *ngIf="!hasSubmittedTypeForm">
+    In order to sign up as a provider you need to
+    <a href="https://canyacoin.typeform.com/to/r2Bfb0">submit a form</a>
+  </div>
+  <div *ngIf="hasSubmittedTypeForm">
+    Congrats! You have submitted a form... but are you verified?
+  </div>
+</div>
+<div *ngIf="!account">
+  Has no account... so we can't check if you have been verified
+  <br/> Log in to MetaMask to check!
+</div>

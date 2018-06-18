@@ -59,7 +59,7 @@ export class EthService implements OnDestroy {
                 }
                 this.accountInterval = setInterval(() => {
                   this.checkAccountMetaMask();
-                }, 500);
+                }, 5000);
               });
               this.canyaContract = new this.web3js.eth.Contract(canyaAbi, canyaContractAddress);
               return;
