@@ -2,6 +2,8 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.6.5.
 
+[![Build Status](https://travis-ci.com/canyaio/can-work.svg?token=FAxKySscNkseqRyx9f3i&branch=master)](https://travis-ci.com/canyaio/can-work)
+
 ## Development server
 
 ### Clone & Initial Setup:
