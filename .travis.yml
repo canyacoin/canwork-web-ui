@@ -11,6 +11,7 @@ install:
 after_success:
 - firebase use staging
 - echo $ANGULAR_CONFIGURATION_FILE > ./src/environments/environment.ts
+- echo "Angular Config:::" && cat ./src/environments/environment.ts
 - firebase functions:config:set algolia.appid=$ALGOLIA_APPID
 - firebase functions:config:set algolia.apikey=$ALGOLIA_APIKEY
 - firebase functions:config:set algolia.providerindex=$ALGOLIA_PROVIDERINDEX
