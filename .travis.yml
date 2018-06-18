@@ -10,9 +10,8 @@ install:
 - npm install -g firebase-tools
 after_success:
 - firebase use staging
-- pwd && ls -la
-- echo $ANGULAR_CONFIGURATION_FILE > ./src/environments/environment.ts
-- echo "Angular Config:::" && cat ./src/environments/environment.ts
+- echo $ANGULAR_CONFIGURATION_FILE > ./src/environments/environment.prod.ts
+- echo "Angular Config:::" && cat ./src/environments/environment.prod.ts
 - firebase functions:config:set algolia.appid=$ALGOLIA_APPID
 - firebase functions:config:set algolia.apikey=$ALGOLIA_APIKEY
 - firebase functions:config:set algolia.providerindex=$ALGOLIA_PROVIDERINDEX
