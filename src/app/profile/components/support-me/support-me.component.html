@@ -3,7 +3,7 @@
     <p class="lead fw-500 bb-1">Support my work</p>
     <h6>If you like my work, buy me a
       <img src="assets/img/coffee.svg" width="auto" height="24px"> to show your support.</h6>
-    <button [disabled] (click)="onBuyACoffee();" type="button" class="btn btn-block btn-primary btn-canya-chat" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">
+    <button [disabled]="true" (click)="onBuyACoffee();" type="button" class="btn btn-block btn-primary btn-canya-chat" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">
       Buy me a
       <img src="assets/img/coffee-white.svg" width="auto" height="24px" style="margin-top: -2px;">
     </button>
