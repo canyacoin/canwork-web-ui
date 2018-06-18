@@ -15,7 +15,7 @@ after_success:
 - firebase functions:config:set algolia.appid=$ALGOLIA_APPID
 - firebase functions:config:set algolia.apikey=$ALGOLIA_APIKEY
 - firebase functions:config:set algolia.providerindex=$ALGOLIA_PROVIDERINDEX
-- ng build --staging
+- ng build --environment=staging
 - firebase deploy --token $FIREBASE_TOKEN
 notifications:
   slack:
