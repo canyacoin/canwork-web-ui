@@ -4,13 +4,14 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 
-import { canyaContractAddress } from '../core-config/contracts';
+import { canyaContractAddress, daoContractAddress } from '../core-config/contracts';
 
 declare let require: any;
 const Web3 = require('web3');
 declare var web3;
 
 const canyaAbi = require('assets/abi/canyaABI.json');
+const daoAbi = require('assets/abi/daoABI.json');
 
 export enum Web3LoadingStatus {
   loading = 'Wallet loading is in progress',
@@ -30,6 +31,7 @@ export class EthService implements OnDestroy {
   accountInterval: any;
 
   canyaContract: any = null;
+  daoContract: any = null;
 
   public web3Status = new BehaviorSubject<Web3LoadingStatus>(Web3LoadingStatus.loading);
   public web3Status$ = this.web3Status.asObservable();
@@ -47,6 +49,8 @@ export class EthService implements OnDestroy {
           switch (id) {
             case 1:
               this.isMainNet = true;
+              this.canyaContract = new this.web3js.eth.Contract(canyaAbi, canyaContractAddress);
+              this.daoContract = new this.web3js.eth.Contract(daoAbi, daoContractAddress);
               console.log('Web3Service: Is MainNet');
               this.web3js.eth.getAccounts().then((accs: string[]) => {
                 console.log('Web3Service: Got accounts: ' + JSON.stringify(accs));
@@ -61,7 +65,6 @@ export class EthService implements OnDestroy {
                   this.checkAccountMetaMask();
                 }, 5000);
               });
-              this.canyaContract = new this.web3js.eth.Contract(canyaAbi, canyaContractAddress);
               return;
             default:
               this.isMainNet = false;
@@ -111,6 +114,16 @@ export class EthService implements OnDestroy {
       return Promise.resolve(tokens);
     }
     return Promise.reject(null);
+  }
+
+  async providerHasBeenAccepted(addr: string): Promise<boolean> {
+    const isProvider = await this.daoContract.methods.isProvider(addr).call();
+    return Promise.resolve(isProvider);
+  }
+
+  async providerHasBeenRejected(addr: string): Promise<boolean> {
+    const isRejected = await this.daoContract.methods.isRejected(addr).call();
+    return Promise.resolve(isRejected);
   }
 
   async getCanYaBalance(): Promise<string> {

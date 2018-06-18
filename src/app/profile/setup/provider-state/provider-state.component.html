@@ -1,13 +1,29 @@
-<div *ngIf="account">
-  <div *ngIf="!hasSubmittedTypeForm">
-    In order to sign up as a provider you need to
-    <a href="https://canyacoin.typeform.com/to/r2Bfb0">submit a form</a>
-  </div>
-  <div *ngIf="hasSubmittedTypeForm">
-    Congrats! You have submitted a form... but are you verified?
-  </div>
+<div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center">
+  <img src="assets/img/loader.svg" height="36px" alt="Loader">
 </div>
-<div *ngIf="!account">
-  Has no account... so we can't check if you have been verified
-  <br/> Log in to MetaMask to check!
+<div *ngIf="!loading">
+  <div *ngIf="account">
+    <div *ngIf="!hasSubmittedTypeForm">
+      In order to sign up as a provider you need to
+      <a href="https://canyacoin.typeform.com/to/r2Bfb0">submit a form</a>
+    </div>
+    <div *ngIf="hasSubmittedTypeForm">
+      <div *ngIf="hasBeenAccepted">
+        Congrats! You have passed the white list. Click
+        <button type="button" (click)="finishProviderSetup()">here</button> to complete your account setup
+      </div>
+      <div *ngIf="!hasBeenAccepted">
+        <div *ngIf="hasBeenRejected">
+          You have been rejected from the white listing process
+        </div>
+        <div *ngIf="!hasBeenRejected">
+          Waiting for your application to be processed and verified...
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!account">
+    Has no account... so we can't check if you have been verified
+    <br/> Log in to MetaMask to check!
+  </div>
 </div>
