@@ -23,6 +23,7 @@ export class User {
     timezone: string;
     title: string;
     type: UserType;
+    whitelisted: boolean;
     work: string;
     workSkillTags: string[] = [];
 

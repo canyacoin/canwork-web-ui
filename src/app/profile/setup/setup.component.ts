@@ -71,15 +71,12 @@ export class SetupComponent implements OnInit, OnDestroy {
   }
 
   isVerified(): boolean {
-    return this.currentUser.state === UserState.done;
+    return this.currentUser.whitelisted === true;
   }
 
   setUserType(type: UserType) {
     this.currentUser.type = type;
     this.userService.updateUserProperty(this.currentUser, 'type', type);
-    if (type === UserType.provider) {
-      // window.location.href = 'https://canyacoin.typeform.com/to/r2Bfb0';
-    }
   }
 
   formSubmitted(event: any) {
