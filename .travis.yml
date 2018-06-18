@@ -10,12 +10,12 @@ install:
 - npm install -g firebase-tools
 after_success:
 - firebase use staging
-- echo $ANGULAR_CONFIGURATION_FILE > ./src/environments/environment.prod.ts
-- echo "Angular Config:::" && cat ./src/environments/environment.prod.ts
+- echo $ANGULAR_CONFIGURATION_FILE > ./src/environments/environment.staging.ts
+- echo "Angular Config:::" && cat ./src/environments/environment.staging.ts
 - firebase functions:config:set algolia.appid=$ALGOLIA_APPID
 - firebase functions:config:set algolia.apikey=$ALGOLIA_APIKEY
 - firebase functions:config:set algolia.providerindex=$ALGOLIA_PROVIDERINDEX
-- ng build --prod
+- ng build --staging
 - firebase deploy --token $FIREBASE_TOKEN
 notifications:
   slack:
