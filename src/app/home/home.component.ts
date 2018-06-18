@@ -25,7 +25,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   query = '';
   loading = true;
-  searching = false;
   canToUsd: number;
 
   routeSub: Subscription;
@@ -36,15 +35,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     ...environment.algolia,
     indexName: environment.algolia.indexName,
     routing: true
-  }
-
-  algoliaShowResults = false;
+  };
 
   constructor(private activatedRoute: ActivatedRoute,
     private afs: AngularFirestore, private http: Http) {
     this.routeSub = this.activatedRoute.params.subscribe((params) => {
       this.query = params['query'] ? params['query'] : '';
-      this.loadProviders();
     });
   }
 
@@ -56,25 +52,18 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 400);
   }
 
   ngOnDestroy() {
     if (this.routeSub) { this.routeSub.unsubscribe(); }
-    if (this.providerSub) { this.providerSub.unsubscribe(); }
     if (this.portfolioSub) { this.portfolioSub.unsubscribe(); }
   }
 
   algoliaSearchChanged(query) {
-    (query.length) ? this.algoliaShowResults = true : this.algoliaShowResults = false;
-  }
-
-  loadProviders() {
-    const providersCollection = this.afs.collection('users', ref => ref.where('state', '==', 'Done').where('type', '==', 'Provider').orderBy('timestamp', 'desc'));
-    if (this.providerSub) { this.providerSub.unsubscribe(); }
-    this.providerSub = providersCollection.valueChanges().subscribe((data: User[]) => {
-      this.allProviders = data;
-      this.filterProviders();
-    });
+    // (query.length) ? this.algoliaShowResults = true : this.algoliaShowResults = false;
   }
 
   getUsdToCan(usd: number): string {
@@ -84,45 +73,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     return '-';
   }
 
-  filterProviders() {
-    this.loading = false;
-    if (this.query !== '') {
-      this.searching = true;
-
-      const selectedProviders: any = [];
-      this.allProviders.map((provider: User) => {
-        if (JSON.stringify(provider).toLowerCase().includes(this.query.toLowerCase())) {
-          selectedProviders.push(provider);
-        }
-      });
-
-      this.allProviders.map((provider: User) => {
-        this.portfolioSub = this.afs.collection(`portfolio/${provider.address}/work`).valueChanges().take(1).subscribe((work: Work[]) => {
-          if (JSON.stringify(work).toLowerCase().includes(this.query.toLowerCase())) {
-            const index: number = findIndex(selectedProviders, { 'address': provider.address });
-            if (index === -1) {
-              selectedProviders.push(provider);
-            }
-          }
-        });
-      });
-
-      for (let i = 0; i < selectedProviders.length; i++) {
-        selectedProviders[i]['gradient'] = this.getRandomGradient(selectedProviders[i].colors);
-      }
-
-      this.filteredProviders = selectedProviders;
-    } else {
-      this.searching = false;
-      this.filteredProviders = this.allProviders;
-    }
-  }
-
-  getProviderTags(provider: User) {
-    const allTags: string[] = union(provider.skillTags, provider.workSkillTags);
+  getProviderTags(provider: any): string[] {
+    const allTags: string[] = union(provider.skillTags === undefined ? [] : provider.skillTags, provider.workSkillTags === undefined ? [] : provider.workSkillTags);
     if (allTags.length > 6) {
-      const moreSymbol = '+ ' + (allTags.length - 6) + ' more';
-      return allTags.splice(5).push(moreSymbol);
+      const moreSymbol = ('+ ' + (allTags.length - 6) + ' more');
+      const arr = allTags.slice(0, 5);
+      return arr.concat([moreSymbol]);
     }
     return allTags;
   }

@@ -180,11 +180,13 @@ exports.seedProviders = functions.https.onRequest(async (request, response) => {
         category: getCategories()[Math.floor(Math.random() * 6)].toUpperCase(),
         colors: [],
         description: chance.paragraph({ sentences: Math.floor((Math.random() * 4) + 1) }),
+        hourlyRate: chance.integer({ min: 1, max: 250 }),
         phone: chance.phone({ mobile: true }),
         timestamp: chance.timestamp(),
         title: chance.profession(),
         timezone: chance.timezone().utc[0],
         state: 'Done',
+        skillTags: getTags().slice(0, randomIntFromInterval(0, getTags().length)),
         testUser: true
       };
       console.log('+ add user record: ', userRecord);
@@ -205,7 +207,7 @@ exports.seedProviders = functions.https.onRequest(async (request, response) => {
         link: chance.url({ protocol: 'https' }),
         state: 'Done',
         timestamp: chance.timestamp(),
-        tags: getTags().sort(() => { return 0.5 - Math.random() })
+        tags: getTags().slice(0, randomIntFromInterval(0, getTags().length))
       }
       try {
         await db.collection('portfolio').doc(newUser.uid).collection('work').add(work);
@@ -240,6 +242,10 @@ exports.seedSkillTagsData = functions.https.onRequest(async (request, response) 
     .type('application/json')
     .send({ 'loaded-tags': tags.length })
 });
+
+function randomIntFromInterval(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
 
 // Later we can get these direct from a google spreadsheet or something central
 function getTags(): string[] {

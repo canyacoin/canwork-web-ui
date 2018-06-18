@@ -2,101 +2,51 @@
   <section class="section bg-gray py-20" id="section-main">
     <div class="container">
 
-      <!-- Algolia Instant Search -->
       <div class="row">
         <div class="col-12">
           <ais-instantsearch [config]="algoliaSearchConfig">
             <ais-search-box (change)="algoliaSearchChanged($event)"></ais-search-box>
-            <div class="row" *ngIf="algoliaShowResults">
+            <div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center">
+              <img src="assets/img/loader.svg" height="36px" alt="Loader">
+            </div>
+            <div class="row">
               <div class="col-md-12">
-                <div class="card-columns">
-                  <ais-hits>
-                    <ng-template let-hits="hits">
-                      <div *ngFor="let hit of hits">
-
-                        <div class="card card-hover-shadow my-15">
+                <ais-hits>
+                  <ng-template let-hits="hits">
+                    <div class="row">
+                      <div *ngFor="let provider of hits" class="col-lg-4 card-deck">
+                        <div class="card text-center my-15 pointer" [routerLink]="['/profile/alt', provider.address]">
+                          <span *ngIf="provider && provider.badge" class="popular-tag" style="background:#3cf; float:right;">{{ provider.badge }}</span>
                           <div class="profile">
-                            <!-- TODO: RouterLink not working -->
-                            <a [routerLink]="['/profile/alt', hit.address]" data-scrollto="section-profile">
-                              <img [src]="hit.avatar.uri" class="headshot">
-                            </a>
+                            <img *ngIf="provider && (provider.avatar && provider.avatar.uri)" class="headshot" src="{{ provider.avatar.uri }}" alt="">
                             <div class="title">
-                              <h2>
-                                <ais-highlight attribute="name" [hit]="hit"></ais-highlight>
-                              </h2>
-                              <h3>
-                                <ais-highlight attribute="title" [hit]="hit"></ais-highlight>
-                              </h3>
+                              <h2 *ngIf="provider && provider.name">{{ provider.name }}</h2>
+                              <h3 *ngIf="provider && provider.title">{{ provider.title }}</h3>
+                              <p *ngIf="provider && provider.bio">{{ provider.bio }}</p>
                             </div>
-
-                            <!-- TODO: find out a way to cast a 'hit' (from algolia) into type User, so getProviderTags() works
-                              <div class="row">
-                                <app-skill-tag *ngFor="let tag of getProviderTags(hit)" [skill]="tag"></app-skill-tag>
-                              </div> -->
+                            <div class="row d-flex justify-content-center">
+                              <app-skill-tag *ngFor="let tag of getProviderTags(provider)" [skill]="tag"></app-skill-tag>
+                            </div>
+                            <div class="row">
+                              <span *ngIf="provider.hourlyRate">
+                                <b>${{provider.hourlyRate}}</b>/hr
+                                <span *ngIf="canToUsd">
+                                  <img class="logo-default" src="assets/img/round-icon.svg" width="auto" height="24px" alt="logo" style="margin-top: -3px;">
+                                  <b>{{getUsdToCan(provider.hourlyRate)}}</b>/hr
+                                </span>
+                              </span>
+                            </div>
                           </div>
                         </div>
-
-
                       </div>
-                    </ng-template>
-                  </ais-hits>
-                </div>
+                    </div>
+                  </ng-template>
+                </ais-hits>
               </div>
             </div>
           </ais-instantsearch>
         </div>
-      </div>
 
-      <div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center">
-        <img src="assets/img/loader.svg" height="36px" alt="Loader">
-      </div>
-
-      <div *ngIf="!loading && filteredProviders.length <= 0" class="container">
-        <div class="row">
-          <div class="col-12 d-flex flex-column">
-            <div class="flexbox-container">
-              <br>
-              <h4 class="fw-400">Uh, oh!</h4>
-              <h5 class="fw-300">We couldn't find any providers matching your search</h5>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div *ngIf="!loading && filteredProviders.length > 0" class="row">
-        <h4 class="fw-400">
-          <span *ngIf="query != ''">CanYa Providers</span>
-          <span *ngIf="query == ''">Our Latest Providers</span>
-        </h4>
-        <div class="card-columns">
-          <div class="card card-hover-shadow my-15" *ngFor="let provider of filteredProviders; let i = index">
-            <div class="card-block pricing-3" [routerLink]="['/profile/alt', provider.address]">
-              <span *ngIf="provider && provider.badge" class="popular-tag" style="background:#3cf; float:right;">{{ provider.badge }}</span>
-              <div class="profile">
-                <a [routerLink]="['/profile/alt', provider.address]" data-scrollto="section-profile">
-                  <img *ngIf="provider && (provider.avatar && provider.avatar.uri)" class="headshot" src="{{ provider.avatar.uri }}" alt="">
-                </a>
-                <div class="title">
-                  <h2 *ngIf="provider && provider.name">{{ provider.name }}</h2>
-                  <h3 *ngIf="provider && provider.title">{{ provider.title }}</h3>
-                  <p *ngIf="provider && provider.bio">{{ provider.bio }}</p>
-                </div>
-                <div class="row">
-                  <app-skill-tag *ngFor="let tag of getProviderTags(provider)" [skill]="tag"></app-skill-tag>
-                </div>
-                <div class="row">
-                  <span *ngIf="provider.hourlyRate">
-                    <b>${{provider.hourlyRate}}</b>/hr
-                    <span *ngIf="canToUsd">
-                      <img class="logo-default" src="assets/img/round-icon.svg" width="auto" height="24px" alt="logo" style="margin-top: -3px;">
-                      <b>{{getUsdToCan(provider.hourlyRate)}}</b>/hr
-                    </span>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
       <div class="row">
         <div class="col-12 my-0 py-0">
