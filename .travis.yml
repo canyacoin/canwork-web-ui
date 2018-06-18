@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-- 9.1.0
+  - 9.1.0
 script:
   - npm install -g npm@6.1.0
   - npm install -g tslint typescript
