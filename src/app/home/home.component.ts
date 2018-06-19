@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { environment } from '../../environments/environment';
 import { Portfolio, Work } from '../core-classes/portfolio';
 import { User } from '../core-classes/user';
+import { NavService } from '../core-services/nav.service';
 
 @Component({
   selector: 'app-home',
@@ -37,7 +38,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     routing: true
   };
 
-  constructor(private activatedRoute: ActivatedRoute,
+  constructor(private activatedRoute: ActivatedRoute, private navService: NavService,
     private afs: AngularFirestore, private http: Http) {
     this.routeSub = this.activatedRoute.params.subscribe((params) => {
       this.query = params['query'] ? params['query'] : '';
@@ -45,6 +46,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.navService.setHideSearchBar(true);
     const canToUsdResp = await this.http.get('https://min-api.cryptocompare.com/data/price?fsym=CAN&tsyms=AUD').toPromise();
     if (canToUsdResp.ok) {
       this.canToUsd = JSON.parse(canToUsdResp.text())['AUD'];
@@ -58,6 +60,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.navService.setHideSearchBar(false);
     if (this.routeSub) { this.routeSub.unsubscribe(); }
     if (this.portfolioSub) { this.portfolioSub.unsubscribe(); }
   }

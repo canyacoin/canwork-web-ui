@@ -15,6 +15,7 @@ import { firebaseUiAuthConfig } from './core-config/app-auth-config';
 import { AuthService } from './core-services/auth.service';
 import { CoreServicesModule } from './core-services/core-services.module';
 import { EthService } from './core-services/eth.service';
+import { NavService } from './core-services/nav.service';
 import { CoreUtilsModule } from './core-utils/core-utils.module';
 
 @NgModule({
@@ -36,7 +37,8 @@ import { CoreUtilsModule } from './core-utils/core-utils.module';
   ],
   providers: [
     AuthService,
-    EthService
+    EthService,
+    NavService
   ],
   bootstrap: [AppComponent]
 })
