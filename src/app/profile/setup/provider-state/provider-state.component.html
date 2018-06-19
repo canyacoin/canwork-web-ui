@@ -2,28 +2,52 @@
   <img src="assets/img/loader.svg" height="36px" alt="Loader">
 </div>
 <div *ngIf="!loading">
-  <div *ngIf="account">
+  <app-wallet-install *ngIf="web3State !== web3LoadingStatus.complete" [web3State]="web3State" [walletType]="walletType"></app-wallet-install>
+  <div *ngIf="web3State == web3LoadingStatus.complete" class="container text-center animated fadeIn">
     <div *ngIf="!hasSubmittedTypeForm">
-      In order to sign up as a provider you need to
-      <a href="https://canyacoin.typeform.com/to/r2Bfb0">submit a form</a>
+      <header class="section-header my-0 py-0">
+        <h2 class="fw-300">No whitelist application</h2>
+        <h5 class="fw-300 mb-10">In order to sign up as a provider you need to submit an application making sure to
+          <b>enter your current {{walletType}} ETH address</b>:
+          <br/>
+          <mark>{{account}}</mark>
+        </h5>
+        <br/>
+        <button type="button" class="btn btn-primary btn-block w-200 center-h" (click)="goToForm()">Go to form</button>
+        <br/>
+        <p>If you have submitted the form under another address please switch your {{walletType}} wallet to this address</p>
+      </header>
     </div>
     <div *ngIf="hasSubmittedTypeForm">
       <div *ngIf="hasBeenAccepted">
-        Congrats! You have passed the white list. Click
-        <button type="button" (click)="finishProviderSetup()">here</button> to complete your account setup
+        <header class="section-header my-0 py-0">
+          <h2 class="fw-300">Congrats! You have been accepted as a provider</h2>
+
+          <button type="button" class="btn btn-primary btn-block mt-10 w-200 center-h" (click)="finishProviderSetup()">Go to setup</button>
+        </header>
+
+        <img src="assets/img/CanYa_tick_green.svg" class="img-responsiveness mt-30 animated bounceInUp" alt="You have been whitelisted"
+          width="200">
       </div>
       <div *ngIf="!hasBeenAccepted">
         <div *ngIf="hasBeenRejected">
-          You have been rejected from the white listing process
+          <header class="section-header my-0 py-0">
+            <h2 class="fw-300">Sorry</h2>
+            <h4 class="fw-300 mb-10">You have not been approved by the CanYa DAO to be a CanYa Ambassador. Please feel free to re-apply in the future</h4>
+          </header>
+          <br/>
+          <img src="assets/img/CanYa_red_cross.svg" class="img-responsiveness mt-10 animated bounceInUp" alt="Your application has been rejected"
+            width="150">
         </div>
         <div *ngIf="!hasBeenRejected">
-          Waiting for your application to be processed and verified...
+          <header class="section-header my-0 py-0">
+            <h2 class="fw-300">Your application has been received</h2>
+            <h4 class="fw-300 mb-10">Members of the CanYa DAO are currently processing and verifying your application and will get back to you soon</h4>
+          </header>
+          <img src="assets/img/CanYa_tick.svg" class="img-responsiveness mt-10 animated bounceInUp" alt="Waiting for your application to process"
+            width="200">
         </div>
       </div>
     </div>
-  </div>
-  <div *ngIf="!account">
-    Has no account... so we can't check if you have been verified
-    <br/> Log in to MetaMask to check!
   </div>
 </div>

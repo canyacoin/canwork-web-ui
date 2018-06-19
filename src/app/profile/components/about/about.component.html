@@ -1,5 +1,5 @@
 <div *ngIf="userModel" class="card pricing-3" style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px;">
-  <span *ngIf="userModel.badge" class="popular-tag" style="background:#3cf; float:right; z-index: 111;">
+  <span *ngIf="userModel.badge" class="popular-tag" style="background:#3cf; float:right; z-index: 30;">
     {{ userModel.badge }}
   </span>
   <a *ngIf="isMyProfile" [routerLink]="['/profile/project']" data-toggle="tooltip" data-placement="top" title="Add Project"
