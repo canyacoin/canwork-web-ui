@@ -62,6 +62,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     this.navService.setHideSearchBar(false);
     if (this.routeSub) { this.routeSub.unsubscribe(); }
+    if (this.navSub) { this.navSub.unsubscribe(); }
     if (this.portfolioSub) { this.portfolioSub.unsubscribe(); }
   }
 
