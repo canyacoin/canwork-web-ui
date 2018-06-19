@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import { EthService, Web3LoadingStatus } from '../core-services/eth.service';
+import { EthService, WalletType, Web3LoadingStatus } from '../core-services/eth.service';
 import { ScriptService } from '../core-services/script.service';
 
 @Component({
@@ -14,6 +14,7 @@ export class ExchangeComponent implements AfterViewInit, OnDestroy {
 
   web3LoadingStatus = Web3LoadingStatus;
   web3State: Web3LoadingStatus = Web3LoadingStatus.loading;
+  walletType: WalletType;
   account: string;
   balance = '0';
 
@@ -31,6 +32,7 @@ export class ExchangeComponent implements AfterViewInit, OnDestroy {
       console.log('Terminal: Web3Status: ' + status);
 
       this.web3State = status;
+      this.walletType = this.ethService.walletType;
       if (status === Web3LoadingStatus.complete) {
         this.scriptService.loadScript('bancor').then(res => {
           this.scriptService.loadScript('bancor-config');

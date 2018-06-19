@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { environment } from '../../../../environments/environment';
 import { User, UserState, UserType } from '../../../core-classes/user';
-import { EthService, Web3LoadingStatus } from '../../../core-services/eth.service';
+import { EthService, WalletType, Web3LoadingStatus } from '../../../core-services/eth.service';
 import { UserService } from '../../../core-services/user.service';
 
 @Component({
@@ -16,8 +16,10 @@ export class ProviderStateComponent implements OnInit, OnDestroy {
 
   @Input() currentUser: User;
 
-  state: Web3LoadingStatus;
+  web3LoadingStatus = Web3LoadingStatus;
+  web3State: Web3LoadingStatus;
   account: string;
+  walletType: WalletType;
 
   loading = true;
   hasSubmittedTypeForm = false;
@@ -32,8 +34,9 @@ export class ProviderStateComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.ethSub = this.ethService.web3Status$.subscribe((state: Web3LoadingStatus) => {
-      this.state = state;
-      if (this.state !== Web3LoadingStatus.loading) {
+      this.web3State = state;
+      if (this.web3State !== Web3LoadingStatus.loading) {
+        this.walletType = this.ethService.walletType;
         this.accSub = this.ethService.account$.subscribe(async (acc: string) => {
           this.loading = true;
           this.account = acc;
@@ -46,6 +49,10 @@ export class ProviderStateComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.ethSub) { this.ethSub.unsubscribe(); }
     if (this.accSub) { this.accSub.unsubscribe(); }
+  }
+
+  goToForm() {
+    window.location.href = 'https://canyacoin.typeform.com/to/r2Bfb0';
   }
 
   async updateFormSubmissionStatus(acc: string) {
@@ -65,6 +72,10 @@ export class ProviderStateComponent implements OnInit, OnDestroy {
           this.loading = false;
         } else {
           this.userService.updateUserProperty(this.currentUser, 'ethAddress', acc);
+          const badge = await this.ethService.getProviderBadge(acc);
+          if (badge && badge !== '') {
+            this.userService.updateUserProperty(this.currentUser, 'badge', badge);
+          }
           this.loading = false;
         }
       } else { this.loading = false; }

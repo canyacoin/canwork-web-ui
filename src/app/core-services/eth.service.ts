@@ -13,25 +13,32 @@ declare var web3;
 const canyaAbi = require('assets/abi/canyaABI.json');
 const daoAbi = require('assets/abi/daoABI.json');
 
+
+export enum WalletType {
+  metaMask = 'MetaMask',
+  trust = 'Trust'
+}
+
 export enum Web3LoadingStatus {
   loading = 'Wallet loading is in progress',
-  noMetaMask = 'MetaMask is not connected.',
-  noAccountsAvailable = 'MetaMask is locked or there are no accounts available.',
-  wrongNetwork = 'Your MetaMask is connected to the wrong Network.',
-  error = 'Something went wrong when connecting to your MetMask wallet',
-  complete = 'Successfully connected to your MetaMask wallet'
+  noMetaMask = 'Wallet is not connected.',
+  noAccountsAvailable = 'Your wallet is locked or there are no accounts available.',
+  wrongNetwork = 'Your wallet is connected to the wrong Network.',
+  error = 'Something went wrong when connecting to your wallet',
+  complete = 'Successfully connected to your wallet'
 }
 
 @Injectable()
 export class EthService implements OnDestroy {
 
-  isMainNet: boolean;
-  isMetaMask: boolean;
   web3js: any;
   accountInterval: any;
 
   canyaContract: any = null;
   daoContract: any = null;
+
+  isMainNet: boolean;
+  walletType: WalletType;
 
   public web3Status = new BehaviorSubject<Web3LoadingStatus>(Web3LoadingStatus.loading);
   public web3Status$ = this.web3Status.asObservable();
@@ -42,7 +49,7 @@ export class EthService implements OnDestroy {
   constructor() {
     if (typeof web3 !== 'undefined') {
       this.web3js = new Web3(web3.currentProvider);
-      this.isMetaMask = true;
+      this.setWalletType();
       try {
         this.web3js.eth.net.getId().then((id: number) => {
           console.log('Web3Service: Network retrieved: ID= ' + id);
@@ -87,7 +94,17 @@ export class EthService implements OnDestroy {
     clearInterval(this.accountInterval);
   }
 
-  checkAccountMetaMask() {
+  private setWalletType() {
+    if (this.web3js.currentProvider.isMetaMask) {
+      this.walletType = WalletType.metaMask;
+    } else if (this.web3js.currentProvider.isTrust) {
+      this.walletType = WalletType.trust;
+    } else {
+      this.walletType = null;
+    }
+  }
+
+  private checkAccountMetaMask() {
     this.web3js.eth.getAccounts().then((accs: string[]) => {
       console.log('Web3Service: loadedaccounts: ' + JSON.stringify(accs));
       if (accs[0] !== this.account.value) {
@@ -119,6 +136,14 @@ export class EthService implements OnDestroy {
   async providerHasBeenAccepted(addr: string): Promise<boolean> {
     const isProvider = await this.daoContract.methods.isProvider(addr).call();
     return Promise.resolve(isProvider);
+  }
+
+  async getProviderBadge(addr: string): Promise<string> {
+    const badge = await this.daoContract.methods.getProviderBadge(addr).call();
+    if (this.web3js.utils.isHex(badge)) {
+      return Promise.resolve(this.web3js.utils.hexToAscii(badge));
+    }
+    return Promise.resolve(null);
   }
 
   async providerHasBeenRejected(addr: string): Promise<boolean> {
