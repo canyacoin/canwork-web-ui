@@ -24,10 +24,10 @@
                               <h3 *ngIf="provider && provider.title">{{ provider.title }}</h3>
                               <p *ngIf="provider && provider.bio">{{ provider.bio }}</p>
                             </div>
-                            <div class="row d-flex justify-content-center">
+                            <div class="row d-flex tag-row justify-content-center">
                               <app-skill-tag *ngFor="let tag of getProviderTags(provider)" [skill]="tag"></app-skill-tag>
                             </div>
-                            <div class="row">
+                            <div class="row hourly-rate">
                               <span *ngIf="provider.hourlyRate">
                                 <b>${{provider.hourlyRate}}</b>/hr
                                 <span *ngIf="canToUsd">
