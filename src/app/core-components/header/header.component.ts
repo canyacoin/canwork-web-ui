@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { User } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
+import { NavService } from '../../core-services/nav.service';
 
 @Component({
   selector: 'app-header',
@@ -29,15 +30,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   @Input() allowFilters = false;
   showFilters = false;
+  hideSearchBar: boolean;
 
   hasUnreadMessages = false;
   messagesSubscription: Subscription;
   routerSub: Subscription;
   authSub: Subscription;
+  navSub: Subscription;
 
   providerCategories = ['Content Creators', 'Designers & Creatives', 'Financial experts', 'Marketing & SEO', 'Software developers', 'Virtual assistants'];
 
   constructor(private afs: AngularFirestore,
+    private navService: NavService,
     private authService: AuthService,
     private router: Router) {
   }
@@ -48,6 +52,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.initUser();
         this.currentUser = user;
       }
+    });
+    this.navSub = this.navService.hideSearchBar$.subscribe((hide: boolean) => {
+      this.hideSearchBar = hide;
     });
   }
 
