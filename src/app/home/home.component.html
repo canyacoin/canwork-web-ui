@@ -1,15 +1,15 @@
 <main class="main-content">
   <section class="section bg-gray py-20" id="section-main">
     <div class="container">
-
-      <div class="row">
+      <div class="row search-container text-center">
         <div class="col-12">
           <ais-instantsearch [config]="algoliaSearchConfig">
-            <ais-search-box (change)="algoliaSearchChanged($event)"></ais-search-box>
+            <h4>CanYa tell us what you're looking for?</h4>
+            <ais-search-box class="search-box" (change)="algoliaSearchChanged($event)"></ais-search-box>
             <div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center">
               <img src="assets/img/loader.svg" height="36px" alt="Loader">
             </div>
-            <div class="row">
+            <div class="row search-results">
               <div class="col-md-12">
                 <ais-hits>
                   <ng-template let-hits="hits">
