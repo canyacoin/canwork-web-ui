@@ -4,32 +4,41 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 
-import { canyaContractAddress } from '../core-config/contracts';
+import { canyaContractAddress, daoContractAddress } from '../core-config/contracts';
 
 declare let require: any;
 const Web3 = require('web3');
 declare var web3;
 
 const canyaAbi = require('assets/abi/canyaABI.json');
+const daoAbi = require('assets/abi/daoABI.json');
+
+
+export enum WalletType {
+  metaMask = 'MetaMask',
+  trust = 'Trust'
+}
 
 export enum Web3LoadingStatus {
   loading = 'Wallet loading is in progress',
-  noMetaMask = 'MetaMask is not connected.',
-  noAccountsAvailable = 'MetaMask is locked or there are no accounts available.',
-  wrongNetwork = 'Your MetaMask is connected to the wrong Network.',
-  error = 'Something went wrong when connecting to your MetMask wallet',
-  complete = 'Successfully connected to your MetaMask wallet'
+  noMetaMask = 'Wallet is not connected.',
+  noAccountsAvailable = 'Your wallet is locked or there are no accounts available.',
+  wrongNetwork = 'Your wallet is connected to the wrong Network.',
+  error = 'Something went wrong when connecting to your wallet',
+  complete = 'Successfully connected to your wallet'
 }
 
 @Injectable()
 export class EthService implements OnDestroy {
 
-  isMainNet: boolean;
-  isMetaMask: boolean;
   web3js: any;
   accountInterval: any;
 
   canyaContract: any = null;
+  daoContract: any = null;
+
+  isMainNet: boolean;
+  walletType: WalletType;
 
   public web3Status = new BehaviorSubject<Web3LoadingStatus>(Web3LoadingStatus.loading);
   public web3Status$ = this.web3Status.asObservable();
@@ -40,13 +49,15 @@ export class EthService implements OnDestroy {
   constructor() {
     if (typeof web3 !== 'undefined') {
       this.web3js = new Web3(web3.currentProvider);
-      this.isMetaMask = true;
+      this.setWalletType();
       try {
         this.web3js.eth.net.getId().then((id: number) => {
           console.log('Web3Service: Network retrieved: ID= ' + id);
           switch (id) {
             case 1:
               this.isMainNet = true;
+              this.canyaContract = new this.web3js.eth.Contract(canyaAbi, canyaContractAddress);
+              this.daoContract = new this.web3js.eth.Contract(daoAbi, daoContractAddress);
               console.log('Web3Service: Is MainNet');
               this.web3js.eth.getAccounts().then((accs: string[]) => {
                 console.log('Web3Service: Got accounts: ' + JSON.stringify(accs));
@@ -59,9 +70,8 @@ export class EthService implements OnDestroy {
                 }
                 this.accountInterval = setInterval(() => {
                   this.checkAccountMetaMask();
-                }, 500);
+                }, 5000);
               });
-              this.canyaContract = new this.web3js.eth.Contract(canyaAbi, canyaContractAddress);
               return;
             default:
               this.isMainNet = false;
@@ -84,7 +94,17 @@ export class EthService implements OnDestroy {
     clearInterval(this.accountInterval);
   }
 
-  checkAccountMetaMask() {
+  private setWalletType() {
+    if (this.web3js.currentProvider.isMetaMask) {
+      this.walletType = WalletType.metaMask;
+    } else if (this.web3js.currentProvider.isTrust) {
+      this.walletType = WalletType.trust;
+    } else {
+      this.walletType = null;
+    }
+  }
+
+  private checkAccountMetaMask() {
     this.web3js.eth.getAccounts().then((accs: string[]) => {
       console.log('Web3Service: loadedaccounts: ' + JSON.stringify(accs));
       if (accs[0] !== this.account.value) {
@@ -111,6 +131,24 @@ export class EthService implements OnDestroy {
       return Promise.resolve(tokens);
     }
     return Promise.reject(null);
+  }
+
+  async providerHasBeenAccepted(addr: string): Promise<boolean> {
+    const isProvider = await this.daoContract.methods.isProvider(addr).call();
+    return Promise.resolve(isProvider);
+  }
+
+  async getProviderBadge(addr: string): Promise<string> {
+    const badge = await this.daoContract.methods.getProviderBadge(addr).call();
+    if (this.web3js.utils.isHex(badge)) {
+      return Promise.resolve(this.web3js.utils.hexToAscii(badge));
+    }
+    return Promise.resolve(null);
+  }
+
+  async providerHasBeenRejected(addr: string): Promise<boolean> {
+    const isRejected = await this.daoContract.methods.isRejected(addr).call();
+    return Promise.resolve(isRejected);
   }
 
   async getCanYaBalance(): Promise<string> {

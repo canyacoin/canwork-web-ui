@@ -62,8 +62,16 @@ export class SetupComponent implements OnInit, OnDestroy {
     if (this.authSub) { this.authSub.unsubscribe(); }
   }
 
-  hasChosenType(): boolean {
-    return this.currentUser.type === UserType.client || this.currentUser.type === UserType.provider;
+  isClient(): boolean {
+    return this.currentUser.type === UserType.client;
+  }
+
+  isProvider(): boolean {
+    return this.currentUser.type === UserType.provider;
+  }
+
+  isVerified(): boolean {
+    return this.currentUser.whitelisted === true;
   }
 
   setUserType(type: UserType) {
