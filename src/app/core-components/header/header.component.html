@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="topbar-right">
-      <ul class="topbar-nav nav">
+      <ul class="topbar-nav nav lh-14">
         <li class="nav-item">
           <a class="nav-link" [routerLink]="['/home']" data-scrollto="section-home">Home</a>
         </li>
@@ -37,24 +37,23 @@
           </a>
           <span *ngIf="hasUnreadMessages" class="badge badge-round badge-danger"></span>
         </li>
-        <li *ngIf="currentUser" class="nav-item">
-          <a class="nav-link" [routerLink]="['/profile']">Profile</a>
+        <li *ngIf="currentUser" class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img [src]="currentUser.avatar.uri || 'assets/img/placeholder.png'" class="avatar" alt="CanYa">
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" href="#" [routerLink]="['/profile']">Profile</a>
+            <a class="dropdown-item" href="#" [routerLink]="['/profile/edit']">Edit Profile</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item text-danger" href="#" data-toggle="modal" data-target="#areYouSureLogoutModal">Logout</a>
+          </div>
+        </li>
+        <li *ngIf="!currentUser" class="nav-item">
+          <a class="btn btn-canya-tools btn-sm text-white hidden-sm-down" [routerLink]="['/auth']">
+            Join
+          </a>
         </li>
       </ul>
-      &nbsp;&nbsp;
-
-      <a *ngIf="!currentUser" [routerLink]="['/auth']" class="btn btn-canya-tools btn-sm text-white hidden-sm-down">
-        Join
-      </a>
-
-      <div *ngIf="currentUser" class="btn-group">
-        <a [routerLink]="['/console']" class="nav-link icon-bot hidden-lg-down">
-        </a>
-
-        &nbsp;&nbsp;&nbsp;&nbsp;
-
-        <a href="" data-toggle="modal" data-target="#areYouSureLogoutModal" class="nav-link icon-sign-out hidden-lg-down"></a>
-      </div>
     </div>
   </div>
 </nav>

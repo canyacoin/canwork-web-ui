@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { BrandComponent } from './core-components/brand/brand.component';
-import { ConsoleComponent } from './core-components/console/console.component';
 import { ToolsComponent } from './core-components/tools/tools.component';
 import { AuthGuard } from './core-utils/auth.guard';
 import { UserIsSetupGuard } from './core-utils/user-is-setup.guard';
@@ -52,12 +51,6 @@ import { UserIsSetupGuard } from './core-utils/user-is-setup.guard';
       {
         path: 'brand',
         component: BrandComponent
-      },
-      {
-        path: 'console',
-        component: ConsoleComponent,
-        canActivate: [AuthGuard],
-        data: { requiresLoggedIn: true }
       },
       {
         path: '**',

@@ -9,9 +9,6 @@ import { BackButtonComponent } from './back-button/back-button.component';
 import { BlogPostsComponent } from './blog-posts/blog-posts.component';
 import { BotComponent } from './bot/bot.component';
 import { BrandComponent } from './brand/brand.component';
-import { ConsoleComponent } from './console/console.component';
-import { FaqComponent } from './wallet-install/faq/faq.component';
-import { InstructionsComponent } from './wallet-install/instructions/instructions.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
@@ -21,6 +18,8 @@ import {
 import { ScrollTopComponent } from './scroll-top/scroll-top.component';
 import { SkillTagComponent } from './skill-tag/skill-tag.component';
 import { ToolsComponent } from './tools/tools.component';
+import { FaqComponent } from './wallet-install/faq/faq.component';
+import { InstructionsComponent } from './wallet-install/instructions/instructions.component';
 import { WalletInstallComponent } from './wallet-install/wallet-install.component';
 
 @NgModule({
@@ -37,7 +36,6 @@ import { WalletInstallComponent } from './wallet-install/wallet-install.componen
     BotComponent,
     BlogPostsComponent,
     BrandComponent,
-    ConsoleComponent,
     FaqComponent,
     FeedbackComponent,
     FooterComponent,
