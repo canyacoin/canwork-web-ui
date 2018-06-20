@@ -80,7 +80,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     const allTags: string[] = union(provider.skillTags === undefined ? [] : provider.skillTags, provider.workSkillTags === undefined ? [] : provider.workSkillTags);
     if (allTags.length > 6) {
       const moreSymbol = ('+ ' + (allTags.length - 6) + ' more');
-      const arr = allTags.slice(0, 5);
+      const arr = allTags.slice(0, 6);
       return arr.concat([moreSymbol]);
     }
     return allTags;

@@ -87,7 +87,10 @@ export class EditComponent implements OnInit, OnDestroy {
       category = 'VIRTUAL ASSISTANTS';
     }
 
-    const tags = this.profileForm.value.skillTags === '' ? [] : this.profileForm.value.skillTags.split(',').map(item => item.trim());
+    let tags: string[] = this.profileForm.value.skillTags === '' ? [] : this.profileForm.value.skillTags.split(',').map(item => item.trim());
+    if (tags.length > 6) {
+      tags = tags.slice(0, 6);
+    }
     const tmpUser = {
       address: this.currentUser.address,
       name: this.profileForm.value.name,

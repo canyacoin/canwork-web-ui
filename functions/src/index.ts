@@ -171,6 +171,7 @@ exports.seedProviders = functions.https.onRequest(async (request, response) => {
         '@type': 'Person',
         'type': 'Provider',
         address: newUser.uid,
+        badge: getRandomBadge(),
         name: newUser.displayName,
         email: newUser.email,
         work: newUser.email,
@@ -186,7 +187,7 @@ exports.seedProviders = functions.https.onRequest(async (request, response) => {
         title: chance.profession(),
         timezone: chance.timezone().utc[0],
         state: 'Done',
-        skillTags: getTags().slice(0, randomIntFromInterval(0, getTags().length)),
+        skillTags: getRandomTags(6),
         testUser: true
       };
       console.log('+ add user record: ', userRecord);
@@ -207,7 +208,7 @@ exports.seedProviders = functions.https.onRequest(async (request, response) => {
         link: chance.url({ protocol: 'https' }),
         state: 'Done',
         timestamp: chance.timestamp(),
-        tags: getTags().slice(0, randomIntFromInterval(0, getTags().length))
+        tags: getRandomTags(6)
       }
       try {
         await db.collection('portfolio').doc(newUser.uid).collection('work').add(work);
@@ -245,6 +246,31 @@ exports.seedSkillTagsData = functions.https.onRequest(async (request, response) 
 
 function randomIntFromInterval(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function getRandomBadge(): string {
+  const arr = ['Pioneer', 'Ambassador', ''];
+  return arr[Math.floor(Math.random() * 3)];
+}
+
+function getRandomTags(max: number): string[] {
+  let array = getTags();
+  let currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array.slice(0, randomIntFromInterval(0, max));
 }
 
 // Later we can get these direct from a google spreadsheet or something central
