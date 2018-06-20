@@ -19,6 +19,13 @@ export enum WalletType {
   trust = 'Trust'
 }
 
+export enum NetworkType {
+  main = 'Mainnet',
+  ropsten = 'Ropsten',
+  rinkeby = 'Rinkeby',
+  unknown = 'Unknown'
+}
+
 export enum Web3LoadingStatus {
   loading = 'Wallet loading is in progress',
   noMetaMask = 'Wallet is not connected.',
@@ -37,7 +44,7 @@ export class EthService implements OnDestroy {
   canyaContract: any = null;
   daoContract: any = null;
 
-  isMainNet: boolean;
+  netType: NetworkType;
   walletType: WalletType;
 
   public web3Status = new BehaviorSubject<Web3LoadingStatus>(Web3LoadingStatus.loading);
@@ -55,7 +62,7 @@ export class EthService implements OnDestroy {
           console.log('Web3Service: Network retrieved: ID= ' + id);
           switch (id) {
             case 1:
-              this.isMainNet = true;
+              this.netType = NetworkType.main;
               this.canyaContract = new this.web3js.eth.Contract(canyaAbi, canyaContractAddress);
               this.daoContract = new this.web3js.eth.Contract(daoAbi, daoContractAddress);
               console.log('Web3Service: Is MainNet');
@@ -73,8 +80,16 @@ export class EthService implements OnDestroy {
                 }, 5000);
               });
               return;
+            case 3:
+              this.netType = NetworkType.ropsten;
+              this.web3Status.next(Web3LoadingStatus.wrongNetwork);
+              return;
+            case 4:
+              this.netType = NetworkType.rinkeby;
+              this.web3Status.next(Web3LoadingStatus.wrongNetwork);
+              return;
             default:
-              this.isMainNet = false;
+              this.netType = NetworkType.unknown;
               console.log('Web3Service: Is Not MainNet');
               this.web3Status.next(Web3LoadingStatus.wrongNetwork);
               return;
