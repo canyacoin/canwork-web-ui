@@ -1,15 +1,15 @@
 language: node_js
 node_js:
-- 9.1.0
+  - 9.1.0
 script:
-- npm install -g npm@6.1.0
-- npm install -g tslint typescript
-- npm install
-- cd functions/ && npm install; cd ../
+  - npm install -g npm@6.1.0
+  - npm install -g tslint typescript
+  - npm install
+  - cd functions/ && npm install; cd ../
 before_install:
-- openssl aes-256-cbc -K $encrypted_8c257a2d09b0_key -iv $encrypted_8c257a2d09b0_iv -in src/environments/environment.staging.ts.enc -out src/environments/environment.staging.ts -d
+  - openssl aes-256-cbc -K $encrypted_8c257a2d09b0_key -iv $encrypted_8c257a2d09b0_iv -in src/environments/environment.staging.ts.enc -out src/environments/environment.staging.ts -d
 install:
-- npm install -g firebase-tools
+  - npm install -g firebase-tools
 after_success:
   - firebase use staging
   - firebase functions:config:set algolia.appid=$ALGOLIA_APPID
