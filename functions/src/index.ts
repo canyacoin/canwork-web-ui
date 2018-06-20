@@ -40,7 +40,7 @@ exports.indexProviderData = functions.firestore
     const data = snap.data();
     const objectId = snap.id;
 
-    if (shouldSkipIndexing(data.type))
+    if (shouldSkipIndexing(data))
       return;
 
     const workData = buildWorkData(objectId);
@@ -68,7 +68,7 @@ exports.updateIndexProviderData = functions.firestore
     await algoliaSearchIndex.deleteObject(objectId);
     console.log('+ deleted...', objectId);
 
-    if (shouldSkipIndexing(data.type))
+    if (shouldSkipIndexing(data))
       return;
 
     const workData = buildWorkData(objectId);
@@ -117,8 +117,8 @@ exports.removeIndexProviderData = functions.firestore
 /*
  * Make sure this user record belongs to a provider
  */
-function shouldSkipIndexing(userType: string) {
-  return (userType === undefined || userType.toLowerCase() !== 'provider');
+function shouldSkipIndexing(user: any) {
+  return (user === undefined || user.type.toLowerCase() !== 'provider' || user.state !== 'Done');
 }
 
 /*
