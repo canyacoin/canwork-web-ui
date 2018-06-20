@@ -40,7 +40,7 @@ exports.indexProviderData = functions.firestore
     const data = snap.data();
     const objectId = snap.id;
 
-    if (shouldSkipIndexing(data.type))
+    if (shouldSkipIndexing(data))
       return;
 
     const workData = buildWorkData(objectId);
@@ -68,7 +68,7 @@ exports.updateIndexProviderData = functions.firestore
     await algoliaSearchIndex.deleteObject(objectId);
     console.log('+ deleted...', objectId);
 
-    if (shouldSkipIndexing(data.type))
+    if (shouldSkipIndexing(data))
       return;
 
     const workData = buildWorkData(objectId);
@@ -117,8 +117,8 @@ exports.removeIndexProviderData = functions.firestore
 /*
  * Make sure this user record belongs to a provider
  */
-function shouldSkipIndexing(userType: string) {
-  return (userType === undefined || userType.toLowerCase() !== 'provider');
+function shouldSkipIndexing(user: any) {
+  return (user === undefined || user.type.toLowerCase() !== 'provider' || user.state !== 'Done');
 }
 
 /*
@@ -171,6 +171,7 @@ exports.seedProviders = functions.https.onRequest(async (request, response) => {
         '@type': 'Person',
         'type': 'Provider',
         address: newUser.uid,
+        badge: getRandomBadge(),
         name: newUser.displayName,
         email: newUser.email,
         work: newUser.email,
@@ -186,7 +187,7 @@ exports.seedProviders = functions.https.onRequest(async (request, response) => {
         title: chance.profession(),
         timezone: chance.timezone().utc[0],
         state: 'Done',
-        skillTags: getTags().slice(0, randomIntFromInterval(0, getTags().length)),
+        skillTags: getRandomTags(6),
         testUser: true
       };
       console.log('+ add user record: ', userRecord);
@@ -207,7 +208,7 @@ exports.seedProviders = functions.https.onRequest(async (request, response) => {
         link: chance.url({ protocol: 'https' }),
         state: 'Done',
         timestamp: chance.timestamp(),
-        tags: getTags().slice(0, randomIntFromInterval(0, getTags().length))
+        tags: getRandomTags(6)
       }
       try {
         await db.collection('portfolio').doc(newUser.uid).collection('work').add(work);
@@ -245,6 +246,31 @@ exports.seedSkillTagsData = functions.https.onRequest(async (request, response) 
 
 function randomIntFromInterval(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function getRandomBadge(): string {
+  const arr = ['Pioneer', 'Ambassador', ''];
+  return arr[Math.floor(Math.random() * 3)];
+}
+
+function getRandomTags(max: number): string[] {
+  let array = getTags();
+  let currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array.slice(0, randomIntFromInterval(0, max));
 }
 
 // Later we can get these direct from a google spreadsheet or something central
