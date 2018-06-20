@@ -21,6 +21,7 @@ import { ToolsComponent } from './tools/tools.component';
 import { FaqComponent } from './wallet-install/faq/faq.component';
 import { InstructionsComponent } from './wallet-install/instructions/instructions.component';
 import { WalletInstallComponent } from './wallet-install/wallet-install.component';
+import { WindowScrollDirective } from './window-scroll.directive';
 
 @NgModule({
   imports: [
@@ -47,6 +48,7 @@ import { WalletInstallComponent } from './wallet-install/wallet-install.componen
     ToolsComponent,
     BackButtonComponent,
     WalletInstallComponent,
+    WindowScrollDirective,
   ],
   exports: [
     BackButtonComponent,
@@ -57,7 +59,8 @@ import { WalletInstallComponent } from './wallet-install/wallet-install.componen
     HeaderComponent,
     ScrollTopComponent,
     SkillTagComponent,
-    WalletInstallComponent
+    WalletInstallComponent,
+    WindowScrollDirective
   ]
 })
 export class CoreComponentsModule { }

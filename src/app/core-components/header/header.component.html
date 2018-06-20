@@ -4,7 +4,7 @@
       <a class="topbar-brand" [routerLink]="['/home']">
         <img class="logo-default" src="assets/img/logo.svg" width="auto" height="36px" alt="logo">
       </a>
-      <div [ngClass]="{'bounceInDown': !hideSearchBar, 'bounceOutUp': hideSearchBar}" class="search-container mx-40 hidden-sm-down animated">
+      <div *ngIf="!hideSearchBar" class="search-container mx-40 hidden-sm-down animated">
         <form class="form-inline justify-content-center justify-content-lg-end" method="post" (ngSubmit)="onSubmit(inputSearch.value);">
           <div class="input-group">
             <input #inputSearch (keyup)="onKeyUp(inputSearch.value);" (focus)="onFocus(inputSearch.value);" (blur)="onBlur(inputSearch.value);"
