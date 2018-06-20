@@ -1,8 +1,8 @@
 <div *ngIf="workItem" class="left-content">
   <div class="row">
     <div class="col-md-6">
-      <a [href]="workItem.image || '//canya-tests.firebaseapp.com/assets/img/work-placeholder.svg'" class="mt-30" data-provide="lightbox">
-        <img [src]="workItem.image" [src-fallback]="defaultImage" alt="CanYa - Portfolio" class="card-img-left thumbnail">
+      <a [href]="workItem.image || '//canya-tests.firebaseapp.com/assets/img/work-placeholder.svg'" class="mt-30" data-provide="lightbox">  
+        <img class="portfolio-item" [src]="workItem.image" [src-fallback]="defaultImage" alt="CanYa - Portfolio" class="card-img-left thumbnail"> 
       </a>
     </div>
     <div class="col-md-6">
