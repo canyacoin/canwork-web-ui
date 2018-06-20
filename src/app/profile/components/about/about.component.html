@@ -18,7 +18,7 @@
         <h2 *ngIf="userModel.name">{{ userModel.name }}</h2>
         <h3 *ngIf="userModel.title">{{ userModel.title }}</h3>
         <p class="fw-400" *ngIf="userModel.bio">{{ userModel.bio }}</p>
-        <div class="row">
+        <div class="row tag-row">
           <app-skill-tag *ngFor="let tag of userModel.skillTags" [skill]="tag"></app-skill-tag>
         </div>
         <button *ngIf="!isMyProfile" (click)="proposeJob()" class="btn btn-primary btn-canya-chat" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }"
