@@ -47,7 +47,12 @@ And get your values for 'Application ID' and 'Admin API Key' to use in firebase 
 
 ```
 cd functions/
-firebase functions:config:set algolia.appid="UMAFX8JMPW" algolia.apikey="0a791357564f5d9ba99935170fac4f22" algolia.providerindex="localdev_provider_index"
+firebase functions:config:set \
+algolia.appid="UMAFX8JMPW" \
+algolia.apikey="XXXXX" \
+algolia.providerindex="localdev_provider_index" \
+sendgrid.apikey="XXXXX"
+
 firebase deploy --only functions
 ```
 
