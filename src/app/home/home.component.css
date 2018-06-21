@@ -27,7 +27,7 @@
 }
 
 .tag-row {
-  padding: 10px;
+  padding: 20px;
 }
 
 .profile {
@@ -103,7 +103,11 @@
 .provider-card:hover {
   box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.1);
 }
-
+@media (max-width:520px){
+    .tag-row {
+        padding: 25px;
+    }
+}
 /* /////////////////////////////////////////////////////////////////////////// */
 
 .specialcard-holder {
