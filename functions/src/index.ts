@@ -61,6 +61,9 @@ exports.indexProviderData = functions.firestore
       await db.collection('users').doc(objectId).set({ welcomeEmailSent: true });
     }
 
+    if (shouldSkipIndexing(data))
+      return;
+
     return algoliaSearchIndex.addObject({
       objectID: objectId,
       ...data,
