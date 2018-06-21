@@ -95,3 +95,8 @@ a.canya-login {
 .btn-search:hover {
   opacity: 0.8;
 }
+.topbar-toggler{
+    padding-top:2rem;
+    color: #535353;
+    font-size: 1.5rem;
+}
