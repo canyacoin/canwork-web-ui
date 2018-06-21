@@ -16,7 +16,11 @@
                     <div class="row">
                       <div *ngFor="let provider of hits" class="col-lg-4 card-deck">
                         <div class="card provider-card text-center my-15 pointer" [routerLink]="['/profile/alt', provider.address]">
-                          <span *ngIf="provider && provider.badge" class="popular-tag" style="background:#3cf; float:right;">{{ provider.badge }}</span>
+                          <div class="popular-tag" style="background:white; color: #33ccff;padding-top:5px;min-height: 35px; float:right;">
+                            <span *ngIf="provider && provider.badge">
+                              {{ provider.badge }}
+                            </span>
+                          </div>
                           <div class="profile">
                             <img *ngIf="provider && (provider.avatar && provider.avatar.uri)" class="headshot" src="{{ provider.avatar.uri }}" alt="">
                             <div class="title">
