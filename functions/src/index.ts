@@ -1,3 +1,5 @@
+import * as algoliasearch from 'algoliasearch';
+
 /*
  * Firebase functions to maintain a full text search on Algolia
  * for users who are of type 'Provider' only
@@ -11,8 +13,6 @@
  * 4) These functions are deployed
  *
  */
-import * as algoliasearch from 'algoliasearch';
-
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
@@ -29,21 +29,37 @@ const env = functions.config();
 const algoliaClient = algoliasearch(env.algolia.appid, env.algolia.apikey);
 const algoliaSearchIndex = algoliaClient.initIndex(env.algolia.providerindex);
 
+const sendgridApiKey = env.sendgrid.apikey;
+
 const chance = new Chance();
 
 /*
  * Listen for user creations and created an associated algolia record
+ * Also send a welcome email, and flag their user object: welcomeEmailSent: true
  */
 exports.indexProviderData = functions.firestore
   .document('users/{userId}')
-  .onCreate((snap, context) => {
+  .onCreate(async (snap, context) => {
     const data = snap.data();
     const objectId = snap.id;
 
-    if (shouldSkipIndexing(data))
-      return;
-
     const workData = buildWorkData(objectId);
+
+    if (data.welcomeEmailSent && data.welcomeEmailSent === false && data.testUser !== true) {
+      console.log('+ sending a user email...');
+
+      const sgMail = require('@sendgrid/mail');
+      sgMail.setApiKey(env.sendgrid.apikey);
+      const msg = {
+        to: data.email,
+        from: 'no-reply@canya.com',
+        subject: 'Welcome to CanYa!',
+        text: 'the best block chain market place',
+        html: 'the <strong>best</strong> block chain market place!',
+      };
+      sgMail.send(msg)
+      await db.collection('users').doc(objectId).set({ welcomeEmailSent: true });
+    }
 
     return algoliaSearchIndex.addObject({
       objectID: objectId,
@@ -118,7 +134,11 @@ exports.removeIndexProviderData = functions.firestore
  * Make sure this user record belongs to a provider
  */
 function shouldSkipIndexing(user: any) {
-  return (user === undefined || user.type.toLowerCase() !== 'provider' || user.state !== 'Done');
+  if (user && user.type) {
+    return (user.type.toLowerCase() !== 'provider' || user.state !== 'Done');
+  } else {
+    return true;
+  }
 }
 
 /*
