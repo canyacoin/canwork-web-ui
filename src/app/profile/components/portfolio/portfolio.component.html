@@ -3,6 +3,9 @@
 </div>
 <div *ngIf="loaded">
   <div class="card" style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px;">
+
+    
+    
     <div id="page-wrap" class="pt-25">
       <div *ngIf="allPortfolioItems.length < 1">
         <div class="row flex-row">
@@ -35,12 +38,21 @@
         </div>
       </div>
       <div *ngIf="allPortfolioItems.length > 0">
-        <div class="card p-20">
+        <div class="card px-20" style="padding-bottom:10px;">
           <div class="row">
-            <div class="col-sm-10" id="about-card-title">
+            <div class="col-sm-10" id="portfolio-card-title">
               <span class="card-title">portfolio</span>
             </div>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-1">
+
+              <a *ngIf="isMyProfile" [routerLink]="['/profile/project']" style="color: #535353;" data-toggle="tooltip" data-placement="top" title="Add Project">
+                  <i class="ti-plus fw-600" aria-hidden="true"></i>
+              </a>
+
+            </div>
           </div>
+          <div class="row" style="height: 25px"></div>
           <div class="row animated {{animation}}">
             <div class="col-sm-12">
               <div *ngFor="let item of paginatedPortfolioItems();let i = index" class="">

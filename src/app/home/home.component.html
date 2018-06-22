@@ -28,6 +28,7 @@
                               <app-skill-tag *ngFor="let tag of getProviderTags(provider)" [skill]="tag"></app-skill-tag>
                             </div>
                             <div class="row hourly-rate">
+
                               <span *ngIf="provider.hourlyRate">
                                 <b>${{provider.hourlyRate}}</b>/hr
                                 <span *ngIf="canToUsd">
@@ -35,6 +36,7 @@
                                   <b>{{getUsdToCan(provider.hourlyRate)}}</b>/hr
                                 </span>
                               </span>
+                              
                             </div>
                           </div>
                         </div>

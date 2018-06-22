@@ -9,15 +9,20 @@
     </div>
     <div class="col-md-6">
       <div class="card">
-        <span class="card-subtitle" style="padding-top: 1em">
-          {{ workItem.title }}
-          <a *ngIf="isMyProfile" [routerLink]="['/profile/project/' + workItem.id]" data-toggle="tooltip" data-placement="top" title="Edit item"
-            class="btn btn-sm btn-circular btn-light icon-edit-work pl-1">
-            <i class="ti-pencil fw-600" aria-hidden="true"></i>
-          </a>
-        </span>
+        <div class="row" style="padding-top:15px">
+          <div class="col-md-10"> 
+          <span class="card-subtitle" style="padding-top: 1em">
+            <b>{{ workItem.title }}</b>
+          </span>
+          </div>
+          <div class="col-md-2"> <a *ngIf="isMyProfile" [routerLink]="['/profile/project/' + workItem.id]" data-toggle="tooltip" data-placement="top" title="Edit item"
+            style="color: #535353;" >
+              <i class="ti-pencil fw-600" aria-hidden="true"></i>
+            </a></div> 
+        </div>
         <div class="card-body">
-          <p *ngIf="workItem.description" class="card-text p-y-1">
+          <br>
+          <p *ngIf="workItem.description" class="fw-400" style="font-size: 12px;">
             {{ workItem.description }}
           </p>
           <div class="row">
