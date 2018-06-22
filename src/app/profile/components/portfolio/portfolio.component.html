@@ -9,8 +9,8 @@
           <div class="col-12">
             <div class="flexbox-container">
               <div *ngIf="isMyProfile && (userModel.type === 'Provider')">
-                <h3 class="fw-500">OMG! Your work is empty!</h3>
-                <h4 class="fw-400">Let's make a portfolio and post your work.</h4>
+                <h3 class="fw-500">You have not uploaded any portfolio items</h3>
+                <h4 class="fw-400">Let's add some!</h4>
                 <p class="text-center py-3">
                   <a class="btn btn-primary btn-add-work" [routerLink]="['/profile/project']" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">ADD WORK</a>
                 </p>
