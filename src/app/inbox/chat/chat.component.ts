@@ -284,7 +284,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onConfirmTransaction() {
-    this.ethService.payCAN('', this.modalData.budget).subscribe((receipt) => {
+    this.ethService.payCan('', this.modalData.budget).subscribe((receipt) => {
       this.postTransaction(null, receipt);
     });
   }

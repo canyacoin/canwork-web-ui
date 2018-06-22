@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
+import { User } from '../../../core-classes/user';
 import { EthService } from '../../../core-services/eth.service';
 
 @Component({
@@ -9,11 +10,12 @@ import { EthService } from '../../../core-services/eth.service';
 })
 export class SupportMeComponent implements OnInit {
 
-  @Input() userModel: any;
+  @Input() userModel: User;
 
   constructor(private ethService: EthService) { }
 
   ngOnInit() { }
+
 
   async onBuyACoffee() {
     await this.ethService.buyCoffee(this.userModel.ethAddress, 1);

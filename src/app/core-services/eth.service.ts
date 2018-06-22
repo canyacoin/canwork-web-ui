@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 
-import { canyaContractAddress, daoContractAddress } from '../core-config/contracts';
+import { environment } from '../../environments/environment';
 
 declare let require: any;
 const Web3 = require('web3');
@@ -12,7 +12,8 @@ declare var web3;
 
 const canyaAbi = require('assets/abi/canyaABI.json');
 const daoAbi = require('assets/abi/daoABI.json');
-
+const canDecimals = 6;
+const gas = { gasPrice: '8000000000', gas: '210000' };
 
 export enum WalletType {
   metaMask = 'MetaMask',
@@ -63,35 +64,19 @@ export class EthService implements OnDestroy {
           switch (id) {
             case 1:
               this.netType = NetworkType.main;
-              this.canyaContract = new this.web3js.eth.Contract(canyaAbi, canyaContractAddress);
-              this.daoContract = new this.web3js.eth.Contract(daoAbi, daoContractAddress);
-              console.log('Web3Service: Is MainNet');
-              this.web3js.eth.getAccounts().then((accs: string[]) => {
-                console.log('Web3Service: Got accounts: ' + JSON.stringify(accs));
-                if (accs[0]) {
-                  this.account.next(accs[0]);
-                  this.web3Status.next(Web3LoadingStatus.complete);
-                } else {
-                  this.account.next(accs[0]);
-                  this.web3Status.next(Web3LoadingStatus.noAccountsAvailable);
-                }
-                this.accountInterval = setInterval(() => {
-                  this.checkAccountMetaMask();
-                }, 5000);
-              });
+              this.setUpAccounts();
               return;
             case 3:
               this.netType = NetworkType.ropsten;
-              this.web3Status.next(Web3LoadingStatus.wrongNetwork);
+              this.setUpAccounts();
               return;
             case 4:
               this.netType = NetworkType.rinkeby;
-              this.web3Status.next(Web3LoadingStatus.wrongNetwork);
+              this.setUpAccounts();
               return;
             default:
               this.netType = NetworkType.unknown;
-              console.log('Web3Service: Is Not MainNet');
-              this.web3Status.next(Web3LoadingStatus.wrongNetwork);
+              this.setUpAccounts();
               return;
           }
         });
@@ -107,6 +92,30 @@ export class EthService implements OnDestroy {
 
   ngOnDestroy() {
     clearInterval(this.accountInterval);
+  }
+
+  private setUpAccounts() {
+    if ((environment.contracts.useTestNet && (this.netType === NetworkType.rinkeby || this.netType === NetworkType.ropsten || this.netType === NetworkType.unknown))
+      || (!environment.contracts.useTestNet && this.netType === NetworkType.main)) {
+      this.canyaContract = new this.web3js.eth.Contract(canyaAbi, environment.contracts.canYaCoin);
+      this.daoContract = new this.web3js.eth.Contract(daoAbi, environment.contracts.canYaDao);
+      console.log('Web3Service: Is MainNet');
+      this.web3js.eth.getAccounts().then((accs: string[]) => {
+        console.log('Web3Service: Got accounts: ' + JSON.stringify(accs));
+        if (accs[0]) {
+          this.account.next(accs[0]);
+          this.web3Status.next(Web3LoadingStatus.complete);
+        } else {
+          this.account.next(accs[0]);
+          this.web3Status.next(Web3LoadingStatus.noAccountsAvailable);
+        }
+        this.accountInterval = setInterval(() => {
+          this.checkAccountMetaMask();
+        }, 5000);
+      });
+    } else {
+      this.web3Status.next(Web3LoadingStatus.wrongNetwork);
+    }
   }
 
   private setWalletType() {
@@ -184,37 +193,23 @@ export class EthService implements OnDestroy {
     }) as Promise<string>;
   }
 
-  buyCoffee(addr: string, number: number) {
-    return new Promise((resolve, reject) => {
-      // const transaction = {
-      //   gasLimit: 48000,
-      //   gasPrice: '0x04e3b29200',
-      //   to: canyaContractAddress,
-      //   data: this.canyaContract.methods.transfer(toAddress, this.web3.utils.toWei(amount.toString(), 'ether')).encodeABI(),
-      //   value: '0x0'
-      // };
-
-      // this.web3.eth.sendTransaction(transaction).on('transactionHash', (hash) => {
-      //   console.log('EthService - hash', hash);
-      //   resolve(hash);
-      // }).on('receipt', (receipt) => {
-      //   console.log('EthService - receipt', receipt);
-      // }).on('confirmation', (confirmationNumber, receipt) => {
-      //   console.log('EthService - confirmationNumber', confirmationNumber, receipt);
-      // }).on('error', (error, receipt) => {
-      //   console.log('EthService - error', error, receipt);
-      //   reject(error);
-      // });
-      resolve();
-    }) as Promise<string>;
+  async buyCoffee(recipient: string, numberOfCan: number): Promise<boolean> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await this.canyaContract.methods.transfer(recipient, numberOfCan * (10 ** canDecimals)).send({ from: this.account.value, ...gas });
+        resolve(true);
+      } catch (error) {
+        reject(error);
+      }
+    }) as Promise<boolean>;
   }
 
-  payCAN(recipient: string, amount: number) {
+  payCan(recipient: string, amountInEth: number) {
     const transaction = {
       gasLimit: 48000,
       gasPrice: '0x04e3b29200',
-      to: canyaContractAddress,
-      data: this.canyaContract.methods.transfer(recipient, this.web3js.utils.toWei(amount.toString(), 'ether')).encodeABI(),
+      to: environment.contracts.canYaCoin,
+      data: this.canyaContract.methods.transfer(recipient, this.web3js.utils.toWei(amountInEth.toString(), 'ether')).encodeABI(),
       value: '0x0'
     };
     return Observable.fromPromise(this.web3js.eth.sendTransaction(transaction));
