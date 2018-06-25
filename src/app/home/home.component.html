@@ -3,12 +3,9 @@
     <div class="container">
       <div class="row search-container text-center">
         <div class="col-12">
-          <ais-instantsearch [config]="algoliaSearchConfig">
+          <ais-instantsearch [config]="algoliaSearchConfig" *ngIf="!rendering">
             <h4>CanYa tell us what you're looking for?</h4>
             <ais-search-box class="search-box" (change)="algoliaSearchChanged($event)"></ais-search-box>
-            <div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center">
-              <img src="assets/img/loader.svg" height="36px" alt="Loader">
-            </div>
             <div class="row search-results">
               <div class="col-md-12">
                 <ais-hits>
@@ -48,8 +45,10 @@
               </div>
             </div>
           </ais-instantsearch>
+          <div *ngIf="loading || rendering" class="container d-flex h-100 flex-column justify-content-center">
+            <img src="assets/img/loader.svg" height="36px" alt="Loader">
+          </div>
         </div>
-
       </div>
       <div class="row">
         <div class="col-12 my-0 py-0">
