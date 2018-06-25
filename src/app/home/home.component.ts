@@ -47,9 +47,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   async ngOnInit() {
     this.navService.setHideSearchBar(true);
-    const canToUsdResp = await this.http.get('https://min-api.cryptocompare.com/data/price?fsym=CAN&tsyms=AUD').toPromise();
+    const canToUsdResp = await this.http.get('https://api.coinmarketcap.com/v2/ticker/2343/?convert=AUD').toPromise();
     if (canToUsdResp.ok) {
-      this.canToUsd = JSON.parse(canToUsdResp.text())['AUD'];
+      this.canToUsd = JSON.parse(canToUsdResp.text())['data']['quotes']['AUD']['price'];
     }
   }
 
