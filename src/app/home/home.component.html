@@ -15,9 +15,10 @@
                   <ng-template let-hits="hits">
                     <div class="row">
                       <div *ngFor="let provider of hits" class="col-lg-4 card-deck">
-                        <a [routerLink] = "['/profile/alt', provider.address]">
-                      
+                   
                         <div class="card provider-card text-center my-15 pointer" [routerLink]="['/profile/alt', provider.address]">
+                          <a [routerLink] = "['/profile/alt', provider.address]">
+                      
                           <span *ngIf="provider && provider.badge" class="popular-tag" 
                           style="background:#3cf; float:right; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; min-height: 50px; font-size: 14px; text-align: center;">
                             {{ provider.badge }}
@@ -45,8 +46,8 @@
                               
                             </div>
                           </div>
+                        </a>
                         </div>
-                      </a>
                       </div>
                     </div>
                   </ng-template>
