@@ -1,5 +1,8 @@
 import * as algoliasearch from 'algoliasearch';
 
+import * as doT from 'dot';
+
+// import * as exphbs from 'express-handlebars';
 /*
  * Firebase functions to maintain a full text search on Algolia
  * for users who are of type 'Provider' only
@@ -17,7 +20,8 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
 const faker = require('faker');
-
+const fs = require('fs');
+const path = require('path');
 const Chance = require('chance');
 
 // Firebase connectivity
@@ -28,10 +32,35 @@ const env = functions.config();
 // Algolia client, see also: https://www.npmjs.com/package/algoliasearch
 const algoliaClient = algoliasearch(env.algolia.appid, env.algolia.apikey);
 const algoliaSearchIndex = algoliaClient.initIndex(env.algolia.providerindex);
-
 const sendgridApiKey = env.sendgrid.apikey;
-
 const chance = new Chance();
+
+const welcomeEmailTemplateHTML = doT.template(fs.readFileSync(path.join(__dirname, '../src/templates', 'email-welcome.html'), 'utf8'));
+
+exports.sendEmail = functions.https.onRequest(async (request, response) => {
+
+  const html = welcomeEmailTemplateHTML({ name: 'Cammo' });
+
+  const sgMail = require('@sendgrid/mail');
+  sgMail.setApiKey(sendgridApiKey);
+  const msg = {
+    to: 'cam.asoftware@gmail.com',
+    from: 'support@canya.com',
+    subject: 'Welcome to CANWork',
+    text: 'text version of content here',
+    html: html,
+  };
+  const r = await sgMail.send(msg);
+
+  return response.status(201)
+    .type('application/json')
+    .send({ r })
+});
+
+
+
+
+
 
 /*
  * Listen for user creations and created an associated algolia record
@@ -39,27 +68,30 @@ const chance = new Chance();
  */
 exports.indexProviderData = functions.firestore
   .document('users/{userId}')
-  .onCreate(async (snap, context) => {
-    const data = snap.data();
-    const objectId = snap.id;
+  .onWrite(async (snap, context) => {
+    const data = snap.after.data();
+    const objectId = snap.after.id;
 
     const workData = buildWorkData(objectId);
 
-    if (data.welcomeEmailSent && data.welcomeEmailSent === false && data.testUser !== true) {
-      console.log('+ sending a user email...');
+    // if (data.welcomeEmailSent && data.welcomeEmailSent === false && data.testUser !== true) {
+    console.log('+ sending a user email...');
 
-      const sgMail = require('@sendgrid/mail');
-      sgMail.setApiKey(env.sendgrid.apikey);
-      const msg = {
-        to: data.email,
-        from: 'no-reply@canya.com',
-        subject: 'Welcome to CanYa!',
-        text: 'the best block chain market place',
-        html: 'the <strong>best</strong> block chain market place!',
-      };
-      sgMail.send(msg)
-      await db.collection('users').doc(objectId).set({ welcomeEmailSent: true });
-    }
+    const html = welcomeEmailTemplateHTML({ name: data.name });
+
+    const sgMail = require('@sendgrid/mail');
+    sgMail.setApiKey(sendgridApiKey);
+    const msg = {
+      to: data.email,
+      from: 'support@canya.com',
+      subject: 'Welcome to CANWork',
+      text: 'text version of content here',
+      html: html,
+    };
+    const r = await sgMail.send(msg);
+    console.log('+ email response was', r)
+    // await db.collection('users').doc(objectId).set({ welcomeEmailSent: true });
+    // }
 
     if (shouldSkipIndexing(data))
       return;
