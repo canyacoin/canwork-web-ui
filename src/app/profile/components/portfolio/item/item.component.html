@@ -3,7 +3,7 @@
     <div class="col-md-6">
       <a [href]="workItem.image || '//canya-tests.firebaseapp.com/assets/img/work-placeholder.svg'" class="mt-30" data-provide="lightbox">  
          
-        <img class="portfolio-item" [src]="workItem.image" style=" padding:10px; border-radius:30px" [src-fallback]="defaultImage" alt="CanYa - Portfolio" class="card-img-left thumbnail"> 
+        <img class="portfolio-item" [src]="workItem.image" style=" padding:10px; border-radius:30px" [src-fallback]="defaultImage" alt="{{ workItem.title }}" class="card-img-left thumbnail"> 
      
       </a>
     </div>
@@ -26,12 +26,14 @@
             {{ workItem.description }}
           </p>
           <div class="row"> 
-            <div class="col-auto mx-5 my-5" style="outline:none; " *ngFor="let skill of workItem.tags | slice:0:8" [routerLink]="['/home', skill]">
-              <app-skill-tag [skill]="skill"></app-skill-tag>
+            <div class="container">
+              <span style="outline:none; margin-right: 5px;" *ngFor="let skill of workItem.tags | slice:0:8" [routerLink]="['/home', skill]">
+                <app-skill-tag [skill]="skill"></app-skill-tag>
+              </span>
             </div>
           </div>
           <br>
-          <a *ngIf="workItem.link" [href]="workItem.link" class="card-link">
+          <a *ngIf="workItem.link" [href]="workItem.link">
             Check it out!
             <i class="fa fa-external-link"></i>
           </a>

@@ -58,8 +58,10 @@
           </div>
         </li>
         <li *ngIf="!currentUser" class="nav-item">
-          <a class="btn btn-canya-tools canya-login btn-sm text-white" [routerLink]="['/auth']">
-            Join
+          <a class="nav-link">
+              <a class="btn btn-canya-tools canya-login btn-sm text-white" [routerLink]="['/auth']">
+                Join
+              </a> 
           </a>
         </li>
         <li *ngIf="currentUser" class="nav-item dropdown">
