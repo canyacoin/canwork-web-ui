@@ -76,6 +76,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
   }
 
+
   isMyProfile() {
     if (this.currentUser == null) {
       return false;

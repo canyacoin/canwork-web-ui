@@ -2,6 +2,7 @@
   "projects": {
     "cam": "can-work-cam",
     "alex": "canwork-alex",
-    "staging": "staging-can-work"
+    "staging": "staging-can-work",
+    "prod": "canya-dotcom"
   }
 }

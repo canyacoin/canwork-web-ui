@@ -55,7 +55,7 @@ export class EditComponent implements OnInit, OnDestroy {
       bio: [this.currentUser.bio || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(60)])],
       category: [this.currentUser.category || ''],
       skillTags: [''],
-      hourlyRate: [this.currentUser.hourlyRate, Validators.compose([CurrencyValidator.isValid])],
+      hourlyRate: [this.currentUser.hourlyRate || '', Validators.compose([CurrencyValidator.isValid])],
       color1: [this.currentUser.colors[0]],
       color2: [this.currentUser.colors[1]],
       color3: [this.currentUser.colors[2]],

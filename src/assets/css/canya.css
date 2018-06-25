@@ -5302,7 +5302,7 @@ ul.flexbox {
   flex-wrap: nowrap;
   position: fixed;
   overflow: auto;
-  left: -300px;
+  right: -300px;
   top: 0;
   bottom: 0;
   width: 300px;
@@ -5400,7 +5400,7 @@ ul.flexbox {
     flex-wrap: nowrap;
     position: fixed;
     overflow: auto;
-    left: -300px;
+    right: -300px;
     top: 0;
     bottom: 0;
     width: 300px;
@@ -5486,7 +5486,7 @@ ul.flexbox {
     flex-wrap: nowrap;
     position: fixed;
     overflow: auto;
-    left: -300px;
+    right: -300px;
     top: 0;
     bottom: 0;
     width: 300px;
@@ -5572,7 +5572,7 @@ ul.flexbox {
     flex-wrap: nowrap;
     position: fixed;
     overflow: auto;
-    left: -300px;
+    right: -300px;
     top: 0;
     bottom: 0;
     width: 300px;
@@ -5658,7 +5658,7 @@ ul.flexbox {
     flex-wrap: nowrap;
     position: fixed;
     overflow: auto;
-    left: -300px;
+    right: -300px;
     top: 0;
     bottom: 0;
     width: 300px;
@@ -5752,7 +5752,7 @@ ul.flexbox {
   opacity: .7;
   position: absolute;
   top: 10px;
-  right: 20px;
+  left: 20px;
 }
 
 .topbar-reveal .topbar {
@@ -5760,7 +5760,7 @@ ul.flexbox {
 }
 
 .topbar-reveal .topbar-nav {
-  left: 0;
+  right: 0;
   -webkit-box-shadow: 2px 0px 9px 2px rgba(0, 0, 0, 0.05);
   box-shadow: 2px 0px 9px 2px rgba(0, 0, 0, 0.05);
 }
