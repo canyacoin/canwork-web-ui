@@ -476,11 +476,21 @@
 
     // Close nav if a scrollto link clicked
     //
-    $(document).on('click', '.topbar-reveal .topbar-nav .nav-link', function(){
-      if ( $(this).hasDataAttr('scrollto') ) {
-        body.removeClass('topbar-reveal');
-        $('.topbar-backdrop').remove();
+    $(document).on('click', '.topbar-reveal .topbar-nav .nav-item .nav-link', function(){
+      console.log("Clicked "+$(this)+" has dropdown? "+($(this).hasClass('dropdown')+" - has dropdown-toggle ?"+($(this).hasClass('dropdown-toggle'))));
+      
+      if((!($(this).hasClass('dropdown')) && (!$(this).hasClass('dropdown-toggle')))  ){ 
+         $('body').removeClass( 'topbar-reveal' ); 
+         $('.topbar-backdrop').remove(); 
       }
+      /*
+      if ( $(this).hasDataAttr('scrollto') ) {
+
+        $('body').removeClass( 'topbar-reveal' ); 
+        $('.topbar-backdrop').remove();
+      
+      }
+      */
     });
 
   }

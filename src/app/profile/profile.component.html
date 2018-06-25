@@ -23,7 +23,6 @@
 
         <div class="col-12 col-md-8 my-5">
           <app-profile-bio *ngIf="userModel && userModel.description" [isMyProfile]="isMyProfile()" [userModel]="userModel"></app-profile-bio>
-
           <app-profile-portfolio *ngIf="userModel" [userModel]="userModel" [notMyProfile]="notMyProfile()" [isMyProfile]="isMyProfile()"></app-profile-portfolio>
         </div>
       </div>
