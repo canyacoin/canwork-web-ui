@@ -1,0 +1,13 @@
+.swiper-container {
+    width:75%;
+    height: auto;
+}
+.swiper-slide {
+    width:75%;
+    height: auto;
+}
+.swiper-wrapper {
+    width:75%;
+    height: auto;
+    transition-duration: 500ms;
+}

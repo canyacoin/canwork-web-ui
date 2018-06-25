@@ -15,12 +15,14 @@
                   <ng-template let-hits="hits">
                     <div class="row">
                       <div *ngFor="let provider of hits" class="col-lg-4 card-deck">
+                        <a [routerLink] = "['/profile/alt', provider.address]">
+                      
                         <div class="card provider-card text-center my-15 pointer" [routerLink]="['/profile/alt', provider.address]">
-                          <div class="popular-tag" style="background:white; color: #33ccff;padding-top:5px;min-height: 35px; float:right;">
-                            <span *ngIf="provider && provider.badge">
-                              {{ provider.badge }}
-                            </span>
-                          </div>
+                          <span *ngIf="provider && provider.badge" class="popular-tag" 
+                          style="background:#3cf; float:right; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; font-size: 14px; text-align: center;">
+                            {{ provider.badge }}
+                          </span>
+
                           <div class="profile">
                             <img *ngIf="provider && (provider.avatar && provider.avatar.uri)" class="headshot" src="{{ provider.avatar.uri }}" alt="">
                             <div class="title">
@@ -32,6 +34,7 @@
                               <app-skill-tag *ngFor="let tag of getProviderTags(provider)" [skill]="tag"></app-skill-tag>
                             </div>
                             <div class="row hourly-rate">
+
                               <span *ngIf="provider.hourlyRate">
                                 <b>${{provider.hourlyRate}}</b>/hr
                                 <span *ngIf="canToUsd">
@@ -39,9 +42,11 @@
                                   <b>{{getUsdToCan(provider.hourlyRate)}}</b>/hr
                                 </span>
                               </span>
+                              
                             </div>
                           </div>
                         </div>
+                      </a>
                       </div>
                     </div>
                   </ng-template>
