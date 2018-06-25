@@ -33,7 +33,7 @@
 
   <section *ngIf="isClient()" class="section bg-white py-40">
     <div class="container">
-      <app-bot [title]="true" [conversation]="conversation" (action)="formSubmitted($event)"></app-bot>
+      <app-create-client-profile [user]="currentUser"></app-create-client-profile>
     </div>
   </section>
   <section *ngIf="isProvider()" class="section bg-white py-40">

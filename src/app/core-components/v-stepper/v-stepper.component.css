@@ -1,0 +1,59 @@
+.line {
+  width: 100px;
+  height: 4px;
+  background-color: #33ccff;
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  margin-top: -2px;
+  margin-left: -5px;
+}
+
+.circle {
+  width: 40px;
+  height: 40px;
+  background-color: #33ccff;
+  border-radius: 20px;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  color: white;
+  padding-top: 5px;
+}
+
+.stepName {
+  position: absolute;
+  top: 100%;
+  width: 100px;
+  font-size: 0.85em;
+  color: #3cf;
+  text-align: center;
+  margin-left: -73px;
+}
+
+.circle-ml {
+  margin-left: 95px;
+}
+
+.none-active {
+  background-color: rgba(51, 204, 255, 0.5);
+}
+
+.none-active-fg {
+  color: rgba(51, 204, 255, 0.5);
+}
+
+.v-stepper {
+  vertical-align: middle;
+  position: relative;
+  text-align: center;
+}
+
+@media (max-width: 500px) {
+  .circle-ml {
+    margin-left: 45px;
+  }
+  .line {
+    width: 50px;
+  }
+}

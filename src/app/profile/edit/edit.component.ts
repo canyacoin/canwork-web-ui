@@ -7,8 +7,8 @@ import * as moment from 'moment-timezone';
 import { User, UserState } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
 import { UserService } from '../../core-services/user.service';
-import { CurrencyValidator } from './currency.validator';
-import { EmailValidator } from './email.validator';
+import { CurrencyValidator } from '../currency.validator';
+import { EmailValidator } from '../email.validator';
 
 @Component({
   selector: 'app-edit',
@@ -102,8 +102,7 @@ export class EditComponent implements OnInit, OnDestroy {
       hourlyRate: this.profileForm.value.hourlyRate,
       colors: [this.profileForm.value.color1, this.profileForm.value.color2, this.profileForm.value.color3],
       description: this.profileForm.value.description,
-      timezone: moment.tz.guess(),
-      state: UserState.done
+      timezone: moment.tz.guess()
     };
 
     // tslint:disable-next-line:forin

@@ -1,0 +1,18 @@
+.custom-form-container {
+  max-width: 800px;
+  width: 100%;
+  text-align: left;
+  min-height: 30em;
+  padding: 2em;
+  margin: 0 auto;
+}
+
+@media (max-width: 500px) {
+  .form-container {
+    width: auto;
+  }
+}
+
+.next-button {
+  float: right;
+}

@@ -19,6 +19,9 @@ import { ProfileViewsComponent } from './profile-views/profile-views.component';
 import { ProfileComponent } from './profile.component';
 import { ProfileRoutingModule } from './profile.routing.module';
 import { ProjectComponent } from './project/project.component';
+import {
+    CreateClientProfileComponent
+} from './setup/create-client-profile/create-client-profile.component';
 import { ProviderStateComponent } from './setup/provider-state/provider-state.component';
 import { SetupComponent } from './setup/setup.component';
 import { SkillTagsSelectionComponent } from './skill-tags-selection/skill-tags-selection.component';
@@ -37,6 +40,7 @@ import { SkillTagsSelectionComponent } from './skill-tags-selection/skill-tags-s
   declarations: [
     AboutComponent,
     BioComponent,
+    CreateClientProfileComponent,
     EditComponent,
     ItemComponent,
     PortfolioComponent,
