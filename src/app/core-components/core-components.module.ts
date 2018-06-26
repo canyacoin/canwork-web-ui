@@ -18,6 +18,7 @@ import {
 import { ScrollTopComponent } from './scroll-top/scroll-top.component';
 import { SkillTagComponent } from './skill-tag/skill-tag.component';
 import { ToolsComponent } from './tools/tools.component';
+import { VStepperComponent } from './v-stepper/v-stepper.component';
 import { FaqComponent } from './wallet-install/faq/faq.component';
 import { InstructionsComponent } from './wallet-install/instructions/instructions.component';
 import { WalletInstallComponent } from './wallet-install/wallet-install.component';
@@ -49,6 +50,7 @@ import { WindowScrollDirective } from './window-scroll.directive';
     BackButtonComponent,
     WalletInstallComponent,
     WindowScrollDirective,
+    VStepperComponent,
   ],
   exports: [
     BackButtonComponent,
@@ -60,6 +62,7 @@ import { WindowScrollDirective } from './window-scroll.directive';
     ScrollTopComponent,
     SkillTagComponent,
     WalletInstallComponent,
+    VStepperComponent,
     WindowScrollDirective
   ]
 })

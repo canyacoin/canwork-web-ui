@@ -3,24 +3,22 @@
     <div class="container">
       <div class="row search-container text-center">
         <div class="col-12">
-          <ais-instantsearch [config]="algoliaSearchConfig">
+          <ais-instantsearch [config]="algoliaSearchConfig" *ngIf="!rendering">
             <h4>CanYa tell us what you're looking for?</h4>
             <ais-search-box class="search-box" (change)="algoliaSearchChanged($event)"></ais-search-box>
-            <div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center">
-              <img src="assets/img/loader.svg" height="36px" alt="Loader">
-            </div>
             <div class="row search-results">
               <div class="col-md-12">
                 <ais-hits>
                   <ng-template let-hits="hits">
+                    <div *ngIf="hits.length <= 0" class="row text-center">
+                      <h3>We couldn't find what you were looking for!</h3>
+                    </div>
                     <div class="row">
                       <div *ngFor="let provider of hits" class="col-lg-4 card-deck">
-                   
+
                         <div class="card provider-card text-center my-15 pointer" [routerLink]="['/profile/alt', provider.address]">
-                          <a [routerLink] = "['/profile/alt', provider.address]">
-                      
-                          <span *ngIf="provider && provider.badge" class="popular-tag" 
-                          style="background:#3cf; float:right; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; min-height: 50px; font-size: 14px; text-align: center;">
+
+                          <span *ngIf="provider && provider.badge" class="popular-tag" style="background:#3cf; float:right; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; min-height: 50px; font-size: 14px; text-align: center;">
                             {{ provider.badge }}
                           </span>
 
@@ -35,18 +33,15 @@
                               <app-skill-tag *ngFor="let tag of getProviderTags(provider)" [skill]="tag"></app-skill-tag>
                             </div>
                             <div class="row hourly-rate">
-
-                              <span *ngIf="provider.hourlyRate">
+                              <span *ngIf="provider.hourlyRate && canToUsd" data-toggle="tooltip" data-placement="bottom" title="{{getUsdToCan(provider.hourlyRate)}} CAN/hr">
                                 <b>${{provider.hourlyRate}}</b>/hr
-                                <span *ngIf="canToUsd">
-                                  <img class="logo-default" src="assets/img/round-icon.svg" width="auto" height="24px" alt="logo" style="margin-top: -3px;">
-                                  <b>{{getUsdToCan(provider.hourlyRate)}}</b>/hr
-                                </span>
                               </span>
-                              
+                              <span *ngIf="provider.hourlyRate && !canToUsd">
+                                <b>${{provider.hourlyRate}}</b>/hr
+                              </span>
+
                             </div>
                           </div>
-                        </a>
                         </div>
                       </div>
                     </div>
@@ -55,8 +50,10 @@
               </div>
             </div>
           </ais-instantsearch>
+          <div *ngIf="loading || rendering" class="container d-flex h-100 flex-column justify-content-center">
+            <img src="assets/img/loader.svg" height="36px" alt="Loader">
+          </div>
         </div>
-
       </div>
       <div class="row">
         <div class="col-12 my-0 py-0">

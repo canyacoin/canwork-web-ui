@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
@@ -32,6 +32,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   providerSub: Subscription;
   portfolioSub: Subscription;
 
+  rendering = false;
+
   algoliaSearchConfig = {
     ...environment.algolia,
     indexName: environment.algolia.indexName,
@@ -39,17 +41,23 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   };
 
   constructor(private activatedRoute: ActivatedRoute, private navService: NavService,
-    private afs: AngularFirestore, private http: Http) {
-    this.routeSub = this.activatedRoute.params.subscribe((params) => {
+    private afs: AngularFirestore, private http: Http, private cdRef: ChangeDetectorRef) {
+    this.routeSub = this.activatedRoute.queryParams.subscribe((params) => {
       this.query = params['query'] ? params['query'] : '';
+      if (!this.loading) {
+        this.rendering = true;
+        setTimeout(() => {
+          this.rendering = false;
+        });
+      }
     });
   }
 
   async ngOnInit() {
     this.navService.setHideSearchBar(true);
-    const canToUsdResp = await this.http.get('https://min-api.cryptocompare.com/data/price?fsym=CAN&tsyms=AUD').toPromise();
+    const canToUsdResp = await this.http.get('https://api.coinmarketcap.com/v2/ticker/2343/?convert=AUD').toPromise();
     if (canToUsdResp.ok) {
-      this.canToUsd = JSON.parse(canToUsdResp.text())['AUD'];
+      this.canToUsd = JSON.parse(canToUsdResp.text())['data']['quotes']['AUD']['price'];
     }
   }
 

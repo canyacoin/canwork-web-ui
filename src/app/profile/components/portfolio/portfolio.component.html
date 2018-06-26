@@ -4,8 +4,8 @@
 <div *ngIf="loaded">
   <div class="card" style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px;">
 
-    
-    
+
+
     <div id="page-wrap" class="pt-25">
       <div *ngIf="allPortfolioItems.length < 1">
         <div class="row flex-row">
@@ -26,7 +26,7 @@
                 </p>
               </div>
               <div *ngIf="notMyProfile">
-                <div #portfolio id="portfolio"></div>
+                <div #portfolio id="portfolio" class="center-h"></div>
                 <h3 class="fw-500">Ohh, so exciting!</h3>
                 <h4 class="fw-400 mb-20">Can I do something for you?</h4>
                 <button (click)="postRequest()" class="btn btn-primary btn-canya-chat mb-30" data-scrollto="section-profile">
@@ -45,11 +45,10 @@
             </div>
             <div class="col-sm-1"></div>
             <div class="col-sm-1">
-
-              <a *ngIf="isMyProfile" [routerLink]="['/profile/project']" style="color: #535353;" data-toggle="tooltip" data-placement="top" title="Add Project">
-                  <i class="ti-plus fw-600" aria-hidden="true"></i>
+              <a *ngIf="isMyProfile" [routerLink]="['/profile/project']" style="color: #535353;" data-toggle="tooltip" data-placement="top"
+                title="Add Project">
+                <i class="ti-plus fw-600" aria-hidden="true"></i>
               </a>
-
             </div>
           </div>
           <div class="row" style="height: 25px"></div>
