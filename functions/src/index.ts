@@ -35,11 +35,20 @@ const algoliaSearchIndex = algoliaClient.initIndex(env.algolia.providerindex);
 const sendgridApiKey = env.sendgrid.apikey;
 const chance = new Chance();
 
+const serviceConfig = getFirebaseInstance(admin.app().options.projectId);
+
 const welcomeEmailTemplateHTML = doT.template(fs.readFileSync(path.join(__dirname, '../src/templates', 'email-welcome.html'), 'utf8'));
 
 exports.sendEmail = functions.https.onRequest(async (request, response) => {
+  // TODO: move to express middleware
+  if (!request.headers.authorization || request.headers.authorization !== env.dev.authkey) {
+    return response.status(403).send('Unauthorized');
+  }
 
-  const html = welcomeEmailTemplateHTML({ name: 'Cammo' });
+  const html = welcomeEmailTemplateHTML({ name: 'Cammo', uri: serviceConfig.uri });
+
+  // const app = admin.app();
+  // console.log('+ firebase project:', app.options.projectId);
 
   const sgMail = require('@sendgrid/mail');
   sgMail.setApiKey(sendgridApiKey);
@@ -58,10 +67,6 @@ exports.sendEmail = functions.https.onRequest(async (request, response) => {
 });
 
 
-
-
-
-
 /*
  * Listen for user creations and created an associated algolia record
  * Also send a welcome email, and flag their user object: welcomeEmailSent: true
@@ -77,7 +82,7 @@ exports.indexProviderData = functions.firestore
     // if (data.welcomeEmailSent && data.welcomeEmailSent === false && data.testUser !== true) {
     console.log('+ sending a user email...');
 
-    const html = welcomeEmailTemplateHTML({ name: data.name });
+    const html = welcomeEmailTemplateHTML({ name: data.name, uri: serviceConfig.uri });
 
     const sgMail = require('@sendgrid/mail');
     sgMail.setApiKey(sendgridApiKey);
@@ -137,7 +142,7 @@ exports.updateIndexProviderData = functions.firestore
  */
 exports.updateUserSkillsTagData = functions.firestore
   .document('portfolio/{userId}/work/{workId}')
-  .onWrite(async (snap, context) => {
+  .onUpdate(async (snap, context) => {
     const objectId = snap.after.id;
 
     const skillsTagData = [];
@@ -160,7 +165,7 @@ exports.updateUserSkillsTagData = functions.firestore
  */
 exports.removeIndexProviderData = functions.firestore
   .document('users/{userId}')
-  .onCreate((snap, context) => {
+  .onDelete((snap, context) => {
     const objectId = snap.id;
     return algoliaSearchIndex.deleteObject(objectId);
   });
@@ -193,9 +198,49 @@ async function buildWorkData(userID: string) {
 }
 
 /*
+ * Firebase function to remove seeded providers (users + provider data)
+ */
+exports.deleteAllProviders = functions.https.onRequest(async (request, response) => {
+  // TODO: move to express middleware
+  if (!request.headers.authorization || request.headers.authorization !== env.dev.authkey) {
+    return response.status(403).send('Unauthorized');
+  }
+
+  let deletedUsers = 0;
+  const userDataSnapshot = await db.collection(`users`).where('testUser', '==', true).get();
+  userDataSnapshot.forEach(async doc => {
+    console.log('+ deleting user: ', doc.data().objectId);
+    try {
+      await admin.auth().deleteUser(doc.data().objectId);
+    } catch (e) {
+      console.log('+ unable to delete auth user', e);
+    }
+    try {
+      await db.collection('portfolio').doc(doc.data().objectId).delete();
+    } catch (e) {
+      console.log('+ unable to delete portfolio user', e);
+    }
+    try {
+      await db.collection('users').doc(doc.data().objectId).delete();
+    } catch (e) {
+      console.log('+ unable to delete user', e);
+    }
+    deletedUsers++;
+  })
+
+  return response.status(202)
+    .type('application/json')
+    .send({ deletedUsers });
+});
+
+/*
  * Firebase function to seed providers (users + provider data)
  */
 exports.seedProviders = functions.https.onRequest(async (request, response) => {
+  // TODO: move to express middleware
+  if (!request.headers.authorization || request.headers.authorization !== env.dev.authkey) {
+    return response.status(403).send('Unauthorized');
+  }
 
   const qty = request.query.qty || 1;
 
@@ -272,20 +317,21 @@ exports.seedProviders = functions.https.onRequest(async (request, response) => {
         return response.status(500)
       }
     }
-
-
   }
-
   return response.status(201)
     .type('application/json')
     .send(users);
-
 });
 
 /*
  * Firebase function to seed skill tag data (invoke with HTTP GET)
  */
 exports.seedSkillTagsData = functions.https.onRequest(async (request, response) => {
+  // TODO: move to express middleware
+  if (!request.headers.authorization || request.headers.authorization !== env.dev.authkey) {
+    return response.status(403).send('Unauthorized');
+  }
+
   let tags: string[];
 
   tags = Array.from(new Set(getTags())).sort();
@@ -326,6 +372,44 @@ function getRandomTags(max: number): string[] {
   }
 
   return array.slice(0, randomIntFromInterval(0, max));
+}
+
+function getFirebaseInstance(projectId: string) {
+  // Set this up from: ../.firebaserc
+  const instances = [
+    {
+      projectId: 'default',
+      uri: 'http://localhost:4200',
+      environment: 'dev'
+    },
+    {
+      projectId: 'can-work-cam',
+      uri: 'http://localhost:4200',
+      environment: 'dev'
+    },
+    {
+      projectId: 'canwork-alex',
+      uri: 'http://localhost:4200',
+      environment: 'dev'
+    },
+    {
+      projectId: 'staging-can-work',
+      uri: 'https://staging.canya.com',
+      environment: 'staging'
+    },
+    {
+      projectId: 'canya-dotcom',
+      uri: 'https://canya.com',
+      environment: 'prod'
+    }
+  ]
+
+  for (const project of instances) {
+    if (project.projectId === projectId) {
+      return project;
+    }
+  }
+  return instances[0];
 }
 
 // Later we can get these direct from a google spreadsheet or something central
