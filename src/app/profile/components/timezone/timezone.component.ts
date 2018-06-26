@@ -23,7 +23,7 @@ export class TimezoneComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.timeSub = this.myInterval.subscribe(x => {
-      this.localTime = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
+      this.localTime = new Date().toLocaleString('en-US', { timeZone: this.userModel.timezone || 'America/New_York' });
     });
   }
 

@@ -1360,7 +1360,8 @@ button:focus {
 .btn-primary,
 .btn-primary:hover {
   background-color: #33ccff;
-  border-color: #33ccff;
+  /* border-color: #33ccff; */
+  border: none;
   color: #fff;
 }
 
@@ -1377,7 +1378,8 @@ button:focus {
 .btn-primary.disabled,
 .btn-primary:disabled {
   background-color: #33ccff;
-  border-color: #33ccff;
+  /* border-color: #33ccff; */
+  border: none;
   opacity: 0.5;
 }
 
