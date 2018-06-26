@@ -21,6 +21,7 @@
                           <span *ngIf="provider && provider.badge" class="popular-tag" style="background:#3cf; float:right; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; min-height: 50px; font-size: 14px; text-align: center;">
                             {{ provider.badge }}
                           </span>
+                          <span *ngIf="!(provider && provider.badge)" class="popular-tag" style="float:right; min-height: 50px;"></span>
 
                           <div class="profile">
                             <img *ngIf="provider && (provider.avatar && provider.avatar.uri)" class="headshot" src="{{ provider.avatar.uri }}" alt="">
