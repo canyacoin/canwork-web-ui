@@ -41,7 +41,7 @@
       <app-provider-state [currentUser]="currentUser"></app-provider-state>
     </div>
     <div *ngIf="isVerified()" class="container">
-      <app-bot [title]="true" [conversation]="conversation" (action)="formSubmitted($event)"></app-bot>
+      <app-create-provider-profile [user]="currentUser"></app-create-provider-profile>
     </div>
   </section>
 </main>

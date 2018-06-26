@@ -22,6 +22,9 @@ import { ProjectComponent } from './project/project.component';
 import {
     CreateClientProfileComponent
 } from './setup/create-client-profile/create-client-profile.component';
+import {
+    CreateProviderProfileComponent
+} from './setup/create-provider-profile/create-provider-profile.component';
 import { ProviderStateComponent } from './setup/provider-state/provider-state.component';
 import { SetupComponent } from './setup/setup.component';
 import { SkillTagsSelectionComponent } from './skill-tags-selection/skill-tags-selection.component';
@@ -41,6 +44,7 @@ import { SkillTagsSelectionComponent } from './skill-tags-selection/skill-tags-s
     AboutComponent,
     BioComponent,
     CreateClientProfileComponent,
+    CreateProviderProfileComponent,
     EditComponent,
     ItemComponent,
     PortfolioComponent,

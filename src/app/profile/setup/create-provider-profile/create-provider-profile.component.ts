@@ -4,25 +4,25 @@ import { Router } from '@angular/router';
 import * as randomColor from 'randomcolor';
 
 import * as moment from 'moment-timezone';
-import { User, UserState, UserType } from '../../../core-classes/user';
+import { User, UserCategory, UserState, UserType } from '../../../core-classes/user';
 import { AuthService } from '../../../core-services/auth.service';
 import { UserService } from '../../../core-services/user.service';
 import { CurrencyValidator } from '../../currency.validator';
 import { EmailValidator } from '../../email.validator';
 
 @Component({
-  selector: 'app-create-client-profile',
-  templateUrl: './create-client-profile.component.html',
-  styleUrls: ['./create-client-profile.component.css', '../setup.component.css']
+  selector: 'app-create-provider-profile',
+  templateUrl: './create-provider-profile.component.html',
+  styleUrls: ['./create-provider-profile.component.css', '../setup.component.css']
 })
-export class CreateClientProfileComponent implements OnInit {
+export class CreateProviderProfileComponent implements OnInit {
 
   @Input() user: User;
   steps = {
-    'aboutYou': {
+    'professionalInfo': {
       num: 0,
-      name: 'aboutYou',
-      title: 'About You',
+      name: 'professionalInfo',
+      title: 'Professional',
       icon: '1'
     },
     'yourProfile': {
@@ -45,8 +45,8 @@ export class CreateClientProfileComponent implements OnInit {
   profileForm: FormGroup = null;
   termsChecked = false;
 
-  constructor(private userService: UserService,
-    private formBuilder: FormBuilder, private router: Router, private authService: AuthService) { }
+  constructor(private userService: UserService, private formBuilder: FormBuilder,
+    private router: Router, private authService: AuthService) { }
 
   ngOnInit() {
     if (this.user != null) {
@@ -66,14 +66,23 @@ export class CreateClientProfileComponent implements OnInit {
       title: [this.user.title || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
       bio: [this.user.bio || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(60)])],
       description: [this.user.description || '', Validators.compose([Validators.maxLength(500)])],
-      // category: [this.user.category || ''],
-      // skillTags: [''],
-      // hourlyRate: [this.user.hourlyRate || '', Validators.compose([CurrencyValidator.isValid])],
+      category: ['', Validators.compose([Validators.required])],
+      skillTags: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(100)])],
+      hourlyRate: [this.user.hourlyRate || '', Validators.compose([CurrencyValidator.isValid])],
       color1: [colors[0]],
       color2: [colors[1]],
       color3: [colors[2]],
       timezone: moment.tz.guess()
     });
+  }
+
+  categories(): Array<string> {
+    const values = Object.values(UserCategory);
+    return values;
+  }
+
+  skillTagsUpdated(value: string) {
+    this.profileForm.controls['skillTags'].setValue(value);
   }
 
   nextStep() {
@@ -87,15 +96,19 @@ export class CreateClientProfileComponent implements OnInit {
     this.userService.saveUser(this.user);
     this.sending = true;
 
+    let tags: string[] = this.profileForm.value.skillTags === '' ? [] : this.profileForm.value.skillTags.split(',').map(item => item.trim());
+    if (tags.length > 6) {
+      tags = tags.slice(0, 6);
+    }
     const tmpUser = {
       address: this.user.address,
       name: this.profileForm.value.firstName + ' ' + this.profileForm.value.lastName,
       work: this.profileForm.value.work,
       title: this.profileForm.value.title,
       bio: this.profileForm.value.bio,
-      // category: category,
-      // skillTags: tags,
-      // hourlyRate: this.profileForm.value.hourlyRate,
+      category: this.profileForm.value.category,
+      skillTags: tags,
+      hourlyRate: this.profileForm.value.hourlyRate,
       colors: [this.profileForm.value.color1, this.profileForm.value.color2, this.profileForm.value.color3],
       description: this.profileForm.value.description,
       timezone: moment.tz.guess()

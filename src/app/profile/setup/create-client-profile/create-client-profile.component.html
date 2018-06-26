@@ -32,6 +32,12 @@
               <small *ngIf="!profileForm.controls.work.valid  && profileForm.controls.work.dirty">Please enter a valid email.</small>
             </div>
           </div>
+          <div class="form-group row">
+            <div class="col-lg-6 col-md-6 col-sm-8">
+              <label>Timezone </label>
+              <input disabled class="form-control" #timezone formControlName="timezone" type="text" name="timezone">
+            </div>
+          </div>
 
           <button type="button" class="btn btn-primary btn-canya-gradient next-button" [disabled]="!profileForm.controls.firstName.valid || !profileForm.controls.lastName.valid || !profileForm.controls.work.valid"
             (click)="nextStep()">NEXT</button>
