@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import * as randomColor from 'randomcolor';
 
 import * as moment from 'moment-timezone';
 import { User, UserState, UserType } from '../../../core-classes/user';
@@ -56,6 +57,8 @@ export class CreateClientProfileComponent implements OnInit {
   }
 
   buildForm() {
+    const colors = randomColor({ luminosity: 'light', count: 3 });
+
     this.profileForm = this.formBuilder.group({
       firstName: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(18)])],
       lastName: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(18)])],
@@ -66,9 +69,9 @@ export class CreateClientProfileComponent implements OnInit {
       // category: [this.user.category || ''],
       // skillTags: [''],
       // hourlyRate: [this.user.hourlyRate || '', Validators.compose([CurrencyValidator.isValid])],
-      color1: [this.user.colors[0]],
-      color2: [this.user.colors[1]],
-      color3: [this.user.colors[2]],
+      color1: [colors[0]],
+      color2: [colors[1]],
+      color3: [colors[2]],
     });
   }
 
@@ -85,7 +88,7 @@ export class CreateClientProfileComponent implements OnInit {
 
     const tmpUser = {
       address: this.user.address,
-      name: this.profileForm.value.firstName + this.profileForm.value.lastName,
+      name: this.profileForm.value.firstName + ' ' + this.profileForm.value.lastName,
       work: this.profileForm.value.work,
       title: this.profileForm.value.title,
       bio: this.profileForm.value.bio,

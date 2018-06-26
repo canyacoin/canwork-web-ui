@@ -1,11 +1,11 @@
 <div class="custom-form-container">
   <form [formGroup]="profileForm" class="form validate" novalidate>
     <fieldset>
-      <div class="text-center">
+      <div class="text-center mb-50">
         <h3>Complete your profile</h3>
       </div>
       <div>
-        <p>
+        <p class="mb-40">
           <app-v-stepper [steps]="stepperSteps" [currentStep]="currentStep"></app-v-stepper>
         </p>
         <div *ngIf="currentStep.name == 'aboutYou'">
@@ -36,38 +36,61 @@
           <button type="button" class="btn btn-primary btn-canya-gradient next-button" [disabled]="!profileForm.controls.firstName.valid || !profileForm.controls.lastName.valid || !profileForm.controls.work.valid"
             (click)="nextStep()">NEXT</button>
         </div>
-      </div>
 
-      <div *ngIf="currentStep.name == 'yourProfile'">
-        <div class="form-group">
-          <label>Headline *</label>
-          <input class="form-control" #title formControlName="title" type="text" name="title" placeholder="Headline of your profile"
-            maxlength="36" [class.invalid]="!profileForm.controls.title.valid && profileForm.controls.title.dirty">
+        <div *ngIf="currentStep.name == 'yourProfile'">
+          <div class="form-group">
+            <label>Headline *</label>
+            <input class="form-control" #title formControlName="title" type="text" name="title" placeholder="Headline of your profile"
+              maxlength="36" [class.invalid]="!profileForm.controls.title.valid && profileForm.controls.title.dirty">
 
-          <small *ngIf="!profileForm.controls.title.valid  && profileForm.controls.title.dirty">Please enter a valid headline for your profile.</small>
+            <small *ngIf="!profileForm.controls.title.valid  && profileForm.controls.title.dirty">Please enter a valid headline for your profile.</small>
+          </div>
+          <div class="form-group">
+            <label>Bio *</label>
+            <input class="form-control" #bio formControlName="bio" type="text" name="bio" placeholder="Creative short bio" maxlength="60"
+              [class.invalid]="!profileForm.controls.bio.valid && profileForm.controls.bio.dirty">
+            <small *ngIf="!profileForm.controls.bio.valid  && profileForm.controls.bio.dirty">Please enter a valid bio for your profile.</small>
+          </div>
+
+          <div class="form-group">
+            <label>Color scheme (click to choose)</label>
+            <p>
+              <input class="form-control form-color" #color1 formControlName="color1" type="color" name="color1" size="3" placeholder="Color scheme"
+                list="canya">
+              <input class="form-control form-color" #color2 formControlName="color2" type="color" name="color2
+                 " size="3" placeholder="Color scheme" list="canya">
+              <input class="form-control form-color" #color3 formControlName="color3" type="color" name="color3
+                 " size="3" placeholder="Color scheme" list="canya">
+            </p>
+            <datalist id="canya">
+              <option>#00FFCC</option>
+              <option>#33ccff</option>
+              <option>#15EDD8</option>
+              <option>#4EDCCA</option>
+              <option>#FF6666</option>
+              <option>#0078BF</option>
+              <option>#FFC600</option>
+              <option>#F9A4D8</option>
+              <option>#485F64</option>
+            </datalist>
+          </div>
+
+          <div class="form-group">
+            <label>Description</label>
+            <textarea class="form-control" #description formControlName="description" name="description" rows="5" placeholder="Think different! Be creative, be innovative."></textarea>
+          </div>
+
+          <button type="button" class="btn btn-primary btn-canya-gradient next-button" [disabled]="!profileForm.controls.title.valid || !profileForm.controls.bio.valid || !profileForm.controls.description.valid || sending"
+            (click)="submitForm()">NEXT</button>
         </div>
-        <div class="form-group">
-          <label>Bio *</label>
-          <input class="form-control" #bio formControlName="bio" type="text" name="bio" placeholder="Creative short bio" maxlength="60"
-            [class.invalid]="!profileForm.controls.bio.valid && profileForm.controls.bio.dirty">
-          <small *ngIf="!profileForm.controls.bio.valid  && profileForm.controls.bio.dirty">Please enter a valid bio for your profile.</small>
+
+        <div *ngIf="currentStep.name == 'complete'" class="text-center">
+          <p class="text-gray">Your client profile is now complete.
+            <br/>
+            <br/>You can access this information at any time from the 'My Profile' section of the main menu.</p>
+
+          <button type="button" class="btn btn-primary" [routerLink]="['/home']">Browse the marketplace</button>
         </div>
-
-        <div class="form-group">
-          <label>Description</label>
-          <textarea class="form-control" #description formControlName="description" name="description" rows="5" placeholder="Think different! Be creative, be innovative."></textarea>
-        </div>
-
-        <button type="button" class="btn btn-primary btn-canya-gradient next-button" [disabled]="!profileForm.controls.title.valid || !profileForm.controls.bio.valid || !profileForm.controls.description.valid || sending"
-          (click)="submitForm()">NEXT</button>
-      </div>
-
-      <div *ngIf="currentStep.name == 'complete'" class="text-center">
-        <p class="text-gray">Your client profile is now complete.
-          <br/>
-          <br/>You can access this information at any time from the 'My Profile' section of the main menu.</p>
-
-        <button type="button" class="btn btn-primary" [routerLink]="['home']">Browse the marketplace</button>
       </div>
     </fieldset>
   </form>
