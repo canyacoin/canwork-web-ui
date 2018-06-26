@@ -11,13 +11,13 @@
         <div *ngIf="currentStep.name == 'aboutYou'">
           <div class="form-group row">
             <div class="col-lg-6 col-md-6 col-sm-8">
-              <label>First name*</label>
+              <label>First name *</label>
               <input class="form-control" #firstName formControlName="firstName" type="text" name="firstName" placeholder="First name"
                 maxlength="18" [class.invalid]="!profileForm.controls.firstName.valid && profileForm.controls.firstName.dirty">
               <small *ngIf="!profileForm.controls.firstName.valid  && profileForm.controls.firstName.dirty">Please enter a valid first name.</small>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-8">
-              <label>Last name*</label>
+              <label>Last name *</label>
               <input class="form-control" #lastName formControlName="lastName" type="text" name="lastName" placeholder="Last Name" maxlength="18"
                 [class.invalid]="!profileForm.controls.lastName.valid && profileForm.controls.lastName.dirty">
               <small *ngIf="!profileForm.controls.lastName.valid  && profileForm.controls.lastName.dirty">Please enter a valid last name.</small>

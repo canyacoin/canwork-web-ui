@@ -10,8 +10,8 @@
               <div class="col-md-12">
                 <ais-hits>
                   <ng-template let-hits="hits">
-                    <div *ngIf="hits.length <= 0" class="row text-center">
-                      <h3>We couldn't find what you were looking for!</h3>
+                    <div *ngIf="hits.length <= 0 && !loading" class="row text-center">
+                      <h4 class="center-h mb-50">We couldn't find what you were looking for!</h4>
                     </div>
                     <div class="row">
                       <div *ngFor="let provider of hits" class="col-lg-4 card-deck">
@@ -30,7 +30,7 @@
                               <p *ngIf="provider && provider.bio">{{ provider.bio }}</p>
                             </div>
                             <div class="row d-flex tag-row justify-content-center">
-                              <app-skill-tag *ngFor="let tag of getProviderTags(provider)" [skill]="tag"></app-skill-tag>
+                              <app-skill-tag *ngFor="let tag of getProviderTags(provider)" [skill]="tag" [routerLink]="['/home']" [queryParams]="{query: tag}"></app-skill-tag>
                             </div>
                             <div class="row hourly-rate">
                               <span *ngIf="provider.hourlyRate && canToUsd" data-toggle="tooltip" data-placement="bottom" title="{{getUsdToCan(provider.hourlyRate)}} CAN/hr">
