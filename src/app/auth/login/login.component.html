@@ -13,12 +13,12 @@
               <br>
               <p>Login with uPort</p>
             </div>
-            <div *ngIf="pageInit && isOnMobile" class="uport-mobile text-center">
-              <p>
-                <i>uPort login method is not available on mobile.</i>
-              </p>
-            </div>
           </a>
+          <div *ngIf="pageInit && isOnMobile" class="d-block text-center">
+            <p>
+              <i>uPort login method is not available on mobile.</i>
+            </p>
+          </div>
         </div>
         <div class="other-login col-sm-12 col-md-6 col-lg-4 text-center">
           <h5 style="width: 100%;">Sign in with alternative services</h5>
