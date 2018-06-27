@@ -23,6 +23,7 @@ import { FaqComponent } from './wallet-install/faq/faq.component';
 import { InstructionsComponent } from './wallet-install/instructions/instructions.component';
 import { WalletInstallComponent } from './wallet-install/wallet-install.component';
 import { WindowScrollDirective } from './window-scroll.directive';
+import { FaqPageComponent } from './faq-page/faq-page.component';
 
 @NgModule({
   imports: [
@@ -39,6 +40,7 @@ import { WindowScrollDirective } from './window-scroll.directive';
     BlogPostsComponent,
     BrandComponent,
     FaqComponent,
+    FaqPageComponent,
     FeedbackComponent,
     FooterComponent,
     HeaderComponent,
@@ -50,12 +52,13 @@ import { WindowScrollDirective } from './window-scroll.directive';
     BackButtonComponent,
     WalletInstallComponent,
     WindowScrollDirective,
-    VStepperComponent,
+    VStepperComponent
   ],
   exports: [
     BackButtonComponent,
     BotComponent,
     BlogPostsComponent,
+    FaqPageComponent,
     FeedbackComponent,
     FooterComponent,
     HeaderComponent,
