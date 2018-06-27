@@ -18,6 +18,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
   loading = false;
   pageInit = false;
 
+  isOnMobile = false;
+
   constructor(private router: Router, private authService: AuthService, private userService: UserService,
     private afs: AngularFirestore, private script: ScriptService) {
     this.script.load('uport').then(data => {
@@ -29,6 +31,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    const ua = window.navigator.userAgent;
+    this.isOnMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua);
   }
 
   ngAfterViewInit() {
@@ -79,15 +83,15 @@ export class LoginComponent implements OnInit, AfterViewInit {
       if (usersMatchingId && usersMatchingId.length > 0) {
         this.authService.setUser(usersMatchingId[0]);
         this.router.navigate(['/home']); // TODO: Add returnURl for when routed here from redirect
-      // } else if (x != null) {
-      //   this.afs.collection<any>('users', x).valueChanges().take(1).subscribe((usersMatchingEmail: any) => {
-      //     if (usersMatchingEmail && usersMatchingEmail.length > 0) {
-      //       this.authService.setUser(usersMatchingEmail[0]);
-      //       this.router.navigate(['/home']);
-      //     } else {
-      //       this.initialiseUserAndRedirect(userDetails);
-      //     }
-      //   });
+        // } else if (x != null) {
+        //   this.afs.collection<any>('users', x).valueChanges().take(1).subscribe((usersMatchingEmail: any) => {
+        //     if (usersMatchingEmail && usersMatchingEmail.length > 0) {
+        //       this.authService.setUser(usersMatchingEmail[0]);
+        //       this.router.navigate(['/home']);
+        //     } else {
+        //       this.initialiseUserAndRedirect(userDetails);
+        //     }
+        //   });
       } else {
         this.initialiseUserAndRedirect(userDetails);
       }

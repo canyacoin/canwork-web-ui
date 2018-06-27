@@ -1,5 +1,3 @@
- 
-
 <main class="main-content bg-gray">
   <section class="section bg-gray  py-20" id="section-main">
     <div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center">
@@ -8,26 +6,26 @@
     <div *ngIf="!loading" class="login-section container min-70">
       <div class="row">
         <div class="col-sm-0 col-md-0 col-lg-2"></div>
-        <div class="col-sm-12 col-md-6 col-lg-4 center-block text-center uport-login-div">
-          <a *ngIf="pageInit" (click)="onUportLogin();" class="d-block pointer" >
-                <div class="uport-btn">
-                    <img src="assets/img/uPort.svg"><br>
-                    <p>Login with uPort</p>
-                </div>
+        <div class="col-sm-12 col-md-6 col-lg-4 center-block text-center">
+          <a *ngIf="pageInit && !isOnMobile" (click)="onUportLogin();" class="d-block pointer">
+            <div class="uport-btn">
+              <img src="assets/img/uPort.svg">
+              <br>
+              <p>Login with uPort</p>
+            </div>
+            <div *ngIf="pageInit && isOnMobile" class="uport-mobile text-center">
+              <p>
+                <i>uPort login method is not available on mobile.</i>
+              </p>
+            </div>
           </a>
         </div>
         <div class="other-login col-sm-12 col-md-6 col-lg-4 text-center">
-          <h5 style="width: 100%; margin-top:30px;">Sign in with alternative services</h5>
+          <h5 style="width: 100%;">Sign in with alternative services</h5>
           <firebase-ui (signInSuccess)="onFirebaseLogin($event)"></firebase-ui>
         </div>
         <div class="col-sm-0 col-md-0 col-lg-2"></div>
       </div>
-
-      <div class="uport-mobile text-center">
-        <p><i>uPort login method is not available on mobile.</i></p>
-      </div>
     </div>
   </section>
 </main>
-
- 

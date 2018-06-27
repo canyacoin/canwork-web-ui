@@ -3626,19 +3626,10 @@ button:focus {
 .swiper-container[data-centered-slides="true"] .swiper-slide-duplicate-active {
   opacity: 1;
 }
-.uport-mobile{
-  display:none;
-}
- 
+
 @media (max-width: 767px) {
   .swiper-button-next,
   .swiper-button-prev {
-    display: none;
-  }
-  .uport-mobile{
-    display:block;
-  }
-  .uport-login-div{
     display: none;
   }
 }
