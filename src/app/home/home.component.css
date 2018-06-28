@@ -13,7 +13,29 @@
   max-width: 600px;
   margin: 0px auto;
 }
-
+::ng-deep .ais-SearchBox-input{
+  outline:none;
+  border-color: white;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);
+}
+::ng-deep .ais-SearchBox-submit{
+  width: 3rem;
+  height: 105%;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #33ccff;
+  margin-left: 91.5%;
+  background-color: #33ccff;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+} 
+::ng-deep .ais-SearchBox-input:hover{
+  transition: all 0.5s;
+  box-shadow: 0 0 20px 0 rgba(0,0,0,0.2);
+}
+::ng-deep .ais-SearchBox-reset{
+  display: none;
+}
 .ais-SearchBox-input:focus {
   outline: none !important;
 }
