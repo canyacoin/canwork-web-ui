@@ -97,13 +97,21 @@
                       </div>
                     </div>
 
-                    <!-- <div class="form-group">
-                      <label class="text-dark">What is your budget for this service?</label>
-                      <input #budget formControlName="budget" class="form-control" type="number" name="budget" min="10" placeholder="10 CanYaCoins minimum"
-                        [class.invalid]="!postForm.controls.budget.valid && postForm.controls.budget.dirty">
+                    <div class="form-group" *ngIf="postForm.controls.paymentType.value">
+                      <label class="text-dark">
+                        <span *ngIf="postForm.controls.paymentType.value == paymentType.hourly">Budget per hour (CAN) *</span>
+                        <span *ngIf="postForm.controls.paymentType.value == paymentType.fixed">Total budget (CAN) *</span>
+                      </label>
+                      <div class="row">
+                        <div class="col-6">
+                          <input #budget formControlName="budget" class="form-control" type="number" name="budget" step="50" placeholder="10 CanYaCoins minimum"
+                            [class.invalid]="!postForm.controls.budget.valid && postForm.controls.budget.dirty">
 
-                      <small *ngIf="!postForm.controls.budget.valid && postForm.controls.budget.dirty" class="text-primary">Must be 10 CanYaCoins or higher.</small>
-                    </div> -->
+                          <small *ngIf="!postForm.controls.budget.valid && postForm.controls.budget.dirty" class="text-primary">Must be 10 CanYaCoins or higher.</small>
+                        </div>
+
+                      </div>
+                    </div>
                   </div>
 
                   <div class="modal-footer">
@@ -130,7 +138,7 @@
           <p class="text-center">
             <a class="btn btn-secondary" [routerLink]="['/home']">Return home</a>
             &nbsp;&nbsp;
-            <a class="btn btn-canya-tools text-white" [routerLink]="['/inbox/chat', recipientAddress]">Go to inbox</a>
+            <a class="btn btn-primary text-white" [routerLink]="['/inbox/chat', recipientAddress]">Go to inbox</a>
           </p>
 
         </div>

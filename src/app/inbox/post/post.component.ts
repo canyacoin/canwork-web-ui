@@ -3,7 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import { Job, PaymentType, TimeRange, WorkType } from '../../core-classes/job';
+import { Job, JobDescription, PaymentType, TimeRange, WorkType } from '../../core-classes/job';
+import { Upload } from '../../core-classes/upload';
 import { User } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
 import { JobService } from '../../core-services/job.service';
@@ -19,6 +20,7 @@ export class PostComponent implements OnInit, OnDestroy {
 
   postForm: FormGroup = null;
   pageLoaded = false;
+  paymentType = PaymentType;
 
   recipientAddress = '';
   recipient: User = null;
@@ -40,13 +42,13 @@ export class PostComponent implements OnInit, OnDestroy {
       description: ['', Validators.compose([Validators.required, Validators.maxLength(255)])],
       title: ['', Validators.compose([Validators.required, Validators.maxLength(64)])],
       initialStage: ['', Validators.compose([Validators.required, Validators.maxLength(64)])],
-      skills: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(100)])],
+      skills: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(100)])],
       attachments: [''],
       workType: ['', Validators.compose([Validators.required])],
       timelineExpectation: ['', Validators.compose([Validators.required])],
       weeklyCommitment: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(60)])],
       paymentType: ['', Validators.compose([Validators.required])],
-      // budget: [Validators.compose([Validators.required, Validators.min(10), Validators.max(10000000)])]
+      budget: ['', Validators.compose([Validators.required, Validators.min(10), Validators.max(10000000)])]
     });
   }
 
@@ -102,13 +104,40 @@ export class PostComponent implements OnInit, OnDestroy {
 
   async submitForm() {
     this.isSending = true;
+
+    let tags: string[] = this.postForm.value.skills === '' ? [] : this.postForm.value.skills.split(',').map(item => item.trim());
+    if (tags.length > 6) {
+      tags = tags.slice(0, 6);
+    }
+
+    try {
+      const job = new Job({
+        clientId: this.recipientAddress,
+        providerId: this.currentUser.address,
+        information: new JobDescription({
+          description: this.postForm.value.description,
+          title: this.postForm.value.title,
+          initialStage: this.postForm.value.initialStage,
+          skills: tags,
+          attachments: new Array<Upload>(),
+          workType: this.postForm.value.workType,
+          timelineExpectation: this.postForm.value.timelineExpectation,
+          weeklyCommitment: this.postForm.value.weeklyCommitment
+        }),
+        paymentType: this.postForm.value.paymentType,
+        budget: this.postForm.value.budget
+      });
+
+      this.sent = await this.jobService.postJob(job);
+      this.isSending = false;
+    } catch (e) {
+      this.sent = false;
+      this.isSending = false;
+    }
+
+
     // const channelId = await this.chatService.createChannelsAsync(this.currentUser, this.recipient);
     // if (channelId) {
     // this.chatService.sendNewPostMessages(channelId, this.currentUser, this.recipient, this.postForm.value.description, this.postForm.value.budget);
-    this.isSending = false;
-    this.sent = true;
-    // } else {
-    //   this.isSending = false;
-    // }
   }
 }

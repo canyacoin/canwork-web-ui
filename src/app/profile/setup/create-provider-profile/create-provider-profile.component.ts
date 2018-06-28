@@ -67,7 +67,7 @@ export class CreateProviderProfileComponent implements OnInit {
       bio: [this.user.bio || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(60)])],
       description: [this.user.description || '', Validators.compose([Validators.maxLength(500)])],
       category: ['', Validators.compose([Validators.required])],
-      skillTags: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(100)])],
+      skillTags: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(100)])],
       hourlyRate: [this.user.hourlyRate || '', Validators.compose([CurrencyValidator.isValid])],
       color1: [colors[0]],
       color2: [colors[1]],

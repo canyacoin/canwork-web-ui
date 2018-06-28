@@ -1,8 +1,22 @@
 import { Upload } from './upload';
 
 export class Job {
+    id: string;
     clientId: string;
     providerId: string;
+    information: JobDescription;
+    paymentType: PaymentType;
+    budget: number;
+    paymentLog: Array<Payment> = [];
+    disputeLog: Array<DisputeItem> = [];
+    boostVisibility = false;
+
+    constructor(init?: Partial<Job>) {
+        Object.assign(this, init);
+    }
+}
+
+export class JobDescription {
     description: string;
     title: string;
     initialStage: string;
@@ -11,13 +25,18 @@ export class Job {
     workType: WorkType;
     timelineExpectation: TimeRange;
     weeklyCommitment: number;
-    paymentType: PaymentType;
-    budget: number;
-    boostVisibility = false;
 
-    constructor(init?: Partial<Job>) {
+    constructor(init?: Partial<JobDescription>) {
         Object.assign(this, init);
     }
+}
+
+export enum Payment {
+
+}
+
+export enum DisputeItem {
+
 }
 
 export enum WorkType {
