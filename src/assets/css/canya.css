@@ -3627,6 +3627,37 @@ button:focus {
   opacity: 1;
 }
 
+.canya-search-bar{
+  border-style:solid !important;
+  border-width: 0.75px !important;
+  border-right: transparent !important; 
+  border-top-left-radius: 5px !important; 
+  border-bottom-left-radius: 5px !important;
+}
+.canya-search-bar .search-img{
+  width:24px;
+  height:24px;
+}
+.canya-search-bar .search-btn{
+  height: 100%;
+  border-top-left-radius: 0px !important; 
+  border-bottom-left-radius: 0px !important; 
+  background-color : #33ccff;
+  border-color: #33ccff !important;
+  color: white; 
+}
+
+.faq-content-hero img{
+  max-height: 25rem;
+}
+.faq-content-hero-text{
+  padding-top:7rem;
+}
+.faq-row{ 
+  background-color: #f8f9fa;
+  margin: 15px 0 15px 0;
+  padding: 15px;
+}
 @media (max-width: 767px) {
   .swiper-button-next,
   .swiper-button-prev {

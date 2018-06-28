@@ -278,7 +278,9 @@
   border-radius: 50%;
   padding: 4px;
 }
-
+.back-button-container{
+  min-height: 40px;
+}
 .banner-canya {
   position: fixed;
   right: 45px;
@@ -332,11 +334,16 @@
   border-radius: 5px;
 }
 
+
+/* MEDIA QUERIES */
 @media (max-width: 768px) {
   .thesaas-sections-split .section,
   .thesaas-sections-split .main-content .site-footer {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     margin: 30px 0 100px;
+  }
+  .back-button-container{
+    min-height: 0px;
   }
 }
 
