@@ -1,14 +1,14 @@
 <main class="main-content">
   <section class="section pt-15 pb-20">
     <div class="container">
-      
+
       <app-back-button></app-back-button>
       <header class="section-header my-0 py-0">
         <h2>Profile</h2>
         <p class="lead fw-400">Edit your details:</p>
         <hr>
-      </header> 
-      <div *ngIf="currentUser" class="row"> 
+      </header>
+      <div *ngIf="currentUser" class="row">
         <div class="col-12 col-md-6 offset-md-3">
           <form [formGroup]="profileForm" class="form validate" novalidate>
             <div class="form-group">
@@ -46,40 +46,40 @@
             <div [hidden]="currentUser.type !== 'Provider'" class="form-group">
               <label>Category</label>
               <div class="row">
-                  <div class="col-md-6">
-                      <label class="custom-control custom-radio">
-                          <input class="custom-control-input" #category1 type="radio" name="category" [checked]="this.currentUser.category === 'CONTENT CREATORS'">
-                          <span class="custom-control-indicator"></span>
-                          <span class="custom-control-description">CONTENT CREATORS</span>
-                        </label>
-                        <label class="custom-control custom-radio">
-                          <input class="custom-control-input" #category2 type="radio" name="category" [checked]="this.currentUser.category === 'DESIGNERS & CREATIVES'">
-                          <span class="custom-control-indicator"></span>
-                          <span class="custom-control-description">DESIGNERS & CREATIVES</span>
-                        </label>
-                        <label class="custom-control custom-radio">
-                          <input class="custom-control-input" #category3 type="radio" name="category" [checked]="this.currentUser.category === 'FINANCIAL EXPERTS'">
-                          <span class="custom-control-indicator"></span>
-                          <span class="custom-control-description">FINANCIAL EXPERTS</span>
-                        </label>
-                  </div>
-                  <div class="col-md-6"> 
-                      <label class="custom-control custom-radio">
-                          <input class="custom-control-input" #category4 type="radio" name="category" [checked]="this.currentUser.category === 'MARKETING & SEO'">
-                          <span class="custom-control-indicator"></span>
-                          <span class="custom-control-description">MARKETING & SEO</span>
-                        </label>
-                        <label class="custom-control custom-radio">
-                          <input class="custom-control-input" #category5 type="radio" name="category" [checked]="this.currentUser.category==='SOFTWARE DEVELOPERS'">
-                          <span class="custom-control-indicator"></span>
-                          <span class="custom-control-description">SOFTWARE DEVELOPERS</span>
-                        </label>
-                        <label class="custom-control custom-radio">
-                          <input class="custom-control-input" #category6 type="radio" name="category" [checked]="this.currentUser.category==='VIRTUAL ASSISTANTS'">
-                          <span class="custom-control-indicator"></span>
-                          <span class="custom-control-description">VIRTUAL ASSISTANTS</span>
-                        </label>
-                  </div>
+                <div class="col-md-6">
+                  <label class="custom-control custom-radio">
+                    <input class="custom-control-input" #category1 type="radio" name="category" [checked]="this.currentUser.category === 'CONTENT CREATORS'">
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">CONTENT CREATORS</span>
+                  </label>
+                  <label class="custom-control custom-radio">
+                    <input class="custom-control-input" #category2 type="radio" name="category" [checked]="this.currentUser.category === 'DESIGNERS & CREATIVES'">
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">DESIGNERS & CREATIVES</span>
+                  </label>
+                  <label class="custom-control custom-radio">
+                    <input class="custom-control-input" #category3 type="radio" name="category" [checked]="this.currentUser.category === 'FINANCIAL EXPERTS'">
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">FINANCIAL EXPERTS</span>
+                  </label>
+                </div>
+                <div class="col-md-6">
+                  <label class="custom-control custom-radio">
+                    <input class="custom-control-input" #category4 type="radio" name="category" [checked]="this.currentUser.category === 'MARKETING & SEO'">
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">MARKETING & SEO</span>
+                  </label>
+                  <label class="custom-control custom-radio">
+                    <input class="custom-control-input" #category5 type="radio" name="category" [checked]="this.currentUser.category==='SOFTWARE DEVELOPERS'">
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">SOFTWARE DEVELOPERS</span>
+                  </label>
+                  <label class="custom-control custom-radio">
+                    <input class="custom-control-input" #category6 type="radio" name="category" [checked]="this.currentUser.category==='VIRTUAL ASSISTANTS'">
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">VIRTUAL ASSISTANTS</span>
+                  </label>
+                </div>
               </div>
               <!-- 
               <div class="custom-controls-stacked">
@@ -118,6 +118,7 @@
             </div>
 
             <div [hidden]="currentUser.type !== 'Provider'" class="form-group">
+              <label>Tag with relevant skills to help clients find you more easily.</label>
               <app-skill-tags-selection *ngIf="currentUser" (tagsUpdated)="skillTagsUpdated($event)" [initialTags]="currentUser.skillTags"
                 [minimumTags]="0"></app-skill-tags-selection>
               <input hidden #skillTags class="form-control" formControlName="skillTags" type="text" name="skillTags">

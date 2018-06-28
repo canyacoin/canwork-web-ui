@@ -21,6 +21,7 @@
 
           <div class="form-group row">
             <div class="col-lg-9 col-md-9 col-sm-12">
+              <label>Tag with relevant skills to help clients find you more easily.</label>
               <app-skill-tags-selection (tagsUpdated)="skillTagsUpdated($event)" [initialTags]="user.skillTags" [minimumTags]="0"></app-skill-tags-selection>
               <input hidden #skillTags class="form-control" formControlName="skillTags" type="text" name="skillTags">
             </div>

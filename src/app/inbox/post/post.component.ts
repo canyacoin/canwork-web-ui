@@ -3,9 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
+import { Job, PaymentType, TimeRange, WorkType } from '../../core-classes/job';
 import { User } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
-import { ChatService } from '../../core-services/chat.service';
+import { JobService } from '../../core-services/job.service';
+import { UploadService } from '../../core-services/upload.service';
 import { UserService } from '../../core-services/user.service';
 
 @Component({
@@ -15,13 +17,14 @@ import { UserService } from '../../core-services/user.service';
 })
 export class PostComponent implements OnInit, OnDestroy {
 
-  currentUser: User;
-  authSub: Subscription;
-
   postForm: FormGroup = null;
+  pageLoaded = false;
 
   recipientAddress = '';
   recipient: User = null;
+  currentUser: User;
+
+  authSub: Subscription;
 
   isSending = false;
   sent = false;
@@ -31,10 +34,19 @@ export class PostComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private userService: UserService,
     private authService: AuthService,
-    private chatService: ChatService) {
+    private jobService: JobService,
+    private uploadService: UploadService) {
     this.postForm = formBuilder.group({
       description: ['', Validators.compose([Validators.required, Validators.maxLength(255)])],
-      budget: ['', Validators.compose([Validators.required, Validators.min(10), Validators.maxLength(9999)])]
+      title: ['', Validators.compose([Validators.required, Validators.maxLength(64)])],
+      initialStage: ['', Validators.compose([Validators.required, Validators.maxLength(64)])],
+      skills: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(100)])],
+      attachments: [''],
+      workType: ['', Validators.compose([Validators.required])],
+      timelineExpectation: ['', Validators.compose([Validators.required])],
+      weeklyCommitment: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(60)])],
+      paymentType: ['', Validators.compose([Validators.required])],
+      // budget: [Validators.compose([Validators.required, Validators.min(10), Validators.max(10000000)])]
     });
   }
 
@@ -45,6 +57,8 @@ export class PostComponent implements OnInit, OnDestroy {
         if (params['address'] && params['address'] !== this.currentUser.address) {
           this.recipientAddress = params['address'];
           this.loadUser(this.recipientAddress);
+        } else {
+          this.pageLoaded = true;
         }
       });
     });
@@ -55,24 +69,46 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   loadUser(address: string) {
-    try {
-      this.userService.getUser(address).then((user: User) => {
-        this.recipient = user;
-      });
-    } catch (error) {
-      console.error('error loading user', error);
-    }
+    this.userService.getUser(address).then((user: User) => {
+      this.recipient = user;
+      this.pageLoaded = true;
+    });
+  }
+
+  skillTagsUpdated(value: string) {
+    this.postForm.controls['skills'].setValue(value);
+  }
+
+  workTypes(): Array<string> {
+    return Object.values(WorkType);
+  }
+  setWorkType(type: WorkType) {
+    this.postForm.controls.workType.setValue(type);
+  }
+
+  timeRanges(): Array<string> {
+    return Object.values(TimeRange);
+  }
+  setTimeRange(range: TimeRange) {
+    this.postForm.controls.timelineExpectation.setValue(range);
+  }
+
+  paymentTypes(): Array<string> {
+    return Object.values(PaymentType);
+  }
+  setPaymentType(type: PaymentType) {
+    this.postForm.controls.paymentType.setValue(type);
   }
 
   async submitForm() {
     this.isSending = true;
-    const channelId = await this.chatService.createChannelsAsync(this.currentUser, this.recipient);
-    if (channelId) {
-      this.chatService.sendNewPostMessages(channelId, this.currentUser, this.recipient, this.postForm.value.description, this.postForm.value.budget);
-      this.isSending = false;
-      this.sent = true;
-    } else {
-      this.isSending = false;
-    }
+    // const channelId = await this.chatService.createChannelsAsync(this.currentUser, this.recipient);
+    // if (channelId) {
+    // this.chatService.sendNewPostMessages(channelId, this.currentUser, this.recipient, this.postForm.value.description, this.postForm.value.budget);
+    this.isSending = false;
+    this.sent = true;
+    // } else {
+    //   this.isSending = false;
+    // }
   }
 }
