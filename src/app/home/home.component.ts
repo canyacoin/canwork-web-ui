@@ -64,10 +64,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     setTimeout(() => {
       this.loading = false;
-    }, 400);
-    $(".ais-SearchBox-submitIcon").remove();
-    $(".ais-SearchBox-submit").append("<img src='assets/img/search-icon-white.svg' class='searchbar-searchicon'>")
-  }
+    }, 400); 
+   }
 
   ngOnDestroy() {
     this.navService.setHideSearchBar(false);
