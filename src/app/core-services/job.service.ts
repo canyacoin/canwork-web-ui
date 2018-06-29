@@ -3,6 +3,7 @@ import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/fires
 import { Observable } from 'rxjs/Observable';
 
 import { Job, PaymentType, TimeRange, WorkType } from '../core-classes/job';
+import { Upload } from '../core-classes/upload';
 import { User } from '../core-classes/user';
 import { AuthService } from './auth.service';
 
@@ -10,7 +11,7 @@ import { AuthService } from './auth.service';
 export class JobService {
 
   jobsCollection: AngularFirestoreCollection<any>;
-  usersJobs: Observable<Job[]>;
+  // usersJobs: Observable<Job[]>;
 
   constructor(private afs: AngularFirestore, private authService: AuthService) {
     this.jobsCollection = this.afs.collection<any>('jobs');
@@ -34,7 +35,7 @@ export class JobService {
     return new Promise(async (resolve: any, reject: any) => {
       try {
         const x = await this.parseJobToObject(job);
-        await this.jobsCollection.add(x);
+        await this.jobsCollection.doc(job.id).set(x);
         resolve(true);
       } catch (e) {
         reject(false);
@@ -42,10 +43,28 @@ export class JobService {
     });
   }
 
+
+
   parseJobToObject(job: Job): Promise<object> {
+    const parsedAttachments: Array<any> = [];
+    job.information.attachments.forEach((attachment: Upload) => {
+      parsedAttachments.push(this.parseUpload(attachment));
+    });
     const parsedInfo = Object.assign({}, job.information);
+    parsedInfo.attachments = parsedAttachments;
     const parsedJob = Object.assign({}, job);
     parsedJob.information = parsedInfo;
     return Promise.resolve(parsedJob);
+  }
+
+  private parseUpload(upload: Upload): any {
+    // const parsedFile = {};
+    // // tslint:disable-next-line:forin
+    // for (const k in upload.file) {
+    //   parsedFile[k] = upload.file[k];
+    // }
+    const parsedUpload: any = Object.assign({}, upload);
+    // parsedUpload.file = parsedFile;
+    return parsedUpload;
   }
 }

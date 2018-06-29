@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AngularFireUploadTask } from 'angularfire2/storage';
+import * as _ from 'lodash';
 import { Subscription } from 'rxjs/Subscription';
 
 import { Job, JobDescription, PaymentType, TimeRange, WorkType } from '../../core-classes/job';
@@ -8,8 +10,9 @@ import { Upload } from '../../core-classes/upload';
 import { User } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
 import { JobService } from '../../core-services/job.service';
-import { UploadService } from '../../core-services/upload.service';
+import { UploadCategory, UploadService } from '../../core-services/upload.service';
 import { UserService } from '../../core-services/user.service';
+import { GenerateGuid } from '../../core-utils/generate.uid';
 
 @Component({
   selector: 'app-post',
@@ -30,6 +33,15 @@ export class PostComponent implements OnInit, OnDestroy {
 
   isSending = false;
   sent = false;
+
+  jobId: string;
+
+  currentUpload: Upload;
+  uploadedFile: Upload;
+  maxFileSizeBytes = 5000000; // 50mb
+  fileTooBig = false;
+  uploadFailed = false;
+  deleteFailed = false;
 
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -53,6 +65,7 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.jobId = GenerateGuid();
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       this.currentUser = user;
       this.activatedRoute.params.take(1).subscribe((params) => {
@@ -64,6 +77,61 @@ export class PostComponent implements OnInit, OnDestroy {
         }
       });
     });
+  }
+
+  detectFiles(event) {
+    const file = event.target.files.item(0);
+    this.uploadSingle(file);
+  }
+
+  async uploadSingle(file: File) {
+    this.currentUpload = null;
+    this.uploadFailed = false;
+    this.fileTooBig = false;
+    if (file.size > this.maxFileSizeBytes) {
+      this.fileTooBig = true;
+    } else {
+      try {
+        this.currentUpload = new Upload(this.currentUser.address, file.name, file.size);
+        const upload: Upload = await this.uploadService.uploadJobAttachmentToStorage(this.jobId, this.currentUpload, file);
+        if (upload) {
+          this.uploadedFile = upload;
+        } else {
+          this.uploadFailed = true;
+          this.currentUpload = null;
+        }
+      } catch (e) {
+        this.uploadFailed = true;
+        this.currentUpload = null;
+      }
+    }
+  }
+
+  async removeUpload(upload: Upload) {
+    this.deleteFailed = false;
+    const deleted = await this.uploadService.cancelJobAttachmentUpload(this.jobId, upload);
+    if (deleted) {
+      this.uploadedFile = null;
+      this.currentUpload = null;
+    } else {
+      this.deleteFailed = true;
+    }
+  }
+
+  humanFileSize(bytes, si) {
+    const thresh = si ? 1000 : 1024;
+    if (Math.abs(bytes) < thresh) {
+      return bytes + ' B';
+    }
+    const units = si
+      ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+      : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+    let u = -1;
+    do {
+      bytes /= thresh;
+      ++u;
+    } while (Math.abs(bytes) >= thresh && u < units.length - 1);
+    return bytes.toFixed(1) + ' ' + units[u];
   }
 
   ngOnDestroy() {
@@ -112,6 +180,7 @@ export class PostComponent implements OnInit, OnDestroy {
 
     try {
       const job = new Job({
+        id: this.jobId,
         clientId: this.recipientAddress,
         providerId: this.currentUser.address,
         information: new JobDescription({
@@ -119,7 +188,7 @@ export class PostComponent implements OnInit, OnDestroy {
           title: this.postForm.value.title,
           initialStage: this.postForm.value.initialStage,
           skills: tags,
-          attachments: new Array<Upload>(),
+          attachments: [this.uploadedFile],
           workType: this.postForm.value.workType,
           timelineExpectation: this.postForm.value.timelineExpectation,
           weeklyCommitment: this.postForm.value.weeklyCommitment

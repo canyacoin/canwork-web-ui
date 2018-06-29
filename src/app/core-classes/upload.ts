@@ -1,13 +1,18 @@
-export class Upload {
+import { GenerateGuid } from '../core-utils/generate.uid';
 
-    $key: string;
-    file: File;
+export class Upload {
+    id: string;
+    createdBy: string;
     name: string;
     url: string;
+    size: number;
     progress: number;
     createdAt: Date = new Date();
 
-    constructor(file: File) {
-        this.file = file;
+    constructor(createdBy: string, filename: string, size: number) {
+        this.id = GenerateGuid();
+        this.createdBy = createdBy;
+        this.name = filename;
+        this.size = size;
     }
 }
