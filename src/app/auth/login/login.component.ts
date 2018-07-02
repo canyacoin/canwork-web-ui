@@ -17,11 +17,15 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   loading = false;
   pageInit = false;
-
+  returnUrl: string;
   isOnMobile = false;
 
-  constructor(private router: Router, private authService: AuthService, private userService: UserService,
-    private afs: AngularFirestore, private script: ScriptService) {
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private authService: AuthService,
+              private userService: UserService,
+              private afs: AngularFirestore,
+              private script: ScriptService) {
     this.script.load('uport').then(data => {
       this.pageInit = true;
       this.authService.initUport();
@@ -33,6 +37,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     const ua = window.navigator.userAgent;
     this.isOnMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua);
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   ngAfterViewInit() {
@@ -82,7 +87,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.afs.collection<any>('users', ref => ref.where('address', '==', userDetails.address).limit(1)).valueChanges().take(1).subscribe((usersMatchingId: any) => {
       if (usersMatchingId && usersMatchingId.length > 0) {
         this.authService.setUser(usersMatchingId[0]);
-        this.router.navigate(['/home']); // TODO: Add returnURl for when routed here from redirect
+        this.router.navigate([this.returnUrl]);
+
         // } else if (x != null) {
         //   this.afs.collection<any>('users', x).valueChanges().take(1).subscribe((usersMatchingEmail: any) => {
         //     if (usersMatchingEmail && usersMatchingEmail.length > 0) {
