@@ -64,8 +64,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     setTimeout(() => {
       this.loading = false;
-    }, 400);
-  }
+    }, 400); 
+   }
 
   ngOnDestroy() {
     this.navService.setHideSearchBar(false);
