@@ -125,7 +125,7 @@
             </div>
 
             <div [hidden]="currentUser.type !== 'Provider'" class="form-group">
-              <label>Hourly Rate ( $AUD )</label>
+              <label>Hourly Rate ( $USD )</label>
               <input class="form-control" #hourlyRate formControlName="hourlyRate" type="text" name="hourlyRate" placeholder="e.g. 19"
                 [class.invalid]="!profileForm.controls.hourlyRate.valid && profileForm.controls.hourlyRate.dirty">
 

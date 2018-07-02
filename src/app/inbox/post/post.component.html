@@ -134,17 +134,25 @@
 
                     <div class="form-group" *ngIf="postForm.controls.paymentType.value">
                       <label class="text-dark">
-                        <span *ngIf="postForm.controls.paymentType.value == paymentType.hourly">Budget per hour (CAN) *</span>
-                        <span *ngIf="postForm.controls.paymentType.value == paymentType.fixed">Total budget (CAN) *</span>
+                        <span *ngIf="postForm.controls.paymentType.value == paymentType.hourly">Budget per hour (USD) *</span>
+                        <span *ngIf="postForm.controls.paymentType.value == paymentType.fixed">Total budget (USD) *</span>
                       </label>
                       <div class="row">
                         <div class="col-6">
-                          <input #budget formControlName="budget" class="form-control" type="number" name="budget" step="50" placeholder="10 CanYaCoins minimum"
+                          <input #budget formControlName="budget" class="form-control" type="number" name="budget" step="5" placeholder="1 USD minimum"
                             [class.invalid]="!postForm.controls.budget.valid && postForm.controls.budget.dirty">
-
-                          <small *ngIf="!postForm.controls.budget.valid && postForm.controls.budget.dirty" class="text-primary">Must be 10 CanYaCoins or higher.</small>
+                          <small *ngIf="!postForm.controls.budget.valid && postForm.controls.budget.dirty" class="text-primary">Must be 1 USD or more.</small>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div *ngIf="postForm.controls.budget.dirty && canToUsd" class="col-6 mt-5 text-right">
+                          <small>~ {{usdToCan(postForm.controls.budget.value)}} CAN</small>
                         </div>
 
+                        <div class="col-12">
+                          <small class="text-primary text-wrap">
+                            <b>Important</b>: All Transactions on CanYa are made in CAN tokens</small>
+                        </div>
                       </div>
                     </div>
                   </div>

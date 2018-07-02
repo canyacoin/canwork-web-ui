@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Http, Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFireUploadTask } from 'angularfire2/storage';
 import * as _ from 'lodash';
@@ -12,6 +13,7 @@ import { AuthService } from '../../core-services/auth.service';
 import { JobService } from '../../core-services/job.service';
 import { UploadCategory, UploadService } from '../../core-services/upload.service';
 import { UserService } from '../../core-services/user.service';
+import { getUsdToCan } from '../../core-utils/currency-conversion';
 import { GenerateGuid } from '../../core-utils/generate.uid';
 
 @Component({
@@ -38,10 +40,12 @@ export class PostComponent implements OnInit, OnDestroy {
 
   currentUpload: Upload;
   uploadedFile: Upload;
-  maxFileSizeBytes = 5000000; // 50mb
+  maxFileSizeBytes = 50000000; // 50mb
   fileTooBig = false;
   uploadFailed = false;
   deleteFailed = false;
+
+  canToUsd: number;
 
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -49,7 +53,8 @@ export class PostComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private authService: AuthService,
     private jobService: JobService,
-    private uploadService: UploadService) {
+    private uploadService: UploadService,
+    private http: Http) {
     this.postForm = formBuilder.group({
       description: ['', Validators.compose([Validators.required, Validators.maxLength(255)])],
       title: ['', Validators.compose([Validators.required, Validators.maxLength(64)])],
@@ -60,11 +65,11 @@ export class PostComponent implements OnInit, OnDestroy {
       timelineExpectation: ['', Validators.compose([Validators.required])],
       weeklyCommitment: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(60)])],
       paymentType: ['', Validators.compose([Validators.required])],
-      budget: ['', Validators.compose([Validators.required, Validators.min(10), Validators.max(10000000)])]
+      budget: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(10000000)])]
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.jobId = GenerateGuid();
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       this.currentUser = user;
@@ -77,7 +82,16 @@ export class PostComponent implements OnInit, OnDestroy {
         }
       });
     });
+    const canToUsdResp = await this.http.get('https://api.coinmarketcap.com/v2/ticker/2343/?convert=USD').toPromise();
+    if (canToUsdResp.ok) {
+      this.canToUsd = JSON.parse(canToUsdResp.text())['data']['quotes']['USD']['price'];
+    }
   }
+
+  usdToCan(usd: number) {
+    return getUsdToCan(this.canToUsd, usd);
+  }
+
 
   detectFiles(event) {
     const file = event.target.files.item(0);
