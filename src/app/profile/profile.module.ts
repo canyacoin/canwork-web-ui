@@ -27,7 +27,6 @@ import {
 } from './setup/create-provider-profile/create-provider-profile.component';
 import { ProviderStateComponent } from './setup/provider-state/provider-state.component';
 import { SetupComponent } from './setup/setup.component';
-import { SkillTagsSelectionComponent } from './skill-tags-selection/skill-tags-selection.component';
 
 @NgModule({
   imports: [
@@ -55,7 +54,6 @@ import { SkillTagsSelectionComponent } from './skill-tags-selection/skill-tags-s
     SocialComponent,
     SetupComponent,
     SupportMeComponent,
-    SkillTagsSelectionComponent,
     TimezoneComponent,
     VisitorsComponent
   ],
