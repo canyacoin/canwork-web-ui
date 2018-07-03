@@ -54,9 +54,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
           } else {
             this.projectLoaded = true;
           }
-        });
+        }, error => { console.error('unable to retrieve data:', error) });
       }
-    });
+    }, error => { console.error('unable to retrieve data:', error) });
   }
 
   ngOnDestroy() {

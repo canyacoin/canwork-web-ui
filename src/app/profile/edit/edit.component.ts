@@ -40,7 +40,7 @@ export class EditComponent implements OnInit, OnDestroy {
       if (this.currentUser != null) {
         this.buildForm();
       }
-    });
+    }, error => { console.error('! unable to retrieve currentUser data:', error) });
   }
 
   ngOnDestroy() {

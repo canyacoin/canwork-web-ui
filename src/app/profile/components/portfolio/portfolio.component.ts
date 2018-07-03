@@ -43,7 +43,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
       this.allPortfolioItems = data;
       this.lastPage = (Math.ceil(this.allPortfolioItems.length / this.pageLimit) - 1);
       this.loaded = true;
-    });
+    }, error => { console.error('! unable to retrieve portfolio data:', error) });
   }
 
   paginatedPortfolioItems() {
