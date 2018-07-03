@@ -254,6 +254,25 @@
   border-bottom-left-radius: 5px;
 }
 
+.canya-seach-bar{
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+  border: none !important;
+  border-radius: 5px;
+} 
+.canya-search-input-btn{ 
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  height:36px;
+}
+.canya-search-input-btn img{
+  height:24px;
+  widows: 24px;
+}
+.canya-search-input{
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
 [border-64] {
   border-radius: 64px;
 }
