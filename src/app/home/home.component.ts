@@ -1,4 +1,6 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import {
+    AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild
+} from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
@@ -40,6 +42,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     routing: true
   };
 
+  @ViewChild('search', { read: ElementRef }) search: ElementRef;
+
   constructor(private activatedRoute: ActivatedRoute, private navService: NavService,
     private afs: AngularFirestore, private http: Http, private cdRef: ChangeDetectorRef) {
     this.routeSub = this.activatedRoute.queryParams.subscribe((params) => {
@@ -64,8 +68,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     setTimeout(() => {
       this.loading = false;
-    }, 400); 
-   }
+    }, 400);
+    this.search.nativeElement.querySelector('.ais-SearchBox-submit').innerHTML = '<img src="assets/img/search-icon-white.svg" class="searchbar-searchicon">';
+  }
 
   ngOnDestroy() {
     this.navService.setHideSearchBar(false);

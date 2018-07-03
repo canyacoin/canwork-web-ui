@@ -5,7 +5,7 @@
         <div class="col-12">
           <ais-instantsearch [config]="algoliaSearchConfig" *ngIf="!rendering">
             <h4>CanYa tell us what you're looking for?</h4>
-            <ais-search-box class="search-box" (change)="algoliaSearchChanged($event)"></ais-search-box>
+            <ais-search-box #search class="search-box" (change)="algoliaSearchChanged($event)"></ais-search-box>
             <div class="row search-results">
               <div class="col-md-12">
                 <ais-hits>
@@ -60,11 +60,7 @@
         </div>
       </div>
     </div>
-  </section> 
-  <script>
-    $(".ais-SearchBox-submitIcon").remove();
-    $(".ais-SearchBox-submit").append("<img src='assets/img/search-icon-white.svg' class='searchbar-searchicon'>")
-  </script>
+  </section>
   <app-random-animation></app-random-animation>
   <app-blog-posts></app-blog-posts>
   <app-feedback></app-feedback>
