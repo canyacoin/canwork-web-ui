@@ -26,7 +26,7 @@ export class UploadService {
         const storageRef = this.storage.ref(`uploads/${UploadCategory.jobs}/${jobId}/${upload.createdBy}/${upload.id}/${upload.name}`);
         const uploadTask = storageRef.put(file);
         uploadTask.snapshotChanges().subscribe((snap) => {
-          upload.progress = (snap.bytesTransferred / snap.totalBytes) * 100;
+          upload.progress = Math.floor((snap.bytesTransferred / snap.totalBytes) * 100);
           if (upload.progress === 100) {
             if (snap.downloadURL) { // firebase storage sometimes bugs and returns null url
               upload.url = snap.downloadURL;

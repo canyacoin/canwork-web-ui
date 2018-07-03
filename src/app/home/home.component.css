@@ -54,7 +54,9 @@
 }
 
 .tag-row {
-  padding: 0 20px 0 20px;
+  min-height: 115px;
+  padding: 0 30px 0 30px; 
+  justify-content: center;
 }
 
 .profile {
@@ -129,7 +131,7 @@
 
 .provider-card:hover {
   box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.1);
-}
+} 
 
 @media (max-width:520px) {
   .tag-row {

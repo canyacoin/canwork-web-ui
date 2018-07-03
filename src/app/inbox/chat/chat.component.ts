@@ -61,7 +61,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   isSending = false;
   isLoading = true;
   hideBanner = false;
-
+  isOnMobile = false;
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
@@ -80,12 +80,15 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
       price: ['', Validators.compose([Validators.required, Validators.min(10), Validators.maxLength(9999)])]
     });
 
-    this.setSelectedChannel(JSON.parse(localStorage.getItem('selectedChannel')));
   }
 
   ngOnInit() {
+
+    const ua = window.navigator.userAgent;
+    this.isOnMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua);
+   
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
-      if (user !== this.currentUser) {
+      if (user && user !== this.currentUser) {
         this.currentUser = user;
         this.activatedRoute.params.take(1).subscribe((params) => {
           if (params['address'] && params['address'] !== this.currentUser.address) {
@@ -125,7 +128,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   loadChannels() {
     try {
       this.afs.collection('chats').doc(this.currentUser.address).collection('channels').valueChanges().subscribe((data: any) => {
-        if (!this.selectedChannel) {
+        if (!JSON.parse(localStorage.getItem('selectedChannel'))) {
           if (this.fAddress !== '') {
             const idx = findIndex(data, { 'address': this.fAddress });
             if (idx !== '-1') {
@@ -134,6 +137,8 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
           } else {
             this.setSelectedChannel(data[0]);
           }
+        } else {
+          this.setSelectedChannel(JSON.parse(localStorage.getItem('selectedChannel')));
         }
         this.channels = orderBy(data, ['timestamp'], ['desc']);
         this.onSearch('');
@@ -189,7 +194,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   sendMessage(messageModel: Message) {
-    this.chatService.sendMessage(this.currentUser, this.userModel, messageModel);
+    this.chatService.sendMessage(this.currentUser.address, this.userModel.address, messageModel);
     this.message = '';
   }
 
@@ -233,9 +238,8 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sendMessage(msg);
   }
 
-  onPostRequest() {
-    this.chatService.sendNewPostMessages(this.selectedChannel.channel, this.currentUser, this.userModel, this.postForm.value.description, this.postForm.value.budget);
-    (<any>window).$('#postARequest').modal('hide');
+  postRequest(userId: string) {
+    this.router.navigate(['/inbox/post', userId]);
   }
 
   onMakeAnOffer() {

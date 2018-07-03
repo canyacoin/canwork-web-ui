@@ -1,0 +1,44 @@
+.headshot { 
+  width: 75px;
+  height: 75px;
+  border-radius: 50%; 
+  object-fit: cover;
+  object-position: center;
+}
+.headshot-div{
+  border-radius: 50%;
+  width:65px;
+  height:65px;
+  background-size: 105%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color:black; 
+}
+
+.job-dashboard-card{
+  box-shadow: 0 0px 10px 0 rgba(0,0,0,0.1); 
+  border-radius: 5px;
+}
+.job-dashboard-card:hover{
+  box-shadow: 0 0px 15px 0 rgba(0,0,0,0.3); 
+} 
+.job-info-status{
+  text-align: right;
+}
+@media (max-width:863px) and (min-width:568px){
+  .headshot {
+    width: 65px;
+    height: 65px; 
+  }
+} 
+@media (max-width:568px){
+  .headshot-div{
+    margin: 0 auto;
+  }
+  .job-info{
+    text-align: center;
+  }
+  .job-info-status{
+    text-align: center;
+  }
+}

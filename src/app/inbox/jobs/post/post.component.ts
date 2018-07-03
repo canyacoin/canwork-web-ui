@@ -6,15 +6,16 @@ import { AngularFireUploadTask } from 'angularfire2/storage';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs/Subscription';
 
-import { Job, JobDescription, PaymentType, TimeRange, WorkType } from '../../core-classes/job';
-import { Upload } from '../../core-classes/upload';
-import { User } from '../../core-classes/user';
-import { AuthService } from '../../core-services/auth.service';
-import { JobService } from '../../core-services/job.service';
-import { UploadCategory, UploadService } from '../../core-services/upload.service';
-import { UserService } from '../../core-services/user.service';
-import { getUsdToCan } from '../../core-utils/currency-conversion';
-import { GenerateGuid } from '../../core-utils/generate.uid';
+import { Job, JobDescription, PaymentType, TimeRange, WorkType } from '../../../core-classes/job';
+import { ActionType, IJobAction } from '../../../core-classes/job-action';
+import { Upload } from '../../../core-classes/upload';
+import { User, UserType } from '../../../core-classes/user';
+import { AuthService } from '../../../core-services/auth.service';
+import { JobService } from '../../../core-services/job.service';
+import { UploadCategory, UploadService } from '../../../core-services/upload.service';
+import { UserService } from '../../../core-services/user.service';
+import { getUsdToCan } from '../../../core-utils/currency-conversion';
+import { GenerateGuid } from '../../../core-utils/generate.uid';
 
 @Component({
   selector: 'app-post',
@@ -58,7 +59,7 @@ export class PostComponent implements OnInit, OnDestroy {
     this.postForm = formBuilder.group({
       description: ['', Validators.compose([Validators.required, Validators.maxLength(10000)])],
       title: ['', Validators.compose([Validators.required, Validators.maxLength(64)])],
-      initialStage: ['', Validators.compose([Validators.required, Validators.maxLength(64)])],
+      initialStage: ['', Validators.compose([Validators.required, Validators.maxLength(3000)])],
       skills: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(100)])],
       attachments: [''],
       workType: ['', Validators.compose([Validators.required])],
@@ -132,21 +133,6 @@ export class PostComponent implements OnInit, OnDestroy {
     }
   }
 
-  humanFileSize(bytes, si) {
-    const thresh = si ? 1000 : 1024;
-    if (Math.abs(bytes) < thresh) {
-      return bytes + ' B';
-    }
-    const units = si
-      ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-      : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
-    let u = -1;
-    do {
-      bytes /= thresh;
-      ++u;
-    } while (Math.abs(bytes) >= thresh && u < units.length - 1);
-    return bytes.toFixed(1) + ' ' + units[u];
-  }
 
   ngOnDestroy() {
     if (this.authSub) { this.authSub.unsubscribe(); }
@@ -195,14 +181,14 @@ export class PostComponent implements OnInit, OnDestroy {
     try {
       const job = new Job({
         id: this.jobId,
-        clientId: this.recipientAddress,
-        providerId: this.currentUser.address,
+        clientId: this.currentUser.address,
+        providerId: this.recipientAddress,
         information: new JobDescription({
           description: this.postForm.value.description,
           title: this.postForm.value.title,
           initialStage: this.postForm.value.initialStage,
           skills: tags,
-          attachments: [this.uploadedFile],
+          attachments: this.uploadedFile ? [this.uploadedFile] : [],
           workType: this.postForm.value.workType,
           timelineExpectation: this.postForm.value.timelineExpectation,
           weeklyCommitment: this.postForm.value.weeklyCommitment
@@ -211,16 +197,15 @@ export class PostComponent implements OnInit, OnDestroy {
         budget: this.postForm.value.budget
       });
 
-      this.sent = await this.jobService.postJob(job);
+      const action = new IJobAction(ActionType.createJob, UserType.client);
+      this.sent = await this.jobService.handleJobAction(job, action);
       this.isSending = false;
+      if (this.sent) {
+        this.jobService.createJobChat(job, action, this.currentUser, this.recipient);
+      }
     } catch (e) {
       this.sent = false;
       this.isSending = false;
     }
-
-
-    // const channelId = await this.chatService.createChannelsAsync(this.currentUser, this.recipient);
-    // if (channelId) {
-    // this.chatService.sendNewPostMessages(channelId, this.currentUser, this.recipient, this.postForm.value.description, this.postForm.value.budget);
   }
 }

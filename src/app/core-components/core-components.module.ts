@@ -5,10 +5,12 @@ import { RouterModule } from '@angular/router';
 import { ImgFallbackModule } from 'ngx-img-fallback';
 
 import { CoreUtilsModule } from '../core-utils/core-utils.module';
+import { AttachmentComponent } from './attachment/attachment.component';
 import { BackButtonComponent } from './back-button/back-button.component';
 import { BlogPostsComponent } from './blog-posts/blog-posts.component';
 import { BotComponent } from './bot/bot.component';
 import { BrandComponent } from './brand/brand.component';
+import { FaqPageComponent } from './faq-page/faq-page.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
@@ -24,7 +26,6 @@ import { FaqComponent } from './wallet-install/faq/faq.component';
 import { InstructionsComponent } from './wallet-install/instructions/instructions.component';
 import { WalletInstallComponent } from './wallet-install/wallet-install.component';
 import { WindowScrollDirective } from './window-scroll.directive';
-import { FaqPageComponent } from './faq-page/faq-page.component';
 
 @NgModule({
   imports: [
@@ -36,6 +37,7 @@ import { FaqPageComponent } from './faq-page/faq-page.component';
     RouterModule
   ],
   declarations: [
+    AttachmentComponent,
     BackButtonComponent,
     BotComponent,
     BlogPostsComponent,
@@ -57,6 +59,7 @@ import { FaqPageComponent } from './faq-page/faq-page.component';
     VStepperComponent
   ],
   exports: [
+    AttachmentComponent,
     BackButtonComponent,
     BotComponent,
     BlogPostsComponent,
