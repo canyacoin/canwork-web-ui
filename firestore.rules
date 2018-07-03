@@ -6,7 +6,7 @@ service cloud.firestore {
        allow write: if (request.auth.uid == userId);
     }
 
-    match /portfolio/{p}/work/{w} {
+    match /portfolio/{userId}/work/{w} {
        allow read;
        allow write: if (request.auth.uid == userId);
     }
