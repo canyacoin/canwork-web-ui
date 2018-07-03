@@ -22,7 +22,7 @@ export class SetupComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       this.currentUser = user;
-    });
+    }, error => { console.error('! unable to retrieve currentUser data:', error) });
   }
   ngOnDestroy() {
     if (this.authSub) { this.authSub.unsubscribe(); }

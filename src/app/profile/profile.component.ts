@@ -37,7 +37,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.initUsers(this.currentUser, params);
         });
       }
-    });
+    }, error => { console.error('! unable to retrieve currentUser data:', error) });
   }
 
   ngOnDestroy() {
