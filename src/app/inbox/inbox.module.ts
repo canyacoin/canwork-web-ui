@@ -12,7 +12,7 @@ import { PostComponent } from './post/post.component';
   imports: [
     CommonModule,
     CoreComponentsModule,
-    CoreComponentsModule,
+    CoreServicesModule,
     InboxRoutingModule,
     FormsModule,
     ReactiveFormsModule

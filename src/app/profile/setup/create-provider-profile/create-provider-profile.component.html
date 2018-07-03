@@ -21,6 +21,7 @@
 
           <div class="form-group row">
             <div class="col-lg-9 col-md-9 col-sm-12">
+              <label>Tag with relevant skills to help clients find you more easily.</label>
               <app-skill-tags-selection (tagsUpdated)="skillTagsUpdated($event)" [initialTags]="user.skillTags" [minimumTags]="0"></app-skill-tags-selection>
               <input hidden #skillTags class="form-control" formControlName="skillTags" type="text" name="skillTags">
             </div>
@@ -35,7 +36,7 @@
 
           <div class="form-group row">
             <div class="col-lg-6 col-md-6 col-sm-8">
-              <label>Hourly Rate ( $AUD )</label>
+              <label>Hourly Rate ( $USD )</label>
               <input class="form-control" #hourlyRate formControlName="hourlyRate" type="text" name="hourlyRate" placeholder="e.g. 19"
                 [class.invalid]="!profileForm.controls.hourlyRate.valid && profileForm.controls.hourlyRate.dirty">
               <small *ngIf="!profileForm.controls.hourlyRate.valid  && profileForm.controls.hourlyRate.dirty">Please enter a number between 0 - 999</small>

@@ -17,6 +17,7 @@ import {
 } from './header/search-filter-option/search-filter-option.component';
 import { ScrollTopComponent } from './scroll-top/scroll-top.component';
 import { SkillTagComponent } from './skill-tag/skill-tag.component';
+import { SkillTagsSelectionComponent } from './skill-tags-selection/skill-tags-selection.component';
 import { ToolsComponent } from './tools/tools.component';
 import { VStepperComponent } from './v-stepper/v-stepper.component';
 import { FaqComponent } from './wallet-install/faq/faq.component';
@@ -48,6 +49,7 @@ import { FaqPageComponent } from './faq-page/faq-page.component';
     SearchFilterOptionComponent,
     ScrollTopComponent,
     SkillTagComponent,
+    SkillTagsSelectionComponent,
     ToolsComponent,
     BackButtonComponent,
     WalletInstallComponent,
@@ -64,6 +66,7 @@ import { FaqPageComponent } from './faq-page/faq-page.component';
     HeaderComponent,
     ScrollTopComponent,
     SkillTagComponent,
+    SkillTagsSelectionComponent,
     WalletInstallComponent,
     VStepperComponent,
     WindowScrollDirective

@@ -2,12 +2,12 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { AnimationService } from './animation.service';
-// import { AuthService } from './auth.service';
 import { ChatService } from './chat.service';
-// import { EthService } from './eth.service';
 import { FeedService } from './feed.service';
+import { JobService } from './job.service';
 import { MomentService } from './moment.service';
 import { ScriptService } from './script.service';
+import { UploadService } from './upload.service';
 import { UserService } from './user.service';
 
 @NgModule({
@@ -17,12 +17,12 @@ import { UserService } from './user.service';
   declarations: [],
   providers: [
     AnimationService,
-    // AuthService,
     ChatService,
-    // EthService,
     FeedService,
+    JobService,
     MomentService,
     ScriptService,
+    UploadService,
     UserService
   ]
 })
