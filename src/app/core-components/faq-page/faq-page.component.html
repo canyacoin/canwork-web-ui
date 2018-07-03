@@ -1,0 +1,35 @@
+<main class="main-content" id="faq-content">
+  <section class="section pt-15 pb-20">
+      <div class="container">
+        <div class="row faq-content-hero"> 
+          <div class="col-md-6">
+            <div class="faq-content-hero-text">
+                <h1>FAQ's</h1>
+                <p>Frequently Asked Questions<br>We're here to help - search or browse below for some common questions about CanYa. </p> 
+                <form>
+                    <div class="canya-seach-bar input-group mb-3">
+                        <input type="text" class="form-control canya-search-input" placeholder="Search FAQ..">
+                        <div class="input-group-append">
+                          <button class="canya-search-input-btn btn btn-primary" type="button"><img class="search-img" src="assets/img/search-icon-white.svg"></button>  
+                        </div>
+                      </div>
+                </form> 
+            </div>
+          </div>
+          <div class="col-md-6 text-center">
+            <img src="https://canya.io/images/CanYa_Consult.gif">
+          </div>
+        </div>
+        <div class="row faq-row" *ngFor="let faq of faqs">
+            <div class="container">
+              <div class="col-md-12">
+                <h5>{{faq.q}}</h5>
+                <span>{{faq.a}}</span>
+              </div> 
+            </div>
+        </div>
+
+
+      </div>
+  </section>
+</main>
