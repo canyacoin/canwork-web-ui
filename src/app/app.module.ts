@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CanpayModule } from '@canyaio/canpay-lib';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
@@ -30,6 +31,13 @@ import { CoreUtilsModule } from './core-utils/core-utils.module';
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     BrowserModule,
     BrowserAnimationsModule,
+    CanpayModule.forRoot({
+      contracts: {
+        useTestNet: false,
+        canyaCoinAddress: '0x5cce91c14eb93f5ce7d51cf6e7beacc8106bead8',
+        canyaAbi: '0x17b4ae55a5b0b6c10b0f4bae2d75a4e83de41709'
+      }
+    }),
     CoreComponentsModule,
     CoreServicesModule,
     CoreUtilsModule,

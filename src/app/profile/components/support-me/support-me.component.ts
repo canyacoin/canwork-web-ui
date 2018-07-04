@@ -1,4 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import {
+    CanPayData, CanPayService, Operation, ProcessAction, setProcessResult
+} from '@canyaio/canpay-lib';
 
 import { User } from '../../../core-classes/user';
 import { EthService } from '../../../core-services/eth.service';
@@ -12,13 +15,32 @@ export class SupportMeComponent implements OnInit {
 
   @Input() userModel: User;
 
-  constructor(private ethService: EthService) { }
+  CanPay: any;
 
-  ngOnInit() { }
+  constructor(private ethService: EthService, private canPayService: CanPayService) { }
 
+  ngOnInit() {
+    this.CanPay = {
+      dAppName: 'CANWork',
+      recepient: this.userModel.ethAddress,
+      operation: Operation.pay,
+      amount: 0, // allow the user to enter amount through an input box
+      complete: this.onComplete.bind(this),
+      cancel: this.onCancel.bind(this),
+    };
+  }
 
-  async onBuyACoffee() {
-    await this.ethService.buyCoffee(this.userModel.ethAddress, 1);
-    (<any>window).$('#thankYou').modal();
+  onBuyACoffee() {
+    this.canPayService.open(this.CanPay);
+  }
+
+  onComplete(canPayData: CanPayDat) {
+    console.log(JSON.stringify(canPayData));
+    this.canPayService.close();
+  }
+
+  onCancel(canPayData: CanPayDat) {
+    console.log(JSON.stringify(canPayData));
+    this.canPayService.close();
   }
 }
