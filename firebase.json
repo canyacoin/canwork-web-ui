@@ -18,6 +18,12 @@
         "source": "**",
         "destination": "/index.html"
       }
+    ],
+    "headers": [
+      {
+        "key": "X-Frame-Options",
+        "value": "DENY"
+      }
     ]
   },
   "firestore": {
