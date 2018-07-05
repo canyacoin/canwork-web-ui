@@ -12,7 +12,6 @@ import { FirebaseUIModule } from 'firebaseui-angular';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing.module';
-import { canyaAbi } from './contracts';
 import { CoreComponentsModule } from './core-components/core-components.module';
 import { firebaseUiAuthConfig } from './core-config/app-auth-config';
 import { AuthService } from './core-services/auth.service';
@@ -37,8 +36,7 @@ import { CoreUtilsModule } from './core-utils/core-utils.module';
     CanpayModule.forRoot({
       contracts: {
         useTestNet: environment.contracts.useTestNet,
-        canyaCoinAddress: environment.contracts.canYaCoin,
-        canyaAbi: canyaAbi
+        canyaCoinAddress: environment.contracts.canYaCoin
       }
     }),
     CoreComponentsModule,
