@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Web3LoadingStatus } from '@canyaio/canpay-lib';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import * as findIndex from 'lodash/findIndex';
 import * as orderBy from 'lodash/orderBy';
@@ -11,7 +12,7 @@ import * as moment from 'moment';
 import { User } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
 import { Channel, ChatService, Message, MessageType } from '../../core-services/chat.service';
-import { EthService, Web3LoadingStatus } from '../../core-services/eth.service';
+import { CanWorkEthService } from '../../core-services/eth.service';
 import { UserService } from '../../core-services/user.service';
 
 @Component({
@@ -66,7 +67,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
     private formBuilder: FormBuilder,
     private userService: UserService,
     private chatService: ChatService,
-    private ethService: EthService,
+    private ethService: CanWorkEthService,
     private authService: AuthService,
     private afs: AngularFirestore) {
     this.postForm = formBuilder.group({
@@ -284,9 +285,9 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onConfirmTransaction() {
-    this.ethService.payCan('', this.modalData.budget).subscribe((receipt) => {
-      this.postTransaction(null, receipt);
-    });
+    // this.ethService.payCan('', this.modalData.budget).subscribe((receipt) => {
+    //   this.postTransaction(null, receipt);
+    // });
   }
 
   postTransaction(checkoutModel: any, receipt: any) {

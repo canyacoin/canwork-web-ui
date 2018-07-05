@@ -11,11 +11,12 @@ import { FirebaseUIModule } from 'firebaseui-angular';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing.module';
+import { canyaAbi } from './contracts';
 import { CoreComponentsModule } from './core-components/core-components.module';
 import { firebaseUiAuthConfig } from './core-config/app-auth-config';
 import { AuthService } from './core-services/auth.service';
 import { CoreServicesModule } from './core-services/core-services.module';
-import { EthService } from './core-services/eth.service';
+import { CanWorkEthService } from './core-services/eth.service';
 import { NavService } from './core-services/nav.service';
 import { CoreUtilsModule } from './core-utils/core-utils.module';
 
@@ -33,9 +34,9 @@ import { CoreUtilsModule } from './core-utils/core-utils.module';
     BrowserAnimationsModule,
     CanpayModule.forRoot({
       contracts: {
-        useTestNet: false,
-        canyaCoinAddress: '0x5cce91c14eb93f5ce7d51cf6e7beacc8106bead8',
-        canyaAbi: '0x17b4ae55a5b0b6c10b0f4bae2d75a4e83de41709'
+        useTestNet: environment.contracts.useTestNet,
+        canyaCoinAddress: environment.contracts.canYaCoin,
+        canyaAbi: canyaAbi
       }
     }),
     CoreComponentsModule,
@@ -45,7 +46,7 @@ import { CoreUtilsModule } from './core-utils/core-utils.module';
   ],
   providers: [
     AuthService,
-    EthService,
+    CanWorkEthService,
     NavService
   ],
   bootstrap: [AppComponent]

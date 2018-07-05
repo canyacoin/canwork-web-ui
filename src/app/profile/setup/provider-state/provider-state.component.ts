@@ -1,10 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
+import { WalletType, Web3LoadingStatus } from '@canyaio/canpay-lib';
 import { Subscription } from 'rxjs/Subscription';
 
 import { environment } from '../../../../environments/environment';
 import { User, UserState, UserType } from '../../../core-classes/user';
-import { EthService, WalletType, Web3LoadingStatus } from '../../../core-services/eth.service';
+import { CanWorkEthService } from '../../../core-services/eth.service';
 import { UserService } from '../../../core-services/user.service';
 
 @Component({
@@ -29,7 +30,7 @@ export class ProviderStateComponent implements OnInit, OnDestroy {
   ethSub: Subscription;
   accSub: Subscription;
 
-  constructor(private ethService: EthService, private http: Http, private userService: UserService) {
+  constructor(private ethService: CanWorkEthService, private http: Http, private userService: UserService) {
   }
 
   async ngOnInit() {
