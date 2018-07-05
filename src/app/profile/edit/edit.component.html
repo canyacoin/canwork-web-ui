@@ -158,17 +158,16 @@
             <div class="form-group">
               <label>Description</label>
               <textarea class="form-control" #description formControlName="description" name="description" rows="7
-                   " placeholder="A Short bio to describe yourself, this will be shown in your profile page. Be creative!"></textarea>
+                   " placeholder="Think different! Be creative, be innovative."></textarea>
             </div>
-            <div class="form-group text-right">
-              
+            <div class="form-group">
+              <button [disabled]="!profileForm.valid || sending" type="button" (click)="save(category1, category2, category3, category4, category5, category6)"
+                class="btn btn-canya-tools text-white">
+                Save
+              </button>
               <a href="#" [routerLink]="[ '/profile']" class="btn btn-secondary">
                 Cancel
               </a>
-              <button [disabled]="!profileForm.valid || sending" type="button" (click)="save(category1, category2, category3, category4, category5, category6)"
-                class="btn btn-primary mx-1 my-1">
-                Save
-              </button>
               <img *ngIf="sending" src="assets/img/loader.svg" height="36px" alt="Loader">
             </div>
           </form>
