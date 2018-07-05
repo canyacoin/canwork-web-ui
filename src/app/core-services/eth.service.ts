@@ -33,7 +33,7 @@ export class CanWorkEthService extends EthService {
   async getProviderBadge(addr: string): Promise<string> {
     const badge = await this.daoContract.methods.getProviderBadge(addr).call();
     if (this.web3js.utils.isHex(badge)) {
-      return Promise.resolve(this.web3js.utils.hexToAscii(badge));
+      return Promise.resolve(this.parseHexToA(badge));
     }
     return Promise.resolve(null);
   }
@@ -41,5 +41,17 @@ export class CanWorkEthService extends EthService {
   async providerHasBeenRejected(addr: string): Promise<boolean> {
     const isRejected = await this.daoContract.methods.isRejected(addr).call();
     return Promise.resolve(isRejected);
+  }
+
+  parseHexToA(hexx) {
+    const hex = hexx.toString();
+    let str = '';
+    for (let i = 0; (i < hex.length && hex.substr(i, 2) !== '00'); i += 2) {
+      if (hex.substr(i, 2) !== '0x') {
+        str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+      }
+    }
+    return str;
+
   }
 }
