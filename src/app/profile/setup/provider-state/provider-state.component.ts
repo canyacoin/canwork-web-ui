@@ -42,7 +42,7 @@ export class ProviderStateComponent implements OnInit, OnDestroy {
           this.loading = true;
           this.account = acc;
           this.updateFormSubmissionStatus(acc);
-        });
+        }, error => { console.error('! unable to retrieve ethService data:', error) });
       }
     });
   }

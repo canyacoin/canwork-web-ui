@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-declare var createCards: any;
+declare var createHelperCards: any;
 
 @Component({
   selector: 'app-tools',
@@ -13,6 +13,6 @@ export class ToolsComponent implements OnInit {
   }
 
   ngOnInit() {
-    createCards();
+    createHelperCards();
   }
 }

@@ -1,10 +1,11 @@
 <main class="main-content">
-  <section class="section my-0 py-0">
+  <section class="section pt-15 pb-20">
     <div class="container">
+
+      <app-back-button></app-back-button>
       <header class="section-header my-0 py-0">
         <h2>Project</h2>
 
-        <app-back-button></app-back-button>
 
         <p class="lead fw-400">Edit project details:</p>
         <hr>
@@ -32,9 +33,11 @@
 
             </div>
 
-            <app-skill-tags-selection *ngIf="projectLoaded" (tagsUpdated)="skillTagsUpdated($event)" [initialTags]="initialTags"></app-skill-tags-selection>
-            <input hidden #tags class="form-control" formControlName="tags" type="text" name="tags">
-
+            <div class="form-group">
+              <label>Tag with relevant skills to help clients find you more easily.</label>
+              <app-skill-tags-selection *ngIf="projectLoaded" (tagsUpdated)="skillTagsUpdated($event)" [initialTags]="initialTags"></app-skill-tags-selection>
+              <input hidden #tags class="form-control" formControlName="tags" type="text" name="tags">
+            </div>
             <div class="form-group">
               <label>Embed an image or video from an URL. (Optional)</label>
               <input class="form-control" #image formControlName="image" type="text" name="image" placeholder="e.g. https://cdn.dribbble.com/..."

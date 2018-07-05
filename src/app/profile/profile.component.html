@@ -1,11 +1,11 @@
 <main class="main-content">
   <section class="section bg-gray pt-15 pb-20" id="section-profile">
 
+    <app-back-button></app-back-button>
+
     <div *ngIf="!userModel" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
       <img src="assets/img/loader.svg" height="36px" alt="Loader">
     </div>
-
-    <app-back-button></app-back-button>
 
     <div class="container">
       <div class="row justify-content-center">
@@ -23,7 +23,6 @@
 
         <div class="col-12 col-md-8 my-5">
           <app-profile-bio *ngIf="userModel && userModel.description" [isMyProfile]="isMyProfile()" [userModel]="userModel"></app-profile-bio>
-
           <app-profile-portfolio *ngIf="userModel" [userModel]="userModel" [notMyProfile]="notMyProfile()" [isMyProfile]="isMyProfile()"></app-profile-portfolio>
         </div>
       </div>
@@ -31,5 +30,8 @@
   </section>
 </main>
 
+<script>
+    console.log("test");
+  </script>
 
 <app-scroll-top></app-scroll-top>

@@ -98,7 +98,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       if (this.messagesSubscription) { this.messagesSubscription.unsubscribe(); }
       this.messagesSubscription = unreadConversations.valueChanges().subscribe(x => {
         this.hasUnreadMessages = x.length > 0;
-      });
+      }, error => { console.error('! unable to retrieve chat/channel data:', error) });
     }
   }
 

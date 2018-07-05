@@ -20,7 +20,7 @@ export class VisitorsComponent implements OnInit {
     const ref = this.afs.collection(`who/${this.userModel.address}/user`);
     ref.valueChanges().take(1).toPromise().then((data: any) => {
       this.whoViewProfileCounter = data.length;
-    });
+    }, error => { console.error('! unable to retrieve who viewed data:', error) });
   }
 
 }

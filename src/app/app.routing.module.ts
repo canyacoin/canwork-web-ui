@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { BrandComponent } from './core-components/brand/brand.component';
+import { FaqPageComponent } from './core-components/faq-page/faq-page.component';
 import { ToolsComponent } from './core-components/tools/tools.component';
 import { AuthGuard } from './core-utils/auth.guard';
 import { UserIsSetupGuard } from './core-utils/user-is-setup.guard';
@@ -51,6 +52,10 @@ import { UserIsSetupGuard } from './core-utils/user-is-setup.guard';
       {
         path: 'brand',
         component: BrandComponent
+      },
+      {
+        path: 'faq',
+        component: FaqPageComponent
       },
       {
         path: '**',

@@ -1360,7 +1360,8 @@ button:focus {
 .btn-primary,
 .btn-primary:hover {
   background-color: #33ccff;
-  border-color: #33ccff;
+  /* border-color: #33ccff; */
+  border: 1px solid transparent;
   color: #fff;
 }
 
@@ -1377,7 +1378,8 @@ button:focus {
 .btn-primary.disabled,
 .btn-primary:disabled {
   background-color: #33ccff;
-  border-color: #33ccff;
+  /* border-color: #33ccff; */
+  border: none;
   opacity: 0.5;
 }
 
@@ -1703,6 +1705,7 @@ button:focus {
 .btn-outline {
   -webkit-transition: .5s;
   transition: .5s;
+  border: 1px solid;
 }
 
 .btn-primary-outline {
@@ -2794,7 +2797,7 @@ button:focus {
   display: inline-block;
   width: 50px;
   height: 50px;
-  line-height: 44px;
+  line-height: 50px;
   font-size: 26px;
   text-align: center;
   background-color: #33ccff;
@@ -3625,6 +3628,37 @@ button:focus {
   opacity: 1;
 }
 
+.canya-search-bar{
+  border-style:solid !important;
+  border-width: 0.75px !important;
+  border-right: transparent !important; 
+  border-top-left-radius: 5px !important; 
+  border-bottom-left-radius: 5px !important;
+}
+.canya-search-bar .search-img{
+  width:24px;
+  height:24px;
+}
+.canya-search-bar .search-btn{
+  height: 100%;
+  border-top-left-radius: 0px !important; 
+  border-bottom-left-radius: 0px !important; 
+  background-color : #33ccff;
+  border-color: #33ccff !important;
+  color: white; 
+}
+
+.faq-content-hero img{
+  max-height: 25rem;
+}
+.faq-content-hero-text{
+  padding-top:7rem;
+}
+.faq-row{ 
+  background-color: #f8f9fa;
+  margin: 15px 0 15px 0;
+  padding: 15px;
+}
 @media (max-width: 767px) {
   .swiper-button-next,
   .swiper-button-prev {

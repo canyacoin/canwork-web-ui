@@ -6,6 +6,7 @@ import { CanpayModule } from '@canyaio/canpay-lib';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireStorageModule } from 'angularfire2/storage';
 
 import { FirebaseUIModule } from 'firebaseui-angular';
 import { environment } from '../environments/environment';
@@ -29,6 +30,7 @@ import { CoreUtilsModule } from './core-utils/core-utils.module';
     AngularFireAuthModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule.enablePersistence(),
+    AngularFireStorageModule,
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     BrowserModule,
     BrowserAnimationsModule,

@@ -37,7 +37,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.projectForm = formBuilder.group({
       title: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(255)])],
       description: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(512)])],
-      tags: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(255)])],
+      tags: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(255)])],
       image: [''],
       link: ['']
     });
@@ -54,9 +54,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
           } else {
             this.projectLoaded = true;
           }
-        });
+        }, error => { console.error('unable to retrieve data:', error) });
       }
-    });
+    }, error => { console.error('unable to retrieve data:', error) });
   }
 
   ngOnDestroy() {

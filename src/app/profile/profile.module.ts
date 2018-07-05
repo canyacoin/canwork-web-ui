@@ -19,9 +19,14 @@ import { ProfileViewsComponent } from './profile-views/profile-views.component';
 import { ProfileComponent } from './profile.component';
 import { ProfileRoutingModule } from './profile.routing.module';
 import { ProjectComponent } from './project/project.component';
+import {
+    CreateClientProfileComponent
+} from './setup/create-client-profile/create-client-profile.component';
+import {
+    CreateProviderProfileComponent
+} from './setup/create-provider-profile/create-provider-profile.component';
 import { ProviderStateComponent } from './setup/provider-state/provider-state.component';
 import { SetupComponent } from './setup/setup.component';
-import { SkillTagsSelectionComponent } from './skill-tags-selection/skill-tags-selection.component';
 
 @NgModule({
   imports: [
@@ -37,6 +42,8 @@ import { SkillTagsSelectionComponent } from './skill-tags-selection/skill-tags-s
   declarations: [
     AboutComponent,
     BioComponent,
+    CreateClientProfileComponent,
+    CreateProviderProfileComponent,
     EditComponent,
     ItemComponent,
     PortfolioComponent,
@@ -47,7 +54,6 @@ import { SkillTagsSelectionComponent } from './skill-tags-selection/skill-tags-s
     SocialComponent,
     SetupComponent,
     SupportMeComponent,
-    SkillTagsSelectionComponent,
     TimezoneComponent,
     VisitorsComponent
   ],

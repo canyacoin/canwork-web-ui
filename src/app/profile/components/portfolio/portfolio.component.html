@@ -3,31 +3,33 @@
 </div>
 <div *ngIf="loaded">
   <div class="card" style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px;">
+
+
+
     <div id="page-wrap" class="pt-25">
       <div *ngIf="allPortfolioItems.length < 1">
         <div class="row flex-row">
           <div class="col-12">
             <div class="flexbox-container">
               <div *ngIf="isMyProfile && (userModel.type === 'Provider')">
-                <h3 class="fw-500">OMG! Your work is empty!</h3>
-                <h4 class="fw-400">Let's make a portfolio and post your work.</h4>
+                <h3 class="fw-500">You have not uploaded any portfolio items</h3>
+                <h4 class="fw-400">Let's add some!</h4>
                 <p class="text-center py-3">
                   <a class="btn btn-primary btn-add-work" [routerLink]="['/profile/project']" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">ADD WORK</a>
                 </p>
               </div>
-              <div *ngIf="isMyProfile && (userModel.type === 'User')">
+              <div *ngIf="isMyProfile && (userModel.type === 'User')" class="text-center">
                 <h3 class="fw-500">Why CanYaCoin?</h3>
-                <h4 class="fw-400">10 times less transaction fees (1%)!</h4>
+                <h4 class="fw-400">Up to 80% cheaper than our competitors!</h4>
                 <p class="text-center py-3">
-                  <a class="btn btn-primary btn-add-work text-white" (click)="onBuy()" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">BUY CAN</a>
+                  <a class="btn btn-primary btn-add-work text-white" href="#" [routerLink]="['/exchange']" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">BUY CAN</a>
                 </p>
               </div>
-              <div *ngIf="notMyProfile">
-                <div #portfolio id="portfolio"></div>
-                <h3 class="fw-500">Ohh, so exciting!</h3>
-                <h4 class="fw-400 mb-20">Can I do something for you?</h4>
-                <button (click)="postRequest()" class="btn btn-primary btn-canya-chat mb-30" data-scrollto="section-profile">
-                  <img src="assets/img/canya-button.png" style="margin-top: -2px;" width="16px" height="16px" alt="CanYa"> CANYA? Post a request
+              <div *ngIf="notMyProfile" class="text-center">
+                <h3 class="fw-500">This provider has no portfolio</h3>
+                <h4 class="fw-400 mb-20">Maybe you can ask for it personally?</h4>
+                <button (click)="postRequest()" class="btn btn-primary btn-canya-chat mb-30" data-scrollto="section-profile" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">
+                  <img src="assets/img/canya-button.png" style="margin-top: -2px;" width="16px" height="16px" alt="CanYa"> Lets Chat
                 </button>
               </div>
             </div>
@@ -35,12 +37,20 @@
         </div>
       </div>
       <div *ngIf="allPortfolioItems.length > 0">
-        <div class="card p-20">
+        <div class="card px-20" style="padding-bottom:10px;">
           <div class="row">
-            <div class="col-sm-10" id="about-card-title">
+            <div class="col-sm-10" id="portfolio-card-title">
               <span class="card-title">portfolio</span>
             </div>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-1">
+              <a *ngIf="isMyProfile" [routerLink]="['/profile/project']" style="color: #535353;" data-toggle="tooltip" data-placement="top"
+                title="Add Project">
+                <i class="ti-plus fw-600" aria-hidden="true"></i>
+              </a>
+            </div>
           </div>
+          <div class="row" style="height: 25px"></div>
           <div class="row animated {{animation}}">
             <div class="col-sm-12">
               <div *ngFor="let item of paginatedPortfolioItems();let i = index" class="">

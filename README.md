@@ -56,6 +56,13 @@ sendgrid.apikey="XXXXX"
 firebase deploy --only functions
 ```
 
+If you wish to execute the firebase functions for data management & seeding:
+
+```
+firebase functions:config:set dev.authkey="some-random-key-only-you-know"
+```
+
+
 ### Start your app
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.

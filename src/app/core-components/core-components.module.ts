@@ -17,11 +17,14 @@ import {
 } from './header/search-filter-option/search-filter-option.component';
 import { ScrollTopComponent } from './scroll-top/scroll-top.component';
 import { SkillTagComponent } from './skill-tag/skill-tag.component';
+import { SkillTagsSelectionComponent } from './skill-tags-selection/skill-tags-selection.component';
 import { ToolsComponent } from './tools/tools.component';
+import { VStepperComponent } from './v-stepper/v-stepper.component';
 import { FaqComponent } from './wallet-install/faq/faq.component';
 import { InstructionsComponent } from './wallet-install/instructions/instructions.component';
 import { WalletInstallComponent } from './wallet-install/wallet-install.component';
 import { WindowScrollDirective } from './window-scroll.directive';
+import { FaqPageComponent } from './faq-page/faq-page.component';
 
 @NgModule({
   imports: [
@@ -38,6 +41,7 @@ import { WindowScrollDirective } from './window-scroll.directive';
     BlogPostsComponent,
     BrandComponent,
     FaqComponent,
+    FaqPageComponent,
     FeedbackComponent,
     FooterComponent,
     HeaderComponent,
@@ -45,21 +49,26 @@ import { WindowScrollDirective } from './window-scroll.directive';
     SearchFilterOptionComponent,
     ScrollTopComponent,
     SkillTagComponent,
+    SkillTagsSelectionComponent,
     ToolsComponent,
     BackButtonComponent,
     WalletInstallComponent,
     WindowScrollDirective,
+    VStepperComponent
   ],
   exports: [
     BackButtonComponent,
     BotComponent,
     BlogPostsComponent,
+    FaqPageComponent,
     FeedbackComponent,
     FooterComponent,
     HeaderComponent,
     ScrollTopComponent,
     SkillTagComponent,
+    SkillTagsSelectionComponent,
     WalletInstallComponent,
+    VStepperComponent,
     WindowScrollDirective
   ]
 })

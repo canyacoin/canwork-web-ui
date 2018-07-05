@@ -1,5 +1,3 @@
- 
-
 <main class="main-content bg-gray">
   <section class="section bg-gray  py-20" id="section-main">
     <div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center">
@@ -9,13 +7,18 @@
       <div class="row">
         <div class="col-sm-0 col-md-0 col-lg-2"></div>
         <div class="col-sm-12 col-md-6 col-lg-4 center-block text-center">
-          <a *ngIf="pageInit" (click)="onUportLogin();" class="d-block pointer" >
-                <div class="uport-btn">
-                    <img src="assets/img/uPort.svg"><br>
-                    <p>Login with uPort</p>
-                </div>
-              
+          <a *ngIf="pageInit && !isOnMobile" (click)="onUportLogin();" class="d-block pointer">
+            <div class="uport-btn">
+              <img src="assets/img/uPort.svg">
+              <br>
+              <p>Login with uPort</p>
+            </div>
           </a>
+          <div *ngIf="pageInit && isOnMobile" class="d-block text-center">
+            <p>
+              <i>uPort login method is not available on mobile.</i>
+            </p>
+          </div>
         </div>
         <div class="other-login col-sm-12 col-md-6 col-lg-4 text-center">
           <h5 style="width: 100%;">Sign in with alternative services</h5>
@@ -26,5 +29,3 @@
     </div>
   </section>
 </main>
-
- 

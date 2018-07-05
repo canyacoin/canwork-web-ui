@@ -4,7 +4,6 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Subscription } from 'rxjs/Subscription';
 
 import { User } from '../../../core-classes/user';
-import { AnimationService } from '../../../core-services/animation.service';
 
 @Component({
   selector: 'app-profile-portfolio',
@@ -28,7 +27,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   portfolioSubscription: Subscription;
 
 
-  constructor(private afs: AngularFirestore, private router: Router, private animationService: AnimationService) { }
+  constructor(private afs: AngularFirestore, private router: Router) { }
 
   ngOnInit() {
     this.setPortfolio(this.userModel.address);
@@ -43,9 +42,8 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     this.portfolioSubscription = portfolioRecords.valueChanges().subscribe((data: any) => {
       this.allPortfolioItems = data;
       this.lastPage = (Math.ceil(this.allPortfolioItems.length / this.pageLimit) - 1);
-      this.animationService.loadAnimations();
       this.loaded = true;
-    });
+    }, error => { console.error('! unable to retrieve portfolio data:', error) });
   }
 
   paginatedPortfolioItems() {

@@ -1,0 +1,12 @@
+<div class="v-stepper">
+  <span *ngFor="let step of steps; index as indx">
+    <span class="circle" [ngClass]="{ 'none-active': currentStep.num < indx, 'circle-ml': indx > 0 }">
+      <div [innerHTML]="step.icon"></div>
+    </span>
+    <span class="stepName" [ngClass]="{ 'none-active-fg': currentStep.num < indx }">
+      {{step.title}}
+    </span>
+    <span class="line" *ngIf="steps.length > indx + 1" [ngClass]="{ 'none-active': currentStep.num < indx }"></span>
+  </span>
+
+</div>

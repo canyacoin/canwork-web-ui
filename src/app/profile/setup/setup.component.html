@@ -21,8 +21,7 @@
             <div class="card-block">
               <h4 class="card-title">I want to find work</h4>
               <p class="card-text">Do you have a
-                <strong>digital service</strong> to offer our client base? Paid with cryptocurrency!</p>
-
+                <strong>digital service</strong> to offer to our clients? Get paid with cryptocurrency!</p>
               <button (click)="setUserType('Provider')" class="btn btn-primary btn-canya-chat">PROVIDER</button>
             </div>
           </div>
@@ -34,7 +33,7 @@
 
   <section *ngIf="isClient()" class="section bg-white py-40">
     <div class="container">
-      <app-bot [title]="true" [conversation]="conversation" (action)="formSubmitted($event)"></app-bot>
+      <app-create-client-profile [user]="currentUser"></app-create-client-profile>
     </div>
   </section>
   <section *ngIf="isProvider()" class="section bg-white py-40">
@@ -42,7 +41,7 @@
       <app-provider-state [currentUser]="currentUser"></app-provider-state>
     </div>
     <div *ngIf="isVerified()" class="container">
-      <app-bot [title]="true" [conversation]="conversation" (action)="formSubmitted($event)"></app-bot>
+      <app-create-provider-profile [user]="currentUser"></app-create-provider-profile>
     </div>
   </section>
 </main>

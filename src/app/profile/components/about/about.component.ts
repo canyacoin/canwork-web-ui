@@ -17,7 +17,8 @@ export class AboutComponent implements OnInit {
 
   constructor(private router: Router, private authService: AuthService) { }
 
-  ngOnInit() { }
+  ngOnInit() {   
+  }
 
   proposeJob() {
     this.authService.currentUser$.take(1).subscribe((user: User) => {
@@ -25,8 +26,9 @@ export class AboutComponent implements OnInit {
         this.router.navigate(['inbox/post', this.userModel.address]);
       } else {
         this.router.navigate(['auth/login']);
-      }
+      } 
     });
   }
+
 }
 

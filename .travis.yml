@@ -16,6 +16,7 @@ after_success:
   - firebase functions:config:set algolia.apikey=$ALGOLIA_APIKEY
   - firebase functions:config:set algolia.providerindex=$ALGOLIA_PROVIDERINDEX
   - firebase functions:config:set sendgrid.apikey=$SENDGRID_APIKEY
+  - firebase functions:config:set dev.authkey=$DEV_API_KEY
   - ng build --environment=staging --aot --build-optimizer
   - firebase deploy --token $FIREBASE_TOKEN
 notifications:
