@@ -1,14 +1,14 @@
-<div *ngIf="isProvider() || (userModel.timezone && userModel.offset)" style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px;">
-  <div class="card my-30 p-24">
-    <div class="card-body">
-      <div *ngIf="userModel.timezone && userModel.offset" style="max-width: 250px;">
-        <p class="lead fw-500 bb-1">Time zone</p>
-        <h6>{{ userModel.timezone }}&nbsp;({{ userModel.offset }})</h6>
-        <h6>Localtime: {{localTime | date:'shortTime'}}</h6>
-      </div>
-      <div *ngIf="isProvider()">
-        <b>${{userModel.hourlyRate}}</b>/ Hour
-      </div>
+<div *ngIf="isProvider() || (userModel.timezone && userModel.offset)"> 
+        <div class="row">
+            <div class="col-md-4"> 
+                <div *ngIf="isProvider()">
+                    <b>${{userModel.hourlyRate}}</b>/ Hour
+                </div>
+             </div>
+            <div class="col-md-8 text-right"> 
+                <div *ngIf="userModel.timezone && userModel.offset" style="max-width: 250px;"> 
+                <p class="fw-400" style="font-size:14px">{{ userModel.timezone }}<br>UTC ({{ userModel.offset }})<br>Localtime: {{localTime | date:'shortTime'}}</p> 
+      </div> 
     </div>
   </div>
 </div>
