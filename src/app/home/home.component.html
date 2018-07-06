@@ -14,13 +14,12 @@
                       <h4 class="center-h mb-50">We couldn't find what you were looking for!</h4>
                     </div>
                     <div class="row">
-                      <div *ngFor="let provider of hits" class="col-lg-4 card-deck">
+                      <div *ngFor="let provider of hits" class="col-lg-3 card-deck" style="padding:5px">
                         <div class="card provider-card text-center my-15 pointer" [routerLink]="['/profile/alt', provider.address]">
                           <span *ngIf="provider && provider.badge" class="popular-tag" style="background-color:transparent;color:#3cf;float:right;font-weight: 600;letter-spacing: 1.5px;text-transform: uppercase;min-height: 50px;font-size: 14px;text-align: center;line-height: 40px;">
                             {{ provider.badge }}
                           </span>
                           <span *ngIf="!(provider && provider.badge)" class="popular-tag" style="float:right; min-height: 50px;"></span>
-
                           <div class="profile">
                             <img *ngIf="provider && (provider.avatar && provider.avatar.uri)" class="headshot" src="{{ provider.avatar.uri }}" alt="">
                             <div class="title">
