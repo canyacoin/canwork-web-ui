@@ -17,14 +17,14 @@
                     <div class="row my-20">
                       <div *ngFor="let provider of hits" class="col-lg-3 card-deck" style="padding:10px">
                         <div class="card provider-card text-center pointer" [routerLink]="['/profile/alt', provider.address]">
-                          <span *ngIf="provider && provider.badge" class="popular-tag" style="background-color:transparent;color:#3cf;float:right;font-weight: 600;letter-spacing: 1.5px;text-transform: uppercase;min-height: 50px;font-size: 14px;text-align: center;line-height: 40px;">
+                          <span *ngIf="provider && provider.badge" class="popular-tag" style="background-color:transparent;color:#33ccff;float:right;font-weight: 600;letter-spacing: 1.5px;text-transform: uppercase;min-height: 35px;font-size: 12px;text-align: center;line-height: 35px;">
                             {{ provider.badge }}
                           </span>
-                          <span *ngIf="!(provider && provider.badge)" class="popular-tag" style="float:right; min-height: 50px;"></span>
+                          <span *ngIf="!(provider && provider.badge)" class="popular-tag" style="float:right; min-height: 35px;"></span>
                           <div class="profile">
                             <img *ngIf="provider && (provider.avatar && provider.avatar.uri)" class="headshot" src="{{ provider.avatar.uri }}" alt="">
                             <div class="title">
-                              <h2 *ngIf="provider && provider.name">{{ provider.name }}</h2>
+                              <h2 style="min-height: 0px;" *ngIf="provider && provider.name">{{ provider.name }}</h2>
                               <h3 *ngIf="provider && provider.title">{{ provider.title }}</h3>
                               <p *ngIf="provider && provider.bio">{{ provider.bio }}</p>
                             </div>
