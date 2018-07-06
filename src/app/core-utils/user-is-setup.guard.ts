@@ -14,10 +14,11 @@ export class UserIsSetupGuard implements CanActivate {
     return new Promise((resolve, reject) => {
       this.authService.getCurrentUser().then((user: User) => {
         if (user) {
-          if (user.state === UserState.done) {
-            resolve(true);
+          if (user.state !== UserState.done)  {
+            this.router.navigate(['/profile/setup'], { queryParams: { returnUrl: state.url }});
+            resolve(false);
           } else {
-            this.router.navigate(['/profile/setup']);
+            resolve(true);
           }
         }
         resolve(false);

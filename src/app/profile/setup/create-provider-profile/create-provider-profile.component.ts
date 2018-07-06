@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import * as randomColor from 'randomcolor';
 
 import * as moment from 'moment-timezone';
@@ -16,6 +16,8 @@ import { EmailValidator } from '../../email.validator';
   styleUrls: ['./create-provider-profile.component.css', '../setup.component.css']
 })
 export class CreateProviderProfileComponent implements OnInit {
+
+  returnUrl: string;
 
   @Input() user: User;
   steps = {
@@ -45,7 +47,7 @@ export class CreateProviderProfileComponent implements OnInit {
   profileForm: FormGroup = null;
   termsChecked = false;
 
-  constructor(private userService: UserService, private formBuilder: FormBuilder,
+  constructor(private userService: UserService, private route: ActivatedRoute, private formBuilder: FormBuilder,
     private router: Router, private authService: AuthService) { }
 
   ngOnInit() {
@@ -54,6 +56,7 @@ export class CreateProviderProfileComponent implements OnInit {
     }
     this.stepperSteps = Object.values(this.steps);
     this.currentStep = this.stepperSteps[0];
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   buildForm() {
@@ -124,6 +127,10 @@ export class CreateProviderProfileComponent implements OnInit {
     setTimeout(() => {
       this.nextStep();
     }, 600);
+  }
+
+  proceed() {
+    this.router.navigate([this.returnUrl]);
   }
 
 }
