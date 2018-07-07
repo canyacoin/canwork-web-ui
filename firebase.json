@@ -7,11 +7,15 @@
     "source": "functions"
   },
   "hosting": {
-    "headers": [
+    "header": [
       {
         "source": "**",
-        "key": "X-Frame-Options",
-        "value": "DENY"
+        "headers": [
+          {
+            "key": "X-Frame-Options",
+            "value": "DENY"
+          }
+        ]
       }
     ],
     "public": "dist",
@@ -32,4 +36,5 @@
     "indexes": "firestore.indexes.json"
   }
 }
+
 
