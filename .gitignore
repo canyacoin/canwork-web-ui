@@ -6,6 +6,8 @@
 /tmp
 /out-tsc
 
+# VS live sharing
+.vs/*
 
 # Cam added: hide environment secrets for firebase
 src/environments/*.ts

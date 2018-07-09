@@ -1,6 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
+import {
+    CanPayData, CanPayService, Operation, ProcessAction, setProcessResult, View
+} from '@canyaio/canpay-lib';
 
-import { EthService } from '../../../core-services/eth.service';
+import { User } from '../../../core-classes/user';
+import { CanWorkEthService } from '../../../core-services/eth.service';
 
 @Component({
   selector: 'app-profile-support-me',
@@ -9,14 +13,35 @@ import { EthService } from '../../../core-services/eth.service';
 })
 export class SupportMeComponent implements OnInit {
 
-  @Input() userModel: any;
+  @Input() userModel: User;
 
-  constructor(private ethService: EthService) { }
+  CanPay: any;
 
-  ngOnInit() { }
+  constructor(private ethService: CanWorkEthService, private canPayService: CanPayService) { }
 
-  async onBuyACoffee() {
-    await this.ethService.buyCoffee(this.userModel.ethAddress, 1);
-    (<any>window).$('#thankYou').modal();
+  ngOnInit() {
+    this.CanPay = {
+      dAppName: this.userModel.name,
+      recepient: this.userModel.ethAddress,
+      operation: Operation.pay,
+      amount: 0, // allow the user to enter amount through an input box
+      complete: this.onComplete.bind(this),
+      cancel: this.onCancel.bind(this),
+      view: View.Compact
+    };
+  }
+
+  onBuyACoffee() {
+    this.canPayService.open(this.CanPay);
+  }
+
+  onComplete(canPayData: CanPayData) {
+    console.log(JSON.stringify(canPayData));
+    this.canPayService.close();
+  }
+
+  onCancel(canPayData: CanPayData) {
+    console.log(JSON.stringify(canPayData));
+    this.canPayService.close();
   }
 }

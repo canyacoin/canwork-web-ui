@@ -2,12 +2,13 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { NgSwitchCase } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NetworkType, WalletType, Web3LoadingStatus } from '@canyaio/canpay-lib';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Subscription } from 'rxjs/Subscription';
 
 import { User } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
-import { EthService, NetworkType, Web3LoadingStatus } from '../../core-services/eth.service';
+import { CanWorkEthService } from '../../core-services/eth.service';
 import { NavService } from '../../core-services/nav.service';
 
 @Component({
@@ -53,7 +54,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(private afs: AngularFirestore,
     private navService: NavService,
     private authService: AuthService,
-    private ethService: EthService,
+    private ethService: CanWorkEthService,
     private router: Router) {
   }
 
@@ -97,7 +98,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       if (this.messagesSubscription) { this.messagesSubscription.unsubscribe(); }
       this.messagesSubscription = unreadConversations.valueChanges().subscribe(x => {
         this.hasUnreadMessages = x.length > 0;
-      }, error => { console.error('! unable to retrieve chat/channel data:', error) });
+      }, error => { console.error('! unable to retrieve chat/channel data:', error); });
     }
   }
 

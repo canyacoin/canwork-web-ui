@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CanpayModule } from '@canyaio/canpay-lib';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
@@ -15,7 +16,7 @@ import { CoreComponentsModule } from './core-components/core-components.module';
 import { firebaseUiAuthConfig } from './core-config/app-auth-config';
 import { AuthService } from './core-services/auth.service';
 import { CoreServicesModule } from './core-services/core-services.module';
-import { EthService } from './core-services/eth.service';
+import { CanWorkEthService } from './core-services/eth.service';
 import { NavService } from './core-services/nav.service';
 import { CoreUtilsModule } from './core-utils/core-utils.module';
 
@@ -32,6 +33,12 @@ import { CoreUtilsModule } from './core-utils/core-utils.module';
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     BrowserModule,
     BrowserAnimationsModule,
+    CanpayModule.forRoot({
+      contracts: {
+        useTestNet: environment.contracts.useTestNet,
+        canyaCoinAddress: environment.contracts.canYaCoin
+      }
+    }),
     CoreComponentsModule,
     CoreServicesModule,
     CoreUtilsModule,
@@ -39,7 +46,7 @@ import { CoreUtilsModule } from './core-utils/core-utils.module';
   ],
   providers: [
     AuthService,
-    EthService,
+    CanWorkEthService,
     NavService
   ],
   bootstrap: [AppComponent]
