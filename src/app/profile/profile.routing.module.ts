@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { AuthGuard } from '../core-utils/auth.guard';
 import { UserIsNotSetupGuard } from '../core-utils/user-is-not-setup.guard';
 import { UserIsSetupGuard } from '../core-utils/user-is-setup.guard';
 import { EditComponent } from './edit/edit.component';
@@ -19,27 +20,32 @@ const routes: Routes = [
   {
     path: 'setup',
     component: SetupComponent,
-    canActivate: [UserIsNotSetupGuard]
+    canActivate: [AuthGuard, UserIsNotSetupGuard],
+    data: { requiresLoggedIn: true }
   },
   {
     path: 'edit',
     component: EditComponent,
-    canActivate: [UserIsSetupGuard]
+    canActivate: [AuthGuard, UserIsSetupGuard],
+    data: { requiresLoggedIn: true }
   },
   {
     path: 'project',
     component: ProjectComponent,
-    canActivate: [UserIsSetupGuard]
+    canActivate: [AuthGuard, UserIsSetupGuard],
+    data: { requiresLoggedIn: true }
   },
   {
     path: 'project/:id',
     component: ProjectComponent,
-    canActivate: [UserIsSetupGuard]
+    canActivate: [AuthGuard, UserIsSetupGuard],
+    data: { requiresLoggedIn: true }
   },
   {
     path: 'views',
     component: ProfileViewsComponent,
-    canActivate: [UserIsSetupGuard]
+    canActivate: [AuthGuard, UserIsSetupGuard],
+    data: { requiresLoggedIn: true }
   },
   {
     path: 'alt/:address',
