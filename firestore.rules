@@ -20,7 +20,7 @@ service cloud.firestore {
        allow read;
     }
 
-    match /chats/{userId}/channels/{chat} {
+    match /chats/{userId} {
        allow read;
        allow write: if (request.auth != null);
     }

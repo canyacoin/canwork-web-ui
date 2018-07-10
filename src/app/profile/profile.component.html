@@ -10,15 +10,15 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12 col-md-4 my-5">
-          
+
           <app-profile-about [isMyProfile]="isMyProfile()" [userModel]="userModel"></app-profile-about>
-          
-            <div class="card my-15">
-                <div class="container py-15"> 
-                <app-profile-timezone *ngIf="userModel" [userModel]="userModel"></app-profile-timezone>
-                <app-profile-social *ngIf="notMyProfile()"></app-profile-social>
-                <app-profile-support-me *ngIf="notMyProfile() && userModel.ethAddress" [userModel]="userModel"></app-profile-support-me>
-                <app-profile-visitors *ngIf="isMyProfile()" [userModel]="currentUser"></app-profile-visitors>
+
+          <div *ngIf="userModel" class="card my-15">
+            <div class="container py-15">
+              <app-profile-timezone *ngIf="userModel" [userModel]="userModel"></app-profile-timezone>
+              <app-profile-social *ngIf="notMyProfile()"></app-profile-social>
+              <app-profile-support-me *ngIf="notMyProfile() && userModel.ethAddress" [userModel]="userModel"></app-profile-support-me>
+              <app-profile-visitors *ngIf="isMyProfile()" [userModel]="currentUser"></app-profile-visitors>
             </div>
 
           </div>

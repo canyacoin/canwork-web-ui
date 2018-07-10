@@ -56,7 +56,7 @@ export class PostComponent implements OnInit, OnDestroy {
     private uploadService: UploadService,
     private http: Http) {
     this.postForm = formBuilder.group({
-      description: ['', Validators.compose([Validators.required, Validators.maxLength(255)])],
+      description: ['', Validators.compose([Validators.required, Validators.maxLength(10000)])],
       title: ['', Validators.compose([Validators.required, Validators.maxLength(64)])],
       initialStage: ['', Validators.compose([Validators.required, Validators.maxLength(64)])],
       skills: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(100)])],
