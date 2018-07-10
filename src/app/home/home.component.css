@@ -49,7 +49,7 @@
 }
 
 .tag-row {
-  padding: 20px;
+  padding: 0 20px 0 20px;
 }
 
 .profile {
@@ -128,7 +128,7 @@
 
 @media (max-width:520px) {
   .tag-row {
-    padding: 25px;
+    padding: 0 25px 0 25px;
   }
 }
 

@@ -83,10 +83,13 @@
 
 <header class="header fadeout pt-90 pb-0 shadow-1" id="section-home">
   <div *ngIf="allowFilters && showFilters" class="container w-full bt-1 hidden-lg-down" style="margin-top: -10px;" [@slideInOut]>
-    <div class="row px-30 py-10 text-center">
-      <app-search-filter-option class="col-4 col-md-2" *ngFor="let category of providerCategories" [text]="category" [link]="category"></app-search-filter-option>
+   <div class="container">
+    <div class="row py-10 text-center">
+          <app-search-filter-option class="col-md-2" *ngFor="let category of providerCategories" [text]="category" [link]="category"></app-search-filter-option>
+        </div>
     </div>
   </div>
+
 </header>
 
 

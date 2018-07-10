@@ -1,27 +1,25 @@
 <main class="main-content">
   <section class="section bg-gray pt-15 pb-20" id="section-profile">
-
     <app-back-button></app-back-button>
-
     <div *ngIf="!userModel" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
       <img src="assets/img/loader.svg" height="36px" alt="Loader">
     </div>
 
     <div class="container">
       <div class="row justify-content-center">
-        <div class="col-12 col-md-3 my-5">
-          <app-profile-about [isMyProfile]="isMyProfile()" [userModel]="userModel"></app-profile-about>
-
-          <app-profile-timezone *ngIf="userModel" [userModel]="userModel"></app-profile-timezone>
-
-          <app-profile-social *ngIf="notMyProfile()"></app-profile-social>
-
-          <app-profile-support-me *ngIf="notMyProfile() && userModel.ethAddress" [userModel]="userModel"></app-profile-support-me>
-
-          <app-profile-visitors *ngIf="isMyProfile()" [userModel]="currentUser"></app-profile-visitors>
+        <div class="col-12 col-lg-4 my-5"> 
+          <app-profile-about [isMyProfile]="isMyProfile()" [userModel]="userModel"></app-profile-about> 
+            <div class="card my-15">
+                <div class="container px-30 py-30"> 
+                <app-profile-timezone *ngIf="userModel" [userModel]="userModel"></app-profile-timezone>
+                <app-profile-social *ngIf="notMyProfile()"></app-profile-social>
+                <app-profile-support-me *ngIf="notMyProfile() && userModel.ethAddress" [userModel]="userModel"></app-profile-support-me>
+                <app-profile-visitors *ngIf="isMyProfile()" [userModel]="currentUser"></app-profile-visitors>
+            </div>
+          </div>
         </div>
 
-        <div class="col-12 col-md-8 my-5">
+        <div class="col-12 col-lg-8 my-5">
           <app-profile-bio *ngIf="userModel && userModel.description" [isMyProfile]="isMyProfile()" [userModel]="userModel"></app-profile-bio>
           <app-profile-portfolio *ngIf="userModel" [userModel]="userModel" [notMyProfile]="notMyProfile()" [isMyProfile]="isMyProfile()"></app-profile-portfolio>
         </div>
@@ -30,5 +28,8 @@
   </section>
 </main>
 
+<script>
+    console.log("test");
+  </script>
 
 <app-scroll-top></app-scroll-top>
