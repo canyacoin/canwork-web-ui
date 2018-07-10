@@ -113,11 +113,12 @@
         </div>
 
         <div *ngIf="currentStep.name == 'complete'" class="text-center">
-          <p class="text-gray">Your provider profile is now complete.
+          <p class="text-gray">
+            Your provider profile is now complete.
             <br/>
-            <br/>You can access this information at any time from the 'My Profile' section of the main menu.</p>
+            <br/>Your application to become a provider must now be approved by the CanYa DAO, submit your application below! </p>
 
-          <button type="button" class="btn btn-primary" (click)="proceed()">Proceed</button>
+          <button type="button" [disabled]="sending" class="btn btn-primary" (click)="proceed()">Submit</button>
         </div>
       </div>
     </fieldset>

@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
 import * as randomColor from 'randomcolor';
 
 import * as moment from 'moment-timezone';
@@ -17,7 +16,6 @@ import { EmailValidator } from '../../email.validator';
 })
 export class CreateProviderProfileComponent implements OnInit {
 
-  returnUrl: string;
 
   @Input() user: User;
   steps = {
@@ -47,8 +45,7 @@ export class CreateProviderProfileComponent implements OnInit {
   profileForm: FormGroup = null;
   termsChecked = false;
 
-  constructor(private userService: UserService, private route: ActivatedRoute, private formBuilder: FormBuilder,
-    private router: Router, private authService: AuthService) { }
+  constructor(private userService: UserService, private formBuilder: FormBuilder, private authService: AuthService) { }
 
   ngOnInit() {
     if (this.user != null) {
@@ -56,7 +53,6 @@ export class CreateProviderProfileComponent implements OnInit {
     }
     this.stepperSteps = Object.values(this.steps);
     this.currentStep = this.stepperSteps[0];
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   buildForm() {
@@ -95,8 +91,6 @@ export class CreateProviderProfileComponent implements OnInit {
   }
 
   submitForm() {
-    this.user.state = UserState.done;
-    this.userService.saveUser(this.user);
     this.sending = true;
 
     let tags: string[] = this.profileForm.value.skillTags === '' ? [] : this.profileForm.value.skillTags.split(',').map(item => item.trim());
@@ -125,12 +119,14 @@ export class CreateProviderProfileComponent implements OnInit {
     this.userService.saveUser(this.user);
     this.authService.setUser(this.user);
     setTimeout(() => {
+      this.sending = false;
       this.nextStep();
     }, 600);
   }
 
   proceed() {
-    this.router.navigate([this.returnUrl]);
+    this.sending = true;
+    this.user.whitelistSubmitted = true;
+    this.userService.saveUser(this.user);
   }
-
 }
