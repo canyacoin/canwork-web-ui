@@ -23,7 +23,7 @@ const faker = require('faker');
 const fs = require('fs');
 const path = require('path');
 const Chance = require('chance');
-
+const cors = require('cors')({ origin: true });
 const env = functions.config();
 
 // Firebase connectivity
@@ -93,53 +93,55 @@ exports.sendEmail = functions.https.onRequest(async (request, response) => {
 
  */
 exports.generateAuthPinCode = functions.https.onRequest(async (request, response) => {
-  if (request.method !== 'POST') {
-    return response.status(405).type('application/json').send({ message: 'Method Not Allowed', supportedMethods: 'POST' });
-  }
+  cors(request, response, async () => {
 
-  let ethereumAddress: string;
-  ethereumAddress = request.body.ethAddress || '';
-  const userSnapshot = await db.collection('users')
-    .where('ethAddress', '==', ethereumAddress)
-    .limit(1).get();
-
-  let i: number = 0;
-  let user: any;
-  userSnapshot.forEach(doc => {
-    if (i === 0) {
-      user = doc.data();
+    if (request.method !== 'POST') {
+      return response.status(405).type('application/json').send({ message: 'Method Not Allowed', supportedMethods: 'POST' });
     }
-    i++;
+
+    const ethereumAddress: string = request.body.ethAddress || '';
+    const userSnapshot = await db.collection('users')
+      .where('ethAddress', '==', ethereumAddress)
+      .limit(1).get();
+
+    let i: number = 0;
+    let user: any;
+    userSnapshot.forEach(doc => {
+      if (i === 0) {
+        user = doc.data();
+      }
+      i++;
+    });
+
+    if (typeof user !== 'undefined') {
+      const pin: number = Math.floor(100000 + Math.random() * 900000);
+      const expiry: number = Math.floor(((Date.now() / 1000) + 600)); // pin code is good for ten minutes
+      try {
+        await db.collection('users').doc(user.address).update({ ethereumLogin: { pin, expiry } });
+      } catch (e) {
+        return response.status(500).type('application/json').send({ message: e });
+      }
+
+      console.log('+ generated mobile/ethereum login pin', { email: user.email, ethAddress: ethereumAddress, pin });
+
+      const html = pinCodeEmailTemplateHTML({ pin, uri: serviceConfig.uri });
+
+      const sgMail = require('@sendgrid/mail');
+      sgMail.setApiKey(sendgridApiKey);
+      const msg = {
+        to: user.email,
+        from: 'support@canya.com',
+        subject: 'CANWork Ethereum Login PIN Code',
+        html: html,
+      };
+      const r = await sgMail.send(msg);
+      console.log('+ email response was', r);
+
+      return response.status(201).type('application/json').send({ message: 'Secure pin generated and delivered', email: user.email });
+    } else {
+      return response.status(404).type('application/json').send({ message: 'Ethereum address not found' });
+    }
   });
-
-  if (typeof user !== 'undefined') {
-    const pin: number = Math.floor(100000 + Math.random() * 900000);
-    const expiry: number = Math.floor(((Date.now() / 1000) + 600)); // pin code is good for ten minutes
-    try {
-      await db.collection('users').doc(user.address).update({ ethereumLogin: { pin, expiry } });
-    } catch (e) {
-      return response.status(500).type('application/json').send({ message: e });
-    }
-
-    console.log('+ generated mobile/ethereum login pin', { email: user.email, ethAddress: ethereumAddress, pin });
-
-    const html = pinCodeEmailTemplateHTML({ pin, uri: serviceConfig.uri });
-
-    const sgMail = require('@sendgrid/mail');
-    sgMail.setApiKey(sendgridApiKey);
-    const msg = {
-      to: user.email,
-      from: 'support@canya.com',
-      subject: 'CANWork Ethereum Login PIN Code',
-      html: html,
-    };
-    const r = await sgMail.send(msg);
-    console.log('+ email response was', r);
-
-    return response.status(201).type('application/json').send({ message: 'Secure pin generated and delivered' });
-  } else {
-    return response.status(404).type('application/json').send({ message: 'Ethereum address not found' });
-  }
 });
 
 /*
@@ -153,56 +155,58 @@ exports.generateAuthPinCode = functions.https.onRequest(async (request, response
 
  */
 exports.ethereumAuthViaPinCode = functions.https.onRequest(async (request, response) => {
-  if (request.method !== 'POST') {
-    return response.status(405).type('application/json').send({ message: 'Method Not Allowed', supportedMethods: 'POST' });
-  }
+  cors(request, response, async () => {
 
-  let ethereumAddress: string = request.body.ethAddress || '';
-  let pinCode: number = request.body.pin || 0;
-
-  const userSnapshot = await db.collection('users')
-    .where('ethAddress', '==', ethereumAddress)
-    .limit(1).get();
-
-  let i: number = 0;
-  let user: any;
-  userSnapshot.forEach(doc => {
-    if (i === 0) {
-      user = doc.data();
+    if (request.method !== 'POST') {
+      return response.status(405).type('application/json').send({ message: 'Method Not Allowed', supportedMethods: 'POST' });
     }
-    i++;
-  });
 
-  let token: string;
+    let ethereumAddress: string = request.body.ethAddress || '';
+    const pinCode: number = request.body.pin || 0;
 
-  if (typeof user !== 'undefined' && user.ethereumLogin !== 'undefined') {
-    const now: number = Math.floor((Date.now() / 1000));
-    if (user.ethereumLogin.pin === pinCode) {
-      console.log('+ auth pin ok');
-      if (now <= user.ethereumLogin.expiry) {
-        // let them in!
-        try {
-          token = await app.auth().createCustomToken(user.address);
-        } catch (e) {
-          console.error('+ unable to generate auth token for request.body:', request.body);
-          console.error('+ error was:', e);
-          return response.status(500).type('application/json').send({ message: e });
+    const userSnapshot = await db.collection('users')
+      .where('ethAddress', '==', ethereumAddress)
+      .limit(1).get();
+
+    let i: number = 0;
+    let user: any;
+    userSnapshot.forEach(doc => {
+      if (i === 0) {
+        user = doc.data();
+      }
+      i++;
+    });
+
+    let token: string;
+
+    if (typeof user !== 'undefined' && user.ethereumLogin !== 'undefined') {
+      const now: number = Math.floor((Date.now() / 1000));
+      if (user.ethereumLogin.pin === pinCode) {
+        console.log('+ auth pin ok');
+        if (now <= user.ethereumLogin.expiry) {
+          // let them in!
+          try {
+            token = await app.auth().createCustomToken(user.address);
+          } catch (e) {
+            console.error('+ unable to generate auth token for request.body:', request.body);
+            console.error('+ error was:', e);
+            return response.status(500).type('application/json').send({ message: e });
+          }
+        } else {
+          console.log('+ auth expired for request.body:', request.body);
+          return response.status(401).type('application/json').send({ message: 'pin code expired' });
         }
       } else {
-        console.log('+ auth expired for request.body:', request.body);
-        return response.status(401).type('application/json').send({ message: 'pin code expired' });
+        console.log('+ invalid pin code, request.body was:', request.body);
+        return response.status(403).type('application/json').send({ message: 'permission denied' });
       }
     } else {
-      console.log('+ invalid pin code, request.body was:', request.body);
+      console.log('+ unable to locate user object in firestore, request.body was:', request.body);
       return response.status(403).type('application/json').send({ message: 'permission denied' });
     }
-  } else {
-    console.log('+ unable to locate user object in firestore, request.body was:', request.body);
-    return response.status(403).type('application/json').send({ message: 'permission denied' });
-  }
-  return response.status(201).type('application/json').send({ token });
+    return response.status(201).type('application/json').send({ token });
+  });
 });
-
 
 
 /*

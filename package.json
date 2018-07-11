@@ -32,6 +32,7 @@
     "firebase": "^4.12.1",
     "firebaseui": "^2.7.0",
     "firebaseui-angular": "^2.6.2",
+    "jwt-decode": "^2.2.0",
     "moment": "^2.20.1",
     "moment-timezone": "^0.5.14",
     "ngx-img-fallback": "^1.3.3",
