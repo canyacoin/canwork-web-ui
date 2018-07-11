@@ -1,17 +1,5 @@
 <div *ngIf="userModel" class="card pricing-3" style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px;">
 
-  <!--
-  <a *ngIf="isMyProfile" [routerLink]="['/profile/project']" data-toggle="tooltip" data-placement="top" title="Add Project"
-    class="btn btn-sm btn-circular icon-add-work pl-1">
-    <i class="ti-plus fw-600" aria-hidden="true"></i>
-  </a>
-
- <span *ngIf="provider && provider.badge" class="popular-tag" style="background-color:transparent;color:#3cf;float:right;font-weight: 600;letter-spacing: 1.5px;text-transform: uppercase;min-height: 50px;font-size: 14px;text-align: center;line-height: 40px;">
-  {{ provider.badge }}
-</span>
-
-    
--->
   <a *ngIf="isMyProfile" [routerLink]="['/profile/edit']" data-toggle="tooltip" data-placement="top" title="Edit Profile" class="btn btn-sm btn-circular btn-light icon-edit-work pl-1">
     <i class="ti-pencil fw-600" style="columns: #535353;" aria-hidden="true"></i>
   </a>
@@ -26,7 +14,7 @@
         <h2 *ngIf="userModel.name">{{ userModel.name }}</h2>
         <h3 *ngIf="userModel.title">{{ userModel.title }}</h3>
         <p class="fw-400" *ngIf="userModel.bio">{{ userModel.bio }}</p>
-        <div class="row d-flex justify-content-around mx-10 my-10">
+        <div class="row d-flex justify-content-around mx-30 my-30">
           <app-skill-tag *ngFor="let tag of userModel.skillTags" [skill]="tag" [routerLink]="['/home']" [queryParams]="{query: tag}"></app-skill-tag>
         </div>
         <button *ngIf="!isMyProfile" (click)="proposeJob()" class="btn btn-primary btn-canya-chat" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }"

@@ -13,12 +13,14 @@
   max-width: 600px;
   margin: 0px auto;
 }
-::ng-deep .ais-SearchBox-input{
-  outline:none;
+
+::ng-deep .ais-SearchBox-input {
+  outline: none;
   border-color: white;
-  box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
-::ng-deep .ais-SearchBox-submit{
+
+::ng-deep .ais-SearchBox-submit {
   width: 3rem;
   height: 105%;
   border-width: 5px;
@@ -28,14 +30,17 @@
   background-color: #33ccff;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-} 
-::ng-deep .ais-SearchBox-input:hover{
-  transition: all 0.5s;
-  box-shadow: 0 0 20px 0 rgba(0,0,0,0.2);
 }
-::ng-deep .ais-SearchBox-reset{
+
+::ng-deep .ais-SearchBox-input:hover {
+  transition: all 0.5s;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+}
+
+::ng-deep .ais-SearchBox-reset {
   display: none;
 }
+
 .ais-SearchBox-input:focus {
   outline: none !important;
 }
@@ -49,9 +54,7 @@
 }
 
 .tag-row {
-  min-height: 75px;
-  max-height: 80px;
-  padding: 0 25px 0 25px;
+  padding: 0 20px 0 20px;
 }
 
 .profile {
@@ -130,7 +133,7 @@
 
 @media (max-width:520px) {
   .tag-row {
-    padding: 25px;
+    padding: 0 25px 0 25px;
   }
 }
 

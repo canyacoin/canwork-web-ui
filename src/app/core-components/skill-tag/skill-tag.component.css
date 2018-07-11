@@ -13,10 +13,15 @@
   color: #9b9b9b;
   background-color: #eceeef;
   text-transform: uppercase; 
+  outline:none;
+  transition:0.25s all ease-out;
 }
 
-.skill-tag:focus{
+.skill-tag:hover{
   outline:none;
+  transition-delay:0.1s;
+  background-color: #33ccff;
+  color: white;
 }
 
 .pointer {
