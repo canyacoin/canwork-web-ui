@@ -1,14 +1,16 @@
-<div *ngIf="isProvider() || (userModel.timezone && userModel.offset)"> 
-        <div class="row">
-            <div class="col-md-4"> 
-                <div *ngIf="isProvider()">
-                    <b>${{userModel.hourlyRate}}</b>/ Hour
-                </div>
-             </div>
-            <div class="col-md-8 text-right"> 
-                <div *ngIf="userModel.timezone && userModel.offset" style="max-width: 250px;"> 
-                <p class="fw-400" style="font-size:12px">{{ userModel.timezone }}<br>UTC ({{ userModel.offset }})<br>Localtime: {{localTime | date:'shortTime'}}</p> 
-      </div> 
+<div *ngIf="isProvider() || (userModel.timezone && userModel.offset)">
+  <div class="row">
+    <div class="col-md-4">
+      <div *ngIf="isProvider()">
+        <b>${{userModel.hourlyRate}}</b>/ Hour
+      </div>
+    </div>
+    <div class="col-md-8 text-right">
+      <div *ngIf="userModel.timezone && userModel.offset">
+        <p class="fw-400" style="font-size:14px">{{ userModel.timezone }}
+          <br>UTC ({{ userModel.offset }})
+          <br>Localtime: {{localTime | date:'shortTime'}}</p>
+      </div>
     </div>
   </div>
 </div>
