@@ -101,7 +101,7 @@ exports.generateAuthPinCode = functions.https.onRequest(async (request, response
 
     const ethereumAddress: string = request.body.ethAddress || '';
     const userSnapshot = await db.collection('users')
-      .where('ethAddress', '==', ethereumAddress)
+      .where('ethAddressLookup', '==', ethereumAddress.toLocaleUpperCase())
       .limit(1).get();
 
     let i: number = 0;
@@ -165,7 +165,7 @@ exports.ethereumAuthViaPinCode = functions.https.onRequest(async (request, respo
     const pinCode: number = request.body.pin || 0;
 
     const userSnapshot = await db.collection('users')
-      .where('ethAddress', '==', ethereumAddress)
+      .where('ethAddressLookup', '==', ethereumAddress.toLocaleUpperCase())
       .limit(1).get();
 
     let i: number = 0;
@@ -215,9 +215,9 @@ exports.ethereumAuthViaPinCode = functions.https.onRequest(async (request, respo
  */
 exports.indexProviderData = functions.firestore
   .document('users/{userId}')
-  .onWrite(async (snap, context) => {
-    const data = snap.after.data();
-    const objectId = snap.after.id;
+  .onCreate(async (snap, context) => {
+    const data = snap.data();
+    const objectId = snap.id;
 
     const workData = buildWorkData(objectId);
 
@@ -237,7 +237,14 @@ exports.indexProviderData = functions.firestore
       };
       const r = await sgMail.send(msg);
       console.log('+ email response was', r)
-      await db.collection('users').doc(objectId).set({ welcomeEmailSent: true });
+      await db.collection('users').doc(objectId).update({ welcomeEmailSent: true });
+    }
+
+    // TODO: When firestore supports case insensitive queries, we won't need this redundant field
+    console.log('+ eth addy', data.ethAddress);
+    if (data.ethAddress && data.ethAddress !== data.ethAddress.toUpperCase()) {
+      console.log('+ updating eth address for fast lookup: ', data.ethAddress.toUpperCase())
+      await db.collection('users').doc(objectId).update({ ethAddressLookup: data.ethAddress.toUpperCase() });
     }
 
     if (shouldSkipIndexing(data))
@@ -261,10 +268,16 @@ exports.updateIndexProviderData = functions.firestore
     const data = snap.after.data();
     const objectId = snap.after.id;
 
-
-    console.log('+ remove item for update...', objectId);
+    console.log('+ remove index record for update operation...', objectId);
     await algoliaSearchIndex.deleteObject(objectId);
     console.log('+ deleted...', objectId);
+
+    // TODO: When firestore supports case insensitive queries, we won't need this redundant field
+    console.log('+ eth addy', data.ethAddress);
+    if (data.ethAddress && data.ethAddress !== data.ethAddress.toUpperCase()) {
+      console.log('+ updating eth address for fast lookup: ', data.ethAddress.toUpperCase())
+      await db.collection('users').doc(objectId).update({ ethAddressLookup: data.ethAddress.toUpperCase() });
+    }
 
     if (shouldSkipIndexing(data))
       return;
