@@ -5,15 +5,8 @@
     </div>
     <div *ngIf="!loading" class="login-section container min-70">
       <div class="row">
-        <div class="col-sm-0 col-md-0 col-lg-2"></div>
-        <div class="col-sm-12 col-md-6 col-lg-4 center-block text-center">
-          <a *ngIf="pageInit && !isOnMobile" (click)="onUportLogin();" class="d-block pointer">
-            <div class="uport-btn">
-              <img src="assets/img/uPort.svg">
-              <br>
-              <p>Login with uPort</p>
-            </div>
-          </a>
+        <div class="col-sm-12 col-md-12 col-lg-4 center-block text-center">
+
           <div *ngIf="pageInit && isOnMobile" class="d-block text-center">
 
             <h5 style="width: 100%;">Login with Ethereum &amp; PIN code</h5>
@@ -36,7 +29,6 @@
 
               <form>
                 <label>Please check your email ({{pinDeliveredTo}}) for the pin code</label>
-
                 <div class="form-group">
                   <input type="text" id="authPin" #authPin class="form-control" placeholder="PIN" size="8">
                 </div>
@@ -45,17 +37,8 @@
                     Login
                   </button>
                 </div>
-
               </form>
-
             </div>
-
-          </div>
-
-          <div>
-            <p>
-              <i>uPort login method is not available on mobile.</i>
-            </p>
           </div>
         </div>
         <div *ngIf="pageInit && !isOnMobile" class="other-login col-sm-12 col-md-6 col-lg-4 text-center">
