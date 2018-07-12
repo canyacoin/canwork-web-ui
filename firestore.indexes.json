@@ -27,6 +27,10 @@
         {
           "fieldPath": "timestamp",
           "mode": "DESCENDING"
+        },
+        {
+          "fieldPath": "ethAddressLookup",
+          "mode": "ASCENDING"
         }
       ]
     }
