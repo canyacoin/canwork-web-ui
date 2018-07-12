@@ -76,6 +76,19 @@ export class LoginComponent implements OnInit, AfterViewInit {
       }, error => {
         this.mobileLoginState = 'sending-pin-failed';
         console.error('! failed to generate and send auth pin', error);
+        this.mobileLoginState = '';
+        switch (error.status) {
+          case 404: {
+            this.mobileLoginState = 'authentication-address-unknown';
+            alert('Please sign in via the desktop, and set your ethereum address first');
+            break;
+          }
+          default: {
+            alert('Sorry, we encountered an unknown error');
+            console.error(error);
+            break;
+          }
+        }
       });
     }
   }
@@ -118,6 +131,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
           }
           case 401: {
             alert('Permission denied, your PIN code has expired');
+            break;
+          }
+          case 404: {
+            alert('Please sign in via the desktop, and set your ethereum address first');
+            this.mobileLoginState = 'authentication-address-unknown';
             break;
           }
           default: {
