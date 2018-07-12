@@ -15,12 +15,50 @@
             </div>
           </a>
           <div *ngIf="pageInit && isOnMobile" class="d-block text-center">
+
+            <h5 style="width: 100%;">Login with Ethereum &amp; PIN code</h5>
+
+            <p>Your wallet address is:</p>
+
+            <pre>{{webViewEthAddress}}</pre>
+
+            <div *ngIf="mobileLoginState == ''" class="container d-flex h-100 flex-column justify-content-center">
+              <button (click)="generateAuthPinCodeAsync()" class="btn btn-primary" type="button">
+                Email me a pin code
+              </button>
+            </div>
+
+            <div *ngIf="mobileLoginState == 'sending-pin' || mobileLoginState == 'authentication-via-pin'" class="container d-flex h-100 flex-column justify-content-center">
+              <img src="assets/img/loader.svg" height="36px" alt="Loader">
+            </div>
+
+            <div *ngIf="mobileLoginState == 'sending-pin-success'" class="container d-flex h-100 flex-column justify-content-center">
+
+              <form>
+                <label>Please check your email ({{pinDeliveredTo}}) for the pin code</label>
+
+                <div class="form-group">
+                  <input type="text" id="authPin" #authPin class="form-control" placeholder="PIN" size="8">
+                </div>
+                <div class="form-group">
+                  <button (click)="ethereumAuthViaPinCodeAsync(authPin)" class="btn btn-primary" type="button">
+                    Login
+                  </button>
+                </div>
+
+              </form>
+
+            </div>
+
+          </div>
+
+          <div>
             <p>
               <i>uPort login method is not available on mobile.</i>
             </p>
           </div>
         </div>
-        <div class="other-login col-sm-12 col-md-6 col-lg-4 text-center">
+        <div *ngIf="pageInit && !isOnMobile" class="other-login col-sm-12 col-md-6 col-lg-4 text-center">
           <h5 style="width: 100%;">Sign in with alternative services</h5>
           <firebase-ui (signInSuccess)="onFirebaseLogin($event)"></firebase-ui>
         </div>

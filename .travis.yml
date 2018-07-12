@@ -18,6 +18,12 @@ after_success:
   - firebase functions:config:set sendgrid.apikey=$SENDGRID_APIKEY
   - firebase functions:config:set dev.authkey=$DEV_API_KEY
   - ng build --environment=staging
+  - firebase functions:config:set fbadmin.project_id=$FBADMIN_PROJECT_ID
+  - firebase functions:config:set fbadmin.client_email=$FBADMIN_CLIENT_EMAIL
+  - firebase functions:config:set fbadmin.private_key="$FBADMIN_PRIVATE_KEY"
+  - firebase functions:config:set fbadmin.client_email=$FBADMIN_CLIENT_EMAIL
+  - firebase functions:config:set fbadmin.database_url=$FBADMIN_DATABASE_URL
+  - ng build --environment=staging --aot --build-optimizer
   - firebase deploy --token $FIREBASE_TOKEN
 notifications:
   slack:

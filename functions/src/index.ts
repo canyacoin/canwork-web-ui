@@ -23,11 +23,23 @@ const faker = require('faker');
 const fs = require('fs');
 const path = require('path');
 const Chance = require('chance');
+const cors = require('cors')({ origin: true });
+const env = functions.config();
 
 // Firebase connectivity
-admin.initializeApp();
+// Should work like this, see: https://github.com/firebase/firebase-admin-node/issues/224
+// const app = admin.initializeApp(functions.config().firebase);
+
+const app = admin.initializeApp({
+  credential: admin.credential.cert({
+    projectId: env.fbadmin.project_id,
+    clientEmail: env.fbadmin.client_email,
+    privateKey: env.fbadmin.private_key.replace(/\\n/g, '\n') // until https://github.com/firebase/firebase-tools/issues/371 is fixed
+  }),
+  databaseURL: env.fbadmin.database_url
+});
+
 const db = admin.firestore();
-const env = functions.config();
 
 // Algolia client, see also: https://www.npmjs.com/package/algoliasearch
 const algoliaClient = algoliasearch(env.algolia.appid, env.algolia.apikey);
@@ -38,6 +50,7 @@ const chance = new Chance();
 const serviceConfig = getFirebaseInstance(admin.app().options.projectId);
 
 const welcomeEmailTemplateHTML = doT.template(fs.readFileSync(path.join(__dirname, '../src/templates', 'email-welcome.html'), 'utf8'));
+const pinCodeEmailTemplateHTML = doT.template(fs.readFileSync(path.join(__dirname, '../src/templates', 'email-ethereum-login-pin.html'), 'utf8'));
 
 exports.sendEmail = functions.https.onRequest(async (request, response) => {
   // TODO: move to express middleware
@@ -53,7 +66,7 @@ exports.sendEmail = functions.https.onRequest(async (request, response) => {
   const sgMail = require('@sendgrid/mail');
   sgMail.setApiKey(sendgridApiKey);
   const msg = {
-    to: 'cam.asoftware@gmail.com',
+    to: 'cam@canya.com',
     from: 'support@canya.com',
     subject: 'Welcome to CANWork',
     text: 'text version of content here',
@@ -64,6 +77,135 @@ exports.sendEmail = functions.https.onRequest(async (request, response) => {
   return response.status(201)
     .type('application/json')
     .send({ r })
+});
+
+
+
+/*
+  generate Authentication Pin Code for 'ethereum' logins.
+  public address is passed in the json body via HTTP POST:
+
+  {
+	   "ethAddress": "0xc8F0fa7328eaEfF8C112ae0A59193A950A8ebC27"
+  }
+
+  And a pin is generate (10 minute expiry) and sent to the users email
+
+ */
+exports.generateAuthPinCode = functions.https.onRequest(async (request, response) => {
+  cors(request, response, async () => {
+
+    if (request.method !== 'POST') {
+      return response.status(405).type('application/json').send({ message: 'Method Not Allowed', supportedMethods: 'POST' });
+    }
+
+    const ethereumAddress: string = request.body.ethAddress || '';
+    const userSnapshot = await db.collection('users')
+      .where('ethAddress', '==', ethereumAddress)
+      .limit(1).get();
+
+    let i: number = 0;
+    let user: any;
+    userSnapshot.forEach(doc => {
+      if (i === 0) {
+        user = doc.data();
+      }
+      i++;
+    });
+
+    if (typeof user !== 'undefined') {
+      const pin: number = Math.floor(100000 + Math.random() * 900000);
+      const expiry: number = Math.floor(((Date.now() / 1000) + 600)); // pin code is good for ten minutes
+      try {
+        await db.collection('users').doc(user.address).update({ ethereumLogin: { pin, expiry } });
+      } catch (e) {
+        return response.status(500).type('application/json').send({ message: e });
+      }
+
+      console.log('+ generated mobile/ethereum login pin', { email: user.email, ethAddress: ethereumAddress, pin });
+
+      const html = pinCodeEmailTemplateHTML({ pin, uri: serviceConfig.uri });
+
+      const sgMail = require('@sendgrid/mail');
+      sgMail.setApiKey(sendgridApiKey);
+      const msg = {
+        to: user.email,
+        from: 'support@canya.com',
+        subject: 'CANWork Ethereum Login PIN Code',
+        html: html,
+      };
+      const r = await sgMail.send(msg);
+      console.log('+ email response was', r);
+
+      return response.status(201).type('application/json').send({ message: 'Secure pin generated and delivered', email: user.email });
+    } else {
+      return response.status(404).type('application/json').send({ message: 'Ethereum address not found' });
+    }
+  });
+});
+
+/*
+  Login via 'ethereum' public address is passed in the json body via HTTP POST:
+  {
+     "ethAddress": "0xc8F0fa7328eaEfF8C112ae0A59193A950A8ebC27",
+     "pin": 123456
+  }
+
+  And a firebase auth token is returned
+
+ */
+exports.ethereumAuthViaPinCode = functions.https.onRequest(async (request, response) => {
+  cors(request, response, async () => {
+
+    if (request.method !== 'POST') {
+      return response.status(405).type('application/json').send({ message: 'Method Not Allowed', supportedMethods: 'POST' });
+    }
+
+    let ethereumAddress: string = request.body.ethAddress || '';
+    const pinCode: number = request.body.pin || 0;
+
+    const userSnapshot = await db.collection('users')
+      .where('ethAddress', '==', ethereumAddress)
+      .limit(1).get();
+
+    let i: number = 0;
+    let user: any;
+    userSnapshot.forEach(doc => {
+      if (i === 0) {
+        user = doc.data();
+      }
+      i++;
+    });
+
+    let token: string;
+
+    if (typeof user !== 'undefined' && user.ethereumLogin !== 'undefined') {
+      const now: number = Math.floor((Date.now() / 1000));
+      if (user.ethereumLogin.pin === pinCode) {
+        console.log('+ auth pin ok');
+        if (now <= user.ethereumLogin.expiry) {
+          // let them in!
+          try {
+            token = await app.auth().createCustomToken(user.address);
+          } catch (e) {
+            console.error('+ unable to generate auth token for request.body:', request.body);
+            console.error('+ error was:', e);
+            return response.status(500).type('application/json').send({ message: e });
+          }
+        } else {
+          console.log('+ auth expired for request.body:', request.body);
+          return response.status(401).type('application/json').send({ message: 'pin code expired' });
+        }
+      } else {
+        console.log('+ invalid pin code, request.body was:', request.body);
+        return response.status(403).type('application/json').send({ message: 'permission denied' });
+      }
+    } else {
+      console.log('+ unable to locate user object in firestore, request.body was:', request.body);
+      return response.status(403).type('application/json').send({ message: 'permission denied' });
+    }
+    return response.status(201).type('application/json').send({ token });
+  });
 });
 
 

@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
@@ -42,7 +43,8 @@ import { CoreUtilsModule } from './core-utils/core-utils.module';
     CoreComponentsModule,
     CoreServicesModule,
     CoreUtilsModule,
-    HttpModule
+    HttpModule,
+    HttpClientModule
   ],
   providers: [
     AuthService,
