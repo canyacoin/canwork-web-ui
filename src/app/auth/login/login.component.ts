@@ -21,7 +21,6 @@ import { UserService } from '../../core-services/user.service';
 export class LoginComponent implements OnInit, AfterViewInit {
 
   loading = false;
-  pageInit = false;
   returnUrl: string;
   isOnMobile = false;
   webViewEthAddress: string;
