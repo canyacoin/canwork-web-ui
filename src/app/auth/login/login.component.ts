@@ -11,7 +11,6 @@ import { environment } from '../../../environments/environment';
 import { User } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
 import { CanWorkEthService } from '../../core-services/eth.service';
-import { ScriptService } from '../../core-services/script.service';
 import { UserService } from '../../core-services/user.service';
 
 @Component({
@@ -22,7 +21,6 @@ import { UserService } from '../../core-services/user.service';
 export class LoginComponent implements OnInit, AfterViewInit {
 
   loading = false;
-  pageInit = false;
   returnUrl: string;
   isOnMobile = false;
   webViewEthAddress: string;
@@ -36,15 +34,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private userService: UserService,
     private afs: AngularFirestore,
     private http: Http,
-    private ethService: CanWorkEthService,
-    private script: ScriptService) {
-    this.script.load('uport').then(data => {
-      this.pageInit = true;
-      this.authService.initUport();
-    }).catch(error => {
-      this.pageInit = true;
-    });
-  }
+    private ethService: CanWorkEthService) { }
 
   ngOnInit() {
     const ua = window.navigator.userAgent;
@@ -56,25 +46,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-  }
-
-  onUportLogin() {
-    try {
-      this.loading = true;
-      this.authService.uportConnectAsync().then((credentials) => {
-        const avatar = credentials['avatar'];
-        const randomAvatarUri = `assets/img/animals/${Math.floor(Math.random() * 109) + 1}.png`;
-        credentials['avatar'] = { 'uri': avatar ? credentials['avatar']['uri'] || randomAvatarUri : randomAvatarUri };
-        const parsedUser = new User(credentials);
-
-        this.handleLogin(parsedUser);
-      }, (err) => {
-        this.loading = false;
-      });
-    } catch (error) {
-      this.loading = false;
-      console.log('onConnect - error', error);
-    }
   }
 
   private setWeb3EthereumPublicAddress() {
@@ -105,6 +76,19 @@ export class LoginComponent implements OnInit, AfterViewInit {
       }, error => {
         this.mobileLoginState = 'sending-pin-failed';
         console.error('! failed to generate and send auth pin', error);
+        this.mobileLoginState = '';
+        switch (error.status) {
+          case 404: {
+            this.mobileLoginState = 'authentication-address-unknown';
+            alert('Please sign in via the desktop, and set your ethereum address first');
+            break;
+          }
+          default: {
+            alert('Sorry, we encountered an unknown error');
+            console.error(error);
+            break;
+          }
+        }
       });
     }
   }
@@ -149,6 +133,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
             alert('Permission denied, your PIN code has expired');
             break;
           }
+          case 404: {
+            alert('Please sign in via the desktop, and set your ethereum address first');
+            this.mobileLoginState = 'authentication-address-unknown';
+            break;
+          }
           default: {
             alert('Sorry, we encountered an unknown error');
             console.error(error);
@@ -178,24 +167,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   handleLogin(userDetails: User) {
-    // let x: QueryFn = null;
-    // if (userDetails.email && userDetails.email !== 'Empty' && userDetails.email !== '') {
-    //   x = ref => ref.where('email', '==', userDetails.email).limit(1);
-    // }
     this.afs.collection<any>('users', ref => ref.where('address', '==', userDetails.address).limit(1)).valueChanges().take(1).subscribe((usersMatchingId: any) => {
       if (usersMatchingId && usersMatchingId.length > 0) {
         this.authService.setUser(usersMatchingId[0]);
         this.router.navigate([this.returnUrl]);
-
-        // } else if (x != null) {
-        //   this.afs.collection<any>('users', x).valueChanges().take(1).subscribe((usersMatchingEmail: any) => {
-        //     if (usersMatchingEmail && usersMatchingEmail.length > 0) {
-        //       this.authService.setUser(usersMatchingEmail[0]);
-        //       this.router.navigate(['/home']);
-        //     } else {
-        //       this.initialiseUserAndRedirect(userDetails);
-        //     }
-        //   });
       } else {
         this.initialiseUserAndRedirect(userDetails);
       }
