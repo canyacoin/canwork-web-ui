@@ -18,6 +18,8 @@ import * as doT from 'dot';
  */
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import { ActionType } from './enums';
+import * as jobEmailfactory from './job-state-email-notification-factory';
 
 const faker = require('faker');
 const fs = require('fs');
@@ -79,7 +81,60 @@ exports.sendEmail = functions.https.onRequest(async (request, response) => {
     .send({ r })
 });
 
+/*
+  Send an email notification based on job status change.
+  Passed in the json body via HTTP POST:
+  {
+     "jobAction": "<ActionType>",   // From the enum used in the UI for job states
+     "jobId": "xxxx"                // the job collection id to operate on
+  }
 
+  And a status is returned, 201 (created) for success
+ */
+exports.jobStateEmailNotification = functions.https.onRequest((request, response) => {
+  cors(request, response, async () => {
+    if (request.method !== 'POST') {
+      return response.status(405).type('application/json').send({ message: 'Method Not Allowed', supportedMethods: 'POST' });
+    }
+
+    if ((!request.headers.authorization || !request.headers.authorization.startsWith('Bearer '))) {
+      console.error('No Firebase ID token was passed as a Bearer token in the Authorization header.',
+        'Make sure you authorize your request by providing the following HTTP header:',
+        'Authorization: Bearer <Firebase ID Token>');
+      return response.status(403).type('application/json').send({ message: 'Unauthorized, missing or incorrect authorization header' });
+    }
+
+    const jobAction: string = request.body['jobAction'];
+    const jobId: string = request.body['jobId'];
+
+    if (!jobAction || !jobId) {
+      console.error('! bad request body parameters', request.body);
+      return response.status(422).type('application/json').send({ message: 'Unprocessable entity, missing or invalid parameters in request body' });
+    }
+
+    const idToken = request.headers.authorization.split('Bearer ')[1];
+    console.log('+ checking id token: ', `${idToken.substr(0, 5)}.....${idToken.substr(idToken.length - 5)}`);
+
+    const user = await app.auth().verifyIdToken(idToken).catch(error => {
+      console.error('! unable to verify token: ', error);
+      return response.status(403).type('application/json').send({ message: 'Forbidden, invalid or expired authorization header' });
+    });
+
+    const a: ActionType = ActionType[jobAction];
+    // const jobStateEmailer = jobEmailfactory.notificationEmail(ActionType.createJob);
+    const jobStateEmailer = jobEmailfactory.notificationEmail(a);
+
+    try {
+      await jobStateEmailer.interpolateTemplates(db, jobId);
+    } catch (error) {
+      console.error('! unable to interpolateTemplates(): ', error);
+      return response.status(500).type('application/json').send({ message: error });
+    }
+
+    jobStateEmailer.deliver(sendgridApiKey, serviceConfig.uri);
+    return response.status(201).type('application/json').send({ message: 'ok' });
+  });
+});
 
 /*
   generate Authentication Pin Code for 'ethereum' logins.
@@ -161,7 +216,7 @@ exports.ethereumAuthViaPinCode = functions.https.onRequest(async (request, respo
       return response.status(405).type('application/json').send({ message: 'Method Not Allowed', supportedMethods: 'POST' });
     }
 
-    let ethereumAddress: string = request.body.ethAddress || '';
+    const ethereumAddress: string = request.body.ethAddress || '';
     const pinCode: number = request.body.pin || 0;
 
     const userSnapshot = await db.collection('users')
@@ -298,8 +353,6 @@ exports.updateIndexProviderData = functions.firestore
 exports.updateUserSkillsTagData = functions.firestore
   .document('portfolio/{userId}/work/{workId}')
   .onUpdate(async (snap, context) => {
-    const objectId = snap.after.id;
-
     const skillsTagData = [];
     const workDataSnapshot = await db.collection(`portfolio/${context.params.userId}/work`).get();
     workDataSnapshot.forEach(doc => {
@@ -453,7 +506,7 @@ exports.seedProviders = functions.https.onRequest(async (request, response) => {
     }
 
     // Insert into portfolio with work items
-    let workRecords = [];
+    //let workRecords = [];
 
     for (let index = 0; index < Math.floor((Math.random() * 5) + 1); index++) {
       const work = {
@@ -510,7 +563,7 @@ function getRandomBadge(): string {
 }
 
 function getRandomTags(max: number): string[] {
-  let array = getTags();
+  const array = getTags();
   let currentIndex = array.length, temporaryValue, randomIndex;
 
   // While there remain elements to shuffle...

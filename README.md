@@ -62,6 +62,11 @@ If you wish to execute the firebase functions for data management & seeding:
 firebase functions:config:set dev.authkey="some-random-key-only-you-know"
 ```
 
+##### Running firebase functions locally (from the project root)
+
+1. Export the path to your credentials json file [as described here](https://firebase.google.com/docs/functions/local-emulator)
+2. Output env vars to the runtime file: `firebase functions:config:get > functions/.runtimeconfig.json`
+3. Run: `firebase serve`
 
 ### Start your app
 

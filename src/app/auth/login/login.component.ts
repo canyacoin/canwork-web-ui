@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, isDevMode, OnInit } from '@angular/core';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
@@ -168,6 +168,14 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   handleLogin(userDetails: User) {
     this.afs.collection<any>('users', ref => ref.where('address', '==', userDetails.address).limit(1)).valueChanges().take(1).subscribe((usersMatchingId: any) => {
+
+      if (isDevMode()) {
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(idToken => {
+          console.log('+ ID Token:', idToken)
+        }).catch(function (error) {
+          // don't care
+        });
+      }
       if (usersMatchingId && usersMatchingId.length > 0) {
         this.authService.setUser(usersMatchingId[0]);
         this.router.navigate([this.returnUrl]);

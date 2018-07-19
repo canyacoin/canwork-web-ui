@@ -11,7 +11,8 @@
     "e2e": "ng e2e",
     "deploy:functions": "firebase deploy --only functions",
     "deploy:rules": "firebase deploy --only firestore:rules",
-    "deploy:indexes": "firebase deploy --only firestore:indexes"
+    "deploy:indexes": "firebase deploy --only firestore:indexes",
+    "dev:functions": "nodemon --watch functions/src/ --exec 'cd functions/src && tsc && cd ../../ && firebase serve --only functions --debug' -e ts"
   },
   "private": true,
   "dependencies": {
@@ -56,6 +57,7 @@
     "karma-coverage-istanbul-reporter": "^1.2.1",
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "nodemon": "^1.18.3",
     "protractor": "^5.3.2",
     "truffle": "^4.1.12",
     "ts-node": "~4.1.0",
