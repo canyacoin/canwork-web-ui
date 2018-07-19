@@ -15,6 +15,7 @@ src/environments/*.ts
 /node_modules
 functions/node_modules
 functions/lib
+functions/.runtimeconfig.json
 
 # IDEs and editors
 /.idea
