@@ -38,6 +38,10 @@ export class AuthService {
     return this.currentUser.value !== null;
   }
 
+  public getJwt(): string {
+    return window.sessionStorage.accessToken || '';
+  }
+
   setUser(user: User) {
     this.emitUser(user);
     if (this.userSub) { this.userSub.unsubscribe(); }

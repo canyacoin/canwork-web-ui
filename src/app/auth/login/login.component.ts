@@ -169,13 +169,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
   handleLogin(userDetails: User) {
     this.afs.collection<any>('users', ref => ref.where('address', '==', userDetails.address).limit(1)).valueChanges().take(1).subscribe((usersMatchingId: any) => {
 
-      if (isDevMode()) {
-        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(idToken => {
-          console.log('+ ID Token:', idToken)
-        }).catch(function (error) {
-          // don't care
-        });
-      }
+      firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(idToken => {
+        window.sessionStorage.accessToken = idToken;
+      }).catch(error => {
+        console.error('! jwt token was not stored in session storage ', error);
+      });
+
       if (usersMatchingId && usersMatchingId.length > 0) {
         this.authService.setUser(usersMatchingId[0]);
         this.router.navigate([this.returnUrl]);
