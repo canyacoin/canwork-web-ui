@@ -18,6 +18,7 @@ import { firebaseUiAuthConfig } from './core-config/app-auth-config';
 import { AuthService } from './core-services/auth.service';
 import { CoreServicesModule } from './core-services/core-services.module';
 import { CanWorkEthService } from './core-services/eth.service';
+import { JobNotificationService } from './core-services/job-notification.service';
 import { NavService } from './core-services/nav.service';
 import { CoreUtilsModule } from './core-utils/core-utils.module';
 
@@ -49,7 +50,8 @@ import { CoreUtilsModule } from './core-utils/core-utils.module';
   providers: [
     AuthService,
     CanWorkEthService,
-    NavService
+    NavService,
+    JobNotificationService
   ],
   bootstrap: [AppComponent]
 })
