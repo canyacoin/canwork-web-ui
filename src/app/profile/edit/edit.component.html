@@ -26,6 +26,13 @@
             </div>
 
             <div class="form-group">
+              <label>ETH Address</label>
+              <input class="form-control" #ethAddress formControlName="ethAddress" type="text" name="ethAddress" placeholder="0x123...">
+
+              <!-- <small *ngIf="!profileForm.controls.work.valid  && profileForm.controls.work.dirty">Please enter a valid email.</small> -->
+            </div>
+
+            <div class="form-group">
               <label>Headline</label>
               <input class="form-control" #title formControlName="title" type="text" name="title" placeholder="Headline of your profile"
                 maxlength="36" [class.invalid]="!profileForm.controls.title.valid && profileForm.controls.title.dirty">
@@ -67,14 +74,14 @@
                     <input class="custom-control-input" #category5 type="radio" name="category" [checked]="this.currentUser.category==='SOFTWARE DEVELOPERS'">
                     <span class="custom-control-indicator"></span>
                     <span class="custom-control-description">SOFTWARE DEVELOPERS</span>
-                  </label> 
+                  </label>
                 </div>
                 <div class="col-md-4">
                     <label class="custom-control custom-radio">
                         <input class="custom-control-input" #category3 type="radio" name="category" [checked]="this.currentUser.category === 'FINANCIAL EXPERTS'">
                         <span class="custom-control-indicator"></span>
                         <span class="custom-control-description">FINANCIAL EXPERTS</span>
-                    </label> 
+                    </label>
                   <label class="custom-control custom-radio">
                       <input class="custom-control-input" #category6 type="radio" name="category" [checked]="this.currentUser.category==='VIRTUAL ASSISTANTS'">
                       <span class="custom-control-indicator"></span>
@@ -82,7 +89,7 @@
                     </label>
                 </div>
               </div>
-              <!-- 
+              <!--
               <div class="custom-controls-stacked">
                     <label class="custom-control custom-radio">
                   <input class="custom-control-input" #category1 type="radio" name="category" [checked]="this.currentUser.category === 'CONTENT CREATORS'">
@@ -114,7 +121,7 @@
                   <span class="custom-control-indicator"></span>
                   <span class="custom-control-description">VIRTUAL ASSISTANTS</span>
                 </label>
-              </div> 
+              </div>
             -->
             </div>
 
@@ -160,7 +167,7 @@
               <textarea class="form-control" #description formControlName="description" name="description" rows="7
                    " placeholder="Think different! Be creative, be innovative."></textarea>
             </div>
-            <div class="form-group text-right"> 
+            <div class="form-group text-right">
                 <a href="#" [routerLink]="[ '/profile']" class="btn btn-secondary">
                   Cancel
                 </a>
