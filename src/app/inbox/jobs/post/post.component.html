@@ -43,6 +43,7 @@
 
                     <div class="form-group">
                       <label>Attach a file (max 50mb)</label>
+                      <br>
                       <small class="text-primary text-wrap">If you wish to upload more than one file we suggest you upload a zip folder</small>
 
                       <div class="row ml-0 mr-0">
@@ -53,6 +54,7 @@
                           <input id="file-upload" [disabled]="currentUpload || uploadedFile" type="file" hidden (change)="detectFiles($event)" />
                         </div>
                       </div>
+                      
                       <div class="alert alert-danger" *ngIf="fileTooBig">
                         File is too large, please upload a file smaller than 50 MB
                       </div>
@@ -70,13 +72,22 @@
                       </div>
 
                       <div class="w-full px-10" *ngIf="uploadedFile">
+                        <br>
                         Uploaded:
-                        <span>
-                          <app-attachment [name]="uploadedFile.name" [url]="uploadedFile.url" [size]="uploadedFile.size"></app-attachment>
+                        <ul class="list-unstyled">
+                            <li><p>{{uploadedFile.name}}<span class="pointer alert" (click)="removeUpload(uploadedFile)">
+                                <i class="fa fa-times fs-14 pl-8"></i>
+                              </span></p>
+                           </li>
+                         </ul>  
+                        <!-- 
+                        <span> 
+                          <app-attachment [name]="uploadedFile.name" [path]="uploadedFile.filePath" [url]="uploadedFile.url" [size]="uploadedFile.size"></app-attachment>
                           <span class="pointer alert" (click)="removeUpload(uploadedFile)">
                             <i class="fa fa-times fs-14 pl-8"></i>
                           </span>
                         </span>
+                      -->
                       </div>
                       <div class="alert alert-danger" *ngIf="deleteFailed">
                         Oops, something went wrong deleting your file

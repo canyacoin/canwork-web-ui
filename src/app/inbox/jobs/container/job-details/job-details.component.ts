@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService } from 'ng2-bootstrap-modal';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-
+import { AngularFireStorage } from 'angularfire2/storage';
 import {
     Job, JobDescription, JobState, PaymentType, TimeRange, WorkType
 } from '@class/job';
@@ -14,7 +14,7 @@ import { AuthService } from '@service/auth.service';
 import { JobService } from '@service/job.service';
 import { UserService } from '@service/user.service';
 import {
-    ActionDialogComponent, ActionDialogOptions
+  ActionDialogComponent, ActionDialogOptions
 } from '../action-dialog/action-dialog.component';
 
 @Component({
@@ -37,7 +37,9 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     private jobNotificationService: JobNotificationService,
     private userService: UserService,
     private activatedRoute: ActivatedRoute,
-    private dialogService: DialogService) {}
+    private dialogService: DialogService,
+    private storage: AngularFireStorage
+  ) { }
 
   ngOnInit() {
     this.authService.currentUser$.take(1).subscribe((user: User) => {
@@ -58,6 +60,29 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.job = job;
         this.currentUserType = this.currentUser.address === job.clientId ? UserType.client : UserType.provider;
         this.jobService.assignOtherPartyAsync(this.job, this.currentUserType);
+        var attachment = this.job.information.attachments;
+        // check if there's any attachment on this job
+        if (attachment.length > 0) {
+          // [0] is used here since we only support single file upload anyway.
+          if (attachment[0].url == null) {
+            console.log("An attachment without URL ! getting the url...");
+            // If there's an attachment but not the URL we can safely assume that it's caused by the async issue
+            if (attachment[0].filePath != null) {
+              var urlSub: Subscription;
+              // If this attachment has a filepath, then convert it into a usable URL by using the code below.
+              urlSub = this.storage.ref(attachment[0].filePath).getDownloadURL().subscribe(downloadUrl => {
+                attachment[0].url = downloadUrl; // change this attachment's (null) url into the actual url.
+                console.log("attachment URL is now " + attachment[0].url);
+              })
+              urlSub.unsubscribe; //unsubscibe to the UrlSub just in case
+            }
+          }
+
+        }
+        else {
+          console.log("no attachment given");
+        }
+
       });
     }
   }
@@ -68,6 +93,61 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
   get currentUserIsClient() {
     return this.currentUserType === UserType.client;
+  }
+
+  /* For the explanation modal */
+  get stateExplanation(): string {
+    switch (this.job.state) {
+      case JobState.offer:
+        return "A client has offered a job to a provider and is awaiting the provider's acceptance";
+      case JobState.workPendingCompletion:
+        return "The provider has marked the job as complete and is awaiting the client's acceptance";
+      case JobState.cancelled:
+        return "This job has been cancelled by the client";
+      case JobState.declined:
+        return "This job offer was turned down by the provider";
+      case JobState.inDispute:
+        return "The provider or the client has raised a dispute. This is being resolved by the CanYa DAO";
+      case JobState.providerCounterOffer:
+        return "The provider has countered the client's offer";
+      case JobState.clientCounterOffer:
+        return "The client has countered the provider's offer";
+      case JobState.termsAcceptedAwaitingEscrow:
+        return "The job's terms has been accepted. The client should now send the agreed amount of money to the escrow to commence the job.";
+      case JobState.complete:
+        return 'This job has been marked as complete by the client.';
+      case JobState.inEscrow:
+        return 'The funds has been sent to the escrow. The job may now commence.';
+      default:
+        return '';
+    }
+  }
+  /* Customizeable messages for each job status. */
+  get stateStatus(): string {
+    switch (this.job.state) {
+      case JobState.offer:
+        return 'Job offered'
+      case JobState.workPendingCompletion:
+        return 'Pending completion';
+      case JobState.cancelled:
+        return 'Cancelled by client';
+      case JobState.declined:
+        return 'Declined by provider';
+      case JobState.inDispute:
+        return 'Dispute raised';
+      case JobState.providerCounterOffer:
+        return 'Offer countered by provider';
+      case JobState.clientCounterOffer:
+        return 'Offer countered by client';
+      case JobState.termsAcceptedAwaitingEscrow:
+        return 'Awaiting payment to escrow';
+      case JobState.complete:
+        return 'Completed';
+      case JobState.inEscrow:
+        return 'Funds in escrow';
+      default:
+        return '';
+    }
   }
 
   getActionColour(action: ActionType): string {

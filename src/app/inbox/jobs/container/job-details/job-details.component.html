@@ -91,9 +91,9 @@
                   <b>Attachments</b> 
               </div>
               <div class="col-lg-9 col-md-8 col-sm-12 col-xs-12">
-                 <p *ngIf="job.information.attachments.length <= 0 ">No Attachment given.</p>
+                 <p *ngIf="job.information.attachments.length <= 0 ">No Attachment given.</p>   
                   <app-attachment *ngFor="let attachment of job.information.attachments" [name]="attachment.name" [url]="attachment.url" [size]="attachment.size"></app-attachment>
-              </div>
+                </div>
             </div> 
              <div id="skills-row" class="row">
                <div class="col-lg-3 col-md-4  col-sm-6 col-xs-12"> 

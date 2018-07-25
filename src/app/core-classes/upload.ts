@@ -8,7 +8,7 @@ export class Upload {
     size: number;
     progress: number;
     createdAt: Date = new Date();
-
+    filePath: string; // a filePath in case we can't get the download path
     constructor(createdBy: string, filename: string, size: number) {
         this.id = GenerateGuid();
         this.createdBy = createdBy;
