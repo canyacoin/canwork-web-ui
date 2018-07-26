@@ -1,32 +1,31 @@
-<main class="main-content">
-  <div class="section bg-white py-10" id="section-main">
+ 
+  <div class="bg-white py-10" id="section-main">
+   
     <app-wallet-install *ngIf="web3State !== web3LoadingStatus.complete" [web3State]="web3State" [walletType]="walletType"></app-wallet-install>
-    <div *ngIf="web3State == web3LoadingStatus.complete">
-      <div class="container">
-        <header class="section-header mt-0 mb-20 py-0">
-          <h4 class="fw-300 my-0 py-0">Wallet Balance </h4>
-          <h1 class="fw-300 my-0 py-0">
-            <img class="logo-default" src="assets/img/round-icon.svg" width="auto" height="36px" alt="logo" style="margin-top: -8px;"> {{ balance | currency:' ':'symbol':'1.2-3':'en-US' }}
-          </h1>
-          <hr>
-          <h4 class="fw-300 px-10">Also available on:</h4>
-          <a class="btn btn-primary my-1" href="https://www.kucoin.com/" target="_blank" data-label="KuCoin">KuCoin</a>
-          <a class="btn btn-primary my-1" href="https://www.aex.com/" target="_blank" data-label="AEX">AEX</a>
-          <a class="btn btn-primary my-1" href="https://xbrick.io/" target="_blank" data-label="XBrick">XBrick</a>
-          <a class="btn btn-primary my-1" href="https://www.cryptopia.co.nz/" target="_blank" data-label="Cryptopia">Cryptopia</a>
-          <a class="btn btn-primary my-1" href="https://www.fatbtc.com/" target="_blank" data-label="Fatbtc">Fatbtc</a>
-          <a class="btn btn-primary my-1" href="https://www.coinspot.com.au/" target="_blank" data-label="CoinSpot">CoinSpot</a>
-          <a class="btn btn-primary my-1" href="https://etherdelta.com/#0x1d462414fe14cf489c7a21cac78509f4bf8cd7c0-ETH" target="_blank"
-            data-label="EtherDelta">EtherDelta</a>
-          <a class="btn btn-primary my-1" href="https://coss.io/" target="_blank" data-label="COSS.IO">COSS.IO</a>
-          <a class="btn btn-primary my-1" href="https://www.qryptos.com/" target="_blank" data-label="QRYPTOS">QRYPTOS</a>
-          <a class="btn btn-primary my-1" href="https://radarrelay.com/" target="_blank" data-label="Radar Relay">Radar Relay</a>
-          <a class="btn btn-primary my-1" href="https://idex.market/" target="_blank" data-label="IDEX">IDEX</a>
-          <a class="btn btn-primary my-1" href="https://gatecoin.com/" target="_blank" data-label="Gatecoin">Gatecoin</a>
-        </header>
+ 
+    <div *ngIf="web3State == web3LoadingStatus.complete"> 
+        <div class="row py-25"> 
+            <div class="col-12 text-center">
+                <h4 class="fw-300 my-0 py-0">Wallet Balance </h4> 
+                <h1 class="fw-300 my-0 py-0">
+                  <img class="logo-default" src="assets/img/round-icon.svg" width="auto" height="36px" alt="logo" style="margin-top: -8px;"> {{ balance | currency:' ':'symbol':'1.2-3':'en-US' }}
+                </h1> 
+            </div>
+        </div>  
+       <div id="bancor-wc"></div> 
+    </div>
+    
+    <div class="container py-20">
+      <div class="row">
+        <div class="col-12 text-center"> 
+          <h4 class="fw-300 px-10">CanYa is also available on:</h4>
+          <a *ngFor = "let exchange of exchanges" target="_blank" class="btn btn-primary m-5" href="{{exchange.url}}">
+            {{exchange.name}}
+          </a> 
+        </div>
       </div>
+         
     </div>
   </div>
 
-  <div id="bancor-wc"></div>
-</main>
+ 
