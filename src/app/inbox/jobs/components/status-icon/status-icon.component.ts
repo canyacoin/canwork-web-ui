@@ -9,9 +9,9 @@ import { Job, JobState, PaymentType } from '../../../../core-classes/job';
 })
 export class StatusIconComponent {
 
-  @Input() job: Job;
-
-  constructor() { }
+  @Input() job: Job; 
+  constructor() {  
+  }
 
   get stateColour(): string {
     switch (this.job.state) {
@@ -60,6 +60,7 @@ export class StatusIconComponent {
       default:
         return '';
     }
-  }
+  } 
+ 
 
 }

@@ -37,6 +37,19 @@ hr{
 .action-btn{
   margin-right:5px;
 }
+.question-btn{
+  background-color: transparent;
+  border-color:transparent;
+  cursor: pointer;
+  margin:0;
+  padding:0;
+}
+#explanation-modal .modal-dialog{
+  padding-top: 25vh;
+}
+#explanation-modal .modal-content{
+  border-color: transparent;
+}
 @media only screen and (max-width: 978px) {
   #status-span{
     text-align: left !important; 

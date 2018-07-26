@@ -221,8 +221,18 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
     localStorage.setItem('selectedChannel', JSON.stringify(this.selectedChannel));
     this.loadChats();
     this.loadUser();
-  }
-
+    if(this.isOnMobile){
+      this.toggleMobileDivs();
+      console.log("on mobile! hiding the list and showing the chat window...");
+    }
+   }
+   toggleMobileDivsEvent(event: any){
+     this.toggleMobileDivs();
+   }
+   toggleMobileDivs(){
+    document.getElementById("contact-div").classList.toggle("hide");
+    document.getElementById("message-div").classList.toggle("hide");
+   }
 
   onBuy() {
     this.router.navigate(['/exchange']);
