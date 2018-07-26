@@ -1,10 +1,5 @@
-import * as doT from 'dot';
-
-import { ActionType } from './enums';
-
 const sgMail = require('@sendgrid/mail');
-const fs = require('fs');
-const path = require('path');
+const replyTo = 'noreply@canya.com';
 
 /*
  * Interfaces
@@ -32,11 +27,9 @@ abstract class AEmailNotification implements IJobStateEmailNotification {
   clientData: any;
   providerData: any;
   emailMessages: EmailMessage[];
-  templateBase: string;
 
   constructor() {
     this.emailMessages = new Array();
-    this.templateBase = path.join(__dirname, '../src/templates');
   }
 
   // Parent method for building 'EmailMessage' objects.
@@ -57,13 +50,13 @@ abstract class AEmailNotification implements IJobStateEmailNotification {
       console.log('+ sending message to', emailMessage.to);
       sgMail.send({
         to: emailMessage.to,
-        from: 'noreply@canya.com',
+        from: replyTo,
         subject: emailMessage.subject,
         html: emailMessage.bodyHtml,
         substitutions: {
           title: emailMessage.title,
           returnLinkText: 'View Job Details Here',
-          returnLinkUrl: `${returnUri}/jobs/${this.jobData.id}`,
+          returnLinkUrl: `${returnUri}/inbox/jobs/${this.jobData.id}`,
         },
         templateId: '4fc71b33-e493-4e60-bf5f-d94721419db5'
       }, (error, result) => {
@@ -133,15 +126,15 @@ class ClientJobRequestNotification extends AEmailNotification {
 
     // get html template here
 
-    const title = `You have a work request from ${this.providerData.name}`
+    const title = `You have a work request from ${this.clientData.name}`
 
     this.emailMessages.push({
-      to: this.clientData.email,
+      to: this.providerData.email,
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${this.clientData.name},<br>
-      ${this.providerData.name} has requested a job: "${this.jobData.information.description}". Please login to CanWork to review this request.`
+      Dear ${this.providerData.name},<br>
+      ${this.clientData.name} has requested a job: "${this.jobData.information.description}". Please login to CanWork to review this request.`
     });
     console.log('+ dump emailMessages:', this.emailMessages);
   }
@@ -182,13 +175,13 @@ class ClientJobRequestNotification extends AEmailNotification {
 //   }
 // }
 
-export function notificationEmail(action: ActionType) {
+export function notificationEmail(action: string) {
   console.log('+ build factory object for action:', action)
   switch (action) {
-    case ActionType.createJob: {
+    case 'Create job': {
       return new ClientJobRequestNotification();
     } default: {
-      console.error('+ unknown action type: ', action)
+      console.log('! unknown action type: ', action)
       return undefined;
     }
   }

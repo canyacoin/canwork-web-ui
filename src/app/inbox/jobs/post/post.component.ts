@@ -11,6 +11,7 @@ import { ActionType, IJobAction } from '../../../core-classes/job-action';
 import { Upload } from '../../../core-classes/upload';
 import { User, UserType } from '../../../core-classes/user';
 import { AuthService } from '../../../core-services/auth.service';
+import { JobNotificationService } from '../../../core-services/job-notification.service';
 import { JobService } from '../../../core-services/job.service';
 import { UploadCategory, UploadService } from '../../../core-services/upload.service';
 import { UserService } from '../../../core-services/user.service';
@@ -54,6 +55,7 @@ export class PostComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private authService: AuthService,
     private jobService: JobService,
+    private jobNotificationService: JobNotificationService,
     private uploadService: UploadService,
     private http: Http) {
     this.postForm = formBuilder.group({
@@ -199,6 +201,7 @@ export class PostComponent implements OnInit, OnDestroy {
 
       const action = new IJobAction(ActionType.createJob, UserType.client);
       this.sent = await this.jobService.handleJobAction(job, action);
+      await this.jobNotificationService.notify(ActionType.createJob, job.id);
       this.isSending = false;
       if (this.sent) {
         this.jobService.createJobChat(job, action, this.currentUser, this.recipient);
