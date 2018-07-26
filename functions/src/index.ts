@@ -18,7 +18,6 @@ import * as doT from 'dot';
  */
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { ActionType } from './enums';
 import * as jobEmailfactory from './job-state-email-notification-factory';
 
 const faker = require('faker');
@@ -96,7 +95,7 @@ exports.jobStateEmailNotification = functions.https.onRequest((request, response
     if (request.method !== 'POST') {
       return response.status(405).type('application/json').send({ message: 'Method Not Allowed', supportedMethods: 'POST' });
     }
-
+    console.log('+ jobStateEmailNotification');
     if ((!request.headers.authorization || !request.headers.authorization.startsWith('Bearer '))) {
       console.error('No Firebase ID token was passed as a Bearer token in the Authorization header.',
         'Make sure you authorize your request by providing the following HTTP header:',
@@ -106,11 +105,11 @@ exports.jobStateEmailNotification = functions.https.onRequest((request, response
 
     const jobAction: string = request.body['jobAction'];
     const jobId: string = request.body['jobId'];
-
     if (!jobAction || !jobId) {
       console.error('! bad request body parameters', request.body);
       return response.status(422).type('application/json').send({ message: 'Unprocessable entity, missing or invalid parameters in request body' });
     }
+    console.log(`+ notification request for jobId: ${jobId} with jobAction: ${jobAction}`);
 
     const idToken = request.headers.authorization.split('Bearer ')[1];
     console.log('+ checking id token: ', `${idToken.substr(0, 5)}.....${idToken.substr(idToken.length - 5)}`);
@@ -120,9 +119,7 @@ exports.jobStateEmailNotification = functions.https.onRequest((request, response
       return response.status(403).type('application/json').send({ message: 'Forbidden, invalid or expired authorization header' });
     });
 
-    const a: ActionType = ActionType[jobAction];
-    // const jobStateEmailer = jobEmailfactory.notificationEmail(ActionType.createJob);
-    const jobStateEmailer = jobEmailfactory.notificationEmail(a);
+    const jobStateEmailer = jobEmailfactory.notificationEmail(jobAction);
 
     try {
       await jobStateEmailer.interpolateTemplates(db, jobId);

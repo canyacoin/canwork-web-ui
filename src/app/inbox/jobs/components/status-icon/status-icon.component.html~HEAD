@@ -1,0 +1,10 @@
+
+<!-- 
+<div class="btn btn-{{stateColour}} cursor-auto">
+  {{job?.state}}
+</div>
+-->
+<div> 
+<b style="line-height: 15px;">Status : <span class="fw-400">{{job?.state}}</span>
+  <span class="btn-{{stateColour}} status-circle cursor-auto">&nbsp;&nbsp;&nbsp;</span></b>
+</div> 

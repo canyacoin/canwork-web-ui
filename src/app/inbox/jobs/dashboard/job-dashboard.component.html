@@ -1,0 +1,72 @@
+<main class="main-content">
+  <section class="section bg-gray pt-15 pb-20" id="section-profile">
+
+    <app-back-button></app-back-button>
+
+    <div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
+      <img src="assets/img/loader.svg" height="36px" alt="Loader">
+    </div>
+    <div class="container" *ngIf="!loading">
+      <div class="row">
+        <span class="col-6 text-left">
+          <h4 class="fw-500 mb-30">MANAGE JOBS</h4>
+        </span>
+        <span class="col-6 text-right" *ngIf="currentUser?.type == 'Provider'">
+          <button class="btn" (click)="changeUserType()">Switch role</button>
+        </span>
+      </div>
+      <div *ngIf="!jobs || jobs.length == 0">
+        Hmm.. you dont have any jobs
+      </div>
+      <div *ngIf="jobs && jobs.length > 0">
+        <div *ngFor="let job of jobs" class="card job-dashboard-card mb-15 p-20 pointer" [routerLink]="['/inbox/job', job.id]" >
+          <div class="row job-info">
+            <div class="col-lg-8 col-md-6 col-sm-8">
+              <div class="row">
+                <h5 class="col-lg-12">{{job.information.title}}
+                  
+                </h5>
+              </div>
+              <div class="row">
+                <span class="col-lg-12">
+                  <div *ngIf ="currentUser.type=='User'">
+                      <h6 class="fw-500">Posted To : {{job.otherParty?.name}}</h6> 
+                  </div>
+                  <div *ngIf ="currentUser.type=='Provider'">
+                      <h6 class="fw-500">Posted By : {{job.otherParty?.name}}</h6> 
+                  </div>  
+                </span>
+              </div>
+              <div class="row">
+                <div class="col-xs-2 col-sm-4 col-md-3 col-lg-2">
+                  <div *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}" >
+                  </div> 
+                </div>
+                <div class="col-xs-10 col-sm-8 col-md-9 col-lg-10">
+                  <h5 class="fw-500 my-10">Description</h5>
+                  <div style="max-height:50px;">
+                    <p style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
+                       {{job.information.description}}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-4 job-info-status">
+              <div class="row">
+                <h5 class="col-12">
+                  <app-budget [job]="job"></app-budget>
+                </h5>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <app-status-icon [job]="job"></app-status-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

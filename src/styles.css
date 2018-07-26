@@ -3,3 +3,7 @@
 .pointer {
   cursor: pointer;
 }
+
+.cursor-auto {
+  cursor: auto !important;
+}

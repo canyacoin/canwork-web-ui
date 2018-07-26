@@ -7,6 +7,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
+import * as firebase from 'firebase';
 import { environment } from '../../environments/environment';
 import { Avatar, User } from '../core-classes/user';
 
@@ -36,6 +37,21 @@ export class AuthService {
 
   isAuthenticated() {
     return this.currentUser.value !== null;
+  }
+
+  // TODO: fix async/promise issue here.
+  public async getJwt(): Promise<string> {
+    console.log('+ 1 current token:', window.sessionStorage.accessToken);
+    await firebase.auth().onAuthStateChanged(async user => {
+      if (user) {
+        const token = await user.getIdToken(true);
+        console.log('+ 2 refreshed token', token);
+        return token;
+      } else {
+        window.sessionStorage.accessToken = '';
+      }
+    });
+    return '';
   }
 
   setUser(user: User) {

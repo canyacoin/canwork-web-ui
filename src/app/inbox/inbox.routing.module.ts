@@ -3,7 +3,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { ChatComponent } from './chat/chat.component';
-import { PostComponent } from './post/post.component';
+import { ActionHistoryComponent } from './jobs/container/action-history/action-history.component';
+import { JobContainerComponent } from './jobs/container/job-container.component';
+import { JobDetailsComponent } from './jobs/container/job-details/job-details.component';
+import { JobDashboardComponent } from './jobs/dashboard/job-dashboard.component';
+import { PostComponent } from './jobs/post/post.component';
 
 const routes: Routes = [
   {
@@ -22,6 +26,24 @@ const routes: Routes = [
   {
     path: 'post/:address',
     component: PostComponent
+  },
+  {
+    path: 'jobs',
+    component: JobDashboardComponent
+  },
+  {
+    path: 'job/:id',
+    component: JobContainerComponent,
+    children: [
+      {
+        path: '',
+        component: JobDetailsComponent
+      }
+      // {
+      //   path: 'actions',
+      //   component: ActionHistoryComponent
+      // }
+    ]
   }
 ];
 

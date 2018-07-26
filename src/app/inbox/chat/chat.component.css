@@ -7,22 +7,31 @@
   padding: 0;
   margin: 0;
 }
-
-.search {
-  padding: 9px;
+.contact-div{
+  height: 70vh;
+}
+.contact-list{
+  min-height: 300px;
+  max-height: 420px; 
+  overflow-y: auto;
+}
+@media (max-width:600px){
+  .contact-div{
+    height: auto;
+  }
+}
+.search { 
   font-size: 14px;
-  margin: 0px 0px 0px 20px;
-  padding-left: 30px;
-  padding-right: 20px;
+  margin: 0px 10px 0px 10px;
+  padding: 0px 30px 0px 30px;
   height: 36px;
   border: 1px solid #DCE0E6;
   border-radius: 5px;
+  width:100%;
 }
-
 .search:focus {
   outline: none;
 }
-
 .search-icon {
   width: 16px;
   height: 16px;
@@ -52,7 +61,7 @@
 
 .list-group-item-action {
   min-height: 60px;
-  max-height: 72px;
+  max-height: 100px;
   border: none;
   overflow: hidden;
 }

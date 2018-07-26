@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 
 import * as moment from 'moment';
-import { Avatar, User } from '../core-classes/user';
+import { Job } from '../core-classes/job';
+import { ActionType, IJobAction } from '../core-classes/job-action';
+import { Avatar, User, UserType } from '../core-classes/user';
+import { AuthService } from './auth.service';
 
 export class Channel {
   channel: string;
@@ -26,6 +29,7 @@ export class Message {
   budget: string;
   name: string;
   title: string;
+  jobId: string;
   message: string;
   type: MessageType;
   price: string;
@@ -40,13 +44,14 @@ export enum MessageType {
   message = 'MESSAGE',
   request = 'REQUEST',
   offer = 'OFFER',
+  jobAction = 'ACTION',
   checkout = 'CHECKOUT'
 }
 
 @Injectable()
 export class ChatService {
 
-  constructor(private afs: AngularFirestore) { }
+  constructor(private afs: AngularFirestore, private auth: AuthService) { }
 
   async createChannelsAsync(sender: User, receiver: User): Promise<string> {
     const channelId: string = [sender.address, receiver.address].sort().join('-');
@@ -63,7 +68,7 @@ export class ChatService {
     });
   }
 
-  async saveChannelAsync(channelOwner: string, channel: Channel): Promise<boolean> {
+  private async saveChannelAsync(channelOwner: string, channel: Channel): Promise<boolean> {
     const ref = this.afs.collection('chats').doc(channelOwner).collection('channels').doc(`${channel.channel}`);
     return new Promise<boolean>((resolve, reject) => {
       ref.snapshotChanges().take(1).toPromise().then((snap: any) => {
@@ -77,30 +82,63 @@ export class ChatService {
     });
   }
 
-  sendNewPostMessages(channelId: string, sender: User, receiver: User, description: string, budget: string) {
-    const message = this.createMessageObject(channelId, sender, 'I\'ve just sent you a request, is this something you can do?');
-    this.sendMessage(sender, receiver, message);
-
-    const request = this.createMessageObject(channelId, sender, description, MessageType.request, budget);
-    this.sendMessage(sender, receiver, request);
+  async sendJobMessages(job: Job, action: IJobAction) {
+    const channelId: string = [job.clientId, job.providerId].sort().join('-');
+    const sender = await this.auth.getCurrentUser();
+    const receiverId = job.providerId;
+    let messageText = '';
+    switch (action.type) {
+      // TODO: Finish these sentences - Dion
+      case ActionType.createJob:
+        messageText = 'I\'ve just sent you a job request, is this something you can do?';
+        break;
+      case ActionType.cancelJob:
+        messageText = 'I\'ve just cancelled a job.. sorry about that!';
+        break;
+      case ActionType.declineTerms:
+        messageText = 'I do not agree with the proposed terms and have declined the job offer.';
+        break;
+      case ActionType.counterOffer:
+        messageText = 'I have proposed a counter offer!';
+        break;
+      case ActionType.acceptTerms:
+        messageText = 'I have accepted the terms of the job';
+        break;
+      case ActionType.enterEscrow:
+        messageText = 'I have deposited funds into the escrow system!';
+        break;
+      default:
+        messageText = 'I\'ve made a change to our job, could you have a look?';
+        break;
+    }
+    const message = this.createMessageObject(channelId, sender, messageText, MessageType.jobAction, null, null, job.id);
+    this.sendMessage(sender.address, receiverId, message);
   }
 
+  // sendNewPostMessages(channelId: string, sender: User, receiver: User, description: string, budget: string) {
+  //   const message = this.createMessageObject(channelId, sender, 'I\'ve just sent you a request, is this something you can do?');
+  //   this.sendMessage(sender, receiver, message);
 
-  sendMessage(sender: User, receiver: User, message: Message) {
+  //   const request = this.createMessageObject(channelId, sender, description, MessageType.request, budget);
+  //   this.sendMessage(sender, receiver, request);
+  // }
+
+
+  sendMessage(senderId: string, receiverId: string, message: Message) {
     try {
       // Save messages
-      this.afs.collection('chats').doc(sender.address).collection('channels').doc(message.channel).collection('messages').add(Object.assign({}, message));
-      this.afs.collection('chats').doc(receiver.address).collection('channels').doc(message.channel).collection('messages').add(Object.assign({}, message));
+      this.afs.collection('chats').doc(senderId).collection('channels').doc(message.channel).collection('messages').add(Object.assign({}, message));
+      this.afs.collection('chats').doc(receiverId).collection('channels').doc(message.channel).collection('messages').add(Object.assign({}, message));
 
       // Update the channel
-      this.afs.collection('chats').doc(sender.address).collection('channels').doc(message.channel).update({ message: message.message, timestamp: moment().format('x'), unreadMessages: false });
-      this.afs.collection('chats').doc(receiver.address).collection('channels').doc(message.channel).update({ message: message.message, timestamp: moment().format('x'), unreadMessages: true });
+      this.afs.collection('chats').doc(senderId).collection('channels').doc(message.channel).update({ message: message.message, timestamp: moment().format('x'), unreadMessages: false });
+      this.afs.collection('chats').doc(receiverId).collection('channels').doc(message.channel).update({ message: message.message, timestamp: moment().format('x'), unreadMessages: true });
     } catch (error) {
       console.error('sendMessage - error', error);
     }
   }
 
-  createChannelObject(channelId: string, user: User, unreadMessages: boolean = true): Channel {
+  private createChannelObject(channelId: string, user: User, unreadMessages: boolean = true): Channel {
     return new Channel({
       channel: channelId,
       address: user.address,
@@ -113,7 +151,7 @@ export class ChatService {
     });
   }
 
-  createMessageObject(channelId: string, user: User, message: string, type: MessageType = MessageType.message, budget: string = '', price: string = ''): Message {
+  createMessageObject(channelId: string, user: User, message: string, type: MessageType = MessageType.message, budget: string = '', price: string = '', jobId: string = ''): Message {
     return new Message({
       channel: channelId,
       address: user.address,
@@ -121,6 +159,7 @@ export class ChatService {
       budget: budget,
       name: user.name,
       title: user.title,
+      jobId: jobId,
       message: message,
       type: type,
       timestamp: moment().format('x')

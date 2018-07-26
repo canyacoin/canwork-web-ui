@@ -1,0 +1,28 @@
+.attachment {
+  display: inline-block;
+  padding: .5em;
+  margin-right: 5px;
+  font-size: 0.6rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 1.5px;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .50rem;
+  color: #9b9b9b;
+  background-color: #eceeef;
+  text-transform: uppercase;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 150px;
+}
+
+.skill-tag:focus {
+  outline: none;
+}
+
+.pointer {
+  cursor: pointer;
+}

@@ -116,9 +116,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     switch (this.web3State) {
       case Web3LoadingStatus.complete:
         return '#30D7A9';
-      case Web3LoadingStatus.noAccountsAvailable || Web3LoadingStatus.loading:
+      case Web3LoadingStatus.noAccountsAvailable:
+      case Web3LoadingStatus.loading:
         return '#ffc600';
-      case Web3LoadingStatus.error || Web3LoadingStatus.noMetaMask || Web3LoadingStatus.wrongNetwork:
+      case Web3LoadingStatus.error:
+      case Web3LoadingStatus.noMetaMask:
+      case Web3LoadingStatus.wrongNetwork:
         return '#ff4954';
       default:
         return '#ff4954';

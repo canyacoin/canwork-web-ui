@@ -1,15 +1,14 @@
 <main class="main-content">
   <section class="section pt-15 pb-20">
+    <app-back-button></app-back-button>
     <div class="container">
-
-      <app-back-button></app-back-button>
       <header class="section-header my-0 py-0">
         <h2>Profile</h2>
         <p class="lead fw-400">Edit your details:</p>
         <hr>
       </header>
       <div *ngIf="currentUser" class="row">
-        <div class="col-12 col-md-6 offset-md-3">
+        <div class="col-lg-12">
           <form [formGroup]="profileForm" class="form validate" novalidate>
             <div class="form-group">
               <label>Full name</label>
@@ -24,6 +23,13 @@
               <input class="form-control" #work formControlName="work" type="email" name="work" placeholder="Work email" [class.invalid]="!profileForm.controls.work.valid && profileForm.controls.work.dirty">
 
               <small *ngIf="!profileForm.controls.work.valid  && profileForm.controls.work.dirty">Please enter a valid email.</small>
+            </div>
+
+            <div class="form-group">
+              <label>ETH Address</label>
+              <input class="form-control" #ethAddress formControlName="ethAddress" type="text" name="ethAddress" placeholder="0x123...">
+
+              <!-- <small *ngIf="!profileForm.controls.work.valid  && profileForm.controls.work.dirty">Please enter a valid email.</small> -->
             </div>
 
             <div class="form-group">
@@ -46,7 +52,7 @@
             <div [hidden]="currentUser.type !== 'Provider'" class="form-group">
               <label>Category</label>
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <label class="custom-control custom-radio">
                     <input class="custom-control-input" #category1 type="radio" name="category" [checked]="this.currentUser.category === 'CONTENT CREATORS'">
                     <span class="custom-control-indicator"></span>
@@ -57,13 +63,8 @@
                     <span class="custom-control-indicator"></span>
                     <span class="custom-control-description">DESIGNERS & CREATIVES</span>
                   </label>
-                  <label class="custom-control custom-radio">
-                    <input class="custom-control-input" #category3 type="radio" name="category" [checked]="this.currentUser.category === 'FINANCIAL EXPERTS'">
-                    <span class="custom-control-indicator"></span>
-                    <span class="custom-control-description">FINANCIAL EXPERTS</span>
-                  </label>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <label class="custom-control custom-radio">
                     <input class="custom-control-input" #category4 type="radio" name="category" [checked]="this.currentUser.category === 'MARKETING & SEO'">
                     <span class="custom-control-indicator"></span>
@@ -74,14 +75,21 @@
                     <span class="custom-control-indicator"></span>
                     <span class="custom-control-description">SOFTWARE DEVELOPERS</span>
                   </label>
+                </div>
+                <div class="col-md-4">
+                    <label class="custom-control custom-radio">
+                        <input class="custom-control-input" #category3 type="radio" name="category" [checked]="this.currentUser.category === 'FINANCIAL EXPERTS'">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">FINANCIAL EXPERTS</span>
+                    </label>
                   <label class="custom-control custom-radio">
-                    <input class="custom-control-input" #category6 type="radio" name="category" [checked]="this.currentUser.category==='VIRTUAL ASSISTANTS'">
-                    <span class="custom-control-indicator"></span>
-                    <span class="custom-control-description">VIRTUAL ASSISTANTS</span>
-                  </label>
+                      <input class="custom-control-input" #category6 type="radio" name="category" [checked]="this.currentUser.category==='VIRTUAL ASSISTANTS'">
+                      <span class="custom-control-indicator"></span>
+                      <span class="custom-control-description">VIRTUAL ASSISTANTS</span>
+                    </label>
                 </div>
               </div>
-              <!-- 
+              <!--
               <div class="custom-controls-stacked">
                     <label class="custom-control custom-radio">
                   <input class="custom-control-input" #category1 type="radio" name="category" [checked]="this.currentUser.category === 'CONTENT CREATORS'">
@@ -113,7 +121,7 @@
                   <span class="custom-control-indicator"></span>
                   <span class="custom-control-description">VIRTUAL ASSISTANTS</span>
                 </label>
-              </div> 
+              </div>
             -->
             </div>
 
@@ -154,20 +162,19 @@
                 <option>#485F64</option>
               </datalist>
             </div>
-
             <div class="form-group">
               <label>Description</label>
               <textarea class="form-control" #description formControlName="description" name="description" rows="7
                    " placeholder="Think different! Be creative, be innovative."></textarea>
             </div>
-            <div class="form-group">
+            <div class="form-group text-right">
+                <a href="#" [routerLink]="[ '/profile']" class="btn btn-secondary">
+                  Cancel
+                </a>
               <button [disabled]="!profileForm.valid || sending" type="button" (click)="save(category1, category2, category3, category4, category5, category6)"
-                class="btn btn-canya-tools text-white">
+                class="btn btn-primary text-white">
                 Save
               </button>
-              <a href="#" [routerLink]="[ '/profile']" class="btn btn-secondary">
-                Cancel
-              </a>
               <img *ngIf="sending" src="assets/img/loader.svg" height="36px" alt="Loader">
             </div>
           </form>

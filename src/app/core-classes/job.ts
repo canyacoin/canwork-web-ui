@@ -1,3 +1,4 @@
+import { IJobAction } from './job-action';
 import { Upload } from './upload';
 
 export class Job {
@@ -7,8 +8,10 @@ export class Job {
     information: JobDescription;
     paymentType: PaymentType;
     budget: number;
+    canInEscrow: number;
     paymentLog: Array<Payment> = [];
-    disputeLog: Array<DisputeItem> = [];
+    state: JobState;
+    actionLog: Array<IJobAction> = [];
     boostVisibility = false;
 
     constructor(init?: Partial<Job>) {
@@ -31,12 +34,27 @@ export class JobDescription {
     }
 }
 
-export enum Payment {
+export class Payment {
+    txId: string;
+    timestamp: string;
+    amountCan: number;
 
+    constructor(init?: Partial<Payment>) {
+        Object.assign(this, init);
+    }
 }
 
-export enum DisputeItem {
-
+export enum JobState {
+    offer = 'Offer pending',
+    cancelled = 'Cancelled',
+    declined = 'Declined',
+    providerCounterOffer = 'Provider counter',
+    clientCounterOffer = 'Client counter',
+    termsAcceptedAwaitingEscrow = 'Awaiting Escrow',
+    inEscrow = 'Funds In Escrow',
+    workPendingCompletion = 'Pending completion',
+    inDispute = 'Disputed',
+    complete = 'Complete'
 }
 
 export enum WorkType {

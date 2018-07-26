@@ -4,9 +4,10 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import * as moment from 'moment-timezone';
-import { User, UserState } from '../../core-classes/user';
-import { AuthService } from '../../core-services/auth.service';
-import { UserService } from '../../core-services/user.service';
+import { User, UserState } from '@class/user';
+import { AuthService } from '@service/auth.service';
+import { UserService } from '@service/user.service';
+import { EthService } from '@canyaio/canpay-lib';
 import { CurrencyValidator } from '../currency.validator';
 import { EmailValidator } from '../email.validator';
 
@@ -19,6 +20,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
   currentUser: User;
   authSub: Subscription;
+  ethSub: Subscription
 
   profileForm: FormGroup = null;
   sending = false;
@@ -28,10 +30,18 @@ export class EditComponent implements OnInit, OnDestroy {
   acceptedTags: string[] = [];
   tagInput = '';
 
+  ethAddress: string
+
   constructor(private router: Router,
     private formBuilder: FormBuilder,
     private userService: UserService,
+    private ethService: EthService,
     private authService: AuthService) {
+
+    console.log(ethService)
+    this.ethSub = this.ethService.account$.subscribe(async (address: string) => {
+      this.ethAddress = address
+    })
   }
 
   ngOnInit() {
@@ -44,13 +54,15 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.authSub) { this.authSub.unsubscribe(); }
+    if (this.authSub) { this.authSub.unsubscribe() }
+    if (this.ethSub) { this.ethSub.unsubscribe() }
   }
 
   buildForm() {
     this.profileForm = this.formBuilder.group({
       name: [this.currentUser.name || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
       work: [this.currentUser.work || '', Validators.compose([Validators.required, EmailValidator.isValid])],
+      ethAddress: [this.currentUser.ethAddress || this.ethAddress],
       title: [this.currentUser.title || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
       bio: [this.currentUser.bio || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(60)])],
       category: [this.currentUser.category || ''],
@@ -95,6 +107,7 @@ export class EditComponent implements OnInit, OnDestroy {
       address: this.currentUser.address,
       name: this.profileForm.value.name,
       work: this.profileForm.value.work,
+      ethAddress: this.profileForm.value.ethAddress,
       title: this.profileForm.value.title,
       bio: this.profileForm.value.bio,
       category: category,

@@ -1,9 +1,11 @@
-<div *ngIf="whoViewProfileCounter > 0" class="card my-30 p-24" style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px;">
-  <div class="card-body">
-    <p class="lead fw-500 bb-1">Visitors</p>
-    <h6>
-      <span class="fw-400 fs-18 text-primary">{{whoViewProfileCounter}}</span> {{ whoViewProfileCounter > 1 ? 'people':'person' }} viewed your profile.</h6>
-
+<div class="row" style="margin-bottom:25px">
+    <div class="col-md-12">
+    <span class="lead fw-500 mt-5">
+      Visitors
+    </span>
+    <p class="fw-400">
+      <span class="fw-400 fs-18 text-primary">{{whoViewProfileCounter}}</span> {{ whoViewProfileCounter > 1 ? 'people':'person' }} viewed your profile.
+    </p>
     <a [routerLink]="['/profile/views']" class="btn btn-block btn-primary btn-canya-chat">
       Who viewed me?
     </a>

@@ -23,8 +23,8 @@ export class UserService {
     });
   }
 
-  getUser(address: string): Promise<User> {
-    return new Promise((resolve, reject) => {
+  async getUser(address: string): Promise<User> {
+    return new Promise<User>((resolve, reject) => {
       this.afs.doc(`users/${address}`).valueChanges().take(1).subscribe((user: User) => {
         if (user) {
           if (user.timezone) {

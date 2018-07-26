@@ -3,8 +3,8 @@ import {
     CanPayData, CanPayService, Operation, ProcessAction, setProcessResult, View
 } from '@canyaio/canpay-lib';
 
-import { User } from '../../../core-classes/user';
-import { CanWorkEthService } from '../../../core-services/eth.service';
+import { User } from '@class/user';
+import { CanWorkEthService } from '@service/eth.service';
 
 @Component({
   selector: 'app-profile-support-me',
