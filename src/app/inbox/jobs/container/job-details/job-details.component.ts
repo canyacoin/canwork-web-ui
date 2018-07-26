@@ -10,6 +10,7 @@ import {
 import { ActionType, IJobAction } from '../../../../core-classes/job-action';
 import { User, UserType } from '../../../../core-classes/user';
 import { AuthService } from '../../../../core-services/auth.service';
+import { JobNotificationService } from '../../../../core-services/job-notification.service';
 import { JobService } from '../../../../core-services/job.service';
 import { UserService } from '../../../../core-services/user.service';
 import {
@@ -33,6 +34,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService,
     private jobService: JobService,
+    private jobNotificationService: JobNotificationService,
     private userService: UserService,
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService) { }
@@ -41,7 +43,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     this.authService.currentUser$.take(1).subscribe((user: User) => {
       this.currentUser = user;
       this.initialiseJob();
-    }); 
+    });
   }
 
   ngOnDestroy() {
@@ -79,6 +81,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     })).subscribe((success) => {
       if (success) {
         console.log('Action executed');
+        this.jobNotificationService.notify(action, this.job.id);
       } else {
         console.log('Action cancelled');
       }

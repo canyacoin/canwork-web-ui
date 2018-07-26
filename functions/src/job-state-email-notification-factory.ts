@@ -109,7 +109,7 @@ abstract class AEmailNotification implements IJobStateEmailNotification {
  * Implementations
  */
 
-// Send notification to client that a new job has been requested
+// Send notification to the client that a new job has been requested
 class ClientJobRequestNotification extends AEmailNotification {
   constructor() {
     super();
@@ -122,64 +122,112 @@ class ClientJobRequestNotification extends AEmailNotification {
     } catch (error) {
       console.error(error);
     }
-    console.log('+ building job request email for provider');
-
-    // get html template here
-
     const title = `You have a work request from ${this.clientData.name}`
-
     this.emailMessages.push({
       to: this.providerData.email,
       subject: title,
       title: title,
       bodyHtml: `
       Dear ${this.providerData.name},<br>
-      ${this.clientData.name} has requested a job: "${this.jobData.information.description}". Please login to CanWork to review this request.`
+      ${this.clientData.name} has requested a job: "${this.jobData.information.description}". Please login to CanWork to review this job.`
     });
     console.log('+ dump emailMessages:', this.emailMessages);
   }
 }
 
-// Send notification to provider only
-// class ProviderNotification extends AEmailNotification {
-//   constructor() {
-//     super();
-//   }
+// Send notification to provider that the requested job has been accepted
+class ClientJobRequestAcceptedNotification extends AEmailNotification {
+  constructor() {
+    super();
+  }
 
-//   async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
-//     await super.interpolateTemplates(db, jobId);
-//     console.log('+ sending email to provider');
-//     // return "";
-//   }
-// }
+  async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
+    console.log('ClientJobRequestAcceptedNotification.interpolateTemplates()');
+    try {
+      await super.interpolateTemplates(db, jobId);
+    } catch (error) {
+      console.error(error);
+    }
 
-// // Send notification to client and provider
-// class ProviderAndClientNotification extends AProvider {
-//   constructor(initiatedByUid: string, jobId: string, job: any) {
-//     super(initiatedByUid, jobId, job);
-//   }
-//   interpolateTemplate(): string {
-//     console.log('+ sending email to client and provider');
-//     return "";
-//   }
-// }
+    const title = `Your work request to ${this.providerData.name} has been accepted`
+    this.emailMessages.push({
+      to: this.providerData.email,
+      subject: title,
+      title: title,
+      bodyHtml: `
+      Dear ${this.providerData.name},<br>
+      ${this.clientData.name} has accepted your job request: "${this.jobData.information.description}". A payment into the escrow is now required to proceed.<br><br>
+      Please login to CanWork to review this job.`
+    });
+    console.log('+ dump emailMessages:', this.emailMessages);
+  }
+}
 
-// // Send notification to client, provider and support
-// class AllPartiesNotification extends AProvider {
-//   constructor(initiatedByUid: string, jobId: string, job: any) {
-//     super(initiatedByUid, jobId, job);
-//   }
-//   interpolateTemplate(): string {
-//     console.log('+ sending email to client, provider and support');
-//     return "";
-//   }
-// }
+// Send notification to provider that the requested job has been declined
+class ClientJobRequestDeclinedNotification extends AEmailNotification {
+  constructor() {
+    super();
+  }
+
+  async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
+    console.log('ClientJobRequestDeclinedNotification.interpolateTemplates()');
+    try {
+      await super.interpolateTemplates(db, jobId);
+    } catch (error) {
+      console.error(error);
+    }
+
+    const title = `Your work request to ${this.providerData.name} has been declined`
+    this.emailMessages.push({
+      to: this.providerData.email,
+      subject: title,
+      title: title,
+      bodyHtml: `
+      Dear ${this.providerData.name},<br>
+      ${this.clientData.name} has declined your job request: "${this.jobData.information.description}". Please login to CanWork to review this job.`
+    });
+    console.log('+ dump emailMessages:', this.emailMessages);
+  }
+}
+
+// Send notification to provider that the requested job has a counter offer
+class ClientJobRequestCounterOfferNotification extends AEmailNotification {
+  constructor() {
+    super();
+  }
+
+  async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
+    console.log('ClientJobRequestCounterOfferNotification.interpolateTemplates()');
+    try {
+      await super.interpolateTemplates(db, jobId);
+    } catch (error) {
+      console.error(error);
+    }
+
+    const title = `Your work request to ${this.clientData.name} has a counter offer`
+    this.emailMessages.push({
+      to: this.providerData.email,
+      subject: title,
+      title: title,
+      bodyHtml: `
+      Dear ${this.providerData.name},<br>
+      ${this.clientData.name} has made a counter offer to your job request: "${this.jobData.information.description}". Please login to CanWork to review this job.`
+    });
+    console.log('+ dump emailMessages:', this.emailMessages);
+  }
+}
 
 export function notificationEmail(action: string) {
   console.log('+ build factory object for action:', action)
   switch (action) {
     case 'Create job': {
       return new ClientJobRequestNotification();
+    } case 'Accept terms': {
+      return new ClientJobRequestAcceptedNotification();
+    } case 'Decline terms': {
+      return new ClientJobRequestDeclinedNotification();
+    } case 'Counter offer': {
+      return new ClientJobRequestCounterOfferNotification();
     } default: {
       console.log('! unknown action type: ', action)
       return undefined;
