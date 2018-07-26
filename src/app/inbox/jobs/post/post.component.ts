@@ -6,17 +6,20 @@ import { AngularFireUploadTask } from 'angularfire2/storage';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs/Subscription';
 
-import { Job, JobDescription, PaymentType, TimeRange, WorkType } from '../../../core-classes/job';
-import { ActionType, IJobAction } from '../../../core-classes/job-action';
-import { Upload } from '../../../core-classes/upload';
-import { User, UserType } from '../../../core-classes/user';
-import { AuthService } from '../../../core-services/auth.service';
-import { JobNotificationService } from '../../../core-services/job-notification.service';
-import { JobService } from '../../../core-services/job.service';
-import { UploadCategory, UploadService } from '../../../core-services/upload.service';
-import { UserService } from '../../../core-services/user.service';
-import { getUsdToCan } from '../../../core-utils/currency-conversion';
-import { GenerateGuid } from '../../../core-utils/generate.uid';
+import { Job, JobDescription, PaymentType, TimeRange, WorkType } from '@class/job';
+import { ActionType, IJobAction } from '@class/job-action';
+import { Upload } from '@class/upload';
+import { User, UserType } from '@class/user';
+import { AuthService } from '@service/auth.service';
+import { JobService } from '@service/job.service';
+import { UploadCategory, UploadService } from '@service/upload.service';
+import { UserService } from '@service/user.service';
+import { getUsdToCan } from '@util/currency-conversion';
+import { GenerateGuid } from '@util/generate.uid';
+
+import { JobNotificationService } from '@service/job-notification.service';
+import { EthService } from '@canyaio/canpay-lib';
+import '@extensions/string';
 
 @Component({
   selector: 'app-post',
@@ -56,6 +59,7 @@ export class PostComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private jobService: JobService,
     private jobNotificationService: JobNotificationService,
+    private ethService: EthService,
     private uploadService: UploadService,
     private http: Http) {
     this.postForm = formBuilder.group({
@@ -183,6 +187,7 @@ export class PostComponent implements OnInit, OnDestroy {
     try {
       const job = new Job({
         id: this.jobId,
+        hexId: this.ethService.web3js.utils.toHex(this.jobId.hashCode()),
         clientId: this.currentUser.address,
         providerId: this.recipientAddress,
         information: new JobDescription({

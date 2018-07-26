@@ -3,6 +3,7 @@ import { Upload } from './upload';
 
 export class Job {
     id: string;
+    hexId: string;
     clientId: string;
     providerId: string;
     information: JobDescription;

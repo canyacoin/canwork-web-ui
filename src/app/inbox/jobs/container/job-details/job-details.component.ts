@@ -6,13 +6,13 @@ import { Subscription } from 'rxjs/Subscription';
 
 import {
     Job, JobDescription, JobState, PaymentType, TimeRange, WorkType
-} from '../../../../core-classes/job';
-import { ActionType, IJobAction } from '../../../../core-classes/job-action';
-import { User, UserType } from '../../../../core-classes/user';
-import { AuthService } from '../../../../core-services/auth.service';
-import { JobNotificationService } from '../../../../core-services/job-notification.service';
-import { JobService } from '../../../../core-services/job.service';
-import { UserService } from '../../../../core-services/user.service';
+} from '@class/job';
+import { JobNotificationService } from '@service/job-notification.service';
+import { ActionType, IJobAction } from '@class/job-action';
+import { User, UserType } from '@class/user';
+import { AuthService } from '@service/auth.service';
+import { JobService } from '@service/job.service';
+import { UserService } from '@service/user.service';
 import {
     ActionDialogComponent, ActionDialogOptions
 } from '../action-dialog/action-dialog.component';
@@ -37,7 +37,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     private jobNotificationService: JobNotificationService,
     private userService: UserService,
     private activatedRoute: ActivatedRoute,
-    private dialogService: DialogService) { }
+    private dialogService: DialogService) {}
 
   ngOnInit() {
     this.authService.currentUser$.take(1).subscribe((user: User) => {
@@ -52,6 +52,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
   initialiseJob() {
     const jobId = this.activatedRoute.snapshot.params['id'] || null;
+
     if (jobId) {
       this.jobSub = this.jobService.getJob(jobId).subscribe((job: Job) => {
         this.job = job;

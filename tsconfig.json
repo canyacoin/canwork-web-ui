@@ -36,6 +36,9 @@
       ],
       "@config/*": [
         "app/core-config/*"
+      ],
+      "@extensions/*": [
+        "./*.extensions.ts"
       ]
     }
   }
