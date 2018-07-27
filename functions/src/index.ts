@@ -273,25 +273,6 @@ exports.indexProviderData = functions.firestore
 
     const workData = buildWorkData(objectId);
 
-    if (data.welcomeEmailSent && data.welcomeEmailSent === false && data.testUser !== true) {
-      console.log('+ sending a user email...');
-
-      const html = welcomeEmailTemplateHTML({ name: data.name, uri: serviceConfig.uri });
-
-      const sgMail = require('@sendgrid/mail');
-      sgMail.setApiKey(sendgridApiKey);
-      const msg = {
-        to: data.email,
-        from: 'support@canya.com',
-        subject: 'Welcome to CANWork',
-        text: 'text version of content here',
-        html: html,
-      };
-      const r = await sgMail.send(msg);
-      console.log('+ email response was', r)
-      await db.collection('users').doc(objectId).update({ welcomeEmailSent: true });
-    }
-
     // TODO: When firestore supports case insensitive queries, we won't need this redundant field
     console.log('+ eth addy', data.ethAddress);
     if (data.ethAddress && data.ethAddress !== data.ethAddress.toUpperCase()) {
@@ -319,6 +300,24 @@ exports.updateIndexProviderData = functions.firestore
   .onUpdate(async (snap, context) => {
     const data = snap.after.data();
     const objectId = snap.after.id;
+
+    if (data.welcomeEmailSent && data.welcomeEmailSent === false && data.testUser !== true) {
+      console.log('+ sending a user email...');
+
+      const html = welcomeEmailTemplateHTML({ name: data.name, uri: serviceConfig.uri });
+
+      const sgMail = require('@sendgrid/mail');
+      sgMail.setApiKey(sendgridApiKey);
+      const msg = {
+        to: data.email,
+        from: 'support@canya.com',
+        subject: 'Welcome to CANWork',
+        html: html,
+      };
+      const r = await sgMail.send(msg);
+      console.log('+ email response was', r)
+      await db.collection('users').doc(objectId).update({ welcomeEmailSent: true });
+    }
 
     console.log('+ remove index record for update operation...', objectId);
     await algoliaSearchIndex.deleteObject(objectId);
