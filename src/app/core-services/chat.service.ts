@@ -104,7 +104,7 @@ export class ChatService {
       case ActionType.acceptTerms:
         messageText = 'I have accepted the terms of the job';
         break;
-      case ActionType.enterEscrow:
+      case ActionType.confirmJobRequest:
         messageText = 'I have deposited funds into the escrow system!';
         break;
       default:

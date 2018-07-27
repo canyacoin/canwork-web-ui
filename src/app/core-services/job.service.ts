@@ -166,21 +166,22 @@ export class JobService {
             break;
           case ActionType.confirmJobRequest:
             const confirmJobRequestAction = action as ConfirmJobRequestAction;
+            parsedJob.actionLog.push(confirmJobRequestAction);
+
             let client = await this.userService.getUser(job.clientId)
             let provider = await this.userService.getUser(job.providerId)
-            console.log(client)
-            console.log(provider)
-            console.log(job)
+
             try {
               let canWorkContract = new CanWorkJobContract(this.ethService)
               canWorkContract.connect()
               await canWorkContract.createJob(job, client, provider)
-              parsedJob.state = JobState.createdJob;
+              parsedJob.state = JobState.workPendingCompletion;
               await this.saveJobFirebase(parsedJob);
               await this.chatService.sendJobMessages(parsedJob, confirmJobRequestAction);
             } catch (error) {
               console.log(error)
             }
+
             resolve(true)
             break;
           case ActionType.addMessage:
