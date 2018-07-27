@@ -34,13 +34,13 @@ export class CanWorkJobContract {
     return this
   }
 
-  async createJob(job: Job, client: User, provider: User, totalCosts: number){
+  async createJob(job: Job, client: User, provider: User){
 
     return new Promise(async (resolve, reject) => {
 
       try {
 
-        let txObject = await this.instance.methods.createJob(job.hexId, client.ethAddress, provider.ethAddress, totalCosts)
+        let txObject = await this.instance.methods.createJob(job.hexId, client.ethAddress, provider.ethAddress, job.canInEscrow)
 
         let gas = await txObject.estimateGas()
 
