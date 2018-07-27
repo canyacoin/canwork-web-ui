@@ -151,6 +151,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   onFirebaseLogin(signInSuccessData: FirebaseUISignInSuccess) {
     const rnd = Math.floor(Math.random() * 109) + 1;
+    const ethAddress = this.webViewEthAddress;
     const parsedUser = new User({
       '@context': 'http://schema.org',
       '@type': 'Person',
@@ -160,7 +161,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
         'uri': signInSuccessData['currentUser']['photoURL'] || `assets/img/animals/${rnd}.png`
       },
       'email': signInSuccessData['currentUser']['email'] || 'Empty',
-      'phone': signInSuccessData['currentUser']['phoneNumber'] || 'Empty'
+      'phone': signInSuccessData['currentUser']['phoneNumber'] || 'Empty',
+
+      'state': signInSuccessData['currentUser']['state'] || 'Empty'
     });
 
     this.handleLogin(parsedUser);
