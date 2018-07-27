@@ -25,7 +25,7 @@ export class UserService {
 
   async getUser(address: string): Promise<User> {
     return new Promise<User>((resolve, reject) => {
-      this.afs.doc(`users/${address}`).valueChanges().take(1).subscribe((user: User) => {
+      this.usersCollectionRef.doc(address).valueChanges().take(1).subscribe((user: User) => {
         if (user) {
           if (user.timezone) {
             user.offset = moment.tz(user.timezone).format('Z');
