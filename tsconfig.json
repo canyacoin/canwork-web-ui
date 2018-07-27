@@ -37,6 +37,9 @@
       "@config/*": [
         "app/core-config/*"
       ],
+      "@env/*": [
+        "environments/*"
+      ],
       "@extensions/*": [
         "./*.extensions.ts"
       ]

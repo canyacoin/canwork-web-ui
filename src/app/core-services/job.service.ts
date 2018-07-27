@@ -2,6 +2,7 @@ import { NgSwitch } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
+import { environment } from '@env/environment';
 
 import { Job, JobState, Payment, PaymentType, TimeRange, WorkType } from '@class/job';
 import { CanWorkJobContract } from '@contract/can-work-job.contract';
@@ -125,9 +126,10 @@ export class JobService {
 
             let canWorkContract = new CanWorkJobContract(this.ethService)
             canWorkContract.connect()
-            canWorkContract.setAddress(CanWorkJobContract.ADDRESS_PRIVATE)
+            canWorkContract.setAddress(environment.contracts.canwork)
 
-            let onComplete = async () => {
+            let onComplete = async (result) => {
+              console.log(result)
               const escrowAction = action as EnterEscrowAction;
               parsedJob.canInEscrow = escrowAction.amountCan || 0;
               parsedJob.paymentLog.push(new Payment({
@@ -141,11 +143,20 @@ export class JobService {
               await this.saveJobFirebase(parsedJob);
               await this.chatService.sendJobMessages(parsedJob, escrowAction);
 
-              await canWorkContract.createJob(job, job.clientId, job.providerId, escrowAction.amountCan)
+              let client = await this.userService.getUser(job.clientId)
+              let provider = await this.userService.getUser(job.providerId)
+              client.ethAddress = result.account
 
-              // todo: send email
-
-              this.canPayService.close()
+              console.log(client)
+              console.log(provider)
+              console.log(job)
+              console.log(escrowAction.amountCan)
+              try {
+                await canWorkContract.createJob(job, client, provider, result.amount)
+                this.canPayService.close()
+              } catch (error) {
+                console.log(error)
+              }
             }
 
             let onCancel = () => {
@@ -153,8 +164,8 @@ export class JobService {
             }
 
             let canPayOptions = {
-              dAppName: `CanWorkJob Escrow contract ${CanWorkJobContract.ADDRESS_PRIVATE}`,
-              recepient: CanWorkJobContract.ADDRESS_PRIVATE,
+              dAppName: `CanWorkJob Escrow contract ${environment.contracts.canwork}`,
+              recepient: environment.contracts.canwork,
               operation: Operation.auth,
               amount: 0, // allow the user to enter amount through an input box
               complete: onComplete,
