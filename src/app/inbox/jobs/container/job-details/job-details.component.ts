@@ -117,7 +117,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       case JobState.complete:
         return 'This job has been marked as complete by the client.';
       case JobState.inEscrow:
-        return 'The funds has been sent to the escrow. Confirm the job request to begin.';
+        return 'The funds have been sent to the escrow. Confirm the job request to begin.';
       default:
         return '';
     }
