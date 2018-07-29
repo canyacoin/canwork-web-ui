@@ -333,10 +333,6 @@ exports.updateIndexProviderData = functions.firestore
       await db.collection('users').doc(objectId).update({ welcomeEmailSent: true });
     }
 
-    console.log('+ remove index record for update operation...', objectId);
-    await algoliaSearchIndex.deleteObject(objectId);
-    console.log('+ deleted...', objectId);
-
     // TODO: When firestore supports case insensitive queries, we won't need this redundant field
     console.log('+ eth addy', data.ethAddress);
     if (data.ethAddress && data.ethAddress !== data.ethAddress.toUpperCase()) {
@@ -346,6 +342,10 @@ exports.updateIndexProviderData = functions.firestore
 
     if (shouldSkipIndexing(data))
       return;
+
+    console.log('+ remove index record for update operation...', objectId);
+    await algoliaSearchIndex.deleteObject(objectId);
+    console.log('+ deleted...', objectId);
 
     const workData = buildWorkData(objectId);
 
