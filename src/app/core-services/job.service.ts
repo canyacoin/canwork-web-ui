@@ -251,26 +251,21 @@ export class JobService {
 
   /** Helper method to get the actions that are able to be performed on a job, based on its state and the user type */
   getAvailableActions(jobState: JobState, forClient: boolean): ActionType[] {
-    switch (jobState) {
-      case JobState.offer:
-        return forClient ? [ActionType.cancelJob] : [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms];
-      case JobState.providerCounterOffer:
-        return forClient ? [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms] : [ActionType.cancelJob];
-      case JobState.clientCounterOffer:
-        return forClient ? [ActionType.cancelJob] : [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms];
-      case JobState.termsAcceptedAwaitingEscrow:
-        return forClient ? [ActionType.enterEscrow, ActionType.cancelJob] : [ActionType.cancelJob];
-      case JobState.inEscrow:
-        return forClient ? [ActionType.confirmJobRequest, ActionType.addMessage] : [ActionType.finishedJob, ActionType.addMessage];
-      case JobState.workPendingCompletion:
-        return forClient ? [ActionType.acceptFinish, ActionType.dispute, ActionType.addMessage] : [ActionType.dispute, ActionType.addMessage];
-      case JobState.inDispute:
-        return forClient ? [ActionType.acceptFinish, ActionType.addMessage] : [ActionType.addMessage];
-      case JobState.cancelled || JobState.declined || JobState.complete:
-        return [];
-      default:
-        return [];
-    }
+
+    let actions = {}
+
+    actions[JobState.offer] = forClient ? [ActionType.cancelJob] : [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms]
+    actions[JobState.providerCounterOffer] = forClient ? [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms] : [ActionType.cancelJob]
+    actions[JobState.clientCounterOffer] = forClient ? [ActionType.cancelJob] : [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms]
+    actions[JobState.termsAcceptedAwaitingEscrow] = forClient ? [ActionType.enterEscrow, ActionType.cancelJob] : [ActionType.cancelJob]
+    actions[JobState.inEscrow] = forClient ? [ActionType.confirmJobRequest, ActionType.addMessage] : [ActionType.finishedJob, ActionType.addMessage]
+    actions[JobState.workPendingCompletion] = forClient ? [ActionType.acceptFinish, ActionType.dispute, ActionType.addMessage] : [ActionType.dispute, ActionType.addMessage]
+    actions[JobState.inDispute] = forClient ? [ActionType.acceptFinish, ActionType.addMessage] : [ActionType.addMessage]
+    actions[JobState.cancelled] = []
+    actions[JobState.declined] = []
+    actions[JobState.complete] = []
+
+    return actions[jobState] || []
   }
 
   /** Helper method to get the colour associated with each action button */
