@@ -302,11 +302,16 @@ exports.updateIndexProviderData = functions.firestore
     const objectId = snap.after.id;
 
     if (data.isAdmin) {
-      console.log('+ setting user claim to admin for user: ', data.email)
-      admin.auth().setCustomUserClaims(data.uid, { admin: true }).then(() => {
-        // The new custom claims will propagate to the user's ID token the
-        // next time a new one is issued.
-      });
+      console.log(`+ setting user claim to admin for userId: ${objectId} and email: ${data.email}`)
+      // The new custom claims will propagate to the user's ID token the
+      // next time a new one is issued.
+      try {
+        await admin.auth().setCustomUserClaims(objectId, { admin: true })
+      } catch (error) {
+        console.log('! unable to set admin claim:', error)
+      }
+    } else {
+      console.log('+ non admin user being updated')
     }
     if (data.welcomeEmailSent && data.welcomeEmailSent === false && data.testUser !== true) {
       console.log('+ sending a user email...');
