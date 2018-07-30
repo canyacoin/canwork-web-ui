@@ -1,16 +1,15 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { User, UserCategory, UserState, UserType } from '@class/user';
+import { AuthService } from '@service/auth.service';
+import { CanWorkEthService } from '@service/eth.service';
+import { UserService } from '@service/user.service';
 import * as randomColor from 'randomcolor';
 import { Subscription } from 'rxjs/Subscription';
 
 import * as moment from 'moment-timezone';
-import { User, UserCategory, UserState, UserType } from '@class/user';
-import { AuthService } from '@service/auth.service';
-import { UserService } from '@service/user.service';
 import { CurrencyValidator } from '../../currency.validator';
 import { EmailValidator } from '../../email.validator';
-
-import { EthService } from '@canyaio/canpay-lib';
 
 @Component({
   selector: 'app-create-provider-profile',
@@ -19,7 +18,7 @@ import { EthService } from '@canyaio/canpay-lib';
 })
 export class CreateProviderProfileComponent implements OnInit, OnDestroy {
 
-  ethSub: Subscription
+  ethSub: Subscription;
 
   @Input() user: User;
   steps = {
@@ -49,17 +48,17 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
   profileForm: FormGroup = null;
   termsChecked = false;
 
-  ethAddress: string
+  ethAddress: string;
 
   constructor(
     private userService: UserService,
     private formBuilder: FormBuilder,
-    private ethService: EthService,
+    private ethService: CanWorkEthService,
     private authService: AuthService) {
 
-    this.ethSub = this.ethService.account$.subscribe(async (address: string) => {
-      this.ethAddress = address
-    })
+    this.ethSub = this.ethService.account$.subscribe((acc: string) => {
+      this.ethAddress = acc;
+    });
   }
 
   ngOnInit() {
@@ -71,7 +70,7 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.ethSub) { this.ethSub.unsubscribe() }
+    if (this.ethSub) { this.ethSub.unsubscribe(); }
   }
 
   buildForm() {
