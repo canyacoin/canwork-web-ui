@@ -162,8 +162,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
       },
       'email': signInSuccessData['currentUser']['email'] || 'Empty',
       'phone': signInSuccessData['currentUser']['phoneNumber'] || 'Empty',
-
-      'state': signInSuccessData['currentUser']['state'] || 'Empty'
+      'state': signInSuccessData['currentUser']['state'] || 'Empty',
+      'whitelisted': signInSuccessData['currentUser']['whitelisted'] || false,
+      'whitelistRejected': signInSuccessData['currentUser']['whitelistRejected'] || false,
+      'whitelistSubmitted': signInSuccessData['currentUser']['whitelistSubmitted'] || false,
     });
 
     this.handleLogin(parsedUser);
