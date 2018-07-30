@@ -14,7 +14,7 @@ export class UserIsNotSetupGuard implements CanActivate {
     return new Promise((resolve, reject) => {
       this.authService.getCurrentUser().then((user: User) => {
         if (user) {
-          if (!user.whitelistSubmitted) {
+          if (user.state !== UserState.done) {
             resolve(true);
           }
         } else {
