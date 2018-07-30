@@ -8,13 +8,10 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
 import * as firebase from 'firebase';
-import { environment } from '../../environments/environment';
 import { Avatar, User } from '../core-classes/user';
 
 @Injectable()
 export class AuthService {
-
-  uport: any = null;
 
   userSub: Subscription;
 
@@ -72,31 +69,5 @@ export class AuthService {
     this.currentUser.next(null);
     this.afAuth.auth.signOut();
     this.router.navigate(['home']); // TODO: Change this to reload same route - and hit the auth guards again
-  }
-
-  initUport() {
-    try {
-      this.uport = new (<any>window).uportconnect.Connect('canya.com', {
-        clientId: environment.uPort.clientId,
-        signer: (<any>window).uportconnect.SimpleSigner(environment.uPort.signer)
-      });
-    } catch (error) {
-      console.error('UserService\t initUport\t error', error);
-    }
-  }
-
-  // formerly connect
-  async uportConnectAsync(type?: string): Promise<any> {
-    return new Promise((resolve: any, reject: any) => {
-      this.uport.requestCredentials({
-        requested: ['avatar', 'name', 'email', 'phone', 'country'],
-        notifications: true // We want this if we want to receive credentials
-      }).then(async (credentials) => {
-        console.log(JSON.stringify(credentials));
-        resolve(credentials);
-      }, (error) => {
-        reject(error);
-      });
-    });
   }
 }

@@ -123,7 +123,6 @@ export class ChatService {
   //   this.sendMessage(sender, receiver, request);
   // }
 
-
   sendMessage(senderId: string, receiverId: string, message: Message) {
     try {
       // Save messages

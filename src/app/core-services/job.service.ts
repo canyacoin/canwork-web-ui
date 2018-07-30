@@ -1,27 +1,18 @@
 import { NgSwitch } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { Observable } from 'rxjs/Observable';
-import { environment } from '@env/environment';
-
+import { CanPayService, EthService, Operation, View } from '@canyaio/canpay-lib';
 import { Job, JobState, Payment, PaymentType, TimeRange, WorkType } from '@class/job';
-import { CanWorkJobContract } from '@contract/can-work-job.contract';
-
 import {
-    ActionType,
-    CounterOfferAction,
-    EnterEscrowAction,
-    ConfirmJobRequestAction,
-    IJobAction
+    ActionType, ConfirmJobRequestAction, CounterOfferAction, EnterEscrowAction, IJobAction
 } from '@class/job-action';
-
 import { Upload } from '@class/upload';
 import { User, UserType } from '@class/user';
+import { CanWorkJobContract } from '@contract/can-work-job.contract';
+import { environment } from '@env/environment';
 import { ChatService } from '@service/chat.service';
-
 import { UserService } from '@service/user.service';
-
-import { EthService, CanPayService, Operation, View } from '@canyaio/canpay-lib';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class JobService {
@@ -127,8 +118,8 @@ export class JobService {
 
             // TODO txId is not returned in the CanPay complete callback
             // in order to be assigned to the paymentLog
-            let onComplete = async (result) => {
-              console.log(result)
+            const onComplete = async (result) => {
+              console.log(result);
               const escrowAction = action as EnterEscrowAction;
               parsedJob.canInEscrow = result.amount || 0;
               parsedJob.paymentLog.push(new Payment({
@@ -140,17 +131,17 @@ export class JobService {
               parsedJob.state = JobState.inEscrow;
 
               await this.saveJobFirebase(parsedJob);
-              let client = await this.userService.getUser(job.clientId)
-              client.ethAddress = result.account
-              await this.userService.saveUser(client)
-              this.canPayService.close()
-            }
+              let client = await this.userService.getUser(job.clientId);
+              client.ethAddress = result.account;
+              await this.userService.saveUser(client);
+              this.canPayService.close();
+            };
 
-            let onCancel = () => {
-              this.canPayService.close()
-            }
+            const onCancel = () => {
+              this.canPayService.close();
+            };
 
-            let canPayOptions = {
+            const canPayOptions = {
               dAppName: `CanWorkJob Escrow contract ${environment.contracts.canwork}`,
               recepient: environment.contracts.canwork,
               operation: Operation.auth,
@@ -158,9 +149,9 @@ export class JobService {
               complete: onComplete,
               cancel: onCancel,
               view: View.Compact
-            }
+            };
 
-            this.canPayService.open(canPayOptions)
+            this.canPayService.open(canPayOptions);
 
             resolve(true);
             break;
@@ -168,21 +159,21 @@ export class JobService {
             const confirmJobRequestAction = action as ConfirmJobRequestAction;
             parsedJob.actionLog.push(confirmJobRequestAction);
 
-            let client = await this.userService.getUser(job.clientId)
-            let provider = await this.userService.getUser(job.providerId)
+            const client = await this.userService.getUser(job.clientId);
+            const provider = await this.userService.getUser(job.providerId);
 
             try {
-              let canWorkContract = new CanWorkJobContract(this.ethService)
-              canWorkContract.connect()
-              await canWorkContract.createJob(job, client, provider)
-              parsedJob.state = JobState.workPendingCompletion;
+              let canWorkContract = new CanWorkJobContract(this.ethService);
+              canWorkContract.connect();
+              await canWorkContract.createJob(job, client, provider);
+              parsedJob.state = JobState.inEscrow;
               await this.saveJobFirebase(parsedJob);
               await this.chatService.sendJobMessages(parsedJob, confirmJobRequestAction);
             } catch (error) {
-              console.log(error)
+              console.log(error);
             }
 
-            resolve(true)
+            resolve(true);
             break;
           case ActionType.addMessage:
             parsedJob.actionLog.push(action);
@@ -252,20 +243,20 @@ export class JobService {
   /** Helper method to get the actions that are able to be performed on a job, based on its state and the user type */
   getAvailableActions(jobState: JobState, forClient: boolean): ActionType[] {
 
-    let actions = {}
+    let actions = {};
 
-    actions[JobState.offer] = forClient ? [ActionType.cancelJob] : [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms]
-    actions[JobState.providerCounterOffer] = forClient ? [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms] : [ActionType.cancelJob]
-    actions[JobState.clientCounterOffer] = forClient ? [ActionType.cancelJob] : [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms]
-    actions[JobState.termsAcceptedAwaitingEscrow] = forClient ? [ActionType.enterEscrow, ActionType.cancelJob] : [ActionType.cancelJob]
-    actions[JobState.inEscrow] = forClient ? [ActionType.confirmJobRequest, ActionType.addMessage] : [ActionType.finishedJob, ActionType.addMessage]
-    actions[JobState.workPendingCompletion] = forClient ? [ActionType.acceptFinish, ActionType.dispute, ActionType.addMessage] : [ActionType.dispute, ActionType.addMessage]
-    actions[JobState.inDispute] = forClient ? [ActionType.acceptFinish, ActionType.addMessage] : [ActionType.addMessage]
-    actions[JobState.cancelled] = []
-    actions[JobState.declined] = []
-    actions[JobState.complete] = []
+    actions[JobState.offer] = forClient ? [ActionType.cancelJob] : [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms];
+    actions[JobState.providerCounterOffer] = forClient ? [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms] : [ActionType.cancelJob];
+    actions[JobState.clientCounterOffer] = forClient ? [ActionType.cancelJob] : [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms];
+    actions[JobState.termsAcceptedAwaitingEscrow] = forClient ? [ActionType.enterEscrow, ActionType.cancelJob] : [ActionType.cancelJob];
+    actions[JobState.inEscrow] = forClient ? [ActionType.confirmJobRequest, ActionType.addMessage] : [ActionType.finishedJob, ActionType.addMessage];
+    actions[JobState.workPendingCompletion] = forClient ? [ActionType.acceptFinish, ActionType.dispute, ActionType.addMessage] : [ActionType.dispute, ActionType.addMessage];
+    actions[JobState.inDispute] = forClient ? [ActionType.acceptFinish, ActionType.addMessage] : [ActionType.addMessage];
+    actions[JobState.cancelled] = [];
+    actions[JobState.declined] = [];
+    actions[JobState.complete] = [];
 
-    return actions[jobState] || []
+    return actions[jobState] || [];
   }
 
   /** Helper method to get the colour associated with each action button */
