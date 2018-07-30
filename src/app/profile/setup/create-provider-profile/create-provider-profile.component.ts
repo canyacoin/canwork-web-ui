@@ -1,12 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { User, UserCategory, UserState, UserType } from '@class/user';
+import { AuthService } from '@service/auth.service';
+import { CanWorkEthService } from '@service/eth.service';
+import { UserService } from '@service/user.service';
 import * as randomColor from 'randomcolor';
+import { Subscription } from 'rxjs/Subscription';
 
 import * as moment from 'moment-timezone';
-import { User, UserCategory, UserState, UserType } from '../../../core-classes/user';
-import { AuthService } from '../../../core-services/auth.service';
-import { UserService } from '../../../core-services/user.service';
 import { CurrencyValidator } from '../../currency.validator';
 import { EmailValidator } from '../../email.validator';
 
@@ -15,9 +16,9 @@ import { EmailValidator } from '../../email.validator';
   templateUrl: './create-provider-profile.component.html',
   styleUrls: ['./create-provider-profile.component.css', '../setup.component.css']
 })
-export class CreateProviderProfileComponent implements OnInit {
+export class CreateProviderProfileComponent implements OnInit, OnDestroy {
 
-  returnUrl: string;
+  ethSub: Subscription;
 
   @Input() user: User;
   steps = {
@@ -47,8 +48,18 @@ export class CreateProviderProfileComponent implements OnInit {
   profileForm: FormGroup = null;
   termsChecked = false;
 
-  constructor(private userService: UserService, private route: ActivatedRoute, private formBuilder: FormBuilder,
-    private router: Router, private authService: AuthService) { }
+  ethAddress: string;
+
+  constructor(
+    private userService: UserService,
+    private formBuilder: FormBuilder,
+    private ethService: CanWorkEthService,
+    private authService: AuthService) {
+
+    this.ethSub = this.ethService.account$.subscribe((acc: string) => {
+      this.ethAddress = acc;
+    });
+  }
 
   ngOnInit() {
     if (this.user != null) {
@@ -56,7 +67,10 @@ export class CreateProviderProfileComponent implements OnInit {
     }
     this.stepperSteps = Object.values(this.steps);
     this.currentStep = this.stepperSteps[0];
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+  }
+
+  ngOnDestroy() {
+    if (this.ethSub) { this.ethSub.unsubscribe(); }
   }
 
   buildForm() {
@@ -75,7 +89,8 @@ export class CreateProviderProfileComponent implements OnInit {
       color1: [colors[0]],
       color2: [colors[1]],
       color3: [colors[2]],
-      timezone: moment.tz.guess()
+      timezone: moment.tz.guess(),
+      ethAddress: [this.user.ethAddress || this.ethAddress, Validators.compose([Validators.required])],
     });
   }
 
@@ -95,8 +110,6 @@ export class CreateProviderProfileComponent implements OnInit {
   }
 
   submitForm() {
-    this.user.state = UserState.done;
-    this.userService.saveUser(this.user);
     this.sending = true;
 
     let tags: string[] = this.profileForm.value.skillTags === '' ? [] : this.profileForm.value.skillTags.split(',').map(item => item.trim());
@@ -107,6 +120,7 @@ export class CreateProviderProfileComponent implements OnInit {
       address: this.user.address,
       name: this.profileForm.value.firstName + ' ' + this.profileForm.value.lastName,
       work: this.profileForm.value.work,
+      ethAddress: this.profileForm.value.ethAddress,
       title: this.profileForm.value.title,
       bio: this.profileForm.value.bio,
       category: this.profileForm.value.category,
@@ -125,12 +139,14 @@ export class CreateProviderProfileComponent implements OnInit {
     this.userService.saveUser(this.user);
     this.authService.setUser(this.user);
     setTimeout(() => {
+      this.sending = false;
       this.nextStep();
     }, 600);
   }
 
   proceed() {
-    this.router.navigate([this.returnUrl]);
+    this.sending = true;
+    this.user.whitelistSubmitted = true;
+    this.userService.saveUser(this.user);
   }
-
 }

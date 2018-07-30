@@ -56,7 +56,7 @@ abstract class AEmailNotification implements IJobStateEmailNotification {
         substitutions: {
           title: emailMessage.title,
           returnLinkText: 'View Job Details Here',
-          returnLinkUrl: `${returnUri}/inbox/jobs/${this.jobData.id}`,
+          returnLinkUrl: `${returnUri}/inbox/job/${this.jobData.id}`,
         },
         templateId: '4fc71b33-e493-4e60-bf5f-d94721419db5'
       }, (error, result) => {
@@ -217,6 +217,67 @@ class ClientJobRequestCounterOfferNotification extends AEmailNotification {
   }
 }
 
+// Send notification to client that their funds have been deposited into escrow
+class ClientJobRequestEscrowedFundsNotification extends AEmailNotification {
+  constructor() {
+    super();
+  }
+
+  async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
+    console.log('ClientJobRequestEscrowedFundsNotification.interpolateTemplates()');
+    try {
+      await super.interpolateTemplates(db, jobId);
+    } catch (error) {
+      console.error(error);
+    }
+
+    const tx = this.jobData.paymentLog[this.jobData.paymetLog.length - 1].txId;
+    const etherscanUri = `https://etherscan.io/tx/${tx}`;
+
+    const title = `Your escrow deposit was successful`
+    this.emailMessages.push({
+      to: this.providerData.email,
+      subject: title,
+      title: title,
+      bodyHtml: `
+      Dear ${this.clientData.name},<br>
+      Your escrow funds have been deposited at <a href='${etherscanUri}'>${tx}</a>.`
+    });
+    console.log('+ dump emailMessages:', this.emailMessages);
+  }
+}
+
+// Send notification to the provider that they may commence the job
+class ClientJobRequestCommenceNotification extends AEmailNotification {
+  constructor() {
+    super();
+  }
+
+  async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
+    console.log('ClientJobRequestCommenceNotification.interpolateTemplates()');
+    try {
+      await super.interpolateTemplates(db, jobId);
+    } catch (error) {
+      console.error(error);
+    }
+
+    const tx = this.jobData.paymentLog[this.jobData.paymetLog.length - 1].txId;
+    const etherscanUri = `https://etherscan.io/tx/${tx}`;
+
+    const title = `Your escrow deposit was successful`
+    this.emailMessages.push({
+      to: this.providerData.email,
+      subject: title,
+      title: title,
+      bodyHtml: `
+      Dear ${this.providerData.name},<br>
+      ${this.clientData.name} has made a payment into escrow for the job request: "${this.jobData.information.description}".
+      The transaction of this deposit has the transaction ID: <a href='${etherscanUri}'>${tx}</a>.`
+    });
+    console.log('+ dump emailMessages:', this.emailMessages);
+  }
+}
+
 export function notificationEmail(action: string) {
   console.log('+ build factory object for action:', action)
   switch (action) {
@@ -228,6 +289,10 @@ export function notificationEmail(action: string) {
       return new ClientJobRequestDeclinedNotification();
     } case 'Counter offer': {
       return new ClientJobRequestCounterOfferNotification();
+    } case 'Add funds to escrow': {
+      return new ClientJobRequestEscrowedFundsNotification();
+    } case '-- provider to commence the job --': {
+      return new ClientJobRequestCommenceNotification();
     } default: {
       console.log('! unknown action type: ', action)
       return undefined;

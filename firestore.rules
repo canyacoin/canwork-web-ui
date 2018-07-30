@@ -3,22 +3,17 @@ service cloud.firestore {
 
     match /users/{userId} {
        allow read;
-       allow write: if (request.auth.uid == userId) || (auth.token.admin === true);
-    }
-
-    match /users {
-       allow read;
-       allow write: if (auth.token.admin === true);
+       allow write: if request.auth != null;
     }
 
     match /portfolio/{userId}/work/{w} {
        allow read;
-       allow write: if (request.auth.uid == userId) || (auth.token.admin === true);
+       allow write: if request.auth.uid == userId;
     }
 
     match /who/{userId}/user/{who} {
        allow read;
-       allow write: if (request.auth != null);
+       allow write: if request.auth != null;
     }
 
     match /skill-tags/{skill} {
@@ -29,13 +24,13 @@ service cloud.firestore {
     // See: https://github.com/canyaio/can-work/issues/142
     match /chats/{document=**} {
        allow read;
-       allow write: if (request.auth != null);
+       allow write: if request.auth != null;
     }
 
     // TODO: Will require a much more complex rule set here
     match /jobs/{jobId} {
        allow read;
-       allow write: if (request.auth != null);
+       allow write: if request.auth != null;
     }
 
   }

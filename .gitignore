@@ -9,6 +9,10 @@
 # VS live sharing
 .vs/*
 
+# Cam added: scripts to deploy to various environments
+prod-deploy.sh
+staging-deploy.sh
+
 # Cam added: hide environment secrets for firebase
 src/environments/*.ts
 # dependencies
