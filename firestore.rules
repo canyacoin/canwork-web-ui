@@ -6,11 +6,6 @@ service cloud.firestore {
        allow write: if request.auth.uid == userId;
     }
 
-    match /users {
-       allow read;
-       allow write: if auth.token.admin == true;
-    }
-
     match /portfolio/{userId}/work/{w} {
        allow read;
        allow write: if request.auth.uid == userId;
