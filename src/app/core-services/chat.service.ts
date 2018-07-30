@@ -85,7 +85,7 @@ export class ChatService {
   async sendJobMessages(job: Job, action: IJobAction) {
     const channelId: string = [job.clientId, job.providerId].sort().join('-');
     const sender = await this.auth.getCurrentUser();
-    const receiverId = job.providerId;
+    const receiverId = action.executedBy === UserType.client ? job.providerId : job.clientId;
     let messageText = '';
     switch (action.type) {
       // TODO: Finish these sentences - Dion

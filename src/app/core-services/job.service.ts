@@ -128,7 +128,6 @@ export class JobService {
                 amountCan: escrowAction.amountCan || 0
               }));
               parsedJob.actionLog.push(escrowAction);
-              parsedJob.state = JobState.inEscrow;
 
               await this.saveJobFirebase(parsedJob);
               let client = await this.userService.getUser(job.clientId);
