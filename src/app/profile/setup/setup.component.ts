@@ -20,7 +20,7 @@ export class SetupComponent implements OnInit, OnDestroy {
   constructor(private userService: UserService, private router: Router, private authService: AuthService) { }
 
   ngOnInit() {
-    this.authSub = this.authService.currentUser$.subscribe((user: User) => {
+    this.authSub = this.authService.currentUser$.take(1).subscribe((user: User) => {
       this.currentUser = user;
     }, error => { console.error('! unable to retrieve currentUser data:', error); });
   }

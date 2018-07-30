@@ -1,21 +1,25 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as randomColor from 'randomcolor';
+import { Subscription } from 'rxjs/Subscription';
 
 import * as moment from 'moment-timezone';
-import { User, UserCategory, UserState, UserType } from '../../../core-classes/user';
-import { AuthService } from '../../../core-services/auth.service';
-import { UserService } from '../../../core-services/user.service';
+import { User, UserCategory, UserState, UserType } from '@class/user';
+import { AuthService } from '@service/auth.service';
+import { UserService } from '@service/user.service';
 import { CurrencyValidator } from '../../currency.validator';
 import { EmailValidator } from '../../email.validator';
+
+import { EthService } from '@canyaio/canpay-lib';
 
 @Component({
   selector: 'app-create-provider-profile',
   templateUrl: './create-provider-profile.component.html',
   styleUrls: ['./create-provider-profile.component.css', '../setup.component.css']
 })
-export class CreateProviderProfileComponent implements OnInit {
+export class CreateProviderProfileComponent implements OnInit, OnDestroy {
 
+  ethSub: Subscription
 
   @Input() user: User;
   steps = {
@@ -45,7 +49,18 @@ export class CreateProviderProfileComponent implements OnInit {
   profileForm: FormGroup = null;
   termsChecked = false;
 
-  constructor(private userService: UserService, private formBuilder: FormBuilder, private authService: AuthService) { }
+  ethAddress: string
+
+  constructor(
+    private userService: UserService,
+    private formBuilder: FormBuilder,
+    private ethService: EthService,
+    private authService: AuthService) {
+
+    this.ethSub = this.ethService.account$.subscribe(async (address: string) => {
+      this.ethAddress = address
+    })
+  }
 
   ngOnInit() {
     if (this.user != null) {
@@ -53,6 +68,10 @@ export class CreateProviderProfileComponent implements OnInit {
     }
     this.stepperSteps = Object.values(this.steps);
     this.currentStep = this.stepperSteps[0];
+  }
+
+  ngOnDestroy() {
+    if (this.ethSub) { this.ethSub.unsubscribe() }
   }
 
   buildForm() {
@@ -71,7 +90,8 @@ export class CreateProviderProfileComponent implements OnInit {
       color1: [colors[0]],
       color2: [colors[1]],
       color3: [colors[2]],
-      timezone: moment.tz.guess()
+      timezone: moment.tz.guess(),
+      ethAddress: [this.user.ethAddress || this.ethAddress, Validators.compose([Validators.required])],
     });
   }
 
@@ -101,6 +121,7 @@ export class CreateProviderProfileComponent implements OnInit {
       address: this.user.address,
       name: this.profileForm.value.firstName + ' ' + this.profileForm.value.lastName,
       work: this.profileForm.value.work,
+      ethAddress: this.profileForm.value.ethAddress,
       title: this.profileForm.value.title,
       bio: this.profileForm.value.bio,
       category: this.profileForm.value.category,

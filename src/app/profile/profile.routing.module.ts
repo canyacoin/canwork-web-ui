@@ -20,7 +20,7 @@ const routes: Routes = [
   {
     path: 'setup',
     component: SetupComponent,
-    canActivate: [AuthGuard, UserIsNotSetupGuard],
+    canActivate: [AuthGuard, /*UserIsNotSetupGuard*/],
     data: { requiresLoggedIn: true }
   },
   {
