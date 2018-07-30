@@ -9,9 +9,9 @@ import { Job, JobState, PaymentType } from '../../../../core-classes/job';
 })
 export class StatusIconComponent {
 
-  @Input() job: Job; 
-  constructor() {  
-  }
+  @Input() job: Job;
+
+  constructor() { }
 
   get stateColour(): string {
     switch (this.job.state) {
@@ -35,10 +35,10 @@ export class StatusIconComponent {
   }
 
   /* Customizeable messages for each job status. */
-  get stateStatus(): string{
+  get stateStatus(): string {
     switch (this.job.state) {
       case JobState.offer:
-        return 'Job offered'
+        return 'Job offered';
       case JobState.workPendingCompletion:
         return 'Pending completion';
       case JobState.cancelled:
@@ -54,13 +54,11 @@ export class StatusIconComponent {
       case JobState.termsAcceptedAwaitingEscrow:
         return 'Awaiting payment to escrow';
       case JobState.complete:
-       return 'Completed';
+        return 'Completed';
       case JobState.inEscrow:
         return 'Funds in escrow';
       default:
         return '';
     }
-  } 
- 
-
+  }
 }

@@ -1,20 +1,19 @@
 import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DialogService } from 'ng2-bootstrap-modal';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import { AngularFireStorage } from 'angularfire2/storage';
-import {
-    Job, JobDescription, JobState, PaymentType, TimeRange, WorkType
-} from '@class/job';
-import { JobNotificationService } from '@service/job-notification.service';
+import { Job, JobDescription, JobState, PaymentType, TimeRange, WorkType } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
 import { User, UserType } from '@class/user';
 import { AuthService } from '@service/auth.service';
+import { JobNotificationService } from '@service/job-notification.service';
 import { JobService } from '@service/job.service';
 import { UserService } from '@service/user.service';
+import { AngularFireStorage } from 'angularfire2/storage';
+import { DialogService } from 'ng2-bootstrap-modal';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+
 import {
-  ActionDialogComponent, ActionDialogOptions
+    ActionDialogComponent, ActionDialogOptions
 } from '../action-dialog/action-dialog.component';
 
 @Component({
@@ -60,31 +59,30 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.job = job;
         this.currentUserType = this.currentUser.address === job.clientId ? UserType.client : UserType.provider;
         this.jobService.assignOtherPartyAsync(this.job, this.currentUserType);
-        var attachment = this.job.information.attachments;
+        const attachment = this.job.information.attachments;
         // check if there's any attachment on this job
         if (attachment.length > 0) {
           // [0] is used here since we only support single file upload anyway.
           if (attachment[0].url == null) {
-            console.log("An attachment without URL ! getting the url...");
+            console.log('An attachment without URL ! getting the url...');
             // If there's an attachment but not the URL we can safely assume that it's caused by the async issue
             if (attachment[0].filePath != null) {
-              var urlSub: Subscription;
+              let urlSub: Subscription;
               // If this attachment has a filepath, then convert it into a usable URL by using the code below.
               urlSub = this.storage.ref(attachment[0].filePath).getDownloadURL().subscribe(downloadUrl => {
                 attachment[0].url = downloadUrl; // change this attachment's (null) url into the actual url.
-                console.log("attachment URL is now " + attachment[0].url);
-              })
-              urlSub.unsubscribe; //unsubscibe to the UrlSub just in case
+                console.log('attachment URL is now ' + attachment[0].url);
+              });
+              urlSub.unsubscribe(); // unsubscibe to the UrlSub just in case
             }
           }
-
         }
-        else {
-          console.log("no attachment given");
-        }
-
       });
     }
+  }
+
+  actionIsEnterEscrow(action: ActionType): boolean {
+    return action === ActionType.enterEscrow;
   }
 
   get availableActions(): ActionType[] {
@@ -117,7 +115,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       case JobState.complete:
         return 'This job has been marked as complete by the client.';
       case JobState.inEscrow:
-        return 'The funds has been sent to the escrow. The job may now commence.';
+        return 'The funds have been sent to the escrow. Confirm the job request to begin.';
       default:
         return '';
     }

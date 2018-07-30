@@ -1,13 +1,13 @@
 import { EthService } from '@canyaio/canpay-lib';
 import { Job } from '@class/job';
+import { User } from '@class/user';
+import { environment } from '@env/environment';
 
 declare var require: any
 
 const CanWorkJobContractInterface = require('@abi/can-work-job.abi.json')
 
 export class CanWorkJobContract {
-
-  static readonly ADDRESS_PRIVATE: string = '0xff3c41a91a4b8d06dbb9a82db3412df548517e77'
 
   instance: any
 
@@ -29,21 +29,23 @@ export class CanWorkJobContract {
 
     this.instance = _contract
 
+    this.setAddress(environment.contracts.canwork)
+
     return this
   }
 
-  async createJob(job: Job, clientAddress: string, providerAddress: string, totalCosts: number){
+  async createJob(job: Job, client: User, provider: User){
 
     return new Promise(async (resolve, reject) => {
 
       try {
 
-        let txObject = await this.instance.methods.createJob(job.id, clientAddress, providerAddress, totalCosts)
+        let txObject = await this.instance.methods.createJob(job.hexId, client.ethAddress, provider.ethAddress, job.canInEscrow)
 
         let gas = await txObject.estimateGas()
 
         let txOptions = {
-          from: clientAddress,
+          from: client.ethAddress,
           value: '0x0',
           gas: gas,
           gasLimit: gas,
