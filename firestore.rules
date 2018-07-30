@@ -3,7 +3,7 @@ service cloud.firestore {
 
     match /users/{userId} {
        allow read;
-       allow write: if request.auth.uid == userId || auth.token.admin == true;
+       allow write: if request.auth.uid == userId;
     }
 
     match /users {
@@ -13,7 +13,7 @@ service cloud.firestore {
 
     match /portfolio/{userId}/work/{w} {
        allow read;
-       allow write: if request.auth.uid == userId || auth.token.admin == true;
+       allow write: if request.auth.uid == userId;
     }
 
     match /who/{userId}/user/{who} {
