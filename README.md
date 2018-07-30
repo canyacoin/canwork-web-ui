@@ -93,6 +93,15 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 firebase use <YOUR_NAME>
 firebase deploy
 
+## oAth Configuration
+
+Assets for oAuth are:
+
+Product Name: `www.canwork.io`
+Product Logo: `https://www.canwork.io/assets/img/canya-media-square.png`
+Privacy Policy: `https://www.canwork.io/assets/docs/canwork-privacy-policy.pdf`
+Terms & Conditions: `https://www.canwork.io/assets/docs/canwork-terms-and-conditions.pdf`
+
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
