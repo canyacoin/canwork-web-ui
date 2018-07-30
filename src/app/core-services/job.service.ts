@@ -174,26 +174,6 @@ export class JobService {
 
             resolve(true);
             break;
-          case ActionType.confirmJobRequest:
-            const confirmJobRequestAction = action as ConfirmJobRequestAction;
-            parsedJob.actionLog.push(confirmJobRequestAction);
-
-            let client = await this.userService.getUser(job.clientId)
-            let provider = await this.userService.getUser(job.providerId)
-
-            try {
-              let canWorkContract = new CanWorkJobContract(this.ethService)
-              canWorkContract.connect()
-              await canWorkContract.createJob(job, client, provider)
-              parsedJob.state = JobState.workPendingCompletion;
-              await this.saveJobFirebase(parsedJob);
-              await this.chatService.sendJobMessages(parsedJob, confirmJobRequestAction);
-            } catch (error) {
-              console.log(error)
-            }
-
-            resolve(true)
-            break;
           case ActionType.addMessage:
             parsedJob.actionLog.push(action);
             await this.saveJobFirebase(parsedJob);
@@ -268,6 +248,7 @@ export class JobService {
     actions[JobState.providerCounterOffer] = forClient ? [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms] : [ActionType.cancelJob];
     actions[JobState.clientCounterOffer] = forClient ? [ActionType.cancelJob] : [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms];
     actions[JobState.termsAcceptedAwaitingEscrow] = forClient ? [ActionType.enterEscrow, ActionType.cancelJob] : [ActionType.cancelJob];
+    // TODO: add a new state in here to create the job
     actions[JobState.inEscrow] = forClient ? [ActionType.confirmJobRequest, ActionType.addMessage] : [ActionType.finishedJob, ActionType.addMessage];
     actions[JobState.workPendingCompletion] = forClient ? [ActionType.acceptFinish, ActionType.dispute, ActionType.addMessage] : [ActionType.dispute, ActionType.addMessage];
     actions[JobState.inDispute] = forClient ? [ActionType.acceptFinish, ActionType.addMessage] : [ActionType.addMessage];

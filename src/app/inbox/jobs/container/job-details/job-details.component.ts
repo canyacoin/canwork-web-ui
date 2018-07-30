@@ -59,31 +59,30 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.job = job;
         this.currentUserType = this.currentUser.address === job.clientId ? UserType.client : UserType.provider;
         this.jobService.assignOtherPartyAsync(this.job, this.currentUserType);
-        var attachment = this.job.information.attachments;
+        const attachment = this.job.information.attachments;
         // check if there's any attachment on this job
         if (attachment.length > 0) {
           // [0] is used here since we only support single file upload anyway.
           if (attachment[0].url == null) {
-            console.log("An attachment without URL ! getting the url...");
+            console.log('An attachment without URL ! getting the url...');
             // If there's an attachment but not the URL we can safely assume that it's caused by the async issue
             if (attachment[0].filePath != null) {
-              var urlSub: Subscription;
+              let urlSub: Subscription;
               // If this attachment has a filepath, then convert it into a usable URL by using the code below.
               urlSub = this.storage.ref(attachment[0].filePath).getDownloadURL().subscribe(downloadUrl => {
                 attachment[0].url = downloadUrl; // change this attachment's (null) url into the actual url.
-                console.log("attachment URL is now " + attachment[0].url);
-              })
-              urlSub.unsubscribe; //unsubscibe to the UrlSub just in case
+                console.log('attachment URL is now ' + attachment[0].url);
+              });
+              urlSub.unsubscribe(); // unsubscibe to the UrlSub just in case
             }
           }
-
         }
-        else {
-          console.log("no attachment given");
-        }
-
       });
     }
+  }
+
+  actionIsEnterEscrow(action: ActionType): boolean {
+    return action === ActionType.enterEscrow;
   }
 
   get availableActions(): ActionType[] {
