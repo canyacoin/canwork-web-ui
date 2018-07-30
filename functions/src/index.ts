@@ -301,6 +301,20 @@ exports.updateIndexProviderData = functions.firestore
     const data = snap.after.data();
     const objectId = snap.after.id;
 
+    console.log('+ looking for admin privileges');
+    if (data.isAdmin) {
+      console.log(`+ setting user claim to admin for userId: ${objectId} and email: ${data.email}`)
+      // The new custom claims will propagate to the user's ID token the
+      // next time a new one is issued.
+      try {
+        await admin.auth().setCustomUserClaims(objectId, { admin: true });
+      } catch (error) {
+        console.log('! unable to set admin claim:', error);
+      }
+    } else {
+      console.log('+ non admin user being updated');
+    }
+
     if (data.welcomeEmailSent && data.welcomeEmailSent === false && data.testUser !== true) {
       console.log('+ sending a user email...');
 
@@ -319,10 +333,6 @@ exports.updateIndexProviderData = functions.firestore
       await db.collection('users').doc(objectId).update({ welcomeEmailSent: true });
     }
 
-    console.log('+ remove index record for update operation...', objectId);
-    await algoliaSearchIndex.deleteObject(objectId);
-    console.log('+ deleted...', objectId);
-
     // TODO: When firestore supports case insensitive queries, we won't need this redundant field
     console.log('+ eth addy', data.ethAddress);
     if (data.ethAddress && data.ethAddress !== data.ethAddress.toUpperCase()) {
@@ -332,6 +342,10 @@ exports.updateIndexProviderData = functions.firestore
 
     if (shouldSkipIndexing(data))
       return;
+
+    console.log('+ remove index record for update operation...', objectId);
+    await algoliaSearchIndex.deleteObject(objectId);
+    console.log('+ deleted...', objectId);
 
     const workData = buildWorkData(objectId);
 

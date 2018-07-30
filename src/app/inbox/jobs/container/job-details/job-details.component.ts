@@ -1,20 +1,19 @@
 import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DialogService } from 'ng2-bootstrap-modal';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import { AngularFireStorage } from 'angularfire2/storage';
-import {
-    Job, JobDescription, JobState, PaymentType, TimeRange, WorkType
-} from '@class/job';
-import { JobNotificationService } from '@service/job-notification.service';
+import { Job, JobDescription, JobState, PaymentType, TimeRange, WorkType } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
 import { User, UserType } from '@class/user';
 import { AuthService } from '@service/auth.service';
+import { JobNotificationService } from '@service/job-notification.service';
 import { JobService } from '@service/job.service';
 import { UserService } from '@service/user.service';
+import { AngularFireStorage } from 'angularfire2/storage';
+import { DialogService } from 'ng2-bootstrap-modal';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+
 import {
-  ActionDialogComponent, ActionDialogOptions
+    ActionDialogComponent, ActionDialogOptions
 } from '../action-dialog/action-dialog.component';
 
 @Component({
@@ -117,7 +116,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       case JobState.complete:
         return 'This job has been marked as complete by the client.';
       case JobState.inEscrow:
-        return 'The funds has been sent to the escrow. Confirm the job request to begin.';
+        return 'The funds have been sent to the escrow. Confirm the job request to begin.';
       default:
         return '';
     }
