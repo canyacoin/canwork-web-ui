@@ -14,9 +14,9 @@ export class CanWorkJobContract {
   address: string
 
   constructor(
-    private eth: EthService){}
+    private eth: EthService) { }
 
-  setAddress(address: string){
+  setAddress(address: string) {
     this.instance.options.address = address
     this.instance._address = address
     this.address = address
@@ -24,7 +24,7 @@ export class CanWorkJobContract {
     return this
   }
 
-  connect(){
+  connect() {
     let _contract = new this.eth.web3js.eth.Contract(CanWorkJobContractInterface.abi)
 
     this.instance = _contract
@@ -34,20 +34,19 @@ export class CanWorkJobContract {
     return this
   }
 
-  async createJob(job: Job, client: User, provider: User){
+  async createJob(job: Job, client: User, provider: User) {
 
     return new Promise(async (resolve, reject) => {
 
       try {
 
-        let txObject = await this.instance.methods.createJob(job.hexId, client.ethAddress, provider.ethAddress, job.canInEscrow)
+        let txObject = await this.instance.methods.createJob(this.eth.web3js.utils.padRight(job.hexId, 32), client.ethAddress, provider.ethAddress, job.canInEscrow * (10 ** 6));
 
         let gas = await txObject.estimateGas()
 
         let txOptions = {
           from: client.ethAddress,
           value: '0x0',
-          gas: gas,
           gasLimit: gas,
           gasPrice: 32000000000,
           data: txObject.encodeABI(),
