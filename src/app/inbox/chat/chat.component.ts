@@ -170,7 +170,6 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
         .doc(this.selectedChannel.channel)
         .collection('messages', ref => ref.limit(50).orderBy('timestamp', 'desc'))
         .valueChanges().map((array) => array.reverse());
-
       collection.subscribe((data: any) => {
         this.isLoading = false;
         this.messages = data;
