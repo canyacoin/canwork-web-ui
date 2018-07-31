@@ -8,11 +8,11 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
 import * as firebase from 'firebase';
-import { environment } from '../../environments/environment';
 import { Avatar, User } from '../core-classes/user';
 
 @Injectable()
 export class AuthService {
+
   userSub: Subscription;
 
   public currentUser = new BehaviorSubject<User>(null);

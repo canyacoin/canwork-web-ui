@@ -22,22 +22,22 @@ export class SetupComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       this.currentUser = user;
-    }, error => { console.error('! unable to retrieve currentUser data:', error) });
+    }, error => { console.error('! unable to retrieve currentUser data:', error); });
   }
   ngOnDestroy() {
     if (this.authSub) { this.authSub.unsubscribe(); }
   }
 
-  isClient(): boolean {
+  get isClient(): boolean {
     return this.currentUser.type === UserType.client;
   }
 
-  isProvider(): boolean {
+  get isProvider(): boolean {
     return this.currentUser.type === UserType.provider;
   }
 
-  isVerified(): boolean {
-    return this.currentUser.whitelisted === true;
+  get whitelistSubmitted(): boolean {
+    return this.currentUser.whitelistSubmitted;
   }
 
   setUserType(type: UserType) {

@@ -11,7 +11,8 @@ import {
     CounterOfferAction,
     IJobAction,
     RaiseDisputeAction,
-    EnterEscrowAction
+    EnterEscrowAction,
+    ConfirmJobRequestAction
 } from '@class/job-action';
 
 import { UserType } from '@class/user';
@@ -66,6 +67,9 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
           break;
         case ActionType.enterEscrow:
           action = new EnterEscrowAction(this.userType, '', 0)
+          break;
+        case ActionType.confirmJobRequest:
+          action = new ConfirmJobRequestAction(this.userType, '', this.job.canInEscrow)
           break;
         default:
           action = new IJobAction(this.actionType, this.userType);
@@ -134,6 +138,8 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
         return 'Are you sure?';
       case ActionType.enterEscrow:
         return 'You are about to pay the agreed amount of CAN to the escrow. Are you sure?';
+      case ActionType.confirmJobRequest:
+        return 'This will create a relationship between the provider address and your address in the escrow contract.';
       case ActionType.addMessage:
         return 'Are you sure?';
       case ActionType.finishedJob:

@@ -24,6 +24,8 @@ export class User {
     title: string;
     type: UserType;
     whitelisted: boolean;
+    whitelistRejected: boolean;
+    whitelistSubmitted: boolean;
     work: string;
     workSkillTags: string[] = [];
 

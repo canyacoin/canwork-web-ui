@@ -128,7 +128,7 @@ export class ChatService {
       case ActionType.acceptTerms:
         messageText = 'I have accepted the terms of the job';
         break;
-      case ActionType.enterEscrow:
+      case ActionType.confirmJobRequest:
         messageText = 'I have deposited funds into the escrow system!';
         break;
       default:
@@ -146,7 +146,6 @@ export class ChatService {
   //   const request = this.createMessageObject(channelId, sender, description, MessageType.request, budget);
   //   this.sendMessage(sender, receiver, request);
   // }
-
 
   sendMessage(senderId: string, receiverId: string, message: Message) {
     try {
