@@ -633,6 +633,7 @@ function getFirebaseInstance(projectId: string) {
 // Later we can get these direct from a google spreadsheet or something central
 function getTags(): string[] {
   return [
+    'Customer Service', 'Customer Support', 'Transcription', 'Virtual Assistant', 'Community Management', 'Tech Support', 'Phone Support', 'Web Research', 'Customer Service Representative', 'Data Entry', 'Data Mining', 'Data', 'Sales Management', 'HR', 'Project Management', 'Content Creators', 'Blog Writing', 'Editing', 'Proof Reading', 'Resume Writing', 'Voice Acting', 'Creative Writing', 'Writing', 'Copywriting', 'Whitepaper', 'Content', 'Ghost Writing', 'Technical Writing', 'Grants', 'Translation', 'Lead Generation', 'Assistant', 'Data Scraping', 'Social Media', 'Social Media Marketing', 'Email Marketing', 'Social Media Manager', 'EDM', 'SEO', 'SEM', 'Marketing Strategy', 'Business', 'Accounting', 'BA', 'Business Analysis', 'Investment Researching', 'Business Modelling', 'Tax', 'Financial Reporting', 'Bookkeeping', 'Financial Planning', 'CFO', 'Token Sale', 'ICO', 'Software', 'Software Development', 'DApps', 'Blockchain', 'Game Development', 'ecommerce', 'Web Development', 'Wordpress', 'AI', 'Bots', 'Databases', 'Security', 'Information Security Analyst', 'Design', 'Creative', 'Logo', 'Graphic Design', 'Illustration', 'UI', 'UX', 'UI / UX', 'Publication', 'Onepager', 'Formatting', 'Whitepaper', 'Brochure', 'Print Design', 'Animation', 'Flat Animation', '3D Animation', 'Stop Motion Animation', 'Photo Editors', 'Web Design', 'Print', 'Packaging', 'Industrial Design', 'Mobile', 'Full Website', 'Landing Page', 'Business Card', 'Poster', 'Layout Design', 'Interaction Design', '3D', 'Flat', 'Pixel Art', 'UX Research', 'Wireframes', 'Brand Strategy', 'CRM Consultancy', 'Ebooks', 'Squarespace', 'Smart Contracts', 'Business Development', 'Research', 'Consultant', 'Writing', 'Facebook', 'Instagram', 'Twitter', 'Telegram', 'Back - End Development', 'Front - End Development', 'Full Stack Development', 'Software Engineer', 'Sales Consultant' 'Android', 'iOS',
     'C++',
     'C#',
     'C',
@@ -736,6 +737,8 @@ function getTags(): string[] {
     'ZenDesk',
     'Non Fiction',
     'Fiction',
+    "API's",
+    'Microservices',
   ];
 }
 
