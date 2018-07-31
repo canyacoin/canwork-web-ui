@@ -4,6 +4,8 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Subscription } from 'rxjs/Subscription';
 
 import { User } from '../../../core-classes/user';
+import { AuthService } from '../../../core-services/auth.service';
+import { ChatService } from '../../../core-services/chat.service';
 
 @Component({
   selector: 'app-profile-portfolio',
@@ -27,7 +29,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   portfolioSubscription: Subscription;
 
 
-  constructor(private afs: AngularFirestore, private router: Router) { }
+  constructor(private afs: AngularFirestore, private authService: AuthService, private chatService: ChatService, private router: Router) { }
 
   ngOnInit() {
     this.setPortfolio(this.userModel.address);
@@ -43,7 +45,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
       this.allPortfolioItems = data;
       this.lastPage = (Math.ceil(this.allPortfolioItems.length / this.pageLimit) - 1);
       this.loaded = true;
-    }, error => { console.error('! unable to retrieve portfolio data:', error) });
+    }, error => { console.error('! unable to retrieve portfolio data:', error); });
   }
 
   paginatedPortfolioItems() {
@@ -72,5 +74,16 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
   postRequest() {
     this.router.navigate(['inbox/post', this.userModel.address]);
+  }
+
+  // Chat the user without proposing a job
+  chatUser() {
+    this.authService.currentUser$.take(1).subscribe((user: User) => {
+      if (user) {
+        this.chatService.createNewChannel(user, this.userModel);
+      } else {
+        this.router.navigate(['auth/login']);
+      }
+    });
   }
 }

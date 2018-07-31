@@ -28,7 +28,7 @@
               <div *ngIf="notMyProfile" class="text-center">
                 <h3 class="fw-500">This provider has no portfolio</h3>
                 <h4 class="fw-400 mb-20">Maybe you can ask for it personally?</h4>
-                <button (click)="postRequest()" class="btn btn-primary btn-canya-chat mb-30" data-scrollto="section-profile" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">
+                <button (click)="chatUser()" class="btn btn-primary btn-canya-chat mb-30" data-scrollto="section-profile" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">
                   <img src="assets/img/canya-button.png" style="margin-top: -2px;" width="16px" height="16px" alt="CanYa"> Lets Chat
                 </button>
               </div>
