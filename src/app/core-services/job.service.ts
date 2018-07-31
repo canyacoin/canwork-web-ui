@@ -168,9 +168,9 @@ export class JobService {
               parsedJob.state = JobState.authorisedEscrow;
 
               await this.saveJobFirebase(parsedJob);
-              let client = await this.userService.getUser(job.clientId);
-              client.ethAddress = result.account;
-              await this.userService.saveUser(client);
+              const clientObj = await this.userService.getUser(job.clientId);
+              clientObj.ethAddress = result.account;
+              await this.userService.saveUser(clientObj);
               this.canPayService.close();
             };
 
@@ -226,18 +226,19 @@ export class JobService {
             resolve(true);
             break;
           case ActionType.acceptFinish:
-            // TODO: put canPAY in here and listen for the receipt
-            // release the funds! When they are successfully released... then complete
+            try {
+              const clientObj = await this.userService.getUser(job.clientId);
+              const canWorkContract = new CanWorkJobContract(this.ethService);
+              canWorkContract.connect();
+              await canWorkContract.completeJob(job, clientObj.ethAddress);
+              parsedJob.state = JobState.complete;
+              parsedJob.actionLog.push(action);
+              await this.saveJobFirebase(parsedJob);
+              await this.chatService.sendJobMessages(parsedJob, action);
+            } catch (error) {
+              console.log(error);
+            }
 
-            parsedJob.actionLog.push(action);
-            parsedJob.state = JobState.complete;
-            parsedJob.paymentLog.push(new Payment({
-              txId: '',
-              timestamp: '',
-              amountCan: null // add a 'release funds' property?
-            }));
-            await this.saveJobFirebase(parsedJob);
-            await this.chatService.sendJobMessages(parsedJob, action);
             resolve(true);
             break;
           case ActionType.dispute:

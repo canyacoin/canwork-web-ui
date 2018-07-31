@@ -34,6 +34,8 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
   job: Job;
   action: IJobAction;
 
+  executing = false;
+
   actionTypes = ActionType;
   paymentTypes = PaymentType;
 
@@ -45,6 +47,7 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
   }
 
   async handleAction() {
+    this.executing = true;
     try {
       let action: IJobAction;
       switch (this.actionType) {
@@ -70,7 +73,10 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
       const success = await this.jobService.handleJobAction(this.job, action);
       if (success) {
         this.result = true;
+        this.executing = false;
         this.close();
+      } else {
+        this.executing = false;
       }
     } catch (e) {
       console.log('error');

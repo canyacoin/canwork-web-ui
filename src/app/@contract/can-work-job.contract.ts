@@ -72,4 +72,34 @@ export class CanWorkJobContract {
     })
   }
 
+  async completeJob(job: Job, fromAddr: string) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const txObject = await this.instance.methods.completeJob(this.eth.web3js.utils.padRight(job.hexId, 32));
+
+        const txOptions = {
+          from: fromAddr,
+          value: '0x0',
+          gasLimit: 200000,
+          gasPrice: 32000000000,
+          data: txObject.encodeABI(),
+        };
+
+        const tx = txObject.send(txOptions);
+
+        tx.on('transactionHash', hash => {
+          console.log(hash);
+        });
+        tx.on('error', error => {
+          reject(error);
+        });
+        tx.on('receipt', receipt => {
+          resolve(receipt);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
 }
