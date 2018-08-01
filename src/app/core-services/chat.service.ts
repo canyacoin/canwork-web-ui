@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
 
 import * as moment from 'moment';
@@ -51,13 +52,12 @@ export enum MessageType {
 @Injectable()
 export class ChatService {
 
-  constructor(private afs: AngularFirestore, private auth: AuthService) { }
+  constructor(private afs: AngularFirestore, private auth: AuthService, private router: Router) { }
 
   async createChannelsAsync(sender: User, receiver: User): Promise<string> {
     const channelId: string = [sender.address, receiver.address].sort().join('-');
     const senderChannel = this.createChannelObject(channelId, receiver, false);
     const receiverChannel = this.createChannelObject(channelId, sender);
-
     const senderChannelCreated = await this.saveChannelAsync(sender.address, senderChannel);
     const receiverChannelCreated = await this.saveChannelAsync(receiver.address, receiverChannel);
     return new Promise<string>((resolve, reject) => {
@@ -80,6 +80,30 @@ export class ChatService {
         resolve(false);
       });
     });
+  }
+
+  // Check if channel exists
+  async createNewChannel(sender: User, receiver: User) {
+    const channelId: string = [sender.address, receiver.address].sort().join('-');
+    const path = `chats/${sender.address}/channels/${channelId}`;
+    this.afs.firestore.doc(path).get().then(docSnapshot => {
+      if (docSnapshot.exists) {
+        // if the channel exists, navigate the user to the chat page.
+        this.router.navigate(['inbox/chat', receiver.address]);
+      } else {
+        this.createAndNavigateToChannel(sender, receiver);
+      }
+    });
+  }
+
+  // create a channel without any message and navigate the user to it
+  async createAndNavigateToChannel(sender: User, receiver: User) {
+    const channelsCreated = await this.createChannelsAsync(sender, receiver);
+    if (channelsCreated) {
+      this.router.navigate(['inbox/chat', receiver.address]);
+    } else {
+      console.log('something wrong with the channels?');
+    }
   }
 
   async sendJobMessages(job: Job, action: IJobAction) {
@@ -108,7 +132,7 @@ export class ChatService {
         messageText = 'I have deposited funds into the escrow system!';
         break;
       default:
-        messageText = 'I\'ve made a change to our job, could you have a look?';
+        messageText = 'I\'ve made a change to our job, can you have a look?';
         break;
     }
     const message = this.createMessageObject(channelId, sender, messageText, MessageType.jobAction, null, null, job.id);
