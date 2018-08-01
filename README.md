@@ -47,19 +47,21 @@ And get your values for 'Application ID' and 'Admin API Key' to use in firebase 
 
 ```
 cd functions/
-firebase functions:config:set \
-algolia.appid="UMAFX8JMPW" \
-algolia.apikey="XXXXX" \
-algolia.providerindex="localdev_provider_index" \
-sendgrid.apikey="XXXXX"
+npm install
 
-firebase deploy --only functions
-```
-
-If you wish to execute the firebase functions for data management & seeding:
-
-```
+firebase functions:config:set algolia.appid="UMAFX8JMPW"
+firebase functions:config:set algolia.apikey="0a791357564f5d9ba99935170fac4f22"
+firebase functions:config:set algolia.providerindex="--FILL THIS OUT--"
+firebase functions:config:set sendgrid.apikey="--FILL THIS OUT--"
+firebase functions:config:set fbadmin.project_id="--FILL THIS OUT--"
+firebase functions:config:set fbadmin.client_email="--FILL THIS OUT--"
+firebase functions:config:set fbadmin.private_key="--FILL THIS OUT-- --private can be found by downloading a service account json file"
+firebase functions:config:set fbadmin.database_url="--FILL THIS OUT--"
 firebase functions:config:set dev.authkey="some-random-key-only-you-know"
+
+
+cd ../
+firebase deploy --only functions
 ```
 
 ##### Running firebase functions locally (from the project root)
@@ -90,8 +92,10 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 ## Deploying to your firebase instance:
 
+```
 firebase use <YOUR_NAME>
 firebase deploy
+```
 
 ## oAth Configuration
 
@@ -105,3 +109,16 @@ Terms & Conditions: `https://www.canwork.io/assets/docs/canwork-terms-and-condit
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+### General dev & dev ops notes:
+
+#### Generate a new travis encrypted config file
+
+May require installation and login of [travis ruby command line utility first](https://github.com/travis-ci/travis.rb)
+
+1. Delete the existing encryption env var in [travis settings](https://travis-ci.com/canyaio/can-work/settings)
+1. Generate a new encrypted file `travis encrypt-file src/environments/environment.staging.ts`
+1. Move the file over the top of the previous version `mv environment.staging.ts.enc src/environments/environment.staging.ts.enc`
+1. Update `.travis.yml`  `openssl ...` decryption line to match the new xxx_key and xxx_iv environment vars
+1. `git push`
+1. Check [travis build status](https://travis-ci.com/canyaio/can-work)
