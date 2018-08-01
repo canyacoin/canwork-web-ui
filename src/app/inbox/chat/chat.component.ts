@@ -83,10 +83,8 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-
     const ua = window.navigator.userAgent;
     this.isOnMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua);
-   
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       if (user && user !== this.currentUser) {
         this.currentUser = user;
