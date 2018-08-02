@@ -135,7 +135,7 @@ class ClientJobRequestNotification extends AEmailNotification {
   }
 }
 
-// Send notification to provider that the requested job has been accepted
+// Send notification to client that the requested job has been accepted by the provider
 class ClientJobRequestAcceptedNotification extends AEmailNotification {
   constructor() {
     super();
@@ -149,21 +149,21 @@ class ClientJobRequestAcceptedNotification extends AEmailNotification {
       console.error(error);
     }
 
-    const title = `Your work request to ${this.providerData.name} has been accepted`
+    const title = `Your work request to ${this.clientData.name} has been accepted`
     this.emailMessages.push({
-      to: this.providerData.email,
+      to: this.clientData.email,
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${this.providerData.name},<br>
-      ${this.clientData.name} has accepted your job request: "${this.jobData.information.description}". A payment into the escrow is now required to proceed.<br><br>
-      Please login to CanWork to review this job.`
+      Dear ${this.clientData.name},<br>
+      ${this.providerData.name} has accepted your job request: "${this.jobData.information.description}". A payment into the escrow is now required to proceed.<br><br>
+      Please login to CANWork to review this job.`
     });
     console.log('+ dump emailMessages:', this.emailMessages);
   }
 }
 
-// Send notification to provider that the requested job has been declined
+// Send notification to client that the requested job has been declined
 class ClientJobRequestDeclinedNotification extends AEmailNotification {
   constructor() {
     super();
@@ -179,12 +179,12 @@ class ClientJobRequestDeclinedNotification extends AEmailNotification {
 
     const title = `Your work request to ${this.providerData.name} has been declined`
     this.emailMessages.push({
-      to: this.providerData.email,
+      to: this.clientData.email,
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${this.providerData.name},<br>
-      ${this.clientData.name} has declined your job request: "${this.jobData.information.description}". Please login to CanWork to review this job.`
+      Dear ${this.clientData.name},<br>
+      ${this.providerData.name} has declined your job request: "${this.jobData.information.description}". Please login to CANWork to review this job.`
     });
     console.log('+ dump emailMessages:', this.emailMessages);
   }
@@ -211,7 +211,7 @@ class ClientJobRequestCounterOfferNotification extends AEmailNotification {
       title: title,
       bodyHtml: `
       Dear ${this.providerData.name},<br>
-      ${this.clientData.name} has made a counter offer to your job request: "${this.jobData.information.description}". Please login to CanWork to review this job.`
+      ${this.clientData.name} has made a counter offer to your job request: "${this.jobData.information.description}". Please login to CANWork to review this job.`
     });
     console.log('+ dump emailMessages:', this.emailMessages);
   }
