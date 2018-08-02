@@ -1,12 +1,12 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { EthService } from '@canyaio/canpay-lib';
+import { EthService, CanYaCoinEthService } from '@canyaio/canpay-lib';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 
-import { environment } from '../../environments/environment';
+import { environment } from '@env/environment';
 import { canyaAbi, daoAbi } from '../contracts';
 
 declare let require: any;
@@ -14,8 +14,14 @@ declare let require: any;
 @Injectable()
 export class CanWorkEthService extends EthService {
 
-  constructor(private http: Http) {
+  constructor(
+    private http: Http,
+    private canyaCoinEthService: CanYaCoinEthService) {
     super({ contracts: { canyaCoinAddress: environment.contracts.canYaCoin } });
+  }
+
+  async getCanYaBalance(userAddress: string = this.canyaCoinEthService.getOwnerAccount()) {
+    return this.canyaCoinEthService.getCanYaBalance(userAddress)
   }
 
   async getCanToUsd(): Promise<number> {

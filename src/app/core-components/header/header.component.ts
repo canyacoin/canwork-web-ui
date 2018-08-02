@@ -6,10 +6,10 @@ import { NetworkType, WalletType, Web3LoadingStatus } from '@canyaio/canpay-lib'
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Subscription } from 'rxjs/Subscription';
 
-import { User } from '../../core-classes/user';
-import { AuthService } from '../../core-services/auth.service';
-import { CanWorkEthService } from '../../core-services/eth.service';
-import { NavService } from '../../core-services/nav.service';
+import { User } from '@class/user';
+import { AuthService } from '@service/auth.service';
+import { CanWorkEthService } from '@service/eth.service';
+import { NavService } from '@service/nav.service';
 
 @Component({
   selector: 'app-header',
