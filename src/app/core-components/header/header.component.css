@@ -106,3 +106,13 @@ a.canya-login {
 .btn-canya-tools:hover{
   box-shadow: 0 0 10px 0 rgba(0,0,0,0.1) !important;
 }
+
+.mobile-only{
+  display: none;
+}
+
+@media screen and (max-width: 768px){
+  .mobile-only{
+    display: block;
+  }
+}

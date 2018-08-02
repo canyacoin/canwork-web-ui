@@ -3663,6 +3663,12 @@ button:focus {
   padding-top: 7rem;
 }
 
+@media (max-width: 767px){
+  .faq-content-hero-text {
+    padding-top: 0px;
+  }
+}
+
 .faq-row {
   background-color: #f8f9fa;
   margin: 15px 0 15px 0;

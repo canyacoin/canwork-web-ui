@@ -27,6 +27,11 @@
           <a class="nav-link" [routerLink]="['/tools']" style="opacity: 1.0;">
             <img class="mb-5" src="assets/img/CanApps.svg" width="auto" height="18px">
           </a>
+        </li> 
+        <li class="nav-item mobile-only">
+          <a class="nav-link" [routerLink]="['/faq']"> 
+            FAQ
+          </a>
         </li>
         <li *ngIf="currentUser" class="nav-item">
           <a class="nav-link" [routerLink]="['/inbox/chat']">
