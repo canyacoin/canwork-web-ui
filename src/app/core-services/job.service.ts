@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { CanPayService, Operation, View } from '@canyaio/canpay-lib';
 import { Job, JobState, Payment, PaymentType, TimeRange, WorkType } from '@class/job';
 import {
-    ActionType, AuthoriseEscrowAction, CounterOfferAction, EnterEscrowAction, IJobAction
+  ActionType, AuthoriseEscrowAction, CounterOfferAction, EnterEscrowAction, IJobAction
 } from '@class/job-action';
 import { Upload } from '@class/upload';
 import { User, UserType } from '@class/user';

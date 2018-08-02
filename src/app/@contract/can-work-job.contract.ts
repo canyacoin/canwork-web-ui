@@ -13,8 +13,14 @@ export class CanWorkJobContract {
 
   address: string
 
+  gasPrice: number
+
   constructor(
-    private eth: EthService) { }
+    private eth: EthService) {
+
+    this.gasPrice = this.eth.web3js.utils.toWei('8', 'gwei')
+
+  }
 
   setAddress(address: string) {
     this.instance.options.address = address
@@ -25,7 +31,7 @@ export class CanWorkJobContract {
   }
 
   connect() {
-    let _contract = new this.eth.web3js.eth.Contract(CanWorkJobContractInterface.abi)
+    const _contract = new this.eth.web3js.eth.Contract(CanWorkJobContractInterface.abi)
 
     this.instance = _contract
 
@@ -40,19 +46,19 @@ export class CanWorkJobContract {
 
       try {
 
-        let txObject = await this.instance.methods.createJob(this.eth.web3js.utils.padRight(job.hexId, 32), client.ethAddress, provider.ethAddress, job.canInEscrow * (10 ** 6));
+        const txObject = await this.instance.methods.createJob(this.eth.web3js.utils.padRight(job.hexId, 32), client.ethAddress, provider.ethAddress, job.canInEscrow * (10 ** 6));
 
-        let gas = await txObject.estimateGas()
+        const gas = await txObject.estimateGas()
 
-        let txOptions = {
+        const txOptions = {
           from: client.ethAddress,
           value: '0x0',
           gasLimit: gas,
-          gasPrice: 32000000000,
+          gasPrice: this.gasPrice,
           data: txObject.encodeABI(),
         }
 
-        let tx = txObject.send(txOptions)
+        const tx = txObject.send(txOptions)
 
         tx.on('transactionHash', hash => {
           console.log(hash)
@@ -81,7 +87,7 @@ export class CanWorkJobContract {
           from: fromAddr,
           value: '0x0',
           gasLimit: 200000,
-          gasPrice: 32000000000,
+          gasPrice: this.gasPrice,
           data: txObject.encodeABI(),
         };
 
