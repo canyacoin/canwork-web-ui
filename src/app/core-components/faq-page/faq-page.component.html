@@ -25,7 +25,7 @@
       </div>
       <div *ngIf = "!isOnMobile" > 
       <div class="question-card card" *ngFor="let faq of queryFaqs;let i = index">
-          <a  class=" question-card-header"  data-toggle="collapse" [attr.data-target]="'#' + faq.index" aria-expanded="true"
+          <a  class="p-20 question-card-header"  data-toggle="collapse" [attr.data-target]="'#' + faq.index" aria-expanded="true"
           [attr.aria-controls]="faq.index"> 
         <div class="row" id="headingOne">
             <div class="col-11">
