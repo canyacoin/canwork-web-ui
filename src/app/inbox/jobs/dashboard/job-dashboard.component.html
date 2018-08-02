@@ -19,34 +19,34 @@
         Hmm.. you dont have any jobs
       </div>
       <div *ngIf="jobs && jobs.length > 0">
-        <div *ngFor="let job of jobs" class="card job-dashboard-card mb-15 p-20 pointer" [routerLink]="['/inbox/job', job.id]" >
+        <div *ngFor="let job of jobs" class="card job-dashboard-card mb-15 p-20 pointer" [routerLink]="['/inbox/job', job.id]">
           <div class="row job-info">
             <div class="col-lg-8 col-md-6 col-sm-8">
               <div class="row">
                 <h5 class="col-lg-12">{{job.information.title}}
-                  
+
                 </h5>
               </div>
               <div class="row">
                 <span class="col-lg-12">
-                  <div *ngIf ="currentUser.type=='User'">
-                      <h6 class="fw-500">Posted To : {{job.otherParty?.name}}</h6> 
+                  <div *ngIf="currentUser.type=='User'">
+                    <h6 class="fw-500">Posted To : {{job.otherParty?.name}}</h6>
                   </div>
-                  <div *ngIf ="currentUser.type=='Provider'">
-                      <h6 class="fw-500">Posted By : {{job.otherParty?.name}}</h6> 
-                  </div>  
+                  <div *ngIf="currentUser.type=='Provider'">
+                    <h6 class="fw-500">Posted By : {{job.otherParty?.name}}</h6>
+                  </div>
                 </span>
               </div>
               <div class="row">
                 <div class="col-xs-2 col-sm-4 col-md-3 col-lg-2">
-                  <div *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}" >
-                  </div> 
+                  <div *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
+                  </div>
                 </div>
                 <div class="col-xs-10 col-sm-8 col-md-9 col-lg-10">
                   <h5 class="fw-500 my-10">Description</h5>
                   <div style="max-height:50px;">
                     <p style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
-                       {{job.information.description}}
+                      {{job.information.description}}
                     </p>
                   </div>
                 </div>
@@ -60,7 +60,7 @@
               </div>
               <div class="row">
                 <div class="col-12">
-                  <app-status-icon [job]="job"></app-status-icon>
+                  <app-status-icon [job]="job" [currentUserType]="userType"></app-status-icon>
                 </div>
               </div>
             </div>

@@ -120,8 +120,11 @@ export class FaqPageComponent implements OnInit {
   ]
   queryFaqs: any = [];
   constructor() { }
-
+  isOnMobile = false;
+  
   ngOnInit() {
+    const ua = window.navigator.userAgent;
+    this.isOnMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua);
     this.onSearch('');
   }
   onKeyUp(event: any) {

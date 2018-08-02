@@ -47,6 +47,17 @@ export class RaiseDisputeAction extends IJobAction {
     }
 }
 
+export class AuthoriseEscrowAction extends IJobAction {
+    txId: string;
+    amountCan: number;
+
+    constructor(executedBy: UserType, txId: string, amountCan: number) {
+        super(ActionType.authoriseEscrow, executedBy);
+        this.txId = txId;
+        this.amountCan = amountCan;
+    }
+}
+
 export class EnterEscrowAction extends IJobAction {
     txId: string;
     amountCan: number;
@@ -58,25 +69,14 @@ export class EnterEscrowAction extends IJobAction {
     }
 }
 
-export class ConfirmJobRequestAction extends IJobAction {
-    txId: string;
-    amountCan: number;
-
-    constructor(executedBy: UserType, txId: string, amountCan: number) {
-        super(ActionType.confirmJobRequest, executedBy);
-        this.txId = txId;
-        this.amountCan = amountCan;
-    }
-}
-
 export enum ActionType {
     createJob = 'Create job',
     cancelJob = 'Cancel job',
     declineTerms = 'Decline terms',
     counterOffer = 'Counter offer',
     acceptTerms = 'Accept terms',
-    enterEscrow = 'Add funds to escrow',
-    confirmJobRequest = 'Confirm job request',
+    authoriseEscrow = 'Authorise escrow',
+    enterEscrow = 'Send CAN to escrow',
     addMessage = 'Add message',
     finishedJob = 'Mark as complete',
     acceptFinish = 'Complete job',

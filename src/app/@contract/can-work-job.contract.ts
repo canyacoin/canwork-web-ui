@@ -13,10 +13,16 @@ export class CanWorkJobContract {
 
   address: string
 
-  constructor(
-    private eth: EthService){}
+  gasPrice: number
 
-  setAddress(address: string){
+  constructor(
+    private eth: EthService) {
+
+    this.gasPrice = this.eth.web3js.utils.toWei('8', 'gwei')
+
+  }
+
+  setAddress(address: string) {
     this.instance.options.address = address
     this.instance._address = address
     this.address = address
@@ -24,8 +30,8 @@ export class CanWorkJobContract {
     return this
   }
 
-  connect(){
-    let _contract = new this.eth.web3js.eth.Contract(CanWorkJobContractInterface.abi)
+  connect() {
+    const _contract = new this.eth.web3js.eth.Contract(CanWorkJobContractInterface.abi)
 
     this.instance = _contract
 
@@ -34,26 +40,25 @@ export class CanWorkJobContract {
     return this
   }
 
-  async createJob(job: Job, client: User, provider: User){
+  async createJob(job: Job, client: User, provider: User) {
 
     return new Promise(async (resolve, reject) => {
 
       try {
 
-        let txObject = await this.instance.methods.createJob(job.hexId, client.ethAddress, provider.ethAddress, job.canInEscrow)
+        const txObject = await this.instance.methods.createJob(this.eth.web3js.utils.padRight(job.hexId, 32), client.ethAddress, provider.ethAddress, job.canInEscrow * (10 ** 6));
 
-        let gas = await txObject.estimateGas()
+        const gas = await txObject.estimateGas()
 
-        let txOptions = {
+        const txOptions = {
           from: client.ethAddress,
           value: '0x0',
-          gas: gas,
           gasLimit: gas,
-          gasPrice: 32000000000,
+          gasPrice: this.gasPrice,
           data: txObject.encodeABI(),
         }
 
-        let tx = txObject.send(txOptions)
+        const tx = txObject.send(txOptions)
 
         tx.on('transactionHash', hash => {
           console.log(hash)
@@ -71,6 +76,36 @@ export class CanWorkJobContract {
         reject(error)
       }
     })
+  }
+
+  async completeJob(job: Job, fromAddr: string) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const txObject = await this.instance.methods.completeJob(this.eth.web3js.utils.padRight(job.hexId, 32));
+
+        const txOptions = {
+          from: fromAddr,
+          value: '0x0',
+          gasLimit: 200000,
+          gasPrice: this.gasPrice,
+          data: txObject.encodeABI(),
+        };
+
+        const tx = txObject.send(txOptions);
+
+        tx.on('transactionHash', hash => {
+          console.log(hash);
+        });
+        tx.on('error', error => {
+          reject(error);
+        });
+        tx.on('receipt', receipt => {
+          resolve(receipt);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 
 }

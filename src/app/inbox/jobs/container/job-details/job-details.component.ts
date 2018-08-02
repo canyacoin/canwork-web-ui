@@ -81,8 +81,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  actionIsEnterEscrow(action: ActionType): boolean {
-    return action === ActionType.enterEscrow;
+  actionIsDisabled(action: ActionType): boolean {
+    return action === ActionType.addMessage || action === ActionType.dispute;
   }
 
   get availableActions(): ActionType[] {
@@ -114,7 +114,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         return "The job's terms has been accepted. The client should now send the agreed amount of money to the escrow to commence the job.";
       case JobState.complete:
         return 'This job has been marked as complete by the client.';
-      case JobState.inEscrow:
+      case JobState.authorisedEscrow:
         return 'The funds have been sent to the escrow. Confirm the job request to begin.';
       default:
         return '';
@@ -141,7 +141,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         return 'Awaiting payment to escrow';
       case JobState.complete:
         return 'Completed';
-      case JobState.inEscrow:
+      case JobState.authorisedEscrow:
         return 'Funds in escrow';
       default:
         return '';

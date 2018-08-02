@@ -29,7 +29,7 @@
         <div class="row">
           <div class="col-12">
             <!-- Current state -->
-            <app-status-icon [job]="job"></app-status-icon>
+            <app-status-icon [job]="job" [currentUserType]="currentUserType"></app-status-icon>
           </div>
         </div>
         <div class="row">
@@ -74,7 +74,7 @@
       </div>
       <div class="row">
         <div class="col-12">
-          <app-status-icon [job]="job"></app-status-icon>
+          <app-status-icon [job]="job" [currentUserType]="currentUserType"></app-status-icon>
         </div>
       </div>
     </div>
@@ -86,7 +86,7 @@
           </div>
           <div *ngIf="availableActions.length > 0" class="col-lg-10 col-sm-12 col-xs-12 action-group">
             <button *ngFor="let action of availableActions" class="btn action-btn mt-5 btn-{{getActionColour(action)}} btn-outline btn-sm"
-              (click)="executeAction(action)" [disabled]="actionIsEnterEscrow(action)">
+              (click)="executeAction(action)" [disabled]="actionIsDisabled(action)">
               {{action}}
             </button>
           </div>

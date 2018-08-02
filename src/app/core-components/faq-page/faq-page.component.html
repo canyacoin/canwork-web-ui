@@ -23,8 +23,9 @@
           <img src="https://canya.io/images/CanYa_Consult.gif">
         </div>
       </div>
+      <div *ngIf = "!isOnMobile" > 
       <div class="question-card card" *ngFor="let faq of queryFaqs;let i = index">
-          <a  class=" question-card-header"  data-toggle="collapse" [attr.data-target]="'#' + faq.index" aria-expanded="true"
+          <a  class="p-20 question-card-header"  data-toggle="collapse" [attr.data-target]="'#' + faq.index" aria-expanded="true"
           [attr.aria-controls]="faq.index"> 
         <div class="row" id="headingOne">
             <div class="col-11">
@@ -41,6 +42,15 @@
           <div class="card-body p-20">
             {{faq.a}}
           </div>
+        </div>
+      </div>
+      </div>
+      <div *ngIf = "isOnMobile"> 
+        <div class="question-card card" *ngFor="let faq of queryFaqs;let i = index">
+            <div class="question-card-header"> 
+                <h6 class="p-20 text-left">{{faq.q}}</h6>
+            </div> 
+            <p class="p-20">{{faq.a}}</p>
         </div>
       </div>
     </div>
