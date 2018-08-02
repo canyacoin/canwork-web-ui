@@ -1,4 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { Http, Response } from '@angular/http';
 import { EthService } from '@canyaio/canpay-lib';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
@@ -13,8 +14,16 @@ declare let require: any;
 @Injectable()
 export class CanWorkEthService extends EthService {
 
-  constructor() {
+  constructor(private http: Http) {
     super({ contracts: { canyaCoinAddress: environment.contracts.canYaCoin } });
+  }
+
+  async getCanToUsd(): Promise<number> {
+    const canToUsdResp = await this.http.get('https://api.coinmarketcap.com/v2/ticker/2343/?convert=USD').toPromise();
+    if (canToUsdResp.ok) {
+      return Promise.resolve(JSON.parse(canToUsdResp.text())['data']['quotes']['USD']['price'] || 0);
+    }
+    return Promise.resolve(0);
   }
 
   parseHexToA(hexx) {
@@ -26,6 +35,5 @@ export class CanWorkEthService extends EthService {
       }
     }
     return str;
-
   }
 }

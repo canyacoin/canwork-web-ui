@@ -1,23 +1,15 @@
 import { AfterViewInit, Component, ComponentRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Http, Response } from '@angular/http';
-import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
-
 import { Job, PaymentType } from '@class/job';
-
 import {
-    ActionType,
-    AddMessageAction,
-    CounterOfferAction,
-    IJobAction,
-    RaiseDisputeAction,
-    EnterEscrowAction,
-    ConfirmJobRequestAction
+    ActionType, AddMessageAction, AuthoriseEscrowAction, CounterOfferAction, EnterEscrowAction,
+    IJobAction, RaiseDisputeAction
 } from '@class/job-action';
-
 import { UserType } from '@class/user';
 import { JobService } from '@service/job.service';
 import { getUsdToCan } from '@util/currency-conversion';
+import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
 
 export class ActionDialogOptions {
   job: Job;
@@ -42,6 +34,8 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
   job: Job;
   action: IJobAction;
 
+  executing = false;
+
   actionTypes = ActionType;
   paymentTypes = PaymentType;
 
@@ -53,6 +47,7 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
   }
 
   async handleAction() {
+    this.executing = true;
     try {
       let action: IJobAction;
       switch (this.actionType) {
@@ -65,11 +60,11 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
         case ActionType.dispute:
           action = new RaiseDisputeAction(this.userType, ''); // TODO: Add value from form here
           break;
-        case ActionType.enterEscrow:
-          action = new EnterEscrowAction(this.userType, '', 0)
+        case ActionType.authoriseEscrow:
+          action = new AuthoriseEscrowAction(this.userType, '', 0);
           break;
-        case ActionType.confirmJobRequest:
-          action = new ConfirmJobRequestAction(this.userType, '', this.job.canInEscrow)
+        case ActionType.enterEscrow:
+          action = new EnterEscrowAction(this.userType, '', this.job.canInEscrow);
           break;
         default:
           action = new IJobAction(this.actionType, this.userType);
@@ -78,7 +73,10 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
       const success = await this.jobService.handleJobAction(this.job, action);
       if (success) {
         this.result = true;
+        this.executing = false;
         this.close();
+      } else {
+        this.executing = false;
       }
     } catch (e) {
       console.log('error');
@@ -136,9 +134,9 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
         return 'If you wish to make a counter offer, enter the amount you propose for the job<br/>\nUSD' + this.job.paymentType === PaymentType.hourly ? '/hr' : '';
       case ActionType.acceptTerms:
         return 'Are you sure?';
-      case ActionType.enterEscrow:
+      case ActionType.authoriseEscrow:
         return 'You are about to pay the agreed amount of CAN to the escrow. Are you sure?';
-      case ActionType.confirmJobRequest:
+      case ActionType.enterEscrow:
         return 'This will create a relationship between the provider address and your address in the escrow contract.';
       case ActionType.addMessage:
         return 'Are you sure?';

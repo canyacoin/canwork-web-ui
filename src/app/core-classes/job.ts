@@ -9,6 +9,7 @@ export class Job {
     information: JobDescription;
     paymentType: PaymentType;
     budget: number;
+    budgetCan: number;
     canInEscrow: number;
     paymentLog: Array<Payment> = [];
     state: JobState;
@@ -52,8 +53,8 @@ export enum JobState {
     providerCounterOffer = 'Provider counter',
     clientCounterOffer = 'Client counter',
     termsAcceptedAwaitingEscrow = 'Awaiting Escrow',
-    inEscrow = 'Funds In Escrow',
-    createdJob = 'Job registered in Escrow',
+    authorisedEscrow = 'Funds In Escrow',
+    inEscrow = 'Job started',
     workPendingCompletion = 'Pending completion',
     inDispute = 'Disputed',
     complete = 'Complete'
