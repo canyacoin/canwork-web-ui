@@ -26,6 +26,7 @@ import { FaqComponent } from './wallet-install/faq/faq.component';
 import { InstructionsComponent } from './wallet-install/instructions/instructions.component';
 import { WalletInstallComponent } from './wallet-install/wallet-install.component';
 import { WindowScrollDirective } from './window-scroll.directive';
+import { StatusLightComponent } from './header/status-light/status-light.component';
 
 @NgModule({
   imports: [
@@ -56,7 +57,8 @@ import { WindowScrollDirective } from './window-scroll.directive';
     BackButtonComponent,
     WalletInstallComponent,
     WindowScrollDirective,
-    VStepperComponent
+    VStepperComponent,
+    StatusLightComponent
   ],
   exports: [
     AttachmentComponent,

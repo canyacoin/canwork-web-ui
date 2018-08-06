@@ -68,28 +68,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.navSub = this.navService.hideSearchBar$.subscribe((hide: boolean) => {
       this.hideSearchBar = hide;
     });
-    this.web3Sub = this.ethService.web3Status$.subscribe((state: Web3LoadingStatus) => {
-      this.web3State = state;
-      this.netType = this.ethService.netType;
-      if (this.web3State === Web3LoadingStatus.complete) {
-        this.accountSub = this.ethService.account$.subscribe((acc: string) => {
-          this.account = acc;
-          if (acc === undefined || acc == null) {
-            clearInterval(this.accountInterval);
-          } else {
-            this.updateBalanceAsync();
-            this.accountInterval = setInterval(async () => {
-              this.updateBalanceAsync();
-            }, 120000);
-          }
-        });
-      }
-    });
-  }
-
-  async updateBalanceAsync() {
-    const bal = await this.ethService.getCanYaBalance();
-    this.canBalance = bal;
   }
 
   initUser() {
@@ -112,21 +90,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     clearInterval(this.accountInterval);
   }
 
-  getWeb3Color(): string {
-    switch (this.web3State) {
-      case Web3LoadingStatus.complete:
-        return '#30D7A9';
-      case Web3LoadingStatus.noAccountsAvailable:
-      case Web3LoadingStatus.loading:
-        return '#ffc600';
-      case Web3LoadingStatus.error:
-      case Web3LoadingStatus.noMetaMask:
-      case Web3LoadingStatus.wrongNetwork:
-        return '#ff4954';
-      default:
-        return '#ff4954';
-    }
-  }
   onFocus(event: any) {
     this.showFilters = true;
   }
