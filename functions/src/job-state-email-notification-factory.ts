@@ -1,6 +1,7 @@
+import { ActionType } from './enums';
+
 const sgMail = require('@sendgrid/mail');
 const replyTo = 'noreply@canya.com';
-
 /*
  * Interfaces
  */
@@ -204,6 +205,10 @@ class ClientJobRequestCounterOfferNotification extends AEmailNotification {
       console.error(error);
     }
 
+    // Loop over job actions, find last matching current action type 'Counter offer'
+    // If executedBy provider... send email to client
+    // Else exectuedBy client, send email to provider
+
     const title = `Your work request to ${this.clientData.name} has a counter offer`
     this.emailMessages.push({
       to: this.providerData.email,
@@ -278,21 +283,23 @@ class ClientJobRequestCommenceNotification extends AEmailNotification {
   }
 }
 
-export function notificationEmail(action: string) {
+export function notificationEmail(action: ActionType) {
   console.log('+ build factory object for action:', action)
   switch (action) {
-    case 'Create job': {
+    case ActionType.createJob: {
       return new ClientJobRequestNotification();
-    } case 'Accept terms': {
+    } case ActionType.acceptTerms: {
       return new ClientJobRequestAcceptedNotification();
-    } case 'Decline terms': {
+    } case ActionType.declineTerms: {
       return new ClientJobRequestDeclinedNotification();
-    } case 'Counter offer': {
+    } case ActionType.counterOffer: {
+      // could be by either provider or client
       return new ClientJobRequestCounterOfferNotification();
-    } case 'Add funds to escrow': {
+    } case ActionType.enterEscrow: {
+      // actually commence the work
       return new ClientJobRequestEscrowedFundsNotification();
-    } case '-- provider to commence the job --': {
-      return new ClientJobRequestCommenceNotification();
+      // } case ActionType.enterEscrow: {
+      //   return new ClientJobRequestCommenceNotification();
     } default: {
       console.log('! unknown action type: ', action)
       return undefined;
