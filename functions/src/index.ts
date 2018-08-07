@@ -338,12 +338,12 @@ exports.updateIndexProviderData = functions.firestore
       sgMail.send({
         to: user.email,
         from: 'support@canya.com',
-        subject: `You've been approved as a CanWork provider!`,
+        subject: `You have been approved as a CANWork provider!`,
         html: html,
         substitutions: {
-          title: `Congratulations, you are now a CanWork provider!`,
-          returnLinkText: `Browse the providers' index`,
-          returnLinkUrl: `https://canwork.io/home`,
+          title: `Congratulations, ${user.name}. 🎉🎊🎉`,
+          returnLinkText: `Edit my profile`,
+          returnLinkUrl: `https://canwork.io/profile/edit`,
         },
         templateId: '4fc71b33-e493-4e60-bf5f-d94721419db5'
       }, async (error, result) => {
