@@ -1,0 +1,27 @@
+[debug] [2018-08-07T03:48:54.996Z] ----------------------------------------------------------------------
+[debug] [2018-08-07T03:48:55.002Z] Command:       /Users/GustavoIbarra/.nvm/versions/node/v8.11.3/bin/node /Users/GustavoIbarra/.nvm/versions/node/v8.11.3/bin/firebase deploy -P staging-can-work --only functions
+[debug] [2018-08-07T03:48:55.002Z] CLI Version:   4.0.3
+[debug] [2018-08-07T03:48:55.002Z] Platform:      darwin
+[debug] [2018-08-07T03:48:55.002Z] Node Version:  v8.11.3
+[debug] [2018-08-07T03:48:55.003Z] Time:          Mon Aug 06 2018 21:48:55 GMT-0600 (CST)
+[debug] [2018-08-07T03:48:55.003Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-08-07T03:48:55.034Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-08-07T03:48:55.035Z] > authorizing via signed-in user
+[debug] [2018-08-07T03:48:55.039Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-08-07T03:48:55.040Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ { refresh_token: '1/CXj_xdQedcVeuqECDyCrbi6XNSCgsggr4AH2toOT1Wk',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Mon Aug 06 2018 21:48:55 GMT-0600 (CST)
+[debug] [2018-08-07T03:48:55.658Z] <<< HTTP RESPONSE 200
+[debug] [2018-08-07T03:48:55.697Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/staging-can-work  
+  
+ Mon Aug 06 2018 21:48:55 GMT-0600 (CST)
+[debug] [2018-08-07T03:48:56.277Z] <<< HTTP RESPONSE 200
+[debug] [2018-08-07T03:48:56.279Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/staging-can-work/tokens  
+  
+ Mon Aug 06 2018 21:48:56 GMT-0600 (CST)
+[debug] [2018-08-07T03:48:56.710Z] <<< HTTP RESPONSE 200
