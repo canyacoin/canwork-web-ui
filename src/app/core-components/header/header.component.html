@@ -27,7 +27,7 @@
           <a class="nav-link" [routerLink]="['/tools']" style="opacity: 1.0;">
             <img class="mb-5" src="assets/img/CanApps.svg" width="auto" height="18px">
           </a>
-        </li> 
+        </li>  
         <li class="nav-item mobile-only">
           <a class="nav-link" [routerLink]="['/faq']"> 
             FAQ
@@ -38,28 +38,9 @@
             Inbox
           </a>
           <span *ngIf="hasUnreadMessages" class="badge badge-round badge-danger"></span>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" role="button" id="connectionDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">
-            <i class="fa fa-circle fs-9" [ngStyle]="{'color': getWeb3Color()}"></i>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right " aria-labelledby="connectionDropdownMenuLink">
-            <div class="dropdown-item w-250 d-flex justify-content-between">
-              <span class="text-left">
-                <i class="fa fa-circle fs-10 mb-2 pr-30" [ngStyle]="{'color': getWeb3Color()}"></i>Ethereum Network:</span>
-              <span>{{netType}}</span>
-            </div>
-            <div *ngIf="account" class="dropdown-divider"></div>
-            <div *ngIf="account" class="dropdown-item d-flex justify-content-between" (click)="updateBalanceAsync()">
-              <span class="pl-30 pr-20 text-left">Balance:</span>
-              <span>
-                {{canBalance}}
-                <img class="logo-default pl-10 pointer" (click)="updateBalanceAsync()" src="assets/img/round-icon.svg" width="auto" height="18px"
-                  alt="logo">
-              </span>
-            </div>
-          </div>
+        </li> 
+        <li class="nav-item dropdown"> 
+          <app-status-light></app-status-light>
         </li>
         <li *ngIf="!currentUser" class="nav-item">
           <a class="nav-link">

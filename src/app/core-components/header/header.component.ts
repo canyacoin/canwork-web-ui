@@ -3,13 +3,11 @@ import { NgSwitchCase } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NetworkType, WalletType, Web3LoadingStatus } from '@canyaio/canpay-lib';
-import { AngularFirestore } from 'angularfire2/firestore';
-import { Subscription } from 'rxjs/Subscription';
-
 import { User } from '@class/user';
 import { AuthService } from '@service/auth.service';
-import { CanWorkEthService } from '@service/eth.service';
 import { NavService } from '@service/nav.service';
+import { AngularFirestore } from 'angularfire2/firestore';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-header',
@@ -41,20 +39,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   authSub: Subscription;
   navSub: Subscription;
 
-  web3Sub: Subscription;
-  accountSub: Subscription;
-  web3State: Web3LoadingStatus;
-  netType: NetworkType;
-  accountInterval: any;
-  account: string;
-  canBalance = '0.00';
-
   providerCategories = ['Content Creators', 'Designers & Creatives', 'Financial experts', 'Marketing & SEO', 'Software developers', 'Virtual assistants'];
 
   constructor(private afs: AngularFirestore,
     private navService: NavService,
     private authService: AuthService,
-    private ethService: CanWorkEthService,
     private router: Router) {
   }
 
@@ -68,28 +57,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.navSub = this.navService.hideSearchBar$.subscribe((hide: boolean) => {
       this.hideSearchBar = hide;
     });
-    this.web3Sub = this.ethService.web3Status$.subscribe((state: Web3LoadingStatus) => {
-      this.web3State = state;
-      this.netType = this.ethService.netType;
-      if (this.web3State === Web3LoadingStatus.complete) {
-        this.accountSub = this.ethService.account$.subscribe((acc: string) => {
-          this.account = acc;
-          if (acc === undefined || acc == null) {
-            clearInterval(this.accountInterval);
-          } else {
-            this.updateBalanceAsync();
-            this.accountInterval = setInterval(async () => {
-              this.updateBalanceAsync();
-            }, 120000);
-          }
-        });
-      }
-    });
-  }
-
-  async updateBalanceAsync() {
-    const bal = await this.ethService.getCanYaBalance();
-    this.canBalance = bal;
   }
 
   initUser() {
@@ -107,26 +74,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.routerSub) { this.routerSub.unsubscribe(); }
     if (this.authSub) { this.authSub.unsubscribe(); }
     if (this.navSub) { this.navSub.unsubscribe(); }
-    if (this.web3Sub) { this.web3Sub.unsubscribe(); }
-    if (this.accountSub) { this.accountSub.unsubscribe(); }
-    clearInterval(this.accountInterval);
   }
 
-  getWeb3Color(): string {
-    switch (this.web3State) {
-      case Web3LoadingStatus.complete:
-        return '#30D7A9';
-      case Web3LoadingStatus.noAccountsAvailable:
-      case Web3LoadingStatus.loading:
-        return '#ffc600';
-      case Web3LoadingStatus.error:
-      case Web3LoadingStatus.noMetaMask:
-      case Web3LoadingStatus.wrongNetwork:
-        return '#ff4954';
-      default:
-        return '#ff4954';
-    }
-  }
   onFocus(event: any) {
     this.showFilters = true;
   }
