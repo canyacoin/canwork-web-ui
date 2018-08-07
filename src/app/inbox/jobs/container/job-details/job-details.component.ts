@@ -115,7 +115,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       case JobState.complete:
         return 'This job has been marked as complete by the client.';
       case JobState.authorisedEscrow:
-        return 'The funds have been sent to the escrow. Confirm the job request to begin.';
+        return 'The escrow has been authorised by the client, they can now send the funds to escrow.';
       default:
         return '';
     }
@@ -124,7 +124,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   get stateStatus(): string {
     switch (this.job.state) {
       case JobState.offer:
-        return 'Job offered'
+        return 'Job offered';
       case JobState.workPendingCompletion:
         return 'Pending completion';
       case JobState.cancelled:
@@ -138,14 +138,16 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       case JobState.clientCounterOffer:
         return 'Offer countered by client';
       case JobState.termsAcceptedAwaitingEscrow:
-        return 'Awaiting payment to escrow';
+        return this.currentUserType === UserType.client ? 'Awaiting escrow authorisation' : 'Awaiting payment to escrow';
+      case JobState.authorisedEscrow:
+        return this.currentUserType === UserType.client ? 'Awaiting escrow deposit' : 'Awaiting payment to escrow';
+      case JobState.inEscrow:
+        return 'Funds in escrow';
       case JobState.complete:
         return 'Completed';
-      case JobState.authorisedEscrow:
-        return 'Funds in escrow';
       default:
         return '';
-    }
+      }
   }
 
   getActionColour(action: ActionType): string {

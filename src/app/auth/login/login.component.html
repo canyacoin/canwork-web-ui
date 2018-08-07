@@ -7,37 +7,44 @@
       <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 center-block text-center">
 
-          <div *ngIf="isOnMobile" class="d-block text-center">
-
-            <h5 style="width: 100%;">Login with Ethereum &amp; PIN code</h5>
-
-            <p>Your wallet address is:</p>
-
-            <pre>{{webViewEthAddress}}</pre>
-
-            <div *ngIf="mobileLoginState == ''" class="container d-flex h-100 flex-column justify-content-center">
-              <button (click)="generateAuthPinCodeAsync()" class="btn btn-primary" type="button">
-                Email me a pin code
-              </button>
+          <div *ngIf="isOnMobile " class="d-block text-center">
+            <div *ngIf="!showMobileLogin" style="display: block;">
+              <h5>Have you signed up on desktop?</h5>
+              <p>
+                For the best experience, you will need to sign up to CanWork on desktop before signing in on mobile.
+                <br>
+                <br>
+                If you already have an account, click the sign in button.
+              </p>
+              <br>
+              <button (click)="onClickMobileSignIn()" class="btn btn-primary">Sign In</button>
             </div>
+            <div *ngIf="showMobileLogin">
+              <h5 style="width: 100%;">Login with Ethereum &amp; PIN code</h5>
+              <p>Your wallet address is:</p> 
+              <pre>{{webViewEthAddress}}</pre> 
+              <div *ngIf="mobileLoginState == ''" class="container d-flex h-100 flex-column justify-content-center">
+                <button (click)="generateAuthPinCodeAsync()" class="btn btn-primary" type="button">
+                  Email me a pin code
+                </button>
+              </div>
+              <div *ngIf="mobileLoginState == 'sending-pin' || mobileLoginState == 'authentication-via-pin'" class="container d-flex h-100 flex-column justify-content-center">
+                <img src="assets/img/loader.svg" height="36px" alt="Loader">
+              </div>
+              <div *ngIf="mobileLoginState == 'sending-pin-success'" class="container d-flex h-100 flex-column justify-content-center">
+                <form>
+                  <label>Please check your email ({{pinDeliveredTo}}) for the pin code</label>
+                  <div class="form-group">
+                    <input type="text" id="authPin" #authPin class="form-control" placeholder="PIN" size="8">
+                  </div>
+                  <div class="form-group">
+                    <button (click)="ethereumAuthViaPinCodeAsync(authPin)" class="btn btn-primary" type="button">
+                      Login
+                    </button>
+                  </div>
+                </form>
+              </div>
 
-            <div *ngIf="mobileLoginState == 'sending-pin' || mobileLoginState == 'authentication-via-pin'" class="container d-flex h-100 flex-column justify-content-center">
-              <img src="assets/img/loader.svg" height="36px" alt="Loader">
-            </div>
-
-            <div *ngIf="mobileLoginState == 'sending-pin-success'" class="container d-flex h-100 flex-column justify-content-center">
-
-              <form>
-                <label>Please check your email ({{pinDeliveredTo}}) for the pin code</label>
-                <div class="form-group">
-                  <input type="text" id="authPin" #authPin class="form-control" placeholder="PIN" size="8">
-                </div>
-                <div class="form-group">
-                  <button (click)="ethereumAuthViaPinCodeAsync(authPin)" class="btn btn-primary" type="button">
-                    Login
-                  </button>
-                </div>
-              </form>
             </div>
           </div>
         </div>
