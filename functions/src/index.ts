@@ -18,7 +18,7 @@ import * as doT from 'dot';
  */
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { ActionType } from './enums';
+import { ActionType } from './job-action-type';
 import * as jobEmailfactory from './job-state-email-notification-factory';
 
 const faker = require('faker');
@@ -52,6 +52,7 @@ const serviceConfig = getFirebaseInstance(admin.app().options.projectId);
 
 const welcomeEmailTemplateHTML = doT.template(fs.readFileSync(path.join(__dirname, '../src/templates', 'email-welcome.html'), 'utf8'));
 const pinCodeEmailTemplateHTML = doT.template(fs.readFileSync(path.join(__dirname, '../src/templates', 'email-ethereum-login-pin.html'), 'utf8'));
+const approvedProviderTemplateHTML = doT.template(fs.readFileSync(path.join(__dirname, '../src/templates', 'email-approved-provider.html'), 'utf8'));
 
 exports.sendEmail = functions.https.onRequest(async (request, response) => {
   // TODO: move to express middleware
@@ -121,7 +122,7 @@ exports.jobStateEmailNotification = functions.https.onRequest((request, response
     });
 
 
-    let ja: ActionType = ActionType[jobAction];
+    const ja: ActionType = ActionType[jobAction];
     // check this work, or return, malformed status code
 
     const jobStateEmailer = jobEmailfactory.notificationEmail(ja);
@@ -323,11 +324,34 @@ exports.updateIndexProviderData = functions.firestore
     }
 
     // Check if the user was just white listed, and send email
-    if (beforeData.whitelisted === false && afterData.whitelisted === true) {
-      console.log('+ sending a accepted provider email...');
+    const userHasBeenWhitelisted = !beforeData.whitelisted && afterData.whitelisted
+    const userIsWhitelistedButEmailIsNotSent = afterData.whitelisted && !afterData.sentApprovedEmail
+    if (userHasBeenWhitelisted || userIsWhitelistedButEmailIsNotSent) {
+      console.log('+ sending a accepted provider email...')
 
-      // @Gus :)
+      const user = afterData
+      const html = approvedProviderTemplateHTML({ name: user.name })
 
+      const sgMail = require('@sendgrid/mail')
+      sgMail.setApiKey(sendgridApiKey);
+      sgMail.setSubstitutionWrappers('{{', '}}')
+      sgMail.send({
+        to: user.email,
+        from: 'support@canya.com',
+        subject: `You've been approved as a CanWork provider!`,
+        html: html,
+        substitutions: {
+          title: `Congratulations, you are now a CanWork provider!`,
+          returnLinkText: `Browse the providers' index`,
+          returnLinkUrl: `https://canwork.io/home`,
+        },
+        templateId: '4fc71b33-e493-4e60-bf5f-d94721419db5'
+      }, async (error, result) => {
+        if (error) {
+          console.error('! error sending message:', error.response.body)
+        }
+        await db.collection('users').doc(objectId).update({ sentApprovedEmail: true })
+      })
     }
 
     if (afterData.welcomeEmailSent && afterData.welcomeEmailSent === false && afterData.testUser !== true) {

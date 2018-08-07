@@ -1,4 +1,4 @@
-import { ActionType } from './enums';
+import { ActionType } from './job-action-type';
 
 const sgMail = require('@sendgrid/mail');
 const replyTo = 'noreply@canya.com';
@@ -283,27 +283,24 @@ class ClientJobRequestCommenceNotification extends AEmailNotification {
   }
 }
 
-export function notificationEmail(action: ActionType) {
+export function notificationEmail(action: string) {
   console.log('+ build factory object for action:', action)
-  switch (action) {
-    case ActionType.createJob: {
-      return new ClientJobRequestNotification();
-    } case ActionType.acceptTerms: {
-      return new ClientJobRequestAcceptedNotification();
-    } case ActionType.declineTerms: {
-      return new ClientJobRequestDeclinedNotification();
-    } case ActionType.counterOffer: {
-      // could be by either provider or client
-      return new ClientJobRequestCounterOfferNotification();
-    } case ActionType.enterEscrow: {
-      // actually commence the work
-      return new ClientJobRequestEscrowedFundsNotification();
-      // } case ActionType.enterEscrow: {
-      //   return new ClientJobRequestCommenceNotification();
-    } default: {
-      console.log('! unknown action type: ', action)
-      return undefined;
-    }
+
+  const actions = {}
+
+  actions[ActionType.createJob] = ClientJobRequestNotification
+  actions[ActionType.acceptTerms] = ClientJobRequestAcceptedNotification
+  actions[ActionType.declineTerms] = ClientJobRequestDeclinedNotification
+  actions[ActionType.counterOffer] = ClientJobRequestCounterOfferNotification
+  actions[ActionType.authoriseEscrow] = ClientJobRequestEscrowedFundsNotification
+  actions[ActionType.createJob] = ClientJobRequestCommenceNotification
+
+  const jobAction = actions[action]
+
+  if (!jobAction) {
+    console.log(`! unknown action type: ${action}`)
+    return undefined
   }
 
+  return new jobAction()
 }
