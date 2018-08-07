@@ -1,6 +1,7 @@
+import { ActionType } from './job-action-type';
+
 const sgMail = require('@sendgrid/mail');
 const replyTo = 'noreply@canya.com';
-
 /*
  * Interfaces
  */
@@ -204,6 +205,10 @@ class ClientJobRequestCounterOfferNotification extends AEmailNotification {
       console.error(error);
     }
 
+    // Loop over job actions, find last matching current action type 'Counter offer'
+    // If executedBy provider... send email to client
+    // Else exectuedBy client, send email to provider
+
     const title = `Your work request to ${this.clientData.name} has a counter offer`
     this.emailMessages.push({
       to: this.providerData.email,
@@ -280,23 +285,22 @@ class ClientJobRequestCommenceNotification extends AEmailNotification {
 
 export function notificationEmail(action: string) {
   console.log('+ build factory object for action:', action)
-  switch (action) {
-    case 'Create job': {
-      return new ClientJobRequestNotification();
-    } case 'Accept terms': {
-      return new ClientJobRequestAcceptedNotification();
-    } case 'Decline terms': {
-      return new ClientJobRequestDeclinedNotification();
-    } case 'Counter offer': {
-      return new ClientJobRequestCounterOfferNotification();
-    } case 'Add funds to escrow': {
-      return new ClientJobRequestEscrowedFundsNotification();
-    } case '-- provider to commence the job --': {
-      return new ClientJobRequestCommenceNotification();
-    } default: {
-      console.log('! unknown action type: ', action)
-      return undefined;
-    }
+
+  const actions = {}
+
+  actions[ActionType.createJob] = ClientJobRequestNotification
+  actions[ActionType.acceptTerms] = ClientJobRequestAcceptedNotification
+  actions[ActionType.declineTerms] = ClientJobRequestDeclinedNotification
+  actions[ActionType.counterOffer] = ClientJobRequestCounterOfferNotification
+  actions[ActionType.authoriseEscrow] = ClientJobRequestEscrowedFundsNotification
+  actions[ActionType.createJob] = ClientJobRequestCommenceNotification
+
+  const jobAction = actions[action]
+
+  if (!jobAction) {
+    console.log(`! unknown action type: ${action}`)
+    return undefined
   }
 
+  return new jobAction()
 }

@@ -18,6 +18,7 @@ import * as doT from 'dot';
  */
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import { ActionType } from './job-action-type';
 import * as jobEmailfactory from './job-state-email-notification-factory';
 
 const faker = require('faker');
@@ -26,7 +27,6 @@ const path = require('path');
 const Chance = require('chance');
 const cors = require('cors')({ origin: true });
 const env = functions.config();
-
 // Firebase connectivity
 // Should work like this, see: https://github.com/firebase/firebase-admin-node/issues/224
 // const app = admin.initializeApp(functions.config().firebase);
@@ -52,6 +52,7 @@ const serviceConfig = getFirebaseInstance(admin.app().options.projectId);
 
 const welcomeEmailTemplateHTML = doT.template(fs.readFileSync(path.join(__dirname, '../src/templates', 'email-welcome.html'), 'utf8'));
 const pinCodeEmailTemplateHTML = doT.template(fs.readFileSync(path.join(__dirname, '../src/templates', 'email-ethereum-login-pin.html'), 'utf8'));
+const approvedProviderTemplateHTML = doT.template(fs.readFileSync(path.join(__dirname, '../src/templates', 'email-approved-provider.html'), 'utf8'));
 
 exports.sendEmail = functions.https.onRequest(async (request, response) => {
   // TODO: move to express middleware
@@ -105,6 +106,7 @@ exports.jobStateEmailNotification = functions.https.onRequest((request, response
 
     const jobAction: string = request.body['jobAction'];
     const jobId: string = request.body['jobId'];
+
     if (!jobAction || !jobId) {
       console.error('! bad request body parameters', request.body);
       return response.status(422).type('application/json').send({ message: 'Unprocessable entity, missing or invalid parameters in request body' });
@@ -119,7 +121,11 @@ exports.jobStateEmailNotification = functions.https.onRequest((request, response
       return response.status(403).type('application/json').send({ message: 'Forbidden, invalid or expired authorization header' });
     });
 
-    const jobStateEmailer = jobEmailfactory.notificationEmail(jobAction);
+
+    const ja: ActionType = ActionType[jobAction];
+    // check this work, or return, malformed status code
+
+    const jobStateEmailer = jobEmailfactory.notificationEmail(ja);
 
     try {
       await jobStateEmailer.interpolateTemplates(db, jobId);
@@ -298,12 +304,14 @@ exports.indexProviderData = functions.firestore
 exports.updateIndexProviderData = functions.firestore
   .document('users/{userId}')
   .onUpdate(async (snap, context) => {
-    const data = snap.after.data();
+    const beforeData = snap.before.data();
+    const afterData = snap.after.data();
+
     const objectId = snap.after.id;
 
     console.log('+ looking for admin privileges');
-    if (data.isAdmin) {
-      console.log(`+ setting user claim to admin for userId: ${objectId} and email: ${data.email}`)
+    if (afterData.isAdmin) {
+      console.log(`+ setting user claim to admin for userId: ${objectId} and email: ${afterData.email}`)
       // The new custom claims will propagate to the user's ID token the
       // next time a new one is issued.
       try {
@@ -315,15 +323,46 @@ exports.updateIndexProviderData = functions.firestore
       console.log('+ non admin user being updated');
     }
 
-    if (data.welcomeEmailSent && data.welcomeEmailSent === false && data.testUser !== true) {
+    // Check if the user was just white listed, and send email
+    const userHasBeenWhitelisted = !beforeData.whitelisted && afterData.whitelisted
+    const userIsWhitelistedButEmailIsNotSent = afterData.whitelisted && !afterData.sentApprovedEmail
+    if (userHasBeenWhitelisted || userIsWhitelistedButEmailIsNotSent) {
+      console.log('+ sending a accepted provider email...')
+
+      const user = afterData
+      const html = approvedProviderTemplateHTML({ name: user.name })
+
+      const sgMail = require('@sendgrid/mail')
+      sgMail.setApiKey(sendgridApiKey);
+      sgMail.setSubstitutionWrappers('{{', '}}')
+      sgMail.send({
+        to: user.email,
+        from: 'support@canya.com',
+        subject: `You've been approved as a CanWork provider!`,
+        html: html,
+        substitutions: {
+          title: `Congratulations, you are now a CanWork provider!`,
+          returnLinkText: `Browse the providers' index`,
+          returnLinkUrl: `https://canwork.io/home`,
+        },
+        templateId: '4fc71b33-e493-4e60-bf5f-d94721419db5'
+      }, async (error, result) => {
+        if (error) {
+          console.error('! error sending message:', error.response.body)
+        }
+        await db.collection('users').doc(objectId).update({ sentApprovedEmail: true })
+      })
+    }
+
+    if (afterData.welcomeEmailSent && afterData.welcomeEmailSent === false && afterData.testUser !== true) {
       console.log('+ sending a user email...');
 
-      const html = welcomeEmailTemplateHTML({ name: data.name, uri: serviceConfig.uri });
+      const html = welcomeEmailTemplateHTML({ name: afterData.name, uri: serviceConfig.uri });
 
       const sgMail = require('@sendgrid/mail');
       sgMail.setApiKey(sendgridApiKey);
       const msg = {
-        to: data.email,
+        to: afterData.email,
         from: 'support@canya.com',
         subject: 'Welcome to CANWork',
         html: html,
@@ -334,13 +373,13 @@ exports.updateIndexProviderData = functions.firestore
     }
 
     // TODO: When firestore supports case insensitive queries, we won't need this redundant field
-    console.log('+ eth addy', data.ethAddress);
-    if (data.ethAddress && data.ethAddress !== data.ethAddress.toUpperCase()) {
-      console.log('+ updating eth address for fast lookup: ', data.ethAddress.toUpperCase())
-      await db.collection('users').doc(objectId).update({ ethAddressLookup: data.ethAddress.toUpperCase() });
+    console.log('+ eth addy', afterData.ethAddress);
+    if (afterData.ethAddress && afterData.ethAddress !== afterData.ethAddress.toUpperCase()) {
+      console.log('+ updating eth address for fast lookup: ', afterData.ethAddress.toUpperCase())
+      await db.collection('users').doc(objectId).update({ ethAddressLookup: afterData.ethAddress.toUpperCase() });
     }
 
-    if (shouldSkipIndexing(data))
+    if (shouldSkipIndexing(afterData))
       return;
 
     console.log('+ remove index record for update operation...', objectId);
@@ -351,7 +390,7 @@ exports.updateIndexProviderData = functions.firestore
 
     return algoliaSearchIndex.addObject({
       objectID: objectId,
-      ...data,
+      ...afterData,
       workData
     });
   });
