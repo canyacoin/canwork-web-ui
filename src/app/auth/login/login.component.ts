@@ -20,11 +20,13 @@ import { UserService } from '../../core-services/user.service';
 })
 export class LoginComponent implements OnInit, AfterViewInit {
 
+  showMobileLogin = false;
+  disableMobileSignIn = true;
   loading = false;
   returnUrl: string;
   isOnMobile = false;
   webViewEthAddress: string;
-  mobileLoginState: string = '';
+  mobileLoginState = '';
   pinDeliveredTo: string;
   httpHeaders = new Headers({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
 
@@ -46,6 +48,15 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+  }
+
+  onCheckSignUp() {
+    this.disableMobileSignIn = true;
+  }
+
+  onClickMobileSignIn() {
+    this.showMobileLogin = true;
+    console.log(this.showMobileLogin);
   }
 
   private setWeb3EthereumPublicAddress() {
@@ -114,7 +125,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
         console.log('+ authenticated via pin OK', token);
 
         firebase.auth().signInWithCustomToken(token).catch((error) => {
-          console.log("firebase.auth().signInWithCustomToken() Error: ", error);
+          console.log('firebase.auth().signInWithCustomToken() Error: ', error);
         });
 
         const tokenPayload = decode(token);
@@ -173,7 +184,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   handleLogin(userDetails: User) {
     this.afs.collection<any>('users', ref => ref.where('address', '==', userDetails.address).limit(1)).valueChanges().take(1).subscribe((usersMatchingId: any) => {
-
       firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(idToken => {
         window.sessionStorage.accessToken = idToken;
       }).catch(error => {
