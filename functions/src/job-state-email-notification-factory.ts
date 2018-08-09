@@ -234,7 +234,7 @@ class ClientJobRequestCounterOfferNotification extends AEmailNotification {
     super();
   }
 
-  async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
+  async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string, userType: UserType): Promise<void> {
     console.log('ClientJobRequestCounterOfferNotification.interpolateTemplates()');
     try {
       await super.interpolateTemplates(db, jobId);
@@ -242,18 +242,17 @@ class ClientJobRequestCounterOfferNotification extends AEmailNotification {
       console.error(error);
     }
 
-    // Loop over job actions, find last matching current action type 'Counter offer'
-    // If executedBy provider... send email to client
-    // Else exectuedBy client, send email to provider
+    const recipient = this.getRecipient(userType);
+    const sender = this.getSender(userType);
 
-    const title = `Your work request to ${this.clientData.name} has a counter offer`
+    const title = `Job: ${this.jobData.information.title}, has a counter offer`;
     this.emailMessages.push({
-      to: this.providerData.email,
+      to: recipient.email,
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${this.providerData.name},<br>
-      ${this.clientData.name} has made a counter offer to your job request: "${this.jobData.information.description}". Please login to CANWork to review this job.`
+      Dear ${recipient.name},<br>
+      ${sender.name} has made a counter offer to your job request: "${this.jobData.information.description}". Please login to CANWork to review this job.`
     });
     console.log('+ dump emailMessages:', this.emailMessages);
   }
