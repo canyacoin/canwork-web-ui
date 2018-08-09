@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 
 import * as moment from 'moment-timezone';
-import { User } from '../core-classes/user';
+import { User, UserType } from '../core-classes/user';
 
 @Injectable()
 export class UserService {
@@ -46,6 +46,31 @@ export class UserService {
         resolve(credentials);
       } catch (error) {
         reject(error);
+      }
+    });
+  }
+
+  resetUser(userModel: User): Promise<boolean> {
+    return new Promise(async (resolve: any, reject: any) => {
+      try {
+        const sanitizedUser = userModel;
+        sanitizedUser.type = null;
+        sanitizedUser.whitelisted = false;
+        sanitizedUser.whitelistRejected = false;
+        sanitizedUser.whitelistSubmitted = false;
+        sanitizedUser.work = null;
+        sanitizedUser.title = null;
+        sanitizedUser.bio = null;
+        sanitizedUser.description = null;
+        sanitizedUser.category = null;
+        sanitizedUser.skillTags = [];
+        sanitizedUser.hourlyRate = null;
+        sanitizedUser.timestamp = moment().format('x');
+        this.usersCollectionRef.doc(sanitizedUser.address).set(Object.assign({}, sanitizedUser)).then(() => {
+          resolve(true);
+        });
+      } catch (error) {
+        reject(false);
       }
     });
   }

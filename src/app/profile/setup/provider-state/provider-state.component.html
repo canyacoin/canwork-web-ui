@@ -19,7 +19,8 @@
           <header class="section-header my-0 py-0">
             <h2 class="fw-300">Sorry</h2>
             <h4 class="fw-300 mb-10">You have not been approved by the CanYa DAO to be a CanYa Ambassador. Please feel free to re-apply in the future</h4>
-            <button type="button" class="btn btn-primary btn-block mt-10 w-200 center-h" (click)="browse()">Browse market</button>
+            <button type="button" class="btn btn-primary btn-block mt-10 w-200 center-h" (click)="resetUser()">
+              <i *ngIf="loading" class="fa fa-circle-o-notch fa-spin fa-fw"> </i>Try again</button>
           </header>
           <br/>
           <img src="assets/img/CanYa_red_cross.svg" class="img-responsiveness mt-10 animated bounceInUp" alt="Your application has been rejected"
