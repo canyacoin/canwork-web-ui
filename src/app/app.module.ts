@@ -36,8 +36,8 @@ import { CoreUtilsModule } from './core-utils/core-utils.module';
     BrowserModule,
     BrowserAnimationsModule,
     CanpayModule.forRoot({
+      useTestNet: environment.contracts.useTestNet,
       contracts: {
-        useTestNet: environment.contracts.useTestNet,
         canyaCoinAddress: environment.contracts.canYaCoin
       }
     }),

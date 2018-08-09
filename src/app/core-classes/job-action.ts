@@ -6,7 +6,7 @@ export class IJobAction {
     executedBy: UserType;
     timestamp: string;
     private: boolean;
-    emailSent: number;
+    emailSent: boolean;
 
     constructor(type: ActionType, executedBy: UserType) {
         this.type = type;

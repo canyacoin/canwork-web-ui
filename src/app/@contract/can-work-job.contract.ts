@@ -43,69 +43,65 @@ export class CanWorkJobContract {
   async createJob(job: Job, client: User, provider: User) {
 
     return new Promise(async (resolve, reject) => {
-
       try {
-
         const txObject = await this.instance.methods.createJob(this.eth.web3js.utils.padRight(job.hexId, 32), client.ethAddress, provider.ethAddress, job.canInEscrow * (10 ** 6));
-
-        const gas = await txObject.estimateGas()
-
+        const gas = await txObject.estimateGas();
+        const gasPrice = await this.eth.getDefaultGasPriceGwei();
         const txOptions = {
           from: client.ethAddress,
           value: '0x0',
           gasLimit: gas,
-          gasPrice: this.gasPrice,
+          gasPrice: gasPrice,
           data: txObject.encodeABI(),
-        }
+        };
 
-        const tx = txObject.send(txOptions)
-
-        tx.on('transactionHash', hash => {
-          console.log(hash)
-        })
-
-        tx.on('error', error => {
-          reject(error)
-        })
-
-        tx.on('receipt', receipt => {
-          resolve(receipt)
-        })
-
-      } catch (error) {
-        reject(error)
+        txObject.send(txOptions, async (err, txHash) => {
+          if (err) {
+            reject(err);
+          }
+          try {
+            const receipt = await this.eth.getTransactionReceiptMined(txHash);
+            receipt.status = typeof (receipt.status) === 'boolean' ? receipt.status : this.eth.web3js.utils.hexToNumber(receipt.status);
+            resolve(receipt);
+          } catch (e) {
+            reject(e);
+          }
+        });
+      } catch (err) {
+        reject(err);
       }
-    })
+    });
   }
 
   async completeJob(job: Job, fromAddr: string) {
     return new Promise(async (resolve, reject) => {
       try {
         const txObject = await this.instance.methods.completeJob(this.eth.web3js.utils.padRight(job.hexId, 32));
+        const gasPrice = await this.eth.getDefaultGasPriceGwei();
 
         const txOptions = {
           from: fromAddr,
           value: '0x0',
-          gasLimit: 200000,
-          gasPrice: this.gasPrice,
+          gasLimit: 129000,
+          gasPrice: gasPrice,
           data: txObject.encodeABI(),
         };
 
-        const tx = txObject.send(txOptions);
-
-        tx.on('transactionHash', hash => {
-          console.log(hash);
+        txObject.send(txOptions, async (err, txHash) => {
+          if (err) {
+            reject(err);
+          }
+          try {
+            const receipt = await this.eth.getTransactionReceiptMined(txHash);
+            receipt.status = typeof (receipt.status) === 'boolean' ? receipt.status : this.eth.web3js.utils.hexToNumber(receipt.status);
+            resolve(receipt);
+          } catch (e) {
+            reject(e);
+          }
         });
-        tx.on('error', error => {
-          reject(error);
-        });
-        tx.on('receipt', receipt => {
-          resolve(receipt);
-        });
-      } catch (error) {
-        reject(error);
+      } catch (err) {
+        reject(err);
       }
     });
   }
-
 }
