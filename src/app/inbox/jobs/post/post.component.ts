@@ -17,7 +17,6 @@ import { UserService } from '@service/user.service';
 import { getUsdToCan } from '@util/currency-conversion';
 import { GenerateGuid } from '@util/generate.uid';
 
-import { JobNotificationService } from '@service/job-notification.service';
 import { EthService } from '@canyaio/canpay-lib';
 import '@extensions/string';
 
@@ -58,7 +57,6 @@ export class PostComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private authService: AuthService,
     private jobService: JobService,
-    private jobNotificationService: JobNotificationService,
     private ethService: EthService,
     private uploadService: UploadService,
     private http: Http) {
@@ -206,7 +204,6 @@ export class PostComponent implements OnInit, OnDestroy {
 
       const action = new IJobAction(ActionType.createJob, UserType.client);
       this.sent = await this.jobService.handleJobAction(job, action);
-      await this.jobNotificationService.notify(ActionType.createJob, job.id);
       this.isSending = false;
       if (this.sent) {
         this.jobService.createJobChat(job, action, this.currentUser, this.recipient);

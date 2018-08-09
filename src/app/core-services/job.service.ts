@@ -14,6 +14,7 @@ import { CanWorkEthService } from '@service/eth.service';
 import { UserService } from '@service/user.service';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
+import { JobNotificationService } from '@service/job-notification.service';
 
 @Injectable()
 export class JobService {
@@ -25,6 +26,7 @@ export class JobService {
     private userService: UserService,
     private chatService: ChatService,
     private ethService: CanWorkEthService,
+    private jobNotificationService: JobNotificationService,
     private canPayService: CanPayService) {
 
     this.jobsCollection = this.afs.collection<any>('jobs');
@@ -112,6 +114,7 @@ export class JobService {
             parsedJob.actionLog.push(action);
             parsedJob.state = JobState.offer;
             await this.saveJobFirebase(parsedJob);
+            await this.jobNotificationService.notify(action.type, job.id);
             // note - chat service is handled in post.component for this action ONLY
             resolve(true);
             break;
@@ -120,6 +123,7 @@ export class JobService {
             parsedJob.state = JobState.cancelled;
             await this.saveJobFirebase(parsedJob);
             await this.chatService.sendJobMessages(parsedJob, action);
+            await this.jobNotificationService.notify(action.type, job.id);
             resolve(true);
             break;
           case ActionType.counterOffer:
@@ -128,6 +132,7 @@ export class JobService {
             parsedJob.budget = (action as CounterOfferAction).amount;
             await this.saveJobFirebase(parsedJob);
             await this.chatService.sendJobMessages(parsedJob, action);
+            await this.jobNotificationService.notify(action.type, job.id);
             resolve(true);
             break;
           case ActionType.acceptTerms:
@@ -139,6 +144,7 @@ export class JobService {
                 parsedJob.state = JobState.termsAcceptedAwaitingEscrow;
                 await this.saveJobFirebase(parsedJob);
                 await this.chatService.sendJobMessages(parsedJob, action);
+                await this.jobNotificationService.notify(action.type, job.id);
                 resolve(true);
               }
             } catch (e) {
@@ -150,6 +156,7 @@ export class JobService {
             parsedJob.state = JobState.declined;
             await this.saveJobFirebase(parsedJob);
             await this.chatService.sendJobMessages(parsedJob, action);
+            await this.jobNotificationService.notify(action.type, job.id);
             resolve(true);
             break;
           case ActionType.authoriseEscrow:
@@ -206,6 +213,7 @@ export class JobService {
               parsedJob.state = JobState.inEscrow;
               await this.saveJobFirebase(parsedJob);
               await this.chatService.sendJobMessages(parsedJob, enterEscrowAction);
+              await this.jobNotificationService.notify(action.type, job.id);
             } catch (error) {
               console.log(error);
             }
@@ -216,6 +224,7 @@ export class JobService {
             parsedJob.actionLog.push(action);
             await this.saveJobFirebase(parsedJob);
             await this.chatService.sendJobMessages(parsedJob, action);
+            await this.jobNotificationService.notify(action.type, job.id);
             resolve(true);
             break;
           case ActionType.finishedJob:
@@ -223,6 +232,7 @@ export class JobService {
             parsedJob.state = JobState.workPendingCompletion;
             await this.saveJobFirebase(parsedJob);
             await this.chatService.sendJobMessages(parsedJob, action);
+            await this.jobNotificationService.notify(action.type, job.id);
             resolve(true);
             break;
           case ActionType.acceptFinish:
@@ -235,6 +245,7 @@ export class JobService {
               parsedJob.actionLog.push(action);
               await this.saveJobFirebase(parsedJob);
               await this.chatService.sendJobMessages(parsedJob, action);
+              await this.jobNotificationService.notify(action.type, job.id);
             } catch (error) {
               console.log(error);
             }
@@ -247,6 +258,7 @@ export class JobService {
             parsedJob.state = JobState.inDispute;
             await this.saveJobFirebase(parsedJob);
             await this.chatService.sendJobMessages(parsedJob, action);
+            await this.jobNotificationService.notify(action.type, job.id);
             resolve(true);
             break;
           default:
