@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as randomColor from 'randomcolor';
 
 import * as moment from 'moment-timezone';
@@ -75,6 +75,7 @@ export class CreateClientProfileComponent implements OnInit {
       color1: [colors[0]],
       color2: [colors[1]],
       color3: [colors[2]],
+      terms: [false, Validators.requiredTrue],
       timezone: moment.tz.guess()
     });
   }

@@ -86,7 +86,14 @@
             <textarea class="form-control" #description formControlName="description" name="description" rows="5" placeholder="Think different! Be creative, be innovative."></textarea>
           </div>
 
-          <button type="button" class="btn btn-primary btn-canya-gradient next-button" [disabled]="!profileForm.controls.title.valid || !profileForm.controls.bio.valid || !profileForm.controls.description.valid || sending"
+          <div class="form-group">
+            <input type="checkbox" formControlName="terms" />
+            <label>I hereby accept the CanWork
+              <a href="assets/docs/canwork-terms-and-conditions.pdf" download="CanWork terms and conditions" target="_blank">terms and conditions</a>
+            </label>
+          </div>
+
+          <button type="button" class="btn btn-primary btn-canya-gradient next-button" [disabled]="!profileForm.controls.title.valid || !profileForm.controls.bio.valid || !profileForm.controls.description.valid || !profileForm.controls.terms.valid || sending"
             (click)="submitForm()">NEXT</button>
         </div>
 

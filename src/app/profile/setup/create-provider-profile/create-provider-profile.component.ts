@@ -89,6 +89,7 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
       color1: [colors[0]],
       color2: [colors[1]],
       color3: [colors[2]],
+      terms: [false, Validators.requiredTrue],
       timezone: moment.tz.guess(),
       ethAddress: [this.user.ethAddress || this.ethAddress, Validators.compose([Validators.required])],
     });
