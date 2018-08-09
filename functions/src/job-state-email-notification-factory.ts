@@ -1,4 +1,5 @@
 import { ActionType } from './job-action-type';
+import { UserType } from './user-type';
 
 const sgMail = require('@sendgrid/mail');
 const replyTo = 'noreply@canya.com';
@@ -13,7 +14,7 @@ interface EmailMessage {
 }
 
 interface IJobStateEmailNotification {
-  interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): void;
+  interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string, userType?: UserType): void;
   deliver(sendgridApiKey: string, returnUri: string): void;
 }
 
@@ -36,7 +37,7 @@ abstract class AEmailNotification implements IJobStateEmailNotification {
   // Parent method for building 'EmailMessage' objects.
   // Each factory calls this with super.interpolateTemplates(db, jobId);
   // And then does it's own work to interpolate the html template
-  public interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
+  public interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string, userType?: UserType): Promise<void> {
     this.db = db;
     console.log('AEmailNotification.interpolateTemplates()');
     return this.populateDataObjects(jobId);
@@ -71,15 +72,14 @@ abstract class AEmailNotification implements IJobStateEmailNotification {
   // Get a user by ID
   private async getUserObjects(userId: string): Promise<any> {
     console.log('AEmailNotification.getUserObjects() userId:', userId);
-    let user;
     try {
-      user = await this.db.collection('users').doc(userId).get();
+      const user = await this.db.collection('users').doc(userId).get();
       console.log('+ user data retrieved for:', user.data().email);
+      return user.data();
     } catch (error) {
       console.error(`! unable to retrieve user data using ID: ${userId}`, error);
       throw new Error(error);
     }
-    return user.data();
   }
 
   // Locate the job document in the collection, and populate the this.jobData object member
@@ -103,6 +103,14 @@ abstract class AEmailNotification implements IJobStateEmailNotification {
     // Populate the required user objects for client & provider:
     this.clientData = await this.getUserObjects(this.jobData.clientId);
     this.providerData = await this.getUserObjects(this.jobData.providerId);
+  }
+
+  getRecipient(userType: UserType) {
+    return userType === UserType.client ? this.providerData : this.clientData;
+  }
+
+  getSender(userType: UserType) {
+    return userType === UserType.client ? this.clientData : this.providerData;
   }
 }
 
@@ -131,6 +139,35 @@ class ClientJobRequestNotification extends AEmailNotification {
       bodyHtml: `
       Dear ${this.providerData.name},<br>
       ${this.clientData.name} has requested a job: "${this.jobData.information.description}". Please login to CanWork to review this job.`
+    });
+    console.log('+ dump emailMessages:', this.emailMessages);
+  }
+}
+
+class CancelJobNotification extends AEmailNotification {
+  constructor() {
+    super();
+  }
+
+  async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string, userType: UserType): Promise<void> {
+    console.log('CancelJobNotification.interpolateTemplates()');
+    try {
+      await super.interpolateTemplates(db, jobId);
+    } catch (error) {
+      console.error(error);
+    }
+
+    const recipient = this.getRecipient(userType);
+    const sender = this.getSender(userType);
+    const title = `${sender.name} has cancelled the job`;
+
+    this.emailMessages.push({
+      to: recipient.email,
+      subject: title,
+      title: title,
+      bodyHtml: `
+      Dear ${recipient.name},<br>
+      ${sender.name} has cancelled a job: "${this.jobData.information.description}".`
     });
     console.log('+ dump emailMessages:', this.emailMessages);
   }
@@ -289,6 +326,7 @@ export function notificationEmail(action: string) {
   const actions = {}
 
   actions[ActionType.createJob] = ClientJobRequestNotification
+  actions[ActionType.cancelJob] = CancelJobNotification
   actions[ActionType.acceptTerms] = ClientJobRequestAcceptedNotification
   actions[ActionType.declineTerms] = ClientJobRequestDeclinedNotification
   actions[ActionType.counterOffer] = ClientJobRequestCounterOfferNotification

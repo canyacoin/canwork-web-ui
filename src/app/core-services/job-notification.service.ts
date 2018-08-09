@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
 
 import * as firebase from 'firebase';
-import { environment } from '../../environments/environment';
-import { ActionType } from '../core-classes/job-action';
+import { environment } from '@env/environment';
+import { ActionType } from '@class/job-action';
 import { AuthService } from './auth.service';
 
 // When I grow up, I want to extend a Notification service for the notification delivery implementation
@@ -26,7 +26,13 @@ export class JobNotificationService {
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', `Bearer ${token}`);
         const reqOptions = { headers };
-        const reqBody = { jobAction: jobAction.toString(), jobId };
+
+        const $user = await this.authService.getCurrentUser();
+        const reqBody = {
+          jobAction: jobAction.toString(),
+          jobId,
+          userType: $user.type
+        };
 
         console.log('+ email notification reqOptions:', reqOptions);
         console.log('+ email notification reqBody:', reqBody);
