@@ -26,13 +26,7 @@ export class JobNotificationService {
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', `Bearer ${token}`);
         const reqOptions = { headers };
-
-        const $user = await this.authService.getCurrentUser();
-        const reqBody = {
-          jobAction: jobAction.toString(),
-          jobId,
-          userType: $user.type
-        };
+        const reqBody = { jobAction: jobAction.toString(), jobId };
 
         console.log('+ email notification reqOptions:', reqOptions);
         console.log('+ email notification reqBody:', reqBody);

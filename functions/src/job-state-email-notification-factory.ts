@@ -14,7 +14,7 @@ interface EmailMessage {
 }
 
 interface IJobStateEmailNotification {
-  interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string, userType?: UserType): void;
+  interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): void;
   deliver(sendgridApiKey: string, returnUri: string): void;
 }
 
@@ -37,7 +37,7 @@ abstract class AEmailNotification implements IJobStateEmailNotification {
   // Parent method for building 'EmailMessage' objects.
   // Each factory calls this with super.interpolateTemplates(db, jobId);
   // And then does it's own work to interpolate the html template
-  public interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string, userType?: UserType): Promise<void> {
+  public interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
     this.db = db;
     console.log('AEmailNotification.interpolateTemplates()');
     return this.populateDataObjects(jobId);
@@ -105,12 +105,14 @@ abstract class AEmailNotification implements IJobStateEmailNotification {
     this.providerData = await this.getUserObjects(this.jobData.providerId);
   }
 
-  getRecipient(userType: UserType) {
-    return userType === UserType.client ? this.providerData : this.clientData;
+  getRecipient() {
+    const lastJobAction = this.jobData.actionLog[this.jobData.actionLog.length - 1]
+    return lastJobAction.executedBy === UserType.client ? this.providerData : this.clientData;
   }
 
-  getSender(userType: UserType) {
-    return userType === UserType.client ? this.clientData : this.providerData;
+  getSender() {
+    const lastJobAction = this.jobData.actionLog[this.jobData.actionLog.length - 1]
+    return lastJobAction.executedBy === UserType.client ? this.clientData : this.providerData;
   }
 }
 
@@ -149,7 +151,7 @@ class CancelJobNotification extends AEmailNotification {
     super();
   }
 
-  async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string, userType: UserType): Promise<void> {
+  async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
     console.log('CancelJobNotification.interpolateTemplates()');
     try {
       await super.interpolateTemplates(db, jobId);
@@ -157,8 +159,8 @@ class CancelJobNotification extends AEmailNotification {
       console.error(error);
     }
 
-    const recipient = this.getRecipient(userType);
-    const sender = this.getSender(userType);
+    const recipient = this.getRecipient();
+    const sender = this.getSender();
     const title = `${sender.name} has cancelled the job`;
 
     this.emailMessages.push({
@@ -234,7 +236,7 @@ class ClientJobRequestCounterOfferNotification extends AEmailNotification {
     super();
   }
 
-  async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string, userType: UserType): Promise<void> {
+  async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
     console.log('ClientJobRequestCounterOfferNotification.interpolateTemplates()');
     try {
       await super.interpolateTemplates(db, jobId);
@@ -242,8 +244,8 @@ class ClientJobRequestCounterOfferNotification extends AEmailNotification {
       console.error(error);
     }
 
-    const recipient = this.getRecipient(userType);
-    const sender = this.getSender(userType);
+    const recipient = this.getRecipient();
+    const sender = this.getSender();
 
     const title = `Job: ${this.jobData.information.title}, has a counter offer`;
     this.emailMessages.push({

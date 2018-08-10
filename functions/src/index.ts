@@ -105,7 +105,6 @@ exports.jobStateEmailNotification = functions.https.onRequest((request, response
 
     const jobAction: string = request.body['jobAction'];
     const jobId: string = request.body['jobId'];
-    const userType: string = request.body['userType'];
 
     if (!jobAction || !jobId) {
       console.error('! bad request body parameters', request.body);
@@ -128,7 +127,7 @@ exports.jobStateEmailNotification = functions.https.onRequest((request, response
     }
 
     try {
-      await jobStateEmailer.interpolateTemplates(db, jobId, userType);
+      await jobStateEmailer.interpolateTemplates(db, jobId);
     } catch (error) {
       console.error('! unable to interpolateTemplates(): ', error);
       return response.status(500).type('application/json').send({ message: error });
