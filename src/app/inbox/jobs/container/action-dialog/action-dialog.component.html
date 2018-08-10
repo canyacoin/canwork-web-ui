@@ -32,19 +32,13 @@
         </div>
         <br/>
         <div *ngIf="userType == 'Provider'" class="form-group">
-          <input type="checkbox" formControlName="terms" />
-          <label>I hereby accept the CanWork
-            <a href="assets/docs/canwork-terms-and-conditions.pdf" download="CanWork terms and conditions" target="_blank">terms and conditions</a>
-          </label>
+          <app-terms [form]="form"></app-terms>
         </div>
       </form>
     </div>
     <form [formGroup]="form" *ngIf="form && actionType == actionTypes.acceptTerms" class="mx-40">
       <div *ngIf="userType == 'Provider'" class="form-group">
-        <input type="checkbox" formControlName="terms" />
-        <label>I hereby accept the CanWork
-          <a href="assets/docs/canwork-terms-and-conditions.pdf" download="CanWork terms and conditions" target="_blank">terms and conditions</a>
-        </label>
+        <app-terms [form]="form"></app-terms>
       </div>
     </form>
     <div class="modal-footer">
