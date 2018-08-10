@@ -3,9 +3,6 @@
     <div class="container">
       <div class="row search-container text-center">
         <div class="col-12">
-          <div *ngIf="loading || rendering" class="container d-flex h-100 flex-column justify-content-center">
-            <img src="assets/img/loader.svg" height="36px" alt="Loader">
-          </div>
           <ais-instantsearch [config]="algoliaSearchConfig" *ngIf="!rendering">
             <h4 class="fw-500">CanYa tell us what you're looking for?</h4>
             <ais-search-box #search class="search-box" (change)="algoliaSearchChanged($event)"></ais-search-box>
@@ -26,9 +23,15 @@
                           <div class="profile">
                             <img *ngIf="provider && (provider.avatar && provider.avatar.uri)" class="headshot" src="{{ provider.avatar.uri }}" alt="">
                             <div class="title">
-                              <h2><span  *ngIf="provider && provider.name">{{ provider.name }}</span></h2>
-                              <h3><span  *ngIf="provider && provider.title">{{ provider.title }}</span></h3>
-                              <p><span *ngIf="provider && provider.bio">{{ provider.bio }}</span></p>
+                              <h2>
+                                <span *ngIf="provider && provider.name">{{ provider.name }}</span>
+                              </h2>
+                              <h3>
+                                <span *ngIf="provider && provider.title">{{ provider.title }}</span>
+                              </h3>
+                              <p>
+                                <span *ngIf="provider && provider.bio">{{ provider.bio }}</span>
+                              </p>
                             </div>
                             <div class="mh-115">
                               <div class="row d-flex tag-row">
@@ -55,6 +58,9 @@
               </div>
             </div>
           </ais-instantsearch>
+          <div *ngIf="loading || rendering" class="container d-flex h-100 flex-column justify-content-center">
+            <img src="assets/img/loader.svg" height="36px" alt="Loader">
+          </div>
         </div>
       </div>
       <div class="row">

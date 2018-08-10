@@ -15,6 +15,8 @@ export class ProviderStateComponent {
 
   returnUrl: string;
 
+  loading = false;
+
   constructor(private userService: UserService, private router: Router, private route: ActivatedRoute) {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
@@ -26,5 +28,10 @@ export class ProviderStateComponent {
 
   browse() {
     this.router.navigate(['/home']);
+  }
+
+  resetUser() {
+    this.loading = true;
+    this.userService.resetUser(this.currentUser);
   }
 }

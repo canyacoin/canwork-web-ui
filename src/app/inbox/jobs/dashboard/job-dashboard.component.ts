@@ -56,6 +56,8 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
 
   changeUserType() {
     this.userType = this.userType === UserType.client ? UserType.provider : UserType.client;
+    this.loading = true;
+    this.initialiseJobs(this.currentUser.address, this.userType);
   }
 
   viewJobDetails(jobId: string): void {
