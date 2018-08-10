@@ -17,16 +17,17 @@ import { HeaderComponent } from './header/header.component';
 import {
     SearchFilterOptionComponent
 } from './header/search-filter-option/search-filter-option.component';
+import { StatusLightComponent } from './header/status-light/status-light.component';
 import { ScrollTopComponent } from './scroll-top/scroll-top.component';
 import { SkillTagComponent } from './skill-tag/skill-tag.component';
 import { SkillTagsSelectionComponent } from './skill-tags-selection/skill-tags-selection.component';
+import { TermsComponent } from './terms/terms.component';
 import { ToolsComponent } from './tools/tools.component';
 import { VStepperComponent } from './v-stepper/v-stepper.component';
 import { FaqComponent } from './wallet-install/faq/faq.component';
 import { InstructionsComponent } from './wallet-install/instructions/instructions.component';
 import { WalletInstallComponent } from './wallet-install/wallet-install.component';
 import { WindowScrollDirective } from './window-scroll.directive';
-import { StatusLightComponent } from './header/status-light/status-light.component';
 
 @NgModule({
   imports: [
@@ -53,6 +54,7 @@ import { StatusLightComponent } from './header/status-light/status-light.compone
     ScrollTopComponent,
     SkillTagComponent,
     SkillTagsSelectionComponent,
+    TermsComponent,
     ToolsComponent,
     BackButtonComponent,
     WalletInstallComponent,
@@ -69,6 +71,7 @@ import { StatusLightComponent } from './header/status-light/status-light.compone
     FeedbackComponent,
     FooterComponent,
     HeaderComponent,
+    TermsComponent,
     ScrollTopComponent,
     SkillTagComponent,
     SkillTagsSelectionComponent,
