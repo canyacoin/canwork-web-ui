@@ -120,14 +120,14 @@ abstract class AEmailNotification implements IJobStateEmailNotification {
  * Implementations
  */
 
-// Send notification to the client that a new job has been requested
-class ClientJobRequestNotification extends AEmailNotification {
+// Send notification to the provider that a new job has been requested
+class ProviderJobRequestNotification extends AEmailNotification {
   constructor() {
     super();
   }
 
   async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
-    console.log('ClientJobRequestNotification.interpolateTemplates()');
+    console.log('ProviderJobRequestNotification.interpolateTemplates()');
     try {
       await super.interpolateTemplates(db, jobId);
     } catch (error) {
@@ -140,7 +140,7 @@ class ClientJobRequestNotification extends AEmailNotification {
       title: title,
       bodyHtml: `
       Dear ${this.providerData.name},<br>
-      ${this.clientData.name} has requested a job: "${this.jobData.information.description}". Please login to CanWork to review this job.`
+      ${this.clientData.name} has requested a job: "${this.jobData.information.title}". Please login to CanWork to review this job.`
     });
     console.log('+ dump emailMessages:', this.emailMessages);
   }
@@ -176,13 +176,13 @@ class CancelJobNotification extends AEmailNotification {
 }
 
 // Send notification to client that the requested job has been accepted by the provider
-class ClientJobRequestAcceptedNotification extends AEmailNotification {
+class JobRequestAcceptedNotification extends AEmailNotification {
   constructor() {
     super();
   }
 
   async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
-    console.log('ClientJobRequestAcceptedNotification.interpolateTemplates()');
+    console.log('JobRequestAcceptedNotification.interpolateTemplates()');
     try {
       await super.interpolateTemplates(db, jobId);
     } catch (error) {
@@ -207,13 +207,13 @@ class ClientJobRequestAcceptedNotification extends AEmailNotification {
 }
 
 // Send notification to client that the requested job has been declined
-class ClientJobRequestDeclinedNotification extends AEmailNotification {
+class JobRequestDeclinedNotification extends AEmailNotification {
   constructor() {
     super();
   }
 
   async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
-    console.log('ClientJobRequestDeclinedNotification.interpolateTemplates()');
+    console.log('JobRequestDeclinedNotification.interpolateTemplates()');
     try {
       await super.interpolateTemplates(db, jobId);
     } catch (error) {
@@ -237,13 +237,13 @@ class ClientJobRequestDeclinedNotification extends AEmailNotification {
 }
 
 // Send notification to provider that the requested job has a counter offer
-class ClientJobRequestCounterOfferNotification extends AEmailNotification {
+class JobRequestCounterOfferNotification extends AEmailNotification {
   constructor() {
     super();
   }
 
   async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
-    console.log('ClientJobRequestCounterOfferNotification.interpolateTemplates()');
+    console.log('JobRequestCounterOfferNotification.interpolateTemplates()');
     try {
       await super.interpolateTemplates(db, jobId);
     } catch (error) {
@@ -260,7 +260,7 @@ class ClientJobRequestCounterOfferNotification extends AEmailNotification {
       title: title,
       bodyHtml: `
       Dear ${recipient.name},<br>
-      ${sender.name} has made a counter offer to your job request: "${this.jobData.information.description}". Please login to CANWork to review this job.`
+      ${sender.name} has made a counter offer to your job request: "${this.jobData.information.title}". Please login to CANWork to review this job.`
     });
     console.log('+ dump emailMessages:', this.emailMessages);
   }
@@ -280,47 +280,58 @@ class ClientJobRequestEscrowedFundsNotification extends AEmailNotification {
       console.error(error);
     }
 
-    const tx = this.jobData.paymentLog[this.jobData.paymetLog.length - 1].txId;
+    const tx = this.jobData.paymentLog[this.jobData.paymentLog.length - 1].txId;
     const etherscanUri = `https://etherscan.io/tx/${tx}`;
 
-    const title = `Your escrow deposit was successful`
+    const title = `Your escrow authorisation was successful`
     this.emailMessages.push({
-      to: this.providerData.email,
+      to: this.clientData.email,
       subject: title,
       title: title,
       bodyHtml: `
       Dear ${this.clientData.name},<br>
-      Your escrow funds have been deposited at <a href='${etherscanUri}'>${tx}</a>.`
+      You have authorised CanWork to enter the escrow <a href='${etherscanUri}'>${tx}</a>.`
     });
     console.log('+ dump emailMessages:', this.emailMessages);
   }
 }
 
 // Send notification to the provider that they may commence the job
-class ClientJobRequestCommenceNotification extends AEmailNotification {
+class JobRequestCommenceNotification extends AEmailNotification {
   constructor() {
     super();
   }
 
   async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
-    console.log('ClientJobRequestCommenceNotification.interpolateTemplates()');
+    console.log('JobRequestCommenceNotification.interpolateTemplates()');
     try {
       await super.interpolateTemplates(db, jobId);
     } catch (error) {
       console.error(error);
     }
 
-    const tx = this.jobData.paymentLog[this.jobData.paymetLog.length - 1].txId;
+    const tx = this.jobData.paymentLog[this.jobData.paymentLog.length - 1].txId;
     const etherscanUri = `https://etherscan.io/tx/${tx}`;
 
-    const title = `Your escrow deposit was successful`
+    let title = `${this.clientData.name} has commenced the job`
     this.emailMessages.push({
       to: this.providerData.email,
       subject: title,
       title: title,
       bodyHtml: `
       Dear ${this.providerData.name},<br>
-      ${this.clientData.name} has made a payment into escrow for the job request: "${this.jobData.information.description}".
+      ${this.clientData.name} has made a payment into escrow for the job request: "${this.jobData.information.title}".
+      The transaction of this deposit has the transaction ID: <a href='${etherscanUri}'>${tx}</a>.`
+    });
+
+    title = `You have commenced the job`
+    this.emailMessages.push({
+      to: this.clientData.email,
+      subject: title,
+      title: title,
+      bodyHtml: `
+      Dear ${this.clientData.name},<br>
+      You have made a payment into escrow for the job: "${this.jobData.information.title}".
       The transaction of this deposit has the transaction ID: <a href='${etherscanUri}'>${tx}</a>.`
     });
     console.log('+ dump emailMessages:', this.emailMessages);
@@ -332,13 +343,13 @@ export function notificationEmail(action: string) {
 
   const actions = {}
 
-  actions[ActionType.createJob] = ClientJobRequestNotification
+  actions[ActionType.createJob] = ProviderJobRequestNotification
   actions[ActionType.cancelJob] = CancelJobNotification
-  actions[ActionType.acceptTerms] = ClientJobRequestAcceptedNotification
-  actions[ActionType.declineTerms] = ClientJobRequestDeclinedNotification
-  actions[ActionType.counterOffer] = ClientJobRequestCounterOfferNotification
+  actions[ActionType.acceptTerms] = JobRequestAcceptedNotification
+  actions[ActionType.declineTerms] = JobRequestDeclinedNotification
+  actions[ActionType.counterOffer] = JobRequestCounterOfferNotification
   actions[ActionType.authoriseEscrow] = ClientJobRequestEscrowedFundsNotification
-  actions[ActionType.createJob] = ClientJobRequestCommenceNotification
+  actions[ActionType.enterEscrow] = JobRequestCommenceNotification
 
   const jobAction = actions[action]
 

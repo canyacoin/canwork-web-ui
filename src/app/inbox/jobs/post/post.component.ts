@@ -2,23 +2,21 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Http, Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AngularFireUploadTask } from 'angularfire2/storage';
-import * as _ from 'lodash';
-import { Subscription } from 'rxjs/Subscription';
-
+import { EthService } from '@canyaio/canpay-lib';
 import { Job, JobDescription, PaymentType, TimeRange, WorkType } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
 import { Upload } from '@class/upload';
 import { User, UserType } from '@class/user';
+import '@extensions/string';
 import { AuthService } from '@service/auth.service';
 import { JobService } from '@service/job.service';
 import { UploadCategory, UploadService } from '@service/upload.service';
 import { UserService } from '@service/user.service';
 import { getUsdToCan } from '@util/currency-conversion';
 import { GenerateGuid } from '@util/generate.uid';
-
-import { EthService } from '@canyaio/canpay-lib';
-import '@extensions/string';
+import { AngularFireUploadTask } from 'angularfire2/storage';
+import * as _ from 'lodash';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-post',
