@@ -9,6 +9,7 @@ import { Upload } from '@class/upload';
 import { User, UserType } from '@class/user';
 import '@extensions/string';
 import { AuthService } from '@service/auth.service';
+import { JobNotificationService } from '@service/job-notification.service';
 import { JobService } from '@service/job.service';
 import { UploadCategory, UploadService } from '@service/upload.service';
 import { UserService } from '@service/user.service';
@@ -68,7 +69,8 @@ export class PostComponent implements OnInit, OnDestroy {
       timelineExpectation: ['', Validators.compose([Validators.required])],
       weeklyCommitment: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(60)])],
       paymentType: ['', Validators.compose([Validators.required])],
-      budget: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(10000000)])]
+      budget: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(10000000)])],
+      terms: [false, Validators.requiredTrue]
     });
   }
 

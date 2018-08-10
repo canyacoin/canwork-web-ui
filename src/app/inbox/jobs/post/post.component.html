@@ -15,7 +15,7 @@
             <div class="col-12 col-lg-12">
               <div class="align-self-center align-items-center my-10">
                 <form [formGroup]="postForm" class="form validate" novalidate>
-                  <div class="col-12 col-lg-12"> 
+                  <div class="col-12 col-lg-12">
                     <div class="form-group">
                       <label>Title *</label>
                       <input class="form-control" #title formControlName="title" type="text" name="title" placeholder="Enter Job Title" maxlength="64"
@@ -23,11 +23,11 @@
                       <small *ngIf="!postForm.controls.title.valid  && postForm.controls.title.dirty" class="text-primary text-wrap">Title must be 64 characters or less</small>
                     </div>
                     <div class="form-group">
-                        <label class="text-dark">Description *</label>
-                        <textarea class="form-control" #description formControlName="description" rows="4" name="description" placeholder="I'm looking for..."
-                          [class.invalid]="!postForm.controls.description.valid && postForm.controls.description.dirty"></textarea>
-                        <small *ngIf="!postForm.controls.description.valid" class="text-primary text-wrap">e.g. 'Custom Logo' or 'Milestone 1 - Wireframes'.</small>
-                      </div> 
+                      <label class="text-dark">Description *</label>
+                      <textarea class="form-control" #description formControlName="description" rows="4" name="description" placeholder="I'm looking for..."
+                        [class.invalid]="!postForm.controls.description.valid && postForm.controls.description.dirty"></textarea>
+                      <small *ngIf="!postForm.controls.description.valid" class="text-primary text-wrap">e.g. 'Custom Logo' or 'Milestone 1 - Wireframes'.</small>
+                    </div>
                     <div class="form-group">
                       <label>Project stage *</label>
                       <textarea class="form-control" #initialStage formControlName="initialStage" type="text" name="initialStage" placeholder="Lorem ipsum dolor"
@@ -54,7 +54,7 @@
                           <input id="file-upload" [disabled]="currentUpload || uploadedFile" type="file" hidden (change)="detectFiles($event)" />
                         </div>
                       </div>
-                      
+
                       <div class="alert alert-danger" *ngIf="fileTooBig">
                         File is too large, please upload a file smaller than 50 MB
                       </div>
@@ -72,14 +72,16 @@
                       </div>
 
                       <div class="w-full px-10" *ngIf="uploadedFile">
-                        <br>
-                        Uploaded:
+                        <br> Uploaded:
                         <ul class="list-unstyled">
-                            <li><p>{{uploadedFile.name}}<span class="pointer alert" (click)="removeUpload(uploadedFile)">
+                          <li>
+                            <p>{{uploadedFile.name}}
+                              <span class="pointer alert" (click)="removeUpload(uploadedFile)">
                                 <i class="fa fa-times fs-14 pl-8"></i>
-                              </span></p>
-                           </li>
-                         </ul>  
+                              </span>
+                            </p>
+                          </li>
+                        </ul>
                         <!-- 
                         <span> 
                           <app-attachment [name]="uploadedFile.name" [path]="uploadedFile.filePath" [url]="uploadedFile.url" [size]="uploadedFile.size"></app-attachment>
@@ -163,6 +165,10 @@
                             <b>Important</b>: All Transactions on CanYa are made in CAN tokens</small>
                         </div>
                       </div>
+                    </div>
+
+                    <div class="form-group">
+                      <app-terms [form]="postForm"></app-terms>
                     </div>
                   </div>
 

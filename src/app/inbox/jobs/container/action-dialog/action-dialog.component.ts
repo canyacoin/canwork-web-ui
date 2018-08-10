@@ -93,14 +93,24 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
   ngAfterViewInit() {
     switch (this.actionType) {
       case ActionType.counterOffer:
-        this.form = this.formBuilder.group({
-          budget: [this.job.budget, Validators.compose([Validators.required, Validators.min(1), Validators.max(10000000)])]
-        });
+        this.form = this.userType === UserType.provider ?
+          this.formBuilder.group({
+            budget: [this.job.budget, Validators.compose([Validators.required, Validators.min(1), Validators.max(10000000)])],
+            terms: [false, Validators.requiredTrue]
+          }) :
+          this.formBuilder.group({
+            budget: [this.job.budget, Validators.compose([Validators.required, Validators.min(1), Validators.max(10000000)])],
+          });
         this.setupCanConverter();
         break;
       case ActionType.addMessage:
       case ActionType.dispute:
         // TODO: Set form to accept message using formbuilder example above
+        break;
+      case ActionType.acceptTerms:
+        this.form = this.formBuilder.group({
+          terms: [false, Validators.requiredTrue]
+        });
         break;
       default:
         break;

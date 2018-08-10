@@ -116,7 +116,13 @@
             <textarea class="form-control" #description formControlName="description" name="description" rows="5" placeholder="Describe more about who you are and what you do"></textarea>
           </div>
 
-          <button type="button" class="btn btn-primary btn-canya-gradient next-button" [disabled]="!profileForm.controls.firstName.valid || !profileForm.controls.lastName.valid || !profileForm.controls.title.valid || !profileForm.controls.bio.valid || sending"
+          <div class="form-group">
+            <app-terms [form]="profileForm"></app-terms>
+          </div>
+
+
+          <button type="button" class="btn btn-primary btn-canya-gradient next-button" [disabled]="!profileForm.controls.firstName.valid || !profileForm.controls.lastName.valid || 
+          !profileForm.controls.title.valid || !profileForm.controls.bio.valid || !profileForm.controls.terms.valid || sending"
             (click)="submitForm()">NEXT</button>
         </div>
 

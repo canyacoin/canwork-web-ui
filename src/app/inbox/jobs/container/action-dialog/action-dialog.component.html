@@ -30,8 +30,17 @@
             </div>
           </div>
         </div>
+        <br/>
+        <div *ngIf="userType == 'Provider'" class="form-group">
+          <app-terms [form]="form"></app-terms>
+        </div>
       </form>
     </div>
+    <form [formGroup]="form" *ngIf="form && actionType == actionTypes.acceptTerms" class="mx-40">
+      <div *ngIf="userType == 'Provider'" class="form-group">
+        <app-terms [form]="form"></app-terms>
+      </div>
+    </form>
     <div class="modal-footer">
       <button [disabled]="submitDisabled || executing" type="button" class="btn btn-{{actionColour}}" (click)="handleAction()">
         {{actionType}}
