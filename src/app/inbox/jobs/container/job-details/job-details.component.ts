@@ -4,7 +4,6 @@ import { Job, JobDescription, JobState, PaymentType, TimeRange, WorkType } from 
 import { ActionType, IJobAction } from '@class/job-action';
 import { User, UserType } from '@class/user';
 import { AuthService } from '@service/auth.service';
-import { JobNotificationService } from '@service/job-notification.service';
 import { JobService } from '@service/job.service';
 import { UserService } from '@service/user.service';
 import { AngularFireStorage } from 'angularfire2/storage';
@@ -13,7 +12,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
 import {
-    ActionDialogComponent, ActionDialogOptions
+  ActionDialogComponent, ActionDialogOptions
 } from '../action-dialog/action-dialog.component';
 
 @Component({
@@ -33,7 +32,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService,
     private jobService: JobService,
-    private jobNotificationService: JobNotificationService,
     private userService: UserService,
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
@@ -147,7 +145,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         return 'Completed';
       default:
         return '';
-      }
+    }
   }
 
   getActionColour(action: ActionType): string {
@@ -162,7 +160,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     })).subscribe((success) => {
       if (success) {
         console.log('Action executed');
-        this.jobNotificationService.notify(action, this.job.id);
       } else {
         console.log('Action cancelled');
       }

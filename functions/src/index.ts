@@ -18,7 +18,6 @@ import * as doT from 'dot';
  */
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { ActionType } from './job-action-type';
 import * as jobEmailfactory from './job-state-email-notification-factory';
 
 const faker = require('faker');
@@ -116,16 +115,16 @@ exports.jobStateEmailNotification = functions.https.onRequest((request, response
     const idToken = request.headers.authorization.split('Bearer ')[1];
     console.log('+ checking id token: ', `${idToken.substr(0, 5)}.....${idToken.substr(idToken.length - 5)}`);
 
-    const user = await app.auth().verifyIdToken(idToken).catch(error => {
+    await app.auth().verifyIdToken(idToken).catch(error => {
       console.error('! unable to verify token: ', error);
       return response.status(403).type('application/json').send({ message: 'Forbidden, invalid or expired authorization header' });
     });
 
+    const jobStateEmailer = jobEmailfactory.notificationEmail(jobAction);
 
-    const ja: ActionType = ActionType[jobAction];
-    // check this work, or return, malformed status code
-
-    const jobStateEmailer = jobEmailfactory.notificationEmail(ja);
+    if (jobStateEmailer === undefined) {
+      return response.status(501).type('application/json').send({ message: `There is no AEmailNotification class for type ${jobAction}` });
+    }
 
     try {
       await jobStateEmailer.interpolateTemplates(db, jobId);
