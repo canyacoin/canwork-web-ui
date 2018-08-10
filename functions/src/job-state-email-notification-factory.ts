@@ -189,14 +189,17 @@ class ClientJobRequestAcceptedNotification extends AEmailNotification {
       console.error(error);
     }
 
-    const title = `Your work request to ${this.clientData.name} has been accepted`
+    const recipient = this.getRecipient();
+    const sender = this.getSender();
+    const title = `Your work request to ${sender.name} has been accepted`
+
     this.emailMessages.push({
-      to: this.clientData.email,
+      to: recipient.email,
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${this.clientData.name},<br>
-      ${this.providerData.name} has accepted your job request: "${this.jobData.information.description}". A payment into the escrow is now required to proceed.<br><br>
+      Dear ${recipient.name},<br>
+      ${sender.name} has accepted your job request: "${this.jobData.information.description}". A payment into the escrow is now required to proceed.<br><br>
       Please login to CANWork to review this job.`
     });
     console.log('+ dump emailMessages:', this.emailMessages);
@@ -217,14 +220,17 @@ class ClientJobRequestDeclinedNotification extends AEmailNotification {
       console.error(error);
     }
 
-    const title = `Your work request to ${this.providerData.name} has been declined`
+    const recipient = this.getRecipient();
+    const sender = this.getSender();
+    const title = `Your work request to ${sender.name} has been declined`
+
     this.emailMessages.push({
-      to: this.clientData.email,
+      to: recipient.email,
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${this.clientData.name},<br>
-      ${this.providerData.name} has declined your job request: "${this.jobData.information.description}". Please login to CANWork to review this job.`
+      Dear ${recipient.name},<br>
+      ${sender.name} has declined your job request: "${this.jobData.information.description}". Please login to CANWork to review this job.`
     });
     console.log('+ dump emailMessages:', this.emailMessages);
   }
