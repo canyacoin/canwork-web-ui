@@ -47,7 +47,7 @@ const algoliaSearchIndex = algoliaClient.initIndex(env.algolia.providerindex);
 const sendgridApiKey = env.sendgrid.apikey;
 const chance = new Chance();
 
-const serviceConfig = getFirebaseInstance(admin.app().options.projectId);
+const serviceConfig = getFirebaseInstance(env.fbadmin.project_id);
 
 const welcomeEmailTemplateHTML = doT.template(fs.readFileSync(path.join(__dirname, '../src/templates', 'email-welcome.html'), 'utf8'));
 const pinCodeEmailTemplateHTML = doT.template(fs.readFileSync(path.join(__dirname, '../src/templates', 'email-ethereum-login-pin.html'), 'utf8'));
