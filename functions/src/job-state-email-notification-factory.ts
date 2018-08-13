@@ -266,6 +266,116 @@ class JobRequestCounterOfferNotification extends AEmailNotification {
   }
 }
 
+class AddMessageNotification extends AEmailNotification {
+  constructor() {
+    super();
+  }
+
+  async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
+    console.log('AddMessageNotification.interpolateTemplates()');
+    try {
+      await super.interpolateTemplates(db, jobId);
+    } catch (error) {
+      console.error(error);
+    }
+
+    const recipient = this.getRecipient();
+    const sender = this.getSender();
+
+    const title = `${sender.name} sent you a message via CanWork`;
+    this.emailMessages.push({
+      to: recipient.email,
+      subject: title,
+      title: title,
+      bodyHtml: `
+      Dear ${recipient.name},<br>
+      ${sender.name} just sent you a message regarding the job: "${this.jobData.information.title}". Login to CANWork to see this message.`
+    });
+    console.log('+ dump emailMessages:', this.emailMessages);
+  }
+}
+
+class FinishedJobNotification extends AEmailNotification {
+  constructor() {
+    super();
+  }
+
+  async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
+    console.log('FinishedJobNotification.interpolateTemplates()');
+    try {
+      await super.interpolateTemplates(db, jobId);
+    } catch (error) {
+      console.error(error);
+    }
+
+    const title = `${this.providerData.name} has marked the job as finished`;
+    this.emailMessages.push({
+      to: this.clientData.email,
+      subject: title,
+      title: title,
+      bodyHtml: `
+      Dear ${this.clientData.name},<br>
+      ${this.providerData.name} has marked the job: "${this.jobData.information.title}" as finished. Login to CANWork to review this job.`
+    });
+    console.log('+ dump emailMessages:', this.emailMessages);
+  }
+}
+
+class AcceptFinishNotification extends AEmailNotification {
+  constructor() {
+    super();
+  }
+
+  async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
+    console.log('AcceptFinishNotification.interpolateTemplates()');
+    try {
+      await super.interpolateTemplates(db, jobId);
+    } catch (error) {
+      console.error(error);
+    }
+
+    const title = `${this.clientData.name} has released the funds.`;
+    this.emailMessages.push({
+      to: this.providerData.email,
+      subject: title,
+      title: title,
+      bodyHtml: `
+      Dear ${this.providerData.name},<br>
+      ${this.clientData.name} has marked the job: "${this.jobData.information.title}" as complete, the funds are now in your wallet.`
+    });
+    console.log('+ dump emailMessages:', this.emailMessages);
+  }
+}
+
+class DisputeNotification extends AEmailNotification {
+  constructor() {
+    super();
+  }
+
+  async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
+    console.log('DisputeNotification.interpolateTemplates()');
+    try {
+      await super.interpolateTemplates(db, jobId);
+    } catch (error) {
+      console.error(error);
+    }
+
+    const recipient = this.getRecipient();
+    const sender = this.getSender();
+
+    const title = `${sender.name} has raised a dispute.`;
+    this.emailMessages.push({
+      to: recipient.email,
+      subject: title,
+      title: title,
+      bodyHtml: `
+      Dear ${recipient.name},<br>
+      ${sender.name} has raised a dispute for the job: "${this.jobData.information.title}". Login to CanWork to see the discussion.`
+    });
+    console.log('+ dump emailMessages:', this.emailMessages);
+  }
+}
+
 // Send notification to client that their funds have been deposited into escrow
 class ClientJobRequestEscrowedFundsNotification extends AEmailNotification {
   constructor() {
@@ -350,6 +460,10 @@ export function notificationEmail(action: string) {
   actions[ActionType.counterOffer] = JobRequestCounterOfferNotification
   actions[ActionType.authoriseEscrow] = ClientJobRequestEscrowedFundsNotification
   actions[ActionType.enterEscrow] = JobRequestCommenceNotification
+  actions[ActionType.addMessage] = AddMessageNotification
+  actions[ActionType.finishedJob] = FinishedJobNotification
+  actions[ActionType.acceptFinish] = AcceptFinishNotification
+  actions[ActionType.dispute] = DisputeNotification
 
   const jobAction = actions[action]
 
