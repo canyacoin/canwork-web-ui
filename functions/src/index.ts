@@ -59,6 +59,8 @@ exports.sendEmail = functions.https.onRequest(async (request, response) => {
     return response.status(403).send('Unauthorized');
   }
 
+  console.log('+ serviceConfig', serviceConfig);
+
   const html = welcomeEmailTemplateHTML({ name: 'Cammo', uri: serviceConfig.uri });
 
   // const app = admin.app();
@@ -654,8 +656,8 @@ function getFirebaseInstance(projectId: string) {
       environment: 'staging'
     },
     {
-      projectId: 'canya-dotcom',
-      uri: 'https://canya.com',
+      projectId: 'canwork-io',
+      uri: 'https://www.canwork.io',
       environment: 'prod'
     }
   ]
