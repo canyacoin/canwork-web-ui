@@ -8,8 +8,9 @@ import { User, UserState } from '@class/user';
 import { AuthService } from '@service/auth.service';
 import { UserService } from '@service/user.service';
 import { EthService } from '@canyaio/canpay-lib';
-import { CurrencyValidator } from '../currency.validator';
-import { EmailValidator } from '../email.validator';
+import { CurrencyValidator } from '@validator/currency.validator';
+import { EmailValidator } from '@validator/email.validator';
+import { EthereumValidator } from '@validator/ethereum.validator';
 
 @Component({
   selector: 'app-edit',
@@ -62,7 +63,7 @@ export class EditComponent implements OnInit, OnDestroy {
     this.profileForm = this.formBuilder.group({
       name: [this.currentUser.name || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
       work: [this.currentUser.work || '', Validators.compose([Validators.required, EmailValidator.isValid])],
-      ethAddress: [this.currentUser.ethAddress || this.ethAddress],
+      ethAddress: [this.currentUser.ethAddress || this.ethAddress, Validators.compose([Validators.required, EthereumValidator.isValidAddress])],
       title: [this.currentUser.title || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
       bio: [this.currentUser.bio || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(60)])],
       category: [this.currentUser.category || ''],
@@ -73,10 +74,14 @@ export class EditComponent implements OnInit, OnDestroy {
       color3: [this.currentUser.colors[2]],
       description: [this.currentUser.description || '']
     });
+
+    console.log(this.profileForm)
   }
 
   skillTagsUpdated(value: string) {
     this.profileForm.controls['skillTags'].setValue(value);
+
+    console.log(this.profileForm)
   }
 
   save(category1: any, category2: any, category3: any, category4: any, category5: any, category6: any) {

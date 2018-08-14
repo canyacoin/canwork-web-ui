@@ -4,11 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as randomColor from 'randomcolor';
 
 import * as moment from 'moment-timezone';
-import { User, UserState, UserType } from '../../../core-classes/user';
-import { AuthService } from '../../../core-services/auth.service';
-import { UserService } from '../../../core-services/user.service';
-import { CurrencyValidator } from '../../currency.validator';
-import { EmailValidator } from '../../email.validator';
+import { User, UserState, UserType } from '@class/user';
+import { AuthService } from '@service/auth.service';
+import { UserService } from '@service/user.service';
+import { EmailValidator } from '@validator/email.validator';
 
 @Component({
   selector: 'app-create-client-profile',

@@ -8,8 +8,8 @@ import * as randomColor from 'randomcolor';
 import { Subscription } from 'rxjs/Subscription';
 
 import * as moment from 'moment-timezone';
-import { CurrencyValidator } from '../../currency.validator';
-import { EmailValidator } from '../../email.validator';
+import { CurrencyValidator } from '@validator/currency.validator';
+import { EmailValidator } from '@validator/email.validator';
 
 @Component({
   selector: 'app-create-provider-profile',
