@@ -14,7 +14,7 @@ export class AttachmentComponent {
   constructor() { }
 
 
-  humanFileSize(bytes, si) {
+  humanFileSize(bytes, si = true) {
     const thresh = si ? 1000 : 1024;
     if (Math.abs(bytes) < thresh) {
       return bytes + ' B';
