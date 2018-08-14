@@ -65,7 +65,7 @@ export class CreateClientProfileComponent implements OnInit {
     this.profileForm = this.formBuilder.group({
       firstName: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(18)])],
       lastName: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(18)])],
-      work: [this.user.work || '', Validators.compose([Validators.required, EmailValidator.isValid])],
+      work: [this.user.email || '', Validators.compose([Validators.required, EmailValidator.isValid])],
       title: [this.user.title || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
       bio: [this.user.bio || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(60)])],
       description: [this.user.description || '', Validators.compose([Validators.maxLength(500)])],

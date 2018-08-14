@@ -41,7 +41,7 @@
             </div>
 
             <div class="form-group">
-              <label>Bio</label>
+              <label>Short Bio (60 chars)</label>
               <input class="form-control" #bio formControlName="bio" type="text" name="bio" placeholder="Creative short bio" maxlength="60"
                 [class.invalid]="!profileForm.controls.bio.valid && profileForm.controls.bio.dirty">
 
@@ -77,16 +77,16 @@
                   </label>
                 </div>
                 <div class="col-md-4">
-                    <label class="custom-control custom-radio">
-                        <input class="custom-control-input" #category3 type="radio" name="category" [checked]="this.currentUser.category === 'FINANCIAL EXPERTS'">
-                        <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">FINANCIAL EXPERTS</span>
-                    </label>
                   <label class="custom-control custom-radio">
-                      <input class="custom-control-input" #category6 type="radio" name="category" [checked]="this.currentUser.category==='VIRTUAL ASSISTANTS'">
-                      <span class="custom-control-indicator"></span>
-                      <span class="custom-control-description">VIRTUAL ASSISTANTS</span>
-                    </label>
+                    <input class="custom-control-input" #category3 type="radio" name="category" [checked]="this.currentUser.category === 'FINANCIAL EXPERTS'">
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">FINANCIAL EXPERTS</span>
+                  </label>
+                  <label class="custom-control custom-radio">
+                    <input class="custom-control-input" #category6 type="radio" name="category" [checked]="this.currentUser.category==='VIRTUAL ASSISTANTS'">
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">VIRTUAL ASSISTANTS</span>
+                  </label>
                 </div>
               </div>
               <!--
@@ -168,9 +168,9 @@
                    " placeholder="Think different! Be creative, be innovative."></textarea>
             </div>
             <div class="form-group text-right">
-                <a href="#" [routerLink]="[ '/profile']" class="btn btn-secondary">
-                  Cancel
-                </a>
+              <a href="#" [routerLink]="[ '/profile']" class="btn btn-secondary">
+                Cancel
+              </a>
               <button [disabled]="!profileForm.valid || sending" type="button" (click)="save(category1, category2, category3, category4, category5, category6)"
                 class="btn btn-primary text-white">
                 Save
