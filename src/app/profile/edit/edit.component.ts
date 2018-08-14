@@ -63,7 +63,7 @@ export class EditComponent implements OnInit, OnDestroy {
     this.profileForm = this.formBuilder.group({
       name: [this.currentUser.name || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
       work: [this.currentUser.work || '', Validators.compose([Validators.required, EmailValidator.isValid])],
-      ethAddress: [this.currentUser.ethAddress || this.ethAddress, Validators.compose([Validators.required, EthereumValidator.isValidAddress])],
+      ethAddress: [this.currentUser.ethAddress || this.ethAddress, Validators.compose([Validators.required, EthereumValidator.isValidAddress]), EthereumValidator.isUniqueAddress(this.userService.usersCollectionRef, this.currentUser)],
       title: [this.currentUser.title || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
       bio: [this.currentUser.bio || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(60)])],
       category: [this.currentUser.category || ''],
@@ -74,14 +74,10 @@ export class EditComponent implements OnInit, OnDestroy {
       color3: [this.currentUser.colors[2]],
       description: [this.currentUser.description || '']
     });
-
-    console.log(this.profileForm)
   }
 
   skillTagsUpdated(value: string) {
     this.profileForm.controls['skillTags'].setValue(value);
-
-    console.log(this.profileForm)
   }
 
   save(category1: any, category2: any, category3: any, category4: any, category5: any, category6: any) {

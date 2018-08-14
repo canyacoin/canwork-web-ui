@@ -28,10 +28,11 @@
 
             <div class="form-group" [class.has-danger]="profileForm.controls.ethAddress.invalid">
               <label>ETH Address</label>
-              <input (change)="skillTagsUpdated('something')" class="form-control" #ethAddress formControlName="ethAddress" type="text"
-                name="ethAddress" placeholder="0x123...">
+              <input class="form-control" #ethAddress formControlName="ethAddress" type="text" name="ethAddress" placeholder="0x123...">
               <small *ngIf="profileForm.controls.ethAddress.errors && profileForm.controls.ethAddress.errors.isInvalidEthereumAddress"
-                class="form-control-feedback">Please enter a valid ethereum address.
+                class="form-control-feedback">Please enter a valid ethereum address.</small>
+              <small *ngIf="profileForm.controls.ethAddress.errors && profileForm.controls.ethAddress.errors.addressExists" class="form-control-feedback">This
+                address is already being used in CanWork. Please use another one.
               </small>
             </div>
 
