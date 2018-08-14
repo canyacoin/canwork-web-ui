@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs/Subscription';
 import * as moment from 'moment-timezone';
 import { CurrencyValidator } from '@validator/currency.validator';
 import { EmailValidator } from '@validator/email.validator';
+import { EthereumValidator } from '@validator/ethereum.validator';
 
 @Component({
   selector: 'app-create-provider-profile',
@@ -91,7 +92,7 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
       color3: [colors[2]],
       terms: [false, Validators.requiredTrue],
       timezone: moment.tz.guess(),
-      ethAddress: [this.user.ethAddress || this.ethAddress, Validators.compose([Validators.required])],
+      ethAddress: [this.user.ethAddress || this.ethAddress, Validators.compose([Validators.required, EthereumValidator.isValidAddress]), EthereumValidator.isUniqueAddress(this.userService.usersCollectionRef, this.user)],
     });
   }
 
