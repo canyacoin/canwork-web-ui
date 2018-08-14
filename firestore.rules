@@ -3,36 +3,63 @@ service cloud.firestore {
 
     match /users/{userId} {
        allow read;
-       allow write: if request.auth != null;
+       allow write: if isAuthenticated();
     }
 
     match /portfolio/{userId}/work/{w} {
        allow read;
-       allow write: if request.auth.uid == userId;
+       allow write: if isDocumentOwner(userId);
     }
 
     match /who/{userId}/user/{who} {
        allow read;
-       allow write: if request.auth != null;
+       allow write: if isAuthenticated();
     }
 
     match /skill-tags/{skill} {
        allow read;
     }
 
-    // TODO: Will require a much more complex rule set here
-    // See: https://github.com/canyaio/can-work/issues/142
     match /chats/{document=**} {
        allow read;
-       allow write: if request.auth != null;
+       allow write: if isAuthenticated();
     }
 
     // TODO: Will require a much more complex rule set here
+    match /jobs {
+       allow read:if request.auth != null;
+    }
+
     match /jobs/{jobId} {
        allow read;
-       allow write: if request.auth != null;
+       allow create: if isAuthenticated();
+       allow update: if userIsClientOrProvider();
+       allow delete: if isAdmin();
     }
 
   }
-}
 
+  // --------------------------------------------------------------------------------
+  function isAuthenticated() {
+    return request.auth != null
+  }
+
+  function isDocumentOwner(userId) {
+    return request.auth.uid == userId
+  }
+
+  function userIsClientOrProvider() {
+    return request.resource.data.clientId == request.auth.uid
+    || request.resource.data.providerId == request.auth.uid
+    || isAdmin()
+  }
+
+  function getUserData() {
+    return get(/databases/$(database)/documents/users/$(request.auth.uid)).data
+  }
+
+  function isAdmin() {
+    return getUserData().isAdmin
+  }
+ // --------------------------------------------------------------------------------
+}
