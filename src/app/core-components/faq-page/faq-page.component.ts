@@ -35,7 +35,7 @@ export class FaqPageComponent implements OnInit {
     {
       index: 'q-6',
       q: 'What is CanYaCoin? (CAN)',
-      a: 'CanYaCoin or CAN is the token which powers the platform’s payment system, enabling a decentralised, trustless and hedged escrow service. The hedged escrow is a bridge between a variety of cryptocurrencies, and a powerful rewards system to encourage network effects.'
+      a: 'CanYaCoin or CAN is the token which powers the platform’s payment system, enabling a decentralised, trustless escrow service. The escrow is a bridge between a variety of cryptocurrencies, and a powerful rewards system to encourage network effects.'
     },
     {
       index: 'q-7',
@@ -62,11 +62,11 @@ export class FaqPageComponent implements OnInit {
       q: 'How do I control the notification settings I receive?',
       a: 'Notifications from CANwork currently are sent via email. You can unsubscribe from these emails anytime, at the bottom of the email. If you would like to see CanYa updates you can go to canya.io.'
     },
-    {
-      index: 'q-12',
-      q: 'What happens if crypto price changes?',
-      a: 'CanYa’s hedged escrow service mitigates against market volatility. If you’ve quoted, for example, $500 USD in CAN tokens for a job, you will receive the same value of $500 USD in CAN upon completing the job regardless of changes in CanYaCoin price.'
-    },
+    // {
+    //   index: 'q-12',
+    //   q: 'What happens if crypto price changes?',
+    //   a: 'CanYa’s hedged escrow service mitigates against market volatility. If you’ve quoted, for example, $500 USD in CAN tokens for a job, you will receive the same value of $500 USD in CAN upon completing the job regardless of changes in CanYaCoin price.'
+    // },
     {
       index: 'q-13',
       q: 'How do I buy CAN?',
@@ -86,7 +86,7 @@ export class FaqPageComponent implements OnInit {
       index: 'q-16',
       q: 'What wallet should I use?',
       a: 'We currently support metamask for payments.'
-    }, 
+    },
     {
       index: 'q-18',
       q: 'Do I have to use Metamask?',
@@ -106,7 +106,7 @@ export class FaqPageComponent implements OnInit {
       index: 'q-21',
       q: 'Can I set up multiple accounts?',
       a: 'We discourage making multiple accounts. If you would like to be both provider and a client, you are able to do so. A provider can contact another provider if they, for example, want to sub-contract for a job.'
-    }, 
+    },
     {
       index: 'q-23',
       q: 'If I have a dispute with the other party during a job is there a way to fairly resolve it?',
@@ -121,7 +121,7 @@ export class FaqPageComponent implements OnInit {
   queryFaqs: any = [];
   constructor() { }
   isOnMobile = false;
-  
+
   ngOnInit() {
     const ua = window.navigator.userAgent;
     this.isOnMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua);
