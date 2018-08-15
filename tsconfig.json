@@ -23,6 +23,9 @@
       "@contract/*": [
         "app/@contract/*"
       ],
+      "@validator/*": [
+        "app/@validator/*"
+      ],
       "@class/*": [
         "app/core-classes/*"
       ],

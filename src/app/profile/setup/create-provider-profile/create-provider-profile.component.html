@@ -9,11 +9,15 @@
           <app-v-stepper [steps]="stepperSteps" [currentStep]="currentStep"></app-v-stepper>
         </p>
         <div *ngIf="currentStep.name == 'professionalInfo'">
-          <div class="form-group row">
+          <div class="form-group row" [class.has-danger]="profileForm.controls.ethAddress.invalid">
             <div class="col-lg-9 col-md-9 col-sm-12">
               <label>ETH Address</label>
               <input class="form-control" #ethAddress formControlName="ethAddress" type="text" name="ethAddress" placeholder="0x123...">
-              <!-- <small *ngIf="!profileForm.controls.work.valid  && profileForm.controls.work.dirty">Please enter a valid email.</small> -->
+              <small *ngIf="profileForm.controls.ethAddress.errors && profileForm.controls.ethAddress.errors.isInvalidEthereumAddress"
+                class="form-control-feedback">Please enter a valid ethereum address.</small>
+              <small *ngIf="profileForm.controls.ethAddress.errors && profileForm.controls.ethAddress.errors.addressExists" class="form-control-feedback">This
+                address is already being used in CanWork. Please use another one.
+              </small>
             </div>
           </div>
 
@@ -23,7 +27,8 @@
               <select class="form-control" #category formControlName="category" type="select" name="category" placeholder="Category" [class.invalid]="!profileForm.controls.category.valid && profileForm.controls.category.dirty">
                 <option *ngFor="let cat of categories()" [value]="cat">{{cat}}</option>
               </select>
-              <small *ngIf="!profileForm.controls.work.valid  && profileForm.controls.work.dirty">Please select a category from the list</small>
+              <small *ngIf="!profileForm.controls.work.valid  && profileForm.controls.work.dirty">Please select a category
+                from the list</small>
             </div>
           </div>
 
@@ -47,7 +52,8 @@
               <label>Hourly Rate ( $USD )</label>
               <input class="form-control" #hourlyRate formControlName="hourlyRate" type="text" name="hourlyRate" placeholder="e.g. 19"
                 [class.invalid]="!profileForm.controls.hourlyRate.valid && profileForm.controls.hourlyRate.dirty">
-              <small *ngIf="!profileForm.controls.hourlyRate.valid  && profileForm.controls.hourlyRate.dirty">Please enter a number between 0 - 999</small>
+              <small *ngIf="!profileForm.controls.hourlyRate.valid  && profileForm.controls.hourlyRate.dirty">Please enter
+                a number between 0 - 999</small>
             </div>
           </div>
           <div class="form-group row">
@@ -66,13 +72,15 @@
               <label>First name *</label>
               <input class="form-control" #firstName formControlName="firstName" type="text" name="firstName" placeholder="First name"
                 maxlength="18" [class.invalid]="!profileForm.controls.firstName.valid && profileForm.controls.firstName.dirty">
-              <small *ngIf="!profileForm.controls.firstName.valid  && profileForm.controls.firstName.dirty">Please enter a valid first name.</small>
+              <small *ngIf="!profileForm.controls.firstName.valid  && profileForm.controls.firstName.dirty">Please enter
+                a valid first name.</small>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-8">
               <label>Last name *</label>
               <input class="form-control" #lastName formControlName="lastName" type="text" name="lastName" placeholder="Last Name" maxlength="18"
                 [class.invalid]="!profileForm.controls.lastName.valid && profileForm.controls.lastName.dirty">
-              <small *ngIf="!profileForm.controls.lastName.valid  && profileForm.controls.lastName.dirty">Please enter a valid last name.</small>
+              <small *ngIf="!profileForm.controls.lastName.valid  && profileForm.controls.lastName.dirty">Please enter a
+                valid last name.</small>
             </div>
           </div>
           <div class="form-group">
@@ -80,13 +88,15 @@
             <input class="form-control" #title formControlName="title" type="text" name="title" placeholder="Profession name" maxlength="36"
               [class.invalid]="!profileForm.controls.title.valid && profileForm.controls.title.dirty">
 
-            <small *ngIf="!profileForm.controls.title.valid  && profileForm.controls.title.dirty">Please enter a valid profession for your profile.</small>
+            <small *ngIf="!profileForm.controls.title.valid  && profileForm.controls.title.dirty">Please enter a valid profession
+              for your profile.</small>
           </div>
           <div class="form-group">
             <label>Short Bio (60 chars) *</label>
             <input class="form-control" #bio formControlName="bio" type="text" name="bio" placeholder="Creative short bio" maxlength="60"
               [class.invalid]="!profileForm.controls.bio.valid && profileForm.controls.bio.dirty">
-            <small *ngIf="!profileForm.controls.bio.valid  && profileForm.controls.bio.dirty">Please enter a valid bio for your profile. (20 words)</small>
+            <small *ngIf="!profileForm.controls.bio.valid  && profileForm.controls.bio.dirty">Please enter a valid bio for
+              your profile. (20 words)</small>
           </div>
           <div class="form-group">
             <label>Color scheme (click to choose)</label>
@@ -121,7 +131,7 @@
           </div>
 
 
-          <button type="button" class="btn btn-primary btn-canya-gradient next-button" [disabled]="!profileForm.controls.firstName.valid || !profileForm.controls.lastName.valid || 
+          <button type="button" class="btn btn-primary btn-canya-gradient next-button" [disabled]="!profileForm.controls.firstName.valid || !profileForm.controls.lastName.valid ||
           !profileForm.controls.title.valid || !profileForm.controls.bio.valid || !profileForm.controls.terms.valid || sending"
             (click)="submitForm()">NEXT</button>
         </div>
@@ -130,7 +140,8 @@
           <p class="text-gray">
             Your provider profile is now complete.
             <br/>
-            <br/>Your application to become a provider must now be approved by the CanYa DAO, submit your application below! </p>
+            <br/>Your application to become a provider must now be approved by the CanYa DAO, submit your application below!
+          </p>
 
           <button type="button" [disabled]="sending" class="btn btn-primary" (click)="proceed()">Submit</button>
         </div>

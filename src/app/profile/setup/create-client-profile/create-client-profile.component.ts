@@ -2,13 +2,14 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as randomColor from 'randomcolor';
-
+import { Subscription } from 'rxjs/Subscription';
+import { CanWorkEthService } from '@service/eth.service';
 import * as moment from 'moment-timezone';
-import { User, UserState, UserType } from '../../../core-classes/user';
-import { AuthService } from '../../../core-services/auth.service';
-import { UserService } from '../../../core-services/user.service';
-import { CurrencyValidator } from '../../currency.validator';
-import { EmailValidator } from '../../email.validator';
+import { User, UserState, UserType } from '@class/user';
+import { AuthService } from '@service/auth.service';
+import { UserService } from '@service/user.service';
+import { EmailValidator } from '@validator/email.validator';
+import { EthereumValidator } from '@validator/ethereum.validator';
 
 @Component({
   selector: 'app-create-client-profile',
@@ -47,8 +48,16 @@ export class CreateClientProfileComponent implements OnInit {
   profileForm: FormGroup = null;
   termsChecked = false;
 
-  constructor(private userService: UserService, private route: ActivatedRoute,
-    private formBuilder: FormBuilder, private router: Router, private authService: AuthService) { }
+  ethAddress: string
+  ethSub: Subscription
+
+  constructor(
+    private userService: UserService,
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private ethService: CanWorkEthService,
+    private authService: AuthService) { }
 
   ngOnInit() {
     if (this.user != null) {
@@ -57,6 +66,10 @@ export class CreateClientProfileComponent implements OnInit {
     this.stepperSteps = Object.values(this.steps);
     this.currentStep = this.stepperSteps[0];
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+
+    this.ethSub = this.ethService.account$.subscribe((acc: string) => {
+      this.ethAddress = acc
+    })
   }
 
   buildForm() {
@@ -69,14 +82,12 @@ export class CreateClientProfileComponent implements OnInit {
       title: [this.user.title || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
       bio: [this.user.bio || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(60)])],
       description: [this.user.description || '', Validators.compose([Validators.maxLength(500)])],
-      // category: [this.user.category || ''],
-      // skillTags: [''],
-      // hourlyRate: [this.user.hourlyRate || '', Validators.compose([CurrencyValidator.isValid])],
       color1: [colors[0]],
       color2: [colors[1]],
       color3: [colors[2]],
       terms: [false, Validators.requiredTrue],
-      timezone: moment.tz.guess()
+      timezone: moment.tz.guess(),
+      ethAddress: [this.user.ethAddress || this.ethAddress, Validators.compose([Validators.required, EthereumValidator.isValidAddress]), EthereumValidator.isUniqueAddress(this.userService.usersCollectionRef, this.user)],
     });
   }
 
@@ -97,12 +108,10 @@ export class CreateClientProfileComponent implements OnInit {
       work: this.profileForm.value.work,
       title: this.profileForm.value.title,
       bio: this.profileForm.value.bio,
-      // category: category,
-      // skillTags: tags,
-      // hourlyRate: this.profileForm.value.hourlyRate,
       colors: [this.profileForm.value.color1, this.profileForm.value.color2, this.profileForm.value.color3],
       description: this.profileForm.value.description,
-      timezone: moment.tz.guess()
+      timezone: moment.tz.guess(),
+      ethAddress: this.profileForm.value.ethAddress,
     };
 
     // tslint:disable-next-line:forin

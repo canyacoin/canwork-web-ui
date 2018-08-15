@@ -15,7 +15,8 @@
               <input class="form-control" #name formControlName="name" type="text" name="name" placeholder="Full name or Company name"
                 maxlength="36" [class.invalid]="!profileForm.controls.name.valid && profileForm.controls.name.dirty">
 
-              <small *ngIf="!profileForm.controls.name.valid  && profileForm.controls.name.dirty">Please enter a valid name or company name.</small>
+              <small *ngIf="!profileForm.controls.name.valid  && profileForm.controls.name.dirty">Please enter a valid name
+                or company name.</small>
             </div>
 
             <div class="form-group">
@@ -25,11 +26,14 @@
               <small *ngIf="!profileForm.controls.work.valid  && profileForm.controls.work.dirty">Please enter a valid email.</small>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" [class.has-danger]="profileForm.controls.ethAddress.invalid">
               <label>ETH Address</label>
               <input class="form-control" #ethAddress formControlName="ethAddress" type="text" name="ethAddress" placeholder="0x123...">
-
-              <!-- <small *ngIf="!profileForm.controls.work.valid  && profileForm.controls.work.dirty">Please enter a valid email.</small> -->
+              <small *ngIf="profileForm.controls.ethAddress.errors && profileForm.controls.ethAddress.errors.isInvalidEthereumAddress"
+                class="form-control-feedback">Please enter a valid ethereum address.</small>
+              <small *ngIf="profileForm.controls.ethAddress.errors && profileForm.controls.ethAddress.errors.addressExists" class="form-control-feedback">This
+                address is already being used in CanWork. Please use another one.
+              </small>
             </div>
 
             <div class="form-group">
@@ -37,7 +41,8 @@
               <input class="form-control" #title formControlName="title" type="text" name="title" placeholder="Headline of your profile"
                 maxlength="36" [class.invalid]="!profileForm.controls.title.valid && profileForm.controls.title.dirty">
 
-              <small *ngIf="!profileForm.controls.title.valid  && profileForm.controls.title.dirty">Please enter a valid headline for your profile.</small>
+              <small *ngIf="!profileForm.controls.title.valid  && profileForm.controls.title.dirty">Please enter a valid
+                headline for your profile.</small>
             </div>
 
             <div class="form-group">
@@ -45,7 +50,8 @@
               <input class="form-control" #bio formControlName="bio" type="text" name="bio" placeholder="Creative short bio" maxlength="60"
                 [class.invalid]="!profileForm.controls.bio.valid && profileForm.controls.bio.dirty">
 
-              <small *ngIf="!profileForm.controls.bio.valid  && profileForm.controls.bio.dirty">Please enter a valid bio for your profile.</small>
+              <small *ngIf="!profileForm.controls.bio.valid  && profileForm.controls.bio.dirty">Please enter a valid bio
+                for your profile.</small>
             </div>
 
 
@@ -137,7 +143,8 @@
               <input class="form-control" #hourlyRate formControlName="hourlyRate" type="text" name="hourlyRate" placeholder="e.g. 19"
                 [class.invalid]="!profileForm.controls.hourlyRate.valid && profileForm.controls.hourlyRate.dirty">
 
-              <small *ngIf="!profileForm.controls.hourlyRate.valid  && profileForm.controls.hourlyRate.dirty">Please enter a number between 0 - 999</small>
+              <small *ngIf="!profileForm.controls.hourlyRate.valid  && profileForm.controls.hourlyRate.dirty">Please enter
+                a number between 0 - 999</small>
             </div>
 
             <div class="form-group">

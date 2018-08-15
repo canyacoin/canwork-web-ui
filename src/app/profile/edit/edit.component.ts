@@ -8,8 +8,9 @@ import { User, UserState } from '@class/user';
 import { AuthService } from '@service/auth.service';
 import { UserService } from '@service/user.service';
 import { EthService } from '@canyaio/canpay-lib';
-import { CurrencyValidator } from '../currency.validator';
-import { EmailValidator } from '../email.validator';
+import { CurrencyValidator } from '@validator/currency.validator';
+import { EmailValidator } from '@validator/email.validator';
+import { EthereumValidator } from '@validator/ethereum.validator';
 
 @Component({
   selector: 'app-edit',
@@ -62,7 +63,7 @@ export class EditComponent implements OnInit, OnDestroy {
     this.profileForm = this.formBuilder.group({
       name: [this.currentUser.name || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
       work: [this.currentUser.work || '', Validators.compose([Validators.required, EmailValidator.isValid])],
-      ethAddress: [this.currentUser.ethAddress || this.ethAddress],
+      ethAddress: [this.currentUser.ethAddress || this.ethAddress, Validators.compose([Validators.required, EthereumValidator.isValidAddress]), EthereumValidator.isUniqueAddress(this.userService.usersCollectionRef, this.currentUser)],
       title: [this.currentUser.title || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
       bio: [this.currentUser.bio || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(60)])],
       category: [this.currentUser.category || ''],
