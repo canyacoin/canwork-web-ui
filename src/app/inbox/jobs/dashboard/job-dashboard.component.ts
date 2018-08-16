@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-
+import { OrderPipe } from 'ngx-order-pipe';
 import { Job, JobDescription, PaymentType, TimeRange, WorkType } from '../../../core-classes/job';
 import { User, UserType } from '../../../core-classes/user';
 import { AuthService } from '../../../core-services/auth.service';
@@ -19,14 +19,14 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   currentUser: User;
   userType: UserType;
   paymentType = PaymentType;
-
   jobs: Job[];
   jobsSubscription: Subscription;
   authSub: Subscription;
-
+  orderType: string;
+  reverseOrder: boolean;
   loading = true;
 
-  constructor(private authService: AuthService, private jobService: JobService, private userService: UserService, private router: Router) { }
+  constructor(private authService: AuthService, private orderPipe: OrderPipe, private jobService: JobService, private userService: UserService, private router: Router) { }
 
   ngOnInit() {
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
@@ -37,6 +37,8 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       }
       this.currentUser = user;
     });
+    this.orderType = 'name';
+    this.reverseOrder = false;
   }
 
   ngOnDestroy() {
@@ -50,6 +52,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       this.loading = false;
       this.jobs.forEach(async (job) => {
         this.jobService.assignOtherPartyAsync(job, this.userType);
+        console.log(job);
       });
     });
   }
@@ -62,5 +65,32 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
 
   viewJobDetails(jobId: string): void {
     this.router.navigate(['/inbox/job', jobId]);
+  }
+  setNewOrderType(selection: any) {
+    switch (selection) {
+      case (selection === '1'):
+        this.orderType = 'name';
+        break;
+      case (selection === '2'):
+        this.orderType = 'budget';
+        this.reverseOrder = false;
+        break;
+      case (selection === '3'):
+        console.log('changing...');
+        this.orderType = 'budget';
+        this.reverseOrder = true;
+        break;
+      case (selection === '4'):
+        this.orderType = 'actionLog[0].timestamp';
+        this.reverseOrder = false;
+        break;
+      case (selection === '5'):
+        this.orderType = 'actionLog[0].timestamp';
+        this.reverseOrder = true;
+        break;
+    }
+    console.log(selection === '2');
+    console.log(typeof(selection));
+    console.log('SortBy : ' + this.orderType + ':' + this.reverseOrder);
   }
 }

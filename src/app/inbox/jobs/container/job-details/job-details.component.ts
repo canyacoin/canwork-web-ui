@@ -51,7 +51,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
   initialiseJob() {
     const jobId = this.activatedRoute.snapshot.params['id'] || null;
-
     if (jobId) {
       this.jobSub = this.jobService.getJob(jobId).subscribe((job: Job) => {
         this.job = job;
