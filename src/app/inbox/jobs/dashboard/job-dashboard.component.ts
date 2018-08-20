@@ -1,9 +1,10 @@
-import { Component, OnDestroy, OnInit, Pipe, PipeTransform, NgModule } from '@angular/core';
+import { Component, NgModule, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { Router } from '@angular/router';
+import { FilterPipe } from 'ngx-filter-pipe';
+import { OrderPipe } from 'ngx-order-pipe';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { OrderPipe } from 'ngx-order-pipe';
-import { FilterPipe } from 'ngx-filter-pipe';
+
 import { Job, JobDescription, PaymentType, TimeRange, WorkType } from '../../../core-classes/job';
 import { User, UserType } from '../../../core-classes/user';
 import { AuthService } from '../../../core-services/auth.service';
@@ -68,12 +69,13 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.initialiseJobs(this.currentUser.address, this.userType);
   }
+
   viewJobDetails(jobId: string): void {
     this.router.navigate(['/inbox/job', jobId]);
   }
 
   filterJobsByState() {
-      this.jobs = this.filterPipe.transform(this.allJobs, this.filterByState);
+    this.jobs = this.filterPipe.transform(this.allJobs, this.filterByState);
   }
 
 }
