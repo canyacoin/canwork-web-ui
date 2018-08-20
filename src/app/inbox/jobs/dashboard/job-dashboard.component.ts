@@ -1,8 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Pipe, PipeTransform, NgModule } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { OrderPipe } from 'ngx-order-pipe';
+import { FilterPipe } from 'ngx-filter-pipe';
 import { Job, JobDescription, PaymentType, TimeRange, WorkType } from '../../../core-classes/job';
 import { User, UserType } from '../../../core-classes/user';
 import { AuthService } from '../../../core-services/auth.service';
@@ -14,6 +15,7 @@ import { UserService } from '../../../core-services/user.service';
   templateUrl: './job-dashboard.component.html',
   styleUrls: ['./job-dashboard.component.css']
 })
+
 export class JobDashboardComponent implements OnInit, OnDestroy {
 
   currentUser: User;
@@ -25,8 +27,12 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   orderType: string;
   reverseOrder: boolean;
   loading = true;
+  filterByState: any = { state: '' };
+  allJobs: Job[];
+  searchQuery: string;
 
-  constructor(private authService: AuthService, private orderPipe: OrderPipe, private jobService: JobService, private userService: UserService, private router: Router) { }
+
+  constructor(private authService: AuthService, private orderPipe: OrderPipe, private jobService: JobService, private userService: UserService, private router: Router, public filterPipe: FilterPipe) { }
 
   ngOnInit() {
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
@@ -37,7 +43,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       }
       this.currentUser = user;
     });
-    this.orderType = 'name';
+    this.orderType = 'information.title';
     this.reverseOrder = false;
   }
 
@@ -49,10 +55,10 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   private initialiseJobs(userId: string, userType: UserType) {
     this.jobsSubscription = this.jobService.getJobsByUser(userId, userType).subscribe(async (jobs: Job[]) => {
       this.jobs = jobs;
+      this.allJobs = jobs;
       this.loading = false;
       this.jobs.forEach(async (job) => {
         this.jobService.assignOtherPartyAsync(job, this.userType);
-        console.log(job);
       });
     });
   }
@@ -62,35 +68,14 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.initialiseJobs(this.currentUser.address, this.userType);
   }
-
   viewJobDetails(jobId: string): void {
     this.router.navigate(['/inbox/job', jobId]);
   }
-  setNewOrderType(selection: any) {
-    switch (selection) {
-      case (selection === '1'):
-        this.orderType = 'name';
-        break;
-      case (selection === '2'):
-        this.orderType = 'budget';
-        this.reverseOrder = false;
-        break;
-      case (selection === '3'):
-        console.log('changing...');
-        this.orderType = 'budget';
-        this.reverseOrder = true;
-        break;
-      case (selection === '4'):
-        this.orderType = 'actionLog[0].timestamp';
-        this.reverseOrder = false;
-        break;
-      case (selection === '5'):
-        this.orderType = 'actionLog[0].timestamp';
-        this.reverseOrder = true;
-        break;
-    }
-    console.log(selection === '2');
-    console.log(typeof(selection));
-    console.log('SortBy : ' + this.orderType + ':' + this.reverseOrder);
+
+  filterJobsByState() {
+      this.jobs = this.filterPipe.transform(this.allJobs, this.filterByState);
   }
+
 }
+
+
