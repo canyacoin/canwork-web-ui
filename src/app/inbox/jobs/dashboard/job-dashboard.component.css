@@ -1,20 +1,23 @@
 .headshot { 
   width: 75px;
   height: 75px;
-  border-radius: 50%; 
+  margin: 0 auto;
   object-fit: cover;
   object-position: center;
 }
 .headshot-div{
   border-radius: 50%;
-  width:65px;
-  height:65px;
+  width: 70px;
+  height: 70px;
   background-size: 105%;
+  margin: 0 auto;
   background-repeat: no-repeat;
   background-position: center;
   background-color:black; 
 }
-
+#checkBox{
+  margin-bottom: 7.5px;
+}
 .job-dashboard-card{
   box-shadow: 0 0px 10px 0 rgba(0,0,0,0.1); 
   border-radius: 5px;
@@ -25,6 +28,20 @@
 .job-info-status{
   text-align: right;
 }
+.search-group{
+  border:none;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+.search-group img{
+  width: 24px;
+  height: 24px;
+}
+.search-group .btn{
+  padding-right: 5px;
+  padding-left: 5px;
+  border-color: white; 
+}
 @media (max-width:863px) and (min-width:568px){
   .headshot {
     width: 65px;
@@ -32,9 +49,9 @@
   }
 } 
 @media (max-width:568px){
-  .headshot-div{
-    margin: 0 auto;
-  }
+  .desktop-search-form{
+    display: none;
+  } 
   .job-info{
     text-align: center;
   }

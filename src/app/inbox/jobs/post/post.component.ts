@@ -18,6 +18,7 @@ import { GenerateGuid } from '@util/generate.uid';
 import { AngularFireUploadTask } from 'angularfire2/storage';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs/Subscription';
+import { FilterPipe } from 'ngx-filter-pipe';
 
 @Component({
   selector: 'app-post',

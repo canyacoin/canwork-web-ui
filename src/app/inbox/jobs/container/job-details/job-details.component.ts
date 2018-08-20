@@ -51,7 +51,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
   initialiseJob() {
     const jobId = this.activatedRoute.snapshot.params['id'] || null;
-
     if (jobId) {
       this.jobSub = this.jobService.getJob(jobId).subscribe((job: Job) => {
         this.job = job;
@@ -95,21 +94,23 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   get stateExplanation(): string {
     switch (this.job.state) {
       case JobState.offer:
-        return "A client has offered a job to a provider and is awaiting the provider's acceptance";
+        return 'A client has offered a job to a provider and is awaiting the provider\'s acceptance';
       case JobState.workPendingCompletion:
-        return "The provider has marked the job as complete and is awaiting the client's acceptance";
+        return 'The provider has marked the job as complete and is awaiting the client\'s acceptance';
       case JobState.cancelled:
-        return "This job has been cancelled by the client";
+        return this.currentUserType === UserType.client ? 'You cancelled this job.' : 'This job has been cancelled by the client';
       case JobState.declined:
-        return "This job offer was turned down by the provider";
+        return 'This job offer was turned down by the provider';
       case JobState.inDispute:
-        return "The provider or the client has raised a dispute. This is being resolved by the CanYa DAO";
+        return 'The provider or the client has raised a dispute. This is being resolved by the CanYa DAO';
       case JobState.providerCounterOffer:
-        return "The provider has countered the client's offer";
+        return 'The provider has countered the client\'s offer';
       case JobState.clientCounterOffer:
-        return "The client has countered the provider's offer";
+        return 'The client has countered the provider\'s offer';
       case JobState.termsAcceptedAwaitingEscrow:
-        return "The job's terms has been accepted. The client should now send the agreed amount of money to the escrow to commence the job.";
+        return this.currentUserType === UserType.client ?
+          'The job\'s terms has been accepted. You can now send the agreed amount of money to the escrow to commence the job.'
+          : 'You have agreed to the terms and conditions of this job, you will need to wait for the client to send the funds to escrow.';
       case JobState.complete:
         return 'This job has been marked as complete by the client.';
       case JobState.authorisedEscrow:

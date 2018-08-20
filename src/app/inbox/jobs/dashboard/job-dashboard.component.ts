@@ -1,5 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgModule, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { Router } from '@angular/router';
+import { FilterPipe } from 'ngx-filter-pipe';
+import { OrderPipe } from 'ngx-order-pipe';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -14,19 +16,24 @@ import { UserService } from '../../../core-services/user.service';
   templateUrl: './job-dashboard.component.html',
   styleUrls: ['./job-dashboard.component.css']
 })
+
 export class JobDashboardComponent implements OnInit, OnDestroy {
 
   currentUser: User;
   userType: UserType;
   paymentType = PaymentType;
-
   jobs: Job[];
   jobsSubscription: Subscription;
   authSub: Subscription;
-
+  orderType: string;
+  reverseOrder: boolean;
   loading = true;
+  filterByState: any = { state: '' };
+  allJobs: Job[];
+  searchQuery: string;
 
-  constructor(private authService: AuthService, private jobService: JobService, private userService: UserService, private router: Router) { }
+
+  constructor(private authService: AuthService, private orderPipe: OrderPipe, private jobService: JobService, private userService: UserService, private router: Router, public filterPipe: FilterPipe) { }
 
   ngOnInit() {
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
@@ -37,6 +44,8 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       }
       this.currentUser = user;
     });
+    this.orderType = 'information.title';
+    this.reverseOrder = false;
   }
 
   ngOnDestroy() {
@@ -47,6 +56,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   private initialiseJobs(userId: string, userType: UserType) {
     this.jobsSubscription = this.jobService.getJobsByUser(userId, userType).subscribe(async (jobs: Job[]) => {
       this.jobs = jobs;
+      this.allJobs = jobs;
       this.loading = false;
       this.jobs.forEach(async (job) => {
         this.jobService.assignOtherPartyAsync(job, this.userType);
@@ -63,4 +73,11 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   viewJobDetails(jobId: string): void {
     this.router.navigate(['/inbox/job', jobId]);
   }
+
+  filterJobsByState() {
+    this.jobs = this.filterPipe.transform(this.allJobs, this.filterByState);
+  }
+
 }
+
+
