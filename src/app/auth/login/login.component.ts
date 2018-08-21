@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, isDevMode, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
@@ -18,17 +18,35 @@ import { UserService } from '../../core-services/user.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit, AfterViewInit {
+export class LoginComponent implements OnInit {
 
   showMobileLogin = false;
   disableMobileSignIn = true;
   loading = false;
   returnUrl: string;
   isOnMobile = false;
-  webViewEthAddress: string;
   mobileLoginState = '';
   pinDeliveredTo: string;
   httpHeaders = new Headers({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+
+  webViewEthAddress: string
+
+  @Input() emailAddress: string
+
+  steps: any = {
+    detectAddress: {
+      isCurrent: true,
+      isMatchingEthAddress: false
+    },
+    createAccountFromMobile: {
+      isCurrent: false,
+    },
+    existingAccountFromMobile: {
+      isCurrent: false,
+    },
+  }
+
+  displayCreateAccountFromMobile: boolean = false
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -47,7 +65,16 @@ export class LoginComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngAfterViewInit() {
+  onCreateAccountFromMobile() {
+    this.steps.detectAddress.isCurrent = false
+    this.steps.createAccountFromMobile.isCurrent = true
+    this.steps.existingAccountFromMobile.isCurrent = false
+  }
+
+  onBackToMobileSignIn() {
+    this.steps.detectAddress.isCurrent = true
+    this.steps.createAccountFromMobile.isCurrent = false
+    this.steps.existingAccountFromMobile.isCurrent = false
   }
 
   onCheckSignUp() {
@@ -59,10 +86,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
     console.log(this.showMobileLogin);
   }
 
-  private setWeb3EthereumPublicAddress() {
+  private async setWeb3EthereumPublicAddress() {
     this.ethService.account$.subscribe(async (address: string) => {
-      if (address !== undefined) {
-        this.webViewEthAddress = address;
+      if (address) {
+        this.webViewEthAddress = address
+        const querySnapshot = await this.userService.getUserByEthAddress(address)
+        this.steps.detectAddress.isMatchingEthAddress = !querySnapshot.empty
       }
     });
   }

@@ -37,6 +37,13 @@ export class UserService {
     });
   }
 
+  async getUserByEthAddress(address: string) {
+    let data = await this.usersCollectionRef.ref
+      .where('ethAddressLookup', '==', address.toUpperCase())
+      .get()
+    return data
+  }
+
   saveUser(credentials: User, type?: string): Promise<User> {
     return new Promise(async (resolve: any, reject: any) => {
       try {
