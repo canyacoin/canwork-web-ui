@@ -158,10 +158,20 @@ exports.generateAuthPinCode = functions.https.onRequest(async (request, response
       return response.status(405).type('application/json').send({ message: 'Method Not Allowed', supportedMethods: 'POST' });
     }
 
+    const emailAddress: string = request.body.emailAddress || '';
     const ethereumAddress: string = request.body.ethAddress || '';
-    const userSnapshot = await db.collection('users')
-      .where('ethAddressLookup', '==', ethereumAddress.toLocaleUpperCase())
-      .limit(1).get();
+
+    let userSnapshot;
+
+    if (emailAddress) {
+      userSnapshot = await db.collection('users')
+        .where('email', '==', emailAddress)
+        .limit(1).get();
+    } else {
+      userSnapshot = await db.collection('users')
+        .where('ethAddressLookup', '==', ethereumAddress.toLocaleUpperCase())
+        .limit(1).get();
+    }
 
     let i: number = 0;
     let user: any;
@@ -198,7 +208,7 @@ exports.generateAuthPinCode = functions.https.onRequest(async (request, response
 
       return response.status(201).type('application/json').send({ message: 'Secure pin generated and delivered', email: user.email });
     } else {
-      return response.status(404).type('application/json').send({ message: 'Ethereum address not found' });
+      return response.status(404).type('application/json').send({ message: `User not found` });
     }
   });
 });
@@ -220,12 +230,21 @@ exports.ethereumAuthViaPinCode = functions.https.onRequest(async (request, respo
       return response.status(405).type('application/json').send({ message: 'Method Not Allowed', supportedMethods: 'POST' });
     }
 
+    const emailAddress: string = request.body.emailAddress || '';
     const ethereumAddress: string = request.body.ethAddress || '';
     const pinCode: number = request.body.pin || 0;
 
-    const userSnapshot = await db.collection('users')
-      .where('ethAddressLookup', '==', ethereumAddress.toLocaleUpperCase())
-      .limit(1).get();
+    let userSnapshot;
+
+    if (emailAddress) {
+      userSnapshot = await db.collection('users')
+        .where('email', '==', emailAddress)
+        .limit(1).get();
+    } else {
+      userSnapshot = await db.collection('users')
+        .where('ethAddressLookup', '==', ethereumAddress.toLocaleUpperCase())
+        .limit(1).get();
+    }
 
     let i: number = 0;
     let user: any;

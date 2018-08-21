@@ -26,13 +26,21 @@
             </div>
           </div>
         </div>
+        <div *ngIf="steps.existingAccountFromMobile.isCurrent">
+          <h3>Sign in</h3>
+          <p class="m-0"><strong>Enter your email address</strong></p>
+          <input type="text" class="form-control" placeholder="your email address" [(ngModel)]="emailAddress">
+          <p class="my-5">Please enter the email associated with your facebook, google or github account.</p>
+          <p>Don't have an account? <span class="text-primary" (click)="onCreateAccountFromMobile()">Sign up</span></p>
+          <button class="btn btn-primary btn-block mt-5" (click)="onMatchingAccountFromMobile()">Sign in</button>
+        </div>
         <div *ngIf="steps.createAccountFromMobile.isCurrent">
           <h3>Sign up</h3>
           <p>Due to the limitations of mobile wallets, you need to sign up from your default mobile browser.</p>
           <p>Create your account and return to this browser in order to make the best use of the CANWork platform.</p>
           <button class="btn btn-primary btn-block" (click)="onBackToMobileSignIn()">Back</button>
         </div>
-        <div *ngIf="steps.existingAccountFromMobile.isCurrent">
+        <div *ngIf="steps.matchingAccountFromMobile.isCurrent">
           <div *ngIf="mobileLoginState == 'sending-pin' || mobileLoginState == 'authentication-via-pin'">
             <img src="assets/img/loader.svg" height="36px" alt="Loader">
           </div>

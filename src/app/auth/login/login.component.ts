@@ -44,6 +44,9 @@ export class LoginComponent implements OnInit {
     existingAccountFromMobile: {
       isCurrent: false,
     },
+    matchingAccountFromMobile: {
+      isCurrent: false,
+    },
   }
 
   constructor(private route: ActivatedRoute,
@@ -67,24 +70,28 @@ export class LoginComponent implements OnInit {
     this.steps.detectAddress.isCurrent = false
     this.steps.createAccountFromMobile.isCurrent = true
     this.steps.existingAccountFromMobile.isCurrent = false
+    this.steps.matchingAccountFromMobile.isCurrent = false
   }
 
   onBackToMobileSignIn() {
     this.steps.detectAddress.isCurrent = true
     this.steps.createAccountFromMobile.isCurrent = false
     this.steps.existingAccountFromMobile.isCurrent = false
+    this.steps.matchingAccountFromMobile.isCurrent = false
   }
 
   onExistingAccountFromMobile() {
     this.steps.detectAddress.isCurrent = false
     this.steps.createAccountFromMobile.isCurrent = false
     this.steps.existingAccountFromMobile.isCurrent = true
+    this.steps.matchingAccountFromMobile.isCurrent = false
   }
 
   onMatchingAccountFromMobile() {
     this.steps.detectAddress.isCurrent = false
     this.steps.createAccountFromMobile.isCurrent = false
-    this.steps.existingAccountFromMobile.isCurrent = true
+    this.steps.existingAccountFromMobile.isCurrent = false
+    this.steps.matchingAccountFromMobile.isCurrent = true
 
     this.generateAuthPinCodeAsync()
   }
@@ -110,7 +117,7 @@ export class LoginComponent implements OnInit {
 
   async generateAuthPinCodeAsync() {
     if (this.webViewEthAddress) {
-      const reqBody = { ethAddress: this.webViewEthAddress };
+      const reqBody = { emailAddress: this.emailAddress, ethAddress: this.webViewEthAddress };
       const reqOptions = { headers: this.httpHeaders };
       let response;
       const endPoint = `${environment.backendURI}/generateAuthPinCode`;
@@ -149,7 +156,7 @@ export class LoginComponent implements OnInit {
     const pin = authPin.value;
     if (this.webViewEthAddress) {
       console.log('+ auth pin:', pin);
-      const reqBody = { ethAddress: this.webViewEthAddress, pin: parseInt(pin, 10) };
+      const reqBody = { emailAddress: this.emailAddress, ethAddress: this.webViewEthAddress, pin: parseInt(pin, 10) };
       const reqOptions = { headers: this.httpHeaders };
       let response;
       const endPoint = `${environment.backendURI}/ethereumAuthViaPinCode`;
