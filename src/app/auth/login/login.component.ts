@@ -46,8 +46,6 @@ export class LoginComponent implements OnInit {
     },
   }
 
-  displayCreateAccountFromMobile: boolean = false
-
   constructor(private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
@@ -75,6 +73,20 @@ export class LoginComponent implements OnInit {
     this.steps.detectAddress.isCurrent = true
     this.steps.createAccountFromMobile.isCurrent = false
     this.steps.existingAccountFromMobile.isCurrent = false
+  }
+
+  onExistingAccountFromMobile() {
+    this.steps.detectAddress.isCurrent = false
+    this.steps.createAccountFromMobile.isCurrent = false
+    this.steps.existingAccountFromMobile.isCurrent = true
+  }
+
+  onMatchingAccountFromMobile() {
+    this.steps.detectAddress.isCurrent = false
+    this.steps.createAccountFromMobile.isCurrent = false
+    this.steps.existingAccountFromMobile.isCurrent = true
+
+    this.generateAuthPinCodeAsync()
   }
 
   onCheckSignUp() {
@@ -185,6 +197,7 @@ export class LoginComponent implements OnInit {
           }
         }
         this.mobileLoginState = 'authentication-pin-failed';
+        this.onBackToMobileSignIn()
       });
     }
   }
@@ -217,6 +230,8 @@ export class LoginComponent implements OnInit {
         window.sessionStorage.accessToken = idToken;
       }).catch(error => {
         console.error('! jwt token was not stored in session storage ', error);
+        alert('Sorry, we encountered an unknown error');
+        this.onBackToMobileSignIn()
       });
 
       if (usersMatchingId && usersMatchingId.length > 0) {

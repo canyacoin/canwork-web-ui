@@ -38,9 +38,9 @@ export class UserService {
   }
 
   async getUserByEthAddress(address: string) {
-    let data = await this.usersCollectionRef.ref
+    const data = await this.usersCollectionRef.ref
       .where('ethAddressLookup', '==', address.toUpperCase())
-      .get()
+      .limit(1).get()
     return data
   }
 
