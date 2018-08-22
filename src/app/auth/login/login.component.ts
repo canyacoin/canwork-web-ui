@@ -148,6 +148,7 @@ export class LoginComponent implements OnInit {
             break;
           }
         }
+        this.onBackToMobileSignIn()
       });
     }
   }
@@ -231,8 +232,10 @@ export class LoginComponent implements OnInit {
     this.handleLogin(parsedUser);
   }
 
-  handleLogin(userDetails: User) {
-    this.afs.collection<any>('users', ref => ref.where('address', '==', userDetails.address).limit(1)).valueChanges().take(1).subscribe((usersMatchingId: any) => {
+  async handleLogin(userDetails: User) {
+    try {
+      const user = await this.userService.getUser(userDetails.address)
+
       firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(idToken => {
         window.sessionStorage.accessToken = idToken;
       }).catch(error => {
@@ -241,13 +244,16 @@ export class LoginComponent implements OnInit {
         this.onBackToMobileSignIn()
       });
 
-      if (usersMatchingId && usersMatchingId.length > 0) {
-        this.authService.setUser(usersMatchingId[0]);
+      if (user) {
+        this.authService.setUser(user);
         this.router.navigate([this.returnUrl]);
       } else {
         this.initialiseUserAndRedirect(userDetails);
       }
-    });
+    } catch (error) {
+      console.log(error)
+      this.onBackToMobileSignIn()
+    }
   }
 
   async initialiseUserAndRedirect(user: User) {

@@ -165,7 +165,7 @@ exports.generateAuthPinCode = functions.https.onRequest(async (request, response
 
     if (emailAddress) {
       userSnapshot = await db.collection('users')
-        .where('email', '==', emailAddress)
+        .where('email', '==', emailAddress.toLowerCase())
         .limit(1).get();
     } else {
       userSnapshot = await db.collection('users')
@@ -238,7 +238,7 @@ exports.ethereumAuthViaPinCode = functions.https.onRequest(async (request, respo
 
     if (emailAddress) {
       userSnapshot = await db.collection('users')
-        .where('email', '==', emailAddress)
+        .where('email', '==', emailAddress.toLowerCase())
         .limit(1).get();
     } else {
       userSnapshot = await db.collection('users')
