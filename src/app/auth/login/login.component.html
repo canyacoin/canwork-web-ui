@@ -25,6 +25,10 @@
               </nav>
             </div>
           </div>
+          <div *ngIf="!webViewEthAddress">
+            <h3>Sign in</h3>
+            <firebase-ui (signInSuccess)="onFirebaseLogin($event)"></firebase-ui>
+          </div>
         </div>
         <div *ngIf="steps.existingAccountFromMobile.isCurrent">
           <h3>Sign in</h3>
