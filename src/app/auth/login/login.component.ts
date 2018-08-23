@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
@@ -173,7 +173,7 @@ export class LoginComponent implements OnInit {
         const token = data.json().token;
         console.log('+ authenticated via pin OK', token);
 
-        firebase.auth().signInWithCustomToken(token).catch((error) => {
+        await firebase.auth().signInWithCustomToken(token).catch((error) => {
           console.log('firebase.auth().signInWithCustomToken() Error: ', error);
         });
 
