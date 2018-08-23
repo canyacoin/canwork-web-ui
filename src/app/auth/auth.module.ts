@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import { FirebaseUIModule } from 'firebaseui-angular';
 
@@ -17,7 +18,8 @@ import { LoginComponent } from './login/login.component';
     CoreComponentsModule,
     CoreServicesModule,
     CoreUtilsModule,
-    FirebaseUIModule
+    FirebaseUIModule,
+    FormsModule
   ],
   declarations: [
     LoginComponent

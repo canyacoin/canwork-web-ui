@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, isDevMode, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
@@ -18,17 +18,36 @@ import { UserService } from '../../core-services/user.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit, AfterViewInit {
+export class LoginComponent implements OnInit {
 
   showMobileLogin = false;
   disableMobileSignIn = true;
   loading = false;
   returnUrl: string;
   isOnMobile = false;
-  webViewEthAddress: string;
   mobileLoginState = '';
   pinDeliveredTo: string;
   httpHeaders = new Headers({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+
+  webViewEthAddress: string
+
+  @Input() emailAddress: string
+
+  steps: any = {
+    detectAddress: {
+      isCurrent: true,
+      isMatchingEthAddress: false
+    },
+    createAccountFromMobile: {
+      isCurrent: false,
+    },
+    existingAccountFromMobile: {
+      isCurrent: false,
+    },
+    matchingAccountFromMobile: {
+      isCurrent: false,
+    },
+  }
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -47,7 +66,34 @@ export class LoginComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngAfterViewInit() {
+  onCreateAccountFromMobile() {
+    this.steps.detectAddress.isCurrent = false
+    this.steps.createAccountFromMobile.isCurrent = true
+    this.steps.existingAccountFromMobile.isCurrent = false
+    this.steps.matchingAccountFromMobile.isCurrent = false
+  }
+
+  onBackToMobileSignIn() {
+    this.steps.detectAddress.isCurrent = true
+    this.steps.createAccountFromMobile.isCurrent = false
+    this.steps.existingAccountFromMobile.isCurrent = false
+    this.steps.matchingAccountFromMobile.isCurrent = false
+  }
+
+  onExistingAccountFromMobile() {
+    this.steps.detectAddress.isCurrent = false
+    this.steps.createAccountFromMobile.isCurrent = false
+    this.steps.existingAccountFromMobile.isCurrent = true
+    this.steps.matchingAccountFromMobile.isCurrent = false
+  }
+
+  onMatchingAccountFromMobile() {
+    this.steps.detectAddress.isCurrent = false
+    this.steps.createAccountFromMobile.isCurrent = false
+    this.steps.existingAccountFromMobile.isCurrent = false
+    this.steps.matchingAccountFromMobile.isCurrent = true
+
+    this.generateAuthPinCodeAsync()
   }
 
   onCheckSignUp() {
@@ -59,17 +105,19 @@ export class LoginComponent implements OnInit, AfterViewInit {
     console.log(this.showMobileLogin);
   }
 
-  private setWeb3EthereumPublicAddress() {
+  private async setWeb3EthereumPublicAddress() {
     this.ethService.account$.subscribe(async (address: string) => {
-      if (address !== undefined) {
-        this.webViewEthAddress = address;
+      if (address) {
+        this.webViewEthAddress = address
+        const querySnapshot = await this.userService.getUserByEthAddress(address)
+        this.steps.detectAddress.isMatchingEthAddress = !querySnapshot.empty
       }
     });
   }
 
   async generateAuthPinCodeAsync() {
     if (this.webViewEthAddress) {
-      const reqBody = { ethAddress: this.webViewEthAddress };
+      const reqBody = { emailAddress: this.emailAddress, ethAddress: this.webViewEthAddress };
       const reqOptions = { headers: this.httpHeaders };
       let response;
       const endPoint = `${environment.backendURI}/generateAuthPinCode`;
@@ -100,6 +148,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
             break;
           }
         }
+        this.onBackToMobileSignIn()
       });
     }
   }
@@ -108,7 +157,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     const pin = authPin.value;
     if (this.webViewEthAddress) {
       console.log('+ auth pin:', pin);
-      const reqBody = { ethAddress: this.webViewEthAddress, pin: parseInt(pin, 10) };
+      const reqBody = { emailAddress: this.emailAddress, ethAddress: this.webViewEthAddress, pin: parseInt(pin, 10) };
       const reqOptions = { headers: this.httpHeaders };
       let response;
       const endPoint = `${environment.backendURI}/ethereumAuthViaPinCode`;
@@ -124,7 +173,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
         const token = data.json().token;
         console.log('+ authenticated via pin OK', token);
 
-        firebase.auth().signInWithCustomToken(token).catch((error) => {
+        await firebase.auth().signInWithCustomToken(token).catch((error) => {
           console.log('firebase.auth().signInWithCustomToken() Error: ', error);
         });
 
@@ -156,6 +205,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
           }
         }
         this.mobileLoginState = 'authentication-pin-failed';
+        this.onBackToMobileSignIn()
       });
     }
   }
@@ -182,21 +232,28 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.handleLogin(parsedUser);
   }
 
-  handleLogin(userDetails: User) {
-    this.afs.collection<any>('users', ref => ref.where('address', '==', userDetails.address).limit(1)).valueChanges().take(1).subscribe((usersMatchingId: any) => {
+  async handleLogin(userDetails: User) {
+    try {
+      const user = await this.userService.getUser(userDetails.address)
+
       firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(idToken => {
         window.sessionStorage.accessToken = idToken;
       }).catch(error => {
         console.error('! jwt token was not stored in session storage ', error);
+        alert('Sorry, we encountered an unknown error');
+        this.onBackToMobileSignIn()
       });
 
-      if (usersMatchingId && usersMatchingId.length > 0) {
-        this.authService.setUser(usersMatchingId[0]);
+      if (user) {
+        this.authService.setUser(user);
         this.router.navigate([this.returnUrl]);
       } else {
         this.initialiseUserAndRedirect(userDetails);
       }
-    });
+    } catch (error) {
+      console.log(error)
+      this.onBackToMobileSignIn()
+    }
   }
 
   async initialiseUserAndRedirect(user: User) {
