@@ -19,15 +19,42 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="form-inline desktop-search-form">
+              <label for="orderTypeSelect" class="mb-15">Show Only: </label>
+              <select class="mb-10 mx-10" #filterTypeSelect [(ngModel)]="filterByState.state" (change)="filterJobsByState()">
+                <option value="">
+                  <span>All Jobs</span>
+                </option>
+                <option value="Awaiting Escrow">
+                  <span>Jobs Awaiting Escrow</span>
+                </option>
+                <option value="Funds In Escrow">
+                  <span>Funds in Escrow</span>
+                </option>
+                <option value="Pending completion">
+                  <span>Jobs Pending Completion</span>
+                </option>
+                <option value="Disputed">
+                  <span>Jobs In Dispute</span>
+                </option>
+                <option value="Offer pending">
+                  <span>Pending Jobs</span>
+                </option>
+                <option value="Cancelled">
+                  <span>Cancelled</span>
+                </option>
+                <option value="Complete">
+                  <span>Completed Jobs</span>
+                </option>
+              </select>
               <label for="orderTypeSelect" class="mb-15">Order By: </label>
-              <select class="form-control mb-10 mx-10" #orderTypeSelect [(ngModel)]="orderType">
-                <option value="information.title" class="form-control">
+              <select class="mb-10 mx-10" #orderTypeSelect [(ngModel)]="orderType">
+                <option value="information.title">
                   <span>Project Name</span>
                 </option>
-                <option value="budget" class="form-control">
+                <option value="budget">
                   <span>Budget</span>
                 </option>
-                <option value="actionLog[0].timestamp" class="form-control">
+                <option value="actionLog[0].timestamp">
                   <span>Date Posted</span>
                 </option>
               </select>
@@ -38,86 +65,41 @@
                 </span>
               </div>
             </div>
-            <div class="form-inline desktop-search-form">
-              <label for="orderTypeSelect" class="mb-15">Show Only: </label>
-              <select class="form-control mb-10 mx-10" #filterTypeSelect [(ngModel)]="filterByState.state" (change)="filterJobsByState()">
-                <option value="" class="form-control">
-                  <span>All Jobs</span>
-                </option>
-                <option value="Awaiting Escrow" class="form-control">
-                  <span>Jobs Awaiting Escrow</span>
-                </option>
-                <option value="Funds In Escrow" class="form-control">
-                  <span>Funds in Escrow</span>
-                </option>
-                <option value="Pending completion" class="form-control">
-                  <span>Jobs Pending Completion</span>
-                </option>
-                <option value="Disputed" class="form-control">
-                  <span>Jobs In Dispute</span>
-                </option>
-                <option value="Offer pending" class="form-control">
-                  <span>Pending Jobs</span>
-                </option>
-                <option value="Cancelled" class="form-control">
-                  <span>Cancelled</span>
-                </option>
-                <option value="Complete" class="form-control">
-                  <span>Completed Jobs</span>
-                </option>
-              </select>
-            </div>
           </div>
-        </div>
+        </div> 
         <div *ngIf="!jobs || jobs.length == 0">
           No jobs to show!
         </div>
         <div *ngIf="jobs && jobs.length > 0">
           <div *ngFor="let job of jobs | orderBy : orderType:reverseOrder" class="card job-dashboard-card mb-15 p-20 pointer" [routerLink]="['/inbox/job', job.id]">
-            <div class="row job-info">
-              <div class="col-lg-8 col-md-6 col-sm-8">
-                <div class="row">
-                  <h5 class="col-lg-12">{{job.information.title}}
+            <div class="container job-info">
+              <div class="row">
+                <div class="col-lg-8">
+                  <h5>{{job.information.title}}
                   </h5>
                 </div>
-                <div class="row">
-                  <span class="col-lg-12">
-                    <div *ngIf="currentUser.type=='User'">
-                      <h6 class="fw-500">Posted To : {{job.otherParty?.name}}</h6>
-                    </div>
-                    <div *ngIf="currentUser.type=='Provider'">
-                      <h6 class="fw-500">Posted By : {{job.otherParty?.name}}</h6>
-                    </div>
-                  </span>
-                </div>
-                <div class="row">
-                  <div class="col-xs-2 col-sm-4 col-md-3 col-lg-2">
-                    <div *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
-                    </div>
-                  </div>
-                  <div class="col-xs-10 col-sm-8 col-md-9 col-lg-10">
-                    <h6 class="fw-500">Description</h6>
-                    <div style="max-height:50px;">
-                      <p style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
-                        {{job.information.description}}
-                      </p>
-                    </div>
-                  </div>
+                <div class="col-lg-4 desktop-right-mobile-center">
+                  <app-status-icon [job]="job" [currentUserType]="userType"></app-status-icon>
                 </div>
               </div>
-              <div class="col-lg-4 col-md-6 col-sm-4 job-info-status">
-                <div class="row">
-                  <h5 class="col-12">
-                    <app-budget [job]="job"></app-budget>
-                  </h5>
-                  <div class="col-12">
-                    <app-status-icon [job]="job" [currentUserType]="userType"></app-status-icon>
-                  </div>
-                  <div class="col-12">
-                    <p>Date posted : {{ job.actionLog[0].timestamp | date:'dd MMM yyyy' }}</p>
-                  </div>
-                  <div class="col-12">
-                    <app-skill-tag *ngFor="let skill of job.information.skills" [skill]="skill"></app-skill-tag>
+              <div class="row">
+                <div class="col-lg-12">
+                  <p class="text-grey fw-500">{{job.paymentType}} |
+                    <app-budget [job]="job"></app-budget>| Date posted : {{ job.actionLog[0].timestamp | date:'dd MMM yyyy'
+                    }}
+                  </p>
+                </div> 
+              </div>
+              <div class="row">
+                <div class="col-lg-12">
+                  <p>{{job.information.description}}</p>
+                </div>
+                <div class="col-lg-12">
+                  <div class="otherPartyName">
+                    <b>Posted <span *ngIf="currentUser.type=='User'">To</span><span *ngIf="currentUser.type=='Provider'">By</span>:</b>
+                    <span *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
+                    </span>
+                    <p>{{job.otherParty?.name}}</p>
                   </div>
                 </div>
               </div>

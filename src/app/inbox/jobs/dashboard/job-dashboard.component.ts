@@ -60,6 +60,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       this.loading = false;
       this.jobs.forEach(async (job) => {
         this.jobService.assignOtherPartyAsync(job, this.userType);
+        console.log(job);
       });
     });
   }

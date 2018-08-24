@@ -1,10 +1,11 @@
-
 <!-- 
 <div class="btn btn-{{stateColour}} cursor-auto">
   {{job?.state}}
 </div>
 -->
-<div class="status-div"> 
-<b>Status : <span class="fw-400" id="jobStatus">{{stateStatus}}</span>
-  <span class="btn-{{stateColour}} status-circle cursor-auto">&nbsp;&nbsp;&nbsp;</span></b>
-</div> 
+<div class="status-div">
+  <b>Status :</b> 
+  <span class="fw-400 jobStatus">{{stateStatus}} &nbsp;
+      <i class="circle-{{stateColour}} fas fa-circle"></i> 
+  </span>
+</div>
