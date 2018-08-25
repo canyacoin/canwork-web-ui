@@ -4,7 +4,7 @@ import { Http, Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EthService } from '@canyaio/canpay-lib';
 import { Job, JobDescription, PaymentType, TimeRange, WorkType } from '@class/job';
-import { ActionType, IJobAction } from '@class/job-action';
+import { ActionType, IJobAction, CreateJobAction } from '@class/job-action';
 import { Upload } from '@class/upload';
 import { User, UserType } from '@class/user';
 import '@extensions/string';
@@ -203,7 +203,7 @@ export class PostComponent implements OnInit, OnDestroy {
         budget: this.postForm.value.budget
       });
 
-      const action = new IJobAction(ActionType.createJob, UserType.client);
+      const action = new CreateJobAction(UserType.client, job);
       this.sent = await this.jobService.handleJobAction(job, action);
       this.isSending = false;
       if (this.sent) {

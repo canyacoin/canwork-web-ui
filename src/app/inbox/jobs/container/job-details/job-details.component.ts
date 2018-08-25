@@ -53,7 +53,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     const jobId = this.activatedRoute.snapshot.params['id'] || null;
     if (jobId) {
       this.jobSub = this.jobService.getJob(jobId).subscribe((job: Job) => {
-        this.job = job;
+        this.job = new Job(job);
         this.currentUserType = this.currentUser.address === job.clientId ? UserType.client : UserType.provider;
         this.jobService.assignOtherPartyAsync(this.job, this.currentUserType);
         const attachment = this.job.information.attachments;
