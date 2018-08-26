@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { CanPayService, Operation, View } from '@canyaio/canpay-lib';
 import { Job, JobState, Payment, PaymentType, TimeRange, WorkType } from '@class/job';
 import {
-  ActionType, AuthoriseEscrowAction, CounterOfferAction, EnterEscrowAction, IJobAction
+    ActionType, AuthoriseEscrowAction, CounterOfferAction, EnterEscrowAction, IJobAction
 } from '@class/job-action';
 import { Upload } from '@class/upload';
 import { User, UserType } from '@class/user';
@@ -11,10 +11,10 @@ import { CanWorkJobContract } from '@contract/can-work-job.contract';
 import { environment } from '@env/environment';
 import { ChatService } from '@service/chat.service';
 import { CanWorkEthService } from '@service/eth.service';
+import { JobNotificationService } from '@service/job-notification.service';
 import { UserService } from '@service/user.service';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
-import { JobNotificationService } from '@service/job-notification.service';
 
 @Injectable()
 export class JobService {
@@ -60,7 +60,8 @@ export class JobService {
   /** Add the 'other party' details to a job, i.e. the clients picture and name */
   async assignOtherPartyAsync(job: Job, viewingUserType: UserType) {
     if (job.clientId && job.providerId) {
-      job['otherParty'] = await this.userService.getUser(viewingUserType === UserType.client ? job.providerId : job.clientId);
+      const otherParty = await this.userService.getUser(viewingUserType === UserType.client ? job.providerId : job.clientId);
+      job['otherParty'] = { avatar: otherParty.avatar, name: otherParty.name };
     }
   }
 

@@ -1,61 +1,163 @@
-.headshot { 
-  width: 75px;
-  height: 75px;
-  margin: 0 auto;
-  object-fit: cover;
-  object-position: center;
-}
-.headshot-div{
-  border-radius: 50%;
-  width: 70px;
-  height: 70px;
-  background-size: 105%;
-  margin: 0 auto;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color:black; 
-}
-#checkBox{
-  margin-bottom: 7.5px;
-}
-.job-dashboard-card{
-  box-shadow: 0 0px 10px 0 rgba(0,0,0,0.1); 
-  border-radius: 5px;
-}
-.job-dashboard-card:hover{
-  box-shadow: 0 0px 15px 0 rgba(0,0,0,0.3); 
-} 
-.job-info-status{
-  text-align: right;
-}
-.search-group{
-  border:none;
-  margin-bottom: 10px;
-  margin-right: 10px;
-}
-.search-group img{
-  width: 24px;
-  height: 24px;
-}
-.search-group .btn{
-  padding-right: 5px;
-  padding-left: 5px;
-  border-color: white; 
-}
-@media (max-width:863px) and (min-width:568px){
-  .headshot {
-    width: 65px;
-    height: 65px; 
-  }
-} 
-@media (max-width:568px){
-  .desktop-search-form{
-    display: none;
-  } 
-  .job-info{
-    text-align: center;
-  }
-  .job-info-status{
-    text-align: center;
-  }
-}
+ .text-grey {
+   color: #9b9b9b;
+ }
+
+ .headshot-div {
+   position: absolute;
+   display: inline-block;
+   border-radius: 50%;
+   width: 25px;
+   height: 25px;
+   background-size: 105%;
+   background-repeat: no-repeat;
+   background-position: center;
+   background-color: black;
+ }
+
+ .otherPartyName {
+   margin: 0;
+ }
+
+ .skill-tag-col {
+   text-align: right;
+   padding: 0;
+   margin: 0;
+ }
+
+ .otherPartyName p {
+   display: inline;
+   padding-left: 30px;
+ }
+
+ .otherPartyName b {
+   padding-right: 5px;
+ }
+
+ #checkBox {
+   margin-bottom: 7.5px;
+ }
+
+ .job-dashboard-card {
+   box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.1);
+   border-radius: 5px;
+ }
+
+ .job-dashboard-card:hover {
+   box-shadow: 0 0px 15px 0 rgba(0, 0, 0, 0.3);
+ }
+
+ .job-info-status {
+   text-align: right;
+ }
+
+ .search-group {
+   border: none;
+   margin-bottom: 10px;
+   margin-right: 10px;
+ }
+
+ .search-group img {
+   width: 24px;
+   height: 24px;
+ }
+
+ .search-group .btn {
+   padding-right: 5px;
+   padding-left: 5px;
+   border-color: white;
+ }
+
+ .desktop-right-mobile-center {
+   text-align: right;
+ }
+
+ @media (max-width:863px) and (min-width:568px) {
+   .headshot {
+     width: 65px;
+     height: 65px;
+   }
+ }
+
+ @media (max-width:568px) {
+   .desktop-search-form {
+     display: none;
+   }
+   .job-info {
+     text-align: center;
+   }
+   .job-info-status {
+     text-align: center;
+   }
+   .desktop-right-mobile-center {
+     text-align: center;
+   }
+ }
+
+ /*the container must be positioned relative:*/
+
+ .custom-select {
+   position: relative;
+   font-family: Arial;
+ }
+
+ .custom-select select {
+   display: none;
+   /*hide original SELECT element:*/
+ }
+
+ .select-selected {
+   background-color: DodgerBlue;
+ }
+
+ /*style the arrow inside the select element:*/
+
+ .select-selected:after {
+   position: absolute;
+   content: "";
+   top: 14px;
+   right: 10px;
+   width: 0;
+   height: 0;
+   border: 6px solid transparent;
+   border-color: #fff transparent transparent transparent;
+ }
+
+ /*point the arrow upwards when the select box is open (active):*/
+
+ .select-selected.select-arrow-active:after {
+   border-color: transparent transparent #fff transparent;
+   top: 7px;
+ }
+
+ /*style the items (options), including the selected item:*/
+
+ .select-items div,
+ .select-selected {
+   color: #ffffff;
+   padding: 8px 16px;
+   border: 1px solid transparent;
+   border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+   cursor: pointer;
+ }
+
+ /*style items (options):*/
+
+ .select-items {
+   position: absolute;
+   background-color: DodgerBlue;
+   top: 100%;
+   left: 0;
+   right: 0;
+   z-index: 99;
+ }
+
+ /*hide the items when the select box is closed:*/
+
+ .select-hide {
+   display: none;
+ }
+
+ .select-items div:hover,
+ .same-as-selected {
+   background-color: rgba(0, 0, 0, 0.1);
+ }
