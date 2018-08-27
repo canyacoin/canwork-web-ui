@@ -45,7 +45,7 @@ export class CanWorkJobContract {
     return new Promise(async (resolve, reject) => {
       try {
         const txObject = await this.instance.methods.createJob(this.eth.web3js.utils.padRight(job.hexId, 32), client.ethAddress, provider.ethAddress, job.canInEscrow * (10 ** 6));
-        const gas = await txObject.estimateGas();
+        const gas = await txObject.estimateGas({ from: client.ethAddress });
         const gasPrice = await this.eth.getDefaultGasPriceGwei();
         const txOptions = {
           from: client.ethAddress,
@@ -77,12 +77,13 @@ export class CanWorkJobContract {
     return new Promise(async (resolve, reject) => {
       try {
         const txObject = await this.instance.methods.completeJob(this.eth.web3js.utils.padRight(job.hexId, 32));
+        const gas = await txObject.estimateGas({ from: fromAddr });
         const gasPrice = await this.eth.getDefaultGasPriceGwei();
 
         const txOptions = {
           from: fromAddr,
           value: '0x0',
-          gasLimit: 129000,
+          gasLimit: gas,
           gasPrice: gasPrice,
           data: txObject.encodeABI(),
         };
