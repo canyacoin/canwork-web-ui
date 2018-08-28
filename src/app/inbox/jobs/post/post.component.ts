@@ -203,7 +203,7 @@ export class PostComponent implements OnInit, OnDestroy {
         budget: this.postForm.value.budget
       });
 
-      const action = new CreateJobAction(UserType.client, job);
+      const action = new CreateJobAction(this.currentUser, job);
       this.sent = await this.jobService.handleJobAction(job, action);
       this.isSending = false;
       if (this.sent) {

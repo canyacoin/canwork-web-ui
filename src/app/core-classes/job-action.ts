@@ -1,13 +1,19 @@
 import * as moment from 'moment';
 import { UserType } from './user';
 import { Job } from '@class/job';
+import { User } from '@class/user';
 
 export class IJobAction {
   type: ActionType;
   executedBy: UserType;
+  userId: string;
   timestamp: string;
   private: boolean;
   emailSent: boolean;
+  job?: Job;
+  user?: User;
+  USD: number;
+  CAN: number;
 
   constructor(type: ActionType, executedBy: UserType) {
     this.type = type;
@@ -26,12 +32,14 @@ export class IJobAction {
 }
 
 export class CreateJobAction extends IJobAction {
-  constructor(executedBy: UserType, job: Job) {
-    super(ActionType.createJob, executedBy);
+  constructor(user: User, job: Job) {
+    super(ActionType.createJob, user.type);
+    this.job = job
   }
 
   getMessage(): string {
-    return `Created job`
+    console.log(this.job)
+    return `Proposed budget at CAN BUDGET`
   }
 }
 
