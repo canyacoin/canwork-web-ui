@@ -26,7 +26,7 @@ export class Job {
     actions[ActionType.createJob] = CreateJobAction
     // actions[ActionType.cancelJob] =
     // actions[ActionType.declineTerms] =
-    // actions[ActionType.counterOffer] = CounterOfferAction
+    actions[ActionType.counterOffer] = CounterOfferAction
     // actions[ActionType.acceptTerms] =
     // actions[ActionType.authoriseEscrow] = AuthoriseEscrowAction
     // actions[ActionType.enterEscrow] = EnterEscrowAction

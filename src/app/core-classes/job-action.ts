@@ -40,7 +40,7 @@ export class IJobAction {
 
 export class CreateJobAction extends IJobAction {
   constructor(user: User, job: Job) {
-    super(ActionType.createJob, user.type);
+    super(ActionType.createJob, user.type)
     this.job = job
     this.job.actionLog.filter(action => {
       return action.type === ActionType.createJob
@@ -65,9 +65,21 @@ export class CreateJobAction extends IJobAction {
 export class CounterOfferAction extends IJobAction {
   amount: number;
 
-  constructor(executedBy: UserType, amount: number) {
-    super(ActionType.counterOffer, executedBy);
-    this.amount = amount;
+  constructor(user: User, job: Job) {
+    super(ActionType.counterOffer, user.type)
+    this.job = job
+    this.amount = this.job.budget
+    this.job.actionLog.filter(action => {
+      return action.type === ActionType.counterOffer
+    }).forEach(action => {
+      this.USD = action.USD
+      this.CAN = action.CAN
+    })
+  }
+
+  getMessage(executor?: string): string {
+    return `'${executor}' proposed a counter offer.<br>
+      Proposed budget at $${this.USD}${this.getPaymentTypeString()} (${this.CAN} CAN)`
   }
 }
 

@@ -3,13 +3,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Http, Response } from '@angular/http';
 import { Job, PaymentType } from '@class/job';
 import {
-    ActionType, AddMessageAction, AuthoriseEscrowAction, CounterOfferAction, EnterEscrowAction,
-    IJobAction, RaiseDisputeAction
+  ActionType, AddMessageAction, AuthoriseEscrowAction, CounterOfferAction, EnterEscrowAction,
+  IJobAction, RaiseDisputeAction
 } from '@class/job-action';
-import { UserType } from '@class/user';
+import { UserType, User } from '@class/user';
 import { JobService } from '@service/job.service';
 import { getUsdToCan } from '@util/currency-conversion';
 import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
+import { UserService } from '@service/user.service';
 
 export class ActionDialogOptions {
   job: Job;
@@ -34,6 +35,8 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
   job: Job;
   action: IJobAction;
 
+  currentUser: User
+
   executing = false;
 
   actionTypes = ActionType;
@@ -42,17 +45,26 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
   canToUsd: number;
   form: FormGroup = null;
 
-  constructor(dialogService: DialogService, private formBuilder: FormBuilder, private jobService: JobService, private http: Http) {
+  constructor(
+    dialogService: DialogService,
+    private formBuilder: FormBuilder,
+    private jobService: JobService,
+    private userService: UserService,
+    private http: Http) {
     super(dialogService);
   }
 
   async handleAction() {
     this.executing = true;
+    this.currentUser = await this.userService.getUser(this.userType === UserType.client ? this.job.clientId : this.job.providerId)
     try {
       let action: IJobAction;
       switch (this.actionType) {
         case ActionType.counterOffer:
-          action = new CounterOfferAction(this.userType, this.form.value.budget);
+          this.job.budget = this.form.value.budget
+          action = new CounterOfferAction(this.currentUser, this.job)
+          action.USD = this.job.budget
+          action.CAN = await this.jobService.getJobBudget(this.job)
           break;
         case ActionType.addMessage:
           action = new AddMessageAction(this.userType, 'Messageeeee');
