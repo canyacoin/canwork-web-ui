@@ -204,6 +204,13 @@ export class PostComponent implements OnInit, OnDestroy {
       });
 
       const action = new CreateJobAction(this.currentUser, job);
+      action.USD = job.budget
+      action.CAN = await this.jobService.getJobBudget(job)
+      action.timelineExpectation = this.postForm.value.timelineExpectation
+      action.workType = this.postForm.value.workType
+      action.weeklyCommitment = this.postForm.value.weeklyCommitment
+      action.paymentType = this.postForm.value.paymentType
+
       this.sent = await this.jobService.handleJobAction(job, action);
       this.isSending = false;
       if (this.sent) {

@@ -1,7 +1,6 @@
 import * as moment from 'moment';
-import { UserType } from './user';
-import { Job } from '@class/job';
-import { User } from '@class/user';
+import { Job, WorkType, TimeRange, PaymentType } from '@class/job';
+import { User, UserType } from '@class/user';
 
 export class IJobAction {
   type: ActionType;
@@ -14,6 +13,10 @@ export class IJobAction {
   user?: User;
   USD: number;
   CAN: number;
+  workType: WorkType;
+  timelineExpectation: TimeRange;
+  weeklyCommitment: number;
+  paymentType: PaymentType;
 
   constructor(type: ActionType, executedBy: UserType) {
     this.type = type;
@@ -26,8 +29,12 @@ export class IJobAction {
     }
   }
 
-  getMessage?(): string {
-    return `Job action: ${this.type}`
+  getMessage?(executor?: string): string {
+    return `Job action: ${this.type}, by '${executor}'`
+  }
+
+  getPaymentTypeString(): string {
+    return this.paymentType && this.paymentType === PaymentType.hourly ? '/hr' : '/total'
   }
 }
 
@@ -35,11 +42,23 @@ export class CreateJobAction extends IJobAction {
   constructor(user: User, job: Job) {
     super(ActionType.createJob, user.type);
     this.job = job
+    this.job.actionLog.filter(action => {
+      return action.type === ActionType.createJob
+    }).forEach(action => {
+      this.USD = action.USD
+      this.CAN = action.CAN
+      this.workType = action.workType
+      this.timelineExpectation = action.timelineExpectation
+      this.weeklyCommitment = action.weeklyCommitment
+      this.paymentType = action.paymentType
+    })
   }
 
-  getMessage(): string {
-    console.log(this.job)
-    return `Proposed budget at CAN BUDGET`
+  getMessage(executor?: string): string {
+    return `Job created by '${executor}'.<br>
+      Proposed budget at $${this.USD}${this.getPaymentTypeString()} (${this.CAN} CAN)
+      for ${this.weeklyCommitment} hours a week
+      for ${this.timelineExpectation}`
   }
 }
 

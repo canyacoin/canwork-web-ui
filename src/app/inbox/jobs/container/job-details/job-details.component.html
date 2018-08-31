@@ -141,8 +141,7 @@
         <div *ngFor="let action of job.actionLog | orderBy:'timestamp':true" class="my-10">
           <div class="row" *ngIf="!action.private || action.executedBy == currentUserType">
             <div class="col-lg-8 col-md-6  col-sm-6 col-xs-6">
-              {{ action.type }} by {{ getActionExecutor(action) }}
-              <p>{{ job.getAction(action).getMessage() }}</p>
+              <p [innerHTML]="job.getAction(action).getMessage(getActionExecutor(action))"></p>
             </div>
             <div class="col-lg-4 col-md-6  col-sm-6 col-xs-6 text-right">
               {{ action.timestamp | date:'medium' }}
