@@ -1,6 +1,7 @@
 import * as moment from 'moment';
 import { Job, WorkType, TimeRange, PaymentType } from '@class/job';
 import { User, UserType } from '@class/user';
+import { THROW_IF_NOT_FOUND } from '@angular/core/src/di/injector';
 
 export class IJobAction {
   type: ActionType;
@@ -29,12 +30,12 @@ export class IJobAction {
     }
   }
 
-  getMessage?(executor?: string): string {
+  getMessage?(index: number, executor?: string): string {
     return `Job action: ${this.type}, by '${executor}'`
   }
 
-  getPaymentTypeString(): string {
-    return this.paymentType && this.paymentType === PaymentType.hourly ? '/hr' : '/total'
+  getPaymentTypeString(index: number): string {
+    return this.job.actionLog[index].paymentType && this.job.actionLog[index].paymentType === PaymentType.hourly ? '/hr' : '/total'
   }
 }
 
@@ -42,44 +43,29 @@ export class CreateJobAction extends IJobAction {
   constructor(user: User, job: Job) {
     super(ActionType.createJob, user.type)
     this.job = job
-    this.job.actionLog.filter(action => {
-      return action.type === ActionType.createJob
-    }).forEach(action => {
-      this.USD = action.USD
-      this.CAN = action.CAN
-      this.workType = action.workType
-      this.timelineExpectation = action.timelineExpectation
-      this.weeklyCommitment = action.weeklyCommitment
-      this.paymentType = action.paymentType
-    })
   }
 
-  getMessage(executor?: string): string {
+  getMessage(index: number, executor?: string): string {
     return `Job created by '${executor}'.<br>
-      Proposed budget at $${this.USD}${this.getPaymentTypeString()} (${this.CAN} CAN)
-      for ${this.weeklyCommitment} hours a week
-      for ${this.timelineExpectation}`
+      Proposed budget at $${this.job.actionLog[index].USD}${this.getPaymentTypeString(index)} (${this.job.actionLog[index].CAN} CAN)
+      for ${this.job.actionLog[index].weeklyCommitment} hours a week
+      for ${this.job.actionLog[index].timelineExpectation}`
   }
 }
 
 export class CounterOfferAction extends IJobAction {
   amount: number;
+  actions: any
 
   constructor(user: User, job: Job) {
     super(ActionType.counterOffer, user.type)
     this.job = job
     this.amount = this.job.budget
-    this.job.actionLog.filter(action => {
-      return action.type === ActionType.counterOffer
-    }).forEach(action => {
-      this.USD = action.USD
-      this.CAN = action.CAN
-    })
   }
 
-  getMessage(executor?: string): string {
+  getMessage(index: number, executor?: string): string {
     return `'${executor}' proposed a counter offer.<br>
-      Proposed budget at $${this.USD}${this.getPaymentTypeString()} (${this.CAN} CAN)`
+      Proposed budget at $${this.job.actionLog[index].USD}${this.getPaymentTypeString(index)} (${this.job.actionLog[index].CAN} CAN)`
   }
 }
 
