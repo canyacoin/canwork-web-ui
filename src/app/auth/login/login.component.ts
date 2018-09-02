@@ -102,7 +102,7 @@ export class LoginComponent implements OnInit {
 
   onClickMobileSignIn() {
     this.showMobileLogin = true;
-    console.log(this.showMobileLogin);
+    console.log('+ show mobile login', this.showMobileLogin);
   }
 
   private async setWeb3EthereumPublicAddress() {
@@ -233,9 +233,16 @@ export class LoginComponent implements OnInit {
   }
 
   async handleLogin(userDetails: User) {
+    let user: User
     try {
-      const user = await this.userService.getUser(userDetails.address)
+      user = await this.userService.getUser(userDetails.address);
+    } catch (error) {
+      console.error(`! failed to query for user with address: [${userDetails.address}] error was: `, error);
+      this.onBackToMobileSignIn()
+    }
 
+    if (user) {
+      console.log('+ logging existing user in:', user.email);
       firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(idToken => {
         window.sessionStorage.accessToken = idToken;
       }).catch(error => {
@@ -243,16 +250,11 @@ export class LoginComponent implements OnInit {
         alert('Sorry, we encountered an unknown error');
         this.onBackToMobileSignIn()
       });
-
-      if (user) {
-        this.authService.setUser(user);
-        this.router.navigate([this.returnUrl]);
-      } else {
-        this.initialiseUserAndRedirect(userDetails);
-      }
-    } catch (error) {
-      console.log(error)
-      this.onBackToMobileSignIn()
+      this.authService.setUser(user);
+      this.router.navigate([this.returnUrl]);
+    } else {
+      console.log('+ detected new user:', userDetails.email);
+      this.initialiseUserAndRedirect(userDetails);
     }
   }
 
