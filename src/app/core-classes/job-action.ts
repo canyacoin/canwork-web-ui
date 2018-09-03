@@ -18,6 +18,8 @@ export class IJobAction {
   timelineExpectation: TimeRange;
   weeklyCommitment: number;
   paymentType: PaymentType;
+  txId: string;
+  amountCan: number;
 
   constructor(type: ActionType, executedBy: UserType) {
     this.type = type;
@@ -30,12 +32,17 @@ export class IJobAction {
     }
   }
 
-  getMessage?(index: number, executor?: string): string {
+  init(init: Partial<IJobAction>) {
+    Object.assign(this, init)
+    return this
+  }
+
+  getMessage?(executor?: string): string {
     return `Job action: ${this.type}, by '${executor}'`
   }
 
-  getPaymentTypeString(index: number): string {
-    return this.job.actionLog[index].paymentType && this.job.actionLog[index].paymentType === PaymentType.hourly ? '/hr' : '/total'
+  getPaymentTypeString(): string {
+    return this.paymentType && this.paymentType === PaymentType.hourly ? '/hr' : '/total'
   }
 }
 
@@ -45,17 +52,16 @@ export class CreateJobAction extends IJobAction {
     this.job = job
   }
 
-  getMessage(index: number, executor?: string): string {
+  getMessage(executor?: string): string {
     return `Job created by '${executor}'.<br>
-      Proposed budget at $${this.job.actionLog[index].USD}${this.getPaymentTypeString(index)} (${this.job.actionLog[index].CAN} CAN)
-      for ${this.job.actionLog[index].weeklyCommitment} hours a week
-      for ${this.job.actionLog[index].timelineExpectation}`
+      Proposed budget at $${this.USD}${this.getPaymentTypeString()} (${this.CAN} CAN)
+      for ${this.weeklyCommitment} hours a week
+      for ${this.timelineExpectation}`
   }
 }
 
 export class CounterOfferAction extends IJobAction {
   amount: number;
-  actions: any
 
   constructor(user: User, job: Job) {
     super(ActionType.counterOffer, user.type)
@@ -63,9 +69,30 @@ export class CounterOfferAction extends IJobAction {
     this.amount = this.job.budget
   }
 
-  getMessage(index: number, executor?: string): string {
+  getMessage(executor?: string): string {
     return `'${executor}' proposed a counter offer.<br>
-      Proposed budget at $${this.job.actionLog[index].USD}${this.getPaymentTypeString(index)} (${this.job.actionLog[index].CAN} CAN)`
+      Proposed budget at $${this.USD}${this.getPaymentTypeString()} (${this.CAN} CAN)`
+  }
+}
+export class AcceptTermsAction extends IJobAction {
+  constructor(user: User, job: Job) {
+    super(ActionType.acceptTerms, user.type)
+    this.job = job
+  }
+
+  getMessage(executor?: string): string {
+    return `'${executor}' accepted the terms of this job.`
+  }
+}
+
+export class DeclineTermsAction extends IJobAction {
+  constructor(user: User, job: Job) {
+    super(ActionType.declineTerms, user.type)
+    this.job = job
+  }
+
+  getMessage(executor?: string): string {
+    return `'${executor}' declined the terms of this job.`
   }
 }
 
@@ -88,13 +115,9 @@ export class RaiseDisputeAction extends IJobAction {
 }
 
 export class AuthoriseEscrowAction extends IJobAction {
-  txId: string;
-  amountCan: number;
-
-  constructor(executedBy: UserType, txId: string, amountCan: number) {
-    super(ActionType.authoriseEscrow, executedBy);
-    this.txId = txId;
-    this.amountCan = amountCan;
+  constructor(user: User, job: Job) {
+    super(ActionType.authoriseEscrow, user.type)
+    this.job = job
   }
 }
 

@@ -73,7 +73,9 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
           action = new RaiseDisputeAction(this.userType, ''); // TODO: Add value from form here
           break;
         case ActionType.authoriseEscrow:
-          action = new AuthoriseEscrowAction(this.userType, '', 0);
+          action = new AuthoriseEscrowAction(this.currentUser, this.job)
+          action.txId = ''
+          action.amountCan = 0
           break;
         case ActionType.enterEscrow:
           action = new EnterEscrowAction(this.userType, '', this.job.canInEscrow);

@@ -138,10 +138,10 @@
     <div id="job-logs" class="row my-10">
       <div class="col-12 my-10 text-left">
         <b>Action Log</b>
-        <div *ngFor="let action of job.actionLog; let actionIndex = index" class="my-10">
+        <div *ngFor="let action of job.getActionLog() | orderBy:'timestamp':true; let actionIndex = index" class="my-10">
           <div class="row" *ngIf="!action.private || action.executedBy == currentUserType">
             <div class="col-lg-8 col-md-6  col-sm-6 col-xs-6">
-              <p [innerHTML]="job.getAction(action).getMessage(actionIndex, getActionExecutor(action))"></p>
+              <p [innerHTML]="action.getMessage(getActionExecutor(action))"></p>
             </div>
             <div class="col-lg-4 col-md-6  col-sm-6 col-xs-6 text-right">
               {{ action.timestamp | date:'medium' }}

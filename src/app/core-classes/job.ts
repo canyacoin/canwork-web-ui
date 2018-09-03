@@ -1,4 +1,4 @@
-import { IJobAction, ActionType, CreateJobAction, CounterOfferAction, AddMessageAction, RaiseDisputeAction, AuthoriseEscrowAction, EnterEscrowAction } from './job-action';
+import { IJobAction, ActionType, CreateJobAction, CounterOfferAction, AddMessageAction, RaiseDisputeAction, AuthoriseEscrowAction, EnterEscrowAction, AcceptTermsAction, DeclineTermsAction } from './job-action';
 import { Upload } from './upload';
 
 export class Job {
@@ -25,9 +25,9 @@ export class Job {
 
     actions[ActionType.createJob] = CreateJobAction
     // actions[ActionType.cancelJob] =
-    // actions[ActionType.declineTerms] =
+    actions[ActionType.declineTerms] = DeclineTermsAction
     actions[ActionType.counterOffer] = CounterOfferAction
-    // actions[ActionType.acceptTerms] =
+    actions[ActionType.acceptTerms] = AcceptTermsAction
     // actions[ActionType.authoriseEscrow] = AuthoriseEscrowAction
     // actions[ActionType.enterEscrow] = EnterEscrowAction
     // actions[ActionType.addMessage] = AddMessageAction
@@ -36,6 +36,13 @@ export class Job {
     // actions[ActionType.dispute] = RaiseDisputeAction
 
     return actions[action.type] ? new actions[action.type](action.executedBy, this) : new IJobAction(action.type, action.executedBy)
+  }
+
+  getActionLog() {
+    return this.actionLog.map(actionObj => {
+      const action = this.getAction(actionObj)
+      return action.init(actionObj)
+    })
   }
 }
 
