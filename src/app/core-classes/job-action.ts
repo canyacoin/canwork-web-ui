@@ -20,6 +20,7 @@ export class IJobAction {
   paymentType: PaymentType;
   txId: string;
   amountCan: number;
+  message: string;
 
   constructor(type: ActionType, executedBy: UserType) {
     this.type = type;
@@ -108,20 +109,21 @@ export class CancelJobAction extends IJobAction {
 }
 
 export class AddMessageAction extends IJobAction {
-  message: string;
+  constructor(user: User, job: Job) {
+    super(ActionType.addMessage, user.type)
+    this.job = job
+  }
 
-  constructor(executedBy: UserType, message: string) {
-    super(ActionType.addMessage, executedBy);
-    this.message = message;
+  getMessage(executor?: string): string {
+    return `'${executor}' left a message:<br>
+      <em>${this.message}</em>`
   }
 }
 
 export class RaiseDisputeAction extends IJobAction {
-  message: string;
-
-  constructor(executedBy: UserType, message: string) {
-    super(ActionType.dispute, executedBy);
-    this.message = message;
+  constructor(user: User, job: Job) {
+    super(ActionType.dispute, user.type)
+    this.job = job
   }
 }
 
@@ -132,7 +134,8 @@ export class AuthoriseEscrowAction extends IJobAction {
   }
 
   getMessage(executor?: string): string {
-    return `'${executor}' authorised the Escrow contract to transfer $${this.USD} (${this.CAN} CAN) to you when the job is finished.`
+    return `'${executor}' authorised the Escrow contract to transfer $${this.USD} (${this.CAN} CAN)<br>
+      Balance will be transferred to the provider when the job is finished.`
   }
 }
 
@@ -143,7 +146,8 @@ export class EnterEscrowAction extends IJobAction {
   }
 
   getMessage(executor?: string): string {
-    return `'${executor}' registered this job in the Escrow contract. When the job is succesfully delivered, '${executor}' will release the funds stored in the contract.`
+    return `'${executor}' registered this job in the Escrow contract.<br>
+      When the job is succesfully delivered, '${executor}' will release the funds stored in the contract.`
   }
 }
 

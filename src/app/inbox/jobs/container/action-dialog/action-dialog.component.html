@@ -6,41 +6,52 @@
     </div>
     <div class="modal-body">
       <p>{{messageBody}}</p>
-    </div>
-    <div *ngIf="form && actionType == actionTypes.counterOffer" class="mx-40">
-      <form [formGroup]="form" class="form-group">
-        <div>
-          <label class="text-dark">
-            <span *ngIf="job.paymentType == paymentTypes.hourly">Amount per hour (USD) *</span>
-            <span *ngIf="job.paymentType == paymentTypes.fixed">Total amount (USD) *</span>
-          </label>
-          <div class="row">
-            <div class="col-12">
-              <input type="number" formControlName="budget" class="form-control" min="0" step="5" placeholder="1 USD minimum" />
-              <small *ngIf="!form.controls.budget.valid && form.controls.budget.dirty" class="text-primary">Must be 1 USD or more.</small>
+      <div *ngIf="form && actionType == actionTypes.counterOffer" class="mx-40">
+        <form [formGroup]="form" class="form-group">
+          <div>
+            <label class="text-dark">
+              <span *ngIf="job.paymentType == paymentTypes.hourly">Amount per hour (USD) *</span>
+              <span *ngIf="job.paymentType == paymentTypes.fixed">Total amount (USD) *</span>
+            </label>
+            <div class="row">
+              <div class="col-12">
+                <input type="number" formControlName="budget" class="form-control" min="0" step="5" placeholder="1 USD minimum" />
+                <small *ngIf="!form.controls.budget.valid && form.controls.budget.dirty" class="text-primary">Must be 1 USD
+                  or more.</small>
+              </div>
+            </div>
+            <div class="row">
+              <div *ngIf="form.controls.budget.dirty && canToUsd" class="col-12 mt-5 text-right">
+                <small>~ {{usdToCan(form.controls.budget.value)}} CAN</small>
+              </div>
+              <div class="col-12">
+                <small class="text-primary text-wrap">
+                  <b>Important</b>: All Transactions on CanYa are made in CAN tokens</small>
+              </div>
             </div>
           </div>
-          <div class="row">
-            <div *ngIf="form.controls.budget.dirty && canToUsd" class="col-12 mt-5 text-right">
-              <small>~ {{usdToCan(form.controls.budget.value)}} CAN</small>
-            </div>
-            <div class="col-12">
-              <small class="text-primary text-wrap">
-                <b>Important</b>: All Transactions on CanYa are made in CAN tokens</small>
-            </div>
+          <br/>
+          <div *ngIf="userType == 'Provider'" class="form-group">
+            <app-terms [form]="form"></app-terms>
           </div>
-        </div>
-        <br/>
-        <div *ngIf="userType == 'Provider'" class="form-group">
-          <app-terms [form]="form"></app-terms>
-        </div>
-      </form>
-    </div>
-    <form [formGroup]="form" *ngIf="form && actionType == actionTypes.acceptTerms" class="mx-40">
-      <div *ngIf="userType == 'Provider'" class="form-group">
-        <app-terms [form]="form"></app-terms>
+        </form>
       </div>
-    </form>
+      <div *ngIf="form && actionType == actionTypes.addMessage || actionType == actionTypes.dispute" class="mx-40">
+        <form [formGroup]="form" class="form-group">
+          <div class="form-group">
+            <label>Add a message</label>
+            <textarea class="form-control" formControlName="message" name="message" placeholder="enter your message here"></textarea>
+          </div>
+        </form>
+      </div>
+      <div *ngIf="form && actionType == actionTypes.acceptTerms" class="mx-40">
+        <form [formGroup]="form">
+          <div *ngIf="userType == 'Provider'" class="form-group">
+            <app-terms [form]="form"></app-terms>
+          </div>
+        </form>
+      </div>
+    </div>
     <div class="modal-footer">
       <button [disabled]="submitDisabled || executing" type="button" class="btn btn-{{actionColour}}" (click)="handleAction()">
         {{actionType}}

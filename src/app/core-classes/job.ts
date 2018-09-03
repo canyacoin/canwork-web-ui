@@ -30,7 +30,7 @@ export class Job {
     actions[ActionType.acceptTerms] = AcceptTermsAction
     actions[ActionType.authoriseEscrow] = AuthoriseEscrowAction
     actions[ActionType.enterEscrow] = EnterEscrowAction
-    // actions[ActionType.addMessage] = AddMessageAction
+    actions[ActionType.addMessage] = AddMessageAction
     // actions[ActionType.finishedJob] =
     // actions[ActionType.acceptFinish] =
     // actions[ActionType.dispute] = RaiseDisputeAction

@@ -67,10 +67,12 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
           action.CAN = await this.jobService.getJobBudget(this.job)
           break;
         case ActionType.addMessage:
-          action = new AddMessageAction(this.userType, 'Messageeeee');
+          action = new AddMessageAction(this.currentUser, this.job)
+          action.message = this.form.value.message
           break;
         case ActionType.dispute:
-          action = new RaiseDisputeAction(this.userType, ''); // TODO: Add value from form here
+          action = new RaiseDisputeAction(this.currentUser, this.job)
+          action.message = this.form.value.message
           break;
         case ActionType.authoriseEscrow:
           action = new AuthoriseEscrowAction(this.currentUser, this.job)
@@ -122,8 +124,14 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
         this.setupCanConverter();
         break;
       case ActionType.addMessage:
+        this.form = this.formBuilder.group({
+          message: ['', Validators.required],
+        })
+        break;
       case ActionType.dispute:
-        // TODO: Set form to accept message using formbuilder example above
+        this.form = this.formBuilder.group({
+          message: ['', Validators.required],
+        })
         break;
       case ActionType.acceptTerms:
         this.form = this.formBuilder.group({
