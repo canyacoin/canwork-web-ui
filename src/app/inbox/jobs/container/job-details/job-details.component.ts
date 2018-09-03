@@ -79,7 +79,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   }
 
   actionIsDisabled(action: ActionType): boolean {
-    return false
+    return action === ActionType.dispute
   }
 
   get availableActions(): ActionType[] {
