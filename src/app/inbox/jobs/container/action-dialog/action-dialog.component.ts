@@ -76,9 +76,13 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
           action = new AuthoriseEscrowAction(this.currentUser, this.job)
           action.txId = ''
           action.amountCan = 0
+          action.USD = this.job.budget
+          action.CAN = await this.jobService.getJobBudget(this.job)
           break;
         case ActionType.enterEscrow:
-          action = new EnterEscrowAction(this.userType, '', this.job.canInEscrow);
+          action = new EnterEscrowAction(this.currentUser, this.job)
+          action.txId = ''
+          action.amountCan = this.job.canInEscrow
           break;
         default:
           action = new IJobAction(this.actionType, this.userType);

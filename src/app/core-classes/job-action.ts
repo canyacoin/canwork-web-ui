@@ -96,6 +96,17 @@ export class DeclineTermsAction extends IJobAction {
   }
 }
 
+export class CancelJobAction extends IJobAction {
+  constructor(user: User, job: Job) {
+    super(ActionType.cancelJob, user.type)
+    this.job = job
+  }
+
+  getMessage(executor?: string): string {
+    return `'${executor}' cancelled this job.`
+  }
+}
+
 export class AddMessageAction extends IJobAction {
   message: string;
 
@@ -119,16 +130,20 @@ export class AuthoriseEscrowAction extends IJobAction {
     super(ActionType.authoriseEscrow, user.type)
     this.job = job
   }
+
+  getMessage(executor?: string): string {
+    return `'${executor}' authorised the Escrow contract to transfer $${this.USD} (${this.CAN} CAN) to you when the job is finished.`
+  }
 }
 
 export class EnterEscrowAction extends IJobAction {
-  txId: string;
-  amountCan: number;
+  constructor(user: User, job: Job) {
+    super(ActionType.enterEscrow, user.type)
+    this.job = job
+  }
 
-  constructor(executedBy: UserType, txId: string, amountCan: number) {
-    super(ActionType.enterEscrow, executedBy);
-    this.txId = txId;
-    this.amountCan = amountCan;
+  getMessage(executor?: string): string {
+    return `'${executor}' registered this job in the Escrow contract. When the job is succesfully delivered, '${executor}' will release the funds stored in the contract.`
   }
 }
 

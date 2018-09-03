@@ -1,4 +1,4 @@
-import { IJobAction, ActionType, CreateJobAction, CounterOfferAction, AddMessageAction, RaiseDisputeAction, AuthoriseEscrowAction, EnterEscrowAction, AcceptTermsAction, DeclineTermsAction } from './job-action';
+import { IJobAction, ActionType, CreateJobAction, CounterOfferAction, AddMessageAction, RaiseDisputeAction, AuthoriseEscrowAction, EnterEscrowAction, AcceptTermsAction, DeclineTermsAction, CancelJobAction } from './job-action';
 import { Upload } from './upload';
 
 export class Job {
@@ -24,12 +24,12 @@ export class Job {
     const actions = {}
 
     actions[ActionType.createJob] = CreateJobAction
-    // actions[ActionType.cancelJob] =
+    actions[ActionType.cancelJob] = CancelJobAction
     actions[ActionType.declineTerms] = DeclineTermsAction
     actions[ActionType.counterOffer] = CounterOfferAction
     actions[ActionType.acceptTerms] = AcceptTermsAction
-    // actions[ActionType.authoriseEscrow] = AuthoriseEscrowAction
-    // actions[ActionType.enterEscrow] = EnterEscrowAction
+    actions[ActionType.authoriseEscrow] = AuthoriseEscrowAction
+    actions[ActionType.enterEscrow] = EnterEscrowAction
     // actions[ActionType.addMessage] = AddMessageAction
     // actions[ActionType.finishedJob] =
     // actions[ActionType.acceptFinish] =
