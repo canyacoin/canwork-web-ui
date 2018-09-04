@@ -2,9 +2,7 @@
   [(ngModel)]="tagInput" [ngModelOptions]="{standalone: true}" (change)="onTagChange()">
 
 
-<small class="text-primary text-wrap" *ngIf="tagSelectionInvalid || acceptedTags.length < minimumTags">Please enter a tag from our pre-defined list
-</small>
-<small class="text-primary text-wrap" *ngIf="acceptedTags.length >= 6 && tagInput != ''">You can only add 6 tags to a project
+<small class="text-primary text-wrap" *ngIf="tagSelectionInvalid">You can only add 6 tags to a project
 </small>
 
 <app-skill-tag *ngFor="let tag of acceptedTags" class="skill-tag mr-5 pointer" (click)="removeTag(tag)" [skill]="tag"></app-skill-tag>
