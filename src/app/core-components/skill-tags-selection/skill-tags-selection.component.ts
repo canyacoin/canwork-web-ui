@@ -39,7 +39,9 @@ export class SkillTagsSelectionComponent implements OnInit {
       return false
     }
 
-    if (this.acceptedTags.length <= 5) {
+    const duplicate = this.acceptedTags.findIndex(x => x === tag) > -1;
+
+    if (this.acceptedTags.length <= 5 && !duplicate && tag.length >= 2 && tag.length <= 14) {
       this.acceptedTags.push(tag)
       this.tagsUpdated.emit(this.acceptedTags.join(','))
     } else {
