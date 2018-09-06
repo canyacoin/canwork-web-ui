@@ -1,7 +1,6 @@
 import * as moment from 'moment';
 import { Job, WorkType, TimeRange, PaymentType } from '@class/job';
 import { User, UserType } from '@class/user';
-import { THROW_IF_NOT_FOUND } from '@angular/core/src/di/injector';
 
 export class IJobAction {
   type: ActionType;
@@ -22,15 +21,23 @@ export class IJobAction {
   amountCan: number;
   message: string;
 
-  constructor(type: ActionType, executedBy: UserType) {
-    this.type = type;
-    this.executedBy = executedBy;
-    this.timestamp = moment().format('x');
-    switch (type) {
+  constructor(user: User, job: Job) {
+    this.user = user
+    this.job = job
+    this.executedBy = this.currentUserType
+    this.timestamp = moment().format('x')
+    switch (this.type) {
       default:
         this.private = false;
         break;
     }
+  }
+
+  get currentUserType(): UserType {
+    if (!this.user || !this.job) {
+      return undefined
+    }
+    return this.user.address === this.job.clientId ? UserType.client : UserType.provider
   }
 
   init(init: Partial<IJobAction>) {
@@ -48,10 +55,9 @@ export class IJobAction {
 }
 
 export class CreateJobAction extends IJobAction {
-  constructor(user: User, job: Job) {
-    super(ActionType.createJob, user.type)
-    this.job = job
-  }
+
+  type = ActionType.createJob
+
 
   getMessage(executor?: string): string {
     return `Job created by '${executor}'.<br>
@@ -63,10 +69,10 @@ export class CreateJobAction extends IJobAction {
 
 export class CounterOfferAction extends IJobAction {
   amount: number;
+  type = ActionType.counterOffer
 
   constructor(user: User, job: Job) {
-    super(ActionType.counterOffer, user.type)
-    this.job = job
+    super(user, job)
     this.amount = this.job.budget
   }
 
@@ -76,10 +82,8 @@ export class CounterOfferAction extends IJobAction {
   }
 }
 export class AcceptTermsAction extends IJobAction {
-  constructor(user: User, job: Job) {
-    super(ActionType.acceptTerms, user.type)
-    this.job = job
-  }
+
+  type = ActionType.acceptTerms
 
   getMessage(executor?: string): string {
     return `'${executor}' accepted the terms of this job.`
@@ -87,10 +91,8 @@ export class AcceptTermsAction extends IJobAction {
 }
 
 export class DeclineTermsAction extends IJobAction {
-  constructor(user: User, job: Job) {
-    super(ActionType.declineTerms, user.type)
-    this.job = job
-  }
+
+  type = ActionType.declineTerms
 
   getMessage(executor?: string): string {
     return `'${executor}' declined the terms of this job.`
@@ -98,10 +100,8 @@ export class DeclineTermsAction extends IJobAction {
 }
 
 export class CancelJobAction extends IJobAction {
-  constructor(user: User, job: Job) {
-    super(ActionType.cancelJob, user.type)
-    this.job = job
-  }
+
+  type = ActionType.cancelJob
 
   getMessage(executor?: string): string {
     return `'${executor}' cancelled this job.`
@@ -109,10 +109,8 @@ export class CancelJobAction extends IJobAction {
 }
 
 export class AddMessageAction extends IJobAction {
-  constructor(user: User, job: Job) {
-    super(ActionType.addMessage, user.type)
-    this.job = job
-  }
+
+  type = ActionType.addMessage
 
   getMessage(executor?: string): string {
     return `'${executor}' left a message:<br>
@@ -121,17 +119,14 @@ export class AddMessageAction extends IJobAction {
 }
 
 export class RaiseDisputeAction extends IJobAction {
-  constructor(user: User, job: Job) {
-    super(ActionType.dispute, user.type)
-    this.job = job
-  }
+
+  type = ActionType.dispute
+
 }
 
 export class AuthoriseEscrowAction extends IJobAction {
-  constructor(user: User, job: Job) {
-    super(ActionType.authoriseEscrow, user.type)
-    this.job = job
-  }
+
+  type = ActionType.authoriseEscrow
 
   getMessage(executor?: string): string {
     return `'${executor}' authorised the Escrow contract to transfer $${this.USD} (${this.CAN} CAN)<br>
@@ -140,10 +135,8 @@ export class AuthoriseEscrowAction extends IJobAction {
 }
 
 export class EnterEscrowAction extends IJobAction {
-  constructor(user: User, job: Job) {
-    super(ActionType.enterEscrow, user.type)
-    this.job = job
-  }
+
+  type = ActionType.enterEscrow
 
   getMessage(executor?: string): string {
     return `'${executor}' registered this job in the Escrow contract.<br>

@@ -1,5 +1,6 @@
 import { IJobAction, ActionType, CreateJobAction, CounterOfferAction, AddMessageAction, RaiseDisputeAction, AuthoriseEscrowAction, EnterEscrowAction, AcceptTermsAction, DeclineTermsAction, CancelJobAction } from './job-action';
 import { Upload } from './upload';
+import { User } from '@class/user';
 
 export class Job {
   id: string;
@@ -20,7 +21,7 @@ export class Job {
     Object.assign(this, init);
   }
 
-  getAction(action: IJobAction): IJobAction {
+  getAction(action: IJobAction, user: User): IJobAction {
     const actions = {}
 
     actions[ActionType.createJob] = CreateJobAction
@@ -35,12 +36,12 @@ export class Job {
     // actions[ActionType.acceptFinish] =
     // actions[ActionType.dispute] = RaiseDisputeAction
 
-    return actions[action.type] ? new actions[action.type](action.executedBy, this) : new IJobAction(action.type, action.executedBy)
+    return actions[action.type] ? new actions[action.type](user, this) : new IJobAction(user, this)
   }
 
-  getActionLog() {
+  getActionLog(user: User) {
     return this.actionLog.map(actionObj => {
-      const action = this.getAction(actionObj)
+      const action = this.getAction(actionObj, user)
       return action.init(actionObj)
     })
   }

@@ -4,7 +4,7 @@ import { Http, Response } from '@angular/http';
 import { Job, PaymentType } from '@class/job';
 import {
   ActionType, AddMessageAction, AuthoriseEscrowAction, CounterOfferAction, EnterEscrowAction,
-  IJobAction, RaiseDisputeAction
+  IJobAction, RaiseDisputeAction, AcceptTermsAction, DeclineTermsAction
 } from '@class/job-action';
 import { UserType, User } from '@class/user';
 import { JobService } from '@service/job.service';
@@ -60,6 +60,12 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
     try {
       let action: IJobAction;
       switch (this.actionType) {
+        case ActionType.acceptTerms:
+          action = new AcceptTermsAction(this.currentUser, this.job)
+          break;
+        case ActionType.declineTerms:
+          action = new DeclineTermsAction(this.currentUser, this.job)
+          break;
         case ActionType.counterOffer:
           this.job.budget = this.form.value.budget
           action = new CounterOfferAction(this.currentUser, this.job)
@@ -87,7 +93,8 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
           action.amountCan = this.job.canInEscrow
           break;
         default:
-          action = new IJobAction(this.actionType, this.userType);
+          action = new IJobAction(this.currentUser, this.job)
+          action.type = this.actionType
           break;
       }
       const success = await this.jobService.handleJobAction(this.job, action);
@@ -99,6 +106,7 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
         this.executing = false;
       }
     } catch (e) {
+      console.log(e)
       console.log('error');
     }
   }

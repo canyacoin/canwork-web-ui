@@ -44,11 +44,9 @@
           </div>
         </form>
       </div>
-      <div *ngIf="form && actionType == actionTypes.acceptTerms" class="mx-40">
+      <div *ngIf="form && actionType == actionTypes.acceptTerms">
         <form [formGroup]="form">
-          <div *ngIf="userType == 'Provider'" class="form-group">
-            <app-terms [form]="form"></app-terms>
-          </div>
+          <app-terms [form]="form"></app-terms>
         </form>
       </div>
     </div>

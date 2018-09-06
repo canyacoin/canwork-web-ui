@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Job, JobDescription, JobState, PaymentType, TimeRange, WorkType } from '@class/job';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Job, JobState } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
 import { User, UserType } from '@class/user';
 import { AuthService } from '@service/auth.service';
@@ -8,7 +8,6 @@ import { JobService } from '@service/job.service';
 import { UserService } from '@service/user.service';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { DialogService } from 'ng2-bootstrap-modal';
-import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
 import {
