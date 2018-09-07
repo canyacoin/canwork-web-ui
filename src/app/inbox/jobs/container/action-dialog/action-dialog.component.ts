@@ -56,47 +56,48 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
 
   async handleAction() {
     this.executing = true;
-    this.currentUser = await this.userService.getUser(this.userType === UserType.client ? this.job.clientId : this.job.providerId)
     try {
       let action: IJobAction;
       switch (this.actionType) {
         case ActionType.acceptTerms:
-          action = new AcceptTermsAction(this.currentUser, this.job)
+          action = new AcceptTermsAction
           break;
         case ActionType.declineTerms:
-          action = new DeclineTermsAction(this.currentUser, this.job)
+          action = new DeclineTermsAction
           break;
         case ActionType.counterOffer:
           this.job.budget = this.form.value.budget
-          action = new CounterOfferAction(this.currentUser, this.job)
+          action = new CounterOfferAction
+          action.amount = this.job.budget
           action.USD = this.job.budget
           action.CAN = await this.jobService.getJobBudget(this.job)
           break;
         case ActionType.addMessage:
-          action = new AddMessageAction(this.currentUser, this.job)
+          action = new AddMessageAction
           action.message = this.form.value.message
           break;
         case ActionType.dispute:
-          action = new RaiseDisputeAction(this.currentUser, this.job)
+          action = new RaiseDisputeAction
           action.message = this.form.value.message
           break;
         case ActionType.authoriseEscrow:
-          action = new AuthoriseEscrowAction(this.currentUser, this.job)
+          action = new AuthoriseEscrowAction
           action.txId = ''
           action.amountCan = 0
           action.USD = this.job.budget
           action.CAN = await this.jobService.getJobBudget(this.job)
           break;
         case ActionType.enterEscrow:
-          action = new EnterEscrowAction(this.currentUser, this.job)
+          action = new EnterEscrowAction
           action.txId = ''
           action.amountCan = this.job.canInEscrow
           break;
         default:
-          action = new IJobAction(this.currentUser, this.job)
+          action = new IJobAction
           action.type = this.actionType
           break;
       }
+      action.executedBy = this.userType
       const success = await this.jobService.handleJobAction(this.job, action);
       if (success) {
         this.result = true;

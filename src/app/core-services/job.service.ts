@@ -345,12 +345,6 @@ export class JobService {
 
     const parsedActions: Array<any> = [];
     job.actionLog.forEach((action: IJobAction) => {
-      if (action.job) {
-        delete action.job
-      }
-      if (action.user) {
-        delete action.user
-      }
       parsedActions.push(Object.assign({}, action));
     });
 

@@ -9,8 +9,6 @@ export class IJobAction {
   timestamp: string;
   private: boolean;
   emailSent: boolean;
-  job?: Job;
-  user?: User;
   USD: number;
   CAN: number;
   workType: WorkType;
@@ -20,24 +18,15 @@ export class IJobAction {
   txId: string;
   amountCan: number;
   message: string;
+  amount: number
 
-  constructor(user: User, job: Job) {
-    this.user = user
-    this.job = job
-    this.executedBy = this.currentUserType
+  constructor() {
     this.timestamp = moment().format('x')
     switch (this.type) {
       default:
         this.private = false;
         break;
     }
-  }
-
-  get currentUserType(): UserType {
-    if (!this.user || !this.job) {
-      return undefined
-    }
-    return this.user.address === this.job.clientId ? UserType.client : UserType.provider
   }
 
   init(init: Partial<IJobAction>) {
@@ -55,9 +44,7 @@ export class IJobAction {
 }
 
 export class CreateJobAction extends IJobAction {
-
   type = ActionType.createJob
-
 
   getMessage(executor?: string): string {
     return `Job created by '${executor}'.<br>
@@ -68,13 +55,7 @@ export class CreateJobAction extends IJobAction {
 }
 
 export class CounterOfferAction extends IJobAction {
-  amount: number;
   type = ActionType.counterOffer
-
-  constructor(user: User, job: Job) {
-    super(user, job)
-    this.amount = this.job.budget
-  }
 
   getMessage(executor?: string): string {
     return `'${executor}' proposed a counter offer.<br>
@@ -82,7 +63,6 @@ export class CounterOfferAction extends IJobAction {
   }
 }
 export class AcceptTermsAction extends IJobAction {
-
   type = ActionType.acceptTerms
 
   getMessage(executor?: string): string {
@@ -91,7 +71,6 @@ export class AcceptTermsAction extends IJobAction {
 }
 
 export class DeclineTermsAction extends IJobAction {
-
   type = ActionType.declineTerms
 
   getMessage(executor?: string): string {
@@ -100,7 +79,6 @@ export class DeclineTermsAction extends IJobAction {
 }
 
 export class CancelJobAction extends IJobAction {
-
   type = ActionType.cancelJob
 
   getMessage(executor?: string): string {
@@ -109,7 +87,6 @@ export class CancelJobAction extends IJobAction {
 }
 
 export class AddMessageAction extends IJobAction {
-
   type = ActionType.addMessage
 
   getMessage(executor?: string): string {
@@ -119,15 +96,11 @@ export class AddMessageAction extends IJobAction {
 }
 
 export class RaiseDisputeAction extends IJobAction {
-
   type = ActionType.dispute
-
 }
 
 export class AuthoriseEscrowAction extends IJobAction {
-
   type = ActionType.authoriseEscrow
-
   getMessage(executor?: string): string {
     return `'${executor}' authorised the Escrow contract to transfer $${this.USD} (${this.CAN} CAN)<br>
       Balance will be transferred to the provider when the job is finished.`
@@ -135,9 +108,7 @@ export class AuthoriseEscrowAction extends IJobAction {
 }
 
 export class EnterEscrowAction extends IJobAction {
-
   type = ActionType.enterEscrow
-
   getMessage(executor?: string): string {
     return `'${executor}' registered this job in the Escrow contract.<br>
       When the job is succesfully delivered, '${executor}' will release the funds stored in the contract.`

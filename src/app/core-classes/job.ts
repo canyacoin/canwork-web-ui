@@ -36,7 +36,7 @@ export class Job {
     // actions[ActionType.acceptFinish] =
     // actions[ActionType.dispute] = RaiseDisputeAction
 
-    return actions[action.type] ? new actions[action.type](user, this) : new IJobAction(user, this)
+    return actions[action.type] ? new actions[action.type] : new IJobAction
   }
 
   getActionLog(user: User) {
