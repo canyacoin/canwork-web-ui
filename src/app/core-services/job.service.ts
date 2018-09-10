@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { CanPayService, Operation, View } from '@canyaio/canpay-lib';
 import { Job, JobState, Payment, PaymentType, TimeRange, WorkType } from '@class/job';
 import {
-    ActionType, AuthoriseEscrowAction, CounterOfferAction, EnterEscrowAction, IJobAction
+  ActionType, AuthoriseEscrowAction, CounterOfferAction, EnterEscrowAction, IJobAction
 } from '@class/job-action';
 import { Upload } from '@class/upload';
 import { User, UserType } from '@class/user';
@@ -70,7 +70,7 @@ export class JobService {
   // =========================
 
 
-  private async getJobBudget(job: Job): Promise<number> {
+  async getJobBudget(job: Job): Promise<number> {
     const canToUsd = await this.ethService.getCanToUsd();
     if (canToUsd) {
       const totalBudget = job.paymentType === PaymentType.fixed ? job.budget : job.budget * this.getTotalWorkHours(job);

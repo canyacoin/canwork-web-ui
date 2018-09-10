@@ -33,35 +33,34 @@ export class SkillTagsSelectionComponent implements OnInit {
 
   onTagEnter() {
     const tag = this.tagInput;
-    const indexOfTag = this.skillTagsList.findIndex(x => x === tag);
-    if (indexOfTag !== -1) {
-      if (!this.acceptedTags.includes(tag)) {
-        if (this.acceptedTags.length <= 5) {
-          this.acceptedTags.push(tag);
-          this.tagsUpdated.emit(this.acceptedTags.join(','));
-        } else {
-          this.tagSelectionInvalid = true;
-          return;
-        }
-      }
-      this.tagInput = '';
-    } else if (tag !== '') {
-      this.tagSelectionInvalid = true;
-      return;
+
+    if (tag === '') {
+      this.tagSelectionInvalid = true
+      return false
     }
-    this.tagSelectionInvalid = false;
+
+    const duplicate = this.acceptedTags.findIndex(x => x === tag) > -1;
+
+    if (this.acceptedTags.length <= 5 && !duplicate && tag.length >= 2 && tag.length <= 14) {
+      this.acceptedTags.push(tag)
+      this.tagsUpdated.emit(this.acceptedTags.join(','))
+    } else {
+      this.tagSelectionInvalid = true
+      return false
+    }
+
+    this.tagInput = ''
+    this.tagSelectionInvalid = false
   }
 
   onTagChange() {
     const tag = this.tagInput;
     const indexOfTag = this.skillTagsList.findIndex(x => x === tag);
     if (indexOfTag !== -1) {
-      if (!this.acceptedTags.includes(tag)) {
-        if (this.acceptedTags.length <= 5) {
-          this.acceptedTags.push(tag);
-          this.tagsUpdated.emit(this.acceptedTags.join(','));
-          this.tagInput = '';
-        }
+      if (this.acceptedTags.length <= 5) {
+        this.acceptedTags.push(tag);
+        this.tagsUpdated.emit(this.acceptedTags.join(','));
+        this.tagInput = '';
       }
     }
     this.tagSelectionInvalid = false;

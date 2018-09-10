@@ -31,6 +31,8 @@ export class UserService {
             user.offset = moment.tz(user.timezone).format('Z');
           }
           resolve(user);
+        } else {
+          resolve(undefined);
         }
         reject();
       });
