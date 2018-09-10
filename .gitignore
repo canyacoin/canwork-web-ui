@@ -14,8 +14,6 @@ prod-deploy.sh
 staging-deploy.sh
 cam-deploy.sh
 
-# Cam added: hide environment secrets for firebase
-src/environments/*.ts
 # dependencies
 /node_modules
 functions/node_modules
