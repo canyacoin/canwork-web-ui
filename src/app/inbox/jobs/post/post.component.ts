@@ -4,7 +4,7 @@ import { Http, Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EthService } from '@canyaio/canpay-lib';
 import { Job, JobDescription, PaymentType, TimeRange, WorkType } from '@class/job';
-import { ActionType, IJobAction, CreateJobAction } from '@class/job-action';
+import { ActionType, CreateJobAction, IJobAction } from '@class/job-action';
 import { Upload } from '@class/upload';
 import { User, UserType } from '@class/user';
 import '@extensions/string';
@@ -17,8 +17,8 @@ import { getUsdToCan } from '@util/currency-conversion';
 import { GenerateGuid } from '@util/generate.uid';
 import { AngularFireUploadTask } from 'angularfire2/storage';
 import * as _ from 'lodash';
-import { Subscription } from 'rxjs/Subscription';
 import { FilterPipe } from 'ngx-filter-pipe';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-post',
@@ -204,6 +204,7 @@ export class PostComponent implements OnInit, OnDestroy {
       });
 
       const action = new CreateJobAction
+      action.executedBy = UserType.client;
       action.USD = job.budget
       action.CAN = await this.jobService.getJobBudget(job)
       action.timelineExpectation = this.postForm.value.timelineExpectation

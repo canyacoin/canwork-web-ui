@@ -1,6 +1,7 @@
-import * as moment from 'moment';
-import { Job, WorkType, TimeRange, PaymentType } from '@class/job';
+import { Job, PaymentType, TimeRange, WorkType } from '@class/job';
 import { User, UserType } from '@class/user';
+
+import * as moment from 'moment';
 
 export class IJobAction {
   type: ActionType;
@@ -9,6 +10,7 @@ export class IJobAction {
   timestamp: string;
   private: boolean;
   emailSent: boolean;
+
   USD: number;
   CAN: number;
   workType: WorkType;
@@ -17,8 +19,9 @@ export class IJobAction {
   paymentType: PaymentType;
   txId: string;
   amountCan: number;
-  message: string;
   amount: number
+
+  message: string;
 
   constructor() {
     this.timestamp = moment().format('x')
