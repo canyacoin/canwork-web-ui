@@ -3,13 +3,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Http, Response } from '@angular/http';
 import { Job, PaymentType } from '@class/job';
 import {
-    ActionType, AddMessageAction, AuthoriseEscrowAction, CounterOfferAction, EnterEscrowAction,
-    IJobAction, RaiseDisputeAction
+  ActionType, AddMessageAction, AuthoriseEscrowAction, CounterOfferAction, EnterEscrowAction,
+  IJobAction, RaiseDisputeAction, AcceptTermsAction, DeclineTermsAction
 } from '@class/job-action';
-import { UserType } from '@class/user';
+import { UserType, User } from '@class/user';
 import { JobService } from '@service/job.service';
 import { getUsdToCan } from '@util/currency-conversion';
 import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
+import { UserService } from '@service/user.service';
 
 export class ActionDialogOptions {
   job: Job;
@@ -34,6 +35,8 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
   job: Job;
   action: IJobAction;
 
+  currentUser: User
+
   executing = false;
 
   actionTypes = ActionType;
@@ -42,7 +45,12 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
   canToUsd: number;
   form: FormGroup = null;
 
-  constructor(dialogService: DialogService, private formBuilder: FormBuilder, private jobService: JobService, private http: Http) {
+  constructor(
+    dialogService: DialogService,
+    private formBuilder: FormBuilder,
+    private jobService: JobService,
+    private userService: UserService,
+    private http: Http) {
     super(dialogService);
   }
 
@@ -51,25 +59,45 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
     try {
       let action: IJobAction;
       switch (this.actionType) {
+        case ActionType.acceptTerms:
+          action = new AcceptTermsAction
+          break;
+        case ActionType.declineTerms:
+          action = new DeclineTermsAction
+          break;
         case ActionType.counterOffer:
-          action = new CounterOfferAction(this.userType, this.form.value.budget);
+          this.job.budget = this.form.value.budget
+          action = new CounterOfferAction
+          action.amount = this.job.budget
+          action.USD = this.job.budget
+          action.CAN = await this.jobService.getJobBudget(this.job)
           break;
         case ActionType.addMessage:
-          action = new AddMessageAction(this.userType, 'Messageeeee');
+          action = new AddMessageAction
+          action.message = this.form.value.message
           break;
         case ActionType.dispute:
-          action = new RaiseDisputeAction(this.userType, ''); // TODO: Add value from form here
+          action = new RaiseDisputeAction
+          action.message = this.form.value.message
           break;
         case ActionType.authoriseEscrow:
-          action = new AuthoriseEscrowAction(this.userType, '', 0);
+          action = new AuthoriseEscrowAction
+          action.txId = ''
+          action.amountCan = 0
+          action.USD = this.job.budget
+          action.CAN = await this.jobService.getJobBudget(this.job)
           break;
         case ActionType.enterEscrow:
-          action = new EnterEscrowAction(this.userType, '', this.job.canInEscrow);
+          action = new EnterEscrowAction
+          action.txId = ''
+          action.amountCan = this.job.canInEscrow
           break;
         default:
-          action = new IJobAction(this.actionType, this.userType);
+          action = new IJobAction
+          action.type = this.actionType
           break;
       }
+      action.executedBy = this.userType
       const success = await this.jobService.handleJobAction(this.job, action);
       if (success) {
         this.result = true;
@@ -79,6 +107,7 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
         this.executing = false;
       }
     } catch (e) {
+      console.log(e)
       console.log('error');
     }
   }
@@ -104,8 +133,14 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
         this.setupCanConverter();
         break;
       case ActionType.addMessage:
+        this.form = this.formBuilder.group({
+          message: ['', Validators.required],
+        })
+        break;
       case ActionType.dispute:
-        // TODO: Set form to accept message using formbuilder example above
+        this.form = this.formBuilder.group({
+          message: ['', Validators.required],
+        })
         break;
       case ActionType.acceptTerms:
         this.form = this.formBuilder.group({

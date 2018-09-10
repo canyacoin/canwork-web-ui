@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Job, JobDescription, JobState, PaymentType, TimeRange, WorkType } from '@class/job';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Job, JobState } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
 import { User, UserType } from '@class/user';
 import { AuthService } from '@service/auth.service';
@@ -8,7 +8,6 @@ import { JobService } from '@service/job.service';
 import { UserService } from '@service/user.service';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { DialogService } from 'ng2-bootstrap-modal';
-import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
 import {
@@ -53,7 +52,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     const jobId = this.activatedRoute.snapshot.params['id'] || null;
     if (jobId) {
       this.jobSub = this.jobService.getJob(jobId).subscribe((job: Job) => {
-        this.job = job;
+        this.job = new Job(job);
         this.currentUserType = this.currentUser.address === job.clientId ? UserType.client : UserType.provider;
         this.jobService.assignOtherPartyAsync(this.job, this.currentUserType);
         const attachment = this.job.information.attachments;
@@ -79,7 +78,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   }
 
   actionIsDisabled(action: ActionType): boolean {
-    return action === ActionType.addMessage || action === ActionType.dispute;
+    return action === ActionType.dispute
   }
 
   get availableActions(): ActionType[] {

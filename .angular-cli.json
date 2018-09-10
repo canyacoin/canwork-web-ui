@@ -60,6 +60,9 @@
   },
   "defaults": {
     "styleExt": "css",
-    "component": {}
+    "component": {},
+    "build": {
+      "showCircularDependencies": false
+    }
   }
 }
