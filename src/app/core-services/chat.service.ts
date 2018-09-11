@@ -156,6 +156,8 @@ export class ChatService {
       // Update the channel
       this.afs.collection('chats').doc(senderId).collection('channels').doc(message.channel).update({ message: message.message, timestamp: moment().format('x'), unreadMessages: false });
       this.afs.collection('chats').doc(receiverId).collection('channels').doc(message.channel).update({ message: message.message, timestamp: moment().format('x'), unreadMessages: true });
+
+      this.afs.doc(`notifications/${receiverId}`).update({ chat: true });
     } catch (error) {
       console.error('sendMessage - error', error);
     }
