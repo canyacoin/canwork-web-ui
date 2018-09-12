@@ -16,6 +16,11 @@ service cloud.firestore {
        allow write: if isAuthenticated();
     }
 
+    match /notifications {
+       allow read;
+       allow write: if isAuthenticated();
+    }
+
     match /skill-tags/{skill} {
        allow read;
     }
