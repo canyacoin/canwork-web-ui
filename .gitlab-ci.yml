@@ -1,0 +1,24 @@
+image: registry.gitlab.com/canya-com/node-build-container:1.0
+
+variables:
+  WORKING_DIR: /usr/src/app
+  APP_PATH: $WORKING_DIR/$CI_PROJECT_PATH
+
+before_script:
+  - cd $APP_PATH
+  - npm install
+  - cd $APP_PATH/functions
+  - npm install
+  - cd ..
+
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  environment: staging
+  only:
+    - master
+  script:
+    - echo -n "+ current working path:" && pwd
+    - ng build --prod
