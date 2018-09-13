@@ -1,5 +1,5 @@
 <main class="main-content">
-  <section class="section bg-gray pt-15 pb-20" id="section-profile">
+  <section class="section bg-gray pt-15 pb-20" id="section-manage-jobs">
     <app-back-button></app-back-button>
     <div class="container">
       <div class="row">
@@ -83,11 +83,14 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-6">
                   <p class="text-grey fw-500">{{job.paymentType}} |
                     <app-budget [job]="job"></app-budget>| Date posted : {{ job.actionLog[0].timestamp | date:'dd MMM yyyy'
                     }}
                   </p>
+                </div> 
+                <div class="col-lg-6 text-right">
+                    <app-skill-tag *ngFor="let skill of job.information.skills" [skill]="skill"></app-skill-tag>
                 </div> 
               </div>
               <div class="row">
