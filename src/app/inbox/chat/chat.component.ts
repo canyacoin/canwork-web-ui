@@ -158,7 +158,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   readIfUnread() {
     if (this.selectedChannel && this.selectedChannel.unreadMessages) {
       this.afs.collection('chats').doc(this.currentUser.address).collection('channels').doc(this.selectedChannel.channel).update({ unreadMessages: false });
-      this.afs.doc(`notifications/${this.currentUser.address}`).update({ chat: false });
+      this.afs.doc(`notifications/${this.currentUser.address}`).set({ chat: false });
     }
   }
 
