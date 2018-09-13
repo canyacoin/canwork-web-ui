@@ -158,6 +158,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   readIfUnread() {
     if (this.selectedChannel && this.selectedChannel.unreadMessages) {
       this.afs.collection('chats').doc(this.currentUser.address).collection('channels').doc(this.selectedChannel.channel).update({ unreadMessages: false });
+      this.afs.doc(`notifications/${this.currentUser.address}`).update({ chat: false });
     }
   }
 
@@ -218,18 +219,18 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
     localStorage.setItem('selectedChannel', JSON.stringify(this.selectedChannel));
     this.loadChats();
     this.loadUser();
-    if(this.isOnMobile){
+    if (this.isOnMobile) {
       this.toggleMobileDivs();
-      console.log("on mobile! hiding the list and showing the chat window...");
+      console.log('on mobile! hiding the list and showing the chat window...');
     }
-   }
-   toggleMobileDivsEvent(event: any){
-     this.toggleMobileDivs();
-   }
-   toggleMobileDivs(){
-    document.getElementById("contact-div").classList.toggle("hide");
-    document.getElementById("message-div").classList.toggle("hide");
-   }
+  }
+  toggleMobileDivsEvent(event: any) {
+    this.toggleMobileDivs();
+  }
+  toggleMobileDivs() {
+    document.getElementById('contact-div').classList.toggle('hide');
+    document.getElementById('message-div').classList.toggle('hide');
+  }
 
   onBuy() {
     this.router.navigate(['/exchange']);

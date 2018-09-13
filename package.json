@@ -25,7 +25,7 @@
     "@angular/platform-browser": "^5.2.8",
     "@angular/platform-browser-dynamic": "^5.2.8",
     "@angular/router": "^5.2.8",
-    "@canyaio/canpay-lib": "^0.1.21",
+    "@canyaio/canpay-lib": "^0.1.22",
     "angular-instantsearch": "^2.0.1",
     "angularfire2": "^5.0.0-rc.5-next",
     "animate.css": "^3.6.1",
