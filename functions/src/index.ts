@@ -452,7 +452,7 @@ exports.removeIndexProviderData = functions.firestore
  */
 function shouldSkipIndexing(user: any) {
   if (user && user.type) {
-    return (user.type.toLowerCase() !== 'provider' || user.state !== 'Done');
+    return user.type.toLowerCase() !== 'provider' || (!user.whitelisted && user.state !== "Done");
   } else {
     return true;
   }
