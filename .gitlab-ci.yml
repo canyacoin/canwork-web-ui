@@ -24,7 +24,7 @@ build:dist:staging:
     - npm install
     - echo -n "+ current working path:" && pwd
     - echo $ENVIRONMENT_STAGING >> $APP_PATH/src/environments/environment.staging.ts
-    - npm run build --prod --env=staging
+    - npm run build:staging
 
 build:dist:production:
   stage: build
@@ -39,7 +39,7 @@ build:dist:production:
     - npm install
     - echo -n "+ current working path:" && pwd
     - echo $ENVIRONMENT_PROD >> $APP_PATH/src/environments/environment.prod.ts
-    - npm run build --prod
+    - npm run build:prod
 
 deploy:hosting:staging:
   stage: deploy_hosting
