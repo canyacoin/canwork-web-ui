@@ -24,7 +24,7 @@ build:dist:staging:
     - npm install
     - echo -n "+ current working path:" && pwd
     - echo $ENVIRONMENT_STAGING >> $APP_PATH/src/environments/environment.staging.ts
-    - node $APP_PATH/node_modules/@angular/cli/bin/ng build --prod --env=staging
+    - npm run build --prod --env=staging
 
 build:dist:production:
   stage: build
@@ -39,7 +39,7 @@ build:dist:production:
     - npm install
     - echo -n "+ current working path:" && pwd
     - echo $ENVIRONMENT_PROD >> $APP_PATH/src/environments/environment.prod.ts
-    - node $APP_PATH/node_modules/@angular/cli/bin/ng build --prod
+    - npm run build --prod
 
 deploy:hosting:staging:
   stage: deploy_hosting
@@ -71,6 +71,7 @@ deploy:functions:staging:
   script:
     - cd $APP_PATH/functions
     - npm install
+    - npm install -g firebase-tools@latest
     - cd ..
     - firebase use staging --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set algolia.appid="$FIREBASE_CONFIG_ALGOLIA_APPID" --token "$FIREBASE_CI_AUTH_TOKEN"
@@ -93,6 +94,7 @@ deploy:functions:production:
   script:
     - cd $APP_PATH/functions
     - npm install
+    - npm install -g firebase-tools@latest
     - cd ..
     - echo $ENVIRONMENT_PROD >> $APP_PATH/src/environments/environment.prod.ts
     - firebase use staging --token "$FIREBASE_CI_AUTH_TOKEN"
