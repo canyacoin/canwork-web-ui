@@ -24,7 +24,7 @@ build:dist:staging:
     - npm install
     - echo -n "+ current working path:" && pwd
     - echo $ENVIRONMENT_STAGING >> $APP_PATH/src/environments/environment.staging.ts
-    - node $APP_PATH/node_modules/@angular/cli/bin/ng build --prod --env=staging
+    - npm run build --prod --env=staging
 
 build:dist:production:
   stage: build
@@ -38,8 +38,8 @@ build:dist:production:
   script:
     - npm install
     - echo -n "+ current working path:" && pwd
-    - echo $ENVIRONMENT_STAGING >> $APP_PATH/src/environments/environment.prod.ts
-    - node $APP_PATH/node_modules/@angular/cli/bin/ng build --prod
+    - echo $ENVIRONMENT_PROD >> $APP_PATH/src/environments/environment.prod.ts
+    - npm run build --prod
 
 deploy:hosting:staging:
   stage: deploy_hosting
@@ -71,17 +71,18 @@ deploy:functions:staging:
   script:
     - cd $APP_PATH/functions
     - npm install
+    - npm install -g firebase-tools@latest
     - cd ..
     - firebase use staging --token "$FIREBASE_CI_AUTH_TOKEN"
-    - firebase functions:config:set algolia.appid=$FIREBASE_CONFIG_ALGOLIA_APPID --token "$FIREBASE_CI_AUTH_TOKEN"
-    - firebase functions:config:set algolia.apikey=$FIREBASE_CONFIG_ALGOLIA_APIKEY --token "$FIREBASE_CI_AUTH_TOKEN"
-    - firebase functions:config:set algolia.providerindex=$FIREBASE_CONFIG_ALGOLIA_PROVIDERINDEX --token "$FIREBASE_CI_AUTH_TOKEN"
-    - firebase functions:config:set sendgrid.apikey=$FIREBASE_CONFIG_SENDGRID_APIKEY --token "$FIREBASE_CI_AUTH_TOKEN"
-    - firebase functions:config:set fbadmin.project_id=$FIREBASE_CONFIG_FBADMIN_PROJECT_ID --token "$FIREBASE_CI_AUTH_TOKEN"
-    - firebase functions:config:set fbadmin.client_email=$FIREBASE_CONFIG_FBADMIN_CLIENT_EMAIL --token "$FIREBASE_CI_AUTH_TOKEN"
-    - firebase functions:config:set fbadmin.private_key=$FIREBASE_CONFIG_FBADMIN_PRIVATE_KEY --token "$FIREBASE_CI_AUTH_TOKEN"
-    - firebase functions:config:set fbadmin.database_url=$FIREBASE_CONFIG_FBADMIN_DATABASE_URL --token "$FIREBASE_CI_AUTH_TOKEN"
-    - firebase functions:config:set dev.authkey=$FIREBASE_CONFIG_DEV_AUTHKEY --token "$FIREBASE_CI_AUTH_TOKEN"
+    - firebase functions:config:set algolia.appid="$FIREBASE_CONFIG_ALGOLIA_APPID" --token "$FIREBASE_CI_AUTH_TOKEN"
+    - firebase functions:config:set algolia.apikey="$FIREBASE_CONFIG_ALGOLIA_APIKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
+    - firebase functions:config:set algolia.providerindex="$FIREBASE_CONFIG_ALGOLIA_PROVIDERINDEX" --token "$FIREBASE_CI_AUTH_TOKEN"
+    - firebase functions:config:set sendgrid.apikey="$FIREBASE_CONFIG_SENDGRID_APIKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
+    - firebase functions:config:set fbadmin.project_id="$FIREBASE_CONFIG_FBADMIN_PROJECT_ID" --token "$FIREBASE_CI_AUTH_TOKEN"
+    - firebase functions:config:set fbadmin.client_email="$FIREBASE_CONFIG_FBADMIN_CLIENT_EMAIL" --token "$FIREBASE_CI_AUTH_TOKEN"
+    - firebase functions:config:set fbadmin.private_key="$FIREBASE_CONFIG_FBADMIN_PRIVATE_KEY" --token "$FIREBASE_CI_AUTH_TOKEN"
+    - firebase functions:config:set fbadmin.database_url="$FIREBASE_CONFIG_FBADMIN_DATABASE_URL" --token "$FIREBASE_CI_AUTH_TOKEN"
+    - firebase functions:config:set dev.authkey="$FIREBASE_CONFIG_DEV_AUTHKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase deploy --only functions --token "$FIREBASE_CI_AUTH_TOKEN" -P staging-can-work
 
 deploy:functions:production:
@@ -93,6 +94,7 @@ deploy:functions:production:
   script:
     - cd $APP_PATH/functions
     - npm install
+    - npm install -g firebase-tools@latest
     - cd ..
     - echo $ENVIRONMENT_PROD >> $APP_PATH/src/environments/environment.prod.ts
     - firebase use staging --token "$FIREBASE_CI_AUTH_TOKEN"
