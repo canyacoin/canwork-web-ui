@@ -182,7 +182,7 @@ exports.generateAuthPinCode = functions.https.onRequest(async (request, response
       i++;
     });
 
-    if (typeof user !== 'undefined') {
+    if (typeof user !== undefined) {
       const pin: number = Math.floor(100000 + Math.random() * 900000);
       const expiry: number = Math.floor(((Date.now() / 1000) + 600)); // pin code is good for ten minutes
       try {
@@ -257,7 +257,7 @@ exports.ethereumAuthViaPinCode = functions.https.onRequest(async (request, respo
 
     let token: string;
 
-    if (typeof user !== 'undefined' && user.ethereumLogin !== 'undefined') {
+    if (typeof user !== undefined && user.ethereumLogin !== undefined) {
       const now: number = Math.floor((Date.now() / 1000));
       if (user.ethereumLogin.pin === pinCode) {
         console.log('+ auth pin ok');
