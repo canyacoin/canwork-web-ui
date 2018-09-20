@@ -9544,15 +9544,21 @@ a.text-danger:focus {
     text-align: center;
     align-content: center;
   }
-
  .profile-mini .headshot{
    margin-top: 5px !important;
   }
 }
  
+@media screen and (max-width: 576px){
+ .profile-mini .headshot{
+    width: 75px !important;
+    height: 75px !important;
+    margin-left: 0 !important;
+ }
+}
 .profile-mini .headshot{
-  width: 75px;
-  height: 75px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   max-width: 100px;
   margin-top: 25px;

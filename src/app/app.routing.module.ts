@@ -19,7 +19,7 @@ import { UserIsSetupGuard } from './core-utils/user-is-setup.guard';
       },
       {
         path: 'home',
-        loadChildren: './home/home.module#HomeModule'
+        component: LandingComponent
       },
       {
         path: 'login',
@@ -35,6 +35,10 @@ import { UserIsSetupGuard } from './core-utils/user-is-setup.guard';
       {
         path: 'exchange',
         loadChildren: './exchange/exchange.module#ExchangeModule'
+      },
+      {
+        path: 'search',
+        loadChildren: './search/search.module#SearchModule'
       },
       {
         path: 'profile',
