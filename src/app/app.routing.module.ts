@@ -18,10 +18,6 @@ import { UserIsSetupGuard } from './core-utils/user-is-setup.guard';
         pathMatch: 'full'
       },
       {
-        path: 'home',
-        component: LandingComponent
-      },
-      {
         path: 'login',
         redirectTo: '/auth',
         pathMatch: 'full'
@@ -37,7 +33,7 @@ import { UserIsSetupGuard } from './core-utils/user-is-setup.guard';
         loadChildren: './exchange/exchange.module#ExchangeModule'
       },
       {
-        path: 'test',
+        path: 'home',
         loadChildren: './home/home.module#HomeModule'
       },
       {

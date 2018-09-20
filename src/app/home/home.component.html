@@ -1,44 +1,120 @@
-<main class="main-content" [appWindowScroll]>
-  <section class="section bg-gray py-20" id="section-main">
-    <div class="container">
-      <div class="row search-container text-center">
-        <div class="col-12">
-          <ais-instantsearch [config]="algoliaSearchConfig" *ngIf="!rendering">
-            <h4 class="fw-500">CanYa tell us what you're looking for?</h4>
-            <ais-search-box #search class="search-box" (change)="algoliaSearchChanged($event)"></ais-search-box>
-            <div class="row search-results">
-              <div class="col-md-12">
-                <ais-hits>
-                  <ng-template let-hits="hits">
-                    <div *ngIf="hits.length <= 0 && !loading" class="row text-center">
-                      <h4 class="center-h mb-50">We couldn't find what you were looking for!</h4>
-                    </div>
-                    <div class="row my-20">
-                      <div *ngFor="let provider of hits" class="col-xl-3 col-lg-4 col-md-6 col-sm-12 card-deck" style="padding:10px">
-                       <app-provider-card [size]="'lg'" [provider]="provider"></app-provider-card>
-                      </div>
-                    </div>
-                  </ng-template>
-                </ais-hits>
+<section class="bg-gray">
+  <div class="container-fluid  py-20" id="section-main">
+    <section id="landing-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6">
+            <h1 class="py-20">Access global freelance talent with only 1% fees</h1>
+            <h4 class="fw-400 text-grey">CanYa tell us what you’re looking for?</h4>
+            <form method="post" (ngSubmit)="onSubmit(inputSearch.value);">
+              <div class="canya-seach-bar input-group mb-3">
+                <input #inputSearch type="text" class="form-control canya-search-input"
+                  placeholder="Search...">
+                <div class="input-group-append">
+                  <button class="canya-search-input-btn btn btn-primary" type="submit">
+                    <img class="search-img" src="assets/img/search-icon-white.svg">
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="col-lg-6">
+            <img class="img-fluid" src="https://canya.io/assets/img/CanYa_Landing_2.svg">
+          </div>
+        </div>
+        <div class="row">
+          <div *ngFor="let type of providerTypes" class="col-lg-2 col-md-3 col-sm-4 col-6 provider-type-col">
+            <div [routerLink]="['/home']" [queryParams]="{query: type.name}" class="provider-type-card pointer">
+              <div class="row">
+                <div class="col-4 no-padding">
+                  <img src="assets/img/providers/{{type.img}}">
+                </div>
+                <div class="col-8">
+                  <h6 class="fw-500 fs-14">{{type.name}}</h6>
+                </div>
               </div>
             </div>
-          </ais-instantsearch>
-          <div *ngIf="loading || rendering" class="container d-flex h-100 flex-column justify-content-center">
-            <img src="assets/img/loader.svg" height="36px" alt="Loader">
           </div>
         </div>
       </div>
+    </section>
+  </div>
+  <section class="py-20">
+    <div class="container">
       <div class="row">
-        <div class="col-12 my-0 py-0">
-          <app-swiper-cards></app-swiper-cards>
+         <div class="col-12">
+          <h4 class="fw-500 fs-18"><span><img class="icon-img" src="assets/img/providers/software-engineers.svg"></span>SOFTWARE DEVELOPERS</h4>
+         </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 col-sm-6 col-12 no-padding" *ngFor="let dev of developers">
+          <app-provider-card [size]="'sm'" [provider]="dev"></app-provider-card>
         </div>
       </div>
     </div>
   </section>
-  <app-random-animation></app-random-animation>
+  <section class="py-20">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+            <h4 class="fw-500 fs-18"><span><img class="icon-img" src="assets/img/providers/creatives-black.svg"></span>DESIGNER & CREATIVES</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 col-sm-6 col-12 no-padding" *ngFor="let designer of designers">
+          <app-provider-card [size]="'sm'" [provider]="designer"></app-provider-card>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="py-20">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+            <h4 class="fw-500 fs-18"><span><img class="icon-img" src="assets/img/providers/writer-black.svg"></span>MARKETERS & CONTENT CREATORS</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 col-sm-6 col-12 no-padding" *ngFor="let content of contents">
+          <app-provider-card [size]="'sm'" [provider]="content"></app-provider-card>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="container-fluid bg-white">
+    <section class="py-20" id="how-it-works">
+      <h1 class="text-center">How Does It Work?</h1>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6">
+            <img src="https://canya.io/assets/img/CanYa_Landing_3.svg">
+          </div>
+          <div class="col-lg-6">
+            <ol class="py-20">
+              <li class="fw-500">POST A REQUEST <br> <span class="fw-400"><img src="assets/img/Create.svg"> Client & Provider Agrees for a project</span></li>
+              <li class="fw-500">DEPOSIT FUNDS <br> <span class="fw-400"><img src="assets/img/Lock.svg"> Client deposits project fee in escrow</span></li>
+              <li class="fw-500">DELIVER PROJECT <br> <span class="fw-400"><img src="assets/img/Deliver.svg"> Provider completes the project deliverables</span></li>
+              <li class="fw-500">PROJECT COMPLETION <br> <span class="fw-400"><img src="assets/img/Complete.svg"> Both parties mark project completed</span></li>
+              <li class="fw-500">DISBURSE FUNDS <br> <span class="fw-400"><img src="assets/img/Disburse.svg"> Escrow disburses project fee to provider</span></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="container-fluid bg-grey">
+
+  </div>
+  <div class="container-fluid bg-grey">
+    <div class="row">
+      <div class="col-4">
+
+      </div>
+      <div class="col-8">
+
+      </div>
+    </div>
+  </div>
   <app-blog-posts></app-blog-posts>
   <app-feedback></app-feedback>
-</main>
-
-
-<app-scroll-top></app-scroll-top>
+</section>
