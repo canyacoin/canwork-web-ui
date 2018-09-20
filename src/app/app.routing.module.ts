@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { LandingComponent } from './landing/landing.component';
 import { BrandComponent } from './core-components/brand/brand.component';
 import { FaqPageComponent } from './core-components/faq-page/faq-page.component';
 import { ToolsComponent } from './core-components/tools/tools.component';
@@ -56,6 +57,10 @@ import { UserIsSetupGuard } from './core-utils/user-is-setup.guard';
       {
         path: 'faq',
         component: FaqPageComponent
+      },
+      {
+        path: 'landing',
+        component: LandingComponent
       },
       {
         path: '**',

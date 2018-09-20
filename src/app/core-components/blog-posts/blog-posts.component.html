@@ -1,9 +1,5 @@
-<section class="section bg-gray mt-30 pt-30 pb-0" *ngIf="feed.length > 0">
+<section class="section bg-gray pt-30 pb-30" *ngIf="feed.length > 0">
   <div class="container">
-    <h2 class="text-center">Latest news</h2>
-    <br>
-    <br>
-
     <div class="row gap-y">
       <div class="col-12 col-md-6 col-lg-4" *ngFor="let fx of feed; let i = index" [ngClass]="{'hidden-md-down': i == 2}">
         <div class="card card-bordered card-hover-shadow">
@@ -11,23 +7,16 @@
             <img class="card-img-top" src="{{fx.thumbnail}}" [src-fallback]="placeholder" [alt]="feed.title" data-aos="fade-in">
           </a>
           <div class="card-block">
-            <h4 class="card-title">
+            <div class="card-title">
               <a [href]="fx.link" target="_blank">{{ fx.title }}</a>
-            </h4>
+            </div>
             <p class="card-text break-word" [innerHtml]="fx.description | sanitizeHtml"></p>
-            <a class="fw-600 fs-12" [href]="fx.link" target="_blank">Read more
-              <i class="fa fa-chevron-right fs-9 pl-8"></i>
+            <a class="fw-500 fs-12" [href]="fx.link" target="_blank">
+              See More
             </a>
           </div>
         </div>
       </div>
-
     </div>
-
-    <br>
-    <br>
-    <p class="fw-400 text-center">
-      <a href="https://blog.canya.com.au" target="_blank">Browse all blog posts</a>
-    </p>
   </div>
 </section>
