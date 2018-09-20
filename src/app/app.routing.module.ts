@@ -37,6 +37,10 @@ import { UserIsSetupGuard } from './core-utils/user-is-setup.guard';
         loadChildren: './exchange/exchange.module#ExchangeModule'
       },
       {
+        path: 'test',
+        loadChildren: './home/home.module#HomeModule'
+      },
+      {
         path: 'search',
         loadChildren: './search/search.module#SearchModule'
       },

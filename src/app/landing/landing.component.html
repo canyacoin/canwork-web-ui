@@ -6,9 +6,9 @@
           <div class="col-lg-6">
             <h1 class="py-20">Access global freelance talent with only 1% fees</h1>
             <h4 class="fw-400 text-grey">CanYa tell us what you’re looking for?</h4>
-            <form method="post" (ngSubmit)="onSearch(inputSearch.value);">
+            <form method="post" (ngSubmit)="onSubmit(inputSearch.value);">
               <div class="canya-seach-bar input-group mb-3">
-                <input #inputSearch (keyup)="onKeyUp(inputSearch.value);" type="text" class="form-control canya-search-input"
+                <input #inputSearch type="text" class="form-control canya-search-input"
                   placeholder="Search...">
                 <div class="input-group-append">
                   <button class="canya-search-input-btn btn btn-primary" type="submit">

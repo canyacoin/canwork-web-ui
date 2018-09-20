@@ -81,6 +81,7 @@ import { ProviderCardComponent } from './provider-card/provider-card.component';
     SkillTagsSelectionComponent,
     WalletInstallComponent,
     VStepperComponent,
+    ProviderCardComponent,
     WindowScrollDirective
   ]
 })

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from 'environments/environment';
+import { Router } from '@angular/router';
 declare var require: any;
 const algoliasearch = require('algoliasearch');
 
@@ -19,6 +20,7 @@ export class LandingComponent implements OnInit {
   algoKey = environment.algolia.apiKey;
 
   constructor(
+    private router: Router
   ) { }
   providerTypes = [
     {
@@ -81,4 +83,7 @@ export class LandingComponent implements OnInit {
     });
   }
 
+  onSubmit(event: any) {
+    this.router.navigate(['search'], { queryParams: { 'query': event } });
+  }
 }
