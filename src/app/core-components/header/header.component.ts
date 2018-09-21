@@ -90,7 +90,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // if ((<any>window).$('html, body')) {
     //   (<any>window).$('html, body').animate({ scrollTop: -10 }, 600);
     // }
-    this.router.navigate(['home'], { queryParams: { 'query': event } });
+    this.router.navigate(['search'], { queryParams: { 'query': event } });
   }
 
   onCancel() {

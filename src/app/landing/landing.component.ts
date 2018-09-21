@@ -62,17 +62,10 @@ export class LandingComponent implements OnInit {
     this.algoliaIndex.search({ query: searchQuery }).then(res => {
       const result = res.hits;
       for (let i = 1; i < 4; i++) {
-        const filteredSkills = [];
-        if (result[i].skillTags.length === 1) {
-          filteredSkills.push(result[i].skillTags[0]);
-        } else if (result[i].skillTags.length >= 2) {
-          filteredSkills.push(result[i].skillTags[0]);
-          filteredSkills.push(result[i].skillTags[1]);
-        }
         const provider = {
           'address': result[i].address,
           'avatar': result[i].avatar,
-          'skillTags': filteredSkills,
+          'skillTags': result[i].skillTags,
           'title': result[i].title,
           'name': result[i].name,
           'category': result[i].category,

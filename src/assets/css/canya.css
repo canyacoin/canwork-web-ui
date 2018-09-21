@@ -9532,30 +9532,30 @@ a.text-danger:focus {
 .profile-mini{
   background-color: white;
   border-radius: 5px;
-  min-height: 165px;
+  min-height: 75px;
   padding: 10px;
   margin: 5px;
 }
 
+@media screen and (max-width:1024px){
 
-@media screen and (max-width:1023px) and (min-width: 768px){
+ .profile-mini .headshot{ 
+  width: 60px !important;
+  height: 60px !important;
+  margin-top: 25px !important;
+ }
+}
+
+@media screen and (max-width:1023px) and (min-width: 576px){
   .profile-mini{
-    height: 265px !important;
+    height: auto !important;
     text-align: center;
     align-content: center;
   }
- .profile-mini .headshot{
+ .profile-mini .headshot{ 
    margin-top: 5px !important;
   }
 }
- 
-@media screen and (max-width: 768px){
- .profile-mini .headshot{
-    width: 75px !important;
-    height: 75px !important;
-    margin-left: 0 !important;
- }
-} 
 @media screen and (max-width: 640px){
  .profile-mini{
     min-height: 75px !important;
@@ -9563,11 +9563,11 @@ a.text-danger:focus {
  .profile-mini .headshot{
     width: 75px !important;
     height: 75px !important;
-    margin-left: 0 !important;
+    margin-left: 10px !important;
     margin-top: 15px !important;
  }
 }
-@media screen and (max-width: 360px){
+@media screen and (max-width: 375px){
  .profile-mini .headshot{
     width: 65px !important;
     height: 65px !important;
@@ -9576,8 +9576,8 @@ a.text-danger:focus {
  }
 }
 .profile-mini .headshot{
-  width: 80px;
-  height: 80px;
+  width: 75px;
+  height: 75px;
   border-radius: 50%;
   max-width: 100px;
   margin-top: 25px;
@@ -9598,7 +9598,6 @@ a.text-danger:focus {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 150px;
   margin: 0;
   padding-top: 5px;
 }

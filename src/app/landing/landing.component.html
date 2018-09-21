@@ -24,7 +24,7 @@
         </div>
         <div class="row">
           <div *ngFor="let type of providerTypes" class="col-lg-2 col-md-3 col-sm-4 col-6 provider-type-col">
-            <div [routerLink]="['/home']" [queryParams]="{query: type.name}" class="provider-type-card pointer">
+            <div [routerLink]="['/search']" [queryParams]="{query: type.name}" class="provider-type-card pointer">
               <div class="row">
                 <div class="col-4 no-padding">
                   <img src="assets/img/providers/{{type.img}}">

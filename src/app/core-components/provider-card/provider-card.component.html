@@ -25,7 +25,7 @@
         </div>
         <div class="mh-115">
           <div class="row d-flex tag-row">
-            <app-skill-tag *ngFor="let tag of provider.skillTags" [skill]="tag" [routerLink]="['/home']" [queryParams]="{query: tag}"></app-skill-tag>
+            <app-skill-tag *ngFor="let tag of provider.skillTags" [skill]="tag" [routerLink]="['/search']" [queryParams]="{query: tag}"></app-skill-tag>
           </div>
         </div>
         <div class="row hourly-rate">
@@ -45,10 +45,10 @@
 <div *ngIf="size == 'sm'" class="px-15">
     <div class="card provider-card pointer profile-mini"  [routerLink]="['/profile/alt', provider.address]" >
       <div class="row">
-          <div class="col-lg-4 col-md-12 col-sm-12 col-3">
+          <div class="col-lg-3 col-md-12 col-sm-12 col-3">
               <img class="headshot" src="{{provider.avatar.uri}}">
           </div>
-          <div class="col-lg-8 col-md-12 col-sm-12 col-9  pb-5">
+          <div class="col-lg-9 col-md-12 col-sm-12 col-9 pl-20 pb-10">
               <h6 class="provider-name">{{provider.name}}</h6>
               <p class="fw-400 no-margin">{{ provider.title}}</p> 
               <span class="fw-400"> 
@@ -56,7 +56,7 @@
                 {{ provider.timezone }}  
               </span>
                 <br>
-              <app-skill-tag *ngFor="let tag of provider.skillTags" [skill]="tag"></app-skill-tag>
+              <app-skill-tag [skill]="provider.skillTags.length + ' Skills'"></app-skill-tag>
           </div> 
       </div> 
     </div>
