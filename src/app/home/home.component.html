@@ -5,18 +5,16 @@
         <div class="row">
           <div class="col-lg-6">
             <h1 class="py-20">Access global freelance talent with only 1% fees</h1>
-            <h4 class="fw-400 text-grey">CanYa tell us what you’re looking for?</h4>
-            <form method="post" (ngSubmit)="onSubmit(inputSearch.value);">
+            <h4 class="fw-400 text-grey">CanYa tell us what you’re looking for?</h4> 
               <div class="canya-seach-bar input-group mb-3">
                 <input #inputSearch type="text" class="form-control canya-search-input"
                   placeholder="Search...">
                 <div class="input-group-append">
-                  <button class="canya-search-input-btn btn btn-primary" type="submit">
+                  <button class="canya-search-input-btn btn btn-primary"  (click)="onSubmit(inputSearch.value);">
                     <img class="search-img" src="assets/img/search-icon-white.svg">
                   </button>
                 </div>
-              </div>
-            </form>
+              </div> 
           </div>
           <div class="col-lg-6">
             <img class="img-fluid" src="https://canya.io/assets/img/CanYa_Landing_2.svg">
@@ -24,7 +22,7 @@
         </div>
         <div class="row">
           <div *ngFor="let type of providerTypes" class="col-lg-2 col-md-3 col-sm-4 col-6 provider-type-col">
-            <div [routerLink]="['/home']" [queryParams]="{query: type.name}" class="provider-type-card pointer">
+            <div [routerLink]="['/search']" [queryParams]="{query: type.name}" class="provider-type-card pointer">
               <div class="row">
                 <div class="col-4 no-padding">
                   <img src="assets/img/providers/{{type.img}}">

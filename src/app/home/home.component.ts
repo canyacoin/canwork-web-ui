@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { environment } from 'environments/environment';
 import { Router } from '@angular/router';
 import { UserCategory } from '../core-classes/user';
+import { NavService } from '../core-services/nav.service';
 declare var require: any;
 const algoliasearch = require('algoliasearch');
 
@@ -21,7 +22,8 @@ export class HomeComponent implements OnInit {
   algoKey = environment.algolia.apiKey;
 
   constructor(
-    private router: Router
+    private router: Router,
+    private nav: NavService
   ) { }
   providerTypes = [
     {
@@ -51,6 +53,7 @@ export class HomeComponent implements OnInit {
   ]
 
   ngOnInit() {
+    this.nav.setHideSearchBar(true);
     this.algoliaSearch = algoliasearch(this.algoId, this.algoKey);
     this.algoliaIndex = this.algoliaSearch.initIndex(this.algoIndex);
     this.getProviders( UserCategory.softwareDev, this.developers);
