@@ -42,7 +42,7 @@
       </div>
     </div>
 </div>
-<div *ngIf="size == 'sm'" class="px-15">
+<div *ngIf="size == 'sm'" class="px-5">
     <div class="card provider-card pointer profile-mini"  [routerLink]="['/profile/alt', provider.address]" >
       <div class="row">
           <div class="col-lg-3 col-md-12 col-sm-12 col-3">
@@ -50,8 +50,8 @@
           </div>
           <div class="col-lg-9 col-md-12 col-sm-12 col-9 pl-20 pb-10">
               <h6 class="provider-name">{{provider.name}}</h6>
-              <p class="fw-400 no-margin">{{ provider.title}}</p> 
-              <span class="fw-400"> 
+              <p class="provider-title">{{ provider.title}}</p> 
+              <span class="fw-400 fs-12 text-grey"> 
                 <i class="fa fa-map-marker-alt text-grey" aria-hidden="true"></i>
                 {{ provider.timezone }}  
               </span>

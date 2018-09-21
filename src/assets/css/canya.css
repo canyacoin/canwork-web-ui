@@ -9544,6 +9544,7 @@ a.text-danger:focus {
   height: 60px !important;
   margin-top: 25px !important;
  }
+
 }
 
 @media screen and (max-width:1023px) and (min-width: 576px){
@@ -9599,5 +9600,14 @@ a.text-danger:focus {
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0;
-  padding-top: 5px;
+  padding-top: 12px;
+  font-size: 16px;
+  color: #323c47;
+}
+.provider-title{
+  font-weight: 400;
+  font-size: 15px;
+  margin: 0;
+  height: 39px;
+  color: #323c47;
 }
