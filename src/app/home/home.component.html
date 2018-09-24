@@ -5,22 +5,24 @@
         <div class="row">
           <div class="col-lg-6">
             <h1 class="py-20">Access global freelance talent with only 1% fees</h1>
-            <h4 class="fw-400 text-grey">CanYa tell us what you’re looking for?</h4> 
-              <div class="canya-seach-bar input-group mb-3">
-                <input #inputSearch type="text" class="form-control canya-search-input"
-                  placeholder="Search...">
-                <div class="input-group-append">
-                  <button class="canya-search-input-btn btn btn-primary"  (click)="onSubmit(inputSearch.value);">
-                    <img class="search-img" src="assets/img/search-icon-white.svg">
-                  </button>
-                </div>
-              </div> 
+            <h4 class="fw-400 text-grey">CanYa tell us what you’re looking for?</h4>
+            <div class="canya-seach-bar input-group mb-3">
+              <input #inputSearch type="text" class="form-control canya-search-input" placeholder="Search...">
+              <div class="input-group-append">
+                <button class="canya-search-input-btn btn btn-primary" (click)="onSubmit(inputSearch.value);">
+                  <img class="search-img" src="assets/img/search-icon-white.svg">
+                </button>
+              </div>
+            </div>
           </div>
           <div class="col-lg-6">
             <img class="img-fluid" src="https://canya.io/assets/img/CanYa_Landing_2.svg">
           </div>
         </div>
         <div class="row">
+          <div class="col-12">
+            <h6 class="text-center text-grey ls-1">Browse our highly skilled and hand-picked providers</h6>
+          </div> 
           <div *ngFor="let type of providerTypes" class="col-lg-2 col-md-3 col-sm-4 col-6 provider-type-col">
             <div [routerLink]="['/search']" [queryParams]="{query: type.name}" class="provider-type-card pointer">
               <div class="row">
@@ -40,7 +42,8 @@
   <section class="py-20">
     <div class="container">
       <div class="row">
-          <h4 class="section-title"><span><img class="icon-img" src="assets/img/providers/software-engineers.svg"></span>SOFTWARE DEVELOPERS</h4>
+        <h4 class="section-title"><span><img class="icon-img" src="assets/img/providers/software-engineers.svg"></span>SOFTWARE
+          DEVELOPERS</h4>
       </div>
       <div class="row">
         <div class="col-md-4 col-sm-6 col-12 no-padding" *ngFor="let dev of developers">
@@ -52,7 +55,8 @@
   <section class="py-20">
     <div class="container">
       <div class="row">
-            <h4 class="section-title"><span><img class="icon-img" src="assets/img/providers/creatives-black.svg"></span>DESIGNER & CREATIVES</h4>
+        <h4 class="section-title"><span><img class="icon-img" src="assets/img/providers/creatives-black.svg"></span>DESIGNER
+          & CREATIVES</h4>
       </div>
       <div class="row">
         <div class="col-md-4 col-sm-6 col-12 no-padding" *ngFor="let designer of designers">
@@ -63,8 +67,9 @@
   </section>
   <section class="py-20">
     <div class="container">
-      <div class="row"> 
-            <h4 class="section-title"><span><img class="icon-img" src="assets/img/providers/writer-black.svg"></span>MARKETERS & CONTENT CREATORS</h4>
+      <div class="row">
+        <h4 class="section-title"><span><img class="icon-img" src="assets/img/providers/writer-black.svg"></span>MARKETERS
+          & CONTENT CREATORS</h4>
       </div>
       <div class="row">
         <div class="col-md-4 col-sm-6 col-12 no-padding" *ngFor="let content of contents">
@@ -83,11 +88,16 @@
           </div>
           <div class="col-lg-6 col-sm-6">
             <ol class="py-20">
-              <li class="fw-500">POST A REQUEST <br> <span class="fw-400"><img src="assets/img/Create.svg"> Client & Provider Agrees for a project</span></li>
-              <li class="fw-500">DEPOSIT FUNDS <br> <span class="fw-400"><img src="assets/img/Lock.svg"> Client deposits project fee in escrow</span></li>
-              <li class="fw-500">DELIVER PROJECT <br> <span class="fw-400"><img src="assets/img/Deliver.svg"> Provider completes the project deliverables</span></li>
-              <li class="fw-500">PROJECT COMPLETION <br> <span class="fw-400"><img src="assets/img/Complete.svg"> Both parties mark project completed</span></li>
-              <li class="fw-500">DISBURSE FUNDS <br> <span class="fw-400"><img src="assets/img/Disburse.svg"> Escrow disburses project fee to provider</span></li>
+              <li class="fw-500">POST A REQUEST <br> <span class="fw-400"><img src="assets/img/Create.svg"> Client &
+                  Provider Agrees for a project</span></li>
+              <li class="fw-500">DEPOSIT FUNDS <br> <span class="fw-400"><img src="assets/img/Lock.svg"> Client
+                  deposits project fee in escrow</span></li>
+              <li class="fw-500">DELIVER PROJECT <br> <span class="fw-400"><img src="assets/img/Deliver.svg"> Provider
+                  completes the project deliverables</span></li>
+              <li class="fw-500">PROJECT COMPLETION <br> <span class="fw-400"><img src="assets/img/Complete.svg"> Both
+                  parties mark project completed</span></li>
+              <li class="fw-500">DISBURSE FUNDS <br> <span class="fw-400"><img src="assets/img/Disburse.svg"> Escrow
+                  disburses project fee to provider</span></li>
             </ol>
           </div>
         </div>

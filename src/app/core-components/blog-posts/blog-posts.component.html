@@ -1,17 +1,14 @@
-<section class="section bg-gray pt-30 pb-30" *ngIf="feed.length > 0">
+<section class="section bg-gray pt-30 pb-30" *ngIf="mediumFeed.length > 0">
   <div class="container">
     <div class="row gap-y">
-      <div class="col-12 col-md-6 col-lg-4" *ngFor="let fx of feed; let i = index" [ngClass]="{'hidden-md-down': i == 2}">
+      <div class="col-12 col-md-6 col-lg-4 col-6" *ngFor="let fx of mediumFeed; let i = index">
         <div class="card card-bordered card-hover-shadow">
-          <a [href]="fx.link" target="_blank">
-            <img class="card-img-top" src="{{fx.thumbnail}}" [src-fallback]="placeholder" [alt]="feed.title">
-          </a>
+          <img class="card-img-top" src="{{fx.thumbnail}}">
           <div class="card-block">
             <div class="card-title">
-              <a [href]="fx.link" target="_blank">{{ fx.title }}</a>
+              <a href="{{fx.link}}" target="_blank">{{ fx.title }}</a>
             </div>
-            <p class="card-text break-word" [innerHtml]="fx.description | sanitizeHtml"></p>
-            <a class="fw-500 fs-12" [href]="fx.link" target="_blank">
+            <a class="fw-500 fs-12" href="{{fx.link}}" target="_blank">
               See More
             </a>
           </div>

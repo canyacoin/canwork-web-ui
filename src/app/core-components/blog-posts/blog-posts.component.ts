@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FeedService } from '../../core-services/feed.service';
-import { FeedItem } from '../../core-classes/feed-item';
-
 @Component({
   selector: 'app-blog-posts',
   templateUrl: './blog-posts.component.html',
@@ -10,13 +7,22 @@ import { FeedItem } from '../../core-classes/feed-item';
 })
 export class BlogPostsComponent implements OnInit {
 
-  feed = new Array<FeedItem>();
-
+  mediumLink = 'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@canyacoin';
   placeholder = 'assets/img/outandabout.png';
-
-  constructor(private feedService: FeedService) { }
+  mediumFeed = [];
+  canLook = false;
+  constructor() { }
 
   async ngOnInit() {
-    this.feed = await this.feedService.getItemsAsync(3);
+    await this.fetchMedium()
+  }
+
+  async fetchMedium() {
+    fetch(this.mediumLink).then((res) => res.json()).then((data) => {
+      for (let i = 0 ; i < 3; i++) {
+          this.mediumFeed.push(data.items[i]);
+          console.log(this.mediumFeed[i]);
+      }
+    })
   }
 }
