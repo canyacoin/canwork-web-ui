@@ -9470,6 +9470,12 @@ a.text-danger:focus {
   right: 15%;
 }
 
+.circle-headshot{
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
 .profile .headshot {
   width: 100px;
   height: 100px;
