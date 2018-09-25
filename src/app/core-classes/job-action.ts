@@ -126,7 +126,7 @@ export enum ActionType {
   acceptTerms = 'Accept terms',
   authoriseEscrow = 'Authorise escrow',
   enterEscrow = 'Send CAN to escrow',
-  addMessage = 'Add message',
+  addMessage = 'Add Note',
   finishedJob = 'Mark as complete',
   acceptFinish = 'Complete job',
   dispute = 'Raise dispute'

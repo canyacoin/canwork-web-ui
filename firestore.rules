@@ -16,7 +16,7 @@ service cloud.firestore {
        allow write: if isAuthenticated();
     }
 
-    match /notifications/{userId} {
+    match /viewed-users/{document=**} {
        allow read;
        allow write: if isAuthenticated();
     }

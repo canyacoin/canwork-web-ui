@@ -92,7 +92,7 @@ export enum WorkType {
 }
 
 export enum TimeRange {
-  oneWeek = '1 Week',
+  oneWeek = '<= 1 Week',
   oneToTwoWeeks = '1-2 Weeks',
   twoToFourWeeks = '2-4 Weeks',
   oneMonth = '1 Month',

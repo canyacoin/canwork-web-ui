@@ -3,15 +3,18 @@ import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/fires
 
 import * as moment from 'moment-timezone';
 import { User, UserType } from '../core-classes/user';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class UserService {
 
 
   usersCollectionRef: AngularFirestoreCollection<any>;
+  viewedUsersRef: AngularFirestoreCollection<any>;
 
   constructor(private afs: AngularFirestore) {
     this.usersCollectionRef = this.afs.collection<any>('users');
+    this.viewedUsersRef = this.afs.collection<any>('viewed-users');
   }
 
   saveProfileView(viewer: User, viewed: string) {
@@ -20,6 +23,29 @@ export class UserService {
       const tmpModel = viewer;
       tmpModel['timestamp'] = moment().format('x');
       return snap.payload.exists ? ref.update(Object.assign({}, tmpModel)) : ref.set(Object.assign({}, tmpModel));
+    });
+  }
+
+  addToViewedUsers(viewer: string, viewed: User) {
+    const ref = this.afs.collection('viewed-users').doc(viewer).collection('viewed').doc(viewed.address);
+    const tmpModel = {
+      address: viewed.address,
+      timestamp : moment().format('x')
+    };
+    ref.set(tmpModel);
+  }
+
+  async getViewedUsers(viewer: string) {
+    const collection = this.afs.collection(`viewed-users/${viewer}/viewed`, ref => ref.orderBy('timestamp', 'desc'));
+    return new Promise<any>((resolve, reject) => {
+      collection.valueChanges().subscribe((result) => {
+        if (result) {
+          console.log('viewed users');
+          console.log(result);
+          resolve(result);
+        }
+        reject();
+      })
     });
   }
 
@@ -38,6 +64,7 @@ export class UserService {
       });
     });
   }
+
 
   async getUserByEthAddress(address: string) {
     const data = await this.usersCollectionRef.ref

@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { environment } from 'environments/environment';
 import { Router } from '@angular/router';
 import { UserCategory } from '../core-classes/user';
+import { AuthService } from '@service/auth.service';
+import { UserService } from '@service/user.service';
 import { NavService } from '../core-services/nav.service';
+import { User } from '../core-classes/user';
 declare var require: any;
 const algoliasearch = require('algoliasearch');
 
@@ -12,18 +15,24 @@ const algoliasearch = require('algoliasearch');
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  currentUser: User;
   private algoliaSearch;
   private algoliaIndex;
   public developers = [];
   public designers = [];
   public contents = [];
+  private authSub;
+  public previouslySeen = [];
+
   algoIndex = environment.algolia.indexName;
   algoId = environment.algolia.appId;
   algoKey = environment.algolia.apiKey;
 
   constructor(
     private router: Router,
-    private nav: NavService
+    private nav: NavService,
+    private auth: AuthService,
+    private userService: UserService
   ) { }
   providerTypes = [
     {
@@ -54,11 +63,30 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.nav.setHideSearchBar(true);
+    this.authSub = this.auth.currentUser$.subscribe((user: User) => {
+      if (this.currentUser !== user) {
+        this.currentUser = user;
+      }
+      this.setUpRecentlyViewed();
+    });
     this.algoliaSearch = algoliasearch(this.algoId, this.algoKey);
     this.algoliaIndex = this.algoliaSearch.initIndex(this.algoIndex);
-    this.getProviders( UserCategory.softwareDev, this.developers);
-    this.getProviders( UserCategory.designer, this.designers);
-    this.getProviders( UserCategory.contentCreator, this.contents);
+    this.getProviders(UserCategory.softwareDev, this.developers);
+    this.getProviders(UserCategory.designer, this.designers);
+    this.getProviders(UserCategory.contentCreator, this.contents);
+  }
+
+  async setUpRecentlyViewed() {
+    this.userService.getViewedUsers(this.currentUser.address).then((result) => {
+      if (result.length > 0) {
+        this.previouslySeen = result.slice(0, 4);
+        for (let i = 0; i < this.previouslySeen.length; i++) {
+          this.userService.getUser(this.previouslySeen[i].address).then(user => {
+            this.previouslySeen[i] = user;
+          })
+        }
+      }
+    })
   }
 
   getProviders(searchQuery, array) {
@@ -83,4 +111,6 @@ export class HomeComponent implements OnInit {
   onSubmit(event: any) {
     this.router.navigate(['search'], { queryParams: { 'query': event } });
   }
+
+
 }
