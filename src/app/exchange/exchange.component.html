@@ -1,31 +1,29 @@
- 
-  <div class="bg-white h-full py-10" id="section-main">
-   
-    <app-wallet-install *ngIf="web3State !== web3LoadingStatus.complete" [web3State]="web3State" [walletType]="walletType"></app-wallet-install>
- 
-    <div *ngIf="web3State == web3LoadingStatus.complete"> 
-        <div class="row py-25"> 
-            <div class="col-12 text-center">
-                <h4 class="fw-300 my-0 py-50">Wallet Balance </h4> 
-                <h1 class="fw-300 my-0 py-0">
-                  <img class="logo-default" src="assets/img/round-icon.svg" width="auto" height="36px" alt="logo" style="margin-top: -8px;"> {{ balance | currency:' ':'symbol':'1.2-3':'en-US' }}
-                </h1> 
-            </div>
-        </div>  
-       <div class="bg-white" id="bancor-wc"></div> 
-    </div>
-    
-    <div class="container py-20">
-      <div class="row">
-        <div class="col-12 text-center"> 
-          <h4 class="fw-300 px-10">CanYa is also available on:</h4>
-          <a *ngFor = "let exchange of exchanges" target="_blank" class="btn w-150 btn-primary m-5" href="{{exchange.url}}">
-            {{exchange.name}}
-          </a> 
-        </div>
+<div class="bg-white h-full py-10" id="section-main">
+
+  <app-wallet-install *ngIf="web3State !== web3LoadingStatus.complete" [web3State]="web3State" [walletType]="walletType"></app-wallet-install>
+
+  <div *ngIf="web3State == web3LoadingStatus.complete">
+    <div class="row py-25">
+      <div class="col-12 text-center">
+        <h4 class="fw-300 my-0 py-50">Wallet Balance </h4>
+        <h1 class="fw-300 my-0 py-0">
+          <img class="logo-default" src="assets/img/round-icon.svg" width="auto" height="36px" alt="logo" style="margin-top: -8px;">
+          {{ balance | currency:' ':'symbol':'1.2-3':'en-US' }}
+        </h1>
       </div>
-         
     </div>
+    <div class="bg-white" id="bancor-wc"></div>
   </div>
 
- 
+  <div class="container py-20">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h4 class="fw-300 px-10">CanYa is also available on:</h4>
+        <a *ngFor="let exchange of exchanges" target="_blank" class="btn w-150 btn-primary m-5" href="{{exchange.url}}">
+          {{exchange.name}}
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>

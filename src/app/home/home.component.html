@@ -7,7 +7,8 @@
             <h1 class="py-20">Access global freelance talent with only 1% fees</h1>
             <h4 class="fw-400 text-grey">CanYa tell us what you’re looking for?</h4>
             <div class="canya-seach-bar input-group mb-3">
-              <input #inputSearch type="text" class="form-control canya-search-input" placeholder="Search...">
+              <input #inputSearch type="text" class="form-control canya-search-input" (keyup.enter)="onSubmit(inputSearch.value)"
+                placeholder="Search...">
               <div class="input-group-append">
                 <button class="canya-search-input-btn btn btn-primary" (click)="onSubmit(inputSearch.value);">
                   <img class="search-img" src="assets/img/search-icon-white.svg">

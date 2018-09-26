@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from 'environments/environment';
 import { Router } from '@angular/router';
-import { UserCategory } from '../core-classes/user';
 import { AuthService } from '@service/auth.service';
 import { UserService } from '@service/user.service';
+
+import { environment } from 'environments/environment';
+import { User, UserCategory } from '../core-classes/user';
 import { NavService } from '../core-services/nav.service';
-import { User } from '../core-classes/user';
+
 declare var require: any;
 const algoliasearch = require('algoliasearch');
 
@@ -108,9 +109,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  onSubmit(event: any) {
-    this.router.navigate(['search'], { queryParams: { 'query': event } });
+  onSubmit(value: any) {
+    this.router.navigate(['search'], { queryParams: { 'query': value } });
   }
-
-
 }

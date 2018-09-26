@@ -1,5 +1,5 @@
 import {
-  AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild
+    AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild
 } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -15,7 +15,6 @@ import { environment } from '../../environments/environment';
 import { Portfolio, Work } from '../core-classes/portfolio';
 import { User } from '../core-classes/user';
 import { NavService } from '../core-services/nav.service';
-
 
 @Component({
   selector: 'app-search',

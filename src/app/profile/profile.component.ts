@@ -79,7 +79,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   addToViewedProfileList() {
     if (this.notMyProfile) {
-      console.log('Can Add this guy to my list...');
       this.userService.addToViewedUsers(this.currentUser.address, this.userModel);
     }
   }

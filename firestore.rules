@@ -16,9 +16,9 @@ service cloud.firestore {
        allow write: if isAuthenticated();
     }
 
-    match /viewed-users/{document=**} {
+    match /viewed-users/{userId} {
        allow read;
-       allow write: if isAuthenticated();
+       allow write: if isDocumentOwner(userId);
     }
 
     match /skill-tags/{skill} {

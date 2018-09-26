@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Observable } from 'rxjs/Observable';
 
 import * as moment from 'moment-timezone';
 import { User, UserType } from '../core-classes/user';
-import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class UserService {
@@ -30,7 +30,7 @@ export class UserService {
     const ref = this.afs.collection('viewed-users').doc(viewer).collection('viewed').doc(viewed.address);
     const tmpModel = {
       address: viewed.address,
-      timestamp : moment().format('x')
+      timestamp: moment().format('x')
     };
     ref.set(tmpModel);
   }
@@ -40,8 +40,6 @@ export class UserService {
     return new Promise<any>((resolve, reject) => {
       collection.valueChanges().subscribe((result) => {
         if (result) {
-          console.log('viewed users');
-          console.log(result);
           resolve(result);
         }
         reject();
@@ -122,7 +120,6 @@ export class UserService {
   private saveUserFirebase(userModel: User) {
     if (userModel && userModel.address) {
       const ref = userModel.address;
-      // Firebase: SaveUser
       this.usersCollectionRef.doc(ref).snapshotChanges().take(1).subscribe((snap: any) => {
         console.log('saveUser - payload', snap.payload.exists);
         return snap.payload.exists ? this.usersCollectionRef.doc(ref).update(Object.assign({}, userModel)) : this.usersCollectionRef.doc(ref).set(Object.assign({}, userModel));
