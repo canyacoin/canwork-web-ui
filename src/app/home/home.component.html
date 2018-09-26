@@ -85,7 +85,12 @@
       <div class="row">
         <h4 class="section-title"><span class="icon-img"><i class="far fa-eye"></i></span>RECENTLY VIEWED </h4>
       </div>
-      <div class="row">
+      <div class="row" *ngIf="previouslySeen.length === 0">
+        <div class="container">
+          <i>You have not checked out any providers.</i>
+        </div>
+      </div>
+      <div class="row" *ngIf="previouslySeen.length > 0">
         <div class="col-lg-3 col-md-6 col-12 no-padding" *ngFor="let seen of previouslySeen">
           <app-provider-card [size]="'lg'" [provider]="seen"></app-provider-card>
         </div>
