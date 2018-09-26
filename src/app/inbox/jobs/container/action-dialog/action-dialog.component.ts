@@ -184,11 +184,11 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
       case ActionType.enterEscrow:
         return 'This will create a relationship between the provider address and your address in the escrow contract.';
       case ActionType.addMessage:
-        return 'Are you sure?';
+        return 'Add a note to this job.';
       case ActionType.finishedJob:
-        return 'Are you sure?';
+        return 'Are you sure you\'ve finished your job?';
       case ActionType.acceptFinish:
-        return 'Are you sure?';
+        return 'Are you sure you want to finish this job?';
       default:
         return 'Are you sure?';
     }

@@ -1,79 +1,124 @@
-<main class="main-content" [appWindowScroll]>
-  <section class="section bg-gray py-20" id="section-main">
-    <div class="container">
-      <div class="row search-container text-center">
-        <div class="col-12">
-          <ais-instantsearch [config]="algoliaSearchConfig" *ngIf="!rendering">
-            <h4 class="fw-500">CanYa tell us what you're looking for?</h4>
-            <ais-search-box #search class="search-box" (change)="algoliaSearchChanged($event)"></ais-search-box>
-            <div class="row search-results">
-              <div class="col-md-12">
-                <ais-hits>
-                  <ng-template let-hits="hits">
-                    <div *ngIf="hits.length <= 0 && !loading" class="row text-center">
-                      <h4 class="center-h mb-50">We couldn't find what you were looking for!</h4>
-                    </div>
-                    <div class="row my-20">
-                      <div *ngFor="let provider of hits" class="col-xl-3 col-lg-4 col-md-6 col-sm-12 card-deck" style="padding:10px">
-                        <div class="card provider-card text-center pointer" [routerLink]="['/profile/alt', provider.address]">
-                          <span *ngIf="provider && provider.badge" class="popular-tag" style="background-color:transparent;color:#33ccff;float:right;font-weight: 600;letter-spacing: 1.5px;text-transform: uppercase;min-height: 35px;font-size: 12px;text-align: center;line-height: 35px;">
-                            {{ provider.badge }}
-                          </span>
-                          <span *ngIf="!(provider && provider.badge)" class="popular-tag" style="float:right; min-height: 35px;"></span>
-                          <div class="profile">
-                            <img *ngIf="provider && (provider.avatar && provider.avatar.uri)" class="headshot" src="{{ provider.avatar.uri }}" alt="">
-                            <div class="title">
-                              <h2>
-                                <span *ngIf="provider && provider.name">{{ provider.name }}</span>
-                              </h2>
-                              <h3>
-                                <span *ngIf="provider && provider.title">{{ provider.title }}</span>
-                              </h3>
-                              <p>
-                                <span *ngIf="provider && provider.bio">{{ provider.bio }}</span>
-                              </p>
-                            </div>
-                            <div class="mh-115">
-                              <div class="row d-flex tag-row">
-                                <app-skill-tag *ngFor="let tag of getProviderTags(provider)" [skill]="tag" [routerLink]="['/home']" [queryParams]="{query: tag}"></app-skill-tag>
-                              </div>
-                            </div>
-                            <div class="row hourly-rate">
-                              <span *ngIf="provider.hourlyRate && canToUsd" data-toggle="tooltip" data-placement="bottom" title="{{getUsdToCan(provider.hourlyRate)}} USD/hr">
-                                <b>${{provider.hourlyRate}}</b>/hr
-                              </span>
-                              <span *ngIf="provider.hourlyRate && !canToUsd">
-                                <b>${{provider.hourlyRate}}</b>/hr
-                              </span>
-                            </div>
-                            <div class="row">
-                              <button [routerLink]="['/inbox/post', provider.address]" class="btn btn-primary btn-canya-chat" style="margin:10px 0 10px 0;">LET'S CHAT</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </ng-template>
-                </ais-hits>
+<section class="bg-gray">
+  <div class="container-fluid  py-20" id="section-main">
+    <section id="landing-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6">
+            <h1 class="py-20">Access global freelance talent with only 1% fees</h1>
+            <h4 class="fw-400 text-grey">CanYa tell us what you’re looking for?</h4>
+            <div class="canya-seach-bar input-group mb-3">
+              <input #inputSearch type="text" class="form-control canya-search-input" (keyup.enter)="onSubmit(inputSearch.value)"
+                placeholder="Search...">
+              <div class="input-group-append">
+                <button class="canya-search-input-btn btn btn-primary" (click)="onSubmit(inputSearch.value);">
+                  <img class="search-img" src="assets/img/search-icon-white.svg">
+                </button>
               </div>
             </div>
-          </ais-instantsearch>
-          <div *ngIf="loading || rendering" class="container d-flex h-100 flex-column justify-content-center">
-            <img src="assets/img/loader.svg" height="36px" alt="Loader">
+          </div>
+          <div class="col-lg-6">
+            <img class="img-fluid" src="https://canya.io/assets/img/CanYa_Landing_2.svg">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <h6 class="text-center text-grey ls-1">Browse our highly skilled and hand-picked providers</h6>
+          </div>
+          <div *ngFor="let type of providerTypes" class="col-lg-2 col-md-3 col-sm-4 col-6 provider-type-col">
+            <div [routerLink]="['/search']" [queryParams]="{query: type.name}" class="provider-type-card pointer">
+              <div class="row">
+                <div class="col-4 no-padding">
+                  <img src="assets/img/providers/{{type.img}}">
+                </div>
+                <div class="col-8">
+                  <h6 class="fw-500 fs-14">{{type.name}}</h6>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+    </section>
+  </div>
+  <section class="py-20">
+    <div class="container">
       <div class="row">
-        <div class="col-12 my-0 py-0">
-          <app-swiper-cards></app-swiper-cards>
+        <h4 class="section-title"><span><img class="icon-img" src="assets/img/providers/software-engineers.svg"></span>SOFTWARE
+          DEVELOPERS</h4>
+      </div>
+      <div class="row">
+        <div class="col-md-4 col-sm-6 col-12 no-padding" *ngFor="let dev of developers">
+          <app-provider-card [size]="'sm'" [provider]="dev"></app-provider-card>
         </div>
       </div>
     </div>
   </section>
-  <app-random-animation></app-random-animation>
+  <section class="py-20">
+    <div class="container">
+      <div class="row">
+        <h4 class="section-title"><span><img class="icon-img" src="assets/img/providers/creatives-black.svg"></span>DESIGNER
+          & CREATIVES</h4>
+      </div>
+      <div class="row">
+        <div class="col-md-4 col-sm-6 col-12 no-padding" *ngFor="let designer of designers">
+          <app-provider-card [size]="'sm'" [provider]="designer"></app-provider-card>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="py-20">
+    <div class="container">
+      <div class="row">
+        <h4 class="section-title"><span><img class="icon-img" src="assets/img/providers/writer-black.svg"></span>MARKETERS
+          & CONTENT CREATORS</h4>
+      </div>
+      <div class="row">
+        <div class="col-md-4 col-sm-6 col-12 no-padding" *ngFor="let content of contents">
+          <app-provider-card [size]="'sm'" [provider]="content"></app-provider-card>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20" *ngIf="currentUser !== null">
+    <div class="container">
+      <div class="row">
+        <h4 class="section-title"><span class="icon-img"><i class="far fa-eye"></i></span>RECENTLY VIEWED </h4>
+      </div>
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-12 no-padding" *ngFor="let seen of previouslySeen">
+          <app-provider-card [size]="'lg'" [provider]="seen"></app-provider-card>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container-fluid bg-white">
+    <section class="py-20" id="how-it-works">
+      <h1 class="text-center">How Does It Work?</h1>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 col-sm-6">
+            <img src="https://canya.io/assets/img/CanYa_Landing_3.svg">
+          </div>
+          <div class="col-lg-6 col-sm-6">
+            <ol class="py-20">
+              <li class="fw-500">POST A REQUEST <br> <span class="fw-400"><img src="assets/img/Create.svg"> Client &
+                  Provider Agrees for a project</span></li>
+              <li class="fw-500">DEPOSIT FUNDS <br> <span class="fw-400"><img src="assets/img/Lock.svg"> Client
+                  deposits project fee in escrow</span></li>
+              <li class="fw-500">DELIVER PROJECT <br> <span class="fw-400"><img src="assets/img/Deliver.svg"> Provider
+                  completes the project deliverables</span></li>
+              <li class="fw-500">PROJECT COMPLETION <br> <span class="fw-400"><img src="assets/img/Complete.svg"> Both
+                  parties mark project completed</span></li>
+              <li class="fw-500">DISBURSE FUNDS <br> <span class="fw-400"><img src="assets/img/Disburse.svg"> Escrow
+                  disburses project fee to provider</span></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
   <app-blog-posts></app-blog-posts>
   <app-feedback></app-feedback>
-</main>
-
-
-<app-scroll-top></app-scroll-top>
+</section>

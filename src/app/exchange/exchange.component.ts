@@ -75,8 +75,8 @@ export class ExchangeComponent implements AfterViewInit, OnDestroy {
       name: 'IDAX',
       url : 'https://www.idax.mn/#/exchange?pairname=CAN_ETH'
     }
-  ]
-  
+  ];
+
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private ethService: CanWorkEthService,

@@ -7,10 +7,6 @@ const routes: Routes = [
   {
     path: '',
     component: HomeComponent
-  },
-  {
-    path: ':query',
-    component: HomeComponent
   }
 ];
 @NgModule({

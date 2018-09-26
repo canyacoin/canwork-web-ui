@@ -14,6 +14,7 @@ import { FaqPageComponent } from './faq-page/faq-page.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
+import { LandingComponent } from '../landing/landing.component';
 import {
     SearchFilterOptionComponent
 } from './header/search-filter-option/search-filter-option.component';
@@ -28,6 +29,7 @@ import { FaqComponent } from './wallet-install/faq/faq.component';
 import { InstructionsComponent } from './wallet-install/instructions/instructions.component';
 import { WalletInstallComponent } from './wallet-install/wallet-install.component';
 import { WindowScrollDirective } from './window-scroll.directive';
+import { ProviderCardComponent } from './provider-card/provider-card.component';
 
 @NgModule({
   imports: [
@@ -46,6 +48,7 @@ import { WindowScrollDirective } from './window-scroll.directive';
     BrandComponent,
     FaqComponent,
     FaqPageComponent,
+    LandingComponent,
     FeedbackComponent,
     FooterComponent,
     HeaderComponent,
@@ -60,7 +63,8 @@ import { WindowScrollDirective } from './window-scroll.directive';
     WalletInstallComponent,
     WindowScrollDirective,
     VStepperComponent,
-    StatusLightComponent
+    StatusLightComponent,
+    ProviderCardComponent
   ],
   exports: [
     AttachmentComponent,
@@ -77,6 +81,7 @@ import { WindowScrollDirective } from './window-scroll.directive';
     SkillTagsSelectionComponent,
     WalletInstallComponent,
     VStepperComponent,
+    ProviderCardComponent,
     WindowScrollDirective
   ]
 })

@@ -1,6 +1,6 @@
  
 <main class="main-content">
-  <section class="section bg-gray py-20" id="section-main">
+  <section class="section bg-gray py-20 mh-fullscreen">
 
     <div class="container">
 
@@ -24,28 +24,9 @@
       </div>
 
       <div class="row">
-        <ng-template ngFor let-i="index" let-user [ngForOf]="users">
-          <div class="col-lg-4 col-md-4 col-sm-6">
-              <div class="card card-hover-shadow my-15">
-                <div class="card-block">
-                  <div class="profile text-center">
-                    <img *ngIf="user && (user.avatar && user.avatar.uri)" class="headshot" style="width: 150px; height: 150px; border-radius: 50%;" src="{{ user.avatar.uri }}" alt="">
-                    <div class="title">
-                      <h3 *ngIf="user && user.name">{{ user.name }}</h3>
-                      <h5 class="fw-300" *ngIf="user && user.title">{{ user.title }}</h5>
-                      <p *ngIf="user && user.bio">{{ user.bio }}</p>
-                    </div>
-                    <a [routerLink]="['/profile/alt', user.address]" data-scrollto="section-profile" class="btn btn-primary detail">
-                      <img src="assets/img/canya-button.png" style="margin-top: -2px;" width="16px" height="16px" alt="CHECK THEM OUT!"> CHECK THEM OUT!
-                    </a>
-                  </div>
-                </div>
-                <div *ngIf="user && user.humanisedDate" class="card-footer bg-white text-center" style="border-top: none;">
-                  <small class="text-muted">{{ user.humanisedDate }}</small>
-                </div>
-              </div> 
-          </div>
-        </ng-template>
+          <div class="col-md-4 col-sm-6 col-12 no-padding" *ngFor="let user of users">
+              <app-provider-card [size]="'sm'" [provider]='user'> </app-provider-card>
+          </div> 
       </div>
     </div>
   </section>

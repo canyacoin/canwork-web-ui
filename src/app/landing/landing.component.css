@@ -1,0 +1,26 @@
+.provider-type-card{
+    padding: 10px 5px 5px 5px;
+    border-radius: 5px;
+    background-color: white;
+    margin-top:10px;
+    transition: all 0.5s;
+}
+.provider-type-card img{
+    height:50px;
+    width:50px;
+    margin-left: 25px;
+}
+.provider-type-card:hover{
+  box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.1);
+}
+.provider-type-col{
+    padding: 0 5px 0 5px;
+}
+#landing-top{
+    background-color:transparent !important;
+}
+.icon-img{
+    width: 30px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
