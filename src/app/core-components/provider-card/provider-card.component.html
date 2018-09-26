@@ -1,0 +1,64 @@
+<!-- 
+  Usage : 
+  <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 card-deck" >
+    <app-provider-card></app-provider-card>
+  </div> 
+-->
+<div *ngIf="size == 'lg'" style="padding:10px">
+  <div class="card provider-card text-center pointer" [routerLink]="['/profile/alt', provider.address]">
+    <span *ngIf="provider && provider.badge" class="popular-tag" style="background-color:transparent;color:#33ccff;float:right;font-weight: 600;letter-spacing: 1.5px;text-transform: uppercase;min-height: 35px;font-size: 12px;text-align: center;line-height: 35px;">
+      {{ provider.badge }}
+    </span>
+    <span *ngIf="!(provider && provider.badge)" class="popular-tag" style="float:right; min-height: 35px;"></span>
+    <div class="profile">
+      <img *ngIf="provider && (provider.avatar && provider.avatar.uri)" class="headshot" src="{{ provider.avatar.uri }}"
+        alt="">
+      <div class="title">
+        <h2>
+          <span *ngIf="provider && provider.name">{{ provider.name }}</span>
+        </h2>
+        <h3>
+          <span *ngIf="provider && provider.title">{{ provider.title }}</span>
+        </h3>
+        <p>
+          <span *ngIf="provider && provider.bio">{{ provider.bio }}</span>
+        </p>
+      </div>
+      <div class="mh-115">
+        <div class="row d-flex tag-row">
+          <app-skill-tag *ngFor="let tag of provider.skillTags" [skill]="tag" [routerLink]="['/search']" [queryParams]="{query: tag}"></app-skill-tag>
+        </div>
+      </div>
+      <div class="row hourly-rate">
+        <span *ngIf="provider.hourlyRate && canToUsd" data-toggle="tooltip" data-placement="bottom" title="{{getUsdToCan(provider.hourlyRate)}} USD/hr">
+          <b>${{provider.hourlyRate}}</b>/hr
+        </span>
+        <span *ngIf="provider.hourlyRate && !canToUsd">
+          <b>${{provider.hourlyRate}}</b>/hr
+        </span>
+      </div>
+      <div class="row">
+        <button [routerLink]="['/inbox/post', provider.address]" class="btn btn-primary btn-canya-chat py-10">SEE MORE</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="size == 'sm'" class="px-5">
+  <div class="card provider-card pointer profile-mini" [routerLink]="['/profile/alt', provider.address]">
+    <div class="row">
+      <div class="col-lg-3 col-md-12 col-sm-12 col-3">
+        <img class="headshot" src="{{provider.avatar.uri}}">
+      </div>
+      <div class="col-lg-9 col-md-12 col-sm-12 col-9 pl-20 pb-10">
+        <h6 class="provider-name">{{provider.name}}</h6>
+        <p class="provider-title">{{ provider.title}}</p>
+        <span class="fw-400 fs-12 text-grey">
+          <i class="fa fa-map-marker-alt text-grey" aria-hidden="true"></i>
+          {{ provider.timezone }}
+        </span>
+        <br>
+        <app-skill-tag [skill]="provider.skillTags.length + ' Skills'"></app-skill-tag>
+      </div>
+    </div>
+  </div>
+</div>

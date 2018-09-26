@@ -1,0 +1,75 @@
+<main class="main-content" [appWindowScroll]>
+  <section class="section bg-gray py-20" id="section-main">
+    <div class="container">
+      <div class="row search-container text-center">
+        <div class="col-12">
+          <ais-instantsearch [config]="algoliaSearchConfig" *ngIf="!rendering">
+            <h4 class="fw-500">CanYa tell us what you're looking for?</h4>
+            <ais-search-box #search class="search-box" (change)="algoliaSearchChanged($event)"></ais-search-box>
+            <div class="row search-results">
+              <div class="col-md-12">
+                <ais-hits>
+                  <ng-template let-hits="hits">
+                    <div *ngIf="hits.length <= 0 && !loading" class="row text-center">
+                      <h4 class="center-h mb-50">We couldn't find what you were looking for!</h4>
+                    </div>
+                    <div class="row my-20">
+                      <div *ngFor="let provider of hits" class="col-xl-3 col-lg-4 col-md-6 col-sm-12 card-deck" style="padding:10px">
+                        <div class="card provider-card text-center pointer" [routerLink]="['/profile/alt', provider.address]">
+                          <span *ngIf="provider && provider.badge" class="popular-tag" style="background-color:transparent;color:#33ccff;float:right;font-weight: 600;letter-spacing: 1.5px;text-transform: uppercase;min-height: 35px;font-size: 12px;text-align: center;line-height: 35px;">
+                            {{ provider.badge }}
+                          </span>
+                          <span *ngIf="!(provider && provider.badge)" class="popular-tag" style="float:right; min-height: 35px;"></span>
+                          <div class="profile">
+                            <img *ngIf="provider && (provider.avatar && provider.avatar.uri)" class="headshot" src="{{ provider.avatar.uri }}"
+                              alt="">
+                            <div class="title">
+                              <h2>
+                                <span *ngIf="provider && provider.name">{{ provider.name }}</span>
+                              </h2>
+                              <h3>
+                                <span *ngIf="provider && provider.title">{{ provider.title }}</span>
+                              </h3>
+                              <p>
+                                <span *ngIf="provider && provider.bio">{{ provider.bio }}</span>
+                              </p>
+                            </div>
+                            <div class="mh-115">
+                              <div class="row d-flex tag-row">
+                                <app-skill-tag *ngFor="let tag of getProviderTags(provider)" [skill]="tag" [routerLink]="['/search']"
+                                  [queryParams]="{query: tag}"></app-skill-tag>
+                              </div>
+                            </div>
+                            <div class="row hourly-rate">
+                              <span *ngIf="provider.hourlyRate && canToUsd" data-toggle="tooltip" data-placement="bottom"
+                                title="{{getUsdToCan(provider.hourlyRate)}} USD/hr">
+                                <b>${{provider.hourlyRate}}</b>/hr
+                              </span>
+                              <span *ngIf="provider.hourlyRate && !canToUsd">
+                                <b>${{provider.hourlyRate}}</b>/hr
+                              </span>
+                            </div>
+                            <div class="row">
+                              <button [routerLink]="['/inbox/post', provider.address]" class="btn btn-primary btn-canya-chat"
+                                style="margin:10px 0 10px 0;">LET'S CHAT</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ais-hits>
+              </div>
+            </div>
+          </ais-instantsearch>
+          <div *ngIf="loading || rendering" class="container d-flex h-100 flex-column justify-content-center">
+            <img src="assets/img/loader.svg" height="36px" alt="Loader">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <app-blog-posts></app-blog-posts>
+  <app-feedback></app-feedback>
+</main>
+<app-scroll-top></app-scroll-top>

@@ -9,13 +9,13 @@
       <span class="text-center" style="font-weight: 600;text-transform: uppercase;letter-spacing: 1.5px;height: 50px;color: #33ccff;background-color: transparent;float: right;min-height: 50px;font-size: 14px;line-height: 50px;">
         <span *ngIf="userModel.badge">{{userModel.badge}}</span>
       </span>
-      <img *ngIf="userModel.avatar && userModel.avatar.uri" class="headshot" src="{{ userModel.avatar.uri }}" alt="">
+      <img *ngIf="userModel.avatar && userModel.avatar.uri" class="circle-headshot" src="{{ userModel.avatar.uri }}" alt="">
       <div class="title">
         <h2 *ngIf="userModel.name">{{ userModel.name }}</h2>
         <h3 *ngIf="userModel.title">{{ userModel.title }}</h3>
         <p class="fw-400" *ngIf="userModel.bio">{{ userModel.bio }}</p>
         <div class="row d-flex justify-content-around mx-30 my-30">
-          <app-skill-tag *ngFor="let tag of userModel.skillTags" [skill]="tag" [routerLink]="['/home']" [queryParams]="{query: tag}"></app-skill-tag>
+          <app-skill-tag *ngFor="let tag of userModel.skillTags" [skill]="tag" [routerLink]="['/search']" [queryParams]="{query: tag}"></app-skill-tag>
         </div>
         <button *ngIf="!isMyProfile" (click)="chatUser()" class="btn btn-primary btn-canya-chat" style="margin:10px 0 10px 0;width:175px;"
           [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">LET'S

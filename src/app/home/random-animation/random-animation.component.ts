@@ -12,7 +12,6 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class RandomAnimationComponent implements AfterViewInit, OnDestroy {
 
-  //randomAnimation = (Math.random() > 0.5) ? 1 : 0;
   randomAnimation = 0;
   routeSub: Subscription;
 

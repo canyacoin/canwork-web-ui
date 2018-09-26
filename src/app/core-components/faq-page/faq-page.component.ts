@@ -62,11 +62,11 @@ export class FaqPageComponent implements OnInit {
       q: 'How do I control the notification settings I receive?',
       a: 'Notifications from CANwork currently are sent via email. You can unsubscribe from these emails anytime, at the bottom of the email. If you would like to see CanYa updates you can go to canya.io.'
     },
-    // {
-    //   index: 'q-12',
-    //   q: 'What happens if crypto price changes?',
-    //   a: 'CanYa’s hedged escrow service mitigates against market volatility. If you’ve quoted, for example, $500 USD in CAN tokens for a job, you will receive the same value of $500 USD in CAN upon completing the job regardless of changes in CanYaCoin price.'
-    // },
+    {
+       index: 'q-12',
+       q: 'What happens if crypto price changes?',
+       a: 'CanYa’s hedged escrow service mitigates against market volatility. If you’ve quoted, for example, $500 USD in CAN tokens for a job, you will receive the same value of $500 USD in CAN upon completing the job regardless of changes in CanYaCoin price.'
+    },
     {
       index: 'q-13',
       q: 'How do I buy CAN?',

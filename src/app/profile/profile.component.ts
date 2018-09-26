@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import * as moment from 'moment-timezone';
-import { User, UserState } from '../core-classes/user';
+import { User, UserState, UserType } from '../core-classes/user';
 import { AuthService } from '../core-services/auth.service';
 import { UserService } from '../core-services/user.service';
 
@@ -59,6 +59,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.userModel = user;
       this.setUsersColors(this.userModel);
       this.saveWhoViewProfile();
+      this.addToViewedProfileList();
     }).catch(err => {
       console.log('loadUser: error');
     });
@@ -73,6 +74,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
   saveWhoViewProfile() {
     if (this.notMyProfile() && this.currentUser) {
       this.userService.saveProfileView(this.currentUser, this.userModel.address);
+    }
+  }
+
+  addToViewedProfileList() {
+    if (this.notMyProfile) {
+      this.userService.addToViewedUsers(this.currentUser.address, this.userModel);
     }
   }
 
