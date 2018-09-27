@@ -1,14 +1,42 @@
 
-.search-container {
-    margin-top: 80px;
-  }
+
   .title h2, h3, p{
     min-height: 50px;
+  }
+  .card-size-btn{
+    border-color: transparent;
+    background-color: transparent;
+    margin: 0px 2.5px 0px 2.5px;
+  }
+  .card-size-btn img{
+    height: 36px;
+    width: auto;
+  }
+  .filter-btn{
+    z-index: 150; 
+    background-color:white; 
+    height: 36px;
+    width: 175px;
+  }
+  .filter-btn .selected{ 
+    background-color:#33ccff; 
+    color:white; 
+  }  
+  .category-btn{
+    border-radius: 60px;
+    width: 225px;
+    margin: 7.5px;
+  }
+  .menu-options{
+    padding: 15px;
+    z-index: 125; 
+    position: absolute; 
+    background-color: white; 
+    border-radius: 5px
   }
   ::ng-deep .search-box .ais-SearchBox {
     width: 90%;
     max-width: 600px;
-    margin: 0px auto;
   }
   
   ::ng-deep .ais-SearchBox-input {
@@ -77,7 +105,7 @@
     /* box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); */
     min-height: 100%;
   }
-  
+
   .specialcard .subtle {
     color: #000;
     font-size: 0.5em;
@@ -142,4 +170,8 @@
     bottom: 40px !important;
     padding-right: 20px;
   }
-  
+
+  .stop-scrolling {
+    height: 100%;
+    overflow: hidden;
+  }
