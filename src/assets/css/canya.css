@@ -1404,7 +1404,11 @@ button:focus {
 
 .btn-primary,
 .btn-primary:hover {
+<<<<<<< HEAD
   background-color: #33ccff;
+=======
+  background-color: #33ccff; 
+>>>>>>> overlaid menu front-end implemented
   border: 1px solid transparent;
   color: #fff;
 }
@@ -9751,4 +9755,19 @@ a.text-danger:focus {
   margin: 0;
   height: 39px;
   color: #323c47;
+}
+
+#menu-overlay {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 0;
+  position: fixed;
+  opacity: 0;
+}
+
+.activate-menu{
+  z-index: 75 !important;
+  opacity: 100 !important;
+  overflow: hidden;
 }
