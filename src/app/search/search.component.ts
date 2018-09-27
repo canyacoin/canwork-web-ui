@@ -25,7 +25,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   allProviders: User[] = [];
   filteredProviders: User[] = [];
-
+  smallCards = false;
   query = '';
   loading = true;
   canToUsd: number;
@@ -89,6 +89,10 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     return '-';
   }
 
+  setSmallCards(bool: boolean) {
+    this.smallCards = bool;
+  }
+
   getProviderTags(provider: any): string[] {
     const allTags: string[] = union(provider.skillTags === undefined ? [] : provider.skillTags, provider.workSkillTags === undefined ? [] : provider.workSkillTags);
     if (allTags.length > 5) {
@@ -112,4 +116,29 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     ];
     return tmp[Math.floor(Math.random() * (tmp.length - 1))];
   }
+
+  toggleOverlay(documentID, buttonID) {
+    document.getElementById('menu-overlay').classList.toggle('activate-menu');
+    const btnPosition =  document.getElementById(buttonID).getBoundingClientRect();
+    if (document.getElementById(documentID).hidden === true) {
+      this.resetMenus();
+      document.getElementById(documentID).style.setProperty('margin-top', '10px');
+      if (window.innerWidth > 576) {
+        document.getElementById(documentID).style.setProperty('left', btnPosition.left - 50 + 'px');
+      }
+      document.getElementById(documentID).hidden = false;
+    } else {
+      document.getElementById(documentID).hidden = true;
+    }
+  }
+
+  resetMenus() {
+    if (document.getElementById('hours-menu').hidden === false) {
+      document.getElementById('hours-menu').hidden = true;
+    }
+    if (document.getElementById('category-menu').hidden === false) {
+      document.getElementById('category-menu').hidden = true;
+    }
+  }
+
 }

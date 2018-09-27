@@ -1,60 +1,95 @@
 <main class="main-content" [appWindowScroll]>
-  <section class="section bg-gray py-20" id="section-main">
+  <section class="section bg-gray">
     <div class="container">
-      <div class="row search-container text-center">
+      <div class="row search-container">
         <div class="col-12">
           <ais-instantsearch [config]="algoliaSearchConfig" *ngIf="!rendering">
-            <h4 class="fw-500">CanYa tell us what you're looking for?</h4>
             <ais-search-box #search class="search-box" (change)="algoliaSearchChanged($event)"></ais-search-box>
-            <div class="row search-results">
+            <div class="row mt-25 mb-15" style="z-index: 150; position: relative;">
+              <div class="col-9">
+                <button id="category-btn" (click)="toggleOverlay('category-menu', 'category-btn')" class="btn btn-primary filter-btn btn-outline">
+                  CATEGORY
+                </button>
+                <button id="hourly-btn" class="btn btn-primary filter-btn btn-outline" (click)="toggleOverlay('hours-menu', 'hourly-btn')">
+                  HOURLY RATE
+                </button>
+                <input type="checkbox" id="filter-timezone" class="filter-timezone ml-5"><span class="fs-12 ml-5">Ony show providers within my timezone</span><br>
+                <div class="menu-options" id="category-menu" hidden>
+                  <div class="row">
+                    <div class="col-sm-6 col-12 no-padding">
+                      <button class="btn btn-primary btn-outline category-btn">
+                        CONTENT CREATORS
+                      </button>
+                    </div>
+                    <div class="col-sm-6 col-12 no-padding">
+                      <button class="btn btn-primary btn-outline category-btn">
+                        DESIGNERS & CREATIVES
+                      </button>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6 col-12 no-padding">
+                      <button class="btn btn-primary btn-outline category-btn">
+                        FINANCIAL EXPERTS
+                      </button>
+                    </div>
+                    <div class="col-sm-6 col-12 no-padding">
+                      <button class="btn btn-primary btn-outline category-btn">
+                        MARKETING EXPERTS
+                      </button>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-6 col-12 no-padding">
+                      <button class="btn btn-primary btn-outline category-btn">
+                        SOFTWARE ENGINEERS
+                      </button>
+                    </div>
+                    <div class="col-sm-6 col-12 no-padding">
+                      <button class="btn btn-primary btn-outline category-btn">
+                        VIRTUAL ASSISTANTS
+                      </button>
+                    </div>
+                  </div>
+                  <div class="row" style="height: 16px">
+                    <div class="col-6">
+                      <p class="fw-700 ls-2  fs-10">CLEAR</p>
+                    </div>
+                    <div class="col-6 text-right">
+                      <a class="fw-700 ls-2 fs-10">APPLY</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="menu-options" id="hours-menu" hidden>
+                  <div class="row">
+                    <div class="p-15">
+                      <input type="range" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-3 text-right no-padding">
+                <button class="card-size-btn" (click)="setSmallCards(false)">
+                  <img *ngIf="!smallCards" src="assets/img/Long-selected.svg">
+                  <img *ngIf="smallCards" src="assets/img/Long-unselected.svg">
+                </button>
+                <button class="card-size-btn" (click)="setSmallCards(true)">
+                  <img *ngIf="smallCards" src="assets/img/Short-selected.svg">
+                  <img *ngIf="!smallCards" src="assets/img/Short-unselected.svg">
+                </button>
+              </div>
+            </div>
+            <div class="row">
               <div class="col-md-12">
                 <ais-hits>
                   <ng-template let-hits="hits">
                     <div *ngIf="hits.length <= 0 && !loading" class="row text-center">
                       <h4 class="center-h mb-50">We couldn't find what you were looking for!</h4>
                     </div>
-                    <div class="row my-20">
-                      <div *ngFor="let provider of hits" class="col-xl-3 col-lg-4 col-md-6 col-sm-12 card-deck" style="padding:10px">
-                        <div class="card provider-card text-center pointer" [routerLink]="['/profile/alt', provider.address]">
-                          <span *ngIf="provider && provider.badge" class="popular-tag" style="background-color:transparent;color:#33ccff;float:right;font-weight: 600;letter-spacing: 1.5px;text-transform: uppercase;min-height: 35px;font-size: 12px;text-align: center;line-height: 35px;">
-                            {{ provider.badge }}
-                          </span>
-                          <span *ngIf="!(provider && provider.badge)" class="popular-tag" style="float:right; min-height: 35px;"></span>
-                          <div class="profile">
-                            <img *ngIf="provider && (provider.avatar && provider.avatar.uri)" class="headshot" src="{{ provider.avatar.uri }}"
-                              alt="">
-                            <div class="title">
-                              <h2>
-                                <span *ngIf="provider && provider.name">{{ provider.name }}</span>
-                              </h2>
-                              <h3>
-                                <span *ngIf="provider && provider.title">{{ provider.title }}</span>
-                              </h3>
-                              <p>
-                                <span *ngIf="provider && provider.bio">{{ provider.bio }}</span>
-                              </p>
-                            </div>
-                            <div class="mh-115">
-                              <div class="row d-flex tag-row">
-                                <app-skill-tag *ngFor="let tag of getProviderTags(provider)" [skill]="tag" [routerLink]="['/search']"
-                                  [queryParams]="{query: tag}"></app-skill-tag>
-                              </div>
-                            </div>
-                            <div class="row hourly-rate">
-                              <span *ngIf="provider.hourlyRate && canToUsd" data-toggle="tooltip" data-placement="bottom"
-                                title="{{getUsdToCan(provider.hourlyRate)}} USD/hr">
-                                <b>${{provider.hourlyRate}}</b>/hr
-                              </span>
-                              <span *ngIf="provider.hourlyRate && !canToUsd">
-                                <b>${{provider.hourlyRate}}</b>/hr
-                              </span>
-                            </div>
-                            <div class="row">
-                              <button [routerLink]="['/inbox/post', provider.address]" class="btn btn-primary btn-canya-chat"
-                                style="margin:10px 0 10px 0;">LET'S CHAT</button>
-                            </div>
-                          </div>
-                        </div>
+                    <div class="row no-padding">
+                      <div *ngFor="let provider of hits" class="col-xl-4 col-lg-4 col-md-6 col-sm-12 no-padding my-5 ">
+                        <app-provider-card *ngIf="smallCards" [size]="'sm'" [provider]="provider"></app-provider-card>
+                        <app-provider-card *ngIf="!smallCards" [size]="'lg'" [provider]="provider"></app-provider-card>
                       </div>
                     </div>
                   </ng-template>
