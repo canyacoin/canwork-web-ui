@@ -1,5 +1,5 @@
 import {
-    AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild
+  AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild
 } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -117,9 +117,12 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     return tmp[Math.floor(Math.random() * (tmp.length - 1))];
   }
 
-  toggleOverlay(documentID, buttonID) {
-    document.getElementById('menu-overlay').classList.toggle('activate-menu');
-    const btnPosition =  document.getElementById(buttonID).getBoundingClientRect();
+  toggleOverlay(documentID, otherDocumentID, buttonID) {
+    const btnPosition = document.getElementById(buttonID).getBoundingClientRect();
+    if (document.getElementById(otherDocumentID).hidden === false) {
+      document.getElementById('menu-overlay').classList.toggle('activate-menu');
+      document.getElementById(otherDocumentID).hidden = true;
+    }
     if (document.getElementById(documentID).hidden === true) {
       this.resetMenus();
       document.getElementById(documentID).style.setProperty('margin-top', '10px');
@@ -128,8 +131,9 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       document.getElementById(documentID).hidden = false;
     } else {
-      document.getElementById(documentID).hidden = true;
+      this.resetMenus();
     }
+    document.getElementById('menu-overlay').classList.toggle('activate-menu');
   }
 
   resetMenus() {
