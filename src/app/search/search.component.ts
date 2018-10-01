@@ -31,11 +31,11 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   query = '';
   loading = true;
   canToUsd: number;
-  minValue = 100;
-  maxValue = 400;
+  minValue = 0;
+  maxValue = 300;
   options: Options = {
     floor: 0,
-    ceil: 500,
+    ceil: 300,
     translate: (value: number, label: LabelType): string => {
       switch (label) {
         case LabelType.Low:
@@ -50,12 +50,12 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   routeSub: Subscription;
   providerSub: Subscription;
   portfolioSub: Subscription;
-
+  algoliaIndex = environment.algolia.indexName;
   rendering = false;
 
   algoliaSearchConfig = {
     ...environment.algolia,
-    indexName: environment.algolia.indexName,
+    indexName: this.algoliaIndex,
     routing: true
   };
 
@@ -97,7 +97,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   algoliaSearchChanged(query) {
-    // (query.length) ? this.algoliaShowResults = true : this.algoliaShowResults = false;
+    console.log(query);
   }
 
   getUsdToCan(usd: number): string {
@@ -144,7 +144,9 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     if (document.getElementById(documentID).classList.contains('hide-menu')) {
       this.resetMenus();
       if (window.innerWidth > 576) {
-        document.getElementById(documentID).style.setProperty('left', btnPosition.left - 50 + 'px');
+        document.getElementById(documentID).style.setProperty('left', btnPosition.left - 75 + 'px');
+      } else {
+        document.getElementById(documentID).style.setProperty('left', '20px');
       }
       document.getElementById(documentID).classList.toggle('hide-menu');
     } else {
@@ -167,15 +169,14 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     // it must be removed. see the front end, and you'll get it.
     const isInArray = this.categoryFilters.find(function (element) {
       return element === categoryName;
-    })
-
-    if (isInArray !== null) {
+    });
+    if (typeof isInArray === 'undefined') {
       this.categoryFilters.push(categoryName);
     } else {
       const index = this.categoryFilters.findIndex(function (element) {
         return element === categoryName;
       })
-      this.categoryFilters.splice(index);
+      this.categoryFilters.splice(index, 1);
     }
     document.getElementById(categoryName).classList.toggle('chosen');
     console.log(this.categoryFilters);

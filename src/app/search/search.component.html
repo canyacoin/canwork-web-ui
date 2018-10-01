@@ -4,7 +4,10 @@
       <div class="row search-container">
         <div class="col-12">
           <ais-instantsearch [config]="algoliaSearchConfig" *ngIf="!rendering">
+            
             <ais-search-box #search class="search-box" (change)="algoliaSearchChanged($event)"></ais-search-box>
+
+            <ais-refinement-list attribute="user.type" operator="or" [limit]="10"></ais-refinement-list>
             <div class="row mt-25 mb-15" style="z-index: 150; position: relative;">
               <div class="col-9">
                 <button id="category-btn" (click)="toggleOverlay('category-menu','hours-menu', 'category-btn')" class="btn btn-primary filter-btn btn-outline">
@@ -16,43 +19,31 @@
                 <input type="checkbox" id="filter-timezone" class="filter-timezone ml-5"><span class="fs-12 ml-5">Ony
                   show providers within my timezone</span><br>
                 <div class="menu-options hide-menu" id="category-menu">
-                  <div class="row">
-                    <div class="col-sm-6 col-12 no-padding">
+                  <div class="row text-center"> 
+                    <div class="col-md-6 col-sm-12 col-12">
                       <button id="contentCreator" (click)="onChooseCategory('contentCreator')" class="btn btn-primary btn-outline category-btn">
                         CONTENT CREATORS
-                      </button>
+                      </button> 
+                        <button id="finance" (click)="onChooseCategory('finance')" class="btn btn-primary btn-outline category-btn">
+                          FINANCIAL EXPERTS
+                        </button>
+                        <button id="softwareDev" (click)="onChooseCategory('softwareDev')" class="btn btn-primary btn-outline category-btn">
+                          SOFTWARE DEVELOPERS
+                        </button>
                     </div>
-                    <div class="col-sm-6 col-12 no-padding">
+                    <div class="col-md-6 col-sm-12 col-12">
                       <button id="designer" (click)="onChooseCategory('designer')" class="btn btn-primary btn-outline category-btn">
                         DESIGNERS & CREATIVES
                       </button>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-sm-6 col-12 no-padding">
-                      <button id="finance" (click)="onChooseCategory('finance')" class="btn btn-primary btn-outline category-btn">
-                        FINANCIAL EXPERTS
-                      </button>
-                    </div>
-                    <div class="col-sm-6 col-12 no-padding">
                       <button id="marketing" (click)="onChooseCategory('marketing')" class="btn btn-primary btn-outline category-btn">
                         MARKETING EXPERTS
                       </button>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-sm-6 col-12 no-padding">
-                      <button id="softwareDev" (click)="onChooseCategory('softwareDev')" class="btn btn-primary btn-outline category-btn">
-                        SOFTWARE DEVELOPERS
-                      </button>
-                    </div>
-                    <div class="col-sm-6 col-12 no-padding">
                       <button id="virtualAssistant" (click)="onChooseCategory('virtualAssistant')" class="btn btn-primary btn-outline category-btn">
                         VIRTUAL ASSISTANTS
                       </button>
-                    </div>
-                  </div>
-                  <div class="row" style="height: 16px">
+                    </div> 
+                  </div> 
+                  <div class="row px-20" style="height: 16px">
                     <div class="col-6">
                       <p class="fw-700 ls-2  fs-10">CLEAR</p>
                     </div>
@@ -62,8 +53,8 @@
                   </div>
                 </div>
                 <div class="menu-options" id="hours-menu">
-                  <div class="row p-20" style="width:500px">
-                    <ng5-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options" style="width:300px"></ng5-slider>
+                  <div class="row">
+                    <ng5-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options" style="width:300px; margin: 0 auto; margin-top: 45px"></ng5-slider>
                   </div>
                 </div>
               </div>
