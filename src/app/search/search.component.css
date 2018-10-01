@@ -1,63 +1,82 @@
+.title h2,
+h3,
+p {
+  min-height: 50px;
+}
 
+.card-size-btn {
+  border-color: transparent;
+  background-color: transparent;
+  margin: 0px 2.5px 0px 2.5px;
+}
 
-  .title h2, h3, p{
-    min-height: 50px;
+.card-size-btn img {
+  height: 36px;
+  width: auto;
+}
+
+.filter-btn {
+  z-index: 150;
+  background-color: white;
+  height: 36px;
+  width: 150px;
+  margin-top: 5px;
+}
+
+.filter-btn .selected {
+  background-color: #33ccff;
+  color: white;
+}
+
+.category-btn {
+  border-radius: 60px;
+  padding: 7.5px;
+  width: 275px;
+  margin: 7.5px;
+}
+
+.chosen {
+  color: white !important;
+  background-color: #33ccff !important;
+}
+
+.menu-options {
+  margin-top: 10px;
+  padding: 15px;
+  left: 50px;
+  z-index: 125;
+  position: absolute;
+  background-color: white;
+  border-radius: 5px;
+  display: block;
+}
+
+.hide-menu {
+  display: none;
+}
+
+#hours-menu {
+  width: 360px;
+  height: 100px;
+}
+
+@media screen and (max-width: 576px) {
+  .menu-options {
+    margin: 0 auto;
+    left: 20px;
   }
-  .card-size-btn{
-    border-color: transparent;
-    background-color: transparent;
-    margin: 0px 2.5px 0px 2.5px;
-  }
-  .card-size-btn img{
-    height: 36px;
-    width: auto;
-  }
-  .filter-btn{
-    z-index: 150; 
-    background-color:white; 
-    height: 36px;
-    width: 150px;
-  }
-  .filter-btn .selected{ 
-    background-color:#33ccff; 
-    color:white; 
-  }  
-  .category-btn{
-    border-radius: 60px;
-    padding: 7.5px;
-    width: 275px;
-    margin: 7.5px;
-  }
-  .chosen{
-    color: white !important;
-    background-color: #33ccff  !important;
-  }
-  .menu-options{
-    padding: 15px;
-    z-index: 125; 
-    position: absolute; 
-    background-color: white; 
-    border-radius: 5px;
-    display: block;
-  }
-  .hide-menu {
-    display: none;
-  }
-  #hours-menu {
-    width: 360px;
-    height: 100px;
-  }
+}
   ::ng-deep .search-box .ais-SearchBox {
     width: 90%;
     max-width: 600px;
   }
-  
+
   ::ng-deep .ais-SearchBox-input {
     outline: none;
     border-color: white;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
   }
-  
+
   ::ng-deep .ais-SearchBox-submit {
     width: 3rem;
     height: 105%;
@@ -69,16 +88,16 @@
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
   }
-  
+
   ::ng-deep .ais-SearchBox-input:hover {
     transition: all 0.5s;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
   }
-  
+
   ::ng-deep .ais-SearchBox-reset {
     display: none;
   }
-  
+
   ::ng-deep .ng5-slider .ng5-slider-pointer {
     width: 8px;
     height: 16px;
@@ -92,17 +111,22 @@
   .ais-SearchBox-input:focus {
     outline: none !important;
   }
-  
+
   .search-results {
     padding-top: 10vh;
   }
-  
+
   .min-70 {
     min-height: 70vh;
   }
-  
+
+  .option-row {
+    height: 16px;
+    padding: 20px
+  }
+
   /* /////////////////////////////////////////////////////////////////////////// */
-  
+
   .specialcard-holder {
     color: #000;
     border-radius: 5px;
@@ -113,7 +137,7 @@
     font-weight: 800;
     padding: 0.6em;
   }
-  
+
   .specialcard {
     font-family: Montserrat, HelveticaNeueLight, HelveticaNeue-Light, "Helvetica Neue Light", HelveticaNeue, "Helvetica Neue", Helvetica, Tahoma, Geneva, Arial, sans-serif;
     font-size: 2.778em;
@@ -135,25 +159,25 @@
     font-weight: 400;
     letter-spacing: -1px;
   }
-  
+
   .specialcard i {
     font-size: 3em;
   }
-  
+
   .bg-gold {
     background: -webkit-linear-gradient(110deg, #fdcd3b 60%, #ffed4b 60%);
     background: -o-linear-gradient(110deg, #fdcd3b 60%, #ffed4b 60%);
     background: -moz-linear-gradient(110deg, #fdcd3b 60%, #ffed4b 60%);
     background: linear-gradient(110deg, #fdcd3b 60%, #ffed4b 60%);
   }
-  
+
   .bg-news {
     background: -webkit-linear-gradient(70deg, #fc3b30 40%, #5ac8fa 40%);
     background: -o-linear-gradient(70deg, #fc3b30 40%, #5ac8fa 40%);
     background: -moz-linear-gradient(70deg, #fc3b30 40%, #5ac8fa 40%);
     background: linear-gradient(70deg, #fc3b30 40%, #5ac8fa 40%);
   }
-  
+
   .bg-germany {
     color: #fff;
     background: -webkit-linear-gradient(110deg, #000 33%, rgba(0, 0, 0, 0) 33%), -webkit-linear-gradient(110deg, #dd0000 66%, #ffc608 66%);
@@ -161,7 +185,7 @@
     background: -moz-linear-gradient(110deg, #000 33%, rgba(0, 0, 0, 0) 33%), -moz-linear-gradient(110deg, #dd0000 66%, #ffc608 66%);
     background: linear-gradient(110deg, #000 33%, rgba(0, 0, 0, 0) 33%), linear-gradient(110deg, #dd0000 66%, #ffc608 66%);
   }
-  
+
   .bg-aurora {
     color: #fff;
     background: -webkit-linear-gradient(-70deg, #fa7c30 30%, rgba(0, 0, 0, 0) 30%), url('https://www.nasa.gov/sites/default/files/thumbnails/image/pia21421-cr.jpg');
@@ -172,7 +196,7 @@
     background-position: 50% 21%;
     text-align: right;
   }
-  
+
   .bg-purple {
     color: #fff;
     background: -webkit-linear-gradient(110deg, #a60af3 40%, rgba(0, 0, 0, 0) 30%), -webkit-radial-gradient(farthest-corner at 0% 0%, #7a00cc 70%, #c03fff 70%);
@@ -180,14 +204,14 @@
     background: -moz-linear-gradient(110deg, #a60af3 40%, rgba(0, 0, 0, 0) 30%), -moz-radial-gradient(farthest-corner at 0% 0%, #7a00cc 70%, #c03fff 70%);
     background: linear-gradient(110deg, #a60af3 40%, rgba(0, 0, 0, 0) 30%), radial-gradient(farthest-corner at 0% 0%, #7a00cc 70%, #c03fff 70%);
   }
-  
+
   .bg-spring {
     background: -webkit-linear-gradient(70deg, #fff810 30%, rgba(0, 0, 0, 0) 30%), -webkit-linear-gradient(30deg, #63e89e 60%, #ff7ee3 60%);
     background: -o-linear-gradient(70deg, #fff810 30%, rgba(0, 0, 0, 0) 30%), -o-linear-gradient(30deg, #63e89e 60%, #ff7ee3 60%);
     background: -moz-linear-gradient(70deg, #fff810 30%, rgba(0, 0, 0, 0) 30%), -moz-linear-gradient(30deg, #63e89e 60%, #ff7ee3 60%);
     background: linear-gradient(70deg, #fff810 30%, rgba(0, 0, 0, 0) 30%), linear-gradient(30deg, #63e89e 60%, #ff7ee3 60%);
   }
-  
+
   .swiper-pagination {
     text-align: right;
     bottom: 40px !important;

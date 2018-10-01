@@ -4,32 +4,39 @@
       <div class="row search-container">
         <div class="col-12">
           <ais-instantsearch [config]="algoliaSearchConfig" *ngIf="!rendering">
-            
+
             <ais-search-box #search class="search-box" (change)="algoliaSearchChanged($event)"></ais-search-box>
 
             <ais-refinement-list attribute="user.type" operator="or" [limit]="10"></ais-refinement-list>
             <div class="row mt-25 mb-15" style="z-index: 150; position: relative;">
               <div class="col-9">
-                <button id="category-btn" (click)="toggleOverlay('category-menu','hours-menu', 'category-btn')" class="btn btn-primary filter-btn btn-outline">
-                  CATEGORY
-                </button>
-                <button id="hourly-btn" class="btn btn-primary filter-btn btn-outline" (click)="toggleOverlay('hours-menu', 'category-menu', 'hourly-btn')">
-                  HOURLY RATE
-                </button>
-                <input type="checkbox" id="filter-timezone" class="filter-timezone ml-5"><span class="fs-12 ml-5">Ony
-                  show providers within my timezone</span><br>
+                <div class="row">
+                  <div class="col-md-6 col-12">
+                    <button id="category-btn" (click)="toggleOverlay('category-menu','hours-menu', 'category-btn')"
+                      class="btn btn-primary filter-btn btn-outline">
+                      CATEGORY
+                    </button>
+                    <button id="hourly-btn" class="btn btn-primary filter-btn btn-outline" (click)="toggleOverlay('hours-menu', 'category-menu', 'hourly-btn')">
+                      HOURLY RATE
+                    </button>
+                  </div>
+                  <div class="col-md-6 col-12">
+                    <input type="checkbox" [checked]="inMyTimezone" (change) = "inMyTimezone = !inMyTimezone" id="filter-timezone" class="filter-timezone ml-5"><span class="fs-12 ml-5">Ony
+                      show providers within my timezone</span>
+                  </div>
+                </div>
                 <div class="menu-options hide-menu" id="category-menu">
-                  <div class="row text-center"> 
+                  <div class="row text-center">
                     <div class="col-md-6 col-sm-12 col-12">
                       <button id="contentCreator" (click)="onChooseCategory('contentCreator')" class="btn btn-primary btn-outline category-btn">
                         CONTENT CREATORS
-                      </button> 
-                        <button id="finance" (click)="onChooseCategory('finance')" class="btn btn-primary btn-outline category-btn">
-                          FINANCIAL EXPERTS
-                        </button>
-                        <button id="softwareDev" (click)="onChooseCategory('softwareDev')" class="btn btn-primary btn-outline category-btn">
-                          SOFTWARE DEVELOPERS
-                        </button>
+                      </button>
+                      <button id="finance" (click)="onChooseCategory('finance')" class="btn btn-primary btn-outline category-btn">
+                        FINANCIAL EXPERTS
+                      </button>
+                      <button id="softwareDev" (click)="onChooseCategory('softwareDev')" class="btn btn-primary btn-outline category-btn">
+                        SOFTWARE DEVELOPERS
+                      </button>
                     </div>
                     <div class="col-md-6 col-sm-12 col-12">
                       <button id="designer" (click)="onChooseCategory('designer')" class="btn btn-primary btn-outline category-btn">
@@ -41,9 +48,9 @@
                       <button id="virtualAssistant" (click)="onChooseCategory('virtualAssistant')" class="btn btn-primary btn-outline category-btn">
                         VIRTUAL ASSISTANTS
                       </button>
-                    </div> 
-                  </div> 
-                  <div class="row px-20" style="height: 16px">
+                    </div>
+                  </div>
+                  <div class="row px-20 option-row">
                     <div class="col-6">
                       <p class="fw-700 ls-2  fs-10">CLEAR</p>
                     </div>
@@ -54,7 +61,15 @@
                 </div>
                 <div class="menu-options" id="hours-menu">
                   <div class="row">
-                    <ng5-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options" style="width:300px; margin: 0 auto; margin-top: 45px"></ng5-slider>
+                    <ng5-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options" style="width:300px; margin: 0 auto; margin-top: 35px;"></ng5-slider>
+                  </div>
+                  <div class="row px-20 option-row">
+                    <div class="col-6">
+                      <p class="fw-700 ls-2  fs-10" (click)="onResetHourlyRate()">RESET</p>
+                    </div>
+                    <div class="col-6 text-right">
+                      <p class="fw-700 ls-2 fs-10" (click)="onSetHourlyRate()">APPLY</p>
+                    </div>
                   </div>
                 </div>
               </div>

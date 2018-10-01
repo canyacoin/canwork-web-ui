@@ -52,7 +52,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   portfolioSub: Subscription;
   algoliaIndex = environment.algolia.indexName;
   rendering = false;
-
+  inMyTimezone = true;
   algoliaSearchConfig = {
     ...environment.algolia,
     indexName: this.algoliaIndex,
@@ -143,11 +143,6 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     if (document.getElementById(documentID).classList.contains('hide-menu')) {
       this.resetMenus();
-      if (window.innerWidth > 576) {
-        document.getElementById(documentID).style.setProperty('left', btnPosition.left - 75 + 'px');
-      } else {
-        document.getElementById(documentID).style.setProperty('left', '20px');
-      }
       document.getElementById(documentID).classList.toggle('hide-menu');
     } else {
       this.resetMenus();
@@ -180,5 +175,14 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     document.getElementById(categoryName).classList.toggle('chosen');
     console.log(this.categoryFilters);
+  }
+
+  onSetHourlyRate() {
+    console.log(this.maxValue, this.minValue);
+  }
+
+  onResetHourlyRate() {
+    this.maxValue = 300;
+    this.minValue = 0;
   }
 }
