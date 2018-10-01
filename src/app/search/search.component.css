@@ -36,7 +36,11 @@
     z-index: 125; 
     position: absolute; 
     background-color: white; 
-    border-radius: 5px
+    border-radius: 5px;
+    display: block;
+  }
+  .hide-menu {
+    display: none;
   }
   ::ng-deep .search-box .ais-SearchBox {
     width: 90%;

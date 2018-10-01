@@ -10,7 +10,7 @@ import * as union from 'lodash/union';
 import { Observable } from 'rxjs/Observable';
 import { take } from 'rxjs/operator/take';
 import { Subscription } from 'rxjs/Subscription';
-
+import { Options, LabelType } from 'ng5-slider';
 import { environment } from '../../environments/environment';
 import { Portfolio, Work } from '../core-classes/portfolio';
 import { User, UserCategory } from '../core-classes/user';
@@ -31,7 +31,22 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   query = '';
   loading = true;
   canToUsd: number;
-
+  minValue = 100;
+  maxValue = 400;
+  options: Options = {
+    floor: 0,
+    ceil: 500,
+    translate: (value: number, label: LabelType): string => {
+      switch (label) {
+        case LabelType.Low:
+          return '<b>Min price:</b> $' + value;
+        case LabelType.High:
+          return '<b>Max price:</b> $' + value;
+        default:
+          return '$' + value;
+      }
+    }
+  };
   routeSub: Subscription;
   providerSub: Subscription;
   portfolioSub: Subscription;
@@ -65,6 +80,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     if (canToUsdResp.ok) {
       this.canToUsd = JSON.parse(canToUsdResp.text())['data']['quotes']['USD']['price'];
     }
+    document.getElementById('hours-menu').classList.toggle('hide-menu');
   }
 
   ngAfterViewInit() {
@@ -121,17 +137,16 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   toggleOverlay(documentID, otherDocumentID, buttonID) {
     const btnPosition = document.getElementById(buttonID).getBoundingClientRect();
-    if (document.getElementById(otherDocumentID).hidden === false) {
+    if (!(document.getElementById(otherDocumentID).classList.contains('hide-menu'))) {
       document.getElementById('menu-overlay').classList.toggle('activate-menu');
-      document.getElementById(otherDocumentID).hidden = true;
+      document.getElementById(otherDocumentID).classList.toggle('hide-menu');
     }
-    if (document.getElementById(documentID).hidden === true) {
+    if (document.getElementById(documentID).classList.contains('hide-menu')) {
       this.resetMenus();
-      document.getElementById(documentID).style.setProperty('margin-top', '10px');
       if (window.innerWidth > 576) {
         document.getElementById(documentID).style.setProperty('left', btnPosition.left - 50 + 'px');
       }
-      document.getElementById(documentID).hidden = false;
+      document.getElementById(documentID).classList.toggle('hide-menu');
     } else {
       this.resetMenus();
     }
@@ -139,11 +154,11 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   resetMenus() {
-    if (document.getElementById('hours-menu').hidden === false) {
-      document.getElementById('hours-menu').hidden = true;
+    if (document.getElementById('hours-menu').classList.contains('hide-menu') === false) {
+      document.getElementById('hours-menu').classList.toggle('hide-menu');
     }
-    if (document.getElementById('category-menu').hidden === false) {
-      document.getElementById('category-menu').hidden = true;
+    if (document.getElementById('category-menu').classList.contains('hide-menu') === false) {
+      document.getElementById('category-menu').classList.toggle('hide-menu');
     }
   }
 

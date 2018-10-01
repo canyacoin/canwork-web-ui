@@ -15,7 +15,7 @@
                 </button>
                 <input type="checkbox" id="filter-timezone" class="filter-timezone ml-5"><span class="fs-12 ml-5">Ony
                   show providers within my timezone</span><br>
-                <div class="menu-options" id="category-menu" hidden>
+                <div class="menu-options hide-menu" id="category-menu">
                   <div class="row">
                     <div class="col-sm-6 col-12 no-padding">
                       <button id="contentCreator" (click)="onChooseCategory('contentCreator')" class="btn btn-primary btn-outline category-btn">
@@ -47,7 +47,7 @@
                       </button>
                     </div>
                     <div class="col-sm-6 col-12 no-padding">
-                      <button id="virtualAssistant" (click)="onChooseCategory('softwareDev')" class="btn btn-primary btn-outline category-btn">
+                      <button id="virtualAssistant" (click)="onChooseCategory('virtualAssistant')" class="btn btn-primary btn-outline category-btn">
                         VIRTUAL ASSISTANTS
                       </button>
                     </div>
@@ -61,18 +61,9 @@
                     </div>
                   </div>
                 </div>
-                <div class="menu-options" id="hours-menu" hidden>
-                  <div class="row">
-                    <div class="col">
-                      <label>min</label>
-                      <br>
-                      <input type="number">
-                    </div>
-                    <div class="col">
-                      <label>max</label>
-                      <br>
-                      <input type="number">
-                    </div>
+                <div class="menu-options" id="hours-menu">
+                  <div class="row p-20" style="width:500px">
+                    <ng5-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options" style="width:300px"></ng5-slider>
                   </div>
                 </div>
               </div>
