@@ -16,7 +16,7 @@
     z-index: 150; 
     background-color:white; 
     height: 36px;
-    width: 175px;
+    width: 150px;
   }
   .filter-btn .selected{ 
     background-color:#33ccff; 
@@ -24,7 +24,8 @@
   }  
   .category-btn{
     border-radius: 60px;
-    width: 225px;
+    padding: 7.5px;
+    width: 275px;
     margin: 7.5px;
   }
   .chosen{
@@ -41,6 +42,10 @@
   }
   .hide-menu {
     display: none;
+  }
+  #hours-menu {
+    width: 360px;
+    height: 100px;
   }
   ::ng-deep .search-box .ais-SearchBox {
     width: 90%;
@@ -74,6 +79,16 @@
     display: none;
   }
   
+  ::ng-deep .ng5-slider .ng5-slider-pointer {
+    width: 8px;
+    height: 16px;
+    bottom: 0;
+    background-color: #333;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+  }
+
+
   .ais-SearchBox-input:focus {
     outline: none !important;
   }
