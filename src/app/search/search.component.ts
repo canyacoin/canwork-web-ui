@@ -13,8 +13,9 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { environment } from '../../environments/environment';
 import { Portfolio, Work } from '../core-classes/portfolio';
-import { User } from '../core-classes/user';
+import { User, UserCategory } from '../core-classes/user';
 import { NavService } from '../core-services/nav.service';
+import { UserType } from '../../../functions/src/user-type';
 
 @Component({
   selector: 'app-search',
@@ -25,6 +26,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   allProviders: User[] = [];
   filteredProviders: User[] = [];
+  categoryFilters: UserType[] = [];
   smallCards = false;
   query = '';
   loading = true;
@@ -145,4 +147,22 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  onChooseCategory(categoryName) {
+    // logic : if the category name is already in the array and this method is called again WITH the same name
+    // it must be removed. see the front end, and you'll get it.
+    const isInArray = this.categoryFilters.find(function (element) {
+      return element === categoryName;
+    })
+
+    if (isInArray !== null) {
+      this.categoryFilters.push(categoryName);
+    } else {
+      const index = this.categoryFilters.findIndex(function (element) {
+        return element === categoryName;
+      })
+      this.categoryFilters.splice(index);
+    }
+    document.getElementById(categoryName).classList.toggle('chosen');
+    console.log(this.categoryFilters);
+  }
 }

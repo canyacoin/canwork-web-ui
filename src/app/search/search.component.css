@@ -27,6 +27,10 @@
     width: 225px;
     margin: 7.5px;
   }
+  .chosen{
+    color: white !important;
+    background-color: #33ccff  !important;
+  }
   .menu-options{
     padding: 15px;
     z-index: 125; 
