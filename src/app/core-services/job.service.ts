@@ -1,9 +1,9 @@
 import { NgSwitch } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { CanPayService, Operation, View } from '@canyaio/canpay-lib';
+import { CanPayService, Operation, setProcessResult, View } from '@canyaio/canpay-lib';
 import { Job, JobState, Payment, PaymentType, TimeRange, WorkType } from '@class/job';
 import {
-  ActionType, AuthoriseEscrowAction, CounterOfferAction, EnterEscrowAction, IJobAction
+    ActionType, AuthoriseEscrowAction, CounterOfferAction, EnterEscrowAction, IJobAction
 } from '@class/job-action';
 import { Upload } from '@class/upload';
 import { User, UserType } from '@class/user';
@@ -201,25 +201,55 @@ export class JobService {
             resolve(true);
             break;
           case ActionType.enterEscrow:
-            const enterEscrowAction = action as EnterEscrowAction;
-            parsedJob.actionLog.push(enterEscrowAction);
+            const onComplete = async (result) => {
+              // successfully sent - update the job
+              // state = JobState.inEscrow
+              // send chat messages
+              // send email notifications
+              this.canPayService.close();
+            };
 
-            const client = await this.userService.getUser(job.clientId);
-            const provider = await this.userService.getUser(job.providerId);
+            const onCancel = () => {
+              this.canPayService.close();
+            };
 
-            try {
+            const onTxHash = () => {
+              // post tx to transaction monitor
+              // add action to job action log
+              const enterEscrowAction = action as EnterEscrowAction;
+              parsedJob.actionLog.push(enterEscrowAction);
+              // set job as pending
+              parsedJob.pending = true;
+              // save transaction to collection
+            };
+
+            const initiateEnterEscrow = async (canPayData: CanPayData) => {
+              const client = await this.userService.getUser(job.clientId);
+              const provider = await this.userService.getUser(job.providerId);
               const canWorkContract = new CanWorkJobContract(this.ethService);
-              canWorkContract.connect();
-              await canWorkContract.createJob(job, client, provider);
-              parsedJob.state = JobState.inEscrow;
-              await this.saveJobFirebase(parsedJob);
-              await this.chatService.sendJobMessages(parsedJob, enterEscrowAction);
-              await this.jobNotificationService.notify(action.type, job.id);
-            } catch (error) {
-              console.log(error);
-            }
+              canWorkContract.connect().createJob(job, client.ethAddress, provider.ethAddress, onTxHash)
+                .then(setProcessResult.bind(canPayOptions))
+                .catch(setProcessResult.bind(canPayOptions));
+            };
 
-            resolve(true);
+            const canPayOptions = {
+              dAppName: `CanWork`,
+              successText: 'Customized success message!',
+              recepient: environment.contracts.canwork,
+              operation: null,
+              amount: job.budgetCan,
+              complete: onComplete,
+              cancel: onCancel,
+              view: View.Compact,
+
+              // Post Authorisation
+              postAuthorisationProcessName: 'Job creation',
+              startPostAuthorisationProcess: initiateEnterEscrow.bind(this),
+              postAuthorisationProcessResults: null
+            };
+
+            this.canPayService.open(canPayOptions);
+            resolve(true)
             break;
           case ActionType.addMessage:
             parsedJob.actionLog.push(action);

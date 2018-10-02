@@ -7,6 +7,7 @@ import { FeedService } from './feed.service';
 import { JobService } from './job.service';
 import { MomentService } from './moment.service';
 import { ScriptService } from './script.service';
+import { TransactionService } from './transaction.service';
 import { UploadService } from './upload.service';
 import { UserService } from './user.service';
 
@@ -22,6 +23,7 @@ import { UserService } from './user.service';
     JobService,
     MomentService,
     ScriptService,
+    TransactionService,
     UploadService,
     UserService
   ]
