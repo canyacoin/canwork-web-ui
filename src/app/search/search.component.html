@@ -18,65 +18,33 @@
                       HOURLY RATE
                     </button>
                   </div>
+                  <ais-toggle label="Only show providers within my timezone" attribute="timezone" [values]="{
+                    on: currentUser.timezone,
+                    off: ''
+                  }">
+                  </ais-toggle>
+                  <!--
                   <div class="col-md-6 col-12">
                     <input type="checkbox" [checked]="inMyTimezone" (change)="inMyTimezone = !inMyTimezone" id="filter-timezone"
                       class="filter-timezone ml-5"><span class="fs-12 ml-5">Ony
                       show providers within my timezone</span>
                   </div>
+                  -->
                 </div>
                 <div class="menu-options hide-menu" id="category-menu">
-                <!--
-                  <div class="row text-center">
-                    <div class="col-md-6 col-sm-12 col-12">
-                      <button id="contentCreator" (click)="onChooseCategory('contentCreator')" class="btn btn-primary btn-outline category-btn">
-                        CONTENT CREATORS
-                      </button>
-                    </div>
-                    <div class="col-md-6 col-sm-12 col-12">
-                      <button id="designer" (click)="onChooseCategory('designer')" class="btn btn-primary btn-outline category-btn">
-                        DESIGNERS & CREATIVES
-                      </button>
-                    </div>
-                  </div>
-                  <div class="row text-center">
-                    <div class="col-md-6 col-sm-12 col-12">
-                      <button id="finance" (click)="onChooseCategory('finance')" class="btn btn-primary btn-outline category-btn">
-                        FINANCIAL EXPERTS
-                      </button>
-                    </div>
-                    <div class="col-md-6 col-sm-12 col-12">
-                      <button id="softwareDev" (click)="onChooseCategory('softwareDev')" class="btn btn-primary btn-outline category-btn">
-                        SOFTWARE DEVELOPERS
-                      </button>
-                    </div>
-                  </div>
-                  <div class="row text-center">
-                    <div class="col-md-6 col-sm-12 col-12">
-                      <button id="marketing" (click)="onChooseCategory('marketing')" class="btn btn-primary btn-outline category-btn">
-                        MARKETING EXPERTS
-                      </button>
-                    </div>
-                    <div class="col-md-6 col-sm-12 col-12">
-                      <button id="virtualAssistant" (click)="onChooseCategory('virtualAssistant')" class="btn btn-primary btn-outline category-btn">
-                        VIRTUAL ASSISTANTS
-                      </button>
-                    </div>
-                  </div>
-                  <div class="row px-20 option-row">
-                    <div class="col-6">
-                      <p class="fw-700 ls-2  fs-10">CLEAR</p>
-                    </div>
-                    <div class="col-6 text-right">
-                      <a class="fw-700 ls-2 fs-10">APPLY</a>
-                    </div>
-                  </div>
-                -->
-                   <ais-refinement-list attribute="category"></ais-refinement-list>
+                  <ais-refinement-list attribute="category"></ais-refinement-list>
                 </div>
-                <div class="menu-options" id="hours-menu">
+                <div class="menu-options  hide-menu" id="hours-menu">
                   <div class="row">
-                    <ng5-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options" style="width:300px; margin: 0 auto; margin-top: 35px;"></ng5-slider>
+                    <ais-range-input attribute="hourlyRate" [min]="minValue" [max]="maxValue" [precision]="0" style="margin: 0 auto">
+                    </ais-range-input>
                   </div>
+
+                  <!--  
+                    <div class="row">
+                    <ng5-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options" style="width:300px; margin: 0 auto; margin-top: 35px;"></ng5-slider>
+                    </div>
+
                   <div class="row px-20 option-row">
                     <div class="col-6">
                       <p class="fw-700 ls-2  fs-10" (click)="onResetHourlyRate()">RESET</p>
@@ -85,6 +53,8 @@
                       <p class="fw-700 ls-2 fs-10" (click)="onSetHourlyRate()">APPLY</p>
                     </div>
                   </div>
+
+                  -->
                 </div>
               </div>
               <div class="col-3 text-right no-padding">

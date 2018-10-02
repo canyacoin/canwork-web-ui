@@ -12,7 +12,8 @@ import { take } from 'rxjs/operator/take';
 import { Subscription } from 'rxjs/Subscription';
 import { Options, LabelType } from 'ng5-slider';
 import { environment } from '../../environments/environment';
-import { Portfolio, Work } from '../core-classes/portfolio';
+import { UserService } from '../core-services/user.service';
+import { AuthService } from '../core-services/auth.service';
 import { User, UserCategory } from '../core-classes/user';
 import { NavService } from '../core-services/nav.service';
 import { UserType } from '../../../functions/src/user-type';
@@ -54,11 +55,13 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   rendering = false;
   inMyTimezone = true;
   algoliaSearchConfig: any;
-
+  private authSub;
+  currentUser;
   @ViewChild('search', { read: ElementRef }) search: ElementRef;
 
   constructor(private activatedRoute: ActivatedRoute, private navService: NavService,
-    private afs: AngularFirestore, private http: Http, private cdRef: ChangeDetectorRef) {
+    private afs: AngularFirestore, private http: Http, private userService: UserService, 
+    private auth: AuthService) {
     this.routeSub = this.activatedRoute.queryParams.subscribe((params) => {
       this.query = params['query'] ? params['query'] : '';
       if (!this.loading) {
@@ -77,12 +80,19 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
       routing: true
     };
 
+    this.authSub = this.auth.currentUser$.subscribe((user: User) => {
+      if (this.currentUser !== user) {
+        this.currentUser = user;
+        console.log(this.currentUser.timezone);
+      }
+    });
+
     this.navService.setHideSearchBar(true);
     const canToUsdResp = await this.http.get('https://api.coinmarketcap.com/v2/ticker/2343/?convert=USD').toPromise();
     if (canToUsdResp.ok) {
       this.canToUsd = JSON.parse(canToUsdResp.text())['data']['quotes']['USD']['price'];
     }
-    document.getElementById('hours-menu').classList.toggle('hide-menu');
+    // document.getElementById('hours-menu').classList.toggle('hide-menu');
   }
 
   ngAfterViewInit() {
@@ -99,7 +109,6 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   algoliaSearchChanged(query) {
-    console.log(query);
   }
 
   getUsdToCan(usd: number): string {
@@ -109,6 +118,16 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     return '-';
   }
 
+  filterArray(array: User[]) {
+    const result = [];
+    for (let i = 0; i < array.length ; i++) {
+      const hourlyRate = parseInt(array[i].hourlyRate, 10);
+      if ( ( hourlyRate >= this.minValue) && (hourlyRate <= this.maxValue) ) {
+        result.push(array[i]);
+      }
+    }
+    return result;
+  }
   setSmallCards(bool: boolean) {
     this.smallCards = bool;
   }
@@ -160,26 +179,20 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  onChooseCategory(categoryName) {
-    // logic : if the category name is already in the array and this method is called again WITH the same name
-    // it must be removed. see the front end, and you'll get it.
-    const isInArray = this.categoryFilters.find(function (element) {
-      return element === categoryName;
-    });
-    if (typeof isInArray === 'undefined') {
-      this.categoryFilters.push(categoryName);
-    } else {
-      const index = this.categoryFilters.findIndex(function (element) {
-        return element === categoryName;
-      })
-      this.categoryFilters.splice(index, 1);
-    }
-    document.getElementById(categoryName).classList.toggle('chosen');
-    console.log(this.categoryFilters);
-  }
-
   onSetHourlyRate() {
     console.log(this.maxValue, this.minValue);
+    const algoliaMinInput = document.getElementsByClassName('ais-RangeInput-input--min');
+    for ( let i = 0 ; i < algoliaMinInput.length ; i++) {
+      (<HTMLInputElement>algoliaMinInput[i]).value = String(this.minValue);
+    }
+    const algoliaMaxInput = document.getElementsByClassName('ais-RangeInput-input--max');
+    for ( let i = 0 ; i < algoliaMaxInput.length ; i++) {
+      (<HTMLInputElement>algoliaMaxInput[i]).value = String(this.maxValue);
+    }
+    const algoliaFilterButton = document.getElementsByClassName('ais-RangeInput-submit');
+    for ( let i = 0 ; i < algoliaFilterButton.length ; i++) {
+      (<HTMLInputElement>algoliaFilterButton[i]).click();
+    }
   }
 
   onResetHourlyRate() {
