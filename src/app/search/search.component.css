@@ -66,10 +66,6 @@ p {
   display: none;
 }
 
-#hours-menu {
-  width: 360px;
-  height: 100px;
-}
 
 @media screen and (max-width: 576px) {
   .menu-options {
@@ -104,10 +100,7 @@ p {
     transition: all 0.5s;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
   }
-
-  ::ng-deep .ais-SearchBox-reset {
-    display: none;
-  }
+ 
 
   ::ng-deep .ng5-slider .ng5-slider-pointer {
     width: 8px;
@@ -130,14 +123,26 @@ p {
     border-radius: 5px;
   }
 
-  ::ng-deep .ais-RefinementList{
+  @media screen and (max-width:576px){
+    ::ng-deep .ais-RefinementList-list{
+      columns: 1;
+      width: auto;
+      height: auto;
+    }
   }
-
   ::ng-deep .ais-RefinementList-checkbox {
     display: none;
   }
 
   ::ng-deep .ais-RefinementList-count{
+    display: none;
+  } 
+
+  ::ng-deep .ais-SearchBox-reset {
+    display: none;
+  }
+
+  ::ng-deep .ais-ToggleRefinement-count{
     display: none;
   }
 
@@ -147,11 +152,19 @@ p {
     letter-spacing: 1.5px;
     margin: 0;
   }
+  
+  ::ng-deep .ais-ToggleRefinement-label{
+    margin-top: 10px;
+  }
+
+  ::ng-deep .ais-RefinementList {
+    padding: 7.5px;
+  }
 
   ::ng-deep .ais-RefinementList-item{
     text-align: center;
     padding: 10px;
-    margin: 10px;
+    margin: 7.5px;
     border-radius: 36px;
     border: 1px #33ccff solid;
     color: #33ccff;
@@ -165,9 +178,35 @@ p {
   ::ng-deep .ais-RefinementList-labelText{
     font-size: 11px;
   }
+
+  ::ng-deep .ais-ToggleRefinement-label{
+    margin-left: 15px;
+  }
+
   ::ng-deep [class^=ais-]{
     font-size: inherit;
   }
+
+  ::ng-deep .ais-RangeInput {
+    margin: 0 auto;
+  }
+
+  ::ng-deep .ais-RangeInput-submit{
+    margin-bottom: 5px;
+    margin-left: 15px;
+    background-color: #33ccff;
+    width: 50px;
+    height: 32.5px;
+  }
+
+  ::ng-deep .ais-RangeInput-form{
+    padding: 30px;
+  }
+  ::ng-deep .ais-RangeInput-form input {
+    border-radius: 5px;
+    border: 1px #9b9b9b solid;
+  }
+
   .ais-SearchBox-input:focus {
     outline: none !important;
   }

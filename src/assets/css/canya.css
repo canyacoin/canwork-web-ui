@@ -9757,7 +9757,7 @@ a.text-danger:focus {
 }
 
 .activate-menu{
-  z-index: 75 !important;
+  z-index: 100 !important;
   opacity: 100 !important;
   overflow: hidden;
 }
