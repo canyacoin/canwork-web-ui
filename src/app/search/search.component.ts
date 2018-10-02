@@ -53,11 +53,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   algoliaIndex = environment.algolia.indexName;
   rendering = false;
   inMyTimezone = true;
-  algoliaSearchConfig = {
-    ...environment.algolia,
-    indexName: this.algoliaIndex,
-    routing: true
-  };
+  algoliaSearchConfig: any;
 
   @ViewChild('search', { read: ElementRef }) search: ElementRef;
 
@@ -75,6 +71,11 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.algoliaSearchConfig = {
+      ...environment.algolia,
+      indexName: this.algoliaIndex,
+      routing: true
+    };
     this.navService.setHideSearchBar(true);
     const canToUsdResp = await this.http.get('https://api.coinmarketcap.com/v2/ticker/2343/?convert=USD').toPromise();
     if (canToUsdResp.ok) {
@@ -136,7 +137,6 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   toggleOverlay(documentID, otherDocumentID, buttonID) {
-    const btnPosition = document.getElementById(buttonID).getBoundingClientRect();
     if (!(document.getElementById(otherDocumentID).classList.contains('hide-menu'))) {
       document.getElementById('menu-overlay').classList.toggle('activate-menu');
       document.getElementById(otherDocumentID).classList.toggle('hide-menu');
