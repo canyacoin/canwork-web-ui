@@ -130,6 +130,44 @@ p {
     border-radius: 5px;
   }
 
+  ::ng-deep .ais-RefinementList{
+  }
+
+  ::ng-deep .ais-RefinementList-checkbox {
+    display: none;
+  }
+
+  ::ng-deep .ais-RefinementList-count{
+    display: none;
+  }
+
+  ::ng-deep .ais-RefinementList-label{
+    font-weight: 500;
+    font-size: 11px !important;
+    letter-spacing: 1.5px;
+    margin: 0;
+  }
+
+  ::ng-deep .ais-RefinementList-item{
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 36px;
+    border: 1px #33ccff solid;
+    color: #33ccff;
+  }
+
+  ::ng-deep .ais-RefinementList-item--selected{
+    background-color: #33ccff;
+    color: white;
+  }
+
+  ::ng-deep .ais-RefinementList-labelText{
+    font-size: 11px;
+  }
+  ::ng-deep [class^=ais-]{
+    font-size: inherit;
+  }
   .ais-SearchBox-input:focus {
     outline: none !important;
   }

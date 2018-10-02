@@ -76,6 +76,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
       indexName: this.algoliaIndex,
       routing: true
     };
+
     this.navService.setHideSearchBar(true);
     const canToUsdResp = await this.http.get('https://api.coinmarketcap.com/v2/ticker/2343/?convert=USD').toPromise();
     if (canToUsdResp.ok) {
