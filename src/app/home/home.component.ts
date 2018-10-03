@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
   public contents = [];
   private authSub;
   public previouslySeen = [];
-
+  public isOnMobile;
   algoIndex = environment.algolia.indexName;
   algoId = environment.algolia.appId;
   algoKey = environment.algolia.apiKey;
@@ -63,6 +63,8 @@ export class HomeComponent implements OnInit {
   ]
 
   ngOnInit() {
+    const ua = window.navigator.userAgent;
+    this.isOnMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua);
     this.nav.setHideSearchBar(true);
     this.authSub = this.auth.currentUser$.subscribe((user: User) => {
       if (this.currentUser !== user) {
