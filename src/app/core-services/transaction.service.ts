@@ -7,17 +7,19 @@ import { Observable } from 'rxjs/Observable';
 export class Transaction {
   id: string;
   senderId: string;
+  jobId: string;
   hash: string;
   timestamp: string;
   actionType: string;
   success = false;
   failure = false;
 
-  constructor(senderId, hash, timestamp, actionType) {
+  constructor(senderId, hash, timestamp, actionType, jobId = '') {
     this.senderId = senderId;
     this.hash = hash;
     this.timestamp = timestamp;
     this.actionType = actionType;
+    this.jobId = jobId;
   }
 
   init(init?: Partial<Transaction>) {

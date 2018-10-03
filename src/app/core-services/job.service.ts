@@ -232,7 +232,7 @@ export class JobService {
          update users active eth address */
       this.transactionService.startMonitoring(job.id, txHash, ActionType.authoriseEscrow)
       this.transactionService.createTransaction(new Transaction(job.clientId,
-        txHash, this.momentService.get(), ActionType.authoriseEscrow));
+        txHash, this.momentService.get(), ActionType.authoriseEscrow, job.id));
       const escrowAction = action as AuthoriseEscrowAction;
       job.actionLog.push(escrowAction);
       job.pending = true;
@@ -256,13 +256,13 @@ export class JobService {
          save action/pending to job */
       this.transactionService.startMonitoring(job.id, txHash, ActionType.enterEscrow)
       this.transactionService.createTransaction(new Transaction(job.clientId,
-        txHash, this.momentService.get(), ActionType.enterEscrow));
+        txHash, this.momentService.get(), ActionType.enterEscrow, job.id));
       const enterEscrowAction = action as EnterEscrowAction;
       job.actionLog.push(enterEscrowAction);
       job.pending = true;
       await this.saveJobFirebase(job);
       const clientObj = await this.userService.getUser(job.clientId);
-      clientObj.ethAddress = this.ethService.getOwnerAccount();
+      clientObj.ethAddress = this.ethService.account.value;
       await this.userService.saveUser(clientObj);
     };
 
@@ -279,7 +279,7 @@ export class JobService {
       dAppName: `CanWork`,
       successText: 'Customized success message!',
       recepient: environment.contracts.canwork,
-      operation: skipAuth ? null : Operation.auth,
+      operation: skipAuth ? Operation.interact : Operation.auth,
       onAuthTxHash: onAuthTxHash.bind(this),
       amount: job.budgetCan,
       complete: onComplete,
