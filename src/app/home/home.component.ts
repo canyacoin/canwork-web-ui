@@ -83,7 +83,7 @@ export class HomeComponent implements OnInit {
 
   async setUpRecentlyViewed() {
     this.userService.getViewedUsers(this.currentUser.address).then((result) => {
-      if (result.length > 0) {
+      if (result && result.length > 0) {
         this.previouslySeen = result.slice(0, 4);
         for (let i = 0; i < this.previouslySeen.length; i++) {
           this.userService.getUser(this.previouslySeen[i].address).then(user => {

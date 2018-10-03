@@ -38,7 +38,7 @@ export class UserService {
   async getViewedUsers(viewer: string) {
     const collection = this.afs.collection(`viewed-users/${viewer}/viewed`, ref => ref.orderBy('timestamp', 'desc'));
     return new Promise<any>((resolve, reject) => {
-      collection.valueChanges().subscribe((result) => {
+      collection.valueChanges().take(1).subscribe((result) => {
         if (result) {
           resolve(result);
         }
