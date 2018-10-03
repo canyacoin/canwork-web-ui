@@ -27,9 +27,12 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   allProviders: User[] = [];
   filteredProviders: User[] = [];
-  categoryFilters: UserType[] = [];
+  categoryFilters = [];
+  chosenFilters = [];
   smallCards = false;
   query = '';
+  categoryQuery = '';
+  hourlyQuery = '';
   loading = true;
   canToUsd: number;
   minValue = 0;
@@ -60,8 +63,9 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('search', { read: ElementRef }) search: ElementRef;
 
   constructor(private activatedRoute: ActivatedRoute, private navService: NavService,
-    private afs: AngularFirestore, private http: Http, private userService: UserService, 
-    private auth: AuthService) {
+    private afs: AngularFirestore, private http: Http, private userService: UserService,
+    private auth: AuthService,
+    private router: Router) {
     this.routeSub = this.activatedRoute.queryParams.subscribe((params) => {
       this.query = params['query'] ? params['query'] : '';
       if (!this.loading) {
@@ -79,14 +83,11 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
       indexName: this.algoliaIndex,
       routing: true
     };
-
     this.authSub = this.auth.currentUser$.subscribe((user: User) => {
       if (this.currentUser !== user) {
         this.currentUser = user;
-        console.log(this.currentUser.timezone);
       }
     });
-
     this.navService.setHideSearchBar(true);
     const canToUsdResp = await this.http.get('https://api.coinmarketcap.com/v2/ticker/2343/?convert=USD').toPromise();
     if (canToUsdResp.ok) {
@@ -99,7 +100,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     setTimeout(() => {
       this.loading = false;
     }, 400);
-    this.search.nativeElement.querySelector('.ais-SearchBox-submit').innerHTML = '<img src="assets/img/search-icon-white.svg" class="searchbar-searchicon">';
+    // this.search.nativeElement.querySelector('.ais-SearchBox-submit').innerHTML = '<img src="assets/img/search-icon-white.svg" class="searchbar-searchicon">';
   }
 
   ngOnDestroy() {
@@ -111,6 +112,14 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   algoliaSearchChanged(query) {
   }
 
+  isInArray(value, array: any[]) {
+    if (array.indexOf(value) > -1 ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   getUsdToCan(usd: number): string {
     if (this.canToUsd) {
       return (usd / this.canToUsd).toFixed(2);
@@ -120,14 +129,15 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   filterArray(array: User[]) {
     const result = [];
-    for (let i = 0; i < array.length ; i++) {
+    for (let i = 0; i < array.length; i++) {
       const hourlyRate = parseInt(array[i].hourlyRate, 10);
-      if ( ( hourlyRate >= this.minValue) && (hourlyRate <= this.maxValue) ) {
+      if ((hourlyRate >= this.minValue) && (hourlyRate <= this.maxValue)) {
         result.push(array[i]);
       }
     }
     return result;
   }
+
   setSmallCards(bool: boolean) {
     this.smallCards = bool;
   }
@@ -180,18 +190,49 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSetHourlyRate() {
-    console.log(this.maxValue, this.minValue);
-    const algoliaMinInput = document.getElementsByClassName('ais-RangeInput-input--min');
-    for ( let i = 0 ; i < algoliaMinInput.length ; i++) {
-      (<HTMLInputElement>algoliaMinInput[i]).value = String(this.minValue);
+    if (!document.getElementById('hours-menu').classList.contains('hide-menu')) {
+      this.hourlyQuery = 'range%5BhourlyRate%5D=' + this.minValue + '%3A' + this.maxValue;
+      document.getElementById('menu-overlay').classList.toggle('activate-menu');
+      this.router.navigateByUrl('/search?query=' + (String(this.query) + '&' + this.categoryQuery + this.hourlyQuery));
     }
-    const algoliaMaxInput = document.getElementsByClassName('ais-RangeInput-input--max');
-    for ( let i = 0 ; i < algoliaMaxInput.length ; i++) {
-      (<HTMLInputElement>algoliaMaxInput[i]).value = String(this.maxValue);
+  }
+
+  onChooseCategory(categoryName) {
+    const isInArray = this.categoryFilters.find(function (element) {
+      return element === categoryName;
+    });
+    if (typeof isInArray === 'undefined') {
+      this.categoryFilters.push(categoryName);
+    } else {
+      const index = this.categoryFilters.findIndex(function (element) {
+        return element === categoryName;
+      })
+      this.categoryFilters.splice(index, 1);
     }
-    const algoliaFilterButton = document.getElementsByClassName('ais-RangeInput-submit');
-    for ( let i = 0 ; i < algoliaFilterButton.length ; i++) {
-      (<HTMLInputElement>algoliaFilterButton[i]).click();
+  }
+
+  onSetCategories() {
+    this.categoryQuery = ' ';
+    if (this.categoryFilters.length > 0) {
+      for (let i = 0; i < this.categoryFilters.length; i++) {
+        this.categoryQuery = this.categoryQuery + 'refinementList%5Bcategory%5D%5B' + i + '%5D=' + encodeURIComponent(UserCategory[this.categoryFilters[i]]) + '&';
+      }
+      document.getElementById('menu-overlay').classList.toggle('activate-menu');
+      this.router.navigateByUrl('/search?query=' + (String(this.query) + '&' + this.categoryQuery + this.hourlyQuery));
+    } else {
+      this.router.navigateByUrl('/search?query=' + (String(this.query) + '&' + this.hourlyQuery));
+    }
+  }
+
+  onResetCategories() {
+    if (this.categoryFilters.length > 0) {
+      this.categoryFilters = [];
+      const categoryBtns = document.getElementsByClassName('category-btn');
+      for (let i = 0; i < categoryBtns.length; i++) {
+        if (categoryBtns[i].classList.contains('chosen')) {
+          categoryBtns[i].classList.remove('chosen');
+        }
+      }
     }
   }
 

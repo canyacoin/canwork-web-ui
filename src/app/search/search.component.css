@@ -34,6 +34,13 @@ p {
   color: white !important;
   background-color: #33ccff !important;
 }
+
+
+#category-btn{
+  margin-right: 27.5px;
+  margin-left: 15px;
+}
+
 .category-btn {
   border-radius: 60px;
   padding: 7.5px;
@@ -54,19 +61,44 @@ p {
 .menu-options {
   margin-top: 10px;
   padding: 15px;
-  left: 50px;
+  right: auto;
   z-index: 125;
   position: absolute;
   background-color: white;
   border-radius: 5px;
   display: block;
+  opacity:  100;
 }
 
+#hours-menu {
+  left: 190px;
+}
+
+@media screen and (max-width:576px){
+  #hours-menu {
+    left: auto;
+  }
+  #hourly-btn {
+    margin-left: 15px;
+  }
+}
 .hide-menu {
-  display: none;
+  opacity:  0 !important;
+  z-index: 0 !important;
+  right: 250vw; /* put the menus OFF the screen instead. The sliders won't render properly otherwise. */
+  left: auto !important;
 }
 
-
+.set-text {
+  font-weight: 700;
+  letter-spacing: 2px;
+  font-size: 10px;
+  transition: all 0.25s;
+  cursor: pointer;
+}
+.set-text:hover{
+  color: #33ccff;
+}
 @media screen and (max-width: 576px) {
   .menu-options {
     margin: 0 auto;
@@ -85,6 +117,10 @@ p {
   }
 
   ::ng-deep .ais-SearchBox-submit {
+    background-image: url('../../assets/img/search-icon-white.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    color: transparent;
     width: 3rem;
     height: 105%;
     border-width: 5px;
@@ -94,6 +130,10 @@ p {
     background-color: #33ccff;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
+  }
+
+  ::ng-deep .ais-SearchBox-submitIcon {
+    display: none;
   }
 
   ::ng-deep .ais-SearchBox-input:hover {

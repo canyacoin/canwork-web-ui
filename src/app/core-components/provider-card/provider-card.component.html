@@ -57,7 +57,18 @@
           {{ provider.timezone }}
         </span>
         <br>
-        <app-skill-tag [skill]="provider.skillTags.length + ' Skills'"></app-skill-tag>
+        <div class="row">
+          <div class="col-6">
+            <app-skill-tag [skill]="provider.skillTags.length + ' Skills'"></app-skill-tag>
+          </div>
+          <div class="col-6 text-right">
+            <span *ngIf="provider.hourlyRate && !canToUsd">
+              <span class="pr-20">
+              <b>${{provider.hourlyRate}}</b>/hr
+              </span>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
