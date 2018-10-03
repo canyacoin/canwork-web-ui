@@ -69,8 +69,10 @@ export class HomeComponent implements OnInit {
     this.authSub = this.auth.currentUser$.subscribe((user: User) => {
       if (this.currentUser !== user) {
         this.currentUser = user;
+        if (this.currentUser && this.currentUser.address) {
+          this.setUpRecentlyViewed();
+        }
       }
-      this.setUpRecentlyViewed();
     });
     this.algoliaSearch = algoliasearch(this.algoId, this.algoKey);
     this.algoliaIndex = this.algoliaSearch.initIndex(this.algoIndex);
