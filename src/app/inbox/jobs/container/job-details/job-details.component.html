@@ -39,8 +39,8 @@
                 <i class="far fa-question-circle"></i>
               </button>
             </div>
-            <div class="modal fade bd-example-modal-sm" id="explanation-modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
-              aria-hidden="true">
+            <div class="modal fade bd-example-modal-sm" id="explanation-modal" tabindex="-1" role="dialog"
+              aria-labelledby="mySmallModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -122,7 +122,8 @@
           </div>
           <div class="col-lg-9 col-md-8 col-sm-12 col-xs-12">
             <p *ngIf="job.information.attachments.length <= 0 ">No Attachment given.</p>
-            <app-attachment *ngFor="let attachment of job.information.attachments" [name]="attachment.name" [url]="attachment.url" [size]="attachment.size"></app-attachment>
+            <app-attachment *ngFor="let attachment of job.information.attachments" [name]="attachment.name" [url]="attachment.url"
+              [size]="attachment.size"></app-attachment>
           </div>
         </div>
         <div id="skills-row" class="row">
@@ -150,10 +151,36 @@
         </div>
         <!-- <a class="btn btn-primary btn-outline" [routerLink]="['actions']">View all actions</a> -->
       </div>
-      <span class="col-12 my-10 text-left">
-        <b>Payment Log</b>
-        <div *ngIf="job.paymentLog.length < 1">
+      <span class="col-12 my-10 text-left" *ngIf="currentUserIsClient">
+        <b>Transactions</b>
+        <div *ngIf="transactions.length < 1">
           No payments have been made yet
+        </div>
+        <div *ngIf="transactions.length >= 1">
+          <div *ngFor="let tx of transactions" class="card mb-15 p-20">
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-8">
+                  <h5>{{tx.actionType}}
+                  </h5>
+                </div>
+                <div class="col-lg-4 desktop-right-mobile-center">
+                  <a href="{{getTxLink(tx.hash)}}">Etherscan</a>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-6">
+                  <p class="text-grey fw-500">{{tx.senderId}}
+                  </p>
+                </div>
+                <div class="col-lg-6 text-right">
+                  <span class="fw-400">
+                    <i class="circle-{{getTxColor(tx)}} fas fa-circle"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </span>
     </div>

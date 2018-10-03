@@ -3,14 +3,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Http, Response } from '@angular/http';
 import { Job, PaymentType } from '@class/job';
 import {
-  ActionType, AddMessageAction, AuthoriseEscrowAction, CounterOfferAction, EnterEscrowAction,
-  IJobAction, RaiseDisputeAction, AcceptTermsAction, DeclineTermsAction
+    AcceptTermsAction, ActionType, AddMessageAction, AuthoriseEscrowAction, CounterOfferAction,
+    DeclineTermsAction, EnterEscrowAction, IJobAction, RaiseDisputeAction
 } from '@class/job-action';
-import { UserType, User } from '@class/user';
+import { User, UserType } from '@class/user';
 import { JobService } from '@service/job.service';
+import { UserService } from '@service/user.service';
 import { getUsdToCan } from '@util/currency-conversion';
 import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
-import { UserService } from '@service/user.service';
 
 export class ActionDialogOptions {
   job: Job;
@@ -83,14 +83,14 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
         case ActionType.authoriseEscrow:
           action = new AuthoriseEscrowAction
           action.txId = ''
-          action.amountCan = 0
+          action.amountCan = this.job.budgetCan
           action.USD = this.job.budget
-          action.CAN = await this.jobService.getJobBudget(this.job)
+          action.CAN = this.job.budgetCan
           break;
         case ActionType.enterEscrow:
           action = new EnterEscrowAction
           action.txId = ''
-          action.amountCan = this.job.canInEscrow
+          action.amountCan = this.job.budgetCan
           break;
         default:
           action = new IJobAction

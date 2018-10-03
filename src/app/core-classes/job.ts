@@ -1,6 +1,11 @@
-import { IJobAction, ActionType, CreateJobAction, CounterOfferAction, AddMessageAction, RaiseDisputeAction, AuthoriseEscrowAction, EnterEscrowAction, AcceptTermsAction, DeclineTermsAction, CancelJobAction } from './job-action';
-import { Upload } from './upload';
 import { User } from '@class/user';
+
+import {
+    AcceptTermsAction, ActionType, AddMessageAction, AuthoriseEscrowAction, CancelJobAction,
+    CounterOfferAction, CreateJobAction, DeclineTermsAction, EnterEscrowAction, IJobAction,
+    RaiseDisputeAction
+} from './job-action';
+import { Upload } from './upload';
 
 export class Job {
   id: string;
@@ -11,9 +16,10 @@ export class Job {
   paymentType: PaymentType;
   budget: number;
   budgetCan: number;
-  canInEscrow: number;
+  daiInEscrow: number;
   paymentLog: Array<Payment> = [];
   state: JobState;
+  pending: boolean;
   actionLog: Array<IJobAction> = [];
   boostVisibility = false;
 

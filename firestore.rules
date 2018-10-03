@@ -11,6 +11,13 @@ service cloud.firestore {
        allow write: if isDocumentOwner(userId);
     }
 
+    match /transactions/{transactionId} {
+       allow read;
+       allow create: if isAuthenticated();
+       allow update: if userIsSender();
+       allow delete: if isAdmin();
+    }
+
     match /who/{userId}/user/{who} {
        allow read;
        allow write: if isAuthenticated();
@@ -51,6 +58,11 @@ service cloud.firestore {
 
   function isDocumentOwner(userId) {
     return request.auth.uid == userId
+  }
+
+  function userIsSender() {
+    return request.resource.data.senderId == request.auth.uid
+    || isAdmin()
   }
 
   function userIsClientOrProvider() {
