@@ -57,7 +57,9 @@
           {{ provider.timezone }}
         </span>
         <br>
-        <app-skill-tag *ngIf="getProviderTags(provider).length > 0" [skill]="getProviderTags(provider).length + ' Skills'"></app-skill-tag>
+        <div class="mini-profile-row">
+            <app-skill-tag *ngIf="getProviderTags(provider).length > 0" [skill]="getProviderTags(provider).length + ' Skills'"></app-skill-tag>
+        </div>
       </div>
     </div>
   </div>
