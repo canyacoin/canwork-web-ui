@@ -35,10 +35,10 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   hourlyQuery = '';
   loading = true;
   canToUsd: number;
-  minValue = 0;
+  minValue = 1;
   maxValue = 300;
   options: Options = {
-    floor: 0,
+    floor: 1,
     ceil: 300,
     translate: (value: number, label: LabelType): string => {
       switch (label) {
@@ -73,6 +73,9 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
         setTimeout(() => {
           this.rendering = false;
         });
+      if (this.containsClass('menu-overlay', 'activate-menu')) {
+          this.toggleMenuOverlay();
+        }
       }
     });
   }
@@ -93,14 +96,12 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     if (canToUsdResp.ok) {
       this.canToUsd = JSON.parse(canToUsdResp.text())['data']['quotes']['USD']['price'];
     }
-    // document.getElementById('hours-menu').classList.toggle('hide-menu');
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.loading = false;
     }, 400);
-    // this.search.nativeElement.querySelector('.ais-SearchBox-submit').innerHTML = '<img src="assets/img/search-icon-white.svg" class="searchbar-searchicon">';
   }
 
   ngOnDestroy() {
@@ -167,34 +168,46 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   toggleOverlay(documentID, otherDocumentID, buttonID) {
-    if (!(document.getElementById(otherDocumentID).classList.contains('hide-menu'))) {
-      document.getElementById('menu-overlay').classList.toggle('activate-menu');
-      document.getElementById(otherDocumentID).classList.toggle('hide-menu');
+    if (!this.containsClass(otherDocumentID, 'hide-menu')) {
+      this.toggleMenuOverlay();
+      this.toggleClass(otherDocumentID, 'hide-menu');
     }
-    if (document.getElementById(documentID).classList.contains('hide-menu')) {
+    if (this.containsClass(documentID, 'hide-menu')) {
       this.resetMenus();
-      document.getElementById(documentID).classList.toggle('hide-menu');
+      this.toggleClass(documentID, 'hide-menu');
     } else {
       this.resetMenus();
     }
-    document.getElementById('menu-overlay').classList.toggle('activate-menu');
+   this.toggleMenuOverlay();
   }
 
   resetMenus() {
-    if (document.getElementById('hours-menu').classList.contains('hide-menu') === false) {
-      document.getElementById('hours-menu').classList.toggle('hide-menu');
+    if ( (this.containsClass('hours-menu', 'hide-menu')) === false ) {
+      this.toggleClass('hours-menu', 'hide-menu');
     }
-    if (document.getElementById('category-menu').classList.contains('hide-menu') === false) {
-      document.getElementById('category-menu').classList.toggle('hide-menu');
+    if ( (this.containsClass('category-menu', 'hide-menu')) === false ) {
+      this.toggleClass('category-menu', 'hide-menu');
     }
   }
 
   onSetHourlyRate() {
-    if (!document.getElementById('hours-menu').classList.contains('hide-menu')) {
+    if (!(this.containsClass('hours-menu', 'hide-menu'))) {
       this.hourlyQuery = 'range%5BhourlyRate%5D=' + this.minValue + '%3A' + this.maxValue;
-      document.getElementById('menu-overlay').classList.toggle('activate-menu');
+      this.toggleMenuOverlay();
       this.router.navigateByUrl('/search?query=' + (String(this.query) + '&' + this.categoryQuery + this.hourlyQuery));
     }
+  }
+
+  containsClass(DocumentID, hiddenClassName) {
+     return document.getElementById(DocumentID).classList.contains(hiddenClassName);
+  }
+
+  toggleClass(DocumentID, hiddenClassName) {
+    document.getElementById(DocumentID).classList.toggle(hiddenClassName);
+  }
+
+  toggleMenuOverlay() {
+    document.getElementById('menu-overlay').classList.toggle('activate-menu');
   }
 
   onChooseCategory(categoryName) {
@@ -217,7 +230,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
       for (let i = 0; i < this.categoryFilters.length; i++) {
         this.categoryQuery = this.categoryQuery + 'refinementList%5Bcategory%5D%5B' + i + '%5D=' + encodeURIComponent(UserCategory[this.categoryFilters[i]]) + '&';
       }
-      document.getElementById('menu-overlay').classList.toggle('activate-menu');
+      this.toggleMenuOverlay();
       this.router.navigateByUrl('/search?query=' + (String(this.query) + '&' + this.categoryQuery + this.hourlyQuery));
     } else {
       this.router.navigateByUrl('/search?query=' + (String(this.query) + '&' + this.hourlyQuery));
@@ -238,6 +251,6 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onResetHourlyRate() {
     this.maxValue = 300;
-    this.minValue = 0;
+    this.minValue = 1;
   }
 }

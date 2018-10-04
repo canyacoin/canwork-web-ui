@@ -57,22 +57,8 @@
           {{ provider.timezone }}
         </span>
         <br>
-<<<<<<< HEAD
         <div class="mini-profile-row">
             <app-skill-tag *ngIf="getProviderTags(provider).length > 0" [skill]="getProviderTags(provider).length + ' Skills'"></app-skill-tag>
-=======
-        <div class="row">
-          <div class="col-6">
-            <app-skill-tag [skill]="provider.skillTags.length + ' Skills'"></app-skill-tag>
-          </div>
-          <div class="col-6 text-right">
-            <span *ngIf="provider.hourlyRate && !canToUsd">
-              <span class="pr-20">
-              <b>${{provider.hourlyRate}}</b>/hr
-              </span>
-            </span>
-          </div>
->>>>>>> filtering works and looks like the zeplin file
         </div>
       </div>
     </div>
