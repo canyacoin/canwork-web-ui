@@ -16,10 +16,16 @@ service cloud.firestore {
        allow write: if isAuthenticated();
     }
 
-    match /viewed-users/{userId} {
+    match /viewed-users/{userId}/viewed/{document=**} {
        allow read;
        allow write: if isDocumentOwner(userId);
     }
+
+    match /notifications/{userId} {
+       allow read;
+       allow write: if isAuthenticated();
+    }
+
 
     match /skill-tags/{skill} {
        allow read;
