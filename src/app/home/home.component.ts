@@ -101,7 +101,7 @@ export class HomeComponent implements OnInit {
         const provider = {
           'address': result[i].address,
           'avatar': result[i].avatar,
-          'skillTags': result[i].skillTags,
+          'skillTags': result[i].skillTags || [],
           'title': result[i].title,
           'name': result[i].name,
           'category': result[i].category,
