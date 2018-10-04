@@ -7148,7 +7148,7 @@ a.text-danger:focus {
 }
 
 .no-shadow {
-  shadow: none;
+  box-shadow: none;
 }
 
 .no-text-shadow {
