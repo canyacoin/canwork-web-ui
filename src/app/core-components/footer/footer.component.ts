@@ -7,14 +7,11 @@ declare var createCustomFooter: any;
   styleUrls: ['./footer.component.css']
 })
 export class FooterComponent implements OnInit {
-    
     constructor() { }
-
     ngOnInit() {
-        var footerUrls = [
-        {name:"FAQ", url:"faq"}, 
+        const footerUrls = [
+        {name: 'FAQ', url: 'faq'},
         ];
-        createCustomFooter(footerUrls); 
+        createCustomFooter(footerUrls);
     }
- 
 }
