@@ -30,7 +30,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   categoryFilters = [];
   chosenFilters = [];
   smallCards = false;
-  query = '';
+  query: string;
   categoryQuery = '';
   hourlyQuery = '';
   loading = true;
@@ -67,7 +67,10 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     private auth: AuthService,
     private router: Router) {
     this.routeSub = this.activatedRoute.queryParams.subscribe((params) => {
-      this.query = params['query'] ? params['query'] : '';
+      if (this.query === '') {
+        this.query = params['query'];
+      }
+      console.log(this.query)
       if (!this.loading) {
         this.rendering = true;
         setTimeout(() => {
@@ -111,6 +114,8 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   algoliaSearchChanged(query) {
+    this.query = String(query);
+    console.log(this.query);
   }
 
   isInArray(value, array: any[]) {
@@ -190,14 +195,6 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  onSetHourlyRate() {
-    if (!(this.containsClass('hours-menu', 'hide-menu'))) {
-      this.hourlyQuery = 'range%5BhourlyRate%5D=' + this.minValue + '%3A' + this.maxValue;
-      this.toggleMenuOverlay();
-      this.router.navigateByUrl('/search?query=' + (String(this.query) + '&' + this.categoryQuery + this.hourlyQuery));
-    }
-  }
-
   containsClass(DocumentID, hiddenClassName) {
      return document.getElementById(DocumentID).classList.contains(hiddenClassName);
   }
@@ -231,10 +228,25 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.categoryQuery = this.categoryQuery + 'refinementList%5Bcategory%5D%5B' + i + '%5D=' + encodeURIComponent(UserCategory[this.categoryFilters[i]]) + '&';
       }
       this.toggleMenuOverlay();
-      this.router.navigateByUrl('/search?query=' + (String(this.query) + '&' + this.categoryQuery + this.hourlyQuery));
+      this.router.navigateByUrl('/search?query=' + ( this.getInputQuery() + '&' + this.categoryQuery + this.hourlyQuery));
     } else {
-      this.router.navigateByUrl('/search?query=' + (String(this.query) + '&' + this.hourlyQuery));
+      this.router.navigateByUrl('/search?query=' + ( this.getInputQuery() + '&' + this.hourlyQuery));
     }
+  }
+
+  onSetHourlyRate() {
+    if (!(this.containsClass('hours-menu', 'hide-menu'))) {
+      this.hourlyQuery = 'range%5BhourlyRate%5D=' + this.minValue + '%3A' + this.maxValue;
+      this.toggleMenuOverlay();
+      console.log('setting hourly rate');
+      console.log(this.getInputQuery());
+      this.router.navigateByUrl('/search?query=' + this.getInputQuery() + '&' + this.categoryQuery + this.hourlyQuery);
+    }
+  }
+
+  getInputQuery() {
+    const value = (document.getElementsByClassName('ais-SearchBox-input')[0] as HTMLInputElement).value;
+    return value;
   }
 
   onResetCategories() {
