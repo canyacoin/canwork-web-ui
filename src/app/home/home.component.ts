@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit {
       img: 'writer.svg'
     },
     {
-      name: 'Software Engineers',
+      name: 'Software Developers',
       img: 'dev.svg'
     },
     {

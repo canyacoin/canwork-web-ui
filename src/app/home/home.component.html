@@ -31,7 +31,7 @@
                   <img src="assets/img/providers/{{type.img}}">
                 </div>
                 <div class="col-8">
-                  <h6 class="fw-500 fs-14">{{type.name}}</h6>
+                  <h6 class="provider-type">{{type.name}}</h6>
                 </div>
               </div>
             </div>
@@ -43,7 +43,7 @@
   <section class="py-20">
     <div class="container">
       <div class="row">
-        <h4 class="section-title"><span><img class="icon-img" src="assets/img/providers/software-engineers.svg"></span>SOFTWARE
+        <h4 class="section-title pointer" [routerLink]="['/search']" [queryParams]="{query: 'SOFTWARE DEVELOPERS'}"><span><img class="icon-img" src="assets/img/providers/software-engineers.svg"></span>SOFTWARE
           DEVELOPERS</h4>
       </div>
       <div class="row">
@@ -56,7 +56,7 @@
   <section class="py-20">
     <div class="container">
       <div class="row">
-        <h4 class="section-title"><span><img class="icon-img" src="assets/img/providers/creatives-black.svg"></span>DESIGNER
+        <h4 class="section-title pointer" [routerLink]="['/search']" [queryParams]="{query: 'DESIGNER & CREATIVES'}"><span><img class="icon-img" src="assets/img/providers/creatives-black.svg"></span>DESIGNER
           & CREATIVES</h4>
       </div>
       <div class="row">
@@ -69,7 +69,7 @@
   <section class="py-20">
     <div class="container">
       <div class="row">
-        <h4 class="section-title"><span><img class="icon-img" src="assets/img/providers/writer-black.svg"></span>MARKETERS
+        <h4 class="section-title pointer" [routerLink]="['/search']" [queryParams]="{query: 'CONTENT CREATORS'}"><span><img class="icon-img" src="assets/img/providers/writer-black.svg"></span>MARKETERS
           & CONTENT CREATORS</h4>
       </div>
       <div class="row">
@@ -90,7 +90,7 @@
           <i>You have not checked out any providers.</i>
         </div>
       </div>
-      <div class="row" *ngIf="previouslySeen.length > 0">
+      <div class="row" *ngIf="previouslySeen.length > 0 && previouslySeen">
         <div class="col-lg-3 col-md-6 col-12 no-padding" *ngFor="let seen of previouslySeen">
           <app-provider-card *ngIf="!isOnMobile" [size]="'lg'" [provider]="seen"></app-provider-card>
           <app-provider-card *ngIf="isOnMobile" [size]="'sm'" [provider]="seen"></app-provider-card>
@@ -109,15 +109,15 @@
           </div>
           <div class="col-lg-6 col-sm-6">
             <ol class="py-20">
-              <li class="fw-500">POST A REQUEST <br> <span class="fw-400"><img src="assets/img/Create.svg"> Client &
+              <li class="fw-600 ls-2">POST A REQUEST <br> <span class="fw-400"><img src="assets/img/Create.svg"> Client &
                   Provider Agrees for a project</span></li>
-              <li class="fw-500">DEPOSIT FUNDS <br> <span class="fw-400"><img src="assets/img/Lock.svg"> Client
+              <li class="fw-600 ls-2">DEPOSIT FUNDS <br> <span class="fw-400"><img src="assets/img/Lock.svg"> Client
                   deposits project fee in escrow</span></li>
-              <li class="fw-500">DELIVER PROJECT <br> <span class="fw-400"><img src="assets/img/Deliver.svg"> Provider
+              <li class="fw-600 ls-2">DELIVER PROJECT <br> <span class="fw-400"><img src="assets/img/Deliver.svg"> Provider
                   completes the project deliverables</span></li>
-              <li class="fw-500">PROJECT COMPLETION <br> <span class="fw-400"><img src="assets/img/Complete.svg"> Both
+              <li class="fw-600 ls-2">PROJECT COMPLETION <br> <span class="fw-400"><img src="assets/img/Complete.svg"> Both
                   parties mark project completed</span></li>
-              <li class="fw-500">DISBURSE FUNDS <br> <span class="fw-400"><img src="assets/img/Disburse.svg"> Escrow
+              <li class="fw-600 ls-2">DISBURSE FUNDS <br> <span class="fw-400"><img src="assets/img/Disburse.svg"> Escrow
                   disburses project fee to provider</span></li>
             </ol>
           </div>
