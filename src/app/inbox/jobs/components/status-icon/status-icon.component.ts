@@ -31,6 +31,7 @@ export class StatusIconComponent {
         return 'warning';
       case JobState.complete:
       case JobState.inEscrow:
+      case JobState.reviewed:
         return 'success';
       default:
         return 'primary';
@@ -62,6 +63,8 @@ export class StatusIconComponent {
         return 'Funds in escrow';
       case JobState.complete:
         return 'Completed';
+      case JobState.reviewed:
+        return 'Reviewed';
       default:
         return '';
     }

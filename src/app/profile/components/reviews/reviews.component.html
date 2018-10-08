@@ -1,0 +1,17 @@
+<section id="user-reviews" class="card mt-3 p-3" *ngIf="user && reviews">
+  <div class="row align-items-center">
+    <div class="col-sm-6">
+      <h4 class="mb-0">Reviews</h4>
+    </div>
+    <div class="col-sm-6 text-right">
+      <p class="m-0">Total upvotes: <strong>{{ user.upvotes }}</strong></p>
+      <p class="m-0">Total downvotes: <strong>{{ user.downvotes }}</strong></p>
+    </div>
+  </div>
+  <article *ngFor="let review of reviews">
+    <p class="mb-0 mt-3">{{ review.message }}</p>
+    <small>Made by {{ review.clientName }} at {{ review.createdAt | date:'medium' }} for job "{{
+      review.jobTitle
+      }}"</small>
+  </article>
+</section>

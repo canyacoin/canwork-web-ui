@@ -27,6 +27,7 @@ import {
 } from './setup/create-provider-profile/create-provider-profile.component';
 import { ProviderStateComponent } from './setup/provider-state/provider-state.component';
 import { SetupComponent } from './setup/setup.component';
+import { ReviewsComponent } from './components/reviews/reviews.component';
 
 @NgModule({
   imports: [
@@ -55,7 +56,8 @@ import { SetupComponent } from './setup/setup.component';
     SetupComponent,
     SupportMeComponent,
     TimezoneComponent,
-    VisitorsComponent
+    VisitorsComponent,
+    ReviewsComponent
   ],
   exports: [
     ProfileRoutingModule
