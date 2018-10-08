@@ -16,7 +16,8 @@
             <div class="row">
               <div class="col-12">
                 <input type="number" formControlName="budget" class="form-control" min="0" step="5" placeholder="1 USD minimum" />
-                <small *ngIf="!form.controls.budget.valid && form.controls.budget.dirty" class="text-primary">Must be 1 USD
+                <small *ngIf="!form.controls.budget.valid && form.controls.budget.dirty" class="text-primary">Must be 1
+                  USD
                   or more.</small>
               </div>
             </div>
@@ -30,7 +31,7 @@
               </div>
             </div>
           </div>
-          <br/>
+          <br />
           <div *ngIf="userType == 'Provider'" class="form-group">
             <app-terms [form]="form"></app-terms>
           </div>
@@ -42,6 +43,21 @@
             <label>Add a message</label>
             <textarea class="form-control" formControlName="message" name="message" placeholder="enter your message here"></textarea>
           </div>
+        </form>
+      </div>
+      <div *ngIf="form && actionType == actionTypes.review" class="mx-40">
+        <form [formGroup]="form" class="form-group">
+          <fieldset class="form-group">
+            <label>Are you satisfied with this job?</label><br>
+            <label for="rating-yes"><input type="radio" formControlName="rating" name="rating" id="rating-yes" [value]=true>
+              Yes</label>
+            <label for="rating-no"><input type="radio" formControlName="rating" name="rating" id="rating-no" [value]=false>
+              No</label>
+          </fieldset>
+          <fieldset class="form-group">
+            <label>Add a public review (optional)</label>
+            <textarea class="form-control" formControlName="message" name="message" placeholder="enter your review here"></textarea>
+          </fieldset>
         </form>
       </div>
       <div *ngIf="form && actionType == actionTypes.acceptTerms">
