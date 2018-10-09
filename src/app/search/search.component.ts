@@ -70,7 +70,6 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
       if (this.query === '') {
         this.query = params['query'];
       }
-      console.log(this.query)
       if (!this.loading) {
         this.rendering = true;
         setTimeout(() => {
@@ -115,7 +114,6 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   algoliaSearchChanged(query) {
     this.query = String(query);
-    console.log(this.query);
   }
 
   isInArray(value, array: any[]) {
@@ -238,8 +236,6 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!(this.containsClass('hours-menu', 'hide-menu'))) {
       this.hourlyQuery = 'range%5BhourlyRate%5D=' + this.minValue + '%3A' + this.maxValue;
       this.toggleMenuOverlay();
-      console.log('setting hourly rate');
-      console.log(this.getInputQuery());
       this.router.navigateByUrl('/search?query=' + this.getInputQuery() + '&' + this.categoryQuery + this.hourlyQuery);
     }
   }

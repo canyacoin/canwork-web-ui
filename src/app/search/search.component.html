@@ -16,7 +16,7 @@
                     <span *ngIf = "minValue === 1 && maxValue === 300">HOURLY RATE</span>
                     <span *ngIf = "minValue > 1 || maxValue < 300">${{minValue}} - ${{maxValue}}/HR</span>
                   </button>
-                  <ais-toggle *ngIf="currentUser" label="Only show providers within my timezone" style="margin-left:30px" attribute="timezone" [values]="{
+                  <ais-toggle *ngIf="currentUser && currentUser.timezone !== '' " label="Only show providers within my timezone" style="margin-left:30px" attribute="timezone" [values]="{
                     on: currentUser.timezone,
                     off: ''
                   }">
