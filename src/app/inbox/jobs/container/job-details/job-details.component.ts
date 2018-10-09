@@ -11,6 +11,7 @@ import { AngularFireStorage } from 'angularfire2/storage';
 import { DialogService } from 'ng2-bootstrap-modal';
 import { Subscription } from 'rxjs/Subscription';
 
+import { environment } from '../../../../../environments/environment';
 import {
     ActionDialogComponent, ActionDialogOptions
 } from '../action-dialog/action-dialog.component';
@@ -187,10 +188,10 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   }
 
   getTxLink(txHash: string) {
-    return `http//etherscan.com/tx/${txHash}`;
+    return `http://${environment.contracts.useTestNet ? 'ropsten.' : ''}etherscan.io/tx/${txHash}`;
   }
 
   getTxColor(tx: Transaction) {
-    return tx.success ? 'success' : tx.failure ? 'danger' : 'info';
+    return tx.success ? 'success' : tx.failure ? 'danger' : 'warning';
   }
 }

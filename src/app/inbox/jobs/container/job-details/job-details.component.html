@@ -149,7 +149,6 @@
             </div>
           </div>
         </div>
-        <!-- <a class="btn btn-primary btn-outline" [routerLink]="['actions']">View all actions</a> -->
       </div>
       <span class="col-12 my-10 text-left" *ngIf="currentUserIsClient">
         <b>Transactions</b>
@@ -157,35 +156,24 @@
           No payments have been made yet
         </div>
         <div *ngIf="transactions.length >= 1">
-          <div *ngFor="let tx of transactions" class="card mb-15 p-20">
-            <div class="container">
-              <div class="row">
-                <div class="col-lg-8">
-                  <h5>{{tx.actionType}}
-                  </h5>
-                </div>
-                <div class="col-lg-4 desktop-right-mobile-center">
-                  <a href="{{getTxLink(tx.hash)}}">Etherscan</a>
-                </div>
+          <div *ngFor="let tx of transactions" class="card mb-15 py-20">
+            <div class="row">
+              <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6">
+                <i class="circle-{{getTxColor(tx)}} fas fa-circle"></i> {{tx.actionType}}
               </div>
-              <div class="row">
-                <div class="col-lg-6">
-                  <p class="text-grey fw-500">{{tx.senderId}}
-                  </p>
-                </div>
-                <div class="col-lg-6 text-right">
-                  <span class="fw-400">
-                    <i class="circle-{{getTxColor(tx)}} fas fa-circle"></i>
-                  </span>
-                </div>
+              <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 text-right">
+                {{ tx.timestamp | date:'medium' }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <a href="{{getTxLink(tx.hash)}}">View on
+                  Etherscan</a>
               </div>
             </div>
           </div>
         </div>
       </span>
-    </div>
-    <div id="job-reviews" class="row my-10">
-
     </div>
   </div>
 </div>
