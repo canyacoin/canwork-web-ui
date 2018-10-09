@@ -13,20 +13,29 @@
   }
 }
 
+.provider-type{
+  font-weight: 500;
+  font-size: 14px;
+}
+
 .provider-type-card img{
   height:50px;
   width:50px;
   margin-left: 25px;
 }
+
 .provider-type-card:hover{
 box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.1);
 }
+
 .provider-type-col{
   padding: 0 5px 0 5px;
 }
+
 #landing-top{
   background-color:transparent !important;
 }
+
 .icon-img{
   width: 30px;
   margin-bottom: 5px;
@@ -38,4 +47,25 @@ box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.1);
   font-weight: 600;
   font-size: 18px;
   letter-spacing: 2.3px;
+}
+
+
+@media screen and (max-width:320px){
+  
+  .provider-type-card img{
+    margin-left: 10px;
+  } 
+
+  .provider-type{
+    font-size: 12px;
+    margin-top: 5px;
+    margin-bottom: 0;
+  }
+
+  .section-title{
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 2.3px;
+  }
+
 }

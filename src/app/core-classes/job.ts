@@ -22,6 +22,7 @@ export class Job {
   pending: boolean;
   actionLog: Array<IJobAction> = [];
   boostVisibility = false;
+  reviewId: string;
 
   constructor(init?: Partial<Job>) {
     Object.assign(this, init);
@@ -89,7 +90,8 @@ export enum JobState {
   inEscrow = 'Job started',
   workPendingCompletion = 'Pending completion',
   inDispute = 'Disputed',
-  complete = 'Complete'
+  complete = 'Complete',
+  reviewed = 'Review added',
 }
 
 export enum WorkType {

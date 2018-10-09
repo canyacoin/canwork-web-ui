@@ -50,6 +50,8 @@ deploy:hosting:staging:
     - build:dist:staging
   script:
     - firebase deploy --only hosting --token "$FIREBASE_CI_AUTH_TOKEN" -P staging-can-work
+    - firebase deploy --only firestore:rules --token "$FIREBASE_CI_AUTH_TOKEN" -P staging-can-work
+    - firebase deploy --only firestore:indexes --token "$FIREBASE_CI_AUTH_TOKEN" -P staging-can-work
 
 deploy:hosting:production:
   stage: deploy_hosting
@@ -61,6 +63,8 @@ deploy:hosting:production:
     - build:dist:production
   script:
     - firebase deploy --only hosting --token "$FIREBASE_CI_AUTH_TOKEN" -P canwork-io
+    - firebase deploy --only firestore:rules --token "$FIREBASE_CI_AUTH_TOKEN" -P canwork-io
+    - firebase deploy --only firestore:indexes --token "$FIREBASE_CI_AUTH_TOKEN" -P canwork-io
 
 deploy:functions:staging:
   stage: deploy_functions

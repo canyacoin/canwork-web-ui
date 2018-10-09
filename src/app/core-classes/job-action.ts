@@ -1,5 +1,5 @@
-import { Job, PaymentType, TimeRange, WorkType } from '@class/job';
-import { User, UserType } from '@class/user';
+import { PaymentType, TimeRange, WorkType } from '@class/job';
+import { UserType } from '@class/user';
 
 import * as moment from 'moment';
 
@@ -98,6 +98,12 @@ export class AddMessageAction extends IJobAction {
   }
 }
 
+export class ReviewAction extends IJobAction {
+  type = ActionType.review
+  isClientSatisfied: boolean
+  private = true
+}
+
 export class RaiseDisputeAction extends IJobAction {
   type = ActionType.dispute
 }
@@ -129,5 +135,6 @@ export enum ActionType {
   addMessage = 'Add Note',
   finishedJob = 'Mark as complete',
   acceptFinish = 'Complete job',
-  dispute = 'Raise dispute'
+  dispute = 'Raise dispute',
+  review = 'Leave a review',
 }

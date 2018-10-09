@@ -1,10 +1,10 @@
-import { AfterViewInit, Component, ComponentRef } from '@angular/core';
+import { AfterViewInit, Component, ComponentRef, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Http, Response } from '@angular/http';
 import { Job, PaymentType } from '@class/job';
 import {
     AcceptTermsAction, ActionType, AddMessageAction, AuthoriseEscrowAction, CounterOfferAction,
-    DeclineTermsAction, EnterEscrowAction, IJobAction, RaiseDisputeAction
+    DeclineTermsAction, EnterEscrowAction, IJobAction, RaiseDisputeAction, ReviewAction
 } from '@class/job-action';
 import { User, UserType } from '@class/user';
 import { JobService } from '@service/job.service';
@@ -27,7 +27,7 @@ export class ActionDialogOptions {
   templateUrl: './action-dialog.component.html',
   styleUrls: ['./action-dialog.component.css']
 })
-export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, boolean> implements ActionDialogOptions, AfterViewInit {
+export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, boolean> implements ActionDialogOptions, OnInit {
 
   actionType: ActionType;
   userType: UserType;
@@ -57,7 +57,7 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
   async handleAction() {
     this.executing = true;
     try {
-      let action: IJobAction;
+      let action
       switch (this.actionType) {
         case ActionType.acceptTerms:
           action = new AcceptTermsAction
@@ -92,6 +92,11 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
           action.txId = ''
           action.amountCan = this.job.budgetCan
           break;
+        case ActionType.review:
+          action = new ReviewAction
+          action.message = this.form.value.message
+          action.isClientSatisfied = this.form.value.rating
+          break;
         default:
           action = new IJobAction
           action.type = this.actionType
@@ -119,7 +124,7 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
     return this.form.invalid;
   }
 
-  ngAfterViewInit() {
+  ngOnInit() {
     switch (this.actionType) {
       case ActionType.counterOffer:
         this.form = this.userType === UserType.provider ?
@@ -140,6 +145,12 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
       case ActionType.dispute:
         this.form = this.formBuilder.group({
           message: ['', Validators.required],
+        })
+        break;
+      case ActionType.review:
+        this.form = this.formBuilder.group({
+          message: ['', Validators.compose([Validators.min(0), Validators.max(350)])],
+          rating: [null, Validators.required],
         })
         break;
       case ActionType.acceptTerms:
@@ -189,6 +200,8 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
         return 'Are you sure you\'ve finished your job?';
       case ActionType.acceptFinish:
         return 'Are you sure you want to finish this job?';
+      case ActionType.review:
+        return '';
       default:
         return 'Are you sure?';
     }

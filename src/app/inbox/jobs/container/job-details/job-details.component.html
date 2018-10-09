@@ -91,7 +91,7 @@
             </button>
           </div>
           <div *ngIf="availableActions.length < 1" class="col-lg-10 col-sm-12 col-xs-12 action-group">
-            <i>Job is {{job?.state}}, no actions available</i>
+            <i>{{job?.state}}, no actions available</i>
           </div>
         </div>
       </div>
@@ -183,6 +183,9 @@
           </div>
         </div>
       </span>
+    </div>
+    <div id="job-reviews" class="row my-10">
+
     </div>
   </div>
 </div>

@@ -55,7 +55,7 @@ import { FilterPipeModule } from 'ngx-filter-pipe';
     AuthService,
     CanWorkEthService,
     NavService,
-    JobNotificationService
+    JobNotificationService,
   ],
   bootstrap: [AppComponent]
 })

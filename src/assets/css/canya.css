@@ -1405,8 +1405,7 @@ button:focus {
 .btn-primary,
 .btn-primary:hover {
   background-color: #33ccff;
-  /* border-color: #33ccff; */
-  /* border: 1px solid transparent; */
+  border: 1px solid transparent;
   color: #fff;
 }
 
@@ -6911,6 +6910,11 @@ a.text-danger:focus {
   height: 100%;
 }
 
+.justify-center {
+  justify-content: center;
+  align-content: center;
+}
+
 .rotate-45 {
   display: inline-block;
   -webkit-transform: rotate(45deg);
@@ -7148,7 +7152,7 @@ a.text-danger:focus {
 }
 
 .no-shadow {
-  shadow: none;
+  box-shadow: none;
 }
 
 .no-text-shadow {
@@ -9742,7 +9746,8 @@ a.text-danger:focus {
 
 .provider-title {
   font-weight: 400;
-  font-size: 15px;
+  font-size: 14px;
+  line-height: initial;
   margin: 0;
   height: 39px;
   color: #323c47;

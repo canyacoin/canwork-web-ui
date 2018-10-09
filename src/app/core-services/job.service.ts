@@ -61,6 +61,14 @@ export class JobService {
     });
   }
 
+  async getReviewedJobsByUser(user: User) {
+    const userType = user.type === UserType.client ? 'clientId' : 'providerId'
+    const data = await this.jobsCollection.ref
+      .where(userType, '==', user.address)
+      .where('state', '==', JobState.reviewed).get()
+    return data
+  }
+
   /** Add the 'other party' details to a job, i.e. the clients picture and name */
   async assignOtherPartyAsync(job: Job, viewingUserType: UserType) {
     if (job.clientId && job.providerId) {
@@ -112,6 +120,8 @@ export class JobService {
    */
   async handleJobAction(job: Job, action: IJobAction): Promise<boolean> {
     const parsedJob = new Job(await this.parseJobToObject(job));
+    let client: User
+    let provider: User
     return new Promise<boolean>(async (resolve, reject) => {
       try {
         switch (action.type) {
@@ -195,6 +205,14 @@ export class JobService {
             await this.saveJobAndNotify(parsedJob, action)
             resolve(true);
             break;
+          case ActionType.review:
+            client = await this.userService.getUser(job.clientId)
+            provider = await this.userService.getUser(job.providerId)
+            await this.userService.newReview(client, provider, parsedJob, action as ReviewAction)
+            parsedJob.state = JobState.reviewed
+            await this.saveJobFirebase(parsedJob)
+            resolve(true)
+            break
           default:
             reject(false);
         }
@@ -314,7 +332,7 @@ export class JobService {
     actions[JobState.inDispute] = forClient ? [ActionType.acceptFinish, ActionType.addMessage] : [ActionType.addMessage];
     actions[JobState.cancelled] = [];
     actions[JobState.declined] = [];
-    actions[JobState.complete] = [];
+    actions[JobState.complete] = forClient ? [ActionType.review] : [];
 
     return actions[jobState] || [];
   }

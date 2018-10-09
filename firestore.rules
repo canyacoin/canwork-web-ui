@@ -6,6 +6,16 @@ service cloud.firestore {
        allow write: if isAuthenticated();
     }
 
+    match /users/{userId}/reviews {
+       allow read;
+       allow write: if isAuthenticated();
+    }
+
+    match /users/{userId}/reviews/{reviewId} {
+       allow read;
+       allow write: if isAuthenticated();
+    }
+
     match /portfolio/{userId}/work/{w} {
        allow read;
        allow write: if isDocumentOwner(userId);
@@ -55,6 +65,15 @@ service cloud.firestore {
        allow delete: if isAdmin();
     }
 
+    match /reviews {
+       allow read;
+       allow write: if isAuthenticated();
+    }
+
+    match /reviews/{reviewId} {
+       allow read;
+       allow write: if isAuthenticated();
+    }
   }
 
   // --------------------------------------------------------------------------------

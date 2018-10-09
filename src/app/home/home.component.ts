@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit {
       img: 'writer.svg'
     },
     {
-      name: 'Software Engineers',
+      name: 'Software Developers',
       img: 'dev.svg'
     },
     {
@@ -69,8 +69,10 @@ export class HomeComponent implements OnInit {
     this.authSub = this.auth.currentUser$.subscribe((user: User) => {
       if (this.currentUser !== user) {
         this.currentUser = user;
+        if (this.currentUser && this.currentUser.address) {
+          this.setUpRecentlyViewed();
+        }
       }
-      this.setUpRecentlyViewed();
     });
     this.algoliaSearch = algoliasearch(this.algoId, this.algoKey);
     this.algoliaIndex = this.algoliaSearch.initIndex(this.algoIndex);
@@ -81,7 +83,7 @@ export class HomeComponent implements OnInit {
 
   async setUpRecentlyViewed() {
     this.userService.getViewedUsers(this.currentUser.address).then((result) => {
-      if (result.length > 0) {
+      if (result && result.length > 0) {
         this.previouslySeen = result.slice(0, 4);
         for (let i = 0; i < this.previouslySeen.length; i++) {
           this.userService.getUser(this.previouslySeen[i].address).then(user => {
@@ -99,7 +101,7 @@ export class HomeComponent implements OnInit {
         const provider = {
           'address': result[i].address,
           'avatar': result[i].avatar,
-          'skillTags': result[i].skillTags,
+          'skillTags': result[i].skillTags || [],
           'title': result[i].title,
           'name': result[i].name,
           'category': result[i].category,
