@@ -1404,11 +1404,7 @@ button:focus {
 
 .btn-primary,
 .btn-primary:hover {
-<<<<<<< HEAD
   background-color: #33ccff;
-=======
-  background-color: #33ccff; 
->>>>>>> overlaid menu front-end implemented
   border: 1px solid transparent;
   color: #fff;
 }
