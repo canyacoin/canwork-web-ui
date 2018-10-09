@@ -1404,7 +1404,7 @@ button:focus {
 
 .btn-primary,
 .btn-primary:hover {
-  background-color: #33ccff;
+  background-color: #33ccff; 
   border: 1px solid transparent;
   color: #fff;
 }
