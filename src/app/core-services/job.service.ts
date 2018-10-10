@@ -254,6 +254,11 @@ export class JobService {
         txHash, this.momentService.get(), ActionType.authoriseEscrow, job.id));
       const escrowAction = action as AuthoriseEscrowAction;
       job.actionLog.push(escrowAction);
+      // This payment log has been deprecated in favor of transacations collection, however emails rely on it
+      job.paymentLog.push(new Payment({
+        txId: escrowAction.txId || '',
+        timestamp: escrowAction.timestamp || ''
+      }));
       job.pending = true;
       await this.saveJobFirebase(job);
     };
@@ -278,6 +283,11 @@ export class JobService {
         txHash, this.momentService.get(), ActionType.enterEscrow, job.id));
       const enterEscrowAction = action as EnterEscrowAction;
       job.actionLog.push(enterEscrowAction);
+      // This payment log has been deprecated in favor of transacations collection, however emails rely on it
+      job.paymentLog.push(new Payment({
+        txId: enterEscrowAction.txId || '',
+        timestamp: enterEscrowAction.timestamp || ''
+      }));
       job.pending = true;
       await this.saveJobFirebase(job);
       const clientObj = await this.userService.getUser(job.clientId);
