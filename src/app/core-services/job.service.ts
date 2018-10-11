@@ -259,7 +259,7 @@ export class JobService {
         txId: escrowAction.txId || '',
         timestamp: escrowAction.timestamp || ''
       }));
-      job.pending = true;
+      job.pendingTx += 1;
       await this.saveJobFirebase(job);
     };
 
@@ -288,7 +288,7 @@ export class JobService {
         txId: enterEscrowAction.txId || '',
         timestamp: enterEscrowAction.timestamp || ''
       }));
-      job.pending = true;
+      job.pendingTx += 1;
       await this.saveJobFirebase(job);
       const clientObj = await this.userService.getUser(job.clientId);
       clientObj.ethAddress = this.ethService.account.value;

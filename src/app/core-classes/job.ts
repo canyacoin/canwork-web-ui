@@ -19,7 +19,7 @@ export class Job {
   daiInEscrow: number;
   paymentLog: Array<Payment> = [];
   state: JobState;
-  pending: boolean;
+  pendingTx = 0;
   actionLog: Array<IJobAction> = [];
   boostVisibility = false;
   reviewId: string;
