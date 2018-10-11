@@ -400,7 +400,9 @@ class ClientJobRequestEscrowedFundsNotification extends AEmailNotification {
       title: title,
       bodyHtml: `
       Dear ${this.clientData.name},<br>
-      You have authorised CanWork to enter the escrow <a href='${etherscanUri}'>${tx}</a>.`
+      Your transaction authorising CanWork to use your funds for a job was successful!<br/>
+      You are one step closer to getting the job started.<br/><br/>
+      View the ethereum transaction <a href='${etherscanUri}'>here</a>.`
     });
     console.log('+ dump emailMessages:', this.emailMessages);
   }
@@ -430,7 +432,9 @@ class ClientJobRequestEscrowedFundsFailedNotification extends AEmailNotification
       title: title,
       bodyHtml: `
       Dear ${this.clientData.name},<br>
-      Your authorisation for CanWork to enter the escrow failed <a href='${etherscanUri}'>${tx}</a>.`
+      Your transaction authorising CanWork to use your funds for a job was un-successful!<br/>
+      <br/>
+      View the ethereum transaction <a href='${etherscanUri}'>here</a>.`
     });
     console.log('+ dump emailMessages:', this.emailMessages);
   }

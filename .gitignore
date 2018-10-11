@@ -11,7 +11,7 @@
 
 # Cam added: scripts to deploy to various environments
 prod-deploy.sh
-staging-deploy.sh
+staging-deploy*.sh
 cam-deploy.sh
 
 # dependencies

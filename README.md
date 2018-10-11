@@ -58,6 +58,7 @@ firebase functions:config:set fbadmin.client_email="--FILL THIS OUT--"
 firebase functions:config:set fbadmin.private_key="--FILL THIS OUT-- --private can be found by downloading a service account json file"
 firebase functions:config:set fbadmin.database_url="--FILL THIS OUT--"
 firebase functions:config:set dev.authkey="some-random-key-only-you-know"
+firebase functions:config:set internal.authkey="xxx"
 
 
 cd ../

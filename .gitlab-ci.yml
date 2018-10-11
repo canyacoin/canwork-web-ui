@@ -8,10 +8,9 @@ before_script:
 
 stages:
   - build
-  - deploy_hosting
-  - deploy_functions
+  - deploy
 
-build:dist:staging:
+dist:staging:
   stage: build
   environment: staging
   only:
@@ -26,7 +25,7 @@ build:dist:staging:
     - echo $ENVIRONMENT_STAGING >> $APP_PATH/src/environments/environment.staging.ts
     - npm run build:staging
 
-build:dist:production:
+dist:production:
   stage: build
   environment: production
   only:
@@ -41,37 +40,13 @@ build:dist:production:
     - echo $ENVIRONMENT_PROD >> $APP_PATH/src/environments/environment.prod.ts
     - npm run build:prod
 
-deploy:hosting:staging:
-  stage: deploy_hosting
+deploy:staging:
+  stage: deploy
   environment: staging
   only:
     - master
   dependencies:
-    - build:dist:staging
-  script:
-    - firebase deploy --only hosting --token "$FIREBASE_CI_AUTH_TOKEN" -P staging-can-work
-    - firebase deploy --only firestore:rules --token "$FIREBASE_CI_AUTH_TOKEN" -P staging-can-work
-    - firebase deploy --only firestore:indexes --token "$FIREBASE_CI_AUTH_TOKEN" -P staging-can-work
-
-deploy:hosting:production:
-  stage: deploy_hosting
-  environment: production
-  only:
-    - master
-  when: manual
-  dependencies:
-    - build:dist:production
-  script:
-    - firebase deploy --only hosting --token "$FIREBASE_CI_AUTH_TOKEN" -P canwork-io
-    - firebase deploy --only firestore:rules --token "$FIREBASE_CI_AUTH_TOKEN" -P canwork-io
-    - firebase deploy --only firestore:indexes --token "$FIREBASE_CI_AUTH_TOKEN" -P canwork-io
-
-deploy:functions:staging:
-  stage: deploy_functions
-  environment: staging
-  only:
-    - master
-  when: manual
+    - dist:staging
   script:
     - cd $APP_PATH/functions
     - npm install
@@ -87,20 +62,22 @@ deploy:functions:staging:
     - firebase functions:config:set fbadmin.private_key="$FIREBASE_PRIVATE_KEY_STAGING" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set fbadmin.database_url="$FIREBASE_DATABASE_URL_STAGING" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set dev.authkey="$FIREBASE_DEV_AUTHKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
-    - firebase deploy --only functions --token "$FIREBASE_CI_AUTH_TOKEN" -P staging-can-work
+    - firebase functions:config:set internal.authkey="$FIREBASE_INTERNAL_AUTHKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
+    - firebase deploy --token "$FIREBASE_CI_AUTH_TOKEN" -P $FIREBASE_PROJECT_ID_STAGING
 
-deploy:functions:production:
-  stage: deploy_functions
+deploy:production:
+  stage: deploy
   environment: production
   only:
     - master
   when: manual
+  dependencies:
+    - dist:production
   script:
     - cd $APP_PATH/functions
     - npm install
     - npm install -g firebase-tools@latest
     - cd ..
-    - echo $ENVIRONMENT_PROD >> $APP_PATH/src/environments/environment.prod.ts
     - firebase use staging --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set algolia.appid="$FIREBASE_ALGOLIA_APPID" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set algolia.apikey="$FIREBASE_ALGOLIA_APIKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
@@ -111,4 +88,5 @@ deploy:functions:production:
     - firebase functions:config:set fbadmin.private_key="$FIREBASE_PRIVATE_KEY" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set fbadmin.database_url="$FIREBASE_DATABASE_URL" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set dev.authkey="$FIREBASE_DEV_AUTHKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
-    - firebase deploy --only functions --token "$FIREBASE_CI_AUTH_TOKEN" -P canwork-io
+    - firebase functions:config:set internal.authkey="$FIREBASE_INTERNAL_AUTHKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
+    - firebase deploy --token "$FIREBASE_CI_AUTH_TOKEN" -P $FIREBASE_PROJECT_ID
