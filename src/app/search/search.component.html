@@ -4,7 +4,7 @@
       <div class="row search-container">
         <div class="col-12">
           <ais-instantsearch [config]="algoliaSearchConfig" *ngIf="!rendering">
-            <ais-refinement-list hidden attribute="category"></ais-refinement-list>
+            <ais-refinement-list hidden attribute="category" operator="or"></ais-refinement-list>
             <ais-search-box #search class="search-box" (change)="algoliaSearchChanged($event)"></ais-search-box>
             <div class="row mt-25 mb-15" style="z-index: 150; position: relative;">
               <div class="col-9">
@@ -13,10 +13,11 @@
                     CATEGORY
                   </button>
                   <button id="hourly-btn" class="btn btn-primary filter-btn btn-outline" (click)="toggleOverlay('hours-menu', 'category-menu', 'hourly-btn')">
-                    <span *ngIf = "minValue === 1 && maxValue === 300">HOURLY RATE</span>
-                    <span *ngIf = "minValue > 1 || maxValue < 300">${{minValue}} - ${{maxValue}}/HR</span>
+                    <span *ngIf="minValue === 1 && maxValue === 300">HOURLY RATE</span>
+                    <span *ngIf="minValue > 1 || maxValue < 300">${{minValue}} - ${{maxValue}}/HR</span>
                   </button>
-                  <ais-toggle *ngIf="currentUser && currentUser.timezone !== '' " label="Only show providers within my timezone" style="margin-left:30px" attribute="timezone" [values]="{
+                  <ais-toggle *ngIf="currentUser && currentUser.timezone !== '' " label="Only show providers within my timezone"
+                    style="margin-left:30px" attribute="timezone" [values]="{
                     on: currentUser.timezone,
                     off: ''
                   }">
@@ -25,54 +26,60 @@
                 <div class="menu-options hide-menu" id="category-menu">
                   <div class="row text-center">
                     <div class="col-md-6 col-sm-12 col-12">
-                      <button id="contentCreator" (click)="onChooseCategory('contentCreator')"  [ngClass]="{chosen: isInArray('contentCreator', this.categoryFilters)}" class="btn btn-primary btn-outline category-btn">
+                      <button id="contentCreator" (click)="onChooseCategory('contentCreator')" [ngClass]="{chosen: isInArray('contentCreator', this.categoryFilters)}"
+                        class="btn btn-primary btn-outline category-btn">
                         CONTENT CREATORS
                       </button>
                     </div>
                     <div class="col-md-6 col-sm-12 col-12">
-                      <button id="designer" (click)="onChooseCategory('designer')" [ngClass]="{chosen: isInArray('designer', this.categoryFilters)}" class="btn btn-primary btn-outline category-btn">
+                      <button id="designer" (click)="onChooseCategory('designer')" [ngClass]="{chosen: isInArray('designer', this.categoryFilters)}"
+                        class="btn btn-primary btn-outline category-btn">
                         DESIGNERS & CREATIVES
                       </button>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-6 col-sm-12 col-12">
-                      <button id="finance" (click)="onChooseCategory('finance')" [ngClass]="{chosen: isInArray('finance', this.categoryFilters)}"  class="btn btn-primary btn-outline category-btn">
+                      <button id="finance" (click)="onChooseCategory('finance')" [ngClass]="{chosen: isInArray('finance', this.categoryFilters)}"
+                        class="btn btn-primary btn-outline category-btn">
                         FINANCIAL EXPERTS
                       </button>
                     </div>
                     <div class="col-md-6 col-sm-12 col-12">
-                      <button id="marketing" (click)="onChooseCategory('marketing')"  [ngClass]="{chosen: isInArray('marketing', this.categoryFilters)}" class="btn btn-primary btn-outline category-btn">
+                      <button id="marketing" (click)="onChooseCategory('marketing')" [ngClass]="{chosen: isInArray('marketing', this.categoryFilters)}"
+                        class="btn btn-primary btn-outline category-btn">
                         MARKETING EXPERTS
                       </button>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-6 col-sm-12 col-12">
-                      <button id="softwareDev" (click)="onChooseCategory('softwareDev')" [ngClass]="{chosen: isInArray('softwareDev', this.categoryFilters)}" class="btn btn-primary btn-outline category-btn">
+                      <button id="softwareDev" (click)="onChooseCategory('softwareDev')" [ngClass]="{chosen: isInArray('softwareDev', this.categoryFilters)}"
+                        class="btn btn-primary btn-outline category-btn">
                         SOFTWARE DEVELOPERS
                       </button>
                     </div>
                     <div class="col-md-6 col-sm-12 col-12">
-                      <button id="virtualAssistant" (click)="onChooseCategory('virtualAssistant')" [ngClass]="{chosen: isInArray('virtualAssistant', this.categoryFilters)}" class="btn btn-primary btn-outline category-btn">
+                      <button id="virtualAssistant" (click)="onChooseCategory('virtualAssistant')" [ngClass]="{chosen: isInArray('virtualAssistant', this.categoryFilters)}"
+                        class="btn btn-primary btn-outline category-btn">
                         VIRTUAL ASSISTANTS
                       </button>
                     </div>
                   </div>
-                  <div class="row option-row">
+                  <div class="row px-20">
                     <div class="col-6">
                       <span class="set-text" (click)="onResetCategories()">CLEAR</span>
                     </div>
                     <div class="col-6 text-right">
-                      <span class="set-text" (click)="onSetCategories()">APPLY</span>
+                    <span class="set-text " (click)="onSetCategories()">APPLY</span>
                     </div>
                   </div>
                 </div>
-                <div class="menu-options hide-menu" id="hours-menu"> 
+                <div class="menu-options hide-menu" id="hours-menu">
                   <div class="row p-20">
                     <ng5-slider [(value)]="minValue" [(highValue)]="maxValue" [options]="options" style="width:300px; margin: 0 auto; margin-top: 35px;"></ng5-slider>
                   </div>
-                  <div class="row option-row">
+                  <div class="row px-20">
                     <div class="col-6">
                       <span class="set-text" (click)="onResetHourlyRate()">RESET</span>
                     </div>

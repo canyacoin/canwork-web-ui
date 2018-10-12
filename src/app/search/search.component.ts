@@ -17,6 +17,7 @@ import { AuthService } from '../core-services/auth.service';
 import { User, UserCategory } from '../core-classes/user';
 import { NavService } from '../core-services/nav.service';
 import { UserType } from '../../../functions/src/user-type';
+import { createEmptyStateSnapshot } from '@angular/router/src/router_state';
 
 @Component({
   selector: 'app-search',
@@ -69,6 +70,10 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     this.routeSub = this.activatedRoute.queryParams.subscribe((params) => {
       if (this.query === '') {
         this.query = params['query'];
+      }
+      if (this.categoryFilters.length < 1 && params['category'] !== '') {
+        this.categoryFilters.push(params['category']);
+        console.log(this.categoryFilters);
       }
       if (!this.loading) {
         this.rendering = true;
@@ -220,13 +225,18 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSetCategories() {
-    this.categoryQuery = ' ';
+    this.categoryQuery = '';
     if (this.categoryFilters.length > 0) {
       for (let i = 0; i < this.categoryFilters.length; i++) {
-        this.categoryQuery = this.categoryQuery + 'refinementList%5Bcategory%5D%5B' + i + '%5D=' + encodeURIComponent(UserCategory[this.categoryFilters[i]]) + '&';
+        const category = encodeURIComponent(UserCategory[this.categoryFilters[i]]);
+        console.log(category);
+        this.categoryQuery = this.categoryQuery + 'refinementList%5Bcategory%5D%5B' + i + '%5D=' + category + '&';
       }
       this.toggleMenuOverlay();
-      this.router.navigateByUrl('/search?query=' + ( this.getInputQuery() + '&' + this.categoryQuery + this.hourlyQuery));
+      console.log(this.categoryQuery);
+      const query = ( '?' + '&' + this.categoryQuery + this.hourlyQuery + '&query=' + this.getInputQuery());
+      console.log(query);
+      this.router.navigateByUrl('/search' + query);
     } else {
       this.router.navigateByUrl('/search?query=' + ( this.getInputQuery() + '&' + this.hourlyQuery));
     }
