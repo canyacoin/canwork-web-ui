@@ -38,27 +38,33 @@ export class HomeComponent implements OnInit {
   providerTypes = [
     {
       name: 'Content Creators',
-      img: 'writer.svg'
+      img: 'writer.svg',
+      id: 'contentCreator'
     },
     {
       name: 'Software Developers',
-      img: 'dev.svg'
+      img: 'dev.svg',
+      id: 'softwareDev'
     },
     {
       name: 'Designers & Creatives',
-      img: 'creatives.svg'
+      img: 'creatives.svg',
+      id: 'designer'
     },
     {
       name: 'Financial Experts',
-      img: 'finance.svg'
+      img: 'finance.svg',
+      id: 'finance'
     },
     {
-      name: 'Marketing Experts',
-      img: 'marketing.svg'
+      name: 'Marketing & Seo',
+      img: 'marketing.svg',
+      id: 'marketing'
     },
     {
       name: 'Virtual Assistants',
-      img: 'assistant.svg'
+      img: 'assistant.svg',
+      id: 'virtualAssistant'
     }
   ]
 

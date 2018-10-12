@@ -25,7 +25,7 @@
             <h6 class="text-center text-grey ls-1">Browse our highly skilled and hand-picked providers</h6>
           </div>
           <div *ngFor="let type of providerTypes" class="col-lg-2 col-md-3 col-sm-4 col-6 provider-type-col">
-            <div [routerLink]="['/search']" [queryParams]="{query: type.name}" class="provider-type-card pointer">
+            <div [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]' : type.name, 'category' : type.id}" class="provider-type-card pointer">
               <div class="row">
                 <div class="col-4 no-padding">
                   <img src="assets/img/providers/{{type.img}}">
@@ -43,7 +43,8 @@
   <section class="py-20">
     <div class="container">
       <div class="row">
-        <h4 class="section-title pointer" [routerLink]="['/search']" [queryParams]="{query: 'SOFTWARE DEVELOPERS'}"><span><img class="icon-img" src="assets/img/providers/software-engineers.svg"></span>SOFTWARE
+        <h4 class="section-title pointer" [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]' : 'SOFTWARE DEVELOPERS', 'category' : 'softwareDev'}"><span><img
+              class="icon-img" src="assets/img/providers/software-engineers.svg"></span>SOFTWARE
           DEVELOPERS</h4>
       </div>
       <div class="row">
@@ -56,7 +57,8 @@
   <section class="py-20">
     <div class="container">
       <div class="row">
-        <h4 class="section-title pointer" [routerLink]="['/search']" [queryParams]="{query: 'DESIGNER & CREATIVES'}"><span><img class="icon-img" src="assets/img/providers/creatives-black.svg"></span>DESIGNER
+        <h4 class="section-title pointer" [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]': 'DESIGNERS & CREATIVES', 'category' : 'designer'}"><span><img
+              class="icon-img" src="assets/img/providers/creatives-black.svg"></span>DESIGNER
           & CREATIVES</h4>
       </div>
       <div class="row">
@@ -69,7 +71,8 @@
   <section class="py-20">
     <div class="container">
       <div class="row">
-        <h4 class="section-title pointer" [routerLink]="['/search']" [queryParams]="{query: 'CONTENT CREATORS'}"><span><img class="icon-img" src="assets/img/providers/writer-black.svg"></span>MARKETERS
+        <h4 class="section-title pointer" [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]': 'CONTENT CREATORS', 'category':'contentCreator'}"><span><img
+              class="icon-img" src="assets/img/providers/writer-black.svg"></span>MARKETERS
           & CONTENT CREATORS</h4>
       </div>
       <div class="row">
@@ -109,15 +112,19 @@
           </div>
           <div class="col-lg-6 col-sm-6">
             <ol class="py-20">
-              <li class="fw-600 ls-2">POST A REQUEST <br> <span class="fw-400"><img src="assets/img/Create.svg"> Client &
+              <li class="fw-600 ls-2">POST A REQUEST <br> <span class="fw-400"><img src="assets/img/Create.svg"> Client
+                  &
                   Provider Agrees for a project</span></li>
               <li class="fw-600 ls-2">DEPOSIT FUNDS <br> <span class="fw-400"><img src="assets/img/Lock.svg"> Client
                   deposits project fee in escrow</span></li>
-              <li class="fw-600 ls-2">DELIVER PROJECT <br> <span class="fw-400"><img src="assets/img/Deliver.svg"> Provider
+              <li class="fw-600 ls-2">DELIVER PROJECT <br> <span class="fw-400"><img src="assets/img/Deliver.svg">
+                  Provider
                   completes the project deliverables</span></li>
-              <li class="fw-600 ls-2">PROJECT COMPLETION <br> <span class="fw-400"><img src="assets/img/Complete.svg"> Both
+              <li class="fw-600 ls-2">PROJECT COMPLETION <br> <span class="fw-400"><img src="assets/img/Complete.svg">
+                  Both
                   parties mark project completed</span></li>
-              <li class="fw-600 ls-2">DISBURSE FUNDS <br> <span class="fw-400"><img src="assets/img/Disburse.svg"> Escrow
+              <li class="fw-600 ls-2">DISBURSE FUNDS <br> <span class="fw-400"><img src="assets/img/Disburse.svg">
+                  Escrow
                   disburses project fee to provider</span></li>
             </ol>
           </div>
