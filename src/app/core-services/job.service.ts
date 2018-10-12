@@ -285,8 +285,8 @@ export class JobService {
       job.actionLog.push(enterEscrowAction);
       // This payment log has been deprecated in favor of transacations collection, however emails rely on it
       job.paymentLog.push(new Payment({
-        txId: enterEscrowAction.txId || '',
-        timestamp: enterEscrowAction.timestamp || ''
+        txId: txHash,
+        timestamp: enterEscrowAction.timestamp
       }));
       job.pendingTx += 1;
       await this.saveJobFirebase(job);
