@@ -1,15 +1,16 @@
 <div *ngIf="userModel" class="card pricing-3" style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px;">
 
-  <a *ngIf="isMyProfile" [routerLink]="['/profile/edit']" data-toggle="tooltip" data-placement="top" title="Edit Profile"
+  <span *ngIf="isMyProfile" (click)="displayProfileEditComponent()" data-toggle="tooltip" data-placement="top" title="Edit Profile"
     class="btn btn-sm btn-circular btn-light icon-edit-work pl-1">
     <i class="ti-pencil fw-600" style="columns: #535353;" aria-hidden="true"></i>
-  </a>
+  </span>
   <div id="sidebar">
     <div class="profile">
       <span class="text-center" style="font-weight: 600;text-transform: uppercase;letter-spacing: 1.5px;height: 50px;color: #33ccff;background-color: transparent;float: right;min-height: 50px;font-size: 14px;line-height: 50px;">
         <span *ngIf="userModel.badge">{{userModel.badge}}</span>
       </span>
-      <img *ngIf="userModel.avatar && userModel.avatar.uri" class="circle-headshot" src="{{ userModel.avatar.uri }}" alt="">
+      <img *ngIf="userModel.avatar && userModel.avatar.uri" class="circle-headshot" src="{{ userModel.avatar.uri }}"
+        alt="">
       <div class="title">
         <h2 *ngIf="userModel.name">{{ userModel.name }}</h2>
         <h3 *ngIf="userModel.title">{{ userModel.title }}</h3>

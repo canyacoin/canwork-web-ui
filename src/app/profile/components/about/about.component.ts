@@ -1,10 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { User } from '../../../core-classes/user';
-import { AuthService } from '../../../core-services/auth.service';
-import { ChatService } from '../../../core-services/chat.service';
-import { ProfileComponent } from '../../profile.component';
+import { User } from '@class/user';
+import { AuthService } from '@service/auth.service';
+import { ChatService } from '@service/chat.service';
 
 @Component({
   selector: 'app-profile-about',
@@ -17,9 +16,18 @@ export class AboutComponent implements OnInit {
   @Input() userModel: User;
   @Input() isMyProfile: boolean;
 
-  constructor(private router: Router, private authService: AuthService, private chatService: ChatService) { }
+  @Output() editProfile = new EventEmitter()
+
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private chatService: ChatService) { }
 
   ngOnInit() { }
+
+  displayProfileEditComponent() {
+    this.editProfile.emit(true)
+  }
 
   proposeJob() {
     this.authService.currentUser$.take(1).subscribe((user: User) => {
