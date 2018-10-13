@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { User } from '../../../core-classes/user';
+import { User } from '@class/user';
 
 @Component({
   selector: 'app-profile-bio',
@@ -12,7 +12,8 @@ export class BioComponent implements OnInit {
   @Input() userModel: User;
   @Input() isMyProfile: boolean;
 
-  constructor() { }
+  constructor(
+  ) { }
 
   ngOnInit() { }
 

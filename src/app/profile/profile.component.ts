@@ -1,12 +1,10 @@
 import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { User } from '@class/user';
+import { AuthService } from '@service/auth.service';
+import { UserService } from '@service/user.service';
 import { Subscription } from 'rxjs/Subscription';
-
-import * as moment from 'moment-timezone';
-import { User, UserState, UserType } from '../core-classes/user';
-import { AuthService } from '../core-services/auth.service';
-import { UserService } from '../core-services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -20,7 +18,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   paramsSub: Subscription;
 
-  constructor(private router: Router,
+  displayEditComponent = false
+
+  constructor(
+    private router: Router,
     private location: Location,
     private activatedRoute: ActivatedRoute,
     private userService: UserService,
@@ -35,6 +36,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.activatedRoute.params.take(1).subscribe((params) => {
           this.initUsers(this.currentUser, params);
         });
+        this.activatedRoute.queryParams.subscribe(params => {
+          this.displayEditComponent = params.editProfile ? true : false
+        })
       }
     }, error => { console.error('! unable to retrieve currentUser data:', error) });
   }

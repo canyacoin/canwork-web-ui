@@ -16,7 +16,7 @@ import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { LandingComponent } from '../landing/landing.component';
 import {
-    SearchFilterOptionComponent
+  SearchFilterOptionComponent
 } from './header/search-filter-option/search-filter-option.component';
 import { StatusLightComponent } from './header/status-light/status-light.component';
 import { ScrollTopComponent } from './scroll-top/scroll-top.component';
@@ -31,6 +31,20 @@ import { WalletInstallComponent } from './wallet-install/wallet-install.componen
 import { WindowScrollDirective } from './window-scroll.directive';
 import { ProviderCardComponent } from './provider-card/provider-card.component';
 
+import { DropzoneModule } from 'ngx-dropzone-wrapper';
+import { DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
+import { IpfsDropzoneComponent } from './ipfs-dropzone/ipfs-dropzone.component';
+import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
+
+const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
+  url: '/upload',
+  autoQueue: false,
+  maxFilesize: 20000000000,
+  maxFiles: 1,
+  uploadMultiple: false,
+  acceptedFiles: null
+}
+
 @NgModule({
   imports: [
     CommonModule,
@@ -38,7 +52,8 @@ import { ProviderCardComponent } from './provider-card/provider-card.component';
     ImgFallbackModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    DropzoneModule
   ],
   declarations: [
     AttachmentComponent,
@@ -64,7 +79,8 @@ import { ProviderCardComponent } from './provider-card/provider-card.component';
     WindowScrollDirective,
     VStepperComponent,
     StatusLightComponent,
-    ProviderCardComponent
+    ProviderCardComponent,
+    IpfsDropzoneComponent
   ],
   exports: [
     AttachmentComponent,
@@ -82,7 +98,14 @@ import { ProviderCardComponent } from './provider-card/provider-card.component';
     WalletInstallComponent,
     VStepperComponent,
     ProviderCardComponent,
-    WindowScrollDirective
+    WindowScrollDirective,
+    IpfsDropzoneComponent
+  ],
+  providers: [
+    {
+      provide: DROPZONE_CONFIG,
+      useValue: DEFAULT_DROPZONE_CONFIG,
+    }
   ]
 })
 export class CoreComponentsModule { }
