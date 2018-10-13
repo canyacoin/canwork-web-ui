@@ -1,5 +1,5 @@
 import {
-    AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild
+  AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild
 } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -10,11 +10,14 @@ import * as union from 'lodash/union';
 import { Observable } from 'rxjs/Observable';
 import { take } from 'rxjs/operator/take';
 import { Subscription } from 'rxjs/Subscription';
-
+import { Options, LabelType } from 'ng5-slider';
 import { environment } from '../../environments/environment';
-import { Portfolio, Work } from '../core-classes/portfolio';
-import { User } from '../core-classes/user';
+import { UserService } from '../core-services/user.service';
+import { AuthService } from '../core-services/auth.service';
+import { User, UserCategory } from '../core-classes/user';
 import { NavService } from '../core-services/nav.service';
+import { UserType } from '../../../functions/src/user-type';
+import { createEmptyStateSnapshot } from '@angular/router/src/router_state';
 
 @Component({
   selector: 'app-search',
@@ -25,39 +28,76 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   allProviders: User[] = [];
   filteredProviders: User[] = [];
-
-  query = '';
+  categoryFilters = [];
+  chosenFilters = [];
+  smallCards = false;
+  query: string;
+  categoryQuery = '';
+  hourlyQuery = '';
   loading = true;
   canToUsd: number;
-
+  minValue = 1;
+  maxValue = 300;
+  options: Options = {
+    floor: 1,
+    ceil: 300,
+    translate: (value: number, label: LabelType): string => {
+      switch (label) {
+        case LabelType.Low:
+          return '<b>Min price:</b> $' + value;
+        case LabelType.High:
+          return '<b>Max price:</b> $' + value;
+        default:
+          return '$' + value;
+      }
+    }
+  };
   routeSub: Subscription;
   providerSub: Subscription;
   portfolioSub: Subscription;
-
+  algoliaIndex = environment.algolia.indexName;
   rendering = false;
-
-  algoliaSearchConfig = {
-    ...environment.algolia,
-    indexName: environment.algolia.indexName,
-    routing: true
-  };
-
+  inMyTimezone = true;
+  algoliaSearchConfig: any;
+  private authSub;
+  currentUser;
   @ViewChild('search', { read: ElementRef }) search: ElementRef;
 
   constructor(private activatedRoute: ActivatedRoute, private navService: NavService,
-    private afs: AngularFirestore, private http: Http, private cdRef: ChangeDetectorRef) {
+    private afs: AngularFirestore, private http: Http, private userService: UserService,
+    private auth: AuthService,
+    private router: Router) {
     this.routeSub = this.activatedRoute.queryParams.subscribe((params) => {
-      this.query = params['query'] ? params['query'] : '';
+      if (this.query === '') {
+        this.query = params['query'];
+      }
+      if (this.categoryFilters.length < 1 && params['category'] !== '') {
+        this.categoryFilters.push(params['category']);
+        console.log(this.categoryFilters);
+      }
       if (!this.loading) {
         this.rendering = true;
         setTimeout(() => {
           this.rendering = false;
         });
+      if (this.containsClass('menu-overlay', 'activate-menu')) {
+          this.toggleMenuOverlay();
+        }
       }
     });
   }
 
   async ngOnInit() {
+    this.algoliaSearchConfig = {
+      ...environment.algolia,
+      indexName: this.algoliaIndex,
+      routing: true
+    };
+    this.authSub = this.auth.currentUser$.subscribe((user: User) => {
+      if (this.currentUser !== user) {
+        this.currentUser = user;
+      }
+    });
     this.navService.setHideSearchBar(true);
     const canToUsdResp = await this.http.get('https://api.coinmarketcap.com/v2/ticker/2343/?convert=USD').toPromise();
     if (canToUsdResp.ok) {
@@ -69,7 +109,6 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     setTimeout(() => {
       this.loading = false;
     }, 400);
-    this.search.nativeElement.querySelector('.ais-SearchBox-submit').innerHTML = '<img src="assets/img/search-icon-white.svg" class="searchbar-searchicon">';
   }
 
   ngOnDestroy() {
@@ -79,7 +118,15 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   algoliaSearchChanged(query) {
-    // (query.length) ? this.algoliaShowResults = true : this.algoliaShowResults = false;
+    this.query = String(query);
+  }
+
+  isInArray(value, array: any[]) {
+    if (array.indexOf(value) > -1 ) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   getUsdToCan(usd: number): string {
@@ -87,6 +134,21 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
       return (usd / this.canToUsd).toFixed(2);
     }
     return '-';
+  }
+
+  filterArray(array: User[]) {
+    const result = [];
+    for (let i = 0; i < array.length; i++) {
+      const hourlyRate = parseInt(array[i].hourlyRate, 10);
+      if ((hourlyRate >= this.minValue) && (hourlyRate <= this.maxValue)) {
+        result.push(array[i]);
+      }
+    }
+    return result;
+  }
+
+  setSmallCards(bool: boolean) {
+    this.smallCards = bool;
   }
 
   getProviderTags(provider: any): string[] {
@@ -111,5 +173,102 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
       `linear-gradient(70deg, ${colors[0]} 30%, rgba(0,0,0,0) 30%), linear-gradient(30deg, ${colors[1]} 60%, ${colors[2]} 60%)`
     ];
     return tmp[Math.floor(Math.random() * (tmp.length - 1))];
+  }
+
+  toggleOverlay(documentID, otherDocumentID, buttonID) {
+    if (!this.containsClass(otherDocumentID, 'hide-menu')) {
+      this.toggleMenuOverlay();
+      this.toggleClass(otherDocumentID, 'hide-menu');
+    }
+    if (this.containsClass(documentID, 'hide-menu')) {
+      this.resetMenus();
+      this.toggleClass(documentID, 'hide-menu');
+    } else {
+      this.resetMenus();
+    }
+   this.toggleMenuOverlay();
+  }
+
+  resetMenus() {
+    if ( (this.containsClass('hours-menu', 'hide-menu')) === false ) {
+      this.toggleClass('hours-menu', 'hide-menu');
+    }
+    if ( (this.containsClass('category-menu', 'hide-menu')) === false ) {
+      this.toggleClass('category-menu', 'hide-menu');
+    }
+  }
+
+  containsClass(DocumentID, hiddenClassName) {
+     return document.getElementById(DocumentID).classList.contains(hiddenClassName);
+  }
+
+  toggleClass(DocumentID, hiddenClassName) {
+    document.getElementById(DocumentID).classList.toggle(hiddenClassName);
+  }
+
+  toggleMenuOverlay() {
+    document.getElementById('menu-overlay').classList.toggle('activate-menu');
+  }
+
+  onChooseCategory(categoryName) {
+    const isInArray = this.categoryFilters.find(function (element) {
+      return element === categoryName;
+    });
+    if (typeof isInArray === 'undefined') {
+      this.categoryFilters.push(categoryName);
+    } else {
+      const index = this.categoryFilters.findIndex(function (element) {
+        return element === categoryName;
+      })
+      this.categoryFilters.splice(index, 1);
+    }
+  }
+
+  onSetCategories() {
+    this.categoryQuery = '';
+    if (this.categoryFilters.length > 0) {
+      for (let i = 0; i < this.categoryFilters.length; i++) {
+        const category = encodeURIComponent(UserCategory[this.categoryFilters[i]]);
+        console.log(category);
+        this.categoryQuery = this.categoryQuery + 'refinementList%5Bcategory%5D%5B' + i + '%5D=' + category + '&';
+      }
+      this.toggleMenuOverlay();
+      console.log(this.categoryQuery);
+      const query = ( '?' + '&' + this.categoryQuery + this.hourlyQuery + '&query=' + this.getInputQuery());
+      console.log(query);
+      this.router.navigateByUrl('/search' + query);
+    } else {
+      this.router.navigateByUrl('/search?query=' + ( this.getInputQuery() + '&' + this.hourlyQuery));
+    }
+  }
+
+  onSetHourlyRate() {
+    if (!(this.containsClass('hours-menu', 'hide-menu'))) {
+      this.hourlyQuery = 'range%5BhourlyRate%5D=' + this.minValue + '%3A' + this.maxValue;
+      this.toggleMenuOverlay();
+      this.router.navigateByUrl('/search?query=' + this.getInputQuery() + '&' + this.categoryQuery + this.hourlyQuery);
+    }
+  }
+
+  getInputQuery() {
+    const value = (document.getElementsByClassName('ais-SearchBox-input')[0] as HTMLInputElement).value;
+    return value;
+  }
+
+  onResetCategories() {
+    if (this.categoryFilters.length > 0) {
+      this.categoryFilters = [];
+      const categoryBtns = document.getElementsByClassName('category-btn');
+      for (let i = 0; i < categoryBtns.length; i++) {
+        if (categoryBtns[i].classList.contains('chosen')) {
+          categoryBtns[i].classList.remove('chosen');
+        }
+      }
+    }
+  }
+
+  onResetHourlyRate() {
+    this.maxValue = 300;
+    this.minValue = 1;
   }
 }

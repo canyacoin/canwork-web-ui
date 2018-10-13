@@ -321,6 +321,9 @@ exports.indexProviderData = functions.firestore
     if (shouldSkipIndexing(data))
       return;
 
+    // this makes sure that ALL hourly rate is treated as a float.
+    const hourlyRateNumber = parseFloat(data.hourlyRate);
+    data.hourlyRate = hourlyRateNumber;
     return algoliaSearchIndex.addObject({
       objectID: objectId,
       ...data,
@@ -419,7 +422,10 @@ exports.updateIndexProviderData = functions.firestore
     console.log('+ deleted...', objectId);
 
     const workData = buildWorkData(objectId);
-
+    // this makes sure that ALL hourly rate is treated as a float.
+    const hourlyRateNumber = parseFloat(afterData.hourlyRate);
+    afterData.hourlyRate = hourlyRateNumber;
+    console.log(afterData);
     return algoliaSearchIndex.addObject({
       objectID: objectId,
       ...afterData,

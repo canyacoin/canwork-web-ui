@@ -1,62 +1,76 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
-
-import * as moment from 'moment-timezone';
-import { User, UserState } from '@class/user';
+import { EthService } from '@canyaio/canpay-lib';
+import { User } from '@class/user';
 import { AuthService } from '@service/auth.service';
 import { UserService } from '@service/user.service';
-import { EthService } from '@canyaio/canpay-lib';
 import { CurrencyValidator } from '@validator/currency.validator';
 import { EmailValidator } from '@validator/email.validator';
 import { EthereumValidator } from '@validator/ethereum.validator';
+import { Subscription } from 'rxjs/Subscription';
+
+import * as moment from 'moment-timezone';
 
 @Component({
-  selector: 'app-edit',
+  selector: 'app-profile-edit',
   templateUrl: './edit.component.html',
-  styleUrls: ['./edit.component.css']
+  styleUrls: ['./edit.component.scss']
 })
 export class EditComponent implements OnInit, OnDestroy {
 
-  currentUser: User;
-  authSub: Subscription;
+  @Input() currentUser: User
   ethSub: Subscription
 
-  profileForm: FormGroup = null;
-  sending = false;
+  @Output() close = new EventEmitter
+  displayIpfsDropzone = false
+  dropzoneConfig = {
+    acceptedFiles: {
+      value: 'image/jpg,image/png,image/jpeg',
+      error: 'Only (jpeg, jpg or png) image files are accepted'
+    },
+    maxFilesize: {
+      value: 1000000,
+      error: 'Please add image files smaller than 1mb'
+    }
+  }
 
-  skillTagsList: string[] = [];
-  tagSelectionInvalid = false;
-  acceptedTags: string[] = [];
-  tagInput = '';
+  profileForm: FormGroup = null
+  sending = false
+
+  skillTagsList: string[] = []
+  tagSelectionInvalid = false
+  acceptedTags: string[] = []
+  tagInput = ''
 
   ethAddress: string
 
-  constructor(private router: Router,
+  constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
     private ethService: EthService,
     private authService: AuthService) {
-
-    console.log(ethService)
     this.ethSub = this.ethService.account$.subscribe(async (address: string) => {
       this.ethAddress = address
     })
   }
 
   ngOnInit() {
-    this.authSub = this.authService.currentUser$.subscribe((user: User) => {
-      this.currentUser = user;
-      if (this.currentUser != null) {
-        this.buildForm();
-      }
-    }, error => { console.error('! unable to retrieve currentUser data:', error) });
+    if (this.currentUser != null) {
+      this.buildForm()
+    }
   }
 
   ngOnDestroy() {
-    if (this.authSub) { this.authSub.unsubscribe() }
     if (this.ethSub) { this.ethSub.unsubscribe() }
+  }
+
+  onProfileImageUpload(ipfsResponse) {
+    this.currentUser.avatar.uri = `https://ipfs.io/ipfs/${ipfsResponse.hash}`
+    this.displayIpfsDropzone = false
+  }
+
+  onClose() {
+    this.close.emit(true)
   }
 
   buildForm() {
@@ -127,7 +141,8 @@ export class EditComponent implements OnInit, OnDestroy {
     this.userService.saveUser(this.currentUser);
     this.authService.setUser(this.currentUser);
     setTimeout(() => {
-      this.router.navigate(['/profile']);
+      // DESTROY the edit overlay
+      this.onClose()
       this.sending = false;
     }, 600);
   }

@@ -21,6 +21,7 @@ import { JobNotificationService } from './core-services/job-notification.service
 import { NavService } from './core-services/nav.service';
 import { CoreUtilsModule } from './core-utils/core-utils.module';
 import { FilterPipeModule } from 'ngx-filter-pipe';
+import { Ng5SliderModule } from 'ng5-slider';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { FilterPipeModule } from 'ngx-filter-pipe';
     CoreUtilsModule,
     HttpModule,
     HttpClientModule,
-    FilterPipeModule
+    FilterPipeModule,
+    Ng5SliderModule
   ],
   exports: [
     FilterPipeModule

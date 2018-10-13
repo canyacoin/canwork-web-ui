@@ -1,14 +1,16 @@
 <main class="main-content">
+  <app-profile-edit *ngIf="displayEditComponent" (close)="displayEditComponent = false" [currentUser]="currentUser"></app-profile-edit>
+
   <section class="section bg-gray pt-15 pb-20" id="section-profile">
     <app-back-button></app-back-button>
     <div *ngIf="!userModel" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
       <img src="assets/img/loader.svg" height="36px" alt="Loader">
     </div>
-
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-12 col-lg-4 my-5">
-          <app-profile-about [currentUser]="currentUser" [isMyProfile]="isMyProfile()" [userModel]="userModel"></app-profile-about>
+          <app-profile-about (editProfile)="displayEditComponent = true" [currentUser]="currentUser" [isMyProfile]="isMyProfile()"
+            [userModel]="userModel"></app-profile-about>
           <div *ngIf="userModel" class="card my-15">
             <div class="container px-30 py-30">
               <app-profile-timezone *ngIf="userModel" [userModel]="userModel"></app-profile-timezone>
@@ -18,7 +20,6 @@
             </div>
           </div>
         </div>
-
         <div class="col-12 col-lg-8 my-5">
           <app-profile-bio *ngIf="userModel && userModel.description" [isMyProfile]="isMyProfile()" [userModel]="userModel"></app-profile-bio>
           <app-profile-portfolio *ngIf="userModel  && (userModel.type === 'Provider')" [userModel]="userModel"

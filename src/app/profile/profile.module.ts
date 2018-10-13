@@ -20,10 +20,10 @@ import { ProfileComponent } from './profile.component';
 import { ProfileRoutingModule } from './profile.routing.module';
 import { ProjectComponent } from './project/project.component';
 import {
-    CreateClientProfileComponent
+  CreateClientProfileComponent
 } from './setup/create-client-profile/create-client-profile.component';
 import {
-    CreateProviderProfileComponent
+  CreateProviderProfileComponent
 } from './setup/create-provider-profile/create-provider-profile.component';
 import { ProviderStateComponent } from './setup/provider-state/provider-state.component';
 import { SetupComponent } from './setup/setup.component';
@@ -61,6 +61,7 @@ import { ReviewsComponent } from './components/reviews/reviews.component';
   ],
   exports: [
     ProfileRoutingModule
-  ]
+  ],
+  providers: []
 })
 export class ProfileModule { }
