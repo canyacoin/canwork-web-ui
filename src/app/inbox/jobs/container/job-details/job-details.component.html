@@ -16,8 +16,7 @@
       <div class="col-lg-8 col-xs-12">
         <div class="row">
           <span class="col-xs-4 col-sm-2 col-md-2 col-lg-2">
-            <img *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot" src="{{ job.otherParty?.avatar.uri }}"
-              alt="">
+            <div *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot" [ngStyle]="{'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}"></div>
           </span>
           <span class="col-xs-8 col-sm-10  col-md-10 col-lg-1O text-left">
             <h3>{{job.information.title}}</h3>
@@ -62,8 +61,7 @@
     <div id="job-top-mobile">
       <div class="row">
         <div class="col-2">
-          <img *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot" src="{{ job.otherParty?.avatar.uri }}"
-            alt="">
+          <div *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot" [ngStyle]="{'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}"></div>
         </div>
         <div class="col-10">
           <h4>{{job.information.title}}

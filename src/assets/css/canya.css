@@ -538,6 +538,9 @@ img {
   border-radius: 10rem;
   width: 48px;
   height: 48px;
+  background-position: center center;
+  background-size: cover;
+  display: inline-block;
 }
 
 .avatar-xs {
@@ -1404,7 +1407,7 @@ button:focus {
 
 .btn-primary,
 .btn-primary:hover {
-  background-color: #33ccff; 
+  background-color: #33ccff;
   border: 1px solid transparent;
   color: #fff;
 }
@@ -9610,6 +9613,9 @@ a.text-danger:focus {
   max-width: 100px;
   object-fit: cover;
   object-position: center;
+  background-position: center center;
+  background-size: cover;
+  display: inline-block;
 }
 
 .profile .title {
@@ -9668,6 +9674,12 @@ a.text-danger:focus {
   min-height: 75px;
   padding: 20px;
   margin: 5px;
+}
+
+.profile-mini .headshot {
+  background-position: center center;
+  background-size: cover;
+  display: inline-block;
 }
 
 @media screen and (max-width:1024px) {

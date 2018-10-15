@@ -1,0 +1,7 @@
+@mixin circle-headshot {
+  .circle-headshot {
+    background-position: center center;
+    background-size: cover;
+    display: inline-block;
+  }
+}

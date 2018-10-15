@@ -1,3 +1,5 @@
+@import "styles.scss";
+
 .overlay {
   background-color: rgba(black, 0.7);
   overflow-y: scroll;
@@ -27,11 +29,7 @@
     }
   }
 
-  .circle-headshot {
-    background-position: center center;
-    background-size: cover;
-    display: inline-block;
-  }
+  @include circle-headshot;
 }
 
 #profile-edit-component {
