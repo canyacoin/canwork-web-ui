@@ -9,6 +9,9 @@
    background-repeat: no-repeat;
    background-position: center;
    background-color: black;
+   background-position: center center;
+  background-size: cover;
+  display: inline-block;
  }
 
  .otherPartyName {
@@ -42,7 +45,7 @@
  .job-dashboard-card:hover {
    box-shadow: 0 0px 15px 0 rgba(0, 0, 0, 0.3);
  }
- 
+
  #section-manage-jobs{
    min-height: 80vh;
  }

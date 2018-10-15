@@ -9,8 +9,7 @@
       <span class="text-center" style="font-weight: 600;text-transform: uppercase;letter-spacing: 1.5px;height: 50px;color: #33ccff;background-color: transparent;float: right;min-height: 50px;font-size: 14px;line-height: 50px;">
         <span *ngIf="userModel.badge">{{userModel.badge}}</span>
       </span>
-      <img *ngIf="userModel.avatar && userModel.avatar.uri" class="circle-headshot" src="{{ userModel.avatar.uri }}"
-        alt="">
+      <div *ngIf="userModel.avatar && userModel.avatar.uri" class="circle-headshot" [ngStyle]="{'background-image': 'url(' + userModel.avatar.uri + ')'}"></div>
       <div class="title">
         <h2 *ngIf="userModel.name">{{ userModel.name }}</h2>
         <h3 *ngIf="userModel.title">{{ userModel.title }}</h3>

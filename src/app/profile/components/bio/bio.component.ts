@@ -5,7 +5,7 @@ import { User } from '@class/user';
 @Component({
   selector: 'app-profile-bio',
   templateUrl: './bio.component.html',
-  styleUrls: ['../../profile.component.css']
+  styleUrls: ['../../profile.component.scss']
 })
 export class BioComponent implements OnInit {
 
