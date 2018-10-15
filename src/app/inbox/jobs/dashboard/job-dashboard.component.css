@@ -10,8 +10,9 @@
    background-position: center;
    background-color: black;
    background-position: center center;
-  background-size: cover;
-  display: inline-block;
+   background-size: cover;
+   display: inline-block;
+   background-repeat: no-repeat;
  }
 
  .otherPartyName {
