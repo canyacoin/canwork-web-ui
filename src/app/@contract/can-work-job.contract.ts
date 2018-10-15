@@ -45,7 +45,7 @@ export class CanWorkJobContract {
           data: txObject.encodeABI(),
         };
 
-        txObject.send(txOptions, (err, txHash) => this.eth.resolveTransaction(err, txHash, resolve, reject, onTxHash));
+        txObject.send(txOptions, (err, txHash) => this.eth.resolveTransaction(err, clientAddress, txHash, resolve, reject, onTxHash));
       } catch (err) {
         reject(err);
       }
@@ -67,7 +67,7 @@ export class CanWorkJobContract {
           data: txObject.encodeABI(),
         };
 
-        txObject.send(txOptions, (err, txHash) => this.eth.resolveTransaction(err, txHash, resolve, reject));
+        txObject.send(txOptions, (err, txHash) => this.eth.resolveTransaction(err, fromAddr, txHash, resolve, reject));
       } catch (err) {
         reject(err);
       }

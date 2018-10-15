@@ -1,8 +1,13 @@
 import { Injectable } from '@angular/core';
+import { Headers, Http } from '@angular/http';
+import { Job } from '@class/job';
 import { ActionType } from '@class/job-action';
 import { UserService } from '@service/user.service';
+import { GenerateGuid } from '@util/generate.uid';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
+
+import { environment } from '../../environments/environment';
 
 export class Transaction {
   id: string;
@@ -14,7 +19,8 @@ export class Transaction {
   success = false;
   failure = false;
 
-  constructor(senderId, hash, timestamp, actionType, jobId = '') {
+  constructor(id = GenerateGuid(), senderId, hash, timestamp, actionType, jobId = '') {
+    this.id = id;
     this.senderId = senderId;
     this.hash = hash;
     this.timestamp = timestamp;
@@ -34,6 +40,7 @@ export class TransactionService {
 
   constructor(
     private afs: AngularFirestore,
+    private http: Http,
     private userService: UserService) {
     this.transactionCollection = this.afs.collection<any>('transactions');
   }
@@ -55,7 +62,7 @@ export class TransactionService {
     return this.transactionCollection.add(x);
   }
 
-  /** Save tx to firebase */
+  /** Update tx in firebase */
   async saveTransaction(tx: Transaction): Promise<any> {
     const x = await this.parseTxToObject(tx);
     return this.transactionCollection.doc(tx.id).set(x);
@@ -63,8 +70,47 @@ export class TransactionService {
 
 
   /** Start monitoring a transaction on the back end */
-  startMonitoring(JobId: string, txHash: string, actionType: ActionType): any {
+  async startMonitoring(job: Job, from: string, txId: string, txHash: string, actionType: ActionType) {
     // start monitoring the transaction
+    const success = this.getCallbackUrl(job, txId, actionType, true);
+    const failure = this.getCallbackUrl(job, txId, actionType);
+
+    const headers = new Headers({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+    const reqBody = {
+      'hash': txHash,
+      'from': from,
+      'webhookOnSuccess': success,
+      'webhookOnTimeout': failure,
+      'webhookOnError': failure
+    };
+
+    console.log(JSON.stringify(reqBody));
+    console.log(JSON.stringify(headers));
+    try {
+      const res = await this.http.post(environment.transactionMonitor.monitorUri, reqBody, { headers: headers });
+
+      res.subscribe(data => {
+        console.log('+ Cool, sent');
+      }, error => {
+        console.log(`+ UH OH: ${error.status} monitoring tx:`, error);
+      });
+
+    } catch (error) {
+      console.error(`! http post error sending notification to monitor: ${environment.transactionMonitor.monitorUri}`, error);
+    }
+  }
+
+  private getCallbackUrl(job: Job, txId: string, action: ActionType, success = false): string {
+    const prefix = `${environment.transactionMonitor.callbackUri}/`;
+    const postfix = success ? 'success' : 'failure';
+    const params = `?txID=${txId}&jobID=${job.id}&jobHexID=${job.hexId}`;
+
+    if (action === ActionType.authoriseEscrow) {
+      return `${prefix}authorise-escrow-${postfix}${params}`;
+    } else if (action === ActionType.enterEscrow) {
+      return `${prefix}enter-escrow-${postfix}${params}`
+    }
+    return '';
   }
 
   /** Tx object must be re-assigned as firebase doesn't accept strong types */

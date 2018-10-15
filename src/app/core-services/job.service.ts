@@ -16,6 +16,7 @@ import { JobNotificationService } from '@service/job-notification.service';
 import { MomentService } from '@service/moment.service';
 import { Transaction, TransactionService } from '@service/transaction.service';
 import { UserService } from '@service/user.service';
+import { GenerateGuid } from '@util/generate.uid';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 
@@ -243,14 +244,15 @@ export class JobService {
 
   /* Uses canpay service to authorise and then enter the escrow, creating job */
   private async authoriseEnterEscrow(job: Job, action: IJobAction, skipAuth: boolean = false) {
-    const onAuthTxHash = async (txHash: string) => {
+    const onAuthTxHash = async (txHash: string, from: string) => {
       /* IF authorisation hash gets sent, do:
          post tx to transaction monitor
          save tx to collection
          save action/pending to job
          update users active eth address */
-      this.transactionService.startMonitoring(job.id, txHash, ActionType.authoriseEscrow)
-      this.transactionService.createTransaction(new Transaction(job.clientId,
+      const txId = GenerateGuid();
+      this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.authoriseEscrow)
+      this.transactionService.createTransaction(new Transaction(txId, job.clientId,
         txHash, this.momentService.get(), ActionType.authoriseEscrow, job.id));
       const escrowAction = action as AuthoriseEscrowAction;
       job.actionLog.push(escrowAction);
@@ -273,13 +275,14 @@ export class JobService {
       this.canPayService.close();
     };
 
-    const onTxHash = async (txHash: string) => {
+    const onTxHash = async (txHash: string, from: string) => {
       /* IF enter escrow hash gets sent, do:
          post tx to transaction monitor
          save tx to collection
          save action/pending to job */
-      this.transactionService.startMonitoring(job.id, txHash, ActionType.enterEscrow)
-      this.transactionService.createTransaction(new Transaction(job.clientId,
+      const txId = GenerateGuid();
+      this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.enterEscrow)
+      this.transactionService.createTransaction(new Transaction(txId, job.clientId,
         txHash, this.momentService.get(), ActionType.enterEscrow, job.id));
       const enterEscrowAction = action as EnterEscrowAction;
       job.actionLog.push(enterEscrowAction);
