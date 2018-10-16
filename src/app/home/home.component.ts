@@ -112,6 +112,7 @@ export class HomeComponent implements OnInit {
           'name': result[i].name,
           'category': result[i].category,
           'timezone': result[i].timezone,
+          'hourlyRate': result[i].hourlyRate,
         }
         array.push(provider);
       }
