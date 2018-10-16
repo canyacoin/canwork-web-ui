@@ -11,6 +11,7 @@ export class CanWorkJobContract {
 
   instance: any
   address: string
+  canYaDecimals = 6
 
 
   constructor(private eth: EthService) {
@@ -34,7 +35,7 @@ export class CanWorkJobContract {
   async createJob(job: Job, clientAddress: string, providerAddress: string, onTxHash: Function) {
     return new Promise(async (resolve, reject) => {
       try {
-        const txObject = await this.instance.methods.createJob(this.eth.web3js.utils.padRight(job.hexId, 32), clientAddress, providerAddress, job.budgetCan * (10 ** 6));
+        const txObject = await this.instance.methods.createJob(this.eth.web3js.utils.padRight(job.hexId, 32), clientAddress, providerAddress, job.budgetCan * (10 ** this.canYaDecimals));
         const gas = await txObject.estimateGas({ from: clientAddress });
         const gasPrice = await this.eth.getDefaultGasPriceGwei();
         const txOptions = {
