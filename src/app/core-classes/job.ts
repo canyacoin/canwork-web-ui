@@ -12,6 +12,7 @@ export class Job {
   hexId: string;
   clientId: string;
   providerId: string;
+  clientEthAddress: string;
   information: JobDescription;
   paymentType: PaymentType;
   budget: number;

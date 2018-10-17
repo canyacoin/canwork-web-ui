@@ -173,7 +173,7 @@ export class JobService {
             resolve(true);
             break;
           case ActionType.enterEscrow:
-            this.authoriseEnterEscrow(parsedJob, action, true)
+            this.authoriseEnterEscrow(parsedJob, action, !!parsedJob.clientEthAddress)
             resolve(true)
             break;
           case ActionType.addMessage:
@@ -252,16 +252,17 @@ export class JobService {
          update users active eth address */
       const txId = GenerateGuid();
       this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.authoriseEscrow)
-      this.transactionService.createTransaction(new Transaction(txId, job.clientId,
+      this.transactionService.saveTransaction(new Transaction(txId, job.clientId,
         txHash, this.momentService.get(), ActionType.authoriseEscrow, job.id));
       const escrowAction = action as AuthoriseEscrowAction;
       job.actionLog.push(escrowAction);
+      job.pendingTx += 1;
+      job.clientEthAddress = this.ethService.account.value;
       // This payment log has been deprecated in favor of transacations collection, however emails rely on it
       job.paymentLog.push(new Payment({
         txId: escrowAction.txId || '',
         timestamp: escrowAction.timestamp || ''
       }));
-      job.pendingTx += 1;
       await this.saveJobFirebase(job);
     };
 
@@ -281,8 +282,8 @@ export class JobService {
          save tx to collection
          save action/pending to job */
       const txId = GenerateGuid();
-      this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.enterEscrow)
-      this.transactionService.createTransaction(new Transaction(txId, job.clientId,
+      this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.exnterEscrow)
+      this.transactionService.saveTransaction(new Transaction(txId, job.clientId,
         txHash, this.momentService.get(), ActionType.enterEscrow, job.id));
       const enterEscrowAction = action as EnterEscrowAction;
       job.actionLog.push(enterEscrowAction);
@@ -293,19 +294,16 @@ export class JobService {
       }));
       job.pendingTx += 1;
       await this.saveJobFirebase(job);
-      const clientObj = await this.userService.getUser(job.clientId);
-      clientObj.ethAddress = this.ethService.account.value;
-      await this.userService.saveUser(clientObj);
     };
 
     const initiateEnterEscrow = async (canPayData: CanPayData) => {
-      const client = await this.userService.getUser(job.clientId);
       const provider = await this.userService.getUser(job.providerId);
       const canWorkContract = new CanWorkJobContract(this.ethService);
-      canWorkContract.connect().createJob(job, client.ethAddress, provider.ethAddress, onTxHash)
+      canWorkContract.connect().createJob(job, job.clientEthAddress, provider.ethAddress, onTxHash)
         .then(setProcessResult.bind(canPayOptions))
         .catch(setProcessResult.bind(canPayOptions));
     };
+
 
     const canPayOptions = {
       dAppName: `CanWork`,
