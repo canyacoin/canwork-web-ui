@@ -317,7 +317,7 @@ export class JobService {
 
     const canPayOptions = {
       dAppName: `CanWork`,
-      successText: 'Customized success message!',
+      successText: 'Woohoo, job started!',
       recepient: environment.contracts.canwork,
       operation: skipAuth ? Operation.interact : Operation.auth,
       onAuthTxHash: onAuthTxHash.bind(this),
