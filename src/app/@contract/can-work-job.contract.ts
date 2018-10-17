@@ -1,4 +1,4 @@
-import { EthService } from '@canyaio/canpay-lib';
+import { CanYaCoinEthService, EthService } from '@canyaio/canpay-lib';
 import { Job } from '@class/job';
 import { User } from '@class/user';
 import { environment } from '@env/environment';
@@ -10,26 +10,15 @@ const CanWorkJobContractInterface = require('@abi/can-work-job.abi.json')
 export class CanWorkJobContract {
 
   instance: any
-  address: string
   canYaDecimals = 6
 
 
   constructor(private eth: EthService) {
   }
 
-  setAddress(address: string) {
-    this.instance.options.address = address
-    this.instance._address = address
-    this.address = address
-
-    return this
-  }
-
   connect() {
-    const _contract = new this.eth.web3js.eth.Contract(CanWorkJobContractInterface.abi);
-    this.instance = _contract;
-    this.setAddress(environment.contracts.canwork);
-    return this;
+    this.instance = this.eth.createContractInstance(CanWorkJobContractInterface.abi, environment.contracts.canwork)
+    return this
   }
 
   async createJob(job: Job, clientAddress: string, providerAddress: string, onTxHash: Function) {
@@ -46,7 +35,7 @@ export class CanWorkJobContract {
           data: txObject.encodeABI(),
         };
 
-        txObject.send(txOptions, (err, txHash) => this.eth.resolveTransaction(err, clientAddress, txHash, resolve, reject, onTxHash));
+        txObject.send(txOptions, async (err, txHash) => this.eth.resolveTransaction(err, clientAddress, txHash, resolve, reject, onTxHash));
       } catch (err) {
         reject(err);
       }
@@ -68,10 +57,11 @@ export class CanWorkJobContract {
           data: txObject.encodeABI(),
         };
 
-        txObject.send(txOptions, (err, txHash) => this.eth.resolveTransaction(err, fromAddr, txHash, resolve, reject));
+        txObject.send(txOptions, async (err, txHash) => this.eth.resolveTransaction(err, fromAddr, txHash, resolve, reject));
       } catch (err) {
         reject(err);
       }
     });
   }
+
 }

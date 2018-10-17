@@ -1,6 +1,8 @@
 import { NgSwitch } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { CanPayData, CanPayService, Operation, setProcessResult, View } from '@canyaio/canpay-lib';
+import {
+    CanPayData, CanPayService, EthService, Operation, setProcessResult, View
+} from '@canyaio/canpay-lib';
 import { Job, JobState, Payment, PaymentType, TimeRange, WorkType } from '@class/job';
 import {
     ActionType, AuthoriseEscrowAction, CounterOfferAction, EnterEscrowAction, IJobAction,
@@ -31,7 +33,8 @@ export class JobService {
     private chatService: ChatService,
     private momentService: MomentService,
     private transactionService: TransactionService,
-    private ethService: CanWorkEthService,
+    private canWorkEthService: CanWorkEthService,
+    private ethService: EthService,
     private jobNotificationService: JobNotificationService,
     private canPayService: CanPayService) {
 
@@ -85,7 +88,7 @@ export class JobService {
 
 
   async getJobBudget(job: Job): Promise<number> {
-    const canToUsd = await this.ethService.getCanToUsd();
+    const canToUsd = await this.canWorkEthService.getCanToUsd();
     if (canToUsd) {
       const totalBudget = job.paymentType === PaymentType.fixed ? job.budget : job.budget * this.getTotalWorkHours(job);
       return Promise.resolve(Math.floor(totalBudget / canToUsd));
@@ -169,11 +172,13 @@ export class JobService {
             resolve(true);
             break;
           case ActionType.authoriseEscrow:
-            this.authoriseEnterEscrow(parsedJob, action, false)
-            resolve(true);
-            break;
           case ActionType.enterEscrow:
-            this.authoriseEnterEscrow(parsedJob, action, !!parsedJob.clientEthAddress)
+            let ethAddr = this.ethService.getOwnerAccount();
+            if (!!parsedJob.clientEthAddress) {
+              ethAddr = parsedJob.clientEthAddress;
+            }
+            const hasAllowance = !!ethAddr ? await this.canWorkEthService.hasAllowance(ethAddr, environment.contracts.canwork, job.budgetCan) : false;
+            this.authoriseEnterEscrow(parsedJob, ethAddr, action, hasAllowance);
             resolve(true)
             break;
           case ActionType.addMessage:
@@ -191,8 +196,7 @@ export class JobService {
             try {
               const clientObj = await this.userService.getUser(job.clientId);
               const canWorkContract = new CanWorkJobContract(this.ethService);
-              canWorkContract.connect();
-              await canWorkContract.completeJob(job, clientObj.ethAddress);
+              await canWorkContract.connect().completeJob(job, clientObj.ethAddress);
               parsedJob.state = JobState.complete;
               parsedJob.actionLog.push(action);
               await this.saveJobAndNotify(parsedJob, action)
@@ -243,7 +247,10 @@ export class JobService {
   }
 
   /* Uses canpay service to authorise and then enter the escrow, creating job */
-  private async authoriseEnterEscrow(job: Job, action: IJobAction, skipAuth: boolean = false) {
+  private async authoriseEnterEscrow(job: Job, ethAddr: string, action: IJobAction, skipAuth: boolean = false) {
+
+    let clientEthAddress = ethAddr;
+
     const onAuthTxHash = async (txHash: string, from: string) => {
       /* IF authorisation hash gets sent, do:
          post tx to transaction monitor
@@ -257,7 +264,8 @@ export class JobService {
       const escrowAction = action as AuthoriseEscrowAction;
       job.actionLog.push(escrowAction);
       job.pendingTx += 1;
-      job.clientEthAddress = this.ethService.account.value;
+      job.clientEthAddress = from;
+      clientEthAddress = from;
       // This payment log has been deprecated in favor of transacations collection, however emails rely on it
       job.paymentLog.push(new Payment({
         txId: escrowAction.txId || '',
@@ -282,24 +290,26 @@ export class JobService {
          save tx to collection
          save action/pending to job */
       const txId = GenerateGuid();
-      this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.exnterEscrow)
+      this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.enterEscrow)
       this.transactionService.saveTransaction(new Transaction(txId, job.clientId,
         txHash, this.momentService.get(), ActionType.enterEscrow, job.id));
       const enterEscrowAction = action as EnterEscrowAction;
       job.actionLog.push(enterEscrowAction);
+      job.pendingTx += 1;
+      job.clientEthAddress = from;
+      clientEthAddress = from;
       // This payment log has been deprecated in favor of transacations collection, however emails rely on it
       job.paymentLog.push(new Payment({
         txId: txHash,
         timestamp: enterEscrowAction.timestamp
       }));
-      job.pendingTx += 1;
       await this.saveJobFirebase(job);
     };
 
     const initiateEnterEscrow = async (canPayData: CanPayData) => {
       const provider = await this.userService.getUser(job.providerId);
       const canWorkContract = new CanWorkJobContract(this.ethService);
-      canWorkContract.connect().createJob(job, job.clientEthAddress, provider.ethAddress, onTxHash)
+      canWorkContract.connect().createJob(job, clientEthAddress, provider.ethAddress, onTxHash)
         .then(setProcessResult.bind(canPayOptions))
         .catch(setProcessResult.bind(canPayOptions));
     };
@@ -338,7 +348,7 @@ export class JobService {
     actions[JobState.providerCounterOffer] = forClient ? [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms] : [ActionType.cancelJob];
     actions[JobState.clientCounterOffer] = forClient ? [ActionType.cancelJob] : [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms];
     actions[JobState.termsAcceptedAwaitingEscrow] = forClient ? [ActionType.authoriseEscrow, ActionType.cancelJob] : [ActionType.cancelJob];
-    actions[JobState.authorisedEscrow] = forClient ? [ActionType.enterEscrow] : [];
+    actions[JobState.authorisedEscrow] = forClient ? [ActionType.enterEscrow, ActionType.cancelJob] : [];
     actions[JobState.inEscrow] = forClient ? [ActionType.dispute, ActionType.addMessage] : [ActionType.finishedJob, ActionType.addMessage];
     actions[JobState.workPendingCompletion] = forClient ? [ActionType.acceptFinish, ActionType.dispute, ActionType.addMessage] : [ActionType.dispute, ActionType.addMessage];
     actions[JobState.inDispute] = forClient ? [ActionType.acceptFinish, ActionType.addMessage] : [ActionType.addMessage];
