@@ -102,6 +102,7 @@ export class HomeComponent implements OnInit {
 
   getProviders(searchQuery, array) {
     this.algoliaIndex.search({ query: searchQuery }).then(res => {
+      console.log(res);
       const result = res.hits;
       for (let i = 1; i < 4; i++) {
         const provider = {
@@ -113,6 +114,7 @@ export class HomeComponent implements OnInit {
           'name': result[i].name,
           'category': result[i].category,
           'timezone': result[i].timezone,
+          'hourlyRate': result[i].hourlyRate || 0
         }
         array.push(provider);
       }
