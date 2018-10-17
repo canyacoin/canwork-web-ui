@@ -108,6 +108,7 @@ export class HomeComponent implements OnInit {
           'address': result[i].address,
           'avatar': result[i].avatar,
           'skillTags': result[i].skillTags || [],
+          'hourlyRate': result[i].hourlyRate || 0,
           'title': result[i].title,
           'name': result[i].name,
           'category': result[i].category,
