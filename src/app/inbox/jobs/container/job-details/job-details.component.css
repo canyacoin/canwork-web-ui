@@ -6,6 +6,10 @@
   border-radius: 50%;
   object-fit: cover;
   object-position: center;
+  background-position: center center;
+  background-size: cover;
+  display: inline-block;
+  background-repeat: no-repeat;
 }
 
 .job-detail-card {

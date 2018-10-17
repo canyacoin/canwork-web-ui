@@ -1,8 +1,8 @@
-<!-- 
-  Usage : 
+<!--
+  Usage :
   <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 card-deck" >
     <app-provider-card></app-provider-card>
-  </div> 
+  </div>
 -->
 <div *ngIf="size == 'lg'" style="padding:10px">
   <div class="card provider-card text-center pointer" [routerLink]="['/profile/alt', provider.address]">
@@ -11,8 +11,7 @@
     </span>
     <span *ngIf="!(provider && provider.badge)" class="popular-tag" style="float:right; min-height: 35px;"></span>
     <div class="profile">
-      <img *ngIf="provider && (provider.avatar && provider.avatar.uri)" class="headshot" src="{{ provider.avatar.uri }}"
-        alt="">
+      <div *ngIf="provider && (provider.avatar && provider.avatar.uri)" class="headshot" [ngStyle]="{'background-image': 'url(' + provider.avatar.uri + ')'}"></div>
       <div class="title">
         <h2>
           <span *ngIf="provider && provider.name">{{ provider.name }}</span>
@@ -48,7 +47,7 @@
   <div class="card provider-card pointer profile-mini" [routerLink]="['/profile/alt', provider.address]">
     <div class="row">
       <div class="col-lg-3 col-md-12 col-sm-12 col-3">
-        <img class="headshot" src="{{provider.avatar.uri}}">
+        <div class="headshot" [ngStyle]="{'background-image': 'url(' + provider.avatar.uri + ')'}"></div>
       </div>
       <div class="col-lg-9 col-md-12 col-sm-12 col-9 pl-20 pb-10">
         <h6 class="provider-name">{{provider.name}}</h6>

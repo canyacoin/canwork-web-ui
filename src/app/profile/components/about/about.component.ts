@@ -8,7 +8,7 @@ import { ChatService } from '@service/chat.service';
 @Component({
   selector: 'app-profile-about',
   templateUrl: './about.component.html',
-  styleUrls: ['../../profile.component.css']
+  styleUrls: ['../../profile.component.scss']
 })
 export class AboutComponent implements OnInit {
 

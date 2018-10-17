@@ -15,8 +15,7 @@
       </div>
       <div class="row">
         <div class="col-lg-3 col-md-4 text-center">
-          <img *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot" src="{{ job.otherParty?.avatar.uri }}"
-            alt="">
+          <div *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot" [ngStyle]="{'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}"></div>
         </div>
         <div class="col-lg-9 col-md-8">
           <h5 class="fw-500">Description</h5>

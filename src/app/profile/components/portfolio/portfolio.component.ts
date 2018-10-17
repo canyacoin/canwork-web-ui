@@ -10,7 +10,7 @@ import { ChatService } from '../../../core-services/chat.service';
 @Component({
   selector: 'app-profile-portfolio',
   templateUrl: './portfolio.component.html',
-  styleUrls: ['../../profile.component.css']
+  styleUrls: ['../../profile.component.scss']
 })
 export class PortfolioComponent implements OnInit, OnDestroy {
 
