@@ -1,23 +1,24 @@
 import {
-  AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild
+    AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild
 } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { createEmptyStateSnapshot } from '@angular/router/src/router_state';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import * as findIndex from 'lodash/findIndex';
 import * as orderBy from 'lodash/orderBy';
 import * as union from 'lodash/union';
+import { LabelType, Options } from 'ng5-slider';
 import { Observable } from 'rxjs/Observable';
 import { take } from 'rxjs/operator/take';
 import { Subscription } from 'rxjs/Subscription';
-import { Options, LabelType } from 'ng5-slider';
-import { environment } from '../../environments/environment';
-import { UserService } from '../core-services/user.service';
-import { AuthService } from '../core-services/auth.service';
-import { User, UserCategory } from '../core-classes/user';
-import { NavService } from '../core-services/nav.service';
+
 import { UserType } from '../../../functions/src/user-type';
-import { createEmptyStateSnapshot } from '@angular/router/src/router_state';
+import { environment } from '../../environments/environment';
+import { User, UserCategory } from '../core-classes/user';
+import { AuthService } from '../core-services/auth.service';
+import { NavService } from '../core-services/nav.service';
+import { UserService } from '../core-services/user.service';
 
 @Component({
   selector: 'app-search',
@@ -225,7 +226,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onSetCategories() {
     this.categoryQuery = '';
-    if (this.categoryFilters.length > 0 && this.categoryFilters !== undefined) {
+    if (this.categoryFilters && this.categoryFilters.length > 0) {
       for (let i = 0; i < this.categoryFilters.length; i++) {
         const category = encodeURIComponent(UserCategory[this.categoryFilters[i]]);
         const addToQuery = (category === undefined || category === 'undefined');

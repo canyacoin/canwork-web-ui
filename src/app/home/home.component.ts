@@ -113,7 +113,7 @@ export class HomeComponent implements OnInit {
           'name': result[i].name,
           'category': result[i].category,
           'timezone': result[i].timezone,
-          'hourlyRate': result[i].hourlyRate,
+          'hourlyRate': result[i].hourlyRate || 0
         }
         array.push(provider);
       }
