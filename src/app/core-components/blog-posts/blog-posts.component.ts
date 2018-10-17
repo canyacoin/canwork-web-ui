@@ -21,7 +21,6 @@ export class BlogPostsComponent implements OnInit {
     fetch(this.mediumLink).then((res) => res.json()).then((data) => {
       for (let i = 0 ; i < 3; i++) {
           this.mediumFeed.push(data.items[i]);
-          console.log(this.mediumFeed[i]);
       }
     })
   }

@@ -30,16 +30,16 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   filteredProviders: User[] = [];
   categoryFilters = [];
   chosenFilters = [];
-  smallCards = false;
+  smallCards = true;
   query: string;
   categoryQuery = '';
   hourlyQuery = '';
   loading = true;
   canToUsd: number;
-  minValue = 1;
+  minValue = 0;
   maxValue = 300;
   options: Options = {
-    floor: 1,
+    floor: 0,
     ceil: 300,
     translate: (value: number, label: LabelType): string => {
       switch (label) {
@@ -73,14 +73,13 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       if (this.categoryFilters.length < 1 && params['category'] !== '') {
         this.categoryFilters.push(params['category']);
-        console.log(this.categoryFilters);
       }
       if (!this.loading) {
         this.rendering = true;
         setTimeout(() => {
           this.rendering = false;
         });
-      if (this.containsClass('menu-overlay', 'activate-menu')) {
+        if (this.containsClass('menu-overlay', 'activate-menu')) {
           this.toggleMenuOverlay();
         }
       }
@@ -122,7 +121,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   isInArray(value, array: any[]) {
-    if (array.indexOf(value) > -1 ) {
+    if (array.indexOf(value) > -1) {
       return true;
     } else {
       return false;
@@ -186,20 +185,20 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.resetMenus();
     }
-   this.toggleMenuOverlay();
+    this.toggleMenuOverlay();
   }
 
   resetMenus() {
-    if ( (this.containsClass('hours-menu', 'hide-menu')) === false ) {
+    if ((this.containsClass('hours-menu', 'hide-menu')) === false) {
       this.toggleClass('hours-menu', 'hide-menu');
     }
-    if ( (this.containsClass('category-menu', 'hide-menu')) === false ) {
+    if ((this.containsClass('category-menu', 'hide-menu')) === false) {
       this.toggleClass('category-menu', 'hide-menu');
     }
   }
 
   containsClass(DocumentID, hiddenClassName) {
-     return document.getElementById(DocumentID).classList.contains(hiddenClassName);
+    return document.getElementById(DocumentID).classList.contains(hiddenClassName);
   }
 
   toggleClass(DocumentID, hiddenClassName) {
@@ -226,19 +225,19 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onSetCategories() {
     this.categoryQuery = '';
-    if (this.categoryFilters.length > 0) {
+    if (this.categoryFilters.length > 0 && this.categoryFilters !== undefined) {
       for (let i = 0; i < this.categoryFilters.length; i++) {
         const category = encodeURIComponent(UserCategory[this.categoryFilters[i]]);
-        console.log(category);
-        this.categoryQuery = this.categoryQuery + 'refinementList%5Bcategory%5D%5B' + i + '%5D=' + category + '&';
+        const addToQuery = (category === undefined || category === 'undefined');
+        if (addToQuery === false) {
+          this.categoryQuery = this.categoryQuery + 'refinementList%5Bcategory%5D%5B' + i + '%5D=' + category + '&';
+        }
       }
       this.toggleMenuOverlay();
-      console.log(this.categoryQuery);
-      const query = ( '?' + '&' + this.categoryQuery + this.hourlyQuery + '&query=' + this.getInputQuery());
-      console.log(query);
+      const query = ('?' + '&' + this.categoryQuery + this.hourlyQuery + '&query=' + this.getInputQuery());
       this.router.navigateByUrl('/search' + query);
     } else {
-      this.router.navigateByUrl('/search?query=' + ( this.getInputQuery() + '&' + this.hourlyQuery));
+      this.router.navigateByUrl('/search?query=' + (this.getInputQuery() + '&' + this.hourlyQuery));
     }
   }
 
