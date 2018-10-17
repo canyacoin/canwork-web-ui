@@ -33,6 +33,14 @@ export class Transaction {
   }
 }
 
+export interface MonitorRequest {
+  hash: string;
+  from: string;
+  webhookOnSuccess: string;
+  webhookOnTimeout: string;
+  webhookOnError: string;
+}
+
 @Injectable()
 export class TransactionService {
 
@@ -76,12 +84,12 @@ export class TransactionService {
     const failure = this.getCallbackUrl(job, txId, actionType);
 
     const headers = new Headers({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
-    const reqBody = {
-      'hash': txHash,
-      'from': from,
-      'webhookOnSuccess': success,
-      'webhookOnTimeout': failure,
-      'webhookOnError': failure
+    const reqBody: MonitorRequest = {
+      hash: txHash,
+      from: from,
+      webhookOnSuccess: success,
+      webhookOnTimeout: failure,
+      webhookOnError: failure
     };
 
     console.log(JSON.stringify(reqBody));
