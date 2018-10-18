@@ -158,6 +158,11 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
           terms: [false, Validators.requiredTrue]
         });
         break;
+      case ActionType.authoriseEscrow:
+      case ActionType.enterEscrow:
+      case ActionType.acceptFinish:
+        this.handleAction();
+        break;
       default:
         break;
     }
