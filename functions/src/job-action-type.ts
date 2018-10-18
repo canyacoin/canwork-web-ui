@@ -11,5 +11,6 @@ export enum ActionType {
   addMessage = 'Add Note', // both sides
   finishedJob = 'Mark as complete', // notifies client
   acceptFinish = 'Complete job', // notifies provider
+  acceptFinishFailed = 'Complete job failed', // notifies provider
   dispute = 'Raise dispute' // depends on caller
 }

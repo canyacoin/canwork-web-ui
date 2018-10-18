@@ -347,6 +347,38 @@ class AcceptFinishNotification extends AEmailNotification {
   }
 }
 
+class AcceptFinishFailedNotification extends AEmailNotification {
+  constructor() {
+    super();
+  }
+
+  async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
+    console.log('AcceptFinishFailedNotification.interpolateTemplates()');
+    try {
+      await super.interpolateTemplates(db, jobId);
+    } catch (error) {
+      console.error(error);
+    }
+
+    const tx = this.jobData.paymentLog[this.jobData.paymentLog.length - 1].txId;
+    const etherscanUri = `https://etherscan.io/tx/${tx}`;
+
+    const title = `Uh-oh, your attempt to complete the job was un-successful`
+    this.emailMessages.push({
+      to: this.clientData.email,
+      subject: title,
+      title: title,
+      bodyHtml: `
+      Dear ${this.clientData.name},<br>
+      Your transaction authorising CanWork to complete a job was un-successful!<br/>
+      <br/>
+      View the ethereum transaction <a href='${etherscanUri}'>here</a>.`
+    });
+
+    console.log('+ dump emailMessages:', this.emailMessages);
+  }
+}
+
 class DisputeNotification extends AEmailNotification {
   constructor() {
     super();
@@ -529,6 +561,7 @@ export function notificationEmail(action: string) {
   actions[ActionType.addMessage] = AddMessageNotification
   actions[ActionType.finishedJob] = FinishedJobNotification
   actions[ActionType.acceptFinish] = AcceptFinishNotification
+  actions[ActionType.acceptFinishFailed] = AcceptFinishFailedNotification
   actions[ActionType.dispute] = DisputeNotification
 
   const jobAction = actions[action]
