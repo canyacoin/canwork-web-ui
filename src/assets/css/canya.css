@@ -5150,7 +5150,7 @@ ul.flexbox {
   background-color: transparent;
   height: 90px;
   border-radius: 0;
-  z-index: 91;
+  z-index: 200;
   -webkit-transition: margin-left .5s;
   transition: margin-left .5s;
 }

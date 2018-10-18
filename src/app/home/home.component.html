@@ -22,7 +22,7 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <h6 class="text-center text-grey ls-1">Browse our highly skilled and hand-picked providers</h6>
+            <h6 class="text-center text-grey ls-1">Browse CanYa's highly skilled and hand-picked providers</h6>
           </div>
           <div *ngFor="let type of providerTypes" class="col-lg-2 col-md-3 col-sm-4 col-6 provider-type-col">
             <div [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]' : type.name, 'category' : type.id}" class="provider-type-card pointer">

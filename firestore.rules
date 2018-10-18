@@ -3,22 +3,30 @@ service cloud.firestore {
 
     match /users/{userId} {
        allow read;
-       allow write: if isAuthenticated();
+       allow create: if isAuthenticated();
+       allow update: if isAuthenticated();
+       allow delete: if isAdmin();
     }
 
     match /users/{userId}/reviews {
        allow read;
-       allow write: if isAuthenticated();
+       allow create: if isAuthenticated();
+       allow update: if isAuthenticated();
+       allow delete: if isAdmin();
     }
 
     match /users/{userId}/reviews/{reviewId} {
        allow read;
-       allow write: if isAuthenticated();
+       allow create: if isAuthenticated();
+       allow update: if isAuthenticated();
+       allow delete: if isAdmin();
     }
 
     match /portfolio/{userId}/work/{w} {
        allow read;
-       allow write: if isDocumentOwner(userId);
+       allow create: if isAuthenticated();
+       allow update: if isDocumentOwner(userId);
+       allow delete: if isAdmin();
     }
 
     match /transactions/{transactionId} {
@@ -30,17 +38,23 @@ service cloud.firestore {
 
     match /who/{userId}/user/{who} {
        allow read;
-       allow write: if isAuthenticated();
+       allow create: if isAuthenticated();
+       allow update: if isAuthenticated();
+       allow delete: if isAdmin();
     }
 
     match /viewed-users/{userId}/viewed/{document=**} {
        allow read;
        allow write: if isDocumentOwner(userId);
+       allow write: if isDocumentOwner(userId);
+       allow delete: if isAdmin();
     }
 
     match /notifications/{userId} {
        allow read;
        allow write: if isAuthenticated();
+       allow write: if isAuthenticated();
+       allow delete: if isAuthenticated();
     }
 
 
@@ -51,6 +65,8 @@ service cloud.firestore {
     match /chats/{document=**} {
        allow read;
        allow write: if isAuthenticated();
+       allow write: if isAuthenticated();
+       allow delete: if isAdmin();
     }
 
     // TODO: Will require a much more complex rule set here
@@ -63,16 +79,6 @@ service cloud.firestore {
        allow create: if isAuthenticated();
        allow update: if userIsClientOrProvider();
        allow delete: if isAdmin();
-    }
-
-    match /reviews {
-       allow read;
-       allow write: if isAuthenticated();
-    }
-
-    match /reviews/{reviewId} {
-       allow read;
-       allow write: if isAuthenticated();
     }
   }
 

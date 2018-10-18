@@ -30,10 +30,10 @@
         </div>
       </div>
       <div class="row hourly-rate">
-        <span *ngIf="provider.hourlyRate && canToUsd" data-toggle="tooltip" data-placement="bottom" title="{{getUsdToCan(provider.hourlyRate)}} USD/hr">
+        <span *ngIf="provider.hourlyRate && provider.hourlyRate > 0 && canToUsd" data-toggle="tooltip" data-placement="bottom" title="{{getUsdToCan(provider.hourlyRate)}} USD/hr">
           <b>${{provider.hourlyRate}}</b>/hr
         </span>
-        <span *ngIf="provider.hourlyRate && !canToUsd">
+        <span *ngIf="provider.hourlyRate && provider.hourlyRate > 0 && !canToUsd">
           <b>${{provider.hourlyRate}}</b>/hr
         </span>
       </div>
@@ -61,7 +61,7 @@
           <div class="col-6">
             <app-skill-tag *ngIf="getProviderTags(provider).length > 0" [skill]="getProviderTags(provider).length + ' Skills'"></app-skill-tag>
           </div>
-          <div class="col-6">
+          <div class="col-6" *ngIf="provider.hourlyRate && provider.hourlyRate > 0">
             <b>${{provider.hourlyRate}}</b>/hr
           </div>
         </div>
