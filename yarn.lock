@@ -134,11 +134,6 @@
   dependencies:
     tslib "^1.7.1"
 
-"@angular/fire@5.0.2":
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/@angular/fire/-/fire-5.0.2.tgz#3ca9c09aee924e129059c4bf8780aa4c99ebb631"
-  integrity sha512-uNagq+cdFTXptWGjX3CzlYVRGBNFQCq04YEDaSVoTlezgqyEI0tWRcpAj68E28gvtdPm2qXruTiNIX2O/yXUWA==
-
 "@angular/forms@^5.2.8":
   version "5.2.11"
   resolved "https://registry.yarnpkg.com/@angular/forms/-/forms-5.2.11.tgz#712534fa317e194caa452d0c1a8efc72f5e040d6"
@@ -597,12 +592,10 @@ angular-instantsearch@^2.0.1:
     querystring-es3 "^0.2.1"
     tslib "^1.7.1"
 
-angularfire2@^5.0.0-rc.5-next:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/angularfire2/-/angularfire2-5.0.2.tgz#7208bb07162a43334114ed9cabade3961b366160"
-  integrity sha512-qLTo3UfSLdcrTNMePEDxLdhbaAFELKN53JVelxzaYBlpiRHPKg6/CeV7YNyOc1XUF7iZGJbHsYtjeo1R2O4/CA==
-  dependencies:
-    "@angular/fire" "5.0.2"
+angularfire2@5.0.0-rc.5-next:
+  version "5.0.0-rc.5-next"
+  resolved "https://registry.yarnpkg.com/angularfire2/-/angularfire2-5.0.0-rc.5-next.tgz#e5b4f0fe994e106276d86133734dc7949d127cb1"
+  integrity sha1-5bTw/plOEGJ22GEzc03HlJ0SfLE=
 
 animate.css@^3.6.1:
   version "3.7.0"
