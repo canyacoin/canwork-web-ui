@@ -14,6 +14,8 @@ stages:
 build:dist:staging:
   stage: build
   environment: staging
+  only:
+    - master
   artifacts:
     name: "canwork-webui dist"
     paths:
@@ -27,6 +29,8 @@ build:dist:staging:
 build:dist:production:
   stage: build
   environment: production
+  only:
+    - master
   artifacts:
     name: "canwork-webui dist"
     paths:
@@ -40,6 +44,8 @@ build:dist:production:
 deploy:hosting:staging:
   stage: deploy_hosting
   environment: staging
+  only:
+    - master
   dependencies:
     - build:dist:staging
   script:
@@ -50,6 +56,8 @@ deploy:hosting:staging:
 deploy:hosting:production:
   stage: deploy_hosting
   environment: production
+  only:
+    - master
   when: manual
   dependencies:
     - build:dist:production
@@ -61,6 +69,8 @@ deploy:hosting:production:
 deploy:functions:staging:
   stage: deploy_functions
   environment: staging
+  only:
+    - master
   when: manual
   script:
     - cd $APP_PATH/functions
@@ -82,6 +92,8 @@ deploy:functions:staging:
 deploy:functions:production:
   stage: deploy_functions
   environment: production
+  only:
+    - master
   when: manual
   script:
     - cd $APP_PATH/functions
