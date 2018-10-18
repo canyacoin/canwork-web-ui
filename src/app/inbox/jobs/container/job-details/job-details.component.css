@@ -7,74 +7,103 @@
   object-fit: cover;
   object-position: center;
   background-position: center center;
-   background-size: cover;
-   display: inline-block;
-   background-repeat: no-repeat;
+  background-size: cover;
+  display: inline-block;
+  background-repeat: no-repeat;
 }
-.job-detail-card{
-  box-shadow: 0 0px 10px 0 rgba(0,0,0,0.1);
+
+.job-detail-card {
+  box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.1);
   border-radius: 5px;
 }
-#job-top-mobile{
+
+#job-top-mobile {
   display: none;
 }
-hr{
+
+hr {
   border-color: #919d9d;
   height: 1.5px;
 }
-#status-span{
+
+#status-span {
   text-align: right;
 }
-#job-actions  b{
+
+#job-actions b {
   line-height: 36px;
 }
-#job-top-mobile h4{
-  margin-left:5px;
+
+#job-top-mobile h4 {
+  margin-left: 5px;
   line-height: 1.5rem;
 }
-.hidden{
+
+.hidden {
   display: none;
 }
-.action-group{
+
+.action-group {
   text-align: right;
 }
-.action-btn{
-  margin-right:5px;
+
+.action-btn {
+  margin-right: 5px;
 }
-.question-btn{
+
+.question-btn {
   background-color: transparent;
-  border-color:transparent;
+  border-color: transparent;
   cursor: pointer;
-  margin:0;
-  padding:0;
+  margin: 0;
+  padding: 0;
 }
-#explanation-modal .modal-dialog{
+
+#explanation-modal .modal-dialog {
   padding-top: 25vh;
 }
-#explanation-modal .modal-content{
+
+#explanation-modal .modal-content {
   border-color: transparent;
 }
+
+.circle-danger {
+  color: #ff6666;
+}
+
+.circle-success {
+  color: #4decca;
+}
+
+.circle-warning {
+  color: #ffc600;
+}
+
 @media only screen and (max-width: 978px) {
-  #status-span{
+  #status-span {
     text-align: left !important;
   }
-  .action-group{
+
+  .action-group {
     text-align: left;
   }
-  .action-btn{
-   margin-top:5px;
+
+  .action-btn {
+    margin-top: 5px;
   }
 }
 
 @media only screen and (max-width: 576px) {
-  #job-top{
+  #job-top {
     display: none;
   }
-  #job-top-mobile{
+
+  #job-top-mobile {
     display: block;
   }
- .headshot{
-   width: 50px;
-   height: 50px;
- }
+
+  .headshot {
+    width: 50px;
+    height: 50px;
+  }
 }

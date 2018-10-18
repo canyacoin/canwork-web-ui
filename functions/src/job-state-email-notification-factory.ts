@@ -400,7 +400,41 @@ class ClientJobRequestEscrowedFundsNotification extends AEmailNotification {
       title: title,
       bodyHtml: `
       Dear ${this.clientData.name},<br>
-      You have authorised CanWork to enter the escrow <a href='${etherscanUri}'>${tx}</a>.`
+      Your transaction authorising CanWork to use your funds for a job was successful!<br/>
+      You are one step closer to getting the job started.<br/><br/>
+      View the ethereum transaction <a href='${etherscanUri}'>here</a>.`
+    });
+    console.log('+ dump emailMessages:', this.emailMessages);
+  }
+}
+
+// Send notification to client that their funds have been deposited into escrow
+class ClientJobRequestEscrowedFundsFailedNotification extends AEmailNotification {
+  constructor() {
+    super();
+  }
+
+  async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
+    console.log('ClientJobRequestEscrowedFundsFailedNotification.interpolateTemplates()');
+    try {
+      await super.interpolateTemplates(db, jobId);
+    } catch (error) {
+      console.error(error);
+    }
+
+    const tx = this.jobData.paymentLog[this.jobData.paymentLog.length - 1].txId;
+    const etherscanUri = `https://etherscan.io/tx/${tx}`;
+
+    const title = `Uh-oh, your escrow authorisation was un-successful`
+    this.emailMessages.push({
+      to: this.clientData.email,
+      subject: title,
+      title: title,
+      bodyHtml: `
+      Dear ${this.clientData.name},<br>
+      Your transaction authorising CanWork to use your funds for a job was un-successful!<br/>
+      <br/>
+      View the ethereum transaction <a href='${etherscanUri}'>here</a>.`
     });
     console.log('+ dump emailMessages:', this.emailMessages);
   }
@@ -448,6 +482,36 @@ class JobRequestCommenceNotification extends AEmailNotification {
   }
 }
 
+// Send notification to the provider that they may commence the job
+class JobRequestCommenceFailedNotification extends AEmailNotification {
+  constructor() {
+    super();
+  }
+
+  async interpolateTemplates(db: FirebaseFirestore.Firestore, jobId: string): Promise<void> {
+    console.log('JobRequestCommenceFailedNotification.interpolateTemplates()');
+    try {
+      await super.interpolateTemplates(db, jobId);
+    } catch (error) {
+      console.error(error);
+    }
+
+    const tx = this.jobData.paymentLog[this.jobData.paymentLog.length - 1].txId;
+    const etherscanUri = `https://etherscan.io/tx/${tx}`;
+
+    const title = `Uh-oh, your transaction to enter the escrow was un-successful`
+    this.emailMessages.push({
+      to: this.clientData.email,
+      subject: title,
+      title: title,
+      bodyHtml: `
+      Dear ${this.clientData.name},<br>
+      The transaction of this failed deposit can be viewed here: <a href='${etherscanUri}'>${tx}</a>.`
+    });
+    console.log('+ dump emailMessages:', this.emailMessages);
+  }
+}
+
 export function notificationEmail(action: string) {
   console.log('+ build factory object for action:', action)
 
@@ -459,7 +523,9 @@ export function notificationEmail(action: string) {
   actions[ActionType.declineTerms] = JobRequestDeclinedNotification
   actions[ActionType.counterOffer] = JobRequestCounterOfferNotification
   actions[ActionType.authoriseEscrow] = ClientJobRequestEscrowedFundsNotification
+  actions[ActionType.authoriseEscrowFailed] = ClientJobRequestEscrowedFundsFailedNotification
   actions[ActionType.enterEscrow] = JobRequestCommenceNotification
+  actions[ActionType.enterEscrowFailed] = JobRequestCommenceFailedNotification
   actions[ActionType.addMessage] = AddMessageNotification
   actions[ActionType.finishedJob] = FinishedJobNotification
   actions[ActionType.acceptFinish] = AcceptFinishNotification

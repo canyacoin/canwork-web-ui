@@ -1,9 +1,12 @@
 import { NgSwitch } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { CanPayService, Operation, View } from '@canyaio/canpay-lib';
+import {
+    CanPayData, CanPayService, EthService, Operation, setProcessResult, View
+} from '@canyaio/canpay-lib';
 import { Job, JobState, Payment, PaymentType, TimeRange, WorkType } from '@class/job';
 import {
-  ActionType, AuthoriseEscrowAction, CounterOfferAction, EnterEscrowAction, IJobAction, ReviewAction
+    ActionType, AuthoriseEscrowAction, CounterOfferAction, EnterEscrowAction, IJobAction,
+    ReviewAction
 } from '@class/job-action';
 import { Upload } from '@class/upload';
 import { User, UserType } from '@class/user';
@@ -12,7 +15,10 @@ import { environment } from '@env/environment';
 import { ChatService } from '@service/chat.service';
 import { CanWorkEthService } from '@service/eth.service';
 import { JobNotificationService } from '@service/job-notification.service';
+import { MomentService } from '@service/moment.service';
+import { Transaction, TransactionService } from '@service/transaction.service';
 import { UserService } from '@service/user.service';
+import { GenerateGuid } from '@util/generate.uid';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 
@@ -25,7 +31,10 @@ export class JobService {
     private afs: AngularFirestore,
     private userService: UserService,
     private chatService: ChatService,
-    private ethService: CanWorkEthService,
+    private momentService: MomentService,
+    private transactionService: TransactionService,
+    private canWorkEthService: CanWorkEthService,
+    private ethService: EthService,
     private jobNotificationService: JobNotificationService,
     private canPayService: CanPayService) {
 
@@ -79,7 +88,7 @@ export class JobService {
 
 
   async getJobBudget(job: Job): Promise<number> {
-    const canToUsd = await this.ethService.getCanToUsd();
+    const canToUsd = await this.canWorkEthService.getCanToUsd();
     if (canToUsd) {
       const totalBudget = job.paymentType === PaymentType.fixed ? job.budget : job.budget * this.getTotalWorkHours(job);
       return Promise.resolve(Math.floor(totalBudget / canToUsd));
@@ -132,18 +141,14 @@ export class JobService {
           case ActionType.cancelJob:
             parsedJob.actionLog.push(action);
             parsedJob.state = JobState.cancelled;
-            await this.saveJobFirebase(parsedJob);
-            await this.chatService.sendJobMessages(parsedJob, action);
-            await this.jobNotificationService.notify(action.type, job.id);
+            await this.saveJobAndNotify(parsedJob, action)
             resolve(true);
             break;
           case ActionType.counterOffer:
             parsedJob.actionLog.push(action);
             parsedJob.state = action.executedBy === UserType.client ? JobState.clientCounterOffer : JobState.providerCounterOffer;
             parsedJob.budget = (action as CounterOfferAction).amount;
-            await this.saveJobFirebase(parsedJob);
-            await this.chatService.sendJobMessages(parsedJob, action);
-            await this.jobNotificationService.notify(action.type, job.id);
+            await this.saveJobAndNotify(parsedJob, action)
             resolve(true);
             break;
           case ActionType.acceptTerms:
@@ -153,9 +158,7 @@ export class JobService {
                 parsedJob.budgetCan = totalBudgetCan;
                 parsedJob.actionLog.push(action);
                 parsedJob.state = JobState.termsAcceptedAwaitingEscrow;
-                await this.saveJobFirebase(parsedJob);
-                await this.chatService.sendJobMessages(parsedJob, action);
-                await this.jobNotificationService.notify(action.type, job.id);
+                await this.saveJobAndNotify(parsedJob, action)
                 resolve(true);
               }
             } catch (e) {
@@ -165,111 +168,47 @@ export class JobService {
           case ActionType.declineTerms:
             parsedJob.actionLog.push(action);
             parsedJob.state = JobState.declined;
-            await this.saveJobFirebase(parsedJob);
-            await this.chatService.sendJobMessages(parsedJob, action);
-            await this.jobNotificationService.notify(action.type, job.id);
+            await this.saveJobAndNotify(parsedJob, action)
             resolve(true);
             break;
           case ActionType.authoriseEscrow:
-            // TODO txId is not returned in the CanPay complete callback
-            // in order to be assigned to the paymentLog
-            const onComplete = async (result) => {
-              console.log(result);
-              const escrowAction = action as AuthoriseEscrowAction;
-              parsedJob.canInEscrow = result.amount || 0;
-              parsedJob.paymentLog.push(new Payment({
-                txId: escrowAction.txId || '',
-                timestamp: escrowAction.timestamp || '',
-                amountCan: escrowAction.amountCan || 0
-              }));
-              parsedJob.actionLog.push(escrowAction);
-              parsedJob.state = JobState.authorisedEscrow;
-
-              await this.saveJobFirebase(parsedJob);
-              const clientObj = await this.userService.getUser(job.clientId);
-              clientObj.ethAddress = result.account;
-              await this.userService.saveUser(clientObj);
-              this.canPayService.close();
-            };
-
-            const onCancel = () => {
-              this.canPayService.close();
-            };
-
-            const canPayOptions = {
-              dAppName: `CanWorkJob Escrow contract ${environment.contracts.canwork}`,
-              recepient: environment.contracts.canwork,
-              operation: Operation.auth,
-              amount: job.budgetCan,
-              complete: onComplete,
-              cancel: onCancel,
-              view: View.Compact
-            };
-
-            this.canPayService.open(canPayOptions);
-
-            resolve(true);
-            break;
           case ActionType.enterEscrow:
-            const enterEscrowAction = action as EnterEscrowAction;
-            parsedJob.actionLog.push(enterEscrowAction);
-
-            client = await this.userService.getUser(job.clientId);
-            provider = await this.userService.getUser(job.providerId);
-
-            try {
-              const canWorkContract = new CanWorkJobContract(this.ethService);
-              canWorkContract.connect();
-              await canWorkContract.createJob(job, client, provider);
-              parsedJob.state = JobState.inEscrow;
-              await this.saveJobFirebase(parsedJob);
-              await this.chatService.sendJobMessages(parsedJob, enterEscrowAction);
-              await this.jobNotificationService.notify(action.type, job.id);
-            } catch (error) {
-              console.log(error);
+            let ethAddr = this.ethService.getOwnerAccount();
+            if (!!parsedJob.clientEthAddress) {
+              ethAddr = parsedJob.clientEthAddress;
             }
-
-            resolve(true);
+            const hasAllowance = !!ethAddr ? await this.canWorkEthService.hasAllowance(ethAddr, environment.contracts.canwork, job.budgetCan) : false;
+            this.authoriseEnterEscrow(parsedJob, ethAddr, action, hasAllowance);
+            resolve(true)
             break;
           case ActionType.addMessage:
             parsedJob.actionLog.push(action);
-            await this.saveJobFirebase(parsedJob);
-            await this.chatService.sendJobMessages(parsedJob, action);
-            await this.jobNotificationService.notify(action.type, job.id);
+            await this.saveJobAndNotify(parsedJob, action)
             resolve(true);
             break;
           case ActionType.finishedJob:
             parsedJob.actionLog.push(action);
             parsedJob.state = JobState.workPendingCompletion;
-            await this.saveJobFirebase(parsedJob);
-            await this.chatService.sendJobMessages(parsedJob, action);
-            await this.jobNotificationService.notify(action.type, job.id);
+            await this.saveJobAndNotify(parsedJob, action)
             resolve(true);
             break;
           case ActionType.acceptFinish:
             try {
               const clientObj = await this.userService.getUser(job.clientId);
               const canWorkContract = new CanWorkJobContract(this.ethService);
-              canWorkContract.connect();
-              await canWorkContract.completeJob(job, clientObj.ethAddress);
+              await canWorkContract.connect().completeJob(job, clientObj.ethAddress);
               parsedJob.state = JobState.complete;
               parsedJob.actionLog.push(action);
-              await this.saveJobFirebase(parsedJob);
-              await this.chatService.sendJobMessages(parsedJob, action);
-              await this.jobNotificationService.notify(action.type, job.id);
+              await this.saveJobAndNotify(parsedJob, action)
             } catch (error) {
               console.log(error);
             }
-
             resolve(true);
             break;
           case ActionType.dispute:
-            // TODO: May need to think more about this
             parsedJob.actionLog.push(action);
             parsedJob.state = JobState.inDispute;
-            await this.saveJobFirebase(parsedJob);
-            await this.chatService.sendJobMessages(parsedJob, action);
-            await this.jobNotificationService.notify(action.type, job.id);
+            await this.saveJobAndNotify(parsedJob, action)
             resolve(true);
             break;
           case ActionType.review:
@@ -289,6 +228,12 @@ export class JobService {
     });
   }
 
+  private async saveJobAndNotify(job: Job, action: IJobAction) {
+    await this.saveJobFirebase(job);
+    await this.chatService.sendJobMessages(job, action);
+    await this.jobNotificationService.notify(action.type, job.id);
+  }
+
   private async saveJobFirebase(job: Job): Promise<any> {
     const x = await this.parseJobToObject(job);
     return this.jobsCollection.doc(job.id).set(x);
@@ -299,6 +244,95 @@ export class JobService {
     if (channelId) {
       this.chatService.sendJobMessages(job, action);
     }
+  }
+
+  /* Uses canpay service to authorise and then enter the escrow, creating job */
+  private async authoriseEnterEscrow(job: Job, ethAddr: string, action: IJobAction, skipAuth: boolean = false) {
+
+    let clientEthAddress = ethAddr;
+
+    const onAuthTxHash = async (txHash: string, from: string) => {
+      /* IF authorisation hash gets sent, do:
+         post tx to transaction monitor
+         save tx to collection
+         save action/pending to job
+         update users active eth address */
+      const txId = GenerateGuid();
+      this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.authoriseEscrow)
+      this.transactionService.saveTransaction(new Transaction(txId, job.clientId,
+        txHash, this.momentService.get(), ActionType.authoriseEscrow, job.id));
+      const escrowAction = action as AuthoriseEscrowAction;
+      job.actionLog.push(escrowAction);
+      job.pendingTx += 1;
+      job.clientEthAddress = from;
+      clientEthAddress = from;
+      // This payment log has been deprecated in favor of transacations collection, however emails rely on it
+      job.paymentLog.push(new Payment({
+        txId: escrowAction.txId || '',
+        timestamp: escrowAction.timestamp || ''
+      }));
+      await this.saveJobFirebase(job);
+    };
+
+    const onComplete = async (result) => {
+      // call endpoint?
+      this.canPayService.close();
+    };
+
+    const onCancel = () => {
+      // call endpoint?
+      this.canPayService.close();
+    };
+
+    const onTxHash = async (txHash: string, from: string) => {
+      /* IF enter escrow hash gets sent, do:
+         post tx to transaction monitor
+         save tx to collection
+         save action/pending to job */
+      const txId = GenerateGuid();
+      this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.enterEscrow)
+      this.transactionService.saveTransaction(new Transaction(txId, job.clientId,
+        txHash, this.momentService.get(), ActionType.enterEscrow, job.id));
+      const enterEscrowAction = action as EnterEscrowAction;
+      job.actionLog.push(enterEscrowAction);
+      job.pendingTx += 1;
+      job.clientEthAddress = from;
+      clientEthAddress = from;
+      // This payment log has been deprecated in favor of transacations collection, however emails rely on it
+      job.paymentLog.push(new Payment({
+        txId: txHash,
+        timestamp: enterEscrowAction.timestamp
+      }));
+      await this.saveJobFirebase(job);
+    };
+
+    const initiateEnterEscrow = async (canPayData: CanPayData) => {
+      const provider = await this.userService.getUser(job.providerId);
+      const canWorkContract = new CanWorkJobContract(this.ethService);
+      canWorkContract.connect().createJob(job, clientEthAddress, provider.ethAddress, onTxHash)
+        .then(setProcessResult.bind(canPayOptions))
+        .catch(setProcessResult.bind(canPayOptions));
+    };
+
+
+    const canPayOptions = {
+      dAppName: `CanWork`,
+      successText: 'Woohoo, job started!',
+      recepient: environment.contracts.canwork,
+      operation: skipAuth ? Operation.interact : Operation.auth,
+      onAuthTxHash: onAuthTxHash.bind(this),
+      amount: job.budgetCan,
+      complete: onComplete,
+      cancel: onCancel,
+      view: View.Compact,
+
+      // Post Authorisation
+      postAuthorisationProcessName: 'Job creation',
+      startPostAuthorisationProcess: initiateEnterEscrow.bind(this),
+      postAuthorisationProcessResults: null
+    };
+
+    this.canPayService.open(canPayOptions);
   }
 
   // =========================
@@ -314,7 +348,7 @@ export class JobService {
     actions[JobState.providerCounterOffer] = forClient ? [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms] : [ActionType.cancelJob];
     actions[JobState.clientCounterOffer] = forClient ? [ActionType.cancelJob] : [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms];
     actions[JobState.termsAcceptedAwaitingEscrow] = forClient ? [ActionType.authoriseEscrow, ActionType.cancelJob] : [ActionType.cancelJob];
-    actions[JobState.authorisedEscrow] = forClient ? [ActionType.enterEscrow] : [];
+    actions[JobState.authorisedEscrow] = forClient ? [ActionType.enterEscrow, ActionType.cancelJob] : [];
     actions[JobState.inEscrow] = forClient ? [ActionType.dispute, ActionType.addMessage] : [ActionType.finishedJob, ActionType.addMessage];
     actions[JobState.workPendingCompletion] = forClient ? [ActionType.acceptFinish, ActionType.dispute, ActionType.addMessage] : [ActionType.dispute, ActionType.addMessage];
     actions[JobState.inDispute] = forClient ? [ActionType.acceptFinish, ActionType.addMessage] : [ActionType.addMessage];

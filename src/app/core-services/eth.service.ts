@@ -24,6 +24,18 @@ export class CanWorkEthService extends EthService {
     return this.canyaCoinEthService.getCanYaBalance(userAddress)
   }
 
+  async hasAllowance(owner: string, spender: string, amount: number): Promise<boolean> {
+    return new Promise<boolean>(async (resolve, reject) => {
+      try {
+        const allowance = await this.canyaCoinEthService.getAllowance(owner, spender);
+        resolve(allowance >= this.canyaCoinEthService.getAmountWithDecimals(amount));
+      } catch (e) {
+        resolve(false);
+      }
+    });
+
+  }
+
   async getCanToUsd(): Promise<number> {
     const canToUsdResp = await this.http.get('https://api.coinmarketcap.com/v2/ticker/2343/?convert=USD').toPromise();
     if (canToUsdResp.ok) {

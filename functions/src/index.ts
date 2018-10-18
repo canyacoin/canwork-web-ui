@@ -98,7 +98,7 @@ exports.jobStateEmailNotification = functions.https.onRequest((request, response
       return response.status(405).type('application/json').send({ message: 'Method Not Allowed', supportedMethods: 'POST' });
     }
     console.log('+ jobStateEmailNotification');
-    if ((!request.headers.authorization || !request.headers.authorization.startsWith('Bearer '))) {
+    if (!request.headers.authorization || (!request.headers.authorization.startsWith('Bearer ') && !request.headers.authorization.startsWith('Internal '))) {
       console.error('No Firebase ID token was passed as a Bearer token in the Authorization header.',
         'Make sure you authorize your request by providing the following HTTP header:',
         'Authorization: Bearer <Firebase ID Token>');
@@ -114,13 +114,25 @@ exports.jobStateEmailNotification = functions.https.onRequest((request, response
     }
     console.log(`+ notification request for jobId: ${jobId} with jobAction: ${jobAction}`);
 
-    const idToken = request.headers.authorization.split('Bearer ')[1];
-    console.log('+ checking id token: ', `${idToken.substr(0, 5)}.....${idToken.substr(idToken.length - 5)}`);
+    if (request.headers.authorization.startsWith('Bearer ')) {
+      const bearerToken = request.headers.authorization.split('Bearer ')[1];
+      console.log('+ checking id token: ', `${bearerToken.substr(0, 5)}.....${bearerToken.substr(bearerToken.length - 5)}`);
 
-    await app.auth().verifyIdToken(idToken).catch(error => {
-      console.error('! unable to verify token: ', error);
-      return response.status(403).type('application/json').send({ message: 'Forbidden, invalid or expired authorization header' });
-    });
+      await app.auth().verifyIdToken(bearerToken).catch(error => {
+        console.error('! unable to verify token: ', error);
+        return response.status(403).type('application/json').send({ message: 'Forbidden, invalid or expired authorization header' });
+      });
+    }
+
+    if (request.headers.authorization.startsWith('Internal ')) {
+      const internalToken = request.headers.authorization.split('Internal ')[1];
+      console.log('+ checking internal token: ', `${internalToken.substr(0, 5)}.....${internalToken.substr(internalToken.length - 5)}`);
+
+      if (internalToken !== env.internal.authkey) {
+        console.error('! unable to verify token');
+        return response.status(403).type('application/json').send({ message: 'Forbidden, invalid or expired authorization header' });
+      }
+    }
 
     const jobStateEmailer = jobEmailfactory.notificationEmail(jobAction);
 

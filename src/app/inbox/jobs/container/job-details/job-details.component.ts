@@ -5,11 +5,13 @@ import { ActionType, IJobAction } from '@class/job-action';
 import { User, UserType } from '@class/user';
 import { AuthService } from '@service/auth.service';
 import { JobService } from '@service/job.service';
+import { Transaction, TransactionService } from '@service/transaction.service';
 import { UserService } from '@service/user.service';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { DialogService } from 'ng2-bootstrap-modal';
 import { Subscription } from 'rxjs/Subscription';
 
+import { environment } from '../../../../../environments/environment';
 import {
     ActionDialogComponent, ActionDialogOptions
 } from '../action-dialog/action-dialog.component';
@@ -21,17 +23,23 @@ import {
 })
 export class JobDetailsComponent implements OnInit, OnDestroy {
 
-  currentUser: User;
-
-  currentUserType: UserType;
-  job: Job;
   jobState = JobState;
 
+  currentUser: User;
+
+  // The current user is 'acting' as this type
+  // This allows providers to work as both client and provider
+  currentUserType: UserType;
+  job: Job;
+  transactions: Transaction[] = [];
+
   jobSub: Subscription;
+  transactionsSub: Subscription;
 
   constructor(private authService: AuthService,
     private jobService: JobService,
     private userService: UserService,
+    private transactionService: TransactionService,
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
     private storage: AngularFireStorage
@@ -46,6 +54,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     if (this.jobSub) { this.jobSub.unsubscribe(); }
+    if (this.transactionsSub) { this.transactionsSub.unsubscribe(); }
   }
 
   initialiseJob() {
@@ -55,30 +64,17 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.job = new Job(job);
         this.currentUserType = this.currentUser.address === job.clientId ? UserType.client : UserType.provider;
         this.jobService.assignOtherPartyAsync(this.job, this.currentUserType);
-        const attachment = this.job.information.attachments;
-        // check if there's any attachment on this job
-        if (attachment.length > 0) {
-          // [0] is used here since we only support single file upload anyway.
-          if (attachment[0].url == null) {
-            console.log('An attachment without URL ! getting the url...');
-            // If there's an attachment but not the URL we can safely assume that it's caused by the async issue
-            if (attachment[0].filePath != null) {
-              let urlSub: Subscription;
-              // If this attachment has a filepath, then convert it into a usable URL by using the code below.
-              urlSub = this.storage.ref(attachment[0].filePath).getDownloadURL().subscribe(downloadUrl => {
-                attachment[0].url = downloadUrl; // change this attachment's (null) url into the actual url.
-                console.log('attachment URL is now ' + attachment[0].url);
-              });
-              urlSub.unsubscribe(); // unsubscibe to the UrlSub just in case
-            }
-          }
-        }
+        this.setAttachmentUrl(this.job.information.attachments);
       });
+
+      this.transactionsSub = this.transactionService.getTransactionsByJob(jobId).subscribe((transactions: Transaction[]) => {
+        this.transactions = transactions;
+      })
     }
   }
 
   actionIsDisabled(action: ActionType): boolean {
-    return action === ActionType.dispute
+    return action === ActionType.dispute || this.job.pendingTx > 0
   }
 
   get availableActions(): ActionType[] {
@@ -87,6 +83,23 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
   get currentUserIsClient() {
     return this.currentUserType === UserType.client;
+  }
+
+  private setAttachmentUrl(attachments) {
+    const attachment = this.job.information.attachments;
+    if (attachment.length > 0) { // check if there's any attachment on this job
+      if (attachment[0].url == null) { // [0] is used here since we only support single file upload anyway.
+        console.log('An attachment without URL ! getting the url...');
+        if (attachment[0].filePath != null) { // Assume that it's caused by the async issue
+          let urlSub: Subscription;
+          urlSub = this.storage.ref(attachment[0].filePath).getDownloadURL().subscribe(downloadUrl => {
+            attachment[0].url = downloadUrl; // change this attachment's (null) url into the actual url.
+            console.log('attachment URL is now ' + attachment[0].url);
+          });
+          urlSub.unsubscribe(); // unsubscibe to the UrlSub just in case
+        }
+      }
+    }
   }
 
   /* For the explanation modal */
@@ -174,4 +187,11 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     return action.executedBy === this.currentUserType ? 'You' : this.job['otherParty'] ? this.job['otherParty'].name : '';
   }
 
+  getTxLink(txHash: string) {
+    return `http://${environment.contracts.useTestNet ? 'ropsten.' : ''}etherscan.io/tx/${txHash}`;
+  }
+
+  getTxColor(tx: Transaction) {
+    return tx.success ? 'success' : tx.failure ? 'danger' : 'warning';
+  }
 }
