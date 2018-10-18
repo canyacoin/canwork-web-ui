@@ -33,7 +33,6 @@ export class CanWorkEthService extends EthService {
         resolve(false);
       }
     });
-
   }
 
   async getCanToUsd(): Promise<number> {

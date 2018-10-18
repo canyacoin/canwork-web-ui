@@ -117,6 +117,8 @@ export class TransactionService {
       return `${prefix}authorise-escrow-${postfix}${params}`;
     } else if (action === ActionType.enterEscrow) {
       return `${prefix}enter-escrow-${postfix}${params}`
+    } else if (action === ActionType.acceptFinish) {
+      return `${prefix}accept-finish-${postfix}${params}`
     }
     return '';
   }

@@ -42,7 +42,7 @@ export class CanWorkJobContract {
     });
   }
 
-  async completeJob(job: Job, fromAddr: string) {
+  async completeJob(job: Job, fromAddr: string, onTxHash: Function) {
     return new Promise(async (resolve, reject) => {
       try {
         const txObject = await this.instance.methods.completeJob(this.eth.web3js.utils.padRight(job.hexId, 32));
@@ -57,7 +57,7 @@ export class CanWorkJobContract {
           data: txObject.encodeABI(),
         };
 
-        txObject.send(txOptions, async (err, txHash) => this.eth.resolveTransaction(err, fromAddr, txHash, resolve, reject));
+        txObject.send(txOptions, async (err, txHash) => this.eth.resolveTransaction(err, fromAddr, txHash, resolve, reject, onTxHash));
       } catch (err) {
         reject(err);
       }

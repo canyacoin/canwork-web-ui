@@ -74,19 +74,6 @@ export class JobService {
     return data
   }
 
-  /** Add the 'other party' details to a job, i.e. the clients picture and name */
-  async assignOtherPartyAsync(job: Job, viewingUserType: UserType) {
-    if (job.clientId && job.providerId) {
-      const otherParty = await this.userService.getUser(viewingUserType === UserType.client ? job.providerId : job.clientId);
-      job['otherParty'] = { avatar: otherParty.avatar, name: otherParty.name };
-    }
-  }
-
-  // =========================
-  //      JOB ACTIONS
-  // =========================
-
-
   async getJobBudget(job: Job): Promise<number> {
     const canToUsd = await this.canWorkEthService.getCanToUsd();
     if (canToUsd) {
@@ -118,6 +105,19 @@ export class JobService {
         return 52 * weeklyHours;
     }
   }
+
+  /** Add the 'other party' details to a job, i.e. the clients picture and name */
+  async assignOtherPartyAsync(job: Job, viewingUserType: UserType) {
+    if (job.clientId && job.providerId) {
+      const otherParty = await this.userService.getUser(viewingUserType === UserType.client ? job.providerId : job.clientId);
+      job['otherParty'] = { avatar: otherParty.avatar, name: otherParty.name };
+    }
+  }
+
+  // =========================
+  //      JOB ACTIONS
+  // =========================
+
 
   /**
    * Handles all actions taken on a job, performing the action and afterwards updating the job state and sending chat messages.
@@ -194,12 +194,43 @@ export class JobService {
             break;
           case ActionType.acceptFinish:
             try {
-              const clientObj = await this.userService.getUser(job.clientId);
-              const canWorkContract = new CanWorkJobContract(this.ethService);
-              await canWorkContract.connect().completeJob(job, clientObj.ethAddress);
-              parsedJob.state = JobState.complete;
-              parsedJob.actionLog.push(action);
-              await this.saveJobAndNotify(parsedJob, action)
+              const onTxHash = async (txHash: string, from: string) => {
+                /* IF complete job hash gets sent, do:
+                   post tx to transaction monitor
+                   save tx to collection
+                   save action/pending to job */
+                const txId = GenerateGuid();
+                this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.acceptFinish)
+                this.transactionService.saveTransaction(new Transaction(txId, job.clientId,
+                  txHash, this.momentService.get(), ActionType.acceptFinish, job.id));
+                parsedJob.actionLog.push(action);
+                job.pendingTx += 1;
+                // This payment log has been deprecated in favor of transacations collection, however emails rely on it
+                job.paymentLog.push(new Payment({
+                  txId: txHash,
+                  timestamp: action.timestamp
+                }));
+                await this.saveJobFirebase(job);
+              };
+
+              const initiateCompleteJob = async (canPayData: CanPayData) => {
+                const canWorkContract = new CanWorkJobContract(this.ethService);
+                canWorkContract.connect().completeJob(job, job.clientEthAddress || this.ethService.getOwnerAccount(), onTxHash)
+                  .then(setProcessResult.bind(canPayOptions))
+                  .catch(setProcessResult.bind(canPayOptions));
+              };
+
+              const canPayOptions = {
+                dAppName: `CanWork`,
+                successText: 'Woohoo, job complete!',
+                recepient: environment.contracts.canwork,
+                operation: Operation.interact,
+                complete: () => { this.canPayService.close() },
+                cancel: () => { this.canPayService.close() },
+                postAuthorisationProcessName: 'Job completion',
+                startPostAuthorisationProcess: initiateCompleteJob.bind(this),
+              };
+              this.canPayService.open(canPayOptions);
             } catch (error) {
               console.log(error);
             }
