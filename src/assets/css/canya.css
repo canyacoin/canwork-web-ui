@@ -1409,7 +1409,6 @@ button:focus {
 .btn-primary,
 .btn-primary:hover {
   background-color: #33ccff;
-  border: 1px solid transparent;
   color: #fff;
 }
 
@@ -9777,7 +9776,7 @@ a.text-danger:focus {
   opacity: 0;
 }
 
-.activate-menu{
+.activate-menu {
   z-index: 100 !important;
   opacity: 100 !important;
   overflow: hidden;
