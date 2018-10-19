@@ -88,6 +88,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async ngOnInit() {
+    console.log(this.categoryFilters[0]);
     this.algoliaSearchConfig = {
       ...environment.algolia,
       indexName: this.algoliaIndex,
@@ -269,6 +270,6 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onResetHourlyRate() {
     this.maxValue = 300;
-    this.minValue = 1;
+    this.minValue = 0;
   }
 }
