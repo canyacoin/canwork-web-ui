@@ -20,10 +20,10 @@ dist:staging:
     paths:
       - $APP_PATH/dist
   script:
-    - npm install
+    - yarn
     - echo -n "+ current working path:" && pwd
     - echo $ENVIRONMENT_STAGING >> $APP_PATH/src/environments/environment.staging.ts
-    - npm run build:staging
+    - yarn run build:staging
 
 dist:production:
   stage: build
@@ -35,10 +35,10 @@ dist:production:
     paths:
       - $APP_PATH/dist
   script:
-    - npm install
+    - yarn
     - echo -n "+ current working path:" && pwd
     - echo $ENVIRONMENT_PROD >> $APP_PATH/src/environments/environment.prod.ts
-    - npm run build:prod
+    - yarn run build:prod
 
 deploy:staging:
   stage: deploy
@@ -49,8 +49,8 @@ deploy:staging:
     - dist:staging
   script:
     - cd $APP_PATH/functions
-    - npm install
-    - npm install -g firebase-tools@latest
+    - yarn
+    - yarn -g firebase-tools@latest
     - cd ..
     - firebase use staging --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set algolia.appid="$FIREBASE_ALGOLIA_APPID" --token "$FIREBASE_CI_AUTH_TOKEN"
@@ -75,8 +75,8 @@ deploy:production:
     - dist:production
   script:
     - cd $APP_PATH/functions
-    - npm install
-    - npm install -g firebase-tools@latest
+    - yarn
+    - yarn -g firebase-tools@latest
     - cd ..
     - firebase use staging --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set algolia.appid="$FIREBASE_ALGOLIA_APPID" --token "$FIREBASE_CI_AUTH_TOKEN"
@@ -90,3 +90,4 @@ deploy:production:
     - firebase functions:config:set dev.authkey="$FIREBASE_DEV_AUTHKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set internal.authkey="$FIREBASE_INTERNAL_AUTHKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase deploy --token "$FIREBASE_CI_AUTH_TOKEN" -P $FIREBASE_PROJECT_ID
+

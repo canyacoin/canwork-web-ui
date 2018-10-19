@@ -19,7 +19,7 @@ npm install -g angular-cli firebase-tools
 ```
 git clone git@github.com:canyaio/can-work.git
 cd can-work
-npm install
+yarn
 cp src/environments/environment.ts.sample src/environments/environment.ts
 ```
 
@@ -47,7 +47,7 @@ And get your values for 'Application ID' and 'Admin API Key' to use in firebase 
 
 ```
 cd functions/
-npm install
+yarn
 
 firebase functions:config:set algolia.appid="UMAFX8JMPW"
 firebase functions:config:set algolia.apikey="0a791357564f5d9ba99935170fac4f22"
