@@ -31,7 +31,7 @@ import { Ng5SliderModule } from 'ng5-slider';
     AppRoutingModule,
     AngularFireAuthModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule.enablePersistence(),
+    AngularFirestoreModule,
     AngularFireStorageModule,
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     BrowserModule,
