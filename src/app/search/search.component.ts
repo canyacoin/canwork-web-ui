@@ -175,7 +175,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     return tmp[Math.floor(Math.random() * (tmp.length - 1))];
   }
 
-  toggleOverlay(documentID, otherDocumentID, buttonID) {
+  toggleOverlay(documentID, otherDocumentID) {
     if (!this.containsClass(otherDocumentID, 'hide-menu')) {
       this.toggleMenuOverlay();
       this.toggleClass(otherDocumentID, 'hide-menu');
@@ -244,8 +244,8 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onSetHourlyRate() {
     if (!(this.containsClass('hours-menu', 'hide-menu'))) {
-      this.hourlyQuery = 'range%5BhourlyRate%5D=' + this.minValue + '%3A' + this.maxValue;
       this.toggleMenuOverlay();
+      this.hourlyQuery = 'range%5BhourlyRate%5D=' + this.minValue + '%3A' + this.maxValue;
       this.router.navigateByUrl('/search?query=' + this.getInputQuery() + '&' + this.categoryQuery + this.hourlyQuery);
     }
   }
@@ -269,6 +269,6 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onResetHourlyRate() {
     this.maxValue = 300;
-    this.minValue = 1;
+    this.minValue = 0;
   }
 }

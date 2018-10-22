@@ -1409,6 +1409,7 @@ button:focus {
 .btn-primary,
 .btn-primary:hover {
   background-color: #33ccff;
+  border: 0px solid transparent; 
   color: #fff;
 }
 
@@ -1434,7 +1435,7 @@ button:focus {
 .btn-primary.active,
 .show>.btn-primary.dropdown-toggle {
   background-color: #00ADEE;
-  border-color: #00ADEE;
+  border-color: transparent;
   color: #fff;
 }
 
