@@ -15,6 +15,7 @@ import { FeedbackComponent } from './feedback/feedback.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { LandingComponent } from '../landing/landing.component';
+import { ComingSoonComponent } from './coming-soon/coming-soon.component';
 import {
   SearchFilterOptionComponent
 } from './header/search-filter-option/search-filter-option.component';
@@ -80,7 +81,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     VStepperComponent,
     StatusLightComponent,
     ProviderCardComponent,
-    IpfsDropzoneComponent
+    IpfsDropzoneComponent,
+    ComingSoonComponent
   ],
   exports: [
     AttachmentComponent,
