@@ -22,6 +22,7 @@ import { NavService } from './core-services/nav.service';
 import { CoreUtilsModule } from './core-utils/core-utils.module';
 import { FilterPipeModule } from 'ngx-filter-pipe';
 import { Ng5SliderModule } from 'ng5-slider';
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,12 @@ import { Ng5SliderModule } from 'ng5-slider';
     HttpModule,
     HttpClientModule,
     FilterPipeModule,
-    Ng5SliderModule
+    Ng5SliderModule,
+    LoggerModule.forRoot({
+      // serverLoggingUrl: '/api/logs',
+      level: NgxLoggerLevel.DEBUG,
+      serverLogLevel: NgxLoggerLevel.ERROR
+    })
   ],
   exports: [
     FilterPipeModule
