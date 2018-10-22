@@ -4,7 +4,7 @@
       <div class="row search-container">
         <div class="col-12">
           <ais-instantsearch [config]="algoliaSearchConfig" *ngIf="!rendering">
-            <div class="row" id="shouldBeShown" hidden *ngIf="minValue > 0">
+            <div class="row" id="shouldBeShown" *ngIf="minValue > 0">
               <ais-range-input hidden attribute="hourlyRate" [min]="minValue" [max]="maxValue" [precision]="0" style="margin: 0 auto">
               </ais-range-input>
             </div>
@@ -13,19 +13,23 @@
             <div class="row mt-25 mb-15" style="z-index: 150; position: relative;">
               <div class="col-9">
                 <div class="row">
-                  <button id="category-btn" (click)="toggleOverlay('category-menu','hours-menu', 'category-btn')" [ngClass]="{ active : this.categoryFilters.length > 1 || this.categoryFilters[0] !== undefined}" class="btn btn-primary filter-btn btn-outline">
+                  <button id="category-btn" (click)="toggleOverlay('category-menu','hours-menu')" [ngClass]="{ active : this.categoryFilters.length > 1 || this.categoryFilters[0] !== undefined}"
+                    class="btn btn-primary filter-btn btn-outline">
                     CATEGORY
                   </button>
-                  <button id="hourly-btn" class="btn btn-primary filter-btn btn-outline" [ngClass]="{ active : minValue > 1 || maxValue < 300}" class="btn btn-primary filter-btn btn-outline" (click)="toggleOverlay('hours-menu', 'category-menu', 'hourly-btn')">
+                  <button id="hourly-btn" (click)="toggleOverlay('hours-menu', 'category-menu')" class="btn btn-primary filter-btn btn-outline"
+                    [ngClass]="{ active : minValue > 1 || maxValue < 300}" class="btn btn-primary filter-btn btn-outline">
                     <span *ngIf="minValue === 0 && maxValue === 300">HOURLY RATE</span>
-                    <span *ngIf="minValue > 0 || maxValue <= 300">${{minValue}} - ${{maxValue}}/HR</span>
+                    <span *ngIf="minValue > 0 || maxValue < 300">${{minValue}} - ${{maxValue}}/HR</span>
                   </button>
-                  <ais-toggle *ngIf="currentUser && currentUser.timezone !== '' " label="Only show providers within my timezone"
-                    style="margin-left:30px" attribute="timezone" [values]="{
-                    on: currentUser.timezone,
-                    off: ''
+                  <div class="row">
+                    <ais-toggle *ngIf="currentUser && currentUser.timezone !== '' " label="Only show providers within my timezone"
+                      style="margin-left:30px" attribute="timezone" [values]="{
+                  on: currentUser.timezone,
+                  off: ''
                   }">
-                  </ais-toggle>
+                    </ais-toggle>
+                  </div>
                 </div>
                 <div class="menu-options hide-menu" id="category-menu">
                   <div class="row text-center">
