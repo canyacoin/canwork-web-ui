@@ -1,0 +1,46 @@
+
+ .headshot-div {
+    position: absolute;
+    display: inline-block;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    background-size: 105%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: black;
+    background-position: center center;
+    background-size: cover;
+    display: inline-block;
+    background-repeat: no-repeat;
+  }
+ 
+  .otherPartyName {
+    margin: 0;
+  }
+ 
+  .skill-tag-col {
+    text-align: right;
+    padding: 0;
+    margin: 0;
+  }
+ 
+  .otherPartyName p {
+    display: inline;
+    padding-left: 30px;
+  }
+ 
+  .otherPartyName b {
+    padding-right: 5px;
+  }
+ 
+ 
+ 
+  .job-dashboard-card {
+    box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+  }
+ 
+  .job-dashboard-card:hover {
+    box-shadow: 0 0px 15px 0 rgba(0, 0, 0, 0.3);
+  }
