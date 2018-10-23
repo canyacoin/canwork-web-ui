@@ -1,0 +1,36 @@
+<div class="container job-info">
+  <div class="row">
+    <div class="col-lg-8">
+      <h5>{{job.information.title}}
+      </h5>
+    </div>
+    <div class="col-lg-4 desktop-right-mobile-center">
+      <app-status-icon [job]="job" [currentUserType]="userType"></app-status-icon>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+      <p class="text-grey fw-500">{{job.paymentType}} |
+        <app-budget [job]="job"></app-budget>| Date posted : {{ job.actionLog[0].timestamp | date:'dd MMM
+        yyyy'
+        }}
+      </p>
+    </div>
+    <div class="col-lg-6 text-right">
+      <app-skill-tag *ngFor="let skill of job.information.skills" [skill]="skill"></app-skill-tag>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <p>{{job.information.description}}</p>
+    </div>
+    <div class="col-lg-12">
+      <div class="otherPartyName">
+        <b>Posted <span *ngIf="currentUser.type=='User'">To</span><span *ngIf="currentUser.type=='Provider'">By</span>:</b>
+        <span *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
+        </span>
+        <p>{{job.otherParty?.name}}</p>
+      </div>
+    </div>
+  </div>
+</div>
