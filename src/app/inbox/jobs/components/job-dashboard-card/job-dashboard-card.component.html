@@ -60,42 +60,62 @@
   </div>
   <div class="container provider-job-card jobs-info mobile-center" *ngIf="currentUser.type === 'Provider'">
     <div class="row">
-      <div class="col-1" [routerLink]="['/inbox/job', job.id]">
+      <div class="col-lg-1 col-md-12 col-sm-12 col-12" [routerLink]="['/inbox/job', job.id]">
         <span *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
         </span>
       </div>
-      <div class="col-9">
+      <div class="col-lg-11  col-md-12 col-sm-12 col-12">
         <div class="row">
-          <table class="table client-info-table">
-            <tr>
-              <td>
-                <h4>{{job.otherParty?.name}}</h4>
-              </td>
-              <td>
-                <p>
-                  {{job.paymentType}}
-                </p>
-                <b>
-                  <app-budget [job]="job"></app-budget>
-                </b>
-              </td>
-              <td>
-                <p>Timeline</p>
-                <b>{{job.information.timelineExpectation}}</b>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <app-skill-tag *ngFor="let skill of job.information.skills" [skill]="skill"></app-skill-tag>
-              </td>
-            </tr>
-          </table>
+          <div class="col-lg-4 col-sm-4">
+            <h4>{{job.otherParty?.name}}</h4>
+          </div>
+          <div class="col-lg-2">
+            <p>
+              {{job.paymentType}}
+            </p>
+          </div>
+          <div class="col-lg-2">
+            <p>Timeline</p>
+          </div>
+          <div class="col-lg-4 text-right">
+            <button class="btn btn-primary btn-round btn-canya-chat">
+              LET'S CHAT
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="col-2 text-center">
-        <button class="btn btn-round btn-canya">
-          LET'S CHAT
-        </button>
+        <div class="row">
+          <div class="col-lg-4">
+            <p>{{job.information.title}}</p>
+          </div>
+          <div class="col-lg-2">
+            <p>
+              <b>
+                <app-budget [job]="job"></app-budget>
+              </b>
+            </p>
+          </div>
+          <div class="col-lg-2">
+            <b>{{job.information.timelineExpectation}}</b>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <app-skill-tag *ngFor="let skill of job.information.skills" [skill]="skill"></app-skill-tag>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-10">
+            {{job.information.description}}
+          </div>
+          <div class="col-lg-2 text-right" style="display: grid;">
+            <button class="btn btn-success" style="margin-top: 5px">
+              ACCEPT
+            </button>
+            <button class="btn btn-secondary" style="margin-top: 5px">
+              DECLINE
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

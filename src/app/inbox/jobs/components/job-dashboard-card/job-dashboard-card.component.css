@@ -83,7 +83,7 @@
   margin-bottom: 5px
 }
 .provider-job-card .headshot-div{
-  position: absolute;
+  position: relative;
   height:50px;
   width:50px;
 }
