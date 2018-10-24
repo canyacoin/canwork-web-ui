@@ -56,9 +56,9 @@ export class StatusIconComponent {
       case JobState.clientCounterOffer:
         return 'Offer countered by client';
       case JobState.termsAcceptedAwaitingEscrow:
-        return this.currentUserType === UserType.client ? 'Awaiting escrow authorisation' : 'Awaiting payment to escrow';
+        return this.currentUserType === UserType.client ? 'Awaiting escrow authorisation' : 'Pending escrow deposit';
       case JobState.authorisedEscrow:
-        return this.currentUserType === UserType.client ? 'Awaiting escrow deposit' : 'Awaiting payment to escrow';
+        return this.currentUserType === UserType.client ? 'Awaiting escrow deposit' : 'Pending escrow deposit';
       case JobState.inEscrow:
         return 'Funds in escrow';
       case JobState.complete:

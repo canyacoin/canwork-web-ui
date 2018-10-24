@@ -1,46 +1,108 @@
+.headshot-div {
+  position: absolute;
+  display: inline-block;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  background-size: 105%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: black;
+  background-position: center center;
+  background-size: cover;
+  display: inline-block;
+  background-repeat: no-repeat;
+}
 
- .headshot-div {
-    position: absolute;
-    display: inline-block;
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    background-size: 105%;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-color: black;
-    background-position: center center;
-    background-size: cover;
-    display: inline-block;
-    background-repeat: no-repeat;
+.otherPartyName {
+  bottom: 0;
+  position: absolute;
+}
+
+.skill-tag-col {
+  text-align: right;
+  padding: 0;
+  margin: 0;
+}
+
+.otherPartyName p {
+  display: inline;
+  padding-left: 30px;
+}
+
+.job-details {
+  font-size: 14px;
+}
+
+.job-details p {
+  margin: 0;
+  color: #323c47;
+}
+
+.job-dashboard-card {
+  border-radius: 5px;
+}
+
+.job-dashboard-card:hover {
+  box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.15);
+}
+
+.info-row {
+  min-height: 144px;
+}
+
+.info-row b {
+  font-weight: 700;
+}
+
+.option-row {
+  min-height: 50px;
+}
+
+.option-menu {
+  box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.2);
+  top: 32px;
+}
+
+#moreOptionsLink {
+  padding-left: 15px;
+  font-size: 600;
+}
+
+.option-menu i {
+  margin-right: 10px;
+}
+.job-desc{
+  min-height: 195px;
+}
+.job-desc p {
+  width: 760px;
+  height: 50px;
+}
+.info-details{
+  margin-bottom: 5px
+}
+.provider-job-card .headshot-div{
+  position: absolute;
+  height:50px;
+  width:50px;
+}
+.provider-job-card p{
+  margin: 0;
+}
+
+.provider-job-card .client-info-table{
+  border:none;
+  margin: 0;
+  max-width: 600px;
+}
+
+.provider-job-card .client-info-table td, .client-info-table th{
+  border:none;
+  padding: 0;
+}
+@media (max-width:568px) {
+  .mobile-center {
+    text-align: center;
   }
- 
-  .otherPartyName {
-    margin: 0;
-  }
- 
-  .skill-tag-col {
-    text-align: right;
-    padding: 0;
-    margin: 0;
-  }
- 
-  .otherPartyName p {
-    display: inline;
-    padding-left: 30px;
-  }
- 
-  .otherPartyName b {
-    padding-right: 5px;
-  }
- 
- 
- 
-  .job-dashboard-card {
-    box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-  }
- 
-  .job-dashboard-card:hover {
-    box-shadow: 0 0px 15px 0 rgba(0, 0, 0, 0.3);
-  }
+}

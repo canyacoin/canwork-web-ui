@@ -1,5 +1,5 @@
 <main class="main-content">
-  <section class="section bg-gray pt-15 pb-20" id="section-manage-jobs">
+  <section class="section bg-gray pt-15" id="manage-jobs">
     <app-back-button></app-back-button>
     <div class="container">
       <div class="row">
@@ -71,10 +71,12 @@
           No jobs to show!
         </div>
         <div *ngIf="jobs && jobs.length > 0">
-          <div *ngFor="let job of jobs | orderBy : orderType:reverseOrder" class="card job-dashboard-card mb-15 p-20 pointer"
-            [routerLink]="['/inbox/job', job.id]">
-            <app-job-dashboard-card [job]="job" [currentUser]="currentUser"></app-job-dashboard-card>
+            <app-job-dashboard-card *ngFor="let job of jobs | orderBy : orderType:reverseOrder"  [job]="job" [currentUser]="currentUser"></app-job-dashboard-card>
+        <!--
+          <div *ngFor="let job of jobs | orderBy : orderType:reverseOrder" class="card mb-15 p-20 pointer"
+          [routerLink]="['/inbox/job', job.id]">
           </div>
+        -->
         </div>
       </div>
     </div>
