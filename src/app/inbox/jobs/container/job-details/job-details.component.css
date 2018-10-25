@@ -59,6 +59,10 @@ hr {
   padding: 0;
 }
 
+.job-info {
+  border-left: 0.5px solid rgba(0, 0, 0, 0.1);
+}
+
 #explanation-modal .modal-dialog {
   padding-top: 25vh;
 }
@@ -78,7 +82,10 @@ hr {
 .circle-warning {
   color: #ffc600;
 }
-
+.job-detail-container .otherPartyName{
+  position: relative;
+  margin: 5px 0 5px 0;
+}
 @media only screen and (max-width: 978px) {
   #status-span {
     text-align: left !important;

@@ -35,31 +35,20 @@
             </div>
           </div>
         </div>
-        <div class="row option-row">
-          <button *ngIf="job.state === 'complete'" class="btn btn-primary btn-outline btn-round">
-            LEAVE REVIEW
+        <div>
+          <button [routerLink]="['/inbox/job', job.id]" class="btn btn-primary view-job-btn">
+            VIEW JOB
           </button>
-          <li class="nav-item dropdown" *ngIf="job.state !== 'complete'">
-            <a class="nav-link dropdown-toggle" role="button" id="moreOptionsLink" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false">
-              More Actions
-            </a>
-            <div class="dropdown-menu option-menu" aria-labelledby="moreOptionsLink">
-              <a class=" nav-link dropdown-item" style="font-weight: 400 !important; text-transform: none"><i class="far fa-edit"></i>Add
-                Note</a>
-              <div class="dropdown-divider"></div>
-              <a class=" nav-link dropdown-item" style="font-weight: 400 !important; text-transform: none"><i class="fas fa-gavel"></i>Raise
-                Dispute</a>
-              <div class="dropdown-divider"></div>
-              <a class=" nav-link dropdown-item" style="font-weight: 400 !important; text-transform: none"><i class="fas fa-question-circle"></i>Help</a>
-            </div>
-          </li>
         </div>
       </div>
     </div>
   </div>
-  <!-- This is for public job offers - e.g. client receiving provider offers. uncomment this once the basic features has been implemented.
-  <div class="container provider-job-card jobs-info">
+  <div class="container provider-job-card jobs-info" *ngIf="job.workType === 'public-job-type-prototype'">
+    <!-- 
+      This is for public job offers - e.g. client receiving provider offers,
+      hence the impossible job.workType ngIf above. this should save us some time...
+      uncomment this once the basic features has been implemented.
+      -->
     <img class="headshot-div" src="{{ job.otherParty?.avatar.uri }}">
     <div class="row">
       <div class="col-md-3 offset-md-1 col-sm-4 col-12" [routerLink]="['/inbox/job', job.id]">
@@ -112,6 +101,5 @@
         </button>
       </div>
     </div>
-  </div> 
-  -->
+  </div>
 </div>

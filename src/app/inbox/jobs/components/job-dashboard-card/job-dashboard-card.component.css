@@ -1,33 +1,7 @@
-.headshot-div {
-  position: absolute;
-  display: inline-block;
-  border-radius: 50%;
-  width: 25px;
-  height: 25px;
-  background-size: 105%;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color: black;
-  background-position: center center;
-  background-size: cover;
-  display: inline-block;
-  background-repeat: no-repeat;
-}
-
-.otherPartyName {
-  bottom: 0;
-  position: absolute;
-}
-
 .skill-tag-col {
   text-align: right;
   padding: 0;
   margin: 0;
-}
-
-.otherPartyName p {
-  display: inline;
-  padding-left: 30px;
 }
 
 .job-details {
@@ -82,10 +56,6 @@
   height: 50px;
 }
 
-.info-details {
-  margin-bottom: 5px
-}
-
 .provider-job-card .headshot-div {
   position: absolute;
   height: 50px;
@@ -117,16 +87,24 @@ h4 {
 .info-container {
   min-width: 420px;
 }
-.btn-div .btn{
-  margin-top:5px;
+
+.btn-div .btn {
+  margin-top: 5px;
 }
+
+.view-job-btn{
+  width: 100%;
+}
+
 @media (max-width:768px) {
   .mobile-center {
     text-align: center !important;
   }
-  .job-desc{
+
+  .job-desc {
     min-height: auto;
   }
+
   .hide-mobile {
     display: none;
   }

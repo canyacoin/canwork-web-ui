@@ -2,7 +2,7 @@
   <img src="assets/img/loader.svg" height="36px" alt="Loader">
 </div>
 
-<div class="container" *ngIf="job">
+<div class="container job-detail-container" *ngIf="job">
   <div class="row" *ngIf="false">
     <span class="col-6 text-left">
       <h4 class="fw-500 mb-30">MANAGE JOB</h4>
@@ -11,167 +11,88 @@
       <button class="btn">Click me</button>
     </span>
   </div>
-  <div class="card mb-30 p-30 job-detail-card">
-    <div id="job-top" class="row">
-      <div class="col-lg-8 col-xs-12">
-        <div class="row">
-          <span class="col-xs-4 col-sm-2 col-md-2 col-lg-2">
-            <div *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot" [ngStyle]="{'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}"></div>
-          </span>
-          <span class="col-xs-8 col-sm-10  col-md-10 col-lg-1O text-left">
-            <h3>{{job.information.title}}</h3>
-            <h4 class="fw-500">{{job.otherParty?.name}}</h4>
-          </span>
+  <div class="card p-30 job-detail-card">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-9">
+          <h5>JOB DETAILS</h5>
+          <h3>
+            {{job.information.title}}
+          </h3>
+          <p>
+            {{job.information.description}}
+          </p>
         </div>
-      </div>
-      <span class="col-lg-4 col-xs-12" id="status-span">
-        <div class="row">
-          <div class="col-12">
-            <!-- Current state -->
-            <app-status-icon [job]="job" [currentUserType]="currentUserType"></app-status-icon>
+        <div class="col-sm-3 job-info">
+          <div class="info-details">
+            <p>
+              {{job.paymentType}}
+            </p>
+            <b>
+              <app-budget [job]="job"></app-budget>
+            </b>
+          </div>
+          <div class="info-details">
+            <p>Timeline</p>
+            <b>{{job.information.timelineExpectation}}</b>
           </div>
         </div>
-        <div class="row">
-          <div class="col-12">
-            <div>
-              <button class="question-btn" data-toggle="modal" data-target="#explanation-modal">
-                <i class="far fa-question-circle"></i>
-              </button>
-            </div>
-            <div class="modal fade bd-example-modal-sm" id="explanation-modal" tabindex="-1" role="dialog"
-              aria-labelledby="mySmallModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h6 class="modal-title">What does "{{stateStatus}}" Mean?</h6>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
+      </div>
+    </div>
+  </div>
+  <div class="container p-30">
+    <div class="row">
+      <div class="col-sm-9">
+        <h5>PROPOSED TERMS</h5>
+        <br>
+        <div class="otherPartyName">
+          <span *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
+          </span>
+          <p>{{job.otherParty?.name}}</p>
+        </div>
+        <b>
+          {{job.paymentType}}
+        </b>
+        <p>This project is set at a {{job.paymentType}}
+          <br>
+          <app-budget [job]="job"></app-budget>
+        </p>
+        <div *ngIf="availableActions.length > 0">
+          <button *ngFor="let action of availableActions" class="btn action-btn mt-5 btn-{{getActionColour(action)}} btn-outline btn-sm"
+            (click)="executeAction(action)" [disabled]="actionIsDisabled(action)">
+            {{action}}
+          </button>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="info-details">
+          <p>Status</p>
+          <app-status-icon [job]="job" [currentUserType]="userType"></app-status-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card p-30 job-detail-card">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <h4>ACTION LOG</h4>
+          <div id="job-logs" class="row my-10">
+            <div class="col-12 my-10 text-left">
+              <div *ngFor="let action of job.getActionLog() | orderBy:'timestamp':true; let actionIndex = index" class="my-10">
+                <div class="row" *ngIf="!action.private || action.executedBy == currentUserType">
+                  <div class="col-lg-8 col-md-6  col-sm-6 col-6">
+                    <p [innerHTML]="action.getMessage(getActionExecutor(action))"></p>
                   </div>
-                  <div class="modal-body text-left">
-                    <p>{{stateExplanation}}</p>
+                  <div class="col-lg-4 col-md-6  col-sm-6 col-6 text-right">
+                    {{ action.timestamp | date:'medium' }}
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </span>
-    </div>
-    <div id="job-top-mobile">
-      <div class="row">
-        <div class="col-2">
-          <div *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot" [ngStyle]="{'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}"></div>
-        </div>
-        <div class="col-10">
-          <h4>{{job.information.title}}
-            <br>
-            <span class="fw-500">{{job.otherParty?.name}}</span>
-          </h4>
-        </div>
       </div>
-      <div class="row">
-        <div class="col-12">
-          <app-status-icon [job]="job" [currentUserType]="currentUserType"></app-status-icon>
-        </div>
-      </div>
-    </div>
-    <div id="job-actions" class="pb-5 bb-1">
-      <div>
-        <div class="row">
-          <div class="col-lg-2 col-sm-12">
-            <b>Actions</b>
-          </div>
-          <div *ngIf="availableActions.length > 0" class="col-lg-10 col-sm-12 col-xs-12 action-group">
-            <button *ngFor="let action of availableActions" class="btn action-btn mt-5 btn-{{getActionColour(action)}} btn-outline btn-sm"
-              (click)="executeAction(action)" [disabled]="actionIsDisabled(action)">
-              {{action}}
-            </button>
-          </div>
-          <div *ngIf="availableActions.length < 1" class="col-lg-10 col-sm-12 col-xs-12 action-group">
-            <i>{{job?.state}}, no actions available</i>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="job-description" class="row">
-      <div class="col-12">
-        <div class="mb-10">
-          <b>Budget:</b>
-          <app-budget [job]="job"></app-budget>
-        </div>
-        <div class="mb-10">
-          <b>Job description</b>
-          {{job.information.description}}
-        </div>
-      </div>
-    </div>
-    <div id="job-details" class="row my-10">
-      <div class="col-lg-6 col-md-12">
-        <app-property [property]="'Initial Stage'" [value]="job.information.initialStage"></app-property>
-        <app-property [property]="'Work type'" [value]="job.information.workType"></app-property>
-        <app-property [property]="'Timeline expectation'" [value]="job.information.timelineExpectation"></app-property>
-        <app-property [property]="'Weekly commitment'" [value]="job.information.weeklyCommitment  + ' hours'"></app-property>
-      </div>
-      <div class="col-lg-6 col-md-12">
-        <div id="attachments-row" class="row">
-          <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            <b>Attachments</b>
-          </div>
-          <div class="col-lg-9 col-md-8 col-sm-12 col-xs-12">
-            <p *ngIf="job.information.attachments.length <= 0 ">No Attachment given.</p>
-            <app-attachment *ngFor="let attachment of job.information.attachments" [name]="attachment.name" [url]="attachment.url"
-              [size]="attachment.size"></app-attachment>
-          </div>
-        </div>
-        <div id="skills-row" class="row">
-          <div class="col-lg-3 col-md-4  col-sm-6 col-xs-12">
-            <b>Skills Required</b>
-          </div>
-          <div class="col-lg-9 col-md-8 col-sm-12 col-xs-12">
-            <app-skill-tag *ngFor="let skill of job.information.skills" [skill]="skill"></app-skill-tag>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="job-logs" class="row my-10">
-      <div class="col-12 my-10 text-left">
-        <b>Action Log</b>
-        <div *ngFor="let action of job.getActionLog() | orderBy:'timestamp':true; let actionIndex = index" class="my-10">
-          <div class="row" *ngIf="!action.private || action.executedBy == currentUserType">
-            <div class="col-lg-8 col-md-6  col-sm-6 col-xs-6">
-              <p [innerHTML]="action.getMessage(getActionExecutor(action))"></p>
-            </div>
-            <div class="col-lg-4 col-md-6  col-sm-6 col-xs-6 text-right">
-              {{ action.timestamp | date:'medium' }}
-            </div>
-          </div>
-        </div>
-      </div>
-      <span class="col-12 my-10 text-left" *ngIf="currentUserIsClient">
-        <b>Transactions</b>
-        <div *ngIf="transactions.length < 1">
-          No payments have been made yet
-        </div>
-        <div *ngIf="transactions.length >= 1">
-          <div *ngFor="let tx of transactions | orderBy:'timestamp':true" class="card mb-15 py-20">
-            <div class="row">
-              <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6">
-                <i class="circle-{{getTxColor(tx)}} fas fa-circle"></i> {{tx.actionType}}
-              </div>
-              <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 text-right">
-                {{ tx.timestamp | date:'medium' }}
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-6">
-                <a href="{{getTxLink(tx.hash)}}">View on
-                  Etherscan</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </span>
     </div>
   </div>
 </div>
