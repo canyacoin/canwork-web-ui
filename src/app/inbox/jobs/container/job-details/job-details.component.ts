@@ -74,7 +74,14 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   }
 
   actionIsDisabled(action: ActionType): boolean {
-    return action === ActionType.dispute || this.job.pendingTx > 0
+    return action === ActionType.dispute || this.hasPendingTransactions;
+  }
+
+  get hasPendingTransactions(): boolean {
+    if (this.transactions) {
+      return this.transactions.findIndex(x => !x.failure && !x.success) > -1;
+    }
+    return false;
   }
 
   get availableActions(): ActionType[] {
