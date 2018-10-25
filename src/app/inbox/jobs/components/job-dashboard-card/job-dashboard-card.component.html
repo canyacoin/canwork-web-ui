@@ -1,7 +1,7 @@
 <div class="card mb-15 p-20 pointer job-dashboard-card">
-  <div class="container jobs-info mobile-center" *ngIf="currentUser.type === 'User'">
+  <div class="container jobs-info">
     <div class="row">
-      <div class="col-lg-9 col-md-8" [routerLink]="['/inbox/job', job.id]">
+      <div class="col-md-9 col-sm-8" [routerLink]="['/inbox/job', job.id]">
         <div class="row job-desc">
           <div class="col-12">
             <h4>{{job.information.title}}</h4>
@@ -14,7 +14,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-3 col-md-4 job-details">
+      <div class="col-md-3 col-sm-4 job-details">
         <div class="row info-row">
           <div class="col-12">
             <div class="info-details">
@@ -58,65 +58,60 @@
       </div>
     </div>
   </div>
-  <div class="container provider-job-card jobs-info mobile-center" *ngIf="currentUser.type === 'Provider'">
+  <!-- This is for public job offers - e.g. client receiving provider offers. uncomment this once the basic features has been implemented.
+  <div class="container provider-job-card jobs-info">
+    <img class="headshot-div" src="{{ job.otherParty?.avatar.uri }}">
     <div class="row">
-      <div class="col-lg-1 col-md-12 col-sm-12 col-12" [routerLink]="['/inbox/job', job.id]">
-        <span *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
-        </span>
+      <div class="col-md-3 offset-md-1 col-sm-4 col-12" [routerLink]="['/inbox/job', job.id]">
+        <h4>{{job.otherParty?.name}}</h4>
       </div>
-      <div class="col-lg-11  col-md-12 col-sm-12 col-12">
-        <div class="row">
-          <div class="col-lg-4 col-sm-4">
-            <h4>{{job.otherParty?.name}}</h4>
-          </div>
-          <div class="col-lg-2">
-            <p>
-              {{job.paymentType}}
-            </p>
-          </div>
-          <div class="col-lg-2">
-            <p>Timeline</p>
-          </div>
-          <div class="col-lg-4 text-right">
-            <button class="btn btn-primary btn-round btn-canya-chat">
-              LET'S CHAT
-            </button>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-4">
-            <p>{{job.information.title}}</p>
-          </div>
-          <div class="col-lg-2">
-            <p>
-              <b>
-                <app-budget [job]="job"></app-budget>
-              </b>
-            </p>
-          </div>
-          <div class="col-lg-2">
-            <b>{{job.information.timelineExpectation}}</b>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-            <app-skill-tag *ngFor="let skill of job.information.skills" [skill]="skill"></app-skill-tag>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-10">
-            {{job.information.description}}
-          </div>
-          <div class="col-lg-2 text-right" style="display: grid;">
-            <button class="btn btn-success" style="margin-top: 5px">
-              ACCEPT
-            </button>
-            <button class="btn btn-secondary" style="margin-top: 5px">
-              DECLINE
-            </button>
-          </div>
-        </div>
+      <div class="col-sm-2 hide-mobile">
+        <p>
+          {{job.paymentType}}
+        </p>
+      </div>
+      <div class="col-sm-2 hide-mobile">
+        <p>Timeline</p>
+      </div>
+      <div class="col-sm-4 text-right">
+        <button class="btn btn-primary btn-canya-chat hide-mobile">
+          LET'S CHAT
+        </button>
       </div>
     </div>
-  </div>
+    <div class="row">
+      <div class="col-md-3 offset-md-1 col-sm-4 col-12">
+        <p>{{job.information.title}}</p>
+      </div>
+      <div class="col-sm-2 col-6">
+        <p>
+          <b>
+            <app-budget [job]="job"></app-budget>
+          </b>
+        </p>
+      </div>
+      <div class="col-sm-2 col-6">
+        <b>{{job.information.timelineExpectation}}</b>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-11 offset-md-1 col-12">
+        <app-skill-tag *ngFor="let skill of job.information.skills" [skill]="skill"></app-skill-tag>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-8 offset-sm-1 col-12">
+        {{job.information.description}}
+      </div>
+      <div class="col-sm-3 col-12 text-right btn-div mobile-center">
+        <button class="btn btn-success">
+          ACCEPT
+        </button>
+        <button class="btn btn-secondary">
+          DECLINE
+        </button>
+      </div>
+    </div>
+  </div> 
+  -->
 </div>

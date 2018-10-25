@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class JobDashboardCardComponent implements OnInit {
   @Input() job: any;
-  @Input() currentUser: any;
+  @Input() type: any;
 
   constructor() { }
 
