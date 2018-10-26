@@ -68,14 +68,15 @@
           <p>Status</p>
           <app-status-icon [job]="job" [currentUserType]="userType"></app-status-icon>
         </div>
-        <br>
-        <b>
-          {{job.paymentType}}
-        </b>
-        <p>This project is set at a {{job.paymentType}}
-          <br>
-          <app-budget [job]="job"></app-budget>
-        </p>
+        <div class="info-details">
+          <b>
+            {{job.paymentType}}
+          </b>
+          <p>This project is set at a {{job.paymentType}}
+            <br>
+            <app-budget [job]="job"></app-budget>
+          </p>
+        </div>
         <div class="actions-div" *ngIf="availableActions.length > 0">
           <button *ngFor="let action of availableActions" class="btn action-btn mt-5 btn-{{getActionColour(action)}} btn-outline btn-sm"
             (click)="executeAction(action)" [disabled]="actionIsDisabled(action)">
@@ -84,7 +85,7 @@
           <br>
         </div>
       </div>
-      <div class="col-sm-3"  *ngIf="!isOnMobile">
+      <div class="col-sm-3" *ngIf="!isOnMobile">
         <div class="info-details">
           <p>Status</p>
           <app-status-icon [job]="job" [currentUserType]="userType"></app-status-icon>
