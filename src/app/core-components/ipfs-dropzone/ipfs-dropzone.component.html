@@ -1,8 +1,11 @@
 <section id="dropzone">
-  <div class="container">
-    <button class="btn btn-light mb-3" (click)="close.emit(true)">Cancel</button>
+  <section class="toggler-div" (click)="close.emit(true)">
+  </section>
+  <div class="container dropzone-container">
+    <div class="col-12 text-right">
+      <button class="btn btn-light" (click)="close.emit(true)">X</button>
+    </div>
     <div class="wrapper">
-
       <dropzone [config]="dropzoneConfig" [message]="dropzoneMessage" (error)="onUploadError($event)" (success)="onUploadSuccess($event)"
         (addedFile)="onFileAdded($event)">
       </dropzone>
