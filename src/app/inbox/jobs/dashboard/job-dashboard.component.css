@@ -1,127 +1,141 @@
-
-
- #checkBox {
+#checkBox {
   margin-bottom: 7.5px;
 }
 
- #section-manage-jobs{
-   min-height: 80vh;
- }
+#section-manage-jobs {
+  min-height: 80vh;
+}
 
- .job-info-status {
-   text-align: right;
- }
+.job-info-status {
+  text-align: right;
+}
 
- .search-group {
-   border: none;
-   margin-bottom: 10px;
-   margin-right: 10px;
- }
+.search-group {
+  border: none;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
 
- .search-group img {
-   width: 24px;
-   height: 24px;
- }
+.search-group img {
+  width: 24px;
+  height: 24px;
+}
 
- .search-group .btn {
-   padding-right: 5px;
-   padding-left: 5px;
-   border-color: white;
- }
+.search-group .btn {
+  padding-right: 5px;
+  padding-left: 5px;
+  border-color: white;
+}
 
 
- @media (max-width:863px) and (min-width:568px) {
-   .headshot {
-     width: 65px;
-     height: 65px;
-   }
- }
+select { 
+  width: auto;
+  padding: 5px 40px 5px 5px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  height: 34px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url('../../../../assets/img/chevron-down-solid.svg') 95% / 15px no-repeat #fff;
+}
 
- @media (max-width:568px) {
-   .desktop-search-form {
-     display: none;
-   }
-   .job-info {
-     text-align: center;
-   }
-   .job-info-status {
-     text-align: center;
-   }
-   .desktop-right-mobile-center {
-     text-align: center;
-   }
- }
+@media (max-width:863px) and (min-width:568px) {
+  .headshot {
+    width: 65px;
+    height: 65px;
+  }
+}
 
- /*the container must be positioned relative:*/
+@media (max-width:568px) {
+  .desktop-search-form {
+    display: none;
+  }
 
- .custom-select {
-   position: relative;
-   font-family: Arial;
- }
+  .job-info {
+    text-align: center;
+  }
 
- .custom-select select {
-   display: none;
-   /*hide original SELECT element:*/
- }
+  .job-info-status {
+    text-align: center;
+  }
 
- .select-selected {
-   background-color: DodgerBlue;
- }
+  .desktop-right-mobile-center {
+    text-align: center;
+  }
+}
 
- /*style the arrow inside the select element:*/
+/*the container must be positioned relative:*/
 
- .select-selected:after {
-   position: absolute;
-   content: "";
-   top: 14px;
-   right: 10px;
-   width: 0;
-   height: 0;
-   border: 6px solid transparent;
-   border-color: #fff transparent transparent transparent;
- }
+.custom-select {
+  position: relative;
+  font-family: Arial;
+}
 
- /*point the arrow upwards when the select box is open (active):*/
+.custom-select select {
+  display: none;
+  /*hide original SELECT element:*/
+}
 
- .select-selected.select-arrow-active:after {
-   border-color: transparent transparent #fff transparent;
-   top: 7px;
- }
+.select-selected {
+  background-color: DodgerBlue;
+}
 
- /*style the items (options), including the selected item:*/
+/*style the arrow inside the select element:*/
 
- .select-items div,
- .select-selected {
-   color: #ffffff;
-   padding: 8px 16px;
-   border: 1px solid transparent;
-   border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
-   cursor: pointer;
- }
+.select-selected:after {
+  position: absolute;
+  content: "";
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #fff transparent transparent transparent;
+}
 
- /*style items (options):*/
+/*point the arrow upwards when the select box is open (active):*/
 
- .select-items {
-   position: absolute;
-   background-color: DodgerBlue;
-   top: 100%;
-   left: 0;
-   right: 0;
-   z-index: 99;
- }
+.select-selected.select-arrow-active:after {
+  border-color: transparent transparent #fff transparent;
+  top: 7px;
+}
 
- /*hide the items when the select box is closed:*/
+/*style the items (options), including the selected item:*/
 
- .select-hide {
-   display: none;
- }
+.select-items div,
+.select-selected {
+  color: #ffffff;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+}
 
- .select-items div:hover,
- .same-as-selected {
-   background-color: rgba(0, 0, 0, 0.1);
- }
+/*style items (options):*/
 
- #manage-jobs{
-   min-height: 80vh;
-   padding-bottom: 15vh;
- }
+.select-items {
+  position: absolute;
+  background-color: DodgerBlue;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
+
+/*hide the items when the select box is closed:*/
+
+.select-hide {
+  display: none;
+}
+
+.select-items div:hover,
+.same-as-selected {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+#manage-jobs {
+  min-height: 80vh;
+  padding-bottom: 15vh;
+}

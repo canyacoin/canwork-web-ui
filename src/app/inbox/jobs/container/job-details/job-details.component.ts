@@ -5,6 +5,7 @@ import { ActionType, IJobAction } from '@class/job-action';
 import { User, UserType } from '@class/user';
 import { AuthService } from '@service/auth.service';
 import { JobService } from '@service/job.service';
+import { MobileService } from '@service/mobile.service';
 import { Transaction, TransactionService } from '@service/transaction.service';
 import { UserService } from '@service/user.service';
 import { AngularFireStorage } from 'angularfire2/storage';
@@ -26,15 +27,15 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   jobState = JobState;
 
   currentUser: User;
-
   // The current user is 'acting' as this type
   // This allows providers to work as both client and provider
   currentUserType: UserType;
   job: Job;
   transactions: Transaction[] = [];
-
+  isOnMobile = false;
   jobSub: Subscription;
   transactionsSub: Subscription;
+  hideDescription = true;
 
   constructor(private authService: AuthService,
     private jobService: JobService,
@@ -42,7 +43,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     private transactionService: TransactionService,
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    private mobile: MobileService
   ) { }
 
   ngOnInit() {
@@ -50,6 +52,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       this.currentUser = user;
       this.initialiseJob();
     });
+    this.isOnMobile = this.mobile.isOnMobile;
   }
 
   ngOnDestroy() {
@@ -201,4 +204,10 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   getTxColor(tx: Transaction) {
     return tx.success ? 'success' : tx.failure ? 'danger' : 'warning';
   }
+
+  toggleDescription() {
+    this.hideDescription = !this.hideDescription;
+    console.log(this.hideDescription);
+  }
+
 }

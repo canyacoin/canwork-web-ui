@@ -82,9 +82,13 @@ hr {
 .circle-warning {
   color: #ffc600;
 }
-.job-detail-container .otherPartyName{
+
+.job-detail-container .otherPartyName {
   position: relative;
   margin: 5px 0 5px 0;
+}
+.actions-div .btn{
+  min-width: 200px;
 }
 @media only screen and (max-width: 978px) {
   #status-span {
@@ -100,7 +104,24 @@ hr {
   }
 }
 
+.job-actions-card {
+  margin: 10px 0 10px 0;
+  border-radius: 5px;
+  box-shadow: 0 2px 9px 0 rgba(0, 0, 0, 0.02);
+  background-color: #f8f9fa;
+}
+
 @media only screen and (max-width: 576px) {
+
+  .job-info {
+    border: none;
+  }
+
+  .info-details {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
   #job-top {
     display: none;
   }

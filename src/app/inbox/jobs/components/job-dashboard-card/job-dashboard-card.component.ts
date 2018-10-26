@@ -7,12 +7,12 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class JobDashboardCardComponent implements OnInit {
   @Input() job: any;
-  @Input() type: any;
+  @Input() type: string;
 
   constructor() { }
 
   ngOnInit() {
-    console.log(this.job);
+    console.log(this.type);
   }
 
 }

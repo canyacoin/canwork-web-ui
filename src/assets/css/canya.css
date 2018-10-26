@@ -9706,12 +9706,20 @@ a.text-danger:focus {
     margin-top: 5px !important;
   }
 }
-
+.show-mobile {
+  display: none;
+}
 @media screen and (max-width: 640px) {
   .profile-mini {
     min-height: 75px !important;
   }
 
+  .hide-mobile {
+    display: none;
+  }
+  .show-mobile{
+    display: block;
+  }
   .profile-mini .headshot {
     width: 75px !important;
     height: 75px !important;

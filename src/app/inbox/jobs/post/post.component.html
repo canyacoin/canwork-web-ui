@@ -1,6 +1,5 @@
-<main class="main-content">
-
-  <section *ngIf="currentUser" class="section bg-white pt-10 pb-30" id="section-main">
+<main>
+  <section *ngIf="currentUser" class="section bg-white pt-10 pb-30">
     <app-back-button></app-back-button>
     <div *ngIf="!pageLoaded" class="container d-flex h-100 flex-column justify-content-center">
       <img src="assets/img/loader.svg" height="36px" alt="Loader">

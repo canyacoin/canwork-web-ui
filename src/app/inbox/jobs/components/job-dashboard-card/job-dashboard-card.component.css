@@ -26,7 +26,7 @@
 }
 
 .info-row b {
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .option-row {
@@ -52,8 +52,11 @@
 }
 
 .job-desc p {
-  width: 760px;
-  height: 50px;
+  width: auto;
+  max-width: 75vw;
+  height: 100px;
+  padding-bottom: 25px;
+  white-space: pre-wrap;
 }
 
 .provider-job-card .headshot-div {
@@ -92,8 +95,9 @@ h4 {
   margin-top: 5px;
 }
 
-.view-job-btn{
-  width: 100%;
+.view-job-btn {
+  width: 150px;
+  height: 36px;
 }
 
 @media (max-width:768px) {
@@ -101,15 +105,27 @@ h4 {
     text-align: center !important;
   }
 
+  .otherPartyName {
+    position: relative;
+  }
+
+  .info-row {
+    min-height: auto;
+    padding: 10px 0 10px 0;
+  }
+
   .job-desc {
     min-height: auto;
   }
-
-  .hide-mobile {
-    display: none;
-  }
-
   .provider-job-card .headshot-div {
     display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .job-desc p {
+    width: auto;
+    max-width: 75vw;
+    height: 45px;
   }
 }
