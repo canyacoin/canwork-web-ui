@@ -2,7 +2,7 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.6.5.
 
-[![Build Status](https://travis-ci.com/canyaio/can-work.svg?token=FAxKySscNkseqRyx9f3i&branch=master)](https://travis-ci.com/canyaio/can-work)
+[![pipeline status](https://gitlab.com/canya-com/canwork/web-ui/badges/master/pipeline.svg)](https://gitlab.com/canya-com/shared/services/ethereum-transaction-monitor/commits/master)
 
 ## Development server
 
@@ -13,7 +13,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 Once only installations:
 
 ```
-npm install -g angular-cli firebase-tools
+npm install -g @angular/cli firebase-tools
 ```
 
 ```
