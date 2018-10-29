@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { environment } from '../../../../../environments/environment';
 import {
-    ActionDialogComponent, ActionDialogOptions
+  ActionDialogComponent, ActionDialogOptions
 } from '../action-dialog/action-dialog.component';
 
 @Component({
@@ -137,6 +137,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         return 'This job has been marked as complete by the client.';
       case JobState.authorisedEscrow:
         return 'The escrow has been authorised by the client, they can now send the funds to escrow.';
+      case JobState.inEscrow:
+        return 'The funds has been deposited in the escrow! you can now commence the job.';
       case JobState.reviewed:
         return 'Both parties have completed the job, and a review has been left for the provider!';
       default:

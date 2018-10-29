@@ -99,7 +99,7 @@
         <div class="col-sm-12">
           <h4>ACTION LOG</h4>
           <div id="job-logs" class="row my-10">
-            <div class="col-12 my-10">
+            <div class="col-12 my-10" *ngIf="!isOnMobile">
               <div *ngFor="let action of job.getActionLog() | orderBy:'timestamp':true; let actionIndex = index" class="my-10">
                 <div class="row" *ngIf="!action.private || action.executedBy == currentUserType">
                   <div class="col-lg-8 col-md-6  col-sm-6 col-6">
@@ -107,6 +107,16 @@
                   </div>
                   <div class="col-lg-4 col-md-6  col-sm-6 col-6 text-right">
                     {{ action.timestamp | date:'medium' }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 my-10" *ngIf="isOnMobile">
+              <div *ngFor="let action of job.getActionLog() | orderBy:'timestamp':true; let actionIndex = index" class="my-10">
+                <div class="row" *ngIf="!action.private || action.executedBy == currentUserType">
+                  <div class="col-12">
+                    <p class="no-margin" [innerHTML]="action.getMessage(getActionExecutor(action))"></p>
+                    <p class="text-grey">{{ action.timestamp | date:'medium' }}</p>
                   </div>
                 </div>
               </div>

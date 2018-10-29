@@ -28,7 +28,7 @@
 }
 
 
-select { 
+select {
   width: auto;
   padding: 5px 40px 5px 5px;
   font-size: 14px;
@@ -41,6 +41,10 @@ select {
   background: url('../../../../assets/img/chevron-down-solid.svg') 95% / 15px no-repeat #fff;
 }
 
+.mobile-search-form {
+  display: none;
+}
+
 @media (max-width:863px) and (min-width:568px) {
   .headshot {
     width: 65px;
@@ -51,6 +55,10 @@ select {
 @media (max-width:568px) {
   .desktop-search-form {
     display: none;
+  }
+
+  .mobile-search-form {
+    display: block;
   }
 
   .job-info {

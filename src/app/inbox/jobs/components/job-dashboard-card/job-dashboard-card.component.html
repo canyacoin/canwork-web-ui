@@ -1,5 +1,5 @@
 <div class="card mb-15 p-20 pointer job-dashboard-card" *ngIf="type === 'lg'">
-  <div class="container jobs-info">
+  <div class="container jobs-info job-info-lg">
     <div class="row">
       <div class="col-md-9 col-sm-8">
         <div class="row job-desc">
@@ -46,7 +46,7 @@
   </div>
 </div>
 <div class="card mb-15 p-20 pointer job-dashboard-card" *ngIf="type === 'sm'">
-  <div class="container jobs-info">
+  <div class="container jobs-info job-info-sm">
     <div class="row">
       <div class="col-md-9 col-sm-8">
         <div class="row job-desc">
@@ -82,6 +82,9 @@
             <p>Timeline</p>
             <b>{{job.information.timelineExpectation}}</b>
           </div>
+          <button [routerLink]="['/inbox/job', job.id]" class="btn btn-primary btn-outline view-job-btn hide-mobile">
+            VIEW JOB
+          </button>
         </div>
       </div>
     </div>
@@ -108,7 +111,7 @@
         <p>Timeline</p>
       </div>
       <div class="col-sm-4 text-right">
-        <button class="btn btn-primary btn-canya-chat hide-mobile">
+        <button class="btn btn-primary btn-canya-chat">
           LET'S CHAT
         </button>
       </div>
