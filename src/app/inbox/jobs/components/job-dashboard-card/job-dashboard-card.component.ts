@@ -13,6 +13,7 @@ export class JobDashboardCardComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.type);
+    console.log(this.job);
   }
 
 }
