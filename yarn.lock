@@ -592,6 +592,11 @@ angular-instantsearch@^2.0.1:
     querystring-es3 "^0.2.1"
     tslib "^1.7.1"
 
+angular2-uuid@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/angular2-uuid/-/angular2-uuid-1.1.1.tgz#72f03cd532b7f40032eb1ecfb9f8457384be956e"
+  integrity sha1-cvA81TK39AAy6x7PufhFc4S+lW4=
+
 angularfire2@5.0.0-rc.5-next:
   version "5.0.0-rc.5-next"
   resolved "https://registry.yarnpkg.com/angularfire2/-/angularfire2-5.0.0-rc.5-next.tgz#e5b4f0fe994e106276d86133734dc7949d127cb1"

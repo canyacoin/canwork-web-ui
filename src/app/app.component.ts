@@ -2,23 +2,46 @@ import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { NGXLogger } from 'ngx-logger';
+import { UUID } from 'angular2-uuid';
+import { HttpHeaders } from '@angular/common/http';
+import { LoggerMonitor } from './log.wrapper';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [NGXLogger]
 })
 export class AppComponent implements OnInit {
-
   constructor(
     private router: Router,
     private afs: AngularFirestore,
+    private afAuth: AngularFireAuth,
     private logger: NGXLogger) {
     afs.firestore.settings({timestampsInSnapshots: true});
     afs.firestore.enablePersistence();
-    this.logger.debug('Your log message goes here');
-    this.logger.debug('Multiple', 'Argument', 'support');
+
+    // register logger
+    this.logger.registerMonitor(new LoggerMonitor())
+    // config logger by auth state
+    const uuid = UUID.UUID();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'X-Auth-Token': uuid
+    });
+    this.logger.setCustomHttpHeaders(headers);
+    this.afAuth.authState.subscribe(async(auth) => {
+      if (auth) {
+        const token = await auth.getIdToken(true);
+        const config = {
+          ...this.logger.getConfigSnapshot(),
+          serverLoggingUrl: 'http://127.0.0.1:8080/log/private',
+        }
+        this.logger.updateConfig(config);
+        this.logger.setCustomHttpHeaders(new HttpHeaders({'Authorization': token}));
+        this.logger.error('hhaa')
+      }
+    });
   }
 
   ngOnInit() {

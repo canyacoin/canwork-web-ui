@@ -51,9 +51,10 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
     FilterPipeModule,
     Ng5SliderModule,
     LoggerModule.forRoot({
-      // serverLoggingUrl: '/api/logs',
-      level: NgxLoggerLevel.DEBUG,
-      serverLogLevel: NgxLoggerLevel.ERROR
+      // TODO: read from config
+      serverLoggingUrl: 'http://127.0.0.1:8080/log/public',
+      level: NgxLoggerLevel.TRACE,
+      serverLogLevel: NgxLoggerLevel.WARN
     })
   ],
   exports: [
