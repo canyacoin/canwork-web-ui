@@ -1,168 +1,149 @@
+#checkBox {
+  margin-bottom: 7.5px;
+}
 
- .headshot-div {
-   position: absolute;
-   display: inline-block;
-   border-radius: 50%;
-   width: 25px;
-   height: 25px;
-   background-size: 105%;
-   background-repeat: no-repeat;
-   background-position: center;
-   background-color: black;
-   background-position: center center;
-   background-size: cover;
-   display: inline-block;
-   background-repeat: no-repeat;
- }
+#section-manage-jobs {
+  min-height: 80vh;
+}
 
- .otherPartyName {
-   margin: 0;
- }
+.job-info-status {
+  text-align: right;
+}
 
- .skill-tag-col {
-   text-align: right;
-   padding: 0;
-   margin: 0;
- }
+.search-group {
+  border: none;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
 
- .otherPartyName p {
-   display: inline;
-   padding-left: 30px;
- }
+.search-group img {
+  width: 24px;
+  height: 24px;
+}
 
- .otherPartyName b {
-   padding-right: 5px;
- }
+.search-group .btn {
+  padding-right: 5px;
+  padding-left: 5px;
+  border-color: white;
+}
 
- #checkBox {
-   margin-bottom: 7.5px;
- }
 
- .job-dashboard-card {
-   box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.1);
-   border-radius: 5px;
- }
+select {
+  width: auto;
+  padding: 5px 40px 5px 5px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  height: 34px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url('../../../../assets/img/chevron-down-solid.svg') 95% / 15px no-repeat #fff;
+}
 
- .job-dashboard-card:hover {
-   box-shadow: 0 0px 15px 0 rgba(0, 0, 0, 0.3);
- }
+.mobile-search-form {
+  display: none;
+}
 
- #section-manage-jobs{
-   min-height: 80vh;
- }
+@media (max-width:863px) and (min-width:568px) {
+  .headshot {
+    width: 65px;
+    height: 65px;
+  }
+}
 
- .job-info-status {
-   text-align: right;
- }
+@media (max-width:568px) {
+  .desktop-search-form {
+    display: none;
+  }
 
- .search-group {
-   border: none;
-   margin-bottom: 10px;
-   margin-right: 10px;
- }
+  .mobile-search-form {
+    display: block;
+  }
 
- .search-group img {
-   width: 24px;
-   height: 24px;
- }
+  .job-info {
+    text-align: center;
+  }
 
- .search-group .btn {
-   padding-right: 5px;
-   padding-left: 5px;
-   border-color: white;
- }
+  .job-info-status {
+    text-align: center;
+  }
 
- .desktop-right-mobile-center {
-   text-align: right;
- }
+  .desktop-right-mobile-center {
+    text-align: center;
+  }
+}
 
- @media (max-width:863px) and (min-width:568px) {
-   .headshot {
-     width: 65px;
-     height: 65px;
-   }
- }
+/*the container must be positioned relative:*/
 
- @media (max-width:568px) {
-   .desktop-search-form {
-     display: none;
-   }
-   .job-info {
-     text-align: center;
-   }
-   .job-info-status {
-     text-align: center;
-   }
-   .desktop-right-mobile-center {
-     text-align: center;
-   }
- }
+.custom-select {
+  position: relative;
+  font-family: Arial;
+}
 
- /*the container must be positioned relative:*/
+.custom-select select {
+  display: none;
+  /*hide original SELECT element:*/
+}
 
- .custom-select {
-   position: relative;
-   font-family: Arial;
- }
+.select-selected {
+  background-color: DodgerBlue;
+}
 
- .custom-select select {
-   display: none;
-   /*hide original SELECT element:*/
- }
+/*style the arrow inside the select element:*/
 
- .select-selected {
-   background-color: DodgerBlue;
- }
+.select-selected:after {
+  position: absolute;
+  content: "";
+  top: 14px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-color: #fff transparent transparent transparent;
+}
 
- /*style the arrow inside the select element:*/
+/*point the arrow upwards when the select box is open (active):*/
 
- .select-selected:after {
-   position: absolute;
-   content: "";
-   top: 14px;
-   right: 10px;
-   width: 0;
-   height: 0;
-   border: 6px solid transparent;
-   border-color: #fff transparent transparent transparent;
- }
+.select-selected.select-arrow-active:after {
+  border-color: transparent transparent #fff transparent;
+  top: 7px;
+}
 
- /*point the arrow upwards when the select box is open (active):*/
+/*style the items (options), including the selected item:*/
 
- .select-selected.select-arrow-active:after {
-   border-color: transparent transparent #fff transparent;
-   top: 7px;
- }
+.select-items div,
+.select-selected {
+  color: #ffffff;
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+}
 
- /*style the items (options), including the selected item:*/
+/*style items (options):*/
 
- .select-items div,
- .select-selected {
-   color: #ffffff;
-   padding: 8px 16px;
-   border: 1px solid transparent;
-   border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
-   cursor: pointer;
- }
+.select-items {
+  position: absolute;
+  background-color: DodgerBlue;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 99;
+}
 
- /*style items (options):*/
+/*hide the items when the select box is closed:*/
 
- .select-items {
-   position: absolute;
-   background-color: DodgerBlue;
-   top: 100%;
-   left: 0;
-   right: 0;
-   z-index: 99;
- }
+.select-hide {
+  display: none;
+}
 
- /*hide the items when the select box is closed:*/
+.select-items div:hover,
+.same-as-selected {
+  background-color: rgba(0, 0, 0, 0.1);
+}
 
- .select-hide {
-   display: none;
- }
-
- .select-items div:hover,
- .same-as-selected {
-   background-color: rgba(0, 0, 0, 0.1);
- }
+#manage-jobs {
+  min-height: 80vh;
+  padding-bottom: 15vh;
+}

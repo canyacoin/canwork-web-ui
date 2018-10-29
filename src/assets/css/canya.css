@@ -1409,7 +1409,7 @@ button:focus {
 .btn-primary,
 .btn-primary:hover {
   background-color: #33ccff;
-  border: 0px solid transparent; 
+  border: 0px solid transparent;
   color: #fff;
 }
 
@@ -9706,12 +9706,20 @@ a.text-danger:focus {
     margin-top: 5px !important;
   }
 }
-
+.show-mobile {
+  display: none;
+}
 @media screen and (max-width: 640px) {
   .profile-mini {
     min-height: 75px !important;
   }
 
+  .hide-mobile {
+    display: none;
+  }
+  .show-mobile{
+    display: block;
+  }
   .profile-mini .headshot {
     width: 75px !important;
     height: 75px !important;
@@ -9781,4 +9789,39 @@ a.text-danger:focus {
   z-index: 100 !important;
   opacity: 100 !important;
   overflow: hidden;
+}
+
+
+.info-details {
+  margin-bottom: 5px
+}
+
+.info-details p {
+  margin: 0;
+}
+
+.headshot-div {
+  position: absolute;
+  display: inline-block;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  background-size: 105%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: black;
+  background-position: center center;
+  background-size: cover;
+  display: inline-block;
+  background-repeat: no-repeat;
+}
+
+.otherPartyName {
+  bottom: 0;
+  position: absolute;
+}
+
+.otherPartyName p {
+  display: inline;
+  padding-left: 30px;
 }

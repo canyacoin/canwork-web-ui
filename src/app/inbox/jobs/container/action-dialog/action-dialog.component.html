@@ -1,8 +1,10 @@
 <div class="modal-dialog">
-  <div class="modal-content" *ngIf="actionType && job">
+  <div class="modal-content text-center" *ngIf="actionType && job">
     <div class="modal-header">
-      <h4 class="modal-title">{{actionType}}</h4>
-      <button type="button" class="close" (click)="close()">&times;</button>
+      <button type="button" class="btn modal-close" (click)="close()">X</button>
+      <div class="col-12">
+        <h4 class="modal-title">{{actionType}}</h4>
+      </div>
     </div>
     <div class="modal-body">
       <p>{{messageBody}}</p>
@@ -67,10 +69,12 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button [disabled]="submitDisabled || executing" type="button" class="btn btn-{{actionColour}}" (click)="handleAction()">
-        {{actionType}}
-      </button>
-      <button type="button" class="btn btn-default" (click)="close()">Cancel</button>
+      <div class="col-12">
+        <button [disabled]="submitDisabled || executing" type="button" class="btn btn-{{actionColour}}" (click)="handleAction()">
+          {{actionType}}
+        </button>
+        <button type="button" class="btn btn-default" (click)="close()">Cancel</button>
+      </div>
     </div>
   </div>
 </div>

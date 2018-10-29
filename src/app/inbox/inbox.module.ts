@@ -8,6 +8,7 @@ import { CoreComponentsModule } from '../core-components/core-components.module'
 import { CoreServicesModule } from '../core-services/core-services.module';
 import { ChatComponent } from './chat/chat.component';
 import { InboxRoutingModule } from './inbox.routing.module';
+import { JobDashboardCardComponent } from './jobs/components/job-dashboard-card/job-dashboard-card.component';
 import { BudgetComponent } from './jobs/components/budget/budget.component';
 import { PropertyComponent } from './jobs/components/property/property.component';
 import { StatusIconComponent } from './jobs/components/status-icon/status-icon.component';
@@ -39,7 +40,8 @@ import { PostComponent } from './jobs/post/post.component';
     JobDetailsComponent,
     PostComponent,
     PropertyComponent,
-    StatusIconComponent
+    StatusIconComponent,
+    JobDashboardCardComponent
   ],
   entryComponents: [
     ActionDialogComponent

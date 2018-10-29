@@ -1,0 +1,155 @@
+<div class="card mb-15 p-20 pointer job-dashboard-card" *ngIf="type === 'lg'">
+  <div class="container jobs-info job-info-lg">
+    <div class="row">
+      <div class="col-md-9 col-sm-8">
+        <div class="row job-desc">
+          <div class="col-12" [routerLink]="['/inbox/job', job.id]">
+            <h4>{{job.information.title}}</h4>
+            <p *ngIf="job.information.description.length < 160">{{job.information.description}}</p>
+            <p *ngIf="job.information.description.length > 160">{{job.information.description.substring(0, 160)}}...</p>
+          </div>
+          <div class="col-12">
+            <div class="otherPartyName pointer" [routerLink]="['/profile/alt/', job.providerId]">
+              <span *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
+              </span>
+              <p>{{job.otherParty?.name}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-4 job-details">
+        <div class="row info-row">
+          <div class="info-details col-sm-12 hide-mobile">
+            <p>Status</p>
+            <app-status-icon [job]="job" [currentUserType]="userType"></app-status-icon>
+          </div>
+          <div class="info-details col-sm-12 col-6">
+            <p>
+              {{job.paymentType}}
+            </p>
+            <b>
+              <app-budget [job]="job"></app-budget>
+            </b>
+          </div>
+          <div class="info-details col-sm-12 col-6">
+            <p>Timeline</p>
+            <b>{{job.information.timelineExpectation}}</b>
+          </div>
+        </div>
+        <div>
+          <button [routerLink]="['/inbox/job', job.id]" class="btn btn-primary btn-outline view-job-btn">
+            VIEW JOB
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card mb-15 p-20 pointer job-dashboard-card" *ngIf="type === 'sm'">
+  <div class="container jobs-info job-info-sm">
+    <div class="row">
+      <div class="col-md-9 col-sm-8">
+        <div class="row job-desc">
+          <div class="col-12" [routerLink]="['/inbox/job', job.id]">
+            <h4>{{job.information.title}}</h4>
+            <p *ngIf="job.information.description.length < 60">{{job.information.description}}</p>
+            <p *ngIf="job.information.description.length > 60">{{job.information.description.substring(0, 60)}}</p>
+          </div>
+          <div class="col-12">
+            <div class="otherPartyName pointer" [routerLink]="['/profile/alt/', job.providerId]">
+              <span *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
+              </span>
+              <p>{{job.otherParty?.name}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-4 job-details">
+        <div class="row info-row">
+          <div class="info-details col-sm-12 hide-mobile">
+            <p>Status</p>
+            <app-status-icon [job]="job" [currentUserType]="userType"></app-status-icon>
+          </div>
+          <div class="info-details col-sm-12 col-6">
+            <p>
+              {{job.paymentType}}
+            </p>
+            <b>
+              <app-budget [job]="job"></app-budget>
+            </b>
+          </div>
+          <div class="info-details col-sm-12 col-6">
+            <p>Timeline</p>
+            <b>{{job.information.timelineExpectation}}</b>
+          </div>
+          <button [routerLink]="['/inbox/job', job.id]" class="btn btn-primary btn-outline view-job-btn hide-mobile">
+            VIEW JOB
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 
+  This is for public job offers - e.g. client receiving provider offers,
+  hence the impossible job.workType ngIf above. this should save us some time...
+  uncomment this once the basic features has been implemented.
+ -->
+<div class="card mb-15 p-20 pointer job-dashboard-card" *ngIf="job.workType === 'public-job-type-prototype' && type === 'offer'">
+  <div class="container provider-job-card jobs-info">
+    <img class="headshot-div" src="{{ job.otherParty?.avatar.uri }}">
+    <div class="row">
+      <div class="col-md-3 offset-md-1 col-sm-4 col-12" [routerLink]="['/inbox/job', job.id]">
+        <h4>{{job.otherParty?.name}}</h4>
+      </div>
+      <div class="col-sm-2 hide-mobile">
+        <p>
+          {{job.paymentType}}
+        </p>
+      </div>
+      <div class="col-sm-2 hide-mobile">
+        <p>Timeline</p>
+      </div>
+      <div class="col-sm-4 text-right">
+        <button class="btn btn-primary btn-canya-chat">
+          LET'S CHAT
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3 offset-md-1 col-sm-4 col-12">
+        <p>{{job.information.title}}</p>
+      </div>
+      <div class="col-sm-2 col-6">
+        <p>
+          <b>
+            <app-budget [job]="job"></app-budget>
+          </b>
+        </p>
+      </div>
+      <div class="col-sm-2 col-6">
+        <b>{{job.information.timelineExpectation}}</b>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-11 offset-md-1 col-12">
+        <app-skill-tag *ngFor="let skill of job.information.skills" [skill]="skill"></app-skill-tag>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-8 offset-sm-1 col-12">
+        <p>
+          {{job.information.description}}
+        </p>
+      </div>
+      <div class="col-sm-3 col-12 text-right btn-div mobile-center">
+        <button class="btn btn-success">
+          ACCEPT
+        </button>
+        <button class="btn btn-secondary">
+          DECLINE
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

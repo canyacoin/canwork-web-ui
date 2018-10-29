@@ -4,12 +4,12 @@ import { FilterPipe } from 'ngx-filter-pipe';
 import { OrderPipe } from 'ngx-order-pipe';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-
 import { Job, JobDescription, PaymentType, TimeRange, WorkType } from '../../../core-classes/job';
 import { User, UserType } from '../../../core-classes/user';
 import { AuthService } from '../../../core-services/auth.service';
 import { JobService } from '../../../core-services/job.service';
 import { UserService } from '../../../core-services/user.service';
+import { MobileService } from '../../../core-services/mobile.service';
 
 @Component({
   selector: 'app-job-dashboard',
@@ -31,9 +31,9 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   filterByState: any = { state: '' };
   allJobs: Job[];
   searchQuery: string;
+  isOnMobile = false;
 
-
-  constructor(private authService: AuthService, private orderPipe: OrderPipe, private jobService: JobService, private userService: UserService, private router: Router, public filterPipe: FilterPipe) { }
+  constructor(private authService: AuthService, public mobile: MobileService, private orderPipe: OrderPipe, private jobService: JobService, private userService: UserService, private router: Router, public filterPipe: FilterPipe) { }
 
   ngOnInit() {
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
@@ -46,6 +46,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     });
     this.orderType = 'information.title';
     this.reverseOrder = false;
+    this.isOnMobile = this.mobile.isOnMobile;
   }
 
   ngOnDestroy() {

@@ -15,6 +15,7 @@ import { AppRoutingModule } from './app.routing.module';
 import { CoreComponentsModule } from './core-components/core-components.module';
 import { firebaseUiAuthConfig } from './core-config/app-auth-config';
 import { AuthService } from './core-services/auth.service';
+import { MobileService } from './core-services/mobile.service';
 import { CoreServicesModule } from './core-services/core-services.module';
 import { CanWorkEthService } from './core-services/eth.service';
 import { JobNotificationService } from './core-services/job-notification.service';
@@ -55,6 +56,7 @@ import { Ng5SliderModule } from 'ng5-slider';
   ],
   providers: [
     AuthService,
+    MobileService,
     CanWorkEthService,
     NavService,
     JobNotificationService,
