@@ -54,10 +54,10 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   web3Subscription: Subscription;
   accountSubscription: Subscription;
   authSub: Subscription;
-
+  routeSub: Subscription;
   postForm: FormGroup = null;
   offerForm: FormGroup = null;
-
+  queryAddress = '';
   isSending = false;
   isLoading = true;
   hideBanner = false;
@@ -79,6 +79,11 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
       description: ['', Validators.compose([Validators.required, Validators.maxLength(255)])],
       price: ['', Validators.compose([Validators.required, Validators.min(10), Validators.maxLength(9999)])]
     });
+    this.routeSub = this.activatedRoute.queryParams.subscribe((params) => {
+      if (params['address']) {
+        this.queryAddress = params['address'];
+      }
+    });
 
   }
 
@@ -88,14 +93,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       if (user && user !== this.currentUser) {
         this.currentUser = user;
-        this.activatedRoute.params.take(1).subscribe((params) => {
-          if (params['address'] && params['address'] !== this.currentUser.address) {
-            this.fAddress = params['address'];
-          }
-          if (this.currentUser) {
-            this.loadChannels();
-          }
-        });
+        this.loadChannels();
       }
     });
   }
@@ -126,17 +124,20 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   loadChannels() {
     try {
       this.afs.collection('chats').doc(this.currentUser.address).collection('channels').valueChanges().subscribe((data: any) => {
-        if (!JSON.parse(localStorage.getItem('selectedChannel'))) {
-          if (this.fAddress !== '') {
-            const idx = findIndex(data, { 'address': this.fAddress });
-            if (idx !== '-1') {
-              this.setSelectedChannel(data[idx]);
-            }
-          } else {
-            this.setSelectedChannel(data[0]);
+        if (this.queryAddress !== '') {
+          const idx = findIndex(data, { 'address': this.queryAddress });
+          console.log(this.queryAddress);
+          console.log(idx);
+          if (idx !== '-1') {
+            this.setSelectedChannel(data[idx]);
           }
-        } else {
+        }
+        if (JSON.parse(localStorage.getItem('selectedChannel')) && this.queryAddress === '') {
           this.setSelectedChannel(JSON.parse(localStorage.getItem('selectedChannel')));
+        }
+        if (!JSON.parse(localStorage.getItem('selectedChannel')) && this.queryAddress === '') {
+          console.log('no params, setting...')
+          this.setSelectedChannel(data[0]);
         }
         this.channels = orderBy(data, ['timestamp'], ['desc']);
         this.onSearch('');
