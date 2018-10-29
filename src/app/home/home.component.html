@@ -94,7 +94,7 @@
         </div>
       </div>
       <div class="row" *ngIf="previouslySeen.length > 0 && previouslySeen">
-        <div class="col-lg-3 col-md-6 col-12 no-padding" *ngFor="let seen of previouslySeen"> 
+        <div class="col-md-4 col-12 no-padding" *ngFor="let seen of previouslySeen"> 
           <app-provider-card [size]="'sm'" [provider]="seen"></app-provider-card>
         </div>
       </div>
