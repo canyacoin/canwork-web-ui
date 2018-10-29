@@ -1,6 +1,7 @@
 <app-ipfs-dropzone *ngIf="displayIpfsDropzone" [config]="dropzoneConfig" (ipfsResponse)="onProfileImageUpload($event)"
   (close)="displayIpfsDropzone = false"></app-ipfs-dropzone>
 <div class="overlay">
+  <section class="toggler-div" (click)="onClose()"></section>
   <section>
     <div class="container">
       <div class="row justify-content-center">
