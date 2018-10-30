@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit {
   private authSub;
   public previouslySeen = [];
   public isOnMobile;
+  loadingDone = false;
   algoIndex = environment.algolia.indexName;
   algoId = environment.algolia.appId;
   algoKey = environment.algolia.apiKey;
@@ -90,11 +91,17 @@ export class HomeComponent implements OnInit {
   async setUpRecentlyViewed() {
     this.userService.getViewedUsers(this.currentUser.address).then((result) => {
       if (result && result.length > 0) {
-        this.previouslySeen = result.slice(0, 4);
+        if (result.length > 3) {
+          result = result.slice(0, 3);
+        }
+        this.previouslySeen = result;
         for (let i = 0; i < this.previouslySeen.length; i++) {
           this.userService.getUser(this.previouslySeen[i].address).then(user => {
             this.previouslySeen[i] = user;
-          })
+            if (i === this.previouslySeen.length - 1) {
+              this.loadingDone = true;
+            }
+          });
         }
       }
     })

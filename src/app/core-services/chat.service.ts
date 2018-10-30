@@ -89,7 +89,7 @@ export class ChatService {
     this.afs.firestore.doc(path).get().then(docSnapshot => {
       if (docSnapshot.exists) {
         // if the channel exists, navigate the user to the chat page.
-        this.router.navigate(['inbox/chat', receiver.address]);
+        this.router.navigateByUrl('/inbox/chat?address=' + receiver.address);
       } else {
         this.createAndNavigateToChannel(sender, receiver);
       }
