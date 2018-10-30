@@ -1,0 +1,16 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12 card" style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px; margin-bottom: 20px;">
+      <div *ngIf="isMyProfile && (userModel.type === 'Provider')" class="p-10">
+        <b>Certifications</b>
+        <button class="btn btn-primary">Add Certifications</button>
+        <input list="uniNameList" class="form-control" placeholder="e.g. HTML, CSS..." [(ngModel)]="uniInput"
+          [ngModelOptions]="{standalone: true}" (change)="onInputChange()">
+      </div>
+    </div>
+  </div>
+</div>
+
+<datalist id="uniNameList">
+  <option *ngFor="let uni of uniList" value="{{uni.name}}">
+</datalist>

@@ -25,7 +25,8 @@
             <h6 class="text-center text-grey ls-1">Browse CanYa's highly skilled and hand-picked providers</h6>
           </div>
           <div *ngFor="let type of providerTypes" class="col-lg-2 col-md-3 col-sm-4 col-6 provider-type-col">
-            <div [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]' : type.name, 'category' : type.id}" class="provider-type-card pointer">
+            <div [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]' : type.name, 'category' : type.id}"
+              class="provider-type-card pointer">
               <div class="row">
                 <div class="col-4 no-padding">
                   <img src="assets/img/providers/{{type.img}}">
@@ -93,8 +94,13 @@
           <i>You have not checked out any providers.</i>
         </div>
       </div>
-      <div class="row" *ngIf="previouslySeen.length > 0 && previouslySeen">
-        <div class="col-md-4 col-12 no-padding" *ngFor="let seen of previouslySeen"> 
+      <div class="row" *ngIf="previouslySeen.length > 0 && previouslySeen && !loadingDone">
+        <div class="container">
+            <i>Loading...</i>
+        </div>
+      </div>
+      <div class="row" *ngIf="previouslySeen.length > 0 && previouslySeen && loadingDone">
+        <div class="col-md-4 col-12 no-padding" *ngFor="let seen of previouslySeen">
           <app-provider-card [size]="'sm'" [provider]="seen"></app-provider-card>
         </div>
       </div>

@@ -7,6 +7,7 @@ import { CoreComponentsModule } from '../core-components/core-components.module'
 import { CoreServicesModule } from '../core-services/core-services.module';
 import { CoreUtilsModule } from '../core-utils/core-utils.module';
 import { AboutComponent } from './components/about/about.component';
+import { CertificationsComponent } from './components/certifications/certifications.component';
 import { BioComponent } from './components/bio/bio.component';
 import { ItemComponent } from './components/portfolio/item/item.component';
 import { PortfolioComponent } from './components/portfolio/portfolio.component';
@@ -49,6 +50,7 @@ import { ReviewsComponent } from './components/reviews/reviews.component';
     ItemComponent,
     PortfolioComponent,
     ProfileComponent,
+    CertificationsComponent,
     ProfileViewsComponent,
     ProjectComponent,
     ProviderStateComponent,
