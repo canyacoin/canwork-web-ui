@@ -24,23 +24,34 @@ export class AppComponent implements OnInit {
     // register logger
     this.logger.registerMonitor(new LoggerMonitor())
     // config logger by auth state
-    const uuid = UUID.UUID();
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'X-Auth-Token': uuid
+      'X-Auth-Token': UUID.UUID(),
     });
     this.logger.setCustomHttpHeaders(headers);
+
+    this.logger.error('test public');
+
     this.afAuth.authState.subscribe(async(auth) => {
       if (auth) {
-        const token = await auth.getIdToken(true);
-        const config = {
+        const jwtToken = await auth.getIdToken(true);
+        this.logger.setCustomHttpHeaders(new HttpHeaders({'Authorization': jwtToken}));
+        this.logger.updateConfig({
           ...this.logger.getConfigSnapshot(),
           // serverLoggingUrl: 'http://127.0.0.1:8080/log/private',
           serverLoggingUrl: 'https://canya-api-gae-stackdriver-logging-proxy-dot-staging-can-work.appspot.com/log/private'
-        }
-        this.logger.updateConfig(config);
-        this.logger.setCustomHttpHeaders(new HttpHeaders({'Authorization': token}));
-        this.logger.error('test error log');
+        });
+
+        this.logger.error('test login private');
+      } else {
+        this.logger.setCustomHttpHeaders(headers);
+        this.logger.updateConfig({
+          ...this.logger.getConfigSnapshot(),
+          // serverLoggingUrl: 'http://127.0.0.1:8080/log/public',
+          serverLoggingUrl: 'https://canya-api-gae-stackdriver-logging-proxy-dot-staging-can-work.appspot.com/log/public'
+        });
+
+        this.logger.error('test log out public');
       }
     });
   }
