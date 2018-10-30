@@ -35,11 +35,12 @@ export class AppComponent implements OnInit {
         const token = await auth.getIdToken(true);
         const config = {
           ...this.logger.getConfigSnapshot(),
-          serverLoggingUrl: 'http://127.0.0.1:8080/log/private',
+          // serverLoggingUrl: 'http://127.0.0.1:8080/log/private',
+          serverLoggingUrl: 'https://canya-api-gae-stackdriver-logging-proxy-dot-staging-can-work.appspot.com/log/private'
         }
         this.logger.updateConfig(config);
         this.logger.setCustomHttpHeaders(new HttpHeaders({'Authorization': token}));
-        this.logger.error('hhaa')
+        this.logger.error('test error log');
       }
     });
   }

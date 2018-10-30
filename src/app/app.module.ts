@@ -52,7 +52,8 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
     Ng5SliderModule,
     LoggerModule.forRoot({
       // TODO: read from config
-      serverLoggingUrl: 'http://127.0.0.1:8080/log/public',
+      // serverLoggingUrl: 'http://127.0.0.1:8080/log/public',
+      serverLoggingUrl: 'https://canya-api-gae-stackdriver-logging-proxy-dot-staging-can-work.appspot.com/log/public',
       level: NgxLoggerLevel.TRACE,
       serverLogLevel: NgxLoggerLevel.WARN
     })
