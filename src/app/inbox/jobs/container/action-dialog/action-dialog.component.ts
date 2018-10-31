@@ -156,7 +156,7 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
       case ActionType.acceptTerms:
         this.form = this.formBuilder.group({
           terms: [false, Validators.requiredTrue]
-        });
+        })
         break;
       case ActionType.authoriseEscrow:
       case ActionType.enterEscrow:

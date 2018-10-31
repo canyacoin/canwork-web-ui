@@ -1,3 +1,4 @@
+import { Type } from '@angular/core';
 import { User } from '@class/user';
 
 import {
@@ -28,7 +29,7 @@ export class Job {
     Object.assign(this, init);
   }
 
-  getAction(action: IJobAction, user: User): IJobAction {
+  getAction(action: IJobAction, user: User): Type {
     const actions = {}
 
     actions[ActionType.createJob] = CreateJobAction
@@ -43,10 +44,10 @@ export class Job {
     // actions[ActionType.acceptFinish] =
     // actions[ActionType.dispute] = RaiseDisputeAction
 
-    return actions[action.type] ? new actions[action.type] : new IJobAction
+    return actions[action.type] ? typeof actions[action.ty[]] : new IJobAction
   }
 
-  getActionLog(user: User) {
+  getActionLog() {
     return this.actionLog.map(actionObj => {
       const action = this.getAction(actionObj, user)
       return action.init(actionObj)

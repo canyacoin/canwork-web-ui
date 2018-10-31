@@ -1,12 +1,12 @@
 import { PaymentType, TimeRange, WorkType } from '@class/job';
 import { UserType } from '@class/user';
+import { Action } from 'rxjs/scheduler/Action';
 
 import * as moment from 'moment';
 
 export class IJobAction {
   type: ActionType;
   executedBy: UserType;
-  userId: string;
   timestamp: string;
   private: boolean;
   emailSent: boolean;
@@ -23,9 +23,15 @@ export class IJobAction {
 
   message: string;
 
-  constructor() {
+  constructor(type: ActionType, executedBy: UserType) {
+    this.type = type;
+    this.executedBy = executedBy;
     this.timestamp = moment().format('x')
     switch (this.type) {
+      case ActionType.review:
+      case ActionType.authoriseEscrow:
+        this.private = true;
+        break;
       default:
         this.private = false;
         break;
@@ -38,7 +44,32 @@ export class IJobAction {
   }
 
   getMessage?(executor?: string): string {
-    return `Job action: ${this.type}, by ${executor}`
+    switch (this.type) {
+      case ActionType.createJob:
+        return `Job created by ${executor}.<br>
+        Proposed budget at $${this.USD}${this.paymentTypeString} (${this.CAN} CAN)
+        for ${this.weeklyCommitment} hours a week
+        for ${this.timelineExpectation}`;
+      case ActionType.counterOffer:
+        return `${executor} proposed a counter offer.<br>
+        Proposed budget at $${this.USD}${this.paymentTypeString} (${this.CAN} CAN)`;
+      case ActionType.acceptTerms:
+        return `${executor} accepted the terms of this job.`
+      case ActionType.declineTerms:
+        return `${executor} declined the terms of this job.`
+      case ActionType.addMessage:
+        return `${executor} left a message:<br>
+            <em>${this.message}</em>`
+      case ActionType.declineTerms:
+        return `${executor} cancelled this job.`
+      case ActionType.authoriseEscrow:
+        return `${executor} authorised the Escrow contract to transfer ${this.amountCan} CAN`
+      case ActionType.enterEscrow:
+        return `${executor} registered this job in the Escrow contract.<br>
+            When the job is succesfully delivered, ${executor} will release the funds stored in the contract.`
+      default:
+        return `Job action: ${this.type}, by ${executor}`
+    }
   }
 
   get paymentTypeString(): string {
@@ -48,53 +79,28 @@ export class IJobAction {
 
 export class CreateJobAction extends IJobAction {
   type = ActionType.createJob
-
-  getMessage(executor?: string): string {
-    return `Job created by ${executor}.<br>
-      Proposed budget at $${this.USD}${this.paymentTypeString} (${this.CAN} CAN)
-      for ${this.weeklyCommitment} hours a week
-      for ${this.timelineExpectation}`
-  }
 }
-
 export class CounterOfferAction extends IJobAction {
   type = ActionType.counterOffer
-
-  getMessage(executor?: string): string {
-    return `${executor} proposed a counter offer.<br>
-      Proposed budget at $${this.USD}${this.paymentTypeString} (${this.CAN} CAN)`
-  }
 }
 export class AcceptTermsAction extends IJobAction {
   type = ActionType.acceptTerms
-
-  getMessage(executor?: string): string {
-    return `${executor} accepted the terms of this job.`
-  }
 }
 
 export class DeclineTermsAction extends IJobAction {
   type = ActionType.declineTerms
 
-  getMessage(executor?: string): string {
-    return `${executor} declined the terms of this job.`
-  }
 }
 
 export class CancelJobAction extends IJobAction {
   type = ActionType.cancelJob
 
-  getMessage(executor?: string): string {
-    return `${executor} cancelled this job.`
-  }
 }
 
 export class AddMessageAction extends IJobAction {
   type = ActionType.addMessage
 
   getMessage(executor?: string): string {
-    return `${executor} left a message:<br>
-      <em>${this.message}</em>`
   }
 }
 
@@ -111,17 +117,10 @@ export class RaiseDisputeAction extends IJobAction {
 export class AuthoriseEscrowAction extends IJobAction {
   type = ActionType.authoriseEscrow
   private = true;
-  getMessage(executor?: string): string {
-    return `${executor} authorised the Escrow contract to transfer ${this.amountCan} CAN`
-  }
 }
 
 export class EnterEscrowAction extends IJobAction {
   type = ActionType.enterEscrow
-  getMessage(executor?: string): string {
-    return `${executor} registered this job in the Escrow contract.<br>
-      When the job is succesfully delivered, ${executor} will release the funds stored in the contract.`
-  }
 }
 
 export enum ActionType {

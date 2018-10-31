@@ -39,10 +39,10 @@ const routes: Routes = [
         path: '',
         component: JobDetailsComponent
       }
-      // {
-      //   path: 'actions',
-      //   component: ActionHistoryComponent
-      // }
+      {
+        path: 'payment',
+        component: ActionHistoryComponent
+      }
     ]
   }
 ];

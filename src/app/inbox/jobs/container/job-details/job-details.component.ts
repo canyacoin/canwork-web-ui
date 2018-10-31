@@ -9,13 +9,9 @@ import { MobileService } from '@service/mobile.service';
 import { Transaction, TransactionService } from '@service/transaction.service';
 import { UserService } from '@service/user.service';
 import { AngularFireStorage } from 'angularfire2/storage';
-import { DialogService } from 'ng2-bootstrap-modal';
 import { Subscription } from 'rxjs/Subscription';
 
 import { environment } from '../../../../../environments/environment';
-import {
-  ActionDialogComponent, ActionDialogOptions
-} from '../action-dialog/action-dialog.component';
 
 @Component({
   selector: 'app-job-details',
@@ -72,7 +68,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
       this.transactionsSub = this.transactionService.getTransactionsByJob(jobId).subscribe((transactions: Transaction[]) => {
         this.transactions = transactions;
-      })
+      });
     }
   }
 
@@ -182,17 +178,26 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   }
 
   executeAction(action: ActionType) {
-    const disposable = this.dialogService.addDialog(ActionDialogComponent, new ActionDialogOptions({
-      job: this.job,
-      userType: this.currentUserType,
-      actionType: action
-    })).subscribe((success) => {
-      if (success) {
-        console.log('Action executed');
-      } else {
-        console.log('Action cancelled');
-      }
-    });
+    switch (action) {
+      case ActionType.enterEscrow:
+      case ActionType.authoriseEscrow:
+      case ActionType.acceptFinish:
+        this.jobService.handleJobAction(this.job, undefined);
+        break;
+      default:
+        this.dialogService.addDialog(ActionDialogComponent, new ActionDialogOptions({
+          job,
+          userType: currentUserType,
+          actionType
+        })).subscribe((success) => {
+          if (success) {
+            console.log('Action executed');
+          } else {
+            console.log('Action cancelled');
+          }
+        });
+        break;
+    }
   }
 
   getActionExecutor(action: IJobAction) {

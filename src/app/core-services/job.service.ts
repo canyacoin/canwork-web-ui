@@ -20,7 +20,13 @@ import { Transaction, TransactionService } from '@service/transaction.service';
 import { UserService } from '@service/user.service';
 import { GenerateGuid } from '@util/generate.uid';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { DialogService } from 'ng2-bootstrap-modal';
 import { Observable } from 'rxjs/Observable';
+import { Action } from 'rxjs/scheduler/Action';
+
+import {
+    ActionDialogComponent, ActionDialogOptions
+} from '../action-dialog/action-dialog.component';
 
 @Injectable()
 export class JobService {
@@ -228,6 +234,8 @@ export class JobService {
                 cancel: () => { this.canPayService.close() },
                 postAuthorisationProcessName: 'Job completion',
                 startPostAuthorisationProcess: initiateCompleteJob.bind(this),
+                disableCanEx: true,
+                userEmail: ''
               };
               this.canPayService.open(canPayOptions);
             } catch (error) {
@@ -353,6 +361,8 @@ export class JobService {
       complete: onComplete,
       cancel: onCancel,
       view: View.Compact,
+      disableCanEx: true,
+      userEmail: '',
 
       // Post Authorisation
       postAuthorisationProcessName: 'Job creation',
