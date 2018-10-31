@@ -49,9 +49,7 @@ export class EditComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private ethService: EthService,
     private authService: AuthService) {
-    this.ethSub = this.ethService.account$.subscribe(async (address: string) => {
-      this.ethAddress = address
-    })
+    this.ethAddress = this.ethService.getOwnerAccount();
   }
 
   ngOnInit() {
