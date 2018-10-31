@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Job } from '@class/job';
-import { ReviewAction } from '@class/job-action';
+import { IJobAction } from '@class/job-action';
 import { Review } from '@class/review';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 
@@ -72,7 +72,7 @@ export class UserService {
     return data
   }
 
-  async newReview(client: User, provider: User, job: Job, action: ReviewAction) {
+  async newReview(client: User, provider: User, job: Job, action: IJobAction) {
     const review = new Review
     review.jobId = job.id
     review.jobTitle = job.information.title

@@ -11,21 +11,22 @@ export class IJobAction {
   private: boolean;
   emailSent: boolean;
 
-  USD: number;
-  CAN: number;
+  message: string;
+
+  isClientSatisfied: boolean
+
+  amountUsd: number;
+  amountCan: number;
   workType: WorkType;
   timelineExpectation: TimeRange;
   weeklyCommitment: number;
   paymentType: PaymentType;
-  txId: string;
-  amountCan: number;
-  amount: number
 
-  message: string;
 
-  constructor(type: ActionType, executedBy: UserType) {
+  constructor(type: ActionType, executedBy: UserType, message?: string = '') {
     this.type = type;
     this.executedBy = executedBy;
+    this.message = message;
     this.timestamp = moment().format('x')
     switch (this.type) {
       case ActionType.review:
@@ -43,16 +44,26 @@ export class IJobAction {
     return this
   }
 
-  getMessage?(executor?: string): string {
+  setPaymentProperties(usdVal: number, canVal: number, timelineExpectation?: TimeRange, workType?: WorkType, weeklyCommitment?: number, paymentType?: PaymentType) {
+    this.amountUsd = usdVal;
+    this.amountCan = canVal;
+    this.timelineExpectation = timelineExpectation;
+    this.workType = workType;
+    this.weeklyCommitment = weeklyCommitment;
+    this.paymentType = paymentType;
+  }
+
+
+  getMessage(executor?: string): string {
     switch (this.type) {
       case ActionType.createJob:
         return `Job created by ${executor}.<br>
-        Proposed budget at $${this.USD}${this.paymentTypeString} (${this.CAN} CAN)
+        Proposed budget at $${this.amountUsd}${this.paymentTypeString} (${this.amountCan} CAN)
         for ${this.weeklyCommitment} hours a week
         for ${this.timelineExpectation}`;
       case ActionType.counterOffer:
         return `${executor} proposed a counter offer.<br>
-        Proposed budget at $${this.USD}${this.paymentTypeString} (${this.CAN} CAN)`;
+        Proposed budget at $${this.amountUsd}${this.paymentTypeString} (${this.amountCan} CAN)`;
       case ActionType.acceptTerms:
         return `${executor} accepted the terms of this job.`
       case ActionType.declineTerms:
@@ -77,51 +88,6 @@ export class IJobAction {
   }
 }
 
-export class CreateJobAction extends IJobAction {
-  type = ActionType.createJob
-}
-export class CounterOfferAction extends IJobAction {
-  type = ActionType.counterOffer
-}
-export class AcceptTermsAction extends IJobAction {
-  type = ActionType.acceptTerms
-}
-
-export class DeclineTermsAction extends IJobAction {
-  type = ActionType.declineTerms
-
-}
-
-export class CancelJobAction extends IJobAction {
-  type = ActionType.cancelJob
-
-}
-
-export class AddMessageAction extends IJobAction {
-  type = ActionType.addMessage
-
-  getMessage(executor?: string): string {
-  }
-}
-
-export class ReviewAction extends IJobAction {
-  type = ActionType.review
-  isClientSatisfied: boolean
-  private = true
-}
-
-export class RaiseDisputeAction extends IJobAction {
-  type = ActionType.dispute
-}
-
-export class AuthoriseEscrowAction extends IJobAction {
-  type = ActionType.authoriseEscrow
-  private = true;
-}
-
-export class EnterEscrowAction extends IJobAction {
-  type = ActionType.enterEscrow
-}
 
 export enum ActionType {
   createJob = 'Create job',

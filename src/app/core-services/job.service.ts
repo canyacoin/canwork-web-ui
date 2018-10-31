@@ -4,10 +4,7 @@ import {
     CanPayData, CanPayService, EthService, Operation, setProcessResult, View
 } from '@canyaio/canpay-lib';
 import { Job, JobState, Payment, PaymentType, TimeRange, WorkType } from '@class/job';
-import {
-    ActionType, AuthoriseEscrowAction, CounterOfferAction, EnterEscrowAction, IJobAction,
-    ReviewAction
-} from '@class/job-action';
+import { IJobAction } from '@class/job-action';
 import { Upload } from '@class/upload';
 import { User, UserType } from '@class/user';
 import { CanWorkJobContract } from '@contract/can-work-job.contract';
@@ -153,7 +150,7 @@ export class JobService {
           case ActionType.counterOffer:
             parsedJob.actionLog.push(action);
             parsedJob.state = action.executedBy === UserType.client ? JobState.clientCounterOffer : JobState.providerCounterOffer;
-            parsedJob.budget = (action as CounterOfferAction).amount;
+            parsedJob.budget = action.amountUsd;
             await this.saveJobAndNotify(parsedJob, action)
             resolve(true);
             break;
@@ -252,7 +249,7 @@ export class JobService {
           case ActionType.review:
             client = await this.userService.getUser(job.clientId)
             provider = await this.userService.getUser(job.providerId)
-            await this.userService.newReview(client, provider, parsedJob, action as ReviewAction)
+            await this.userService.newReview(client, provider, parsedJob, action)
             parsedJob.state = JobState.reviewed
             await this.saveJobFirebase(parsedJob)
             resolve(true)
@@ -299,13 +296,13 @@ export class JobService {
       this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.authoriseEscrow)
       this.transactionService.saveTransaction(new Transaction(txId, job.clientId,
         txHash, this.momentService.get(), ActionType.authoriseEscrow, job.id));
-      const escrowAction = action as AuthoriseEscrowAction;
+      const escrowAction = action;
       job.actionLog.push(escrowAction);
       job.clientEthAddress = from;
       clientEthAddress = from;
       // This payment log has been deprecated in favor of transacations collection, however emails rely on it
       job.paymentLog.push(new Payment({
-        txId: escrowAction.txId || '',
+        txId: txHash,
         timestamp: escrowAction.timestamp || ''
       }));
       await this.saveJobFirebase(job);
@@ -330,7 +327,7 @@ export class JobService {
       this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.enterEscrow)
       this.transactionService.saveTransaction(new Transaction(txId, job.clientId,
         txHash, this.momentService.get(), ActionType.enterEscrow, job.id));
-      const enterEscrowAction = action as EnterEscrowAction;
+      const enterEscrowAction = action;
       job.actionLog.push(enterEscrowAction);
       job.clientEthAddress = from;
       clientEthAddress = from;

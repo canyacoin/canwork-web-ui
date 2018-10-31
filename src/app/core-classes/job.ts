@@ -1,11 +1,7 @@
 import { Type } from '@angular/core';
 import { User } from '@class/user';
 
-import {
-    AcceptTermsAction, ActionType, AddMessageAction, AuthoriseEscrowAction, CancelJobAction,
-    CounterOfferAction, CreateJobAction, DeclineTermsAction, EnterEscrowAction, IJobAction,
-    RaiseDisputeAction
-} from './job-action';
+import { IJobAction } from './job-action';
 import { Upload } from './upload';
 
 export class Job {
@@ -27,31 +23,6 @@ export class Job {
 
   constructor(init?: Partial<Job>) {
     Object.assign(this, init);
-  }
-
-  getAction(action: IJobAction, user: User): Type {
-    const actions = {}
-
-    actions[ActionType.createJob] = CreateJobAction
-    actions[ActionType.cancelJob] = CancelJobAction
-    actions[ActionType.declineTerms] = DeclineTermsAction
-    actions[ActionType.counterOffer] = CounterOfferAction
-    actions[ActionType.acceptTerms] = AcceptTermsAction
-    actions[ActionType.authoriseEscrow] = AuthoriseEscrowAction
-    actions[ActionType.enterEscrow] = EnterEscrowAction
-    actions[ActionType.addMessage] = AddMessageAction
-    // actions[ActionType.finishedJob] =
-    // actions[ActionType.acceptFinish] =
-    // actions[ActionType.dispute] = RaiseDisputeAction
-
-    return actions[action.type] ? typeof actions[action.ty[]] : new IJobAction
-  }
-
-  getActionLog() {
-    return this.actionLog.map(actionObj => {
-      const action = this.getAction(actionObj, user)
-      return action.init(actionObj)
-    })
   }
 }
 

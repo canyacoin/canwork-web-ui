@@ -2,10 +2,7 @@ import { AfterViewInit, Component, ComponentRef, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Http, Response } from '@angular/http';
 import { Job, PaymentType } from '@class/job';
-import {
-    AcceptTermsAction, ActionType, AddMessageAction, AuthoriseEscrowAction, CounterOfferAction,
-    DeclineTermsAction, EnterEscrowAction, IJobAction, RaiseDisputeAction, ReviewAction
-} from '@class/job-action';
+import { ActionType, IJobAction } from '@class/job-action';
 import { User, UserType } from '@class/user';
 import { JobService } from '@service/job.service';
 import { UserService } from '@service/user.service';
@@ -59,50 +56,30 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
     try {
       let action
       switch (this.actionType) {
-        case ActionType.acceptTerms:
-          action = new AcceptTermsAction
-          break;
-        case ActionType.declineTerms:
-          action = new DeclineTermsAction
-          break;
         case ActionType.counterOffer:
           this.job.budget = this.form.value.budget
-          action = new CounterOfferAction
-          action.amount = this.job.budget
-          action.USD = this.job.budget
-          action.CAN = await this.jobService.getJobBudget(this.job)
-          break;
-        case ActionType.addMessage:
-          action = new AddMessageAction
-          action.message = this.form.value.message
-          break;
-        case ActionType.dispute:
-          action = new RaiseDisputeAction
-          action.message = this.form.value.message
+          action = new IJobAction(ActionType.counterOffer, this.userType)
+          action.setPaymentProperties(this.job.budget, await this.jobService.getJobBudget(this.job))
           break;
         case ActionType.authoriseEscrow:
-          action = new AuthoriseEscrowAction
-          action.txId = ''
-          action.amountCan = this.job.budgetCan
-          action.USD = this.job.budget
-          action.CAN = this.job.budgetCan
-          break;
-        case ActionType.enterEscrow:
-          action = new EnterEscrowAction
-          action.txId = ''
+          action = new IJobAction(this.actionType, this.userType)
           action.amountCan = this.job.budgetCan
           break;
         case ActionType.review:
-          action = new ReviewAction
-          action.message = this.form.value.message
+          action = new IJobAction(this.actionType, this.userType, this.form.value.message)
           action.isClientSatisfied = this.form.value.rating
           break;
+        case ActionType.addMessage:
+        case ActionType.dispute:
+          action = new IJobAction(this.actionType, this.userType, this.form.value.message)
+          break;
+        case ActionType.acceptTerms:
+        case ActionType.declineTerms:
+        case ActionType.enterEscrow:
         default:
-          action = new IJobAction
-          action.type = this.actionType
+          action = new IJobAction(this.actionType, this.userType)
           break;
       }
-      action.executedBy = this.userType
       const success = await this.jobService.handleJobAction(this.job, action);
       if (success) {
         this.result = true;
