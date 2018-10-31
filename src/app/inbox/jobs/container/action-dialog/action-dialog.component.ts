@@ -51,36 +51,69 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
     super(dialogService);
   }
 
+  ngOnInit() {
+    this.action = new IJobAction(this.actionType, this.userType)
+    switch (this.actionType) {
+      case ActionType.counterOffer:
+        this.action.paymentType = this.job.paymentType;
+        this.form = this.userType === UserType.provider ?
+          this.formBuilder.group({
+            budget: [this.job.budget, Validators.compose([Validators.required, Validators.min(1), Validators.max(10000000)])],
+            terms: [false, Validators.requiredTrue]
+          }) :
+          this.formBuilder.group({
+            budget: [this.job.budget, Validators.compose([Validators.required, Validators.min(1), Validators.max(10000000)])],
+          });
+        this.setupCanConverter();
+        break;
+      case ActionType.addMessage:
+      case ActionType.dispute:
+        this.form = this.formBuilder.group({
+          message: ['', Validators.required],
+        })
+        break;
+      case ActionType.review:
+        this.form = this.formBuilder.group({
+          message: ['', Validators.compose([Validators.min(0), Validators.max(350)])],
+          rating: [null, Validators.required],
+        })
+        break;
+      case ActionType.acceptTerms:
+        this.form = this.formBuilder.group({
+          terms: [false, Validators.requiredTrue]
+        })
+        break;
+      default:
+        break;
+    }
+  }
+
   async handleAction() {
     this.executing = true;
     try {
-      let action
       switch (this.actionType) {
         case ActionType.counterOffer:
           this.job.budget = this.form.value.budget
-          action = new IJobAction(ActionType.counterOffer, this.userType)
-          action.setPaymentProperties(this.job.budget, await this.jobService.getJobBudget(this.job))
+          this.action.setPaymentProperties(this.job.budget, await this.jobService.getJobBudget(this.job))
           break;
         case ActionType.authoriseEscrow:
-          action = new IJobAction(this.actionType, this.userType)
-          action.amountCan = this.job.budgetCan
+          this.action.amountCan = this.job.budgetCan
           break;
         case ActionType.review:
-          action = new IJobAction(this.actionType, this.userType, this.form.value.message)
-          action.isClientSatisfied = this.form.value.rating
+          this.action.message = this.form.value.message;
+          this.action.isClientSatisfied = this.form.value.rating
           break;
         case ActionType.addMessage:
         case ActionType.dispute:
-          action = new IJobAction(this.actionType, this.userType, this.form.value.message)
+          this.action.message = this.form.value.message;
           break;
         case ActionType.acceptTerms:
         case ActionType.declineTerms:
         case ActionType.enterEscrow:
         default:
-          action = new IJobAction(this.actionType, this.userType)
           break;
       }
-      const success = await this.jobService.handleJobAction(this.job, action);
+      const success = await this.jobService.handleJobAction(this.job, this.action);
       if (success) {
         this.result = true;
         this.executing = false;
@@ -101,50 +134,6 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
     return this.form.invalid;
   }
 
-  ngOnInit() {
-    switch (this.actionType) {
-      case ActionType.counterOffer:
-        this.form = this.userType === UserType.provider ?
-          this.formBuilder.group({
-            budget: [this.job.budget, Validators.compose([Validators.required, Validators.min(1), Validators.max(10000000)])],
-            terms: [false, Validators.requiredTrue]
-          }) :
-          this.formBuilder.group({
-            budget: [this.job.budget, Validators.compose([Validators.required, Validators.min(1), Validators.max(10000000)])],
-          });
-        this.setupCanConverter();
-        break;
-      case ActionType.addMessage:
-        this.form = this.formBuilder.group({
-          message: ['', Validators.required],
-        })
-        break;
-      case ActionType.dispute:
-        this.form = this.formBuilder.group({
-          message: ['', Validators.required],
-        })
-        break;
-      case ActionType.review:
-        this.form = this.formBuilder.group({
-          message: ['', Validators.compose([Validators.min(0), Validators.max(350)])],
-          rating: [null, Validators.required],
-        })
-        break;
-      case ActionType.acceptTerms:
-        this.form = this.formBuilder.group({
-          terms: [false, Validators.requiredTrue]
-        })
-        break;
-      case ActionType.authoriseEscrow:
-      case ActionType.enterEscrow:
-      case ActionType.acceptFinish:
-        this.handleAction();
-        break;
-      default:
-        break;
-    }
-  }
-
   private async setupCanConverter() {
     const canToUsdResp = await this.http.get('https://api.coinmarketcap.com/v2/ticker/2343/?convert=USD').toPromise();
     if (canToUsdResp.ok) {
@@ -154,38 +143,5 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
 
   usdToCan(usd: number) {
     return getUsdToCan(this.canToUsd, usd);
-  }
-
-  get actionColour(): string {
-    return this.jobService.getActionColour(this.actionType);
-  }
-
-  get messageBody(): string {
-    // TODO: Ensure these messages are correct
-    switch (this.actionType) {
-      case ActionType.cancelJob:
-        return 'Are you sure you wish to cancel this job?';
-      case ActionType.declineTerms:
-        return 'Once you decline these terms, the job will be cancelled and no further action can be performed on it.' +
-          ' Are you sure you wish to decline the terms?';
-      case ActionType.counterOffer:
-        return 'If you wish to make a counter offer, enter the amount you propose for the job<br/>\nUSD' + this.job.paymentType === PaymentType.hourly ? '/hr' : '';
-      case ActionType.acceptTerms:
-        return 'Are you sure?';
-      case ActionType.authoriseEscrow:
-        return 'You are about to pay the agreed amount of CAN to the escrow. Are you sure?';
-      case ActionType.enterEscrow:
-        return 'This will create a relationship between the provider address and your address in the escrow contract.';
-      case ActionType.addMessage:
-        return 'Add a note to this job.';
-      case ActionType.finishedJob:
-        return 'Are you sure you\'ve finished your job?';
-      case ActionType.acceptFinish:
-        return 'Are you sure you want to finish this job?';
-      case ActionType.review:
-        return '';
-      default:
-        return 'Are you sure?';
-    }
   }
 }

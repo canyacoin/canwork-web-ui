@@ -38,7 +38,7 @@ const routes: Routes = [
       {
         path: '',
         component: JobDetailsComponent
-      }
+      },
       {
         path: 'payment',
         component: ActionHistoryComponent

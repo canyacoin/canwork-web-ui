@@ -4,7 +4,7 @@ import {
     CanPayData, CanPayService, EthService, Operation, setProcessResult, View
 } from '@canyaio/canpay-lib';
 import { Job, JobState, Payment, PaymentType, TimeRange, WorkType } from '@class/job';
-import { IJobAction } from '@class/job-action';
+import { ActionType, IJobAction } from '@class/job-action';
 import { Upload } from '@class/upload';
 import { User, UserType } from '@class/user';
 import { CanWorkJobContract } from '@contract/can-work-job.contract';
@@ -17,13 +17,8 @@ import { Transaction, TransactionService } from '@service/transaction.service';
 import { UserService } from '@service/user.service';
 import { GenerateGuid } from '@util/generate.uid';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { DialogService } from 'ng2-bootstrap-modal';
 import { Observable } from 'rxjs/Observable';
 import { Action } from 'rxjs/scheduler/Action';
-
-import {
-    ActionDialogComponent, ActionDialogOptions
-} from '../action-dialog/action-dialog.component';
 
 @Injectable()
 export class JobService {
@@ -394,27 +389,7 @@ export class JobService {
     return actions[jobState] || [];
   }
 
-  /** Helper method to get the colour associated with each action button */
-  getActionColour(action: ActionType): string {
-    switch (action) {
-      case ActionType.cancelJob:
-      case ActionType.dispute:
-        return 'danger';
-      case ActionType.declineTerms:
-        return 'danger';
-      case ActionType.counterOffer:
-      case ActionType.addMessage:
-        return 'info';
-      case ActionType.acceptTerms:
-      case ActionType.authoriseEscrow:
-      case ActionType.enterEscrow:
-      case ActionType.finishedJob:
-      case ActionType.acceptFinish:
-        return 'success';
-      default:
-        return 'info';
-    }
-  }
+
 
   /** Job object must be re-assigned as firebase doesn't accept strong types */
   private parseJobToObject(job: Job): Promise<object> {

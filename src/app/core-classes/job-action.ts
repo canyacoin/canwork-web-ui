@@ -23,7 +23,7 @@ export class IJobAction {
   paymentType: PaymentType;
 
 
-  constructor(type: ActionType, executedBy: UserType, message?: string = '') {
+  constructor(type: ActionType, executedBy: UserType, message = '') {
     this.type = type;
     this.executedBy = executedBy;
     this.message = message;
@@ -54,37 +54,59 @@ export class IJobAction {
   }
 
 
-  getMessage(executor?: string): string {
+  get paymentTypeString(): string {
+    return this.paymentType && this.paymentType === PaymentType.hourly ? '/hr' : '/total'
+  }
+
+  get dialogMessage(): string {
+    // TODO: Ensure these messages are correct
     switch (this.type) {
-      case ActionType.createJob:
-        return `Job created by ${executor}.<br>
-        Proposed budget at $${this.amountUsd}${this.paymentTypeString} (${this.amountCan} CAN)
-        for ${this.weeklyCommitment} hours a week
-        for ${this.timelineExpectation}`;
+      case ActionType.cancelJob:
+        return 'Are you sure you wish to cancel this job?';
+      case ActionType.declineTerms:
+        return 'Once you decline these terms, the job will be cancelled and no further action can be performed on it.' +
+          ' Are you sure you wish to decline the terms?';
       case ActionType.counterOffer:
-        return `${executor} proposed a counter offer.<br>
-        Proposed budget at $${this.amountUsd}${this.paymentTypeString} (${this.amountCan} CAN)`;
+        return 'If you wish to make a counter offer, enter the amount you propose for the job<br/>\nUSD' + this.paymentTypeString;
       case ActionType.acceptTerms:
-        return `${executor} accepted the terms of this job.`
-      case ActionType.declineTerms:
-        return `${executor} declined the terms of this job.`
-      case ActionType.addMessage:
-        return `${executor} left a message:<br>
-            <em>${this.message}</em>`
-      case ActionType.declineTerms:
-        return `${executor} cancelled this job.`
+        return 'Are you sure?';
       case ActionType.authoriseEscrow:
-        return `${executor} authorised the Escrow contract to transfer ${this.amountCan} CAN`
+        return 'You are about to pay the agreed amount of CAN to the escrow. Are you sure?';
       case ActionType.enterEscrow:
-        return `${executor} registered this job in the Escrow contract.<br>
-            When the job is succesfully delivered, ${executor} will release the funds stored in the contract.`
+        return 'This will create a relationship between the provider address and your address in the escrow contract.';
+      case ActionType.addMessage:
+        return 'Add a note to this job.';
+      case ActionType.finishedJob:
+        return 'Are you sure you\'ve finished your job?';
+      case ActionType.acceptFinish:
+        return 'Are you sure you want to finish this job?';
+      case ActionType.review:
+        return '';
       default:
-        return `Job action: ${this.type}, by ${executor}`
+        return 'Are you sure?';
     }
   }
 
-  get paymentTypeString(): string {
-    return this.paymentType && this.paymentType === PaymentType.hourly ? '/hr' : '/total'
+  /** Helper method to get the colour associated with each action button */
+  get colour(): string {
+    switch (this.type) {
+      case ActionType.cancelJob:
+      case ActionType.dispute:
+        return 'danger';
+      case ActionType.declineTerms:
+        return 'danger';
+      case ActionType.counterOffer:
+      case ActionType.addMessage:
+        return 'info';
+      case ActionType.acceptTerms:
+      case ActionType.authoriseEscrow:
+      case ActionType.enterEscrow:
+      case ActionType.finishedJob:
+      case ActionType.acceptFinish:
+        return 'success';
+      default:
+        return 'info';
+    }
   }
 }
 
