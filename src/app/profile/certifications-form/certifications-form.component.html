@@ -14,14 +14,14 @@
             <div class="form-group">
               <label for="university">School or Certifying Institution<span class="text-danger">*</span>:</label>
               <input required id="university" name="university" list="uniNameList" formControlName="university" class="form-control"
-                placeholder="Type in your Institution...." [value]="(this.certifications.certToEdit !== null && certifications.editCert )? this.certifications.certToEdit.university : ''">
+                placeholder="Type in your Institution...." [value]="(this.certifications.certToEdit !== null && certifications.editCert) ? this.certifications.certToEdit.university : ''">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label for="course">Certification or Course Name<span class="text-danger">*</span>:</label>
               <input type="text" id="course" name="course" formControlName="course" required class="form-control"
-                [value]="(this.certifications.certToEdit !== null && certifications.editCert )? this.certifications.certToEdit.course : ''">
+                [value]="(this.certifications.certToEdit !== null && certifications.editCert) ? this.certifications.certToEdit.course : ''">
             </div>
           </div>
           <div class="form-row row">
@@ -29,13 +29,13 @@
               <label for="completion">Start<span class="text-danger">*</span>:</label>
               <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                 type="number" maxlength="4" required id="startDate" name="startDate" formControlName="startDate" class="form-control"
-                [value]="(this.certifications.certToEdit !== null && certifications.editCert )? this.certifications.certToEdit.completion : ''">
+                [value]="(this.certifications.certToEdit !== null && certifications.editCert) ? this.certifications.certToEdit.completion : ''">
             </div>
             <div class="form-group col-4">
               <label for="completion">Completion<span class="text-danger">*</span>:</label>
               <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                 type="number" maxlength="4" required id="completion" name="completion" formControlName="completion"
-                class="form-control" [value]="(this.certifications.certToEdit !== null && certifications.editCert )? this.certifications.certToEdit.completion : ''">
+                class="form-control" [value]="(this.certifications.certToEdit !== null && certifications.editCert) ? this.certifications.certToEdit.completion : ''">
             </div>
             <div class="form-group col-4">
               <div class="form-check" class="study-check">
