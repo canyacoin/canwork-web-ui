@@ -1,17 +1,40 @@
 <div class="container">
   <div class="row">
-    <div class="col-12 card" style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px; margin-bottom: 20px;">
-      <div *ngIf="isMyProfile && (userModel.type === 'Provider')" class="p-10 text-center">
-        <b>Certifications</b>
-        <br>
+    <div *ngIf="!loaded" class="col-12 card certification-card">
+      <div class="container d-flex h-100 flex-column justify-content-center">
+        <img src="assets/img/loader.svg" height="36px" alt="Loader">
+      </div>
+    </div>
+    <div *ngIf="loaded" class="col-12 card certification-card">
+      <div *ngIf="isMyProfile && (userModel.type === 'Provider') && userCertifications.length === 0" class="p-10 text-center">
         <p class="no-margin">You do not have any certifications</p>
         <i>Let's add some!</i>
         <br>
         <button class="btn btn-primary" data-toggle="modal" data-target="#newCertification">Add Certifications</button>
       </div>
+      <div *ngIf="(userModel.type === 'Provider') && userCertifications.length > 0" class="p-10">
+        <div class="row">
+          <div class="col-11">
+            <h6>Certifications</h6>
+          </div>
+          <div class="col-1">
+            <a data-toggle="modal" (click)="setAddModal()" data-target="#newCertification">
+              <i class="ti-plus fw-600" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+        <br>
+        <div class="row" *ngFor="let cert of userCertifications">
+          <div class="col-11">
+            <h5 class="mb-0">{{ cert.university }}</h5>
+            <p>Course:{{cert.course}}<br>Completed in : {{ cert.completion }}</p>
+          </div>
+          <div class="col-1">
+            <i *ngIf="isMyProfile" (click)="setEditModal(cert)" data-toggle="modal" data-target="#newCertification"
+              class="ti-pencil fw-600" aria-hidden="true"></i>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-
-
-
