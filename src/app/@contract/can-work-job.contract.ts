@@ -34,11 +34,11 @@ export class CanWorkJobContract {
           gasPrice: gasPrice,
           data: txObject.encodeABI(),
         };
-
-        txObject.send(txOptions, async (err, txHash) => this.eth.resolveTransaction(err, clientAddress, txHash, resolve, reject, onTxHash));
       } catch (err) {
         reject(err);
       }
+      txObject.send(txOptions, async (err, txHash) => this.eth.resolveTransaction(err, clientAddress, txHash, resolve, reject, onTxHash));
+
     });
   }
 
@@ -56,11 +56,11 @@ export class CanWorkJobContract {
           gasPrice: gasPrice,
           data: txObject.encodeABI(),
         };
-
-        txObject.send(txOptions, async (err, txHash) => this.eth.resolveTransaction(err, fromAddr, txHash, resolve, reject, onTxHash));
       } catch (err) {
         reject(err);
       }
+      txObject.send(txOptions, async (err, txHash) => this.eth.resolveTransaction(err, fromAddr, txHash, resolve, reject, onTxHash));
+
     });
   }
 

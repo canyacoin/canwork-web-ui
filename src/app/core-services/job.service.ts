@@ -201,7 +201,7 @@ export class JobService {
                 this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.acceptFinish)
                 this.transactionService.saveTransaction(new Transaction(txId, job.clientId,
                   txHash, this.momentService.get(), ActionType.acceptFinish, job.id));
-                parsedJob.actionLog.push(action);
+                job.actionLog.push(action);
                 // This payment log has been deprecated in favor of transacations collection, however emails rely on it
                 job.paymentLog.push(new Payment({
                   txId: txHash,
@@ -246,6 +246,7 @@ export class JobService {
             provider = await this.userService.getUser(job.providerId)
             await this.userService.newReview(client, provider, parsedJob, action)
             parsedJob.state = JobState.reviewed
+            parsedJob.actionLog.push(action);
             await this.saveJobFirebase(parsedJob)
             resolve(true)
             break
