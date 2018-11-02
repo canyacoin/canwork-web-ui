@@ -1,10 +1,10 @@
-<div class="modal" tabindex="-1" role="dialog" id="newCertification" role="dialog" aria-labelledby="newCertification">
+<div class="modal" tabindex="-1" role="dialog" id="certificationModal" role="dialog" aria-labelledby="certificationModal">
   <div class="modal-dialog" role="document" style="border:none">
     <div class="modal-content">
       <div class="modal-header" style="border:none">
         <h5 class="modal-title" *ngIf="!certifications.editCert">ADD CERTIFICATION</h5>
         <h5 class="modal-title" *ngIf="certifications.editCert">EDIT CERTIFICATION</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" id="certificationModalClose" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -25,13 +25,19 @@
             </div>
           </div>
           <div class="form-row row">
-            <div class="form-group col-6">
-              <label for="completion">Year of completion<span class="text-danger">*</span>:</label>
+            <div class="form-group col-4">
+              <label for="completion">Start<span class="text-danger">*</span>:</label>
+              <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                type="number" maxlength="4" required id="startDate" name="startDate" formControlName="startDate" class="form-control"
+                [value]="(this.certifications.certToEdit !== null && certifications.editCert )? this.certifications.certToEdit.completion : ''">
+            </div>
+            <div class="form-group col-4">
+              <label for="completion">Completion<span class="text-danger">*</span>:</label>
               <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                 type="number" maxlength="4" required id="completion" name="completion" formControlName="completion"
                 class="form-control" [value]="(this.certifications.certToEdit !== null && certifications.editCert )? this.certifications.certToEdit.completion : ''">
             </div>
-            <div class="form-group col-6">
+            <div class="form-group col-4">
               <div class="form-check" class="study-check">
                 <input type="checkbox" value="true" id="study" formControlName="isStudying" name="isStudying">
                 <label for="isStudying">
@@ -48,7 +54,8 @@
           </div>
         </div>
         <div class="modal-footer" style="border:none">
-          <a (click)="onDeleteCertification(this.certifications.certToEdit)" class="btn btn-danger" style="color: white; position: absolute; left:15px;">Delete</a>
+          <a (click)="onDeleteCertification(this.certifications.certToEdit)" *ngIf="(this.certifications.certToEdit !== null && certifications.editCert ) "
+            class="btn btn-danger" style="color: white; position: absolute; left:15px;" data-dismiss="modal">Delete</a>
           <button type="submit" [disabled]="!certificationForm.valid" class="btn btn-primary">Save
             changes</button>
           <button class="btn btn-secondary" data-dismiss="modal">Close</button>

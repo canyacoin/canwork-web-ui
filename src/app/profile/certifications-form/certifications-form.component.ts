@@ -40,6 +40,7 @@ export class CertificationsFormComponent implements OnInit {
     this.certificationForm = this.formBuilder.group({
       university: ['', Validators.required],
       course: ['', Validators.required],
+      startDate: ['', Validators.required],
       completion: ['', Validators.required],
       isStudying: [false],
       certificate: [''],
@@ -58,9 +59,11 @@ export class CertificationsFormComponent implements OnInit {
     tempCert.university = this.certificationForm.value.university;
     tempCert.completion = this.certificationForm.value.completion;
     tempCert.course = this.certificationForm.value.course;
+    tempCert.startDate = this.certificationForm.value.startDate;
     tempCert.isStudying = this.certificationForm.value.isStudying;
     tempCert.certificate = this.certificationForm.value.certificate;
     console.log(tempCert);
+    document.getElementById('certificationModalClose').click();
     try {
       if (this.certifications.editCert) {
         tempCert.id = this.certifications.certToEdit.id;
