@@ -17,7 +17,11 @@ export class WithDockComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(({ code }) => {
-      this.init(code)
+      if (code) {
+        this.init(code)
+      } else {
+        // TODO show or redirect to error
+      }
     })
   }
 

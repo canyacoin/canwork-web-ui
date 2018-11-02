@@ -1,0 +1,31 @@
+#auth-with-dock-component {
+  background-color: white;
+  position: absolute;
+  text-align: center;
+  min-height: 100vh;
+  z-index: 1000;
+  height: 100%;
+  width: 100%;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  top: 0;
+
+  .checkpoints {
+    margin: 28px 0;
+    list-style: none;
+    text-align: left;
+    font-size: 28px;
+    width: 280px;
+    li {
+      i {
+        margin-right: 12px;
+      }
+      &.complete {
+        i {
+          color: #30D7A9;
+        }
+      }
+    }
+  }
+}
