@@ -28,6 +28,7 @@ export class CertificationsService {
         id: certification.id,
         university: certification.university,
         course: certification.course,
+        startDate: certification.startDate,
         completion: certification.completion,
         isStudying: certification.isStudying,
         certificate: certification.certificate
@@ -46,6 +47,7 @@ export class CertificationsService {
         id: certification.id,
         university: certification.university,
         course: certification.course,
+        startDate: certification.startDate,
         completion: certification.completion,
         isStudying: certification.isStudying,
         certificate: certification.certificate
@@ -65,7 +67,7 @@ export class CertificationsService {
   }
 
   public async getCertifications(userID: string) {
-    console.log('fetching certifications...');
+    console.log('Fetching certifications...');
     const certifications = this.afs.collection(`users/${userID}/certifications`);
     let result: any;
     this.certificationSub = certifications.valueChanges().subscribe((data: any) => {
@@ -76,13 +78,12 @@ export class CertificationsService {
   }
 
   public loadAddCert() {
-    console.log('Received request to add cert');
+    console.log('Adding certification...');
     this.certToEdit = null;
     this.editCert = false;
   }
   public loadEditCert(cert) {
-    console.log('Received edit for cert : ');
-    console.log(cert);
+    console.log('Editing certification...');
     this.certToEdit = cert;
     this.editCert = true;
   }

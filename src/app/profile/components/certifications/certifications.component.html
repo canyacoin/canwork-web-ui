@@ -15,23 +15,27 @@
       <div *ngIf="(userModel.type === 'Provider') && userCertifications.length > 0" class="p-10">
         <div class="row">
           <div class="col-11">
-            <h6>Certifications</h6>
+            <span class="card-title">Certifications</span>
           </div>
           <div class="col-1">
-            <a data-toggle="modal" (click)="setAddModal()" data-target="#newCertification">
+            <a data-toggle="modal" *ngIf="isMyProfile" (click)="setAddModal()" data-target="#certificationModal">
               <i class="ti-plus fw-600" aria-hidden="true"></i>
             </a>
           </div>
         </div>
         <br>
         <div class="row" *ngFor="let cert of userCertifications">
-          <div class="col-11">
-            <h5 class="mb-0">{{ cert.university }}</h5>
-            <p>Course:{{cert.course}}<br>Completed in : {{ cert.completion }}</p>
+          <div class="col-6">
+            <h6 class="mb-0">{{ cert.course }}</h6>
+            <p class="text-grey">{{ cert.university }}</p>
           </div>
-          <div class="col-1">
-            <i *ngIf="isMyProfile" (click)="setEditModal(cert)" data-toggle="modal" data-target="#newCertification"
-              class="ti-pencil fw-600" aria-hidden="true"></i>
+          <div class="col-6 text-right">
+            <h6>{{ cert.startDate }} - {{ cert.completion }}
+              <span *ngIf="isMyProfile">&nbsp;&nbsp;&nbsp;
+                <i (click)="setEditModal(cert)" data-toggle="modal" data-target="#certificationModal" class="ti-pencil text-grey fw-600"
+                  aria-hidden="true"></i>
+              </span>
+            </h6>
           </div>
         </div>
       </div>
