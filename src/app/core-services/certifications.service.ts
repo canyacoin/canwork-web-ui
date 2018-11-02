@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { AngularFirestore } from 'angularfire2/firestore';
 import { Certification } from '../core-classes/certification';
 import { Subscription } from 'rxjs/Subscription';
 
 @Injectable()
 export class CertificationsService {
-  usersCollectionRef: AngularFirestoreCollection<any>;
-  viewedUsersRef: AngularFirestoreCollection<any>;
+
   certificationSub: Subscription;
   constructor(
     private afs: AngularFirestore
