@@ -29,6 +29,13 @@ service cloud.firestore {
        allow delete: if isAdmin();
     }
 
+    match /users/{userId}/certifications/{certificationId} {
+       allow read;
+       allow create: if isAuthenticated();
+       allow update: if isDocumentOwner(userId);
+       allow delete: if isDocumentOwner(userId);
+    }
+
     match /transactions/{transactionId} {
        allow read;
        allow create: if isAuthenticated();
