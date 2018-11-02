@@ -88,6 +88,7 @@ export class HomeComponent implements OnInit {
     this.getProviders(UserCategory.contentCreator, this.contents);
   }
 
+
   async setUpRecentlyViewed() {
     this.userService.getViewedUsers(this.currentUser.address).then((result) => {
       if (result && result.length > 0) {
