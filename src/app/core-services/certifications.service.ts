@@ -22,47 +22,44 @@ export class CertificationsService {
 
   public addCertification(certification: Certification, userID: string) {
     console.log('adding Certification...');
-    try {
-      const tempCert = {
-        id: certification.id,
-        university: certification.university,
-        course: certification.course,
-        startDate: certification.startDate,
-        completion: certification.completion,
-        isStudying: certification.isStudying,
-        certificate: certification.certificate
-      }
-      this.afs.doc(`users/${userID}/certifications/${tempCert.id}`).set(tempCert);
-    } catch (error) {
-      console.error('submitForm - error', error);
+    const tempCert = {
+      id: certification.id,
+      university: certification.university,
+      course: certification.course,
+      startDate: certification.startDate,
+      completion: certification.completion,
+      isStudying: certification.isStudying,
+      certificate: certification.certificate
     }
+    this.afs.doc(`users/${userID}/certifications/${tempCert.id}`).set(tempCert).catch(error => {
+      alert('Something went wrong. Please try again later.');
+      console.log(error);
+    });
   }
 
 
   public updateCertification(certification: Certification, userID: string) {
     console.log('updating Certification...');
-    try {
-      const tempCert = {
-        id: certification.id,
-        university: certification.university,
-        course: certification.course,
-        startDate: certification.startDate,
-        completion: certification.completion,
-        isStudying: certification.isStudying,
-        certificate: certification.certificate
-      }
-      this.afs.doc(`users/${userID}/certifications/${tempCert.id}`).update(tempCert);
-    } catch (error) {
-      console.error('submitForm - error', error);
+    const tempCert = {
+      id: certification.id,
+      university: certification.university,
+      course: certification.course,
+      startDate: certification.startDate,
+      completion: certification.completion,
+      isStudying: certification.isStudying,
+      certificate: certification.certificate
     }
+    this.afs.doc(`users/${userID}/certifications/${tempCert.id}`).update(tempCert).catch(error => {
+      alert('Something went wrong. Please try again later.');
+      console.log(error);
+    });
   }
 
   public deleteCertification(certification: Certification, userID: string) {
-    try {
-      this.afs.doc(`users/${userID}/certifications/${certification.id}`).delete();
-    } catch (error) {
-      console.error('submitForm - error', error);
-    }
+    this.afs.doc(`users/${userID}/certifications/${certification.id}`).delete().catch(error => {
+      alert('Something went wrong. Please try again later.');
+      console.log(error);
+    });
   }
 
   public async getCertifications(userID: string) {
@@ -81,6 +78,7 @@ export class CertificationsService {
     this.certToEdit = null;
     this.editCert = false;
   }
+
   public loadEditCert(cert) {
     console.log('Editing certification...');
     this.certToEdit = cert;
