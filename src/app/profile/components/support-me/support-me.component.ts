@@ -2,9 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import {
     CanPayData, CanPayService, Operation, ProcessAction, setProcessResult, View
 } from '@canyaio/canpay-lib';
-
 import { User } from '@class/user';
 import { CanWorkEthService } from '@service/eth.service';
+import { FeatureToggle, FeatureToggleService } from '@service/feature-toggle.service';
 
 @Component({
   selector: 'app-profile-support-me',
@@ -14,10 +14,19 @@ import { CanWorkEthService } from '@service/eth.service';
 export class SupportMeComponent implements OnInit {
 
   @Input() userModel: User;
+  @Input() currentUser: User;
 
   CanPay: any;
 
-  constructor(private ethService: CanWorkEthService, private canPayService: CanPayService) { }
+  canexDisabled = false;
+
+  constructor(private ethService: CanWorkEthService, private canPayService: CanPayService, private featureService: FeatureToggleService) {
+    this.featureService.getFeatureConfig('canexchange').then(val => {
+      this.canexDisabled = val.enabled;
+    }).catch(e => {
+      this.canexDisabled = true;
+    })
+  }
 
   ngOnInit() {
     this.CanPay = {
@@ -27,7 +36,9 @@ export class SupportMeComponent implements OnInit {
       amount: 0, // allow the user to enter amount through an input box
       complete: this.onComplete.bind(this),
       cancel: this.onCancel.bind(this),
-      view: View.Compact
+      view: View.Compact,
+      disableCanEx: this.canexDisabled,
+      userEmail: this.currentUser.email
     };
   }
 

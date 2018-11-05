@@ -91,6 +91,28 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     return this.jobService.getAvailableActions(this.job.state, this.currentUserIsClient);
   }
 
+  /** Helper method to get the colour associated with each action button */
+  getColour(type: ActionType): string {
+    switch (type) {
+      case ActionType.cancelJob:
+      case ActionType.dispute:
+        return 'danger';
+      case ActionType.declineTerms:
+        return 'danger';
+      case ActionType.counterOffer:
+      case ActionType.addMessage:
+        return 'info';
+      case ActionType.acceptTerms:
+      case ActionType.authoriseEscrow:
+      case ActionType.enterEscrow:
+      case ActionType.finishedJob:
+      case ActionType.acceptFinish:
+        return 'success';
+      default:
+        return 'info';
+    }
+  }
+
   get currentUserIsClient() {
     return this.currentUserType === UserType.client;
   }

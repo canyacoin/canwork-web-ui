@@ -59,7 +59,6 @@ export class IJobAction {
   }
 
   get dialogMessage(): string {
-    // TODO: Ensure these messages are correct
     switch (this.type) {
       case ActionType.cancelJob:
         return 'Are you sure you wish to cancel this job?';
@@ -87,25 +86,32 @@ export class IJobAction {
     }
   }
 
-  /** Helper method to get the colour associated with each action button */
-  get colour(): string {
+  getMessage(executor?: string): string {
     switch (this.type) {
-      case ActionType.cancelJob:
-      case ActionType.dispute:
-        return 'danger';
-      case ActionType.declineTerms:
-        return 'danger';
+      case ActionType.createJob:
+        return `Job created by ${executor}.<br>
+          Proposed budget at $${this.amountUsd}${this.paymentTypeString} (${this.amountCan} CAN)
+          for ${this.weeklyCommitment} hours a week
+          for ${this.timelineExpectation}`;
       case ActionType.counterOffer:
-      case ActionType.addMessage:
-        return 'info';
+        return `${executor} proposed a counter offer.<br>
+          Proposed budget at $${this.amountUsd}${this.paymentTypeString} (${this.amountCan} CAN)`;
       case ActionType.acceptTerms:
+        return `${executor} accepted the terms of this job.`
+      case ActionType.declineTerms:
+        return `${executor} declined the terms of this job.`
+      case ActionType.addMessage:
+        return `${executor} left a message:<br>
+              <em>${this.message}</em>`
+      case ActionType.declineTerms:
+        return `${executor} cancelled this job.`
       case ActionType.authoriseEscrow:
+        return `${executor} authorised the Escrow contract to transfer ${this.amountCan} CAN`
       case ActionType.enterEscrow:
-      case ActionType.finishedJob:
-      case ActionType.acceptFinish:
-        return 'success';
+        return `${executor} registered this job in the Escrow contract.<br>
+              When the job is succesfully delivered, ${executor} will release the funds stored in the contract.`
       default:
-        return 'info';
+        return `Job action: ${this.type}, by ${executor}`
     }
   }
 }

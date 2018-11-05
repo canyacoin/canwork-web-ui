@@ -20,10 +20,13 @@ import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/fires
 import { Observable } from 'rxjs/Observable';
 import { Action } from 'rxjs/scheduler/Action';
 
+import { FeatureToggleService } from './feature-toggle.service';
+
 @Injectable()
 export class JobService {
 
   jobsCollection: AngularFirestoreCollection<any>;
+  canexDisabled = false;
 
   constructor(
     private afs: AngularFirestore,
@@ -34,9 +37,15 @@ export class JobService {
     private canWorkEthService: CanWorkEthService,
     private ethService: EthService,
     private jobNotificationService: JobNotificationService,
-    private canPayService: CanPayService) {
+    private canPayService: CanPayService,
+    private featureService: FeatureToggleService) {
 
     this.jobsCollection = this.afs.collection<any>('jobs');
+    this.featureService.getFeatureConfig('canexchange').then(val => {
+      this.canexDisabled = val.enabled;
+    }).catch(e => {
+      this.canexDisabled = true;
+    })
   }
 
   // =========================
@@ -123,8 +132,7 @@ export class JobService {
    */
   async handleJobAction(job: Job, action: IJobAction): Promise<boolean> {
     const parsedJob = new Job(await this.parseJobToObject(job));
-    let client: User
-    let provider: User
+    let client, provider: User;
     return new Promise<boolean>(async (resolve, reject) => {
       try {
         switch (action.type) {
@@ -217,6 +225,9 @@ export class JobService {
                   .catch(setProcessResult.bind(canPayOptions));
               };
 
+
+              client = await this.userService.getUser(job.clientId);
+
               const canPayOptions = {
                 dAppName: `CanWork`,
                 successText: 'Woohoo, job complete!',
@@ -226,8 +237,8 @@ export class JobService {
                 cancel: () => { this.canPayService.close() },
                 postAuthorisationProcessName: 'Job completion',
                 startPostAuthorisationProcess: initiateCompleteJob.bind(this),
-                disableCanEx: true,
-                userEmail: ''
+                disableCanEx: this.canexDisabled,
+                userEmail: client.email
               };
               this.canPayService.open(canPayOptions);
             } catch (error) {
@@ -343,6 +354,7 @@ export class JobService {
         .catch(setProcessResult.bind(canPayOptions));
     };
 
+    const client = await this.userService.getUser(job.clientId);
 
     const canPayOptions = {
       dAppName: `CanWork`,
@@ -354,8 +366,8 @@ export class JobService {
       complete: onComplete,
       cancel: onCancel,
       view: View.Compact,
-      disableCanEx: true,
-      userEmail: '',
+      disableCanEx: this.canexDisabled,
+      userEmail: client.email,
 
       // Post Authorisation
       postAuthorisationProcessName: 'Job creation',
