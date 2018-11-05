@@ -13,8 +13,8 @@ export class StatusIconComponent {
   @Input() currentUserType: UserType;
 
   constructor() { }
+  get stateColour(): string {
 
-  get stateColour() {
     switch (this.job.state) {
       case JobState.offer:
       case JobState.workPendingCompletion:
@@ -36,8 +36,9 @@ export class StatusIconComponent {
         return 'primary';
     }
   }
+  /* Customizeable messages for each job status. */
+  get stateStatus(): string {
 
-  get stateStatus() {
     switch (this.job.state) {
       case JobState.offer:
         return 'Job offered';
