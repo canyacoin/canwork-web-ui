@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AnimationService } from './animation.service';
 import { ChatService } from './chat.service';
+import { FeatureToggleService } from './feature-toggle.service';
 import { FeedService } from './feed.service';
 import { JobService } from './job.service';
 import { MomentService } from './moment.service';
@@ -20,6 +21,7 @@ import { UserService } from './user.service';
     AnimationService,
     ChatService,
     FeedService,
+    FeatureToggleService,
     JobService,
     MomentService,
     ScriptService,

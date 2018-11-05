@@ -45,15 +45,15 @@ service cloud.firestore {
 
     match /viewed-users/{userId}/viewed/{document=**} {
        allow read;
-       allow write: if isDocumentOwner(userId);
-       allow write: if isDocumentOwner(userId);
+       allow create: if isDocumentOwner(userId);
+       allow update: if isDocumentOwner(userId);
        allow delete: if isAdmin();
     }
 
     match /notifications/{userId} {
        allow read;
-       allow write: if isAuthenticated();
-       allow write: if isAuthenticated();
+       allow create: if isAuthenticated();
+       allow update: if isAuthenticated();
        allow delete: if isAuthenticated();
     }
 
@@ -64,9 +64,13 @@ service cloud.firestore {
 
     match /chats/{document=**} {
        allow read;
-       allow write: if isAuthenticated();
-       allow write: if isAuthenticated();
+       allow create: if isAuthenticated();
+       allow update: if isAuthenticated();
        allow delete: if isAdmin();
+    }
+
+    match /features/{document=**} {
+       allow read;
     }
 
     // TODO: Will require a much more complex rule set here
