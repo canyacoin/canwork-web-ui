@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {
     CanPayData, CanPayService, Operation, ProcessAction, setProcessResult, View
 } from '@canyaio/canpay-lib';
@@ -11,7 +11,7 @@ import { FeatureToggle, FeatureToggleService } from '@service/feature-toggle.ser
   templateUrl: './support-me.component.html',
   styleUrls: ['./support-me.component.css']
 })
-export class SupportMeComponent implements OnInit {
+export class SupportMeComponent {
 
   @Input() userModel: User;
   @Input() currentUser: User;
@@ -22,14 +22,14 @@ export class SupportMeComponent implements OnInit {
 
   constructor(private ethService: CanWorkEthService, private canPayService: CanPayService, private featureService: FeatureToggleService) {
     this.featureService.getFeatureConfig('canexchange').then(val => {
-      this.canexDisabled = val.enabled;
+      this.canexDisabled = !val.enabled;
     }).catch(e => {
       this.canexDisabled = true;
     })
   }
 
-  ngOnInit() {
-    this.CanPay = {
+  onBuyACoffee() {
+    const canPay = {
       dAppName: this.userModel.name,
       recepient: this.userModel.ethAddress,
       operation: Operation.pay,
@@ -39,11 +39,8 @@ export class SupportMeComponent implements OnInit {
       view: View.Compact,
       disableCanEx: this.canexDisabled,
       userEmail: this.currentUser.email
-    };
-  }
-
-  onBuyACoffee() {
-    this.canPayService.open(this.CanPay);
+    }
+    this.canPayService.open(canPay);
   }
 
   onComplete(canPayData: CanPayData) {

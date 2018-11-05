@@ -42,7 +42,7 @@ export class JobService {
 
     this.jobsCollection = this.afs.collection<any>('jobs');
     this.featureService.getFeatureConfig('canexchange').then(val => {
-      this.canexDisabled = val.enabled;
+      this.canexDisabled = !val.enabled;
     }).catch(e => {
       this.canexDisabled = true;
     })
