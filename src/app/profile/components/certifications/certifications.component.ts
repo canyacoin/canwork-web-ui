@@ -20,7 +20,10 @@ export class CertificationsComponent implements OnInit {
   userCertifications: any;
   loaded = false;
   certificationSub: Subscription;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 90881c984fbfe456f6e44f8c239eb8f7748bfe71
   constructor(
     private afs: AngularFirestore,
     private certifications: CertificationsService
@@ -36,6 +39,27 @@ export class CertificationsComponent implements OnInit {
   }
 
   onInputChange() {
+  }
+
+  onDeleteCertification() {
+    console.log('deleting');
+  }
+
+  async loadCertifications() {
+    const certifications = this.afs.collection(`users/${this.userModel.address}/certifications`);
+    this.certificationSub = certifications.valueChanges().subscribe((data: any) => {
+      this.userCertifications = data;
+      if (data.length >= 0) {
+        this.loaded = true;
+      }
+    });
+  }
+  setEditModal(cert) {
+    this.certifications.loadEditCert(cert);
+  }
+
+  setAddModal() {
+    this.certifications.loadAddCert();
   }
 
   onDeleteCertification() {
