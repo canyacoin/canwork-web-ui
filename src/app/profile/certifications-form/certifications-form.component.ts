@@ -74,7 +74,6 @@ export class CertificationsFormComponent implements OnInit {
         this.certifications.addCertification(tempCert, this.currentUser.address);
       }
     } catch (error) {
-      alert('Something went wrong. please try again later.')
     }
   }
 

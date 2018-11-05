@@ -20,6 +20,7 @@ export class CertificationsComponent implements OnInit {
   userCertifications: any;
   loaded = false;
   certificationSub: Subscription;
+
   constructor(
     private afs: AngularFirestore,
     private certifications: CertificationsService
