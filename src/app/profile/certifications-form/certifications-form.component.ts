@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Certification } from '../../core-classes/certification';
 import { CertificationsService } from '../../core-services/certifications.service';
 import { AuthService } from '../../core-services/auth.service';
@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: './certifications-form.component.html',
   styleUrls: ['./certifications-form.component.css']
 })
-export class CertificationsFormComponent implements OnInit {
+export class CertificationsFormComponent implements OnInit, AfterViewInit {
 
   uniInput = '';
   uniList: any;
@@ -45,11 +45,13 @@ export class CertificationsFormComponent implements OnInit {
       isStudying: [false],
       certificate: [''],
     });
+  }
+
+  ngAfterViewInit() {
     this.getJSON().subscribe(data => {
       this.uniList = data;
     });
   }
-
   public getJSON(): Observable<any> {
     return this.http.get('../../assets/js/UniversityList.json');
   }
