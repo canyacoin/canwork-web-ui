@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Certification } from '../../core-classes/certification';
 import { CertificationsService } from '../../core-services/certifications.service';
 import { AuthService } from '../../core-services/auth.service';
@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: './certifications-form.component.html',
   styleUrls: ['./certifications-form.component.css']
 })
-export class CertificationsFormComponent implements OnInit {
+export class CertificationsFormComponent implements OnInit, AfterViewInit {
 
   uniInput = '';
   uniList: any;
@@ -45,11 +45,13 @@ export class CertificationsFormComponent implements OnInit {
       isStudying: [false],
       certificate: [''],
     });
+  }
+
+  ngAfterViewInit() {
     this.getJSON().subscribe(data => {
       this.uniList = data;
     });
   }
-
   public getJSON(): Observable<any> {
     return this.http.get('../../assets/js/UniversityList.json');
   }
@@ -62,19 +64,17 @@ export class CertificationsFormComponent implements OnInit {
     tempCert.startDate = this.certificationForm.value.startDate;
     tempCert.isStudying = this.certificationForm.value.isStudying;
     tempCert.certificate = this.certificationForm.value.certificate;
-    console.log(tempCert);
-    document.getElementById('certificationModalClose').click();
     try {
       if (this.certifications.editCert) {
         tempCert.id = this.certifications.certToEdit.id;
         this.certifications.updateCertification(tempCert, this.currentUser.address);
       } else {
         tempCert.id = this.idGenerator();
-        console.log(tempCert);
         this.certifications.addCertification(tempCert, this.currentUser.address);
       }
+      document.getElementById('certificationModalClose').click();
     } catch (error) {
-      alert('Something went wrong. please try again later.')
+      this.toggleWarning();
     }
   }
 
@@ -88,13 +88,12 @@ export class CertificationsFormComponent implements OnInit {
   }
 
   onDeleteCertification(cert) {
-    console.log('deleting certification ');
-    console.log(cert)
     if (confirm('Are you sure you want to delete this certification? this can\'t be undone!')) {
       this.certifications.deleteCertification(cert, this.currentUser.address);
-    } else {
-      console.log('awww');
     }
-    // this.certifications.deleteCertification(cert, this.currentUser.address);
+  }
+
+  toggleWarning() {
+    document.getElementById('warning-msg').classList.toggle('active');
   }
 }

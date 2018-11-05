@@ -6,14 +6,14 @@ import { Subscription } from 'rxjs/Subscription';
 @Injectable()
 export class CertificationsService {
 
+  editCert = false;
+  certToEdit: Certification;
   certificationSub: Subscription;
   constructor(
     private afs: AngularFirestore
   ) {
   }
 
-  editCert = false;
-  certToEdit: Certification;
 
   /**
    * This service is created to accomodate the add certification feature on
@@ -21,7 +21,6 @@ export class CertificationsService {
    */
 
   public addCertification(certification: Certification, userID: string) {
-    console.log('adding Certification...');
     const tempCert = {
       id: certification.id,
       university: certification.university,
@@ -39,7 +38,6 @@ export class CertificationsService {
 
 
   public updateCertification(certification: Certification, userID: string) {
-    console.log('updating Certification...');
     const tempCert = {
       id: certification.id,
       university: certification.university,
@@ -51,19 +49,16 @@ export class CertificationsService {
     }
     this.afs.doc(`users/${userID}/certifications/${tempCert.id}`).update(tempCert).catch(error => {
       alert('Something went wrong. Please try again later.');
-      console.log(error);
     });
   }
 
   public deleteCertification(certification: Certification, userID: string) {
     this.afs.doc(`users/${userID}/certifications/${certification.id}`).delete().catch(error => {
       alert('Something went wrong. Please try again later.');
-      console.log(error);
     });
   }
 
   public async getCertifications(userID: string) {
-    console.log('Fetching certifications...');
     const certifications = this.afs.collection(`users/${userID}/certifications`);
     let result: any;
     this.certificationSub = certifications.valueChanges().subscribe((data: any) => {

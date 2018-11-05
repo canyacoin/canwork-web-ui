@@ -33,8 +33,8 @@ export class CertificationsComponent implements OnInit {
   OnDestroy() {
     this.certificationSub.unsubscribe();
   }
+
   onInputChange() {
-    console.log('changed');
   }
 
   onDeleteCertification() {
@@ -50,6 +50,7 @@ export class CertificationsComponent implements OnInit {
       }
     });
   }
+
   setEditModal(cert) {
     this.certifications.loadEditCert(cert);
   }

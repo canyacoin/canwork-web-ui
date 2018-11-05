@@ -10,6 +10,16 @@
       </div>
       <form [formGroup]="certificationForm" (ngSubmit)="onSubmitCertification()">
         <div class="modal-body">
+          <div class="row" id="warning-msg">
+            <div class="col-11">
+              <span>Something went wrong. Please try again later.</span>
+            </div>
+            <div class="col-1">
+              <button type="button" id="close-warning" (click)="toggleWarning()">
+                &times;
+              </button>
+            </div>
+          </div>
           <div class="form-row">
             <div class="form-group">
               <label for="university">School or Certifying Institution<span class="text-danger">*</span>:</label>
