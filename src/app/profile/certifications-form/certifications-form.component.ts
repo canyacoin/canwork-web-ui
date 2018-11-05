@@ -62,18 +62,17 @@ export class CertificationsFormComponent implements OnInit {
     tempCert.startDate = this.certificationForm.value.startDate;
     tempCert.isStudying = this.certificationForm.value.isStudying;
     tempCert.certificate = this.certificationForm.value.certificate;
-    console.log(tempCert);
-    document.getElementById('certificationModalClose').click();
     try {
       if (this.certifications.editCert) {
         tempCert.id = this.certifications.certToEdit.id;
         this.certifications.updateCertification(tempCert, this.currentUser.address);
       } else {
         tempCert.id = this.idGenerator();
-        console.log(tempCert);
         this.certifications.addCertification(tempCert, this.currentUser.address);
       }
+      document.getElementById('certificationModalClose').click();
     } catch (error) {
+      this.toggleWarning();
     }
   }
 
@@ -87,13 +86,12 @@ export class CertificationsFormComponent implements OnInit {
   }
 
   onDeleteCertification(cert) {
-    console.log('deleting certification ');
-    console.log(cert)
     if (confirm('Are you sure you want to delete this certification? this can\'t be undone!')) {
       this.certifications.deleteCertification(cert, this.currentUser.address);
-    } else {
-      console.log('awww');
     }
-    // this.certifications.deleteCertification(cert, this.currentUser.address);
+  }
+
+  toggleWarning() {
+    document.getElementById('warning-msg').classList.toggle('active');
   }
 }

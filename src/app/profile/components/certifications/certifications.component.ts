@@ -34,8 +34,8 @@ export class CertificationsComponent implements OnInit {
   OnDestroy() {
     this.certificationSub.unsubscribe();
   }
+
   onInputChange() {
-    console.log('changed');
   }
 
   onDeleteCertification() {
