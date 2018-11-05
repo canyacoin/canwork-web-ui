@@ -1,15 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as randomColor from 'randomcolor';
-import { Subscription } from 'rxjs/Subscription';
-import { CanWorkEthService } from '@service/eth.service';
-import * as moment from 'moment-timezone';
 import { User, UserState, UserType } from '@class/user';
 import { AuthService } from '@service/auth.service';
+import { CanWorkEthService } from '@service/eth.service';
 import { UserService } from '@service/user.service';
 import { EmailValidator } from '@validator/email.validator';
 import { EthereumValidator } from '@validator/ethereum.validator';
+import * as randomColor from 'randomcolor';
+import { Subscription } from 'rxjs/Subscription';
+
+import * as moment from 'moment-timezone';
 
 @Component({
   selector: 'app-create-client-profile',
@@ -67,9 +68,7 @@ export class CreateClientProfileComponent implements OnInit {
     this.currentStep = this.stepperSteps[0];
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
-    this.ethSub = this.ethService.account$.subscribe((acc: string) => {
-      this.ethAddress = acc
-    })
+    this.ethAddress = this.ethService.getOwnerAccount();
   }
 
   buildForm() {
