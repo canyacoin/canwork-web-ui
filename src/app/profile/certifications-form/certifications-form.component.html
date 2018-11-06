@@ -23,7 +23,7 @@
           <div class="form-row">
             <div class="form-group">
               <label for="university">School or Certifying Institution<span class="text-danger">*</span>:</label>
-              <input required id="university" name="university" list="uniNameList" formControlName="university" class="form-control"
+              <input required id="university" name="university" (input)="searchUni()" list="uniNameList" formControlName="university" class="form-control"
                 placeholder="Type in your Institution...." [value]="(this.certifications.certToEdit !== null && certifications.editCert) ? this.certifications.certToEdit.university : ''">
             </div>
           </div>
@@ -76,5 +76,5 @@
 </div>
 
 <datalist id="uniNameList">
-  <option *ngFor="let uni of uniList" value="{{uni}}">
+  <option *ngFor="let uni of uniFilteredList" value="{{ uni.name }}">
 </datalist>

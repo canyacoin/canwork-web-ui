@@ -17,6 +17,7 @@ export class CertificationsFormComponent implements OnInit, AfterViewInit {
 
   uniInput = '';
   uniList: any;
+  uniFilteredList: any;
   authSub: Subscription;
   uniListSelection = new Array();
   certificationForm: any;
@@ -54,7 +55,7 @@ export class CertificationsFormComponent implements OnInit, AfterViewInit {
     });
   }
   public getJSON(): Observable<any> {
-    return this.http.get('../../assets/js/UniversityListNames.json');
+    return this.http.get('../../assets/js/UniversityList.json');
   }
 
   onSubmitCertification() {
@@ -96,5 +97,12 @@ export class CertificationsFormComponent implements OnInit, AfterViewInit {
 
   toggleWarning() {
     document.getElementById('warning-msg').classList.toggle('active');
+  }
+
+  searchUni() {
+    const input = this.certificationForm.value.university;
+    this.uniFilteredList = this.uniList
+      .filter(uni => uni.name.toLowerCase().indexOf(input) !== -1)
+      .slice(0, 10)
   }
 }
