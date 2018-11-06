@@ -11,6 +11,11 @@ body {
   transition: .5s;
 }
 
+body.modal-open {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
 ::-moz-selection {
   background: #3cf;
   color: #fff;
