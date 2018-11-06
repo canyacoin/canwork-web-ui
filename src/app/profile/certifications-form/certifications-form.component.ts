@@ -55,7 +55,7 @@ export class CertificationsFormComponent implements OnInit, AfterViewInit {
     });
   }
   public getJSON(): Observable<any> {
-    return this.http.get('../../assets/js/UniversityList.json');
+    return this.http.get('../../assets/js/UniversityListNames.json');
   }
 
   onSubmitCertification() {
@@ -100,9 +100,9 @@ export class CertificationsFormComponent implements OnInit, AfterViewInit {
   }
 
   searchUni() {
-    const input = this.certificationForm.value.university;
+    const input = this.certificationForm.value.university.toLowerCase();
     this.uniFilteredList = this.uniList
-      .filter(uni => uni.name.toLowerCase().indexOf(input) !== -1)
+      .filter(uni => uni.toLowerCase().indexOf(input) !== -1)
       .slice(0, 10)
   }
 }
