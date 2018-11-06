@@ -10,7 +10,7 @@ import { Transaction, TransactionService } from '@service/transaction.service';
 import { UserService } from '@service/user.service';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { DialogService } from 'ng2-bootstrap-modal';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { environment } from '../../../../../environments/environment';
 import {

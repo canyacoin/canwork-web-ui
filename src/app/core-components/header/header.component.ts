@@ -7,7 +7,7 @@ import { User } from '@class/user';
 import { AuthService } from '@service/auth.service';
 import { NavService } from '@service/nav.service';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',

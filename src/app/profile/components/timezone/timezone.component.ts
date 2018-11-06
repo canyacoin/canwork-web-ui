@@ -1,7 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { interval } from 'rxjs/observable/interval';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable ,  interval ,  Subscription } from 'rxjs';
 
 import { User, UserType } from '../../../core-classes/user';
 

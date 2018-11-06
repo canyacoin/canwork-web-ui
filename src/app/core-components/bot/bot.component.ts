@@ -4,8 +4,8 @@ import {
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import * as randomColor from 'randomcolor';
-import 'rxjs/add/operator/take';
-import { Subject } from 'rxjs/Subject';
+
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-bot',

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { AnimationService } from '../../core-services/animation.service';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-random-animation',

@@ -2,8 +2,7 @@ import { Component, NgModule, OnDestroy, OnInit, Pipe, PipeTransform } from '@an
 import { Router } from '@angular/router';
 import { FilterPipe } from 'ngx-filter-pipe';
 import { OrderPipe } from 'ngx-order-pipe';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable ,  Subscription } from 'rxjs';
 import { Job, JobDescription, PaymentType, TimeRange, WorkType } from '../../../core-classes/job';
 import { User, UserType } from '../../../core-classes/user';
 import { AuthService } from '../../../core-services/auth.service';

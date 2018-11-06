@@ -2,10 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { CanYaCoinEthService, EthService } from '@canyaio/canpay-lib';
 import { environment } from '@env/environment';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
+import { BehaviorSubject ,  Observable ,  Subject ,  Subscription } from 'rxjs';
 
 import { canyaAbi, daoAbi } from '../contracts';
 

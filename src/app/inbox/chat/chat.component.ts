@@ -5,8 +5,7 @@ import { Web3LoadingStatus } from '@canyaio/canpay-lib';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import * as findIndex from 'lodash/findIndex';
 import * as orderBy from 'lodash/orderBy';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable ,  Subscription } from 'rxjs';
 
 import * as moment from 'moment';
 import { User } from '../../core-classes/user';
