@@ -225,6 +225,7 @@ export class JobService {
                 successText: 'Woohoo, job complete!',
                 recepient: environment.contracts.canwork,
                 operation: Operation.interact,
+                userEmail: '', // TODO
                 complete: () => { this.canPayService.close() },
                 cancel: () => { this.canPayService.close() },
                 postAuthorisationProcessName: 'Job completion',
@@ -354,6 +355,8 @@ export class JobService {
       complete: onComplete,
       cancel: onCancel,
       view: View.Compact,
+
+      userEmail: '', // TODO
 
       // Post Authorisation
       postAuthorisationProcessName: 'Job creation',
