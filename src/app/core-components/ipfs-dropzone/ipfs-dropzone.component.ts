@@ -2,9 +2,9 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angu
 import { DropzoneComponent as Dropzone } from 'ngx-dropzone-wrapper';
 
 import { Buffer } from 'buffer';
+import * as streamBuffers from 'stream-buffers';
+import * as ipfsAPI from 'ipfs-api';
 
-const streamBuffers = require('stream-buffers')
-const ipfsAPI = require('ipfs-api')
 const ipfs = ipfsAPI({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' })
 
 @Component({
