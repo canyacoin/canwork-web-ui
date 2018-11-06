@@ -19,7 +19,7 @@ import { AngularFireUploadTask } from 'angularfire2/storage';
 import * as _ from 'lodash';
 import { FilterPipe } from 'ngx-filter-pipe';
 import { Subscription } from 'rxjs';
-
+import { take } from 'rxjs/operators';
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
@@ -79,7 +79,7 @@ export class PostComponent implements OnInit, OnDestroy {
     this.jobId = GenerateGuid();
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       this.currentUser = user;
-      this.activatedRoute.params.take(1).subscribe((params) => {
+      this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
         if (params['address'] && params['address'] !== this.currentUser.address) {
           this.recipientAddress = params['address'];
           this.loadUser(this.recipientAddress);

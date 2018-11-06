@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Subscription } from 'rxjs';
-
+import { take } from 'rxjs/operators';
 import { User } from '../../../core-classes/user';
 import { AuthService } from '../../../core-services/auth.service';
 import { ChatService } from '../../../core-services/chat.service';
@@ -78,7 +78,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
   // Chat the user without proposing a job
   chatUser() {
-    this.authService.currentUser$.take(1).subscribe((user: User) => {
+    this.authService.currentUser$.pipe(take(1)).subscribe((user: User) => {
       if (user) {
         this.chatService.createNewChannel(user, this.userModel);
       } else {

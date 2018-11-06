@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
-
+import { take } from 'rxjs/operators';
 import * as moment from 'moment';
 import { Job } from '../core-classes/job';
 import { ActionType, IJobAction } from '../core-classes/job-action';
@@ -71,7 +71,7 @@ export class ChatService {
   private async saveChannelAsync(channelOwner: string, channel: Channel): Promise<boolean> {
     const ref = this.afs.collection('chats').doc(channelOwner).collection('channels').doc(`${channel.channel}`);
     return new Promise<boolean>((resolve, reject) => {
-      ref.snapshotChanges().take(1).toPromise().then((snap: any) => {
+      ref.snapshotChanges().pipe(take(1)).toPromise().then((snap: any) => {
         if (!snap.payload.exists) {
           ref.set(Object.assign({}, channel));
         }

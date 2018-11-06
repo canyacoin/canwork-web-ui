@@ -3,7 +3,7 @@ import { Job } from '@class/job';
 import { ReviewAction } from '@class/job-action';
 import { Review } from '@class/review';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-
+import { take } from 'rxjs/operators';
 import * as moment from 'moment-timezone';
 import { User, UserType } from '../core-classes/user';
 
@@ -21,7 +21,7 @@ export class UserService {
 
   saveProfileView(viewer: User, viewed: string) {
     const ref = this.afs.doc(`who/${viewed}/user/${viewer.address}`);
-    ref.snapshotChanges().take(1).toPromise().then((snap: any) => {
+    ref.snapshotChanges().pipe(take(1)).toPromise().then((snap: any) => {
       const tmpModel = viewer;
       tmpModel['timestamp'] = moment().format('x');
       return snap.payload.exists ? ref.update(Object.assign({}, tmpModel)) : ref.set(Object.assign({}, tmpModel));
@@ -40,7 +40,7 @@ export class UserService {
   async getViewedUsers(viewer: string) {
     const collection = this.afs.collection(`viewed-users/${viewer}/viewed`, ref => ref.orderBy('timestamp', 'desc'));
     return new Promise<any>((resolve, reject) => {
-      collection.valueChanges().take(1).subscribe((result) => {
+      collection.valueChanges().pipe(take(1)).subscribe((result) => {
         if (result) {
           resolve(result);
         }
@@ -51,7 +51,7 @@ export class UserService {
 
   async getUser(address: string): Promise<User> {
     return new Promise<User>((resolve, reject) => {
-      this.usersCollectionRef.doc(address).valueChanges().take(1).subscribe((user: User) => {
+      this.usersCollectionRef.doc(address).valueChanges().pipe(take(1)).subscribe((user: User) => {
         if (user) {
           if (user.timezone) {
             user.offset = moment.tz(user.timezone).format('Z');
@@ -116,7 +116,7 @@ export class UserService {
         .doc(userId)
         .collection('reviews')
         .valueChanges()
-        .take(1)
+        .pipe(take(1))
         .subscribe(data => {
           if (data) {
             resolve(data)
@@ -176,7 +176,7 @@ export class UserService {
   private saveUserFirebase(userModel: User) {
     if (userModel && userModel.address) {
       const ref = userModel.address;
-      this.usersCollectionRef.doc(ref).snapshotChanges().take(1).subscribe((snap: any) => {
+      this.usersCollectionRef.doc(ref).snapshotChanges().pipe(take(1)).subscribe((snap: any) => {
         console.log('saveUser - payload', snap.payload.exists);
         return snap.payload.exists ? this.usersCollectionRef.doc(ref).update(Object.assign({}, userModel)) : this.usersCollectionRef.doc(ref).set(Object.assign({}, userModel));
       });

@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import * as randomColor from 'randomcolor';
 
 import { Subject } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-bot',
@@ -135,7 +136,7 @@ export class BotComponent implements OnInit {
       tmpActions['typing'] = false;
       tmpActions['from'] = 'bot';
       const i = this.bot.push(tmpActions) - 1;
-      const sub = this.triggerAction.take(1).subscribe((response: any) => {
+      const sub = this.triggerAction.pipe(take(1)).subscribe((response: any) => {
         this.bot.splice(response.i, 1);
         this.bot.push({ message: response.message, typing: false, from: 'me' });
         this.scrollToBottom();
@@ -152,7 +153,7 @@ export class BotComponent implements OnInit {
       tmpInput['input'] = true;
       tmpInput['from'] = 'bot';
       const i = this.bot.push(tmpInput) - 1;
-      const sub = this.triggerAction.take(1).subscribe((response: any) => {
+      const sub = this.triggerAction.pipe(take(1)).subscribe((response: any) => {
         this.bot.splice(response.i, 1);
         this.bot.push({ message: response.message, typing: false, from: 'me' });
         this.scrollToBottom();

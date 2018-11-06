@@ -11,7 +11,7 @@ import { UserService } from '@service/user.service';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { DialogService } from 'ng2-bootstrap-modal';
 import { Subscription } from 'rxjs';
-
+import { take } from 'rxjs/operators';
 import { environment } from '../../../../../environments/environment';
 import {
   ActionDialogComponent, ActionDialogOptions
@@ -48,7 +48,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.authService.currentUser$.take(1).subscribe((user: User) => {
+    this.authService.currentUser$.pipe(take(1)).subscribe((user: User) => {
       this.currentUser = user;
       this.initialiseJob();
     });

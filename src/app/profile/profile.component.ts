@@ -5,7 +5,7 @@ import { User } from '@class/user';
 import { AuthService } from '@service/auth.service';
 import { UserService } from '@service/user.service';
 import { Subscription } from 'rxjs';
-
+import { take } from 'rxjs/operators';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -33,7 +33,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       if (user !== this.currentUser) {
         this.currentUser = user;
         this.setUsersColors(this.currentUser);
-        this.activatedRoute.params.take(1).subscribe((params) => {
+        this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
           this.initUsers(this.currentUser, params);
         });
         this.activatedRoute.queryParams.subscribe(params => {

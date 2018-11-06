@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Subscription } from 'rxjs';
-
+import { take } from 'rxjs/operators';
 import * as moment from 'moment';
 import { Work } from '../../core-classes/portfolio';
 import { User } from '../../core-classes/user';
@@ -47,7 +47,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       if (user && this.currentUser !== user) {
         this.currentUser = user;
-        this.activatedRoute.params.take(1).subscribe((params) => {
+        this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
           if (params['id']) {
             this.projectId = params['id'];
             this.loadProject(this.projectId);
@@ -69,7 +69,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   loadProject(address: string) {
     try {
-      this.afs.doc(`portfolio/${this.currentUser.address}/work/${address}`).valueChanges().take(1).subscribe((data: Work) => {
+      this.afs.doc(`portfolio/${this.currentUser.address}/work/${address}`).valueChanges().pipe(take(1)).subscribe((data: Work) => {
         this.projectForm.controls['title'].setValue(data.title);
         this.projectForm.controls['description'].setValue(data.description);
 
