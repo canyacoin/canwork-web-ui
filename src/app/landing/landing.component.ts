@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from 'environments/environment';
+import { environment } from '@env/environment';
 import { Router } from '@angular/router';
 import { UserCategory } from '../core-classes/user';
 declare var require: any;

@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '@service/auth.service';
 import { UserService } from '@service/user.service';
-
-import { environment } from 'environments/environment';
+import { environment } from '@env/environment';
 import { User, UserCategory } from '../core-classes/user';
 import { NavService } from '../core-services/nav.service';
 
