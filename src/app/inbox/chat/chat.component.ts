@@ -6,7 +6,7 @@ import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/fires
 import * as findIndex from 'lodash/findIndex';
 import * as orderBy from 'lodash/orderBy';
 import { Observable ,  Subscription } from 'rxjs';
-
+import { map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { User } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
@@ -168,7 +168,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
       const collection = this.afs.collection('chats').doc(this.currentUser.address).collection('channels')
         .doc(this.selectedChannel.channel)
         .collection('messages', ref => ref.limit(50).orderBy('timestamp', 'desc'))
-        .valueChanges().map((array) => array.reverse());
+        .valueChanges().pipe(map((array) => array.reverse()));
       collection.subscribe((data: any) => {
         this.isLoading = false;
         this.messages = data;

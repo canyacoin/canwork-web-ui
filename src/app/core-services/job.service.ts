@@ -21,6 +21,7 @@ import { UserService } from '@service/user.service';
 import { GenerateGuid } from '@util/generate.uid';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class JobService {
@@ -47,23 +48,23 @@ export class JobService {
 
   /** Get a job from firebase */
   getJob(jobId: string): Observable<Job> {
-    return this.afs.doc(`jobs/${jobId}`).snapshotChanges().map(doc => {
+    return this.afs.doc(`jobs/${jobId}`).snapshotChanges().pipe(map(doc => {
       const job = doc.payload.data() as Job;
       job.id = jobId;
       return job;
-    });
+    }));
   }
 
   /** Get all of a users jobs, based on their type */
   getJobsByUser(userId: string, userType: UserType): Observable<Job[]> {
     const propertyToCheck = userType === UserType.client ? 'clientId' : 'providerId';
-    return this.afs.collection<any>('jobs', ref => ref.where(propertyToCheck, '==', userId)).snapshotChanges().map(changes => {
+    return this.afs.collection<any>('jobs', ref => ref.where(propertyToCheck, '==', userId)).snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Job;
         data.id = a.payload.doc.id;
         return data;
       });
-    });
+    }));
   }
 
   async getReviewedJobsByUser(user: User) {

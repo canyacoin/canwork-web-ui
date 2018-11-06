@@ -6,7 +6,7 @@ import { UserService } from '@service/user.service';
 import { GenerateGuid } from '@util/generate.uid';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
-
+import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 export class Transaction {
@@ -55,13 +55,13 @@ export class TransactionService {
 
   /** Get transactions by Job */
   getTransactionsByJob(jobId: string): Observable<Transaction[]> {
-    return this.afs.collection<any>('transactions', ref => ref.where('jobId', '==', jobId)).snapshotChanges().map(changes => {
+    return this.afs.collection<any>('transactions', ref => ref.where('jobId', '==', jobId)).snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Transaction;
         data.id = a.payload.doc.id;
         return data;
       });
-    });
+    }));
   }
 
   /** Save tx to firebase */
