@@ -50,10 +50,11 @@ export class CertificationsFormComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.getJSON().subscribe(data => {
       this.uniList = data;
+      this.uniList.sort();
     });
   }
   public getJSON(): Observable<any> {
-    return this.http.get('../../assets/js/UniversityList.json');
+    return this.http.get('../../assets/js/UniversityListNames.json');
   }
 
   onSubmitCertification() {
