@@ -82,7 +82,6 @@ export class UserService {
     review.message = action.message
     review.isClientSatisfied = action.isClientSatisfied
     review.createdAt = moment().format('x')
-    1
     try {
       const ref = await this.usersCollectionRef
         .doc(provider.address)
