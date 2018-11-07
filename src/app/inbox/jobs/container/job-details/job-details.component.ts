@@ -77,7 +77,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   }
 
   actionIsDisabled(action: ActionType): boolean {
-    return action === ActionType.dispute || this.hasPendingTransactions;
+    return action === ActionType.dispute || (this.hasPendingTransactions && action === ActionType.enterEscrow);
   }
 
   get hasPendingTransactions(): boolean {
