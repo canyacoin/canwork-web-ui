@@ -5,7 +5,7 @@ import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/fires
 
 import { BehaviorSubject ,  Observable ,  Subscription } from 'rxjs';
 
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
 import { Avatar, User } from '../core-classes/user';
 
 @Injectable()

@@ -5,7 +5,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 
 import * as decode from 'jwt-decode';
 
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
 import { FirebaseUISignInSuccess } from 'firebaseui-angular';
 import { environment } from '../../../environments/environment';
 import { User } from '../../core-classes/user';
