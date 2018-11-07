@@ -18,36 +18,16 @@
       "dom"
     ],
     "paths": {
-      "@abi/*": [
-        "assets/abi/*"
-      ],
-      "@contract/*": [
-        "app/@contract/*"
-      ],
-      "@validator/*": [
-        "app/@validator/*"
-      ],
-      "@class/*": [
-        "app/core-classes/*"
-      ],
-      "@service/*": [
-        "app/core-services/*"
-      ],
-      "@util/*": [
-        "app/core-utils/*"
-      ],
-      "@component/*": [
-        "app/core-components/*"
-      ],
-      "@config/*": [
-        "app/core-config/*"
-      ],
-      "@env/*": [
-        "environments/*"
-      ],
-      "@extensions/*": [
-        "./*.extensions.ts"
-      ]
+      "@abi/*": ["assets/abi/*"],
+      "@contract/*": ["app/@contract/*"],
+      "@validator/*": ["app/@validator/*"],
+      "@class/*": ["app/core-classes/*"],
+      "@service/*": ["app/core-services/*"],
+      "@util/*": ["app/core-utils/*"],
+      "@component/*": ["app/core-components/*"],
+      "@config/*": ["app/core-config/*"],
+      "@env/*": ["environments/*"],
+      "@extensions/*": ["./*.extensions.ts"]
     }
   }
 }
