@@ -38,12 +38,15 @@ export class PostComponent implements OnInit, OnDestroy {
   friendlyUrl = '';
   authSub: Subscription;
   routeSub: Subscription;
+  jobSub: Subscription;
   currentDate = '';
   isShareable = false;
   isSending = false;
   sent = false;
   draft = false;
+  editing = false;
 
+  jobToEdit: Job;
   jobId: string;
 
   currentUpload: Upload;
@@ -129,10 +132,36 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.jobId = GenerateGuid();
+    console.log(this.activatedRoute.snapshot.params['jobId']);
+    this.editing = this.activatedRoute.snapshot.params['jobId'] && this.activatedRoute.snapshot.params['jobId'] !== '';
+    console.log(this.editing);
+    if (!this.editing) {
+      this.jobId = GenerateGuid();
+    } else {
+      console.log(this.jobToEdit);
+      this.jobId = this.activatedRoute.snapshot.params['jobId'];
+      this.jobSub = this.publicJobService.getPublicJob(this.activatedRoute.snapshot.params['jobId']).subscribe((result) => {
+        if (result) {
+          this.jobToEdit = result;
+          this.shareableJobForm.controls['title'].patchValue(this.jobToEdit.information.title);
+          this.shareableJobForm.controls['description'].patchValue(this.jobToEdit.information.description);
+          this.shareableJobForm.controls['initialStage'].patchValue(this.jobToEdit.information.initialStage);
+          this.shareableJobForm.controls['providerType'].patchValue(this.jobToEdit.information.providerType);
+          this.shareableJobForm.controls['workType'].patchValue(this.jobToEdit.information.workType);
+          this.shareableJobForm.controls['timelineExpectation'].patchValue(this.jobToEdit.information.timelineExpectation);
+          this.shareableJobForm.controls['weeklyCommitment'].patchValue(this.jobToEdit.information.weeklyCommitment);
+          this.shareableJobForm.controls['budget'].patchValue(this.jobToEdit.budget);
+          this.shareableJobForm.controls['paymentType'].patchValue(this.jobToEdit.paymentType);
+          this.shareableJobForm.controls['deadline'].patchValue(this.jobToEdit.deadline);
+          this.shareableJobForm.controls['visibility'].patchValue(this.jobToEdit.visibility);
+          this.shareableJobForm.controls['skills'].patchValue(this.jobToEdit.information.skills);
+        }
+      });
+    }
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       this.currentUser = user;
-      this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
+      this.activatedRoute.params.take(1).subscribe((params) => {
+        console.log(params);
         if (params['address'] && params['address'] !== this.currentUser.address) {
           this.recipientAddress = params['address'];
           this.loadUser(this.recipientAddress);
@@ -315,6 +344,7 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   async submitShareableJob(isDraft: boolean) {
+    this.isSending = true;
     let tags: string[];
     tags = this.shareableJobForm.value.skills === '' ? [] : this.shareableJobForm.value.skills.split(',').map(item => item.trim());
     if (tags.length > 6) {
@@ -323,6 +353,9 @@ export class PostComponent implements OnInit, OnDestroy {
     const friendly = await this.publicJobService.generateReadableId(this.shareableJobForm.value.title);
     this.friendlyUrl = friendly;
     console.log('Friendly URL : ' + this.friendlyUrl);
+    if (this.editing) {
+      this.jobId = this.jobToEdit.id;
+    }
     const job = new Job({
       id: this.jobId,
       hexId: this.ethService.web3js.utils.toHex(this.jobId.hashCode()),
@@ -336,7 +369,8 @@ export class PostComponent implements OnInit, OnDestroy {
         attachments: this.uploadedFile ? [this.uploadedFile] : [],
         workType: this.shareableJobForm.value.workType,
         timelineExpectation: this.shareableJobForm.value.timelineExpectation,
-        weeklyCommitment: this.shareableJobForm.value.weeklyCommitment
+        weeklyCommitment: this.shareableJobForm.value.weeklyCommitment,
+        providerType: this.shareableJobForm.value.providerType
       }),
       paymentType: this.shareableJobForm.value.paymentType,
       budget: this.shareableJobForm.value.budget,
@@ -354,4 +388,7 @@ export class PostComponent implements OnInit, OnDestroy {
     this.isSending = false;
   }
 
+  async updateJob() {
+    // uploads the job
+  }
 }
