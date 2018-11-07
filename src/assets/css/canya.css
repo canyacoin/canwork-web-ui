@@ -9176,6 +9176,10 @@ a.text-danger:focus {
   padding-bottom: 300px !important;
 }
 
+.brad-5px{
+  border-radius: 5px;
+}
+
 .gap-items>*,
 .gap-items-3>* {
   margin-left: 8px;
