@@ -49,15 +49,15 @@ export class ExchangeComponent implements AfterViewInit, OnDestroy {
     },
     {
       name: 'Coss.io',
-      url : 'https://exchange.coss.io/exchange/can-eth'
+      url: 'https://exchange.coss.io/exchange/can-eth'
     },
     {
       name: 'Qryptos',
-      url : 'https://trade.qryptos.com/basic/CANETH'
+      url: 'https://trade.qryptos.com/basic/CANETH'
     },
     {
       name: 'Radar Relay',
-      url : 'https://app.radarrelay.com/CAN/WETH'
+      url: 'https://app.radarrelay.com/CAN/WETH'
     },
     {
       name: 'IDEX',
@@ -65,15 +65,15 @@ export class ExchangeComponent implements AfterViewInit, OnDestroy {
     },
     {
       name: 'Gatecoin',
-      url : 'https://gatecoin.com/markets/caneth'
+      url: 'https://gatecoin.com/markets/caneth'
     },
     {
       name: 'Coinswitch',
-      url : 'https://coinswitch.co/'
+      url: 'https://coinswitch.co/'
     },
     {
       name: 'IDAX',
-      url : 'https://www.idax.mn/#/exchange?pairname=CAN_ETH'
+      url: 'https://www.idax.mn/#/exchange?pairname=CAN_ETH'
     }
   ];
 

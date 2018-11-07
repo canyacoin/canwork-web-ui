@@ -1,10 +1,7 @@
-import { User } from '@class/user';
+import { Type } from '@angular/core';
+import { User, UserType } from '@class/user';
 
-import {
-    AcceptTermsAction, ActionType, AddMessageAction, AuthoriseEscrowAction, CancelJobAction,
-    CounterOfferAction, CreateJobAction, DeclineTermsAction, EnterEscrowAction, IJobAction,
-    RaiseDisputeAction
-} from './job-action';
+import { IJobAction } from './job-action';
 import { Upload } from './upload';
 
 export class Job {
@@ -28,29 +25,45 @@ export class Job {
     Object.assign(this, init);
   }
 
-  getAction(action: IJobAction, user: User): IJobAction {
-    const actions = {}
-
-    actions[ActionType.createJob] = CreateJobAction
-    actions[ActionType.cancelJob] = CancelJobAction
-    actions[ActionType.declineTerms] = DeclineTermsAction
-    actions[ActionType.counterOffer] = CounterOfferAction
-    actions[ActionType.acceptTerms] = AcceptTermsAction
-    actions[ActionType.authoriseEscrow] = AuthoriseEscrowAction
-    actions[ActionType.enterEscrow] = EnterEscrowAction
-    actions[ActionType.addMessage] = AddMessageAction
-    // actions[ActionType.finishedJob] =
-    // actions[ActionType.acceptFinish] =
-    // actions[ActionType.dispute] = RaiseDisputeAction
-
-    return actions[action.type] ? new actions[action.type] : new IJobAction
-  }
-
-  getActionLog(user: User) {
+  get parsedActionLog() {
     return this.actionLog.map(actionObj => {
-      const action = this.getAction(actionObj, user)
+      const action = new IJobAction(actionObj.type, actionObj.executedBy)
       return action.init(actionObj)
     })
+  }
+
+  /* For the explanation modal */
+  getStateExplanation(currentUserType: UserType): string {
+    switch (this.state) {
+      case JobState.offer:
+        return 'A client has offered a job to a provider and is awaiting the provider\'s acceptance';
+      case JobState.workPendingCompletion:
+        return 'The provider has marked the job as complete and is awaiting the client\'s acceptance';
+      case JobState.cancelled:
+        return currentUserType === UserType.client ? 'You cancelled this job.' : 'This job has been cancelled by the client';
+      case JobState.declined:
+        return 'This job offer was turned down by the provider';
+      case JobState.inDispute:
+        return 'The provider or the client has raised a dispute. This is being resolved by the CanYa DAO';
+      case JobState.providerCounterOffer:
+        return 'The provider has countered the client\'s offer';
+      case JobState.clientCounterOffer:
+        return 'The client has countered the provider\'s offer';
+      case JobState.termsAcceptedAwaitingEscrow:
+        return currentUserType === UserType.client ?
+          'The job\'s terms has been accepted. You can now send the agreed amount of money to the escrow to commence the job.'
+          : 'You have agreed to the terms and conditions of this job, you will need to wait for the client to send the funds to escrow.';
+      case JobState.complete:
+        return 'This job has been marked as complete by the client.';
+      case JobState.authorisedEscrow:
+        return 'The escrow has been authorised by the client, they can now send the funds to escrow.';
+      case JobState.inEscrow:
+        return 'The funds has been deposited in the escrow! you can now commence the job.';
+      case JobState.reviewed:
+        return 'Both parties have completed the job, and a review has been left for the provider!';
+      default:
+        return '';
+    }
   }
 }
 

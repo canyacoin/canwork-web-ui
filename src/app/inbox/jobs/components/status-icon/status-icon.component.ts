@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
-
-import { Job, JobState, PaymentType } from '../../../../core-classes/job';
-import { User, UserType } from '../../../../core-classes/user';
+import { Job, JobState } from '@class/job';
+import { UserType } from '@class/user';
 
 @Component({
   selector: 'app-status-icon',
@@ -14,8 +13,8 @@ export class StatusIconComponent {
   @Input() currentUserType: UserType;
 
   constructor() { }
-
   get stateColour(): string {
+
     switch (this.job.state) {
       case JobState.offer:
       case JobState.workPendingCompletion:
@@ -37,9 +36,9 @@ export class StatusIconComponent {
         return 'primary';
     }
   }
-
   /* Customizeable messages for each job status. */
   get stateStatus(): string {
+
     switch (this.job.state) {
       case JobState.offer:
         return 'Job offered';
@@ -56,9 +55,8 @@ export class StatusIconComponent {
       case JobState.clientCounterOffer:
         return 'Offer countered by client';
       case JobState.termsAcceptedAwaitingEscrow:
-        return this.currentUserType === UserType.client ? 'Awaiting payment' : 'Awaiting payment';
       case JobState.authorisedEscrow:
-        return this.currentUserType === UserType.client ? 'Awaiting payment' : 'Awaiting payment';
+        return 'Awaiting payment to escrow';
       case JobState.inEscrow:
         return 'Funds in escrow';
       case JobState.complete:
