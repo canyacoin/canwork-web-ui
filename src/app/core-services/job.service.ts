@@ -335,7 +335,7 @@ export class JobService {
       this.transactionService.saveTransaction(new Transaction(txId, job.clientId,
         txHash, this.momentService.get(), ActionType.enterEscrow, job.id));
       if (action.type === ActionType.authoriseEscrow) {
-        ation.type = ActionType.enterEscrow;
+        action.type = ActionType.enterEscrow;
       }
       job.actionLog.push(action);
       job.clientEthAddress = from;
