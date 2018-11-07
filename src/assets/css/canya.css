@@ -9176,13 +9176,10 @@ a.text-danger:focus {
   padding-bottom: 300px !important;
 }
 
-<<<<<<< HEAD
-=======
 .brad-5px {
   border-radius: 5px;
 }
 
->>>>>>> created the basic friendly-url generator and route
 .gap-items>*,
 .gap-items-3>* {
   margin-left: 8px;
@@ -10003,8 +10000,9 @@ hr {
   box-shadow: 0 2px 9px 0 rgba(0, 0, 0, 0.02);
   background-color: #f8f9fa;
 }
+
 @media only screen and (max-width: 994px) {
-  .job-info{
+  .job-info {
     border: none;
   }
 }

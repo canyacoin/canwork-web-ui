@@ -39,10 +39,14 @@ export class PostComponent implements OnInit, OnDestroy {
   authSub: Subscription;
   routeSub: Subscription;
 <<<<<<< HEAD
+<<<<<<< HEAD
   jobSub: Subscription;
 =======
 >>>>>>> fixed some git rebase mess
   currentDate = '';
+=======
+
+>>>>>>> providerless job post
   isShareable = false;
   isSending = false;
   sent = false;
