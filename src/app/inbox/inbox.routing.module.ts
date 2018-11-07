@@ -29,6 +29,10 @@ const routes: Routes = [
     component: PostComponent
   },
   {
+    path: 'post',
+    component: PostComponent
+  },
+  {
     path: 'jobs',
     component: JobDashboardComponent
   },

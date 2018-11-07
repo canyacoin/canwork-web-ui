@@ -30,13 +30,14 @@ export class PostComponent implements OnInit, OnDestroy {
   postForm: FormGroup = null;
   pageLoaded = false;
   paymentType = PaymentType;
-
   recipientAddress = '';
   recipient: User = null;
   currentUser: User;
 
   authSub: Subscription;
+  routeSub: Subscription;
 
+  isShareable = false;
   isSending = false;
   sent = false;
 
@@ -85,6 +86,7 @@ export class PostComponent implements OnInit, OnDestroy {
           this.loadUser(this.recipientAddress);
         } else {
           this.pageLoaded = true;
+          this.isShareable = true;
         }
       });
     });
@@ -157,6 +159,7 @@ export class PostComponent implements OnInit, OnDestroy {
   workTypes(): Array<string> {
     return Object.values(WorkType);
   }
+
   setWorkType(type: WorkType) {
     this.postForm.controls.workType.setValue(type);
   }
