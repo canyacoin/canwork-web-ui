@@ -18,10 +18,9 @@ export class DockIoService {
     return `${base}?${params.toString()}`
   }
 
-  getAccessTokenURI(code: string, userId: string) {
+  getAccessTokenURI(code: string) {
     const base = environment.dockio.client.accessTokenURI
     let params = new HttpParams()
-    params = params.set('user_id', userId)
     params = params.set('grant_type', 'authorization_code')
     params = params.set('code', code)
     params = params.set('client_id', environment.dockio.account.clientID)
@@ -29,11 +28,11 @@ export class DockIoService {
     return `${base}?${params.toString()}`
   }
 
-  callAuthenticationService(code: string, userId: string) {
+  callAuthenticationService(code: string) {
     const _headers = {
       'Authorization': `Bearer: ${window.sessionStorage.accessToken}`
     }
-    this.http.get(this.getAccessTokenURI(code, userId), {
+    this.http.get(this.getAccessTokenURI(code), {
       headers: new HttpHeaders(_headers)
     }).subscribe((data) => {
       console.log(data)
