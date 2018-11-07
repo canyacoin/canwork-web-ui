@@ -126,8 +126,6 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
       this.afs.collection('chats').doc(this.currentUser.address).collection('channels').valueChanges().subscribe((data: any) => {
         if (this.queryAddress !== '') {
           const idx = findIndex(data, { 'address': this.queryAddress });
-          console.log(this.queryAddress);
-          console.log(idx);
           if (idx !== '-1') {
             this.setSelectedChannel(data[idx]);
           }
@@ -136,7 +134,6 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
           this.setSelectedChannel(JSON.parse(localStorage.getItem('selectedChannel')));
         }
         if (!JSON.parse(localStorage.getItem('selectedChannel')) && this.queryAddress === '') {
-          console.log('no params, setting...')
           this.setSelectedChannel(data[0]);
         }
         this.channels = orderBy(data, ['timestamp'], ['desc']);

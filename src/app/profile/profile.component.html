@@ -23,10 +23,8 @@
         </div>
         <div class="col-12 col-lg-8 my-5">
           <app-profile-bio *ngIf="userModel && userModel.description" [isMyProfile]="isMyProfile()" [userModel]="userModel"></app-profile-bio>
-          <!--   
           <app-certifications *ngIf="userModel && (userModel.type === 'Provider')" [userModel]="userModel"
-            [notMyProfile]="notMyProfile()" [isMyProfile]="isMyProfile()"></app-certifications> 
-        -->
+            [notMyProfile]="notMyProfile()" [isMyProfile]="isMyProfile()"></app-certifications>
           <app-profile-portfolio *ngIf="userModel  && (userModel.type === 'Provider')" [userModel]="userModel"
             [notMyProfile]="notMyProfile()" [isMyProfile]="isMyProfile()"></app-profile-portfolio>
           <app-reviews *ngIf="userModel" [user]="userModel"></app-reviews>
@@ -35,5 +33,5 @@
     </div>
   </section>
 </main>
-
+<app-certifications-form *ngIf="isMyProfile()"></app-certifications-form>
 <app-scroll-top></app-scroll-top>

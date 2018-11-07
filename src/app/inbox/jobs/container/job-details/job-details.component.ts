@@ -121,12 +121,10 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     const attachment = this.job.information.attachments;
     if (attachment.length > 0) { // check if there's any attachment on this job
       if (attachment[0].url == null) { // [0] is used here since we only support single file upload anyway.
-        console.log('An attachment without URL ! getting the url...');
         if (attachment[0].filePath != null) { // Assume that it's caused by the async issue
           let urlSub: Subscription;
           urlSub = this.storage.ref(attachment[0].filePath).getDownloadURL().subscribe(downloadUrl => {
             attachment[0].url = downloadUrl; // change this attachment's (null) url into the actual url.
-            console.log('attachment URL is now ' + attachment[0].url);
           });
           urlSub.unsubscribe(); // unsubscibe to the UrlSub just in case
         }
@@ -171,7 +169,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
   toggleDescription() {
     this.hideDescription = !this.hideDescription;
-    console.log(this.hideDescription);
   }
 
 }

@@ -15,6 +15,7 @@ import { SocialComponent } from './components/social/social.component';
 import { SupportMeComponent } from './components/support-me/support-me.component';
 import { TimezoneComponent } from './components/timezone/timezone.component';
 import { VisitorsComponent } from './components/visitors/visitors.component';
+import { CertificationsFormComponent } from './certifications-form/certifications-form.component';
 import { EditComponent } from './edit/edit.component';
 import { ProfileViewsComponent } from './profile-views/profile-views.component';
 import { ProfileComponent } from './profile.component';
@@ -46,6 +47,7 @@ import { ReviewsComponent } from './components/reviews/reviews.component';
     BioComponent,
     CreateClientProfileComponent,
     CreateProviderProfileComponent,
+    CertificationsFormComponent,
     EditComponent,
     ItemComponent,
     PortfolioComponent,
