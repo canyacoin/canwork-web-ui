@@ -12,8 +12,6 @@ export class JobDashboardCardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.type);
-    console.log(this.job);
   }
 
 }
