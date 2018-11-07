@@ -102,7 +102,7 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
   }
 
   skillTagsUpdated(value: string) {
-    this.profileForm.controls['skillTags'].setValue(value);
+    this.profileForm.controls['skillTags'].setValue([value]);
   }
 
   nextStep() {
