@@ -334,14 +334,16 @@ export class JobService {
       this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.enterEscrow)
       this.transactionService.saveTransaction(new Transaction(txId, job.clientId,
         txHash, this.momentService.get(), ActionType.enterEscrow, job.id));
-      const enterEscrowAction = action;
-      job.actionLog.push(enterEscrowAction);
+      if (action.type === ActionType.authoriseEscrow) {
+        ation.type = ActionType.enterEscrow;
+      }
+      job.actionLog.push(action);
       job.clientEthAddress = from;
       clientEthAddress = from;
       // This payment log has been deprecated in favor of transacations collection, however emails rely on it
       job.paymentLog.push(new Payment({
         txId: txHash,
-        timestamp: enterEscrowAction.timestamp
+        timestamp: action.timestamp
       }));
       await this.saveJobFirebase(job);
     };
