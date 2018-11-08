@@ -225,24 +225,15 @@
           <div class="row">
             <div class="col-12 col-lg-12  bg-white">
               <div class="align-self-center align-items-center my-10">
-<<<<<<< HEAD
                 <form [formGroup]="shareableJobForm" class="form validate" novalidate>
-=======
-                <form [formGroup]="postForm" class="form validate" novalidate>
->>>>>>> providerless job post
                   <div class="col-12 col-lg-12">
                     <div class="form-group">
                       <div class="col-12">
                         <label>Title *</label>
                         <input class="form-control" #title formControlName="title" type="text" name="title" placeholder="Enter Job Title"
-<<<<<<< HEAD
                           maxlength="64" [class.invalid]="!shareableJobForm.controls.title.valid && shareableJobForm.controls.title.dirty">
                         <small *ngIf="!shareableJobForm.controls.title.valid  && shareableJobForm.controls.title.dirty"
                           class="text-primary text-wrap">Title
-=======
-                          maxlength="64" [class.invalid]="!postForm.controls.title.valid && postForm.controls.title.dirty">
-                        <small *ngIf="!postForm.controls.title.valid  && postForm.controls.title.dirty" class="text-primary text-wrap">Title
->>>>>>> providerless job post
                           must be 64 characters or less</small>
                       </div>
                     </div>
@@ -250,7 +241,6 @@
                       <div class="col-12">
                         <label class="text-dark">Description *</label>
                         <textarea class="form-control" #description formControlName="description" rows="4" name="description"
-<<<<<<< HEAD
                           placeholder="I'm looking for..." [class.invalid]="!shareableJobForm.controls.description.valid && shareableJobForm.controls.description.dirty"></textarea>
                         <small *ngIf="!shareableJobForm.controls.description.valid" class="text-primary text-wrap">e.g.
                           'Custom
@@ -258,24 +248,12 @@
                       </div>
                     </div>
 
-=======
-                          placeholder="I'm looking for..." [class.invalid]="!postForm.controls.description.valid && postForm.controls.description.dirty"></textarea>
-                        <small *ngIf="!postForm.controls.description.valid" class="text-primary text-wrap">e.g. 'Custom
-                          Logo' or 'Milestone 1 - Wireframes'.</small>
-                      </div>
-                    </div>
->>>>>>> providerless job post
                     <div class="form-group">
                       <div class="col-12">
                         <label>Project stage *</label>
                         <textarea class="form-control" #initialStage formControlName="initialStage" type="text" name="initialStage"
-<<<<<<< HEAD
                           placeholder="Lorem ipsum dolor" maxlength="3000" [class.invalid]="!shareableJobForm.controls.initialStage.valid && shareableJobForm.controls.initialStage.dirty"></textarea>
                         <small *ngIf="!shareableJobForm.controls.description.valid" class="text-primary text-wrap">e.g.
-=======
-                          placeholder="Lorem ipsum dolor" maxlength="3000" [class.invalid]="!postForm.controls.initialStage.valid && postForm.controls.initialStage.dirty"></textarea>
-                        <small *ngIf="!postForm.controls.description.valid" class="text-primary text-wrap">e.g.
->>>>>>> providerless job post
                           'Ideation
                           phase' or 'I have started work already'</small>
                       </div>
@@ -336,18 +314,13 @@
                         </div>
 
                         <div class="alert alert-danger" *ngIf="deleteFailed">
-<<<<<<< HEAD
                           Oops, something went while wrong deleting your file.
-=======
-                          Oops, something went wrong deleting your file
->>>>>>> providerless job post
                         </div>
                       </div>
                     </div>
 
                     <div class="form-group">
                       <div class="col-12">
-<<<<<<< HEAD
                         <label>Provider type *</label>
                         <br />
                         <div class="row ml-0 mr-0">
@@ -375,13 +348,6 @@
                         <div class="row ml-0 mr-0">
                           <div *ngFor="let type of workTypes()" class="mb-10 px-5 col-lg-2 col-md-4 col-sm-4 col-12">
                             <button type="button" (click)="setWorkType(type)" class="btn btn-primary w-full" [ngClass]="{'btn-outline': shareableJobForm.controls.workType.value !== type}">
-=======
-                        <label>Type of work *</label>
-                        <br />
-                        <div class="row ml-0 mr-0">
-                          <div *ngFor="let type of workTypes()" class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                            <button type="button" (click)="setWorkType(type)" class="btn btn-primary w-full" [ngClass]="{'btn-outline': postForm.controls.workType.value !== type}">
->>>>>>> providerless job post
                               {{type}}
                             </button>
                           </div>
@@ -389,7 +355,6 @@
                       </div>
                     </div>
 
-<<<<<<< HEAD
                     <div class="form-group row px-15">
                       <div class="col-sm-6">
                         <label>Deadline *</label>
@@ -416,29 +381,6 @@
                           <button type="button" (click)="setPaymentType(type)" class="btn btn-primary w-full" [ngClass]="{'btn-outline': shareableJobForm.controls.paymentType.value !== type}">
                             {{type}}
                           </button>
-=======
-                    <div class="form-group">
-                      <div class="col-6">
-                        <label>Deadline *</label>
-                        <br />
-                        <div class="row ml-0 mr-0">
-                          <input type="date" class="form-control">
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="form-group">
-                      <div class="col-12">
-                        <label>Payment preference *</label>
-                        <br />
-                        <div class="row ml-0 mr-0">
-                          <div *ngFor="let type of paymentTypes()" class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                            <button type="button" (click)="setPaymentType(type)" class="btn btn-primary w-full"
-                              [ngClass]="{'btn-outline': postForm.controls.paymentType.value !== type}">
-                              {{type}}
-                            </button>
-                          </div>
->>>>>>> providerless job post
                         </div>
                       </div>
                     </div>
