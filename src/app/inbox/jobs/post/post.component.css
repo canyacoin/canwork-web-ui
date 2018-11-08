@@ -1,0 +1,21 @@
+.btn-providerType img {
+  margin-top: 5px;
+  height: 24px;
+  position: absolute;
+}
+
+.btn-providerType span {
+  font-size: 10px;
+  width: 100px;
+}
+
+@media screen and (max-width: 576px) {
+  .btn-providerType {
+    padding: 10px;
+  }
+
+  .btn-providerType img {
+    margin-top: 10px;
+    height: 21px;
+  }
+}
