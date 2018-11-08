@@ -6,7 +6,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import * as decode from 'jwt-decode';
 
 import * as firebase from 'firebase/app';
-import { FirebaseUISignInSuccess } from 'firebaseui-angular';
+import { FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular';
 import { environment } from '../../../environments/environment';
 import { User } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
@@ -29,9 +29,9 @@ export class LoginComponent implements OnInit {
   pinDeliveredTo: string;
   httpHeaders = new Headers({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
 
-  webViewEthAddress: string
+  webViewEthAddress: string;
 
-  @Input() emailAddress: string
+  @Input() emailAddress: string;
 
   steps: any = {
     detectAddress: {
@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
     matchingAccountFromMobile: {
       isCurrent: false,
     },
-  }
+  };
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -67,33 +67,33 @@ export class LoginComponent implements OnInit {
   }
 
   onCreateAccountFromMobile() {
-    this.steps.detectAddress.isCurrent = false
-    this.steps.createAccountFromMobile.isCurrent = true
-    this.steps.existingAccountFromMobile.isCurrent = false
-    this.steps.matchingAccountFromMobile.isCurrent = false
+    this.steps.detectAddress.isCurrent = false;
+    this.steps.createAccountFromMobile.isCurrent = true;
+    this.steps.existingAccountFromMobile.isCurrent = false;
+    this.steps.matchingAccountFromMobile.isCurrent = false;
   }
 
   onBackToMobileSignIn() {
-    this.steps.detectAddress.isCurrent = true
-    this.steps.createAccountFromMobile.isCurrent = false
-    this.steps.existingAccountFromMobile.isCurrent = false
-    this.steps.matchingAccountFromMobile.isCurrent = false
+    this.steps.detectAddress.isCurrent = true;
+    this.steps.createAccountFromMobile.isCurrent = false;
+    this.steps.existingAccountFromMobile.isCurrent = false;
+    this.steps.matchingAccountFromMobile.isCurrent = false;
   }
 
   onExistingAccountFromMobile() {
-    this.steps.detectAddress.isCurrent = false
-    this.steps.createAccountFromMobile.isCurrent = false
-    this.steps.existingAccountFromMobile.isCurrent = true
-    this.steps.matchingAccountFromMobile.isCurrent = false
+    this.steps.detectAddress.isCurrent = false;
+    this.steps.createAccountFromMobile.isCurrent = false;
+    this.steps.existingAccountFromMobile.isCurrent = true;
+    this.steps.matchingAccountFromMobile.isCurrent = false;
   }
 
   onMatchingAccountFromMobile() {
-    this.steps.detectAddress.isCurrent = false
-    this.steps.createAccountFromMobile.isCurrent = false
-    this.steps.existingAccountFromMobile.isCurrent = false
-    this.steps.matchingAccountFromMobile.isCurrent = true
+    this.steps.detectAddress.isCurrent = false;
+    this.steps.createAccountFromMobile.isCurrent = false;
+    this.steps.existingAccountFromMobile.isCurrent = false;
+    this.steps.matchingAccountFromMobile.isCurrent = true;
 
-    this.generateAuthPinCodeAsync()
+    this.generateAuthPinCodeAsync();
   }
 
   onCheckSignUp() {
@@ -108,9 +108,9 @@ export class LoginComponent implements OnInit {
   private async setWeb3EthereumPublicAddress() {
     this.ethService.account$.subscribe(async (address: string) => {
       if (address) {
-        this.webViewEthAddress = address
-        const querySnapshot = await this.userService.getUserByEthAddress(address)
-        this.steps.detectAddress.isMatchingEthAddress = !querySnapshot.empty
+        this.webViewEthAddress = address;
+        const querySnapshot = await this.userService.getUserByEthAddress(address);
+        this.steps.detectAddress.isMatchingEthAddress = !querySnapshot.empty;
       }
     });
   }
@@ -148,7 +148,7 @@ export class LoginComponent implements OnInit {
             break;
           }
         }
-        this.onBackToMobileSignIn()
+        this.onBackToMobileSignIn();
       });
     }
   }
@@ -179,7 +179,7 @@ export class LoginComponent implements OnInit {
 
         const tokenPayload = decode(token);
         console.log('+ decoded JWT:', tokenPayload);
-        const user: User = new User({ address: tokenPayload.uid })
+        const user: User = new User({ address: tokenPayload.uid });
         this.handleLogin(user);
       }, error => {
         console.log('+ auth status !!', error.status);
@@ -205,40 +205,40 @@ export class LoginComponent implements OnInit {
           }
         }
         this.mobileLoginState = 'authentication-pin-failed';
-        this.onBackToMobileSignIn()
+        this.onBackToMobileSignIn();
       });
     }
   }
 
-  onFirebaseLogin(signInSuccessData: FirebaseUISignInSuccess) {
+  onFirebaseLogin(signInSuccessData: FirebaseUISignInSuccessWithAuthResult) {
+    const user = signInSuccessData.authResult.user;
     const rnd = Math.floor(Math.random() * 109) + 1;
-    const ethAddress = this.webViewEthAddress;
     const parsedUser = new User({
       '@context': 'http://schema.org',
       '@type': 'Person',
-      'name': signInSuccessData['currentUser']['displayName'] || 'Empty',
-      'address': signInSuccessData['currentUser']['uid'],
+      'name': user['displayName'] || 'Empty',
+      'address': user['uid'],
       'avatar': {
-        'uri': signInSuccessData['currentUser']['photoURL'] || `assets/img/animals/${rnd}.png`
+        'uri': user['photoURL'] || `assets/img/animals/${rnd}.png`
       },
-      'email': signInSuccessData['currentUser']['email'] || 'Empty',
-      'phone': signInSuccessData['currentUser']['phoneNumber'] || 'Empty',
-      'state': signInSuccessData['currentUser']['state'] || 'Empty',
-      'whitelisted': signInSuccessData['currentUser']['whitelisted'] || false,
-      'whitelistRejected': signInSuccessData['currentUser']['whitelistRejected'] || false,
-      'whitelistSubmitted': signInSuccessData['currentUser']['whitelistSubmitted'] || false,
+      'email': user['email'] || 'Empty',
+      'phone': user['phoneNumber'] || 'Empty',
+      'state': user['state'] || 'Empty',
+      'whitelisted': user['whitelisted'] || false,
+      'whitelistRejected': user['whitelistRejected'] || false,
+      'whitelistSubmitted': user['whitelistSubmitted'] || false,
     });
 
     this.handleLogin(parsedUser);
   }
 
   async handleLogin(userDetails: User) {
-    let user: User
+    let user: User;
     try {
       user = await this.userService.getUser(userDetails.address);
     } catch (error) {
       console.error(`! failed to query for user with address: [${userDetails.address}] error was: `, error);
-      this.onBackToMobileSignIn()
+      this.onBackToMobileSignIn();
     }
 
     if (user) {
@@ -248,7 +248,7 @@ export class LoginComponent implements OnInit {
       }).catch(error => {
         console.error('! jwt token was not stored in session storage ', error);
         alert('Sorry, we encountered an unknown error');
-        this.onBackToMobileSignIn()
+        this.onBackToMobileSignIn();
       });
       this.authService.setUser(user);
       this.router.navigate([this.returnUrl]);
