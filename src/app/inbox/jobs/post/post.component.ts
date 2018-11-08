@@ -64,6 +64,7 @@ export class PostComponent implements OnInit, OnDestroy {
   deleteFailed = false;
 
   canToUsd: number;
+<<<<<<< HEAD
   providerTypes = [
     {
       name: 'Content Creators',
@@ -97,6 +98,9 @@ export class PostComponent implements OnInit, OnDestroy {
     }
   ];
 
+=======
+  currentDate = new Date().toLocaleDateString();
+>>>>>>> finished redesigning the public job form
   providerTypes = [
     {
       name: 'Content Creators',
@@ -161,12 +165,18 @@ export class PostComponent implements OnInit, OnDestroy {
       attachments: [''],
       workType: ['', Validators.compose([Validators.required])],
       providerType: ['', Validators.compose([Validators.required])],
+<<<<<<< HEAD
       deadline: ['', Validators.compose([Validators.required])],
       timelineExpectation: ['', Validators.compose([Validators.required])],
       paymentType: ['', Validators.compose([Validators.required])],
       visibility: ['', Validators.compose([Validators.required])],
       budget: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(10000000)])],
       weeklyCommitment: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(60)])],
+=======
+      paymentType: ['', Validators.compose([Validators.required])],
+      deadline: ['', Validators.compose([Validators.required])],
+      budget: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(10000000)])],
+>>>>>>> finished redesigning the public job form
       terms: [false, Validators.requiredTrue]
     });
   }
@@ -307,11 +317,16 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   setProviderType(type: string) {
+<<<<<<< HEAD
     this.shareableJobForm.controls.providerType.setValue(type);
   }
 
   setVisibility(type: string) {
     this.shareableJobForm.controls.visibility.setValue(type);
+=======
+    console.log(type)
+    this.shareableJobForm.controls.providerType.setValue(type);
+>>>>>>> finished redesigning the public job form
   }
 
   timeRanges(): Array<string> {
