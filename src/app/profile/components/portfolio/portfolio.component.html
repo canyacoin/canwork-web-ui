@@ -11,8 +11,8 @@
           </div>
           <div class="col-sm-1"></div>
           <div class="col-sm-1">
-            <a *ngIf="isMyProfile" [routerLink]="['/profile/project']" style="color: #535353;" data-toggle="tooltip"
-              data-placement="top" title="Add Project">
+            <a *ngIf="isMyProfile && allPortfolioItems.length > 0" [routerLink]="['/profile/project']" style="color: #535353;"
+              data-toggle="tooltip" data-placement="top" title="Add Project">
               <i class="ti-plus fw-600" aria-hidden="true"></i>
             </a>
           </div>
