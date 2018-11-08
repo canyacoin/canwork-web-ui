@@ -517,7 +517,7 @@
           <div class="row">
             <div class="col-12 col-lg-12  bg-white">
               <div class="align-self-center align-items-center my-10">
-                <form [formGroup]="postForm" class="form validate" novalidate>
+                <form [formGroup]="shareableJobForm" class="form validate" novalidate>
                   <div class="col-12 col-lg-12">
                     <div class="form-group">
                       <div class="col-12">
@@ -609,29 +609,35 @@
                       </div>
                     </div>
 
-                    <div class="form-group row">
-                      <label>Type of work *</label>
-                      <div *ngFor="let type of providerTypes" class="col-lg-2 col-md-3 col-sm-4 col-6 provider-type-col">
-                        <div class="col-12">
-                          <div class="row">
-                            <div class="col-3 no-padding">
-                              <img src="assets/img/providers/{{type.img}}">
-                            </div>
-                            <div class="col-9">
-                              <p>{{type.name}}</p>
-                            </div>
+                    <div class="form-group">
+                      <div class="col-12">
+                        <label>Provider type *</label>
+                        <br />
+                        <div class="row ml-0 mr-0">
+                          <div *ngFor="let type of providerTypes" class="mb-10 px-5 col-lg-3 col-md-4 col-sm-6 col-12">
+                            <button type="button text-left" (click)="setProviderType(type.id)" class="btn btn-primary w-full btn-providerType"
+                              [ngClass]="{'btn-outline': shareableJobForm.controls.providerType.value !== type.id}">
+                              <div class="row">
+                                <div class="col-lg-3 col-2 text-center">
+                                  <img *ngIf="shareableJobForm.controls.providerType.value !== type.id" src="assets/img/providers/{{type.img}}">
+                                  <img *ngIf="shareableJobForm.controls.providerType.value === type.id" src="assets/img/providers/white/{{type.img}}">
+                                </div>
+                                <div class="col-lg-8 col-10 text-left" style="white-space: initial;">
+                                  <span>{{type.name}}</span>
+                                </div>
+                              </div>
+                            </button>
                           </div>
                         </div>
                       </div>
                     </div>
-
                     <div class="form-group">
                       <div class="col-12">
                         <label>Type of work *</label>
                         <br />
                         <div class="row ml-0 mr-0">
-                          <div *ngFor="let type of workTypes()" class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                            <button type="button" (click)="setWorkType(type)" class="btn btn-primary w-full" [ngClass]="{'btn-outline': postForm.controls.workType.value !== type}">
+                          <div *ngFor="let type of workTypes()" class="mb-10 px-5 col-lg-3 col-md-3 col-sm-4 col-6">
+                            <button type="button" (click)="setWorkType(type)" class="btn btn-primary w-full" [ngClass]="{'btn-outline': shareableJobForm.controls.workType.value !== type}">
                               {{type}}
                             </button>
                           </div>
@@ -644,7 +650,7 @@
                         <label>Deadline *</label>
                         <br />
                         <div class="row ml-0 mr-0">
-                          <input type="date" class="form-control">
+                          <input #deadline formControlName="deadline" type="date" class="form-control">
                         </div>
                       </div>
                     </div>
@@ -656,7 +662,7 @@
                         <div class="row ml-0 mr-0">
                           <div *ngFor="let type of paymentTypes()" class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <button type="button" (click)="setPaymentType(type)" class="btn btn-primary w-full"
-                              [ngClass]="{'btn-outline': postForm.controls.paymentType.value !== type}">
+                              [ngClass]="{'btn-outline': shareableJobForm.controls.paymentType.value !== type}">
                               {{type}}
                             </button>
                           </div>
@@ -691,7 +697,27 @@
                         </div>
                       </div>
                     </div>
-
+                    <div class="form-group">
+                      <div class="col-12">
+                        <label>Visibility *</label>
+                        <br />
+                        <div class="row ml-0 mr-0">
+                          <div  class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <button type="button" (click)="setVisibility('invite')" class="btn btn-primary w-full"
+                              [ngClass]="{'btn-outline': shareableJobForm.controls.paymentType.value !== type}">
+                              Invite-only
+                            </button>
+                          </div>
+                          <div  class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <button type="button btn-secondary" (click)="setVisibility('public')" disabled class="btn btn-primary w-full"
+                              [ngClass]="{'btn-outline': shareableJobForm.controls.paymentType.value !== type}">
+                              Public
+                            </button>
+                          </div>
+                        </div>
+                        <i class="small">Public job listing coming soon</i>
+                      </div>
+                    </div>
                     <div class="form-group">
                       <div class="col-12">
                         <app-terms [form]="postForm"></app-terms>
