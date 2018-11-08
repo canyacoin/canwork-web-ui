@@ -52,6 +52,39 @@ export class PostComponent implements OnInit, OnDestroy {
 
   canToUsd: number;
 
+  providerTypes = [
+    {
+      name: 'Content Creators',
+      img: 'writer.svg',
+      id: 'contentCreator'
+    },
+    {
+      name: 'Software Developers',
+      img: 'dev.svg',
+      id: 'softwareDev'
+    },
+    {
+      name: 'Designers & Creatives',
+      img: 'creatives.svg',
+      id: 'designer'
+    },
+    {
+      name: 'Financial Experts',
+      img: 'finance.svg',
+      id: 'finance'
+    },
+    {
+      name: 'Marketing & Seo',
+      img: 'marketing.svg',
+      id: 'marketing'
+    },
+    {
+      name: 'Virtual Assistants',
+      img: 'assistant.svg',
+      id: 'virtualAssistant'
+    }
+  ];
+
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
@@ -206,7 +239,7 @@ export class PostComponent implements OnInit, OnDestroy {
         budget: this.postForm.value.budget
       });
 
-      const action = new IJobAction(ActionType.createJob, UserType.client)
+      const action = new IJobAction(ActionType.createJob, UserType.client);
       action.setPaymentProperties(job.budget, await this.jobService.getJobBudget(job), this.postForm.value.timelineExpectation,
         this.postForm.value.workType, this.postForm.value.weeklyCommitment, this.postForm.value.paymentType);
 
