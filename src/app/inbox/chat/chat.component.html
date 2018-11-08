@@ -3,7 +3,7 @@
   <section class="section bg-gray px-10 py-30" id="section-profile">
     <div class="container">
       <div class="row flex-row" *ngIf="!isOnMobile" style="border-radius: 5px;">
-        <div *ngIf="currentUser" class="col-12 col-md-4 p-0 m-0">
+        <div *ngIf="currentUser" class="col-12 col-lg-4 col-sm-12 p-0 m-0">
           <div class="card card-bordered contact-div">
             <form class="card-header" style="background: white; border-top-left-radius: 5px;">
               <div class="search-container">
@@ -54,7 +54,7 @@
             </div>
           </div>
         </div>
-        <div class="col-12 col-md-8 p-0 m-0">
+        <div class="col-12 col-lg-8 col-sm-12 p-0 m-0">
           <div class="card card-bordered view-70">
             <div *ngIf="selectedChannel" class="card-header d-flex justify-content-between align-items-center" style="background: white; min-height: 61px; max-height: 61px; border-top-left-radius: 5px;">
               <a [routerLink]="['/profile/alt', selectedChannel.address]">
