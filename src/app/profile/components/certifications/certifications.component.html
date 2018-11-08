@@ -1,16 +1,53 @@
-<div class="container">
+<div class="container" [hidden]="loaded && !isMyProfile &&  userCertifications.length === 0">
   <div class="row">
-    <div class="col-12 card" style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px; margin-bottom: 20px;">
-      <div *ngIf="isMyProfile && (userModel.type === 'Provider')" class="p-10">
-        <b>Certifications</b>
-        <button class="btn btn-primary">Add Certifications</button>
-        <input list="uniNameList" class="form-control" placeholder="e.g. HTML, CSS..." [(ngModel)]="uniInput"
-          [ngModelOptions]="{standalone: true}" (change)="onInputChange()">
+    <div *ngIf="!loaded" class="col-12 card certification-card">
+      <div class="container d-flex h-100 flex-column justify-content-center">
+        <img src="assets/img/loader.svg" height="36px" alt="Loader">
+      </div>
+    </div>
+    <div *ngIf="loaded" class="col-12 card certification-card">
+      <div *ngIf="(userModel.type === 'Provider')" class="py-20">
+        <div class="row">
+          <div class="col-11">
+            <h5>CERTIFICATIONS</h5>
+          </div>
+          <div class="col-1">
+            <a data-toggle="modal" *ngIf="isMyProfile && userCertifications.length > 0" (click)="setAddModal()"
+              data-target="#certificationModal">
+              <i class="ti-plus fw-600" style="color: #535353;" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+        <div *ngIf="userCertifications.length > 0">
+          <div class="row" *ngFor="let cert of userCertifications">
+            <div class="col-6">
+              <h6 class="mb-0">{{ cert.course }}</h6>
+              <p class="text-grey">{{ cert.university }}</p>
+            </div>
+            <div class="col-6 text-right">
+              <h6 class="mb-0">{{ cert.startDate }} - {{ cert.completion }}
+                <span *ngIf="isMyProfile">&nbsp;&nbsp;&nbsp;
+                  <i (click)="setEditModal(cert)" data-toggle="modal" data-target="#certificationModal" class="ti-pencil text-grey pr-15 fw-600"
+                    aria-hidden="true"></i>
+                </span>
+              </h6>
+              <a class="pr-20" *ngIf="cert.certificate !== ''" href="{{cert.certificate}}" target="_blank">Certificate</a>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="isMyProfile && (userModel.type === 'Provider') && userCertifications.length === 0">
+          <div class="row">
+            <div class="col-6">
+              <p class="pt-5 no-margin">You do not have any certifications</p>
+            </div>
+            <div class="col-6 text-right">
+              <a (click)="setAddModal()" data-target="#certificationModal" *ngIf="isMyProfile && (userModel.type === 'Provider')"
+                class="btn btn-primary btn-add-work  text-white" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">ADD
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
-<datalist id="uniNameList">
-  <option *ngFor="let uni of uniList" value="{{uni.name}}">
-</datalist>

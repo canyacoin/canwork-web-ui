@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-job-dashboard-card',
@@ -12,8 +12,6 @@ export class JobDashboardCardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.type);
-    console.log(this.job);
   }
 
 }

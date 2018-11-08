@@ -4,10 +4,7 @@ import {
     CanPayData, CanPayService, EthService, Operation, setProcessResult, View
 } from '@canyaio/canpay-lib';
 import { Job, JobState, Payment, PaymentType, TimeRange, WorkType } from '@class/job';
-import {
-    ActionType, AuthoriseEscrowAction, CounterOfferAction, EnterEscrowAction, IJobAction,
-    ReviewAction
-} from '@class/job-action';
+import { ActionType, IJobAction } from '@class/job-action';
 import { Upload } from '@class/upload';
 import { User, UserType } from '@class/user';
 import { CanWorkJobContract } from '@contract/can-work-job.contract';
@@ -22,11 +19,13 @@ import { GenerateGuid } from '@util/generate.uid';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { FeatureToggleService } from './feature-toggle.service';
 
 @Injectable()
 export class JobService {
 
   jobsCollection: AngularFirestoreCollection<any>;
+  canexDisabled = false;
 
   constructor(
     private afs: AngularFirestore,
@@ -37,9 +36,15 @@ export class JobService {
     private canWorkEthService: CanWorkEthService,
     private ethService: EthService,
     private jobNotificationService: JobNotificationService,
-    private canPayService: CanPayService) {
+    private canPayService: CanPayService,
+    private featureService: FeatureToggleService) {
 
     this.jobsCollection = this.afs.collection<any>('jobs');
+    this.featureService.getFeatureConfig('canexchange').then(val => {
+      this.canexDisabled = !val.enabled;
+    }).catch(e => {
+      this.canexDisabled = true;
+    });
   }
 
   // =========================
@@ -68,11 +73,11 @@ export class JobService {
   }
 
   async getReviewedJobsByUser(user: User) {
-    const userType = user.type === UserType.client ? 'clientId' : 'providerId'
+    const userType = user.type === UserType.client ? 'clientId' : 'providerId';
     const data = await this.jobsCollection.ref
       .where(userType, '==', user.address)
-      .where('state', '==', JobState.reviewed).get()
-    return data
+      .where('state', '==', JobState.reviewed).get();
+    return data;
   }
 
   async getJobBudget(job: Job): Promise<number> {
@@ -126,8 +131,7 @@ export class JobService {
    */
   async handleJobAction(job: Job, action: IJobAction): Promise<boolean> {
     const parsedJob = new Job(await this.parseJobToObject(job));
-    let client: User
-    let provider: User
+    let client, provider: User;
     return new Promise<boolean>(async (resolve, reject) => {
       try {
         switch (action.type) {
@@ -142,14 +146,14 @@ export class JobService {
           case ActionType.cancelJob:
             parsedJob.actionLog.push(action);
             parsedJob.state = JobState.cancelled;
-            await this.saveJobAndNotify(parsedJob, action)
+            await this.saveJobAndNotify(parsedJob, action);
             resolve(true);
             break;
           case ActionType.counterOffer:
             parsedJob.actionLog.push(action);
             parsedJob.state = action.executedBy === UserType.client ? JobState.clientCounterOffer : JobState.providerCounterOffer;
-            parsedJob.budget = (action as CounterOfferAction).amount;
-            await this.saveJobAndNotify(parsedJob, action)
+            parsedJob.budget = action.amountUsd;
+            await this.saveJobAndNotify(parsedJob, action);
             resolve(true);
             break;
           case ActionType.acceptTerms:
@@ -159,7 +163,7 @@ export class JobService {
                 parsedJob.budgetCan = totalBudgetCan;
                 parsedJob.actionLog.push(action);
                 parsedJob.state = JobState.termsAcceptedAwaitingEscrow;
-                await this.saveJobAndNotify(parsedJob, action)
+                await this.saveJobAndNotify(parsedJob, action);
                 resolve(true);
               }
             } catch (e) {
@@ -169,7 +173,7 @@ export class JobService {
           case ActionType.declineTerms:
             parsedJob.actionLog.push(action);
             parsedJob.state = JobState.declined;
-            await this.saveJobAndNotify(parsedJob, action)
+            await this.saveJobAndNotify(parsedJob, action);
             resolve(true);
             break;
           case ActionType.authoriseEscrow:
@@ -180,17 +184,17 @@ export class JobService {
             }
             const hasAllowance = !!ethAddr ? await this.canWorkEthService.hasAllowance(ethAddr, environment.contracts.canwork, job.budgetCan) : false;
             this.authoriseEnterEscrow(parsedJob, ethAddr, action, hasAllowance);
-            resolve(true)
+            resolve(true);
             break;
           case ActionType.addMessage:
             parsedJob.actionLog.push(action);
-            await this.saveJobAndNotify(parsedJob, action)
+            await this.saveJobAndNotify(parsedJob, action);
             resolve(true);
             break;
           case ActionType.finishedJob:
             parsedJob.actionLog.push(action);
             parsedJob.state = JobState.workPendingCompletion;
-            await this.saveJobAndNotify(parsedJob, action)
+            await this.saveJobAndNotify(parsedJob, action);
             resolve(true);
             break;
           case ActionType.acceptFinish:
@@ -201,10 +205,10 @@ export class JobService {
                    save tx to collection
                    save action/pending to job */
                 const txId = GenerateGuid();
-                this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.acceptFinish)
+                this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.acceptFinish);
                 this.transactionService.saveTransaction(new Transaction(txId, job.clientId,
                   txHash, this.momentService.get(), ActionType.acceptFinish, job.id));
-                parsedJob.actionLog.push(action);
+                job.actionLog.push(action);
                 // This payment log has been deprecated in favor of transacations collection, however emails rely on it
                 job.paymentLog.push(new Payment({
                   txId: txHash,
@@ -220,16 +224,20 @@ export class JobService {
                   .catch(setProcessResult.bind(canPayOptions));
               };
 
+
+              client = await this.userService.getUser(job.clientId);
+
               const canPayOptions = {
                 dAppName: `CanWork`,
                 successText: 'Woohoo, job complete!',
                 recepient: environment.contracts.canwork,
                 operation: Operation.interact,
-                userEmail: '', // TODO
-                complete: () => { this.canPayService.close() },
-                cancel: () => { this.canPayService.close() },
+                complete: () => { this.canPayService.close(); },
+                cancel: () => { this.canPayService.close(); },
                 postAuthorisationProcessName: 'Job completion',
                 startPostAuthorisationProcess: initiateCompleteJob.bind(this),
+                disableCanEx: this.canexDisabled,
+                userEmail: client.email
               };
               this.canPayService.open(canPayOptions);
             } catch (error) {
@@ -240,17 +248,18 @@ export class JobService {
           case ActionType.dispute:
             parsedJob.actionLog.push(action);
             parsedJob.state = JobState.inDispute;
-            await this.saveJobAndNotify(parsedJob, action)
+            await this.saveJobAndNotify(parsedJob, action);
             resolve(true);
             break;
           case ActionType.review:
-            client = await this.userService.getUser(job.clientId)
-            provider = await this.userService.getUser(job.providerId)
-            await this.userService.newReview(client, provider, parsedJob, action as ReviewAction)
-            parsedJob.state = JobState.reviewed
-            await this.saveJobFirebase(parsedJob)
-            resolve(true)
-            break
+            client = await this.userService.getUser(job.clientId);
+            provider = await this.userService.getUser(job.providerId);
+            await this.userService.newReview(client, provider, parsedJob, action);
+            parsedJob.state = JobState.reviewed;
+            parsedJob.actionLog.push(action);
+            await this.saveJobFirebase(parsedJob);
+            resolve(true);
+            break;
           default:
             reject(false);
         }
@@ -290,16 +299,16 @@ export class JobService {
          save action/pending to job
          update users active eth address */
       const txId = GenerateGuid();
-      this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.authoriseEscrow)
+      this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.authoriseEscrow);
       this.transactionService.saveTransaction(new Transaction(txId, job.clientId,
         txHash, this.momentService.get(), ActionType.authoriseEscrow, job.id));
-      const escrowAction = action as AuthoriseEscrowAction;
+      const escrowAction = action;
       job.actionLog.push(escrowAction);
       job.clientEthAddress = from;
       clientEthAddress = from;
       // This payment log has been deprecated in favor of transacations collection, however emails rely on it
       job.paymentLog.push(new Payment({
-        txId: escrowAction.txId || '',
+        txId: txHash,
         timestamp: escrowAction.timestamp || ''
       }));
       await this.saveJobFirebase(job);
@@ -321,17 +330,19 @@ export class JobService {
          save tx to collection
          save action/pending to job */
       const txId = GenerateGuid();
-      this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.enterEscrow)
+      this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.enterEscrow);
       this.transactionService.saveTransaction(new Transaction(txId, job.clientId,
         txHash, this.momentService.get(), ActionType.enterEscrow, job.id));
-      const enterEscrowAction = action as EnterEscrowAction;
-      job.actionLog.push(enterEscrowAction);
+      if (action.type === ActionType.authoriseEscrow) {
+        action.type = ActionType.enterEscrow;
+      }
+      job.actionLog.push(action);
       job.clientEthAddress = from;
       clientEthAddress = from;
       // This payment log has been deprecated in favor of transacations collection, however emails rely on it
       job.paymentLog.push(new Payment({
         txId: txHash,
-        timestamp: enterEscrowAction.timestamp
+        timestamp: action.timestamp
       }));
       await this.saveJobFirebase(job);
     };
@@ -344,6 +355,7 @@ export class JobService {
         .catch(setProcessResult.bind(canPayOptions));
     };
 
+    const client = await this.userService.getUser(job.clientId);
 
     const canPayOptions = {
       dAppName: `CanWork`,
@@ -355,8 +367,8 @@ export class JobService {
       complete: onComplete,
       cancel: onCancel,
       view: View.Compact,
-
-      userEmail: '', // TODO
+      disableCanEx: this.canexDisabled,
+      userEmail: client.email,
 
       // Post Authorisation
       postAuthorisationProcessName: 'Job creation',
@@ -391,27 +403,7 @@ export class JobService {
     return actions[jobState] || [];
   }
 
-  /** Helper method to get the colour associated with each action button */
-  getActionColour(action: ActionType): string {
-    switch (action) {
-      case ActionType.cancelJob:
-      case ActionType.dispute:
-        return 'danger';
-      case ActionType.declineTerms:
-        return 'danger';
-      case ActionType.counterOffer:
-      case ActionType.addMessage:
-        return 'info';
-      case ActionType.acceptTerms:
-      case ActionType.authoriseEscrow:
-      case ActionType.enterEscrow:
-      case ActionType.finishedJob:
-      case ActionType.acceptFinish:
-        return 'success';
-      default:
-        return 'info';
-    }
-  }
+
 
   /** Job object must be re-assigned as firebase doesn't accept strong types */
   private parseJobToObject(job: Job): Promise<object> {

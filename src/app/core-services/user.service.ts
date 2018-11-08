@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Job } from '@class/job';
-import { ReviewAction } from '@class/job-action';
+import { IJobAction } from '@class/job-action';
 import { Review } from '@class/review';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { take } from 'rxjs/operators';
@@ -45,7 +45,7 @@ export class UserService {
           resolve(result);
         }
         reject();
-      })
+      });
     });
   }
 
@@ -68,45 +68,45 @@ export class UserService {
   async getUserByEthAddress(address: string) {
     const data = await this.usersCollectionRef.ref
       .where('ethAddressLookup', '==', address.toUpperCase())
-      .limit(1).get()
-    return data
+      .limit(1).get();
+    return data;
   }
 
-  async newReview(client: User, provider: User, job: Job, action: ReviewAction) {
-    const review = new Review
-    review.jobId = job.id
-    review.jobTitle = job.information.title
-    review.clientId = job.clientId
-    review.clientName = client.name
-    review.providerId = job.providerId
-    review.message = action.message
-    review.isClientSatisfied = action.isClientSatisfied
-    review.createdAt = moment().format('x')
+  async newReview(client: User, provider: User, job: Job, action: IJobAction) {
+    const review = new Review;
+    review.jobId = job.id;
+    review.jobTitle = job.information.title;
+    review.clientId = job.clientId;
+    review.clientName = client.name;
+    review.providerId = job.providerId;
+    review.message = action.message;
+    review.isClientSatisfied = action.isClientSatisfied;
+    review.createdAt = moment().format('x');
     try {
       const ref = await this.usersCollectionRef
         .doc(provider.address)
         .collection('reviews')
-        .add({ ...review })
+        .add({ ...review });
 
-      provider.upvotes = !provider.upvotes || isNaN(provider.upvotes) ? 0 : provider.upvotes
-      provider.downvotes = !provider.downvotes || isNaN(provider.downvotes) ? 0 : provider.downvotes
-      provider.numberOfReviews = !provider.numberOfReviews || isNaN(provider.numberOfReviews) ? 0 : provider.numberOfReviews
+      provider.upvotes = !provider.upvotes || isNaN(provider.upvotes) ? 0 : provider.upvotes;
+      provider.downvotes = !provider.downvotes || isNaN(provider.downvotes) ? 0 : provider.downvotes;
+      provider.numberOfReviews = !provider.numberOfReviews || isNaN(provider.numberOfReviews) ? 0 : provider.numberOfReviews;
 
       if (review.isClientSatisfied) {
-        provider.upvotes += 1
+        provider.upvotes += 1;
       } else {
-        provider.downvotes += 1
+        provider.downvotes += 1;
       }
 
       if (review.message) {
-        provider.numberOfReviews += 1
+        provider.numberOfReviews += 1;
       }
 
-      this.saveUserFirebase(provider)
+      this.saveUserFirebase(provider);
 
-      return ref
+      return ref;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -119,12 +119,12 @@ export class UserService {
         .pipe(take(1))
         .subscribe(data => {
           if (data) {
-            resolve(data)
+            resolve(data);
           } else {
-            resolve([])
+            resolve([]);
           }
-        })
-    })
+        });
+    });
   }
 
   saveUser(credentials: User, type?: string): Promise<User> {

@@ -23,45 +23,48 @@ export class CanWorkJobContract {
 
   async createJob(job: Job, clientAddress: string, providerAddress: string, onTxHash: Function) {
     return new Promise(async (resolve, reject) => {
-      try {
-        const txObject = await this.instance.methods.createJob(this.eth.web3js.utils.padRight(job.hexId, 32), clientAddress, providerAddress, job.budgetCan * (10 ** this.canYaDecimals));
-        const gas = await txObject.estimateGas({ from: clientAddress });
-        const gasPrice = await this.eth.getDefaultGasPriceGwei();
-        const txOptions = {
-          from: clientAddress,
-          value: '0x0',
-          gasLimit: gas,
-          gasPrice: gasPrice,
-          data: txObject.encodeABI(),
-        };
+      const txObject = await this.instance.methods.createJob(this.eth.web3js.utils.padRight(job.hexId, 32), clientAddress, providerAddress, job.budgetCan * (10 ** this.canYaDecimals));
+      let gas, gasPrice = '';
 
-        txObject.send(txOptions, async (err, txHash) => this.eth.resolveTransaction(err, clientAddress, txHash, resolve, reject, onTxHash));
+      try {
+        gas = await txObject.estimateGas({ from: clientAddress });
+        gasPrice = await this.eth.getDefaultGasPriceGwei();
       } catch (err) {
         reject(err);
       }
+
+      const txOptions = {
+        from: clientAddress,
+        value: '0x0',
+        gasLimit: gas,
+        gasPrice: gasPrice,
+        data: txObject.encodeABI(),
+      };
+      txObject.send(txOptions, async (err, txHash) => this.eth.resolveTransaction(err, clientAddress, txHash, resolve, reject, onTxHash));
+
     });
   }
 
   async completeJob(job: Job, fromAddr: string, onTxHash: Function) {
     return new Promise(async (resolve, reject) => {
+      const txObject = await this.instance.methods.completeJob(this.eth.web3js.utils.padRight(job.hexId, 32));
+      let gas, gasPrice = '';
+
       try {
-        const txObject = await this.instance.methods.completeJob(this.eth.web3js.utils.padRight(job.hexId, 32));
-        const gas = await txObject.estimateGas({ from: fromAddr });
-        const gasPrice = await this.eth.getDefaultGasPriceGwei();
-
-        const txOptions = {
-          from: fromAddr,
-          value: '0x0',
-          gasLimit: gas,
-          gasPrice: gasPrice,
-          data: txObject.encodeABI(),
-        };
-
-        txObject.send(txOptions, async (err, txHash) => this.eth.resolveTransaction(err, fromAddr, txHash, resolve, reject, onTxHash));
+        gas = await txObject.estimateGas({ from: fromAddr });
+        gasPrice = await this.eth.getDefaultGasPriceGwei();
       } catch (err) {
         reject(err);
       }
+
+      const txOptions = {
+        from: fromAddr,
+        value: '0x0',
+        gasLimit: gas,
+        gasPrice: gasPrice,
+        data: txObject.encodeABI(),
+      };
+      txObject.send(txOptions, async (err, txHash) => this.eth.resolveTransaction(err, fromAddr, txHash, resolve, reject, onTxHash));
     });
   }
-
 }

@@ -1,5 +1,5 @@
 <div class="modal-dialog">
-  <div class="modal-content text-center" *ngIf="actionType && job">
+  <div class="modal-content text-center" *ngIf="action && job">
     <div class="modal-header">
       <button type="button" class="btn modal-close" (click)="close()">X</button>
       <div class="col-12">
@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="modal-body">
-      <p>{{messageBody}}</p>
+      <p>{{action.dialogMessage}}</p>
       <div *ngIf="form && actionType == actionTypes.counterOffer" class="mx-40">
         <form [formGroup]="form" class="form-group">
           <div>
@@ -70,7 +70,7 @@
     </div>
     <div class="modal-footer">
       <div class="col-12">
-        <button [disabled]="submitDisabled || executing" type="button" class="btn btn-{{actionColour}}" (click)="handleAction()">
+        <button [disabled]="submitDisabled || executing" type="button" class="btn btn-{{action.colour}}" (click)="handleAction()">
           {{actionType}}
         </button>
         <button type="button" class="btn btn-default" (click)="close()">Cancel</button>

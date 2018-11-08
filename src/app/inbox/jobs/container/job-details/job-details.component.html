@@ -78,7 +78,7 @@
           </p>
         </div>
         <div class="actions-div" *ngIf="availableActions.length > 0">
-          <button *ngFor="let action of availableActions" class="btn action-btn mt-5 btn-{{getActionColour(action)}} btn-outline btn-sm"
+          <button *ngFor="let action of availableActions" class="btn action-btn mt-5 btn-{{getColour(action)}} btn-outline btn-sm"
             (click)="executeAction(action)" [disabled]="actionIsDisabled(action)">
             {{action}}
           </button>
@@ -100,7 +100,7 @@
           <h4>ACTION LOG</h4>
           <div id="job-logs" class="row my-10">
             <div class="col-12 my-10" *ngIf="!isOnMobile">
-              <div *ngFor="let action of job.getActionLog() | orderBy:'timestamp':true; let actionIndex = index" class="my-10">
+              <div *ngFor="let action of job.parsedActionLog | orderBy:'timestamp':true; let actionIndex = index" class="my-10">
                 <div class="row" *ngIf="!action.private || action.executedBy == currentUserType">
                   <div class="col-lg-8 col-md-6  col-sm-6 col-6">
                     <p [innerHTML]="action.getMessage(getActionExecutor(action))"></p>
@@ -112,7 +112,7 @@
               </div>
             </div>
             <div class="col-12 my-10" *ngIf="isOnMobile">
-              <div *ngFor="let action of job.getActionLog() | orderBy:'timestamp':true; let actionIndex = index" class="my-10">
+              <div *ngFor="let action of job.parsedActionLog | orderBy:'timestamp':true; let actionIndex = index" class="my-10">
                 <div class="row" *ngIf="!action.private || action.executedBy == currentUserType">
                   <div class="col-12">
                     <p class="no-margin" [innerHTML]="action.getMessage(getActionExecutor(action))"></p>
@@ -124,6 +124,34 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="container p-30 job-actions-card">
+    <div class="row">
+      <span class="col-12 my-10 text-left" *ngIf="currentUserIsClient">
+        <h5>TRANSACTIONS</h5>
+        <div *ngIf="transactions.length < 1">
+          No payments have been made yet
+        </div>
+        <div *ngIf="transactions.length >= 1">
+          <div *ngFor="let tx of transactions | orderBy:'timestamp':true" class="card mb-15 py-20 bg-transparent">
+            <div class="row">
+              <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6">
+                <i class="circle-{{getTxColor(tx)}} fas fa-circle"></i> {{tx.actionType}}
+              </div>
+              <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 text-right">
+                {{ tx.timestamp | date:'medium' }}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <a href="{{getTxLink(tx.hash)}}">View on
+                  Etherscan</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </span>
     </div>
   </div>
 </div>

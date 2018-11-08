@@ -18,6 +18,7 @@ import { MobileService } from './core-services/mobile.service';
 import { CoreServicesModule } from './core-services/core-services.module';
 import { CanWorkEthService } from './core-services/eth.service';
 import { JobNotificationService } from './core-services/job-notification.service';
+import { CertificationsService } from './core-services/certifications.service';
 import { NavService } from './core-services/nav.service';
 import { CoreUtilsModule } from './core-utils/core-utils.module';
 import { FilterPipeModule } from 'ngx-filter-pipe';
@@ -58,6 +59,7 @@ import { Ng5SliderModule } from 'ng5-slider';
     CanWorkEthService,
     NavService,
     JobNotificationService,
+    CertificationsService
   ],
   bootstrap: [AppComponent]
 })

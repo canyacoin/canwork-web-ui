@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { User } from '../../../core-classes/user';
-import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { AngularFirestore } from 'angularfire2/firestore';
+import { CertificationsService } from '../../../core-services/certifications.service';
 
 @Component({
   selector: 'app-certifications',
@@ -13,31 +14,48 @@ export class CertificationsComponent implements OnInit {
   @Input() userModel: User;
   @Input() isMyProfile: boolean;
   @Input() notMyProfile: boolean;
-  uniInput = '';
-  uniList: any;
-  uniListSelection = new Array();
+  @Output() editCertification = new EventEmitter();
+
+  userCertifications: any;
+  loaded = false;
+  certificationSub: Subscription;
   constructor(
-    private http: HttpClient
-  ) { }
+    private afs: AngularFirestore,
+    private certifications: CertificationsService
+  ) {
+  }
 
   ngOnInit() {
-    this.getJSON().subscribe(data => {
-      this.uniList = data;
-      /*
-      for (let i = 0; i < this.uniList.length; i++) {
-        const name = this.uniList[i]['name'];
-        console.log(name);
-        this.uniListSelection.push(name);
+    this.loadCertifications();
+  }
+
+  OnDestroy() {
+    this.certificationSub.unsubscribe();
+  }
+
+  onInputChange() {
+  }
+
+  onDeleteCertification() {
+    console.log('deleting');
+  }
+
+  async loadCertifications() {
+    const certifications = this.afs.collection(`users/${this.userModel.address}/certifications`);
+    this.certificationSub = certifications.valueChanges().subscribe((data: any) => {
+      this.userCertifications = data;
+      if (data.length >= 0) {
+        this.loaded = true;
       }
-      */
     });
   }
 
-  public getJSON(): Observable<any> {
-    return this.http.get('../../assets/js/UniversityList.json');
+  setEditModal(cert) {
+    this.certifications.loadEditCert(cert);
   }
-  onInputChange() {
-    console.log('changed');
+
+  setAddModal() {
+    this.certifications.loadAddCert();
   }
 
 }
