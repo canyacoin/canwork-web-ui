@@ -52,6 +52,39 @@ export class PostComponent implements OnInit, OnDestroy {
 
   canToUsd: number;
 
+  providerTypes = [
+    {
+      name: 'Content Creators',
+      img: 'writer.svg',
+      id: 'contentCreator'
+    },
+    {
+      name: 'Software Developers',
+      img: 'dev.svg',
+      id: 'softwareDev'
+    },
+    {
+      name: 'Designers & Creatives',
+      img: 'creatives.svg',
+      id: 'designer'
+    },
+    {
+      name: 'Financial Experts',
+      img: 'finance.svg',
+      id: 'finance'
+    },
+    {
+      name: 'Marketing & Seo',
+      img: 'marketing.svg',
+      id: 'marketing'
+    },
+    {
+      name: 'Virtual Assistants',
+      img: 'assistant.svg',
+      id: 'virtualAssistant'
+    }
+  ]
+
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
