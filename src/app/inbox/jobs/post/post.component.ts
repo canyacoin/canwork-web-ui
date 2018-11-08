@@ -28,6 +28,7 @@ import { take } from 'rxjs/operators';
 export class PostComponent implements OnInit, OnDestroy {
 
   postForm: FormGroup = null;
+  shareableJobForm: FormGroup = null;
   pageLoaded = false;
   paymentType = PaymentType;
   recipientAddress = '';
@@ -51,7 +52,7 @@ export class PostComponent implements OnInit, OnDestroy {
   deleteFailed = false;
 
   canToUsd: number;
-
+  currentDate = new Date().toLocaleDateString();
   providerTypes = [
     {
       name: 'Content Creators',
@@ -104,6 +105,19 @@ export class PostComponent implements OnInit, OnDestroy {
       timelineExpectation: ['', Validators.compose([Validators.required])],
       weeklyCommitment: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(60)])],
       paymentType: ['', Validators.compose([Validators.required])],
+      budget: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(10000000)])],
+      terms: [false, Validators.requiredTrue]
+    });
+    this.shareableJobForm = formBuilder.group({
+      description: ['', Validators.compose([Validators.required, Validators.maxLength(10000)])],
+      title: ['', Validators.compose([Validators.required, Validators.maxLength(64)])],
+      initialStage: ['', Validators.compose([Validators.required, Validators.maxLength(3000)])],
+      skills: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(100)])],
+      attachments: [''],
+      workType: ['', Validators.compose([Validators.required])],
+      providerType: ['', Validators.compose([Validators.required])],
+      paymentType: ['', Validators.compose([Validators.required])],
+      deadline: ['', Validators.compose([Validators.required])],
       budget: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(10000000)])],
       terms: [false, Validators.requiredTrue]
     });
@@ -194,7 +208,16 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   setWorkType(type: WorkType) {
-    this.postForm.controls.workType.setValue(type);
+    if (!this.isShareable) {
+      this.postForm.controls.workType.setValue(type);
+    } else {
+      this.shareableJobForm.controls.workType.setValue(type);
+    }
+  }
+
+  setProviderType(type: string) {
+    console.log(type)
+    this.shareableJobForm.controls.providerType.setValue(type);
   }
 
   timeRanges(): Array<string> {
