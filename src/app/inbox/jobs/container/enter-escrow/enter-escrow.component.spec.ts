@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ActionHistoryComponent } from './action-history.component';
+import { EnterEscrowComponent } from './enter-escrow.component';
 
-describe('ActionHistoryComponent', () => {
-  let component: ActionHistoryComponent;
-  let fixture: ComponentFixture<ActionHistoryComponent>;
+describe('EnterEscrowComponent', () => {
+  let component: EnterEscrowComponent;
+  let fixture: ComponentFixture<EnterEscrowComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ActionHistoryComponent ]
+      declarations: [ EnterEscrowComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ActionHistoryComponent);
+    fixture = TestBed.createComponent(EnterEscrowComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

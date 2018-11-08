@@ -31,7 +31,7 @@ export class SupportMeComponent {
   onBuyACoffee() {
     const canPay = {
       dAppName: this.userModel.name,
-      recepient: this.userModel.ethAddress,
+      recipient: this.userModel.ethAddress,
       operation: Operation.pay,
       amount: 0, // allow the user to enter amount through an input box
       complete: this.onComplete.bind(this),

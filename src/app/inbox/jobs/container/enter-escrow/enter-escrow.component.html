@@ -1,0 +1,60 @@
+<div *ngIf="!job" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
+  <img src="assets/img/loader.svg" height="36px" alt="Loader">
+</div>
+
+<div class="container" *ngIf="job">
+  <div *ngIf="!paymentStarted">
+    <div class="card p-30 row">
+      <div class="container text-center">
+        <h2>Payment</h2>
+        <hr>
+        <div class="row">
+          <div class="col-8 text-left">
+            <i class="fas fa-shopping-cart"></i> Your order summary
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-8 text-left">
+            <span class="fw-800">{{job.information.title}}</span>
+          </div>
+          <div class="col-4 text-right">
+            <span>{{totalJobBudgetUsd}} $USD </span>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-8 text-left">
+            <span class="fw-800">Total:</span>
+          </div>
+          <div class="col-4 text-right">
+            <span>{{totalJobBudgetUsd}} $USD </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-8 text-left">
+            <span class="fw-400">1 CAN = {{usdPerCan}}</span>
+          </div>
+          <div class="col-4 text-right">
+            <span class="fw-800">{{job.budgetCan}} <img src="assets/img/canya-media-coin.png" width="16px" height="16px"
+                alt="CanYa">
+              CAN</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-right my-30 mx-30">
+      <button class="btn btn-primary" (click)="startCanpay()">NEXT</button>
+    </div>
+  </div>
+  <div class="row" *ngIf="(paymentStarted && !paymentComplete) && canPayOptions">
+    <canyalib-canpay [dAppName]="canPayOptions.dAppName" [successText]="canPayOptions.successText" [operation]="canPayOptions.operation"
+      [onAuthTxHash]="canPayOptions.onAuthTxHash" [recipient]="canPayOptions.recipient" [amount]="canPayOptions.amount"
+      [postAuthorisationProcessName]="canPayOptions.postAuthorisationProcessName" [postAuthorisationProcessResults]="canPayOptions.postAuthorisationProcessResults"
+      (startPostAuthorisationProcess)="canPayOptions.startPostAuthorisationProcess($event)" (complete)="canPayOptions.complete($event)"
+      (cancel)="canPayOptions.cancel($event)" [disableCanEx]="canPayOptions.disableCanEx" [userEmail]="canPayOptions.userEmail"></canyalib-canpay>
+  </div>
+  <div class="row" *ngIf="paymentComplete">
+    Finish
+  </div>
+</div>

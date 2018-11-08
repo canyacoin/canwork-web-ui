@@ -90,7 +90,7 @@ export class IJobAction {
     switch (this.type) {
       case ActionType.createJob:
         return `Job created by ${executor}.<br>
-          Proposed budget at $${this.amountUsd}${this.paymentTypeString} (${this.amountCan} CAN)
+          Proposed ${this.amountUsd ? `budget at $${this.amountUsd}${this.paymentTypeString} (${this.amountCan} CAN)` : ''}
           for ${this.weeklyCommitment} hours a week
           for ${this.timelineExpectation}`;
       case ActionType.counterOffer:

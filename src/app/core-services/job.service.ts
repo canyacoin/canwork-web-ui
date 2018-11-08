@@ -84,11 +84,15 @@ export class JobService {
   async getJobBudget(job: Job): Promise<number> {
     const canToUsd = await this.canWorkEthService.getCanToUsd();
     if (canToUsd) {
-      const totalBudget = job.paymentType === PaymentType.fixed ? job.budget : job.budget * this.getTotalWorkHours(job);
+      const totalBudget = await this.getJobBudgetUsd(job);
       return Promise.resolve(Math.floor(totalBudget / canToUsd));
     } else {
       return Promise.reject(false);
     }
+  }
+
+  async getJobBudgetUsd(job: Job): Promise<number> {
+    return job.paymentType === PaymentType.fixed ? job.budget : job.budget * this.getTotalWorkHours(job);
   }
 
   private getTotalWorkHours(job: Job): number {
@@ -177,16 +181,6 @@ export class JobService {
             await this.saveJobAndNotify(parsedJob, action)
             resolve(true);
             break;
-          case ActionType.authoriseEscrow:
-          case ActionType.enterEscrow:
-            let ethAddr = this.ethService.getOwnerAccount();
-            if (!!parsedJob.clientEthAddress) {
-              ethAddr = parsedJob.clientEthAddress;
-            }
-            const hasAllowance = !!ethAddr ? await this.canWorkEthService.hasAllowance(ethAddr, environment.contracts.canwork, job.budgetCan) : false;
-            this.authoriseEnterEscrow(parsedJob, ethAddr, action, hasAllowance);
-            resolve(true)
-            break;
           case ActionType.addMessage:
             parsedJob.actionLog.push(action);
             await this.saveJobAndNotify(parsedJob, action)
@@ -210,11 +204,6 @@ export class JobService {
                 this.transactionService.saveTransaction(new Transaction(txId, job.clientId,
                   txHash, this.momentService.get(), ActionType.acceptFinish, job.id));
                 job.actionLog.push(action);
-                // This payment log has been deprecated in favor of transacations collection, however emails rely on it
-                job.paymentLog.push(new Payment({
-                  txId: txHash,
-                  timestamp: action.timestamp
-                }));
                 await this.saveJobFirebase(job);
               };
 
@@ -225,13 +214,12 @@ export class JobService {
                   .catch(setProcessResult.bind(canPayOptions));
               };
 
-
               client = await this.userService.getUser(job.clientId);
 
               const canPayOptions = {
                 dAppName: `CanWork`,
                 successText: 'Woohoo, job complete!',
-                recepient: environment.contracts.canwork,
+                recipient: environment.contracts.canwork,
                 operation: Operation.interact,
                 complete: () => { this.canPayService.close() },
                 cancel: () => { this.canPayService.close() },
@@ -261,6 +249,8 @@ export class JobService {
             await this.saveJobFirebase(parsedJob)
             resolve(true)
             break
+          case ActionType.authoriseEscrow:
+          case ActionType.enterEscrow:
           default:
             reject(false);
         }
@@ -276,7 +266,7 @@ export class JobService {
     await this.jobNotificationService.notify(action.type, job.id);
   }
 
-  private async saveJobFirebase(job: Job): Promise<any> {
+  async saveJobFirebase(job: Job): Promise<any> {
     const x = await this.parseJobToObject(job);
     return this.jobsCollection.doc(job.id).set(x);
   }
@@ -286,98 +276,6 @@ export class JobService {
     if (channelId) {
       this.chatService.sendJobMessages(job, action);
     }
-  }
-
-  /* Uses canpay service to authorise and then enter the escrow, creating job */
-  private async authoriseEnterEscrow(job: Job, ethAddr: string, action: IJobAction, skipAuth: boolean = false) {
-
-    let clientEthAddress = ethAddr;
-
-    const onAuthTxHash = async (txHash: string, from: string) => {
-      /* IF authorisation hash gets sent, do:
-         post tx to transaction monitor
-         save tx to collection
-         save action/pending to job
-         update users active eth address */
-      const txId = GenerateGuid();
-      this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.authoriseEscrow)
-      this.transactionService.saveTransaction(new Transaction(txId, job.clientId,
-        txHash, this.momentService.get(), ActionType.authoriseEscrow, job.id));
-      const escrowAction = action;
-      job.actionLog.push(escrowAction);
-      job.clientEthAddress = from;
-      clientEthAddress = from;
-      // This payment log has been deprecated in favor of transacations collection, however emails rely on it
-      job.paymentLog.push(new Payment({
-        txId: txHash,
-        timestamp: escrowAction.timestamp || ''
-      }));
-      await this.saveJobFirebase(job);
-    };
-
-    const onComplete = async (result) => {
-      // call endpoint?
-      this.canPayService.close();
-    };
-
-    const onCancel = () => {
-      // call endpoint?
-      this.canPayService.close();
-    };
-
-    const onTxHash = async (txHash: string, from: string) => {
-      /* IF enter escrow hash gets sent, do:
-         post tx to transaction monitor
-         save tx to collection
-         save action/pending to job */
-      const txId = GenerateGuid();
-      this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.enterEscrow)
-      this.transactionService.saveTransaction(new Transaction(txId, job.clientId,
-        txHash, this.momentService.get(), ActionType.enterEscrow, job.id));
-      if (action.type === ActionType.authoriseEscrow) {
-        action.type = ActionType.enterEscrow;
-      }
-      job.actionLog.push(action);
-      job.clientEthAddress = from;
-      clientEthAddress = from;
-      // This payment log has been deprecated in favor of transacations collection, however emails rely on it
-      job.paymentLog.push(new Payment({
-        txId: txHash,
-        timestamp: action.timestamp
-      }));
-      await this.saveJobFirebase(job);
-    };
-
-    const initiateEnterEscrow = async (canPayData: CanPayData) => {
-      const provider = await this.userService.getUser(job.providerId);
-      const canWorkContract = new CanWorkJobContract(this.ethService);
-      canWorkContract.connect().createJob(job, clientEthAddress, provider.ethAddress, onTxHash)
-        .then(setProcessResult.bind(canPayOptions))
-        .catch(setProcessResult.bind(canPayOptions));
-    };
-
-    const client = await this.userService.getUser(job.clientId);
-
-    const canPayOptions = {
-      dAppName: `CanWork`,
-      successText: 'Woohoo, job started!',
-      recepient: environment.contracts.canwork,
-      operation: skipAuth ? Operation.interact : Operation.auth,
-      onAuthTxHash: onAuthTxHash.bind(this),
-      amount: job.budgetCan,
-      complete: onComplete,
-      cancel: onCancel,
-      view: View.Compact,
-      disableCanEx: this.canexDisabled,
-      userEmail: client.email,
-
-      // Post Authorisation
-      postAuthorisationProcessName: 'Job creation',
-      startPostAuthorisationProcess: initiateEnterEscrow.bind(this),
-      postAuthorisationProcessResults: null
-    };
-
-    this.canPayService.open(canPayOptions);
   }
 
   // =========================
