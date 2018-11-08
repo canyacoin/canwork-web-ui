@@ -1,7 +1,7 @@
 <div *ngIf="!loaded" class="container d-flex h-100 flex-column justify-content-center">
   <img src="assets/img/loader.svg" height="36px" alt="Loader">
 </div>
-<div *ngIf="loaded">
+<div *ngIf="loaded" [hidden]="!isMyProfile && allPortfolioItems.length < 1">
   <div class="card" style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px;">
     <div>
       <div class="card p-20">
@@ -45,7 +45,7 @@
           <div class="col-4 text-right">
             <a *ngIf="isMyProfile && (userModel.type === 'Provider')" class="btn btn-primary btn-add-work" [routerLink]="['/profile/project']"
               [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">ADD
-              WORK</a>
+            </a>
           </div>
         </div>
       </div>

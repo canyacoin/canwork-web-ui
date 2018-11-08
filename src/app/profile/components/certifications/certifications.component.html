@@ -40,8 +40,9 @@
               <p class="pt-5 no-margin">You do not have any certifications</p>
             </div>
             <div class="col-6 text-right">
-              <a class="btn btn-primary btn-add-work" [routerLink]="['/profile/project']" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">ADD
-                WORK</a>
+              <a (click)="setAddModal()" data-target="#certificationModal" *ngIf="isMyProfile && (userModel.type === 'Provider')"
+                class="btn btn-primary btn-add-work" [routerLink]="['/profile/project']" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">ADD
+              </a>
             </div>
           </div>
         </div>
