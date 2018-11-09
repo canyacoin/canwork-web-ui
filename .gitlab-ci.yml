@@ -22,6 +22,7 @@ dist:staging:
   script:
     - yarn
     - echo -n "+ current working path:" && pwd
+    - echo "ANGULAR ENV STUB" >> $APP_PATH/src/environments/environment.ts
     - echo $ENVIRONMENT_STAGING >> $APP_PATH/src/environments/environment.staging.ts
     - yarn run build:staging
 
@@ -37,6 +38,7 @@ dist:production:
   script:
     - yarn
     - echo -n "+ current working path:" && pwd
+    - echo "ANGULAR ENV STUB" >> $APP_PATH/src/environments/environment.ts
     - echo $ENVIRONMENT_PROD >> $APP_PATH/src/environments/environment.prod.ts
     - yarn run build:prod
 
