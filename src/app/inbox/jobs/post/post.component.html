@@ -209,6 +209,7 @@
         </div>
       </div>
     </div>
+
     <div id="shareable-job" *ngIf="!recipient && pageLoaded && isShareable">
       <div *ngIf="!sent" class="section bg-grey pt-15 pb-30">
         <div class="container bg-white p-30 brad-5px">
@@ -224,8 +225,9 @@
                       <div class="col-12">
                         <label>Title *</label>
                         <input class="form-control" #title formControlName="title" type="text" name="title" placeholder="Enter Job Title"
-                          maxlength="64" [class.invalid]="!postForm.controls.title.valid && postForm.controls.title.dirty">
-                        <small *ngIf="!postForm.controls.title.valid  && postForm.controls.title.dirty" class="text-primary text-wrap">Title
+                          maxlength="64" [class.invalid]="!shareableJobForm.controls.title.valid && shareableJobForm.controls.title.dirty">
+                        <small *ngIf="!shareableJobForm.controls.title.valid  && shareableJobForm.controls.title.dirty"
+                          class="text-primary text-wrap">Title
                           must be 64 characters or less</small>
                       </div>
                     </div>
@@ -233,8 +235,9 @@
                       <div class="col-12">
                         <label class="text-dark">Description *</label>
                         <textarea class="form-control" #description formControlName="description" rows="4" name="description"
-                          placeholder="I'm looking for..." [class.invalid]="!postForm.controls.description.valid && postForm.controls.description.dirty"></textarea>
-                        <small *ngIf="!postForm.controls.description.valid" class="text-primary text-wrap">e.g. 'Custom
+                          placeholder="I'm looking for..." [class.invalid]="!shareableJobForm.controls.description.valid && shareableJobForm.controls.description.dirty"></textarea>
+                        <small *ngIf="!shareableJobForm.controls.description.valid" class="text-primary text-wrap">e.g.
+                          'Custom
                           Logo' or 'Milestone 1 - Wireframes'.</small>
                       </div>
                     </div>
@@ -243,8 +246,8 @@
                       <div class="col-12">
                         <label>Project stage *</label>
                         <textarea class="form-control" #initialStage formControlName="initialStage" type="text" name="initialStage"
-                          placeholder="Lorem ipsum dolor" maxlength="3000" [class.invalid]="!postForm.controls.initialStage.valid && postForm.controls.initialStage.dirty"></textarea>
-                        <small *ngIf="!postForm.controls.description.valid" class="text-primary text-wrap">e.g.
+                          placeholder="Lorem ipsum dolor" maxlength="3000" [class.invalid]="!shareableJobForm.controls.initialStage.valid && shareableJobForm.controls.initialStage.dirty"></textarea>
+                        <small *ngIf="!shareableJobForm.controls.description.valid" class="text-primary text-wrap">e.g.
                           'Ideation
                           phase' or 'I have started work already'</small>
                       </div>
@@ -371,24 +374,27 @@
                       </div>
                     </div>
 
-                    <div class="form-group" *ngIf="postForm.controls.paymentType.value">
+                    <div class="form-group" *ngIf="shareableJobForm.controls.paymentType.value">
                       <div class="col-12">
                         <label class="text-dark">
-                          <span *ngIf="postForm.controls.paymentType.value == paymentType.hourly">Budget per hour (USD)
+                          <span *ngIf="shareableJobForm.controls.paymentType.value == paymentType.hourly">Budget per
+                            hour (USD)
                             *</span>
-                          <span *ngIf="postForm.controls.paymentType.value == paymentType.fixed">Total budget (USD) *</span>
+                          <span *ngIf="shareableJobForm.controls.paymentType.value == paymentType.fixed">Total budget
+                            (USD) *</span>
                         </label>
                         <div class="row">
                           <div class="col-6">
                             <input #budget formControlName="budget" class="form-control" type="number" min="0" name="budget"
-                              step="5" placeholder="1 USD minimum" [class.invalid]="!postForm.controls.budget.valid && postForm.controls.budget.dirty">
-                            <small *ngIf="!postForm.controls.budget.valid && postForm.controls.budget.dirty" class="text-primary">Must
+                              step="5" placeholder="1 USD minimum" [class.invalid]="!shareableJobForm.controls.budget.valid && shareableJobForm.controls.budget.dirty">
+                            <small *ngIf="!shareableJobForm.controls.budget.valid && shareableJobForm.controls.budget.dirty"
+                              class="text-primary">Must
                               be 1 USD or more.</small>
                           </div>
                         </div>
                         <div class="row">
-                          <div *ngIf="postForm.controls.budget.dirty && canToUsd" class="col-6 mt-5 text-right">
-                            <small>~ {{usdToCan(postForm.controls.budget.value)}} CAN</small>
+                          <div *ngIf="shareableJobForm.controls.budget.dirty && canToUsd" class="col-6 mt-5 text-right">
+                            <small>~ {{usdToCan(shareableJobForm.controls.budget.value)}} CAN</small>
                           </div>
 
                           <div class="col-12">
@@ -403,15 +409,15 @@
                         <label>Visibility *</label>
                         <br />
                         <div class="row ml-0 mr-0">
-                          <div  class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                          <div class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <button type="button" (click)="setVisibility('invite')" class="btn btn-primary w-full"
-                              [ngClass]="{'btn-outline': shareableJobForm.controls.paymentType.value !== type}">
+                              [ngClass]="{'btn-outline': shareableJobForm.controls.visibility.value !== 'invite'}">
                               Invite-only
                             </button>
                           </div>
-                          <div  class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                          <div class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <button type="button btn-secondary" (click)="setVisibility('public')" disabled class="btn btn-primary w-full"
-                              [ngClass]="{'btn-outline': shareableJobForm.controls.paymentType.value !== type}">
+                              [ngClass]="{'btn-outline': shareableJobForm.controls.visibility.value !== 'public'}">
                               Public
                             </button>
                           </div>
@@ -421,14 +427,14 @@
                     </div>
                     <div class="form-group">
                       <div class="col-12">
-                        <app-terms [form]="postForm"></app-terms>
+                        <app-terms [form]="shareableJobForm"></app-terms>
                       </div>
                     </div>
                   </div>
 
                   <div class="col-12 text-right">
                     <img *ngIf="isSending" src="assets/img/loader.svg" height="36px" alt="CanYa Coin">
-                    <button type="button" (click)="submitForm()" class="btn btn-primary" [disabled]="!postForm.valid || isSending || (currentUpload && !uploadedFile)">POST</button>
+                    <button type="button" (click)="submitForm()" class="btn btn-primary" [disabled]="!shareableJobForm.valid || isSending || (currentUpload && !uploadedFile)">POST</button>
                   </div>
                 </form>
               </div>

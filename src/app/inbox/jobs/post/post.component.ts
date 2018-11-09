@@ -116,8 +116,9 @@ export class PostComponent implements OnInit, OnDestroy {
       attachments: [''],
       workType: ['', Validators.compose([Validators.required])],
       providerType: ['', Validators.compose([Validators.required])],
-      paymentType: ['', Validators.compose([Validators.required])],
       deadline: ['', Validators.compose([Validators.required])],
+      paymentType: ['', Validators.compose([Validators.required])],
+      visibility: ['', Validators.compose([Validators.required])],
       budget: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(10000000)])],
       terms: [false, Validators.requiredTrue]
     });
@@ -200,9 +201,20 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   skillTagsUpdated(value: string) {
-    this.postForm.controls['skills'].setValue(value);
+    if (!this.isShareable) {
+      this.postForm.controls['skills'].setValue(value);
+    } else {
+      this.shareableJobForm.controls['skills'].setValue(value);
+    }
   }
+  checkForm() {
 
+    if (!this.isShareable) {
+      console.log(this.postForm);
+    } else {
+      console.log(this.shareableJobForm);
+    }
+  }
   workTypes(): Array<string> {
     return Object.values(WorkType);
   }
@@ -216,60 +228,77 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   setProviderType(type: string) {
-    console.log(type)
     this.shareableJobForm.controls.providerType.setValue(type);
   }
-
+  setVisibility(type: string) {
+    this.shareableJobForm.controls.visibility.setValue(type);
+  }
   timeRanges(): Array<string> {
     return Object.values(TimeRange);
   }
   setTimeRange(range: TimeRange) {
-    this.postForm.controls.timelineExpectation.setValue(range);
+    if (this.isShareable) {
+      this.shareableJobForm.controls.timelineExpectation.setValue(range);
+    } else {
+      this.postForm.controls.timelineExpectation.setValue(range);
+    }
   }
 
   paymentTypes(): Array<string> {
     return Object.values(PaymentType);
   }
   setPaymentType(type: PaymentType) {
-    this.postForm.controls.paymentType.setValue(type);
+    if (this.isShareable) {
+      this.shareableJobForm.controls.paymentType.setValue(type);
+    } else {
+      this.postForm.controls.paymentType.setValue(type);
+    }
   }
 
   async submitForm() {
     this.isSending = true;
-
-    let tags: string[] = this.postForm.value.skills === '' ? [] : this.postForm.value.skills.split(',').map(item => item.trim());
+    let tags: string[];
+    if (!this.isShareable) {
+      tags = this.postForm.value.skills === '' ? [] : this.postForm.value.skills.split(',').map(item => item.trim());
+    } else {
+      tags = this.postForm.value.skills === '' ? [] : this.shareableJobForm.value.skills.split(',').map(item => item.trim());
+    }
     if (tags.length > 6) {
       tags = tags.slice(0, 6);
     }
 
     try {
-      const job = new Job({
-        id: this.jobId,
-        hexId: this.ethService.web3js.utils.toHex(this.jobId.hashCode()),
-        clientId: this.currentUser.address,
-        providerId: this.recipientAddress,
-        information: new JobDescription({
-          description: this.postForm.value.description,
-          title: this.postForm.value.title,
-          initialStage: this.postForm.value.initialStage,
-          skills: tags,
-          attachments: this.uploadedFile ? [this.uploadedFile] : [],
-          workType: this.postForm.value.workType,
-          timelineExpectation: this.postForm.value.timelineExpectation,
-          weeklyCommitment: this.postForm.value.weeklyCommitment
-        }),
-        paymentType: this.postForm.value.paymentType,
-        budget: this.postForm.value.budget
-      });
+      if (!this.isShareable) {
+        const job = new Job({
+          id: this.jobId,
+          hexId: this.ethService.web3js.utils.toHex(this.jobId.hashCode()),
+          clientId: this.currentUser.address,
+          providerId: this.recipientAddress,
+          information: new JobDescription({
+            description: this.postForm.value.description,
+            title: this.postForm.value.title,
+            initialStage: this.postForm.value.initialStage,
+            skills: tags,
+            attachments: this.uploadedFile ? [this.uploadedFile] : [],
+            workType: this.postForm.value.workType,
+            timelineExpectation: this.postForm.value.timelineExpectation,
+            weeklyCommitment: this.postForm.value.weeklyCommitment
+          }),
+          paymentType: this.postForm.value.paymentType,
+          budget: this.postForm.value.budget
+        });
 
-      const action = new IJobAction(ActionType.createJob, UserType.client);
-      action.setPaymentProperties(job.budget, await this.jobService.getJobBudget(job), this.postForm.value.timelineExpectation,
-        this.postForm.value.workType, this.postForm.value.weeklyCommitment, this.postForm.value.paymentType);
+        const action = new IJobAction(ActionType.createJob, UserType.client);
+        action.setPaymentProperties(job.budget, await this.jobService.getJobBudget(job), this.postForm.value.timelineExpectation,
+          this.postForm.value.workType, this.postForm.value.weeklyCommitment, this.postForm.value.paymentType);
 
-      this.sent = await this.jobService.handleJobAction(job, action);
-      this.isSending = false;
-      if (this.sent) {
-        this.jobService.createJobChat(job, action, this.currentUser, this.recipient);
+        this.sent = await this.jobService.handleJobAction(job, action);
+        this.isSending = false;
+        if (this.sent) {
+          this.jobService.createJobChat(job, action, this.currentUser, this.recipient);
+        }
+      } else {
+        console.log('Shareable job submitted...');
       }
     } catch (e) {
       this.sent = false;
