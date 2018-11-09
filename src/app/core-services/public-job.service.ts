@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-<<<<<<< HEAD
 import { Job, JobState, Bid } from '@class/job';
 import { User, UserType } from '@class/user';
 import { UserService } from '@service/user.service';
@@ -7,16 +6,18 @@ import { JobService } from '@service/job.service';
 import { ActionType, IJobAction } from '@class/job-action';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable, ReplaySubject } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { map, } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
+import { ChatService } from '@service/chat.service';
 import { createChangeDetectorRef } from '@angular/core/src/view/refs';
 import { JobNotificationService } from './job-notification.service';
+import { Action } from 'rxjs/internal/scheduler/Action';
 
 @Injectable()
 export class PublicJobService {
   publicJobsCollection: AngularFirestoreCollection<any>;
   constructor(
     private afs: AngularFirestore,
+    private chatService: ChatService,
     private userService: UserService,
     private jobService: JobService
   ) {
@@ -28,25 +29,38 @@ export class PublicJobService {
   getPublicJob(jobId: string): Observable<Job> {
     return this.afs.doc(`public-jobs/${jobId}`).snapshotChanges().pipe(map(doc => {
       const job = doc.payload.data() as Job;
-      console.log(job);
       if (job) {
-        console.log('found.');
+        console.log('job found.');
       } else {
-        console.log('not found.');
+        console.log('job not found.');
       }
       return job;
     }));
   }
 
-  getPublicJobsByUrl(url: string): Observable<Job[]> {
-    return this.afs.collection<any>('public-jobs', ref => ref.where('friendlyUrl', '==', url)).snapshotChanges().pipe(map(changes => {
-      return changes.map(a => {
-        const data = a.payload.doc.data() as Job;
-        data.id = a.payload.doc.id;
-        console.log();
-        return data;
+  getPublicJobBids(jobId: string): Observable<any> {
+    return this.afs.collection(`public-jobs/${jobId}/bids`).snapshotChanges().pipe(map(docs => {
+      const bids = [];
+      docs.forEach((doc) => {
+        bids.push(doc.payload.doc.data() as Bid);
       });
+      return bids;
     }));
+  }
+
+  getPublicJobsByUrl(url: string): Observable<Job> {
+    return this.afs.collection<any>('public-jobs', ref => ref.where('friendlyUrl', '==', url)).snapshotChanges().pipe(map(changes => {
+      if (changes.length > 0) {
+        return (changes[0].payload.doc.data());
+      } else {
+        return null;
+      }
+    }));
+  }
+
+  async getPublicJobByUrl(friendly) {
+    const exist = await this.afs.collection(`public-jobs`, ref => ref.where('friendlyUrl', '==', friendly)).valueChanges().take(1).toPromise();
+    return exist;
   }
 
   getPublicJobsByUser(userId: string, userType: UserType): Observable<Job[]> {
@@ -78,7 +92,6 @@ export class PublicJobService {
       job.actionLog.push(action);
     }
     console.log('added action to this job\'s action log');
-    console.log(job.actionLog);
     const parsedJob = await this.jobService.parseJobToObject(job);
     return this.publicJobsCollection.doc(job.id).set(parsedJob);
   }
@@ -89,13 +102,22 @@ export class PublicJobService {
       try {
         if (this.canBid(bid.providerId, job)) {
           console.log('uploading the bid');
+          const action = new IJobAction(ActionType.bid, UserType.provider);
+          const client = await this.userService.getUser(job.clientId);
+          const provider = await this.userService.getUser(bid.providerId);
           await this.addBid(bid, job.id);
-          resolve(true);
+          const channelId = await this.chatService.createChannelsAsync(provider, client);
+          if (channelId) {
+            console.log(channelId);
+            await this.chatService.sendPublicJobMessages(job, action, bid.providerId);
+            resolve(true);
+          }
         } else {
-          console.log('can not bid');
+          console.log('can\'t upload bid...');
           reject(false);
         }
       } catch (error) {
+        console.log('something went wrong. try again later.');
         reject(false);
       }
     });
@@ -112,7 +134,6 @@ export class PublicJobService {
     const bidToUpload = this.parseBidToObject(bid);
     return new Promise<boolean>((resolve, reject) => {
       this.afs.doc(`public-jobs/${jobId}/bids/${bid.providerId}`).set(bidToUpload).then(result => {
-        console.log(result);
         resolve(true);
       }).catch(e => {
         reject(false);
@@ -131,9 +152,7 @@ export class PublicJobService {
   }
 
   async jobUrlExists(friendlyQuery) {
-    console.log(friendlyQuery);
     const exist = await this.afs.collection('public-jobs', ref => ref.where('friendlyUrl', '>=', friendlyQuery)).valueChanges().take(1).toPromise();
-    console.log(exist);
     return exist;
   }
 
@@ -144,11 +163,31 @@ export class PublicJobService {
         job.providerId = bid.providerId;
         job.state = JobState.termsAcceptedAwaitingEscrow;
         job.budget = bid.budget;
-        await this.saveJobFirebase(job, null);
-        const action = new IJobAction(ActionType.acceptTerms, UserType.client);
-        await this.jobService.handleJobAction(job, action);
+        const newJob = job;
+        const acceptTerms = new IJobAction(ActionType.acceptTerms, UserType.client);
+        const success = await this.jobService.handleJobAction(newJob, acceptTerms);
+        if (success) {
+          this.saveJobFirebase(job, null);
+          resolve(true);
+        } else {
+          reject (false);
+        }
+      } catch (error) {
+        console.log(error);
+        reject (false);
+      }
+    });
+  }
+
+  declineBid(job: Job, bid: Bid) {
+    //  Decline the bid. still WIP
+    return new Promise<boolean>(async (resolve, reject) => {
+      try {
+        const update = await this.afs.doc(`public-jobs/${job.id}/bids/${bid.providerId}`).update({ rejected: true });
+        console.log(update);
         resolve(true);
       } catch (error) {
+        console.log(error);
         reject(false);
       }
     });
@@ -161,7 +200,7 @@ export class PublicJobService {
     let friendly: string;
     if (nameArray.length > 1) {
       friendly = nameArray[0] + '-' + nameArray[1];
-    } else if (nameArray.length > 2) {
+    } else if (nameArray.length >= 2) {
       friendly = nameArray[0] + '-' + nameArray[1] + '-' + nameArray[2];
     } else {
       friendly = nameArray[0];
@@ -185,20 +224,11 @@ export class PublicJobService {
     const bidObject = Object.assign({}, bid);
     bidObject.message = bid.message;
     bidObject.providerId = bid.providerId;
-    bidObject.providerName = bid.providerName;
-    bidObject.providerAvatar = bid.providerAvatar;
+    bidObject.providerInfo = bid.providerInfo;
     bidObject.budget = bid.budget;
     bidObject.timestamp = bid.timestamp;
     console.log('converted the bid into object');
     console.log(bidObject);
     return bidObject;
   }
-=======
-
-@Injectable()
-export class PublicJobService {
-
-  constructor() { }
-
->>>>>>> created public-job service
 }
