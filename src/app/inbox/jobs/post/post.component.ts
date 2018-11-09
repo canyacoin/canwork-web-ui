@@ -165,6 +165,7 @@ export class PostComponent implements OnInit, OnDestroy {
         if (params['address'] && params['address'] !== this.currentUser.address) {
           this.recipientAddress = params['address'];
           this.loadUser(this.recipientAddress);
+          this.isShareable = false;
         } else {
           this.pageLoaded = true;
           this.isShareable = true;
@@ -241,7 +242,6 @@ export class PostComponent implements OnInit, OnDestroy {
     }
   }
   checkForm() {
-
     if (!this.isShareable) {
       console.log(this.postForm);
     } else {
@@ -294,7 +294,7 @@ export class PostComponent implements OnInit, OnDestroy {
     if (!this.isShareable) {
       tags = this.postForm.value.skills === '' ? [] : this.postForm.value.skills.split(',').map(item => item.trim());
     } else {
-      tags = this.postForm.value.skills === '' ? [] : this.shareableJobForm.value.skills.split(',').map(item => item.trim());
+      tags = this.shareableJobForm.value.skills === '' ? [] : this.shareableJobForm.value.skills.split(',').map(item => item.trim());
     }
     if (tags.length > 6) {
       tags = tags.slice(0, 6);
