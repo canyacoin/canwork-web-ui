@@ -27,7 +27,7 @@
           </div>
           <div *ngIf="!webViewEthAddress">
             <h3>Sign in</h3>
-            <firebase-ui (signInSuccess)="onFirebaseLogin($event)"></firebase-ui>
+            <firebase-ui (signInSuccessWithAuthResult)="onFirebaseLogin($event)"></firebase-ui>
           </div>
         </div>
         <div *ngIf="steps.existingAccountFromMobile.isCurrent">
@@ -60,7 +60,7 @@
       </div>
       <div *ngIf="!isOnMobile" class="other-login text-center">
         <h5 style="width: 100%;">Sign in to CanWork</h5>
-        <firebase-ui (signInSuccess)="onFirebaseLogin($event)"></firebase-ui>
+        <firebase-ui (signInSuccessWithAuthResult)="onFirebaseLogin($event)"></firebase-ui>
       </div>
     </div>
   </section>

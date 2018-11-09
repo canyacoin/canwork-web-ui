@@ -8,7 +8,7 @@ import { UserService } from '@service/user.service';
 import { EmailValidator } from '@validator/email.validator';
 import { EthereumValidator } from '@validator/ethereum.validator';
 import * as randomColor from 'randomcolor';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import * as moment from 'moment-timezone';
 

@@ -3,7 +3,7 @@ import {
     AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument
 } from 'angularfire2/firestore';
 import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { Upload } from '../core-classes/upload';
 

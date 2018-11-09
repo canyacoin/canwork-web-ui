@@ -51,7 +51,7 @@ export class BuyCoffeeComponent implements OnInit {
       cancel: this.onComplete.bind(this),
       disableCanEx: this.canexDisabled,
       userEmail: this.currentUser.email
-    }
+    };
   }
 
   onComplete(canPayData: CanPayData) {

@@ -2,14 +2,14 @@ import { Component, NgModule, OnDestroy, OnInit, Pipe, PipeTransform } from '@an
 import { Router } from '@angular/router';
 import { FilterPipe } from 'ngx-filter-pipe';
 import { OrderPipe } from 'ngx-order-pipe';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable, Subscription } from 'rxjs';
+
 import { Job, JobDescription, PaymentType, TimeRange, WorkType } from '../../../core-classes/job';
 import { User, UserType } from '../../../core-classes/user';
 import { AuthService } from '../../../core-services/auth.service';
 import { JobService } from '../../../core-services/job.service';
-import { UserService } from '../../../core-services/user.service';
 import { MobileService } from '../../../core-services/mobile.service';
+import { UserService } from '../../../core-services/user.service';
 
 @Component({
   selector: 'app-job-dashboard',
@@ -35,15 +35,11 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService, public mobile: MobileService, private orderPipe: OrderPipe, private jobService: JobService, private userService: UserService, private router: Router, public filterPipe: FilterPipe) { }
 
-  ngOnInit() {
-    this.authSub = this.authService.currentUser$.subscribe((user: User) => {
-      if (!this.currentUser && user) {
-        this.userType = user.type;
-        this.initialiseJobs(user.address, this.userType);
-        this.loading = false;
-      }
-      this.currentUser = user;
-    });
+  async ngOnInit() {
+    this.currentUser = await this.authService.getCurrentUser();
+    this.userType = this.currentUser.type;
+    this.initialiseJobs(this.currentUser.address, this.userType);
+
     this.orderType = 'information.title';
     this.reverseOrder = false;
     this.isOnMobile = this.mobile.isOnMobile;
@@ -51,7 +47,6 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     if (this.jobsSubscription) { this.jobsSubscription.unsubscribe(); }
-    if (this.authSub) { this.authSub.unsubscribe(); }
   }
 
   private initialiseJobs(userId: string, userType: UserType) {

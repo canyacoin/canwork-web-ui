@@ -7,7 +7,7 @@ import { UserService } from '@service/user.service';
 import { CurrencyValidator } from '@validator/currency.validator';
 import { EmailValidator } from '@validator/email.validator';
 import { EthereumValidator } from '@validator/ethereum.validator';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import * as moment from 'moment-timezone';
 

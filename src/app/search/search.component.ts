@@ -9,9 +9,7 @@ import * as findIndex from 'lodash/findIndex';
 import * as orderBy from 'lodash/orderBy';
 import * as union from 'lodash/union';
 import { LabelType, Options } from 'ng5-slider';
-import { Observable } from 'rxjs/Observable';
-import { take } from 'rxjs/operator/take';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable ,  Subscription } from 'rxjs';
 
 import { UserType } from '../../../functions/src/user-type';
 import { environment } from '../../environments/environment';

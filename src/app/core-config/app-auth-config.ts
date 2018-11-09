@@ -1,33 +1,22 @@
-import {
-    AuthMethods,
-    AuthProvider,
-    CredentialHelper,
-    AuthProviderWithCustomConfig,
-    FirebaseUIAuthConfig
-} from 'firebaseui-angular';
+import { firebase, firebaseui } from 'firebaseui-angular';
 
-
-const facebookCustomConfig: AuthProviderWithCustomConfig = {
-    provider: AuthProvider.Facebook,
-    customConfig: {
-        scopes: [
-            'public_profile',
-            'email'
-        ],
-        customParameters: {
-            auth_type: 'reauthenticate'
-        }
-    }
-};
-
-export const firebaseUiAuthConfig: FirebaseUIAuthConfig = {
-    providers: [
-        AuthProvider.Google,
-        facebookCustomConfig,
-        AuthProvider.Github
+export const firebaseUiAuthConfig: firebaseui.auth.Config = {
+    signInFlow: 'popup',
+    signInOptions: [
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        {
+            scopes: [
+                'public_profile',
+                'email'
+            ],
+            customParameters: {
+                'auth_type': 'reauthenticate'
+            },
+            provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID
+        },
+        firebase.auth.TwitterAuthProvider.PROVIDER_ID
     ],
-    method: AuthMethods.Popup,
-    tos: 'https://canya.io/assets/docs/Terms-CanYa.pdf',
-    credentialHelper: CredentialHelper.OneTap
+    tosUrl: 'https://canya.io/assets/docs/Terms-CanYa.pdf',
+    privacyPolicyUrl: '',
+    credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO
 };
-

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
 
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
 import { environment } from '@env/environment';
 import { ActionType } from '@class/job-action';
 import { AuthService } from './auth.service';

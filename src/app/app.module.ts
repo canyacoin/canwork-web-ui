@@ -1,6 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CanpayModule } from '@canyaio/canpay-lib';
@@ -47,7 +46,6 @@ import { Ng5SliderModule } from 'ng5-slider';
     CoreComponentsModule,
     CoreServicesModule,
     CoreUtilsModule,
-    HttpModule,
     HttpClientModule,
     FilterPipeModule,
     Ng5SliderModule

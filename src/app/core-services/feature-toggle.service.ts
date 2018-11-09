@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 export class FeatureToggle {
   featureName: string;
@@ -27,7 +27,7 @@ export class FeatureToggleService {
       if (feature.empty) {
         resolve(null);
       } else {
-        resolve(feature.docs.pop().data());
+        resolve(feature.docs.pop().data() as FeatureToggle);
       }
     });
   }

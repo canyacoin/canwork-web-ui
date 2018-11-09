@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NetworkType, WalletType, Web3LoadingStatus } from '@canyaio/canpay-lib';
 import { CanWorkEthService } from '@service/eth.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-status-light',
