@@ -1,7 +1,9 @@
-import { ThrowStmt } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { CanPay, CanPayData, EthService, Operation, setProcessResult } from '@canyaio/canpay-lib';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+    CanPay, CanPayData, EthService, Operation, PaymentItem, PaymentItemCurrency, PaymentSummary,
+    setProcessResult
+} from '@canyaio/canpay-lib';
 import { Job } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
 import { User, UserType } from '@class/user';
@@ -27,8 +29,6 @@ export class EnterEscrowComponent implements OnInit {
 
   job: Job;
   totalJobBudgetUsd: number;
-  paymentStarted = false;
-  paymentComplete = false;
 
   canPayOptions: CanPay;
 
@@ -41,7 +41,8 @@ export class EnterEscrowComponent implements OnInit {
     private canworkEthService: CanWorkEthService,
     private featureService: FeatureToggleService,
     private activatedRoute: ActivatedRoute,
-    private momentService: MomentService) { }
+    private momentService: MomentService,
+    private router: Router) { }
 
   ngOnInit() {
     const jobId = this.activatedRoute.parent.snapshot.params['id'] || null;
@@ -52,13 +53,6 @@ export class EnterEscrowComponent implements OnInit {
         this.startCanpay();
       });
     }
-  }
-
-  get usdPerCan(): string {
-    if (!this.job || !this.job.budgetCan || !this.totalJobBudgetUsd) {
-      return '?';
-    }
-    return (this.totalJobBudgetUsd / this.job.budgetCan).toPrecision(4).toString();
   }
 
   async startCanpay() {
@@ -86,12 +80,12 @@ export class EnterEscrowComponent implements OnInit {
 
     const onComplete = async (result) => {
       // call endpoint?
-      this.paymentComplete = true;
+      this.router.navigate(['/inbox/job', this.job.id]);
     };
 
     const onCancel = () => {
       // call endpoint?
-      this.paymentStarted = false;
+      this.router.navigate(['/inbox/job', this.job.id]);
     };
 
     const onTxHash = async (txHash: string, from: string) => {
@@ -120,6 +114,12 @@ export class EnterEscrowComponent implements OnInit {
 
     const client = await this.userService.getUser(this.job.clientId);
 
+    const paymentSummary = {
+      currency: PaymentItemCurrency.usd,
+      items: [{ name: this.job.information.title, value: this.totalJobBudgetUsd }],
+      total: this.totalJobBudgetUsd
+    };
+
     this.canPayOptions = {
       dAppName: `CanWork`,
       successText: 'Woohoo, job started!',
@@ -127,6 +127,7 @@ export class EnterEscrowComponent implements OnInit {
       operation: Operation.auth,
       onAuthTxHash: onAuthTxHash.bind(this),
       amount: this.job.budgetCan,
+      paymentSummary: paymentSummary,
       complete: onComplete,
       cancel: onCancel,
       disableCanEx: this.canexDisabled,
@@ -137,8 +138,6 @@ export class EnterEscrowComponent implements OnInit {
       startPostAuthorisationProcess: initiateEnterEscrow.bind(this),
       postAuthorisationProcessResults: null
     };
-
-    this.paymentStarted = true;
   }
 
 }

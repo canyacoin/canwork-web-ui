@@ -140,7 +140,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.router.navigate(['../enter-escrow'], { relativeTo: this.activatedRoute });
         break;
       case ActionType.acceptFinish:
-        this.jobService.handleJobAction(this.job, new IJobAction(action, this.currentUserType));
+        this.router.navigate(['../complete-job'], { relativeTo: this.activatedRoute });
         break;
       default:
         this.dialogService.addDialog(ActionDialogComponent, new ActionDialogOptions({

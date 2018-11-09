@@ -192,48 +192,6 @@ export class JobService {
             await this.saveJobAndNotify(parsedJob, action)
             resolve(true);
             break;
-          case ActionType.acceptFinish:
-            try {
-              const onTxHash = async (txHash: string, from: string) => {
-                /* IF complete job hash gets sent, do:
-                   post tx to transaction monitor
-                   save tx to collection
-                   save action/pending to job */
-                const txId = GenerateGuid();
-                this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.acceptFinish)
-                this.transactionService.saveTransaction(new Transaction(txId, job.clientId,
-                  txHash, this.momentService.get(), ActionType.acceptFinish, job.id));
-                job.actionLog.push(action);
-                await this.saveJobFirebase(job);
-              };
-
-              const initiateCompleteJob = async (canPayData: CanPayData) => {
-                const canWorkContract = new CanWorkJobContract(this.ethService);
-                canWorkContract.connect().completeJob(job, job.clientEthAddress || this.ethService.getOwnerAccount(), onTxHash)
-                  .then(setProcessResult.bind(canPayOptions))
-                  .catch(setProcessResult.bind(canPayOptions));
-              };
-
-              client = await this.userService.getUser(job.clientId);
-
-              const canPayOptions = {
-                dAppName: `CanWork`,
-                successText: 'Woohoo, job complete!',
-                recipient: environment.contracts.canwork,
-                operation: Operation.interact,
-                complete: () => { this.canPayService.close() },
-                cancel: () => { this.canPayService.close() },
-                postAuthorisationProcessName: 'Job completion',
-                startPostAuthorisationProcess: initiateCompleteJob.bind(this),
-                disableCanEx: this.canexDisabled,
-                userEmail: client.email
-              };
-              this.canPayService.open(canPayOptions);
-            } catch (error) {
-              console.log(error);
-            }
-            resolve(true);
-            break;
           case ActionType.dispute:
             parsedJob.actionLog.push(action);
             parsedJob.state = JobState.inDispute;
@@ -251,6 +209,7 @@ export class JobService {
             break
           case ActionType.authoriseEscrow:
           case ActionType.enterEscrow:
+          case ActionType.acceptFinish:
           default:
             reject(false);
         }

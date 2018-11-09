@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { ChatComponent } from './chat/chat.component';
+import { CompleteJobComponent } from './jobs/container/complete-job/complete-job.component';
 import { EnterEscrowComponent } from './jobs/container/enter-escrow/enter-escrow.component';
 import { JobContainerComponent } from './jobs/container/job-container.component';
 import { JobDetailsComponent } from './jobs/container/job-details/job-details.component';
@@ -42,6 +43,10 @@ const routes: Routes = [
       {
         path: 'enter-escrow',
         component: EnterEscrowComponent
+      },
+      {
+        path: 'complete-job',
+        component: CompleteJobComponent
       }
     ]
   }
