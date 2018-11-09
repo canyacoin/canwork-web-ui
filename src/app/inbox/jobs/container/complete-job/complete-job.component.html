@@ -1,0 +1,10 @@
+<div *ngIf="!canPayOptions" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
+  <img src="assets/img/loader.svg" height="36px" alt="Loader">
+</div>
+
+<div class="container" *ngIf="canPayOptions ">
+  <canyalib-canpay [dAppName]="canPayOptions.dAppName" [successText]="canPayOptions.successText" [operation]="canPayOptions.operation"
+    [recipient]="canPayOptions.recipient" [postAuthorisationProcessName]="canPayOptions.postAuthorisationProcessName"
+    [postAuthorisationProcessResults]="canPayOptions.postAuthorisationProcessResults" (startPostAuthorisationProcess)="canPayOptions.startPostAuthorisationProcess($event)"
+    (complete)="canPayOptions.complete($event)" (cancel)="canPayOptions.cancel($event)"></canyalib-canpay>
+</div>

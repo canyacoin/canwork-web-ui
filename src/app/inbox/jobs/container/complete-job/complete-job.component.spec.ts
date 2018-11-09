@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ActionHistoryComponent } from './action-history.component';
+import { CompleteJobComponent } from './complete-job.component';
 
-describe('ActionHistoryComponent', () => {
-  let component: ActionHistoryComponent;
-  let fixture: ComponentFixture<ActionHistoryComponent>;
+describe('CompleteJobComponent', () => {
+  let component: CompleteJobComponent;
+  let fixture: ComponentFixture<CompleteJobComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ActionHistoryComponent ]
+      declarations: [ CompleteJobComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ActionHistoryComponent);
+    fixture = TestBed.createComponent(CompleteJobComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

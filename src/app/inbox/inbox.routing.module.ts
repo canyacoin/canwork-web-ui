@@ -3,7 +3,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { ChatComponent } from './chat/chat.component';
-import { ActionHistoryComponent } from './jobs/container/action-history/action-history.component';
+import { CompleteJobComponent } from './jobs/container/complete-job/complete-job.component';
+import { EnterEscrowComponent } from './jobs/container/enter-escrow/enter-escrow.component';
 import { JobContainerComponent } from './jobs/container/job-container.component';
 import { JobDetailsComponent } from './jobs/container/job-details/job-details.component';
 import { JobDashboardComponent } from './jobs/dashboard/job-dashboard.component';
@@ -38,11 +39,15 @@ const routes: Routes = [
       {
         path: '',
         component: JobDetailsComponent
+      },
+      {
+        path: 'enter-escrow',
+        component: EnterEscrowComponent
+      },
+      {
+        path: 'complete',
+        component: CompleteJobComponent
       }
-      //   {
-      //     path: 'payment',
-      //     component: ActionHistoryComponent
-      //   }
     ]
   }
 ];

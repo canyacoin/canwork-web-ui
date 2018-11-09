@@ -1,38 +1,41 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CanpayModule } from '@canyaio/canpay-lib';
 import { ImgFallbackModule } from 'ngx-img-fallback';
 
 import { CoreComponentsModule } from '../core-components/core-components.module';
 import { CoreServicesModule } from '../core-services/core-services.module';
 import { CoreUtilsModule } from '../core-utils/core-utils.module';
+import { BuyCoffeeComponent } from './buy-coffee/buy-coffee.component';
+import { CertificationsFormComponent } from './certifications-form/certifications-form.component';
 import { AboutComponent } from './components/about/about.component';
-import { CertificationsComponent } from './components/certifications/certifications.component';
 import { BioComponent } from './components/bio/bio.component';
+import { CertificationsComponent } from './components/certifications/certifications.component';
 import { ItemComponent } from './components/portfolio/item/item.component';
 import { PortfolioComponent } from './components/portfolio/portfolio.component';
+import { ReviewsComponent } from './components/reviews/reviews.component';
 import { SocialComponent } from './components/social/social.component';
 import { SupportMeComponent } from './components/support-me/support-me.component';
 import { TimezoneComponent } from './components/timezone/timezone.component';
 import { VisitorsComponent } from './components/visitors/visitors.component';
-import { CertificationsFormComponent } from './certifications-form/certifications-form.component';
 import { EditComponent } from './edit/edit.component';
 import { ProfileViewsComponent } from './profile-views/profile-views.component';
 import { ProfileComponent } from './profile.component';
 import { ProfileRoutingModule } from './profile.routing.module';
 import { ProjectComponent } from './project/project.component';
 import {
-  CreateClientProfileComponent
+    CreateClientProfileComponent
 } from './setup/create-client-profile/create-client-profile.component';
 import {
-  CreateProviderProfileComponent
+    CreateProviderProfileComponent
 } from './setup/create-provider-profile/create-provider-profile.component';
 import { ProviderStateComponent } from './setup/provider-state/provider-state.component';
 import { SetupComponent } from './setup/setup.component';
-import { ReviewsComponent } from './components/reviews/reviews.component';
 
 @NgModule({
   imports: [
+    CanpayModule,
     CommonModule,
     CoreComponentsModule,
     CoreServicesModule,
@@ -45,6 +48,7 @@ import { ReviewsComponent } from './components/reviews/reviews.component';
   declarations: [
     AboutComponent,
     BioComponent,
+    BuyCoffeeComponent,
     CreateClientProfileComponent,
     CreateProviderProfileComponent,
     CertificationsFormComponent,

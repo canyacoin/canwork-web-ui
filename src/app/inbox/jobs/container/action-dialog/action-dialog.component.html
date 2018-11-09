@@ -70,7 +70,8 @@
     </div>
     <div class="modal-footer">
       <div class="col-12">
-        <button [disabled]="submitDisabled || executing" type="button" class="btn btn-{{action.colour}}" (click)="handleAction()">
+        <button [disabled]="submitDisabled || executing" type="button" class="btn btn-{{getColour(action.type)}}"
+          (click)="handleAction()">
           {{actionType}}
         </button>
         <button type="button" class="btn btn-default" (click)="close()">Cancel</button>

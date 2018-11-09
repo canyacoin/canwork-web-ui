@@ -27,7 +27,7 @@ export class FeatureToggleService {
       if (feature.empty) {
         resolve(null);
       } else {
-        resolve(feature.docs.pop().data().toPromise());
+        resolve(feature.docs.pop().data() as FeatureToggle);
       }
     });
   }

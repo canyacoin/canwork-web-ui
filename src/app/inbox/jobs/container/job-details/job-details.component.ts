@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Job, JobState } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
 import { User, UserType } from '@class/user';
@@ -44,7 +44,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
     private storage: AngularFireStorage,
-    private mobile: MobileService
+    private mobile: MobileService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -77,7 +78,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   }
 
   actionIsDisabled(action: ActionType): boolean {
-    return action === ActionType.dispute || (this.hasPendingTransactions && action === ActionType.enterEscrow);
+    return action === ActionType.dispute || (this.hasPendingTransactions && (action === ActionType.enterEscrow || action === ActionType.acceptFinish));
   }
 
   get hasPendingTransactions(): boolean {
@@ -136,8 +137,10 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     switch (action) {
       case ActionType.enterEscrow:
       case ActionType.authoriseEscrow:
+        this.router.navigate(['../enter-escrow'], { relativeTo: this.activatedRoute });
+        break;
       case ActionType.acceptFinish:
-        this.jobService.handleJobAction(this.job, new IJobAction(action, this.currentUserType));
+        this.router.navigate(['../complete'], { relativeTo: this.activatedRoute });
         break;
       default:
         this.dialogService.addDialog(ActionDialogComponent, new ActionDialogOptions({

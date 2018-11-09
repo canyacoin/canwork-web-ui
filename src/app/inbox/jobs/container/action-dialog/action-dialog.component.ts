@@ -32,7 +32,7 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
   job: Job;
   action: IJobAction;
 
-  currentUser: User
+  currentUser: User;
 
   executing = false;
 
@@ -52,7 +52,7 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
   }
 
   ngOnInit() {
-    this.action = new IJobAction(this.actionType, this.userType)
+    this.action = new IJobAction(this.actionType, this.userType);
     switch (this.actionType) {
       case ActionType.counterOffer:
         this.action.paymentType = this.job.paymentType;
@@ -70,21 +70,44 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
       case ActionType.dispute:
         this.form = this.formBuilder.group({
           message: ['', Validators.required],
-        })
+        });
         break;
       case ActionType.review:
         this.form = this.formBuilder.group({
           message: ['', Validators.compose([Validators.min(0), Validators.max(350)])],
           rating: [null, Validators.required],
-        })
+        });
         break;
       case ActionType.acceptTerms:
         this.form = this.formBuilder.group({
           terms: [false, Validators.requiredTrue]
-        })
+        });
         break;
       default:
         break;
+    }
+  }
+
+
+  /** Helper method to get the colour associated with each action button */
+  getColour(type: ActionType): string {
+    switch (type) {
+      case ActionType.cancelJob:
+      case ActionType.dispute:
+        return 'danger';
+      case ActionType.declineTerms:
+        return 'danger';
+      case ActionType.counterOffer:
+      case ActionType.addMessage:
+        return 'info';
+      case ActionType.acceptTerms:
+      case ActionType.authoriseEscrow:
+      case ActionType.enterEscrow:
+      case ActionType.finishedJob:
+      case ActionType.acceptFinish:
+        return 'success';
+      default:
+        return 'info';
     }
   }
 
@@ -93,15 +116,15 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
     try {
       switch (this.actionType) {
         case ActionType.counterOffer:
-          this.job.budget = this.form.value.budget
-          this.action.setPaymentProperties(this.job.budget, await this.jobService.getJobBudget(this.job))
+          this.job.budget = this.form.value.budget;
+          this.action.setPaymentProperties(this.job.budget, await this.jobService.getJobBudget(this.job));
           break;
         case ActionType.authoriseEscrow:
-          this.action.amountCan = this.job.budgetCan
+          this.action.amountCan = this.job.budgetCan;
           break;
         case ActionType.review:
           this.action.message = this.form.value.message;
-          this.action.isClientSatisfied = this.form.value.rating
+          this.action.isClientSatisfied = this.form.value.rating;
           break;
         case ActionType.addMessage:
         case ActionType.dispute:
@@ -122,7 +145,7 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
         this.executing = false;
       }
     } catch (e) {
-      console.log(e)
+      console.log(e);
       console.log('error');
     }
   }

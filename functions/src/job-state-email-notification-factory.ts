@@ -360,8 +360,6 @@ class AcceptFinishFailedNotification extends AEmailNotification {
       console.error(error);
     }
 
-    const tx = this.jobData.paymentLog[this.jobData.paymentLog.length - 1].txId;
-    const etherscanUri = `https://etherscan.io/tx/${tx}`;
 
     const title = `Uh-oh, your attempt to complete the job was un-successful`
     this.emailMessages.push({
@@ -372,7 +370,7 @@ class AcceptFinishFailedNotification extends AEmailNotification {
       Dear ${this.clientData.name},<br>
       Your transaction authorising CanWork to complete a job was un-successful!<br/>
       <br/>
-      View the ethereum transaction <a href='${etherscanUri}'>here</a>.`
+      View the ethereum transaction from your job details page.`
     });
 
     console.log('+ dump emailMessages:', this.emailMessages);
@@ -422,9 +420,6 @@ class ClientJobRequestEscrowedFundsNotification extends AEmailNotification {
       console.error(error);
     }
 
-    const tx = this.jobData.paymentLog[this.jobData.paymentLog.length - 1].txId;
-    const etherscanUri = `https://etherscan.io/tx/${tx}`;
-
     const title = `Your escrow authorisation was successful`
     this.emailMessages.push({
       to: this.clientData.email,
@@ -434,7 +429,7 @@ class ClientJobRequestEscrowedFundsNotification extends AEmailNotification {
       Dear ${this.clientData.name},<br>
       Your transaction authorising CanWork to use your funds for a job was successful!<br/>
       You are one step closer to getting the job started.<br/><br/>
-      View the ethereum transaction <a href='${etherscanUri}'>here</a>.`
+      View the ethereum transaction from your job details page.`
     });
     console.log('+ dump emailMessages:', this.emailMessages);
   }
@@ -454,9 +449,6 @@ class ClientJobRequestEscrowedFundsFailedNotification extends AEmailNotification
       console.error(error);
     }
 
-    const tx = this.jobData.paymentLog[this.jobData.paymentLog.length - 1].txId;
-    const etherscanUri = `https://etherscan.io/tx/${tx}`;
-
     const title = `Uh-oh, your escrow authorisation was un-successful`
     this.emailMessages.push({
       to: this.clientData.email,
@@ -466,7 +458,7 @@ class ClientJobRequestEscrowedFundsFailedNotification extends AEmailNotification
       Dear ${this.clientData.name},<br>
       Your transaction authorising CanWork to use your funds for a job was un-successful!<br/>
       <br/>
-      View the ethereum transaction <a href='${etherscanUri}'>here</a>.`
+      View the ethereum transaction from your job details page.`
     });
     console.log('+ dump emailMessages:', this.emailMessages);
   }
@@ -486,9 +478,6 @@ class JobRequestCommenceNotification extends AEmailNotification {
       console.error(error);
     }
 
-    const tx = this.jobData.paymentLog[this.jobData.paymentLog.length - 1].txId;
-    const etherscanUri = `https://etherscan.io/tx/${tx}`;
-
     let title = `${this.clientData.name} has commenced the job`
     this.emailMessages.push({
       to: this.providerData.email,
@@ -496,8 +485,7 @@ class JobRequestCommenceNotification extends AEmailNotification {
       title: title,
       bodyHtml: `
       Dear ${this.providerData.name},<br>
-      ${this.clientData.name} has made a payment into escrow for the job request: "${this.jobData.information.title}".
-      The transaction of this deposit has the transaction ID: <a href='${etherscanUri}'>${tx}</a>.`
+      ${this.clientData.name} has submitted the funds into escrow for the job request: "${this.jobData.information.title}".`
     });
 
     title = `You have commenced the job`
@@ -507,8 +495,7 @@ class JobRequestCommenceNotification extends AEmailNotification {
       title: title,
       bodyHtml: `
       Dear ${this.clientData.name},<br>
-      You have made a payment into escrow for the job: "${this.jobData.information.title}".
-      The transaction of this deposit has the transaction ID: <a href='${etherscanUri}'>${tx}</a>.`
+      You have made a payment into escrow for the job: "${this.jobData.information.title}".`
     });
     console.log('+ dump emailMessages:', this.emailMessages);
   }
@@ -528,9 +515,6 @@ class JobRequestCommenceFailedNotification extends AEmailNotification {
       console.error(error);
     }
 
-    const tx = this.jobData.paymentLog[this.jobData.paymentLog.length - 1].txId;
-    const etherscanUri = `https://etherscan.io/tx/${tx}`;
-
     const title = `Uh-oh, your transaction to enter the escrow was un-successful`
     this.emailMessages.push({
       to: this.clientData.email,
@@ -538,7 +522,7 @@ class JobRequestCommenceFailedNotification extends AEmailNotification {
       title: title,
       bodyHtml: `
       Dear ${this.clientData.name},<br>
-      The transaction of this failed deposit can be viewed here: <a href='${etherscanUri}'>${tx}</a>.`
+      The transaction of this failed deposit can be viewed from your job details page.`
     });
     console.log('+ dump emailMessages:', this.emailMessages);
   }

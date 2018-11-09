@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '../core-utils/auth.guard';
 import { UserIsNotSetupGuard } from '../core-utils/user-is-not-setup.guard';
 import { UserIsSetupGuard } from '../core-utils/user-is-setup.guard';
+import { BuyCoffeeComponent } from './buy-coffee/buy-coffee.component';
 import { EditComponent } from './edit/edit.component';
 import { ProfileViewsComponent } from './profile-views/profile-views.component';
 import { ProfileComponent } from './profile.component';
@@ -21,12 +22,6 @@ const routes: Routes = [
     path: 'setup',
     component: SetupComponent,
     canActivate: [AuthGuard, UserIsNotSetupGuard],
-    data: { requiresLoggedIn: true }
-  },
-  {
-    path: 'edit',
-    component: EditComponent,
-    canActivate: [AuthGuard, UserIsSetupGuard],
     data: { requiresLoggedIn: true }
   },
   {
@@ -50,6 +45,10 @@ const routes: Routes = [
   {
     path: 'alt/:address',
     component: ProfileComponent
+  },
+  {
+    path: 'buy-coffee/:address',
+    component: BuyCoffeeComponent
   }
 ];
 

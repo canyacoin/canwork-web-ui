@@ -9713,9 +9713,11 @@ a.text-danger:focus {
     margin-top: 5px !important;
   }
 }
+
 .show-mobile {
   display: none;
 }
+
 @media screen and (max-width: 640px) {
   .profile-mini {
     min-height: 75px !important;
@@ -9724,9 +9726,11 @@ a.text-danger:focus {
   .hide-mobile {
     display: none;
   }
-  .show-mobile{
+
+  .show-mobile {
     display: block;
   }
+
   .profile-mini .headshot {
     width: 75px !important;
     height: 75px !important;
@@ -9831,4 +9835,8 @@ a.text-danger:focus {
 .otherPartyName p {
   display: inline;
   padding-left: 30px;
+}
+
+.mh-250 {
+  min-height: 250px;
 }

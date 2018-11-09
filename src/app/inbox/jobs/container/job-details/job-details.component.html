@@ -1,3 +1,5 @@
+<app-back-button></app-back-button>
+
 <div *ngIf="!job" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
   <img src="assets/img/loader.svg" height="36px" alt="Loader">
 </div>
@@ -145,7 +147,7 @@
             </div>
             <div class="row">
               <div class="col-lg-6">
-                <a href="{{getTxLink(tx.hash)}}">View on
+                <a href="{{getTxLink(tx.hash)}}" target="_blank">View on
                   Etherscan</a>
               </div>
             </div>
