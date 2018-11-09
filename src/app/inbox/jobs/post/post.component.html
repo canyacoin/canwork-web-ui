@@ -565,16 +565,16 @@
                         <label>Provider type *</label>
                         <br />
                         <div class="row ml-0 mr-0">
-                          <div *ngFor="let type of providerTypes" class="mb-10 px-5 col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div *ngFor="let type of providerTypes" class="mb-10 px-5 col-lg-2 col-md-4 col-6">
                             <button type="button text-left" (click)="setProviderType(type.id)" class="btn btn-primary w-full btn-providerType"
                               [ngClass]="{'btn-outline': shareableJobForm.controls.providerType.value !== type.id}">
                               <div class="row">
-                                <div class="col-lg-3 col-2 text-center">
+                                <div class="col-lg-3 col-sm-2 col-2 text-center">
                                   <img *ngIf="shareableJobForm.controls.providerType.value !== type.id" src="assets/img/providers/{{type.img}}">
                                   <img *ngIf="shareableJobForm.controls.providerType.value === type.id" src="assets/img/providers/white/{{type.img}}">
                                 </div>
-                                <div class="col-lg-8 col-10 text-left" style="white-space: initial;">
-                                  <span>{{type.name}}</span>
+                                <div class="col-lg-8 col-sm-10 col-10 text-left" style="white-space: initial;">
+                                  <p>{{type.name}}</p>
                                 </div>
                               </div>
                             </button>
@@ -582,12 +582,13 @@
                         </div>
                       </div>
                     </div>
+
                     <div class="form-group">
                       <div class="col-12">
                         <label>Type of work *</label>
                         <br />
                         <div class="row ml-0 mr-0">
-                          <div *ngFor="let type of workTypes()" class="mb-10 px-5 col-lg-3 col-md-3 col-sm-4 col-6">
+                          <div *ngFor="let type of workTypes()" class="mb-10 px-5 col-lg-2 col-md-4 col-sm-4 col-12">
                             <button type="button" (click)="setWorkType(type)" class="btn btn-primary w-full" [ngClass]="{'btn-outline': shareableJobForm.controls.workType.value !== type}">
                               {{type}}
                             </button>
@@ -597,7 +598,7 @@
                     </div>
 
                     <div class="form-group">
-                      <div class="col-6">
+                      <div class="col-sm-6">
                         <label>Deadline *</label>
                         <br />
                         <div class="row ml-0 mr-0">
@@ -611,7 +612,7 @@
                         <label>Payment preference *</label>
                         <br />
                         <div class="row ml-0 mr-0">
-                          <div *ngFor="let type of paymentTypes()" class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                          <div *ngFor="let type of paymentTypes()" class="mb-10 px-5 col-lg-2 col-md-4 col-sm-6 col-xs-12">
                             <button type="button" (click)="setPaymentType(type)" class="btn btn-primary w-full"
                               [ngClass]="{'btn-outline': shareableJobForm.controls.paymentType.value !== type}">
                               {{type}}
@@ -656,13 +657,13 @@
                         <label>Visibility *</label>
                         <br />
                         <div class="row ml-0 mr-0">
-                          <div class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                          <div class="mb-10 px-5 col-lg-2 col-md-4 col-sm-6 col-xs-12">
                             <button type="button" (click)="setVisibility('invite')" class="btn btn-primary w-full"
                               [ngClass]="{'btn-outline': shareableJobForm.controls.visibility.value !== 'invite'}">
                               Invite-only
                             </button>
                           </div>
-                          <div class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                          <div class="mb-10 px-5 col-lg-2 col-md-4 col-sm-6 col-xs-12">
                             <button type="button btn-secondary" (click)="setVisibility('public')" disabled class="btn btn-primary w-full"
                               [ngClass]="{'btn-outline': shareableJobForm.controls.visibility.value !== 'public'}">
                               Public
