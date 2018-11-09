@@ -351,6 +351,7 @@
                         </div>
                       </div>
                     </div>
+
                     <div class="form-group">
                       <div class="col-12">
                         <label>Type of work *</label>
@@ -365,7 +366,11 @@
                       </div>
                     </div>
 
+<<<<<<< HEAD
                     <div class="form-group row px-15">
+=======
+                    <div class="form-group">
+>>>>>>> created skeleton public job service - temporary fix for CanPay error
                       <div class="col-sm-6">
                         <label>Deadline *</label>
                         <br />
@@ -383,6 +388,7 @@
                       </div>
                     </div>
 
+<<<<<<< HEAD
                     <div class="form-group px-10">
                       <label class="px-5">Payment preference *</label>
                       <br />
@@ -391,6 +397,19 @@
                           <button type="button" (click)="setPaymentType(type)" class="btn btn-primary w-full" [ngClass]="{'btn-outline': shareableJobForm.controls.paymentType.value !== type}">
                             {{type}}
                           </button>
+=======
+                    <div class="form-group">
+                      <div class="col-12">
+                        <label>Payment preference *</label>
+                        <br />
+                        <div class="row ml-0 mr-0">
+                          <div *ngFor="let type of paymentTypes()" class="mb-10 px-5 col-lg-2 col-md-4 col-sm-6 col-xs-12">
+                            <button type="button" (click)="setPaymentType(type)" class="btn btn-primary w-full"
+                              [ngClass]="{'btn-outline': shareableJobForm.controls.paymentType.value !== type}">
+                              {{type}}
+                            </button>
+                          </div>
+>>>>>>> created skeleton public job service - temporary fix for CanPay error
                         </div>
                       </div>
                     </div>
@@ -424,6 +443,47 @@
                         </div>
                       </div>
                     </div>
+<<<<<<< HEAD
+=======
+                    <div class="form-group">
+                      <div class="col-12">
+                        <label>Visibility *</label>
+                        <br />
+                        <div class="row ml-0 mr-0">
+                          <div class="mb-10 px-5 col-lg-2 col-md-4 col-sm-6 col-xs-12">
+                            <button type="button" (click)="setVisibility('invite')" class="btn btn-primary w-full"
+                              [ngClass]="{'btn-outline': shareableJobForm.controls.visibility.value !== 'invite'}">
+                              Invite-only
+                            </button>
+                          </div>
+                          <div class="mb-10 px-5 col-lg-2 col-md-4 col-sm-6 col-xs-12">
+                            <button type="button btn-secondary" (click)="setVisibility('public')" disabled class="btn btn-primary w-full"
+                              [ngClass]="{'btn-outline': shareableJobForm.controls.visibility.value !== 'public'}">
+                              Public
+                            </button>
+                          </div>
+                        </div>
+                        <i class="small">Public job listing coming soon</i>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-12">
+                        <app-terms [form]="shareableJobForm"></app-terms>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-12 text-right">
+                    <img *ngIf="isSending" src="assets/img/loader.svg" height="36px" alt="CanYa Coin">
+                    <button type="button" (click)="submitForm()" class="btn btn-primary" [disabled]="!shareableJobForm.valid || isSending || (currentUpload && !uploadedFile)">POST</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+>>>>>>> created skeleton public job service - temporary fix for CanPay error
 
                     <div class="form-group">
                       <label class="px-15">Weekly commitment *</label>
