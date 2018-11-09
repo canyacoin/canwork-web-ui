@@ -1,12 +1,28 @@
+input {
+  border-radius: 5px;
+}
+
 .btn-providerType img {
-  margin-top: 5px;
-  height: 24px;
+  margin-top: 7.5px;
+  margin-left: -15px;
+  height: 20px;
   position: absolute;
 }
 
-.btn-providerType span {
+.btn-providerType p {
   font-size: 10px;
-  width: 100px;
+  width: 87.5px;
+  margin-bottom: 0;
+  margin-left: -20px;
+}
+
+@media screen and (max-width: 992px) {
+  .btn-providerType p {
+    font-size: 10px;
+    width: 100px;
+    margin-bottom: 0;
+    margin-left: 25px;
+  }
 }
 
 @media screen and (max-width: 576px) {
@@ -15,7 +31,32 @@
   }
 
   .btn-providerType img {
-    margin-top: 10px;
-    height: 21px;
+    margin-top: 5px;
+    height: 24px;
+    margin-left: 10px;
+    position: absolute;
+  }
+
+  .btn-providerType p {
+    font-size: 10px;
+    width: 100px;
+    margin-bottom: 0;
+    margin-left: 15px
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .btn-providerType img {
+    margin-left: 0x;
+    height: 14px;
+    margin-top: 10px
+  }
+
+  .btn-providerType p {
+    font-size: 9px;
+    width: 80px;
+    margin-left: 20px;
+    margin-right: 0;
+    margin-bottom: 0;
   }
 }
