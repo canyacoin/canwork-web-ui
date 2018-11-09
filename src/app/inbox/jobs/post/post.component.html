@@ -216,6 +216,7 @@
         </div>
       </div>
     </div>
+
     <div id="shareable-job" *ngIf="!recipient && pageLoaded && isShareable">
       <div *ngIf="!sent" class="section bg-grey pt-15 pb-30">
         <div class="container bg-white p-30 brad-5px">
@@ -385,8 +386,13 @@
                       </div>
                     </div>
 
+<<<<<<< HEAD
                     <div class="form-group">
                       <div class="col-12" *ngIf="shareableJobForm.controls.paymentType.value">
+=======
+                    <div class="form-group" *ngIf="shareableJobForm.controls.paymentType.value">
+                      <div class="col-12">
+>>>>>>> created public-job service
                         <label class="text-dark">
                           <span *ngIf="shareableJobForm.controls.paymentType.value == paymentType.hourly">Budget per
                             hour (USD)
@@ -433,13 +439,21 @@
                         <label>Visibility *</label>
                         <br />
                         <div class="row ml-0 mr-0">
+<<<<<<< HEAD
                           <div class="mb-10 px-5 col-lg-2 col-md-4 col-sm-6 col-xs-12">
+=======
+                          <div class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
+>>>>>>> created public-job service
                             <button type="button" (click)="setVisibility('invite')" class="btn btn-primary w-full"
                               [ngClass]="{'btn-outline': shareableJobForm.controls.visibility.value !== 'invite'}">
                               Invite-only
                             </button>
                           </div>
+<<<<<<< HEAD
                           <div class="mb-10 px-5 col-lg-2 col-md-4 col-sm-6 col-xs-12">
+=======
+                          <div class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
+>>>>>>> created public-job service
                             <button type="button btn-secondary" (click)="setVisibility('public')" disabled class="btn btn-primary w-full"
                               [ngClass]="{'btn-outline': shareableJobForm.controls.visibility.value !== 'public'}">
                               Public
@@ -456,6 +470,7 @@
                     </div>
                   </div>
                   <div class="col-12 text-right">
+<<<<<<< HEAD
                     <div *ngIf="!isSending">
                       <button type="button" (click)="submitShareableJob(true)" [disabled]="!shareableJobForm.valid || isSending || (currentUpload && !uploadedFile)"
                         class="btn btn-secondary mx-10">SAVE AS DRAFT</button>
@@ -467,6 +482,10 @@
                     <div *ngIf="isSending">
                       <img *ngIf="isSending" src="assets/img/loader.svg" height="36px" alt="CanYa Coin">
                     </div>
+=======
+                    <img *ngIf="isSending" src="assets/img/loader.svg" height="36px" alt="CanYa Coin">
+                    <button type="button" (click)="submitForm()" class="btn btn-primary" [disabled]="!shareableJobForm.valid || isSending || (currentUpload && !uploadedFile)">POST</button>
+>>>>>>> created public-job service
                   </div>
                 </form>
               </div>

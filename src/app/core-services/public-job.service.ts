@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+<<<<<<< HEAD
 import { Job, JobState, Bid } from '@class/job';
 import { User, UserType } from '@class/user';
 import { UserService } from '@service/user.service';
@@ -192,4 +193,12 @@ export class PublicJobService {
     console.log(bidObject);
     return bidObject;
   }
+=======
+
+@Injectable()
+export class PublicJobService {
+
+  constructor() { }
+
+>>>>>>> created public-job service
 }
