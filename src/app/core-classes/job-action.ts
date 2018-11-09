@@ -1,6 +1,5 @@
 import { PaymentType, TimeRange, WorkType } from '@class/job';
 import { UserType } from '@class/user';
-import { Action } from 'rxjs/scheduler/Action';
 
 import * as moment from 'moment';
 
@@ -13,7 +12,7 @@ export class IJobAction {
 
   message: string;
 
-  isClientSatisfied: boolean
+  isClientSatisfied: boolean;
 
   amountUsd: number;
   amountCan: number;
@@ -27,7 +26,7 @@ export class IJobAction {
     this.type = type;
     this.executedBy = executedBy;
     this.message = message;
-    this.timestamp = moment().format('x')
+    this.timestamp = moment().format('x');
     switch (this.type) {
       case ActionType.review:
       case ActionType.authoriseEscrow:
@@ -40,8 +39,8 @@ export class IJobAction {
   }
 
   init(init: Partial<IJobAction>) {
-    Object.assign(this, init)
-    return this
+    Object.assign(this, init);
+    return this;
   }
 
   setPaymentProperties(usdVal: number, canVal: number, timelineExpectation?: TimeRange, workType?: WorkType, weeklyCommitment?: number, paymentType?: PaymentType) {
@@ -55,7 +54,7 @@ export class IJobAction {
 
 
   get paymentTypeString(): string {
-    return this.paymentType && this.paymentType === PaymentType.hourly ? '/hr' : '/total'
+    return this.paymentType && this.paymentType === PaymentType.hourly ? '/hr' : '/total';
   }
 
   get dialogMessage(): string {
@@ -97,21 +96,21 @@ export class IJobAction {
         return `${executor} proposed a counter offer.<br>
           Proposed budget at $${this.amountUsd}${this.paymentTypeString} (${this.amountCan} CAN)`;
       case ActionType.acceptTerms:
-        return `${executor} accepted the terms of this job.`
+        return `${executor} accepted the terms of this job.`;
       case ActionType.declineTerms:
-        return `${executor} declined the terms of this job.`
+        return `${executor} declined the terms of this job.`;
       case ActionType.addMessage:
         return `${executor} left a message:<br>
-              <em>${this.message}</em>`
+              <em>${this.message}</em>`;
       case ActionType.declineTerms:
-        return `${executor} cancelled this job.`
+        return `${executor} cancelled this job.`;
       case ActionType.authoriseEscrow:
-        return `${executor} authorised the Escrow contract to transfer ${this.amountCan} CAN`
+        return `${executor} authorised the Escrow contract to transfer ${this.amountCan} CAN`;
       case ActionType.enterEscrow:
         return `${executor} registered this job in the Escrow contract.<br>
-              When the job is succesfully delivered, ${executor} will release the funds stored in the contract.`
+              When the job is succesfully delivered, ${executor} will release the funds stored in the contract.`;
       default:
-        return `Job action: ${this.type}, by ${executor}`
+        return `Job action: ${this.type}, by ${executor}`;
     }
   }
 }

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
-
+import { take } from 'rxjs/operators';
 export class SkillTag {
   tag: string;
 }
@@ -24,7 +24,7 @@ export class SkillTagsSelectionComponent implements OnInit {
   constructor(private afs: AngularFirestore) { }
 
   ngOnInit() {
-    this.afs.collection<SkillTag>('skill-tags').valueChanges().take(1).subscribe((tags: SkillTag[]) => {
+    this.afs.collection<SkillTag>('skill-tags').valueChanges().pipe(take(1)).subscribe((tags: SkillTag[]) => {
       this.skillTagsList = tags.map(x => x.tag);
     });
     this.acceptedTags = this.initialTags === undefined ? [] : this.initialTags;

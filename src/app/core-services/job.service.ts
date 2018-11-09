@@ -17,9 +17,8 @@ import { Transaction, TransactionService } from '@service/transaction.service';
 import { UserService } from '@service/user.service';
 import { GenerateGuid } from '@util/generate.uid';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { Observable } from 'rxjs/Observable';
-import { Action } from 'rxjs/scheduler/Action';
-
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { FeatureToggleService } from './feature-toggle.service';
 
 @Injectable()
@@ -45,7 +44,7 @@ export class JobService {
       this.canexDisabled = !val.enabled;
     }).catch(e => {
       this.canexDisabled = true;
-    })
+    });
   }
 
   // =========================
@@ -54,31 +53,31 @@ export class JobService {
 
   /** Get a job from firebase */
   getJob(jobId: string): Observable<Job> {
-    return this.afs.doc(`jobs/${jobId}`).snapshotChanges().map(doc => {
+    return this.afs.doc(`jobs/${jobId}`).snapshotChanges().pipe(map(doc => {
       const job = doc.payload.data() as Job;
       job.id = jobId;
       return job;
-    });
+    }));
   }
 
   /** Get all of a users jobs, based on their type */
   getJobsByUser(userId: string, userType: UserType): Observable<Job[]> {
     const propertyToCheck = userType === UserType.client ? 'clientId' : 'providerId';
-    return this.afs.collection<any>('jobs', ref => ref.where(propertyToCheck, '==', userId)).snapshotChanges().map(changes => {
+    return this.afs.collection<any>('jobs', ref => ref.where(propertyToCheck, '==', userId)).snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Job;
         data.id = a.payload.doc.id;
         return data;
       });
-    });
+    }));
   }
 
   async getReviewedJobsByUser(user: User) {
-    const userType = user.type === UserType.client ? 'clientId' : 'providerId'
+    const userType = user.type === UserType.client ? 'clientId' : 'providerId';
     const data = await this.jobsCollection.ref
       .where(userType, '==', user.address)
-      .where('state', '==', JobState.reviewed).get()
-    return data
+      .where('state', '==', JobState.reviewed).get();
+    return data;
   }
 
   async getJobBudget(job: Job): Promise<number> {
@@ -147,14 +146,14 @@ export class JobService {
           case ActionType.cancelJob:
             parsedJob.actionLog.push(action);
             parsedJob.state = JobState.cancelled;
-            await this.saveJobAndNotify(parsedJob, action)
+            await this.saveJobAndNotify(parsedJob, action);
             resolve(true);
             break;
           case ActionType.counterOffer:
             parsedJob.actionLog.push(action);
             parsedJob.state = action.executedBy === UserType.client ? JobState.clientCounterOffer : JobState.providerCounterOffer;
             parsedJob.budget = action.amountUsd;
-            await this.saveJobAndNotify(parsedJob, action)
+            await this.saveJobAndNotify(parsedJob, action);
             resolve(true);
             break;
           case ActionType.acceptTerms:
@@ -164,7 +163,7 @@ export class JobService {
                 parsedJob.budgetCan = totalBudgetCan;
                 parsedJob.actionLog.push(action);
                 parsedJob.state = JobState.termsAcceptedAwaitingEscrow;
-                await this.saveJobAndNotify(parsedJob, action)
+                await this.saveJobAndNotify(parsedJob, action);
                 resolve(true);
               }
             } catch (e) {
@@ -174,7 +173,7 @@ export class JobService {
           case ActionType.declineTerms:
             parsedJob.actionLog.push(action);
             parsedJob.state = JobState.declined;
-            await this.saveJobAndNotify(parsedJob, action)
+            await this.saveJobAndNotify(parsedJob, action);
             resolve(true);
             break;
           case ActionType.authoriseEscrow:
@@ -185,17 +184,17 @@ export class JobService {
             }
             const hasAllowance = !!ethAddr ? await this.canWorkEthService.hasAllowance(ethAddr, environment.contracts.canwork, job.budgetCan) : false;
             this.authoriseEnterEscrow(parsedJob, ethAddr, action, hasAllowance);
-            resolve(true)
+            resolve(true);
             break;
           case ActionType.addMessage:
             parsedJob.actionLog.push(action);
-            await this.saveJobAndNotify(parsedJob, action)
+            await this.saveJobAndNotify(parsedJob, action);
             resolve(true);
             break;
           case ActionType.finishedJob:
             parsedJob.actionLog.push(action);
             parsedJob.state = JobState.workPendingCompletion;
-            await this.saveJobAndNotify(parsedJob, action)
+            await this.saveJobAndNotify(parsedJob, action);
             resolve(true);
             break;
           case ActionType.acceptFinish:
@@ -206,7 +205,7 @@ export class JobService {
                    save tx to collection
                    save action/pending to job */
                 const txId = GenerateGuid();
-                this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.acceptFinish)
+                this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.acceptFinish);
                 this.transactionService.saveTransaction(new Transaction(txId, job.clientId,
                   txHash, this.momentService.get(), ActionType.acceptFinish, job.id));
                 job.actionLog.push(action);
@@ -233,8 +232,8 @@ export class JobService {
                 successText: 'Woohoo, job complete!',
                 recepient: environment.contracts.canwork,
                 operation: Operation.interact,
-                complete: () => { this.canPayService.close() },
-                cancel: () => { this.canPayService.close() },
+                complete: () => { this.canPayService.close(); },
+                cancel: () => { this.canPayService.close(); },
                 postAuthorisationProcessName: 'Job completion',
                 startPostAuthorisationProcess: initiateCompleteJob.bind(this),
                 disableCanEx: this.canexDisabled,
@@ -249,18 +248,18 @@ export class JobService {
           case ActionType.dispute:
             parsedJob.actionLog.push(action);
             parsedJob.state = JobState.inDispute;
-            await this.saveJobAndNotify(parsedJob, action)
+            await this.saveJobAndNotify(parsedJob, action);
             resolve(true);
             break;
           case ActionType.review:
-            client = await this.userService.getUser(job.clientId)
-            provider = await this.userService.getUser(job.providerId)
-            await this.userService.newReview(client, provider, parsedJob, action)
-            parsedJob.state = JobState.reviewed
+            client = await this.userService.getUser(job.clientId);
+            provider = await this.userService.getUser(job.providerId);
+            await this.userService.newReview(client, provider, parsedJob, action);
+            parsedJob.state = JobState.reviewed;
             parsedJob.actionLog.push(action);
-            await this.saveJobFirebase(parsedJob)
-            resolve(true)
-            break
+            await this.saveJobFirebase(parsedJob);
+            resolve(true);
+            break;
           default:
             reject(false);
         }
@@ -300,7 +299,7 @@ export class JobService {
          save action/pending to job
          update users active eth address */
       const txId = GenerateGuid();
-      this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.authoriseEscrow)
+      this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.authoriseEscrow);
       this.transactionService.saveTransaction(new Transaction(txId, job.clientId,
         txHash, this.momentService.get(), ActionType.authoriseEscrow, job.id));
       const escrowAction = action;
@@ -331,7 +330,7 @@ export class JobService {
          save tx to collection
          save action/pending to job */
       const txId = GenerateGuid();
-      this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.enterEscrow)
+      this.transactionService.startMonitoring(job, from, txId, txHash, ActionType.enterEscrow);
       this.transactionService.saveTransaction(new Transaction(txId, job.clientId,
         txHash, this.momentService.get(), ActionType.enterEscrow, job.id));
       if (action.type === ActionType.authoriseEscrow) {

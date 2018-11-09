@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
-
+import { take } from 'rxjs/operators';
 import { User } from '../../../core-classes/user';
 
 @Component({
@@ -18,7 +18,7 @@ export class VisitorsComponent implements OnInit {
 
   ngOnInit() {
     const ref = this.afs.collection(`who/${this.userModel.address}/user`);
-    ref.valueChanges().take(1).toPromise().then((data: any) => {
+    ref.valueChanges().pipe(take(1)).toPromise().then((data: any) => {
       this.whoViewProfileCounter = data.length;
     }, error => { console.error('! unable to retrieve who viewed data:', error) });
   }

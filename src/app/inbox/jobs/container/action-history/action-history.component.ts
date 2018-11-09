@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-
+import { Observable ,  Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { Job } from '../../../../core-classes/job';
 import { IJobAction } from '../../../../core-classes/job-action';
 import { User, UserType } from '../../../../core-classes/user';
@@ -25,7 +24,7 @@ export class ActionHistoryComponent implements OnInit, OnDestroy {
   constructor(private authService: AuthService, private jobService: JobService, private userService: UserService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
-    this.authService.currentUser$.take(1).subscribe((user: User) => {
+    this.authService.currentUser$.pipe(take(1)).subscribe((user: User) => {
       const jobId = this.activatedRoute.parent.snapshot.params['id'] || null;
       if (jobId) {
         this.jobSub = this.jobService.getJob(jobId).subscribe((job: Job) => {

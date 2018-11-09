@@ -5,7 +5,7 @@ import { AuthService } from '@service/auth.service';
 import { CanWorkEthService } from '@service/eth.service';
 import { UserService } from '@service/user.service';
 import * as randomColor from 'randomcolor';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import * as moment from 'moment-timezone';
 import { CurrencyValidator } from '@validator/currency.validator';
@@ -102,7 +102,7 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
   }
 
   skillTagsUpdated(value: string) {
-    this.profileForm.controls['skillTags'].setValue(value);
+    this.profileForm.controls['skillTags'].setValue([value]);
   }
 
   nextStep() {

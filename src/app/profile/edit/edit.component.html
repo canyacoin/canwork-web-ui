@@ -162,7 +162,7 @@
               <div class="form-group text-right">
                 <button (click)="onClose()" class="btn btn-secondary">Cancel</button>
                 <button [disabled]="!profileForm.valid || sending" type="button" (click)="save(category1, category2, category3, category4, category5, category6)"
-                  class="btn btn-primary text-white">
+                  class="btn btn-primary text-white ml-8">
                   Save
                 </button>
                 <img *ngIf="sending" src="assets/img/loader.svg" height="36px" alt="Loader">

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { take } from 'rxjs/operators';
 import { User } from '@class/user';
 import { AuthService } from '@service/auth.service';
 import { ChatService } from '@service/chat.service';
@@ -30,7 +30,7 @@ export class AboutComponent implements OnInit {
   }
 
   proposeJob() {
-    this.authService.currentUser$.take(1).subscribe((user: User) => {
+    this.authService.currentUser$.pipe(take(1)).subscribe((user: User) => {
       if (user) {
         this.router.navigate(['inbox/post', this.userModel.address]);
       } else {
@@ -41,7 +41,7 @@ export class AboutComponent implements OnInit {
 
   // Chat the user without proposing a job
   chatUser() {
-    this.authService.currentUser$.take(1).subscribe((user: User) => {
+    this.authService.currentUser$.pipe(take(1)).subscribe((user: User) => {
       if (user) {
         this.chatService.createNewChannel(this.currentUser, this.userModel);
       } else {

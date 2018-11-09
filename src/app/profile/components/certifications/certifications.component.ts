@@ -1,8 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { User } from '../../../core-classes/user';
-import { Subscription } from 'rxjs/Subscription';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { Certification } from '../../../core-classes/certification';
+import { Subscription } from 'rxjs';
+import { AngularFirestore } from 'angularfire2/firestore';
 import { CertificationsService } from '../../../core-services/certifications.service';
 
 @Component({
