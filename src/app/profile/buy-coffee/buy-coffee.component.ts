@@ -36,7 +36,7 @@ export class BuyCoffeeComponent implements OnInit {
       this.canexDisabled = !canexToggle.enabled;
       this.userModel = await this.userService.getUser(userId);
       this.currentUser = await this.authService.getCurrentUser();
-      if (this.userModel && this.currentUser) {
+      if (this.userModel) {
         this.startCanpay();
       }
     }
@@ -50,7 +50,7 @@ export class BuyCoffeeComponent implements OnInit {
       complete: this.onComplete.bind(this),
       cancel: this.onComplete.bind(this),
       disableCanEx: this.canexDisabled,
-      userEmail: this.currentUser.email
+      userEmail: this.currentUser.email || ''
     };
   }
 
