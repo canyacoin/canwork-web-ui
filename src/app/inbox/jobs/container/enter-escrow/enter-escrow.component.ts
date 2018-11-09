@@ -84,11 +84,6 @@ export class EnterEscrowComponent implements OnInit {
       this.router.navigate(['/inbox/job', this.job.id]);
     };
 
-    const onCancel = () => {
-      // call endpoint?
-      this.router.navigate(['/inbox/job', this.job.id]);
-    };
-
     const onTxHash = async (txHash: string, from: string) => {
       /* IF enter escrow hash gets sent, do:
          post tx to transaction monitor
@@ -130,7 +125,7 @@ export class EnterEscrowComponent implements OnInit {
       amount: this.job.budgetCan,
       paymentSummary: paymentSummary,
       complete: onComplete,
-      cancel: onCancel,
+      cancel: onComplete,
       disableCanEx: this.canexDisabled,
       userEmail: client.email,
 
