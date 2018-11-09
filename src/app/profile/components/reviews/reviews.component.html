@@ -1,11 +1,16 @@
 <section id="user-reviews" class="card mt-3 p-3" *ngIf="user && reviews">
-  <div class="row align-items-center">
-    <div class="col-sm-6">
-      <h4 class="mb-0">Reviews</h4>
+  <div class="row">
+    <div class="col-12">
+      <h5 class="mb-0">REVIEWS</h5>
     </div>
-    <div class="col-sm-6 text-right">
+  </div>
+  <div class="row align-items-center">
+    <div class="col-sm-12" *ngIf= "user.upvotes || user.downvotes">
       <p class="m-0">Total upvotes: <strong>{{ user.upvotes }}</strong></p>
       <p class="m-0">Total downvotes: <strong>{{ user.downvotes }}</strong></p>
+    </div>
+    <div class="col-sm-12" *ngIf="!user.upvotes && !user.downvotes">
+      <p class="m-0 pt-5">This user has no reviews</p>
     </div>
   </div>
   <article *ngFor="let review of reviews">

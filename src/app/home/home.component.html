@@ -32,7 +32,7 @@
                   <img src="assets/img/providers/{{type.img}}">
                 </div>
                 <div class="col-8">
-                  <h6 class="provider-type">{{type.name}}</h6>
+                  <p class="provider-type">{{type.name}}</p>
                 </div>
               </div>
             </div>
@@ -44,9 +44,15 @@
   <section class="py-20">
     <div class="container">
       <div class="row">
-        <h4 class="section-title pointer" [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]' : 'SOFTWARE DEVELOPERS', 'category' : 'softwareDev'}"><span><img
-              class="icon-img" src="assets/img/providers/software-engineers.svg"></span>SOFTWARE
-          DEVELOPERS</h4>
+        <div class="col-8">
+          <h4 class="section-title pointer" [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]' : 'SOFTWARE DEVELOPERS', 'category' : 'softwareDev'}"><span><img
+                class="icon-img" src="assets/img/providers/software-engineers.svg"></span>SOFTWARE
+            DEVELOPERS</h4>
+        </div>
+        <div class="col-4 text-right">
+          <p class="see-all pointer" [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]' : 'SOFTWARE DEVELOPERS', 'category' : 'softwareDev'}">
+            See All</p>
+        </div>
       </div>
       <div class="row">
         <div class="col-md-4 col-sm-6 col-12 no-padding" *ngFor="let dev of developers">
@@ -58,9 +64,15 @@
   <section class="py-20">
     <div class="container">
       <div class="row">
-        <h4 class="section-title pointer" [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]': 'DESIGNERS & CREATIVES', 'category' : 'designer'}"><span><img
-              class="icon-img" src="assets/img/providers/creatives-black.svg"></span>DESIGNER
-          & CREATIVES</h4>
+        <div class="col-8">
+          <h4 class="section-title pointer" [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]': 'DESIGNERS & CREATIVES', 'category' : 'designer'}"><span><img
+                class="icon-img" src="assets/img/providers/creatives-black.svg"></span>DESIGNER
+            & CREATIVES</h4>
+        </div>
+        <div class="col-4 text-right">
+          <p class="see-all pointer" [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]': 'DESIGNERS & CREATIVES', 'category':'designer'}">
+            See All</p>
+        </div>
       </div>
       <div class="row">
         <div class="col-md-4 col-sm-6 col-12 no-padding" *ngFor="let designer of designers">
@@ -72,9 +84,15 @@
   <section class="py-20">
     <div class="container">
       <div class="row">
-        <h4 class="section-title pointer" [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]': 'CONTENT CREATORS', 'category':'contentCreator'}"><span><img
-              class="icon-img" src="assets/img/providers/writer-black.svg"></span>MARKETERS
-          & CONTENT CREATORS</h4>
+        <div class="col-8">
+          <h4 class="section-title pointer" [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]': 'CONTENT CREATORS', 'category':'contentCreator'}"><span><img
+                class="icon-img" src="assets/img/providers/writer-black.svg"></span>MARKETERS
+            & CONTENT CREATORS</h4>
+        </div>
+        <div class="col-4 text-right">
+          <p class="see-all pointer" [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]': 'CONTENT CREATORS', 'category':'contentCreator'}">
+            See All</p>
+        </div>
       </div>
       <div class="row">
         <div class="col-md-4 col-sm-6 col-12 no-padding" *ngFor="let content of contents">
@@ -96,7 +114,7 @@
       </div>
       <div class="row" *ngIf="previouslySeen.length > 0 && previouslySeen && !loadingDone">
         <div class="container">
-            <i>Loading...</i>
+          <i>Loading...</i>
         </div>
       </div>
       <div class="row" *ngIf="previouslySeen.length > 0 && previouslySeen && loadingDone">

@@ -1,68 +1,81 @@
-.provider-type-card{
+.provider-type-card {
   padding: 10px 5px 5px 5px;
   border-radius: 5px;
   background-color: white;
-  margin-top:10px;
+  margin-top: 10px;
   width: 175px;
   transition: all 0.5s;
 }
 
-@media screen and (max-width: 1024px){
-  .provider-type-card{
+@media screen and (max-width: 1024px) {
+  .provider-type-card {
     width: auto;
   }
 }
 
-.provider-type{
+.provider-type {
   font-weight: 500;
   font-size: 14px;
 }
 
-.provider-type-card img{
-  height:50px;
-  width:50px;
+.provider-type-card img {
+  height: 50px;
+  width: 50px;
   margin-left: 25px;
 }
 
-.provider-type-card:hover{
-box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.1);
+.provider-type-card:hover {
+  box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.1);
 }
 
-.provider-type-col{
+.provider-type-col {
   padding: 0 5px 0 5px;
 }
 
-#landing-top{
-  background-color:transparent !important;
+#landing-top {
+  background-color: transparent !important;
 }
 
-.icon-img{
+.icon-img {
   width: 30px;
   margin-bottom: 5px;
   margin-right: 5px;
   margin-left: 10px;
 }
 
-.section-title{
+.section-title {
   font-weight: 600;
   font-size: 18px;
   letter-spacing: 2.3px;
+  transition: all 0.5s;
 }
 
+.see-all {
+  font-weight: 500;
+  font-size: 14px;
+  margin-bottom: 0px;
+  transition: all 0.5s;
+  color: #0078bf;
+}
 
-@media screen and (max-width:320px){
-  
-  .provider-type-card img{
+.section-title:hover,
+.see-all:hover {
+  color: #33ccff;
+}
+
+@media screen and (max-width:320px) {
+
+  .provider-type-card img {
     margin-left: 10px;
-  } 
+  }
 
-  .provider-type{
+  .provider-type {
     font-size: 12px;
     margin-top: 5px;
     margin-bottom: 0;
   }
 
-  .section-title{
+  .section-title {
     font-weight: 600;
     font-size: 14px;
     letter-spacing: 2.3px;
