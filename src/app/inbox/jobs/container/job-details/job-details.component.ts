@@ -78,7 +78,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   }
 
   actionIsDisabled(action: ActionType): boolean {
-    return action === ActionType.dispute || (this.hasPendingTransactions && action === ActionType.enterEscrow);
+    return action === ActionType.dispute || (this.hasPendingTransactions && (action === ActionType.enterEscrow || action === ActionType.acceptFinish));
   }
 
   get hasPendingTransactions(): boolean {
@@ -140,7 +140,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.router.navigate(['../enter-escrow'], { relativeTo: this.activatedRoute });
         break;
       case ActionType.acceptFinish:
-        this.router.navigate(['../complete-job'], { relativeTo: this.activatedRoute });
+        this.router.navigate(['../complete'], { relativeTo: this.activatedRoute });
         break;
       default:
         this.dialogService.addDialog(ActionDialogComponent, new ActionDialogOptions({

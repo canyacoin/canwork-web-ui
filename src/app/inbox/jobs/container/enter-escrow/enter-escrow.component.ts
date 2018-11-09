@@ -72,6 +72,7 @@ export class EnterEscrowComponent implements OnInit {
       this.transactionService.saveTransaction(new Transaction(txId, this.job.clientId,
         txHash, this.momentService.get(), ActionType.authoriseEscrow, this.job.id));
       const escrowAction = new IJobAction(ActionType.authoriseEscrow, UserType.client);
+      escrowAction.amountCan = this.job.budgetCan;
       this.job.actionLog.push(escrowAction);
       this.job.clientEthAddress = from;
       clientEthAddress = from;

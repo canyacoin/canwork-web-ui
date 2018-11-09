@@ -45,7 +45,7 @@ const routes: Routes = [
         component: EnterEscrowComponent
       },
       {
-        path: 'complete-job',
+        path: 'complete',
         component: CompleteJobComponent
       }
     ]
