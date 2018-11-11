@@ -298,6 +298,37 @@ exports.ethereumAuthViaPinCode = functions.https.onRequest(async (request, respo
   });
 });
 
+/*
+* Generate a firebase JWT token to log the user in the client
+* userID comes from GAE dock-io-auth-service implementation
+*/
+exports.getFirebaseTokenForDockIOAuth = functions.https.onRequest(async (request, response) => {
+  cors(request, response, async () => {
+
+    if (request.method !== 'POST') {
+      return response.status(405).type('application/json').send({ message: 'Method Not Allowed', supportedMethods: 'POST' });
+    }
+
+    const userID: string = request.body.userID || '';
+
+    let token: string;
+
+    if (typeof userID !== undefined) {
+      try {
+        token = await app.auth().createCustomToken(userID);
+      } catch (e) {
+        console.error('+ unable to generate auth token for request.body:', request.body);
+        console.error('+ error was:', e);
+        return response.status(500).type('application/json').send({ message: e });
+      }
+    } else {
+      console.log('+ unable to locate user object in firestore, request.body was:', request.body);
+      return response.status(403).type('application/json').send({ message: 'permission denied' });
+    }
+    return response.status(201).type('application/json').send({ token });
+  });
+});
+
 
 /*
  * Listen for user creations and created an associated algolia record

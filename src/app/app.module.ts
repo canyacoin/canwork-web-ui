@@ -23,6 +23,7 @@ import { NavService } from './core-services/nav.service';
 import { CoreUtilsModule } from './core-utils/core-utils.module';
 import { FilterPipeModule } from 'ngx-filter-pipe';
 import { Ng5SliderModule } from 'ng5-slider';
+import { DockIoService } from './core-services/dock-io.service';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { Ng5SliderModule } from 'ng5-slider';
     CanWorkEthService,
     NavService,
     JobNotificationService,
-    CertificationsService
+    CertificationsService,
+    DockIoService,
   ],
   bootstrap: [AppComponent]
 })

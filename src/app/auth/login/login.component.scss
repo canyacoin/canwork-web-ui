@@ -1,5 +1,18 @@
- .main-content{
-    min-height: 75vh; 
+.dock-io-button {
+  text-transform: capitalize;
+  padding-right: 28px;
+  padding-left: 28px;
+  color: #535353;
+  .dock-io-icon {
+    margin-right: 7px;
+    height: auto;
+    width: 14px;
+  }
+}
+
+
+.main-content{
+    min-height: 75vh;
 }
 
 .login-section{
@@ -11,13 +24,13 @@
     padding: 10px;
     transition-duration: 0.2s;
 }
-.uport-btn:hover{ 
+.uport-btn:hover{
     box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);
 }
 .uport-btn img{
     padding: 10px;
-} 
-@media (max-width:768px){ 
+}
+@media (max-width:768px){
     .login-section{
         padding-top: 1.5rem;
     }
@@ -30,5 +43,5 @@
     }
     .other-login{
         padding-top:2rem;
-    }   
+    }
 }

@@ -12,11 +12,13 @@ import { User } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
 import { CanWorkEthService } from '../../core-services/eth.service';
 import { UserService } from '../../core-services/user.service';
+import { FeatureToggleService } from '@service/feature-toggle.service';
+import { DockIoService } from '@service/dock-io.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
 
@@ -28,6 +30,7 @@ export class LoginComponent implements OnInit {
   mobileLoginState = '';
   pinDeliveredTo: string;
   httpHeaders = new Headers({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+  displayDockAuth = false;
 
   webViewEthAddress: string;
 
@@ -54,8 +57,10 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private afs: AngularFirestore,
+    public dockIOService: DockIoService,
     private http: Http,
-    private ethService: CanWorkEthService) { }
+    private ethService: CanWorkEthService,
+    private featureService: FeatureToggleService) { }
 
   ngOnInit() {
     const ua = window.navigator.userAgent;
@@ -64,6 +69,12 @@ export class LoginComponent implements OnInit {
     if (this.isOnMobile) {
       this.setWeb3EthereumPublicAddress();
     }
+
+    this.featureService.getFeatureConfig('dockAuth').then(val => {
+      this.displayDockAuth = val.enabled;
+    }).catch(e => {
+      this.displayDockAuth = false;
+    });
   }
 
   onCreateAccountFromMobile() {
