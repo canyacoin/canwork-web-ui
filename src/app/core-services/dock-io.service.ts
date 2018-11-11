@@ -19,7 +19,7 @@ export class DockIoService {
   }
 
   getAccessTokenURI(code: string) {
-    const base = environment.dockio.client.accessTokenURI
+    const base = `${environment.dockio.client.accessTokenURI}/request-user-data`
     let params = new HttpParams()
     params = params.set('grant_type', 'authorization_code')
     params = params.set('code', code)
