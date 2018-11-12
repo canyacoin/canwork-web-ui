@@ -22,7 +22,7 @@ export class Job {
   reviewId: string;
   deadline: string;
   visibility: string;
-  bids: Array<Bid> = []
+  bids: Array<Bid> = [];
 
 
   constructor(init?: Partial<Job>) {
@@ -31,9 +31,9 @@ export class Job {
 
   get parsedActionLog() {
     return this.actionLog.map(actionObj => {
-      const action = new IJobAction(actionObj.type, actionObj.executedBy)
-      return action.init(actionObj)
-    })
+      const action = new IJobAction(actionObj.type, actionObj.executedBy);
+      return action.init(actionObj);
+    });
   }
 
   /* For the explanation modal */
