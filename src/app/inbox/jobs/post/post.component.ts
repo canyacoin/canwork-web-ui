@@ -119,9 +119,11 @@ export class PostComponent implements OnInit, OnDestroy {
       workType: ['', Validators.compose([Validators.required])],
       providerType: ['', Validators.compose([Validators.required])],
       deadline: ['', Validators.compose([Validators.required])],
+      timelineExpectation: ['', Validators.compose([Validators.required])],
       paymentType: ['', Validators.compose([Validators.required])],
       visibility: ['', Validators.compose([Validators.required])],
       budget: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(10000000)])],
+      weeklyCommitment: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(60)])],
       terms: [false, Validators.requiredTrue]
     });
   }
@@ -242,6 +244,7 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   setTimeRange(range: TimeRange) {
+    console.log(range);
     if (this.isShareable) {
       this.shareableJobForm.controls.timelineExpectation.setValue(range);
     } else {
@@ -304,6 +307,7 @@ export class PostComponent implements OnInit, OnDestroy {
           this.jobService.createJobChat(job, action, this.currentUser, this.recipient);
         }
       } else {
+        console.log(this.shareableJobForm);
         const job = new Job({
           id: this.jobId,
           hexId: this.ethService.web3js.utils.toHex(this.jobId.hashCode()),
@@ -315,7 +319,7 @@ export class PostComponent implements OnInit, OnDestroy {
             skills: tags,
             attachments: this.uploadedFile ? [this.uploadedFile] : [],
             workType: this.shareableJobForm.value.workType,
-            timelineExpectation: null,
+            timelineExpectation: this.shareableJobForm.value.timelineExpectation,
             weeklyCommitment: this.shareableJobForm.value.weeklyCommitment
           }),
           paymentType: this.shareableJobForm.value.paymentType,
@@ -324,7 +328,9 @@ export class PostComponent implements OnInit, OnDestroy {
         });
         console.log('Shareable job submitted...');
         console.log('job created');
-        console.log(job)
+        console.log(job);
+        this.sent = await this.publicJobService.handlepublicJob(job);
+        this.isSending = false;
       }
     } catch (e) {
       this.sent = false;

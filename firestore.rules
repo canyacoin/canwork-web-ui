@@ -84,6 +84,21 @@ service cloud.firestore {
        allow update: if userIsClientOrProvider();
        allow delete: if isAdmin();
     }
+    
+    // TODO: Will require a much more complex rule set here
+    match /public-jobs {
+       allow read;
+       allow create: if isAuthenticated();
+       allow update: if userIsClientOrProvider();
+       allow delete: if isAdmin();
+    }
+    
+    match /public-jobs/{publicJobId} {
+       allow read;
+       allow create: if isAuthenticated();
+       allow update: if userIsClientOrProvider();
+       allow delete: if isAdmin();
+    }
   }
 
   // --------------------------------------------------------------------------------

@@ -4,7 +4,8 @@ import { User, UserType } from '@class/user';
 import { UserService } from '@service/user.service';
 import { JobService } from '@service/job.service';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class PublicJobService {
@@ -20,15 +21,22 @@ export class PublicJobService {
   // BASIC GETs
 
   getPublicJob(jobId: string) {
-    return this.afs.doc(`public-jobs/${jobId}`).snapshotChanges().map(doc => {
-      const job = doc.payload.data() as Job;
-      job.id = jobId;
-      return job;
-    });
   }
 
+  public async getPublicJobsByUser() {
+  }
   // BASIC CRUDs
-
+  async handlepublicJob(job): Promise<boolean>  {
+    console.log('uploading job...');
+    return new Promise<boolean>(async (resolve, reject) => {
+      try {
+        await this.saveJobFirebase(job);
+        resolve (true);
+      } catch (error) {
+        reject(false);
+      }
+    });
+  }
 
   // save the public job
   private async saveJobFirebase(job: Job): Promise<any> {
