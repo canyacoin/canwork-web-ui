@@ -22,12 +22,16 @@ export class Job {
   reviewId: string;
   deadline: string;
   visibility: string;
+<<<<<<< HEAD
   draft: boolean;
   friendlyUrl: string;
 <<<<<<< HEAD
 
 =======
 >>>>>>> created the basic friendly-url generator and route
+=======
+  bids: Array<Bid> = []
+>>>>>>> public job services WIP, some fixes for duplicate tags
 
 
   constructor(init?: Partial<Job>) {
@@ -94,6 +98,7 @@ export class JobDescription {
 
 export class Bid {
   providerId: string;
+<<<<<<< HEAD
   providerInfo: Object;
   budget: number;
   message: string;
@@ -107,6 +112,10 @@ export class Bid {
     this.timestamp = timestamp;
     this.rejected = false;
   }
+=======
+  budget: number;
+  timestamp: string;
+>>>>>>> public job services WIP, some fixes for duplicate tags
 }
 
 export class Payment {
