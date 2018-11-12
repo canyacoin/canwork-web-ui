@@ -23,7 +23,7 @@ export class Job {
   deadline: string;
   visibility: string;
   bids: Array<Bid> = [];
-
+  draft: boolean;
 
   constructor(init?: Partial<Job>) {
     Object.assign(this, init);
