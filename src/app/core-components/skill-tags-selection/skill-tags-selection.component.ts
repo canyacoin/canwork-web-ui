@@ -46,9 +46,14 @@ export class SkillTagsSelectionComponent implements OnInit {
       this.tagSelectionInvalid = true;
       return false;
     }
+<<<<<<< HEAD
 
     this.tagInput = '';
     this.tagSelectionInvalid = false;
+=======
+    this.tagInput = ''
+    this.tagSelectionInvalid = false
+>>>>>>> public job services WIP, some fixes for duplicate tags
   }
 
   onTagChange() {

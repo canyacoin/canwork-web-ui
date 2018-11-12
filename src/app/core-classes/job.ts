@@ -89,19 +89,18 @@ export class JobDescription {
 
 export class Bid {
   providerId: string;
-  providerName: string;
-  providerAvatar: Avatar;
+  providerInfo: Object;
   budget: number;
   message: string;
   timestamp: string;
-
-  constructor(providerId: string, providerName: string, providerAvatar: Avatar, budget: number, message: string, timestamp: string) {
+  rejected: boolean;
+  constructor(providerId: string, providerInfo: Object, budget: number, message: string, timestamp: string) {
     this.providerId = providerId;
-    this.providerName = providerName;
-    this.providerAvatar = providerAvatar;
+    this.providerInfo = providerInfo;
     this.budget = budget;
     this.message = message;
     this.timestamp = timestamp;
+    this.rejected = false;
   }
 }
 
