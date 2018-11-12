@@ -20,6 +20,10 @@ export class Job {
   actionLog: Array<IJobAction> = [];
   boostVisibility = false;
   reviewId: string;
+  deadline: string;
+  visibility: string;
+  bids: Array<Bid> = []
+
 
   constructor(init?: Partial<Job>) {
     Object.assign(this, init);
@@ -82,6 +86,12 @@ export class JobDescription {
   }
 }
 
+export class Bid {
+  providerId: string;
+  budget: number;
+  timestamp: string;
+}
+
 export class Payment {
   txId: string;
   timestamp: string;
@@ -127,4 +137,5 @@ export enum PaymentType {
   hourly = 'Hourly rate',
   fixed = 'Fixed price'
 }
+
 

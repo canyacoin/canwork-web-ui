@@ -4,11 +4,12 @@
     <div *ngIf="!pageLoaded" class="container d-flex h-100 flex-column justify-content-center">
       <img src="assets/img/loader.svg" height="36px" alt="Loader">
     </div>
+  
     <div id="direct-job" *ngIf="recipient && pageLoaded && !isShareable">
       <div *ngIf="!sent" class="section pt-0 bg-grey pb-30">
         <div class="container bg-white p-30">
           <header class="section-header my-0 py-0">
-            <h2 class="fw-300">Post a request</h2>
+            <h2 class="fw-600">Post a request</h2>
           </header>
           <div class="row">
             <div class="col-12 col-lg-12 bg-white">
