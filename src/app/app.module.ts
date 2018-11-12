@@ -9,7 +9,6 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireStorageModule } from 'angularfire2/storage';
 import { Ng5SliderModule } from 'ng5-slider';
-import { FilterPipeModule } from 'ngx-filter-pipe';
 
 import { FirebaseUIModule } from 'firebaseui-angular';
 import { environment } from '../environments/environment';
@@ -30,6 +29,7 @@ import { PublicJobService } from './core-services/public-job.service';
 import { CoreUtilsModule } from './core-utils/core-utils.module';
 import { PublicJobComponent } from './public-job/public-job/public-job.component';
 import { JobBidsComponent } from './public-job/job-bids/job-bids.component';
+import { FilterPipeModule } from 'ngx-filter-pipe';
 
 @NgModule({
   declarations: [
@@ -58,9 +58,9 @@ import { JobBidsComponent } from './public-job/job-bids/job-bids.component';
     HttpClientModule,
     FilterPipeModule,
     Ng5SliderModule,
-    StarRatingModule.forRoot(),
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    StarRatingModule.forRoot()
   ],
   exports: [
     FilterPipeModule
