@@ -8,7 +8,7 @@
       <div *ngIf="!sent" class="section pt-0 bg-grey pb-30">
         <div class="container bg-white p-30">
           <header class="section-header my-0 py-0">
-            <h2 class="fw-300">Post a request</h2>
+            <h2 class="fw-600">Post a request</h2>
           </header>
           <div class="row">
             <div class="col-12 col-lg-12 bg-white">
@@ -116,11 +116,17 @@
                       <label>Timeline Expectations *</label>
                       <br />
                       <div class="row ml-0 mr-0">
+                        <select #timelineExpectation class="form-control">
+                          <option selected>Choose...</option>
+                          <option *ngFor="let range of timeRanges()"> {{ range }} </option>
+                        </select>
+                        <!-- 
                         <div *ngFor="let range of timeRanges()" class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
                           <button type="button" (click)="setTimeRange(range)" class="btn btn-primary w-full" [ngClass]="{'btn-outline': postForm.controls.timelineExpectation.value !== range}">
                             {{range}}
                           </button>
                         </div>
+                      -->
                       </div>
                     </div>
 
@@ -140,7 +146,7 @@
                       <label>Payment preference *</label>
                       <br />
                       <div class="row ml-0 mr-0">
-                        <div *ngFor="let type of paymentTypes()" class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div *ngFor="let type of paymentTypes()" class="mb-10 px-5 col-lg-2 col-md-4 col-sm-4 col-12">
                           <button type="button" (click)="setPaymentType(type)" class="btn btn-primary w-full" [ngClass]="{'btn-outline': postForm.controls.paymentType.value !== type}">
                             {{type}}
                           </button>
@@ -210,7 +216,6 @@
         </div>
       </div>
     </div>
-
     <div id="shareable-job" *ngIf="!recipient && pageLoaded && isShareable">
       <div *ngIf="!sent" class="section bg-grey pt-15 pb-30">
         <div class="container bg-white p-30 brad-5px">
@@ -309,7 +314,7 @@
                         </div>
 
                         <div class="alert alert-danger" *ngIf="deleteFailed">
-                          Oops, something went wrong deleting your file
+                          Oops, something went while wrong deleting your file.
                         </div>
                       </div>
                     </div>
@@ -336,7 +341,6 @@
                         </div>
                       </div>
                     </div>
-
                     <div class="form-group">
                       <div class="col-12">
                         <label>Type of work *</label>
@@ -351,33 +355,38 @@
                       </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group row px-15">
                       <div class="col-sm-6">
                         <label>Deadline *</label>
                         <br />
                         <div class="row ml-0 mr-0">
-                          <input #deadline formControlName="deadline" type="date" class="form-control">
+                          <input #deadline formControlName="deadline" type="date" class="form-control" min="{{currentDate}}">
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <label>Timeline Expectations *</label>
+                        <br />
+                        <select #timelineExpectation class="form-control" formControlName="timelineExpectation">
+                          <option value='' selected>Choose...</option>
+                          <option *ngFor="let range of timeRanges()"> {{ range }} </option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="form-group px-10">
+                      <label class="px-5">Payment preference *</label>
+                      <br />
+                      <div class="row ml-0 mr-0">
+                        <div *ngFor="let type of paymentTypes()" class="px-5 col-lg-2 col-md-4 col-sm-4 col-12">
+                          <button type="button" (click)="setPaymentType(type)" class="btn btn-primary w-full" [ngClass]="{'btn-outline': shareableJobForm.controls.paymentType.value !== type}">
+                            {{type}}
+                          </button>
                         </div>
                       </div>
                     </div>
 
                     <div class="form-group">
-                      <div class="col-12">
-                        <label>Payment preference *</label>
-                        <br />
-                        <div class="row ml-0 mr-0">
-                          <div *ngFor="let type of paymentTypes()" class="mb-10 px-5 col-lg-2 col-md-4 col-sm-6 col-xs-12">
-                            <button type="button" (click)="setPaymentType(type)" class="btn btn-primary w-full"
-                              [ngClass]="{'btn-outline': shareableJobForm.controls.paymentType.value !== type}">
-                              {{type}}
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="form-group" *ngIf="shareableJobForm.controls.paymentType.value">
-                      <div class="col-12">
+                      <div class="col-12" *ngIf="shareableJobForm.controls.paymentType.value">
                         <label class="text-dark">
                           <span *ngIf="shareableJobForm.controls.paymentType.value == paymentType.hourly">Budget per
                             hour (USD)
@@ -386,7 +395,7 @@
                             (USD) *</span>
                         </label>
                         <div class="row">
-                          <div class="col-6">
+                          <div class="col-md-6 col-sm-12">
                             <input #budget formControlName="budget" class="form-control" type="number" min="0" name="budget"
                               step="5" placeholder="1 USD minimum" [class.invalid]="!shareableJobForm.controls.budget.valid && shareableJobForm.controls.budget.dirty">
                             <small *ngIf="!shareableJobForm.controls.budget.valid && shareableJobForm.controls.budget.dirty"
@@ -398,13 +407,26 @@
                           <div *ngIf="shareableJobForm.controls.budget.dirty && canToUsd" class="col-6 mt-5 text-right">
                             <small>~ {{usdToCan(shareableJobForm.controls.budget.value)}} CAN</small>
                           </div>
-
                           <div class="col-12">
                             <small class="text-primary text-wrap">
                               <b>Important</b>: All Transactions on CanWork are made in CAN tokens</small>
                           </div>
                         </div>
                       </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="px-15">Weekly commitment *</label>
+                      <br>
+                      <div class="row px-30">
+                        <input #weeklyCommitment formControlName="weeklyCommitment" class="form-control col-6" type="number"
+                          name="weeklyCommitment" min="1" placeholder="10" [class.invalid]="!shareableJobForm.controls.weeklyCommitment.valid && shareableJobForm.controls.weeklyCommitment.dirty">
+                        <span class="col-3 mt-8">hours / week</span>
+                        <br>
+                        <small>Your expectations of the providers weekly time commitment ot your job.</small>
+                      </div>
+                      <small *ngIf="!postForm.controls.weeklyCommitment.valid && postForm.controls.weeklyCommitment.dirty"
+                        class="text-primary">Must be between 1 - 60 hours</small>
                     </div>
                     <div class="form-group">
                       <div class="col-12">
@@ -433,10 +455,18 @@
                       </div>
                     </div>
                   </div>
-
                   <div class="col-12 text-right">
-                    <img *ngIf="isSending" src="assets/img/loader.svg" height="36px" alt="CanYa Coin">
-                    <button type="button" (click)="submitForm()" class="btn btn-primary" [disabled]="!shareableJobForm.valid || isSending || (currentUpload && !uploadedFile)">POST</button>
+                    <div *ngIf="!isSending">
+                      <button type="button" (click)="submitShareableJob(true)" [disabled]="!shareableJobForm.valid || isSending || (currentUpload && !uploadedFile)"
+                        class="btn btn-secondary mx-10">SAVE AS DRAFT</button>
+                      <button type="button" (click)="submitShareableJob(false)" [disabled]="!shareableJobForm.valid || isSending || (currentUpload && !uploadedFile)"
+                        class="btn btn-primary">
+                        POST JOB
+                      </button>
+                    </div>
+                    <div *ngIf="isSending">
+                      <img *ngIf="isSending" src="assets/img/loader.svg" height="36px" alt="CanYa Coin">
+                    </div>
                   </div>
                 </form>
               </div>
@@ -445,273 +475,29 @@
         </div>
       </div>
 
-      <div *ngIf="sent" class="section py-70">
-        <div class="container">
-          <div class="section-header">
+      <div *ngIf="sent">
+        <div class="container card">
+          <div class="text-center mt-30">
             <img src="assets/img/CanYa_tick_green.svg" class="mb-30 animated bounceInDown" width="100px" height="100px">
-            <h2>Congrats! Your Job has been Created!</h2>
-            <p class="lead fw-400">You can now invite providers to this job.</p>
-            <hr>
-          </div>
-          <br>
-          <p class="text-center">
-            <a class="btn btn-secondary" [routerLink]="['/home']">Return home</a>
-            &nbsp;&nbsp;
-            <a class="btn btn-primary text-white" [routerLink]="['/inbox/chat', recipientAddress]">Go to inbox</a>
-          </p>
-
-        </div>
-      </div>
-    </div>
-<<<<<<< HEAD
-=======
-    <div id="shareable-job" *ngIf="!recipient && pageLoaded && isShareable">
-      <div *ngIf="!sent" class="section bg-grey pt-15 pb-30">
-        <div class="container bg-white p-30 brad-5px">
-          <header class="section-header my-0 py-15">
-            <h2 class="fw-600">Create a Job Post</h2>
-          </header>
-          <div class="row">
-            <div class="col-12 col-lg-12  bg-white">
-              <div class="align-self-center align-items-center my-10">
-                <form [formGroup]="shareableJobForm" class="form validate" novalidate>
-                  <div class="col-12 col-lg-12">
-                    <div class="form-group">
-                      <div class="col-12">
-                        <label>Title *</label>
-                        <input class="form-control" #title formControlName="title" type="text" name="title" placeholder="Enter Job Title"
-                          maxlength="64" [class.invalid]="!postForm.controls.title.valid && postForm.controls.title.dirty">
-                        <small *ngIf="!postForm.controls.title.valid  && postForm.controls.title.dirty" class="text-primary text-wrap">Title
-                          must be 64 characters or less</small>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <div class="col-12">
-                        <label class="text-dark">Description *</label>
-                        <textarea class="form-control" #description formControlName="description" rows="4" name="description"
-                          placeholder="I'm looking for..." [class.invalid]="!postForm.controls.description.valid && postForm.controls.description.dirty"></textarea>
-                        <small *ngIf="!postForm.controls.description.valid" class="text-primary text-wrap">e.g. 'Custom
-                          Logo' or 'Milestone 1 - Wireframes'.</small>
-                      </div>
-                    </div>
-
-                    <div class="form-group">
-                      <div class="col-12">
-                        <label>Project stage *</label>
-                        <textarea class="form-control" #initialStage formControlName="initialStage" type="text" name="initialStage"
-                          placeholder="Lorem ipsum dolor" maxlength="3000" [class.invalid]="!postForm.controls.initialStage.valid && postForm.controls.initialStage.dirty"></textarea>
-                        <small *ngIf="!postForm.controls.description.valid" class="text-primary text-wrap">e.g.
-                          'Ideation
-                          phase' or 'I have started work already'</small>
-                      </div>
-                    </div>
-
-                    <div class="form-group">
-                      <div class="col-12">
-                        <label>Key skills required *</label>
-                        <app-skill-tags-selection (tagsUpdated)="skillTagsUpdated($event)" [minimumTags]="1"></app-skill-tags-selection>
-                        <input hidden #skillTags class="form-control" formControlName="skills" type="text" name="skills">
-                      </div>
-                    </div>
-
-                    <div class="form-group">
-                      <div class="col-12">
-                        <label>Attach a file (max 50mb)</label>
-                        <br>
-                        <small class="text-primary text-wrap">If you wish to upload more than one file we suggest you
-                          upload a zip folder</small>
-
-                        <div class="row ml-0 mr-0">
-                          <div class="mb-10 mt-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                            <label for="file-upload" class="btn btn-outline btn-primary" [ngClass]="{'disabled': currentUpload || uploadedFile}">
-                              Add file
-                            </label>
-                            <input id="file-upload" [disabled]="currentUpload || uploadedFile" type="file" hidden
-                              (change)="detectFiles($event)" />
-                          </div>
-                        </div>
-
-                        <div class="alert alert-danger" *ngIf="fileTooBig">
-                          File is too large, please upload a file smaller than 50 MB
-                        </div>
-
-                        <div *ngIf="currentUpload">
-                          <div class="progress">
-                            <div class="progress-bar progress-bar-animated" [ngStyle]="{ 'width': currentUpload?.progress + '%' }"></div>
-                          </div>
-                          <div *ngIf="!uploadedFile">
-                            Progress: {{currentUpload?.name}} | {{currentUpload?.progress}}% Complete
-                          </div>
-                        </div>
-                        <div class="alert alert-danger" *ngIf="uploadFailed">
-                          Oops, something went wrong uploading your file
-                        </div>
-
-                        <div class="w-full px-10" *ngIf="uploadedFile">
-                          <br> Uploaded:
-                          <ul class="list-unstyled">
-                            <li>
-                              <p>{{uploadedFile.name}}
-                                <span class="pointer alert" (click)="removeUpload(uploadedFile)">
-                                  <i class="fa fa-times fs-14 pl-8"></i>
-                                </span>
-                              </p>
-                            </li>
-                          </ul>
-                        </div>
-
-                        <div class="alert alert-danger" *ngIf="deleteFailed">
-                          Oops, something went wrong deleting your file
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="form-group">
-                      <div class="col-12">
-                        <label>Provider type *</label>
-                        <br />
-                        <div class="row ml-0 mr-0">
-                          <div *ngFor="let type of providerTypes" class="mb-10 px-5 col-lg-3 col-md-4 col-sm-6 col-12">
-                            <button type="button text-left" (click)="setProviderType(type.id)" class="btn btn-primary w-full btn-providerType"
-                              [ngClass]="{'btn-outline': shareableJobForm.controls.providerType.value !== type.id}">
-                              <div class="row">
-                                <div class="col-lg-3 col-2 text-center">
-                                  <img *ngIf="shareableJobForm.controls.providerType.value !== type.id" src="assets/img/providers/{{type.img}}">
-                                  <img *ngIf="shareableJobForm.controls.providerType.value === type.id" src="assets/img/providers/white/{{type.img}}">
-                                </div>
-                                <div class="col-lg-8 col-10 text-left" style="white-space: initial;">
-                                  <span>{{type.name}}</span>
-                                </div>
-                              </div>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <div class="col-12">
-                        <label>Type of work *</label>
-                        <br />
-                        <div class="row ml-0 mr-0">
-                          <div *ngFor="let type of workTypes()" class="mb-10 px-5 col-lg-3 col-md-3 col-sm-4 col-6">
-                            <button type="button" (click)="setWorkType(type)" class="btn btn-primary w-full" [ngClass]="{'btn-outline': shareableJobForm.controls.workType.value !== type}">
-                              {{type}}
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="form-group">
-                      <div class="col-6">
-                        <label>Deadline *</label>
-                        <br />
-                        <div class="row ml-0 mr-0">
-                          <input #deadline formControlName="deadline" type="date" class="form-control">
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="form-group">
-                      <div class="col-12">
-                        <label>Payment preference *</label>
-                        <br />
-                        <div class="row ml-0 mr-0">
-                          <div *ngFor="let type of paymentTypes()" class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                            <button type="button" (click)="setPaymentType(type)" class="btn btn-primary w-full"
-                              [ngClass]="{'btn-outline': shareableJobForm.controls.paymentType.value !== type}">
-                              {{type}}
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="form-group" *ngIf="postForm.controls.paymentType.value">
-                      <div class="col-12">
-                        <label class="text-dark">
-                          <span *ngIf="postForm.controls.paymentType.value == paymentType.hourly">Budget per hour (USD)
-                            *</span>
-                          <span *ngIf="postForm.controls.paymentType.value == paymentType.fixed">Total budget (USD) *</span>
-                        </label>
-                        <div class="row">
-                          <div class="col-6">
-                            <input #budget formControlName="budget" class="form-control" type="number" min="0" name="budget"
-                              step="5" placeholder="1 USD minimum" [class.invalid]="!postForm.controls.budget.valid && postForm.controls.budget.dirty">
-                            <small *ngIf="!postForm.controls.budget.valid && postForm.controls.budget.dirty" class="text-primary">Must
-                              be 1 USD or more.</small>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div *ngIf="postForm.controls.budget.dirty && canToUsd" class="col-6 mt-5 text-right">
-                            <small>~ {{usdToCan(postForm.controls.budget.value)}} CAN</small>
-                          </div>
-
-                          <div class="col-12">
-                            <small class="text-primary text-wrap">
-                              <b>Important</b>: All Transactions on CanWork are made in CAN tokens</small>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <div class="col-12">
-                        <label>Visibility *</label>
-                        <br />
-                        <div class="row ml-0 mr-0">
-                          <div  class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                            <button type="button" (click)="setVisibility('invite')" class="btn btn-primary w-full"
-                              [ngClass]="{'btn-outline': shareableJobForm.controls.paymentType.value !== type}">
-                              Invite-only
-                            </button>
-                          </div>
-                          <div  class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                            <button type="button btn-secondary" (click)="setVisibility('public')" disabled class="btn btn-primary w-full"
-                              [ngClass]="{'btn-outline': shareableJobForm.controls.paymentType.value !== type}">
-                              Public
-                            </button>
-                          </div>
-                        </div>
-                        <i class="small">Public job listing coming soon</i>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <div class="col-12">
-                        <app-terms [form]="postForm"></app-terms>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-12 text-right">
-                    <img *ngIf="isSending" src="assets/img/loader.svg" height="36px" alt="CanYa Coin">
-                    <button type="button" (click)="submitForm()" class="btn btn-primary" [disabled]="!postForm.valid || isSending || (currentUpload && !uploadedFile)">POST</button>
-                  </div>
-                </form>
-              </div>
+            <div *ngIf="!draft">
+              <h2>Congrats! Your Job has been Created!</h2>
+              <p class="lead fw-400">You can now invite providers to this job.</p>
+            </div>
+            <div *ngIf="draft">
+              <h2>Your job draft has been saved</h2>
+              <p class="lead fw-400 m-0">You can finish the draft and share it later.</p>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div *ngIf="sent" class="section py-70">
-        <div class="container">
-          <div class="section-header">
-            <img src="assets/img/CanYa_tick_green.svg" class="mb-30 animated bounceInDown" width="100px" height="100px">
-            <h2>Congrats! Your Job has been Created!</h2>
-            <p class="lead fw-400">You can now invite providers to this job.</p>
-            <hr>
-          </div>
           <br>
           <p class="text-center">
             <a class="btn btn-secondary" [routerLink]="['/home']">Return home</a>
             &nbsp;&nbsp;
-            <a class="btn btn-primary text-white" [routerLink]="['/inbox/chat', recipientAddress]">Go to inbox</a>
+            <a class="btn btn-primary text-white" [routerLink]="['/jobs/public/', friendlyUrl]">Go to job</a>
           </p>
 
         </div>
       </div>
     </div>
->>>>>>> providerless job post
     <div *ngIf="!recipient && pageLoaded && !isShareable" class="section bg-white pt-0 text-center">
       <h3>Uh-oh, we can't seem to find this provider!</h3>
     </div>

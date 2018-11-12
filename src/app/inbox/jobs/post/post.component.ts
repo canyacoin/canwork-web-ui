@@ -11,6 +11,7 @@ import '@extensions/string';
 import { AuthService } from '@service/auth.service';
 import { JobNotificationService } from '@service/job-notification.service';
 import { JobService } from '@service/job.service';
+import { PublicJobService } from '@service/public-job.service';
 import { UploadCategory, UploadService } from '@service/upload.service';
 import { UserService } from '@service/user.service';
 import { getUsdToCan } from '@util/currency-conversion';
@@ -126,6 +127,7 @@ export class PostComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private jobService: JobService,
     private ethService: EthService,
+    private publicJobService: PublicJobService,
     private uploadService: UploadService,
     private http: Http) {
     this.postForm = formBuilder.group({
@@ -263,12 +265,15 @@ export class PostComponent implements OnInit, OnDestroy {
   setProviderType(type: string) {
     this.shareableJobForm.controls.providerType.setValue(type);
   }
+
   setVisibility(type: string) {
     this.shareableJobForm.controls.visibility.setValue(type);
   }
+
   timeRanges(): Array<string> {
     return Object.values(TimeRange);
   }
+
   setTimeRange(range: TimeRange) {
     if (this.isShareable) {
       this.shareableJobForm.controls.timelineExpectation.setValue(range);
@@ -280,6 +285,7 @@ export class PostComponent implements OnInit, OnDestroy {
   paymentTypes(): Array<string> {
     return Object.values(PaymentType);
   }
+
   setPaymentType(type: PaymentType) {
     if (this.isShareable) {
       this.shareableJobForm.controls.paymentType.setValue(type);
@@ -331,7 +337,27 @@ export class PostComponent implements OnInit, OnDestroy {
           this.jobService.createJobChat(job, action, this.currentUser, this.recipient);
         }
       } else {
+        const job = new Job({
+          id: this.jobId,
+          hexId: this.ethService.web3js.utils.toHex(this.jobId.hashCode()),
+          clientId: this.currentUser.address,
+          information: new JobDescription({
+            description: this.shareableJobForm.value.description,
+            title: this.shareableJobForm.value.title,
+            initialStage: this.shareableJobForm.value.initialStage,
+            skills: tags,
+            attachments: this.uploadedFile ? [this.uploadedFile] : [],
+            workType: this.shareableJobForm.value.workType,
+            timelineExpectation: null,
+            weeklyCommitment: this.shareableJobForm.value.weeklyCommitment
+          }),
+          paymentType: this.shareableJobForm.value.paymentType,
+          budget: this.shareableJobForm.value.budget,
+          deadline: this.shareableJobForm.value.deadline
+        });
         console.log('Shareable job submitted...');
+        console.log('job created');
+        console.log(job)
       }
     } catch (e) {
       this.sent = false;
