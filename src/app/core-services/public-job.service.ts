@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+<<<<<<< HEAD
 import { Job, JobState, Bid } from '@class/job';
 import { User, UserType } from '@class/user';
 import { UserService } from '@service/user.service';
@@ -13,19 +14,32 @@ import { createChangeDetectorRef } from '@angular/core/src/view/refs';
 import { JobNotificationService } from './job-notification.service';
 import { Action } from 'rxjs/internal/scheduler/Action';
 import * as moment from 'moment';
+=======
+import { Job, JobDescription } from '@class/job';
+import { User, UserType } from '@class/user';
+import { UserService } from '@service/user.service';
+import { JobService } from '@service/job.service';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Observable } from 'rxjs/Observable';
+>>>>>>> public job services WIP, some fixes for duplicate tags
 
 @Injectable()
 export class PublicJobService {
   publicJobsCollection: AngularFirestoreCollection<any>;
   constructor(
     private afs: AngularFirestore,
+<<<<<<< HEAD
     private chatService: ChatService,
     private userService: UserService,
     private auth: AuthService,
+=======
+    private userService: UserService,
+>>>>>>> public job services WIP, some fixes for duplicate tags
     private jobService: JobService
   ) {
     this.publicJobsCollection = this.afs.collection<any>('public-jobs');
   }
+<<<<<<< HEAD
 
   // BASIC GETs
 
@@ -109,6 +123,17 @@ export class PublicJobService {
       return 0;
     });
     return result;
+=======
+
+  // BASIC GETs
+
+  getPublicJob(jobId: string) {
+    return this.afs.doc(`public-jobs/${jobId}`).snapshotChanges().map(doc => {
+      const job = doc.payload.data() as Job;
+      job.id = jobId;
+      return job;
+    });
+>>>>>>> public job services WIP, some fixes for duplicate tags
   }
 
   // BASIC CRUDs
@@ -157,6 +182,7 @@ export class PublicJobService {
     });
   }
 
+<<<<<<< HEAD
   // checks if the provider exists in the job bid
   async canBid(providerId: string, job: Job) {
     const bid = await this.afs.collection<any>(`public-jobs/${job.id}/bids/`, ref => ref.where('providerId', '==', providerId)).get().toPromise();
@@ -173,6 +199,13 @@ export class PublicJobService {
         reject(false);
       });
     });
+=======
+
+  // save the public job
+  private async saveJobFirebase(job: Job): Promise<any> {
+    const x = await this.jobService.parseJobToObject(job);
+    return this.publicJobsCollection.doc(job.id).set(x);
+>>>>>>> public job services WIP, some fixes for duplicate tags
   }
 
   async getBids(jobId: string) {
@@ -254,6 +287,7 @@ export class PublicJobService {
     return friendly;
   }
 
+<<<<<<< HEAD
   parseBidToObject(bid: Bid): Object {
     // firebase don't allow us to upload custom object so we have to use this workaround
     const bidObject = Object.assign({}, bid);
@@ -307,5 +341,9 @@ export class PublicJobService {
   async canInvite(jobId, providerId) {
     const exist = await this.afs.collection(`public-jobs/${jobId}/invites/`, ref => ref.where('provider', '==', providerId)).valueChanges().take(1).toPromise();
     return !(exist.length > 0);
+=======
+  bidPublicJob() {
+
+>>>>>>> public job services WIP, some fixes for duplicate tags
   }
 }

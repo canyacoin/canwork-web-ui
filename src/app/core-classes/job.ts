@@ -22,8 +22,12 @@ export class Job {
   reviewId: string;
   deadline: string;
   visibility: string;
+<<<<<<< HEAD
   draft: boolean;
   friendlyUrl: string;
+=======
+  bids: Array<Bid> = []
+>>>>>>> public job services WIP, some fixes for duplicate tags
 
 
   constructor(init?: Partial<Job>) {
@@ -89,6 +93,7 @@ export class JobDescription {
 
 export class Bid {
   providerId: string;
+<<<<<<< HEAD
   providerName: string;
   providerAvatar: Avatar;
   budget: number;
@@ -103,6 +108,10 @@ export class Bid {
     this.message = message;
     this.timestamp = timestamp;
   }
+=======
+  budget: number;
+  timestamp: string;
+>>>>>>> public job services WIP, some fixes for duplicate tags
 }
 
 export class Payment {
