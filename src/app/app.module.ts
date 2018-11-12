@@ -20,14 +20,17 @@ import { CanWorkEthService } from './core-services/eth.service';
 import { JobNotificationService } from './core-services/job-notification.service';
 import { CertificationsService } from './core-services/certifications.service';
 import { NavService } from './core-services/nav.service';
+import { PublicJobService } from './core-services/public-job.service';
 import { CoreUtilsModule } from './core-utils/core-utils.module';
+import { PublicJobComponent } from './public-job/public-job.component';
 import { FilterPipeModule } from 'ngx-filter-pipe';
 import { Ng5SliderModule } from 'ng5-slider';
 import { DockIoService } from './core-services/dock-io.service';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PublicJobComponent
   ],
   imports: [
     AppRoutingModule,
@@ -62,6 +65,7 @@ import { DockIoService } from './core-services/dock-io.service';
     JobNotificationService,
     CertificationsService,
     DockIoService,
+    PublicJobService
   ],
   bootstrap: [AppComponent]
 })

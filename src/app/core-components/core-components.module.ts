@@ -44,7 +44,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   maxFiles: 1,
   uploadMultiple: false,
   acceptedFiles: null
-}
+};
 
 @NgModule({
   imports: [
