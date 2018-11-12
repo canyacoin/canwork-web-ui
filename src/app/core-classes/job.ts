@@ -22,8 +22,12 @@ export class Job {
   reviewId: string;
   deadline: string;
   visibility: string;
+<<<<<<< HEAD
   draft: boolean;
   friendlyUrl: string;
+=======
+  bids: Array<Bid> = [];
+>>>>>>> basic public job upload done
 
 
   constructor(init?: Partial<Job>) {
