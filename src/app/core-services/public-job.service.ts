@@ -20,18 +20,28 @@ export class PublicJobService {
 
   // BASIC GETs
 
-  getPublicJob(jobId: string) {
+  getPublicJob(jobId: string): Observable<Job> {
+    return this.afs.doc(`public-jobs/${jobId}`).snapshotChanges().pipe(map(doc => {
+      const job = doc.payload.data() as Job;
+      console.log(job);
+      if (job !== undefined) {
+        console.log('found.');
+      } else {
+        console.log('not found.');
+      }
+      return job;
+    }));
   }
 
   public async getPublicJobsByUser() {
   }
   // BASIC CRUDs
-  async handlepublicJob(job): Promise<boolean>  {
+  async handlepublicJob(job): Promise<boolean> {
     console.log('uploading job...');
     return new Promise<boolean>(async (resolve, reject) => {
       try {
         await this.saveJobFirebase(job);
-        resolve (true);
+        resolve(true);
       } catch (error) {
         reject(false);
       }
