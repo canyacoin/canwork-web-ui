@@ -335,31 +335,7 @@ export class PostComponent implements OnInit, OnDestroy {
           this.jobService.createJobChat(job, action, this.currentUser, this.recipient);
         }
       } else {
-<<<<<<< HEAD
         console.log('shareable job!');
-=======
-        const job = new Job({
-          id: this.jobId,
-          hexId: this.ethService.web3js.utils.toHex(this.jobId.hashCode()),
-          clientId: this.currentUser.address,
-          information: new JobDescription({
-            description: this.shareableJobForm.value.description,
-            title: this.shareableJobForm.value.title,
-            initialStage: this.shareableJobForm.value.initialStage,
-            skills: tags,
-            attachments: this.uploadedFile ? [this.uploadedFile] : [],
-            workType: this.shareableJobForm.value.workType,
-            timelineExpectation: null,
-            weeklyCommitment: this.shareableJobForm.value.weeklyCommitment
-          }),
-          paymentType: this.shareableJobForm.value.paymentType,
-          budget: this.shareableJobForm.value.budget,
-          deadline: this.shareableJobForm.value.deadline
-        });
-        console.log('Shareable job submitted...');
-        console.log('job created');
-        console.log(job)
->>>>>>> public job services WIP, some fixes for duplicate tags
       }
     } catch (e) {
       this.sent = false;

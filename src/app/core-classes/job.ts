@@ -22,12 +22,8 @@ export class Job {
   reviewId: string;
   deadline: string;
   visibility: string;
-<<<<<<< HEAD
   draft: boolean;
   friendlyUrl: string;
-=======
-  bids: Array<Bid> = []
->>>>>>> public job services WIP, some fixes for duplicate tags
 
 
   constructor(init?: Partial<Job>) {
@@ -85,6 +81,7 @@ export class JobDescription {
   workType: WorkType;
   timelineExpectation: TimeRange;
   weeklyCommitment: number;
+  providerType: string;
 
   constructor(init?: Partial<JobDescription>) {
     Object.assign(this, init);
@@ -93,25 +90,19 @@ export class JobDescription {
 
 export class Bid {
   providerId: string;
-<<<<<<< HEAD
-  providerName: string;
-  providerAvatar: Avatar;
+  providerInfo: Object;
   budget: number;
   message: string;
   timestamp: string;
-
-  constructor(providerId: string, providerName: string, providerAvatar: Avatar, budget: number, message: string, timestamp: string) {
+  rejected: boolean;
+  constructor(providerId: string, providerInfo: Object, budget: number, message: string, timestamp: string) {
     this.providerId = providerId;
-    this.providerName = providerName;
-    this.providerAvatar = providerAvatar;
+    this.providerInfo = providerInfo;
     this.budget = budget;
     this.message = message;
     this.timestamp = timestamp;
+    this.rejected = false;
   }
-=======
-  budget: number;
-  timestamp: string;
->>>>>>> public job services WIP, some fixes for duplicate tags
 }
 
 export class Payment {
@@ -126,6 +117,7 @@ export class Payment {
 
 export enum JobState {
   acceptingOffers = 'Accepting Offers',
+  closed = 'Public job closed',
   offer = 'Offer pending',
   cancelled = 'Cancelled',
   declined = 'Declined',
