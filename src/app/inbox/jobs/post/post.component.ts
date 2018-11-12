@@ -344,23 +344,32 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   async submitShareableJob(isDraft: boolean) {
+<<<<<<< HEAD
     this.isSending = true;
+=======
+>>>>>>> basic job getter and checker works
     let tags: string[];
     tags = this.shareableJobForm.value.skills === '' ? [] : this.shareableJobForm.value.skills.split(',').map(item => item.trim());
     if (tags.length > 6) {
       tags = tags.slice(0, 6);
     }
+<<<<<<< HEAD
     const friendly = await this.publicJobService.generateReadableId(this.shareableJobForm.value.title);
     this.friendlyUrl = friendly;
     console.log('Friendly URL : ' + this.friendlyUrl);
     if (this.editing) {
       this.jobId = this.jobToEdit.id;
     }
+=======
+>>>>>>> basic job getter and checker works
     const job = new Job({
       id: this.jobId,
       hexId: this.ethService.web3js.utils.toHex(this.jobId.hashCode()),
       clientId: this.currentUser.address,
+<<<<<<< HEAD
       friendlyUrl: this.friendlyUrl,
+=======
+>>>>>>> basic job getter and checker works
       information: new JobDescription({
         description: this.shareableJobForm.value.description,
         title: this.shareableJobForm.value.title,
@@ -369,14 +378,19 @@ export class PostComponent implements OnInit, OnDestroy {
         attachments: this.uploadedFile ? [this.uploadedFile] : [],
         workType: this.shareableJobForm.value.workType,
         timelineExpectation: this.shareableJobForm.value.timelineExpectation,
+<<<<<<< HEAD
         weeklyCommitment: this.shareableJobForm.value.weeklyCommitment,
         providerType: this.shareableJobForm.value.providerType
+=======
+        weeklyCommitment: this.shareableJobForm.value.weeklyCommitment
+>>>>>>> basic job getter and checker works
       }),
       paymentType: this.shareableJobForm.value.paymentType,
       budget: this.shareableJobForm.value.budget,
       deadline: this.shareableJobForm.value.deadline,
       draft: isDraft
     });
+<<<<<<< HEAD
     this.draft = isDraft;
     const action = new IJobAction(ActionType.createJob, UserType.client);
     action.setPaymentProperties(job.budget, await this.jobService.getJobBudget(job), this.postForm.value.timelineExpectation,
@@ -391,4 +405,14 @@ export class PostComponent implements OnInit, OnDestroy {
   async updateJob() {
     // uploads the job
   }
+=======
+    console.log(this.shareableJobForm);
+    console.log('Shareable job submitted...');
+    console.log('job created');
+    console.log(job);
+    this.sent = await this.publicJobService.handlepublicJob(job);
+    this.isSending = false;
+  }
+
+>>>>>>> basic job getter and checker works
 }

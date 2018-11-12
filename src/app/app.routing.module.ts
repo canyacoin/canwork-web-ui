@@ -55,7 +55,6 @@ import { UserIsSetupGuard } from './core-utils/user-is-setup.guard';
         component: PublicJobComponent
       },
       {
-<<<<<<< HEAD
         path: 'jobs/:jobId/bids',
         component: JobBidsComponent
       },
@@ -64,8 +63,6 @@ import { UserIsSetupGuard } from './core-utils/user-is-setup.guard';
         component: JobBidsComponent
       },
       {
-=======
->>>>>>> created the basic friendly-url generator and route
         path: 'profile',
         loadChildren: './profile/profile.module#ProfileModule'
       },
