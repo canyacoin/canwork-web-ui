@@ -1,13 +1,5 @@
 import { Type } from '@angular/core';
-<<<<<<< HEAD
-<<<<<<< HEAD
 import { Avatar, User, UserType } from '@class/user';
-=======
-import { User, UserType, Avatar } from '@class/user';
->>>>>>> cleaned up some code, changed the animation for the bidding process, added bids list on the public-job page
-=======
-import { Avatar, User, UserType } from '@class/user';
->>>>>>> Bid constructor example
 
 import { IJobAction } from './job-action';
 import { Upload } from './upload';
@@ -32,10 +24,6 @@ export class Job {
   visibility: string;
   draft: boolean;
   friendlyUrl: string;
-<<<<<<< HEAD
-
-=======
->>>>>>> created the basic friendly-url generator and route
 
 
   constructor(init?: Partial<Job>) {
@@ -102,7 +90,6 @@ export class JobDescription {
 
 export class Bid {
   providerId: string;
-<<<<<<< HEAD
   providerInfo: Object;
   budget: number;
   message: string;
@@ -115,26 +102,6 @@ export class Bid {
     this.message = message;
     this.timestamp = timestamp;
     this.rejected = false;
-=======
-  providerName: string;
-  providerAvatar: Avatar;
-  budget: number;
-  message: string;
-  timestamp: string;
-
-<<<<<<< HEAD
-  constructor(init?: Partial<Bid>) {
-    Object.assign(this, init);
->>>>>>> cleaned up some code, changed the animation for the bidding process, added bids list on the public-job page
-=======
-  constructor(providerId: string, providerName: string, providerAvatar: Avatar, budget: number, message: string, timestamp: string) {
-    this.providerId = providerId;
-    this.providerName = providerName;
-    this.providerAvatar = providerAvatar;
-    this.budget = budget;
-    this.message = message;
-    this.timestamp = timestamp;
->>>>>>> Bid constructor example
   }
 }
 
@@ -150,10 +117,7 @@ export class Payment {
 
 export enum JobState {
   acceptingOffers = 'Accepting Offers',
-<<<<<<< HEAD
   closed = 'Public job closed',
-=======
->>>>>>> the most basic choose-bid-and-close-public-job functionality
   offer = 'Offer pending',
   cancelled = 'Cancelled',
   declined = 'Declined',
