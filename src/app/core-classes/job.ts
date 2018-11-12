@@ -22,7 +22,7 @@ export class Job {
   reviewId: string;
   deadline: string;
   visibility: string;
-  bids: Array<Bid> = []
+  bids: Array<Bid> = [];
 
 
   constructor(init?: Partial<Job>) {
