@@ -87,6 +87,7 @@ service cloud.firestore {
     
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     match /public-jobs/{jobId} {
 =======
     // TODO: Will require a much more complex rule set here
@@ -95,10 +96,15 @@ service cloud.firestore {
 =======
      match /public-jobs/{publicJobId} {
 >>>>>>> created the basic friendly-url generator and route
+=======
+    // TODO: Will require a much more complex rule set here
+    match /public-jobs {
+>>>>>>> basic public job upload done
        allow read;
        allow create: if isAuthenticated();
        allow update: if userIsClientOrProvider();
        allow delete: if isAdmin();
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     }    
@@ -109,6 +115,17 @@ service cloud.firestore {
        allow update: if userIsClientOrProvider();
        allow delete: if isAdmin();
     }
+=======
+    }
+    
+    match /public-jobs/{publicJobId} {
+       allow read;
+       allow create: if isAuthenticated();
+       allow update: if userIsClientOrProvider();
+       allow delete: if isAdmin();
+    }
+  }
+>>>>>>> basic public job upload done
 
 =======
     }

@@ -23,6 +23,7 @@ export class Job {
   deadline: string;
   visibility: string;
 <<<<<<< HEAD
+<<<<<<< HEAD
   draft: boolean;
   friendlyUrl: string;
 <<<<<<< HEAD
@@ -32,6 +33,9 @@ export class Job {
 =======
   bids: Array<Bid> = []
 >>>>>>> public job services WIP, some fixes for duplicate tags
+=======
+  bids: Array<Bid> = [];
+>>>>>>> basic public job upload done
 
 
   constructor(init?: Partial<Job>) {
