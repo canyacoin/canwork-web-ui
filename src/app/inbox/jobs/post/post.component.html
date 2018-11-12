@@ -4,7 +4,10 @@
     <div *ngIf="!pageLoaded" class="container d-flex h-100 flex-column justify-content-center">
       <img src="assets/img/loader.svg" height="36px" alt="Loader">
     </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> basic job getter and checker works
     <div id="direct-job" *ngIf="recipient && pageLoaded && !isShareable">
       <div *ngIf="!sent" class="section pt-0 bg-grey pb-30">
         <div class="container bg-white p-30">
@@ -220,6 +223,13 @@
         </div>
       </div>
     </div>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> basic job getter and checker works
+>>>>>>> basic job getter and checker works
     <div id="shareable-job" *ngIf="!recipient && pageLoaded && isShareable">
       <div *ngIf="!sent" class="section bg-grey pt-15 pb-30">
         <div class="container bg-white p-30 brad-5px">
@@ -355,6 +365,13 @@
                         </div>
                       </div>
                     </div>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> basic job getter and checker works
+>>>>>>> basic job getter and checker works
                     <div class="form-group">
                       <div class="col-12">
                         <label>Type of work *</label>
@@ -611,10 +628,134 @@
                       </div>
 >>>>>>> basic public job upload done
                     </div>
+<<<<<<< HEAD
                     <div *ngIf="isSending">
                       <img *ngIf="isSending" src="assets/img/loader.svg" height="36px" alt="CanYa Coin">
                     </div>
                   </div>
+=======
+
+                    <div class="form-group">
+                      <div class="col-12">
+                        <label>Provider type *</label>
+                        <br />
+                        <div class="row ml-0 mr-0">
+                          <div *ngFor="let type of providerTypes" class="mb-10 px-5 col-lg-3 col-md-4 col-sm-6 col-12">
+                            <button type="button text-left" (click)="setProviderType(type.id)" class="btn btn-primary w-full btn-providerType"
+                              [ngClass]="{'btn-outline': shareableJobForm.controls.providerType.value !== type.id}">
+                              <div class="row">
+                                <div class="col-lg-3 col-2 text-center">
+                                  <img *ngIf="shareableJobForm.controls.providerType.value !== type.id" src="assets/img/providers/{{type.img}}">
+                                  <img *ngIf="shareableJobForm.controls.providerType.value === type.id" src="assets/img/providers/white/{{type.img}}">
+                                </div>
+                                <div class="col-lg-8 col-10 text-left" style="white-space: initial;">
+                                  <span>{{type.name}}</span>
+                                </div>
+                              </div>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-12">
+                        <label>Type of work *</label>
+                        <br />
+                        <div class="row ml-0 mr-0">
+                          <div *ngFor="let type of workTypes()" class="mb-10 px-5 col-lg-3 col-md-3 col-sm-4 col-6">
+                            <button type="button" (click)="setWorkType(type)" class="btn btn-primary w-full" [ngClass]="{'btn-outline': shareableJobForm.controls.workType.value !== type}">
+                              {{type}}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <div class="col-6">
+                        <label>Deadline *</label>
+                        <br />
+                        <div class="row ml-0 mr-0">
+                          <input #deadline formControlName="deadline" type="date" class="form-control">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <div class="col-12">
+                        <label>Payment preference *</label>
+                        <br />
+                        <div class="row ml-0 mr-0">
+                          <div *ngFor="let type of paymentTypes()" class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <button type="button" (click)="setPaymentType(type)" class="btn btn-primary w-full"
+                              [ngClass]="{'btn-outline': shareableJobForm.controls.paymentType.value !== type}">
+                              {{type}}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group" *ngIf="postForm.controls.paymentType.value">
+                      <div class="col-12">
+                        <label class="text-dark">
+                          <span *ngIf="postForm.controls.paymentType.value == paymentType.hourly">Budget per hour (USD)
+                            *</span>
+                          <span *ngIf="postForm.controls.paymentType.value == paymentType.fixed">Total budget (USD) *</span>
+                        </label>
+                        <div class="row">
+                          <div class="col-6">
+                            <input #budget formControlName="budget" class="form-control" type="number" min="0" name="budget"
+                              step="5" placeholder="1 USD minimum" [class.invalid]="!postForm.controls.budget.valid && postForm.controls.budget.dirty">
+                            <small *ngIf="!postForm.controls.budget.valid && postForm.controls.budget.dirty" class="text-primary">Must
+                              be 1 USD or more.</small>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div *ngIf="postForm.controls.budget.dirty && canToUsd" class="col-6 mt-5 text-right">
+                            <small>~ {{usdToCan(postForm.controls.budget.value)}} CAN</small>
+                          </div>
+
+                          <div class="col-12">
+                            <small class="text-primary text-wrap">
+                              <b>Important</b>: All Transactions on CanWork are made in CAN tokens</small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-12">
+                        <label>Visibility *</label>
+                        <br />
+                        <div class="row ml-0 mr-0">
+                          <div  class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <button type="button" (click)="setVisibility('invite')" class="btn btn-primary w-full"
+                              [ngClass]="{'btn-outline': shareableJobForm.controls.paymentType.value !== type}">
+                              Invite-only
+                            </button>
+                          </div>
+                          <div  class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <button type="button btn-secondary" (click)="setVisibility('public')" disabled class="btn btn-primary w-full"
+                              [ngClass]="{'btn-outline': shareableJobForm.controls.paymentType.value !== type}">
+                              Public
+                            </button>
+                          </div>
+                        </div>
+                        <i class="small">Public job listing coming soon</i>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-12">
+                        <app-terms [form]="shareableJobForm"></app-terms>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 text-right">
+                    <img *ngIf="isSending" src="assets/img/loader.svg" height="36px" alt="CanYa Coin">
+                    <button type="button" (click)="submitShareableJob(true)" [disabled]="!shareableJobForm.valid || isSending || (currentUpload && !uploadedFile)" class="btn btn-secondary mx-10">SAVE AS DRAFT</button>
+                    <button type="button" (click)="submitShareableJob(false)" [disabled]="!shareableJobForm.valid || isSending || (currentUpload && !uploadedFile)" class="btn btn-primary">POST JOB</button>
+                  </div>
+>>>>>>> basic job getter and checker works
                 </form>
               </div>
             </div>
