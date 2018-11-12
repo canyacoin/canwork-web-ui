@@ -264,7 +264,7 @@ export class JobService {
 
 
   /** Job object must be re-assigned as firebase doesn't accept strong types */
-  private parseJobToObject(job: Job): Promise<object> {
+  parseJobToObject(job: Job): Promise<object> {
     const parsedAttachments: Array<any> = [];
     job.information.attachments.forEach((attachment: Upload) => {
       parsedAttachments.push(this.parseUpload(attachment));
