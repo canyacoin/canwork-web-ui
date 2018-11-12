@@ -25,11 +25,14 @@ import { CanWorkEthService } from './core-services/eth.service';
 import { JobNotificationService } from './core-services/job-notification.service';
 import { MobileService } from './core-services/mobile.service';
 import { NavService } from './core-services/nav.service';
+import { PublicJobService } from './core-services/public-job.service';
 import { CoreUtilsModule } from './core-utils/core-utils.module';
+import { PublicJobComponent } from './public-job/public-job.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PublicJobComponent
   ],
   imports: [
     AppRoutingModule,
@@ -65,6 +68,7 @@ import { CoreUtilsModule } from './core-utils/core-utils.module';
     JobNotificationService,
     CertificationsService,
     DockIoService,
+    PublicJobService
   ],
   bootstrap: [AppComponent]
 })

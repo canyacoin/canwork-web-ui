@@ -40,7 +40,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.displayEditComponent = params.editProfile ? true : false;
         });
       }
-    }, error => { console.error('! unable to retrieve currentUser data:', error); });
+    }, error => {
+      console.error('! unable to retrieve currentUser data:', error);
+    });
   }
 
   ngOnDestroy() {

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
+import { PublicJobComponent } from './public-job/public-job.component';
 import { LandingComponent } from './landing/landing.component';
 import { BrandComponent } from './core-components/brand/brand.component';
 import { FaqPageComponent } from './core-components/faq-page/faq-page.component';
@@ -44,6 +44,10 @@ import { UserIsSetupGuard } from './core-utils/user-is-setup.guard';
       {
         path: 'jobs',
         component: ComingSoonComponent
+      },
+      {
+        path: 'jobs/:jobId',
+        component: PublicJobComponent
       },
       {
         path: 'profile',

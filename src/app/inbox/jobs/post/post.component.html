@@ -4,7 +4,10 @@
     <div *ngIf="!pageLoaded" class="container d-flex h-100 flex-column justify-content-center">
       <img src="assets/img/loader.svg" height="36px" alt="Loader">
     </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> basic job getter and checker works
     <div id="direct-job" *ngIf="recipient && pageLoaded && !isShareable">
       <div *ngIf="!sent" class="section pt-0 bg-grey pb-30">
         <div class="container bg-white p-30">
@@ -462,7 +465,6 @@
         </div>
       </div>
     </div>
-
     <div id="shareable-job" *ngIf="!recipient && pageLoaded && isShareable">
       <div *ngIf="!sent" class="section bg-grey pt-15 pb-30">
         <div class="container bg-white p-30 brad-5px">
@@ -588,7 +590,6 @@
                         </div>
                       </div>
                     </div>
-
                     <div class="form-group">
                       <div class="col-12">
                         <label>Type of work *</label>
@@ -703,10 +704,10 @@
                       </div>
                     </div>
                   </div>
-
                   <div class="col-12 text-right">
                     <img *ngIf="isSending" src="assets/img/loader.svg" height="36px" alt="CanYa Coin">
-                    <button type="button" (click)="submitForm()"  [disabled]="!shareableJobForm.valid || isSending || (currentUpload && !uploadedFile)" class="btn btn-primary">POST</button>
+                    <button type="button" (click)="submitShareableJob(true)" [disabled]="!shareableJobForm.valid || isSending || (currentUpload && !uploadedFile)" class="btn btn-secondary mx-10">SAVE AS DRAFT</button>
+                    <button type="button" (click)="submitShareableJob(false)" [disabled]="!shareableJobForm.valid || isSending || (currentUpload && !uploadedFile)" class="btn btn-primary">POST JOB</button>
                   </div>
                 </form>
               </div>
@@ -733,7 +734,6 @@
         </div>
       </div>
     </div>
-
     <div *ngIf="!recipient && pageLoaded && !isShareable" class="section bg-white pt-0 text-center">
       <h3>Uh-oh, we can't seem to find this provider!</h3>
     </div>
