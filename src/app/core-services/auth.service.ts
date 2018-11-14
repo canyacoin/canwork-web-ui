@@ -1,3 +1,4 @@
+import { LOCAL_STORAGE , WINDOW} from '@ng-toolkit/universal';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -16,7 +17,7 @@ export class AuthService {
   public currentUser = new BehaviorSubject<User>(null);
   public currentUser$ = this.currentUser.asObservable();
 
-  constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth, private router: Router) {
+  constructor(@Inject(WINDOW) private window: Window, @Inject(LOCAL_STORAGE) private localStorage: any, private afs: AngularFirestore, private afAuth: AngularFireAuth, private router: Router) {
     const savedUser = JSON.parse(localStorage.getItem('credentials'));
     if (savedUser) {
       this.setUser(savedUser);
@@ -36,14 +37,14 @@ export class AuthService {
 
   // TODO: fix async/promise issue here.
   public async getJwt(): Promise<string> {
-    console.log('+ 1 current token:', window.sessionStorage.accessToken);
+    console.log('+ 1 current token:', this.window.sessionStorage.accessToken);
     await firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         const token = await user.getIdToken(true);
         console.log('+ 2 refreshed token', token);
         return token;
       } else {
-        window.sessionStorage.accessToken = '';
+        this.window.sessionStorage.accessToken = '';
       }
     });
     return '';
@@ -58,12 +59,12 @@ export class AuthService {
   }
 
   emitUser(user: User) {
-    localStorage.setItem('credentials', JSON.stringify(user));
+    this.localStorage.setItem('credentials', JSON.stringify(user));
     this.currentUser.next(user);
   }
 
   logout() {
-    localStorage.clear();
+    this.localStorage.clear();
     this.currentUser.next(null);
     this.afAuth.auth.signOut();
     this.router.navigate(['home']); // TODO: Change this to reload same route - and hit the auth guards again

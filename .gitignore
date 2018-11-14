@@ -57,3 +57,5 @@ testem.log
 Thumbs.db
 src/environments/environment.ts.orig
 src/environments/*.ts
+
+/functions/node_modules/

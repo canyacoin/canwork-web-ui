@@ -1,3 +1,4 @@
+import { WINDOW } from '@ng-toolkit/universal';
 import { Injectable } from '@angular/core';
 
 @Injectable()
@@ -7,7 +8,7 @@ export class MobileService {
   // ===================================================
   isOnMobile = false;
   userAgent = window.navigator.userAgent;
-  constructor() {
+  constructor(@Inject(WINDOW) private window: Window, ) {
     this.isOnMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(this.userAgent);
   }
 

@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { WINDOW } from '@ng-toolkit/universal';
+import { Component, OnInit, OnDestroy , Inject} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DockIoService } from '@service/dock-io.service';
 import { AuthService } from '@service/auth.service';
@@ -20,7 +21,7 @@ export class WithDockComponent implements OnInit, OnDestroy {
   usersSub: Subscription
   httpHeaders = new Headers({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
 
-  constructor(
+  constructor(@Inject(WINDOW) private window: Window, 
     private route: ActivatedRoute,
     private router: Router,
     private http: Http,
@@ -107,7 +108,7 @@ export class WithDockComponent implements OnInit, OnDestroy {
 
   async handleLogin(user: User) {
     firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(idToken => {
-      window.sessionStorage.accessToken = idToken
+      this.window.sessionStorage.accessToken = idToken
       this.initialiseUserAndRedirect(user)
     }).catch(error => {
       console.error('! jwt token was not stored in session storage ', error)

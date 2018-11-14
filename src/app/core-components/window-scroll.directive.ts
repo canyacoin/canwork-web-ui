@@ -1,4 +1,5 @@
-import { Directive, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { WINDOW } from '@ng-toolkit/universal';
+import { Directive, Input, NgZone, OnDestroy, OnInit , Inject} from '@angular/core';
 
 import { NavService } from '../core-services/nav.service';
 
@@ -11,7 +12,7 @@ export class WindowScrollDirective implements OnInit, OnDestroy {
 
   private eventOptions: boolean | { capture?: boolean, passive?: boolean };
 
-  constructor(private ngZone: NgZone, private navService: NavService) {
+  constructor(@Inject(WINDOW) private window: Window, private ngZone: NgZone, private navService: NavService) {
   }
 
   passiveSupported() {
@@ -24,8 +25,8 @@ export class WindowScrollDirective implements OnInit, OnDestroy {
         }
       });
 
-      window.addEventListener('test', options, options);
-      window.removeEventListener('test', options, options);
+      this.window.addEventListener('test', options, options);
+      this.window.removeEventListener('test', options, options);
       return true;
     } catch (err) {
       return false;
@@ -42,12 +43,12 @@ export class WindowScrollDirective implements OnInit, OnDestroy {
       this.eventOptions = true;
     }
     this.ngZone.runOutsideAngular(() => {
-      window.addEventListener('scroll', this.scroll, <any>this.eventOptions);
+      this.window.addEventListener('scroll', this.scroll, <any>this.eventOptions);
     });
   }
 
   ngOnDestroy() {
-    window.removeEventListener('scroll', this.scroll, <any>this.eventOptions);
+    this.window.removeEventListener('scroll', this.scroll, <any>this.eventOptions);
   }
 
   scroll = (): void => {

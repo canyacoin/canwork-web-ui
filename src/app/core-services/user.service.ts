@@ -1,3 +1,4 @@
+import { LOCAL_STORAGE } from '@ng-toolkit/universal';
 import { Injectable } from '@angular/core';
 import { Job } from '@class/job';
 import { IJobAction } from '@class/job-action';
@@ -14,7 +15,7 @@ export class UserService {
   usersCollectionRef: AngularFirestoreCollection<any>;
   viewedUsersRef: AngularFirestoreCollection<any>;
 
-  constructor(private afs: AngularFirestore) {
+  constructor(@Inject(LOCAL_STORAGE) private localStorage: any, private afs: AngularFirestore) {
     this.usersCollectionRef = this.afs.collection<any>('users');
     this.viewedUsersRef = this.afs.collection<any>('viewed-users');
   }

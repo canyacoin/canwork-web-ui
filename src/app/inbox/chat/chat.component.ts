@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { LOCAL_STORAGE , WINDOW} from '@ng-toolkit/universal';
+import { AfterViewInit, Component, OnDestroy, OnInit , Inject} from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Web3LoadingStatus } from '@canyaio/canpay-lib';
@@ -61,7 +62,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoading = true;
   hideBanner = false;
   isOnMobile = false;
-  constructor(private router: Router,
+  constructor(@Inject(WINDOW) private window: Window, @Inject(LOCAL_STORAGE) private localStorage: any, private router: Router,
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private userService: UserService,
@@ -87,7 +88,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    const ua = window.navigator.userAgent;
+    const ua = this.window.navigator.userAgent;
     this.isOnMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua);
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       if (user && user !== this.currentUser) {
@@ -129,10 +130,10 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
             this.setSelectedChannel(data[idx]);
           }
         }
-        if (JSON.parse(localStorage.getItem('selectedChannel')) && this.queryAddress === '') {
-          this.setSelectedChannel(JSON.parse(localStorage.getItem('selectedChannel')));
+        if (JSON.parse(this.localStorage.getItem('selectedChannel')) && this.queryAddress === '') {
+          this.setSelectedChannel(JSON.parse(this.localStorage.getItem('selectedChannel')));
         }
-        if (!JSON.parse(localStorage.getItem('selectedChannel')) && this.queryAddress === '') {
+        if (!JSON.parse(this.localStorage.getItem('selectedChannel')) && this.queryAddress === '') {
           this.setSelectedChannel(data[0]);
         }
         this.channels = orderBy(data, ['timestamp'], ['desc']);
@@ -183,8 +184,8 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   scrollToBottom() {
-    if ((<any>window).$('#section-messages') && ((<any>window).$('#section-messages-end') && (<any>window).$('#section-messages-end').offset())) {
-      (<any>window).$('#section-messages').animate({ scrollTop: 100000 }, 300);
+    if ((<any>this.window).$('#section-messages') && ((<any>this.window).$('#section-messages-end') && (<any>this.window).$('#section-messages-end').offset())) {
+      (<any>this.window).$('#section-messages').animate({ scrollTop: 100000 }, 300);
     }
   }
 
@@ -213,7 +214,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onSelect(channelModel: any) {
     this.setSelectedChannel(channelModel);
-    localStorage.setItem('selectedChannel', JSON.stringify(this.selectedChannel));
+    this.localStorage.setItem('selectedChannel', JSON.stringify(this.selectedChannel));
     this.loadChats();
     this.loadUser();
     if (this.isOnMobile) {
@@ -252,7 +253,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sendMessage(msg);
     const request = this.chatService.createMessageObject(this.selectedChannel.channel, this.currentUser, MessageType.offer, this.offerForm.value.description, this.offerForm.value.price);
     this.sendMessage(request);
-    (<any>window).$('#makeAnOffer').modal('hide');
+    (<any>this.window).$('#makeAnOffer').modal('hide');
   }
 
   onAccept(checkoutModel: any, type: MessageType) {
@@ -283,13 +284,13 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
     this.modalData.budget = checkoutModel.budget;
 
     if (this.web3State === Web3LoadingStatus.wrongNetwork) {
-      (<any>window).$('#switchToMainNetModal').modal();
+      (<any>this.window).$('#switchToMainNetModal').modal();
     } else if (this.web3State === Web3LoadingStatus.noAccountsAvailable) {
-      (<any>window).$('#walletLocked').modal();
+      (<any>this.window).$('#walletLocked').modal();
     } else if (this.web3State === Web3LoadingStatus.complete) {
-      (<any>window).$('#confirmTransaction').modal();
+      (<any>this.window).$('#confirmTransaction').modal();
     } else {
-      (<any>window).$('#web3NotAvailable').modal();
+      (<any>this.window).$('#web3NotAvailable').modal();
     }
   }
 

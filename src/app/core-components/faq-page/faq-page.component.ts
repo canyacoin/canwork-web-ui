@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { WINDOW } from '@ng-toolkit/universal';
+import { Component, OnInit , Inject} from '@angular/core';
 
 @Component({
   selector: 'app-faq-page',
@@ -119,11 +120,11 @@ export class FaqPageComponent implements OnInit {
     }
   ]
   queryFaqs: any = [];
-  constructor() { }
+  constructor(@Inject(WINDOW) private window: Window, ) { }
   isOnMobile = false;
 
   ngOnInit() {
-    const ua = window.navigator.userAgent;
+    const ua = this.window.navigator.userAgent;
     this.isOnMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua);
     this.onSearch('');
   }

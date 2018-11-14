@@ -1,3 +1,5 @@
+import { NgtUniversalModule } from '@ng-toolkit/universal';
+import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -29,14 +31,17 @@ import { DockIoService } from './core-services/dock-io.service';
   declarations: [
     AppComponent
   ],
-  imports: [
+  imports:[
+ CommonModule,
+NgtUniversalModule,
+ 
     AppRoutingModule,
     AngularFireAuthModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireStorageModule,
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
-    BrowserModule,
+    
     BrowserAnimationsModule,
     CanpayModule.forRoot({
       useTestNet: environment.contracts.useTestNet,
@@ -63,6 +68,5 @@ import { DockIoService } from './core-services/dock-io.service';
     CertificationsService,
     DockIoService,
   ],
-  bootstrap: [AppComponent]
 })
 export class AppModule { }

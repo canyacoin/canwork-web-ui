@@ -1,3 +1,4 @@
+import { WINDOW } from '@ng-toolkit/universal';
 import { Injectable } from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
 
@@ -13,7 +14,7 @@ export class JobNotificationService {
 
   readonly endPoint: string = `${environment.backendURI}/jobStateEmailNotification`;
 
-  constructor(private authService: AuthService, private http: Http) { }
+  constructor(@Inject(WINDOW) private window: Window, private authService: AuthService, private http: Http) { }
 
   public async notify(jobAction: ActionType, jobId: string) {
 
@@ -42,7 +43,7 @@ export class JobNotificationService {
           console.log(`+ error: ${error.status} sending notification:`, error);
         });
       } else {
-        window.sessionStorage.accessToken = '';
+        this.window.sessionStorage.accessToken = '';
       }
     });
   }

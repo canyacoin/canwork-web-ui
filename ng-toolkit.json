@@ -1,0 +1,17 @@
+{
+  "universal": {
+    "project": "can-work",
+    "skipInstall": false,
+    "directory": "."
+  },
+  "serverless": {
+    "directory": ".",
+    "skipInstall": true,
+    "provider": "firebase",
+    "project": "can-work",
+    "serverless": {
+      "aws": {},
+      "gcloud": {}
+    }
+  }
+}

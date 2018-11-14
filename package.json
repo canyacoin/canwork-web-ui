@@ -7,14 +7,23 @@
     "ng": "ng",
     "start": "ng serve",
     "build:staging": "ng build --prod --configuration=staging",
-    "build:prod": "ng build --prod --configuration=prod",
+    "build:prod": "npm run build:browser:prod && npm run build:server:prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "deploy:functions": "firebase deploy --only functions",
     "deploy:rules": "firebase deploy --only firestore:rules",
     "deploy:indexes": "firebase deploy --only firestore:indexes",
-    "dev:functions": "nodemon --watch functions/src/ --exec 'cd functions/src && tsc && cd ../../ && firebase serve --only functions --debug' -e ts"
+    "dev:functions": "nodemon --watch functions/src/ --exec 'cd functions/src && tsc && cd ../../ && firebase serve --only functions --debug' -e ts",
+    "build:server:prod": "ng run can-work:server && webpack --config webpack.server.config.js --progress --colors",
+    "build:browser:prod": "ng build --prod",
+    "server": "node local.js",
+    "build:prod:deploy": "npm run build:prod && npm run deploy",
+    "build:browser:serverless": "ng build --prod --base-href /",
+    "build:serverless": "npm run build:browser:serverless && npm run build:server:serverless",
+    "build:serverless:deploy": "npm run build:serverless && npm run deploy",
+    "deploy": "cp-cli dist/ functions/dist/ && cd functions && npm install && firebase deploy",
+    "build:server:serverless": "ng run can-work:server && webpack --config webpack.server.config.js --progress --colors"
   },
   "private": true,
   "dependencies": {
@@ -28,6 +37,7 @@
     "@angular/platform-browser-dynamic": "7.0.2",
     "@angular/router": "7.0.2",
     "@canyaio/canpay-lib": "^0.2.1",
+    "@ng-toolkit/universal": "^1.1.47",
     "angular-instantsearch": "^2.0.1",
     "angularfire2": "^5.1.0",
     "animate.css": "^3.6.1",
@@ -50,7 +60,15 @@
     "rxjs-compat": "^6.3.3",
     "stream-buffers": "^3.0.2",
     "web3": "^1.0.0-beta.30",
-    "zone.js": "^0.8.26"
+    "zone.js": "^0.8.26",
+    "@angular/platform-server": "7.0.2",
+    "@nguniversal/module-map-ngfactory-loader": "7.0.2",
+    "webpack-cli": "^2.1.4",
+    "ts-loader": "4.2.0",
+    "@nguniversal/express-engine": "7.0.2",
+    "cors": "~2.8.4",
+    "@ng-toolkit/serverless": "1.1.28",
+    "cp-cli": "^1.1.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.10.4",
@@ -73,6 +91,9 @@
     "truffle": "^4.1.12",
     "ts-node": "~4.1.0",
     "tslint": "~5.9.1",
-    "typescript": "3.1.6"
+    "typescript": "3.1.6",
+    "ts-loader": "4.2.0",
+    "webpack-cli": "2.1.2",
+    "opencollective": "^1.0.3"
   }
 }

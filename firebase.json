@@ -7,27 +7,11 @@
     "source": "functions"
   },
   "hosting": {
-    "header": [
-      {
-        "source": "**",
-        "headers": [
-          {
-            "key": "X-Frame-Options",
-            "value": "DENY"
-          }
-        ]
-      }
-    ],
-    "public": "dist",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "public": "functions/dist",
     "rewrites": [
       {
         "source": "**",
-        "destination": "/index.html"
+        "function": "http"
       }
     ]
   },
@@ -36,5 +20,3 @@
     "indexes": "firestore.indexes.json"
   }
 }
-
-
