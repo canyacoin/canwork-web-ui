@@ -25,6 +25,7 @@ export class Job {
   draft: boolean;
   friendlyUrl: string;
 
+
   constructor(init?: Partial<Job>) {
     Object.assign(this, init);
   }
