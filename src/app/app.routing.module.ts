@@ -50,6 +50,10 @@ import { UserIsSetupGuard } from './core-utils/user-is-setup.guard';
         component: PublicJobComponent
       },
       {
+        path: 'jobs/public/:friendlyUrl',
+        component: PublicJobComponent
+      },
+      {
         path: 'profile',
         loadChildren: './profile/profile.module#ProfileModule'
       },

@@ -19,9 +19,10 @@
 }
 
 .provider-type-card img {
-  height: 50px;
-  width: 50px;
-  margin-left: 25px;
+  height: 30px;
+  width: 30px;
+  margin-left: 35px;
+  margin-top: 10px;
 }
 
 .provider-type-card:hover {

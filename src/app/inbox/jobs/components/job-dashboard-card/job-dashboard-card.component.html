@@ -1,10 +1,11 @@
-<div class="card mb-15 p-20 pointer job-dashboard-card" *ngIf="type === 'lg'">
+<div class="card mb-15 p-20 pointer job-dashboard-card" *ngIf="type === 'lg' && !isPublic">
   <div class="container jobs-info job-info-lg">
     <div class="row">
       <div class="col-md-9 col-sm-8">
         <div class="row job-desc">
           <div class="col-12" [routerLink]="['/inbox/job', job.id]">
             <h4>{{job.information.title}}</h4>
+            <app-skill-tag *ngFor="let skill of job.information.skills" [skill]=skill></app-skill-tag>
             <p *ngIf="job.information.description.length < 160">{{job.information.description}}</p>
             <p *ngIf="job.information.description.length > 160">{{job.information.description.substring(0, 160)}}...</p>
           </div>
@@ -46,7 +47,7 @@
     </div>
   </div>
 </div>
-<div class="card mb-15 p-20 pointer job-dashboard-card" *ngIf="type === 'sm'">
+<div class="card mb-15 p-20 pointer job-dashboard-card" *ngIf="type === 'sm' && !isPublic">
   <div class="container jobs-info job-info-sm">
     <div class="row">
       <div class="col-md-9 col-sm-8">
@@ -151,6 +152,42 @@
         <button class="btn btn-secondary">
           DECLINE
         </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card mb-15 p-20 pointer job-dashboard-card" *ngIf="type === 'lg' && isPublic">
+  <div class="container jobs-info job-info-lg">
+    <div class="row">
+      <div class="col-md-9 col-sm-8">
+        <div class="row job-desc">
+          <div class="col-12" [routerLink]="['/jobs', job.id]">
+            <h4>{{job.information.title}}</h4>
+            <p *ngIf="job.information.description.length < 160">{{job.information.description}}</p>
+            <p *ngIf="job.information.description.length > 160">{{job.information.description.substring(0, 160)}}...</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-4 job-details">
+        <div class="row info-row">
+          <div class="info-details col-sm-12 col-6">
+            <p>
+              {{job.paymentType}}
+            </p>
+            <b>
+              <app-budget [job]="job"></app-budget>
+            </b>
+          </div>
+          <div class="info-details col-sm-12 col-6">
+            <p>Deadline</p>
+            <b>{{job.deadline}}</b>
+          </div>
+        </div>
+        <div>
+          <button [routerLink]="['/jobs', job.id]" class="btn btn-primary btn-outline view-job-btn">
+            VIEW JOB
+          </button>
+        </div>
       </div>
     </div>
   </div>
