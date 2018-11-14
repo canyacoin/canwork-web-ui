@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { User, UserType } from '@class/user';
 import { PublicJobService } from '@service/public-job.service';
+import { UserService } from '@service/user.service';
 import { AuthService } from '@service/auth.service';
 import { Job, JobDescription } from '@class/job';
 @Component({
@@ -18,8 +19,9 @@ export class PublicJobComponent implements OnInit {
   jobExists: boolean;
   canSee = false;
   myJob = false;
-  currentJob: Job;
+  job: Job;
   currentUser: User;
+  jobPoster: User;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -36,21 +38,32 @@ export class PublicJobComponent implements OnInit {
         this.jobSub = this.publicJobs.getPublicJob(params['jobId']).subscribe(publicJob => {
           if (publicJob === undefined) {
             this.jobExists = false;
+            this.canSee = false;
           } else {
-            this.currentJob = publicJob;
+            this.job = publicJob;
             this.jobExists = true;
-            if (this.currentJob.draft === false) {
-              this.canSee = true;
-            } else if (this.currentJob.draft === true && this.currentJob.clientId === this.currentUser.address) {
-              this.canSee = true;
-              this.myJob = true;
-            } else {
+            this.myJob = (this.job.clientId === this.currentUser.address);
+            if (this.job.draft && !this.myJob) {
+              // only allow the job creator to see jobs in draft state
               this.canSee = false;
+            } else {
+              this.canSee = true;
             }
+          }
+        });
+      } else if (params['friendlyUrl']) {
+        alert('Test complete');
+        this.jobSub = this.publicJobs.getPublicJobsByUrl(params['friendlyUrl']).subscribe(publicJob => {
+          if (publicJob.length > 0) {
+            this.job = publicJob[0] as Job;
+            this.canSee = true;
           }
         });
       }
     });
+  }
+
+  shareJob() {
   }
 
 }

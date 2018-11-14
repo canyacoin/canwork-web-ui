@@ -8,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class JobDashboardCardComponent implements OnInit {
   @Input() job: any;
   @Input() type: string;
+  @Input() isPublic: boolean;
 
   constructor() { }
 
