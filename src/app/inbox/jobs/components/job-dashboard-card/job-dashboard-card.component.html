@@ -1,208 +1,163 @@
-<div class="card mb-15 p-20 pointer job-dashboard-card" *ngIf="type === 'lg' && !isPublic">
-  <div class="container jobs-info job-info-lg">
-    <div class="row">
-      <div class="col-md-9 col-sm-8">
-        <div class="row job-desc">
-          <div class="col-12" [routerLink]="['/inbox/job', job.id]">
-            <h4>{{job.information.title}}</h4>
-            <div class="hide-mobile">
-              <app-skill-tag *ngFor="let skill of job.information.skills" [skill]=skill></app-skill-tag>
+<main class="main-content">
+  <section class="section bg-gray pt-15" id="manage-jobs">
+    <app-back-button></app-back-button>
+    <div class="container">
+      <div class="row">
+        <span class="col-6 text-left">
+          <h4 class="fw-500">MANAGE JOBS</h4>
+        </span>
+        <span class="col-6 text-right" *ngIf="currentUser?.type == 'Provider'">
+          <button class="btn btn-primary" (click)="changeUserType()">
+            {{ userType == 'Provider' ? 'Act as Client' : 'Act as Provider' }}
+          </button>
+        </span>
+      </div>
+      <div *ngIf="loading" class="d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
+        <img src="assets/img/loader.svg" height="36px" alt="Loader">
+      </div>
+      <div *ngIf="!loading">
+        <div class="row">
+          <div class="col-12 my-15" *ngIf="!isOnMobile && this.userType !== 'Provider'">
+            <button class="btn btn-primary btn-sm btn-outline mr-5" [ngClass]="{active: jobType === 'active'}" (click)="changeJob('active')">Active
+              Jobs</button>
+            <button class="btn btn-primary btn-sm btn-outline mr-5" [ngClass]="{active: jobType === 'public'}" (click)="changeJob('public')">Public
+              Jobs</button>
+            <button class="btn btn-primary btn-sm btn-outline mr-5" [ngClass]="{active: jobType === 'draft'}" (click)="changeJob('draft')">Jobs
+              in draft</button>
+          </div>
+        </div>
+        <div *ngIf="!isOnMobile" class="row">
+          <div class="col-lg-12">
+            <div class="form-inline">
+              <div class="form-group" *ngIf="jobType === 'active'">
+                <label for="orderTypeSelect" class="mb-15">Show Only: </label>
+                <select class="mb-10 mx-10" #filterTypeSelect [(ngModel)]="filterByState.state" (change)="filterJobsByState()">
+                  <option value="">
+                    <span>All Jobs</span>
+                  </option>
+                  <option value="Awaiting Escrow">
+                    <span>Jobs Awaiting Escrow</span>
+                  </option>
+                  <option value="Funds In Escrow">
+                    <span>Funds in Escrow</span>
+                  </option>
+                  <option value="Pending completion">
+                    <span>Jobs Pending Completion</span>
+                  </option>
+                  <option value="Disputed">
+                    <span>Jobs In Dispute</span>
+                  </option>
+                  <option value="Offer pending">
+                    <span>Pending Jobs</span>
+                  </option>
+                  <option value="Cancelled">
+                    <span>Cancelled</span>
+                  </option>
+                  <option value="Complete">
+                    <span>Completed Jobs</span>
+                  </option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="orderTypeSelect" class="mb-15">Order By: </label>
+                <select class="mb-10 mx-10" #orderTypeSelect [(ngModel)]="orderType">
+                  <option value="information.title">
+                    <span>Project Name</span>
+                  </option>
+                  <option value="budget">
+                    <span>Budget</span>
+                  </option>
+                  <option value="actionLog[0].timestamp">
+                    <span>Date Posted</span>
+                  </option>
+                </select>
+              </div>
+              <div class="form-group">
+                <div class="form-check mx-10">
+                  <span class="mb-10 pointer" (click)="reverseOrder = !reverseOrder">
+                    <i *ngIf="reverseOrder" class="fas fa-sort-amount-up"></i>
+                    <i *ngIf="!reverseOrder" class="fas fa-sort-amount-down"></i>
+                  </span>
+                </div>
+              </div>
             </div>
-            <p *ngIf="job.information.description.length < 160">{{job.information.description}}</p>
-            <p *ngIf="job.information.description.length > 160">{{job.information.description.substring(0, 160)}}...</p>
+          </div>
+        </div>
+        <div class="row" *ngIf="isOnMobile">
+          <div class="col-12">
+            <label for="orderTypeSelect" class="mb-15">Show Only: </label>
+            <select class="mb-10 mx-10" #filterTypeSelect [(ngModel)]="filterByState.state" (change)="filterJobsByState()">
+              <option value="">
+                <span>All Jobs</span>
+              </option>
+              <option value="Awaiting Escrow">
+                <span>Jobs Awaiting Escrow</span>
+              </option>
+              <option value="Funds In Escrow">
+                <span>Funds in Escrow</span>
+              </option>
+              <option value="Pending completion">
+                <span>Jobs Pending Completion</span>
+              </option>
+              <option value="Disputed">
+                <span>Jobs In Dispute</span>
+              </option>
+              <option value="Offer pending">
+                <span>Pending Jobs</span>
+              </option>
+              <option value="Cancelled">
+                <span>Cancelled</span>
+              </option>
+              <option value="Complete">
+                <span>Completed Jobs</span>
+              </option>
+            </select>
+            <br>
           </div>
           <div class="col-12">
-            <div class="otherPartyName pointer" *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri"
-              [routerLink]="['/profile/alt/', job.otherParty.id]">
-              <span class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
-              </span>
-              <p>{{job.otherParty?.name}}</p>
-            </div>
+            <label for="orderTypeSelect" class="mb-15">Order By: </label>
+            <select class="mb-10 mx-10" #orderTypeSelect [(ngModel)]="orderType">
+              <option value="information.title">
+                <span>Project Name</span>
+              </option>
+              <option value="budget">
+                <span>Budget</span>
+              </option>
+              <option value="actionLog[0].timestamp">
+                <span>Date Posted</span>
+              </option>
+            </select>
+            <span class="mb-10 pointer" (click)="reverseOrder = !reverseOrder">
+              <i *ngIf="reverseOrder" class="fas fa-sort-amount-up"></i>
+              <i *ngIf="!reverseOrder" class="fas fa-sort-amount-down"></i>
+            </span>
           </div>
         </div>
-      </div>
-      <div class="col-md-3 col-sm-4 job-details">
-        <div class="row info-row">
-          <div class="info-details col-sm-12 hide-mobile">
-            <p>Status</p>
-            <app-status-icon [job]="job" [currentUserType]="userType"></app-status-icon>
-          </div>
-          <div class="info-details col-sm-12 col-6">
-            <p>
-              {{job.paymentType}}
-            </p>
-            <b>
-              <app-budget [job]="job"></app-budget>
-            </b>
-          </div>
-          <div class="info-details col-sm-12 col-6">
-            <p>Timeline</p>
-            <b>{{job.information.timelineExpectation}}</b>
-          </div>
+        <div *ngIf="!jobs || jobs.length == 0">
+          No jobs to show!
         </div>
-        <div>
-          <button [routerLink]="['/inbox/job', job.id]" class="btn btn-primary btn-outline view-job-btn">
-            VIEW JOB
-          </button>
+        <div *ngIf="jobs && jobs.length > 0 && !isOnMobile">
+          <app-job-dashboard-card *ngFor="let job of jobs | orderBy : orderType:reverseOrder" [job]="job" [type]="'lg'"
+            [isPublic]="jobType !== 'active'"></app-job-dashboard-card>
+        </div>
+        <div *ngIf="jobs && jobs.length > 0 && isOnMobile">
+          <app-job-dashboard-card *ngFor="let job of jobs | orderBy : orderType:reverseOrder" [job]="job" [type]="'sm'"
+            [isPublic]="false"></app-job-dashboard-card>
         </div>
       </div>
     </div>
-  </div>
-</div>
-<div class="card mb-15 p-20 pointer job-dashboard-card" *ngIf="type === 'sm' && !isPublic">
-  <div class="container jobs-info job-info-sm">
-    <div class="row">
-      <div class="col-md-9 col-sm-8">
-        <div class="row job-desc">
-          <div class="col-12" [routerLink]="['/inbox/job', job.id]">
-            <h4>{{job.information.title}}</h4>
-            <p *ngIf="job.information.description.length < 60">{{job.information.description}}</p>
-            <p *ngIf="job.information.description.length > 60">{{job.information.description.substring(0, 60)}}</p>
-          </div>
-          <div class="col-12">
-            <div *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="otherPartyName pointer"
-              [routerLink]="['/profile/alt/', job.otherParty.id]">
-              <span class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
-              </span>
-              <p>{{job.otherParty?.name}}</p>
-            </div>
-          </div>
+    <!--
+    <div class="container" *ngIf="publicJobs">
+      <div class="row">
+        <div class="col-12">
+          <h4 class="fw-500 mb-30">PUBLIC JOBS</h4>
         </div>
       </div>
-      <div class="col-md-3 col-sm-4 job-details">
-        <div class="row info-row">
-          <div class="info-details col-sm-12 hide-mobile">
-            <p>Status</p>
-            <app-status-icon [job]="job" [currentUserType]="userType"></app-status-icon>
-          </div>
-          <div class="info-details col-sm-12 col-6">
-            <p>
-              {{job.paymentType}}
-            </p>
-            <b>
-              <app-budget [job]="job"></app-budget>
-            </b>
-          </div>
-          <div class="info-details col-sm-12 col-6">
-            <p>Timeline</p>
-            <b>{{job.information.timelineExpectation}}</b>
-          </div>
-          <button [routerLink]="['/inbox/job', job.id]" class="btn btn-primary btn-outline view-job-btn hide-mobile">
-            VIEW JOB
-          </button>
-        </div>
+      <div *ngIf="publicJobs && publicJobs.length > 0 && !isOnMobile">
+        <app-job-dashboard-card *ngFor="let job of publicJobs | orderBy : orderType:reverseOrder" [job]="job" [type]="'lg'"
+          [isPublic]="true"></app-job-dashboard-card>
       </div>
     </div>
-  </div>
-</div>
-<!-- 
-  This is for public job offers - e.g. client receiving provider offers,
-  hence the impossible job.workType ngIf above. this should save us some time...
-  uncomment this once the basic features has been implemented.
- -->
-<div class="card mb-15 p-20 pointer job-dashboard-card" *ngIf="job.workType === 'public-job-type-prototype' && type === 'offer'">
-  <div class="container provider-job-card jobs-info">
-    <img class="headshot-div" src="{{ job.otherParty?.avatar.uri }}">
-    <div class="row">
-      <div class="col-md-3 offset-md-1 col-sm-4 col-12" [routerLink]="['/inbox/job', job.id]">
-        <h4>{{job.otherParty?.name}}</h4>
-      </div>
-      <div class="col-sm-2 hide-mobile">
-        <p>
-          {{job.paymentType}}
-        </p>
-      </div>
-      <div class="col-sm-2 hide-mobile">
-        <p>Timeline</p>
-      </div>
-      <div class="col-sm-4 text-right">
-        <button class="btn btn-primary btn-canya-chat">
-          LET'S CHAT
-        </button>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-3 offset-md-1 col-sm-4 col-12">
-        <p>{{job.information.title}}</p>
-      </div>
-      <div class="col-sm-2 col-6">
-        <p>
-          <b>
-            <app-budget [job]="job"></app-budget>
-          </b>
-        </p>
-      </div>
-      <div class="col-sm-2 col-6">
-        <b>{{job.information.timelineExpectation}}</b>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-11 offset-md-1 col-12">
-        <app-skill-tag *ngFor="let skill of job.information.skills" [skill]="skill"></app-skill-tag>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-8 offset-sm-1 col-12">
-        <p>
-          {{job.information.description}}
-        </p>
-      </div>
-      <div class="col-sm-3 col-12 text-right btn-div mobile-center">
-        <button class="btn btn-success">
-          ACCEPT
-        </button>
-        <button class="btn btn-secondary">
-          DECLINE
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="card mb-15 p-20 pointer job-dashboard-card" *ngIf="type === 'lg' && isPublic">
-  <div class="container jobs-info job-info-lg">
-    <div class="row">
-      <div class="col-md-9 col-sm-8">
-        <div class="row job-desc">
-          <div class="col-12" [routerLink]="['/jobs', job.id]">
-            <h4>{{job.information.title}}</h4>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-            <app-skill-tag *ngFor="let skill of job.information.skills" [skill]="skill"></app-skill-tag>
-=======
->>>>>>> created the basic friendly-url generator and route
-=======
->>>>>>> created the basic friendly-url generator and route
-            <p *ngIf="job.information.description.length < 160">{{job.information.description}}</p>
-=======
->>>>>>> updated the bid-choosing flow
-            <app-skill-tag *ngFor="let skill of job.information.skills" [skill]="skill"></app-skill-tag>
-            <p *ngIf="job.information.description.length < 160">{{job.information.description}}</p>
-            <p *ngIf="job.information.description.length > 160">{{job.information.description.substring(0, 160)}}...</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-4 job-details">
-        <div class="row info-row">
-          <div class="info-details col-sm-12 col-6">
-            <p>
-              {{job.paymentType}}
-            </p>
-            <b>
-              <app-budget [job]="job"></app-budget>
-            </b>
-          </div>
-          <div class="info-details col-sm-12 col-6">
-            <p>Deadline</p>
-            <b>{{job.deadline}}</b>
-          </div>
-        </div>
-        <div>
-          <button [routerLink]="['/jobs', job.id]" class="btn btn-primary btn-outline view-job-btn">
-            VIEW JOB
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+    -->
+  </section>
+</main>

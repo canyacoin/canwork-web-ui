@@ -91,13 +91,17 @@ service cloud.firestore {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> basic public job upload done
+=======
+>>>>>>> created the basic friendly-url generator and route
     match /public-jobs/{jobId} {
 =======
     // TODO: Will require a much more complex rule set here
     match /public-jobs {
 >>>>>>> basic public job upload done
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
      match /public-jobs/{publicJobId} {
@@ -135,10 +139,16 @@ service cloud.firestore {
 =======
     match /public-jobs/{jobId} {
 >>>>>>> updated firestore rules
+=======
+=======
+     match /public-jobs/{publicJobId} {
+>>>>>>> created the basic friendly-url generator and route
+>>>>>>> created the basic friendly-url generator and route
        allow read;
        allow create: if isAuthenticated();
        allow update: if userIsClientOrProvider();
        allow delete: if isAdmin();
+<<<<<<< HEAD
 <<<<<<< HEAD
     }
   }
@@ -167,6 +177,9 @@ service cloud.firestore {
 =======
 =======
 >>>>>>> basic public job upload done
+=======
+<<<<<<< HEAD
+>>>>>>> created the basic friendly-url generator and route
     }    
     
     match /public-jobs/{jobId}/bids/{bidId} {
@@ -186,9 +199,17 @@ service cloud.firestore {
        allow delete: if isAdmin();
     }
 >>>>>>> basic public job upload done
+=======
+  	}
+>>>>>>> created the basic friendly-url generator and route
   }
+<<<<<<< HEAD
 
 >>>>>>> updated firestore rules
+=======
+  
+ 
+>>>>>>> created the basic friendly-url generator and route
   // --------------------------------------------------------------------------------
   function isAuthenticated() {
     return request.auth != null
