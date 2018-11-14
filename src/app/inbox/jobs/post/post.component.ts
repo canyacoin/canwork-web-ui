@@ -129,6 +129,7 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.publicJobService.generateReadableId('Testing 251 Creaton Job');
     this.jobId = GenerateGuid();
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       this.currentUser = user;
@@ -325,6 +326,7 @@ export class PostComponent implements OnInit, OnDestroy {
       id: this.jobId,
       hexId: this.ethService.web3js.utils.toHex(this.jobId.hashCode()),
       clientId: this.currentUser.address,
+      friendlyUrl: this.publicJobService.generateReadableId(this.shareableJobForm.value.title),
       information: new JobDescription({
         description: this.shareableJobForm.value.description,
         title: this.shareableJobForm.value.title,
@@ -340,10 +342,21 @@ export class PostComponent implements OnInit, OnDestroy {
       deadline: this.shareableJobForm.value.deadline,
       draft: isDraft
     });
+    const action = new IJobAction(ActionType.createJob, UserType.client);
+    action.setPaymentProperties(job.budget, await this.jobService.getJobBudget(job), this.postForm.value.timelineExpectation,
+      this.postForm.value.workType, this.postForm.value.weeklyCommitment, this.postForm.value.paymentType);
     console.log(this.shareableJobForm);
     console.log('Shareable job submitted...');
     console.log('job created');
-    console.log(job);
+    console.log(job.friendlyUrl);
+    const exists = await this.publicJobService.jobUrlExists(job.friendlyUrl);
+    if (exists.length < 1) {
+      console.log('just upload it');
+    } else {
+      console.log('wait might want to change the url mate');
+      job.friendlyUrl = job.friendlyUrl + '-' + exists.length;
+      console.log('new url : ' + job.friendlyUrl);
+    }
     this.sent = await this.publicJobService.handlepublicJob(job);
     this.isSending = false;
   }

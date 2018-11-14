@@ -1,9 +1,79 @@
-<p>
-  public-job works!<br>
-  Job exists?
-  {{ jobExists }} <br>
-  Can I see it? 
-  {{ canSee }}  <br>
-  Do I own the bloody job?
-  {{ myJob }}
-</p>
+<main class="main-content">
+  <section class="section bg-gray pt-15 pb-20">
+    <app-back-button></app-back-button>
+    <div *ngIf="!job" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
+      <img src="assets/img/loader.svg" height="36px" alt="Loader">
+    </div>
+    <div class="container job-detail-container" *ngIf="job && canSee">
+      <div class="card p-30 job-detail-card" *ngIf="canSee">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-9 col-12">
+              <h2>
+                {{job.information.title}}
+              </h2>
+              <div class="" style="max-width: 65vw; min-height: 5rem">
+                <p>
+                  {{job.information.description.substring(0, 80)}}
+                  <span *ngIf="hideDescription === false">
+                    {{job.information.description.substring(80, job.information.description.length)}}
+                  </span>
+                  <a class="pointer text-blue" *ngIf="job.information.description.length > 80" (click)="toggleDescription()">
+                    <span *ngIf="hideDescription">
+                      ...Show more
+                    </span>
+                    <span *ngIf="!hideDescription">
+                      <br>
+                      Show less
+                    </span>
+                  </a>
+                </p>
+              </div>
+              <app-skill-tag *ngFor="let skill of job.information.skills" [skill]=skill></app-skill-tag>
+            </div>
+            <div class="col-lg-3 col-12 job-info">
+              <a (click)="shareJob()" style="position: absolute; right: 0px; font-weight: 500; letter-spacing: 1.5px"><i
+                  class="fas fa-share-alt"></i> SHARE</a>
+              <div class="info-details">
+                <b>${{job.budget}}<span *ngIf="job.paymentType !== 'Fixed price'">/ Hr</span> USD</b>
+                <p>{{job.paymentType}}</p>
+              </div>
+              <div class="info-details">
+                <b>{{job.deadline}}</b>
+                <p>Deadline</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container p-30 job-actions-card">
+        <div class="row">
+          <div class="col-12">
+            <h4>PROPOSED TERMS</h4>
+
+            <div class="otherPartyName pointer" [routerLink]="['/profile/alt/', job.clientId]">
+              TEST
+              <!-- 
+              <span *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
+              </span>
+              <p>{{job.otherParty?.name}}</p>
+              -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container job-detail-container" *ngIf="!job && !canSee">
+      <div class="card p-30 job-detail-card">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 text-center">
+              <h2>We can't find the job you were looking for</h2>
+              <p>Please check the link you provided</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
