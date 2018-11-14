@@ -29,6 +29,7 @@ export class Job {
 =======
 >>>>>>> created the basic friendly-url generator and route
 
+
   constructor(init?: Partial<Job>) {
     Object.assign(this, init);
   }

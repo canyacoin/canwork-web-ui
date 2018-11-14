@@ -97,7 +97,6 @@ export class PublicJobService {
   getPublicJobsByUrl(url: string): Observable<Job[]> {
     return this.afs.collection<any>('public-jobs', ref => ref.where('friendlyUrl', '==', url)).snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
-        console.log(a);
         const data = a.payload.doc.data() as Job;
         data.id = a.payload.doc.id;
         return data;
