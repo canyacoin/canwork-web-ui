@@ -26,7 +26,10 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   jobs: Job[];
   publicJobs: Job[];
 <<<<<<< HEAD
+<<<<<<< HEAD
   activeJobs: Job[];
+=======
+>>>>>>> created the basic friendly-url generator and route
 =======
 >>>>>>> created the basic friendly-url generator and route
   jobsSubscription: Subscription;
@@ -70,7 +73,11 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       this.activeJobs = jobs;
       this.loading = false;
 <<<<<<< HEAD
+<<<<<<< HEAD
       this.jobs = this.activeJobs;
+=======
+      console.log(this.jobs);
+>>>>>>> created the basic friendly-url generator and route
 =======
       console.log(this.jobs);
 >>>>>>> created the basic friendly-url generator and route
@@ -80,6 +87,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     });
     this.publicJobsSubscription = this.publicJobService.getPublicJobsByUser(userId, userType).subscribe(async (jobs: Job[]) => {
       this.publicJobs = jobs;
+<<<<<<< HEAD
 <<<<<<< HEAD
     });
   }
@@ -96,6 +104,10 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       case 'draft':
         this.jobs = this.publicJobs.filter(job => job.draft === true);
     }
+=======
+      console.log(this.publicJobs);
+    });
+>>>>>>> created the basic friendly-url generator and route
 =======
       console.log(this.publicJobs);
     });

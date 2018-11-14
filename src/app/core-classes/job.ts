@@ -24,7 +24,10 @@ export class Job {
   visibility: string;
   draft: boolean;
   friendlyUrl: string;
+<<<<<<< HEAD
 
+=======
+>>>>>>> created the basic friendly-url generator and route
 
   constructor(init?: Partial<Job>) {
     Object.assign(this, init);
