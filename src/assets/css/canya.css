@@ -9879,7 +9879,11 @@ a.text-danger:focus {
 }
 
 hr {
+<<<<<<< HEAD
   border-color: #ebebeb;
+=======
+  border-color: #919d9d;
+>>>>>>> created the basic friendly-url generator and route
   height: 1.5px;
 }
 
