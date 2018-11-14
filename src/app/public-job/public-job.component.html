@@ -1,10 +1,10 @@
 <main class="main-content">
   <section class="section bg-gray pt-15 pb-20">
     <app-back-button></app-back-button>
-    <div *ngIf="!job" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
+    <div *ngIf="!job && loading" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
       <img src="assets/img/loader.svg" height="36px" alt="Loader">
     </div>
-    <div class="container job-detail-container" *ngIf="job && canSee">
+    <div class="container job-detail-container" *ngIf="job">
       <div class="card p-30 job-detail-card" *ngIf="canSee">
         <div class="container">
           <div class="row">
@@ -29,19 +29,26 @@
                   </a>
                 </p>
               </div>
-              <app-skill-tag *ngFor="let skill of job.information.skills" [skill]=skill></app-skill-tag>
             </div>
             <div class="col-lg-3 col-12 job-info">
-              <a (click)="shareJob()" style="position: absolute; right: 0px; font-weight: 500; letter-spacing: 1.5px"><i
-                  class="fas fa-share-alt"></i> SHARE</a>
+              <a data-toggle="modal" data-target="#shareModal" class="share-link">
+                <i class="fas fa-share-alt"></i> SHARE
+              </a>
               <div class="info-details">
-                <b>${{job.budget}}<span *ngIf="job.paymentType !== 'Fixed price'">/ Hr</span> USD</b>
+                <b>${{job.budget}}<span *ngIf="job.paymentType !== 'Fixed price'">/hr</span> USD</b>
                 <p>{{job.paymentType}}</p>
               </div>
               <div class="info-details">
                 <b>{{job.deadline}}</b>
                 <p>Deadline</p>
               </div>
+              <div class="info-details">
+                <b>{{job.information.weeklyCommitment}} hr/week</b>
+                <p>Weekly Commitment</p>
+              </div>
+            </div>
+            <div class="col-12">
+              <app-skill-tag *ngFor="let skill of job.information.skills" [skill]=skill></app-skill-tag>
             </div>
           </div>
         </div>
@@ -50,20 +57,65 @@
         <div class="row">
           <div class="col-12">
             <h4>PROPOSED TERMS</h4>
-
             <div class="otherPartyName pointer" [routerLink]="['/profile/alt/', job.clientId]">
-              TEST
-              <!-- 
-              <span *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
+              <span *ngIf="jobPoster?.avatar && jobPoster?.avatar.uri" class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + jobPoster?.avatar.uri + ')'}">
               </span>
-              <p>{{job.otherParty?.name}}</p>
-              -->
+              <p style="font-style: 21px;">{{jobPoster?.name}}</p>
+            </div>
+            <b>${{job.budget}}<span *ngIf="job.paymentType !== 'Fixed price'">/hr</span> USD</b>
+            <p>This project is set at a {{job.paymentType}}, {{job.information.weeklyCommitment}} hours per week, over {{job.information.timelineExpectation}} period.</p>
+          </div>
+          <div class="col-12" *ngIf="myJob">
+            <button class="btn btn-primary">EDIT JOB</button>
+
+          </div>
+        </div>
+      </div>
+      <!-- Modal -->
+      <div id="shareModal" class="modal fade" role="dialog">
+        <div border-none class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div border-none class="modal-header  text-center">
+              <div class="col-12">
+                <h4 class="modal-title">SHARE THIS JOB AS A LINK</h4>
+              </div>
+              <button type="button" class="close" style="position: absolute; right: 15px;" data-dismiss="modal">&times;</button>
+            </div>
+            <div border-none class="modal-body">
+              <div class="container">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="row px-15">
+                      <span>URL:</span>
+                    </div>
+                    <div class="row px-15">
+                      <div class="col-8 link-col">
+                        <p *ngIf="!job.friendlyUrl">
+                          {{shareableLink}}/jobs/{{job.id}}
+                        </p>
+                        <p *ngIf="job.friendlyUrl">
+                          {{shareableLink}}/jobs/public/{{job.friendlyUrl}}
+                        </p>
+                      </div>
+                      <div class="col-4">
+                        <button (click)="copyLink()" class="btn btn-primary">COPY LINK</button>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-12 text-center">
+                        <small id="copied">Copied!</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="container job-detail-container" *ngIf="!job && !canSee">
+    <div class="container job-detail-container" *ngIf="job && !canSee && !loading">
       <div class="card p-30 job-detail-card">
         <div class="container">
           <div class="row">
