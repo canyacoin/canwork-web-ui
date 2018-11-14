@@ -27,9 +27,9 @@ export class Job {
 
   get parsedActionLog() {
     return this.actionLog.map(actionObj => {
-      const action = new IJobAction(actionObj.type, actionObj.executedBy)
-      return action.init(actionObj)
-    })
+      const action = new IJobAction(actionObj.type, actionObj.executedBy);
+      return action.init(actionObj);
+    });
   }
 
   /* For the explanation modal */

@@ -1,5 +1,5 @@
 import { LOCAL_STORAGE } from '@ng-toolkit/universal';
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Job } from '@class/job';
 import { IJobAction } from '@class/job-action';
 import { Review } from '@class/review';

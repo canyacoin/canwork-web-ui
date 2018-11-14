@@ -1,5 +1,5 @@
 import { LOCAL_STORAGE , WINDOW} from '@ng-toolkit/universal';
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';

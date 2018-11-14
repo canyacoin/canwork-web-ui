@@ -53,7 +53,7 @@ export class WindowScrollDirective implements OnInit, OnDestroy {
 
   scroll = (): void => {
     const doc = document.documentElement;
-    const top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
+    const top = (this.window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
     if (top > 20) {
       this.ngZone.run(() => {
         this.navService.setHideSearchBar(false);
