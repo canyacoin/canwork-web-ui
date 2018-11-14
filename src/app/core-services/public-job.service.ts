@@ -6,6 +6,7 @@ import { JobService } from '@service/job.service';
 import { AuthService } from '@service/auth.service';
 import { ActionType, IJobAction } from '@class/job-action';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+<<<<<<< HEAD
 import { Observable, ReplaySubject } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { ChatService } from '@service/chat.service';
@@ -13,6 +14,12 @@ import { createChangeDetectorRef } from '@angular/core/src/view/refs';
 import { JobNotificationService } from './job-notification.service';
 import { Action } from 'rxjs/internal/scheduler/Action';
 import * as moment from 'moment';
+=======
+import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { map, } from 'rxjs/operators';
+import { createChangeDetectorRef } from '@angular/core/src/view/refs';
+>>>>>>> created the basic friendly-url generator and route
 
 @Injectable()
 export class PublicJobService {
@@ -41,6 +48,7 @@ export class PublicJobService {
     }));
   }
 
+<<<<<<< HEAD
   async getPublicJobAsObject(jobId: string) {
     const jobPromise = await this.afs.doc(`public-jobs/${jobId}`).snapshotChanges().toPromise();
     if (jobPromise) {
@@ -85,6 +93,20 @@ export class PublicJobService {
   }
 
   getPublicJobsByUser(userId: string): Observable<Job[]> {
+=======
+  getPublicJobsByUrl(url: string): Observable<Job[]> {
+    return this.afs.collection<any>('public-jobs', ref => ref.where('friendlyUrl', '==', url)).snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        console.log(a);
+        const data = a.payload.doc.data() as Job;
+        data.id = a.payload.doc.id;
+        return data;
+      });
+    }));
+  }
+
+  getPublicJobsByUser(userId: string, userType: UserType): Observable<Job[]> {
+>>>>>>> created the basic friendly-url generator and route
     return this.afs.collection<any>('public-jobs', ref => ref.where('clientId', '==', userId)).snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Job;
@@ -94,6 +116,7 @@ export class PublicJobService {
     }));
   }
 
+<<<<<<< HEAD
   async getOpenPublicJobsByUser(userId: string) {
     const exist = await this.afs.collection(`public-jobs/`, ref => ref.where('clientId', '==', userId)).valueChanges().take(1).toPromise() as Job[];
     let result: Job[];
@@ -111,6 +134,8 @@ export class PublicJobService {
     return result;
   }
 
+=======
+>>>>>>> created the basic friendly-url generator and route
   // BASIC CRUDs
   async handlepublicJob(job, action: IJobAction): Promise<boolean> {
     console.log('uploading job...');
@@ -157,6 +182,7 @@ export class PublicJobService {
     });
   }
 
+<<<<<<< HEAD
   // checks if the provider exists in the job bid
   async canBid(providerId: string, job: Job) {
     const bid = await this.afs.collection<any>(`public-jobs/${job.id}/bids/`, ref => ref.where('providerId', '==', providerId)).get().toPromise();
@@ -180,17 +206,29 @@ export class PublicJobService {
     return result;
   }
 
+=======
+>>>>>>> created the basic friendly-url generator and route
   async jobExists(jobId) {
     const exist = await this.afs.doc(`public-jobs/${jobId}`).valueChanges().take(1).toPromise();
     return exist;
   }
 
   async jobUrlExists(friendlyQuery) {
+<<<<<<< HEAD
     const exist = await this.afs.collection('public-jobs', ref => ref.where('friendlyUrl', '>=', friendlyQuery)).valueChanges().take(1).toPromise();
     return exist;
   }
 
   closePublicJob(job: Job, bid: Bid) {
+=======
+    console.log(friendlyQuery);
+    const exist = await this.afs.collection('public-jobs', ref => ref.where('friendlyUrl', '>=', friendlyQuery)).valueChanges().take(1).toPromise();
+    console.log(exist);
+    return exist;
+  }
+
+  closePublicJob(job: Job, providerId: string) {
+>>>>>>> created the basic friendly-url generator and route
     // closes the public job, create a new job object and starts the usual job flow.
     return new Promise<boolean>(async (resolve, reject) => {
       try {
@@ -267,6 +305,7 @@ export class PublicJobService {
     return bidObject;
   }
 
+<<<<<<< HEAD
   async sendPublicJobMessage(job: Job, action: IJobAction, client: User, provider: User) {
     const channelId = await this.chatService.createChannelsAsync(provider, client);
     const sender = await this.auth.getCurrentUser();
@@ -307,5 +346,20 @@ export class PublicJobService {
   async canInvite(jobId, providerId) {
     const exist = await this.afs.collection(`public-jobs/${jobId}/invites/`, ref => ref.where('provider', '==', providerId)).valueChanges().take(1).toPromise();
     return !(exist.length > 0);
+=======
+  generateReadableId(jobName): string {
+    // take the job name, take the first 2 strings.
+    const filteredName = jobName.replace(/[0-9]/g, '');
+    const nameArray = filteredName.split(' ');
+    let friendly: string;
+    if (nameArray.length > 1) {
+      friendly = nameArray[0] + '-' + nameArray[1];
+    } else {
+      friendly = nameArray[0];
+    }
+    console.log(jobName + ' = filtered to = ' + friendly);
+    friendly = friendly.toLowerCase();
+    return friendly;
+>>>>>>> created the basic friendly-url generator and route
   }
 }

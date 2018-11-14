@@ -27,9 +27,16 @@ import { MobileService } from './core-services/mobile.service';
 import { NavService } from './core-services/nav.service';
 import { PublicJobService } from './core-services/public-job.service';
 import { CoreUtilsModule } from './core-utils/core-utils.module';
+<<<<<<< HEAD
 import { PublicJobComponent } from './public-job/public-job/public-job.component';
 import { JobBidsComponent } from './public-job/job-bids/job-bids.component';
 import { FilterPipeModule } from 'ngx-filter-pipe';
+=======
+import { PublicJobComponent } from './public-job/public-job.component';
+import { FilterPipeModule } from 'ngx-filter-pipe';
+import { Ng5SliderModule } from 'ng5-slider';
+import { DockIoService } from './core-services/dock-io.service';
+>>>>>>> created the basic friendly-url generator and route
 
 @NgModule({
   declarations: [
