@@ -9,7 +9,10 @@ module.exports = {
     server: './server.ts',
   },
   target: 'node',
-  resolve: { extensions: ['.ts', '.js'] },
+  resolve: { 
+    extensions: ['.ts', '.js'],
+    mainFields: ["browser", "main"]
+  },
   externals: [/(node_modules|main\..*\.js)/,],
   output: {
     libraryTarget: 'commonjs2',
