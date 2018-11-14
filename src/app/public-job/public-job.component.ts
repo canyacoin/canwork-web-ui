@@ -19,6 +19,8 @@ export class PublicJobComponent implements OnInit {
   jobExists: boolean;
   canSee = false;
   myJob = false;
+  shareableLink: string;
+  loading: boolean;
   job: Job;
   currentUser: User;
   jobPoster: User;
@@ -26,16 +28,20 @@ export class PublicJobComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
-    private publicJobs: PublicJobService
-  ) { }
+    private userService: UserService,
+    private publicJobsService: PublicJobService
+  ) {
+    this.loading = true;
+  }
 
   async ngOnInit() {
+    this.shareableLink = '' + window.location.origin;
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       this.currentUser = user;
     });
     this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
       if (params['jobId']) {
-        this.jobSub = this.publicJobs.getPublicJob(params['jobId']).subscribe(publicJob => {
+        this.jobSub = this.publicJobsService.getPublicJob(params['jobId']).subscribe(publicJob => {
           if (publicJob === undefined) {
             this.jobExists = false;
             this.canSee = false;
@@ -49,21 +55,55 @@ export class PublicJobComponent implements OnInit {
             } else {
               this.canSee = true;
             }
+            this.setClient(this.job.clientId);
           }
         });
       } else if (params['friendlyUrl']) {
-        alert('Test complete');
-        this.jobSub = this.publicJobs.getPublicJobsByUrl(params['friendlyUrl']).subscribe(publicJob => {
-          if (publicJob.length > 0) {
+        this.jobSub = this.publicJobsService.getPublicJobsByUrl(params['friendlyUrl']).subscribe(publicJob => {
+          if (publicJob.length === 0) {
+            this.jobExists = false;
+            this.canSee = false;
+          } else {
             this.job = publicJob[0] as Job;
             this.canSee = true;
+            this.setClient(this.job.clientId);
           }
         });
       }
     });
+    this.loading = false;
   }
-
+  async setClient(clientId) {
+    this.jobPoster = await this.userService.getUser(clientId);
+    console.log(this.jobPoster);
+  }
   shareJob() {
   }
 
+  initJob() {
+  }
+
+  copyLink() {
+    let link = '';
+    if (this.job.friendlyUrl) {
+      link = this.shareableLink + '/jobs/public/' + this.job.friendlyUrl;
+    } else {
+      link = this.shareableLink + '/jobs/' + this.job.id;
+    }
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = link;
+    document.body.appendChild(selBox);
+    selBox.select();
+    selBox.focus();
+    console.log(document.execCommand('copy'));
+    document.body.removeChild(selBox);
+    document.getElementById('copied').style.display = 'block';
+    setTimeout(function () {
+      document.getElementById('copied').style.display = 'none';
+    }, 2000);
+  }
 }
