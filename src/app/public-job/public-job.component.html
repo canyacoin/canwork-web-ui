@@ -65,10 +65,6 @@
             <b>${{job.budget}}<span *ngIf="job.paymentType !== 'Fixed price'">/hr</span> USD</b>
             <p>This project is set at a {{job.paymentType}}, {{job.information.weeklyCommitment}} hours per week, over {{job.information.timelineExpectation}} period.</p>
           </div>
-          <div class="col-12" *ngIf="myJob">
-            <button class="btn btn-primary">EDIT JOB</button>
-
-          </div>
         </div>
       </div>
       <!-- Modal -->
