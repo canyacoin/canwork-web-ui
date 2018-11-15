@@ -47,15 +47,7 @@ export class PublicJobComponent implements OnInit {
             this.canSee = false;
           } else {
             this.job = publicJob;
-            this.jobExists = true;
-            this.myJob = (this.job.clientId === this.currentUser.address);
-            if (this.job.draft && !this.myJob) {
-              // only allow the job creator to see jobs in draft state
-              this.canSee = false;
-            } else {
-              this.canSee = true;
-            }
-            this.setClient(this.job.clientId);
+            this.initJob(this.job);
           }
         });
       } else if (params['friendlyUrl']) {
@@ -65,8 +57,7 @@ export class PublicJobComponent implements OnInit {
             this.canSee = false;
           } else {
             this.job = publicJob[0] as Job;
-            this.canSee = true;
-            this.setClient(this.job.clientId);
+            this.initJob(this.job);
           }
         });
       }
@@ -80,7 +71,16 @@ export class PublicJobComponent implements OnInit {
   shareJob() {
   }
 
-  initJob() {
+  initJob(job: Job) {
+    this.jobExists = true;
+    this.myJob = (job.clientId === this.currentUser.address);
+    if (job.draft && !this.myJob) {
+      // only allow the job creator to see jobs in draft state
+      this.canSee = false;
+    } else {
+      this.canSee = true;
+    }
+    this.setClient(this.job.clientId);
   }
 
   copyLink() {
