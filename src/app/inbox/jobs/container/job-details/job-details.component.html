@@ -55,11 +55,16 @@
           <div class="info-details" *ngIf="job.information.attachments.length > 0">
             <b>Attachments</b>
             <a href="{{job.information.attachments[0].url}}" target="_blank">
+<<<<<<< HEAD
               <p *ngIf="job.information.attachments[0].name.length > 10">
                 <i class="fas fa-paperclip"></i> {{ job.information.attachments[0].name.substring(0, 10) }}...
               </p>
               <p *ngIf="job.information.attachments[0].name.length <= 10">
                 <i class="fas fa-paperclip"></i> {{ job.information.attachments[0].name }}...
+=======
+              <p>
+                <i class="fas fa-paperclip"></i> {{ job.information.attachments[0].name }}
+>>>>>>> finished the reactive modal, bid submitting WIP
               </p>
             </a>
           </div>

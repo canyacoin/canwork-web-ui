@@ -180,6 +180,40 @@ export class PublicJobService {
     return result;
   }
 
+
+  async handlePublicBid(bid: Bid, job: Job) {
+    return new Promise<boolean>(async (resolve, reject) => {
+      try {
+        if (this.canBid(bid.providerId, job)) {
+          console.log('upload the bid');
+          resolve(true);
+        } else {
+          console.log('can not bid');
+          reject(false);
+        }
+      } catch (error) {
+        reject(false);
+      }
+    });
+  }
+
+  // checks if the provider exists in the job bid
+  canBid(providerId: string, job: Job) {
+    const found = job.bids.some(function (el) {
+      return el.providerId === providerId;
+    });
+    if (found) {
+      console.log('provider already bids');
+    } else {
+      console.log('provider can bid');
+    }
+    return !found;
+  }
+
+  // add new bid to collection
+  private async addBid(bid: Bid, jobId: string) {
+  }
+
   async jobExists(jobId) {
     const exist = await this.afs.doc(`public-jobs/${jobId}`).valueChanges().take(1).toPromise();
     return exist;

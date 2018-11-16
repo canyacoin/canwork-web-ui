@@ -74,6 +74,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       this.loading = false;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       this.jobs = this.activeJobs;
 =======
       console.log(this.jobs);
@@ -81,12 +82,15 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
 =======
       console.log(this.jobs);
 >>>>>>> created the basic friendly-url generator and route
+=======
+>>>>>>> finished the reactive modal, bid submitting WIP
       this.jobs.forEach(async (job) => {
         this.jobService.assignOtherPartyAsync(job, this.userType);
       });
     });
     this.publicJobsSubscription = this.publicJobService.getPublicJobsByUser(userId, userType).subscribe(async (jobs: Job[]) => {
       this.publicJobs = jobs;
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     });
@@ -110,6 +114,8 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
 >>>>>>> created the basic friendly-url generator and route
 =======
       console.log(this.publicJobs);
+=======
+>>>>>>> finished the reactive modal, bid submitting WIP
     });
 >>>>>>> created the basic friendly-url generator and route
   }
