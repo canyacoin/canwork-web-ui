@@ -1,11 +1,17 @@
 <main class="main-content">
-  <section class="section bg-gray pt-15 pb-20">
+  <section class="section bg-gray pt-15 pb-20" style="min-height: 70vh;">
     <app-back-button></app-back-button>
-    <div *ngIf="!job && loading" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
-      <img src="assets/img/loader.svg" height="36px" alt="Loader">
+    <div *ngIf="!job || loading" class="container">
+      <div class="row">
+        <div class="col-12 job-detail-container text-center">
+          <div class="card p-30 job-detail-card">
+            <img src="assets/img/loader.svg" height="36px" alt="Loader">
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="container job-detail-container" *ngIf="job">
-      <div class="card p-30 job-detail-card" *ngIf="canSee">
+    <div class="container job-detail-container" *ngIf="job && canSee">
+      <div class="card p-30 job-detail-card">
         <div class="container">
           <div class="row">
             <div class="col-lg-9 col-12">
@@ -91,6 +97,7 @@
             <div class="col-12 text-center">
               <h2>We can't find the job you were looking for</h2>
               <p>Please check the link you provided</p>
+              <button class="btn btn-primary" [routerLink]="['/home']">RETURN TO HOMEPAGE</button>
             </div>
           </div>
         </div>
@@ -149,17 +156,18 @@
         <div class="col-12">
           <h5 class="modal-title">PLACE YOUR BID</h5>
         </div>
-        <button type="button" class="close" style="position: absolute; right: 15px;" data-dismiss="modal">&times;</button>
+        <button type="button" class="close" style="position: absolute; right: 15px;" id="close-bid" data-dismiss="modal">&times;</button>
       </div>
       <div border-none class="modal-body">
-        <div class="container" *ngIf="canBid">
+        <div class="container" *ngIf="canBid && !sent">
           <div class="row">
             <div class="col-12">
               <form [formGroup]="bidForm" class="form validate" novalidate>
                 <label for="price">Price*</label>
                 <br>
                 <div class="input-group" style="border: none;">
-                  <input type="number" formControlName="price" style="border: 1px solid #ebebeb;" class="form-control" id="price" placeholder="{{job.budget}}">
+                  <input type="number" formControlName="price" style="border: 1px solid #ebebeb;" class="form-control"
+                    id="price" placeholder="{{job.budget}}">
                   <div class="input-group-append" style="padding: 5px;">
                     <span class="input-group-text">USD <span *ngIf="job.paymentType !== 'Fixed price'">/hr</span></span>
                   </div>
@@ -170,11 +178,14 @@
               </form>
               <div class="row px-15">
               </div>
-              <div class="row">
-                <div class="col-12 text-center">
-                  <small id="copied">Copied!</small>
-                </div>
-              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container" *ngIf="canBid && sent">
+          <div class="row">
+            <div class="col-12 text-center">
+              <img src="assets/img/CanYa_tick_green.svg" class="mb-30 animated bounceInDown" width="100px" height="100px">
+              <h6>Bid posted!</h6>
             </div>
           </div>
         </div>
@@ -182,8 +193,8 @@
           <h6>You've already placed your bid</h6>
         </div>
       </div>
-      <div class="modal-footer text-right" *ngIf="canBid">
-        <button type="button" class="btn btn-primary" [disabled]="!bidForm.valid" (click)="submitBid()">PLACE BID</button>
+      <div class="modal-footer text-right" *ngIf="canBid && !sent">
+      <img src="assets/img/loader.svg" height="36px" alt="Loader" *ngIf="isBidding"> <button type="button" class="btn btn-primary" [disabled]="!bidForm.valid || isBidding" (click)="submitBid()">PLACE BID</button>
       </div>
     </div>
   </div>
