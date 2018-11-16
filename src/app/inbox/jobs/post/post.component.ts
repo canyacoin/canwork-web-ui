@@ -129,7 +129,6 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.publicJobService.generateReadableId('Testing 251 Creaton Job');
     this.jobId = GenerateGuid();
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       this.currentUser = user;
@@ -345,10 +344,8 @@ export class PostComponent implements OnInit, OnDestroy {
     const action = new IJobAction(ActionType.createJob, UserType.client);
     action.setPaymentProperties(job.budget, await this.jobService.getJobBudget(job), this.postForm.value.timelineExpectation,
       this.postForm.value.workType, this.postForm.value.weeklyCommitment, this.postForm.value.paymentType);
-    console.log(this.shareableJobForm);
     console.log('Shareable job submitted...');
     console.log('job created');
-    console.log(job.friendlyUrl);
     const exists = await this.publicJobService.jobUrlExists(job.friendlyUrl);
     if (exists.length < 1) {
       console.log('just upload it');
