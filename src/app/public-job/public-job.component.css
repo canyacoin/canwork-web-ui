@@ -13,10 +13,17 @@
 }
 
 .link-col p {
-    padding-top: 7.5px;
-    margin: 0;
+  padding-top: 7.5px;
+  margin: 0;
 }
 
 #copied {
-    display: none;
+  display: none;
+}
+
+.input-group-append {
+  padding: 5px 10px;
+  border: 1px solid #ebebeb;
+  background-color: #ebebeb;
+  border-radius: 0px 5px 5px 0;
 }

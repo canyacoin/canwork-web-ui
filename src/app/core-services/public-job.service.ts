@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Job, JobDescription } from '@class/job';
+import { Job, JobDescription, Bid } from '@class/job';
 import { User, UserType } from '@class/user';
 import { UserService } from '@service/user.service';
 import { JobService } from '@service/job.service';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { map, } from 'rxjs/operators';
 import { createChangeDetectorRef } from '@angular/core/src/view/refs';
@@ -74,6 +74,40 @@ export class PublicJobService {
     return this.publicJobsCollection.doc(job.id).set(x);
   }
 
+
+  async handlePublicBid(bid: Bid, job: Job) {
+    return new Promise<boolean>(async (resolve, reject) => {
+      try {
+        if (this.canBid(bid.providerId, job)) {
+          console.log('upload the bid');
+          resolve(true);
+        } else {
+          console.log('can not bid');
+          reject(false);
+        }
+      } catch (error) {
+        reject(false);
+      }
+    });
+  }
+
+  // checks if the provider exists in the job bid
+  canBid(providerId: string, job: Job) {
+    const found = job.bids.some(function (el) {
+      return el.providerId === providerId;
+    });
+    if (found) {
+      console.log('provider already bids');
+    } else {
+      console.log('provider can bid');
+    }
+    return !found;
+  }
+
+  // add new bid to collection
+  private async addBid(bid: Bid, jobId: string) {
+  }
+
   async jobExists(jobId) {
     const exist = await this.afs.doc(`public-jobs/${jobId}`).valueChanges().take(1).toPromise();
     return exist;
@@ -104,5 +138,15 @@ export class PublicJobService {
     console.log(jobName + ' = filtered to = ' + friendly);
     friendly = friendly.toLowerCase();
     return friendly;
+  }
+
+  parseBidToObject(bid: Bid): Object {
+    const bidObject = Object.assign({}, bid);
+    const currentTime = new Date().getTime;
+    bidObject.message = bid.message;
+    bidObject.providerId = bid.providerId;
+    bidObject.budget = bid.budget;
+    bidObject.timestamp = bid.timestamp;
+    return bidObject;
   }
 }

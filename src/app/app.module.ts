@@ -10,6 +10,7 @@ import { AngularFireStorageModule } from 'angularfire2/storage';
 import { FirebaseUIModule } from 'firebaseui-angular';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app.routing.module';
 import { CoreComponentsModule } from './core-components/core-components.module';
 import { firebaseUiAuthConfig } from './core-config/app-auth-config';
@@ -52,7 +53,9 @@ import { DockIoService } from './core-services/dock-io.service';
     CoreUtilsModule,
     HttpClientModule,
     FilterPipeModule,
-    Ng5SliderModule
+    Ng5SliderModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   exports: [
     FilterPipeModule

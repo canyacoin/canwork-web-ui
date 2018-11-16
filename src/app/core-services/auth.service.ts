@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 
-import { BehaviorSubject ,  Observable ,  Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import * as firebase from 'firebase/app';
 import { Avatar, User } from '../core-classes/user';
@@ -58,7 +58,9 @@ export class AuthService {
   }
 
   emitUser(user: User) {
-    localStorage.setItem('credentials', JSON.stringify(user));
+    if (user) {
+      localStorage.setItem('credentials', JSON.stringify(user));
+    }
     this.currentUser.next(user);
   }
 
