@@ -5,8 +5,9 @@ import { Web3LoadingStatus } from '@canyaio/canpay-lib';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import * as findIndex from 'lodash/findIndex';
 import * as orderBy from 'lodash/orderBy';
-import { Observable ,  Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+
 import * as moment from 'moment';
 import { User } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
@@ -78,12 +79,12 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
       description: ['', Validators.compose([Validators.required, Validators.maxLength(255)])],
       price: ['', Validators.compose([Validators.required, Validators.min(10), Validators.maxLength(9999)])]
     });
-    this.routeSub = this.activatedRoute.queryParams.subscribe((params) => {
+
+    this.activatedRoute.queryParams.take(1).subscribe((params) => {
       if (params['address']) {
         this.queryAddress = params['address'];
       }
     });
-
   }
 
   ngOnInit() {
@@ -122,7 +123,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
 
   loadChannels() {
     try {
-      this.afs.collection('chats').doc(this.currentUser.address).collection('channels').valueChanges().subscribe((data: any) => {
+      this.afs.collection('chats').doc(this.currentUser.address).collection('channels').valueChanges().subscribe((data: Channel[]) => {
         if (this.queryAddress !== '') {
           const idx = findIndex(data, { 'address': this.queryAddress });
           if (idx !== '-1') {
@@ -135,7 +136,11 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!JSON.parse(localStorage.getItem('selectedChannel')) && this.queryAddress === '') {
           this.setSelectedChannel(data[0]);
         }
-        this.channels = orderBy(data, ['timestamp'], ['desc']);
+        this.channels = data.filter((doc: Channel) => {
+          return doc.message || this.selectedChannel === doc;
+        }).sort((a, b) => {
+          return parseInt(b.timestamp, 10) - parseInt(a.timestamp, 10);
+        });
         this.onSearch('');
         this.loadChats();
         this.loadUser();
