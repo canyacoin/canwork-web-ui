@@ -29,7 +29,7 @@ export class CertificationsService {
       completion: certification.completion,
       isStudying: certification.isStudying,
       certificate: certification.certificate
-    }
+    };
     this.afs.doc(`users/${userID}/certifications/${tempCert.id}`).set(tempCert).catch(error => {
       alert('Something went wrong. Please try again later.');
       console.log(error);
@@ -46,7 +46,7 @@ export class CertificationsService {
       completion: certification.completion,
       isStudying: certification.isStudying,
       certificate: certification.certificate
-    }
+    };
     this.afs.doc(`users/${userID}/certifications/${tempCert.id}`).update(tempCert).catch(error => {
       alert('Something went wrong. Please try again later.');
     });

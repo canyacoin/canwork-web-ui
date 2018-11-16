@@ -22,7 +22,6 @@ export class Job {
   reviewId: string;
   deadline: string;
   visibility: string;
-  bids: Array<Bid> = [];
   draft: boolean;
   friendlyUrl: string;
 
