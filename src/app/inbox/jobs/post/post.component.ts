@@ -133,6 +133,7 @@ export class PostComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
 <<<<<<< HEAD
+<<<<<<< HEAD
     console.log(this.activatedRoute.snapshot.params['jobId']);
     this.editing = this.activatedRoute.snapshot.params['jobId'] && this.activatedRoute.snapshot.params['jobId'] !== '';
     console.log(this.editing);
@@ -161,6 +162,8 @@ export class PostComponent implements OnInit, OnDestroy {
     }
 =======
     this.publicJobService.generateReadableId('Testing 251 Creaton Job');
+=======
+>>>>>>> add bid and bid checker function works
     this.jobId = GenerateGuid();
 >>>>>>> created the basic friendly-url generator and route
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
@@ -420,11 +423,13 @@ export class PostComponent implements OnInit, OnDestroy {
     const action = new IJobAction(ActionType.createJob, UserType.client);
     action.setPaymentProperties(job.budget, await this.jobService.getJobBudget(job), this.postForm.value.timelineExpectation,
       this.postForm.value.workType, this.postForm.value.weeklyCommitment, this.postForm.value.paymentType);
+<<<<<<< HEAD
 >>>>>>> created the basic friendly-url generator and route
     console.log(this.shareableJobForm);
+=======
+>>>>>>> add bid and bid checker function works
     console.log('Shareable job submitted...');
     console.log('job created');
-    console.log(job.friendlyUrl);
     const exists = await this.publicJobService.jobUrlExists(job.friendlyUrl);
     if (exists.length < 1) {
       console.log('just upload it');

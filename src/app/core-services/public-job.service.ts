@@ -185,7 +185,8 @@ export class PublicJobService {
     return new Promise<boolean>(async (resolve, reject) => {
       try {
         if (this.canBid(bid.providerId, job)) {
-          console.log('upload the bid');
+          console.log('uploading the bid');
+          await this.addBid(bid, job.id);
           resolve(true);
         } else {
           console.log('can not bid');
@@ -198,26 +199,27 @@ export class PublicJobService {
   }
 
   // checks if the provider exists in the job bid
-  canBid(providerId: string, job: Job) {
-    const found = job.bids.some(function (el) {
-      return el.providerId === providerId;
-    });
-    if (found) {
-      console.log('provider already bids');
-    } else {
-      console.log('provider can bid');
-    }
-    return !found;
+  async canBid(providerId: string, job: Job) {
+    const bid = await this.afs.collection(`public-jobs`).doc(job.id).collection('bids').doc(providerId).get().toPromise();
+    console.log(bid.exists);
+    return !bid.exists;
   }
 
   // add new bid to collection
-  private async addBid(bid: Bid, jobId: string) {
+  private addBid(bid: Bid, jobId: string) {
+    const bidToUpload = this.parseBidToObject(bid);
+    this.afs.doc(`public-jobs/${jobId}/bids/${bid.providerId}`).set(bidToUpload).catch(error => {
+      alert('Something went wrong. Please try again later.');
+      console.log(error);
+    });
   }
+
 
   async jobExists(jobId) {
     const exist = await this.afs.doc(`public-jobs/${jobId}`).valueChanges().take(1).toPromise();
     return exist;
   }
+
 
   async jobUrlExists(friendlyQuery) {
     const exist = await this.afs.collection('public-jobs', ref => ref.where('friendlyUrl', '>=', friendlyQuery)).valueChanges().take(1).toPromise();
