@@ -93,7 +93,7 @@ export class PublicJobComponent implements OnInit {
     this.setClient(this.job.clientId);
     this.setAttachmentUrl();
     if (this.currentUser.type === 'Provider') {
-      this.canBid = this.publicJobsService.canBid(this.currentUser.address, this.job);
+      this.canBid =  await this.publicJobsService.canBid(this.currentUser.address, this.job);
     }
     console.log(job);
   }
@@ -105,6 +105,7 @@ export class PublicJobComponent implements OnInit {
     bidToSubmit.providerId = this.currentUser.address;
     bidToSubmit.timestamp = moment().format('x');
     console.log(bidToSubmit);
+    this.publicJobsService.handlePublicBid(bidToSubmit, this.job);
   }
 
   copyLink() {
