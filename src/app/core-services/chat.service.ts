@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { take } from 'rxjs/operators';
+
 import * as moment from 'moment';
 import { Job } from '../core-classes/job';
 import { ActionType, IJobAction } from '../core-classes/job-action';
@@ -89,7 +90,7 @@ export class ChatService {
     this.afs.firestore.doc(path).get().then(docSnapshot => {
       if (docSnapshot.exists) {
         // if the channel exists, navigate the user to the chat page.
-        this.router.navigateByUrl('/inbox/chat?address=' + receiver.address);
+        this.router.navigateByUrl('inbox/chat?address=' + receiver.address);
       } else {
         this.createAndNavigateToChannel(sender, receiver);
       }
@@ -100,7 +101,7 @@ export class ChatService {
   async createAndNavigateToChannel(sender: User, receiver: User) {
     const channelsCreated = await this.createChannelsAsync(sender, receiver);
     if (channelsCreated) {
-      this.router.navigate(['inbox/chat', receiver.address]);
+      this.router.navigateByUrl('inbox/chat?address=' + receiver.address);
     } else {
       console.log('something wrong with the channels?');
     }
