@@ -4,7 +4,7 @@ import { FilterPipe } from 'ngx-filter-pipe';
 import { OrderPipe } from 'ngx-order-pipe';
 import { Observable, Subscription } from 'rxjs';
 
-import { Job, JobDescription, PaymentType, TimeRange, WorkType } from '../../../core-classes/job';
+import { Job, JobDescription, PaymentType, TimeRange, WorkType, JobState } from '../../../core-classes/job';
 import { User, UserType } from '../../../core-classes/user';
 import { AuthService } from '../../../core-services/auth.service';
 import { JobService } from '../../../core-services/job.service';
@@ -25,13 +25,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   paymentType = PaymentType;
   jobs: Job[];
   publicJobs: Job[];
-<<<<<<< HEAD
-<<<<<<< HEAD
   activeJobs: Job[];
-=======
->>>>>>> created the basic friendly-url generator and route
-=======
->>>>>>> created the basic friendly-url generator and route
   jobsSubscription: Subscription;
   publicJobsSubscription: Subscription;
   authSub: Subscription;
@@ -72,27 +66,15 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     this.jobsSubscription = this.jobService.getJobsByUser(userId, userType).subscribe(async (jobs: Job[]) => {
       this.activeJobs = jobs;
       this.loading = false;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
       this.jobs = this.activeJobs;
-=======
-      console.log(this.jobs);
->>>>>>> created the basic friendly-url generator and route
-=======
-      console.log(this.jobs);
->>>>>>> created the basic friendly-url generator and route
-=======
->>>>>>> finished the reactive modal, bid submitting WIP
       this.jobs.forEach(async (job) => {
         this.jobService.assignOtherPartyAsync(job, this.userType);
       });
     });
-    this.publicJobsSubscription = this.publicJobService.getPublicJobsByUser(userId, userType).subscribe(async (jobs: Job[]) => {
-      this.publicJobs = jobs;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
+    this.publicJobsSubscription = this.publicJobService.getPublicJobsByUser(userId).subscribe(async (jobs: Job[]) => {
+      // only show open jobs
+      const openJobs = jobs.filter(job => job.state === JobState.acceptingOffers);
+      this.publicJobs = openJobs;
     });
   }
 
@@ -108,16 +90,6 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       case 'draft':
         this.jobs = this.publicJobs.filter(job => job.draft === true);
     }
-=======
-      console.log(this.publicJobs);
-    });
->>>>>>> created the basic friendly-url generator and route
-=======
-      console.log(this.publicJobs);
-=======
->>>>>>> finished the reactive modal, bid submitting WIP
-    });
->>>>>>> created the basic friendly-url generator and route
   }
 
   changeUserType() {

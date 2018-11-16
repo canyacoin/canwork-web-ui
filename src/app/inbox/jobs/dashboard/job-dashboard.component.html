@@ -137,8 +137,6 @@
           No jobs to show!
         </div>
         <div *ngIf="jobs && jobs.length > 0 && !isOnMobile">
-<<<<<<< HEAD
-<<<<<<< HEAD
           <app-job-dashboard-card *ngFor="let job of jobs | orderBy : orderType:reverseOrder" [job]="job" [type]="'lg'"
             [isPublic]="jobType !== 'active'"></app-job-dashboard-card>
         </div>
@@ -149,50 +147,17 @@
       </div>
     </div>
     <!--
-=======
-=======
->>>>>>> created the basic friendly-url generator and route
-          <app-job-dashboard-card *ngFor="let job of jobs | orderBy : orderType:reverseOrder" [job]="job" [type]="'lg'" [isPublic]="false"></app-job-dashboard-card>
-        </div>
-        <div *ngIf="jobs && jobs.length > 0 && isOnMobile">
-          <app-job-dashboard-card *ngFor="let job of jobs | orderBy : orderType:reverseOrder" [job]="job" [type]="'sm'" [isPublic]="false"></app-job-dashboard-card>
-<<<<<<< HEAD
-        </div>
-      </div>
-    </div>
->>>>>>> created the basic friendly-url generator and route
     <div class="container" *ngIf="publicJobs">
       <div class="row">
         <div class="col-12">
           <h4 class="fw-500 mb-30">PUBLIC JOBS</h4>
-=======
->>>>>>> created the basic friendly-url generator and route
         </div>
       </div>
       <div *ngIf="publicJobs && publicJobs.length > 0 && !isOnMobile">
-<<<<<<< HEAD
         <app-job-dashboard-card *ngFor="let job of publicJobs | orderBy : orderType:reverseOrder" [job]="job" [type]="'lg'"
           [isPublic]="true"></app-job-dashboard-card>
       </div>
     </div>
     -->
-=======
-          <app-job-dashboard-card *ngFor="let job of publicJobs | orderBy : orderType:reverseOrder" [job]="job" [type]="'lg'" [isPublic]="true"></app-job-dashboard-card>
-      </div>
-    </div>
-<<<<<<< HEAD
->>>>>>> created the basic friendly-url generator and route
-=======
-    <div class="container" *ngIf="publicJobs">
-      <div class="row">
-        <div class="col-12">
-          <h4 class="fw-500 mb-30">PUBLIC JOBS</h4>
-        </div>
-      </div>
-      <div *ngIf="publicJobs && publicJobs.length > 0 && !isOnMobile">
-          <app-job-dashboard-card *ngFor="let job of publicJobs | orderBy : orderType:reverseOrder" [job]="job" [type]="'lg'" [isPublic]="true"></app-job-dashboard-card>
-      </div>
-    </div>
->>>>>>> created the basic friendly-url generator and route
   </section>
 </main>
