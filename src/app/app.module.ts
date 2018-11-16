@@ -14,6 +14,7 @@ import { FilterPipeModule } from 'ngx-filter-pipe';
 import { FirebaseUIModule } from 'firebaseui-angular';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app.routing.module';
 import { CoreComponentsModule } from './core-components/core-components.module';
 import { firebaseUiAuthConfig } from './core-config/app-auth-config';
@@ -55,7 +56,9 @@ import { PublicJobComponent } from './public-job/public-job.component';
     HttpClientModule,
     FilterPipeModule,
     Ng5SliderModule,
-    StarRatingModule.forRoot()
+    StarRatingModule.forRoot(),
+    FormsModule,
+    ReactiveFormsModule
   ],
   exports: [
     FilterPipeModule

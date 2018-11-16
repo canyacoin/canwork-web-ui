@@ -18,6 +18,19 @@ body.modal-open {
   overflow-y: scroll;
 }
 
+.modal-open .topbar {
+  right: 0 !important;
+}
+
+.modal {
+  overflow-y: auto;
+}
+
+.modal-open {
+  overflow: auto;
+}
+
+
 ::-moz-selection {
   background: #3cf;
   color: #fff;
@@ -272,11 +285,6 @@ h6,
 .text-quoted::after {
   content: '”';
   padding-left: 2px;
-}
-
-hr {
-  border-top-color: rgba(83, 83, 83, 0.07);
-  margin: 2rem auto;
 }
 
 .mark-border {
@@ -9875,7 +9883,7 @@ a.text-danger:focus {
 }
 
 hr {
-  border-color: #919d9d;
+  border-color: #ebebeb;
   height: 1.5px;
 }
 

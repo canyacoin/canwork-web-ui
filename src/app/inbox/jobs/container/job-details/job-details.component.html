@@ -52,6 +52,14 @@
             <p>Timeline</p>
             <b>{{job.information.timelineExpectation}}</b>
           </div>
+          <div class="info-details" *ngIf="job.information.attachments.length > 0">
+            <b>Attachments</b>
+            <a href="{{job.information.attachments[0].url}}" target="_blank">
+              <p>
+                <i class="fas fa-paperclip"></i> {{ job.information.attachments[0].name }}
+              </p>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -80,8 +88,13 @@
           </p>
         </div>
         <div class="actions-div" *ngIf="availableActions.length > 0">
+<<<<<<< HEAD
           <button *ngFor="let action of availableActions" class="btn action-btn mt-5 btn-{{getColour(action)}} btn-outline btn-sm"
             (click)="executeAction(action)" [disabled]="actionIsDisabled(action)" [hidden]="actionIsHidden(action)">
+=======
+          <button *ngFor="let action of availableActions" class="btn action-btn mt-5 mr-5 btn-{{getColour(action)}} btn-outline btn-sm"
+            (click)="executeAction(action)" [disabled]="actionIsDisabled(action)">
+>>>>>>> finished the reactive modal, bid submitting WIP
             {{action}}
           </button>
           <br>
