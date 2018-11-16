@@ -30,7 +30,8 @@
         </div>
       </div>
       <div class="row hourly-rate">
-        <span *ngIf="provider.hourlyRate && provider.hourlyRate > 0 && canToUsd" data-toggle="tooltip" data-placement="bottom" title="{{getUsdToCan(provider.hourlyRate)}} USD/hr">
+        <span *ngIf="provider.hourlyRate && provider.hourlyRate > 0 && canToUsd" data-toggle="tooltip" data-placement="bottom"
+          title="{{getUsdToCan(provider.hourlyRate)}} USD/hr">
           <b>${{provider.hourlyRate}}</b>/hr
         </span>
         <span *ngIf="provider.hourlyRate && provider.hourlyRate > 0 && !canToUsd">
@@ -38,7 +39,7 @@
         </span>
       </div>
       <div class="row">
-        <button [routerLink]="['/inbox/post', provider.address]" class="btn btn-primary btn-canya-chat py-10">SEE MORE</button>
+        <button [routerLink]="['/profile/alt', provider.address]" class="btn btn-primary btn-canya-chat py-10">SEE MORE</button>
       </div>
     </div>
   </div>
