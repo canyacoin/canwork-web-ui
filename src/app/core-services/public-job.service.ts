@@ -26,7 +26,7 @@ export class PublicJobService {
     return this.afs.doc(`public-jobs/${jobId}`).snapshotChanges().pipe(map(doc => {
       const job = doc.payload.data() as Job;
       console.log(job);
-      if (job !== undefined) {
+      if (job) {
         console.log('found.');
       } else {
         console.log('not found.');
@@ -94,9 +94,13 @@ export class PublicJobService {
 
   // checks if the provider exists in the job bid
   async canBid(providerId: string, job: Job) {
+    /*
     const bid = await this.afs.collection(`public-jobs`).doc(job.id).collection('bids').doc(providerId).get().toPromise();
     console.log(bid.exists);
     return !bid.exists;
+    */
+    const bid = await this.afs.collection<any>(`public-jobs/${job.id}/bids/`, ref => ref.where('providerId', '==', providerId)).get().toPromise();
+    return bid.empty;
   }
 
   // add new bid to collection

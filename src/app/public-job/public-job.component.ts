@@ -23,6 +23,8 @@ export class PublicJobComponent implements OnInit {
   jobSub: Subscription;
   jobExists: boolean;
   canBid: boolean;
+  isBidding: boolean;
+  sent = false;
   canSee = false;
   myJob = false;
   shareableLink: string;
@@ -93,19 +95,21 @@ export class PublicJobComponent implements OnInit {
     this.setClient(this.job.clientId);
     this.setAttachmentUrl();
     if (this.currentUser.type === 'Provider') {
-      this.canBid =  await this.publicJobsService.canBid(this.currentUser.address, this.job);
+      const check = await this.publicJobsService.canBid(this.currentUser.address, this.job);
+      this.canBid = check;
     }
-    console.log(job);
   }
 
   async submitBid() {
+    this.isBidding = true;
     const bidToSubmit = new Bid;
     bidToSubmit.budget = this.bidForm.value.price;
     bidToSubmit.message = this.bidForm.value.message;
     bidToSubmit.providerId = this.currentUser.address;
     bidToSubmit.timestamp = moment().format('x');
     console.log(bidToSubmit);
-    this.publicJobsService.handlePublicBid(bidToSubmit, this.job);
+    this.sent = await this.publicJobsService.handlePublicBid(bidToSubmit, this.job);
+    this.isBidding = false;
   }
 
   copyLink() {
