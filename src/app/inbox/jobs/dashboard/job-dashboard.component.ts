@@ -65,14 +65,12 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       this.jobs = jobs;
       this.allJobs = jobs;
       this.loading = false;
-      console.log(this.jobs);
       this.jobs.forEach(async (job) => {
         this.jobService.assignOtherPartyAsync(job, this.userType);
       });
     });
     this.publicJobsSubscription = this.publicJobService.getPublicJobsByUser(userId, userType).subscribe(async (jobs: Job[]) => {
       this.publicJobs = jobs;
-      console.log(this.publicJobs);
     });
   }
 

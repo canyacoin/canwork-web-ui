@@ -91,6 +91,7 @@ export class JobDescription {
 export class Bid {
   providerId: string;
   budget: number;
+  message: string;
   timestamp: string;
 }
 

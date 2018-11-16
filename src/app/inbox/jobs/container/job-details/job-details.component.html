@@ -52,6 +52,14 @@
             <p>Timeline</p>
             <b>{{job.information.timelineExpectation}}</b>
           </div>
+          <div class="info-details" *ngIf="job.information.attachments.length > 0">
+            <b>Attachments</b>
+            <a href="{{job.information.attachments[0].url}}" target="_blank">
+              <p>
+                <i class="fas fa-paperclip"></i> {{ job.information.attachments[0].name }}
+              </p>
+            </a>
+          </div>
         </div>
       </div>
     </div>
