@@ -25,12 +25,14 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   paymentType = PaymentType;
   jobs: Job[];
   publicJobs: Job[];
+  activeJobs: Job[];
   jobsSubscription: Subscription;
   publicJobsSubscription: Subscription;
   authSub: Subscription;
   orderType: string;
   reverseOrder: boolean;
   loading = true;
+  jobType = 'active';
   filterByState: any = { state: '' };
   allJobs: Job[];
   searchQuery: string;
@@ -62,9 +64,9 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
 
   private initialiseJobs(userId: string, userType: UserType) {
     this.jobsSubscription = this.jobService.getJobsByUser(userId, userType).subscribe(async (jobs: Job[]) => {
-      this.jobs = jobs;
-      this.allJobs = jobs;
+      this.activeJobs = jobs;
       this.loading = false;
+      this.jobs = this.activeJobs;
       this.jobs.forEach(async (job) => {
         this.jobService.assignOtherPartyAsync(job, this.userType);
       });
@@ -72,6 +74,20 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     this.publicJobsSubscription = this.publicJobService.getPublicJobsByUser(userId, userType).subscribe(async (jobs: Job[]) => {
       this.publicJobs = jobs;
     });
+  }
+
+  changeJob(jobType) {
+    this.jobType = jobType;
+    switch (jobType) {
+      case 'public':
+        this.jobs = this.publicJobs.filter( job => job.draft === false );
+        break;
+      case 'active':
+        this.jobs = this.activeJobs;
+        break;
+      case 'draft':
+        this.jobs = this.publicJobs.filter( job => job.draft === true );
+    }
   }
 
   changeUserType() {
