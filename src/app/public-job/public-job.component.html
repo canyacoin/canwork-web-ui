@@ -1,7 +1,7 @@
 <main class="main-content">
   <section class="section bg-gray pt-15 pb-20" style="min-height: 70vh;">
     <app-back-button></app-back-button>
-    <div *ngIf="!job || loading" class="container">
+    <div *ngIf="!job" class="container">
       <div class="row">
         <div class="col-12 job-detail-container text-center">
           <div class="card p-30 job-detail-card">
@@ -103,6 +103,55 @@
         </div>
       </div>
     </div>
+    <div class="container job-detail-container" *ngIf="job && myJob">
+      <div class="card p-30 job-detail-card">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <h5>BIDS</h5>
+            </div>
+            <div class="col-12" *ngIf="bids.length > 0">
+              <div class="row" style="min-height: 20px">
+                <div class="col-3">
+                  <b>Provider</b>
+                </div>
+                <div class="col-4">
+                  <b>Message</b>
+                </div>
+                <div class="col-2">
+                  <b>Budget</b>
+                </div>
+                <div class="col-3">
+                  <b>Actions</b>
+                </div>
+              </div>
+              <div class="row" *ngFor="let bid of bids">
+                <div class="col-3">
+                  <div class="otherPartyName pointer" [routerLink]="['/profile/alt/', bid.providerId]">
+                    <span *ngIf="bid.providerAvatar" class="headshot-div" [ngStyle]="{'background-image': 'url(' + (bid.providerAvatar || {}).uri + ')'}">
+                    </span>
+                    <p class="fs-16">{{bid.providerName}}</p>
+                  </div>
+                </div>
+                <div class="col-4  mt-5">
+                  {{bid.message}}
+                </div>
+                <div class="col-2 mt-5">
+                  {{bid.budget}}<span *ngIf="job.paymentType !== 'Fixed price'">/hr</span> USD
+                </div>
+                <div class="col-3 mt-5">
+                  <button [routerLink]="['/inbox/chat']" [queryParams]="{ address : bid.providerId}"  class="btn btn-sm btn-primary mr-5">CHAT</button>
+                  <button class="btn btn-sm btn-success">CHOOSE</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-12" *ngIf="bids.length < 1">
+              <p>No bids yet.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 </main>
 <!-- Modals -->
@@ -184,7 +233,7 @@
         <div class="container" *ngIf="canBid && sent">
           <div class="row">
             <div class="col-12 text-center">
-              <img src="assets/img/CanYa_tick_green.svg" class="mb-30 animated bounceInDown" width="100px" height="100px">
+              <img src="assets/img/CanYa_tick_green.svg" class="mb-30 fadeInShort" width="100px" height="100px">
               <h6>Bid posted!</h6>
             </div>
           </div>
@@ -194,7 +243,8 @@
         </div>
       </div>
       <div class="modal-footer text-right" *ngIf="canBid && !sent">
-      <img src="assets/img/loader.svg" height="36px" alt="Loader" *ngIf="isBidding"> <button type="button" class="btn btn-primary" [disabled]="!bidForm.valid || isBidding" (click)="submitBid()">PLACE BID</button>
+        <img src="assets/img/loader.svg" height="36px" alt="Loader" *ngIf="isBidding"> <button type="button" class="btn btn-primary"
+          [disabled]="!bidForm.valid || isBidding" (click)="submitBid()">PLACE BID</button>
       </div>
     </div>
   </div>
