@@ -6,7 +6,7 @@ import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/fires
 import * as findIndex from 'lodash/findIndex';
 import * as orderBy from 'lodash/orderBy';
 import { Observable, Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, take } from 'rxjs/operators';
 
 import * as moment from 'moment';
 import { User } from '../../core-classes/user';
@@ -53,7 +53,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   web3State: Web3LoadingStatus;
   web3Subscription: Subscription;
   accountSubscription: Subscription;
-  authSub: Subscription;
+  channelSubscription: Subscription;
   routeSub: Subscription;
   postForm: FormGroup = null;
   offerForm: FormGroup = null;
@@ -62,6 +62,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoading = true;
   hideBanner = false;
   isOnMobile = false;
+
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
@@ -90,7 +91,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     const ua = window.navigator.userAgent;
     this.isOnMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua);
-    this.authSub = this.authService.currentUser$.subscribe((user: User) => {
+    this.authService.currentUser$.pipe(take(1)).subscribe((user: User) => {
       if (user && user !== this.currentUser) {
         this.currentUser = user;
         this.loadChannels();
@@ -118,29 +119,32 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     if (this.web3Subscription) { this.web3Subscription.unsubscribe(); }
     if (this.accountSubscription !== undefined) { this.accountSubscription.unsubscribe(); }
-    if (this.authSub) { this.authSub.unsubscribe(); }
+    if (this.channelSubscription) { this.channelSubscription.unsubscribe(); }
   }
 
   loadChannels() {
     try {
-      this.afs.collection('chats').doc(this.currentUser.address).collection('channels').valueChanges().subscribe((data: Channel[]) => {
+      this.channelSubscription = this.afs.collection('chats').doc(this.currentUser.address).collection('channels').valueChanges().subscribe((data: Channel[]) => {
+
+
         if (this.queryAddress !== '') {
           const idx = findIndex(data, { 'address': this.queryAddress });
           if (idx !== '-1') {
             this.setSelectedChannel(data[idx]);
           }
         }
-        if (JSON.parse(localStorage.getItem('selectedChannel')) && this.queryAddress === '') {
-          this.setSelectedChannel(JSON.parse(localStorage.getItem('selectedChannel')));
-        }
-        if (!JSON.parse(localStorage.getItem('selectedChannel')) && this.queryAddress === '') {
-          this.setSelectedChannel(data[0]);
-        }
         this.channels = data.filter((doc: Channel) => {
           return doc.message || this.selectedChannel === doc;
         }).sort((a, b) => {
           return parseInt(b.timestamp, 10) - parseInt(a.timestamp, 10);
         });
+        if (JSON.parse(localStorage.getItem('selectedChannel')) && this.queryAddress === '') {
+          this.setSelectedChannel(JSON.parse(localStorage.getItem('selectedChannel')));
+        }
+        if (!JSON.parse(localStorage.getItem('selectedChannel')) && this.queryAddress === '') {
+          this.setSelectedChannel(this.channels[0]);
+        }
+
         this.onSearch('');
         this.loadChats();
         this.loadUser();
@@ -148,6 +152,12 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
     } catch (error) {
       console.error('error loading channels');
     }
+  }
+
+  async hideChannel(channel: Channel) {
+    localStorage.setItem('selectedChannel', null);
+    this.chatService.hideChannel(this.currentUser.address, channel.channel);
+    // this.loadChannels();
   }
 
   setSelectedChannel(channel: any) {

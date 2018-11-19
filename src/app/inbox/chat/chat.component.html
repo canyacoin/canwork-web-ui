@@ -68,6 +68,15 @@
                   </div>
                 </div>
               </a>
+              <div class="topbar-right">
+                <button (click)="hideChannel(selectedChannel)" class="btn btn-outline hidden-lg-down" border-64>
+                  <i class="fa fa-archive"></i>
+                  Archive
+                </button>
+                <button (click)="hideChannel(selectedChannel)" class="btn btn-action hidden-md-up" border-64>
+                  <i class="fa fa-archive"></i>
+                </button>
+              </div>
               <div class="topbar-right" *ngIf="currentUser.type !== 'Provider'">
                 <button (click)="postRequest(selectedChannel.address)" class="btn btn-primary btn-outline hidden-lg-down"
                   border-64>
