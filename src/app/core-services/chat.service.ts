@@ -97,6 +97,13 @@ export class ChatService {
     });
   }
 
+  // Check if channel exists
+  async hideChannel(userId: string, channelId: string) {
+    const path = `chats/${userId}/channels/${channelId}`;
+    await this.afs.firestore.doc(path).update({ message: '', timestamp: moment().format('x') });
+  }
+
+
   // create a channel without any message and navigate the user to it
   async createAndNavigateToChannel(sender: User, receiver: User) {
     const channelsCreated = await this.createChannelsAsync(sender, receiver);
