@@ -438,7 +438,7 @@ export class PostComponent implements OnInit, OnDestroy {
       job.friendlyUrl = job.friendlyUrl + '-' + exists.length;
       console.log('new url : ' + job.friendlyUrl);
     }
-    this.sent = await this.publicJobService.handlepublicJob(job);
+    this.sent = await this.publicJobService.handlepublicJob(job, action);
     this.isSending = false;
   }
 
