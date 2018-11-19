@@ -12,20 +12,20 @@
           </button>
         </span>
       </div>
-      <div class="row">
-        <div class="col-12 my-15" *ngIf="!isOnMobile">
-          <button class="btn btn-primary btn-outline mr-5" [ngClass]="{active: jobType === 'active'}" (click)="changeJob('active')">Active
-            Jobs</button>
-          <button class="btn btn-primary btn-outline mr-5" [ngClass]="{active: jobType === 'public'}" (click)="changeJob('public')">Public
-            Jobs</button>
-          <button class="btn btn-primary btn-outline mr-5" [ngClass]="{active: jobType === 'draft'}" (click)="changeJob('draft')">Jobs
-            in draft</button>
-        </div>
-      </div>
       <div *ngIf="loading" class="d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
         <img src="assets/img/loader.svg" height="36px" alt="Loader">
       </div>
       <div *ngIf="!loading">
+        <div class="row">
+          <div class="col-12 my-15" *ngIf="!isOnMobile && this.userType !== 'Provider'">
+            <button class="btn btn-primary btn-outline mr-5" [ngClass]="{active: jobType === 'active'}" (click)="changeJob('active')">Active
+              Jobs</button>
+            <button class="btn btn-primary btn-outline mr-5" [ngClass]="{active: jobType === 'public'}" (click)="changeJob('public')">Public
+              Jobs</button>
+            <button class="btn btn-primary btn-outline mr-5" [ngClass]="{active: jobType === 'draft'}" (click)="changeJob('draft')">Jobs
+              in draft</button>
+          </div>
+        </div>
         <div *ngIf="!isOnMobile" class="row">
           <div class="col-lg-12">
             <div class="form-inline">
