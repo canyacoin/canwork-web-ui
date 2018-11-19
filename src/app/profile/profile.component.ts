@@ -6,6 +6,7 @@ import { AuthService } from '@service/auth.service';
 import { UserService } from '@service/user.service';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -18,7 +19,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   paramsSub: Subscription;
 
-  displayEditComponent = false
+  displayEditComponent = false;
 
   constructor(
     private router: Router,
@@ -37,10 +38,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.initUsers(this.currentUser, params);
         });
         this.activatedRoute.queryParams.subscribe(params => {
-          this.displayEditComponent = params.editProfile ? true : false
-        })
+          this.displayEditComponent = params.editProfile ? true : false;
+        });
       }
-    }, error => { console.error('! unable to retrieve currentUser data:', error) });
+    }, error => { console.error('! unable to retrieve currentUser data:', error); });
   }
 
   ngOnDestroy() {
@@ -66,6 +67,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }).catch(err => {
       console.log('loadUser: error');
     });
+  }
+
+  closeEditDialog() {
+    this.displayEditComponent = false;
+    this.router.navigate(['.'], { relativeTo: this.activatedRoute, queryParams: {} });
   }
 
   setUsersColors(user: User) {

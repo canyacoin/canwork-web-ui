@@ -1,5 +1,5 @@
 <main class="main-content">
-  <app-profile-edit *ngIf="displayEditComponent" (close)="displayEditComponent = false" [currentUser]="currentUser"></app-profile-edit>
+  <app-profile-edit *ngIf="displayEditComponent" (close)="closeEditDialog()" [currentUser]="currentUser"></app-profile-edit>
 
   <section class="section bg-gray pt-15 pb-20" id="section-profile">
     <app-back-button></app-back-button>

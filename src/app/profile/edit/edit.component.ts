@@ -18,11 +18,11 @@ import * as moment from 'moment-timezone';
 })
 export class EditComponent implements OnInit, OnDestroy {
 
-  @Input() currentUser: User
-  ethSub: Subscription
+  @Input() currentUser: User;
+  ethSub: Subscription;
 
-  @Output() close = new EventEmitter
-  displayIpfsDropzone = false
+  @Output() close = new EventEmitter;
+  displayIpfsDropzone = false;
   dropzoneConfig = {
     acceptedFiles: {
       value: 'image/jpg,image/png,image/jpeg',
@@ -32,17 +32,17 @@ export class EditComponent implements OnInit, OnDestroy {
       value: 1000000,
       error: 'Please add image files smaller than 1mb'
     }
-  }
+  };
 
-  profileForm: FormGroup = null
-  sending = false
+  profileForm: FormGroup = null;
+  sending = false;
 
-  skillTagsList: string[] = []
-  tagSelectionInvalid = false
-  acceptedTags: string[] = []
-  tagInput = ''
+  skillTagsList: string[] = [];
+  tagSelectionInvalid = false;
+  acceptedTags: string[] = [];
+  tagInput = '';
 
-  ethAddress: string
+  ethAddress: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -54,21 +54,21 @@ export class EditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.currentUser != null) {
-      this.buildForm()
+      this.buildForm();
     }
   }
 
   ngOnDestroy() {
-    if (this.ethSub) { this.ethSub.unsubscribe() }
+    if (this.ethSub) { this.ethSub.unsubscribe(); }
   }
 
   onProfileImageUpload(ipfsResponse) {
-    this.currentUser.avatar.uri = `https://ipfs.io/ipfs/${ipfsResponse.hash}`
-    this.displayIpfsDropzone = false
+    this.currentUser.avatar.uri = `https://ipfs.io/ipfs/${ipfsResponse.hash}`;
+    this.displayIpfsDropzone = false;
   }
 
   onClose() {
-    this.close.emit(true)
+    this.close.emit(true);
   }
 
   buildForm() {
@@ -140,7 +140,7 @@ export class EditComponent implements OnInit, OnDestroy {
     this.authService.setUser(this.currentUser);
     setTimeout(() => {
       // DESTROY the edit overlay
-      this.onClose()
+      this.onClose();
       this.sending = false;
     }, 600);
   }
