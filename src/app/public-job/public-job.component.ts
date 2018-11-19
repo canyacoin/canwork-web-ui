@@ -18,6 +18,7 @@ import * as moment from 'moment';
 })
 export class PublicJobComponent implements OnInit {
   bidForm: FormGroup = null;
+  bids: any;
   authSub: Subscription;
   routeSub: Subscription;
   jobSub: Subscription;
@@ -28,7 +29,6 @@ export class PublicJobComponent implements OnInit {
   canSee = false;
   myJob = false;
   shareableLink: string;
-  loading: boolean;
   job: Job;
   currentUser: User;
   jobPoster: User;
@@ -75,7 +75,6 @@ export class PublicJobComponent implements OnInit {
         });
       }
     });
-    this.loading = false;
   }
 
   async setClient(clientId) {
@@ -98,14 +97,18 @@ export class PublicJobComponent implements OnInit {
       const check = await this.publicJobsService.canBid(this.currentUser.address, this.job);
       this.canBid = check;
     }
+    this.bids = await this.publicJobsService.getBids(job.id);
+    console.log(this.bids);
   }
 
   async submitBid() {
     this.isBidding = true;
-    const bidToSubmit = new Bid;
+    const bidToSubmit = new Bid();
     bidToSubmit.budget = this.bidForm.value.price;
     bidToSubmit.message = this.bidForm.value.message;
     bidToSubmit.providerId = this.currentUser.address;
+    bidToSubmit.providerName = this.currentUser.name;
+    bidToSubmit.providerAvatar = this.currentUser.avatar;
     bidToSubmit.timestamp = moment().format('x');
     console.log(bidToSubmit);
     this.sent = await this.publicJobsService.handlePublicBid(bidToSubmit, this.job);
@@ -155,6 +158,17 @@ export class PublicJobComponent implements OnInit {
         console.log(attachment[0].url);
       }
     }
+  }
+
+  async getProviderData(id) {
+    const provider = await this.userService.getUserByEthAddress(id);
+    return provider;
+  }
+
+  toLocaleDateString(timestamp) {
+    const date = new Date(parseInt(timestamp, 10));
+    console.log(date);
+    return date.toLocaleDateString();
   }
 
 }
