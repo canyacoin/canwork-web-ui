@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Job, JobDescription, Bid } from '@class/job';
+import { Job, JobDescription, JobState, Bid } from '@class/job';
 import { User, UserType } from '@class/user';
 import { UserService } from '@service/user.service';
 import { JobService } from '@service/job.service';
+import { ActionType, IJobAction } from '@class/job-action';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable, ReplaySubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { map, } from 'rxjs/operators';
 import { createChangeDetectorRef } from '@angular/core/src/view/refs';
+import { JobNotificationService } from './job-notification.service';
 
 @Injectable()
 export class PublicJobService {
@@ -56,11 +58,11 @@ export class PublicJobService {
   }
 
   // BASIC CRUDs
-  async handlepublicJob(job): Promise<boolean> {
+  async handlepublicJob(job, action: IJobAction): Promise<boolean> {
     console.log('uploading job...');
     return new Promise<boolean>(async (resolve, reject) => {
       try {
-        await this.saveJobFirebase(job);
+        await this.saveJobFirebase(job, action);
         resolve(true);
       } catch (error) {
         reject(false);
@@ -69,9 +71,12 @@ export class PublicJobService {
   }
 
   // save the public job
-  private async saveJobFirebase(job: Job): Promise<any> {
-    const x = await this.jobService.parseJobToObject(job);
-    return this.publicJobsCollection.doc(job.id).set(x);
+  private async saveJobFirebase(job: Job, action: IJobAction): Promise<any> {
+    job.actionLog.push(action);
+    console.log('added action to this job\'s action log');
+    console.log(job.actionLog);
+    const parsedJob = await this.jobService.parseJobToObject(job);
+    return this.publicJobsCollection.doc(job.id).set(parsedJob);
   }
 
 
@@ -147,6 +152,7 @@ export class PublicJobService {
   }
 
   parseBidToObject(bid: Bid): Object {
+    // firebase don't allow us to upload custom object so we have to use this workaround
     const bidObject = Object.assign({}, bid);
     bidObject.message = bid.message;
     bidObject.providerId = bid.providerId;
