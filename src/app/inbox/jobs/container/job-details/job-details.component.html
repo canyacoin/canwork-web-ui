@@ -136,32 +136,4 @@
       </div>
     </div>
   </div>
-  <div class="container p-30 job-actions-card">
-    <div class="row">
-      <span class="col-12 my-10 text-left">
-        <h5>TRANSACTIONS</h5>
-        <div *ngIf="transactions.length < 1">
-          No payments have been made yet
-        </div>
-        <div *ngIf="transactions.length >= 1">
-          <div *ngFor="let tx of transactions | orderBy:'timestamp':true" class="card mb-15 py-20 bg-transparent">
-            <div class="row">
-              <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6">
-                <i class="circle-{{getTxColor(tx)}} fas fa-circle"></i> {{tx.actionType}}
-              </div>
-              <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 text-right">
-                {{ tx.timestamp | date:'medium' }}
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-6">
-                <a href="{{getTxLink(tx.hash)}}" target="_blank">View on
-                  Etherscan</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </span>
-    </div>
-  </div>
 </div>
