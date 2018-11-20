@@ -38,7 +38,10 @@ export class PostComponent implements OnInit, OnDestroy {
   friendlyUrl = '';
   authSub: Subscription;
   routeSub: Subscription;
+<<<<<<< HEAD
   jobSub: Subscription;
+=======
+>>>>>>> new min value for date picker
   currentDate = '';
   isShareable = false;
   isSending = false;
@@ -60,6 +63,42 @@ export class PostComponent implements OnInit, OnDestroy {
   deleteFailed = false;
 
   canToUsd: number;
+<<<<<<< HEAD
+=======
+  providerTypes = [
+    {
+      name: 'Content Creators',
+      img: 'writer.svg',
+      id: 'contentCreator'
+    },
+    {
+      name: 'Software Developers',
+      img: 'dev.svg',
+      id: 'softwareDev'
+    },
+    {
+      name: 'Designers & Creatives',
+      img: 'creatives.svg',
+      id: 'designer'
+    },
+    {
+      name: 'Financial Experts',
+      img: 'finance.svg',
+      id: 'finance'
+    },
+    {
+      name: 'Marketing & Seo',
+      img: 'marketing.svg',
+      id: 'marketing'
+    },
+    {
+      name: 'Virtual Assistants',
+      img: 'assistant.svg',
+      id: 'virtualAssistant'
+    }
+  ]
+
+>>>>>>> new min value for date picker
   providerTypes = [
     {
       name: 'Content Creators',
