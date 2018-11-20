@@ -1,5 +1,5 @@
 import { Type } from '@angular/core';
-import { User, UserType, Avatar } from '@class/user';
+import { Avatar, User, UserType } from '@class/user';
 
 import { IJobAction } from './job-action';
 import { Upload } from './upload';
@@ -95,8 +95,13 @@ export class Bid {
   message: string;
   timestamp: string;
 
-  constructor(init?: Partial<Bid>) {
-    Object.assign(this, init);
+  constructor(providerId: string, providerName: string, providerAvatar: Avatar, budget: number, message: string, timestamp: string) {
+    this.providerId = providerId;
+    this.providerName = providerName;
+    this.providerAvatar = providerAvatar;
+    this.budget = budget;
+    this.message = message;
+    this.timestamp = timestamp;
   }
 }
 
