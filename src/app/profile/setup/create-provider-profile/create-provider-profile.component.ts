@@ -4,13 +4,13 @@ import { User, UserCategory, UserState, UserType } from '@class/user';
 import { AuthService } from '@service/auth.service';
 import { CanWorkEthService } from '@service/eth.service';
 import { UserService } from '@service/user.service';
+import { CurrencyValidator } from '@validator/currency.validator';
+import { EmailValidator } from '@validator/email.validator';
+import { EthereumValidator } from '@validator/ethereum.validator';
 import * as randomColor from 'randomcolor';
 import { Subscription } from 'rxjs';
 
 import * as moment from 'moment-timezone';
-import { CurrencyValidator } from '@validator/currency.validator';
-import { EmailValidator } from '@validator/email.validator';
-import { EthereumValidator } from '@validator/ethereum.validator';
 
 @Component({
   selector: 'app-create-provider-profile',
