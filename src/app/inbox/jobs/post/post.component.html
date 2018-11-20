@@ -456,8 +456,10 @@
                   </div>
                   <div class="col-12 text-right">
                     <img *ngIf="isSending" src="assets/img/loader.svg" height="36px" alt="CanYa Coin">
-                    <button type="button" (click)="submitShareableJob(true)" [disabled]="!shareableJobForm.valid || isSending || (currentUpload && !uploadedFile)" class="btn btn-secondary mx-10">SAVE AS DRAFT</button>
-                    <button type="button" (click)="submitShareableJob(false)" [disabled]="!shareableJobForm.valid || isSending || (currentUpload && !uploadedFile)" class="btn btn-primary">POST JOB</button>
+                    <button type="button" (click)="submitShareableJob(true)" [disabled]="!shareableJobForm.valid || isSending || (currentUpload && !uploadedFile)"
+                      class="btn btn-secondary mx-10">SAVE AS DRAFT</button>
+                    <button type="button" (click)="submitShareableJob(false)" [disabled]="!shareableJobForm.valid || isSending || (currentUpload && !uploadedFile)"
+                      class="btn btn-primary">POST JOB</button>
                   </div>
                 </form>
               </div>
@@ -466,19 +468,24 @@
         </div>
       </div>
 
-      <div *ngIf="sent" class="section py-70">
-        <div class="container">
-          <div class="section-header">
+      <div *ngIf="sent">
+        <div class="container card">
+          <div class="text-center mt-30">
             <img src="assets/img/CanYa_tick_green.svg" class="mb-30 animated bounceInDown" width="100px" height="100px">
-            <h2>Congrats! Your Job has been Created!</h2>
-            <p class="lead fw-400">You can now invite providers to this job.</p>
-            <hr>
+            <div *ngIf="!draft">
+              <h2>Congrats! Your Job has been Created!</h2>
+              <p class="lead fw-400">You can now invite providers to this job.</p>
+            </div>
+            <div *ngIf="draft">
+              <h2>Your job draft has been saved</h2>
+              <p class="lead fw-400 m-0">You can finish the draft and share it later.</p>
+            </div>
           </div>
           <br>
           <p class="text-center">
             <a class="btn btn-secondary" [routerLink]="['/home']">Return home</a>
             &nbsp;&nbsp;
-            <a class="btn btn-primary text-white" [routerLink]="['/jobs/', jobId]">Go to job</a>
+            <a class="btn btn-primary text-white" [routerLink]="['/jobs/public/', friendlyUrl]">Go to job</a>
           </p>
 
         </div>

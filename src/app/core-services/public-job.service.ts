@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Job, JobDescription, JobState, Bid } from '@class/job';
+import { Job, JobState, Bid } from '@class/job';
 import { User, UserType } from '@class/user';
 import { UserService } from '@service/user.service';
 import { JobService } from '@service/job.service';
@@ -110,7 +110,7 @@ export class PublicJobService {
       this.afs.doc(`public-jobs/${jobId}/bids/${bid.providerId}`).set(bidToUpload).then(result => {
         console.log(result);
         resolve(true);
-      }).catch( e => {
+      }).catch(e => {
         reject(false);
       });
     });
@@ -126,7 +126,6 @@ export class PublicJobService {
     return exist;
   }
 
-
   async jobUrlExists(friendlyQuery) {
     console.log(friendlyQuery);
     const exist = await this.afs.collection('public-jobs', ref => ref.where('friendlyUrl', '>=', friendlyQuery)).valueChanges().take(1).toPromise();
@@ -136,7 +135,18 @@ export class PublicJobService {
 
   closePublicJob(job: Job, providerId: string) {
     // closes the public job, create a new job object and starts the usual job flow.
-    job.providerId = providerId;
+    return new Promise<boolean>(async (resolve, reject) => {
+      try {
+        job.providerId = providerId;
+        job.state = JobState.termsAcceptedAwaitingEscrow;
+        const action = new IJobAction(ActionType.acceptTerms, UserType.client);
+        await this.saveJobFirebase(job, null);
+        await this.jobService.handleJobAction(job, action);
+        resolve(true);
+      } catch (error) {
+        reject(false);
+      }
+    });
   }
 
   generateReadableId(jobName): string {
@@ -146,6 +156,8 @@ export class PublicJobService {
     let friendly: string;
     if (nameArray.length > 1) {
       friendly = nameArray[0] + '-' + nameArray[1];
+    } else if (nameArray.length > 2) {
+      friendly = nameArray[0] + '-' + nameArray[1] + '-' + nameArray[2];
     } else {
       friendly = nameArray[0];
     }
