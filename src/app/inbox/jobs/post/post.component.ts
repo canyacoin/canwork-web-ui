@@ -44,7 +44,10 @@ export class PostComponent implements OnInit, OnDestroy {
   isSending = false;
   sent = false;
   draft = false;
+<<<<<<< HEAD
   editing = false;
+=======
+>>>>>>> the most basic choose-bid-and-close-public-job functionality
 
   jobToEdit: Job;
   jobId: string;
@@ -362,6 +365,7 @@ export class PostComponent implements OnInit, OnDestroy {
       tags = tags.slice(0, 6);
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     const friendly = await this.publicJobService.generateReadableId(this.shareableJobForm.value.title);
     this.friendlyUrl = friendly;
     console.log('Friendly URL : ' + this.friendlyUrl);
@@ -370,10 +374,14 @@ export class PostComponent implements OnInit, OnDestroy {
     }
 =======
 >>>>>>> basic job getter and checker works
+=======
+    this.friendlyUrl = this.publicJobService.generateReadableId(this.shareableJobForm.value.title);
+>>>>>>> the most basic choose-bid-and-close-public-job functionality
     const job = new Job({
       id: this.jobId,
       hexId: this.ethService.web3js.utils.toHex(this.jobId.hashCode()),
       clientId: this.currentUser.address,
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       friendlyUrl: this.friendlyUrl,
@@ -382,6 +390,9 @@ export class PostComponent implements OnInit, OnDestroy {
 =======
       friendlyUrl: this.publicJobService.generateReadableId(this.shareableJobForm.value.title),
 >>>>>>> created the basic friendly-url generator and route
+=======
+      friendlyUrl: this.friendlyUrl,
+>>>>>>> the most basic choose-bid-and-close-public-job functionality
       information: new JobDescription({
         description: this.shareableJobForm.value.description,
         title: this.shareableJobForm.value.title,
@@ -404,6 +415,7 @@ export class PostComponent implements OnInit, OnDestroy {
     });
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     this.draft = isDraft;
     const action = new IJobAction(ActionType.createJob, UserType.client);
     action.setPaymentProperties(job.budget, await this.jobService.getJobBudget(job), this.postForm.value.timelineExpectation,
@@ -420,6 +432,9 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 =======
 =======
+=======
+    this.draft = isDraft;
+>>>>>>> the most basic choose-bid-and-close-public-job functionality
     const action = new IJobAction(ActionType.createJob, UserType.client);
     action.setPaymentProperties(job.budget, await this.jobService.getJobBudget(job), this.postForm.value.timelineExpectation,
       this.postForm.value.workType, this.postForm.value.weeklyCommitment, this.postForm.value.paymentType);
@@ -430,12 +445,14 @@ export class PostComponent implements OnInit, OnDestroy {
 >>>>>>> add bid and bid checker function works
     console.log('Shareable job submitted...');
     console.log('job created');
+    job.state = JobState.acceptingOffers;
     const exists = await this.publicJobService.jobUrlExists(job.friendlyUrl);
     if (exists.length < 1) {
       console.log('just upload it');
     } else {
       console.log('wait might want to change the url mate');
       job.friendlyUrl = job.friendlyUrl + '-' + exists.length;
+      this.friendlyUrl = job.friendlyUrl;
       console.log('new url : ' + job.friendlyUrl);
     }
     this.sent = await this.publicJobService.handlepublicJob(job, action);

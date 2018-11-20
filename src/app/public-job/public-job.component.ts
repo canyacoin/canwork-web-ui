@@ -7,7 +7,7 @@ import { User, UserType } from '@class/user';
 import { PublicJobService } from '@service/public-job.service';
 import { UserService } from '@service/user.service';
 import { AuthService } from '@service/auth.service';
-import { Job, Bid } from '@class/job';
+import { Job, Bid, JobState } from '@class/job';
 import { AngularFireStorage } from 'angularfire2/storage';
 import * as moment from 'moment';
 
@@ -25,6 +25,7 @@ export class PublicJobComponent implements OnInit {
   jobExists: boolean;
   canBid: boolean;
   isBidding: boolean;
+  isOpen: boolean;
   sent = false;
   canSee = false;
   myJob = false;
@@ -98,7 +99,11 @@ export class PublicJobComponent implements OnInit {
       this.canBid = check;
     }
     this.bids = await this.publicJobsService.getBids(job.id);
-    console.log(this.bids);
+    if (job.state === JobState.acceptingOffers) {
+      this.isOpen = true;
+    } else {
+      this.isOpen = false;
+    }
   }
 
   async submitBid() {
@@ -171,4 +176,16 @@ export class PublicJobComponent implements OnInit {
     return date.toLocaleDateString();
   }
 
+  async chooseProvider(providerId) {
+    const confirmed = confirm('Are you sure you want to choose this provider?');
+    if (confirmed) {
+      const chosen = await this.publicJobsService.closePublicJob(this.job, providerId);
+      if (chosen) {
+        alert('Provider chosen!');
+        window.location.href =  window.location.origin + '/inbox/job/' + this.job.id;
+      } else {
+        alert('Something went wrong. please try again later');
+      }
+    }
+  }
 }

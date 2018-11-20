@@ -136,7 +136,10 @@ export class Payment {
 
 export enum JobState {
   acceptingOffers = 'Accepting Offers',
+<<<<<<< HEAD
   closed = 'Public job closed',
+=======
+>>>>>>> the most basic choose-bid-and-close-public-job functionality
   offer = 'Offer pending',
   cancelled = 'Cancelled',
   declined = 'Declined',
