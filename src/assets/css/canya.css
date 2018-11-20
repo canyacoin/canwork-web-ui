@@ -9953,6 +9953,42 @@ hr {
   min-width: 200px;
 }
 
+.status-div b {
+  line-height: 20px;
+}
+
+.status-circle {
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.circle-danger {
+  color: #ff6666;
+}
+
+.circle-info {
+  color: #0078bf;
+}
+
+.circle-success {
+  color: #4decca;
+}
+
+.circle-warning {
+  color: #ffc600;
+}
+
+.circle-primary {
+  color: #33ccff;
+}
+
+.jobStatus {
+  font-size: 14px;
+  font-weight: 600;
+}
+
 @media only screen and (max-width: 978px) {
   #status-span {
     text-align: left !important;
