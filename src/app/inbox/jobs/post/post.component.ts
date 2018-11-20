@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Http, Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EthService } from '@canyaio/canpay-lib';
-import { Job, JobDescription, PaymentType, TimeRange, WorkType } from '@class/job';
+import { Job, JobDescription, PaymentType, TimeRange, WorkType, JobState } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
 import { Upload } from '@class/upload';
 import { User, UserType } from '@class/user';
@@ -35,13 +35,14 @@ export class PostComponent implements OnInit, OnDestroy {
   recipientAddress = '';
   recipient: User = null;
   currentUser: User;
-
+  friendlyUrl = '';
   authSub: Subscription;
   routeSub: Subscription;
 
   isShareable = false;
   isSending = false;
   sent = false;
+  draft = false;
 
   jobId: string;
 
@@ -329,11 +330,9 @@ export class PostComponent implements OnInit, OnDestroy {
           paymentType: this.postForm.value.paymentType,
           budget: this.postForm.value.budget
         });
-
         const action = new IJobAction(ActionType.createJob, UserType.client);
         action.setPaymentProperties(job.budget, await this.jobService.getJobBudget(job), this.postForm.value.timelineExpectation,
           this.postForm.value.workType, this.postForm.value.weeklyCommitment, this.postForm.value.paymentType);
-
         this.sent = await this.jobService.handleJobAction(job, action);
         this.isSending = false;
         if (this.sent) {
@@ -354,11 +353,12 @@ export class PostComponent implements OnInit, OnDestroy {
     if (tags.length > 6) {
       tags = tags.slice(0, 6);
     }
+    this.friendlyUrl = this.publicJobService.generateReadableId(this.shareableJobForm.value.title);
     const job = new Job({
       id: this.jobId,
       hexId: this.ethService.web3js.utils.toHex(this.jobId.hashCode()),
       clientId: this.currentUser.address,
-      friendlyUrl: this.publicJobService.generateReadableId(this.shareableJobForm.value.title),
+      friendlyUrl: this.friendlyUrl,
       information: new JobDescription({
         description: this.shareableJobForm.value.description,
         title: this.shareableJobForm.value.title,
@@ -374,17 +374,20 @@ export class PostComponent implements OnInit, OnDestroy {
       deadline: this.shareableJobForm.value.deadline,
       draft: isDraft
     });
+    this.draft = isDraft;
     const action = new IJobAction(ActionType.createJob, UserType.client);
     action.setPaymentProperties(job.budget, await this.jobService.getJobBudget(job), this.postForm.value.timelineExpectation,
       this.postForm.value.workType, this.postForm.value.weeklyCommitment, this.postForm.value.paymentType);
     console.log('Shareable job submitted...');
     console.log('job created');
+    job.state = JobState.acceptingOffers;
     const exists = await this.publicJobService.jobUrlExists(job.friendlyUrl);
     if (exists.length < 1) {
       console.log('just upload it');
     } else {
       console.log('wait might want to change the url mate');
       job.friendlyUrl = job.friendlyUrl + '-' + exists.length;
+      this.friendlyUrl = job.friendlyUrl;
       console.log('new url : ' + job.friendlyUrl);
     }
     this.sent = await this.publicJobService.handlepublicJob(job, action);

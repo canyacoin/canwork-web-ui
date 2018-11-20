@@ -111,6 +111,7 @@ export class Payment {
 }
 
 export enum JobState {
+  acceptingOffers = 'Accepting Offers',
   offer = 'Offer pending',
   cancelled = 'Cancelled',
   declined = 'Declined',

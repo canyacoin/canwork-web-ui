@@ -38,7 +38,7 @@
               </div>
             </div>
             <div class="col-lg-3 col-12 job-info">
-              <a data-toggle="modal" data-target="#shareModal" class="share-link">
+              <a data-toggle="modal" data-target="#shareModal" *ngIf="!job.draft" class="share-link">
                 <i class="fas fa-share-alt"></i> SHARE
               </a>
               <div class="info-details">
@@ -70,19 +70,35 @@
       </div>
       <div class="container p-30 job-actions-card">
         <div class="row">
-          <div class="col-12">
+          <div class="col-sm-8">
             <h5>PROPOSED TERMS</h5>
+          </div>
+          <div class="col-sm-4 text-right">
+            <div class="status-div" *ngIf="job.state && isOpen">
+              <span class="jobStatus">
+                <i class="circle-success fas fa-circle"></i>&nbsp;
+                {{job.state}}
+              </span>
+            </div>
+            <div class="status-div" *ngIf="job.state && !isOpen">
+              <span class="jobStatus">
+                <i class="circle-danger fas fa-circle"></i>&nbsp;
+                Job closed
+              </span>
+            </div>
+          </div>
+          <div class="col-12">
             <div class="otherPartyName pointer" [routerLink]="['/profile/alt/', job.clientId]">
               <span *ngIf="jobPoster?.avatar && jobPoster?.avatar.uri" class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + jobPoster?.avatar.uri + ')'}">
               </span>
               <p style="font-style: 21px;">{{jobPoster?.name}}</p>
             </div>
             <b>${{job.budget}}<span *ngIf="job.paymentType !== 'Fixed price'">/hr</span> USD</b>
-            <p>This project is set at a {{job.paymentType}}, {{job.information.weeklyCommitment}} hours per week, over
+            <p>This project is set at a {{job.paymentType}}<br>{{job.information.weeklyCommitment}} hours per week, over
               {{job.information.timelineExpectation}} period.</p>
-            <hr>
+            <hr *ngIf="currentUser.type === 'Provider' && !myJob && isOpen">
           </div>
-          <div class="col-12" *ngIf="currentUser.type === 'Provider' && !myJob">
+          <div class="col-12" *ngIf="currentUser.type === 'Provider' && !myJob && isOpen">
             <button class="btn btn-primary mt-5 mr-5" data-toggle="modal" data-target="#bidModal">
               PLACE BID
             </button>
@@ -110,7 +126,10 @@
             <div class="col-12">
               <h5>BIDS</h5>
             </div>
-            <div class="col-12" *ngIf="bids.length > 0">
+            <div class="col-12 text-center" *ngIf="!bids">
+              <img src="assets/img/loader.svg" height="36px" alt="Loader">
+            </div>
+            <div class="col-12" *ngIf="bids && bids.length > 0">
               <div class="row" style="min-height: 20px">
                 <div class="col-3">
                   <b>Provider</b>
@@ -139,13 +158,16 @@
                 <div class="col-2 mt-5">
                   {{bid.budget}}<span *ngIf="job.paymentType !== 'Fixed price'">/hr</span> USD
                 </div>
-                <div class="col-3 mt-5">
-                  <button [routerLink]="['/inbox/chat']" [queryParams]="{ address : bid.providerId}"  class="btn btn-sm btn-primary mr-5">CHAT</button>
-                  <button class="btn btn-sm btn-success">CHOOSE</button>
+                <div class="col-3 mt-5" *ngIf="isOpen">
+                  <button [routerLink]="['/inbox/chat']" [queryParams]="{ address : bid.providerId}" class="btn btn-sm btn-primary mr-5">CHAT</button>
+                  <button class="btn btn-sm btn-success" (click)="chooseProvider(bid.providerId)">ACCEPT</button>
+                </div>
+                <div class="col-3 mt-5" *ngIf="!isOpen">
+                  <p>Job Closed</p>
                 </div>
               </div>
             </div>
-            <div class="col-12" *ngIf="bids.length < 1">
+            <div class="col-12" *ngIf="bids && bids.length < 1">
               <p>No bids yet.</p>
             </div>
           </div>
