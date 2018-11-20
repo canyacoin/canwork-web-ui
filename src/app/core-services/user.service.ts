@@ -4,6 +4,7 @@ import { IJobAction } from '@class/job-action';
 import { Review } from '@class/review';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { take } from 'rxjs/operators';
+
 import * as moment from 'moment-timezone';
 import { User, UserType } from '../core-classes/user';
 
@@ -72,7 +73,7 @@ export class UserService {
     return data;
   }
 
-  async newReview(client: User, provider: User, job: Job, action: IJobAction) {
+  async newReview(reviewer: User, provider: User, job: Job, action: IJobAction) {
     const review = new Review;
     review.jobId = job.id;
     review.jobTitle = job.information.title;

@@ -202,7 +202,6 @@ export class JobService {
             client = await this.userService.getUser(job.clientId);
             provider = await this.userService.getUser(job.providerId);
             await this.userService.newReview(client, provider, parsedJob, action);
-            parsedJob.state = JobState.reviewed;
             parsedJob.actionLog.push(action);
             await this.saveJobFirebase(parsedJob);
             resolve(true);
@@ -256,7 +255,8 @@ export class JobService {
     actions[JobState.inDispute] = forClient ? [ActionType.acceptFinish, ActionType.addMessage] : [ActionType.addMessage];
     actions[JobState.cancelled] = [];
     actions[JobState.declined] = [];
-    actions[JobState.complete] = forClient ? [ActionType.review] : [];
+    actions[JobState.complete] = [ActionType.review];
+    actions[JobState.reviewed] = [];
 
     return actions[jobState] || [];
   }
