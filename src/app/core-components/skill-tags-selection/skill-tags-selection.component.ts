@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { take } from 'rxjs/operators';
+
 export class SkillTag {
   tag: string;
 }
@@ -35,22 +36,22 @@ export class SkillTagsSelectionComponent implements OnInit {
     const tag = this.tagInput;
 
     if (tag === '') {
-      this.tagSelectionInvalid = true
-      return false
+      this.tagSelectionInvalid = true;
+      return false;
     }
 
     const duplicate = this.acceptedTags.findIndex(x => x === tag) > -1;
 
     if (this.acceptedTags.length <= 5 && !duplicate && tag.length >= 2 && tag.length <= 14) {
-      this.acceptedTags.push(tag)
-      this.tagsUpdated.emit(this.acceptedTags.join(','))
+      this.acceptedTags.push(tag);
+      this.tagsUpdated.emit(this.acceptedTags.join(','));
     } else {
-      this.tagSelectionInvalid = true
-      return false
+      this.tagSelectionInvalid = true;
+      return false;
     }
 
-    this.tagInput = ''
-    this.tagSelectionInvalid = false
+    this.tagInput = '';
+    this.tagSelectionInvalid = false;
   }
 
   onTagChange() {
