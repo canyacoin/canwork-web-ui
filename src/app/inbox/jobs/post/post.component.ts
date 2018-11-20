@@ -38,7 +38,7 @@ export class PostComponent implements OnInit, OnDestroy {
   friendlyUrl = '';
   authSub: Subscription;
   routeSub: Subscription;
-
+  currentDate = '';
   isShareable = false;
   isSending = false;
   sent = false;
@@ -54,7 +54,6 @@ export class PostComponent implements OnInit, OnDestroy {
   deleteFailed = false;
 
   canToUsd: number;
-  currentDate = new Date().toLocaleDateString();
   providerTypes = [
     {
       name: 'Content Creators',
@@ -181,6 +180,7 @@ export class PostComponent implements OnInit, OnDestroy {
     if (canToUsdResp.ok) {
       this.canToUsd = JSON.parse(canToUsdResp.text())['data']['quotes']['USD']['price'];
     }
+    this.currentDate = new Date().toISOString().split('T')[0];
   }
 
   usdToCan(usd: number) {
