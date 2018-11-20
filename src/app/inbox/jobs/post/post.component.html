@@ -359,7 +359,7 @@
                         <label>Deadline *</label>
                         <br />
                         <div class="row ml-0 mr-0">
-                          <input #deadline formControlName="deadline" type="date" class="form-control">
+                          <input #deadline formControlName="deadline" type="date" class="form-control" min="{{currentDate}}">
                         </div>
                       </div>
                       <div class="col-sm-6">
