@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { take } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Bid, Job, JobState } from '@class/job';
 import { User, UserType } from '@class/user';
+import { AuthService } from '@service/auth.service';
 import { PublicJobService } from '@service/public-job.service';
 import { UserService } from '@service/user.service';
-import { AuthService } from '@service/auth.service';
-import { Job, Bid, JobState } from '@class/job';
 import { AngularFireStorage } from 'angularfire2/storage';
+import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
+
 import * as moment from 'moment';
 
 @Component({
@@ -108,13 +109,7 @@ export class PublicJobComponent implements OnInit {
 
   async submitBid() {
     this.isBidding = true;
-    const bidToSubmit = new Bid();
-    bidToSubmit.budget = this.bidForm.value.price;
-    bidToSubmit.message = this.bidForm.value.message;
-    bidToSubmit.providerId = this.currentUser.address;
-    bidToSubmit.providerName = this.currentUser.name;
-    bidToSubmit.providerAvatar = this.currentUser.avatar;
-    bidToSubmit.timestamp = moment().format('x');
+    const bidToSubmit = new Bid(this.currentUser.address, this.currentUser.name, this.currentUser.avatar, this.bidForm.value.price, this.bidForm.value.message, moment().format('x'));
     console.log(bidToSubmit);
     this.sent = await this.publicJobsService.handlePublicBid(bidToSubmit, this.job);
     this.isBidding = false;
@@ -182,7 +177,7 @@ export class PublicJobComponent implements OnInit {
       const chosen = await this.publicJobsService.closePublicJob(this.job, providerId);
       if (chosen) {
         alert('Provider chosen!');
-        window.location.href =  window.location.origin + '/inbox/job/' + this.job.id;
+        window.location.href = window.location.origin + '/inbox/job/' + this.job.id;
       } else {
         alert('Something went wrong. please try again later');
       }
