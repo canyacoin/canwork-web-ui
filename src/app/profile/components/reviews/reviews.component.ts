@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Review } from '@class/review';
 import { User } from '@class/user';
+import { MomentService } from '@service/moment.service';
 import { ReviewService } from '@service/review.service';
 
 @Component({
@@ -15,10 +16,14 @@ export class ReviewsComponent implements OnInit {
   reviews: Array<Review> = [];
 
   constructor(
-    private reviewService: ReviewService
+    private reviewService: ReviewService,
   ) { }
 
   async ngOnInit() {
     this.reviews = await this.reviewService.getUserReviews(this.user.address);
+  }
+
+  getReviewLabel(review: Review): string {
+    return `Made by ${review.reviewerName} at ${new Date(review.createdAt).toDateString()} for job ${review.jobTitle}`;
   }
 }

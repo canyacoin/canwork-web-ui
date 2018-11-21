@@ -23,7 +23,7 @@ export class ReviewService {
 
   async newReview(reviewer: User, reviewee: User, job: Job, action: IJobAction): Promise<any> {
     return new Promise<any>(async (resolve, reject) => {
-      const review = new Review(reviewer.address, reviewer.name, reviewee.address, action.message, job.id, job.information.title, moment().format('x'), action.rating);
+      const review = new Review(reviewer.address, reviewer.name, reviewee.address, action.message, job.id, job.information.title, parseInt(moment().format('x'), 10), action.rating);
       try {
         const ref = await this.reviewsCollectionRef.add({ ...review });
         reviewee.rating = await this.calculateAverageRating(reviewee.address);
@@ -39,12 +39,12 @@ export class ReviewService {
   async calculateAverageRating(userId: string): Promise<Rating> {
     const reviews = await this.getUserReviews(userId);
     if (reviews) {
-      let count, total = 0;
+      let total = 0;
       reviews.forEach(review => {
-        count++;
         total += review.rating;
       });
-      return { count: count, average: Math.round(total * 2) / 2 } as Rating;
+      const average = total / reviews.length;
+      return { count: reviews.length, average: Math.round(average * 2) / 2 } as Rating;
     }
     return { count: 0, average: 0 } as Rating;
   }

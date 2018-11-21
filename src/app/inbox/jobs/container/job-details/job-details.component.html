@@ -61,8 +61,8 @@
       <div class="col-sm-9 col-12">
         <h5>PROPOSED TERMS</h5>
         <br>
-        <div class="otherPartyName pointer" [routerLink]="['/profile/alt/', job.providerId]">
-          <span *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
+        <div *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="otherPartyName pointer" [routerLink]="['/profile/alt/', job.otherParty.id]">
+          <span class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
           </span>
           <p>{{job.otherParty?.name}}</p>
         </div>

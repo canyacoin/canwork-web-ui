@@ -13,10 +13,8 @@
   <article *ngFor="let review of reviews">
     <p class="mb-0 mt-3">{{ review.message }}</p>
     <small>
-      <star-rating [starType]="'svg'" size="small" [showHalfStars]="true" staticColor="ok" [readOnly]="true" [rating]="review.rating"
-        [step]="0.5"></star-rating>
-      Made by {{ review.reviewerName }} at {{ review.createdAt | date:'medium' }}
-      for job "{{ review.jobTitle }}"
+      <star-rating [starType]="'svg'" size="small" showHalfStars="true" staticColor="ok" [readOnly]="true" [rating]="review.rating"
+        [step]="0.5" [labelText]="getReviewLabel(review)" labelPosition="right"></star-rating>
     </small>
   </article>
 </section>

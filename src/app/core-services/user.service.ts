@@ -24,7 +24,7 @@ export class UserService {
     ref.snapshotChanges().pipe(take(1)).toPromise().then((snap: any) => {
       const tmpModel = viewer;
       tmpModel['timestamp'] = moment().format('x');
-      return snap.payload.exists ? ref.update(Object.assign({}, tmpModel)) : ref.set(Object.assign({}, tmpModel));
+      return snap.payload.exists ? ref.update(this.parseUserToObject(tmpModel)) : ref.set(this.parseUserToObject(tmpModel));
     });
   }
 
@@ -102,7 +102,7 @@ export class UserService {
         sanitizedUser.skillTags = [];
         sanitizedUser.hourlyRate = null;
         sanitizedUser.timestamp = moment().format('x');
-        this.usersCollectionRef.doc(sanitizedUser.address).set(Object.assign({}, sanitizedUser)).then(() => {
+        this.usersCollectionRef.doc(sanitizedUser.address).set(this.parseUserToObject(sanitizedUser)).then(() => {
           resolve(true);
         });
       } catch (error) {
@@ -124,8 +124,17 @@ export class UserService {
       const ref = userModel.address;
       this.usersCollectionRef.doc(ref).snapshotChanges().pipe(take(1)).subscribe((snap: any) => {
         console.log('saveUser - payload', snap.payload.exists);
-        return snap.payload.exists ? this.usersCollectionRef.doc(ref).update(Object.assign({}, userModel)) : this.usersCollectionRef.doc(ref).set(Object.assign({}, userModel));
+        return snap.payload.exists ? this.usersCollectionRef.doc(ref).update(this.parseUserToObject(userModel)) : this.usersCollectionRef.doc(ref).set(this.parseUserToObject(userModel));
       });
     }
+  }
+
+  /** User object must be re-assigned as firebase doesn't accept strong types */
+  private parseUserToObject(user: User): object {
+    const parsedRating = Object.assign({}, user.rating);
+
+    const parsedUser = Object.assign({}, user);
+    parsedUser.rating = parsedRating;
+    return parsedUser;
   }
 }

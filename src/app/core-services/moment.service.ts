@@ -8,7 +8,7 @@ export class MomentService {
   constructor() { }
 
 
-  get(date: Date = null, format: string = 'x'): string {
+  get(date = null, format: string = 'x'): string {
     if (date != null) {
       return moment(date).format(format);
     } else {

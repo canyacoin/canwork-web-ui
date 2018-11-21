@@ -123,7 +123,7 @@ export class JobService {
   async assignOtherPartyAsync(job: Job, viewingUserType: UserType) {
     if (job.clientId && job.providerId) {
       const otherParty = await this.userService.getUser(viewingUserType === UserType.client ? job.providerId : job.clientId);
-      job['otherParty'] = { avatar: otherParty.avatar, name: otherParty.name };
+      job['otherParty'] = { avatar: otherParty.avatar, name: otherParty.name, id: otherParty.address };
     }
   }
 

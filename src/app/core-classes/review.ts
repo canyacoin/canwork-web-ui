@@ -6,11 +6,11 @@ export class Review {
   message: string;
   jobId: string;
   jobTitle: string;
-  createdAt: string;
+  createdAt: number;
   rating: number;
 
   constructor(reviewerId: string, reviewerName: string, revieweeId: string, message: string,
-    jobId: string, jobTitle: string, createdAt: string, rating: number) {
+    jobId: string, jobTitle: string, createdAt: number, rating: number) {
     this.reviewerId = reviewerId;
     this.reviewerName = reviewerName;
     this.revieweeId = revieweeId;
