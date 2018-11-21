@@ -93,6 +93,11 @@ export class PublicJobComponent implements OnInit {
     } else {
       this.canSee = true;
     }
+    if (job.state === JobState.acceptingOffers) {
+      this.isOpen = true;
+    } else {
+      this.isOpen = false;
+    }
     this.setClient(this.job.clientId);
     this.setAttachmentUrl();
     if (this.currentUser.type === 'Provider') {
@@ -100,11 +105,6 @@ export class PublicJobComponent implements OnInit {
       this.canBid = check;
     }
     this.bids = await this.publicJobsService.getBids(job.id);
-    if (job.state === JobState.acceptingOffers) {
-      this.isOpen = true;
-    } else {
-      this.isOpen = false;
-    }
   }
 
   async submitBid() {
@@ -113,6 +113,7 @@ export class PublicJobComponent implements OnInit {
     console.log(bidToSubmit);
     this.sent = await this.publicJobsService.handlePublicBid(bidToSubmit, this.job);
     this.isBidding = false;
+    this.canBid = false;
   }
 
   copyLink() {
