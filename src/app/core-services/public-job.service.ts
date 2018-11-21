@@ -136,12 +136,13 @@ export class PublicJobService {
     return exist;
   }
 
-  closePublicJob(job: Job, providerId: string) {
+  closePublicJob(job: Job, bid: Bid) {
     // closes the public job, create a new job object and starts the usual job flow.
     return new Promise<boolean>(async (resolve, reject) => {
       try {
-        job.providerId = providerId;
+        job.providerId = bid.providerId;
         job.state = JobState.termsAcceptedAwaitingEscrow;
+        job.budget = bid.budget;
         await this.saveJobFirebase(job, null);
         const action = new IJobAction(ActionType.acceptTerms, UserType.client);
         await this.jobService.handleJobAction(job, action);
