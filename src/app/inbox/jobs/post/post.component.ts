@@ -38,19 +38,13 @@ export class PostComponent implements OnInit, OnDestroy {
   friendlyUrl = '';
   authSub: Subscription;
   routeSub: Subscription;
-<<<<<<< HEAD
   jobSub: Subscription;
-=======
->>>>>>> new min value for date picker
   currentDate = '';
   isShareable = false;
   isSending = false;
   sent = false;
   draft = false;
-<<<<<<< HEAD
   editing = false;
-=======
->>>>>>> the most basic choose-bid-and-close-public-job functionality
 
   jobToEdit: Job;
   jobId: string;
@@ -63,42 +57,6 @@ export class PostComponent implements OnInit, OnDestroy {
   deleteFailed = false;
 
   canToUsd: number;
-<<<<<<< HEAD
-=======
-  providerTypes = [
-    {
-      name: 'Content Creators',
-      img: 'writer.svg',
-      id: 'contentCreator'
-    },
-    {
-      name: 'Software Developers',
-      img: 'dev.svg',
-      id: 'softwareDev'
-    },
-    {
-      name: 'Designers & Creatives',
-      img: 'creatives.svg',
-      id: 'designer'
-    },
-    {
-      name: 'Financial Experts',
-      img: 'finance.svg',
-      id: 'finance'
-    },
-    {
-      name: 'Marketing & Seo',
-      img: 'marketing.svg',
-      id: 'marketing'
-    },
-    {
-      name: 'Virtual Assistants',
-      img: 'assistant.svg',
-      id: 'virtualAssistant'
-    }
-  ]
-
->>>>>>> new min value for date picker
   providerTypes = [
     {
       name: 'Content Creators',
@@ -174,8 +132,6 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-<<<<<<< HEAD
-<<<<<<< HEAD
     console.log(this.activatedRoute.snapshot.params['jobId']);
     this.editing = this.activatedRoute.snapshot.params['jobId'] && this.activatedRoute.snapshot.params['jobId'] !== '';
     console.log(this.editing);
@@ -202,12 +158,6 @@ export class PostComponent implements OnInit, OnDestroy {
         }
       });
     }
-=======
-    this.publicJobService.generateReadableId('Testing 251 Creaton Job');
-=======
->>>>>>> add bid and bid checker function works
-    this.jobId = GenerateGuid();
->>>>>>> created the basic friendly-url generator and route
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       this.currentUser = user;
       this.activatedRoute.params.take(1).subscribe((params) => {
@@ -394,44 +344,23 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   async submitShareableJob(isDraft: boolean) {
-<<<<<<< HEAD
     this.isSending = true;
-=======
->>>>>>> basic job getter and checker works
     let tags: string[];
     tags = this.shareableJobForm.value.skills === '' ? [] : this.shareableJobForm.value.skills.split(',').map(item => item.trim());
     if (tags.length > 6) {
       tags = tags.slice(0, 6);
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
     const friendly = await this.publicJobService.generateReadableId(this.shareableJobForm.value.title);
     this.friendlyUrl = friendly;
     console.log('Friendly URL : ' + this.friendlyUrl);
     if (this.editing) {
       this.jobId = this.jobToEdit.id;
     }
-=======
->>>>>>> basic job getter and checker works
-=======
-    this.friendlyUrl = this.publicJobService.generateReadableId(this.shareableJobForm.value.title);
->>>>>>> the most basic choose-bid-and-close-public-job functionality
     const job = new Job({
       id: this.jobId,
       hexId: this.ethService.web3js.utils.toHex(this.jobId.hashCode()),
       clientId: this.currentUser.address,
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
       friendlyUrl: this.friendlyUrl,
-=======
->>>>>>> basic job getter and checker works
-=======
-      friendlyUrl: this.publicJobService.generateReadableId(this.shareableJobForm.value.title),
->>>>>>> created the basic friendly-url generator and route
-=======
-      friendlyUrl: this.friendlyUrl,
->>>>>>> the most basic choose-bid-and-close-public-job functionality
       information: new JobDescription({
         description: this.shareableJobForm.value.description,
         title: this.shareableJobForm.value.title,
@@ -440,21 +369,14 @@ export class PostComponent implements OnInit, OnDestroy {
         attachments: this.uploadedFile ? [this.uploadedFile] : [],
         workType: this.shareableJobForm.value.workType,
         timelineExpectation: this.shareableJobForm.value.timelineExpectation,
-<<<<<<< HEAD
         weeklyCommitment: this.shareableJobForm.value.weeklyCommitment,
         providerType: this.shareableJobForm.value.providerType
-=======
-        weeklyCommitment: this.shareableJobForm.value.weeklyCommitment
->>>>>>> basic job getter and checker works
       }),
       paymentType: this.shareableJobForm.value.paymentType,
       budget: this.shareableJobForm.value.budget,
       deadline: this.shareableJobForm.value.deadline,
       draft: isDraft
     });
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     this.draft = isDraft;
     const action = new IJobAction(ActionType.createJob, UserType.client);
     action.setPaymentProperties(job.budget, await this.jobService.getJobBudget(job), this.postForm.value.timelineExpectation,
@@ -469,34 +391,4 @@ export class PostComponent implements OnInit, OnDestroy {
   async updateJob() {
     // uploads the job
   }
-=======
-=======
-=======
-    this.draft = isDraft;
->>>>>>> the most basic choose-bid-and-close-public-job functionality
-    const action = new IJobAction(ActionType.createJob, UserType.client);
-    action.setPaymentProperties(job.budget, await this.jobService.getJobBudget(job), this.postForm.value.timelineExpectation,
-      this.postForm.value.workType, this.postForm.value.weeklyCommitment, this.postForm.value.paymentType);
-<<<<<<< HEAD
->>>>>>> created the basic friendly-url generator and route
-    console.log(this.shareableJobForm);
-=======
->>>>>>> add bid and bid checker function works
-    console.log('Shareable job submitted...');
-    console.log('job created');
-    job.state = JobState.acceptingOffers;
-    const exists = await this.publicJobService.jobUrlExists(job.friendlyUrl);
-    if (exists.length < 1) {
-      console.log('just upload it');
-    } else {
-      console.log('wait might want to change the url mate');
-      job.friendlyUrl = job.friendlyUrl + '-' + exists.length;
-      this.friendlyUrl = job.friendlyUrl;
-      console.log('new url : ' + job.friendlyUrl);
-    }
-    this.sent = await this.publicJobService.handlepublicJob(job, action);
-    this.isSending = false;
-  }
-
->>>>>>> basic job getter and checker works
 }
