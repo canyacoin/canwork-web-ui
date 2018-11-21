@@ -33,7 +33,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       if (user !== this.currentUser) {
         this.currentUser = user;
-        this.setUsersColors(this.currentUser);
         this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
           this.initUsers(this.currentUser, params);
         });

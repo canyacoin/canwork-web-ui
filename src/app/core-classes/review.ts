@@ -1,11 +1,24 @@
 export class Review {
-  id: string
-  message: string
-  clientId: string
-  clientName: string
-  providerId: string
-  jobId: string
-  jobTitle: string
-  createdAt: string
-  isClientSatisfied: boolean
+  id: string;
+  reviewerId: string;
+  reviewerName: string;
+  revieweeId: string;
+  message: string;
+  jobId: string;
+  jobTitle: string;
+  createdAt: string;
+  rating: number;
+
+  constructor(reviewerId: string, reviewerName: string, revieweeId: string, message: string,
+    jobId: string, jobTitle: string, createdAt: string, rating: number) {
+    this.reviewerId = reviewerId;
+    this.reviewerName = reviewerName;
+    this.revieweeId = revieweeId;
+    this.message = message;
+    this.jobId = jobId;
+    this.jobTitle = jobTitle;
+    this.createdAt = createdAt;
+    this.rating = rating;
+  }
 }
+

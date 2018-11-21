@@ -8,14 +8,7 @@ service cloud.firestore {
        allow delete: if isAdmin();
     }
 
-    match /users/{userId}/reviews {
-       allow read;
-       allow create: if isAuthenticated();
-       allow update: if isAuthenticated();
-       allow delete: if isAdmin();
-    }
-
-    match /users/{userId}/reviews/{reviewId} {
+    match /reviews/{document=**} {
        allow read;
        allow create: if isAuthenticated();
        allow update: if isAuthenticated();

@@ -7,12 +7,14 @@ import { User, UserType } from '@class/user';
 import { JobService } from '@service/job.service';
 import { UserService } from '@service/user.service';
 import { getUsdToCan } from '@util/currency-conversion';
+import { RatingChangeEvent } from 'angular-star-rating';
 import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
 
 export class ActionDialogOptions {
   job: Job;
   actionType: ActionType;
   userType: UserType;
+  otherParty: string;
 
   constructor(init?: Partial<ActionDialogOptions>) {
     Object.assign(this, init);
@@ -33,6 +35,7 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
   action: IJobAction;
 
   currentUser: User;
+  otherParty: string;
 
   executing = false;
 
@@ -111,6 +114,12 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
     }
   }
 
+  onRatingChange($event: RatingChangeEvent) {
+    console.log('onRatingUpdated $event: ', $event);
+    this.form.controls['rating'].setValue($event.rating);
+  }
+
+
   async handleAction() {
     this.executing = true;
     try {
@@ -124,7 +133,7 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
           break;
         case ActionType.review:
           this.action.message = this.form.value.message;
-          this.action.isClientSatisfied = this.form.value.rating;
+          this.action.rating = this.form.value.rating;
           break;
         case ActionType.addMessage:
         case ActionType.dispute:

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CanpayModule } from '@canyaio/canpay-lib';
+import { StarRatingModule } from 'angular-star-rating';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { OrderModule } from 'ngx-order-pipe';
 
@@ -33,7 +34,8 @@ import { PostComponent } from './jobs/post/post.component';
     InboxRoutingModule,
     FormsModule,
     OrderModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    StarRatingModule.forChild()
   ],
   declarations: [
     ActionDialogComponent,

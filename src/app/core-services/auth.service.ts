@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-
-import { BehaviorSubject ,  Observable ,  Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 import * as firebase from 'firebase/app';
 import { Avatar, User } from '../core-classes/user';
@@ -53,7 +52,7 @@ export class AuthService {
     this.emitUser(user);
     if (this.userSub) { this.userSub.unsubscribe(); }
     this.userSub = this.afs.doc(`users/${user.address}`).valueChanges().subscribe((val: User) => {
-      this.emitUser(val);
+      this.emitUser(new User(val));
     });
   }
 

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Review } from '@class/review';
 import { User } from '@class/user';
-import { UserService } from '@service/user.service';
+import { ReviewService } from '@service/review.service';
 
 @Component({
   selector: 'app-reviews',
@@ -10,15 +10,15 @@ import { UserService } from '@service/user.service';
 })
 export class ReviewsComponent implements OnInit {
 
-  @Input() user: User
+  @Input() user: User;
 
-  reviews: Array<Review> = []
+  reviews: Array<Review> = [];
 
   constructor(
-    private userService: UserService
+    private reviewService: ReviewService
   ) { }
 
   async ngOnInit() {
-    this.reviews = await this.userService.getUserReviews(this.user.address)
+    this.reviews = await this.reviewService.getUserReviews(this.user.address);
   }
 }

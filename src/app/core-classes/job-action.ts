@@ -12,7 +12,7 @@ export class IJobAction {
 
   message: string;
 
-  isClientSatisfied: boolean;
+  rating: number;
 
   amountUsd: number;
   amountCan: number;

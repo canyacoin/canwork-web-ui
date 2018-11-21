@@ -1,0 +1,369 @@
+@charset "UTF-8";
+
+/*
+Rating Component
+========================================================================= */
+.rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: $rating-margin-bottom;
+
+  /*Rating Value
+  ====================================================*/
+  @for $i from $minRatingValue through $maxNumOfStars {
+    &.value-#{$i} {
+
+      .star-container {
+        .star:nth-child(-n+#{$i}) {
+          @extend .filled;
+        }
+
+        .star {
+          @if $i <= 2 {
+            @extend .star.negative;
+          }
+
+          @if $i == 3 {
+            @extend .ok;
+          }
+
+          @if $i >= 4 {
+            @extend .positive;
+          }
+        }
+      }
+    }
+  }
+
+  //Handling values > $maxNumOfStars up to $maxNumOfStars*2 (i know it's ugly. Maybe i will skip this completely)
+  @for $i from $maxNumOfStars through $maxNumOfStars*2 {
+    &.value-#{$i} {
+
+      .star-container {
+        .star:nth-child(-n+#{$i}) {
+          @extend .star.filled
+        }
+
+        .star {
+          @extend .positive;
+        }
+      }
+    }
+  }
+
+  /*Hover states
+  ====================================================*/
+
+  //- all stars before and the hover star should be filled
+  //- filled stars after the hover star should be empty
+
+  &.hover:hover {
+
+    @for $i from $minRatingValue through $maxNumOfStars {
+
+      &.value-#{$i}.half,
+      &.hover-#{$i} {
+        .star-container {
+          .star {
+            @extend .empty;
+          }
+        }
+      }
+
+      &.hover-#{$i} {
+        .star-container {
+
+          .star:nth-child(-n+#{$i}) {
+            @extend .filled;
+          }
+
+          .star {
+            @if $i <= 2 {
+              @extend .star.negative;
+            }
+
+            @if $i == 3 {
+              @extend .ok;
+            }
+
+            @if $i >= 4 {
+              @extend .positive;
+            }
+          }
+        }
+      }
+    }
+
+  }
+
+  /*Half stars
+  ====================================================*/
+
+  //if we hals ratings > 0 && < 1 we color the first star
+  &.value-0.half {
+    .star {
+      @extend .negative;
+    }
+    .star:nth-child(1) {
+      @extend .half;
+    }
+  }
+
+  @for $i from $minRatingValue through $maxNumOfStars {
+    &.value-#{$i}.half {
+
+      .star-container {
+        @if ($i < $maxNumOfStars) {
+          .star:nth-child(#{$i+1}) {
+            @extend .half;
+          }
+        }
+      }
+
+    }
+  }
+
+  /*Label Visible
+  ====================================================*/
+  &.label-hidden {
+    .label-value {
+      display: none;
+    }
+  }
+  &.label-visible {
+    display: flex;
+  }
+
+  /*Label Position
+  ====================================================*/
+  &.label-top {
+    flex-direction: column;
+
+    .label-value {
+      + .star-container {
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: $default-stars-label-margin;
+      }
+    }
+  }
+
+  &.label-left .label-value {
+    flex: 0 0 auto;
+
+    + .star-container {
+      margin-left: $default-stars-label-margin;
+      margin-right: 0;
+    }
+  }
+
+  &.label-right {
+    flex-direction: row-reverse;
+
+    .label-value {
+      + .star-container {
+        margin-left: 0;
+        margin-right: $default-stars-label-margin;
+      }
+    }
+  }
+
+  &.label-bottom {
+    flex-direction: column-reverse;
+
+    .label-value {
+      + .star-container {
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: $default-stars-label-margin;
+      }
+    }
+  }
+
+  /*
+  Direction
+  ===================================================*/
+  &.direction-rtl {
+    direction: rtl;
+
+    .star-container {
+      @extend .star-container.direction-rtl;
+      .star {
+        @extend .star.direction-rtl;
+      }
+    }
+  }
+  &.direction-ltr {
+    direction: ltr;
+  }
+
+  /* Star Type
+  ====================================================*/
+  &.star-icon {
+    @extend .star.icon;
+  }
+  &.star-custom-icon {
+    @extend .star.custom-icon;
+  }
+  &.star-svg {
+    @extend .star.svg;
+  }
+
+  /* Sizes
+  ==========================================================*/
+  &.small {
+    .star {
+      @extend .star.small;
+    }
+
+    .label-value {
+      @extend .label-value.small;
+    }
+  }
+
+  &.medium {
+    .star {
+      @extend .star.medium;
+    }
+
+    .label-value {
+      @extend .label-value.medium;
+    }
+  }
+
+  &.large {
+    .star {
+      @extend .star.large;
+    }
+
+    .label-value {
+      @extend .label-value.large;
+    }
+  }
+
+  /* Space
+  ====================================================*/
+  &.space-no {
+    .star-container {
+      @extend .star-container.space-no;
+    }
+  }
+
+  &.space-between {
+    .star-container {
+      @extend .star-container.space-between;
+    }
+  }
+
+  &.space-around {
+    .star-container {
+      @extend .star-container.space-around;
+    }
+  }
+
+  /* Static Color
+    ====================================================*/
+  &.color-default {
+    .star-container {
+      .star {
+        svg {
+          fill: $color-default-rating;
+        }
+        i {
+          color: $color-default-rating;
+        }
+      }
+    }
+  }
+
+  &.color-ok {
+    .star-container {
+      .star {
+        svg {
+          fill: $color-ok-rating;
+        }
+        i {
+          color: $color-ok-rating;
+        }
+      }
+    }
+  }
+
+  &.color-positive {
+    .star-container {
+      .star {
+        svg {
+          fill: $color-positive-rating;
+        }
+        i {
+          color: $color-positive-rating;
+        }
+      }
+    }
+  }
+
+  &.color-negative {
+    .star-container {
+      .star {
+        svg {
+          fill: $color-negative-rating;
+        }
+        i {
+          color: $color-negative-rating;
+        }
+      }
+    }
+  }
+
+  /*Disabled
+  ====================================================*/
+  &.disabled {
+    .label-value {
+      @extend .label-value.disabled;
+    }
+    .star-container {
+      .star {
+        @extend .star.disabled;
+      }
+    }
+  }
+
+  /*AnimationSpeed
+ ====================================================*/
+  &.immediately
+  .star-container {
+    transition: all $immediately-animation-type;
+    .star {
+      transition: $immediately-animation-type;
+      svg, i {
+        transition: $immediately-animation-type;
+      }
+    }
+  }
+
+  &.noticeable {
+    .star-container {
+      transition: all $default-animation-speed $default-animation-type;
+      .star {
+        transition: all $default-animation-speed $default-animation-type;
+        svg, i {
+          transition: all $default-animation-speed $default-animation-type;
+        }
+      }
+    }
+  }
+
+  &.slow {
+    .star-container {
+      transition: all $slow-animation-speed $default-animation-type;
+      .star {
+        transition: all $slow-animation-speed $default-animation-type;
+        svg, i {
+          transition: all $slow-animation-speed $default-animation-type;
+        }
+      }
+    }
+  }
+
+}

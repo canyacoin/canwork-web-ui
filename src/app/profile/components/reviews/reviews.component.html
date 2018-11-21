@@ -5,18 +5,18 @@
     </div>
   </div>
   <div class="row align-items-center">
-    <div class="col-sm-12" *ngIf= "user.upvotes || user.downvotes">
-      <p class="m-0">Total upvotes: <strong>{{ user.upvotes }}</strong></p>
-      <p class="m-0">Total downvotes: <strong>{{ user.downvotes }}</strong></p>
-    </div>
-    <div class="col-sm-12" *ngIf="!user.upvotes && !user.downvotes">
-      <p class="m-0 pt-5">This user has no reviews</p>
+    <div class="p-3">
+      <star-rating [starType]="'svg'" [labelText]="'(' + user.rating.count + ')'" labelPosition="right" [showHalfStars]="true"
+        staticColor="ok" [readOnly]="true" [step]="0.5" [rating]="user.rating.average"></star-rating>
     </div>
   </div>
   <article *ngFor="let review of reviews">
     <p class="mb-0 mt-3">{{ review.message }}</p>
-    <small>Made by {{ review.clientName }} at {{ review.createdAt | date:'medium' }} for job "{{
-      review.jobTitle
-      }}"</small>
+    <small>
+      <star-rating [starType]="'svg'" size="small" [showHalfStars]="true" staticColor="ok" [readOnly]="true" [rating]="review.rating"
+        [step]="0.5"></star-rating>
+      Made by {{ review.reviewerName }} at {{ review.createdAt | date:'medium' }}
+      for job "{{ review.jobTitle }}"
+    </small>
   </article>
 </section>

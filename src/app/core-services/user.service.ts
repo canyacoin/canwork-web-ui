@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Job } from '@class/job';
 import { IJobAction } from '@class/job-action';
-import { Review } from '@class/review';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { take } from 'rxjs/operators';
 
@@ -57,7 +56,7 @@ export class UserService {
           if (user.timezone) {
             user.offset = moment.tz(user.timezone).format('Z');
           }
-          resolve(user);
+          resolve(new User(user));
         } else {
           resolve(undefined);
         }
@@ -73,60 +72,6 @@ export class UserService {
     return data;
   }
 
-  async newReview(reviewer: User, provider: User, job: Job, action: IJobAction) {
-    const review = new Review;
-    review.jobId = job.id;
-    review.jobTitle = job.information.title;
-    review.clientId = job.clientId;
-    review.clientName = client.name;
-    review.providerId = job.providerId;
-    review.message = action.message;
-    review.isClientSatisfied = action.isClientSatisfied;
-    review.createdAt = moment().format('x');
-    try {
-      const ref = await this.usersCollectionRef
-        .doc(provider.address)
-        .collection('reviews')
-        .add({ ...review });
-
-      provider.upvotes = !provider.upvotes || isNaN(provider.upvotes) ? 0 : provider.upvotes;
-      provider.downvotes = !provider.downvotes || isNaN(provider.downvotes) ? 0 : provider.downvotes;
-      provider.numberOfReviews = !provider.numberOfReviews || isNaN(provider.numberOfReviews) ? 0 : provider.numberOfReviews;
-
-      if (review.isClientSatisfied) {
-        provider.upvotes += 1;
-      } else {
-        provider.downvotes += 1;
-      }
-
-      if (review.message) {
-        provider.numberOfReviews += 1;
-      }
-
-      this.saveUserFirebase(provider);
-
-      return ref;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async getUserReviews(userId: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.usersCollectionRef
-        .doc(userId)
-        .collection('reviews')
-        .valueChanges()
-        .pipe(take(1))
-        .subscribe(data => {
-          if (data) {
-            resolve(data);
-          } else {
-            resolve([]);
-          }
-        });
-    });
-  }
 
   saveUser(credentials: User, type?: string): Promise<User> {
     return new Promise(async (resolve: any, reject: any) => {
