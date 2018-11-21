@@ -80,13 +80,13 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     this.jobType = jobType;
     switch (jobType) {
       case 'public':
-        this.jobs = this.publicJobs.filter( job => job.draft === false );
+        this.jobs = this.publicJobs.filter(job => job.draft === false);
         break;
       case 'active':
         this.jobs = this.activeJobs;
         break;
       case 'draft':
-        this.jobs = this.publicJobs.filter( job => job.draft === true );
+        this.jobs = this.publicJobs.filter(job => job.draft === true);
     }
   }
 
@@ -101,7 +101,12 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   }
 
   filterJobsByState() {
-    this.jobs = this.filterPipe.transform(this.allJobs, this.filterByState);
+    console.log(this.filterByState.state !== '');
+    if (this.filterByState.state !== '') {
+      this.jobs = this.activeJobs.filter(job => job.state === this.filterByState.state);
+    } else {
+      this.jobs = this.activeJobs;
+    }
   }
 
 }
