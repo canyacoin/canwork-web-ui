@@ -174,10 +174,11 @@ export class PublicJobComponent implements OnInit {
     return date.toLocaleDateString();
   }
 
-  async chooseProvider(providerId) {
+  async chooseProvider(bidIndex) {
+    const bid = this.bids[bidIndex];
     const confirmed = confirm('Are you sure you want to choose this provider?');
     if (confirmed) {
-      const chosen = await this.publicJobsService.closePublicJob(this.job, providerId);
+      const chosen = await this.publicJobsService.closePublicJob(this.job, bid);
       if (chosen) {
         alert('Provider chosen!');
         this.router.navigate(['/inbox/job', this.job.id]);
