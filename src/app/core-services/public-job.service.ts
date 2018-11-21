@@ -42,6 +42,7 @@ export class PublicJobService {
       return changes.map(a => {
         const data = a.payload.doc.data() as Job;
         data.id = a.payload.doc.id;
+        console.log();
         return data;
       });
     }));
@@ -72,7 +73,9 @@ export class PublicJobService {
 
   // save the public job
   private async saveJobFirebase(job: Job, action: IJobAction): Promise<any> {
-    job.actionLog.push(action);
+    if (action && action !== null) {
+      job.actionLog.push(action);
+    }
     console.log('added action to this job\'s action log');
     console.log(job.actionLog);
     const parsedJob = await this.jobService.parseJobToObject(job);
@@ -104,7 +107,7 @@ export class PublicJobService {
   }
 
   // add new bid to collection
-  private async  addBid(bid: Bid, jobId: string): Promise<Boolean> {
+  private async addBid(bid: Bid, jobId: string): Promise<Boolean> {
     const bidToUpload = this.parseBidToObject(bid);
     return new Promise<boolean>((resolve, reject) => {
       this.afs.doc(`public-jobs/${jobId}/bids/${bid.providerId}`).set(bidToUpload).then(result => {
@@ -139,8 +142,8 @@ export class PublicJobService {
       try {
         job.providerId = providerId;
         job.state = JobState.termsAcceptedAwaitingEscrow;
-        const action = new IJobAction(ActionType.acceptTerms, UserType.client);
         await this.saveJobFirebase(job, null);
+        const action = new IJobAction(ActionType.acceptTerms, UserType.client);
         await this.jobService.handleJobAction(job, action);
         resolve(true);
       } catch (error) {
@@ -149,7 +152,7 @@ export class PublicJobService {
     });
   }
 
-  generateReadableId(jobName): string {
+  async generateReadableId(jobName) {
     // take the job name, take the first 2 strings.
     const filteredName = jobName.replace(/[0-9]/g, '');
     const nameArray = filteredName.split(' ');
@@ -163,6 +166,15 @@ export class PublicJobService {
     }
     console.log(jobName + ' = filtered to = ' + friendly);
     friendly = friendly.toLowerCase();
+    const exists = await this.jobUrlExists(friendly);
+    console.log(exists);
+    if (exists.length < 1) {
+      console.log('just upload it');
+    } else {
+      console.log('wait might want to change the url mate');
+      friendly = friendly + '-' + exists.length;
+      console.log('new url : ' + friendly);
+    }
     return friendly;
   }
 

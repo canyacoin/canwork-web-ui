@@ -353,7 +353,9 @@ export class PostComponent implements OnInit, OnDestroy {
     if (tags.length > 6) {
       tags = tags.slice(0, 6);
     }
-    this.friendlyUrl = this.publicJobService.generateReadableId(this.shareableJobForm.value.title);
+    const friendly = await this.publicJobService.generateReadableId(this.shareableJobForm.value.title);
+    this.friendlyUrl = friendly;
+    console.log('Friendly URL : ' + this.friendlyUrl);
     const job = new Job({
       id: this.jobId,
       hexId: this.ethService.web3js.utils.toHex(this.jobId.hashCode()),
@@ -381,15 +383,6 @@ export class PostComponent implements OnInit, OnDestroy {
     console.log('Shareable job submitted...');
     console.log('job created');
     job.state = JobState.acceptingOffers;
-    const exists = await this.publicJobService.jobUrlExists(job.friendlyUrl);
-    if (exists.length < 1) {
-      console.log('just upload it');
-    } else {
-      console.log('wait might want to change the url mate');
-      job.friendlyUrl = job.friendlyUrl + '-' + exists.length;
-      this.friendlyUrl = job.friendlyUrl;
-      console.log('new url : ' + job.friendlyUrl);
-    }
     this.sent = await this.publicJobService.handlepublicJob(job, action);
     this.isSending = false;
   }

@@ -29,6 +29,7 @@ export class PublicJobComponent implements OnInit {
   isOpen: boolean;
   sent = false;
   canSee = false;
+  hideDescription = false;
   myJob = false;
   shareableLink: string;
   job: Job;
@@ -41,7 +42,8 @@ export class PublicJobComponent implements OnInit {
     private userService: UserService,
     private publicJobsService: PublicJobService,
     private storage: AngularFireStorage,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private router: Router
   ) {
     this.bidForm = formBuilder.group({
       price: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(10000000)])],
@@ -178,10 +180,14 @@ export class PublicJobComponent implements OnInit {
       const chosen = await this.publicJobsService.closePublicJob(this.job, providerId);
       if (chosen) {
         alert('Provider chosen!');
-        window.location.href = window.location.origin + '/inbox/job/' + this.job.id;
+        this.router.navigate(['/inbox/job', this.job.id]);
       } else {
         alert('Something went wrong. please try again later');
       }
     }
   }
+  toggleDescription() {
+    this.hideDescription = !this.hideDescription;
+  }
+
 }
