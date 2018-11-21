@@ -99,9 +99,10 @@
             <hr *ngIf="currentUser.type === 'Provider' && !myJob && isOpen">
           </div>
           <div class="col-12" *ngIf="currentUser.type === 'Provider' && !myJob && isOpen">
-            <button class="btn btn-primary mt-5 mr-5" data-toggle="modal" data-target="#bidModal">
+            <button class="btn btn-primary mt-5 mr-5" [hidden]="!canBid" data-toggle="modal" data-target="#bidModal">
               PLACE BID
             </button>
+            <i *ngIf="!canBid">You've posted your bid.</i>
           </div>
         </div>
       </div>
@@ -252,16 +253,13 @@
             </div>
           </div>
         </div>
-        <div class="container" *ngIf="canBid && sent">
+        <div class="container" *ngIf="!canBid && sent">
           <div class="row">
             <div class="col-12 text-center">
               <img src="assets/img/CanYa_tick_green.svg" class="mb-30 fadeInShort" width="100px" height="100px">
               <h6>Bid posted!</h6>
             </div>
           </div>
-        </div>
-        <div class="container text-center" *ngIf="!canBid">
-          <h6>You've already placed your bid</h6>
         </div>
       </div>
       <div class="modal-footer text-right" *ngIf="canBid && !sent">
