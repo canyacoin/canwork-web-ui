@@ -132,7 +132,6 @@ export class UserService {
   /** User object must be re-assigned as firebase doesn't accept strong types */
   private parseUserToObject(user: User): object {
     const parsedRating = Object.assign({}, user.rating);
-
     const parsedUser = Object.assign({}, user);
     parsedUser.rating = parsedRating;
     return parsedUser;

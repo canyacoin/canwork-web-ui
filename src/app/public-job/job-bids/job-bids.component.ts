@@ -18,6 +18,7 @@ export class JobBidsComponent implements OnInit {
   authSub: Subscription;
   currentUser: User;
   bids: any;
+  jobId: any;
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
@@ -33,16 +34,16 @@ export class JobBidsComponent implements OnInit {
     this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
       if (params['jobId']) {
         this.initBids(params['jobId']);
+        this.jobId = params['jobId'];
       } else if (params['friendlyUrl']) {
-        const jobLookUp = this.publicJobsService.jobUrlExists(params['friendlyUrl']);
-        console.log(jobLookUp);
+        const job = this.publicJobsService.getPublicJobsByUrl(params['friendlyUrl']);
+        console.log(job);
       }
     });
   }
 
   async initBids(jobId) {
     this.bids = await this.publicJobsService.getBids(jobId);
-    console.log(this.bids);
   }
 
 }

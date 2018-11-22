@@ -9682,6 +9682,37 @@ a.text-danger:focus {
   box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.1);
 }
 
+@media screen and (max-width:640px) {
+  .text-center-mobile {
+    text-align: center !important;
+  }
+
+  .mt-0-mobile {
+    margin-top: 0px !important;
+  }
+
+  .ml-0-mobile {
+    margin-left: 0px !important;
+  }
+
+  .mr-0-mobile {
+    margin-right: 0px !important;
+  }
+
+  .mr-5-mobile {
+    margin-right: 5px !important;
+  }
+
+  .mb-0-mobile {
+    margin-bottom: 0px !important;
+  }
+}
+
+.mini-profile-row {
+  min-height: 30px;
+}
+
+
 @media (max-width:520px) {
   .tag-row {
     padding: 0 25px 0 25px;
