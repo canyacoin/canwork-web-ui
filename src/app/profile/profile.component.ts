@@ -41,12 +41,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
         });
       }
 <<<<<<< HEAD
+<<<<<<< HEAD
     }, error => { console.error('! unable to retrieve currentUser data:', error); });
 =======
     }, error => {
       console.error('! unable to retrieve currentUser data:', error);
     });
 >>>>>>> basic job getter and checker works
+=======
+    }, error => { console.error('! unable to retrieve currentUser data:', error); });
+>>>>>>> fixed some git rebase mess
   }
 
   ngOnDestroy() {
