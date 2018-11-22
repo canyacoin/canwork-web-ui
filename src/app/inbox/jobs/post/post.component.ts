@@ -38,7 +38,10 @@ export class PostComponent implements OnInit, OnDestroy {
   friendlyUrl = '';
   authSub: Subscription;
   routeSub: Subscription;
+<<<<<<< HEAD
   jobSub: Subscription;
+=======
+>>>>>>> fixed some git rebase mess
   currentDate = '';
   isShareable = false;
   isSending = false;
