@@ -1,22 +1,28 @@
 <section id="user-reviews" class="card mt-3 p-3" *ngIf="user && reviews">
   <div class="row">
-    <div class="col-12">
+    <div class="col-6">
       <h5 class="mb-0">REVIEWS</h5>
     </div>
-  </div>
-  <div class="row align-items-center">
-    <div class="col-sm-12" *ngIf= "user.upvotes || user.downvotes">
-      <p class="m-0">Total upvotes: <strong>{{ user.upvotes }}</strong></p>
-      <p class="m-0">Total downvotes: <strong>{{ user.downvotes }}</strong></p>
-    </div>
-    <div class="col-sm-12" *ngIf="!user.upvotes && !user.downvotes">
-      <p class="m-0 pt-5">This user has no reviews</p>
+    <div class="col-6">
+      <star-rating class="float-right" [starType]="'svg'" [labelText]="'(' + user.rating.count + ')'" labelPosition="right"
+        [showHalfStars]="true" staticColor="ok" [readOnly]="true" [step]="0.5" [rating]="user.rating.average"></star-rating>
     </div>
   </div>
-  <article *ngFor="let review of reviews">
-    <p class="mb-0 mt-3">{{ review.message }}</p>
-    <small>Made by {{ review.clientName }} at {{ review.createdAt | date:'medium' }} for job "{{
-      review.jobTitle
-      }}"</small>
+  <article *ngFor="let review of reviews" class="row mt-3">
+    <div class="col-6">
+      <b>{{review.reviewerName}}</b>
+    </div>
+    <div class="col-6">
+      <star-rating class="float-right" [starType]="'svg'" size="small" showHalfStars="true" staticColor="ok" [readOnly]="true"
+        [rating]="review.rating" [step]="0.5"></star-rating>
+    </div>
+    <div class="col-12">
+      <p class="mb-0">{{ review.message }}</p>
+    </div>
+    <div class="col-12">
+      <small>
+        {{getReviewLabel(review)}}
+      </small>
+    </div>
   </article>
 </section>

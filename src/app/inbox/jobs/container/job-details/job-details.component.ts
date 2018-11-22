@@ -2,16 +2,19 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Job, JobState } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
+import { Review } from '@class/review';
 import { User, UserType } from '@class/user';
 import { AuthService } from '@service/auth.service';
 import { JobService } from '@service/job.service';
 import { MobileService } from '@service/mobile.service';
+import { ReviewService } from '@service/review.service';
 import { Transaction, TransactionService } from '@service/transaction.service';
 import { UserService } from '@service/user.service';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { DialogService } from 'ng2-bootstrap-modal';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
+
 import { environment } from '../../../../../environments/environment';
 import {
     ActionDialogComponent, ActionDialogOptions
@@ -32,15 +35,18 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   currentUserType: UserType;
   job: Job;
   transactions: Transaction[] = [];
+  reviews: Review[] = new Array<Review>();
   isOnMobile = false;
   jobSub: Subscription;
   transactionsSub: Subscription;
+  reviewsSub: Subscription;
   hideDescription = true;
 
   constructor(private authService: AuthService,
     private jobService: JobService,
     private userService: UserService,
     private transactionService: TransactionService,
+    private reviewService: ReviewService,
     private activatedRoute: ActivatedRoute,
     private dialogService: DialogService,
     private storage: AngularFireStorage,
@@ -71,6 +77,10 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.setAttachmentUrl(this.job.information.attachments);
       });
 
+      this.reviewsSub = this.reviewService.getJobReviews(jobId).subscribe((reviews: Review[]) => {
+        this.reviews = reviews;
+      });
+
       this.transactionsSub = this.transactionService.getTransactionsByJob(jobId).subscribe((transactions: Transaction[]) => {
         this.transactions = transactions;
       });
@@ -78,7 +88,34 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   }
 
   actionIsDisabled(action: ActionType): boolean {
-    return action === ActionType.dispute || (this.hasPendingTransactions && (action === ActionType.enterEscrow || action === ActionType.acceptFinish));
+    switch (action) {
+      case ActionType.dispute:
+        return true;
+      case ActionType.enterEscrow:
+      case ActionType.acceptFinish:
+        return this.hasPendingTransactions;
+      case ActionType.review:
+        return !this.userCanReview;
+      default:
+        return false;
+    }
+  }
+
+  actionIsHidden(action: ActionType): boolean {
+    switch (action) {
+      case ActionType.review:
+        return !this.userCanReview;
+      default:
+        return false;
+    }
+  }
+
+  get jobIsComplete(): boolean {
+    return this.job.state === JobState.complete;
+  }
+
+  get userCanReview(): boolean {
+    return this.reviews && this.reviews.findIndex(x => x.reviewerId === this.currentUser.address) === -1;
   }
 
   get hasPendingTransactions(): boolean {
@@ -146,6 +183,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.dialogService.addDialog(ActionDialogComponent, new ActionDialogOptions({
           job: this.job,
           userType: this.currentUserType,
+          otherParty: this.job['otherParty']['name'] || 'the other party',
           actionType: action
         })).subscribe((success) => {
           if (success) {

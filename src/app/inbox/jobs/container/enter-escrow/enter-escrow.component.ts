@@ -68,7 +68,7 @@ export class EnterEscrowComponent implements OnInit {
          save action/pending to job
          update users active eth address */
       const txId = GenerateGuid();
-      this.transactionService.startMonitoring(this.job, from, txId, txHash, ActionType.authoriseEscrow)
+      this.transactionService.startMonitoring(this.job, from, txId, txHash, ActionType.authoriseEscrow);
       this.transactionService.saveTransaction(new Transaction(txId, this.job.clientId,
         txHash, this.momentService.get(), ActionType.authoriseEscrow, this.job.id));
       const escrowAction = new IJobAction(ActionType.authoriseEscrow, UserType.client);
@@ -90,10 +90,10 @@ export class EnterEscrowComponent implements OnInit {
          save tx to collection
          save action/pending to job */
       const txId = GenerateGuid();
-      this.transactionService.startMonitoring(this.job, from, txId, txHash, ActionType.enterEscrow)
+      this.transactionService.startMonitoring(this.job, from, txId, txHash, ActionType.enterEscrow);
       this.transactionService.saveTransaction(new Transaction(txId, this.job.clientId,
         txHash, this.momentService.get(), ActionType.enterEscrow, this.job.id));
-      const action = new IJobAction(ActionType.enterEscrow, UserType.client)
+      const action = new IJobAction(ActionType.enterEscrow, UserType.client);
       this.job.actionLog.push(action);
       this.job.clientEthAddress = from;
       clientEthAddress = from;

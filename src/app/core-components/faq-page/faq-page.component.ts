@@ -8,22 +8,22 @@ import { Component, OnInit } from '@angular/core';
 export class FaqPageComponent implements OnInit {
   faqs = [
     {
-      index: "q-1",
+      index: 'q-1',
       q: 'Who is CANwork for?',
       a: 'CANWork is a platform for clients to find quality providers who offer digital services (eg. software engineering, graphics design, content writing, digital marketing). '
     },
     {
-      index: "q-2",
+      index: 'q-2',
       q: 'Why CANwork?',
       a: 'CANwork only takes 1% in service fees when you make a transaction. This means that when you receive payment for your work, you take more of your hard earned salary home. You can expect high quality providers from CANwork. This because all of our providers are hand picked and vetted for their skills. CANwork is decentralised  - CANWork does not and will never keep or distribute your personal data. CANwork provides fantastic utility for the many unbanked agents in the developing world. Cryptocurrency payments allow for international transactions to be processed quickly and with less fees. Payments on CANwork are enabled for use globally. Those in countries where paypal is not available don’t have to worry when using our platform because our transactions are all made using cryptocurrency. National currency such as USD and AUD transactions coming soon. CANwork has a global reach because of the borderless nature of crypto payments.  This is particularly beneficial as it gives everyone equal opportunity to access the global gig economy, and most importantly equal opportunity to earn an equivalent wage. CANwork is continually being optimised for your experience. We pride ourselves on the fact that CANwork is made from insights from our community. We are a platform for gig workers, designed by gig workers. CANwork has created a suite of free tools which allows a sole operator to build and operate their business from their own computer.'
     },
     {
-      index: "q-3",
+      index: 'q-3',
       q: 'How do I get started as a provider?',
       a: 'Join CANwork and set up your account as a provider. You will then receive an email from us to get started with completing your profile. When your signing up as a provider you will need to be whitelisted, which can take up to 72 hours to determine if your eligible to be a provider.'
     },
     {
-      index: "q-4",
+      index: 'q-4',
       q: 'How do I get started as a client?',
       a: 'Simply join CANwork and set your account up as a client. You will then have full access to the platform, and be able to communicate with any service provider. '
     },
@@ -63,9 +63,9 @@ export class FaqPageComponent implements OnInit {
       a: 'Notifications from CANwork currently are sent via email. You can unsubscribe from these emails anytime, at the bottom of the email. If you would like to see CanYa updates you can go to canya.io.'
     },
     {
-       index: 'q-12',
-       q: 'What happens if crypto price changes?',
-       a: 'CanYa’s hedged escrow service mitigates against market volatility. If you’ve quoted, for example, $500 USD in CAN tokens for a job, you will receive the same value of $500 USD in CAN upon completing the job regardless of changes in CanYaCoin price.'
+      index: 'q-12',
+      q: 'What happens if crypto price changes?',
+      a: 'CanYa’s hedged escrow service mitigates against market volatility. If you’ve quoted, for example, $500 USD in CAN tokens for a job, you will receive the same value of $500 USD in CAN upon completing the job regardless of changes in CanYaCoin price.'
     },
     {
       index: 'q-13',
@@ -117,7 +117,7 @@ export class FaqPageComponent implements OnInit {
       q: 'Who can see my profile?',
       a: 'Everyone can see your profile, we use a shuffling algorithm to make sure that everyone gets a turn at the top of the page. In the future, we will be implementing review systems and premium spots so that you can increase your exposure.'
     }
-  ]
+  ];
   queryFaqs: any = [];
   constructor() { }
   isOnMobile = false;

@@ -9,8 +9,9 @@
             <p *ngIf="job.information.description.length > 160">{{job.information.description.substring(0, 160)}}...</p>
           </div>
           <div class="col-12">
-            <div class="otherPartyName pointer" [routerLink]="['/profile/alt/', job.providerId]">
-              <span *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
+            <div class="otherPartyName pointer" *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri"
+              [routerLink]="['/profile/alt/', job.otherParty.id]">
+              <span class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
               </span>
               <p>{{job.otherParty?.name}}</p>
             </div>
@@ -56,8 +57,9 @@
             <p *ngIf="job.information.description.length > 60">{{job.information.description.substring(0, 60)}}</p>
           </div>
           <div class="col-12">
-            <div class="otherPartyName pointer" [routerLink]="['/profile/alt/', job.providerId]">
-              <span *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
+            <div *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="otherPartyName pointer"
+              [routerLink]="['/profile/alt/', job.otherParty.id]">
+              <span class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
               </span>
               <p>{{job.otherParty?.name}}</p>
             </div>

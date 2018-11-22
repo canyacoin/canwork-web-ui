@@ -2,28 +2,37 @@
   height: 70vh;
 }
 
+.break-word {
+  word-break: break-word;
+}
+
 .search-container {
   position: relative;
   padding: 0;
   margin: 0;
 }
-.contact-div{
+
+.contact-div {
   height: 70vh;
 }
-.contact-list{
+
+.contact-list {
   min-height: 300px;
   max-height: 420px;
   overflow-y: auto;
 }
-@media (max-width:600px){
-  .contact-div{
+
+@media (max-width:600px) {
+  .contact-div {
     height: auto;
   }
 }
-.hide{
+
+.hide {
   display: none;
 }
-.show{
+
+.show {
   display: block;
 }
 .search {
@@ -33,11 +42,13 @@
   height: 36px;
   border: 1px solid #DCE0E6;
   border-radius: 5px;
-  width:100%;
+  width: 100%;
 }
+
 .search:focus {
   outline: none;
 }
+
 .search-icon {
   width: 16px;
   height: 16px;
@@ -59,13 +70,15 @@
   border-bottom-right-radius: 0rem;
   border-bottom-left-radius: 0rem;
 }
-.chat-back-button{
-  background-color:transparent;
+
+.chat-back-button {
+  background-color: transparent;
   color: #33ccff;
-  padding:0;
-  margin:0;
+  padding: 0;
+  margin: 0;
   border-color: transparent;
 }
+
 .list-group-item.active {
   background-color: #f7f7f9;
   border-color: rgba(0, 0, 0, .125);
@@ -96,7 +109,7 @@
 }
 
 .card-message-block {
-  max-width:75vw;
+  max-width: 75vw;
   border-radius: 25px;
   line-height: 1.3;
   font-weight: 400;
@@ -228,33 +241,43 @@
   0% {
     -webkit-transform: scale(1.0);
   }
+
   10% {
     -webkit-transform: scale(1.2);
   }
+
   20% {
     -webkit-transform: scale(1.3);
   }
+
   30% {
     -webkit-transform: scale(1.2);
   }
+
   40% {
     -webkit-transform: scale(1.0);
   }
+
   50% {
     -webkit-transform: scale(1.1);
   }
+
   60% {
     -webkit-transform: scale(1.0);
   }
+
   70% {
     -webkit-transform: scale(1.05);
   }
+
   80% {
     -webkit-transform: scale(1.0);
   }
+
   90% {
     -webkit-transform: scale(1.02);
   }
+
   100% {
     -webkit-transform: scale(1.0);
   }
@@ -264,33 +287,43 @@
   0% {
     transform: scale(1.0);
   }
+
   10% {
     transform: scale(1.2);
   }
+
   20% {
     transform: scale(1.3);
   }
+
   30% {
     transform: scale(1.2);
   }
+
   40% {
     transform: scale(1.0);
   }
+
   50% {
     transform: scale(1.1);
   }
+
   60% {
     transform: scale(1.0);
   }
+
   70% {
     transform: scale(1.05);
   }
+
   80% {
     transform: scale(1.0);
   }
+
   90% {
     transform: scale(1.02);
   }
+
   100% {
     transform: scale(1.0);
   }
@@ -321,19 +354,23 @@
 }
 
 @keyframes shake {
+
   10%,
   90% {
     transform: translate3d(-1px, 0, 0);
   }
+
   20%,
   80% {
     transform: translate3d(2px, 0, 0);
   }
+
   30%,
   50%,
   70% {
     transform: translate3d(-4px, 0, 0);
   }
+
   40%,
   60% {
     transform: translate3d(4px, 0, 0);

@@ -50,11 +50,9 @@
       <div *ngIf="form && actionType == actionTypes.review" class="mx-40">
         <form [formGroup]="form" class="form-group">
           <fieldset class="form-group">
-            <label>Are you satisfied with this job?</label><br>
-            <label for="rating-yes"><input type="radio" formControlName="rating" name="rating" id="rating-yes" [value]=true>
-              Yes</label>
-            <label for="rating-no"><input type="radio" formControlName="rating" name="rating" id="rating-no" [value]=false>
-              No</label>
+            <label>How would you rate {{otherParty}}?</label><br>
+            <star-rating [starType]="'svg'" [showHalfStars]="true" [staticColor]="ok" [hoverEnabled]="true"
+              (ratingChange)="onRatingChange($event)"></star-rating>
           </fieldset>
           <fieldset class="form-group">
             <label>Add a public review (optional)</label>
@@ -72,6 +70,9 @@
       <div class="col-12">
         <button [disabled]="submitDisabled || executing" type="button" class="btn btn-{{getColour(action.type)}}"
           (click)="handleAction()">
+          <div *ngIf="executing">
+            <img src="assets/img/loader.svg" height="36px" alt="Loader">
+          </div>
           {{actionType}}
         </button>
         <button type="button" class="btn btn-default" (click)="close()">Cancel</button>

@@ -21,6 +21,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { FeatureToggleService } from './feature-toggle.service';
+import { ReviewService } from './review.service';
 
 @Injectable()
 export class JobService {
@@ -34,6 +35,7 @@ export class JobService {
     private chatService: ChatService,
     private momentService: MomentService,
     private transactionService: TransactionService,
+    private reviewService: ReviewService,
     private canWorkEthService: CanWorkEthService,
     private ethService: EthService,
     private jobNotificationService: JobNotificationService,
@@ -121,7 +123,7 @@ export class JobService {
   async assignOtherPartyAsync(job: Job, viewingUserType: UserType) {
     if (job.clientId && job.providerId) {
       const otherParty = await this.userService.getUser(viewingUserType === UserType.client ? job.providerId : job.clientId);
-      job['otherParty'] = { avatar: otherParty.avatar, name: otherParty.name };
+      job['otherParty'] = { avatar: otherParty.avatar, name: otherParty.name, id: otherParty.address };
     }
   }
 
@@ -136,7 +138,6 @@ export class JobService {
    */
   async handleJobAction(job: Job, action: IJobAction): Promise<boolean> {
     const parsedJob = new Job(await this.parseJobToObject(job));
-    let client, provider: User;
     return new Promise<boolean>(async (resolve, reject) => {
       try {
         switch (action.type) {
@@ -199,10 +200,9 @@ export class JobService {
             resolve(true);
             break;
           case ActionType.review:
-            client = await this.userService.getUser(job.clientId);
-            provider = await this.userService.getUser(job.providerId);
-            await this.userService.newReview(client, provider, parsedJob, action);
-            parsedJob.state = JobState.reviewed;
+            const reviewer = await this.userService.getUser(action.executedBy === UserType.client ? job.clientId : job.providerId);
+            const reviewee = await this.userService.getUser(action.executedBy === UserType.client ? job.providerId : job.clientId);
+            await this.reviewService.newReview(reviewer, reviewee, parsedJob, action);
             parsedJob.actionLog.push(action);
             await this.saveJobFirebase(parsedJob);
             resolve(true);
@@ -256,7 +256,8 @@ export class JobService {
     actions[JobState.inDispute] = forClient ? [ActionType.acceptFinish, ActionType.addMessage] : [ActionType.addMessage];
     actions[JobState.cancelled] = [];
     actions[JobState.declined] = [];
-    actions[JobState.complete] = forClient ? [ActionType.review] : [];
+    actions[JobState.complete] = [ActionType.review];
+    actions[JobState.reviewed] = [];
 
     return actions[jobState] || [];
   }

@@ -9582,7 +9582,6 @@ a.text-danger:focus {
 
 
 .tag-row {
-  min-height: 135px;
   padding: 0 30px 0 30px;
   justify-content: center;
 }
@@ -9599,7 +9598,7 @@ a.text-danger:focus {
 }
 
 .hourly-rate {
-  margin-top: 1rem;
+  height: 25px;
   color: #535353;
 }
 
@@ -9783,8 +9782,11 @@ a.text-danger:focus {
   font-size: 14px;
   line-height: initial;
   margin: 0;
-  height: 39px;
   color: #323c47;
+}
+
+.provider-stars {
+  min-height: 25px;
 }
 
 #menu-overlay {
@@ -9839,4 +9841,8 @@ a.text-danger:focus {
 
 .mh-250 {
   min-height: 250px;
+}
+
+.mh-135 {
+  min-height: 135px;
 }

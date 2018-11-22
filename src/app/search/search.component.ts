@@ -9,7 +9,7 @@ import * as findIndex from 'lodash/findIndex';
 import * as orderBy from 'lodash/orderBy';
 import * as union from 'lodash/union';
 import { LabelType, Options } from 'ng5-slider';
-import { Observable ,  Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { UserType } from '../../../functions/src/user-type';
 import { environment } from '../../environments/environment';
@@ -217,7 +217,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       const index = this.categoryFilters.findIndex(function (element) {
         return element === categoryName;
-      })
+      });
       this.categoryFilters.splice(index, 1);
     }
   }

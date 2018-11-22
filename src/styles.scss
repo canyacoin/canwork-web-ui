@@ -1,3 +1,7 @@
+$color-ok-rating: #33ccff !default;
+
+@import 'assets/star-scss/star-rating';
+
 @mixin circle-headshot {
   .circle-headshot {
     background-position: center center;
@@ -5,4 +9,12 @@
     display: inline-block;
     background-repeat: no-repeat;
   }
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.cursor-auto {
+  cursor: auto !important;
 }

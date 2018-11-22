@@ -7,6 +7,7 @@ import { GenerateGuid } from '@util/generate.uid';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+
 import { environment } from '../../environments/environment';
 
 export class Transaction {
@@ -116,9 +117,9 @@ export class TransactionService {
     if (action === ActionType.authoriseEscrow) {
       return `${prefix}authorise-escrow-${postfix}${params}`;
     } else if (action === ActionType.enterEscrow) {
-      return `${prefix}enter-escrow-${postfix}${params}`
+      return `${prefix}enter-escrow-${postfix}${params}`;
     } else if (action === ActionType.acceptFinish) {
-      return `${prefix}accept-finish-${postfix}${params}`
+      return `${prefix}accept-finish-${postfix}${params}`;
     }
     return '';
   }

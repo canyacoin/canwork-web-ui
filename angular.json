@@ -32,27 +32,23 @@
               "node_modules/nouislider/distribute/nouislider.min.css",
               "node_modules/firebaseui/dist/firebaseui.css",
               "node_modules/animate.css/animate.css",
-              "src/styles.css",
+              "src/styles.scss",
               "src/assets/sass/global.scss"
             ],
             "scripts": []
           },
           "configurations": {
             "staging": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.staging.ts"
-                }
-              ]
+              "fileReplacements": [{
+                "replace": "src/environments/environment.ts",
+                "with": "src/environments/environment.staging.ts"
+              }]
             },
             "prod": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
-                }
-              ]
+              "fileReplacements": [{
+                "replace": "src/environments/environment.ts",
+                "with": "src/environments/environment.prod.ts"
+              }]
             },
             "production": {
               "optimization": true,
@@ -104,7 +100,7 @@
               "node_modules/nouislider/distribute/nouislider.min.css",
               "node_modules/firebaseui/dist/firebaseui.css",
               "node_modules/animate.css/animate.css",
-              "src/styles.css",
+              "src/styles.scss",
               "src/assets/sass/global.scss"
             ],
             "assets": [

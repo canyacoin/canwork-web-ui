@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CanpayModule } from '@canyaio/canpay-lib';
+import { StarRatingModule } from 'angular-star-rating';
 import { ImgFallbackModule } from 'ngx-img-fallback';
 
 import { CoreComponentsModule } from '../core-components/core-components.module';
@@ -43,7 +44,8 @@ import { SetupComponent } from './setup/setup.component';
     ImgFallbackModule,
     FormsModule,
     ProfileRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    StarRatingModule.forChild()
   ],
   declarations: [
     AboutComponent,

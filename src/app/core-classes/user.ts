@@ -17,6 +17,7 @@ export class User {
   publicEncKey: string;
   publicKey: string;
   pushToken: string;
+  rating: Rating = new Rating();
   skillTags: string[] = [];
   state: UserState;
   timestamp: string;
@@ -29,13 +30,17 @@ export class User {
   work: string;
   workSkillTags: string[] = [];
 
-  upvotes = 0
-  downvotes = 0
-  numberOfReviews = 0
 
   constructor(init?: Partial<User>) {
     Object.assign(this, init);
   }
+}
+
+export class Rating {
+  count = 0;
+  average = 0;
+
+  constructor() { }
 }
 
 export class Avatar {
