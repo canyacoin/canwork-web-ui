@@ -1,11 +1,43 @@
 <main class="main-content">
   <section class="section bg-gray pt-15 pb-20" style="min-height: 70vh;">
     <app-back-button></app-back-button>
-    <div *ngIf="!job" class="container">
+    <div *ngIf="!bids" class="container">
       <div class="row">
         <div class="col-12 job-detail-container text-center">
           <div class="card p-30 job-detail-card">
             <img src="assets/img/loader.svg" height="36px" alt="Loader">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" *ngIf="bids">
+      <div class="row">
+        <div class="col-12">
+          <h4>REVIEW OFFERS</h4>
+        </div>
+      </div>
+      <div class="card mb-15 p-20 job-dashboard-card bid-card" *ngFor="let bid of bids; let i = index">
+        <div class="container provider-job-card jobs-info">
+          <div class="row">
+            <div class="col-md-8 col-sm-6 col-7" [routerLink]="['/profile/alt/', bid.providerId]">
+              <span *ngIf="bid.providerAvatar" class="headshot-div" style="margin-top:2.5px" [ngStyle]="{'background-image': 'url(' + (bid.providerAvatar || {}).uri + ')'}">
+              </span>
+              <h4 style="margin-left: 2rem">{{bid.providerName}}</h4>
+            </div>
+            <div class="col-md-4 col-sm-6 col-5 text-right">
+              <button [routerLink]="['/inbox/chat']" [queryParams]="{ address : bid.providerId}" class="btn btn-canya-chat btn-sm btn-primary">CHAT</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8 col-sm-8 col-12">
+              {{bid.message}}
+            </div>
+            <div class="col-md-4 col-sm-4 col-12 text-right text-center-mobile">
+              <button class="btn btn-sm btn-secondary  mr-5-mobile" (click)="declineProvider(i)">DECLINE</button>
+              <br class="hide-mobile">
+              <button class="btn btn-sm btn-success mt-5 mt-0-mobile" (click)="chooseProvider(i)">ACCEPT</button>
+            </div>
           </div>
         </div>
       </div>
