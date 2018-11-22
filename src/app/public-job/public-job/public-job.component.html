@@ -53,8 +53,11 @@
                 </a>
               </div>
             </div>
-            <div class="col-12">
+            <div class="col-sm-9">
               <app-skill-tag *ngFor="let skill of job.information.skills" [skill]=skill></app-skill-tag>
+            </div>
+            <div class="col-sm-3" *ngIf="job.draft === true"> 
+              <i>Draft</i>
             </div>
           </div>
         </div>
@@ -120,7 +123,7 @@
               <h5>BIDS</h5>
             </div>
             <div class="col-4 text-right">
-              <button class="btn btn-sm btn-primary">DETAILED VIEW</button>
+              <button class="btn btn-sm btn-primary" [routerLink]="['bids']">DETAILED VIEW</button>
             </div>
           </div>
           <div class="row">
@@ -175,7 +178,7 @@
   </section>
 </main>
 <!-- Modals -->
-<div id="shareModal" class="modal fade" *ngIf="job" role="dialog">
+<div id="shareModal" class="modal fade" *ngIf="job && canSee" role="dialog">
   <div border-none class="modal-dialog">
     <!-- Modal content-->
     <div class="modal-content">
