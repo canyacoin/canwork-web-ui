@@ -28,12 +28,14 @@ import { MobileService } from './core-services/mobile.service';
 import { NavService } from './core-services/nav.service';
 import { PublicJobService } from './core-services/public-job.service';
 import { CoreUtilsModule } from './core-utils/core-utils.module';
-import { PublicJobComponent } from './public-job/public-job.component';
+import { PublicJobComponent } from './public-job/public-job/public-job.component';
+import { JobBidsComponent } from './public-job/job-bids/job-bids.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PublicJobComponent
+    PublicJobComponent,
+    JobBidsComponent
   ],
   imports: [
     AppRoutingModule,
