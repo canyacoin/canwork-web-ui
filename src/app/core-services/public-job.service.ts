@@ -1,194 +1,194 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Bid, Job, JobState } from '@class/job';
+import { Injectable } from '@angular/core';
+import { Job, JobState, Bid } from '@class/job';
 import { User, UserType } from '@class/user';
-import { AuthService } from '@service/auth.service';
-import { PublicJobService } from '@service/public-job.service';
 import { UserService } from '@service/user.service';
-import { AngularFireStorage } from 'angularfire2/storage';
-import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { JobService } from '@service/job.service';
+import { ActionType, IJobAction } from '@class/job-action';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Observable, ReplaySubject } from 'rxjs';
+import { map, take } from 'rxjs/operators';
+import { createChangeDetectorRef } from '@angular/core/src/view/refs';
+import { JobNotificationService } from './job-notification.service';
 
-import * as moment from 'moment';
-
-@Component({
-  selector: 'app-public-job',
-  templateUrl: './public-job.component.html',
-  styleUrls: ['./public-job.component.css']
-})
-export class PublicJobComponent implements OnInit {
-  bidForm: FormGroup = null;
-  bids: any;
-  authSub: Subscription;
-  routeSub: Subscription;
-  jobSub: Subscription;
-  jobExists: boolean;
-  canBid: boolean;
-  isBidding: boolean;
-  isOpen: boolean;
-  sent = false;
-  canSee = false;
-  hideDescription = false;
-  myJob = false;
-  shareableLink: string;
-  job: Job;
-  currentUser: User;
-  jobPoster: User;
-
+@Injectable()
+export class PublicJobService {
+  publicJobsCollection: AngularFirestoreCollection<any>;
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private authService: AuthService,
+    private afs: AngularFirestore,
     private userService: UserService,
-    private publicJobsService: PublicJobService,
-    private storage: AngularFireStorage,
-    private formBuilder: FormBuilder,
-    private router: Router
+    private jobService: JobService
   ) {
-    this.bidForm = formBuilder.group({
-      price: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(10000000)])],
-      message: ['', Validators.compose([Validators.min(0), Validators.maxLength(10000)])]
-    });
+    this.publicJobsCollection = this.afs.collection<any>('public-jobs');
   }
 
-  async ngOnInit() {
-    this.shareableLink = '' + window.location.origin;
-    this.authSub = this.authService.currentUser$.subscribe((user: User) => {
-      this.currentUser = user;
-    });
-    this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
-      if (params['jobId']) {
-        this.jobSub = this.publicJobsService.getPublicJob(params['jobId']).subscribe(publicJob => {
-          if (publicJob === undefined) {
-            this.jobExists = false;
-            this.canSee = false;
-          } else {
-            this.job = publicJob;
-            this.initJob(this.job);
-          }
-        });
-      } else if (params['friendlyUrl']) {
-        this.jobSub = this.publicJobsService.getPublicJobsByUrl(params['friendlyUrl']).subscribe(publicJob => {
-          if (publicJob.length === 0) {
-            this.jobExists = false;
-            this.canSee = false;
-          } else {
-            this.job = publicJob[0] as Job;
-            this.initJob(this.job);
-          }
-        });
+  // BASIC GETs
+
+  getPublicJob(jobId: string): Observable<Job> {
+    return this.afs.doc(`public-jobs/${jobId}`).snapshotChanges().pipe(map(doc => {
+      const job = doc.payload.data() as Job;
+      console.log(job);
+      if (job) {
+        console.log('found.');
+      } else {
+        console.log('not found.');
+      }
+      return job;
+    }));
+  }
+
+  getPublicJobsByUrl(url: string): Observable<Job[]> {
+    return this.afs.collection<any>('public-jobs', ref => ref.where('friendlyUrl', '==', url)).snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as Job;
+        data.id = a.payload.doc.id;
+        console.log();
+        return data;
+      });
+    }));
+  }
+
+  getPublicJobsByUser(userId: string, userType: UserType): Observable<Job[]> {
+    return this.afs.collection<any>('public-jobs', ref => ref.where('clientId', '==', userId)).snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as Job;
+        data.id = a.payload.doc.id;
+        return data;
+      });
+    }));
+  }
+
+  // BASIC CRUDs
+  async handlepublicJob(job, action: IJobAction): Promise<boolean> {
+    console.log('uploading job...');
+    return new Promise<boolean>(async (resolve, reject) => {
+      try {
+        await this.saveJobFirebase(job, action);
+        resolve(true);
+      } catch (error) {
+        reject(false);
       }
     });
   }
 
-  async setClient(clientId) {
-    this.jobPoster = await this.userService.getUser(clientId);
-    console.log(this.jobPoster);
+  // save the public job
+  private async saveJobFirebase(job: Job, action: IJobAction): Promise<any> {
+    if (action && action !== null) {
+      job.actionLog.push(action);
+    }
+    console.log('added action to this job\'s action log');
+    console.log(job.actionLog);
+    const parsedJob = await this.jobService.parseJobToObject(job);
+    return this.publicJobsCollection.doc(job.id).set(parsedJob);
   }
 
-  async initJob(job: Job) {
-    this.jobExists = true;
-    this.myJob = (job.clientId === this.currentUser.address);
-    if (job.draft && !this.myJob) {
-      // only allow the job creator to see jobs in draft state
-      this.canSee = false;
-    } else {
-      this.canSee = true;
-    }
-    if (job.state === JobState.acceptingOffers) {
-      this.isOpen = true;
-    } else {
-      this.isOpen = false;
-    }
-    this.setClient(this.job.clientId);
-    this.setAttachmentUrl();
-    if (this.currentUser.type === 'Provider') {
-      const check = await this.publicJobsService.canBid(this.currentUser.address, this.job);
-      this.canBid = check;
-    }
-    this.bids = await this.publicJobsService.getBids(job.id);
-  }
 
-  async submitBid() {
-    this.isBidding = true;
-    const bidToSubmit = new Bid(this.currentUser.address, this.currentUser.name, this.currentUser.avatar, this.bidForm.value.price, this.bidForm.value.message, moment().format('x'));
-    console.log(bidToSubmit);
-    this.sent = await this.publicJobsService.handlePublicBid(bidToSubmit, this.job);
-    this.isBidding = false;
-    this.canBid = false;
-  }
-
-  copyLink() {
-    let link = '';
-    if (this.job.friendlyUrl) {
-      link = this.shareableLink + '/jobs/public/' + this.job.friendlyUrl;
-    } else {
-      link = this.shareableLink + '/jobs/' + this.job.id;
-    }
-    const selBox = document.createElement('textarea');
-    selBox.style.position = 'fixed';
-    selBox.style.left = '0';
-    selBox.style.top = '0';
-    selBox.style.opacity = '0';
-    selBox.value = link;
-    document.body.appendChild(selBox);
-    selBox.select();
-    selBox.focus();
-    console.log(document.execCommand('copy'));
-    document.body.removeChild(selBox);
-    document.getElementById('copied').style.display = 'block';
-    setTimeout(function () {
-      document.getElementById('copied').style.display = 'none';
-    }, 2000);
-  }
-
-  private async setAttachmentUrl() {
-    const attachment = this.job.information.attachments;
-    if (attachment.length > 0) { // check if there's any attachment on this job
-      if (attachment[0].url === null || attachment[0].url === undefined) { // [0] is used here since we only support single file upload anyway.
-        console.log('no URL');
-        if (attachment[0].filePath != null) { // Assume that it's caused by the async issue
-          let getUrl: Subscription;
-          const filePath = attachment[0].filePath;
-          const fileRef = this.storage.ref(filePath);
-          getUrl = fileRef.getDownloadURL().subscribe(result => {
-            this.job.information.attachments[0].url = result;
-          });
-          console.log(attachment);
+  async handlePublicBid(bid: Bid, job: Job) {
+    return new Promise<boolean>(async (resolve, reject) => {
+      try {
+        if (this.canBid(bid.providerId, job)) {
+          console.log('uploading the bid');
+          await this.addBid(bid, job.id);
+          resolve(true);
+        } else {
+          console.log('can not bid');
+          reject(false);
         }
-      } else {
-        console.log('Has URL');
-        console.log(attachment[0].url);
+      } catch (error) {
+        reject(false);
       }
-    }
+    });
   }
 
-  async getProviderData(id) {
-    const provider = await this.userService.getUserByEthAddress(id);
-    return provider;
+  // checks if the provider exists in the job bid
+  async canBid(providerId: string, job: Job) {
+    const bid = await this.afs.collection<any>(`public-jobs/${job.id}/bids/`, ref => ref.where('providerId', '==', providerId)).get().toPromise();
+    return bid.empty;
   }
 
-  toLocaleDateString(timestamp) {
-    const date = new Date(parseInt(timestamp, 10));
-    console.log(date);
-    return date.toLocaleDateString();
+  // add new bid to collection
+  private async addBid(bid: Bid, jobId: string): Promise<Boolean> {
+    const bidToUpload = this.parseBidToObject(bid);
+    return new Promise<boolean>((resolve, reject) => {
+      this.afs.doc(`public-jobs/${jobId}/bids/${bid.providerId}`).set(bidToUpload).then(result => {
+        console.log(result);
+        resolve(true);
+      }).catch(e => {
+        reject(false);
+      });
+    });
   }
 
-  async chooseProvider(bidIndex) {
-    const bid = this.bids[bidIndex];
-    const confirmed = confirm('Are you sure you want to choose this provider?');
-    if (confirmed) {
-      const chosen = await this.publicJobsService.closePublicJob(this.job, bid);
-      if (chosen) {
-        alert('Provider chosen!');
-        this.router.navigate(['/inbox/job', this.job.id]);
-      } else {
-        alert('Something went wrong. please try again later');
+  async getBids(jobId: string) {
+    const result = this.afs.collection('public-jobs').doc(jobId).collection('bids').valueChanges().pipe(take(1)).toPromise();
+    return result;
+  }
+
+  async jobExists(jobId) {
+    const exist = await this.afs.doc(`public-jobs/${jobId}`).valueChanges().take(1).toPromise();
+    return exist;
+  }
+
+  async jobUrlExists(friendlyQuery) {
+    console.log(friendlyQuery);
+    const exist = await this.afs.collection('public-jobs', ref => ref.where('friendlyUrl', '>=', friendlyQuery)).valueChanges().take(1).toPromise();
+    console.log(exist);
+    return exist;
+  }
+
+  closePublicJob(job: Job, bid: Bid) {
+    // closes the public job, create a new job object and starts the usual job flow.
+    return new Promise<boolean>(async (resolve, reject) => {
+      try {
+        job.providerId = bid.providerId;
+        job.state = JobState.termsAcceptedAwaitingEscrow;
+        job.budget = bid.budget;
+        await this.saveJobFirebase(job, null);
+        const action = new IJobAction(ActionType.acceptTerms, UserType.client);
+        await this.jobService.handleJobAction(job, action);
+        resolve(true);
+      } catch (error) {
+        reject(false);
       }
-    }
-  }
-  toggleDescription() {
-    this.hideDescription = !this.hideDescription;
+    });
   }
 
+  async generateReadableId(jobName) {
+    // take the job name, take the first 2 strings.
+    const filteredName = jobName.replace(/[0-9]/g, '');
+    const nameArray = filteredName.split(' ');
+    let friendly: string;
+    if (nameArray.length > 1) {
+      friendly = nameArray[0] + '-' + nameArray[1];
+    } else if (nameArray.length > 2) {
+      friendly = nameArray[0] + '-' + nameArray[1] + '-' + nameArray[2];
+    } else {
+      friendly = nameArray[0];
+    }
+    console.log(jobName + ' = filtered to = ' + friendly);
+    friendly = friendly.toLowerCase();
+    const exists = await this.jobUrlExists(friendly);
+    console.log(exists);
+    if (exists.length < 1) {
+      console.log('just upload it');
+    } else {
+      console.log('wait might want to change the url mate');
+      friendly = friendly + '-' + exists.length;
+      console.log('new url : ' + friendly);
+    }
+    return friendly;
+  }
+
+  parseBidToObject(bid: Bid): Object {
+    // firebase don't allow us to upload custom object so we have to use this workaround
+    const bidObject = Object.assign({}, bid);
+    bidObject.message = bid.message;
+    bidObject.providerId = bid.providerId;
+    bidObject.providerName = bid.providerName;
+    bidObject.providerAvatar = bid.providerAvatar;
+    bidObject.budget = bid.budget;
+    bidObject.timestamp = bid.timestamp;
+    console.log('converted the bid into object');
+    console.log(bidObject);
+    return bidObject;
+  }
 }

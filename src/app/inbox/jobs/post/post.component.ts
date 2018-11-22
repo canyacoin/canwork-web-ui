@@ -38,11 +38,7 @@ export class PostComponent implements OnInit, OnDestroy {
   friendlyUrl = '';
   authSub: Subscription;
   routeSub: Subscription;
-<<<<<<< HEAD
-
-=======
   currentDate = '';
->>>>>>> 8b5176a69420c74657b1de064f232d779cf6fdb3
   isShareable = false;
   isSending = false;
   sent = false;
@@ -58,10 +54,6 @@ export class PostComponent implements OnInit, OnDestroy {
   deleteFailed = false;
 
   canToUsd: number;
-<<<<<<< HEAD
-  currentDate = new Date().toLocaleDateString();
-=======
->>>>>>> 8b5176a69420c74657b1de064f232d779cf6fdb3
   providerTypes = [
     {
       name: 'Content Creators',
