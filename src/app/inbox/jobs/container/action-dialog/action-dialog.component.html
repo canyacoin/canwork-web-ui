@@ -70,6 +70,9 @@
       <div class="col-12">
         <button [disabled]="submitDisabled || executing" type="button" class="btn btn-{{getColour(action.type)}}"
           (click)="handleAction()">
+          <div *ngIf="executing">
+            <img src="assets/img/loader.svg" height="36px" alt="Loader">
+          </div>
           {{actionType}}
         </button>
         <button type="button" class="btn btn-default" (click)="close()">Cancel</button>
