@@ -25,12 +25,14 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   paymentType = PaymentType;
   jobs: Job[];
   publicJobs: Job[];
+  activeJobs: Job[];
   jobsSubscription: Subscription;
   publicJobsSubscription: Subscription;
   authSub: Subscription;
   orderType: string;
   reverseOrder: boolean;
   loading = true;
+  jobType = 'active';
   filterByState: any = { state: '' };
   allJobs: Job[];
   searchQuery: string;
@@ -62,18 +64,30 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
 
   private initialiseJobs(userId: string, userType: UserType) {
     this.jobsSubscription = this.jobService.getJobsByUser(userId, userType).subscribe(async (jobs: Job[]) => {
-      this.jobs = jobs;
-      this.allJobs = jobs;
+      this.activeJobs = jobs;
       this.loading = false;
-      console.log(this.jobs);
+      this.jobs = this.activeJobs;
       this.jobs.forEach(async (job) => {
         this.jobService.assignOtherPartyAsync(job, this.userType);
       });
     });
     this.publicJobsSubscription = this.publicJobService.getPublicJobsByUser(userId, userType).subscribe(async (jobs: Job[]) => {
       this.publicJobs = jobs;
-      console.log(this.publicJobs);
     });
+  }
+
+  changeJob(jobType) {
+    this.jobType = jobType;
+    switch (jobType) {
+      case 'public':
+        this.jobs = this.publicJobs.filter(job => job.draft === false);
+        break;
+      case 'active':
+        this.jobs = this.activeJobs;
+        break;
+      case 'draft':
+        this.jobs = this.publicJobs.filter(job => job.draft === true);
+    }
   }
 
   changeUserType() {
@@ -87,7 +101,12 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   }
 
   filterJobsByState() {
-    this.jobs = this.filterPipe.transform(this.allJobs, this.filterByState);
+    console.log(this.filterByState.state !== '');
+    if (this.filterByState.state !== '') {
+      this.jobs = this.activeJobs.filter(job => job.state === this.filterByState.state);
+    } else {
+      this.jobs = this.activeJobs;
+    }
   }
 
 }

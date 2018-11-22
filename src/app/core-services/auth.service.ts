@@ -57,7 +57,9 @@ export class AuthService {
   }
 
   emitUser(user: User) {
-    localStorage.setItem('credentials', JSON.stringify(user));
+    if (user) {
+      localStorage.setItem('credentials', JSON.stringify(user));
+    }
     this.currentUser.next(user);
   }
 

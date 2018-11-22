@@ -1,5 +1,5 @@
 import { Type } from '@angular/core';
-import { User, UserType } from '@class/user';
+import { Avatar, User, UserType } from '@class/user';
 
 import { IJobAction } from './job-action';
 import { Upload } from './upload';
@@ -22,7 +22,6 @@ export class Job {
   reviewId: string;
   deadline: string;
   visibility: string;
-  bids: Array<Bid> = [];
   draft: boolean;
   friendlyUrl: string;
 
@@ -90,8 +89,20 @@ export class JobDescription {
 
 export class Bid {
   providerId: string;
+  providerName: string;
+  providerAvatar: Avatar;
   budget: number;
+  message: string;
   timestamp: string;
+
+  constructor(providerId: string, providerName: string, providerAvatar: Avatar, budget: number, message: string, timestamp: string) {
+    this.providerId = providerId;
+    this.providerName = providerName;
+    this.providerAvatar = providerAvatar;
+    this.budget = budget;
+    this.message = message;
+    this.timestamp = timestamp;
+  }
 }
 
 export class Payment {
@@ -105,6 +116,7 @@ export class Payment {
 }
 
 export enum JobState {
+  acceptingOffers = 'Accepting Offers',
   offer = 'Offer pending',
   cancelled = 'Cancelled',
   declined = 'Declined',

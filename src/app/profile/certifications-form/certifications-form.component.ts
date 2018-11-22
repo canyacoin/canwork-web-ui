@@ -103,6 +103,6 @@ export class CertificationsFormComponent implements OnInit, AfterViewInit {
     const input = this.certificationForm.value.university.toLowerCase();
     this.uniFilteredList = this.uniList
       .filter(uni => uni.toLowerCase().indexOf(input) !== -1)
-      .slice(0, 10)
+      .slice(0, 10);
   }
 }

@@ -14,6 +14,7 @@ import { FilterPipeModule } from 'ngx-filter-pipe';
 import { FirebaseUIModule } from 'firebaseui-angular';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app.routing.module';
 import { CoreComponentsModule } from './core-components/core-components.module';
 import { firebaseUiAuthConfig } from './core-config/app-auth-config';
@@ -27,7 +28,8 @@ import { MobileService } from './core-services/mobile.service';
 import { NavService } from './core-services/nav.service';
 import { PublicJobService } from './core-services/public-job.service';
 import { CoreUtilsModule } from './core-utils/core-utils.module';
-import { PublicJobComponent } from './public-job/public-job.component';
+import { PublicJobComponent } from './public-job/public-job/public-job.component';
+import { JobBidsComponent } from './public-job/job-bids/job-bids.component';
 import { FilterPipeModule } from 'ngx-filter-pipe';
 import { Ng5SliderModule } from 'ng5-slider';
 import { DockIoService } from './core-services/dock-io.service';
@@ -35,7 +37,8 @@ import { DockIoService } from './core-services/dock-io.service';
 @NgModule({
   declarations: [
     AppComponent,
-    PublicJobComponent
+    PublicJobComponent,
+    JobBidsComponent
   ],
   imports: [
     AppRoutingModule,
@@ -58,7 +61,8 @@ import { DockIoService } from './core-services/dock-io.service';
     HttpClientModule,
     FilterPipeModule,
     Ng5SliderModule,
-    StarRatingModule.forRoot()
+    FormsModule,
+    ReactiveFormsModule
   ],
   exports: [
     FilterPipeModule

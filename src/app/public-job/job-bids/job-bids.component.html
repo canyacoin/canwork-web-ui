@@ -1,0 +1,14 @@
+<main class="main-content">
+  <section class="section bg-gray pt-15 pb-20" style="min-height: 70vh;">
+    <app-back-button></app-back-button>
+    <div *ngIf="!job" class="container">
+      <div class="row">
+        <div class="col-12 job-detail-container text-center">
+          <div class="card p-30 job-detail-card">
+            <img src="assets/img/loader.svg" height="36px" alt="Loader">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
