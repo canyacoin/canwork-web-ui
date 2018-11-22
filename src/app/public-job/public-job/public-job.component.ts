@@ -187,6 +187,7 @@ export class PublicJobComponent implements OnInit {
       }
     }
   }
+
   toggleDescription() {
     this.hideDescription = !this.hideDescription;
   }
