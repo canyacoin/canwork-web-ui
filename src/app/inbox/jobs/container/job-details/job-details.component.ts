@@ -101,6 +101,19 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  actionIsHidden(action: ActionType): boolean {
+    switch (action) {
+      case ActionType.review:
+        return !this.userCanReview;
+      default:
+        return false;
+    }
+  }
+
+  get jobIsComplete(): boolean {
+    return this.job.state === JobState.complete;
+  }
+
   get userCanReview(): boolean {
     return this.reviews && this.reviews.findIndex(x => x.reviewerId === this.currentUser.address) === -1;
   }

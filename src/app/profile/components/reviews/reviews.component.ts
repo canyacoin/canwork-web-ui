@@ -24,6 +24,6 @@ export class ReviewsComponent implements OnInit {
   }
 
   getReviewLabel(review: Review): string {
-    return `Made by ${review.reviewerName} at ${new Date(review.createdAt).toDateString()} for job ${review.jobTitle}`;
+    return `${new Date(review.createdAt).toDateString()}`;
   }
 }

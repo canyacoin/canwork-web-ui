@@ -23,7 +23,10 @@
           <span *ngIf="provider && provider.bio">{{ provider.bio }}</span>
         </p>
       </div>
-      <div class="mh-115">
+      <div class="mh-135">
+        <star-rating *ngIf="provider.rating && provider.rating.count > 0" [starType]="'svg'" showHalfStars="true"
+          staticColor="ok" [readOnly]="true" [rating]="provider.rating.average" [step]="0.5" [labelText]="'(' + provider.rating.average + ')'"
+          labelPosition="right"></star-rating>
         <div class="row d-flex tag-row">
           <app-skill-tag *ngFor="let tag of getProviderTags(provider)" [skill]="tag" [routerLink]="['/search']"
             [queryParams]="{query: tag}"></app-skill-tag>
@@ -53,6 +56,13 @@
       <div class="col-lg-9 col-md-12 col-sm-12 col-9 pl-20 pb-10">
         <h6 class="provider-name">{{provider.name}}</h6>
         <p class="provider-title">{{ provider.title}}</p>
+        <div class="row provider-stars">
+          <div class="col-12">
+            <star-rating *ngIf="provider.rating && provider.rating.count > 0" class="float-left" [starType]="'svg'"
+              size="small" showHalfStars="true" staticColor="ok" [readOnly]="true" [rating]="provider.rating.average"
+              [step]="0.5" [labelText]="'(' + provider.rating.average + ')'" labelPosition="right"></star-rating>
+          </div>
+        </div>
         <span class="fw-400 fs-12 text-grey">
           <i class="fa fa-map-marker-alt text-grey" aria-hidden="true"></i>
           {{ provider.timezone }}

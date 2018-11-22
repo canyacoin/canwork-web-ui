@@ -81,7 +81,7 @@
         </div>
         <div class="actions-div" *ngIf="availableActions.length > 0">
           <button *ngFor="let action of availableActions" class="btn action-btn mt-5 btn-{{getColour(action)}} btn-outline btn-sm"
-            (click)="executeAction(action)" [disabled]="actionIsDisabled(action)">
+            (click)="executeAction(action)" [disabled]="actionIsDisabled(action)" [hidden]="actionIsHidden(action)">
             {{action}}
           </button>
           <br>
@@ -128,9 +128,9 @@
       </div>
     </div>
   </div>
-  <div class="container p-30 job-actions-card">
+  <div class="container p-30 job-actions-card" *ngIf="currentUserIsClient">
     <div class="row">
-      <span class="col-12 my-10 text-left" *ngIf="currentUserIsClient">
+      <span class="col-12 my-10 text-left">
         <h5>TRANSACTIONS</h5>
         <div *ngIf="transactions.length < 1">
           No payments have been made yet
@@ -149,6 +149,37 @@
               <div class="col-lg-6">
                 <a href="{{getTxLink(tx.hash)}}" target="_blank">View on
                   Etherscan</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </span>
+    </div>
+  </div>
+  <div class="container p-30 job-actions-card" *ngIf="jobIsComplete">
+    <div class="row">
+      <span class="col-12 my-10 text-left">
+        <h5>REVIEWS</h5>
+        <div *ngIf="reviews.length < 1">
+          No reviews have been left yet
+        </div>
+        <div *ngIf="reviews.length >= 1">
+          <div *ngFor="let review of reviews | orderBy:'createdAt':true" class="card mb-15 py-20 bg-transparent">
+            <div class="row mt-3">
+              <div class="col-6">
+                By <b>{{review.reviewerName}}</b>
+              </div>
+              <div class="col-6">
+                <star-rating class="float-right" [starType]="'svg'" showHalfStars="true" staticColor="ok" [readOnly]="true"
+                  [rating]="review.rating" [step]="0.5"></star-rating>
+              </div>
+              <div class="col-12">
+                <p class="mb-0">{{ review.message }}</p>
+              </div>
+              <div class="col-12">
+                <small>
+                  {{review.createdAt | date}}
+                </small>
               </div>
             </div>
           </div>

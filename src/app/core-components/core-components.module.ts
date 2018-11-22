@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { StarRatingModule } from 'angular-star-rating';
 import { DROPZONE_CONFIG, DropzoneConfigInterface, DropzoneModule } from 'ngx-dropzone-wrapper';
 import { ImgFallbackModule } from 'ngx-img-fallback';
 
@@ -51,7 +52,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    DropzoneModule
+    DropzoneModule,
+    StarRatingModule.forChild()
   ],
   declarations: [
     AttachmentComponent,

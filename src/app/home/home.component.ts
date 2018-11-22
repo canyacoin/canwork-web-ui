@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { environment } from '@env/environment';
 import { AuthService } from '@service/auth.service';
 import { UserService } from '@service/user.service';
-import { environment } from '@env/environment';
-import { User, UserCategory } from '../core-classes/user';
+
+import { Rating, User, UserCategory } from '../core-classes/user';
 import { NavService } from '../core-services/nav.service';
 
 declare var require: any;
@@ -66,7 +67,7 @@ export class HomeComponent implements OnInit {
       img: 'assistant.svg',
       id: 'virtualAssistant'
     }
-  ]
+  ];
 
   ngOnInit() {
     const ua = window.navigator.userAgent;
@@ -104,7 +105,7 @@ export class HomeComponent implements OnInit {
           });
         }
       }
-    })
+    });
   }
 
   getProviders(searchQuery, array) {
@@ -119,8 +120,9 @@ export class HomeComponent implements OnInit {
           'name': result[i].name,
           'category': result[i].category,
           'timezone': result[i].timezone,
-          'hourlyRate': result[i].hourlyRate || 0
-        }
+          'hourlyRate': result[i].hourlyRate || 0,
+          'rating': result[i].rating || new Rating(),
+        };
         array.push(provider);
       }
       return array;
