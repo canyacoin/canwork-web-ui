@@ -96,11 +96,7 @@ export class PublicJobComponent implements OnInit {
     } else {
       this.canSee = true;
     }
-    if (job.state === JobState.acceptingOffers) {
-      this.isOpen = true;
-    } else {
-      this.isOpen = false;
-    }
+    this.isOpen = (this.job.state === JobState.acceptingOffers);
     this.setClient(this.job.clientId);
     this.setAttachmentUrl();
     if (this.currentUser.type === 'Provider') {
@@ -108,18 +104,23 @@ export class PublicJobComponent implements OnInit {
       this.canBid = check;
     }
     this.bids = await this.publicJobsService.getBids(job.id);
+    if (this.bids.length > 3) {
+      this.recentBids = this.bids.slice(0, 3);
+    } else {
+      this.recentBids = this.bids;
+    }
   }
 
   async submitBid() {
     this.isBidding = true;
     const providerInfo = {
-      name      : this.currentUser.name,
-      skillTags : this.currentUser.skillTags,
-      title     : this.currentUser.title,
-      timezone  : this.currentUser.timezone,
-      avatar    : this.currentUser.avatar
+      name: this.currentUser.name,
+      skillTags: this.currentUser.skillTags,
+      title: this.currentUser.title,
+      timezone: this.currentUser.timezone,
+      avatar: this.currentUser.avatar
     };
-    const bidToSubmit = new Bid(this.currentUser.address, providerInfo , this.bidForm.value.price, this.bidForm.value.message, moment().format('x'));
+    const bidToSubmit = new Bid(this.currentUser.address, providerInfo, this.bidForm.value.price, this.bidForm.value.message, moment().format('x'));
     console.log(bidToSubmit);
     this.sent = await this.publicJobsService.handlePublicBid(bidToSubmit, this.job);
     this.isBidding = false;

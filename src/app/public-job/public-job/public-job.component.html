@@ -67,7 +67,7 @@
           <div class="col-sm-8">
             <h5>PROPOSED TERMS</h5>
           </div>
-          <div class="col-sm-4 text-right">
+          <div class="col-sm-4 text-right text-left-mobile">
             <div class="status-div" *ngIf="job.state && isOpen">
               <span class="jobStatus">
                 <i class="circle-success fas fa-circle"></i>&nbsp;
@@ -119,10 +119,10 @@
       <div class="card p-30 job-detail-card">
         <div class="container">
           <div class="row">
-            <div class="col-8">
+            <div class="col-sm-8 col-6">
               <h5>BIDS</h5>
             </div>
-            <div class="col-4 text-right">
+            <div class="col-sm-4 col-6 text-right">
               <button class="btn btn-sm btn-primary" *ngIf="bids && bids.length > 0" [routerLink]="['bids']">VIEW ALL</button>
             </div>
           </div>
@@ -140,39 +140,26 @@
             </div>
             <div class="col-12" *ngIf="bids && bids.length > 0">
               <div class="row my-10">
-                <div class="col-3">
+                <div class="col-sm-3 col-6 ">
                   <b>Provider</b>
                 </div>
-                <div class="col-4">
+                <div class="col-sm-3 col-6 ">
+                  <b>Bid</b>
+                </div>
+                <div class="col-sm-6 hide-mobile">
                   <b>Message</b>
-                </div>
-                <div class="col-2">
-                  <b>Budget</b>
-                </div>
-                <div class="col-3">
-                  <b>Actions</b>
                 </div>
               </div>
               <div class="row" *ngFor="let bid of bids; let i = index">
-                <div class="col-3">
-                  <div class="otherPartyName pointer" [routerLink]="['/profile/alt/', bid.providerId]">
-                    <span *ngIf="bid.providerInfo.avatar" class="headshot-div" [ngStyle]="{'background-image': 'url(' + (bid.providerInfo.avatar || {}).uri + ')'}">
-                    </span>
-                    <p class="fs-16">{{bid.providerInfo.name}}</p>
-                  </div>
+                <div class="col-sm-3 col-6 ">
+                  <p class="fs-16" [routerLink]="['/profile/alt/', bid.providerId]">
+                    {{bid.providerInfo.name}}</p>
                 </div>
-                <div class="col-4 mt-5">
-                  {{bid.message}}
-                </div>
-                <div class="col-2 mt-5">
+                <div class="col-sm-3 col-6 mt-5">
                   {{bid.budget}}<span *ngIf="job.paymentType !== 'Fixed price'">/hr</span> USD
                 </div>
-                <div class="col-3 mt-5" *ngIf="isOpen">
-                  <button [routerLink]="['/inbox/chat']" [queryParams]="{ address : bid.providerId}" class="btn btn-sm btn-primary mr-5">CHAT</button>
-                  <button class="btn btn-sm btn-success" (click)="chooseProvider(i)">ACCEPT</button>
-                </div>
-                <div class="col-3 mt-5" *ngIf="!isOpen">
-                  <p>Job Closed</p>
+                <div class="col-sm-6 mt-5 hide-mobile">
+                  {{ bid.message.substring(0, 50) }}...
                 </div>
               </div>
             </div>

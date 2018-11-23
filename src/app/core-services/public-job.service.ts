@@ -157,6 +157,20 @@ export class PublicJobService {
     });
   }
 
+  declineBid(job: Job, bid: Bid) {
+    //  Decline the bid. still WIP
+    return new Promise<boolean>(async (resolve, reject) => {
+      try {
+        const update = await this.afs.doc(`public-jobs/${job.id}/bids/${bid.providerId}`).update({ rejected: true });
+        console.log(update);
+        resolve(true);
+      } catch (error) {
+        console.log(error);
+        reject(false);
+      }
+    });
+  }
+
   async generateReadableId(jobName) {
     // take the job name, take the first 2 strings.
     const filteredName = jobName.replace(/[0-9]/g, '');
