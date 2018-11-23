@@ -8,6 +8,13 @@ global['window'] = win;
 global['document'] = win.document;
 global['navigator'] = win.navigator;
 
+// fix runtime: TypeError: Cannot set property 'stringify' of undefined
+win.JSON = JSON;
+win.JSON.stringify = JSON.stringify;
+win.JSON.parse = JSON.parse;
+global['JSON'] = win.JSON;
+console.log('freeyiyi1994', win.JSON, global['JSON']);
+
 import { enableProdMode } from '@angular/core';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
