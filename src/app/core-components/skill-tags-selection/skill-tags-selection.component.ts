@@ -46,8 +46,8 @@ export class SkillTagsSelectionComponent implements OnInit {
       this.tagSelectionInvalid = true;
       return false;
     }
-    this.tagInput = ''
-    this.tagSelectionInvalid = false
+    this.tagInput = '';
+    this.tagSelectionInvalid = false;
   }
 
   onTagChange() {

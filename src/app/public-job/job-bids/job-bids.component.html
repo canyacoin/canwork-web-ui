@@ -10,7 +10,6 @@
         </div>
       </div>
     </div>
-
     <div class="container" *ngIf="bids">
       <div class="row">
         <div class="col-12">
@@ -21,15 +20,14 @@
         <div class="container provider-job-card jobs-info" *ngIf="bid.providerInfo">
           <div class="row">
             <div class="col-md-3" [routerLink]="['/profile/alt/', bid.providerId]">
-              <span *ngIf="bid.providerAvatar" class="headshot-div" [ngStyle]="{'background-image': 'url(' + (bid.providerAvatar || {}).uri + ')'}">
+              <span *ngIf="bid.providerInfo.avatar" class="headshot-div" [ngStyle]="{'background-image': 'url(' + (bid.providerInfo.avatar || {}).uri + ')'}">
               </span>
-              <h4 class="ml-2r mb-0">{{bid.providerName}}</h4>
-              <h6 class="ml-2r">{{ bid.providerInfo.title }}</h6>
+              <h4 class="ml-2r mb-0">{{bid.providerInfo.name}}</h4>
+              <h6 class="ml-2r mb-0">{{ bid.providerInfo.title }}</h6>
             </div>
             <div class="col-md-3" [routerLink]="['/profile/alt/', bid.providerId]">
               <div class="info-details">
-                <p>Bid</p>
-                <b>${{bid.budget}} USD</b>
+                <p>Bid<br><b>${{bid.budget}} USD</b></p>
               </div>
             </div>
             <div class="col-md-6 col-sm-6 col-5 text-right">
@@ -38,7 +36,7 @@
           </div>
           <div class="row">
             <div class="col-md-3 col-sm-4 col-12">
-              <h6 class="ml-2r"><i class="fas fa-map-marker-alt"></i> {{ bid.providerInfo.timezone }}</h6>
+              <small class="ml-2r"><i class="fas fa-map-marker-alt"></i> {{ bid.providerInfo.timezone }}</small>
             </div>
             <div class="col-md-9 col-sm-8 col-12">
               <app-skill-tag *ngFor="let tag of bid.providerInfo.skillTags" [skill]="tag" [routerLink]="['/search']"></app-skill-tag>

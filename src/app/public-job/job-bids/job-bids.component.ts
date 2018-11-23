@@ -33,11 +33,13 @@ export class JobBidsComponent implements OnInit {
     });
     this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
       if (params['jobId']) {
-        this.initBids(params['jobId']);
         this.jobId = params['jobId'];
+        this.initBids(this.jobId);
       } else if (params['friendlyUrl']) {
-        const job = this.publicJobsService.getPublicJobsByUrl(params['friendlyUrl']);
-        console.log(job);
+        this.publicJobsService.getPublicJobByUrl(params['friendlyUrl']).then((result) => {
+          this.jobId = result[0]['id'];
+          this.initBids(this.jobId);
+        });
       }
     });
   }
@@ -49,14 +51,6 @@ export class JobBidsComponent implements OnInit {
 
   async initBids(jobId) {
     this.bids = await this.publicJobsService.getBids(jobId);
-    for (let i = 0; i < this.bids.length; i++) {
-      const providerInfo = await this.getProviderData(this.bids[0]['providerId']);
-      this.bids[i]['providerInfo'] = providerInfo;
-      console.log(providerInfo);
-    }
     console.log(this.bids[0].providerInfo.skillTags);
   }
-
-
-
 }
