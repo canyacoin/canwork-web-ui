@@ -9682,6 +9682,14 @@ a.text-danger:focus {
     text-align: center !important;
   }
 
+  .text-left-mobile {
+    text-align: left !important;
+  }
+
+  .text-right-mobile {
+    text-align: right !important;
+  }
+
   .mt-0-mobile {
     margin-top: 0px !important;
   }
@@ -9761,7 +9769,7 @@ a.text-danger:focus {
   }
 
   .hide-mobile {
-    display: none;
+    display: none !important;
   }
 
   .show-mobile {

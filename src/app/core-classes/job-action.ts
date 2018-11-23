@@ -128,5 +128,5 @@ export enum ActionType {
   finishedJob = 'Mark as complete',
   acceptFinish = 'Complete job',
   dispute = 'Raise dispute',
-  review = 'Leave a review',
+  review = 'Leave a review'
 }
