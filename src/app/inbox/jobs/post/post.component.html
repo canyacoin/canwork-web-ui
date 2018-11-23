@@ -117,6 +117,7 @@
                       <br />
                       <div class="row ml-0 mr-0">
                         <select #timelineExpectation class="form-control">
+                          <option selected>Choose...</option>
                           <option *ngFor="let range of timeRanges()"> {{ range }} </option>
                         </select>
                         <!-- 
@@ -366,6 +367,7 @@
                         <label>Timeline Expectations *</label>
                         <br />
                         <select #timelineExpectation class="form-control" formControlName="timelineExpectation">
+                          <option value='' selected>Choose...</option>
                           <option *ngFor="let range of timeRanges()"> {{ range }} </option>
                         </select>
                       </div>

@@ -72,7 +72,6 @@ export class JobBidsComponent implements OnInit {
 
   async initBids(jobId) {
     this.bids = await this.publicJobsService.getBids(jobId);
-    console.log(this.bids[0].providerInfo.skillTags);
   }
 
   async chooseProvider(bidIndex) {
