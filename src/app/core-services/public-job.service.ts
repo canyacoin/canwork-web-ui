@@ -47,6 +47,11 @@ export class PublicJobService {
     }));
   }
 
+  async getPublicJobByUrl(friendly) {
+    const exist = await this.afs.collection(`public-jobs`, ref => ref.where('friendlyUrl', '==', friendly)).valueChanges().take(1).toPromise();
+    return exist;
+  }
+
   getPublicJobsByUser(userId: string, userType: UserType): Observable<Job[]> {
     return this.afs.collection<any>('public-jobs', ref => ref.where('clientId', '==', userId)).snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
@@ -183,8 +188,7 @@ export class PublicJobService {
     const bidObject = Object.assign({}, bid);
     bidObject.message = bid.message;
     bidObject.providerId = bid.providerId;
-    bidObject.providerName = bid.providerName;
-    bidObject.providerAvatar = bid.providerAvatar;
+    bidObject.providerInfo = bid.providerInfo;
     bidObject.budget = bid.budget;
     bidObject.timestamp = bid.timestamp;
     console.log('converted the bid into object');

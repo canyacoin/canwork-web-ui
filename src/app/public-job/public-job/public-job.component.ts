@@ -20,6 +20,7 @@ import * as moment from 'moment';
 export class PublicJobComponent implements OnInit {
   bidForm: FormGroup = null;
   bids: any;
+  recentBids: any;
   authSub: Subscription;
   routeSub: Subscription;
   jobSub: Subscription;
@@ -111,7 +112,14 @@ export class PublicJobComponent implements OnInit {
 
   async submitBid() {
     this.isBidding = true;
-    const bidToSubmit = new Bid(this.currentUser.address, this.currentUser.name, this.currentUser.avatar, this.bidForm.value.price, this.bidForm.value.message, moment().format('x'));
+    const providerInfo = {
+      name      : this.currentUser.name,
+      skillTags : this.currentUser.skillTags,
+      title     : this.currentUser.title,
+      timezone  : this.currentUser.timezone,
+      avatar    : this.currentUser.avatar
+    };
+    const bidToSubmit = new Bid(this.currentUser.address, providerInfo , this.bidForm.value.price, this.bidForm.value.message, moment().format('x'));
     console.log(bidToSubmit);
     this.sent = await this.publicJobsService.handlePublicBid(bidToSubmit, this.job);
     this.isBidding = false;

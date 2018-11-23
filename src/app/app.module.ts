@@ -29,7 +29,7 @@ import { PublicJobService } from './core-services/public-job.service';
 import { CoreUtilsModule } from './core-utils/core-utils.module';
 import { PublicJobComponent } from './public-job/public-job/public-job.component';
 import { JobBidsComponent } from './public-job/job-bids/job-bids.component';
-import { FilterPipeModule } from 'ngx-filter-pipe'; 
+import { FilterPipeModule } from 'ngx-filter-pipe';
 
 @NgModule({
   declarations: [
