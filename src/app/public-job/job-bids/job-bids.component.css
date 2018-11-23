@@ -1,3 +1,13 @@
 .bid-card .btn{
     min-width: 105px;
+    width: 150px;
+}
+.ml-2r{
+    margin-left: 2rem;
+}
+.headshot-div{
+    width: 35px;
+    height: 35px;
+    margin-left: -12.5px;
+    margin-top: 3.5px;
 }

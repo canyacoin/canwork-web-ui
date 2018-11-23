@@ -18,20 +18,37 @@
         </div>
       </div>
       <div class="card mb-15 p-20 job-dashboard-card bid-card" *ngFor="let bid of bids; let i = index">
-        <div class="container provider-job-card jobs-info">
+        <div class="container provider-job-card jobs-info" *ngIf="bid.providerInfo">
           <div class="row">
-            <div class="col-md-8 col-sm-6 col-7" [routerLink]="['/profile/alt/', bid.providerId]">
-              <span *ngIf="bid.providerAvatar" class="headshot-div" style="margin-top:2.5px" [ngStyle]="{'background-image': 'url(' + (bid.providerAvatar || {}).uri + ')'}">
+            <div class="col-md-3" [routerLink]="['/profile/alt/', bid.providerId]">
+              <span *ngIf="bid.providerAvatar" class="headshot-div" [ngStyle]="{'background-image': 'url(' + (bid.providerAvatar || {}).uri + ')'}">
               </span>
-              <h4 style="margin-left: 2rem">{{bid.providerName}}</h4>
+              <h4 class="ml-2r mb-0">{{bid.providerName}}</h4>
+              <h6 class="ml-2r">{{ bid.providerInfo.title }}</h6>
             </div>
-            <div class="col-md-4 col-sm-6 col-5 text-right">
-              <button [routerLink]="['/inbox/chat']" [queryParams]="{ address : bid.providerId}" class="btn btn-canya-chat btn-sm btn-primary">CHAT</button>
+            <div class="col-md-3" [routerLink]="['/profile/alt/', bid.providerId]">
+              <div class="info-details">
+                <p>Bid</p>
+                <b>${{bid.budget}} USD</b>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-5 text-right">
+              <button [routerLink]="['/inbox/chat']" [queryParams]="{ address : bid.providerId }" class="btn btn-canya-chat btn-sm btn-primary">CHAT</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3 col-sm-4 col-12">
+              <h6 class="ml-2r"><i class="fas fa-map-marker-alt"></i> {{ bid.providerInfo.timezone }}</h6>
+            </div>
+            <div class="col-md-9 col-sm-8 col-12">
+              <app-skill-tag *ngFor="let tag of bid.providerInfo.skillTags" [skill]="tag" [routerLink]="['/search']"></app-skill-tag>
             </div>
           </div>
           <div class="row">
             <div class="col-md-8 col-sm-8 col-12">
-              {{bid.message}}
+              <p class="ml-2r">
+                {{bid.message}}
+              </p>
             </div>
             <div class="col-md-4 col-sm-4 col-12 text-right text-center-mobile">
               <button class="btn btn-sm btn-secondary  mr-5-mobile" (click)="declineProvider(i)">DECLINE</button>

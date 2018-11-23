@@ -42,8 +42,21 @@ export class JobBidsComponent implements OnInit {
     });
   }
 
+  async getProviderData(id) {
+    const provider = await this.userService.getUser(id);
+    return provider;
+  }
+
   async initBids(jobId) {
     this.bids = await this.publicJobsService.getBids(jobId);
+    for (let i = 0; i < this.bids.length; i++) {
+      const providerInfo = await this.getProviderData(this.bids[0]['providerId']);
+      this.bids[i]['providerInfo'] = providerInfo;
+      console.log(providerInfo);
+    }
+    console.log(this.bids[0].providerInfo.skillTags);
   }
+
+
 
 }
