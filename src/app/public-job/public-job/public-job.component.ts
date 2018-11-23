@@ -84,7 +84,6 @@ export class PublicJobComponent implements OnInit {
 
   async setClient(clientId) {
     this.jobPoster = await this.userService.getUser(clientId);
-    console.log(this.jobPoster);
   }
 
   async initJob(job: Job) {
@@ -121,7 +120,6 @@ export class PublicJobComponent implements OnInit {
       avatar: this.currentUser.avatar
     };
     const bidToSubmit = new Bid(this.currentUser.address, providerInfo, this.bidForm.value.price, this.bidForm.value.message, moment().format('x'));
-    console.log(bidToSubmit);
     this.sent = await this.publicJobsService.handlePublicBid(bidToSubmit, this.job);
     this.isBidding = false;
     this.canBid = false;
@@ -143,7 +141,6 @@ export class PublicJobComponent implements OnInit {
     document.body.appendChild(selBox);
     selBox.select();
     selBox.focus();
-    console.log(document.execCommand('copy'));
     document.body.removeChild(selBox);
     document.getElementById('copied').style.display = 'block';
     setTimeout(function () {
@@ -155,7 +152,6 @@ export class PublicJobComponent implements OnInit {
     const attachment = this.job.information.attachments;
     if (attachment.length > 0) { // check if there's any attachment on this job
       if (attachment[0].url === null || attachment[0].url === undefined) { // [0] is used here since we only support single file upload anyway.
-        console.log('no URL');
         if (attachment[0].filePath != null) { // Assume that it's caused by the async issue
           let getUrl: Subscription;
           const filePath = attachment[0].filePath;
@@ -163,11 +159,7 @@ export class PublicJobComponent implements OnInit {
           getUrl = fileRef.getDownloadURL().subscribe(result => {
             this.job.information.attachments[0].url = result;
           });
-          console.log(attachment);
         }
-      } else {
-        console.log('Has URL');
-        console.log(attachment[0].url);
       }
     }
   }
@@ -179,7 +171,6 @@ export class PublicJobComponent implements OnInit {
 
   toLocaleDateString(timestamp) {
     const date = new Date(parseInt(timestamp, 10));
-    console.log(date);
     return date.toLocaleDateString();
   }
 
