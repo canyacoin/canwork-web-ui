@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { WINDOW } from '@ng-toolkit/universal';
+import { Component, Input, OnInit , Inject} from '@angular/core';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
@@ -52,7 +53,7 @@ export class LoginComponent implements OnInit {
     },
   };
 
-  constructor(private route: ActivatedRoute,
+  constructor(@Inject(WINDOW) private window: Window, private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
     private userService: UserService,
@@ -63,7 +64,7 @@ export class LoginComponent implements OnInit {
     private featureService: FeatureToggleService) { }
 
   ngOnInit() {
-    const ua = window.navigator.userAgent;
+    const ua = this.window.navigator.userAgent;
     this.isOnMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua);
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     if (this.isOnMobile) {
@@ -255,7 +256,7 @@ export class LoginComponent implements OnInit {
     if (user) {
       console.log('+ logging existing user in:', user.email);
       firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(idToken => {
-        window.sessionStorage.accessToken = idToken;
+        this.window.sessionStorage.accessToken = idToken;
       }).catch(error => {
         console.error('! jwt token was not stored in session storage ', error);
         alert('Sorry, we encountered an unknown error');

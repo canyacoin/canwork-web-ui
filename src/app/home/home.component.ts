@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { WINDOW } from '@ng-toolkit/universal';
+import { Component, OnInit , Inject} from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '@env/environment';
 import { AuthService } from '@service/auth.service';
@@ -30,7 +31,7 @@ export class HomeComponent implements OnInit {
   algoId = environment.algolia.appId;
   algoKey = environment.algolia.apiKey;
 
-  constructor(
+  constructor(@Inject(WINDOW) private window: Window, 
     private router: Router,
     private nav: NavService,
     private auth: AuthService,
@@ -70,7 +71,7 @@ export class HomeComponent implements OnInit {
   ];
 
   ngOnInit() {
-    const ua = window.navigator.userAgent;
+    const ua = this.window.navigator.userAgent;
     this.isOnMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua);
     this.nav.setHideSearchBar(true);
     this.authSub = this.auth.currentUser$.subscribe((user: User) => {

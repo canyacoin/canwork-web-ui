@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { WINDOW } from '@ng-toolkit/universal';
+import { Component, OnInit , Inject} from '@angular/core';
 
 declare let escape: any;
 
@@ -9,18 +10,18 @@ declare let escape: any;
 })
 export class SocialComponent implements OnInit {
 
-  constructor() { }
+  constructor(@Inject(WINDOW) private window: Window, ) { }
 
   ngOnInit() { }
 
   onShare() {
-    window.open('https://www.facebook.com/sharer/sharer.php?u=' + escape(window.location.href) + '&t=' + document.title, '',
+    this.window.open('https://www.facebook.com/sharer/sharer.php?u=' + escape(this.window.location.href) + '&t=' + document.title, '',
       'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
     return false;
   }
 
   onTweet() {
-    window.open('https://twitter.com/intent/tweet?url=' + escape(window.location.href) + '&text=' + document.title + '&original_referer=' + escape('https://canya.com'), '',
+    this.window.open('https://twitter.com/intent/tweet?url=' + escape(this.window.location.href) + '&text=' + document.title + '&original_referer=' + escape('https://canya.com'), '',
       'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
     return false;
   }
