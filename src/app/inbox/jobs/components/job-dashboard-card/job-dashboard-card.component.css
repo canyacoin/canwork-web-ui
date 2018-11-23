@@ -57,6 +57,7 @@
   height: 100px;
   padding-bottom: 25px;
   white-space: pre-wrap;
+  overflow: hidden;
 }
 
 .provider-job-card .headshot-div {

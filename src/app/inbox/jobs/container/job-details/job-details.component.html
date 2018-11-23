@@ -22,7 +22,7 @@
             {{job.information.title}}
           </h2>
           <div class="" style="max-width: 65vw">
-            <p>
+            <p class="job-description">
               {{job.information.description.substring(0, 80)}}
               <span *ngIf="hideDescription === false">
                 {{job.information.description.substring(80, job.information.description.length)}}
@@ -80,8 +80,7 @@
           </p>
         </div>
         <div class="actions-div" *ngIf="availableActions.length > 0">
-          <button *ngFor="let action of availableActions" class="btn action-btn mt-5 btn-{{getColour(action)}} btn-outline btn-sm"
-            (click)="executeAction(action)" [disabled]="actionIsDisabled(action)" [hidden]="actionIsHidden(action)">
+          <button *ngFor="let action of availableActions" class="btn action-btn mt-5 btn-{{getColour(action)}} btn-outline btn-sm" (click)="executeAction(action)" [disabled]="actionIsDisabled(action)" [hidden]="actionIsHidden(action)">
             {{action}}
           </button>
           <br>
@@ -170,8 +169,7 @@
                 By <b>{{review.reviewerName}}</b>
               </div>
               <div class="col-6">
-                <star-rating class="float-right" [starType]="'svg'" showHalfStars="true" staticColor="ok" [readOnly]="true"
-                  [rating]="review.rating" [step]="0.5"></star-rating>
+                <star-rating class="float-right" [starType]="'svg'" showHalfStars="true" staticColor="ok" [readOnly]="true" [rating]="review.rating" [step]="0.5"></star-rating>
               </div>
               <div class="col-12">
                 <p class="mb-0">{{ review.message }}</p>
