@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 .bid-card .btn {
   width: 150px;
 }
@@ -35,18 +34,3 @@
     position: relative;
   }
 }
-=======
-.bid-card .btn{
-    min-width: 105px;
-    width: 150px;
-}
-.ml-2r{
-    margin-left: 2rem;
-}
-.headshot-div{
-    width: 35px;
-    height: 35px;
-    position: absolute;
-    left: 0;
-}
->>>>>>> modified the bid object

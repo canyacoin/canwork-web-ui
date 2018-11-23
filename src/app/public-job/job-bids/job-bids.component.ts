@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Bid, Job, JobState } from '@class/job';
-import { User, UserType } from '@class/user';
+import { JobState } from '@class/job';
+import { User } from '@class/user';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@service/auth.service';
 import { PublicJobService } from '@service/public-job.service';
 import { UserService } from '@service/user.service';
-import { AngularFireStorage } from 'angularfire2/storage';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 
@@ -30,7 +29,6 @@ export class JobBidsComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private publicJobsService: PublicJobService,
-    private storage: AngularFireStorage,
     private router: Router) { }
 
   async ngOnInit() {
