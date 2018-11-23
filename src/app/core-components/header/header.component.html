@@ -34,9 +34,9 @@
           </a>
           <span *ngIf="hasUnreadMessages" class="badge badge-round badge-danger"></span>
         </li>
-        <li *ngIf="currentUser" class="nav-item">
+        <li *ngIf="currentUser && currentUser.userType !== 'Provider'" class="nav-item">
           <a class="nav-link" [routerLink]="['/inbox/post']">
-            <button border-64 class="btn btn-primary my-10 hidden-md-down">
+            <button border-64 class="btn btn-sm btn-primary my-10 hidden-md-down">
               POST A JOB
             </button>
           </a>

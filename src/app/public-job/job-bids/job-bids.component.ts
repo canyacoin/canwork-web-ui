@@ -19,6 +19,11 @@ export class JobBidsComponent implements OnInit {
   currentUser: User;
   bids: any;
   jobId: any;
+  job: any;
+  isOpen: boolean;
+  jobSub: Subscription;
+  canSee = false;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
@@ -33,12 +38,28 @@ export class JobBidsComponent implements OnInit {
     });
     this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
       if (params['jobId']) {
-        this.jobId = params['jobId'];
-        this.initBids(this.jobId);
+        this.jobSub = this.publicJobsService.getPublicJob(params['jobId']).subscribe(publicJob => {
+          if (this.currentUser.address === publicJob.clientId) {
+            this.job = publicJob;
+            this.isOpen = (this.job.state === JobState.acceptingOffers);
+            this.jobId = params['jobId'];
+            this.initBids(this.jobId);
+            this.canSee = true;
+          } else {
+            this.canSee = false;
+          }
+        });
       } else if (params['friendlyUrl']) {
         this.publicJobsService.getPublicJobByUrl(params['friendlyUrl']).then((result) => {
-          this.jobId = result[0]['id'];
-          this.initBids(this.jobId);
+          if (this.currentUser.address === result[0]['clientId']) {
+            this.job = result[0];
+            this.isOpen = (this.job.state === JobState.acceptingOffers);
+            this.jobId = result[0]['id'];
+            this.initBids(this.jobId);
+            this.canSee = true;
+          } else {
+            this.canSee = false;
+          }
         });
       }
     });
@@ -52,5 +73,32 @@ export class JobBidsComponent implements OnInit {
   async initBids(jobId) {
     this.bids = await this.publicJobsService.getBids(jobId);
     console.log(this.bids[0].providerInfo.skillTags);
+  }
+
+  async chooseProvider(bidIndex) {
+    const bid = this.bids[bidIndex];
+    const confirmed = confirm('Are you sure you want to choose this provider?');
+    if (confirmed) {
+      const chosen = await this.publicJobsService.closePublicJob(this.job, bid);
+      if (chosen) {
+        alert('Provider chosen!');
+        this.router.navigate(['/inbox/job', this.jobId]);
+      } else {
+        alert('Something went wrong. please try again later');
+      }
+    }
+  }
+
+  async declineProvider(bidIndex) {
+    const bid = this.bids[bidIndex];
+    const confirmed = confirm('Are you sure you want to decline this provider\'s offer?');
+    if (confirmed) {
+      const chosen = await this.publicJobsService.declineBid(this.job, bid);
+      if (chosen) {
+        alert('Declined!');
+      } else {
+        alert('Something went wrong. please try again later');
+      }
+    }
   }
 }
