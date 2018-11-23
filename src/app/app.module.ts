@@ -31,6 +31,7 @@ import { CoreUtilsModule } from './core-utils/core-utils.module';
 import { PublicJobComponent } from './public-job/public-job/public-job.component';
 import { JobBidsComponent } from './public-job/job-bids/job-bids.component';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { FilterPipeModule } from 'ngx-filter-pipe';
 =======
 import { PublicJobComponent } from './public-job/public-job.component';
@@ -41,6 +42,9 @@ import { DockIoService } from './core-services/dock-io.service';
 =======
 import { FilterPipeModule } from 'ngx-filter-pipe'; 
 >>>>>>> fixed some git rebase mess
+=======
+import { FilterPipeModule } from 'ngx-filter-pipe';
+>>>>>>> modified the bid object
 
 @NgModule({
   declarations: [
