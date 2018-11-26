@@ -116,6 +116,7 @@ export class ChatService {
 
   async sendJobMessages(job: Job, action: IJobAction) {
     const channelId: string = [job.clientId, job.providerId].sort().join('-');
+    console.log(channelId);
     const sender = await this.auth.getCurrentUser();
     const receiverId = action.executedBy === UserType.client ? job.providerId : job.clientId;
     let messageText = '';
@@ -138,6 +139,9 @@ export class ChatService {
         break;
       case ActionType.enterEscrow:
         messageText = 'I have deposited funds into the escrow system!';
+        break;
+      case ActionType.bid:
+        messageText = 'I have placed a bid on your job';
         break;
       default:
         messageText = 'I\'ve made a change to our job, can you have a look?';
