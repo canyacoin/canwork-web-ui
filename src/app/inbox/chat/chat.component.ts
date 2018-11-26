@@ -185,7 +185,6 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isLoading = false;
         this.messages = data;
         this.scrollToBottom();
-        console.log(this.messages);
       });
     }
   }
