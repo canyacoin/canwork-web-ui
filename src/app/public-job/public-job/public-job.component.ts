@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Bid, Job, JobState } from '@class/job';
@@ -17,12 +17,13 @@ import * as moment from 'moment';
   templateUrl: './public-job.component.html',
   styleUrls: ['./public-job.component.css']
 })
-export class PublicJobComponent implements OnInit {
+export class PublicJobComponent implements OnInit, OnDestroy {
   bidForm: FormGroup = null;
   bids: any;
   recentBids: any;
   authSub: Subscription;
   routeSub: Subscription;
+  bidsSub: Subscription;
   jobSub: Subscription;
   jobExists: boolean;
   canBid: boolean;
@@ -32,6 +33,7 @@ export class PublicJobComponent implements OnInit {
   canSee = false;
   hideDescription = false;
   myJob = false;
+  loading = true;
   shareableLink: string;
   job: Job;
   currentUser: User;
@@ -54,32 +56,61 @@ export class PublicJobComponent implements OnInit {
 
   async ngOnInit() {
     this.shareableLink = '' + window.location.origin;
-    this.authSub = this.authService.currentUser$.subscribe((user: User) => {
-      this.currentUser = user;
-    });
     this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
       if (params['jobId']) {
         this.jobSub = this.publicJobsService.getPublicJob(params['jobId']).subscribe(publicJob => {
           if (publicJob === undefined) {
             this.jobExists = false;
             this.canSee = false;
+            this.loading = false;
           } else {
             this.job = publicJob;
             this.initJob(this.job);
+            this.bidsSub = this.publicJobsService.getPublicJobBids(params['jobId']).subscribe(result => {
+              this.bids = result;
+              if (this.bids.length > 3) {
+                this.recentBids = this.bids.slice(0, 3);
+              } else {
+                this.recentBids = this.bids;
+              }
+            });
           }
         });
       } else if (params['friendlyUrl']) {
         this.jobSub = this.publicJobsService.getPublicJobsByUrl(params['friendlyUrl']).subscribe(publicJob => {
-          if (publicJob.length === 0) {
+          console.log(publicJob === null);
+          if (publicJob === null) {
             this.jobExists = false;
             this.canSee = false;
+            this.loading = false;
           } else {
-            this.job = publicJob[0] as Job;
+            this.job = publicJob as Job;
             this.initJob(this.job);
+            this.bidsSub = this.publicJobsService.getPublicJobBids(publicJob.id).subscribe(result => {
+              this.bids = result;
+              if (this.bids.length > 3) {
+                this.recentBids = this.bids.slice(0, 3);
+              } else {
+                this.recentBids = this.bids;
+              }
+            });
           }
         });
       }
     });
+    this.authSub = this.authService.currentUser$.subscribe((user: User) => {
+      if (user) {
+        this.currentUser = user;
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.bidsSub) {
+      this.bidsSub.unsubscribe();
+    }
+    this.jobSub.unsubscribe();
+    this.authSub.unsubscribe();
   }
 
   async setClient(clientId) {
@@ -88,7 +119,15 @@ export class PublicJobComponent implements OnInit {
 
   async initJob(job: Job) {
     this.jobExists = true;
-    this.myJob = (job.clientId === this.currentUser.address);
+    if (this.currentUser) {
+      this.myJob = (job.clientId === this.currentUser.address);
+      if (this.currentUser.type === 'Provider') {
+        const check = await this.publicJobsService.canBid(this.currentUser.address, this.job);
+        this.canBid = check;
+      }
+    } else {
+      this.myJob = false;
+    }
     if (job.draft && !this.myJob) {
       // only allow the job creator to see jobs in draft state
       this.canSee = false;
@@ -98,16 +137,6 @@ export class PublicJobComponent implements OnInit {
     this.isOpen = (this.job.state === JobState.acceptingOffers);
     this.setClient(this.job.clientId);
     this.setAttachmentUrl();
-    if (this.currentUser.type === 'Provider') {
-      const check = await this.publicJobsService.canBid(this.currentUser.address, this.job);
-      this.canBid = check;
-    }
-    this.bids = await this.publicJobsService.getBids(job.id);
-    if (this.bids.length > 3) {
-      this.recentBids = this.bids.slice(0, 3);
-    } else {
-      this.recentBids = this.bids;
-    }
   }
 
   async submitBid() {
@@ -123,6 +152,7 @@ export class PublicJobComponent implements OnInit {
     this.sent = await this.publicJobsService.handlePublicBid(bidToSubmit, this.job);
     this.isBidding = false;
     this.canBid = false;
+    this.loading = false;
   }
 
   copyLink() {
@@ -141,6 +171,7 @@ export class PublicJobComponent implements OnInit {
     document.body.appendChild(selBox);
     selBox.select();
     selBox.focus();
+    document.execCommand('copy');
     document.body.removeChild(selBox);
     document.getElementById('copied').style.display = 'block';
     setTimeout(function () {

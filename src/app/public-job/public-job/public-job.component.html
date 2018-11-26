@@ -1,7 +1,7 @@
 <main class="main-content">
   <section class="section bg-gray pt-15 pb-20" style="min-height: 70vh;">
     <app-back-button></app-back-button>
-    <div *ngIf="!job" class="container">
+    <div *ngIf="!job && loading" class="container">
       <div class="row">
         <div class="col-12 job-detail-container text-center">
           <div class="card p-30 job-detail-card">
@@ -91,9 +91,9 @@
             <p>This project is set at a {{job.paymentType}}<br>{{job.information.weeklyCommitment}} hours per week,
               over
               {{job.information.timelineExpectation}} period.</p>
-            <hr *ngIf="currentUser.type === 'Provider' && !myJob && isOpen">
+            <hr *ngIf="currentUser && currentUser.type === 'Provider' && !myJob && isOpen">
           </div>
-          <div class="col-12" *ngIf="currentUser.type === 'Provider' && !myJob && isOpen">
+          <div class="col-12" *ngIf="currentUser && currentUser.type === 'Provider' && !myJob && isOpen">
             <button class="btn btn-primary mt-5 mr-5" [hidden]="!canBid" data-toggle="modal" data-target="#bidModal">
               PLACE BID
             </button>
@@ -103,6 +103,19 @@
       </div>
     </div>
     <div class="container job-detail-container" *ngIf="job && !canSee && !loading">
+      <div class="card p-30 job-detail-card">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 text-center">
+              <h2>We can't find the job you were looking for</h2>
+              <p>Please check the link you provided</p>
+              <button class="btn btn-primary" [routerLink]="['/home']">RETURN TO HOMEPAGE</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container job-detail-container" *ngIf="!job && !loading">
       <div class="card p-30 job-detail-card">
         <div class="container">
           <div class="row">
@@ -126,7 +139,7 @@
               <button class="btn btn-sm btn-primary" *ngIf="bids && bids.length > 0" [routerLink]="['bids']">VIEW ALL</button>
             </div>
           </div>
-          <div class="row">
+          <div class="row" *ngIf="bids">
             <div class="col-12">
               <p><b>Total Bid(s) : </b>{{ bids.length }}</p>
             </div>
@@ -159,7 +172,7 @@
                   {{bid.budget}}<span *ngIf="job.paymentType !== 'Fixed price'">/hr</span> USD
                 </div>
                 <div class="col-sm-6 mt-5 hide-mobile">
-                  {{ bid.message.substring(0, 50) }}...
+                  {{ bid.message.substring(0, 50) }}<span *ngIf="bid.message.length > 50">...</span>
                 </div>
               </div>
             </div>
@@ -215,7 +228,7 @@
     </div>
   </div>
 </div>
-<div id="bidModal" *ngIf="job && currentUser.type === 'Provider'" class="modal fade" role="dialog">
+<div id="bidModal" *ngIf="job && currentUser && currentUser.type === 'Provider'" class="modal fade" role="dialog">
   <div border-none class="modal-dialog">
     <!-- Modal content-->
     <div class="modal-content">

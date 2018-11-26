@@ -36,7 +36,7 @@ export class Message {
   type: MessageType;
   price: string;
   timestamp: string;
-
+  isPublic: boolean;
   constructor(init?: Partial<Message>) {
     Object.assign(this, init);
   }
@@ -116,7 +116,6 @@ export class ChatService {
 
   async sendJobMessages(job: Job, action: IJobAction) {
     const channelId: string = [job.clientId, job.providerId].sort().join('-');
-    console.log(channelId);
     const sender = await this.auth.getCurrentUser();
     const receiverId = action.executedBy === UserType.client ? job.providerId : job.clientId;
     let messageText = '';
@@ -140,9 +139,6 @@ export class ChatService {
       case ActionType.enterEscrow:
         messageText = 'I have deposited funds into the escrow system!';
         break;
-      case ActionType.bid:
-        messageText = 'I have placed a bid on your job';
-        break;
       default:
         messageText = 'I\'ve made a change to our job, can you have a look?';
         break;
@@ -150,6 +146,25 @@ export class ChatService {
     const message = this.createMessageObject(channelId, sender, messageText, MessageType.jobAction, null, null, job.id);
     this.sendMessage(sender.address, receiverId, message);
   }
+
+  // had to make a separate function so it won't break the usual job flow
+  async sendPublicJobMessages(job: Job, action: IJobAction, providerId: string) {
+    const channelId: string = [job.clientId, providerId].sort().join('-');
+    const sender = await this.auth.getCurrentUser();
+    const receiverId = action.executedBy === UserType.client ? job.providerId : job.clientId;
+    let messageText = '';
+    switch (action.type) {
+      case ActionType.bid:
+        messageText = 'I\'ve sent a bid to your job, can you take a look?';
+        break;
+      default:
+        messageText = 'I\'ve sent a response to your public job';
+        break;
+    }
+    const message = this.createPublicMessageObject(channelId, sender, messageText, MessageType.jobAction, null, null, job.id);
+    this.sendMessage(sender.address, receiverId, message);
+  }
+
 
   // sendNewPostMessages(channelId: string, sender: User, receiver: User, description: string, budget: string) {
   //   const message = this.createMessageObject(channelId, sender, 'I\'ve just sent you a request, is this something you can do?');
@@ -199,6 +214,23 @@ export class ChatService {
       jobId: jobId,
       message: message,
       type: type,
+      isPublic: false,
+      timestamp: moment().format('x')
+    });
+  }
+
+  createPublicMessageObject(channelId: string, user: User, message: string, type: MessageType = MessageType.message, budget: string = '', price: string = '', jobId: string = ''): Message {
+    return new Message({
+      channel: channelId,
+      address: user.address,
+      avatar: user.avatar,
+      budget: budget,
+      name: user.name,
+      title: user.title,
+      jobId: jobId,
+      message: message,
+      type: type,
+      isPublic: true,
       timestamp: moment().format('x')
     });
   }

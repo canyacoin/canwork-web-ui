@@ -16,6 +16,7 @@ import { take } from 'rxjs/operators';
 })
 export class JobBidsComponent implements OnInit {
   authSub: Subscription;
+  bidsSub: Subscription;
   currentUser: User;
   bids: any;
   jobId: any;
@@ -43,22 +44,31 @@ export class JobBidsComponent implements OnInit {
             this.job = publicJob;
             this.isOpen = (this.job.state === JobState.acceptingOffers);
             this.jobId = params['jobId'];
-            this.initBids(this.jobId);
             this.canSee = true;
+            this.bidsSub = this.publicJobsService.getPublicJobBids(publicJob.id).subscribe(result => {
+              this.bids = result;
+            });
           } else {
             this.canSee = false;
           }
         });
       } else if (params['friendlyUrl']) {
-        this.publicJobsService.getPublicJobByUrl(params['friendlyUrl']).then((result) => {
-          if (this.currentUser.address === result[0]['clientId']) {
-            this.job = result[0];
-            this.isOpen = (this.job.state === JobState.acceptingOffers);
-            this.jobId = result[0]['id'];
-            this.initBids(this.jobId);
-            this.canSee = true;
-          } else {
+        this.jobSub = this.publicJobsService.getPublicJobsByUrl(params['friendlyUrl']).subscribe(publicJob => {
+          console.log(publicJob === null);
+          if (publicJob === null) {
             this.canSee = false;
+          } else {
+            if (this.currentUser.address === publicJob.clientId) {
+              this.job = publicJob;
+              this.isOpen = (this.job.state === JobState.acceptingOffers);
+              this.jobId = params['jobId'];
+              this.canSee = true;
+              this.bidsSub = this.publicJobsService.getPublicJobBids(publicJob.id).subscribe(result => {
+                this.bids = result;
+              });
+            } else {
+              this.canSee = false;
+            }
           }
         });
       }
@@ -68,10 +78,6 @@ export class JobBidsComponent implements OnInit {
   async getProviderData(id) {
     const provider = await this.userService.getUser(id);
     return provider;
-  }
-
-  async initBids(jobId) {
-    this.bids = await this.publicJobsService.getBids(jobId);
   }
 
   async chooseProvider(bidIndex) {

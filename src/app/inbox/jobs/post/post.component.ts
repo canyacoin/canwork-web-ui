@@ -317,6 +317,7 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   async submitShareableJob(isDraft: boolean) {
+    this.isSending = true;
     let tags: string[];
     tags = this.shareableJobForm.value.skills === '' ? [] : this.shareableJobForm.value.skills.split(',').map(item => item.trim());
     if (tags.length > 6) {

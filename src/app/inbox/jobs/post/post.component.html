@@ -456,11 +456,17 @@
                     </div>
                   </div>
                   <div class="col-12 text-right">
-                    <img *ngIf="isSending" src="assets/img/loader.svg" height="36px" alt="CanYa Coin">
-                    <button type="button" (click)="submitShareableJob(true)" [disabled]="!shareableJobForm.valid || isSending || (currentUpload && !uploadedFile)"
-                      class="btn btn-secondary mx-10">SAVE AS DRAFT</button>
-                    <button type="button" (click)="submitShareableJob(false)" [disabled]="!shareableJobForm.valid || isSending || (currentUpload && !uploadedFile)"
-                      class="btn btn-primary">POST JOB</button>
+                    <div *ngIf="!isSending">
+                      <button type="button" (click)="submitShareableJob(true)" [disabled]="!shareableJobForm.valid || isSending || (currentUpload && !uploadedFile)"
+                        class="btn btn-secondary mx-10">SAVE AS DRAFT</button>
+                      <button type="button" (click)="submitShareableJob(false)" [disabled]="!shareableJobForm.valid || isSending || (currentUpload && !uploadedFile)"
+                        class="btn btn-primary">
+                        POST JOB
+                      </button>
+                    </div>
+                    <div *ngIf="isSending">
+                      <img *ngIf="isSending" src="assets/img/loader.svg" height="36px" alt="CanYa Coin">
+                    </div>
                   </div>
                 </form>
               </div>

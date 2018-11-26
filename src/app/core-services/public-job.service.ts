@@ -28,24 +28,32 @@ export class PublicJobService {
   getPublicJob(jobId: string): Observable<Job> {
     return this.afs.doc(`public-jobs/${jobId}`).snapshotChanges().pipe(map(doc => {
       const job = doc.payload.data() as Job;
-      console.log(job);
       if (job) {
-        console.log('found.');
+        console.log('job found.');
       } else {
-        console.log('not found.');
+        console.log('job not found.');
       }
       return job;
     }));
   }
 
-  getPublicJobsByUrl(url: string): Observable<Job[]> {
-    return this.afs.collection<any>('public-jobs', ref => ref.where('friendlyUrl', '==', url)).snapshotChanges().pipe(map(changes => {
-      return changes.map(a => {
-        const data = a.payload.doc.data() as Job;
-        data.id = a.payload.doc.id;
-        console.log();
-        return data;
+  getPublicJobBids(jobId: string): Observable<any> {
+    return this.afs.collection(`public-jobs/${jobId}/bids`).snapshotChanges().pipe(map(docs => {
+      const bids = [];
+      docs.forEach((doc) => {
+        bids.push(doc.payload.doc.data() as Bid);
       });
+      return bids;
+    }));
+  }
+
+  getPublicJobsByUrl(url: string): Observable<Job> {
+    return this.afs.collection<any>('public-jobs', ref => ref.where('friendlyUrl', '==', url)).snapshotChanges().pipe(map(changes => {
+      if (changes.length > 0) {
+        return (changes[0].payload.doc.data());
+      } else {
+        return null;
+      }
     }));
   }
 
@@ -83,7 +91,6 @@ export class PublicJobService {
       job.actionLog.push(action);
     }
     console.log('added action to this job\'s action log');
-    console.log(job.actionLog);
     const parsedJob = await this.jobService.parseJobToObject(job);
     return this.publicJobsCollection.doc(job.id).set(parsedJob);
   }
@@ -101,14 +108,15 @@ export class PublicJobService {
           const channelId = await this.chatService.createChannelsAsync(provider, client);
           if (channelId) {
             console.log(channelId);
-            await this.chatService.sendJobMessages(job, action);
+            await this.chatService.sendPublicJobMessages(job, action, bid.providerId);
             resolve(true);
           }
         } else {
-          console.log('can not bid');
+          console.log('can\'t upload bid...');
           reject(false);
         }
       } catch (error) {
+        console.log('something went wrong. try again later.');
         reject(false);
       }
     });
@@ -125,7 +133,6 @@ export class PublicJobService {
     const bidToUpload = this.parseBidToObject(bid);
     return new Promise<boolean>((resolve, reject) => {
       this.afs.doc(`public-jobs/${jobId}/bids/${bid.providerId}`).set(bidToUpload).then(result => {
-        console.log(result);
         resolve(true);
       }).catch(e => {
         reject(false);
@@ -144,9 +151,7 @@ export class PublicJobService {
   }
 
   async jobUrlExists(friendlyQuery) {
-    console.log(friendlyQuery);
     const exist = await this.afs.collection('public-jobs', ref => ref.where('friendlyUrl', '>=', friendlyQuery)).valueChanges().take(1).toPromise();
-    console.log(exist);
     return exist;
   }
 
@@ -188,7 +193,7 @@ export class PublicJobService {
     let friendly: string;
     if (nameArray.length > 1) {
       friendly = nameArray[0] + '-' + nameArray[1];
-    } else if (nameArray.length > 2) {
+    } else if (nameArray.length >= 2) {
       friendly = nameArray[0] + '-' + nameArray[1] + '-' + nameArray[2];
     } else {
       friendly = nameArray[0];
