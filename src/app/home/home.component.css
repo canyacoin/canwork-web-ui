@@ -7,6 +7,15 @@
   transition: all 0.5s;
 }
 
+#how-it-works img {
+  max-height: 200px;
+  padding: 15px;
+}
+
+#how-it-works h5 {
+  min-height: 64px;
+}
+
 @media screen and (max-width: 1024px) {
   .provider-type-card {
     width: auto;
@@ -62,6 +71,12 @@
 .section-title:hover,
 .see-all:hover {
   color: #33ccff;
+}
+
+@media screen and (max-width:768px) {
+  #how-it-works h5 {
+    min-height: 0px;
+  }
 }
 
 @media screen and (max-width:320px) {
