@@ -7,6 +7,7 @@ import { ActionType, IJobAction } from '@class/job-action';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable, ReplaySubject } from 'rxjs';
 import { map, take } from 'rxjs/operators';
+import { ChatService } from '@service/chat.service';
 import { createChangeDetectorRef } from '@angular/core/src/view/refs';
 import { JobNotificationService } from './job-notification.service';
 
@@ -15,6 +16,7 @@ export class PublicJobService {
   publicJobsCollection: AngularFirestoreCollection<any>;
   constructor(
     private afs: AngularFirestore,
+    private chatService: ChatService,
     private userService: UserService,
     private jobService: JobService
   ) {
@@ -92,8 +94,16 @@ export class PublicJobService {
       try {
         if (this.canBid(bid.providerId, job)) {
           console.log('uploading the bid');
+          const action = new IJobAction(ActionType.bid, UserType.provider);
+          const client = await this.userService.getUser(job.clientId);
+          const provider = await this.userService.getUser(bid.providerId);
           await this.addBid(bid, job.id);
-          resolve(true);
+          const channelId = await this.chatService.createChannelsAsync(provider, client);
+          if (channelId) {
+            console.log(channelId);
+            await this.chatService.sendJobMessages(job, action);
+            resolve(true);
+          }
         } else {
           console.log('can not bid');
           reject(false);
