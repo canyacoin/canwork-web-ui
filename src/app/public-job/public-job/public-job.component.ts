@@ -28,7 +28,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   jobExists: boolean;
   canBid: boolean;
   isBidding: boolean;
-  isOpen: boolean;
   sent = false;
   canSee = false;
   hideDescription = false;
@@ -134,9 +133,12 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     } else {
       this.canSee = true;
     }
-    this.isOpen = (this.job.state === JobState.acceptingOffers);
     this.setClient(this.job.clientId);
     this.setAttachmentUrl();
+  }
+
+  get isOpen() {
+    return (this.job.state === JobState.acceptingOffers);
   }
 
   async submitBid() {
@@ -203,20 +205,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   toLocaleDateString(timestamp) {
     const date = new Date(parseInt(timestamp, 10));
     return date.toLocaleDateString();
-  }
-
-  async chooseProvider(bidIndex) {
-    const bid = this.bids[bidIndex];
-    const confirmed = confirm('Are you sure you want to choose this provider?');
-    if (confirmed) {
-      const chosen = await this.publicJobsService.closePublicJob(this.job, bid);
-      if (chosen) {
-        alert('Provider chosen!');
-        this.router.navigate(['/inbox/job', this.job.id]);
-      } else {
-        alert('Something went wrong. please try again later');
-      }
-    }
   }
 
   toggleDescription() {

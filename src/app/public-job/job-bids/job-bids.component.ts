@@ -87,7 +87,7 @@ export class JobBidsComponent implements OnInit {
       const chosen = await this.publicJobsService.closePublicJob(this.job, bid);
       if (chosen) {
         alert('Provider chosen!');
-        this.router.navigate(['/inbox/job', this.jobId]);
+        this.router.navigate(['/inbox/job', this.job.id]);
       } else {
         alert('Something went wrong. please try again later');
       }
