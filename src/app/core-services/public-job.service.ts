@@ -36,6 +36,7 @@ export class PublicJobService {
   constructor(
     private afs: AngularFirestore,
 <<<<<<< HEAD
+<<<<<<< HEAD
     private chatService: ChatService,
     private userService: UserService,
     private auth: AuthService,
@@ -188,6 +189,9 @@ export class PublicJobService {
         console.log('something went wrong. try again later.');
         reject(false);
 =======
+=======
+    private chatService: ChatService,
+>>>>>>> bid notification WIP
     private userService: UserService,
     private jobService: JobService
   ) {
@@ -461,8 +465,16 @@ export class PublicJobService {
       try {
         if (this.canBid(bid.providerId, job)) {
           console.log('uploading the bid');
+          const action = new IJobAction(ActionType.bid, UserType.provider);
+          const client = await this.userService.getUser(job.clientId);
+          const provider = await this.userService.getUser(bid.providerId);
           await this.addBid(bid, job.id);
-          resolve(true);
+          const channelId = await this.chatService.createChannelsAsync(provider, client);
+          if (channelId) {
+            console.log(channelId);
+            await this.chatService.sendJobMessages(job, action);
+            resolve(true);
+          }
         } else {
           console.log('can not bid');
           reject(false);
