@@ -30,12 +30,6 @@ export class User {
   work: string;
   workSkillTags: string[] = [];
 
-<<<<<<< HEAD
-=======
-  upvotes = 0;
-  downvotes = 0;
-  numberOfReviews = 0;
->>>>>>> created the basic friendly-url generator and route
 
   constructor(init?: Partial<User>) {
     Object.assign(this, init);

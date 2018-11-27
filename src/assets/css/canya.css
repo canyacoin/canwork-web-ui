@@ -9595,6 +9595,7 @@ a.text-danger:focus {
 
 .tag-row {
   padding: 0 30px 0 30px;
+  min-height: 86px;
   justify-content: center;
 }
 
@@ -9612,6 +9613,7 @@ a.text-danger:focus {
 .hourly-rate {
   height: 25px;
   color: #535353;
+  margin-bottom: 10px;
 }
 
 .profile:hover::after {
@@ -9625,9 +9627,7 @@ a.text-danger:focus {
   border-radius: 50%;
 }
 
-.profile .headshot {
-  width: 100px;
-  height: 100px;
+.headshot {
   border-radius: 50%;
   max-width: 100px;
   object-fit: cover;
@@ -9837,7 +9837,8 @@ a.text-danger:focus {
 }
 
 .provider-stars {
-  min-height: 25px;
+  min-height: 24px;
+  margin: 5px;
 }
 
 #menu-overlay {
@@ -9892,6 +9893,10 @@ a.text-danger:focus {
 
 .mh-250 {
   min-height: 250px;
+}
+
+.mh-135 {
+  min-height: 135px;
 }
 
 .headshot {
