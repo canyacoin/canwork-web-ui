@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import * as decode from 'jwt-decode';
 
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
 
 @Component({
   selector: 'app-with-dock',
@@ -23,7 +23,7 @@ export class WithDockComponent implements OnInit, OnDestroy {
   usersSub: Subscription;
   httpHeaders = new Headers({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
 
-  constructor(@Inject(WINDOW) private window: Window, 
+  constructor(@Inject(WINDOW) private window: Window,
     private route: ActivatedRoute,
     private router: Router,
     private http: Http,

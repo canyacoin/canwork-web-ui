@@ -13,7 +13,6 @@ win.JSON = JSON;
 win.JSON.stringify = JSON.stringify;
 win.JSON.parse = JSON.parse;
 global['JSON'] = win.JSON;
-console.log('freeyiyi1994', win.JSON, global['JSON']);
 
 import { enableProdMode } from '@angular/core';
 import { ngExpressEngine } from '@nguniversal/express-engine';
