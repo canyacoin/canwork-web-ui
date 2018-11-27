@@ -85,22 +85,11 @@ service cloud.firestore {
        allow delete: if isAdmin();
     }
     
-<<<<<<< HEAD
-<<<<<<< HEAD
-    match /public-jobs/{jobId} {
-=======
-    // TODO: Will require a much more complex rule set here
-    match /public-jobs {
->>>>>>> basic public job upload done
-=======
-     match /public-jobs/{publicJobId} {
->>>>>>> created the basic friendly-url generator and route
+    match /public-jobs/{jobId} { 
        allow read;
        allow create: if isAuthenticated();
        allow update: if userIsClientOrProvider();
-       allow delete: if isAdmin();
-<<<<<<< HEAD
-<<<<<<< HEAD
+       allow delete: if isAdmin(); 
     }    
     
     match /public-jobs/{jobId}/bids/{bidId} {
@@ -109,9 +98,6 @@ service cloud.firestore {
        allow update: if userIsClientOrProvider();
        allow delete: if isAdmin();
     }
-
-=======
-    }
     
     match /public-jobs/{publicJobId} {
        allow read;
@@ -119,11 +105,7 @@ service cloud.firestore {
        allow update: if userIsClientOrProvider();
        allow delete: if isAdmin();
     }
->>>>>>> basic public job upload done
-=======
-  	}
->>>>>>> created the basic friendly-url generator and route
-  }
+ 
   
  
   // --------------------------------------------------------------------------------

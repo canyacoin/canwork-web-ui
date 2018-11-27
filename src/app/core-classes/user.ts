@@ -30,6 +30,9 @@ export class User {
   work: string;
   workSkillTags: string[] = [];
 
+  upvotes = 0;
+  downvotes = 0;
+  numberOfReviews = 0;
 
   constructor(init?: Partial<User>) {
     Object.assign(this, init);
