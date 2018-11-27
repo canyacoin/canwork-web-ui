@@ -11,6 +11,7 @@ import { ChatService } from '@service/chat.service';
 import { createChangeDetectorRef } from '@angular/core/src/view/refs';
 import { JobNotificationService } from './job-notification.service';
 import { Action } from 'rxjs/internal/scheduler/Action';
+import * as moment from 'moment';
 
 @Injectable()
 export class PublicJobService {
@@ -63,7 +64,7 @@ export class PublicJobService {
     return exist;
   }
 
-  getPublicJobsByUser(userId: string, userType: UserType): Observable<Job[]> {
+  getPublicJobsByUser(userId: string): Observable<Job[]> {
     return this.afs.collection<any>('public-jobs', ref => ref.where('clientId', '==', userId)).snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
         const data = a.payload.doc.data() as Job;
@@ -170,11 +171,11 @@ export class PublicJobService {
           this.saveJobFirebase(job, null);
           resolve(true);
         } else {
-          reject (false);
+          reject(false);
         }
       } catch (error) {
         console.log(error);
-        reject (false);
+        reject(false);
       }
     });
   }
@@ -230,5 +231,24 @@ export class PublicJobService {
     console.log('converted the bid into object');
     console.log(bidObject);
     return bidObject;
+  }
+
+
+  async inviteProviderToJob(jobId, providerId) {
+    const invite = {
+      provider: providerId,
+      timestamp: moment().format('x')
+    };
+    return new Promise<boolean>((resolve, reject) => {
+      this.afs.doc(`public-jobs/${jobId}/invites/${providerId}`).set(invite).then(result => {
+        resolve(true);
+      }).catch(e => {
+        reject(false);
+      });
+    });
+  }
+
+  async providerInvited(jobId, providerId) {
+
   }
 }
