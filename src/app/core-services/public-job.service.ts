@@ -10,6 +10,7 @@ import { map, take } from 'rxjs/operators';
 import { ChatService } from '@service/chat.service';
 import { createChangeDetectorRef } from '@angular/core/src/view/refs';
 import { JobNotificationService } from './job-notification.service';
+import { Action } from 'rxjs/internal/scheduler/Action';
 
 @Injectable()
 export class PublicJobService {
@@ -162,12 +163,18 @@ export class PublicJobService {
         job.providerId = bid.providerId;
         job.state = JobState.termsAcceptedAwaitingEscrow;
         job.budget = bid.budget;
-        await this.saveJobFirebase(job, null);
-        const action = new IJobAction(ActionType.acceptTerms, UserType.client);
-        await this.jobService.handleJobAction(job, action);
-        resolve(true);
+        const newJob = job;
+        const acceptTerms = new IJobAction(ActionType.acceptTerms, UserType.client);
+        const success = await this.jobService.handleJobAction(newJob, acceptTerms);
+        if (success) {
+          this.saveJobFirebase(job, null);
+          resolve(true);
+        } else {
+          reject (false);
+        }
       } catch (error) {
-        reject(false);
+        console.log(error);
+        reject (false);
       }
     });
   }
