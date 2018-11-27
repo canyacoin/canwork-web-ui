@@ -207,10 +207,10 @@
   dependencies:
     tslib "^1.9.0"
 
-"@canyaio/canpay-lib@^0.2.4":
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/@canyaio/canpay-lib/-/canpay-lib-0.2.4.tgz#04c0f97c9faa14b53d0b52d97793473b7971ce09"
-  integrity sha512-vEBk0dGo4a1aoSua+5ts9TyhJmJ26rrTBRz5EHMhVIxHWwQNtZ4zNWvQU7rO/7TBQYN+oEvv8Y0o/Rz4F8umWg==
+"@canyaio/canpay-lib@^0.2.6":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@canyaio/canpay-lib/-/canpay-lib-0.2.6.tgz#81f882b01b994f2ec1ea917c4ac4bc7706294c48"
+  integrity sha512-081YVWaISTNZAHbr11Z7yKAdcOD5aPQmghIhMLNDA271WHq6cv0hHOQQ/NwWDzLJj4bUl4gb49KO5Ib33UosAw==
   dependencies:
     angular2-qrcode "^2.0.1"
     lodash.merge "^4.6.1"
@@ -744,6 +744,13 @@ angular-instantsearch@^2.0.1:
     lodash "^4.17.10"
     nouislider "^10.0.0"
     querystring-es3 "^0.2.1"
+    tslib "^1.7.1"
+
+angular-star-rating@^4.0.0-beta.3:
+  version "4.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/angular-star-rating/-/angular-star-rating-4.0.0-beta.3.tgz#b814a2eae02f9670428e1512d513fed44db7b492"
+  integrity sha512-2GAaWvmRjKiQovN5lRvK9u24Ksv2mZupYvwij6ShAKuojxm0VB1d3/O9nBeoID0gmthYK+NXaskrJAW+RmStEg==
+  dependencies:
     tslib "^1.7.1"
 
 angular2-qrcode@^2.0.1:
