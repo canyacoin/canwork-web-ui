@@ -165,10 +165,7 @@
         <div class="row job-desc">
           <div class="col-12" [routerLink]="['/jobs', job.id]">
             <h4>{{job.information.title}}</h4>
-<<<<<<< HEAD
             <app-skill-tag *ngFor="let skill of job.information.skills" [skill]="skill"></app-skill-tag>
-=======
->>>>>>> created the basic friendly-url generator and route
             <p *ngIf="job.information.description.length < 160">{{job.information.description}}</p>
             <p *ngIf="job.information.description.length > 160">{{job.information.description.substring(0, 160)}}...</p>
           </div>
