@@ -33,11 +33,13 @@ export class AboutComponent implements OnInit {
     private publicJobService: PublicJobService) { }
 
   async ngOnInit() {
-    this.publicJobService.getPublicJobsByUser(this.currentUser.address).subscribe(async (jobs: Job[]) => {
-      this.currentUserJobs = jobs.filter(job => job.state === 'Accepting Offers' && job.draft !== true);
-      this.lastPage = (Math.ceil(this.currentUserJobs.length / this.pageLimit) - 1);
-      console.log(this.currentUserJobs);
-    });
+    if (this.currentUser) {
+      this.currentUserJobs = await this.publicJobService.getOpenPublicJobsByUser(this.currentUser.address);
+      for (let i = 0; i < this.currentUserJobs.length; i++) {
+        this.currentUserJobs[i].canInvite = await this.publicJobService.canInvite(this.currentUserJobs[i].id, this.userModel.address);
+      }
+    }
+    this.lastPage = (Math.ceil(this.currentUserJobs.length / this.pageLimit) - 1);
   }
 
   displayProfileEditComponent() {
@@ -85,4 +87,24 @@ export class AboutComponent implements OnInit {
       }
     });
   }
+
+  async inviteProvider(job, index) {
+    const invited = await this.publicJobService.inviteProvider(job, this.currentUser, this.userModel);
+    if (invited) {
+      alert('provider invited');
+      console.log(this.currentUserJobs[index]);
+      this.currentUserJobs[index].canInvite = false;
+      return true;
+    } else {
+      alert('something went wrong');
+      return false;
+    }
+  }
+
+
+  async canInvite(jobId) {
+    const result = await this.publicJobService.canInvite(jobId, this.userModel.address);
+    return result;
+  }
+
 }

@@ -3,6 +3,7 @@ import { Job, JobState, Bid } from '@class/job';
 import { User, UserType } from '@class/user';
 import { UserService } from '@service/user.service';
 import { JobService } from '@service/job.service';
+import { AuthService } from '@service/auth.service';
 import { ActionType, IJobAction } from '@class/job-action';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -20,6 +21,7 @@ export class PublicJobService {
     private afs: AngularFirestore,
     private chatService: ChatService,
     private userService: UserService,
+    private auth: AuthService,
     private jobService: JobService
   ) {
     this.publicJobsCollection = this.afs.collection<any>('public-jobs');
@@ -64,6 +66,11 @@ export class PublicJobService {
     return exist;
   }
 
+  async getPublicJobInvites(jobId) {
+    const exist = await this.afs.collection(`public-jobs/${jobId}/invites`).valueChanges().take(1).toPromise();
+    return exist;
+  }
+
   getPublicJobsByUser(userId: string): Observable<Job[]> {
     return this.afs.collection<any>('public-jobs', ref => ref.where('clientId', '==', userId)).snapshotChanges().pipe(map(changes => {
       return changes.map(a => {
@@ -72,6 +79,23 @@ export class PublicJobService {
         return data;
       });
     }));
+  }
+
+  async getOpenPublicJobsByUser(userId: string) {
+    const exist = await this.afs.collection(`public-jobs/`, ref => ref.where('clientId', '==', userId)).valueChanges().take(1).toPromise() as Job[];
+    let result: Job[];
+    result = exist.filter(job => job.state === 'Accepting Offers' && !job.draft);
+    // sort from latest to oldest
+    result.sort((a, b) => {
+      if (a.actionLog[0].timestamp > b.actionLog[0].timestamp) {
+        return -1;
+      }
+      if (a.actionLog[0].timestamp < b.actionLog[0].timestamp) {
+        return 1;
+      }
+      return 0;
+    });
+    return result;
   }
 
   // BASIC CRUDs
@@ -107,12 +131,16 @@ export class PublicJobService {
           const client = await this.userService.getUser(job.clientId);
           const provider = await this.userService.getUser(bid.providerId);
           await this.addBid(bid, job.id);
+          await this.sendPublicJobMessage(job, action, client, provider);
+          resolve(true);
+          /*
           const channelId = await this.chatService.createChannelsAsync(provider, client);
           if (channelId) {
             console.log(channelId);
-            await this.chatService.sendPublicJobMessages(job, action, bid.providerId);
+            await this.chatService.sendPublicJobMessages(job, action, bid.providerId, sender);
             resolve(true);
           }
+          */
         } else {
           console.log('can\'t upload bid...');
           reject(false);
@@ -233,6 +261,27 @@ export class PublicJobService {
     return bidObject;
   }
 
+  async sendPublicJobMessage(job: Job, action: IJobAction, client: User, provider: User) {
+    const channelId = await this.chatService.createChannelsAsync(provider, client);
+    const sender = await this.auth.getCurrentUser();
+    if (channelId) {
+      await this.chatService.sendPublicJobMessages(job, action, provider.address, sender);
+    }
+  }
+
+  async inviteProvider(job: Job, client: User, provider: User) {
+    try {
+      const invited = await this.inviteProviderToJob(job.id, provider.address);
+      if (invited) {
+        const invite = new IJobAction(ActionType.invite, UserType.client);
+        await this.sendPublicJobMessage(job, invite, client, provider);
+        return true;
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
 
   async inviteProviderToJob(jobId, providerId) {
     const invite = {
@@ -241,6 +290,7 @@ export class PublicJobService {
     };
     return new Promise<boolean>((resolve, reject) => {
       this.afs.doc(`public-jobs/${jobId}/invites/${providerId}`).set(invite).then(result => {
+        console.log(result);
         resolve(true);
       }).catch(e => {
         reject(false);
@@ -248,7 +298,8 @@ export class PublicJobService {
     });
   }
 
-  async providerInvited(jobId, providerId) {
-
+  async canInvite(jobId, providerId) {
+    const exist = await this.afs.collection(`public-jobs/${jobId}/invites/`, ref => ref.where('provider', '==', providerId)).valueChanges().take(1).toPromise();
+    return !(exist.length > 0);
   }
 }
