@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Bid, Job, JobState } from '@class/job';
-import { User, UserType } from '@class/user';
+import { User } from '@class/user';
 import { AuthService } from '@service/auth.service';
 import { PublicJobService } from '@service/public-job.service';
 import { UserService } from '@service/user.service';
@@ -45,9 +45,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     private publicJobsService: PublicJobService,
     private storage: AngularFireStorage,
     private formBuilder: FormBuilder,
-    private router: Router
   ) {
-    this.bidForm = formBuilder.group({
+    this.bidForm = this.formBuilder.group({
       price: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(10000000)])],
       message: ['', Validators.compose([Validators.min(0), Validators.maxLength(10000)])]
     });
