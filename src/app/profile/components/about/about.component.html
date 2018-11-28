@@ -21,7 +21,7 @@
           [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">LET'S
           CHAT</button>
         <br>
-        <button *ngIf="!isMyProfile && userModel.type == 'Provider' && currentUserJobs && currentUserJobs.length < 0"
+        <button *ngIf="!isMyProfile && userModel.type == 'Provider' && currentUserJobs && currentUserJobs.length < 1"
           (click)="proposeJob()" class="btn btn-primary btn-canya-chat" style="width:175px;" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }"
           data-scrollto="section-profile">
           POST A REQUEST
@@ -84,7 +84,8 @@
             <h6>{{job.information.title}}</h6>
           </div>
           <div class="col-4 text-right">
-            <button class="btn btn-success">INVITE</button>
+            <button id="job-{{i}}" (click)="inviteProvider(job, i)" *ngIf="job.canInvite" class="btn btn-success">INVITE</button>
+            <i *ngIf="!job.canInvite" class="mr-15">Invited</i>
           </div>
         </div>
         <div class="row py-10">
@@ -100,7 +101,7 @@
         <div class="row py-10">
           <div class="col-12 text-center">
             <span>Want to start a new job?<br>
-              <a data-dismiss="modal" class="pointer text-canya" (click)="proposeJob()">Post a unique request.</a></span>
+              <a data-dismiss="modal" class="pointer text-canya" (click)="proposeJob()">Post a request.</a></span>
           </div>
         </div>
       </div>

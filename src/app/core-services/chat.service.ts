@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ContentChildren } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { take } from 'rxjs/operators';
@@ -83,7 +83,7 @@ export class ChatService {
     });
   }
 
-  // Check if channel exists
+
   async createNewChannel(sender: User, receiver: User) {
     const channelId: string = [sender.address, receiver.address].sort().join('-');
     const path = `chats/${sender.address}/channels/${channelId}`;
@@ -97,7 +97,7 @@ export class ChatService {
     });
   }
 
-  // Check if channel exists
+
   async hideChannel(userId: string, channelId: string) {
     const path = `chats/${userId}/channels/${channelId}`;
     await this.afs.firestore.doc(path).update({ message: '', timestamp: moment().format('x') });
@@ -148,12 +148,15 @@ export class ChatService {
   }
 
   // had to make a separate function so it won't break the usual job flow
-  async sendPublicJobMessages(job: Job, action: IJobAction, providerId: string) {
+  async sendPublicJobMessages(job: Job, action: IJobAction, providerId: string, sender: User) {
     const channelId: string = [job.clientId, providerId].sort().join('-');
-    const sender = await this.auth.getCurrentUser();
-    const receiverId = action.executedBy === UserType.client ? job.providerId : job.clientId;
+    const msgSender = sender;
+    const receiverId = action.executedBy === UserType.client ? providerId : job.clientId;
     let messageText = '';
     switch (action.type) {
+      case ActionType.invite:
+        messageText = 'I have invited you to my job, can you take a look?';
+        break;
       case ActionType.bid:
         messageText = 'I\'ve sent a bid to your job, can you take a look?';
         break;
@@ -161,7 +164,8 @@ export class ChatService {
         messageText = 'I\'ve sent a response to your public job';
         break;
     }
-    const message = this.createPublicMessageObject(channelId, sender, messageText, MessageType.jobAction, null, null, job.id);
+    const message = this.createPublicMessageObject(channelId, msgSender, messageText, MessageType.jobAction, null, null, job.id);
+    console.log(receiverId);
     this.sendMessage(sender.address, receiverId, message);
   }
 
