@@ -108,9 +108,8 @@
                       'background': message.address !== currentUser.address ? '#3cf':'#e4e7ea' }"
                       style="border-radius:15px;">
                       <div class="card-block p-2 card-message-block">
-                        <p class="fw-400 mb-0 break-word">
-                          {{ message.message }}
-                        </p>
+                        <span class="fw-400 mb-0 break-word" [innerHTML]="linkify(message.message)">
+                        </span>
                         <div class="text-right">
                           <small [ngClass]="{ 'text-dark opacity-40': message.address === currentUser.address,
                             'text-white opacity-60': message.address !== currentUser.address }">{{
@@ -315,9 +314,8 @@
                           'background': message.address !== currentUser.address ? '#3cf':'#e4e7ea' }"
                       style="border-radius:15px;">
                       <div class="card-block p-2 card-message-block">
-                        <p class="fw-400 mb-0">
-                          {{ message.message }}
-                        </p>
+                        <span class="fw-400 mb-0" [innerHTML]="linkify(message.message)">
+                        </span>
                         <div class="text-right">
                           <small [ngClass]="{ 'text-dark opacity-40': message.address === currentUser.address,
                                 'text-white opacity-60': message.address !== currentUser.address }">{{

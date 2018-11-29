@@ -9889,6 +9889,10 @@ a.text-danger:focus {
   padding-left: 30px;
 }
 
+.mh-150 {
+  min-height: 150px;
+}
+
 .mh-250 {
   min-height: 250px;
 }
