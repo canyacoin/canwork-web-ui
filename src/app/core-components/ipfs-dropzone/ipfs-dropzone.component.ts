@@ -5,7 +5,7 @@ import { Buffer } from 'buffer';
 import * as streamBuffers from 'stream-buffers';
 import * as ipfsAPI from 'ipfs-api';
 
-const ipfs = ipfsAPI({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' })
+const ipfs = ipfsAPI({ host: 'ipfs.canya.io', port: '443', protocol: 'https' });
 
 @Component({
   selector: 'app-ipfs-dropzone',
@@ -14,23 +14,23 @@ const ipfs = ipfsAPI({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' }
 })
 export class IpfsDropzoneComponent implements OnInit {
 
-  @ViewChild(Dropzone) dropzone: Dropzone
+  @ViewChild(Dropzone) dropzone: Dropzone;
 
-  @Output() ipfsResponse = new EventEmitter
-  @Output() close = new EventEmitter
+  @Output() ipfsResponse = new EventEmitter;
+  @Output() close = new EventEmitter;
 
-  dropzoneConfig: any = {}
-  errors: any = {}
+  dropzoneConfig: any = {};
+  errors: any = {};
   @Input() set config(config) {
-    this.errors = config
+    this.errors = config;
     Object.keys(config).forEach(key => {
-      this.dropzoneConfig[key] = config[key].value
-    })
+      this.dropzoneConfig[key] = config[key].value;
+    });
   }
 
-  dropzoneMessage = `<i class='fa fa-cloud-upload-alt'></i> <h4>Drag a document to upload</h4> <p>- or -</p> <span class='btn btn-primary'>Browse</span>`
-  errorMessage: string
-  hasError = false
+  dropzoneMessage = `<i class='fa fa-cloud-upload-alt'></i> <h4>Drag a document to upload</h4> <p>- or -</p> <span class='btn btn-primary'>Browse</span>`;
+  errorMessage: string;
+  hasError = false;
 
   file = {
     isUploading: false,
@@ -39,7 +39,7 @@ export class IpfsDropzoneComponent implements OnInit {
     size: null,
     progress: 0,
     pctg: '0%',
-  }
+  };
 
   constructor() { }
 
@@ -54,60 +54,60 @@ export class IpfsDropzoneComponent implements OnInit {
   }
 
   upload(fileContent) {
-    this.file.isUploading = true
+    this.file.isUploading = true;
 
     const myReadableStreamBuffer = new streamBuffers.ReadableStreamBuffer({
       chunkSize: 25000
-    })
+    });
 
-    const stream = ipfs.addReadableStream()
+    const stream = ipfs.addReadableStream();
 
     stream.on('data', (ipfsResponse) => {
-      console.log(ipfsResponse)
-      this.file.isUploading = false
-      this.file.pctg = '100%'
-      this.ipfsResponse.emit(ipfsResponse)
-    })
+      console.log(ipfsResponse);
+      this.file.isUploading = false;
+      this.file.pctg = '100%';
+      this.ipfsResponse.emit(ipfsResponse);
+    });
 
     myReadableStreamBuffer.on('data', (chunk) => {
-      this.file.progress += chunk.byteLength
-      this.file.pctg = (this.file.progress >= this.file.size) ? '98%' : `${(this.file.progress / this.file.size) * 100}%`
-      myReadableStreamBuffer.resume()
+      this.file.progress += chunk.byteLength;
+      this.file.pctg = (this.file.progress >= this.file.size) ? '98%' : `${(this.file.progress / this.file.size) * 100}%`;
+      myReadableStreamBuffer.resume();
     });
 
-    stream.write(myReadableStreamBuffer)
+    stream.write(myReadableStreamBuffer);
 
-    myReadableStreamBuffer.put(Buffer.from(fileContent))
-    myReadableStreamBuffer.stop()
+    myReadableStreamBuffer.put(Buffer.from(fileContent));
+    myReadableStreamBuffer.stop();
 
     myReadableStreamBuffer.on('end', () => {
-      stream.end()
+      stream.end();
     });
 
-    myReadableStreamBuffer.resume()
+    myReadableStreamBuffer.resume();
   }
 
   onFileAdded(file) {
-    const reader = new FileReader()
+    const reader = new FileReader();
     reader.onloadend = () => {
       if (this.dropzoneConfig && this.dropzoneConfig.acceptedFiles) {
         if (!this.dropzoneConfig.acceptedFiles.includes(file.type)) {
-          this.hasError = true
-          this.errorMessage = this.errors.acceptedFiles.error
-          return false
+          this.hasError = true;
+          this.errorMessage = this.errors.acceptedFiles.error;
+          return false;
         }
       }
 
       if (this.dropzoneConfig && this.dropzoneConfig.maxFilesize) {
         if (file.size > this.dropzoneConfig.maxFilesize) {
-          this.hasError = true
-          this.errorMessage = this.errors.maxFilesize.error
-          return false
+          this.hasError = true;
+          this.errorMessage = this.errors.maxFilesize.error;
+          return false;
         }
       }
 
-      this.hasError = false
-      this.errorMessage = ''
+      this.hasError = false;
+      this.errorMessage = '';
 
       this.file = {
         isUploading: false,
@@ -116,9 +116,9 @@ export class IpfsDropzoneComponent implements OnInit {
         size: file.size,
         progress: 0,
         pctg: '0%',
-      }
-      this.upload(reader.result)
-    }
-    reader.readAsArrayBuffer(file)
+      };
+      this.upload(reader.result);
+    };
+    reader.readAsArrayBuffer(file);
   }
 }
