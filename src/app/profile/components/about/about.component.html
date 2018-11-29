@@ -78,7 +78,12 @@
           </button>
         </div>
       </div>
-      <div class="modal-body" border-none>
+      <div class="modal-body" *ngIf="loadingJobs">
+        <div class="col-12 mh-150 text-center">
+          <i>Loading...</i>
+        </div>
+      </div>
+      <div class="modal-body" *ngIf="!loadingJobs" border-none>
         <div class="row py-10 animated {{animation}}" *ngFor="let job of paginatedUserJobs();let i = index">
           <div class="col-8">
             <h6>{{job.information.title}}</h6>

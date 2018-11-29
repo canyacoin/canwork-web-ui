@@ -25,7 +25,7 @@ export class AboutComponent implements OnInit {
   currentPage = 0;
   lastPage = 0;
   animation = 'fadeIn';
-
+  loadingJobs = false;
   constructor(
     private router: Router,
     private authService: AuthService,
@@ -34,10 +34,12 @@ export class AboutComponent implements OnInit {
 
   async ngOnInit() {
     if (this.currentUser) {
+      this.loadingJobs = true;
       this.currentUserJobs = await this.publicJobService.getOpenPublicJobsByUser(this.currentUser.address);
       for (let i = 0; i < this.currentUserJobs.length; i++) {
         this.currentUserJobs[i].canInvite = await this.publicJobService.canInvite(this.currentUserJobs[i].id, this.userModel.address);
       }
+      this.loadingJobs = false;
     }
     this.lastPage = (Math.ceil(this.currentUserJobs.length / this.pageLimit) - 1);
   }

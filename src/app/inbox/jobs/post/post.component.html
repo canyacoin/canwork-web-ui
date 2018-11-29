@@ -220,7 +220,8 @@
       <div *ngIf="!sent" class="section bg-grey pt-15 pb-30">
         <div class="container bg-white p-30 brad-5px">
           <header class="section-header my-0 py-15">
-            <h2 class="fw-600">Create a Job Post</h2>
+            <h2 *ngIf="!editing" class="fw-600">Create a Job Post</h2>
+            <h2 *ngIf="editing" class="fw-600">Edit a Job Post</h2>
           </header>
           <div class="row">
             <div class="col-12 col-lg-12  bg-white">
@@ -259,10 +260,19 @@
                       </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" *ngIf="!editing">
                       <div class="col-12">
-                        <label>Key skills required *</label>
+                        <label>Key skills required</label>
                         <app-skill-tags-selection (tagsUpdated)="skillTagsUpdated($event)" [minimumTags]="1"></app-skill-tags-selection>
+                        <input hidden #skillTags class="form-control" formControlName="skills" type="text" name="skills">
+                      </div>
+                    </div>
+
+                    <div class="form-group" *ngIf="editing && this.jobToEdit && this.jobToEdit.information.skills.length > 0">
+                      <div class="col-12">
+                        <label>Key skills required to edit</label>
+                        <app-skill-tags-selection (tagsUpdated)="skillTagsUpdated($event)" [initialTags]="this.jobToEdit.information.skills"
+                          [minimumTags]="1"></app-skill-tags-selection>
                         <input hidden #skillTags class="form-control" formControlName="skills" type="text" name="skills">
                       </div>
                     </div>
@@ -490,9 +500,9 @@
           </div>
           <br>
           <p class="text-center">
-            <a class="btn btn-secondary" [routerLink]="['/home']">Return home</a>
+            <a class="btn btn-secondary" [routerLink]="['/jobs/public/', friendlyUrl]">Go to job</a>
             &nbsp;&nbsp;
-            <a class="btn btn-primary text-white" [routerLink]="['/jobs/public/', friendlyUrl]">Go to job</a>
+            <a class="btn btn-primary text-white" [routerLink]="['/search']">Invite Providers</a>
           </p>
 
         </div>

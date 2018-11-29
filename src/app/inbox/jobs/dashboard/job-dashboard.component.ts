@@ -4,7 +4,7 @@ import { FilterPipe } from 'ngx-filter-pipe';
 import { OrderPipe } from 'ngx-order-pipe';
 import { Observable, Subscription } from 'rxjs';
 
-import { Job, JobDescription, PaymentType, TimeRange, WorkType } from '../../../core-classes/job';
+import { Job, JobDescription, PaymentType, TimeRange, WorkType, JobState } from '../../../core-classes/job';
 import { User, UserType } from '../../../core-classes/user';
 import { AuthService } from '../../../core-services/auth.service';
 import { JobService } from '../../../core-services/job.service';
@@ -72,7 +72,9 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       });
     });
     this.publicJobsSubscription = this.publicJobService.getPublicJobsByUser(userId).subscribe(async (jobs: Job[]) => {
-      this.publicJobs = jobs;
+      // only show open jobs
+      const openJobs = jobs.filter(job => job.state === JobState.acceptingOffers);
+      this.publicJobs = openJobs;
     });
   }
 

@@ -81,6 +81,7 @@ export class JobDescription {
   workType: WorkType;
   timelineExpectation: TimeRange;
   weeklyCommitment: number;
+  providerType: string;
 
   constructor(init?: Partial<JobDescription>) {
     Object.assign(this, init);
@@ -116,6 +117,7 @@ export class Payment {
 
 export enum JobState {
   acceptingOffers = 'Accepting Offers',
+  closed = 'Public job closed',
   offer = 'Offer pending',
   cancelled = 'Cancelled',
   declined = 'Declined',

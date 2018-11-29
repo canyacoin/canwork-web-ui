@@ -41,6 +41,19 @@ export class PublicJobService {
     }));
   }
 
+  async getPublicJobAsObject(jobId: string) {
+    const jobPromise = await this.afs.doc(`public-jobs/${jobId}`).snapshotChanges().toPromise();
+    if (jobPromise) {
+      const job = jobPromise.payload.data() as Job;
+      if (job) {
+        return job;
+      } else {
+        return null;
+      }
+    }
+    return null;
+  }
+
   getPublicJobBids(jobId: string): Observable<any> {
     return this.afs.collection(`public-jobs/${jobId}/bids`).snapshotChanges().pipe(map(docs => {
       const bids = [];
@@ -133,14 +146,6 @@ export class PublicJobService {
           await this.addBid(bid, job.id);
           await this.sendPublicJobMessage(job, action, client, provider);
           resolve(true);
-          /*
-          const channelId = await this.chatService.createChannelsAsync(provider, client);
-          if (channelId) {
-            console.log(channelId);
-            await this.chatService.sendPublicJobMessages(job, action, bid.providerId, sender);
-            resolve(true);
-          }
-          */
         } else {
           console.log('can\'t upload bid...');
           reject(false);
@@ -189,13 +194,14 @@ export class PublicJobService {
     // closes the public job, create a new job object and starts the usual job flow.
     return new Promise<boolean>(async (resolve, reject) => {
       try {
-        job.providerId = bid.providerId;
-        job.state = JobState.termsAcceptedAwaitingEscrow;
-        job.budget = bid.budget;
         const newJob = job;
+        newJob.providerId = bid.providerId;
+        newJob.state = JobState.termsAcceptedAwaitingEscrow;
+        newJob.budget = bid.budget;
         const acceptTerms = new IJobAction(ActionType.acceptTerms, UserType.client);
         const success = await this.jobService.handleJobAction(newJob, acceptTerms);
         if (success) {
+          job.state = JobState.closed;
           this.saveJobFirebase(job, null);
           resolve(true);
         } else {
