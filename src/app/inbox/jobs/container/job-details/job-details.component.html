@@ -55,22 +55,11 @@
           <div class="info-details" *ngIf="job.information.attachments.length > 0">
             <b>Attachments</b>
             <a href="{{job.information.attachments[0].url}}" target="_blank">
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> fixed some bugs and streamlined the generateReadableId process
               <p *ngIf="job.information.attachments[0].name.length > 10">
                 <i class="fas fa-paperclip"></i> {{ job.information.attachments[0].name.substring(0, 10) }}...
               </p>
               <p *ngIf="job.information.attachments[0].name.length <= 10">
                 <i class="fas fa-paperclip"></i> {{ job.information.attachments[0].name }}...
-<<<<<<< HEAD
-=======
-              <p>
-                <i class="fas fa-paperclip"></i> {{ job.information.attachments[0].name }}
->>>>>>> finished the reactive modal, bid submitting WIP
-=======
->>>>>>> fixed some bugs and streamlined the generateReadableId process
               </p>
             </a>
           </div>
@@ -102,8 +91,8 @@
           </p>
         </div>
         <div class="actions-div" *ngIf="availableActions.length > 0">
-          <button *ngFor="let action of availableActions" class="btn action-btn mt-5 btn-{{getColour(action)}} btn-outline btn-sm"
-            (click)="executeAction(action)" [disabled]="actionIsDisabled(action)" [hidden]="actionIsHidden(action)">
+          <button *ngFor="let action of availableActions" class="btn action-btn mt-5 mr-5 btn-{{getColour(action)}} btn-outline btn-sm"
+            (click)="executeAction(action)" [disabled]="actionIsDisabled(action)">
             {{action}}
           </button>
           <br>
