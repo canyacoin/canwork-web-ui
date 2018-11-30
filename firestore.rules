@@ -99,13 +99,13 @@ service cloud.firestore {
        allow delete: if isAdmin();
     }
     
-    match /public-jobs/{publicJobId} {
+    match /public-jobs/{jobId}/invite/{inviteId} {
        allow read;
-       allow create: if isAuthenticated();
+       allow create: if userIsClientOrProvider();
        allow update: if userIsClientOrProvider();
        allow delete: if isAdmin();
     }
- 
+    
   
  
   // --------------------------------------------------------------------------------

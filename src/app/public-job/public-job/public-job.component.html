@@ -41,9 +41,9 @@
                 <b>{{job.information.weeklyCommitment}} hr/week</b>
                 <p>Weekly Commitment</p>
               </div>
-              <div class="info-details" *ngIf="job.information.attachments.length > 0">
+              <div class="info-details">
                 <b>Attachments</b>
-                <a href="{{job.information.attachments[0].url}}" target="_blank">
+                <a href="{{job.information.attachments[0].url}}" target="_blank" *ngIf="job.information.attachments.length > 0">
                   <p *ngIf="job.information.attachments[0].name.length > 10">
                     <i class="fas fa-paperclip"></i> {{ job.information.attachments[0].name.substring(0, 10) }}...
                   </p>
@@ -51,13 +51,16 @@
                     <i class="fas fa-paperclip"></i> {{ job.information.attachments[0].name }}...
                   </p>
                 </a>
+                <p><i *ngIf="job.information.attachments.length < 1">No attachment provided</i></p>
               </div>
             </div>
+          </div>
+          <div class="row my-15">
             <div class="col-sm-9">
               <app-skill-tag *ngFor="let skill of job.information.skills" [skill]=skill></app-skill-tag>
             </div>
-            <div class="col-sm-3" *ngIf="job.draft === true">
-              <i>Draft</i>
+            <div class="col-sm-3">
+              <button class="btn btn-sm btn-primary" [routerLink]="['/inbox/job/edit', job.id]" >EDIT JOB</button>
             </div>
           </div>
         </div>
@@ -68,16 +71,22 @@
             <h5>PROPOSED TERMS</h5>
           </div>
           <div class="col-sm-4 text-right text-left-mobile">
-            <div class="status-div" *ngIf="job.state && isOpen">
+            <div class="status-div" *ngIf="job.state && isOpen && !job.draft">
               <span class="jobStatus">
                 <i class="circle-success fas fa-circle"></i>&nbsp;
                 {{job.state}}
               </span>
             </div>
-            <div class="status-div" *ngIf="job.state && !isOpen">
+            <div class="status-div" *ngIf="job.state && !isOpen && !job.draft">
               <span class="jobStatus">
                 <i class="circle-danger fas fa-circle"></i>&nbsp;
                 Job closed
+              </span>
+            </div>
+            <div class="status-div" *ngIf="job.draft">
+              <span class="jobStatus">
+                <i class="circle-danger fas fa-circle"></i>&nbsp;
+                Draft
               </span>
             </div>
           </div>
