@@ -10,6 +10,7 @@ export class User {
   email: string;
   ethAddress: string;
   hourlyRate: string;
+  isDockUpdating: boolean;
   name: string;
   networkAddress: string;
   offset: string;
