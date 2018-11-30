@@ -23,6 +23,7 @@ export class StatusIconComponent {
       case JobState.cancelled:
       case JobState.declined:
       case JobState.inDispute:
+      case JobState.draft:
       case JobState.closed:
         return 'danger';
       case JobState.providerCounterOffer:
@@ -66,8 +67,10 @@ export class StatusIconComponent {
         return 'Reviewed';
       case JobState.acceptingOffers:
         return 'Accepting Offers';
-        case JobState.closed:
-          return 'Closed from public';
+      case JobState.closed:
+        return 'Closed from public';
+      case JobState.draft:
+        return 'Draft';
       default:
         return '';
     }

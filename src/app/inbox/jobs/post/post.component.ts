@@ -383,8 +383,12 @@ export class PostComponent implements OnInit, OnDestroy {
       this.postForm.value.workType, this.postForm.value.weeklyCommitment, this.postForm.value.paymentType);
     console.log('Shareable job submitted...');
     console.log('job created');
-    job.state = JobState.acceptingOffers;
-    this.sent = await this.publicJobService.handlepublicJob(job, action);
+    if (!isDraft) {
+      job.state = JobState.acceptingOffers;
+    } else {
+      job.state = JobState.draft;
+    }
+    this.sent = await this.publicJobService.handlePublicJob(job, action);
     this.isSending = false;
   }
 

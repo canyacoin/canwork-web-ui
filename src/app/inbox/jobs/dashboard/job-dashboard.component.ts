@@ -26,6 +26,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   jobs: Job[];
   publicJobs: Job[];
   activeJobs: Job[];
+  draftJobs: Job[];
   jobsSubscription: Subscription;
   publicJobsSubscription: Subscription;
   authSub: Subscription;
@@ -73,8 +74,10 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     });
     this.publicJobsSubscription = this.publicJobService.getPublicJobsByUser(userId).subscribe(async (jobs: Job[]) => {
       // only show open jobs
-      const openJobs = jobs.filter(job => job.state === JobState.acceptingOffers);
-      this.publicJobs = openJobs;
+      const open = jobs.filter(job => job.state === JobState.acceptingOffers);
+      const draft = jobs.filter(job => job.state === JobState.draft);
+      this.publicJobs = open;
+      this.draftJobs = draft;
     });
   }
 
@@ -88,7 +91,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
         this.jobs = this.activeJobs;
         break;
       case 'draft':
-        this.jobs = this.publicJobs.filter(job => job.draft === true);
+        this.jobs = this.draftJobs;
     }
   }
 

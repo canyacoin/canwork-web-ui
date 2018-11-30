@@ -85,11 +85,12 @@ service cloud.firestore {
        allow delete: if isAdmin();
     }
     
-    match /public-jobs/{jobId} { 
+        
+    match /public-jobs/{jobId} {
        allow read;
        allow create: if isAuthenticated();
        allow update: if userIsClientOrProvider();
-       allow delete: if isAdmin(); 
+       allow delete: if isAdmin();
     }    
     
     match /public-jobs/{jobId}/bids/{bidId} {
@@ -99,15 +100,14 @@ service cloud.firestore {
        allow delete: if isAdmin();
     }
     
-    match /public-jobs/{jobId}/invite/{inviteId} {
+    match /public-jobs/{jobId}/invites/{inviteId} {
        allow read;
-       allow create: if userIsClientOrProvider();
-       allow update: if userIsClientOrProvider();
+       allow create: if isAuthenticated();
+       allow update: if isAuthenticated();
        allow delete: if isAdmin();
     }
-    
-  
- 
+  }
+
   // --------------------------------------------------------------------------------
   function isAuthenticated() {
     return request.auth != null

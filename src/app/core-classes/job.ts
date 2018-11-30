@@ -130,6 +130,7 @@ export enum JobState {
   inDispute = 'Disputed',
   complete = 'Complete',
   reviewed = 'Review added',
+  draft = 'Draft'
 }
 
 export enum WorkType {

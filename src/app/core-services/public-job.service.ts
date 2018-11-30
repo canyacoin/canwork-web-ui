@@ -112,13 +112,14 @@ export class PublicJobService {
   }
 
   // BASIC CRUDs
-  async handlepublicJob(job, action: IJobAction): Promise<boolean> {
+  async handlePublicJob(job, action: IJobAction): Promise<boolean> {
     console.log('uploading job...');
     return new Promise<boolean>(async (resolve, reject) => {
       try {
         await this.saveJobFirebase(job, action);
         resolve(true);
       } catch (error) {
+        console.log(error);
         reject(false);
       }
     });
@@ -131,7 +132,11 @@ export class PublicJobService {
     }
     console.log('added action to this job\'s action log');
     const parsedJob = await this.jobService.parseJobToObject(job);
-    return this.publicJobsCollection.doc(job.id).set(parsedJob);
+    try {
+      return this.publicJobsCollection.doc(job.id).set(parsedJob);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
 

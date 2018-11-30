@@ -135,7 +135,7 @@
                       <div class="row">
                         <small class="col-7">Your expectations of the providers weekly time commitment ot your job.</small>
                         <input #weeklyCommitment formControlName="weeklyCommitment" class="form-control col-2" type="number"
-                          name="weeklyCommitment" min="1" placeholder="10" [class.invalid]="!postForm.controls.weeklyCommitment.valid && postForm.controls.weeklyCommitment.dirty">
+                          name="weeklyCommitment" min="1" placeholder="Enter hours/week..." [class.invalid]="!postForm.controls.weeklyCommitment.valid && postForm.controls.weeklyCommitment.dirty">
                         <span class="col-3 mt-8">hours / week</span>
                       </div>
                       <small *ngIf="!postForm.controls.weeklyCommitment.valid && postForm.controls.weeklyCommitment.dirty"
@@ -489,8 +489,12 @@
         <div class="container card">
           <div class="text-center mt-30">
             <img src="assets/img/CanYa_tick_green.svg" class="mb-30 animated bounceInDown" width="100px" height="100px">
-            <div *ngIf="!draft">
+            <div *ngIf="!draft && !editing">
               <h2>Congrats! Your Job has been Created!</h2>
+              <p class="lead fw-400">You can now invite providers to this job.</p>
+            </div>
+            <div *ngIf="!draft && editing">
+              <h2>Your job has been saved!</h2>
               <p class="lead fw-400">You can now invite providers to this job.</p>
             </div>
             <div *ngIf="draft">
@@ -499,12 +503,17 @@
             </div>
           </div>
           <br>
-          <p class="text-center">
+          <p *ngIf="!draft" class="text-center">
             <a class="btn btn-secondary" [routerLink]="['/jobs/public/', friendlyUrl]">Go to job</a>
             &nbsp;&nbsp;
             <a class="btn btn-primary text-white" [routerLink]="['/search']">Invite Providers</a>
           </p>
-
+          <p *ngIf="draft" class="text-center">
+            <a class="btn btn-secondary" [routerLink]="['/inbox/jobs/']">My Jobs</a>
+            &nbsp;&nbsp;
+            <a class="btn btn-primary text-white" [routerLink]="['/jobs/public/', friendlyUrl]">Go to job</a>
+            &nbsp;&nbsp;
+          </p>
         </div>
       </div>
     </div>

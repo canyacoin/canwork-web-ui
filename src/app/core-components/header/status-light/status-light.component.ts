@@ -68,7 +68,7 @@ export class StatusLightComponent implements OnInit, OnDestroy {
       case Web3LoadingStatus.error:
         return '#ff4954';
       case Web3LoadingStatus.noMetaMask:
-        return '#ff4954'
+        return '#ff4954';
       case Web3LoadingStatus.wrongNetwork:
         return '#b7bbbd';
       default:
