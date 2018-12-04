@@ -52,7 +52,7 @@ deploy:staging:
   script:
     - cd $APP_PATH/functions
     - yarn
-    - yarn -g firebase-tools@latest
+    - yarn global add firebase-tools@latest
     - cd ..
     - firebase use staging --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set algolia.appid="$FIREBASE_ALGOLIA_APPID" --token "$FIREBASE_CI_AUTH_TOKEN"
@@ -78,7 +78,7 @@ deploy:production:
   script:
     - cd $APP_PATH/functions
     - yarn
-    - yarn -g firebase-tools@latest
+    - yarn global add firebase-tools@latest
     - cd ..
     - firebase use prod --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set algolia.appid="$FIREBASE_ALGOLIA_APPID" --token "$FIREBASE_CI_AUTH_TOKEN"
