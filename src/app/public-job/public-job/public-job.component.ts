@@ -54,6 +54,11 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.shareableLink = '' + window.location.origin;
+    this.authSub = this.authService.currentUser$.subscribe((user: User) => {
+      if (user) {
+        this.currentUser = user;
+      }
+    });
     this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
       if (params['jobId']) {
         this.jobSub = this.publicJobsService.getPublicJob(params['jobId']).subscribe(publicJob => {
@@ -74,8 +79,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
             });
           }
         });
-      } else if (params['friendlyUrl']) {
-        this.jobSub = this.publicJobsService.getPublicJobsByUrl(params['friendlyUrl']).subscribe(publicJob => {
+      } else if (params['slug']) {
+        this.jobSub = this.publicJobsService.getPublicJobsByUrl(params['slug']).subscribe(publicJob => {
           console.log(publicJob === null);
           if (publicJob === null) {
             this.jobExists = false;
@@ -94,11 +99,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
             });
           }
         });
-      }
-    });
-    this.authSub = this.authService.currentUser$.subscribe((user: User) => {
-      if (user) {
-        this.currentUser = user;
       }
     });
   }

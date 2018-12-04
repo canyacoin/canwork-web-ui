@@ -60,7 +60,7 @@
               <app-skill-tag *ngFor="let skill of job.information.skills" [skill]=skill></app-skill-tag>
             </div>
             <div class="col-sm-3">
-              <button class="btn btn-sm btn-primary" [routerLink]="['/inbox/job/edit', job.id]" >EDIT JOB</button>
+              <button class="btn btn-sm btn-primary" *ngIf="myJob" [routerLink]="['/inbox/job/edit', job.id]" >EDIT JOB</button>
             </div>
           </div>
         </div>
@@ -256,14 +256,14 @@
                 <br>
                 <div class="input-group" style="border: none;">
                   <input type="number" formControlName="price" style="border: 1px solid #ebebeb;" class="form-control"
-                    id="price" placeholder="{{job.budget}}">
+                    id="price" placeholder="Client budget : {{job.budget}}">
                   <div class="input-group-append" style="padding: 5px;">
                     <span class="input-group-text"> <span *ngIf="job.paymentType !== 'Fixed price'">/hr </span>USD</span>
                   </div>
                 </div>
                 <label for="message">Message</label>
                 <br>
-                <textarea rows="2" class="form-control" formControlName="message" id="message"></textarea>
+                <textarea rows="2" class="form-control" placeholder="Deliver your pitch!" formControlName="message" id="message"></textarea>
               </form>
               <div class="row px-15">
               </div>

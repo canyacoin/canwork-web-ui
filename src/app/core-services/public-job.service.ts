@@ -139,6 +139,14 @@ export class PublicJobService {
     }
   }
 
+  async isMyJob(jobId, id) {
+    const job = await this.getPublicJobAsObject(jobId);
+    if (job.clientId === id) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   async handlePublicBid(bid: Bid, job: Job) {
     return new Promise<boolean>(async (resolve, reject) => {

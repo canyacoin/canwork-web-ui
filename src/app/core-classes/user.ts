@@ -9,6 +9,7 @@ export class User {
   description: string;
   email: string;
   ethAddress: string;
+  friendlyUrl: string;
   hourlyRate: string;
   name: string;
   networkAddress: string;

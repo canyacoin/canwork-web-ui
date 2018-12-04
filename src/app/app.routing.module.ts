@@ -51,7 +51,7 @@ import { UserIsSetupGuard } from './core-utils/user-is-setup.guard';
         component: PublicJobComponent
       },
       {
-        path: 'jobs/public/:friendlyUrl',
+        path: 'jobs/public/:slug',
         component: PublicJobComponent
       },
       {
@@ -59,7 +59,7 @@ import { UserIsSetupGuard } from './core-utils/user-is-setup.guard';
         component: JobBidsComponent
       },
       {
-        path: 'jobs/public/:friendlyUrl/bids',
+        path: 'jobs/public/:slug/bids',
         component: JobBidsComponent
       },
       {

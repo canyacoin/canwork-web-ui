@@ -26,6 +26,7 @@ export class AboutComponent implements OnInit {
   lastPage = 0;
   animation = 'fadeIn';
   loadingJobs = false;
+  inviting = false;
   constructor(
     private router: Router,
     private authService: AuthService,
@@ -91,13 +92,15 @@ export class AboutComponent implements OnInit {
   }
 
   async inviteProvider(job, index) {
+    this.inviting = true;
     const invited = await this.publicJobService.inviteProvider(job, this.currentUser, this.userModel);
     if (invited) {
-      alert('provider invited');
       console.log(this.currentUserJobs[index]);
       this.currentUserJobs[index].canInvite = false;
+      this.inviting = false;
       return true;
     } else {
+      this.inviting = false;
       alert('something went wrong');
       return false;
     }

@@ -135,29 +135,6 @@ export class PostComponent implements OnInit, OnDestroy {
     console.log(this.activatedRoute.snapshot.params['jobId']);
     this.editing = this.activatedRoute.snapshot.params['jobId'] && this.activatedRoute.snapshot.params['jobId'] !== '';
     console.log(this.editing);
-    if (!this.editing) {
-      this.jobId = GenerateGuid();
-    } else {
-      console.log(this.jobToEdit);
-      this.jobId = this.activatedRoute.snapshot.params['jobId'];
-      this.jobSub = this.publicJobService.getPublicJob(this.activatedRoute.snapshot.params['jobId']).subscribe((result) => {
-        if (result) {
-          this.jobToEdit = result;
-          this.shareableJobForm.controls['title'].patchValue(this.jobToEdit.information.title);
-          this.shareableJobForm.controls['description'].patchValue(this.jobToEdit.information.description);
-          this.shareableJobForm.controls['initialStage'].patchValue(this.jobToEdit.information.initialStage);
-          this.shareableJobForm.controls['providerType'].patchValue(this.jobToEdit.information.providerType);
-          this.shareableJobForm.controls['workType'].patchValue(this.jobToEdit.information.workType);
-          this.shareableJobForm.controls['timelineExpectation'].patchValue(this.jobToEdit.information.timelineExpectation);
-          this.shareableJobForm.controls['weeklyCommitment'].patchValue(this.jobToEdit.information.weeklyCommitment);
-          this.shareableJobForm.controls['budget'].patchValue(this.jobToEdit.budget);
-          this.shareableJobForm.controls['paymentType'].patchValue(this.jobToEdit.paymentType);
-          this.shareableJobForm.controls['deadline'].patchValue(this.jobToEdit.deadline);
-          this.shareableJobForm.controls['visibility'].patchValue(this.jobToEdit.visibility);
-          this.shareableJobForm.controls['skills'].patchValue(this.jobToEdit.information.skills);
-        }
-      });
-    }
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       this.currentUser = user;
       this.activatedRoute.params.take(1).subscribe((params) => {
@@ -167,10 +144,38 @@ export class PostComponent implements OnInit, OnDestroy {
           this.loadUser(this.recipientAddress);
           this.isShareable = false;
         } else {
-          this.pageLoaded = true;
           this.isShareable = true;
         }
       });
+      if (!this.editing) {
+        this.jobId = GenerateGuid();
+        this.pageLoaded = true;
+      } else {
+        this.jobId = this.activatedRoute.snapshot.params['jobId'];
+        this.jobSub = this.publicJobService.getPublicJob(this.activatedRoute.snapshot.params['jobId']).subscribe((result) => {
+          if (result) {
+            const canEdit = result.clientId === this.currentUser.address;
+            if (canEdit) {
+              this.jobToEdit = result;
+              this.shareableJobForm.controls['title'].patchValue(this.jobToEdit.information.title);
+              this.shareableJobForm.controls['description'].patchValue(this.jobToEdit.information.description);
+              this.shareableJobForm.controls['initialStage'].patchValue(this.jobToEdit.information.initialStage);
+              this.shareableJobForm.controls['providerType'].patchValue(this.jobToEdit.information.providerType);
+              this.shareableJobForm.controls['workType'].patchValue(this.jobToEdit.information.workType);
+              this.shareableJobForm.controls['timelineExpectation'].patchValue(this.jobToEdit.information.timelineExpectation);
+              this.shareableJobForm.controls['weeklyCommitment'].patchValue(this.jobToEdit.information.weeklyCommitment);
+              this.shareableJobForm.controls['budget'].patchValue(this.jobToEdit.budget);
+              this.shareableJobForm.controls['paymentType'].patchValue(this.jobToEdit.paymentType);
+              this.shareableJobForm.controls['deadline'].patchValue(this.jobToEdit.deadline);
+              this.shareableJobForm.controls['visibility'].patchValue(this.jobToEdit.visibility);
+              this.shareableJobForm.controls['skills'].patchValue(this.jobToEdit.information.skills);
+              this.pageLoaded = true;
+            } else {
+              this.router.navigateByUrl('/not-found');
+            }
+          }
+        });
+      }
     });
     const canToUsdResp = await this.http.get('https://api.coinmarketcap.com/v2/ticker/2343/?convert=USD').toPromise();
     if (canToUsdResp.ok) {
@@ -379,8 +384,8 @@ export class PostComponent implements OnInit, OnDestroy {
     });
     this.draft = isDraft;
     const action = new IJobAction(ActionType.createJob, UserType.client);
-    action.setPaymentProperties(job.budget, await this.jobService.getJobBudget(job), this.postForm.value.timelineExpectation,
-      this.postForm.value.workType, this.postForm.value.weeklyCommitment, this.postForm.value.paymentType);
+    action.setPaymentProperties(job.budget, await this.jobService.getJobBudget(job), this.shareableJobForm.value.timelineExpectation,
+      this.shareableJobForm.value.workType, this.shareableJobForm.value.weeklyCommitment, this.shareableJobForm.value.paymentType);
     console.log('Shareable job submitted...');
     console.log('job created');
     if (!isDraft) {

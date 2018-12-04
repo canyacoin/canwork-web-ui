@@ -108,8 +108,7 @@
                       'background': message.address !== currentUser.address ? '#3cf':'#e4e7ea' }"
                       style="border-radius:15px;">
                       <div class="card-block p-2 card-message-block">
-                        <span class="fw-400 mb-0 break-word" [innerHTML]="linkify(message.message)">
-                        </span>
+                        <span [innerHTML]="linkify(message.message, message.address !== currentUser.address) "></span>
                         <div class="text-right">
                           <small [ngClass]="{ 'text-dark opacity-40': message.address === currentUser.address,
                             'text-white opacity-60': message.address !== currentUser.address }">{{
@@ -302,7 +301,7 @@
               </div>
               <p *ngIf="!isLoading && channels.length < 1" class="text-dark opacity-60 my-80 text-center">Uh, oh, no
                 messages yet! Try again later.</p>
-              <div *ngFor="let message of messages;let i = index">
+              <div *ngFor="let message of messages;let i = index">x
                 <div *ngIf="message.type === 'MESSAGE' || message.type === 'ACTION'" class="row" [ngClass]="{ 'justify-content-start': message.address !== currentUser.address,
                       'justify-content-end': message.address === currentUser.address }">
                   <div class="col-auto mx-30 my-5">
@@ -313,9 +312,7 @@
                       [ngStyle]="{ 'color': message.address !== currentUser.address ? 'white':'',
                           'background': message.address !== currentUser.address ? '#3cf':'#e4e7ea' }"
                       style="border-radius:15px;">
-                      <div class="card-block p-2 card-message-block">
-                        <span class="fw-400 mb-0" [innerHTML]="linkify(message.message)">
-                        </span>
+                      <div class="card-block p-2 card-message-block" [innerHTML]="linkify(message.message, message.address !== currentUser.address)">
                         <div class="text-right">
                           <small [ngClass]="{ 'text-dark opacity-40': message.address === currentUser.address,
                                 'text-white opacity-60': message.address !== currentUser.address }">{{

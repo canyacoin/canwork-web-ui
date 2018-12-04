@@ -89,7 +89,10 @@
             <h6>{{job.information.title}}</h6>
           </div>
           <div class="col-4 text-right">
-            <button id="job-{{i}}" (click)="inviteProvider(job, i)" *ngIf="job.canInvite" class="btn btn-success">INVITE</button>
+            <button id="job-{{i}}" (click)="inviteProvider(job, i)" *ngIf="job.canInvite" [disabled]="inviting === true" class="btn btn-success">
+              <span *ngIf = "inviting === true">Inviting...</span>
+              <span *ngIf = "inviting !== true">INVITE</span>
+            </button>
             <i *ngIf="!job.canInvite" class="mr-15">Invited</i>
           </div>
         </div>
