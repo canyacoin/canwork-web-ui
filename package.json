@@ -75,5 +75,8 @@
     "ts-node": "~4.1.0",
     "tslint": "~5.9.1",
     "typescript": "3.1.6"
+  },
+  "resolutions": {
+    "**/event-stream": "^4.0.1"
   }
 }

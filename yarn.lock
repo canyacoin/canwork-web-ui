@@ -207,7 +207,7 @@
   dependencies:
     tslib "^1.9.0"
 
-"@canyaio/canpay-lib@^0.2.6":
+"@canyaio/canpay-lib@^0.2.4":
   version "0.2.6"
   resolved "https://registry.yarnpkg.com/@canyaio/canpay-lib/-/canpay-lib-0.2.6.tgz#81f882b01b994f2ec1ea917c4ac4bc7706294c48"
   integrity sha512-081YVWaISTNZAHbr11Z7yKAdcOD5aPQmghIhMLNDA271WHq6cv0hHOQQ/NwWDzLJj4bUl4gb49KO5Ib33UosAw==
@@ -3092,13 +3092,12 @@ ethjs-unit@0.1.6:
     bn.js "4.11.6"
     number-to-bn "1.7.0"
 
-event-stream@~3.3.0:
-  version "3.3.6"
-  resolved "https://registry.yarnpkg.com/event-stream/-/event-stream-3.3.6.tgz#cac1230890e07e73ec9cacd038f60a5b66173eef"
-  integrity sha512-dGXNg4F/FgVzlApjzItL+7naHutA3fDqbV/zAZqDDlXTjiMnQmZKu+prImWKszeBM5UQeGvAl3u1wBiKeDh61g==
+event-stream@^4.0.1, event-stream@~3.3.0:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/event-stream/-/event-stream-4.0.1.tgz#4092808ec995d0dd75ea4580c1df6a74db2cde65"
+  integrity sha512-qACXdu/9VHPBzcyhdOWR5/IahhGMf0roTeZJfzz077GwylcDd90yOHLouhmv7GJ5XzPi6ekaQWd8AvPP2nOvpA==
   dependencies:
     duplexer "^0.1.1"
-    flatmap-stream "^0.1.0"
     from "^0.1.7"
     map-stream "0.0.7"
     pause-stream "^0.0.11"
@@ -3520,11 +3519,6 @@ firebaseui@^3.4.1:
   integrity sha512-DKXSFKC2ryCjpbifpLXC/erXPR8v7aCyWMicRXO0m7GNj+cpQgw7L3XOwzgpyoLKOL1DhsJ0Qniwi5qvvRSbjQ==
   dependencies:
     dialog-polyfill "^0.4.7"
-
-flatmap-stream@^0.1.0:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/flatmap-stream/-/flatmap-stream-0.1.1.tgz#d34f39ef3b9aa5a2fc225016bd3adf28ac5ae6ea"
-  integrity sha512-lAq4tLbm3sidmdCN8G3ExaxH7cUCtP5mgDvrYowsx84dcYkJJ4I28N7gkxA6+YlSXzaGLJYIDEi9WGfXzMiXdw==
 
 flatmap@0.0.3:
   version "0.0.3"
