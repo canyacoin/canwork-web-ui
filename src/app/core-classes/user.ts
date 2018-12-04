@@ -9,6 +9,7 @@ export class User {
   description: string;
   email: string;
   ethAddress: string;
+  friendlyUrl: string;
   hourlyRate: string;
   isDockUpdating: boolean;
   name: string;
@@ -31,6 +32,9 @@ export class User {
   work: string;
   workSkillTags: string[] = [];
 
+  upvotes = 0;
+  downvotes = 0;
+  numberOfReviews = 0;
 
   constructor(init?: Partial<User>) {
     Object.assign(this, init);

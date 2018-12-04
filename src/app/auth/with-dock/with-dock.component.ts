@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import * as decode from 'jwt-decode';
 
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
 
 @Component({
   selector: 'app-with-dock',

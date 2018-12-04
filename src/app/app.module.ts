@@ -9,11 +9,11 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireStorageModule } from 'angularfire2/storage';
 import { Ng5SliderModule } from 'ng5-slider';
-import { FilterPipeModule } from 'ngx-filter-pipe';
 
 import { FirebaseUIModule } from 'firebaseui-angular';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app.routing.module';
 import { CoreComponentsModule } from './core-components/core-components.module';
 import { firebaseUiAuthConfig } from './core-config/app-auth-config';
@@ -25,11 +25,17 @@ import { CanWorkEthService } from './core-services/eth.service';
 import { JobNotificationService } from './core-services/job-notification.service';
 import { MobileService } from './core-services/mobile.service';
 import { NavService } from './core-services/nav.service';
+import { PublicJobService } from './core-services/public-job.service';
 import { CoreUtilsModule } from './core-utils/core-utils.module';
+import { PublicJobComponent } from './public-job/public-job/public-job.component';
+import { JobBidsComponent } from './public-job/job-bids/job-bids.component';
+import { FilterPipeModule } from 'ngx-filter-pipe';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PublicJobComponent,
+    JobBidsComponent
   ],
   imports: [
     AppRoutingModule,
@@ -52,6 +58,8 @@ import { CoreUtilsModule } from './core-utils/core-utils.module';
     HttpClientModule,
     FilterPipeModule,
     Ng5SliderModule,
+    FormsModule,
+    ReactiveFormsModule,
     StarRatingModule.forRoot()
   ],
   exports: [
@@ -65,6 +73,7 @@ import { CoreUtilsModule } from './core-utils/core-utils.module';
     JobNotificationService,
     CertificationsService,
     DockIoService,
+    PublicJobService
   ],
   bootstrap: [AppComponent]
 })

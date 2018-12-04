@@ -35,6 +35,7 @@
 .show {
   display: block;
 }
+
 .search {
   font-size: 14px;
   margin: 0px 10px 0px 10px;
@@ -116,7 +117,7 @@
   padding: 7px 13px !important;
 }
 
-.card-message-block > p {
+.card-message-block>p {
   word-break: break-word;
 }
 
@@ -183,6 +184,10 @@
   border-radius: 25px;
   color: white;
   float: left;
+}
+
+.white-text {
+  color: white !important;
 }
 
 .from-user:before {

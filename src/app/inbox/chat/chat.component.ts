@@ -318,4 +318,19 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
     const msg = this.chatService.createMessageObject(this.selectedChannel.channel, this.currentUser, 'You\'ve received a payment. Please, check your MetaMask Wallet.');
     this.sendMessage(msg);
   }
+
+  linkify(text, userMessage) {
+    const urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    if (userMessage === false) {
+      text = text.replace(urlRegex,
+        '<a target="_blank" href="$1">$1</a>'
+      );
+    } else {
+      text = text.replace(urlRegex,
+        '<a class="text-white" target="_blank" href="$1">$1</a>'
+      );
+    }
+    return text;
+  }
+
 }

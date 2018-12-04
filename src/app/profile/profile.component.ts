@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '@class/user';
 import { AuthService } from '@service/auth.service';
 import { UserService } from '@service/user.service';
+import { PublicJobService } from '@service/public-job.service';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 
@@ -14,6 +15,8 @@ import { take } from 'rxjs/operators';
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   currentUser: User;
+  currentUserJobs: any;
+
   userModel: User;
   authSub: Subscription;
 
@@ -26,7 +29,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private location: Location,
     private activatedRoute: ActivatedRoute,
     private userService: UserService,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private publicJobService: PublicJobService) {
   }
 
   ngOnInit() {

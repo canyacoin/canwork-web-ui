@@ -295,6 +295,8 @@
   height: 12px;
   border-radius: 50%;
   padding: 4px;
+  position: absolute;
+  top: 10px;
 }
 .back-button-container{
   min-height: 40px;

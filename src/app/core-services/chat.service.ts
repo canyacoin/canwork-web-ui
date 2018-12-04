@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ContentChildren } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { take } from 'rxjs/operators';
@@ -36,7 +36,7 @@ export class Message {
   type: MessageType;
   price: string;
   timestamp: string;
-
+  isPublic: boolean;
   constructor(init?: Partial<Message>) {
     Object.assign(this, init);
   }
@@ -83,7 +83,7 @@ export class ChatService {
     });
   }
 
-  // Check if channel exists
+
   async createNewChannel(sender: User, receiver: User) {
     const channelId: string = [sender.address, receiver.address].sort().join('-');
     const path = `chats/${sender.address}/channels/${channelId}`;
@@ -97,7 +97,7 @@ export class ChatService {
     });
   }
 
-  // Check if channel exists
+
   async hideChannel(userId: string, channelId: string) {
     const path = `chats/${userId}/channels/${channelId}`;
     await this.afs.firestore.doc(path).update({ message: '', timestamp: moment().format('x') });
@@ -147,6 +147,29 @@ export class ChatService {
     this.sendMessage(sender.address, receiverId, message);
   }
 
+  // had to make a separate function so it won't break the usual job flow
+  async sendPublicJobMessages(job: Job, action: IJobAction, providerId: string, sender: User) {
+    const channelId: string = [job.clientId, providerId].sort().join('-');
+    const msgSender = sender;
+    const receiverId = action.executedBy === UserType.client ? providerId : job.clientId;
+    let messageText = '';
+    switch (action.type) {
+      case ActionType.invite:
+        messageText = 'I have invited you to my job, can you take a look?';
+        break;
+      case ActionType.bid:
+        messageText = 'I\'ve sent a bid to your job, can you take a look?';
+        break;
+      default:
+        messageText = 'I\'ve sent a response to your public job';
+        break;
+    }
+    const message = this.createPublicMessageObject(channelId, msgSender, messageText, MessageType.jobAction, null, null, job.id);
+    console.log(receiverId);
+    this.sendMessage(sender.address, receiverId, message);
+  }
+
+
   // sendNewPostMessages(channelId: string, sender: User, receiver: User, description: string, budget: string) {
   //   const message = this.createMessageObject(channelId, sender, 'I\'ve just sent you a request, is this something you can do?');
   //   this.sendMessage(sender, receiver, message);
@@ -195,6 +218,23 @@ export class ChatService {
       jobId: jobId,
       message: message,
       type: type,
+      isPublic: false,
+      timestamp: moment().format('x')
+    });
+  }
+
+  createPublicMessageObject(channelId: string, user: User, message: string, type: MessageType = MessageType.message, budget: string = '', price: string = '', jobId: string = ''): Message {
+    return new Message({
+      channel: channelId,
+      address: user.address,
+      avatar: user.avatar,
+      budget: budget,
+      name: user.name,
+      title: user.title,
+      jobId: jobId,
+      message: message,
+      type: type,
+      isPublic: true,
       timestamp: moment().format('x')
     });
   }

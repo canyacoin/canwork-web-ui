@@ -1,13 +1,14 @@
-import { Component, NgModule, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { Component, NgModule, OnDestroy, OnInit, Pipe, PipeTransform, HostBinding } from '@angular/core';
 import { Router } from '@angular/router';
 import { FilterPipe } from 'ngx-filter-pipe';
 import { OrderPipe } from 'ngx-order-pipe';
 import { Observable, Subscription } from 'rxjs';
 
-import { Job, JobDescription, PaymentType, TimeRange, WorkType } from '../../../core-classes/job';
+import { Job, JobDescription, PaymentType, TimeRange, WorkType, JobState } from '../../../core-classes/job';
 import { User, UserType } from '../../../core-classes/user';
 import { AuthService } from '../../../core-services/auth.service';
 import { JobService } from '../../../core-services/job.service';
+import { PublicJobService } from '../../../core-services/public-job.service';
 import { MobileService } from '../../../core-services/mobile.service';
 import { UserService } from '../../../core-services/user.service';
 
@@ -23,23 +24,36 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   userType: UserType;
   paymentType = PaymentType;
   jobs: Job[];
+  publicJobs: Job[];
+  activeJobs: Job[];
+  draftJobs: Job[];
   jobsSubscription: Subscription;
+  publicJobsSubscription: Subscription;
   authSub: Subscription;
   orderType: string;
   reverseOrder: boolean;
   loading = true;
+  jobType = 'active';
   filterByState: any = { state: '' };
   allJobs: Job[];
   searchQuery: string;
   isOnMobile = false;
 
-  constructor(private authService: AuthService, public mobile: MobileService, private orderPipe: OrderPipe, private jobService: JobService, private userService: UserService, private router: Router, public filterPipe: FilterPipe) { }
+  constructor(
+    private authService: AuthService,
+    public mobile: MobileService,
+    private orderPipe: OrderPipe,
+    private jobService: JobService,
+    private publicJobService: PublicJobService,
+    private userService: UserService,
+    private router: Router,
+    public filterPipe: FilterPipe
+  ) { }
 
   async ngOnInit() {
     this.currentUser = await this.authService.getCurrentUser();
     this.userType = this.currentUser.type;
     this.initialiseJobs(this.currentUser.address, this.userType);
-
     this.orderType = 'information.title';
     this.reverseOrder = false;
     this.isOnMobile = this.mobile.isOnMobile;
@@ -51,13 +65,34 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
 
   private initialiseJobs(userId: string, userType: UserType) {
     this.jobsSubscription = this.jobService.getJobsByUser(userId, userType).subscribe(async (jobs: Job[]) => {
-      this.jobs = jobs;
-      this.allJobs = jobs;
+      this.activeJobs = jobs;
       this.loading = false;
+      this.jobs = this.activeJobs;
       this.jobs.forEach(async (job) => {
         this.jobService.assignOtherPartyAsync(job, this.userType);
       });
     });
+    this.publicJobsSubscription = this.publicJobService.getPublicJobsByUser(userId).subscribe(async (jobs: Job[]) => {
+      // only show open jobs
+      const open = jobs.filter(job => job.state === JobState.acceptingOffers);
+      const draft = jobs.filter(job => job.state === JobState.draft);
+      this.publicJobs = open;
+      this.draftJobs = draft;
+    });
+  }
+
+  changeJob(jobType) {
+    this.jobType = jobType;
+    switch (jobType) {
+      case 'public':
+        this.jobs = this.publicJobs.filter(job => job.draft === false);
+        break;
+      case 'active':
+        this.jobs = this.activeJobs;
+        break;
+      case 'draft':
+        this.jobs = this.draftJobs;
+    }
   }
 
   changeUserType() {
@@ -71,7 +106,12 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   }
 
   filterJobsByState() {
-    this.jobs = this.filterPipe.transform(this.allJobs, this.filterByState);
+    console.log(this.filterByState.state !== '');
+    if (this.filterByState.state !== '') {
+      this.jobs = this.activeJobs.filter(job => job.state === this.filterByState.state);
+    } else {
+      this.jobs = this.activeJobs;
+    }
   }
 
 }

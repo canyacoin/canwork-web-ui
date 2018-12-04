@@ -48,7 +48,7 @@ export class LandingComponent implements OnInit {
       name: 'Virtual Assistants',
       img: 'assistant.svg'
     }
-  ]
+  ];
 
   ngOnInit() {
     this.algoliaSearch = algoliasearch(this.algoId, this.algoKey);
@@ -70,7 +70,7 @@ export class LandingComponent implements OnInit {
           'name': result[i].name,
           'category': result[i].category,
           'timezone': result[i].timezone,
-        }
+        };
         array.push(provider);
       }
       return array;
