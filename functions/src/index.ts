@@ -53,6 +53,36 @@ const welcomeEmailTemplateHTML = doT.template(fs.readFileSync(path.join(__dirnam
 const pinCodeEmailTemplateHTML = doT.template(fs.readFileSync(path.join(__dirname, '../src/templates', 'email-ethereum-login-pin.html'), 'utf8'));
 const approvedProviderTemplateHTML = doT.template(fs.readFileSync(path.join(__dirname, '../src/templates', 'email-approved-provider.html'), 'utf8'));
 
+exports.canyaSupportNotification = functions.https.onRequest(async (request, response) => {
+  cors(request, response, async () => {
+
+    if (request.method !== 'POST') {
+      return response.status(405).type('application/json').send({ message: 'Method Not Allowed', supportedMethods: 'POST' });
+    }
+
+    const emailAddress: string = request.body.emailAddress;
+    const message: string = request.body.message;
+    const subject: string = request.body.subject;
+
+    try {
+      const sgMail = require('@sendgrid/mail');
+      sgMail.setApiKey(sendgridApiKey);
+      const msg = {
+        to: emailAddress,
+        from: 'support@canya.com',
+        subject: subject,
+        text: message,
+      };
+      const r = await sgMail.send(msg);
+      console.log('+ email response was', r);
+      return response.status(201).type('application/json').send({ message: 'Provider was notified', email: emailAddress });
+    } catch (error) {
+      console.log(error);
+      return response.status(404).type('application/json').send({ message: `Email not sent` });
+    }
+  });
+});
+
 exports.sendEmail = functions.https.onRequest(async (request, response) => {
   // TODO: move to express middleware
   if (!request.headers.authorization || request.headers.authorization !== env.dev.authkey) {
