@@ -12,5 +12,6 @@ export enum ActionType {
   finishedJob = 'Mark as complete', // notifies client
   acceptFinish = 'Complete job', // notifies provider
   acceptFinishFailed = 'Complete job failed', // notifies provider
-  dispute = 'Raise dispute' // depends on caller
+  dispute = 'Raise dispute', // depends on caller
+  bid = 'Place Bid' //
 }

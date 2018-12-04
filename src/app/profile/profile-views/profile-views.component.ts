@@ -34,9 +34,13 @@ export class ProfileViewsComponent implements OnInit, OnDestroy {
             item['humanisedDate'] = moment(item.timestamp, 'x').fromNow();
           });
           this.users = data;
-        }, error => { console.error('! unable to retrieve who viewed data:', error) });
+        }, error => {
+          console.error('! unable to retrieve who viewed data:', error);
+        });
       }
-    }, error => { console.error('! unable to retrieve currentUser data:', error) });
+    }, error => {
+      console.error('! unable to retrieve currentUser data:', error);
+    });
   }
 
   ngOnDestroy() {

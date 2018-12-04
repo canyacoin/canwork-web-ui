@@ -29,6 +29,18 @@ const routes: Routes = [
     component: PostComponent
   },
   {
+    path: 'post',
+    component: PostComponent
+  },
+  {
+    path: 'post/:id',
+    component: PostComponent
+  },
+  {
+    path: 'job/edit/:jobId',
+    component: PostComponent
+  },
+  {
     path: 'jobs',
     component: JobDashboardComponent
   },

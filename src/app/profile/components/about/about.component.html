@@ -21,10 +21,16 @@
           [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">LET'S
           CHAT</button>
         <br>
-        <button *ngIf="!isMyProfile && userModel.type == 'Provider'" (click)="proposeJob()" class="btn btn-primary btn-canya-chat"
-          style="width:175px;" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }"
+        <button *ngIf="!isMyProfile && userModel.type == 'Provider' && currentUserJobs && currentUserJobs.length < 1"
+          (click)="proposeJob()" class="btn btn-primary btn-canya-chat" style="width:175px;" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }"
           data-scrollto="section-profile">
           POST A REQUEST
+        </button>
+        <button *ngIf="!isMyProfile && userModel.type == 'Provider' && currentUserJobs && currentUserJobs.length > 0"
+          class="btn btn-primary btn-canya-chat" data-toggle="modal" data-target="#inviteModal" style="width:175px;"
+          [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }"
+          data-scrollto="section-profile">
+          INVITE TO JOB
         </button>
       </div>
     </div>
@@ -54,6 +60,59 @@
           <path id="path1_fill" d="M 0 36.4959C 14.0351 50.8858 62.5188 84.4509 95 74.5268C 135.602 62.1217 181.5 -41.9732 257 19.0267C 321.612 71.2295 344 96.5267 400 44.9313L 400 971.527L 0 971.527L 0 36.4959Z" />
         </defs>
       </svg>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="inviteModal" tabindex="-1" *ngIf="currentUserJobs && currentUserJobs.length > 0" role="dialog"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center" border-none>
+        <div class="col-12">
+          <h5 class="modal-title" id="exampleModalLabel">INVITE TO JOB</h5>
+          <button type="button" style="position: absolute; right: 0; top: 0" class="close" data-dismiss="modal"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+      <div class="modal-body" *ngIf="loadingJobs">
+        <div class="col-12 mh-150 text-center">
+          <i>Loading...</i>
+        </div>
+      </div>
+      <div class="modal-body" *ngIf="!loadingJobs" border-none>
+        <div class="row py-10 animated {{animation}}" *ngFor="let job of paginatedUserJobs();let i = index">
+          <div class="col-8">
+            <h6>{{job.information.title}}</h6>
+          </div>
+          <div class="col-4 text-right">
+            <button id="job-{{i}}" (click)="inviteProvider(job, i)" *ngIf="job.canInvite" [disabled]="inviting === true" class="btn btn-success">
+              <span *ngIf = "inviting === true">Inviting...</span>
+              <span *ngIf = "inviting !== true">INVITE</span>
+            </button>
+            <i *ngIf="!job.canInvite" class="mr-15">Invited</i>
+          </div>
+        </div>
+        <div class="row py-10">
+          <div class="col-12 d-flex justify-content-center">
+            <button class="btn btn-sm" [disabled]="currentPage == 0" (click)="previousPage()">
+              <i class="fa fa-chevron-left"></i>
+            </button>
+            <button class="btn btn-sm" [disabled]="currentPage == lastPage" (click)="nextPage()">
+              <i class="fa fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+        <div class="row py-10">
+          <div class="col-12 text-center">
+            <span>Want to start a new job?<br>
+              <a data-dismiss="modal" class="pointer text-canya" (click)="proposeJob()">Post a request.</a></span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

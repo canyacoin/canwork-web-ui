@@ -1,7 +1,7 @@
 import { NgSwitch } from '@angular/common';
 import { Injectable } from '@angular/core';
 import {
-    CanPayData, CanPayService, EthService, Operation, setProcessResult, View
+  CanPayData, CanPayService, EthService, Operation, setProcessResult, View
 } from '@canyaio/canpay-lib';
 import { Job, JobState, Payment, PaymentType, TimeRange, WorkType } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
@@ -265,7 +265,7 @@ export class JobService {
 
 
   /** Job object must be re-assigned as firebase doesn't accept strong types */
-  private parseJobToObject(job: Job): Promise<object> {
+  parseJobToObject(job: Job): Promise<object> {
     const parsedAttachments: Array<any> = [];
     job.information.attachments.forEach((attachment: Upload) => {
       parsedAttachments.push(this.parseUpload(attachment));
@@ -290,8 +290,10 @@ export class JobService {
     return Promise.resolve(parsedJob);
   }
 
+
   private parseUpload(upload: Upload): any {
     const parsedUpload: any = Object.assign({}, upload);
     return parsedUpload;
   }
+
 }

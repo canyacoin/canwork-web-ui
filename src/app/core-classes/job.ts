@@ -1,5 +1,5 @@
 import { Type } from '@angular/core';
-import { User, UserType } from '@class/user';
+import { Avatar, User, UserType } from '@class/user';
 
 import { IJobAction } from './job-action';
 import { Upload } from './upload';
@@ -20,6 +20,11 @@ export class Job {
   actionLog: Array<IJobAction> = [];
   boostVisibility = false;
   reviewId: string;
+  deadline: string;
+  visibility: string;
+  draft: boolean;
+  friendlyUrl: string;
+
 
   constructor(init?: Partial<Job>) {
     Object.assign(this, init);
@@ -76,9 +81,27 @@ export class JobDescription {
   workType: WorkType;
   timelineExpectation: TimeRange;
   weeklyCommitment: number;
+  providerType: string;
 
   constructor(init?: Partial<JobDescription>) {
     Object.assign(this, init);
+  }
+}
+
+export class Bid {
+  providerId: string;
+  providerInfo: Object;
+  budget: number;
+  message: string;
+  timestamp: string;
+  rejected: boolean;
+  constructor(providerId: string, providerInfo: Object, budget: number, message: string, timestamp: string) {
+    this.providerId = providerId;
+    this.providerInfo = providerInfo;
+    this.budget = budget;
+    this.message = message;
+    this.timestamp = timestamp;
+    this.rejected = false;
   }
 }
 
@@ -93,6 +116,8 @@ export class Payment {
 }
 
 export enum JobState {
+  acceptingOffers = 'Accepting Offers',
+  closed = 'Public job closed',
   offer = 'Offer pending',
   cancelled = 'Cancelled',
   declined = 'Declined',
@@ -105,6 +130,7 @@ export enum JobState {
   inDispute = 'Disputed',
   complete = 'Complete',
   reviewed = 'Review added',
+  draft = 'Draft'
 }
 
 export enum WorkType {
@@ -127,4 +153,5 @@ export enum PaymentType {
   hourly = 'Hourly rate',
   fixed = 'Fixed price'
 }
+
 

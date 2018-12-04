@@ -23,6 +23,8 @@ export class StatusIconComponent {
       case JobState.cancelled:
       case JobState.declined:
       case JobState.inDispute:
+      case JobState.draft:
+      case JobState.closed:
         return 'danger';
       case JobState.providerCounterOffer:
       case JobState.clientCounterOffer:
@@ -31,6 +33,7 @@ export class StatusIconComponent {
       case JobState.complete:
       case JobState.inEscrow:
       case JobState.reviewed:
+      case JobState.acceptingOffers:
         return 'success';
       default:
         return 'primary';
@@ -38,7 +41,6 @@ export class StatusIconComponent {
   }
   /* Customizeable messages for each job status. */
   get stateStatus(): string {
-
     switch (this.job.state) {
       case JobState.offer:
         return 'Job offered';
@@ -63,6 +65,12 @@ export class StatusIconComponent {
         return 'Completed';
       case JobState.reviewed:
         return 'Reviewed';
+      case JobState.acceptingOffers:
+        return 'Accepting Offers';
+      case JobState.closed:
+        return 'Closed from public';
+      case JobState.draft:
+        return 'Draft';
       default:
         return '';
     }

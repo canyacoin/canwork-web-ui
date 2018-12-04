@@ -17,7 +17,7 @@ import { take } from 'rxjs/operators';
 
 import { environment } from '../../../../../environments/environment';
 import {
-    ActionDialogComponent, ActionDialogOptions
+  ActionDialogComponent, ActionDialogOptions
 } from '../action-dialog/action-dialog.component';
 
 @Component({
@@ -74,7 +74,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.job = new Job(job);
         this.currentUserType = this.currentUser.address === job.clientId ? UserType.client : UserType.provider;
         this.jobService.assignOtherPartyAsync(this.job, this.currentUserType);
-        this.setAttachmentUrl(this.job.information.attachments);
+        this.setAttachmentUrl();
       });
 
       this.reviewsSub = this.reviewService.getJobReviews(jobId).subscribe((reviews: Review[]) => {
@@ -155,17 +155,24 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     return this.currentUserType === UserType.client;
   }
 
-  private setAttachmentUrl(attachments) {
+
+  private async setAttachmentUrl() {
     const attachment = this.job.information.attachments;
     if (attachment.length > 0) { // check if there's any attachment on this job
-      if (attachment[0].url == null) { // [0] is used here since we only support single file upload anyway.
+      if (attachment[0].url === null || attachment[0].url === undefined) { // [0] is used here since we only support single file upload anyway.
+        console.log('no URL');
         if (attachment[0].filePath != null) { // Assume that it's caused by the async issue
-          let urlSub: Subscription;
-          urlSub = this.storage.ref(attachment[0].filePath).getDownloadURL().subscribe(downloadUrl => {
-            attachment[0].url = downloadUrl; // change this attachment's (null) url into the actual url.
+          let getUrl: Subscription;
+          const filePath = attachment[0].filePath;
+          const fileRef = this.storage.ref(filePath);
+          getUrl = fileRef.getDownloadURL().subscribe(result => {
+            this.job.information.attachments[0].url = result;
           });
-          urlSub.unsubscribe(); // unsubscibe to the UrlSub just in case
+          console.log(attachment);
         }
+      } else {
+        console.log('Has URL');
+        console.log(attachment[0].url);
       }
     }
   }

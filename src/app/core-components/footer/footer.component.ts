@@ -9,9 +9,5 @@ declare var createCustomFooter: any;
 export class FooterComponent implements OnInit {
     constructor() { }
     ngOnInit() {
-        const footerUrls = [
-        {name: 'FAQ', url: 'faq'},
-        ];
-        createCustomFooter(footerUrls);
     }
 }

@@ -118,6 +118,7 @@ h4 {
   .job-desc {
     min-height: auto;
   }
+
   .provider-job-card .headshot-div {
     display: none;
   }
@@ -126,7 +127,7 @@ h4 {
 @media (max-width: 576px) {
   .job-desc p {
     width: auto;
-    max-width: 75vw;
-    height: 45px;
+    text-overflow: clip;
+    white-space: unset;
   }
 }
