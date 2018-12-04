@@ -53,7 +53,8 @@ export class WithDockComponent implements OnInit, OnDestroy {
         action.forEach(({ payload }) => {
           const snapshot = payload.doc;
           const data = snapshot.data();
-          if (data['address'] && data['@context'] === 'https://dock.io') {
+          const isFromDockContext = data['address'] && data['@context'] === 'https://dock.io' && data['isDockUpdating'];
+          if (isFromDockContext) {
             console.log(data);
             this.getFirebaseToken(data.address);
           }
@@ -81,7 +82,10 @@ export class WithDockComponent implements OnInit, OnDestroy {
       });
       const tokenPayload = decode(token);
       console.log('+ decoded JWT:', tokenPayload);
-      const user: User = new User({ address: tokenPayload.uid });
+      const user: User = new User({
+        address: tokenPayload.uid,
+        isDockUpdating: false,
+      });
       this.handleLogin(user);
     }, error => {
       console.log('+ auth status !!', error.status);
