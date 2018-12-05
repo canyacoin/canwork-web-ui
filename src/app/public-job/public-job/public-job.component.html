@@ -60,7 +60,7 @@
               <app-skill-tag *ngFor="let skill of job.information.skills" [skill]=skill></app-skill-tag>
             </div>
             <div class="col-sm-3">
-              <button class="btn btn-sm btn-primary" *ngIf="myJob" [routerLink]="['/inbox/job/edit', job.id]" >EDIT JOB</button>
+              <button class="btn btn-sm btn-primary" *ngIf="myJob" [routerLink]="['/inbox/job/edit', job.id]">EDIT JOB</button>
             </div>
           </div>
         </div>
@@ -209,20 +209,20 @@
         <div class="container">
           <div class="row">
             <div class="col-12">
-              <div class="row px-15">
-                <span>URL:</span>
-              </div>
-              <div class="row px-15">
-                <div class="col-8 link-col">
-                  <p *ngIf="!job.friendlyUrl">
+              <div class="row px-15 text-center ">
+                <div class="col-12">
+                  <span class="my-5">URL:</span>
+                </div>
+                <div class="col-12 link-col">
+                  <p *ngIf="!job.slug">
                     {{shareableLink}}/jobs/{{job.id}}
                   </p>
-                  <p *ngIf="job.friendlyUrl">
-                    {{shareableLink}}/jobs/public/{{job.friendlyUrl}}
+                  <p *ngIf="job.slug">
+                    {{shareableLink}}/jobs/public/{{job.slug}}
                   </p>
                 </div>
-                <div class="col-4">
-                  <button (click)="copyLink()" class="btn btn-primary">COPY LINK</button>
+                <div class="col-12">
+                  <button (click)="copyLink()" class="btn btn-primary mt-5">COPY LINK</button>
                 </div>
               </div>
               <div class="row">
