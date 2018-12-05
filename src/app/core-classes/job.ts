@@ -23,7 +23,7 @@ export class Job {
   deadline: string;
   visibility: string;
   draft: boolean;
-  friendlyUrl: string;
+  slug: string;
 
 
   constructor(init?: Partial<Job>) {
