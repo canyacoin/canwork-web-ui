@@ -10442,3 +10442,137 @@ hr {
     height: 50px;
   }
 }
+
+.skill-tag-col {
+  text-align: right;
+  padding: 0;
+  margin: 0;
+}
+
+.job-details {
+  font-size: 14px;
+}
+
+.job-details p {
+  margin: 0;
+  color: #323c47;
+}
+
+.job-dashboard-card {
+  border-radius: 5px;
+}
+
+.job-dashboard-card:hover {
+  box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.15);
+}
+
+.info-row {
+  min-height: 144px;
+}
+
+.info-row b {
+  font-weight: 600;
+}
+
+.option-row {
+  min-height: 50px;
+}
+
+.option-menu {
+  box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.2);
+  top: 32px;
+}
+
+#moreOptionsLink {
+  padding-left: 15px;
+  font-size: 600;
+}
+
+.option-menu i {
+  margin-right: 10px;
+}
+
+.job-desc {
+  min-height: 195px;
+}
+
+.job-desc p {
+  width: auto;
+  max-width: 75vw;
+  height: 100px;
+  padding-bottom: 25px;
+  white-space: pre-wrap;
+  overflow: hidden;
+}
+
+.provider-job-card .headshot-div {
+  position: absolute;
+  height: 50px;
+  width: 50px;
+  border: none;
+}
+
+.provider-job-card p,
+h4 {
+  margin: 0;
+}
+
+.provider-job-card .client-info-table {
+  border: none;
+  margin: 0;
+  max-width: 600px;
+}
+
+.provider-job-card .client-info-table td,
+.client-info-table th {
+  border: none;
+  padding: 0;
+}
+
+.provider-job-card .btn {
+  min-width: 135px;
+}
+
+.info-container {
+  min-width: 420px;
+}
+
+.btn-div .btn {
+  margin-top: 5px;
+}
+
+.view-job-btn {
+  width: 150px;
+  height: 36px;
+}
+
+@media (max-width:768px) {
+  .mobile-center {
+    text-align: center !important;
+  }
+
+  .otherPartyName {
+    position: relative;
+  }
+
+  .info-row {
+    min-height: auto;
+    padding: 10px 0 10px 0;
+  }
+
+  .job-desc {
+    min-height: auto;
+  }
+
+  .provider-job-card .headshot-div {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .job-desc p {
+    width: auto;
+    text-overflow: clip;
+    white-space: unset;
+  }
+}

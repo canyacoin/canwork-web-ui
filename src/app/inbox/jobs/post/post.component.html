@@ -450,13 +450,12 @@
                             </button>
                           </div>
                           <div class="mb-10 px-5 col-lg-2 col-md-4 col-sm-6 col-xs-12">
-                            <button type="button btn-secondary" (click)="setVisibility('public')" disabled class="btn btn-primary w-full"
+                            <button type="button btn-secondary" (click)="setVisibility('public')" class="btn btn-primary w-full"
                               [ngClass]="{'btn-outline': shareableJobForm.controls.visibility.value !== 'public'}">
                               Public
                             </button>
                           </div>
                         </div>
-                        <i class="small">Public job listing coming soon</i>
                       </div>
                     </div>
                     <div class="form-group">
@@ -504,7 +503,7 @@
           </div>
           <br>
           <p *ngIf="!draft" class="text-center">
-            <a class="btn btn-secondary" [routerLink]="['/jobs/public/', friendlyUrl]">Go to job</a>
+            <a class="btn btn-secondary" [routerLink]="['/jobs/', jobId]">Go to job</a>
             &nbsp;&nbsp;
             <a class="btn btn-primary text-white" [routerLink]="['/search']">Invite Providers</a>
           </p>

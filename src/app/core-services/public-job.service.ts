@@ -64,8 +64,21 @@ export class PublicJobService {
     }));
   }
 
+  getAllOpenJobs(): Observable<any> {
+    return this.afs.collection(`public-jobs`).snapshotChanges().pipe(map(docs => {
+      const jobs = [];
+      docs.forEach((doc) => {
+        const currentJob = doc.payload.doc.data() as Job;
+        if (currentJob.state === JobState.acceptingOffers && currentJob.visibility === 'public') {
+          jobs.push(currentJob);
+        }
+      });
+      return jobs;
+    }));
+  }
+
   getPublicJobsByUrl(url: string): Observable<Job> {
-    return this.afs.collection<any>('public-jobs', ref => ref.where('friendlyUrl', '==', url)).snapshotChanges().pipe(map(changes => {
+    return this.afs.collection<any>('public-jobs', ref => ref.where('slug', '==', url)).snapshotChanges().pipe(map(changes => {
       if (changes.length > 0) {
         return (changes[0].payload.doc.data());
       } else {

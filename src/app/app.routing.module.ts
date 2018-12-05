@@ -8,6 +8,7 @@ import { BrandComponent } from './core-components/brand/brand.component';
 import { FaqPageComponent } from './core-components/faq-page/faq-page.component';
 import { ComingSoonComponent } from './core-components/coming-soon/coming-soon.component';
 import { ToolsComponent } from './core-components/tools/tools.component';
+import { DashboardComponent } from './public-job/dashboard/dashboard.component';
 import { AuthGuard } from './core-utils/auth.guard';
 import { UserIsSetupGuard } from './core-utils/user-is-setup.guard';
 
@@ -44,7 +45,7 @@ import { UserIsSetupGuard } from './core-utils/user-is-setup.guard';
       },
       {
         path: 'jobs',
-        component: ComingSoonComponent
+        component: DashboardComponent
       },
       {
         path: 'jobs/:jobId',
