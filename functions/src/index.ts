@@ -360,7 +360,7 @@ exports.getFirebaseTokenForDockIOAuth = functions.https.onRequest(async (request
 });
 
 /** 
- * Listen for public-job creations and created slug field
+ * Listen for public-job creations and create slug field
  */
 exports.createSlugWhenJobCreated = functions.firestore
   .document('public-jobs/{jobId}')
@@ -961,3 +961,20 @@ async function createSlugIfNotExist(collectionPath: string, id: string, expected
 function joinString(str: string = ''): string {
   return str.toLocaleLowerCase().split(' ').join('-');
 }
+
+/*
+ * cloud https function to init slug of users collection & jobs collection
+ */
+exports.initSlug = functions.https.onRequest(async (request, response) => {
+  const usersnaps = await db.collection('users').get();
+  const jobsnaps = await db.collection('public-jobs').get();
+
+  usersnaps.forEach(doc => {
+    createSlugIfNotExist('users', doc.id, joinString(doc.data().name))
+  });
+  jobsnaps.forEach(doc => {
+    createSlugIfNotExist('public-jobs', doc.id, joinString(doc.data().information.title))
+  });
+
+  return response.status(201);
+});
