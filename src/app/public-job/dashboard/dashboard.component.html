@@ -12,33 +12,22 @@
   <div class="container py-15" *ngIf="allJobs && allJobs.length > 0">
     <div class="row">
       <div class="col-lg-12">
+        <form method="post" (ngSubmit)="onSearch(inputSearch.value);">
+          <div class="canya-seach-bar input-group mb-3" style="max-width:540px">
+            <input #inputSearch type="text" class="form-control canya-search-input" placeholder="Search Jobs..">
+            <div class="input-group-append">
+              <button class="canya-search-input-btn btn btn-primary" type="submit">
+                <img class="search-img" src="assets/img/search-icon-white.svg">
+              </button>
+            </div>
+          </div>
+        </form>
         <div class="form-inline">
           <div class="form-group">
             <label for="orderTypeSelect" class="mb-15">Category: </label>
             <select class="mb-10 mx-10" #filterTypeSelect>
-              <option value="">
-                <span>All Jobs</span>
-              </option>
-              <option value="Awaiting Escrow">
-                <span>Jobs Awaiting Escrow</span>
-              </option>
-              <option value="Funds In Escrow">
-                <span>Funds in Escrow</span>
-              </option>
-              <option value="Pending completion">
-                <span>Jobs Pending Completion</span>
-              </option>
-              <option value="Disputed">
-                <span>Jobs In Dispute</span>
-              </option>
-              <option value="Offer pending">
-                <span>Pending Jobs</span>
-              </option>
-              <option value="Cancelled">
-                <span>Cancelled</span>
-              </option>
-              <option value="Complete">
-                <span>Completed Jobs</span>
+              <option *ngFor="let type of providerTypes" value="type.id">
+                <span>{{type.name}}</span>
               </option>
             </select>
           </div>
@@ -67,31 +56,30 @@
         </div>
       </div>
     </div>
-    <div class="card job-dashboard-card my-10 p-20" *ngFor="let job of allJobs">
+    <div class="card job-dashboard-card my-10 p-20" *ngFor="let job of allJobs" [routerLink]="['/jobs/public', job.slug]">
       <div class="row">
         <div class="col-12">
           <h5>{{job.information.title}}</h5>
         </div>
       </div>
       <div class="row">
-        <div class="col-12">
+        <div class="col-12 public-job-card-desc">
           <p>{{job.information.description}}</p>
-          <app-skill-tag *ngFor="let skill of job.information.skills" [skill]="skill"></app-skill-tag>
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm-2">
-          <b>{{job.budget}}</b>
+      <div class="row pt-15">
+        <div class="col-md-2 col-sm-3 col-6">
+          <b>{{job.budget}} USD</b>
           <p>{{job.paymentType}}</p>
         </div>
-        <div class="col-sm-2">
+        <div class="col-md-2 col-sm-3 col-6">
           <b>{{job.deadline}}</b>
           <p>Project Deadline</p>
         </div>
-        <div class="col-sm-4">
-
-        </div>
-        <div class="col-sm-4">
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <app-skill-tag *ngFor="let skill of job.information.skills" [skill]="skill"></app-skill-tag>
         </div>
       </div>
     </div>
