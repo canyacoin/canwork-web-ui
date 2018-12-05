@@ -369,7 +369,8 @@ exports.createSlugWhenJobCreated = functions.firestore
     const jobId = snap.id;
     const slug = data.slug;
 
-    !slug && createSlugIfNotExist('public-jobs', jobId, joinString(data.information.title));
+    !slug && createSlugIfNotExist('public-jobs', jobId, joinString(data.information.title))
+    .catch(err => console.error(err))
   })
 /*
  * Listen for user creations and created an associated algolia record
@@ -381,7 +382,8 @@ exports.indexProviderData = functions.firestore
     const data = snap.data();
     const objectId = snap.id;
 
-    !data.slug && createSlugIfNotExist('users', objectId, joinString(data.name));
+    !data.slug && createSlugIfNotExist('users', objectId, joinString(data.name))
+    .catch(err => console.error(err))
 
     const workData = buildWorkData(objectId);
 
@@ -971,9 +973,11 @@ exports.initSlug = functions.https.onRequest(async (request, response) => {
 
   usersnaps.forEach(doc => {
     createSlugIfNotExist('users', doc.id, joinString(doc.data().name))
+    .catch(err => console.error(err))
   });
   jobsnaps.forEach(doc => {
     createSlugIfNotExist('public-jobs', doc.id, joinString(doc.data().information.title))
+    .catch(err => console.error(err))
   });
 
   return response.status(201);
