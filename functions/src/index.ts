@@ -369,7 +369,7 @@ exports.createSlugWhenJobCreated = functions.firestore
     const jobId = snap.id;
     const slug = data.slug;
 
-    !slug && createSlugIfNotExist(`public-jobs/${jobId}`, joinString(data.information.title));
+    !slug && createSlugIfNotExist('public-jobs', jobId, joinString(data.information.title));
   })
 /*
  * Listen for user creations and created an associated algolia record
@@ -381,7 +381,7 @@ exports.indexProviderData = functions.firestore
     const data = snap.data();
     const objectId = snap.id;
 
-    !data.slug && createSlugIfNotExist(`users/${objectId}`, joinString(data.name));
+    !data.slug && createSlugIfNotExist('users', objectId, joinString(data.name));
 
     const workData = buildWorkData(objectId);
 
@@ -947,15 +947,15 @@ function getCategories(): string[] {
 }
 
 // ignore that case: update manually in firebase console and happen to conflict with the exist one
-async function createSlugIfNotExist(docPath: string, expectedSlug: string) {
+async function createSlugIfNotExist(collectionPath: string, id: string, expectedSlug: string) {
   let len: number = 0;
   let slug: string;
-  const snapshots = await db.collection(docPath).where('slug', '==', expectedSlug).get();
+  const snapshots = await db.collection(collectionPath).where('slug', '==', expectedSlug).get();
 
   snapshots.forEach(doc => len++);
   slug = `${expectedSlug}${len > 0 ? len : ''}`;
 
-  await db.doc(docPath).update({ slug });
+  await db.doc(`${collectionPath}/${id}`).update({ slug });
 }
 
 function joinString(str: string = ''): string {
