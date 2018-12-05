@@ -14,7 +14,7 @@
           <div *ngIf="userModel" class="card my-15">
             <div class="container px-30 py-30">
               <app-profile-timezone *ngIf="userModel" [userModel]="userModel"></app-profile-timezone>
-              <app-profile-social *ngIf="notMyProfile()"></app-profile-social>
+              <app-profile-social [userModel]="userModel" *ngIf="notMyProfile()"></app-profile-social>
               <app-profile-support-me *ngIf="notMyProfile() && userModel.ethAddress" [userModel]="userModel"
                 [currentUser]="currentUser"></app-profile-support-me>
               <app-profile-visitors *ngIf="isMyProfile()" [userModel]="currentUser"></app-profile-visitors>

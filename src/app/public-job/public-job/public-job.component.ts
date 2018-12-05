@@ -9,7 +9,7 @@ import { UserService } from '@service/user.service';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-
+import { environment } from '@env/environment';
 import * as moment from 'moment';
 
 @Component({
@@ -53,7 +53,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.shareableLink = '' + window.location.origin;
+    this.shareableLink = environment.shareBaseUrl;
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       if (user) {
         this.currentUser = user;
@@ -159,7 +159,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   copyLink() {
     let link = '';
     if (this.job.slug) {
-      link = this.shareableLink + '/jobs/public/' + this.job.slug;
+      link = this.shareableLink + '/job/' + this.job.slug;
     } else {
       link = this.shareableLink + '/jobs/' + this.job.id;
     }
