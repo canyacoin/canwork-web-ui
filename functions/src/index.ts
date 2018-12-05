@@ -359,7 +359,18 @@ exports.getFirebaseTokenForDockIOAuth = functions.https.onRequest(async (request
   });
 });
 
+/** 
+ * Listen for public-job creations and created slug field
+ */
+exports.createSlugWhenJobCreated = functions.firestore
+  .document('public-jobs/{jobId}')
+  .onCreate(async (snap) => {
+    const data = snap.data();
+    const jobId = snap.id;
+    const slug = data.slug;
 
+    !slug && createSlugIfNotExist(`public-jobs/${jobId}`, joinString(data.information.title));
+  })
 /*
  * Listen for user creations and created an associated algolia record
  * Also send a welcome email, and flag their user object: welcomeEmailSent: true
@@ -369,6 +380,8 @@ exports.indexProviderData = functions.firestore
   .onCreate(async (snap, context) => {
     const data = snap.data();
     const objectId = snap.id;
+
+    !data.slug && createSlugIfNotExist(`users/${objectId}`, joinString(data.name));
 
     const workData = buildWorkData(objectId);
 
@@ -931,4 +944,20 @@ function getCategories(): string[] {
     'Software developers',
     'Virtual assistants'
   ]
+}
+
+// ignore that case: update manually in firebase console and happen to conflict with the exist one
+async function createSlugIfNotExist(docPath: string, expectedSlug: string) {
+  let len: number = 0;
+  let slug: string;
+  const snapshots = await db.collection(docPath).where('slug', '==', expectedSlug).get();
+
+  snapshots.forEach(doc => len++);
+  slug = `${expectedSlug}${len > 0 ? len : ''}`;
+
+  await db.doc(docPath).update({ slug });
+}
+
+function joinString(str: string = ''): string {
+  return str.toLocaleLowerCase().split(' ').join('-');
 }
