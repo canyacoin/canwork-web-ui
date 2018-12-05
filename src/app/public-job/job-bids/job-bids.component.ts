@@ -50,8 +50,8 @@ export class JobBidsComponent implements OnInit {
             this.canSee = false;
           }
         });
-      } else if (params['friendlyUrl']) {
-        this.jobSub = this.publicJobsService.getPublicJobsByUrl(params['friendlyUrl']).subscribe(publicJob => {
+      } else if (params['slug']) {
+        this.jobSub = this.publicJobsService.getPublicJobsByUrl(params['slug']).subscribe(publicJob => {
           console.log(publicJob === null);
           if (publicJob === null) {
             this.canSee = false;

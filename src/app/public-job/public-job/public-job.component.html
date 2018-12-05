@@ -214,11 +214,11 @@
               </div>
               <div class="row px-15">
                 <div class="col-8 link-col">
-                  <p *ngIf="!job.friendlyUrl">
+                  <p *ngIf="!job.slug">
                     {{shareableLink}}/jobs/{{job.id}}
                   </p>
-                  <p *ngIf="job.friendlyUrl">
-                    {{shareableLink}}/jobs/public/{{job.friendlyUrl}}
+                  <p *ngIf="job.slug">
+                    {{shareableLink}}/jobs/public/{{job.slug}}
                   </p>
                 </div>
                 <div class="col-4">

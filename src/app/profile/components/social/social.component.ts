@@ -15,8 +15,8 @@ export class SocialComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if (this.userModel && this.userModel.friendlyUrl !== '') {
-      this.shareLink = this.userModel.friendlyUrl;
+    if (this.userModel && this.userModel.slug !== '') {
+      this.shareLink = this.userModel.slug;
     } else {
       this.shareLink = escape(window.location.href);
     }

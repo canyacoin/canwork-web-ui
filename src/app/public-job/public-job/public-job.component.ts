@@ -158,8 +158,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
   copyLink() {
     let link = '';
-    if (this.job.friendlyUrl) {
-      link = this.shareableLink + '/jobs/public/' + this.job.friendlyUrl;
+    if (this.job.slug) {
+      link = this.shareableLink + '/jobs/public/' + this.job.slug;
     } else {
       link = this.shareableLink + '/jobs/' + this.job.id;
     }

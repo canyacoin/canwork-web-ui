@@ -65,7 +65,7 @@ export class PublicJobService {
   }
 
   getPublicJobsByUrl(url: string): Observable<Job> {
-    return this.afs.collection<any>('public-jobs', ref => ref.where('friendlyUrl', '==', url)).snapshotChanges().pipe(map(changes => {
+    return this.afs.collection<any>('public-jobs', ref => ref.where('slug', '==', url)).snapshotChanges().pipe(map(changes => {
       if (changes.length > 0) {
         return (changes[0].payload.doc.data());
       } else {
@@ -75,7 +75,7 @@ export class PublicJobService {
   }
 
   async getPublicJobByUrl(friendly) {
-    const exist = await this.afs.collection(`public-jobs`, ref => ref.where('friendlyUrl', '==', friendly)).valueChanges().take(1).toPromise();
+    const exist = await this.afs.collection(`public-jobs`, ref => ref.where('slug', '==', friendly)).valueChanges().take(1).toPromise();
     return exist;
   }
 
@@ -199,7 +199,7 @@ export class PublicJobService {
   }
 
   async jobUrlExists(friendlyQuery) {
-    const exist = await this.afs.collection('public-jobs', ref => ref.where('friendlyUrl', '>=', friendlyQuery)).valueChanges().take(1).toPromise();
+    const exist = await this.afs.collection('public-jobs', ref => ref.where('slug', '>=', friendlyQuery)).valueChanges().take(1).toPromise();
     return exist;
   }
 

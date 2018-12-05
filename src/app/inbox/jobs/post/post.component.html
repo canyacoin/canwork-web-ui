@@ -504,14 +504,14 @@
           </div>
           <br>
           <p *ngIf="!draft" class="text-center">
-            <a class="btn btn-secondary" [routerLink]="['/jobs/public/', friendlyUrl]">Go to job</a>
+            <a class="btn btn-secondary" [routerLink]="['/jobs/public/', slug]">Go to job</a>
             &nbsp;&nbsp;
             <a class="btn btn-primary text-white" [routerLink]="['/search']">Invite Providers</a>
           </p>
           <p *ngIf="draft" class="text-center">
             <a class="btn btn-secondary" [routerLink]="['/inbox/jobs/']">My Jobs</a>
             &nbsp;&nbsp;
-            <a class="btn btn-primary text-white" [routerLink]="['/jobs/public/', friendlyUrl]">Go to job</a>
+            <a class="btn btn-primary text-white" [routerLink]="['/jobs/public/', slug]">Go to job</a>
             &nbsp;&nbsp;
           </p>
         </div>

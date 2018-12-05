@@ -9,7 +9,7 @@ export class User {
   description: string;
   email: string;
   ethAddress: string;
-  friendlyUrl: string;
+  slug: string;
   hourlyRate: string;
   isDockUpdating: boolean;
   name: string;
