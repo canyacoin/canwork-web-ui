@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
 import { User } from '@class/user';
+import { environment } from '@env/environment';
 
 declare let escape: any;
 
@@ -8,15 +9,16 @@ declare let escape: any;
   templateUrl: './social.component.html',
   styleUrls: ['../../profile.component.scss']
 })
-export class SocialComponent implements OnInit {
+export class SocialComponent implements OnInit, AfterViewInit {
   @Input() userModel: User;
-  shareLink = '';
+  shareLink = environment.shareBaseUrl + '/profile/';
 
   constructor() { }
 
-  ngOnInit() {
-    if (this.userModel && this.userModel.friendlyUrl !== '') {
-      this.shareLink = this.userModel.friendlyUrl;
+  ngOnInit() {}
+  ngAfterViewInit() {
+    if (this.userModel && this.userModel.slug !== '') {
+      this.shareLink += this.userModel.slug;
     } else {
       this.shareLink = escape(window.location.href);
     }

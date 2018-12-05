@@ -35,7 +35,7 @@ export class PostComponent implements OnInit, OnDestroy {
   recipientAddress = '';
   recipient: User = null;
   currentUser: User;
-  friendlyUrl = '';
+  slug = '';
   authSub: Subscription;
   routeSub: Subscription;
   jobSub: Subscription;
@@ -356,6 +356,11 @@ export class PostComponent implements OnInit, OnDestroy {
       tags = tags.slice(0, 6);
     }
     const friendly = await this.publicJobService.generateReadableId(this.shareableJobForm.value.title);
+<<<<<<< HEAD
+=======
+    this.slug = friendly;
+    console.log('Friendly URL : ' + this.slug);
+>>>>>>> master
     if (this.editing) {
       this.jobId = this.jobToEdit.id;
     }
@@ -363,6 +368,10 @@ export class PostComponent implements OnInit, OnDestroy {
       id: this.jobId,
       hexId: this.ethService.web3js.utils.toHex(this.jobId.hashCode()),
       clientId: this.currentUser.address,
+<<<<<<< HEAD
+=======
+      slug: this.slug,
+>>>>>>> master
       information: new JobDescription({
         description: this.shareableJobForm.value.description,
         title: this.shareableJobForm.value.title,

@@ -88,7 +88,7 @@ export class PublicJobService {
   }
 
   async getPublicJobByUrl(friendly) {
-    const exist = await this.afs.collection(`public-jobs`, ref => ref.where('friendlyUrl', '==', friendly)).valueChanges().take(1).toPromise();
+    const exist = await this.afs.collection(`public-jobs`, ref => ref.where('slug', '==', friendly)).valueChanges().take(1).toPromise();
     return exist;
   }
 
@@ -212,7 +212,7 @@ export class PublicJobService {
   }
 
   async jobUrlExists(friendlyQuery) {
-    const exist = await this.afs.collection('public-jobs', ref => ref.where('friendlyUrl', '>=', friendlyQuery)).valueChanges().take(1).toPromise();
+    const exist = await this.afs.collection('public-jobs', ref => ref.where('slug', '>=', friendlyQuery)).valueChanges().take(1).toPromise();
     return exist;
   }
 
