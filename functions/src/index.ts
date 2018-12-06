@@ -951,13 +951,14 @@ function getCategories(): string[] {
 
 // ignore that case: update manually in firebase console and happen to conflict with the exist one
 async function createSlugIfNotExist(collectionPath: string, id: string, expectedSlug: string) {
-  let len: number = 0;
-  let slug: string;
-  const snapshots = await db.collection(collectionPath).where('slug', '==', expectedSlug).get();
+  let flag: boolean = true;
+  let slug: string = joinString(expectedSlug);
 
-  snapshots.forEach(doc => len++);
-  slug = `${expectedSlug}${len > 0 ? '-' + len : ''}`;
-
+  while(flag) {
+    slug += `-${Math.floor(Math.random() * 1000)}`;
+    const result = await db.collection(collectionPath).where('slug', '==', slug).get();
+    flag = !!result.size
+  }
   await db.doc(`${collectionPath}/${id}`).update({ slug });
 }
 
@@ -974,17 +975,11 @@ exports.initSlug = functions.https.onRequest(async (request, response) => {
 
   usersnaps.forEach(async (doc) => {
     const data = doc.data();
-    if (!data.slug) {
-      await createSlugIfNotExist('users', doc.id, joinString(doc.data().name))
-      .catch(err => console.error(err))
-    }
+    !data.slug && createSlugIfNotExist('users', doc.id, joinString(doc.data().name)).catch(err => console.error(err))
   });
   jobsnaps.forEach(async (doc) => {
     const data = doc.data();
-    if (!data.slug) {
-      await createSlugIfNotExist('public-jobs', doc.id, joinString(doc.data().information.title))
-      .catch(err => console.error(err))
-    }
+    !data.slug && createSlugIfNotExist('public-jobs', doc.id, joinString(doc.data().information.title)).catch(err => console.error(err))
   });
 
   return response.status(200)
@@ -1004,15 +999,11 @@ exports.delSlug = functions.https.onRequest(async (request, response) => {
 
   usersnaps.forEach(async (doc) => {
     const data = doc.data();
-    if (data.slug) {
-      await db.doc(`users/${doc.id}`).update({ slug: null })
-    }
+    data.slug && await db.doc(`users/${doc.id}`).update({ slug: '' })
   });
   jobsnaps.forEach(async (doc) => {
     const data = doc.data();
-    if (data.slug){
-      await db.doc(`public-jobs/${doc.id}`).update({ slug: null })
-    }
+    data.slug && await db.doc(`public-jobs/${doc.id}`).update({ slug: '' })
   });
 
   return response.status(200)
