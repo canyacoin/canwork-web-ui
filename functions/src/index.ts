@@ -955,7 +955,7 @@ async function createSlugIfNotExist(collectionPath: string, id: string, expected
   const snapshots = await db.collection(collectionPath).where('slug', '==', expectedSlug).get();
 
   snapshots.forEach(doc => len++);
-  slug = `${expectedSlug}${len > 0 ? len : ''}`;
+  slug = `${expectedSlug}${len > 0 ? '-' + len : ''}`;
 
   await db.doc(`${collectionPath}/${id}`).update({ slug });
 }
@@ -998,11 +998,15 @@ exports.delSlug = functions.https.onRequest(async (request, response) => {
 
   usersnaps.forEach(async (doc) => {
     const data = doc.data();
-    data.slug && await db.doc(`users/${doc.id}`).update({ slug: null })
+    if (data.slug) {
+      await db.doc(`users/${doc.id}`).update({ slug: null })
+    }
   });
   jobsnaps.forEach(async (doc) => {
     const data = doc.data();
-    !data.slug && await db.doc(`public-jobs/${doc.id}`).update({ slug: null })
+    if (data.slug){
+      await db.doc(`public-jobs/${doc.id}`).update({ slug: null })
+    }
   });
 
   return response.status(201);
