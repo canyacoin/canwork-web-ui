@@ -978,7 +978,7 @@ exports.initSlug = functions.https.onRequest(async (request, response) => {
   });
   jobsnaps.forEach(async (doc) => {
     const data = doc.data();
-    
+    console.log(`init jobs ${data.slug}`)
     !data.slug && createSlugIfNotExist('public-jobs', doc.id, joinString(doc.data().information.title)).catch(err => console.error(err))
   });
 
@@ -986,7 +986,7 @@ exports.initSlug = functions.https.onRequest(async (request, response) => {
     .type('application/json')
     .send({
       status: 0,
-      msg: `init all slug succ!`
+      msg: `init all slug succ! 2`
     })
 });
 
@@ -1010,6 +1010,6 @@ exports.delSlug = functions.https.onRequest(async (request, response) => {
     .type('application/json')
     .send({
       status: 0,
-      msg: `del all slug succ!`
+      msg: `del all slug succ! 2`
     })
 });
