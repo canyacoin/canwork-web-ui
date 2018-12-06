@@ -49,6 +49,10 @@ const routes: Routes = [
   {
     path: 'buy-coffee/:address',
     component: BuyCoffeeComponent
+  },
+  {
+    path: ':slug',
+    component: ProfileComponent
   }
 ];
 

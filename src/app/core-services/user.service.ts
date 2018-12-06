@@ -72,6 +72,12 @@ export class UserService {
     return data;
   }
 
+  async getUserBySlug(slug: string) {
+    const data = await this.usersCollectionRef.ref
+      .where('slug', '==', slug)
+      .limit(1).get();
+    return data;
+  }
 
   saveUser(credentials: User, type?: string): Promise<User> {
     return new Promise(async (resolve: any, reject: any) => {
