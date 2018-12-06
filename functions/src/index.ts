@@ -987,7 +987,12 @@ exports.initSlug = functions.https.onRequest(async (request, response) => {
     }
   });
 
-  return response.status(201);
+  return response.status(200)
+    .type('application/json')
+    .send({
+      status: 0,
+      msg: `init all slug succ!`
+    })
 });
 
 /*
@@ -1010,5 +1015,10 @@ exports.delSlug = functions.https.onRequest(async (request, response) => {
     }
   });
 
-  return response.status(201);
+  return response.status(200)
+    .type('application/json')
+    .send({
+      status: 0,
+      msg: `del all slug succ!`
+    })
 });
