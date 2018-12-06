@@ -971,13 +971,34 @@ exports.initSlug = functions.https.onRequest(async (request, response) => {
   const usersnaps = await db.collection('users').get();
   const jobsnaps = await db.collection('public-jobs').get();
 
-  usersnaps.forEach(doc => {
-    createSlugIfNotExist('users', doc.id, joinString(doc.data().name))
+  usersnaps.forEach(async (doc) => {
+    const data = doc.data();
+    !data.slug && await createSlugIfNotExist('users', doc.id, joinString(doc.data().name))
     .catch(err => console.error(err))
   });
-  jobsnaps.forEach(doc => {
-    createSlugIfNotExist('public-jobs', doc.id, joinString(doc.data().information.title))
+  jobsnaps.forEach(async (doc) => {
+    const data = doc.data();
+    !data.slug && await createSlugIfNotExist('public-jobs', doc.id, joinString(doc.data().information.title))
     .catch(err => console.error(err))
+  });
+
+  return response.status(201);
+});
+
+/*
+ * cloud https function to delete all slug
+ */
+exports.delSlug = functions.https.onRequest(async (request, response) => {
+  const usersnaps = await db.collection('users').get();
+  const jobsnaps = await db.collection('public-jobs').get();
+
+  usersnaps.forEach(async (doc) => {
+    const data = doc.data();
+    data.slug && await db.doc(`users/${doc.id}`).update({ slug: null })
+  });
+  jobsnaps.forEach(async (doc) => {
+    const data = doc.data();
+    !data.slug && await db.doc(`public-jobs/${doc.id}`).update({ slug: null })
   });
 
   return response.status(201);
