@@ -128,7 +128,7 @@ exports.jobStateEmailNotification = functions.https.onRequest((request, response
       return response.status(405).type('application/json').send({ message: 'Method Not Allowed', supportedMethods: 'POST' });
     }
     console.log('+ jobStateEmailNotification');
-    if (!request.headers.authorization || (!request.headers.authorization.startsWith('Bearer ') && !request.headers.authorization.startsWith('Internal '))) {
+    if (!request.headers.authorization || (!request.headers.authorization.toString().startsWith('Bearer ') && !request.headers.authorization.toString().startsWith('Internal '))) {
       console.error('No Firebase ID token was passed as a Bearer token in the Authorization header.',
         'Make sure you authorize your request by providing the following HTTP header:',
         'Authorization: Bearer <Firebase ID Token>');
@@ -144,8 +144,8 @@ exports.jobStateEmailNotification = functions.https.onRequest((request, response
     }
     console.log(`+ notification request for jobId: ${jobId} with jobAction: ${jobAction}`);
 
-    if (request.headers.authorization.startsWith('Bearer ')) {
-      const bearerToken = request.headers.authorization.split('Bearer ')[1];
+    if (request.headers.authorization.toString().startsWith('Bearer ')) {
+      const bearerToken = request.headers.authorization.toString().split('Bearer ')[1];
       console.log('+ checking id token: ', `${bearerToken.substr(0, 5)}.....${bearerToken.substr(bearerToken.length - 5)}`);
 
       await app.auth().verifyIdToken(bearerToken).catch(error => {
@@ -154,8 +154,8 @@ exports.jobStateEmailNotification = functions.https.onRequest((request, response
       });
     }
 
-    if (request.headers.authorization.startsWith('Internal ')) {
-      const internalToken = request.headers.authorization.split('Internal ')[1];
+    if (request.headers.authorization.toString().startsWith('Internal ')) {
+      const internalToken = request.headers.authorization.toString().split('Internal ')[1];
       console.log('+ checking internal token: ', `${internalToken.substr(0, 5)}.....${internalToken.substr(internalToken.length - 5)}`);
 
       if (internalToken !== env.internal.authkey) {
@@ -973,13 +973,17 @@ exports.initSlug = functions.https.onRequest(async (request, response) => {
 
   usersnaps.forEach(async (doc) => {
     const data = doc.data();
-    !data.slug && await createSlugIfNotExist('users', doc.id, joinString(doc.data().name))
-    .catch(err => console.error(err))
+    if (!data.slug) {
+      await createSlugIfNotExist('users', doc.id, joinString(doc.data().name))
+      .catch(err => console.error(err))
+    }
   });
   jobsnaps.forEach(async (doc) => {
     const data = doc.data();
-    !data.slug && await createSlugIfNotExist('public-jobs', doc.id, joinString(doc.data().information.title))
-    .catch(err => console.error(err))
+    if (!data.slug) {
+      await createSlugIfNotExist('public-jobs', doc.id, joinString(doc.data().information.title))
+      .catch(err => console.error(err))
+    }
   });
 
   return response.status(201);
