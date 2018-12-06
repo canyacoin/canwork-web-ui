@@ -40,6 +40,7 @@ const app = admin.initializeApp({
 });
 
 const db = admin.firestore();
+db.settings({ timestampsInSnapshots: true })
 
 // Algolia client, see also: https://www.npmjs.com/package/algoliasearch
 const algoliaClient = algoliasearch(env.algolia.appid, env.algolia.apikey);
