@@ -974,17 +974,12 @@ exports.initSlug = functions.https.onRequest(async (request, response) => {
 
   usersnaps.forEach(async (doc) => {
     const data = doc.data();
-    if (!data.slug) {
-      await createSlugIfNotExist('users', doc.id, joinString(doc.data().name))
-      .catch(err => console.error(err))
-    }
+    !data.slug && createSlugIfNotExist('users', doc.id, joinString(doc.data().name)).catch(err => console.error(err))
   });
   jobsnaps.forEach(async (doc) => {
     const data = doc.data();
-    if (!data.slug) {
-      await createSlugIfNotExist('public-jobs', doc.id, joinString(doc.data().information.title))
-      .catch(err => console.error(err))
-    }
+    
+    !data.slug && createSlugIfNotExist('public-jobs', doc.id, joinString(doc.data().information.title)).catch(err => console.error(err))
   });
 
   return response.status(200)
@@ -1004,15 +999,11 @@ exports.delSlug = functions.https.onRequest(async (request, response) => {
 
   usersnaps.forEach(async (doc) => {
     const data = doc.data();
-    if (data.slug) {
-      await db.doc(`users/${doc.id}`).update({ slug: null })
-    }
+    data.slug && await db.doc(`users/${doc.id}`).update({ slug: '' })
   });
   jobsnaps.forEach(async (doc) => {
     const data = doc.data();
-    if (data.slug){
-      await db.doc(`public-jobs/${doc.id}`).update({ slug: null })
-    }
+    data.slug && await db.doc(`public-jobs/${doc.id}`).update({ slug: '' })
   });
 
   return response.status(200)
