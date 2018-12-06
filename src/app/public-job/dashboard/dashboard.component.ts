@@ -104,6 +104,8 @@ export class DashboardComponent implements OnInit {
       });
       console.log(tmpJobs);
       this.queryJobs = tmpJobs;
+    } else {
+      this.queryJobs = this.allJobs;
     }
   }
 

@@ -11,11 +11,10 @@
   </div>
   <div class="container py-15" style="min-height: 75vh" *ngIf="allJobs && allJobs.length > 0">
     <div class="row">
-      <div class="col-lg-12">
+      <div class="col-md-8">
         <form method="post" (ngSubmit)="onSearch(inputSearch.value);">
-          <div class="canya-seach-bar input-group mb-3" style="max-width:540px">
-            <input #inputSearch type="text" class="form-control canya-search-input" (keyup)="onKeyUp(inputSearch.value);"
-              placeholder="Search Jobs..">
+          <div class="canya-seach-bar input-group mb-3">
+            <input #inputSearch type="text" class="form-control canya-search-input" placeholder="Search Jobs..">
             <div class="input-group-append">
               <button class="canya-search-input-btn btn btn-primary" type="submit">
                 <img class="search-img" src="assets/img/search-icon-white.svg">
@@ -23,6 +22,8 @@
             </div>
           </div>
         </form>
+      </div>
+      <div class="col-md-4">
         <div class="form-inline">
           <div class="form-group">
             <label for="orderTypeSelect" class="mb-15">Category: </label>
@@ -32,34 +33,10 @@
               </option>
             </select>
           </div>
-          <!--  
-          <div class="form-group">
-            <label for="orderTypeSelect" class="mb-15">Order By: </label>
-            <select class="mb-10 mx-10" #orderTypeSelect [(ngModel)]="orderType">
-              <option value="information.title">
-                <span>Project Name</span>
-              </option>
-              <option value="budget">
-                <span>Budget</span>
-              </option>
-              <option value="actionLog[0].timestamp">
-                <span>Date Posted</span>
-              </option>
-            </select>
-          </div>
-        -->
-          <div class="form-group">
-            <div class="form-check mx-10">
-              <span class="mb-10 pointer" (click)="reverseOrder = !reverseOrder">
-                <i *ngIf="reverseOrder" class="fas fa-sort-amount-up"></i>
-                <i *ngIf="!reverseOrder" class="fas fa-sort-amount-down"></i>
-              </span>
-            </div>
-          </div>
         </div>
       </div>
     </div>
-    <div class="card job-dashboard-card my-10 p-20 text-center-mobile" *ngFor="let job of queryJobs | orderBy : orderType:reverseOrder | paginate: { itemsPerPage: 5, currentPage: index }"
+    <div class="card job-dashboard-card my-10 py-15 px-30 text-center-mobile" *ngFor="let job of queryJobs | orderBy : orderType:false | paginate: { itemsPerPage: 10, currentPage: index }"
       [routerLink]="['/jobs/public', job.slug]">
       <div class="row">
         <div class="col-sm-8 col-12">
@@ -71,15 +48,15 @@
       </div>
       <div class="row">
         <div class="col-12 public-job-card-desc">
-          <p *ngIf="job.information.description.length >= 100">
-            {{job.information.description.substring(0, 100)}}...
+          <p *ngIf="job.information.description.length >= 200">
+            {{job.information.description.substring(0, 200)}}...
           </p>
-          <p *ngIf="job.information.description.length <= 100">
+          <p *ngIf="job.information.description.length <= 200">
             {{job.information.description}}
           </p>
         </div>
       </div>
-      <div class="row pt-15">
+      <div class="row">
         <div class="col-md-2 col-sm-3 col-6">
           <b>{{job.budget}} USD <span *ngIf="job.paymentType == paymentType.hourly">/hr</span></b>
           <p>{{job.paymentType}}</p>

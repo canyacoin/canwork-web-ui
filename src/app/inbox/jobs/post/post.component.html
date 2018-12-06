@@ -147,10 +147,12 @@
                       <br />
                       <div class="row ml-0 mr-0">
                         <div *ngFor="let type of paymentTypes()" class="mb-10 px-5 col-lg-3 col-md-4 col-sm-4 col-12">
-                          <button type="button" (click)="setPaymentType(type)" class="btn btn-primary w-full" [ngClass]="{'btn-outline': postForm.controls.paymentType.value !== type}">
+                          <button type="button" (click)="setPaymentType(type)" [disabled]="type=== 'Hourly rate'" class="btn btn-primary w-full"
+                            [ngClass]="{'btn-outline': postForm.controls.paymentType.value !== type}">
                             {{type}}
                           </button>
                         </div>
+                        <small><i>Hourly rate payments coming soon</i></small>
                       </div>
                     </div>
 
@@ -388,9 +390,14 @@
                       <br />
                       <div class="row ml-0 mr-0">
                         <div *ngFor="let type of paymentTypes()" class="px-5 col-lg-3 col-md-4 col-sm-4 col-12">
-                          <button type="button" (click)="setPaymentType(type)" class="btn btn-primary w-full" [ngClass]="{'btn-outline': shareableJobForm.controls.paymentType.value !== type}">
+                          <button type="button" (click)="setPaymentType(type)" [disabled]="type=== 'Hourly rate'" class="btn btn-primary w-full"
+                            [ngClass]="{'btn-outline': shareableJobForm.controls.paymentType.value !== type}">
                             {{type}}
                           </button>
+                        </div>
+                        <br>
+                        <div class="col-12">
+                          <small><i>Hourly rate payments coming soon</i></small>
                         </div>
                       </div>
                     </div>
