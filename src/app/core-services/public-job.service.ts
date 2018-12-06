@@ -77,6 +77,12 @@ export class PublicJobService {
     }));
   }
 
+  async getAllOpenJobsPromise() {
+    const result = await this.afs.collection(`public-jobs`).snapshotChanges().toPromise();
+    console.log(result);
+    return result;
+  }
+
   getPublicJobsByUrl(url: string): Observable<Job> {
     return this.afs.collection<any>('public-jobs', ref => ref.where('slug', '==', url)).snapshotChanges().pipe(map(changes => {
       if (changes.length > 0) {

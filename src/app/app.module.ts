@@ -31,6 +31,7 @@ import { PublicJobComponent } from './public-job/public-job/public-job.component
 import { DashboardComponent } from './public-job/dashboard/dashboard.component';
 import { JobBidsComponent } from './public-job/job-bids/job-bids.component';
 import { FilterPipeModule } from 'ngx-filter-pipe';
+import { OrderModule } from 'ngx-order-pipe';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { FilterPipeModule } from 'ngx-filter-pipe';
     Ng5SliderModule,
     FormsModule,
     ReactiveFormsModule,
+    OrderModule,
     StarRatingModule.forRoot()
   ],
   exports: [
