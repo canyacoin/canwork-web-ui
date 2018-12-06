@@ -979,7 +979,6 @@ exports.initSlug = functions.https.onRequest(async (request, response) => {
   });
   jobsnaps.forEach(async (doc) => {
     const data = doc.data();
-    console.log(`init jobs ${data.slug}`)
     !data.slug && createSlugIfNotExist('public-jobs', doc.id, joinString(doc.data().information.title)).catch(err => console.error(err))
   });
 
