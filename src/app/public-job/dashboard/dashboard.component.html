@@ -9,7 +9,7 @@
   <div *ngIf="!allJobs" class="container d-flex h-100 flex-column justify-content-center">
     <img src="assets/img/loader.svg" height="36px" alt="Loader">
   </div>
-  <div class="container py-15" *ngIf="allJobs && allJobs.length > 0">
+  <div class="container py-15" style="min-height: 75vh" *ngIf="allJobs && allJobs.length > 0">
     <div class="row">
       <div class="col-lg-12">
         <form method="post" (ngSubmit)="onSearch(inputSearch.value);">
@@ -32,6 +32,7 @@
               </option>
             </select>
           </div>
+          <!--  
           <div class="form-group">
             <label for="orderTypeSelect" class="mb-15">Order By: </label>
             <select class="mb-10 mx-10" #orderTypeSelect [(ngModel)]="orderType">
@@ -46,6 +47,7 @@
               </option>
             </select>
           </div>
+        -->
           <div class="form-group">
             <div class="form-check mx-10">
               <span class="mb-10 pointer" (click)="reverseOrder = !reverseOrder">
@@ -57,11 +59,14 @@
         </div>
       </div>
     </div>
-    <div class="card job-dashboard-card my-10 p-20" *ngFor="let job of queryJobs | orderBy : orderType:reverseOrder"
+    <div class="card job-dashboard-card my-10 p-20 text-center-mobile" *ngFor="let job of queryJobs | orderBy : orderType:reverseOrder | paginate: { itemsPerPage: 5, currentPage: index }"
       [routerLink]="['/jobs/public', job.slug]">
       <div class="row">
-        <div class="col-12">
+        <div class="col-sm-8 col-12">
           <h5>{{job.information.title}}</h5>
+        </div>
+        <div class="col-sm-4 col-12 text-right text-center-mobile">
+          <small>Posted On : {{ timestampToDate(job.actionLog[0].timestamp) }}</small>
         </div>
       </div>
       <div class="row">
@@ -85,6 +90,13 @@
         </div>
         <div class="col-md-8 col-sm-6 col-12 text-right text-center-mobile">
           <app-skill-tag *ngFor="let skill of job.information.skills" [skill]="skill"></app-skill-tag>
+        </div>
+      </div>
+    </div>
+    <div class="container text-center">
+      <div class="row">
+        <div class="col-12">
+          <pagination-controls (pageChange)="index = $event" previousLabel="Prev"></pagination-controls>
         </div>
       </div>
     </div>

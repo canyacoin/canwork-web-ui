@@ -121,7 +121,7 @@ export class PostComponent implements OnInit, OnDestroy {
       attachments: [''],
       workType: ['', Validators.compose([Validators.required])],
       providerType: ['', Validators.compose([Validators.required])],
-      deadline: ['', Validators.compose([Validators.required])],
+      deadline: [''],
       timelineExpectation: ['', Validators.compose([Validators.required])],
       paymentType: ['', Validators.compose([Validators.required])],
       visibility: ['', Validators.compose([Validators.required])],

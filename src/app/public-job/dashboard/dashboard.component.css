@@ -2,12 +2,15 @@
   min-height: 70vh;
 }
 
-.public-job-card-desc p{
-  height: 75px;
-  padding-bottom: 25px;
-  white-space: pre-wrap;
-  overflow: hidden;
+@media screen and (min-width: 640px) {
+  .public-job-card-desc p {
+    height: 75px;
+    padding-bottom: 25px;
+    white-space: pre-wrap;
+    overflow: hidden;
+  }
 }
+
 
 #checkBox {
   margin-bottom: 7.5px;
@@ -157,4 +160,11 @@ select {
 #manage-jobs {
   min-height: 80vh;
   padding-bottom: 15vh;
+}
+
+::ng-deep .ngx-pagination .current {
+  padding: 0.1875rem 0.625rem;
+  background: #33ccff !important;
+  border-radius: 5px !important;
+  cursor: default;
 }

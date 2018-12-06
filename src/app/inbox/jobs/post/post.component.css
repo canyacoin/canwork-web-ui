@@ -60,3 +60,7 @@ input {
     margin-bottom: 0;
   }
 }
+
+.btn {
+  min-width: 125px;
+}

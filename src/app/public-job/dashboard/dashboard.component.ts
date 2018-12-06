@@ -6,6 +6,8 @@ import { Job, JobDescription, JobState, PaymentType } from '@class/job';
 import { OrderPipe } from 'ngx-order-pipe';
 import { Subscription } from 'rxjs';
 import { User, UserType } from '@class/user';
+import { NgxPaginationModule } from 'ngx-pagination'; // <-- import the module
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -16,7 +18,8 @@ export class DashboardComponent implements OnInit {
   queryJobs: any;
   authSub: Subscription;
   currentUser: User;
-  orderType: string;
+  orderType = 'actionLog[0].timestamp';
+  index = 1;
   reverseOrder = true;
   filterByCategory: any;
   paymentType = PaymentType;
@@ -83,7 +86,10 @@ export class DashboardComponent implements OnInit {
   get isProvider(): boolean {
     return this.currentUser.type === UserType.provider;
   }
-
+  timestampToDate(timestamp) {
+    const date = new Date(parseInt(timestamp, 10)).toLocaleDateString();
+    return date;
+  }
   onKeyUp(event: any) {
     this.onSearch(event);
   }
