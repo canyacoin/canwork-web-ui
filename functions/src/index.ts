@@ -951,13 +951,14 @@ function getCategories(): string[] {
 
 // ignore that case: update manually in firebase console and happen to conflict with the exist one
 async function createSlugIfNotExist(collectionPath: string, id: string, expectedSlug: string) {
-  let len: number = 0;
-  let slug: string;
-  const snapshots = await db.collection(collectionPath).where('slug', '==', expectedSlug).get();
+  let flag: boolean = true;
+  let slug: string = joinString(expectedSlug);
 
-  snapshots.forEach(doc => len++);
-  slug = `${expectedSlug}${len > 0 ? '-' + len : ''}`;
-
+  while(flag) {
+    slug += `-${Math.floor(Math.random() * 1000)}`;
+    const result = await db.collection(collectionPath).where('slug', '==', slug).get();
+    flag = !!result.size
+  }
   await db.doc(`${collectionPath}/${id}`).update({ slug });
 }
 
@@ -986,7 +987,7 @@ exports.initSlug = functions.https.onRequest(async (request, response) => {
     .type('application/json')
     .send({
       status: 0,
-      msg: `init all slug succ! 2`
+      msg: `init all slug succ!`
     })
 });
 
@@ -1010,6 +1011,6 @@ exports.delSlug = functions.https.onRequest(async (request, response) => {
     .type('application/json')
     .send({
       status: 0,
-      msg: `del all slug succ! 2`
+      msg: `del all slug succ!`
     })
 });
