@@ -421,6 +421,10 @@ exports.updateIndexProviderData = functions.firestore
 
     const objectId = snap.after.id;
 
+    if (!beforeData.name && afterData.name) {
+      createSlugIfNotExist('users', objectId, afterData.name)
+    }
+
     console.log('+ looking for admin privileges');
     if (afterData.isAdmin) {
       console.log(`+ setting user claim to admin for userId: ${objectId} and email: ${afterData.email}`)
