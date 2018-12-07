@@ -9682,7 +9682,7 @@ a.text-danger:focus {
   box-shadow: 0 0px 10px 0 rgba(0, 0, 0, 0.1);
 }
 
-@media screen and (max-width:640px) {
+@media screen and (max-width:792px) {
   .text-center-mobile {
     text-align: center !important;
   }
@@ -10499,7 +10499,7 @@ hr {
 .job-desc p {
   width: auto;
   max-width: 75vw;
-  height: 100px;
+  height: 80px;
   padding-bottom: 25px;
   white-space: pre-wrap;
   overflow: hidden;

@@ -16,12 +16,13 @@ export class AboutComponent implements OnInit {
 
   @Input() currentUser: User;
   @Input() userModel: User;
+  @Input() userAddress: string;
   @Input() isMyProfile: boolean;
 
   @Output() editProfile = new EventEmitter();
 
   currentUserJobs = null;
-  pageLimit = 3;
+  pageLimit = 5;
   currentPage = 0;
   lastPage = 0;
   animation = 'fadeIn';
@@ -38,7 +39,7 @@ export class AboutComponent implements OnInit {
       this.loadingJobs = true;
       this.currentUserJobs = await this.publicJobService.getOpenPublicJobsByUser(this.currentUser.address);
       for (let i = 0; i < this.currentUserJobs.length; i++) {
-        this.currentUserJobs[i].canInvite = await this.publicJobService.canInvite(this.currentUserJobs[i].id, this.userModel.address);
+        this.currentUserJobs[i].canInvite = await this.publicJobService.canInvite(this.currentUserJobs[i].id, this.userAddress);
       }
       this.loadingJobs = false;
     }

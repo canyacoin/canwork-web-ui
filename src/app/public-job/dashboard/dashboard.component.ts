@@ -6,7 +6,7 @@ import { Job, JobDescription, JobState, PaymentType } from '@class/job';
 import { OrderPipe } from 'ngx-order-pipe';
 import { Subscription } from 'rxjs';
 import { User, UserType } from '@class/user';
-import { NgxPaginationModule } from 'ngx-pagination'; // <-- import the module
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @Component({
   selector: 'app-dashboard',
@@ -80,7 +80,6 @@ export class DashboardComponent implements OnInit {
     this.publicJobService.getAllOpenJobs().subscribe(result => {
       this.allJobs = result;
       this.queryJobs = this.allJobs;
-      console.log(this.queryJobs);
     });
   }
   get isProvider(): boolean {
@@ -116,5 +115,12 @@ export class DashboardComponent implements OnInit {
     } else {
       this.queryJobs = this.allJobs;
     }
+  }
+
+  getImage(string) {
+    let url = 'assets/img/providers/';
+    const type = this.providerTypes.find(prov => prov.id === string);
+    url = url + type.img;
+    return url;
   }
 }

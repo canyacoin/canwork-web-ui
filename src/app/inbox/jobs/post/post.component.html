@@ -214,10 +214,10 @@
             <a class="btn btn-primary text-white" [routerLink]="['/inbox/chat']" [queryParams]="{address: recipientAddress}">Go
               to inbox</a>
           </p>
-
         </div>
       </div>
     </div>
+
     <div id="shareable-job" *ngIf="!recipient && pageLoaded && isShareable">
       <div *ngIf="!sent" class="section bg-grey pt-15 pb-30">
         <div class="container bg-white p-30 brad-5px">
@@ -255,10 +255,8 @@
                       <div class="col-12">
                         <label>Project stage *</label>
                         <textarea class="form-control" #initialStage formControlName="initialStage" type="text" name="initialStage"
-                          placeholder="Lorem ipsum dolor" maxlength="3000" [class.invalid]="!shareableJobForm.controls.initialStage.valid && shareableJobForm.controls.initialStage.dirty"></textarea>
-                        <small *ngIf="!shareableJobForm.controls.description.valid" class="text-primary text-wrap">e.g.
-                          'Ideation
-                          phase' or 'I have started work already'</small>
+                          placeholder=" Ideation phase' or 'I have started work already'" maxlength="3000"
+                          [class.invalid]="!shareableJobForm.controls.initialStage.valid && shareableJobForm.controls.initialStage.dirty"></textarea>
                       </div>
                     </div>
 

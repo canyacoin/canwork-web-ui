@@ -11,7 +11,7 @@
   </div>
   <div class="container py-15" style="min-height: 75vh" *ngIf="allJobs && allJobs.length > 0">
     <div class="row">
-      <div class="col-md-8">
+      <div class="col-lg-8">
         <form method="post" (ngSubmit)="onSearch(inputSearch.value);">
           <div class="canya-seach-bar input-group mb-3">
             <input #inputSearch type="text" class="form-control canya-search-input" placeholder="Search Jobs..">
@@ -23,7 +23,7 @@
           </div>
         </form>
       </div>
-      <div class="col-md-4">
+      <div class="col-lg-4">
         <div class="form-inline">
           <div class="form-group">
             <label for="orderTypeSelect" class="mb-15">Category: </label>
@@ -36,13 +36,13 @@
         </div>
       </div>
     </div>
-    <div class="card job-dashboard-card my-10 py-15 px-30 text-center-mobile" *ngFor="let job of queryJobs | orderBy : orderType:false | paginate: { itemsPerPage: 10, currentPage: index }"
+    <div class="card job-dashboard-card my-10 py-15 px-30 text-center-mobile" *ngFor="let job of queryJobs | orderBy : 'actionLog[0].timestamp':true | paginate: { itemsPerPage: 10, currentPage: index }"
       [routerLink]="['/jobs/public', job.slug]">
       <div class="row">
-        <div class="col-sm-8 col-12">
-          <h5>{{job.information.title}}</h5>
+        <div class="col-lg-8 col-12">
+          <h5><img class="provider-type-icon" src="{{getImage(job.information.providerType)}}">&nbsp;&nbsp;{{job.information.title}}</h5>
         </div>
-        <div class="col-sm-4 col-12 text-right text-center-mobile">
+        <div class="col-lg-4 col-12 text-right text-center-mobile">
           <small>Posted On : {{ timestampToDate(job.actionLog[0].timestamp) }}</small>
         </div>
       </div>
@@ -57,20 +57,20 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-2 col-sm-3 col-6">
+        <div class="col-lg-2 col-md-3 col-ms-4 col-6">
           <b>{{job.budget}} USD <span *ngIf="job.paymentType == paymentType.hourly">/hr</span></b>
           <p>{{job.paymentType}}</p>
         </div>
-        <div class="col-md-2 col-sm-3 col-6">
+        <div class="col-lg-2 col-md-3 col-ms-4 col-6">
           <b>{{job.deadline}}</b>
           <p>Project Deadline</p>
         </div>
-        <div class="col-md-8 col-sm-6 col-12 text-right text-center-mobile">
+        <div class="col-lg-8 col-md-6 col-ms-4 col-12 text-right text-center-mobile">
           <app-skill-tag *ngFor="let skill of job.information.skills" [skill]="skill"></app-skill-tag>
         </div>
       </div>
     </div>
-    <div class="container text-center">
+    <div class="container text-center" *ngIf="queryJobs.length > 0">
       <div class="row">
         <div class="col-12">
           <pagination-controls (pageChange)="index = $event" previousLabel="Prev"></pagination-controls>

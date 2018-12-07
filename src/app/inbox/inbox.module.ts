@@ -5,6 +5,7 @@ import { CanpayModule } from '@canyaio/canpay-lib';
 import { StarRatingModule } from 'angular-star-rating';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { OrderModule } from 'ngx-order-pipe';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 import { CoreComponentsModule } from '../core-components/core-components.module';
 import { CoreServicesModule } from '../core-services/core-services.module';
@@ -35,7 +36,8 @@ import { PostComponent } from './jobs/post/post.component';
     FormsModule,
     OrderModule,
     ReactiveFormsModule,
-    StarRatingModule.forChild()
+    StarRatingModule.forChild(),
+    NgxPaginationModule
   ],
   declarations: [
     ActionDialogComponent,
