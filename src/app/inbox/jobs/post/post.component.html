@@ -32,9 +32,7 @@
                     <div class="form-group">
                       <label>Project stage *</label>
                       <textarea class="form-control" #initialStage formControlName="initialStage" type="text" name="initialStage"
-                        placeholder="Lorem ipsum dolor" maxlength="3000" [class.invalid]="!postForm.controls.initialStage.valid && postForm.controls.initialStage.dirty"></textarea>
-                      <small *ngIf="!postForm.controls.description.valid" class="text-primary text-wrap">e.g. 'Ideation
-                        phase' or 'I have started work already'</small>
+                        placeholder="e.g. 'Ideation phase' or 'I have started work already'" maxlength="3000" [class.invalid]="!postForm.controls.initialStage.valid && postForm.controls.initialStage.dirty"></textarea>
                     </div>
 
                     <div class="form-group">
@@ -253,10 +251,7 @@
                       <div class="col-12">
                         <label>Project stage *</label>
                         <textarea class="form-control" #initialStage formControlName="initialStage" type="text" name="initialStage"
-                          placeholder="Lorem ipsum dolor" maxlength="3000" [class.invalid]="!shareableJobForm.controls.initialStage.valid && shareableJobForm.controls.initialStage.dirty"></textarea>
-                        <small *ngIf="!shareableJobForm.controls.description.valid" class="text-primary text-wrap">e.g.
-                          'Ideation
-                          phase' or 'I have started work already'</small>
+                          placeholder="eg. 'Ideation phase' or 'I have started work already'" maxlength="3000" [class.invalid]="!shareableJobForm.controls.initialStage.valid && shareableJobForm.controls.initialStage.dirty"></textarea>
                       </div>
                     </div>
 
