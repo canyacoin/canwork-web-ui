@@ -40,6 +40,7 @@ const app = admin.initializeApp({
 });
 
 const db = admin.firestore();
+db.settings({ timestampsInSnapshots: true })
 
 // Algolia client, see also: https://www.npmjs.com/package/algoliasearch
 const algoliaClient = algoliasearch(env.algolia.appid, env.algolia.apikey);
@@ -128,7 +129,7 @@ exports.jobStateEmailNotification = functions.https.onRequest((request, response
       return response.status(405).type('application/json').send({ message: 'Method Not Allowed', supportedMethods: 'POST' });
     }
     console.log('+ jobStateEmailNotification');
-    if (!request.headers.authorization || (!request.headers.authorization.startsWith('Bearer ') && !request.headers.authorization.startsWith('Internal '))) {
+    if (!request.headers.authorization || (!request.headers.authorization.toString().startsWith('Bearer ') && !request.headers.authorization.toString().startsWith('Internal '))) {
       console.error('No Firebase ID token was passed as a Bearer token in the Authorization header.',
         'Make sure you authorize your request by providing the following HTTP header:',
         'Authorization: Bearer <Firebase ID Token>');
@@ -144,8 +145,8 @@ exports.jobStateEmailNotification = functions.https.onRequest((request, response
     }
     console.log(`+ notification request for jobId: ${jobId} with jobAction: ${jobAction}`);
 
-    if (request.headers.authorization.startsWith('Bearer ')) {
-      const bearerToken = request.headers.authorization.split('Bearer ')[1];
+    if (request.headers.authorization.toString().startsWith('Bearer ')) {
+      const bearerToken = request.headers.authorization.toString().split('Bearer ')[1];
       console.log('+ checking id token: ', `${bearerToken.substr(0, 5)}.....${bearerToken.substr(bearerToken.length - 5)}`);
 
       await app.auth().verifyIdToken(bearerToken).catch(error => {
@@ -154,8 +155,8 @@ exports.jobStateEmailNotification = functions.https.onRequest((request, response
       });
     }
 
-    if (request.headers.authorization.startsWith('Internal ')) {
-      const internalToken = request.headers.authorization.split('Internal ')[1];
+    if (request.headers.authorization.toString().startsWith('Internal ')) {
+      const internalToken = request.headers.authorization.toString().split('Internal ')[1];
       console.log('+ checking internal token: ', `${internalToken.substr(0, 5)}.....${internalToken.substr(internalToken.length - 5)}`);
 
       if (internalToken !== env.internal.authkey) {
@@ -419,6 +420,10 @@ exports.updateIndexProviderData = functions.firestore
     const afterData = snap.after.data();
 
     const objectId = snap.after.id;
+
+    if (!beforeData.name && afterData.name) {
+      createSlugIfNotExist('users', objectId, afterData.name)
+    }
 
     console.log('+ looking for admin privileges');
     if (afterData.isAdmin) {
@@ -950,13 +955,14 @@ function getCategories(): string[] {
 
 // ignore that case: update manually in firebase console and happen to conflict with the exist one
 async function createSlugIfNotExist(collectionPath: string, id: string, expectedSlug: string) {
-  let len: number = 0;
-  let slug: string;
-  const snapshots = await db.collection(collectionPath).where('slug', '==', expectedSlug).get();
+  let flag: boolean = true;
+  let slug: string = joinString(expectedSlug);
 
-  snapshots.forEach(doc => len++);
-  slug = `${expectedSlug}${len > 0 ? len : ''}`;
-
+  while(flag) {
+    slug += `-${Math.floor(Math.random() * 1000)}`;
+    const result = await db.collection(collectionPath).where('slug', '==', slug).get();
+    flag = !!result.size
+  }
   await db.doc(`${collectionPath}/${id}`).update({ slug });
 }
 
@@ -971,14 +977,43 @@ exports.initSlug = functions.https.onRequest(async (request, response) => {
   const usersnaps = await db.collection('users').get();
   const jobsnaps = await db.collection('public-jobs').get();
 
-  usersnaps.forEach(doc => {
-    createSlugIfNotExist('users', doc.id, joinString(doc.data().name))
-    .catch(err => console.error(err))
+  usersnaps.forEach(async (doc) => {
+    const data = doc.data();
+    !data.slug && createSlugIfNotExist('users', doc.id, joinString(doc.data().name)).catch(err => console.error(err))
   });
-  jobsnaps.forEach(doc => {
-    createSlugIfNotExist('public-jobs', doc.id, joinString(doc.data().information.title))
-    .catch(err => console.error(err))
+  jobsnaps.forEach(async (doc) => {
+    const data = doc.data();
+    !data.slug && createSlugIfNotExist('public-jobs', doc.id, joinString(doc.data().information.title)).catch(err => console.error(err))
   });
 
-  return response.status(201);
+  return response.status(200)
+    .type('application/json')
+    .send({
+      status: 0,
+      msg: `init all slug succ!`
+    })
+});
+
+/*
+ * cloud https function to delete all slug
+ */
+exports.delSlug = functions.https.onRequest(async (request, response) => {
+  const usersnaps = await db.collection('users').get();
+  const jobsnaps = await db.collection('public-jobs').get();
+
+  usersnaps.forEach(async (doc) => {
+    const data = doc.data();
+    data.slug && await db.doc(`users/${doc.id}`).update({ slug: '' })
+  });
+  jobsnaps.forEach(async (doc) => {
+    const data = doc.data();
+    data.slug && await db.doc(`public-jobs/${doc.id}`).update({ slug: '' })
+  });
+
+  return response.status(200)
+    .type('application/json')
+    .send({
+      status: 0,
+      msg: `del all slug succ!`
+    })
 });

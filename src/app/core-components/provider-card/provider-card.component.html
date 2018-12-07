@@ -5,7 +5,7 @@
   </div>
 -->
 <div *ngIf="size == 'lg'" style="padding:10px">
-  <div class="card provider-card text-center pointer" [routerLink]="['/profile/alt', provider.address]">
+  <div class="card provider-card text-center pointer" [routerLink]="['/profile/', provider.slug]">
     <span *ngIf="provider && provider.badge" class="popular-tag" style="background-color:transparent;color:#33ccff;float:right;font-weight: 600;letter-spacing: 1.5px;text-transform: uppercase;min-height: 35px;font-size: 12px;text-align: center;line-height: 35px;">
       {{ provider.badge }}
     </span>
@@ -50,7 +50,7 @@
   </div>
 </div>
 <div *ngIf="size == 'sm'" class="px-5">
-  <div class="card provider-card pointer profile-mini" [routerLink]="['/profile/alt', provider.address]">
+  <div class="card provider-card pointer profile-mini" [routerLink]="['/profile/',  provider.slug]">
     <div class="row">
       <div class="col-lg-3 col-md-12 col-sm-12 col-3">
         <div class="headshot" [ngStyle]="{'background-image': 'url(' + (provider.avatar || {}).uri + ')'}"></div>
@@ -58,10 +58,10 @@
       <div class="col-lg-9 col-md-12 col-sm-12 col-9 pl-20 pb-10">
         <h6 class="provider-name">{{provider.name}}</h6>
         <p class="provider-title">{{ provider.title}}</p>
-        <div class="row provider-stars"> 
-            <star-rating *ngIf="provider.rating && provider.rating.count > 0" class="float-left" [starType]="'svg'"
-              size="small" showHalfStars="true" staticColor="ok" [readOnly]="true" [rating]="provider.rating.average"
-              [step]="0.5" [labelText]="'(' + provider.rating.count + ')'" labelPosition="right"></star-rating>
+        <div class="row provider-stars">
+          <star-rating *ngIf="provider.rating && provider.rating.count > 0" class="float-left" [starType]="'svg'" size="small"
+            showHalfStars="true" staticColor="ok" [readOnly]="true" [rating]="provider.rating.average" [step]="0.5"
+            [labelText]="'(' + provider.rating.count + ')'" labelPosition="right"></star-rating>
         </div>
         <span class="fw-400 fs-12 text-grey">
           <i class="fa fa-map-marker-alt text-grey" aria-hidden="true"></i>

@@ -53,8 +53,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   initUsers(user: User, params: any) {
-    if (params['address'] && params['address'] !== 'setup') {
+    const { address, slug } = params;
+    if (address && address !== 'setup') {
       this.loadUser(params['address']);
+    } else if (slug) {
+      this.userService.getUserBySlug(slug)
+        .then(snapshots => {
+          const result = snapshots.docs[0];
+          this.userModel = new User(result.data());
+        });
     } else if (user) {
       this.userModel = this.currentUser;
       this.setUsersColors(this.userModel);
