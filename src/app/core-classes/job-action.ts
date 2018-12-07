@@ -130,5 +130,6 @@ export enum ActionType {
   dispute = 'Raise dispute',
   review = 'Leave a review',
   bid = 'Place Bid',
+  declineBid = 'Decline Bid',
   invite = 'Invite to job'
 }
