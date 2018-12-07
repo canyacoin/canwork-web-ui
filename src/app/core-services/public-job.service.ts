@@ -288,6 +288,19 @@ export class PublicJobService {
     }
   }
 
+  async notifyLosers(job: Job, client: User, bids: any) {
+    if (bids.length === 0) { return; }
+    try {
+      const declineBidAction = new IJobAction(ActionType.declineBid, UserType.client);
+      const bid = bids.pop();
+      const provider = await this.userService.getUser(bid.providerId);
+      this.sendPublicJobMessage(job, declineBidAction, client, provider);
+      this.notifyLosers(job, client, bids);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async inviteProvider(job: Job, client: User, provider: User) {
     try {
       const invited = await this.inviteProviderToJob(job.id, provider.address);
