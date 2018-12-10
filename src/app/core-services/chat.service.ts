@@ -160,6 +160,9 @@ export class ChatService {
       case ActionType.bid:
         messageText = 'I\'ve sent a bid to your job, can you take a look?';
         break;
+      case ActionType.declineBid:
+        messageText = `Your job bid has been declined by the client.`;
+        break;
       default:
         messageText = 'I\'ve sent a response to your public job';
         break;

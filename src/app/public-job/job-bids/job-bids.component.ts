@@ -85,6 +85,9 @@ export class JobBidsComponent implements OnInit {
       const chosen = await this.publicJobsService.closePublicJob(this.job, bid);
       if (chosen) {
         alert('Provider chosen!');
+        const losingBids = this.bids.splice(0, bidIndex);
+        const client = await this.userService.getUser(this.job.clientId);
+        this.publicJobsService.notifyLosers(this.job, client, losingBids);
         this.router.navigate(['/inbox/job', this.job.id]);
       } else {
         alert('Something went wrong. please try again later');
