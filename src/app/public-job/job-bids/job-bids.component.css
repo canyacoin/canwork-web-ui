@@ -18,6 +18,11 @@
   right: 15px;
   top: 0;
 }
+.decline-btn {
+  position: absolute;
+  bottom: 35px;
+  right: 15px;
+}
 
 .accept-btn {
   position: absolute;

@@ -115,7 +115,7 @@ export class PostComponent implements OnInit, OnDestroy {
     });
     this.shareableJobForm = formBuilder.group({
       description: ['', Validators.compose([Validators.required, Validators.maxLength(10000)])],
-      title: ['', Validators.compose([Validators.required, Validators.maxLength(64)])],
+      title: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(64)])],
       initialStage: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(100)])],
       skills: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(100)])],
       attachments: [''],

@@ -62,6 +62,7 @@
             <div class="col-md-4 col-sm-12 text-right text-center-mobile">
               <i *ngIf="bid.rejected && isOpen">Offer Declined</i>
               <i *ngIf="!isOpen" class="mr-15">Job Closed</i>
+              <button *ngIf="!bid.rejected && isOpen" class="btn btn-sm btn-danger decline-btn">DECLINE</button>
               <button *ngIf="!bid.rejected && isOpen" class="btn btn-sm btn-success accept-btn" (click)="chooseProvider(i)">ACCEPT</button>
             </div>
           </div>
