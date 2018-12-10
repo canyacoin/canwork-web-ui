@@ -40,7 +40,7 @@
       [routerLink]="['/jobs/public', job.slug]">
       <div class="row">
         <div class="col-lg-8 col-12">
-          <h5 class="mb-0"><img class="provider-type-icon" src="{{getImage(job.information.providerType)}}">{{job.information.title}}</h5>
+          <h5><img class="provider-type-icon" src="{{getImage(job.information.providerType)}}">{{job.information.title}}</h5>
         </div>
         <div class="col-lg-4 col-12 text-right text-left-mobile">
           <small>Posted On : {{ timestampToDate(job.actionLog[0].timestamp) }}</small>

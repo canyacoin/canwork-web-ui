@@ -3,7 +3,9 @@
 }
 
 .public-job-card-desc p {
-  height: 2.5rem;
+  height: 3.25rem;
+  white-space: pre-wrap;
+  overflow: hidden;
   margin-bottom: 1rem;
 }
 
@@ -15,11 +17,8 @@
 
 @media screen and (max-width: 640px) {
   .public-job-card-desc p {
-    height: 3.25rem;
-    white-space: pre-wrap;
-    overflow: hidden;
+    margin-bottom: 0px;
   }
-
   .provider-type-icon {
     display: none;
   }
