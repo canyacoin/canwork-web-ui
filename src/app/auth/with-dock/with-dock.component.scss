@@ -61,3 +61,18 @@
     }
   }
 }
+
+@media only screen and (min-width: 320px) and (max-width: 600px) {
+  header {
+    h1 {
+      font-size: 21px;
+    }
+  }
+  .checkpoints {
+    li {
+      span {
+        min-width: 240px;
+      }
+    }
+  }
+}
