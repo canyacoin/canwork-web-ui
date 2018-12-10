@@ -12,6 +12,8 @@ import { PublicJobService } from '../../../core-services/public-job.service';
 import { MobileService } from '../../../core-services/mobile.service';
 import { UserService } from '../../../core-services/user.service';
 
+import { NgxPaginationModule } from 'ngx-pagination';
+
 @Component({
   selector: 'app-job-dashboard',
   templateUrl: './job-dashboard.component.html',

@@ -116,12 +116,12 @@ export class PostComponent implements OnInit, OnDestroy {
     this.shareableJobForm = formBuilder.group({
       description: ['', Validators.compose([Validators.required, Validators.maxLength(10000)])],
       title: ['', Validators.compose([Validators.required, Validators.maxLength(64)])],
-      initialStage: ['', Validators.compose([Validators.required, Validators.maxLength(3000)])],
+      initialStage: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(100)])],
       skills: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(100)])],
       attachments: [''],
       workType: ['', Validators.compose([Validators.required])],
       providerType: ['', Validators.compose([Validators.required])],
-      deadline: ['', Validators.compose([Validators.required])],
+      deadline: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(100)])],
       timelineExpectation: ['', Validators.compose([Validators.required])],
       paymentType: ['', Validators.compose([Validators.required])],
       visibility: ['', Validators.compose([Validators.required])],
@@ -132,13 +132,10 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    console.log(this.activatedRoute.snapshot.params['jobId']);
     this.editing = this.activatedRoute.snapshot.params['jobId'] && this.activatedRoute.snapshot.params['jobId'] !== '';
-    console.log(this.editing);
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       this.currentUser = user;
       this.activatedRoute.params.take(1).subscribe((params) => {
-        console.log(params);
         if (params['address'] && params['address'] !== this.currentUser.address) {
           this.recipientAddress = params['address'];
           this.loadUser(this.recipientAddress);
@@ -377,6 +374,7 @@ export class PostComponent implements OnInit, OnDestroy {
         weeklyCommitment: this.shareableJobForm.value.weeklyCommitment,
         providerType: this.shareableJobForm.value.providerType
       }),
+      visibility: this.shareableJobForm.value.visibility,
       paymentType: this.shareableJobForm.value.paymentType,
       budget: this.shareableJobForm.value.budget,
       deadline: this.shareableJobForm.value.deadline,

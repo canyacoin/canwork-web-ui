@@ -9,7 +9,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireStorageModule } from 'angularfire2/storage';
 import { Ng5SliderModule } from 'ng5-slider';
-
+import { NgxPaginationModule } from 'ngx-pagination';
 import { FirebaseUIModule } from 'firebaseui-angular';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
@@ -28,14 +28,17 @@ import { NavService } from './core-services/nav.service';
 import { PublicJobService } from './core-services/public-job.service';
 import { CoreUtilsModule } from './core-utils/core-utils.module';
 import { PublicJobComponent } from './public-job/public-job/public-job.component';
+import { DashboardComponent } from './public-job/dashboard/dashboard.component';
 import { JobBidsComponent } from './public-job/job-bids/job-bids.component';
 import { FilterPipeModule } from 'ngx-filter-pipe';
+import { OrderModule } from 'ngx-order-pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     PublicJobComponent,
-    JobBidsComponent
+    JobBidsComponent,
+    DashboardComponent
   ],
   imports: [
     AppRoutingModule,
@@ -60,6 +63,8 @@ import { FilterPipeModule } from 'ngx-filter-pipe';
     Ng5SliderModule,
     FormsModule,
     ReactiveFormsModule,
+    OrderModule,
+    NgxPaginationModule,
     StarRatingModule.forRoot()
   ],
   exports: [

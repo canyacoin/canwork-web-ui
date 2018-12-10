@@ -1,5 +1,5 @@
 <main>
-  <section *ngIf="currentUser" class="section bg-grey pt-30">
+  <section id="job-creation-form" *ngIf="currentUser" class="section bg-grey pt-30">
     <app-back-button></app-back-button>
     <div *ngIf="!pageLoaded" class="container d-flex h-100 flex-column justify-content-center">
       <img src="assets/img/loader.svg" height="36px" alt="Loader">
@@ -144,11 +144,13 @@
                       <label>Payment preference *</label>
                       <br />
                       <div class="row ml-0 mr-0">
-                        <div *ngFor="let type of paymentTypes()" class="mb-10 px-5 col-lg-2 col-md-4 col-sm-4 col-12">
-                          <button type="button" (click)="setPaymentType(type)" class="btn btn-primary w-full" [ngClass]="{'btn-outline': postForm.controls.paymentType.value !== type}">
+                        <div *ngFor="let type of paymentTypes()" class="mb-10 px-5 col-lg-3 col-md-4 col-sm-4 col-12">
+                          <button type="button" (click)="setPaymentType(type)" [disabled]="type=== 'Hourly rate'" class="btn btn-primary w-full"
+                            [ngClass]="{'btn-outline': postForm.controls.paymentType.value !== type}">
                             {{type}}
                           </button>
                         </div>
+                        <small><i>Hourly rate payments coming soon</i></small>
                       </div>
                     </div>
 
@@ -210,10 +212,10 @@
             <a class="btn btn-primary text-white" [routerLink]="['/inbox/chat']" [queryParams]="{address: recipientAddress}">Go
               to inbox</a>
           </p>
-
         </div>
       </div>
     </div>
+
     <div id="shareable-job" *ngIf="!recipient && pageLoaded && isShareable">
       <div *ngIf="!sent" class="section bg-grey pt-15 pb-30">
         <div class="container bg-white p-30 brad-5px">
@@ -329,15 +331,15 @@
                         <label>Provider type *</label>
                         <br />
                         <div class="row ml-0 mr-0">
-                          <div *ngFor="let type of providerTypes" class="mb-10 px-5 col-lg-2 col-md-4 col-6">
+                          <div *ngFor="let type of providerTypes" class="mb-10 px-5 col-lg-2 col-md-4 col-sm-6 col-12">
                             <button type="button text-left" (click)="setProviderType(type.id)" class="btn btn-primary w-full btn-providerType"
                               [ngClass]="{'btn-outline': shareableJobForm.controls.providerType.value !== type.id}">
                               <div class="row">
-                                <div class="col-lg-3 col-sm-2 col-2 text-center">
+                                <div class="col-lg-3 col-sm-2 col-0 text-center">
                                   <img *ngIf="shareableJobForm.controls.providerType.value !== type.id" src="assets/img/providers/{{type.img}}">
                                   <img *ngIf="shareableJobForm.controls.providerType.value === type.id" src="assets/img/providers/white/{{type.img}}">
                                 </div>
-                                <div class="col-lg-8 col-sm-10 col-10 text-left" style="white-space: initial;">
+                                <div class="col-lg-8 col-sm-10 col-12 text-left" style="white-space: initial;">
                                   <p>{{type.name}}</p>
                                 </div>
                               </div>
@@ -351,7 +353,7 @@
                         <label>Type of work *</label>
                         <br />
                         <div class="row ml-0 mr-0">
-                          <div *ngFor="let type of workTypes()" class="mb-10 px-5 col-lg-2 col-md-4 col-sm-4 col-12">
+                          <div *ngFor="let type of workTypes()" class="mb-10 px-5 col-lg-3 col-md-4 col-sm-4 col-12">
                             <button type="button" (click)="setWorkType(type)" class="btn btn-primary w-full" [ngClass]="{'btn-outline': shareableJobForm.controls.workType.value !== type}">
                               {{type}}
                             </button>
@@ -362,13 +364,6 @@
 
                     <div class="form-group row px-15">
                       <div class="col-sm-6">
-                        <label>Deadline *</label>
-                        <br />
-                        <div class="row ml-0 mr-0">
-                          <input #deadline formControlName="deadline" type="date" class="form-control" min="{{currentDate}}">
-                        </div>
-                      </div>
-                      <div class="col-sm-6">
                         <label>Timeline Expectations *</label>
                         <br />
                         <select #timelineExpectation class="form-control" formControlName="timelineExpectation">
@@ -376,16 +371,28 @@
                           <option *ngFor="let range of timeRanges()"> {{ range }} </option>
                         </select>
                       </div>
+                      <div class="col-sm-6">
+                        <label>Deadline</label>
+                        <br />
+                        <div class="row ml-0 mr-0">
+                          <input #deadline formControlName="deadline" type="date" class="form-control" min="{{currentDate}}">
+                        </div>
+                      </div>
                     </div>
 
                     <div class="form-group px-10">
                       <label class="px-5">Payment preference *</label>
                       <br />
                       <div class="row ml-0 mr-0">
-                        <div *ngFor="let type of paymentTypes()" class="px-5 col-lg-2 col-md-4 col-sm-4 col-12">
-                          <button type="button" (click)="setPaymentType(type)" class="btn btn-primary w-full" [ngClass]="{'btn-outline': shareableJobForm.controls.paymentType.value !== type}">
+                        <div *ngFor="let type of paymentTypes()" class="px-5 col-lg-3 col-md-4 col-sm-4 col-12">
+                          <button type="button" (click)="setPaymentType(type)" [disabled]="type=== 'Hourly rate'" class="btn btn-primary w-full"
+                            [ngClass]="{'btn-outline': shareableJobForm.controls.paymentType.value !== type}">
                             {{type}}
                           </button>
+                        </div>
+                        <br>
+                        <div class="col-12">
+                          <small><i>Hourly rate payments coming soon</i></small>
                         </div>
                       </div>
                     </div>
@@ -438,20 +445,19 @@
                         <label>Visibility *</label>
                         <br />
                         <div class="row ml-0 mr-0">
-                          <div class="mb-10 px-5 col-lg-2 col-md-4 col-sm-6 col-xs-12">
+                          <div class="mb-10 px-5 col-lg-3 col-md-4 col-sm-6 col-xs-12">
                             <button type="button" (click)="setVisibility('invite')" class="btn btn-primary w-full"
                               [ngClass]="{'btn-outline': shareableJobForm.controls.visibility.value !== 'invite'}">
                               Invite-only
                             </button>
                           </div>
-                          <div class="mb-10 px-5 col-lg-2 col-md-4 col-sm-6 col-xs-12">
-                            <button type="button btn-secondary" (click)="setVisibility('public')" disabled class="btn btn-primary w-full"
+                          <div class="mb-10 px-5 col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <button type="button " (click)="setVisibility('public')" class="btn btn-primary w-full"
                               [ngClass]="{'btn-outline': shareableJobForm.controls.visibility.value !== 'public'}">
                               Public
                             </button>
                           </div>
                         </div>
-                        <i class="small">Public job listing coming soon</i>
                       </div>
                     </div>
                     <div class="form-group">
