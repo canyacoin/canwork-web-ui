@@ -13,6 +13,8 @@ stages:
 dist:staging:
   stage: build
   environment: staging
+  only:
+    - master
   artifacts:
     name: "canwork-webui dist"
     paths:
@@ -43,6 +45,8 @@ dist:production:
 deploy:staging:
   stage: deploy
   environment: staging
+  only:
+    - master
   dependencies:
     - dist:staging
   script:
