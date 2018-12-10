@@ -331,15 +331,15 @@
                         <label>Provider type *</label>
                         <br />
                         <div class="row ml-0 mr-0">
-                          <div *ngFor="let type of providerTypes" class="mb-10 px-5 col-lg-2 col-md-4 col-6">
+                          <div *ngFor="let type of providerTypes" class="mb-10 px-5 col-lg-2 col-md-4 col-sm-6 col-12">
                             <button type="button text-left" (click)="setProviderType(type.id)" class="btn btn-primary w-full btn-providerType"
                               [ngClass]="{'btn-outline': shareableJobForm.controls.providerType.value !== type.id}">
                               <div class="row">
-                                <div class="col-lg-3 col-sm-2 col-2 text-center">
+                                <div class="col-lg-3 col-sm-2 col-0 text-center">
                                   <img *ngIf="shareableJobForm.controls.providerType.value !== type.id" src="assets/img/providers/{{type.img}}">
                                   <img *ngIf="shareableJobForm.controls.providerType.value === type.id" src="assets/img/providers/white/{{type.img}}">
                                 </div>
-                                <div class="col-lg-8 col-sm-10 col-10 text-left" style="white-space: initial;">
+                                <div class="col-lg-8 col-sm-10 col-12 text-left" style="white-space: initial;">
                                   <p>{{type.name}}</p>
                                 </div>
                               </div>

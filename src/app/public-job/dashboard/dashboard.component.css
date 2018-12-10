@@ -10,11 +10,12 @@
 .provider-type-icon {
   max-height: 1.25rem;
   margin-bottom: 5px;
+  margin-right: 12px;
 }
 
 @media screen and (max-width: 640px) {
   .public-job-card-desc p {
-    height: 75px;
+    height: 3.25rem;
     white-space: pre-wrap;
     overflow: hidden;
   }

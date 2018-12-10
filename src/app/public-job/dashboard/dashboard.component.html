@@ -36,24 +36,20 @@
         </div>
       </div>
     </div>
-    <div class="card job-dashboard-card my-10 py-15 px-30 text-center-mobile" *ngFor="let job of queryJobs | orderBy : 'actionLog[0].timestamp':true | paginate: { itemsPerPage: 10, currentPage: index }"
+    <div class="card job-dashboard-card my-10 py-15 px-30" *ngFor="let job of queryJobs | orderBy : 'actionLog[0].timestamp':true | paginate: { itemsPerPage: 10, currentPage: index }"
       [routerLink]="['/jobs/public', job.slug]">
       <div class="row">
         <div class="col-lg-8 col-12">
-          <h5><img class="provider-type-icon" src="{{getImage(job.information.providerType)}}">&nbsp;&nbsp;{{job.information.title}}</h5>
+          <h5 class="mb-0"><img class="provider-type-icon" src="{{getImage(job.information.providerType)}}">{{job.information.title}}</h5>
         </div>
-        <div class="col-lg-4 col-12 text-right text-center-mobile">
+        <div class="col-lg-4 col-12 text-right text-left-mobile">
           <small>Posted On : {{ timestampToDate(job.actionLog[0].timestamp) }}</small>
         </div>
       </div>
       <div class="row">
         <div class="col-12 public-job-card-desc">
-          <p *ngIf="job.information.description.length >= 200">
-            {{job.information.description.substring(0, 200)}}...
-          </p>
-          <p *ngIf="job.information.description.length <= 200">
-            {{job.information.description}}
-          </p>
+          <p *ngIf="job.information.description.length >= 200">{{job.information.description.substring(0, 200)}}...</p>
+          <p *ngIf="job.information.description.length <= 200">{{job.information.description}}</p>
         </div>
       </div>
       <div class="row">
@@ -63,9 +59,9 @@
         </div>
         <div class="col-lg-2 col-md-3 col-ms-4 col-6">
           <b>{{job.deadline}}</b>
-          <p>Project Deadline</p>
+          <p *ngIf="job.deadline">Project Deadline</p>
         </div>
-        <div class="col-lg-8 col-md-6 col-ms-4 col-12 text-right text-center-mobile">
+        <div class="col-lg-8 col-md-6 col-ms-4 col-12 text-right text-left-mobile">
           <app-skill-tag *ngFor="let skill of job.information.skills" [skill]="skill"></app-skill-tag>
         </div>
       </div>

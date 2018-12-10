@@ -31,33 +31,17 @@ input {
   }
 
   .btn-providerType img {
-    margin-top: 5px;
-    height: 24px;
-    margin-left: 10px;
-    position: absolute;
-  }
-
-  .btn-providerType p {
-    font-size: 10px;
-    width: 100px;
-    margin-bottom: 0;
-    margin-left: 15px
-  }
-}
-
-@media screen and (max-width: 420px) {
-  .btn-providerType img {
     margin-left: 0x;
     height: 14px;
-    margin-top: 10px
+    display: none;
   }
 
   .btn-providerType p {
-    font-size: 9px;
-    width: 80px;
-    margin-left: 20px;
+    text-align: center !important;
+    margin-left: 0;
     margin-right: 0;
     margin-bottom: 0;
+    width: 100%;
   }
 }
 
