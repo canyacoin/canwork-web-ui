@@ -90,7 +90,6 @@ export class JobDescription {
 
 export class Bid {
   providerId: string;
-  clientId: string;
   providerInfo: Object;
   budget: number;
   message: string;
@@ -103,7 +102,6 @@ export class Bid {
     this.message = message;
     this.timestamp = timestamp;
     this.rejected = false;
-    this.clientId = '';
   }
 }
 
