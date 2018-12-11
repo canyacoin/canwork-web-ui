@@ -226,10 +226,10 @@
   dependencies:
     tslib "^1.9.0"
 
-"@canyaio/canpay-lib@^0.2.7":
-  version "0.2.7"
-  resolved "https://registry.yarnpkg.com/@canyaio/canpay-lib/-/canpay-lib-0.2.7.tgz#869bf96c73707313dffe6276ae5e11214449fb81"
-  integrity sha512-d9j84EuqjttIcc8oo8N0uBuwOfNfQ1CcFascXuzq/ySf5Gj2cu0KX1g8nwa0I5Qh1vK60mrIvOKSx4wSUciIpA==
+"@canyaio/canpay-lib@^0.2.8":
+  version "0.2.8"
+  resolved "https://registry.yarnpkg.com/@canyaio/canpay-lib/-/canpay-lib-0.2.8.tgz#63dfeab4a4b2be32c76c4fc2556ac44281365457"
+  integrity sha512-XChqbUpnQ3SwQCmnfgKhe59JtNbQyqErnBWifr0138gBK0g7bzSTX6/EP7rmgQTleQcxVnUf4ddpU2PBIahNGw==
   dependencies:
     angular2-qrcode "^2.0.1"
     lodash.merge "^4.6.1"
