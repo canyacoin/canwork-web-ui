@@ -250,7 +250,7 @@ export class PublicJobService {
     //  Decline the bid.
     return new Promise<boolean>(async (resolve, reject) => {
       try {
-        const update = await this.afs.doc(`public-jobs/${job.id}/bids/${bid.providerId}`).update({ providerId: bid.providerId, rejected: true });
+        const update = await this.afs.doc(`public-jobs/${job.id}/bids/${bid.providerId}`).update({ rejected: true });
         console.log(update);
         resolve(true);
       } catch (error) {
