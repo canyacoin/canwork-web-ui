@@ -28,7 +28,6 @@ import { Subscription } from 'rxjs';
 export class HeaderComponent implements OnInit, OnDestroy {
 
   currentUser: User;
-  isProvider: boolean;
   @Input() allowFilters = false;
   showFilters = false;
   hideSearchBar: boolean;
@@ -66,7 +65,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.messagesSubscription = unreadConversations.valueChanges().subscribe(x => {
         this.hasUnreadMessages = x.length > 0;
       }, error => { console.error('! unable to retrieve chat/channel data:', error); });
-      this.isProvider = this.currentUser.type === UserType.provider;
     }
   }
 

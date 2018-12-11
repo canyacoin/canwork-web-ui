@@ -96,7 +96,7 @@ service cloud.firestore {
     match /public-jobs/{jobId}/bids/{bidId} {
        allow read;
        allow create: if userIsClientOrProvider();
-       allow update: if userIsClientOrProvider();
+       allow update: if isAuthenticated();
        allow delete: if isAdmin();
     }
     

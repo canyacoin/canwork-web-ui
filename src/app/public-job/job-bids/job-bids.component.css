@@ -1,36 +1,46 @@
 .bid-card .btn {
-  width: 150px;
+    width: 150px;
 }
 
 .ml-2r {
-  margin-left: 2rem;
+    margin-left: 2rem;
 }
 
 .headshot-div {
-  width: 35px;
-  height: 35px;
-  position: absolute;
-  left: 0;
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    left: 0;
 }
 
 .bid-card .btn-canya-chat {
-  position: absolute;
-  right: 15px;
-  top: 0;
+    position: absolute;
+    right: 15px;
+    top: 0;
+}
+
+.decline-btn {
+    position: absolute;
+    bottom: 35px;
+    right: 15px;
 }
 
 .accept-btn {
-  position: absolute;
-  bottom: 0;
-  right: 15px;
+    position: absolute;
+    bottom: 0;
+    right: 15px;
 }
 
 @media screen and (max-width: 640px) {
-  .bid-card .btn {
-    width: 105px;
-  }
-
-  .accept-btn {
-    position: relative;
-  }
+    .bid-card .btn {
+        width: 105px;
+    }
+    .accept-btn {
+        left: 5px;
+        position: relative;
+    }
+    .decline-btn {
+        bottom: 0px;
+        position: relative;
+    }
 }
