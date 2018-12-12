@@ -144,7 +144,7 @@ export class PostComponent implements OnInit, OnDestroy {
           this.isShareable = true;
         }
       });
-      if (!this.editing) {
+      if (!this.editing && !this.recipientAddress) {
         this.jobId = GenerateGuid();
         this.pageLoaded = true;
       } else {
@@ -230,11 +230,14 @@ export class PostComponent implements OnInit, OnDestroy {
     if (this.authSub) { this.authSub.unsubscribe(); }
   }
 
-  loadUser(address: string) {
+  async loadUser(address: string) {
+    this.recipient = await this.userService.getUser(address);
+    this.pageLoaded = true;
+    /**
     this.userService.getUser(address).then((user: User) => {
       this.recipient = user;
-      this.pageLoaded = true;
     });
+     */
   }
 
   skillTagsUpdated(value: string) {

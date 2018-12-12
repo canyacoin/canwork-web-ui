@@ -4,8 +4,8 @@
     <div *ngIf="!pageLoaded" class="container d-flex h-100 flex-column justify-content-center">
       <img src="assets/img/loader.svg" height="36px" alt="Loader">
     </div>
-    <div id="direct-job" *ngIf="recipient && pageLoaded && !isShareable">
-      <div *ngIf="!sent" class="section pt-0 bg-grey pb-30">
+    <div id="direct-job" *ngIf="pageLoaded && !isShareable">
+      <div *ngIf="!sent && recipient" class="section pt-0 bg-grey pb-30">
         <div class="container bg-white p-30">
           <header class="section-header my-0 py-0">
             <h2 class="fw-600">Post a request</h2>
@@ -32,7 +32,8 @@
                     <div class="form-group">
                       <label>Project stage *</label>
                       <textarea class="form-control" #initialStage formControlName="initialStage" type="text" name="initialStage"
-                        placeholder="e.g. 'Ideation phase' or 'I have started work already'" maxlength="3000" [class.invalid]="!postForm.controls.initialStage.valid && postForm.controls.initialStage.dirty"></textarea>
+                        placeholder="e.g. 'Ideation phase' or 'I have started work already'" maxlength="3000"
+                        [class.invalid]="!postForm.controls.initialStage.valid && postForm.controls.initialStage.dirty"></textarea>
                     </div>
 
                     <div class="form-group">
@@ -103,7 +104,8 @@
                       <br />
                       <div class="row ml-0 mr-0">
                         <div *ngFor="let type of workTypes()" class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                          <button type="button" (click)="setWorkType(type)" class="btn btn-primary" [ngClass]="{'btn-outline': postForm.controls.workType.value !== type}">
+                          <button type="button" style="width:100%" (click)="setWorkType(type)" class="btn btn-primary"
+                            [ngClass]="{'btn-outline': postForm.controls.workType.value !== type}">
                             {{type}}
                           </button>
                         </div>
@@ -111,33 +113,32 @@
                     </div>
 
                     <div class="form-group">
-                      <label>Timeline Expectations *</label>
-                      <br />
-                      <div class="row ml-0 mr-0">
-                        <select #timelineExpectation class="form-control">
-                          <option selected>Choose...</option>
-                          <option *ngFor="let range of timeRanges()"> {{ range }} </option>
-                        </select>
-                        <!-- 
-                        <div *ngFor="let range of timeRanges()" class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                          <button type="button" (click)="setTimeRange(range)" class="btn btn-primary w-full" [ngClass]="{'btn-outline': postForm.controls.timelineExpectation.value !== range}">
-                            {{range}}
-                          </button>
-                        </div>
-                      -->
-                      </div>
-                    </div>
-
-                    <div class="form-group">
-                      <label>Weekly commitment *</label>
                       <div class="row">
-                        <small class="col-7">Your expectations of the providers weekly time commitment ot your job.</small>
-                        <input #weeklyCommitment formControlName="weeklyCommitment" class="form-control col-2" type="number"
-                          name="weeklyCommitment" min="1" placeholder="Enter hours/week..." [class.invalid]="!postForm.controls.weeklyCommitment.valid && postForm.controls.weeklyCommitment.dirty">
-                        <span class="col-3 mt-8">hours / week</span>
+                        <div class="col-sm-6 col-12">
+
+                          <label>Timeline Expectations *</label>
+                          <br />
+                          <div class="row ml-0 mr-0">
+                            <select #timelineExpectation class="form-control" formControlName="timelineExpectation">
+                              <option selected>Choose...</option>
+                              <option *ngFor="let range of timeRanges()"> {{ range }} </option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-sm-6 col-12">
+                          <label>Weekly commitment *</label>
+                          <div class="input-group" style="border-radius: 5px"><input #weeklyCommitment formControlName="weeklyCommitment"
+                              class="form-control" type="number" name="weeklyCommitment" min="1" placeholder="Enter hours/week..."
+                              [class.invalid]="!postForm.controls.weeklyCommitment.valid && postForm.controls.weeklyCommitment.dirty">
+                            <div class="input-group-append" style=" margin-top: 5px; margin-right: 10px;">
+                              <span class="input-group-text" id="basic-addon2">Hours / Week</span>
+                            </div>
+                          </div>
+                        </div>
+                        <small *ngIf="!postForm.controls.weeklyCommitment.valid && postForm.controls.weeklyCommitment.dirty"
+                          class="text-primary">Must be between 1 - 60 hours</small>
+
                       </div>
-                      <small *ngIf="!postForm.controls.weeklyCommitment.valid && postForm.controls.weeklyCommitment.dirty"
-                        class="text-primary">Must be between 1 - 60 hours</small>
                     </div>
 
                     <div class="form-group">
@@ -150,7 +151,8 @@
                             {{type}}
                           </button>
                         </div>
-                        <small><i>Hourly rate payments coming soon</i></small>
+                        <br>
+                        <small class="col-12"><i>Hourly rate payments coming soon</i></small>
                       </div>
                     </div>
 
@@ -194,7 +196,9 @@
           </div>
         </div>
       </div>
-
+      <div *ngIf="!recipient">
+        <h5>Provider not found.</h5>
+      </div>
       <div *ngIf="sent" class="section py-70">
         <div class="container">
           <div class="section-header">
@@ -215,7 +219,6 @@
         </div>
       </div>
     </div>
-
     <div id="shareable-job" *ngIf="!recipient && pageLoaded && isShareable">
       <div *ngIf="!sent" class="section bg-grey pt-15 pb-30">
         <div class="container bg-white p-30 brad-5px">
@@ -253,7 +256,8 @@
                       <div class="col-12">
                         <label>Project stage *</label>
                         <textarea class="form-control" #initialStage formControlName="initialStage" type="text" name="initialStage"
-                          placeholder="eg. 'Ideation phase' or 'I have started work already'" maxlength="3000" [class.invalid]="!shareableJobForm.controls.initialStage.valid && shareableJobForm.controls.initialStage.dirty"></textarea>
+                          placeholder="eg. 'Ideation phase' or 'I have started work already'" maxlength="3000"
+                          [class.invalid]="!shareableJobForm.controls.initialStage.valid && shareableJobForm.controls.initialStage.dirty"></textarea>
                       </div>
                     </div>
 
@@ -517,9 +521,6 @@
           </p>
         </div>
       </div>
-    </div>
-    <div *ngIf="!recipient && pageLoaded && !isShareable" class="section bg-white pt-0 text-center">
-      <h3>Uh-oh, we can't seem to find this provider!</h3>
     </div>
   </section>
 </main>
