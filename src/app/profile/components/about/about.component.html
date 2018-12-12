@@ -78,32 +78,37 @@
           </button>
         </div>
       </div>
-      <div class="modal-body" *ngIf="loadingJobs">
-        <div class="col-12 mh-150 text-center">
-          <i>Loading...</i>
-        </div>
-      </div>
-      <div class="modal-body" *ngIf="!loadingJobs" border-none>
-        <div class="row py-10 animated {{animation}}" *ngFor="let job of paginatedUserJobs();let i = index">
-          <div class="col-8">
-            <h6>{{job.information.title}}</h6>
-          </div>
-          <div class="col-4 text-right">
-            <button id="job-{{i}}" (click)="inviteProvider(job, i)" *ngIf="job.canInvite" [disabled]="inviting === true" class="btn btn-success">
-              <span *ngIf = "inviting === true">Inviting...</span>
-              <span *ngIf = "inviting !== true">INVITE</span>
-            </button>
-            <i *ngIf="!job.canInvite" class="mr-15">Invited</i>
+      <div class="modal-body">
+        <div class="row" *ngIf="loadingJobs">
+          <div class="col-12 mh-150 text-center">
+            <i>Loading...</i>
           </div>
         </div>
-        <div class="row py-10">
-          <div class="col-12 d-flex justify-content-center">
-            <button class="btn btn-sm" [disabled]="currentPage == 0" (click)="previousPage()">
-              <i class="fa fa-chevron-left"></i>
-            </button>
-            <button class="btn btn-sm" [disabled]="currentPage == lastPage" (click)="nextPage()">
-              <i class="fa fa-chevron-right"></i>
-            </button>
+        <div class="row" *ngIf="!loadingJobs">
+          <div class="col-12">
+              <div class="row py-10 animated {{animation}}" *ngFor="let job of paginatedUserJobs();let i = index">
+                  <div class="col-8">
+                    <h6>{{job.information.title}}</h6>
+                  </div>
+                  <div class="col-4 text-right">
+                    <button id="job-{{i}}" (click)="inviteProvider(job, i)" *ngIf="job.canInvite" [disabled]="inviting === true"
+                      class="btn btn-success">
+                      <span *ngIf="inviting === true">Inviting...</span>
+                      <span *ngIf="inviting !== true">INVITE</span>
+                    </button>
+                    <i *ngIf="!job.canInvite" class="mr-15">Invited</i>
+                  </div>
+                </div>
+                <div class="row py-10">
+                  <div class="col-12 d-flex justify-content-center">
+                    <button class="btn btn-sm" [disabled]="currentPage == 0" (click)="previousPage()">
+                      <i class="fa fa-chevron-left"></i>
+                    </button>
+                    <button class="btn btn-sm" [disabled]="currentPage == lastPage" (click)="nextPage()">
+                      <i class="fa fa-chevron-right"></i>
+                    </button>
+                  </div>
+                </div>
           </div>
         </div>
         <div class="row py-10">
@@ -112,6 +117,9 @@
               <a data-dismiss="modal" class="pointer text-canya" (click)="proposeJob()">Post a request.</a></span>
           </div>
         </div>
+      </div>
+      <div class="modal-body" *ngIf="!loadingJobs" border-none>
+       
       </div>
     </div>
   </div>
