@@ -20,7 +20,7 @@
                 {{job.information.title}}
               </h2>
               <div class="" style="max-width: 65vw; min-height: 5rem">
-                <p>
+                <p style="white-space: pre-wrap;">
                   {{job.information.description}}
                 </p>
               </div>
@@ -262,8 +262,7 @@
                 <label for="price">Price*</label>
                 <br>
                 <div class="input-group" style="border: none;">
-                  <input type="number" formControlName="price" style="border: 1px solid #ebebeb;" class="form-control"
-                    id="price" placeholder="Client budget : {{job.budget}}">
+                  <input type="number" formControlName="price" style="border: 1px solid #ebebeb;" class="form-control" id="price" placeholder="Client budget : {{job.budget}}">
                   <div class="input-group-append" style="padding: 5px;">
                     <span class="input-group-text"> <span *ngIf="job.paymentType !== 'Fixed price'">/hr </span>USD</span>
                   </div>
@@ -287,8 +286,7 @@
         </div>
       </div>
       <div class="modal-footer text-right" *ngIf="canBid && !sent">
-        <img src="assets/img/loader.svg" height="36px" alt="Loader" *ngIf="isBidding"> <button type="button" class="btn btn-primary"
-          [disabled]="!bidForm.valid || isBidding" (click)="submitBid()">PLACE BID</button>
+        <img src="assets/img/loader.svg" height="36px" alt="Loader" *ngIf="isBidding"> <button type="button" class="btn btn-primary" [disabled]="!bidForm.valid || isBidding" (click)="submitBid()">PLACE BID</button>
       </div>
     </div>
   </div>
