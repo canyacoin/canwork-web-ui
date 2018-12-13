@@ -19,7 +19,7 @@ import * as firebase from 'firebase/app';
 })
 export class WithDockComponent implements OnInit, OnDestroy {
 
-  usersSub: Subscription;
+  dockAuthSub: Subscription;
   httpHeaders = new Headers({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
 
   constructor(
@@ -41,25 +41,29 @@ export class WithDockComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.usersSub) {
-      this.usersSub.unsubscribe();
+    if (this.dockAuthSub) {
+      this.dockAuthSub.unsubscribe();
     }
   }
 
   async init(code: string) {
     console.log(`Calling dock-io-service with code [${code}]`);
-    this.usersSub = this.userService.usersCollectionRef.stateChanges(['added', 'modified'])
+    this.dockAuthSub = this.dockIoService.authCollection.stateChanges(['added', 'modified'])
       .subscribe(action => {
         action.forEach(({ payload }) => {
           const snapshot = payload.doc;
           const data = snapshot.data();
-          const isFromDockContext = data['address'] && data['@context'] === 'https://dock.io' && data['isDockUpdating'];
-          if (isFromDockContext) {
+          const isFromDockContext = data['redirectURIAuthCode'] && data['userID'] ? true : false;
+          const remoteAuthCodeMatchesLocalCode = data['redirectURIAuthCode'] === code;
+          if (isFromDockContext && remoteAuthCodeMatchesLocalCode) {
             console.log(data);
-            this.getFirebaseToken(data.address);
+            this.getFirebaseToken(data.userID);
           }
         });
       });
+    this.dockIoService.storeDockAuth({
+      redirectURIAuthCode: code,
+    });
     this.dockIoService.callAuthenticationService(code);
   }
 
