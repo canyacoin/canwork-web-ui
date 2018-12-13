@@ -57,7 +57,8 @@
           </div>
           <div class="row my-15">
             <div class="col-sm-9">
-              <app-skill-tag *ngFor="let skill of job.information.skills" [routerLink]="['/search/']" [queryParams]="{query : skill}" [skill]=skill></app-skill-tag>
+              <app-skill-tag *ngFor="let skill of job.information.skills" [routerLink]="['/search/']" [queryParams]="{query : skill}"
+                [skill]=skill></app-skill-tag>
             </div>
             <div class="col-sm-3">
               <button class="btn btn-sm btn-primary" *ngIf="myJob" [routerLink]="['/inbox/job/edit', job.id]">EDIT JOB</button>
@@ -101,6 +102,12 @@
               over
               {{job.information.timelineExpectation}} period.</p>
             <hr *ngIf="currentUser && currentUser.type === 'Provider' && !myJob && isOpen">
+          </div>
+          <div class="col-12" *ngIf="currentUser && currentUser.type !== 'Provider' && !myJob && isOpen">
+            <span>You must be a CanWork service provider to bid on this job.</span>
+          </div>
+          <div class="col-12" *ngIf="!currentUser && !myJob && isOpen">
+            <span>Sign up to be a CanWork service provider to bid on this job. <a [routerLink]="['/auth']">Create one now.</a></span>
           </div>
           <div class="col-12" *ngIf="currentUser && currentUser.type === 'Provider' && !myJob && isOpen">
             <button class="btn btn-primary mt-5 mr-5" [hidden]="!canBid" data-toggle="modal" data-target="#bidModal">
