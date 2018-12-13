@@ -73,6 +73,10 @@ service cloud.firestore {
        allow read;
     }
 
+    match /dock-auth/{docId} {
+      allow read;
+    }
+
     // TODO: Will require a much more complex rule set here
     match /jobs {
        allow read:if request.auth != null;
@@ -84,22 +88,22 @@ service cloud.firestore {
        allow update: if userIsClientOrProvider();
        allow delete: if isAdmin();
     }
-    
-        
+
+
     match /public-jobs/{jobId} {
        allow read;
        allow create: if isAuthenticated();
        allow update: if userIsClientOrProvider();
        allow delete: if isAdmin();
-    }    
-    
+    }
+
     match /public-jobs/{jobId}/bids/{bidId} {
        allow read;
        allow create: if userIsClientOrProvider();
        allow update: if isAuthenticated();
        allow delete: if isAdmin();
     }
-    
+
     match /public-jobs/{jobId}/invites/{inviteId} {
        allow read;
        allow create: if isAuthenticated();
