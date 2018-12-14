@@ -49,8 +49,8 @@ export class CreateClientProfileComponent implements OnInit {
   profileForm: FormGroup = null;
   termsChecked = false;
 
-  ethAddress: string
-  ethSub: Subscription
+  ethAddress: string;
+  ethSub: Subscription;
 
   constructor(
     private userService: UserService,

@@ -64,7 +64,14 @@ export class WithDockComponent implements OnInit, OnDestroy {
     this.dockIoService.storeDockAuth({
       redirectURIAuthCode: code,
     });
-    this.dockIoService.callAuthenticationService(code);
+    try {
+      const data = await this.dockIoService.callAuthenticationService(code);
+      console.log(data);
+      const localDockAuthData = this.dockIoService.getLocalDockAuthData();
+      this.dockIoService.storeDockAuth(Object.assign(data, localDockAuthData));
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async getFirebaseToken(userID: string) {
@@ -88,7 +95,6 @@ export class WithDockComponent implements OnInit, OnDestroy {
       console.log('+ decoded JWT:', tokenPayload);
       const user: User = new User({
         address: tokenPayload.uid,
-        isDockUpdating: false,
       });
       this.handleLogin(user);
     }, error => {

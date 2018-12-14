@@ -13,7 +13,6 @@ export class DockIoService {
     private http: HttpClient,
     private afs: AngularFirestore) {
     this.authCollection = this.afs.collection<any>('dock-auth');
-    this.storeDockAuth({});
   }
 
   get oAuthURI() {
@@ -45,15 +44,28 @@ export class DockIoService {
     return JSON.parse(dockAuth);
   }
 
+  getLocalConnectionAddress() {
+    const dockAuthData = this.getLocalDockAuthData();
+    return (dockAuthData.user_data || {}).connection_addr;
+  }
+
+  async getDockSchemaByConnectionAddress(address: string) {
+    try {
+      const querySnapshot = await this.authCollection.ref
+        .where('connectionAddress', '==', address)
+        .limit(1).get();
+      return querySnapshot;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   callAuthenticationService(code: string) {
     const _headers = {
       'Authorization': `Bearer: ${window.sessionStorage.accessToken}`
     };
-    this.http.get(this.getAccessTokenURI(code), {
+    return this.http.get(this.getAccessTokenURI(code), {
       headers: new HttpHeaders(_headers)
-    }).toPromise()
-      .then((data: any) => {
-        console.log(data);
-      }).catch(error => console.error(error));
+    }).toPromise();
   }
 }
