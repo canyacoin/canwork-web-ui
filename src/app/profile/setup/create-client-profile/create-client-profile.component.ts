@@ -75,8 +75,8 @@ export class CreateClientProfileComponent implements OnInit {
     const colors = randomColor({ luminosity: 'light', count: 3 });
 
     this.profileForm = this.formBuilder.group({
-      firstName: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(18)])],
-      lastName: ['', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(18)])],
+      firstName: [this.user.name.split(' ')[0], Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(18)])],
+      lastName: [this.user.name.split(' ')[1], Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(18)])],
       work: [this.user.email || '', Validators.compose([Validators.required, EmailValidator.isValid])],
       title: [this.user.title || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
       bio: [this.user.bio || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(60)])],
