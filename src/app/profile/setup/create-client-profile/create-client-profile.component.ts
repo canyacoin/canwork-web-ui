@@ -62,6 +62,9 @@ export class CreateClientProfileComponent implements OnInit {
 
   ngOnInit() {
     if (this.user != null) {
+      if (this.user.state === UserState.done) {
+        this.router.navigate(['/home']);
+      }
       this.buildForm();
     }
     this.stepperSteps = Object.values(this.steps);
