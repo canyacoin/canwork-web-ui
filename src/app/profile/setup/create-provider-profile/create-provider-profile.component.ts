@@ -81,7 +81,7 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
       firstName: [this.user.name ? this.user.name.split(' ')[0] : '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(18)])],
       lastName: [this.user.name ? this.user.name.split(' ')[1] : '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(18)])],
       work: [this.user.email || '', Validators.compose([Validators.required, EmailValidator.isValid])],
-      title: [this.user.title || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
+      title: [this.user.description || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
       bio: [this.user.bio || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(60)])],
       description: [this.user.description || '', Validators.compose([Validators.maxLength(500)])],
       category: ['', Validators.compose([Validators.required])],
