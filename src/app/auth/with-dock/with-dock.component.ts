@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { User } from '@class/user';
+import { User, UserState } from '@class/user';
 import { environment } from '@env/environment';
 import { AuthService } from '@service/auth.service';
 import { DockIoService } from '@service/dock-io.service';
@@ -134,7 +134,11 @@ export class WithDockComponent implements OnInit, OnDestroy {
   async initialiseUserAndRedirect(user: User) {
     this.userService.saveUser(user).then((res) => {
       this.authService.setUser(user);
-      this.router.navigate(['/profile/setup']);
+      if (user.state === UserState.done) {
+        this.router.navigate(['/home']);
+      } else {
+        this.router.navigate(['/profile/setup']);
+      }
     }, (err) => {
       console.log('onLogin - err', err);
     });
