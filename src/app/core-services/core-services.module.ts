@@ -9,6 +9,7 @@ import { JobService } from './job.service';
 import { PublicJobService } from './public-job.service';
 import { MomentService } from './moment.service';
 import { ReviewService } from './review.service';
+import { DatesService } from './dates.service';
 import { ScriptService } from './script.service';
 import { TransactionService } from './transaction.service';
 import { UploadService } from './upload.service';
@@ -25,6 +26,7 @@ import { UserService } from './user.service';
     FeedService,
     FeatureToggleService,
     JobService,
+    DatesService,
     PublicJobService,
     MomentService,
     ScriptService,
