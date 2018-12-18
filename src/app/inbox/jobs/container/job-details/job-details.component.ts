@@ -37,6 +37,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   transactions: Transaction[] = [];
   reviews: Review[] = new Array<Review>();
   isOnMobile = false;
+  isPartOfJob = false;
   jobSub: Subscription;
   transactionsSub: Subscription;
   reviewsSub: Subscription;
@@ -71,10 +72,16 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     const jobId = this.activatedRoute.snapshot.params['id'] || null;
     if (jobId) {
       this.jobSub = this.jobService.getJob(jobId).subscribe((job: Job) => {
-        this.job = new Job(job);
-        this.currentUserType = this.currentUser.address === job.clientId ? UserType.client : UserType.provider;
-        this.jobService.assignOtherPartyAsync(this.job, this.currentUserType);
-        this.setAttachmentUrl();
+        this.isPartOfJob = this.currentUser.address === job.clientId || this.currentUser.address === job.providerId;
+        if (this.isPartOfJob) {
+          this.job = new Job(job);
+          this.currentUserType = this.currentUser.address === job.clientId ? UserType.client : UserType.provider;
+          this.jobService.assignOtherPartyAsync(this.job, this.currentUserType);
+          this.setAttachmentUrl();
+        } else {
+          console.log('Thou never belong hither , aroint thee!');
+          this.router.navigateByUrl('/not-found');
+        }
       });
 
       this.reviewsSub = this.reviewService.getJobReviews(jobId).subscribe((reviews: Review[]) => {
