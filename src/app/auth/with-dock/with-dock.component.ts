@@ -89,9 +89,12 @@ export class WithDockComponent implements OnInit, OnDestroy {
       console.log('+ auth data !!', data);
       const token = data.json().token;
       console.log('+ authenticated via pin OK', token);
-      await firebase.auth().signInWithCustomToken(token).catch((error) => {
-        console.log('firebase.auth().signInWithCustomToken() Error: ', error);
-      });
+      const userCredential = await firebase.auth()
+        .signInWithCustomToken(token)
+        .catch((error) => {
+          console.log('firebase.auth().signInWithCustomToken() Error: ', error);
+        });
+      console.log('+ userCredential +', userCredential);
       const tokenPayload = decode(token);
       console.log('+ decoded JWT:', tokenPayload);
       const user: User = new User({
