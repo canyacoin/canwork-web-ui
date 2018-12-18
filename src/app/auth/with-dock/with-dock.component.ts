@@ -50,13 +50,13 @@ export class WithDockComponent implements OnInit, OnDestroy {
     console.log(`Calling dock-io-service with code [${code}]`);
     this.dockAuthSub = this.dockIoService.authCollection.stateChanges(['added', 'modified'])
       .subscribe(action => {
-        action.some(({ payload }) => {
+        action.some(({ payload, type }) => {
           const snapshot = payload.doc;
           const data = snapshot.data();
           const isFromDockContext = data['redirectURIAuthCode'] && data['userID'] ? true : false;
           const remoteAuthCodeMatchesLocalCode = data['redirectURIAuthCode'] === code;
           if (isFromDockContext && remoteAuthCodeMatchesLocalCode) {
-            console.log('+ find curuser +', data);
+            console.log(`+ curuser + type: ${type}, `, data);
             this.getFirebaseToken(data.userID);
           }
           return isFromDockContext && remoteAuthCodeMatchesLocalCode;
