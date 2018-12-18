@@ -56,7 +56,7 @@ export class WithDockComponent implements OnInit, OnDestroy {
           const isFromDockContext = data['redirectURIAuthCode'] && data['userID'] ? true : false;
           const remoteAuthCodeMatchesLocalCode = data['redirectURIAuthCode'] === code;
           if (isFromDockContext && remoteAuthCodeMatchesLocalCode) {
-            console.log(data);
+            console.log('+ find curuser +', data);
             this.getFirebaseToken(data.userID);
           }
           return isFromDockContext && remoteAuthCodeMatchesLocalCode;
@@ -67,7 +67,7 @@ export class WithDockComponent implements OnInit, OnDestroy {
     });
     try {
       const data = await this.dockIoService.callAuthenticationService(code);
-      console.log(data);
+      console.log('+ user data from dock +', data);
       const localDockAuthData = this.dockIoService.getLocalDockAuthData();
       this.dockIoService.storeDockAuth(Object.assign(data, localDockAuthData));
     } catch (error) {
