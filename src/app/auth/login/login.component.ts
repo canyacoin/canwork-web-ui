@@ -264,7 +264,7 @@ export class LoginComponent implements OnInit {
       this.authService.setUser(user);
       this.router.navigate([this.returnUrl]);
     } else {
-      console.log('+ detected new user:', userDetails.email);
+      console.log('+ detected new user:', userDetails.email, userDetails);
       this.initialiseUserAndRedirect(userDetails);
     }
   }

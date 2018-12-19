@@ -26,11 +26,13 @@ export class SetupComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
-      const isFromDockContext = user['@context'] && user['@context'] === 'https://dock.io';
-      if (isFromDockContext) {
-        this.syncDockAuthData(user);
-      } else {
-        this.currentUser = user;
+      if (user) {
+        const isFromDockContext = user['@context'] && user['@context'] === 'https://dock.io';
+        if (isFromDockContext) {
+          this.syncDockAuthData(user);
+        } else {
+          this.currentUser = user;
+        }
       }
     }, error => { console.error('! unable to retrieve currentUser data:', error); });
   }
