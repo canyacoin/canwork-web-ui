@@ -130,7 +130,7 @@ export class UserService {
       const ref = userModel.address;
       this.usersCollectionRef.doc(ref).snapshotChanges().pipe(take(1)).subscribe((snap: any) => {
         console.log('saveUser - payload', snap.payload.exists);
-        return snap.payload.exists ? this.usersCollectionRef.doc(ref).update(this.parseUserToObject(userModel)) : this.usersCollectionRef.doc(ref).set(this.parseUserToObject(userModel));
+        return snap.payload.exists ? this.usersCollectionRef.doc(ref).update(this.parseUserToObject(userModel)).catch(err => console.log(err)) : this.usersCollectionRef.doc(ref).set(this.parseUserToObject(userModel));
       });
     }
   }

@@ -29,7 +29,7 @@
           <div *ngIf="!webViewEthAddress">
             <h3>Sign in</h3>
             <firebase-ui (signInSuccessWithAuthResult)="onFirebaseLogin($event)"></firebase-ui>
-            <a [href]="dockIOService.oAuthURI" *ngIf="displayDockAuth" class="btn btn-white btn-lg dock-io-button">
+            <a [href]="dockIOService.oAuthURI" class="btn btn-white btn-lg dock-io-button">
               <img class="dock-io-icon" src="assets/svg/dock.svg" alt="dock.io icon">
               Sign in with Dock
             </a>
@@ -66,7 +66,7 @@
       <div *ngIf="!isOnMobile" class="other-login text-center">
         <h5 style="width: 100%;">Sign in to CanWork</h5>
         <firebase-ui (signInSuccessWithAuthResult)="onFirebaseLogin($event)"></firebase-ui>
-        <a [href]="dockIOService.oAuthURI" *ngIf="displayDockAuth" class="btn btn-white btn-lg dock-io-button">
+        <a [href]="dockIOService.oAuthURI" class="btn btn-white btn-lg dock-io-button">
           <img class="dock-io-icon" src="assets/svg/dock.svg" alt="dock.io icon">
           Sign in with Dock
         </a>
