@@ -122,12 +122,12 @@ export class WithDockComponent implements OnInit, OnDestroy {
       const userCredential = await firebase.auth().signInWithCustomToken(token);
       const idToken = await userCredential.user.getIdToken(true);
       window.sessionStorage.accessToken = idToken;
-      window.sessionStorage.setItem('uid', address);
     } catch (err) {
       alert('Sorry, we encountered an unknown error');
       console.log(err);
     }
     const user = await this.userService.getUser(address);
+    window.sessionStorage.setItem('dockUserInfo', JSON.stringify(user));
     this.initialiseUserAndRedirect(user);
   }
 
