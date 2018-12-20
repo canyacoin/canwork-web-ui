@@ -127,7 +127,7 @@ export class WithDockComponent implements OnInit, OnDestroy {
       console.log(err);
     }
     const user = await this.userService.getUser(address);
-    window.sessionStorage.setItem('dockUserInfo', JSON.stringify(user));
+    window.sessionStorage.setItem('uid', address);
     this.initialiseUserAndRedirect(user);
   }
 
