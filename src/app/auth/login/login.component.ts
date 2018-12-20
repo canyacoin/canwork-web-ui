@@ -283,6 +283,7 @@ export class LoginComponent implements OnInit {
 
     if (uid) {
       try {
+        this.loading = true;
         const token = await this.dockIOService.getFirebaseToken(uid);
         const user = await this.userService.getUser(uid);
 
