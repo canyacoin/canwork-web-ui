@@ -291,6 +291,7 @@ export class LoginComponent implements OnInit {
         await firebase.auth().signInWithCustomToken(token);
         this.handleLogin(user);
       } catch (err) {
+        this.loading = false;
         console.log(err);
       }
     } else {
