@@ -64,6 +64,7 @@ export class AuthService {
   }
 
   logout() {
+    console.log('logout', this.currentUser.value);
     localStorage.clear();
     this.currentUser.next(null);
     this.afAuth.auth.signOut();
