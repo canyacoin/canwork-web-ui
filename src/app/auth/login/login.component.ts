@@ -277,4 +277,18 @@ export class LoginComponent implements OnInit {
       console.log('onLogin - err', err);
     });
   }
+
+  async onDockLogin() {
+    const dockUserInfo = window.sessionStorage.getItem('dockUserInfo');
+
+    if (dockUserInfo) {
+      const token = window.sessionStorage.getItem('accessToken');
+      const user = new User(JSON.parse(dockUserInfo));
+
+      await firebase.auth().signInWithCustomToken(token);
+      this.handleLogin(user);
+    } else {
+      window.location.href = this.dockIOService.oAuthURI;
+    }
+  }
 }
