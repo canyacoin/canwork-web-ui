@@ -68,4 +68,20 @@ export class DockIoService {
       headers: new HttpHeaders(_headers)
     }).toPromise();
   }
+  async getFirebaseToken(userID: string): Promise<string> {
+    const reqBody = { userID: userID };
+    const reqOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }) };
+    let response;
+    const endPoint = `${environment.backendURI}/getFirebaseTokenForDockIOAuth`;
+    try {
+      response = await this.http.post(endPoint, reqBody, reqOptions);
+    } catch (error) {
+      console.error(`! http post error pin authentication at endpoint: ${endPoint}`, error);
+    }
+    return new Promise((resolve, reject) => {
+      response.subscribe(async data => {
+        resolve(data.token);
+      }, err => reject(err));
+    }) as Promise<string>;
+  }
 }
