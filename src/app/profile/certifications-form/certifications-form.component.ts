@@ -23,7 +23,8 @@ export class CertificationsFormComponent implements OnInit, AfterViewInit {
   certificationForm: any;
   currentUser: User;
   currentCert: Certification;
-
+  yearList = new Array();
+  completionYearList = new Array();
   constructor(
     private auth: AuthService,
     public certifications: CertificationsService,
@@ -46,6 +47,14 @@ export class CertificationsFormComponent implements OnInit, AfterViewInit {
       isStudying: [false],
       certificate: [''],
     });
+    const currentYear = (new Date()).getFullYear();
+    const maxCompletionYear = currentYear + 10;
+    for (let i = 0; i < 60; i++) {
+      this.yearList.push(currentYear - i);
+    }
+    for (let i = 0 ; i < 60; i++) {
+      this.completionYearList.push(maxCompletionYear - i);
+    }
   }
 
   ngAfterViewInit() {

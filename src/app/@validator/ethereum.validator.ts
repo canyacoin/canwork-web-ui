@@ -30,7 +30,7 @@ export class EthereumValidator {
 
           const addressBelongsToUser: boolean = record.id === user.address &&
             control.value.toUpperCase() === user.ethAddress.toUpperCase();
-
+          console.log('is ' + control.value.toUpperCase() + '===' + user.ethAddress.toUpperCase() + ' ? '  + addressBelongsToUser);
           if (addressBelongsToUser) {
             resolve(null);
           }
