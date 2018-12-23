@@ -10459,6 +10459,7 @@ hr {
 }
 
 .job-dashboard-card {
+  cursor: pointer;
   border-radius: 5px;
 }
 

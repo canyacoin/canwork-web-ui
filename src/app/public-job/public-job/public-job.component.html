@@ -103,11 +103,15 @@
               {{job.information.timelineExpectation}} period.</p>
             <hr *ngIf="currentUser && currentUser.type === 'Provider' && !myJob && isOpen">
           </div>
+          <div class="col-12">
+            <p><b>Total Bid(s) : </b>{{ bids.length }}</p>
+          </div>
           <div class="col-12" *ngIf="currentUser && currentUser.type !== 'Provider' && !myJob && isOpen">
             <span>You must be a CanWork service provider to bid on this job.</span>
           </div>
           <div class="col-12" *ngIf="!currentUser && !myJob && isOpen">
-            <span>Sign up to be a CanWork service provider to bid on this job. <a [routerLink]="['/auth']">Create one now.</a></span>
+            <span>Sign up to be a CanWork service provider to bid on this job. <a [routerLink]="['/auth']">Create one
+                now.</a></span>
           </div>
           <div class="col-12" *ngIf="currentUser && currentUser.type === 'Provider' && !myJob && isOpen">
             <button class="btn btn-primary mt-5 mr-5" [hidden]="!canBid" data-toggle="modal" data-target="#bidModal">
@@ -262,7 +266,8 @@
                 <label for="price">Price*</label>
                 <br>
                 <div class="input-group" style="border: none;">
-                  <input type="number" formControlName="price" style="border: 1px solid #ebebeb;" class="form-control" id="price" placeholder="Client budget : {{job.budget}}">
+                  <input type="number" formControlName="price" style="border: 1px solid #ebebeb;" class="form-control"
+                    id="price" placeholder="Client budget : {{job.budget}}">
                   <div class="input-group-append" style="padding: 5px;">
                     <span class="input-group-text"> <span *ngIf="job.paymentType !== 'Fixed price'">/hr </span>USD</span>
                   </div>
@@ -286,7 +291,8 @@
         </div>
       </div>
       <div class="modal-footer text-right" *ngIf="canBid && !sent">
-        <img src="assets/img/loader.svg" height="36px" alt="Loader" *ngIf="isBidding"> <button type="button" class="btn btn-primary" [disabled]="!bidForm.valid || isBidding" (click)="submitBid()">PLACE BID</button>
+        <img src="assets/img/loader.svg" height="36px" alt="Loader" *ngIf="isBidding"> <button type="button" class="btn btn-primary"
+          [disabled]="!bidForm.valid || isBidding" (click)="submitBid()">PLACE BID</button>
       </div>
     </div>
   </div>
