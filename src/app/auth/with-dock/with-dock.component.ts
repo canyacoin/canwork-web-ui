@@ -50,15 +50,16 @@ export class WithDockComponent implements OnInit, OnDestroy {
     console.log(`Calling dock-io-service with code [${code}]`);
     this.dockAuthSub = this.dockIoService.authCollection.stateChanges(['added', 'modified'])
       .subscribe(action => {
-        action.forEach(({ payload }) => {
+        action.some(({ payload, type }) => {
           const snapshot = payload.doc;
           const data = snapshot.data();
           const isFromDockContext = data['redirectURIAuthCode'] && data['userID'] ? true : false;
           const remoteAuthCodeMatchesLocalCode = data['redirectURIAuthCode'] === code;
           if (isFromDockContext && remoteAuthCodeMatchesLocalCode) {
-            console.log(data);
+            console.log(`+ curuser + type: ${type}, `, data);
             this.getFirebaseToken(data.userID);
           }
+          return isFromDockContext && remoteAuthCodeMatchesLocalCode;
         });
       });
     this.dockIoService.storeDockAuth({
@@ -66,10 +67,11 @@ export class WithDockComponent implements OnInit, OnDestroy {
     });
     try {
       const data = await this.dockIoService.callAuthenticationService(code);
-      console.log(data);
+      console.log('+ user data from dock +', data);
       const localDockAuthData = this.dockIoService.getLocalDockAuthData();
       this.dockIoService.storeDockAuth(Object.assign(data, localDockAuthData));
     } catch (error) {
+      alert('Sorry, we encountered an unknown error');
       console.error(error);
     }
   }
@@ -88,15 +90,9 @@ export class WithDockComponent implements OnInit, OnDestroy {
       console.log('+ auth data !!', data);
       const token = data.json().token;
       console.log('+ authenticated via pin OK', token);
-      await firebase.auth().signInWithCustomToken(token).catch((error) => {
-        console.log('firebase.auth().signInWithCustomToken() Error: ', error);
-      });
       const tokenPayload = decode(token);
       console.log('+ decoded JWT:', tokenPayload);
-      const user: User = new User({
-        address: tokenPayload.uid,
-      });
-      this.handleLogin(user);
+      this.handleLogin(token, tokenPayload.uid);
     }, error => {
       console.log('+ auth status !!', error.status);
       switch (error.status) {
@@ -121,26 +117,27 @@ export class WithDockComponent implements OnInit, OnDestroy {
     });
   }
 
-  async handleLogin(user: User) {
-    firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(idToken => {
+  async handleLogin(token: string, address: string) {
+    try {
+      const userCredential = await firebase.auth().signInWithCustomToken(token);
+      const idToken = await userCredential.user.getIdToken(true);
       window.sessionStorage.accessToken = idToken;
-      this.initialiseUserAndRedirect(user);
-    }).catch(error => {
-      console.error('! jwt token was not stored in session storage ', error);
+    } catch (err) {
       alert('Sorry, we encountered an unknown error');
-    });
+      console.log(err);
+    }
+    const user = await this.userService.getUser(address);
+    window.sessionStorage.setItem('uid', address);
+    this.initialiseUserAndRedirect(user);
   }
 
   async initialiseUserAndRedirect(user: User) {
-    this.userService.saveUser(user).then((res) => {
-      this.authService.setUser(user);
-      if (user.state === UserState.done) {
-        this.router.navigate(['/home']);
-      } else {
-        this.router.navigate(['/profile/setup']);
-      }
-    }, (err) => {
-      console.log('onLogin - err', err);
-    });
+    await this.userService.saveUser(user);
+    this.authService.setUser(user);
+    if (user.state === UserState.done) {
+      this.router.navigate(['/home']);
+    } else {
+      this.router.navigate(['/profile/setup']);
+    }
   }
 }

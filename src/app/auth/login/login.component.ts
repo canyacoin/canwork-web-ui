@@ -264,7 +264,7 @@ export class LoginComponent implements OnInit {
       this.authService.setUser(user);
       this.router.navigate([this.returnUrl]);
     } else {
-      console.log('+ detected new user:', userDetails.email);
+      console.log('+ detected new user:', userDetails.email, userDetails);
       this.initialiseUserAndRedirect(userDetails);
     }
   }
@@ -276,5 +276,26 @@ export class LoginComponent implements OnInit {
     }, (err) => {
       console.log('onLogin - err', err);
     });
+  }
+
+  async onDockLogin() {
+    const uid = window.sessionStorage.getItem('uid');
+
+    if (uid) {
+      try {
+        this.loading = true;
+        const token = await this.dockIOService.getFirebaseToken(uid);
+        const user = await this.userService.getUser(uid);
+
+        window.sessionStorage.accessToken = token;
+        await firebase.auth().signInWithCustomToken(token);
+        this.handleLogin(user);
+      } catch (err) {
+        this.loading = false;
+        console.log(err);
+      }
+    } else {
+      window.location.href = this.dockIOService.oAuthURI;
+    }
   }
 }
