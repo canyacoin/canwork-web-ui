@@ -14,6 +14,7 @@ import { AuthService } from '../../core-services/auth.service';
 import { Channel, ChatService, Message, MessageType } from '../../core-services/chat.service';
 import { CanWorkEthService } from '../../core-services/eth.service';
 import { UserService } from '../../core-services/user.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-chat',
@@ -333,6 +334,10 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
       );
     }
     return text;
+  }
+
+  getTxLink(txHash: string) {
+    return `http://${environment.contracts.useTestNet ? 'ropsten.' : ''}etherscan.io/tx/${txHash}`;
   }
 
 }

@@ -37,6 +37,7 @@ export class Message {
   price: string;
   timestamp: string;
   isPublic: boolean;
+  txHash: string;
   constructor(init?: Partial<Message>) {
     Object.assign(this, init);
   }
@@ -47,7 +48,8 @@ export enum MessageType {
   request = 'REQUEST',
   offer = 'OFFER',
   jobAction = 'ACTION',
-  checkout = 'CHECKOUT'
+  checkout = 'CHECKOUT',
+  tip = 'TIP'
 }
 
 @Injectable()
@@ -112,6 +114,24 @@ export class ChatService {
     } else {
       console.log('something wrong with the channels?');
     }
+  }
+
+  async sendTipMessage(txHash: string, receiverId: string) {
+    const sender = await this.auth.getCurrentUser();
+    const channelId = [sender.address, receiverId].sort().join('-');
+    const messageText = 'I\'ve just tipped you CanYaCoin!';
+    const message = new Message({
+      address: sender.address,
+      avatar: sender.avatar,
+      channel: channelId,
+      message: messageText,
+      name: sender.name,
+      timestamp: moment().format('x'),
+      title: sender.title,
+      txHash: txHash,
+      type: MessageType.tip
+    });
+    this.sendMessage(sender.address, receiverId, message);
   }
 
   async sendJobMessages(job: Job, action: IJobAction) {
