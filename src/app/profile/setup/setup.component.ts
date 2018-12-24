@@ -50,7 +50,7 @@ export class SetupComponent implements OnInit, OnDestroy {
         user.work = record.email;
         user.name = record.name;
         user.bio = record.bio;
-        user.description = record.headline;
+        user.description = (record.headline || '').length > 36 ?  (record.headline || '').substr(0, 34) + '……' : record.headline;
         user.avatar.uri = record.avatar || user.avatar.uri;
         this.currentUser = user;
       });
