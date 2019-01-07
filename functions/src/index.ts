@@ -391,6 +391,37 @@ exports.updatepublicJobTimeStamp = functions.firestore
       updateAt: timestamp,  
     });
   })
+
+/** 
+ * create timestamp when job created
+ */
+exports.createTimestampWhenJobCreated = functions.firestore
+  .document('jobs/{jobId}')
+  .onCreate(async (snap) => {
+    const data = snap.data();
+    const jobId = snap.id;
+    const slug = data.slug;
+    const timestamp = String(new Date().valueOf());
+
+    await db.doc(`public-jobs/{jobId}`).update({ 
+      createAt: timestamp,
+      updateAt: timestamp,  
+    });
+  })
+
+/** 
+ * update timestamp when job updated
+ */
+exports.updateJobTimeStamp = functions.firestore
+  .document('jobs/{jobId}')
+  .onUpdate(async (snap) => {
+    const timestamp = String(new Date().valueOf());
+
+    await db.doc(`public-jobs/{snap.after.id}`).update({ 
+      updateAt: timestamp,  
+    });
+  })
+
 /*
  * Listen for user creations and created an associated algolia record
  * Also send a welcome email, and flag their user object: welcomeEmailSent: true
