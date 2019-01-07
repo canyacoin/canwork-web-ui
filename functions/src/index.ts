@@ -380,6 +380,17 @@ exports.createSlugWhenJobCreated = functions.firestore
     !slug && createSlugIfNotExist('public-jobs', jobId, joinString(data.information.title))
     .catch(err => console.error(err))
   })
+
+// update updateAt
+exports.createSlugWhenJobCreated = functions.firestore
+  .document('public-jobs/{jobId}')
+  .onUpdate(async (snap) => {
+    const timestamp = String(new Date().valueOf());
+
+    await db.doc(`public-jobs/{jobId}`).update({ 
+      updateAt: timestamp,  
+    });
+  })
 /*
  * Listen for user creations and created an associated algolia record
  * Also send a welcome email, and flag their user object: welcomeEmailSent: true
