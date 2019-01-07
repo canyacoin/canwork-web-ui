@@ -6,12 +6,9 @@ import { JobService } from '@service/job.service';
 import { AuthService } from '@service/auth.service';
 import { ActionType, IJobAction } from '@class/job-action';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { ChatService } from '@service/chat.service';
-import { createChangeDetectorRef } from '@angular/core/src/view/refs';
-import { JobNotificationService } from './job-notification.service';
-import { Action } from 'rxjs/internal/scheduler/Action';
 import * as moment from 'moment';
 
 @Injectable()

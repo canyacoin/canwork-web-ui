@@ -362,6 +362,7 @@ exports.getFirebaseTokenForDockIOAuth = functions.https.onRequest(async (request
 
 /** 
  * Listen for public-job creations and create slug field
+ * Add createAt updateAt field
  */
 exports.createSlugWhenJobCreated = functions.firestore
   .document('public-jobs/{jobId}')
@@ -369,6 +370,12 @@ exports.createSlugWhenJobCreated = functions.firestore
     const data = snap.data();
     const jobId = snap.id;
     const slug = data.slug;
+    const timestamp = String(new Date().valueOf());
+
+    await db.doc(`public-jobs/{jobId}`).update({ 
+      createAt: timestamp,
+      updateAt: timestamp,  
+    });
 
     !slug && createSlugIfNotExist('public-jobs', jobId, joinString(data.information.title))
     .catch(err => console.error(err))
