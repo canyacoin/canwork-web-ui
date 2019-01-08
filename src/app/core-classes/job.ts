@@ -22,8 +22,8 @@ export class Job {
   visibility: string;
   draft: boolean;
   slug: string;
-  createAt: string;
-  updateAt: string;
+  createAt: number;
+  updateAt: number;
 
   constructor(init?: Partial<Job>) {
     Object.assign(this, init);
