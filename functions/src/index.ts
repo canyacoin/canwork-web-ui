@@ -372,7 +372,7 @@ exports.createSlugWhenJobCreated = functions.firestore
     const slug = data.slug;
     const timestamp = String(new Date().valueOf());
 
-    await db.doc(`public-jobs/{jobId}`).update({ 
+    await db.doc(`public-jobs/${jobId}`).update({ 
       createAt: timestamp,
       updateAt: timestamp,  
     });
@@ -387,7 +387,7 @@ exports.updatepublicJobTimeStamp = functions.firestore
   .onUpdate(async (snap) => {
     const timestamp = String(new Date().valueOf());
 
-    await db.doc(`public-jobs/{snap.after.id}`).update({ 
+    await db.doc(`public-jobs/${snap.after.id}`).update({ 
       updateAt: timestamp,  
     });
   })
@@ -400,7 +400,7 @@ exports.createTimestampWhenJobCreated = functions.firestore
   .onCreate(async (snap) => {
     const timestamp = String(new Date().valueOf());
 
-    await db.doc(`jobs/{snap.id}`).update({ 
+    await db.doc(`jobs/${snap.id}`).update({ 
       createAt: timestamp,
       updateAt: timestamp,  
     });
@@ -414,7 +414,7 @@ exports.updateJobTimeStamp = functions.firestore
   .onUpdate(async (snap) => {
     const timestamp = String(new Date().valueOf());
 
-    await db.doc(`jobs/{snap.after.id}`).update({ 
+    await db.doc(`jobs/${snap.after.id}`).update({ 
       updateAt: timestamp,  
     });
   })
