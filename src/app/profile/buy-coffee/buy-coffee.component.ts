@@ -21,8 +21,6 @@ export class BuyCoffeeComponent implements OnInit {
   CanPay: any;
   canexDisabled = false;
   canPayOptions: CanPay;
-  txHash: string;
-
 
   constructor(private authService: AuthService,
     private chatService: ChatService,
@@ -52,22 +50,17 @@ export class BuyCoffeeComponent implements OnInit {
       onAuthTxHash: this.onAuthTxHash.bind(this),
       operation: Operation.pay,
       complete: this.onComplete.bind(this),
-      cancel: this.onCancel.bind(this),
+      cancel: this.onComplete.bind(this),
       disableCanEx: this.canexDisabled,
       userEmail: this.currentUser.email || ''
     };
   }
 
-  onAuthTxHash(txHash: string, from: string) {
-    this.txHash = txHash;
-  }
-
-  onCancel(canPayData: CanPayData) {
-    this.router.navigate(['/profile/alt', this.userModel.address]);
+  async onAuthTxHash(txHash: string, from: string) {
+    await this.chatService.sendTipMessage(txHash, this.userModel.address);
   }
 
   async onComplete(canPayData: CanPayData) {
-    await this.chatService.sendTipMessage(this.txHash, this.userModel.address);
     this.router.navigate(['/profile/alt', this.userModel.address]);
   }
 }
