@@ -389,7 +389,7 @@ exports.updatepublicJobTimeStamp = functions.firestore
     const afterData = snap.after.data();
     const timestamp = String(new Date().valueOf());
     
-    if (!beforeData.updateAt || (afterData.updateAt - beforeData.updateAt > 2000)) {
+    if (!beforeData.updateAt) {
       await db.doc(`public-jobs/${snap.after.id}`).update({ 
         updateAt: timestamp,  
       });
@@ -420,7 +420,7 @@ exports.updateJobTimeStamp = functions.firestore
     const afterData = snap.after.data();
     const timestamp = String(new Date().valueOf());
     
-    if (!beforeData.updateAt || (afterData.updateAt - beforeData.updateAt > 2000)) {
+    if (!beforeData.updateAt) {
       await db.doc(`jobs/${snap.after.id}`).update({ 
         updateAt: timestamp,  
       });
