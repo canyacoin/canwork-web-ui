@@ -398,12 +398,9 @@ exports.updatepublicJobTimeStamp = functions.firestore
 exports.createTimestampWhenJobCreated = functions.firestore
   .document('jobs/{jobId}')
   .onCreate(async (snap) => {
-    const data = snap.data();
-    const jobId = snap.id;
-    const slug = data.slug;
     const timestamp = String(new Date().valueOf());
 
-    await db.doc(`public-jobs/{jobId}`).update({ 
+    await db.doc(`public-jobs/{snap.id}`).update({ 
       createAt: timestamp,
       updateAt: timestamp,  
     });
