@@ -385,15 +385,11 @@ exports.createSlugWhenJobCreated = functions.firestore
 exports.updatepublicJobTimeStamp = functions.firestore
   .document('public-jobs/{jobId}')
   .onUpdate(async (snap) => {
-    const beforeData = snap.before.data();
-    const afterData = snap.after.data();
     const timestamp = String(new Date().valueOf());
     
-    if (!beforeData.updateAt) {
-      await db.doc(`public-jobs/${snap.after.id}`).update({ 
-        updateAt: timestamp,  
-      });
-    }
+    await db.doc(`public-jobs/${snap.after.id}`).update({ 
+      updateAt: timestamp,  
+    });
   })
 
 /** 
@@ -420,11 +416,9 @@ exports.updateJobTimeStamp = functions.firestore
     const afterData = snap.after.data();
     const timestamp = String(new Date().valueOf());
     
-    if (!beforeData.updateAt) {
-      await db.doc(`jobs/${snap.after.id}`).update({ 
-        updateAt: timestamp,  
-      });
-    }
+    await db.doc(`jobs/${snap.after.id}`).update({ 
+      updateAt: timestamp,  
+    });
   })
 
 /*
