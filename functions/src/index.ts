@@ -400,7 +400,7 @@ exports.createTimestampWhenJobCreated = functions.firestore
   .onCreate(async (snap) => {
     const timestamp = String(new Date().valueOf());
 
-    await db.doc(`public-jobs/{snap.id}`).update({ 
+    await db.doc(`jobs/{snap.id}`).update({ 
       createAt: timestamp,
       updateAt: timestamp,  
     });
