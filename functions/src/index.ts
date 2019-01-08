@@ -385,11 +385,15 @@ exports.createSlugWhenJobCreated = functions.firestore
 exports.updatepublicJobTimeStamp = functions.firestore
   .document('public-jobs/{jobId}')
   .onUpdate(async (snap) => {
+    const beforeData = snap.before.data();
+    const afterData = snap.after.data();
     const timestamp = String(new Date().valueOf());
-
-    await db.doc(`public-jobs/${snap.after.id}`).update({ 
-      updateAt: timestamp,  
-    });
+    
+    if (!beforeData.updateAt || (beforeData.updateAt - afterData.updateAt > 2000)) {
+      await db.doc(`public-jobs/${snap.after.id}`).update({ 
+        updateAt: timestamp,  
+      });
+    }
   })
 
 /** 
@@ -412,11 +416,15 @@ exports.createTimestampWhenJobCreated = functions.firestore
 exports.updateJobTimeStamp = functions.firestore
   .document('jobs/{jobId}')
   .onUpdate(async (snap) => {
+    const beforeData = snap.before.data();
+    const afterData = snap.after.data();
     const timestamp = String(new Date().valueOf());
-
-    await db.doc(`jobs/${snap.after.id}`).update({ 
-      updateAt: timestamp,  
-    });
+    
+    if (!beforeData.updateAt || (beforeData.updateAt - afterData.updateAt > 2000)) {
+      await db.doc(`jobs/${snap.after.id}`).update({ 
+        updateAt: timestamp,  
+      });
+    }
   })
 
 /*
