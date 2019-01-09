@@ -1,6 +1,4 @@
-import { Type } from '@angular/core';
-import { Avatar, User, UserType } from '@class/user';
-
+import { UserType } from '@class/user';
 import { IJobAction } from './job-action';
 import { Upload } from './upload';
 
@@ -24,7 +22,8 @@ export class Job {
   visibility: string;
   draft: boolean;
   slug: string;
-
+  createAt: number;
+  updateAt: number;
 
   constructor(init?: Partial<Job>) {
     Object.assign(this, init);

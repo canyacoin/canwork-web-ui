@@ -362,6 +362,7 @@ exports.getFirebaseTokenForDockIOAuth = functions.https.onRequest(async (request
 
 /** 
  * Listen for public-job creations and create slug field
+ * Add createAt updateAt field
  */
 exports.createSlugWhenJobCreated = functions.firestore
   .document('public-jobs/{jobId}')
@@ -369,10 +370,55 @@ exports.createSlugWhenJobCreated = functions.firestore
     const data = snap.data();
     const jobId = snap.id;
     const slug = data.slug;
+    const timestamp = new Date().valueOf();
+
+    await db.doc(`public-jobs/${jobId}`).update({ 
+      createAt: timestamp,
+      updateAt: timestamp,  
+    });
 
     !slug && createSlugIfNotExist('public-jobs', jobId, joinString(data.information.title))
     .catch(err => console.error(err))
   })
+
+// update updateAt
+exports.updatepublicJobTimeStamp = functions.firestore
+  .document('public-jobs/{jobId}')
+  .onUpdate(async (snap) => {
+    const timestamp = new Date().valueOf();
+    
+    await db.doc(`public-jobs/${snap.after.id}`).update({ 
+      updateAt: timestamp,  
+    });
+  })
+
+/** 
+ * create timestamp when job created
+ */
+exports.createTimestampWhenJobCreated = functions.firestore
+  .document('jobs/{jobId}')
+  .onCreate(async (snap) => {
+    const timestamp = new Date().valueOf();
+
+    await db.doc(`jobs/${snap.id}`).update({ 
+      createAt: timestamp,
+      updateAt: timestamp,  
+    });
+  })
+
+/** 
+ * update timestamp when job updated
+ */
+exports.updateJobTimeStamp = functions.firestore
+  .document('jobs/{jobId}')
+  .onUpdate(async (snap) => {
+    const timestamp = new Date().valueOf();
+    
+    await db.doc(`jobs/${snap.after.id}`).update({ 
+      updateAt: timestamp,  
+    });
+  })
+
 /*
  * Listen for user creations and created an associated algolia record
  * Also send a welcome email, and flag their user object: welcomeEmailSent: true
