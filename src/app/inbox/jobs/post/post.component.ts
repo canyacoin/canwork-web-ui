@@ -144,7 +144,7 @@ export class PostComponent implements OnInit, OnDestroy {
           this.isShareable = true;
         }
       });
-      if (!this.editing && !this.recipientAddress) {
+      if (!this.editing) {
         this.jobId = GenerateGuid();
         this.pageLoaded = true;
       } else {

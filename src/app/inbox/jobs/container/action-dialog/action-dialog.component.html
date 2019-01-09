@@ -68,11 +68,9 @@
     </div>
     <div class="modal-footer">
       <div class="col-12">
+        <img *ngIf="executing" src="assets/img/loader.svg" height="36px" alt="Loader">
         <button [disabled]="submitDisabled || executing" type="button" class="btn mr-10 btn-{{getColour(action.type)}}"
           (click)="handleAction()">
-          <div *ngIf="executing">
-            <img src="assets/img/loader.svg" height="36px" alt="Loader">
-          </div>
           {{actionType}}
         </button>
         <button type="button" class="btn btn-default" (click)="close()">Cancel</button>

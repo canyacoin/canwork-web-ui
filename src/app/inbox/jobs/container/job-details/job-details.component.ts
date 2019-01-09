@@ -42,6 +42,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   transactionsSub: Subscription;
   reviewsSub: Subscription;
   hideDescription = true;
+  isInitialised = false;
 
   constructor(private authService: AuthService,
     private jobService: JobService,
@@ -78,6 +79,10 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
           this.currentUserType = this.currentUser.address === job.clientId ? UserType.client : UserType.provider;
           this.jobService.assignOtherPartyAsync(this.job, this.currentUserType);
           this.setAttachmentUrl();
+          if (!this.isInitialised) {
+            this.jobService.updateJobState(this.job);
+            this.isInitialised = true;
+          }
         } else {
           console.log('Thou never belong hither , aroint thee!');
           this.router.navigateByUrl('/not-found');
