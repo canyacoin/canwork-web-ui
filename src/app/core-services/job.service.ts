@@ -1,4 +1,5 @@
 import { NgSwitch } from '@angular/common';
+import { Http, Headers } from '@angular/http';
 import { Injectable } from '@angular/core';
 import {
   CanPayData, CanPayService, EthService, Operation, setProcessResult, View
@@ -31,6 +32,7 @@ export class JobService {
 
   constructor(
     private afs: AngularFirestore,
+    private http: Http,
     private userService: UserService,
     private chatService: ChatService,
     private momentService: MomentService,
@@ -124,6 +126,26 @@ export class JobService {
     if (job.clientId && job.providerId) {
       const otherParty = await this.userService.getUser(viewingUserType === UserType.client ? job.providerId : job.clientId);
       job['otherParty'] = { avatar: otherParty.avatar, name: otherParty.name, id: otherParty.address };
+    }
+  }
+
+  async updateJobState(job: Job) {
+    if (job.state === JobState.termsAcceptedAwaitingEscrow ||
+        job.state === JobState.authorisedEscrow ||
+        job.state === JobState.workPendingCompletion ||
+        job.state === JobState.inDispute) {
+
+        let url = `${environment.transactionMonitor.callbackUri}/check-job-state`;
+        url += `?jobID=${job.id}&jobHexID=${job.hexId}`;
+
+
+        try {
+
+          await this.http.get(url).toPromise();
+
+        } catch (error) {
+          console.error(`! http get error checking job state`, error);
+        }
     }
   }
 
