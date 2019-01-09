@@ -413,7 +413,7 @@ exports.updateJobTimeStamp = functions.firestore
   .document('jobs/{jobId}')
   .onUpdate(async (snap) => {
     const timestamp = new Date().valueOf();
-    
+    return;    
     await db.doc(`jobs/${snap.after.id}`).update({ 
       updateAt: timestamp,  
     });
