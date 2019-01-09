@@ -19,7 +19,7 @@ import * as moment from 'moment';
 })
 export class PublicJobComponent implements OnInit, OnDestroy {
   bidForm: FormGroup = null;
-  bids: any;
+  bids: [];
   recentBids: any;
   authSub: Subscription;
   routeSub: Subscription;
@@ -66,7 +66,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
             this.job = publicJob;
             this.initJob(this.job);
             this.bidsSub = this.publicJobsService.getPublicJobBids(params['jobId']).subscribe(result => {
-              this.bids = result;
+              this.bids = result || [];
               if (this.bids.length > 3) {
                 this.recentBids = this.bids.slice(0, 3);
               } else {
@@ -86,7 +86,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
             this.job = publicJob as Job;
             this.initJob(this.job);
             this.bidsSub = this.publicJobsService.getPublicJobBids(publicJob.id).subscribe(result => {
-              this.bids = result;
+              this.bids = result || [];
               if (this.bids.length > 3) {
                 this.recentBids = this.bids.slice(0, 3);
               } else {
