@@ -386,10 +386,11 @@ exports.updatepublicJobTimeStamp = functions.firestore
   .document('public-jobs/{jobId}')
   .onUpdate(async (snap) => {
     const timestamp = new Date().valueOf();
-    return;
-    await db.doc(`public-jobs/${snap.after.id}`).update({ 
-      updateAt: timestamp,  
-    });
+    const beforeData = snap.before.data();
+
+    if (!beforeData.updateAt || (timestamp - beforeData.updateAt) > 3000) {
+      await db.doc(`public-jobs/${snap.after.id}`).update({ updateAt: timestamp });
+    }
   })
 
 /** 
@@ -413,10 +414,11 @@ exports.updateJobTimeStamp = functions.firestore
   .document('jobs/{jobId}')
   .onUpdate(async (snap) => {
     const timestamp = new Date().valueOf();
-    return;    
-    await db.doc(`jobs/${snap.after.id}`).update({ 
-      updateAt: timestamp,  
-    });
+    const beforeData = snap.before.data();
+
+    if (!beforeData.updateAt || (timestamp - beforeData.updateAt) > 3000) {
+      await db.doc(`jobs/${snap.after.id}`).update({ updateAt: timestamp });
+    }
   })
 
 /*
