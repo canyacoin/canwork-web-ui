@@ -384,10 +384,12 @@ exports.createSlugWhenJobCreated = functions.firestore
 // update updateAt
 exports.updatepublicJobTimeStamp = functions.firestore
   .document('public-jobs/{jobId}')
-  .onUpdate(async (snap) => {
+  .onUpdate(async (snap, context) => {
     const timestamp = new Date().valueOf();
-    console.log('+ snap.before.data() +', snap.before.data(), timestamp)
-    console.log('+ snap.after.data() +', snap.after.data(), timestamp)
+    console.log('timestamp: ', timestamp);
+    console.log('context', context);
+    console.log('+ snap.before.data() +', snap.before.data())
+    console.log('+ snap.after.data() +', snap.after.data())
     return;
     await db.doc(`public-jobs/${snap.after.id}`).update({ 
       updateAt: timestamp,  
