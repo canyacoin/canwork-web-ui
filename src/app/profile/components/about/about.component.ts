@@ -42,8 +42,8 @@ export class AboutComponent implements OnInit {
         this.currentUserJobs[i].canInvite = await this.publicJobService.canInvite(this.currentUserJobs[i].id, this.userAddress);
       }
       this.loadingJobs = false;
+      this.lastPage = (Math.ceil(this.currentUserJobs.length / this.pageLimit) - 1);
     }
-    this.lastPage = (Math.ceil(this.currentUserJobs.length / this.pageLimit) - 1);
   }
 
   displayProfileEditComponent() {
