@@ -96,7 +96,7 @@
               <p *ngIf="!isLoading && channels.length < 1" class="text-dark opacity-60 my-80 text-center">Uh, oh, no
                 messages yet! Try again later.</p>
               <div *ngFor="let message of messages;let i = index">
-                <div *ngIf="message.type === 'MESSAGE' || message.type === 'ACTION'" class="row" [ngClass]="{ 'justify-content-start': message.address !== currentUser.address,
+                <div *ngIf="message.type === 'MESSAGE' || message.type === 'ACTION' || message.type === 'TIP'" class="row" [ngClass]="{ 'justify-content-start': message.address !== currentUser.address,
                   'justify-content-end': message.address === currentUser.address }">
 
                   <div class="col-auto mx-30 my-5">
@@ -126,6 +126,15 @@
                           JOB DETAILS</a>
                         <a href="#" *ngIf="message.isPublic && message.isPublic === true" [routerLink]="['/jobs/', message.jobId]"
                           class="fs-14 fw-400">PUBLIC JOB DETAILS</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row justify-content-center" *ngIf="message.type === 'TIP'">
+                  <div class="col-auto mx-30 my-5">
+                    <div class="card bg-white card-request">
+                      <div class="row justify-content-center">
+                        <a href="{{getTxLink(message.txHash)}}" target="_blank" class="fs-14 fw-400">VIEW TRANSACTION</a>
                       </div>
                     </div>
                   </div>
@@ -302,7 +311,7 @@
               <p *ngIf="!isLoading && channels.length < 1" class="text-dark opacity-60 my-80 text-center">Uh, oh, no
                 messages yet! Try again later.</p>
               <div *ngFor="let message of messages;let i = index">x
-                <div *ngIf="message.type === 'MESSAGE' || message.type === 'ACTION'" class="row" [ngClass]="{ 'justify-content-start': message.address !== currentUser.address,
+                <div *ngIf="message.type === 'MESSAGE' || message.type === 'ACTION' || message.type === 'TIP'" class="row" [ngClass]="{ 'justify-content-start': message.address !== currentUser.address,
                       'justify-content-end': message.address === currentUser.address }">
                   <div class="col-auto mx-30 my-5">
                     <div class="card card-message" [ngClass]="{

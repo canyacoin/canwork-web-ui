@@ -120,17 +120,7 @@ export class ChatService {
     const sender = await this.auth.getCurrentUser();
     const channelId = [sender.address, receiverId].sort().join('-');
     const messageText = 'I\'ve just tipped you CanYaCoin!';
-    const message = new Message({
-      address: sender.address,
-      avatar: sender.avatar,
-      channel: channelId,
-      message: messageText,
-      name: sender.name,
-      timestamp: moment().format('x'),
-      title: sender.title,
-      txHash: txHash,
-      type: MessageType.tip
-    });
+    const message = {txHash, ...this.createMessageObject(channelId, sender, messageText, MessageType.tip)};
     this.sendMessage(sender.address, receiverId, message);
   }
 

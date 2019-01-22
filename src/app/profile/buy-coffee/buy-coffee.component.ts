@@ -47,7 +47,7 @@ export class BuyCoffeeComponent implements OnInit {
     this.canPayOptions = {
       dAppName: this.userModel.name,
       recipient: this.userModel.ethAddress,
-      onAuthTxHash: this.onAuthTxHash.bind(this),
+      onPaymentTxHash: this.onPaymentTxHash.bind(this),
       operation: Operation.pay,
       complete: this.onComplete.bind(this),
       cancel: this.onComplete.bind(this),
@@ -56,7 +56,7 @@ export class BuyCoffeeComponent implements OnInit {
     };
   }
 
-  async onAuthTxHash(txHash: string, from: string) {
+  async onPaymentTxHash(txHash: string, from: string) {
     await this.chatService.sendTipMessage(txHash, this.userModel.address);
   }
 
