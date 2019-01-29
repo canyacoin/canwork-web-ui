@@ -101,6 +101,8 @@ export class ExchangeComponent implements AfterViewInit, OnDestroy {
             });
           }
         });
+      } else if (status === Web3LoadingStatus.noAccountsAvailable) {
+        this.ethService.getOwnerAccount();
       } else if (status != null) {
         this.account = null;
       }

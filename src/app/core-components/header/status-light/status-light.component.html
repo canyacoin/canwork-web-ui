@@ -13,7 +13,10 @@
   </div>
   <div class="dropdown-divider"></div>
   <div class="dropdown-item d-flex justify-content-between">
-    <span class="pl-30 ">{{web3Message}}</span>
+    <span class="text-left">
+      <i *ngIf="showRefreshButton" class="fa fa-refresh fs-10 mb-2 pr-30 pointer" (click)="getAccount()"></i>
+      <span [ngClass]="{'pl-30': !showRefreshButton}">{{web3Message}}</span>
+    </span>
   </div>
   <div class="dropdown-item">
     <span class="pl-30 " *ngIf="!walletType">

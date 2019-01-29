@@ -76,6 +76,17 @@ export class StatusLightComponent implements OnInit, OnDestroy {
     }
   }
 
+  getAccount() {
+    this.account = this.ethService.getOwnerAccount();
+    if (this.account) {
+      this.updateBalanceAsync();
+    }
+  }
+
+  get showRefreshButton(): boolean {
+    return this.web3State === Web3LoadingStatus.noAccountsAvailable;
+  }
+
   get web3Message(): string {
     switch (this.web3State) {
       case Web3LoadingStatus.noAccountsAvailable:

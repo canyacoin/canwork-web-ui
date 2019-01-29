@@ -18,7 +18,7 @@ export class CanWorkEthService extends EthService {
   }
 
   async getCanYaBalance(userAddress: string = this.canyaCoinEthService.getOwnerAccount()) {
-    return this.canyaCoinEthService.getCanYaBalance(userAddress)
+    return this.canyaCoinEthService.getCanYaBalance(userAddress);
   }
 
   async getCanToUsd(): Promise<number> {
