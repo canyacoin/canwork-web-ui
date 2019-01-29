@@ -110,6 +110,8 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
             });
           }
         });
+      } else if (status === Web3LoadingStatus.noAccountsAvailable) {
+        this.ethService.getOwnerAccount();
       } else {
         this.balance = '0';
       }

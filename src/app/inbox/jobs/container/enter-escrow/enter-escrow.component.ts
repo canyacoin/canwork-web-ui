@@ -103,7 +103,7 @@ export class EnterEscrowComponent implements OnInit {
     const initiateEnterEscrow = async (canPayData: CanPayData) => {
       const provider = await this.userService.getUser(this.job.providerId);
       const canWorkContract = new CanWorkJobContract(this.ethService);
-      canWorkContract.connect().createJob(this.job, clientEthAddress, provider.ethAddress, onTxHash)
+      canWorkContract.connect().createJob(this.job, clientEthAddress || this.ethService.getOwnerAccount(), provider.ethAddress, onTxHash)
         .then(setProcessResult.bind(this.canPayOptions))
         .catch(setProcessResult.bind(this.canPayOptions));
     };

@@ -48,7 +48,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
-      console.log('++ currentUser vs user ++');
       console.log(this.currentUser, user);
       if (this.currentUser !== user) {
         this.initUser();
@@ -62,7 +61,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   initUser() {
     if (this.currentUser) {
-      console.log('initUser currentUser', this.currentUser);
       const unreadConversations = this.afs.collection('chats').doc(this.currentUser.address).collection('channels', ref => ref.where('unreadMessages', '==', true));
 
       if (this.messagesSubscription) { this.messagesSubscription.unsubscribe(); }
