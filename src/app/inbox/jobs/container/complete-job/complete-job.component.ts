@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-    CanPay, CanPayData, EthService, Operation, PaymentItem, PaymentItemCurrency, PaymentSummary,
+    CanPay, CanPayData, Operation, PaymentItem, PaymentItemCurrency, PaymentSummary,
     setProcessResult
 } from '@canpay-lib/lib';
 import { Job } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
 import { User, UserType } from '@class/user';
 import { CanWorkJobContract } from '@contract/can-work-job.contract';
-import { CanWorkEthService } from '@service/eth.service';
+import { EthService } from '@service/eth.service';
 import { FeatureToggleService } from '@service/feature-toggle.service';
 import { JobService } from '@service/job.service';
 import { MomentService } from '@service/moment.service';
@@ -34,7 +34,6 @@ export class CompleteJobComponent implements OnInit {
   constructor(private ethService: EthService,
     private jobService: JobService,
     private transactionService: TransactionService,
-    private canworkEthService: CanWorkEthService,
     private featureService: FeatureToggleService,
     private activatedRoute: ActivatedRoute,
     private momentService: MomentService,

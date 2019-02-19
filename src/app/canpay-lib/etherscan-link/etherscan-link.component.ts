@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { EthService } from '../services/eth.service';
+import { EthService } from '@service/eth.service';
 
 @Component({
   selector: 'canyalib-etherscan-link',
@@ -21,7 +21,7 @@ export class EtherscanLinkComponent implements OnInit {
 
   get url() {
     if (this.address) {
-      return `http://${this.ethService.configUseTestNet ? 'ropsten.' : ''}etherscan.io/address/${this.address}`;
+      return `http://${this.ethService.useTestNet ? 'ropsten.' : ''}etherscan.io/address/${this.address}`;
     } else {
       return '';
     }

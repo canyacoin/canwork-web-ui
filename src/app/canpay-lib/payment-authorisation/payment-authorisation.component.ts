@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
-import { CanYaCoinEthService } from '../services/canyacoin-eth.service';
+import { EthService } from '@service/eth.service';
 
 @Component({
   selector: 'canyalib-payment-authorisation',
@@ -24,15 +24,15 @@ export class PaymentAuthorisationComponent implements OnInit, OnDestroy {
 
   accSub: Subscription;
 
-  constructor(private canyaCoinEthService: CanYaCoinEthService) { }
+  constructor(private ethService: EthService) { }
 
   async ngOnInit() {
-    this.accSub = this.canyaCoinEthService.account$.subscribe(async (acc) => {
-      const hasAllowance = await this.canyaCoinEthService.hasAllowance(acc, this.recipient, this.amount);
+    this.accSub = this.ethService.account$.subscribe(async (acc) => {
+      const hasAllowance = await this.ethService.hasAllowance(acc, this.recipient, this.amount);
       if (hasAllowance) {
         this.success.emit('');
       } else if (this.isLoading) {
-        const ethBal = await this.canyaCoinEthService.getEthBalanceAsync(acc);
+        const ethBal = await this.ethService.getEthBalanceAsync(acc);
         if (Number(ethBal) <= 0) {
           this.warning.emit('You do not have enough gas (ETH) to send this transaction');
         }
@@ -50,7 +50,7 @@ export class PaymentAuthorisationComponent implements OnInit, OnDestroy {
 
     this.sendingTx = true;
     console.log('authCanPayment: ', this.recipient, this.amount);
-    this.canyaCoinEthService.authoriseCANPayment(this.recipient, this.amount, undefined, this.onAuthTxHash)
+    this.ethService.authoriseCANPayment(this.recipient, this.amount, undefined, this.onAuthTxHash)
       .then((tx) => {
         if (tx.status) {
           this.transactionSent.emit(tx); this.success.emit();

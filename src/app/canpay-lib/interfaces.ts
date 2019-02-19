@@ -56,7 +56,6 @@ export interface CanPay {
     successText?: string;
     postAuthorisationProcessName?: string;
     postAuthorisationProcessResults?: ProcessActionResult;
-    canyaContract?: Contract;
     startPostAuthorisationProcess?: Function;
     complete: Function;
     cancel?: Function;

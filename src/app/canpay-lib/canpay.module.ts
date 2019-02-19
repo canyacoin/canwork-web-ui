@@ -40,8 +40,6 @@ import { PaymentComponent } from './payment/payment.component';
 import { ProcessComponent } from './process/process.component';
 import { CanexService } from './services/canex.service';
 import { CanPayService } from './services/canpay.service';
-import { CanYaCoinEthService } from './services/canyacoin-eth.service';
-import { EthService } from './services/eth.service';
 import { FormDataService } from './services/formData.service';
 
 const COMPONENTS = [
@@ -71,7 +69,7 @@ const COMPONENTS = [
 ];
 
 const PROVIDERS = [
-  EthService, CanYaCoinEthService, CanPayService, FormDataService,
+  CanPayService, FormDataService,
   ResizeService, CanexService
 ];
 
@@ -93,11 +91,4 @@ const PROVIDERS = [
   exports: COMPONENTS,
   providers: PROVIDERS
 })
-export class CanpayModule {
-  static forRoot(config: any): ModuleWithProviders {
-    return {
-      ngModule: CanpayModule,
-      providers: [{ provide: 'Config', useValue: config }]
-    };
-  }
-}
+export class CanpayModule { }

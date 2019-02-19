@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { EthService, WalletType, Web3LoadingStatus } from '../services/eth.service';
+import { EthService, WalletType, Web3LoadingStatus } from '@service/eth.service';
 
 @Component({
   selector: 'canyalib-metamask',
@@ -32,7 +32,7 @@ export class MetamaskComponent implements OnInit, OnDestroy {
   constructor(private ethService: EthService) { }
 
   async ngOnInit() {
-    this.configUseTestNet = this.ethService.configUseTestNet;
+    this.configUseTestNet = this.ethService.useTestNet;
     this.ethSub = this.ethService.web3Status$.subscribe((state: Web3LoadingStatus) => {
       console.log('state: ', state);
       this.web3State = state;

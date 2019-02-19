@@ -2,7 +2,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { NgSwitchCase } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NetworkType, WalletType, Web3LoadingStatus } from '@canpay-lib/lib';
+import { NetworkType, WalletType, Web3LoadingStatus } from '@service/eth.service';
 import { User, UserType } from '@class/user';
 import { AuthService } from '@service/auth.service';
 import { NavService } from '@service/nav.service';

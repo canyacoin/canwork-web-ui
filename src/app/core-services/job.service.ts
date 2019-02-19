@@ -2,7 +2,7 @@ import { NgSwitch } from '@angular/common';
 import { Http, Headers } from '@angular/http';
 import { Injectable } from '@angular/core';
 import {
-  CanPayData, CanPayService, EthService, Operation, setProcessResult, View
+  CanPayData, CanPayService, Operation, setProcessResult, View
 } from '@canpay-lib/lib';
 import { Job, JobState, Payment, PaymentType, TimeRange, WorkType } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
@@ -11,7 +11,7 @@ import { User, UserType } from '@class/user';
 import { CanWorkJobContract } from '@contract/can-work-job.contract';
 import { environment } from '@env/environment';
 import { ChatService } from '@service/chat.service';
-import { CanWorkEthService } from '@service/eth.service';
+import { EthService } from '@service/eth.service';
 import { JobNotificationService } from '@service/job-notification.service';
 import { MomentService } from '@service/moment.service';
 import { Transaction, TransactionService } from '@service/transaction.service';
@@ -38,7 +38,7 @@ export class JobService {
     private momentService: MomentService,
     private transactionService: TransactionService,
     private reviewService: ReviewService,
-    private canWorkEthService: CanWorkEthService,
+    private EthService: EthService,
     private ethService: EthService,
     private jobNotificationService: JobNotificationService,
     private canPayService: CanPayService,
@@ -86,7 +86,7 @@ export class JobService {
   }
 
   async getJobBudget(job: Job): Promise<number> {
-    const canToUsd = await this.canWorkEthService.getCanToUsd();
+    const canToUsd = await this.EthService.getCanToUsd();
     if (canToUsd) {
       const totalBudget = await this.getJobBudgetUsd(job);
       return Promise.resolve(Math.floor(totalBudget / canToUsd));

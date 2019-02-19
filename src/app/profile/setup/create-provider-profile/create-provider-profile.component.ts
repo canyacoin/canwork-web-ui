@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User, UserCategory, UserState, UserType } from '@class/user';
 import { AuthService } from '@service/auth.service';
-import { CanWorkEthService } from '@service/eth.service';
+import { EthService } from '@service/eth.service';
 import { UserService } from '@service/user.service';
 import { CurrencyValidator } from '@validator/currency.validator';
 import { EmailValidator } from '@validator/email.validator';
@@ -54,7 +54,7 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
   constructor(
     private userService: UserService,
     private formBuilder: FormBuilder,
-    private ethService: CanWorkEthService,
+    private ethService: EthService,
     private authService: AuthService) {
 
     this.ethSub = this.ethService.account$.subscribe((acc: string) => {

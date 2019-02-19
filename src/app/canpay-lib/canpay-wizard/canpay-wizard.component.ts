@@ -7,7 +7,7 @@ import {
     CanPay, CanPayData, Contract, Operation, PaymentSummary, ProcessAction, ProcessActionResult,
     Step, View
 } from '../interfaces';
-import { CanYaCoinEthService } from '../services/canyacoin-eth.service';
+import { EthService } from '@service/eth.service';
 import { FormDataService } from '../services/formData.service';
 
 @Component({
@@ -38,11 +38,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
   @Input() destinationAddress;
   @Input() userEmail;
 
-  @Input() set canyaContract(canyaContract: Contract) {
-    console.log('setting up canyaContract: ', canyaContract);
-    this.canyaCoinEthService.initContract(canyaContract.abi, canyaContract.address);
-  }
-
   @Input() set postAuthorisationProcessResults(postAuthorisationProcessResults: ProcessActionResult) {
     this.doCompletePostAuthorisationProcess(postAuthorisationProcessResults);
   }
@@ -68,7 +63,7 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
   balanceInterval: any;
   totalTransactions = 1;
 
-  constructor(private canyaCoinEthService: CanYaCoinEthService, private formDataService: FormDataService) { }
+  constructor(private ethService: EthService, private formDataService: FormDataService) { }
 
   ngOnInit() {
     this.steps = [
@@ -186,7 +181,7 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
     let isLoading = true;
     if (!this.balanceInterval) {
       this.balanceInterval = setInterval(() => {
-        this.canyaCoinEthService.getCanYaBalance(this.canyaCoinEthService.getOwnerAccount())
+        this.ethService.getCanYaBalance(this.ethService.getOwnerAccount())
           .then(_balance => {
             this.balance = Number(_balance);
             this.insufficientBalance = Number(_balance) < this.amount;
@@ -287,7 +282,7 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
         this.updateCurrentStep(Step.paymentSummary);
         break;
       case Step.paymentSummary:
-        if (this.canyaCoinEthService.account.value) {
+        if (this.ethService.account.value) {
           this.checkBalance();
         } else {
           this.updateCurrentStep(Step.metamask);
@@ -328,7 +323,7 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
 
 
   getCanExRecipient(): string {
-    return this.destinationAddress || this.canyaCoinEthService.getOwnerAccount();
+    return this.destinationAddress || this.ethService.getOwnerAccount();
   }
 
   get hasPostAuthProcess() {

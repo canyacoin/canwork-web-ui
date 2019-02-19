@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Web3LoadingStatus } from '@canpay-lib/lib';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import * as findIndex from 'lodash/findIndex';
 import * as orderBy from 'lodash/orderBy';
@@ -9,11 +8,11 @@ import { Observable, Subscription } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 
 import * as moment from 'moment';
-import { User } from '../../core-classes/user';
-import { AuthService } from '../../core-services/auth.service';
-import { Channel, ChatService, Message, MessageType } from '../../core-services/chat.service';
-import { CanWorkEthService } from '../../core-services/eth.service';
-import { UserService } from '../../core-services/user.service';
+import { User } from '@class/user';
+import { AuthService } from '@service/auth.service';
+import { Channel, ChatService, Message, MessageType } from '@service/chat.service';
+import { EthService, Web3LoadingStatus } from '@service/eth.service';
+import { UserService } from '@service/user.service';
 
 @Component({
   selector: 'app-chat',
@@ -68,7 +67,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
     private formBuilder: FormBuilder,
     private userService: UserService,
     private chatService: ChatService,
-    private ethService: CanWorkEthService,
+    private ethService: EthService,
     private authService: AuthService,
     private afs: AngularFirestore) {
     this.postForm = formBuilder.group({

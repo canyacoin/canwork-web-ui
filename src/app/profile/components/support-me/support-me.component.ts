@@ -4,7 +4,7 @@ import {
     CanPayData, CanPayService, Operation, ProcessAction, setProcessResult, View
 } from '@canpay-lib/lib';
 import { User } from '@class/user';
-import { CanWorkEthService } from '@service/eth.service';
+import { EthService } from '@service/eth.service';
 import { FeatureToggle, FeatureToggleService } from '@service/feature-toggle.service';
 
 @Component({

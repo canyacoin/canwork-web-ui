@@ -6,7 +6,7 @@ import 'rxjs/add/operator/take';
 
 import { Step } from '../interfaces';
 import { CanexService } from '../services/canex.service';
-import { CanYaCoinEthService } from '../services/canyacoin-eth.service';
+import { EthService } from '@service/eth.service';
 import { FormData, FormDataService, Personal } from '../services/formData.service';
 
 declare var require: any;
@@ -38,7 +38,6 @@ export class CanexQRComponent implements OnInit, OnDestroy {
     tokenABI: any;
     public MyContract: any;
     web3js: any;
-    canyaContract: any;
     message: string;
     orderUrl: string;
     @Output() valueChange = new EventEmitter();
@@ -48,7 +47,7 @@ export class CanexQRComponent implements OnInit, OnDestroy {
     gasSub: Subscription;
 
     constructor(protected http: Http, private canexService: CanexService,
-        private router: Router, private formDataService: FormDataService, private route: Router, private canYaCoinEthService: CanYaCoinEthService) {
+        private router: Router, private formDataService: FormDataService, private route: Router, private ethService: EthService) {
 
         try {
             this.statusInterval = setInterval(() => {
@@ -112,10 +111,10 @@ export class CanexQRComponent implements OnInit, OnDestroy {
     metamask() {
 
         if (this.formData.currency === 'ETH') {
-            this.canYaCoinEthService.payWithEther(this.formData.eth, this.canexService.environment.backendEthAddress);
+            this.ethService.payWithEther(this.formData.eth, this.canexService.environment.backendEthAddress);
         } else {
             this.gasSub = this.canexService.getGasPrice().subscribe(activity => {
-                this.canYaCoinEthService.payWithERC20(this.formData.eth, this.canexService.environment.backendEthAddress,
+                this.ethService.payWithERC20(this.formData.eth, this.canexService.environment.backendEthAddress,
                     this.formData.erc20token, this.formData.erc20tokenDecimal, activity.json().fast + '000');
             });
         }

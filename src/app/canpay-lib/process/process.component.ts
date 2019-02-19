@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { CanYaCoinEthService } from '../services/canyacoin-eth.service';
+import { EthService } from '@service/eth.service';
 
 @Component({
   selector: 'canyalib-process',
@@ -24,10 +24,10 @@ export class ProcessComponent implements AfterViewInit {
 
   sendingTx = false;
 
-  constructor(private canyaCoinEthService: CanYaCoinEthService) { }
+  constructor(private ethService: EthService) { }
 
   async ngAfterViewInit() {
-    const ethBal = await this.canyaCoinEthService.getEthBalanceAsync();
+    const ethBal = await this.ethService.getEthBalanceAsync();
     if (Number(ethBal) <= 0) {
       this.warning.emit('You do not have enough gas (ETH) to send this transaction');
     } else if (Number(ethBal) <= 0.02) {

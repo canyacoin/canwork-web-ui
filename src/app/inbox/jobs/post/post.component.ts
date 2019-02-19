@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Http, Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EthService } from '@canpay-lib/lib';
+import { EthService } from '@service/eth.service';
 import { Job, JobDescription, PaymentType, TimeRange, WorkType, JobState } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
 import { Upload } from '@class/upload';

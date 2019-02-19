@@ -1,4 +1,4 @@
-import { CanYaCoinEthService, EthService } from '@canpay-lib/lib';
+import { EthService } from '@service/eth.service';
 import { Job } from '@class/job';
 import { User } from '@class/user';
 import { environment } from '@env/environment';
