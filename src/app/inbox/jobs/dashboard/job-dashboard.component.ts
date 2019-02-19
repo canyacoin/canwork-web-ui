@@ -6,11 +6,11 @@ import { Observable, Subscription } from 'rxjs';
 
 import { Job, JobDescription, PaymentType, TimeRange, WorkType, JobState } from '../../../core-classes/job';
 import { User, UserType } from '../../../core-classes/user';
-import { AuthService } from '../../../core-services/auth.service';
-import { JobService } from '../../../core-services/job.service';
-import { PublicJobService } from '../../../core-services/public-job.service';
-import { MobileService } from '../../../core-services/mobile.service';
-import { UserService } from '../../../core-services/user.service';
+import { AuthService } from '@service/auth.service';
+import { JobService } from '@service/job.service';
+import { PublicJobService } from '@service/public-job.service';
+import { MobileService } from '@service/mobile.service';
+import { UserService } from '@service/user.service';
 
 import { NgxPaginationModule } from 'ngx-pagination';
 

@@ -1,0 +1,54 @@
+<div class="card p-30 row mh-250">
+  <form #personalForm="ngForm" class="form" novalidate>
+    <div class="text-center payment-body text-center">
+      <span class="text-center" style="font-size: 14px; margin-bottom: 10px;">Choose specific
+        ERC20 Token
+      </span>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1"><i class="fa fa-search"></i></span>
+        </div>
+        <input placeholder="Search..." type="text" class="form-control" name="search" style="margin-bottom: 0px !important;"
+          (input)="search($event.target.value)">
+      </div>
+
+      <br />
+      <div class="scrollbar scrollbar-primary">
+        <div class="row method-container payment-margin-left">
+          <div [className]="token_classes" style="margin-right: 8px; " *ngFor="let token of filteredTokens;">
+
+            <div [ngClass]="otherstest == token.name ? 'card-body active' : 'card-body'" style="cursor: pointer;" *ngIf="token.status > 0"
+              (click)="selectCurrency(token, key)">
+              <div class="radio float-right">
+
+                <input type="radio" name="optradio">
+
+              </div>
+              <div class="circle-cover">
+                <img class="logo-default" src="/assets/tokens/{{token.tokenid}}.png" width="auto" height="60px" alt="logo">
+              </div>
+              <span class="card-subtitle" style="font-size: 16px; font-weight: 550; margin-bottom: 2px; color: rgb(116, 114, 114);">{{token.symbol}}</span>
+              <h6 class=" " style="line-height: normal; font-size: 14px; color: rgb(151, 151, 151);">{{token.name}}</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<span class="text-center help-line">{{error}}</span>
+
+<div class="text-right m-30 float-right">
+  <div>
+    <span class="payments-font can-display">{{formData.amount
+      | number : '1.6-6'}} CAN
+    </span>
+    <span class="payments-font erc-display">=
+      {{price | number : '1.8-8'}} {{selectedERC }}</span>
+  </div>
+  <button class="btn btn-primary" [disabled]="nextButtonDisabled" (click)="goToNext(personalForm,key)">
+    NEXT</button>
+
+</div>

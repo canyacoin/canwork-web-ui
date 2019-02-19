@@ -1,0 +1,106 @@
+<section class="section bg-white py-0 " id="introduction">
+  <div class="myModal mymodeloverwrite">
+    <div class="row canAppDiv modal-dialog modal-lg">
+
+      <div class="col-md-12 modal-content model_overwrite">
+        <div class="noDecor modal-body model_overwrite">
+          <div id="VerifyEmail-step">
+
+            <div class="form-horizontal bg-white">
+              <div class="text-center">
+                <a href="/"><img class="logo-default" src="./assets/canex/CANExchange.svg" width="auto" height="23px"
+                    alt="logo"></a>
+              </div>
+
+              <div class="text-center complete-body">
+
+                <div class="well">
+
+                  <div class="form-horizontal" style="padding: 15px 0;">
+                    <div class="form-group">
+                      <label for="inputOrderTrackingID" class="col-sm-3 control-label">Order id</label>
+                      <div class="col-sm-12">
+                        <input type="text" class="form-control" [(ngModel)]="orderid" id="orderid" name="orderid"
+                          placeholder="# put your order id here">
+                      </div>
+                    </div>
+                    <div class="form-group">
+
+                    </div>
+                    <div class="form-group">
+                      <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" id="shopGetOrderStatusID" class="btn btn-success btn-outline-rounded btn-info customColor"
+                          (click)="getOrder()">Get
+                          status
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <h5>Your order status: </h5>
+
+                  <ul class="list-group" style="width: 100%; text-align: left;">
+                    <li class="list-group-item">
+                      <span class="prefix"><b>Order Id:</b></span>
+                      <span class="label label-success">&nbsp;{{orderData.orderid}}</span>
+                    </li>
+                    <li class="list-group-item">
+                      <span class="prefix"><b>Address:</b></span>
+                      <span class="label label-success">&nbsp;{{orderData.address}}</span>
+                    </li>
+                    <li class="list-group-item">
+                      <span class="prefix"><b>{{currency}}:</b></span>
+                      <span class="label label-success">&nbsp;{{orderData.amount}}</span>
+                    </li>
+                    <li class="list-group-item">
+                      <span class="prefix"><b>Ether:</b></span>
+                      <span class="label label-success">&nbsp;{{orderData.eth}}</span>
+                    </li>
+                    <li class="list-group-item">
+                      <a href="{{etherUrl}}">Etherscan</a>
+                    </li>
+                    <li class="list-group-item">
+                      <span class="prefix"><b>Status:</b></span>
+                      <span class="label label-success">&nbsp;{{orderData.status}}</span>
+                    </li>
+
+                  </ul>
+
+                </div>
+
+                <div class="form-horizontal" style="padding: 15px 0;">
+                  <div class="form-group">
+
+                  </div>
+                  <div class="form-group">
+
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-offset-2" style="float: right;">
+                      <button type="button" id="shopGetOrderStatusID" class="btn btn-default btn-outline-rounded"
+                        routerLink="/">Go
+                        Back
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+              <br />
+
+              <div class="text-center help-line">
+                <a href="#">Need Help?</a>
+              </div>
+
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
