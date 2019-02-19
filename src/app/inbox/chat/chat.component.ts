@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Web3LoadingStatus } from '@canyaio/canpay-lib';
+import { Web3LoadingStatus } from '@canpay-lib/lib';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import * as findIndex from 'lodash/findIndex';
 import * as orderBy from 'lodash/orderBy';

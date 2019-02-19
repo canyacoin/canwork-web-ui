@@ -1,24 +1,24 @@
-import { CanYaCoinEthService, EthService } from '@canyaio/canpay-lib';
+import { CanYaCoinEthService, EthService } from '@canpay-lib/lib';
 import { Job } from '@class/job';
 import { User } from '@class/user';
 import { environment } from '@env/environment';
 
-declare var require: any
+declare var require: any;
 
-const CanWorkJobContractInterface = require('@abi/can-work-job.abi.json')
+const CanWorkJobContractInterface = require('@abi/can-work-job.abi.json');
 
 export class CanWorkJobContract {
 
-  instance: any
-  canYaDecimals = 6
+  instance: any;
+  canYaDecimals = 6;
 
 
   constructor(private eth: EthService) {
   }
 
   connect() {
-    this.instance = this.eth.createContractInstance(CanWorkJobContractInterface.abi, environment.contracts.canwork)
-    return this
+    this.instance = this.eth.createContractInstance(CanWorkJobContractInterface.abi, environment.contracts.canwork);
+    return this;
   }
 
   async createJob(job: Job, clientAddress: string, providerAddress: string, onTxHash: Function) {

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EthService } from '@canyaio/canpay-lib';
+import { EthService } from '@canpay-lib/lib';
 import { User } from '@class/user';
 import { AuthService } from '@service/auth.service';
 import { UserService } from '@service/user.service';

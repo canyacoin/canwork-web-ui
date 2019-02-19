@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { WalletType, Web3LoadingStatus } from '@canyaio/canpay-lib';
+import { WalletType, Web3LoadingStatus } from '@canpay-lib/lib';
 import { Subscription } from 'rxjs';
 
 import { CanWorkEthService } from '../core-services/eth.service';

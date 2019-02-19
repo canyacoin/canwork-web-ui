@@ -8,7 +8,7 @@ import { QRCodeModule } from 'angular2-qrcode';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { ClipboardModule } from 'ngx-clipboard';
 
-import { ResizeService } from '../lib/services/resize.service';
+import { ResizeService } from './services/resize.service';
 import { BalanceCheckComponent } from './balance-check/balance-check.component';
 import { CanexERC20Component } from './canex-erc20/canex-erc20.component';
 import { CanexErrorComponent } from './canex-error/canex-error.component';

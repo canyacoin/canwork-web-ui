@@ -3,7 +3,7 @@ import { Http, Headers } from '@angular/http';
 import { Injectable } from '@angular/core';
 import {
   CanPayData, CanPayService, EthService, Operation, setProcessResult, View
-} from '@canyaio/canpay-lib';
+} from '@canpay-lib/lib';
 import { Job, JobState, Payment, PaymentType, TimeRange, WorkType } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
 import { Upload } from '@class/upload';

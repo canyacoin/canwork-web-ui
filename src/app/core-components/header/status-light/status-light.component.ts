@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NetworkType, WalletType, Web3LoadingStatus } from '@canyaio/canpay-lib';
+import { NetworkType, WalletType, Web3LoadingStatus } from '@canpay-lib/lib';
 import { CanWorkEthService } from '@service/eth.service';
 import { Subscription } from 'rxjs';
 

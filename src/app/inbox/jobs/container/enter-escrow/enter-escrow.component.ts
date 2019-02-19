@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
     CanPay, CanPayData, EthService, Operation, PaymentItem, PaymentItemCurrency, PaymentSummary,
     setProcessResult
-} from '@canyaio/canpay-lib';
+} from '@canpay-lib/lib';
 import { Job } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
 import { User, UserType } from '@class/user';

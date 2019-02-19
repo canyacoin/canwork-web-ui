@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import {
     CanPayData, CanPayService, Operation, ProcessAction, setProcessResult, View
-} from '@canyaio/canpay-lib';
+} from '@canpay-lib/lib';
 import { User } from '@class/user';
 import { CanWorkEthService } from '@service/eth.service';
 import { FeatureToggle, FeatureToggleService } from '@service/feature-toggle.service';

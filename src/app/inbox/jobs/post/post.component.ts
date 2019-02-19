@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Http, Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EthService } from '@canyaio/canpay-lib';
+import { EthService } from '@canpay-lib/lib';
 import { Job, JobDescription, PaymentType, TimeRange, WorkType, JobState } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
 import { Upload } from '@class/upload';
@@ -146,7 +146,6 @@ export class PostComponent implements OnInit, OnDestroy {
       });
       if (!this.editing) {
         this.jobId = GenerateGuid();
-        this.pageLoaded = true;
       } else {
         this.jobId = this.activatedRoute.snapshot.params['jobId'];
         this.jobSub = this.publicJobService.getPublicJob(this.activatedRoute.snapshot.params['jobId']).subscribe((result) => {

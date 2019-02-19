@@ -2,7 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CanpayModule } from '@canyaio/canpay-lib';
+import { CanpayModule } from '@canpay-lib/canpay.module';
 import { StarRatingModule } from 'angular-star-rating';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
