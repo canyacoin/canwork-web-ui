@@ -173,10 +173,11 @@ export class PostComponent implements OnInit, OnDestroy {
         });
       }
     });
-    const canToUsdResp = await this.http.get('https://api.coinmarketcap.com/v2/ticker/2343/?convert=USD').toPromise();
-    if (canToUsdResp.ok) {
-      this.canToUsd = JSON.parse(canToUsdResp.text())['data']['quotes']['USD']['price'];
-    }
+    // const canToUsdResp = await this.http.get('https://api.coinmarketcap.com/v2/ticker/2343/?convert=USD').toPromise();
+    // if (canToUsdResp.ok) {
+    //   this.canToUsd = JSON.parse(canToUsdResp.text())['data']['quotes']['USD']['price'];
+    // }
+    this.canToUsd = await this.ethService.getCanToUsd();
     this.currentDate = new Date().toISOString().split('T')[0];
   }
 

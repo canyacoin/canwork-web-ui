@@ -38,7 +38,6 @@ export class JobService {
     private momentService: MomentService,
     private transactionService: TransactionService,
     private reviewService: ReviewService,
-    private EthService: EthService,
     private ethService: EthService,
     private jobNotificationService: JobNotificationService,
     private canPayService: CanPayService,
@@ -86,7 +85,7 @@ export class JobService {
   }
 
   async getJobBudget(job: Job): Promise<number> {
-    const canToUsd = await this.EthService.getCanToUsd();
+    const canToUsd = await this.ethService.getCanToUsd();
     if (canToUsd) {
       const totalBudget = await this.getJobBudgetUsd(job);
       return Promise.resolve(Math.floor(totalBudget / canToUsd));

@@ -3,7 +3,7 @@ import { Http, Response } from '@angular/http';
 import merge from 'lodash.merge';
 import { BehaviorSubject, bindNodeCallback, Observable, Subject, Subscription } from 'rxjs';
 import { environment } from '@env/environment';
-import { canyaAbi, canworkAbi } from '../contracts';
+import { canyaAbi, canworkAbi, priceOracleAbi } from '../contracts';
 
 declare let require: any;
 const Web3 = require('web3');
@@ -417,10 +417,15 @@ export class EthService implements OnDestroy {
 
 
   async getCanToUsd(): Promise<number> {
-    const canToUsdResp = await this.http.get('https://api.coinmarketcap.com/v2/ticker/2343/?convert=USD').toPromise();
-    if (canToUsdResp.ok) {
-      return Promise.resolve(JSON.parse(canToUsdResp.text())['data']['quotes']['USD']['price'] || 0);
+    try {
+      const priceOracle = this.createContractInstance(priceOracleAbi, environment.contracts.priceOracle);
+      const tokenValueInDai = await priceOracle.methods.getTokenToDai(1 * (10 ** this.canyaDecimals)).call();
+      const tokenValueDecimal = tokenValueInDai / (10 ** 18);
+      return Promise.resolve(tokenValueDecimal);
+    } catch (error) {
+      console.log(error);
+      return Promise.resolve(0);
     }
-    return Promise.resolve(0);
   }
+
 }
