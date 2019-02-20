@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { WalletType, Web3LoadingStatus } from '@canyaio/canpay-lib';
+import { WalletType, Web3LoadingStatus } from '@service/eth.service';
 
 @Component({
   selector: 'app-wallet-install',

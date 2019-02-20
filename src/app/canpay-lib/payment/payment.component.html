@@ -1,0 +1,28 @@
+<div class="card px-30 pt-20 pb-30 row mh-250">
+  <div class="container">
+    <div class="row">
+      <div class="col col-lg-5 col-sm-12 text-center">
+        <img src="assets/img/metamask-send.png" width="70%" title="Metamask help">
+      </div>
+      <div class="col col-lg-7 col-sm-12">
+        <div class="container">
+          <header class="text-center">
+            <h6 class="fw-600">Confirmation 1 of {{totalTransactions}}</h6>
+            <img src="assets/img/metamask.svg" width="60px" height="60px">
+            <p class="fw-300 my-20">
+              Hit <b>confirm</b> on the pop up to complete the payment
+            </p>
+            <hr>
+          </header>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="text-right m-30 float-right">
+  <img *ngIf="sendingTx" src="assets/img/loader.svg" height="36px" alt="Loader">
+  <button class="btn btn-primary" (click)="pay()" [disabled]="sendingTx">
+    {{ sendingTx ? 'Paying' : 'Pay' }}
+  </button>
+</div>

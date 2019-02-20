@@ -20,6 +20,7 @@
     "paths": {
       "@abi/*": ["assets/abi/*"],
       "@contract/*": ["app/@contract/*"],
+      "@canpay-lib/*": ["app/canpay-lib/*"],
       "@validator/*": ["app/@validator/*"],
       "@class/*": ["app/core-classes/*"],
       "@service/*": ["app/core-services/*"],

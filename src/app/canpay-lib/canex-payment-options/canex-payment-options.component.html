@@ -1,0 +1,130 @@
+<div class="card px-30 pt-20 pb-30 row mh-250">
+
+  <canyalib-loader [isLoading]="isLoading"></canyalib-loader>
+  <form *ngIf="!isLoading" #personalForm="ngForm" class="form" novalidate>
+    <div class="text-center payment-body text-center">
+      <div class="currency-data">
+        <span class="payments-font">{{formData.amount | number : '1.6-6'}} CAN</span>
+        <span class="payments-font">{{formData.usd | number : '1.2-2'}} USD</span>
+        <!-- <span class="payments-font">
+          <b *ngIf="formData.currency == 'CAN'">= {{formData.eth | number : '1.6-6'}} ETH</b>
+          <b *ngIf="formData.currency != 'CAN'">= {{etherPrice | number : '1.6-6'}} ETH</b>
+        </span> -->
+      </div>
+
+      <div class="row method-container payment-margin-left">
+        <div [className]="token_classes" style="cursor: pointer;">
+          <div [ngClass]="ethereum ? 'card-body active' : 'card-body'" (click)="selectCurrency('ETH')">
+            <div class="radio float-right">
+              <input type="radio" name="optradio">
+            </div>
+            <div class="circle-cover" style="width: 80px;">
+              <img class="logo-default" src="/assets/canex/ethereum.png" width="auto" height="60px" alt="logo">
+            </div>
+            <h6 class="card-subtitle">Ethereum</h6>
+          </div>
+        </div>
+
+        <div [className]="token_classes" style="cursor: pointer;">
+          <div [ngClass]="erc20 ? 'card-body active' : 'card-body'" (click)="selectCurrency('erc20')">
+            <div class="radio float-right">
+              <input type="radio" name="optradio">
+            </div>
+            <div class="circle-cover" style="width: 80px;">
+              <img class="logo-default" src="/assets/canex/erc20.png" width="auto" height="60px" alt="logo">
+            </div>
+            <h6 class="card-subtitle">ERC20</h6>
+          </div>
+        </div>
+
+        <div [className]="token_classes" style="cursor: pointer;">
+          <div [ngClass]="bnb ? 'card-body active' : 'card-body'" (click)="selectCurrency('bnb')">
+            <div class="radio float-right">
+              <input type="radio" name="optradio">
+            </div>
+            <div class="circle-cover" style="width: 80px;">
+              <img class="logo-default" src="/assets/canex/1839.png" width="auto" height="60px" alt="logo">
+            </div>
+            <h6 class="card-subtitle">BNB</h6>
+            <span class="card-subtitle">Binance Coin</span>
+          </div>
+        </div>
+
+        <div [className]="token_classes" style="cursor: pointer;">
+          <div [ngClass]="dai ? 'card-body active' : 'card-body'" (click)="selectCurrency('dai')">
+            <div class="radio float-right">
+              <input type="radio" name="optradio">
+            </div>
+            <div class="circle-cover" style="width: 80px;">
+              <img class="logo-default" src="/assets/canex/2308.png" width="auto" height="60px" alt="logo">
+            </div>
+            <h6 class="card-subtitle">DAI</h6>
+            <span class="card-subtitle">Dai</span>
+          </div>
+        </div>
+
+        <div [className]="token_classes">
+          <div class="card-body disable">
+            <div class="radio float-right">
+              <input type="radio">
+              <i class="uncheck canya-color-text far fa-circle"></i>
+              <i class="check canya-color-text fas fa-check-circle"></i>
+            </div>
+            <div class="circle-cover">
+              <img class="logo-default" src="/assets/canex/bitcoin.jpg" width="auto" height="60px" alt="logo">
+            </div>
+            <h6 class="card-subtitle">Bitcoin</h6>
+            <span class="card-subtitle">(Coming Soon)</span>
+          </div>
+        </div>
+        <div [className]="token_classes">
+          <div class="card-body disable">
+            <div class="radio float-right">
+              <input type="radio">
+              <i class="uncheck canya-color-text far fa-circle"></i>
+              <i class="check canya-color-text fas fa-check-circle"></i>
+            </div>
+            <div class="circle-cover">
+              <img class="logo-default" src="/assets/canex/alt.png" width="auto" height="60px" alt="logo">
+            </div>
+            <h6 class="card-subtitle">Alt Coins</h6>
+            <span class="card-subtitle">(Coming Soon)</span>
+          </div>
+        </div>
+
+        <div [className]="token_classes">
+          <div class="card-body disable">
+            <div class="radio float-right">
+              <input type="radio">
+              <i class="uncheck canya-color-text far fa-circle"></i>
+              <i class="check canya-color-text fas fa-check-circle"></i>
+            </div>
+            <div class="circle-cover">
+              <img class="logo-default" src="/assets/canex/CANExchange_Card.png" width="60px" height="60px" alt="logo">
+            </div>
+            <h6 class="card-subtitle">Credit Card</h6>
+            <span class="card-subtitle">(Coming Soon)</span>
+          </div>
+        </div>
+        <div [className]="token_classes">
+          <div class="card-body disable">
+            <div class="radio float-right">
+              <input type="radio">
+              <i class="uncheck canya-color-text far fa-circle"></i>
+              <i class="check canya-color-text fas fa-check-circle"></i>
+            </div>
+            <div class="circle-cover">
+              <img class="logo-default" src="/assets/canex/CANExchange_Paypal.png" width="auto" height="60px" alt="logo"
+                width="60px">
+            </div>
+            <h6 class="card-subtitle">Paypal</h6>
+            <span class="card-subtitle">(Coming Soon)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div *ngIf="!isLoading" class="text-right m-30 float-right">
+  <button class="btn btn-primary" [disabled]="!enableButton" (click)="next()">NEXT</button>
+</div>

@@ -1,9 +1,8 @@
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { WalletType, Web3LoadingStatus } from '@canyaio/canpay-lib';
 import { Subscription } from 'rxjs';
 
-import { CanWorkEthService } from '../core-services/eth.service';
+import { EthService, WalletType, Web3LoadingStatus} from '@service/eth.service';
 import { ScriptService } from '../core-services/script.service';
 
 @Component({
@@ -79,7 +78,7 @@ export class ExchangeComponent implements AfterViewInit, OnDestroy {
 
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
-    private ethService: CanWorkEthService,
+    private ethService: EthService,
     private scriptService: ScriptService) {
   }
 

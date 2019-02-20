@@ -1,0 +1,22 @@
+.balance-section {
+  text-align: center;
+}
+
+.balance {
+  font-size: 52px;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.fixed-width-200 {
+  width: 200px;
+  margin: 2px;
+}
+
+.buttons-bar {
+  direction: rtl;
+}
+
+.btn-default {
+  padding: 10px 40px;
+}

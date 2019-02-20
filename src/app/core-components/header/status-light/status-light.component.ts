@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NetworkType, WalletType, Web3LoadingStatus } from '@canyaio/canpay-lib';
-import { CanWorkEthService } from '@service/eth.service';
+import { EthService, NetworkType, WalletType, Web3LoadingStatus } from '@service/eth.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -21,7 +20,7 @@ export class StatusLightComponent implements OnInit, OnDestroy {
   walletType: WalletType;
 
   constructor(
-    private ethService: CanWorkEthService
+    private ethService: EthService
   ) { }
 
   ngOnInit() {

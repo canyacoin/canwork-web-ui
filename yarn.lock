@@ -226,18 +226,6 @@
   dependencies:
     tslib "^1.9.0"
 
-"@canyaio/canpay-lib@^0.2.12":
-  version "0.2.12"
-  resolved "https://registry.yarnpkg.com/@canyaio/canpay-lib/-/canpay-lib-0.2.12.tgz#71f3f54182fca91fb28ccd66319bd82ae162f1a1"
-  integrity sha512-koKjuFByJ6nIMzHbsL2ap5qXdp/FbaCo+W+Zl91jALJTsoAcIZmp/eH4BkeUMF80Ymnt0WvZMVN++ODDjAEI1A==
-  dependencies:
-    angular2-qrcode "^2.0.1"
-    lodash.merge "^4.6.1"
-    ng2-bootstrap-modal "https://github.com/Sky4CE/ng2-bootstrap-modal/tarball/v.1.0.2"
-    ngx-clipboard "^11.1.9"
-    tslib "^1.9.0"
-    web3 "^1.0.0-beta.34"
-
 "@firebase/app-types@0.3.2":
   version "0.3.2"
   resolved "https://registry.npmjs.org/@firebase/app-types/-/app-types-0.3.2.tgz#a92dc544290e2893bd8c02a81e684dae3d8e7c85"
@@ -780,7 +768,7 @@ angular-star-rating@^4.0.0-beta.3:
 
 angular2-qrcode@^2.0.1:
   version "2.0.1"
-  resolved "https://registry.npmjs.org/angular2-qrcode/-/angular2-qrcode-2.0.1.tgz#1b4e65c302694b5078ca06f71138f7e4367754dc"
+  resolved "https://registry.yarnpkg.com/angular2-qrcode/-/angular2-qrcode-2.0.1.tgz#1b4e65c302694b5078ca06f71138f7e4367754dc"
   integrity sha1-G05lwwJpS1B4ygb3ETj35DZ3VNw=
   dependencies:
     qrious "^2.2.0"
@@ -1779,7 +1767,7 @@ canonical-path@0.0.2:
 
 canvas@^1.6.5:
   version "1.6.13"
-  resolved "https://registry.npmjs.org/canvas/-/canvas-1.6.13.tgz#8cb4e9abbea9e615a377890ffac50277a1167c73"
+  resolved "https://registry.yarnpkg.com/canvas/-/canvas-1.6.13.tgz#8cb4e9abbea9e615a377890ffac50277a1167c73"
   integrity sha512-XAfzfEOHZ3JIPjEV+WSI6PpISgUta3dgmndWbsajotz+0TQOX/jDpp2kawjRERatOGv9sMMzk5auB3GKEKA6hg==
   dependencies:
     nan "^2.10.0"
@@ -5733,7 +5721,7 @@ lodash.max@^4.0.1:
   resolved "https://registry.npmjs.org/lodash.max/-/lodash.max-4.0.1.tgz#8735566c618b35a9f760520b487ae79658af136a"
   integrity sha1-hzVWbGGLNan3YFILSHrnllivE2o=
 
-lodash.merge@^4.6.0, lodash.merge@^4.6.1:
+lodash.merge@^4.6.0:
   version "4.6.1"
   resolved "https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.1.tgz#adc25d9cb99b9391c59624f379fbba60d7111d54"
   integrity sha512-AOYza4+Hf5z1/0Hztxpm2/xiPZgi/cjMqdnKTUWTBSKchJlxXXuUSxCCl8rJlf4g6yww/j6mA8nC8Hw/EZWxKQ==
@@ -6468,7 +6456,7 @@ ng5-slider@^1.1.3:
 
 ngx-clipboard@^11.1.9:
   version "11.1.9"
-  resolved "https://registry.npmjs.org/ngx-clipboard/-/ngx-clipboard-11.1.9.tgz#a391853dc49e436de407260863a2c814d73a9332"
+  resolved "https://registry.yarnpkg.com/ngx-clipboard/-/ngx-clipboard-11.1.9.tgz#a391853dc49e436de407260863a2c814d73a9332"
   integrity sha512-xF54Ibt/04g2B5SnYylNz7ESP1/thuC7odo+0bKkgbCC873NaqP1VTVx/umh/cnezlXKu8zuWNzzg05tvfgaJg==
   dependencies:
     ngx-window-token "^1.0.2"
@@ -6507,7 +6495,7 @@ ngx-pagination@^3.2.1:
 
 ngx-window-token@^1.0.2:
   version "1.0.2"
-  resolved "https://registry.npmjs.org/ngx-window-token/-/ngx-window-token-1.0.2.tgz#2ebadd300fee1f61eb8b851b0ad97b1f46f5e4cc"
+  resolved "https://registry.yarnpkg.com/ngx-window-token/-/ngx-window-token-1.0.2.tgz#2ebadd300fee1f61eb8b851b0ad97b1f46f5e4cc"
   integrity sha512-bFgvi7MYSK1p4b3Mqvn9+biXaO8QDEbpP2sEMSwr0Zgrwh6zCO3F92a6SIIzusqpZBAhxyfVSqj3mO5qIxlM5Q==
   dependencies:
     tslib "^1.9.0"
@@ -7825,7 +7813,7 @@ qjobs@^1.1.4:
 
 qrious@^2.2.0:
   version "2.3.0"
-  resolved "https://registry.npmjs.org/qrious/-/qrious-2.3.0.tgz#ca7ce68a82099a67a90e4979f4b1cdf51ef32475"
+  resolved "https://registry.yarnpkg.com/qrious/-/qrious-2.3.0.tgz#ca7ce68a82099a67a90e4979f4b1cdf51ef32475"
   integrity sha1-ynzmioIJmmepDkl59LHN9R7zJHU=
   optionalDependencies:
     canvas "^1.6.5"
@@ -10333,7 +10321,7 @@ web3-utils@1.0.0-beta.36:
     underscore "1.8.3"
     utf8 "2.1.1"
 
-web3@^1.0.0-beta.30, web3@^1.0.0-beta.34:
+web3@^1.0.0-beta.30:
   version "1.0.0-beta.36"
   resolved "https://registry.npmjs.org/web3/-/web3-1.0.0-beta.36.tgz#2954da9e431124c88396025510d840ba731c8373"
   integrity sha512-fZDunw1V0AQS27r5pUN3eOVP7u8YAvyo6vOapdgVRolAu5LgaweP7jncYyLINqIX9ZgWdS5A090bt+ymgaYHsw==

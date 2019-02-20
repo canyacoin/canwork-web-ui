@@ -1,0 +1,21 @@
+<!-- Modal -->
+<div class="modal-dialog modal-lg">
+  <div class="modal-content desktop-mt-70">
+    <div class="modal-body">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 text-right">
+            <button type="button" class="btn btn-default" (click)="close()">X</button>
+          </div>
+        </div>
+      </div>
+      <canyalib-canpay [dAppName]="canPay.dAppName" [successText]="canPay.successText" [operation]="canPay.operation"
+        [onAuthTxHash]="canPay.onAuthTxHash" [onPaymentTxHash]="canPay.onPaymentTxHash" [recipient]="canPay.recipient" [amount]="canPay.amount" [paymentSummary]="canPay.paymentSummary"
+        [postAuthorisationProcessName]="canPay.postAuthorisationProcessName" [postAuthorisationProcessResults]="canPay.postAuthorisationProcessResults"
+        (currentStep)="currentStep($event)" (startPostAuthorisationProcess)="canPay.startPostAuthorisationProcess($event)"
+        (complete)="canPay.complete($event)" (cancel)="canPay.cancel($event)" [destinationAddress]="canPay.destinationAddress"
+        [disableCanEx]="canPay.disableCanEx" [userEmail]="canPay.userEmail"></canyalib-canpay>
+
+    </div>
+  </div>
+</div>

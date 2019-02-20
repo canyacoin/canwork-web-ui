@@ -1,15 +1,15 @@
 import { inject, TestBed } from '@angular/core/testing';
 
-import { CanWorkEthService } from './eth.service';
+import { EthService } from './eth.service';
 
 describe('EthService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [CanWorkEthService]
+      providers: [EthService]
     });
   });
 
-  it('should be created', inject([CanWorkEthService], (service: CanWorkEthService) => {
+  it('should be created', inject([EthService], (service: EthService) => {
     expect(service).toBeTruthy();
   }));
 });
