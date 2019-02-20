@@ -174,10 +174,6 @@ export class PostComponent implements OnInit, OnDestroy {
         });
       }
     });
-    // const canToUsdResp = await this.http.get('https://api.coinmarketcap.com/v2/ticker/2343/?convert=USD').toPromise();
-    // if (canToUsdResp.ok) {
-    //   this.canToUsd = JSON.parse(canToUsdResp.text())['data']['quotes']['USD']['price'];
-    // }
     try {
       this.canToUsd = await this.ethService.getCanToUsd();
     } catch (e) {

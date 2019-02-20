@@ -46,7 +46,8 @@ export class CanexPaymentOptionsComponent implements OnInit, OnDestroy {
     @Input() balance = 0;
 
     sessionSub: Subscription;
-    cmcSub: Subscription;
+    usdSub: Subscription;
+    ethSub: Subscription;
     dataSub: Subscription;
 
     isLoading = true;
@@ -73,15 +74,17 @@ export class CanexPaymentOptionsComponent implements OnInit, OnDestroy {
             this.isLoading = false;
         });
 
-        this.cmcSub = this.canexService.getDataCmc('ETH').subscribe(
-            (data) => {
 
-                this.formData.eth = Number((this.formData.amount * data.json().data.quotes.ETH.price).toFixed(6));
-                this.formData.usd = Number((this.formData.amount * data.json().data.quotes.USD.price).toFixed(6));
-                // this.etherPrice = this.formData.eth;
+        this.canexService.getData('ETH').take(1).subscribe(
+            (data) => {
+                this.formData.eth = Number((this.formData.amount * data.json().data.price).toFixed(6));
             }
         );
-
+        this.canexService.getData('USD').take(1).subscribe(
+            (data) => {
+                this.formData.usd = Number((this.formData.amount * data.json().data.price).toFixed(6));
+            }
+        );
         if (window.innerWidth < 769) {
             this.token_classes = 'card-holder col-xs-6 payment-margin-right';
         } else {
@@ -99,7 +102,8 @@ export class CanexPaymentOptionsComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         if (this.resizeSubscription) { this.resizeSubscription.unsubscribe(); }
-        if (this.cmcSub) { this.cmcSub.unsubscribe(); }
+        if (this.usdSub) { this.usdSub.unsubscribe(); }
+        if (this.ethSub) { this.ethSub.unsubscribe(); }
         if (this.sessionSub) { this.sessionSub.unsubscribe(); }
         if (this.dataSub) { this.dataSub.unsubscribe(); }
     }

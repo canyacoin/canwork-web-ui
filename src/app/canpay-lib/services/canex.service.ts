@@ -14,7 +14,6 @@ export class CanexConfig {
     backendUrl: string;
     backendEthAddress: string;
     bancor: string;
-    cmc: string;
     etherscan: string;
     order: string;
 }
@@ -31,7 +30,6 @@ export class CanexService {
                 backendUrl: 'https://canpay-backend-dot-staging-can-work.appspot.com',
                 backendEthAddress: '0xA766743bD02AA07f5E5a7509F038028E1DEd8186',
                 bancor: 'https://api.bancor.network/0.1/currencies/CAN/ticker?fromCurrencyCode=',
-                cmc: 'https://api.coinmarketcap.com/v2/ticker/2343/?convert=',
                 etherscan: 'https://ropsten.etherscan.io/tx/',
                 order: 'http://staging.canexchange.io/#/order/'
             };
@@ -40,7 +38,6 @@ export class CanexService {
                 backendUrl: 'https://canexchange-prod-dot-canwork-io.appspot.com/',
                 backendEthAddress: '0xf0725197ca2c41e61912d97c91febcee21664f65',
                 bancor: 'https://api.bancor.network/0.1/currencies/CAN/ticker?fromCurrencyCode=',
-                cmc: 'https://api.coinmarketcap.com/v2/ticker/2343/?convert=',
                 etherscan: 'https://etherscan.io/tx/',
                 order: 'http://staging.canexchange.io/#/order/'
             };
@@ -53,9 +50,9 @@ export class CanexService {
     }
 
     // get conversion rates from coin market cap api
-    getDataCmc(currency): Observable<any> {
-        return this.http.get(this.environment.cmc + currency);
-    }
+    // getDataCmc(currency): Observable<any> {
+    //     return this.http.get(this.environment.cmc + currency);
+    // }
 
     // get conversion rates from bancor api
     getData(currency): Observable<any> {
