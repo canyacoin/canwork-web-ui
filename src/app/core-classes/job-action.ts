@@ -65,7 +65,7 @@ export class IJobAction {
         return 'Once you decline these terms, the job will be cancelled and no further action can be performed on it.' +
           ' Are you sure you wish to decline the terms?';
       case ActionType.counterOffer:
-        return 'If you wish to make a counter offer, enter the amount you propose for the job<br/>\nUSD' + this.paymentTypeString;
+        return 'If you wish to make a counter offer, enter the amount you propose for the job \nUSD' + this.paymentTypeString;
       case ActionType.acceptTerms:
         return 'Are you sure?';
       case ActionType.authoriseEscrow:

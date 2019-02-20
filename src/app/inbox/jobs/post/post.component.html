@@ -189,6 +189,9 @@
                   <div class="modal-footer">
                     <img *ngIf="isSending" src="assets/img/loader.svg" height="36px" alt="CanYa Coin">
                     <button type="button" (click)="submitForm()" class="btn btn-primary" [disabled]="!postForm.valid || isSending || (currentUpload && !uploadedFile)">POST</button>
+                    <span *ngIf="error" class="fs-12 fw-400 mt-10" style="color: #ff6666">
+                      Something went wrong when posting this job..
+                    </span>
                   </div>
                 </form>
               </div>
@@ -482,6 +485,9 @@
                     <div *ngIf="isSending">
                       <img *ngIf="isSending" src="assets/img/loader.svg" height="36px" alt="CanYa Coin">
                     </div>
+                    <span *ngIf="error" class="fs-12 fw-400 mt-10" style="color: #ff6666">
+                      Something went wrong when posting this job..
+                    </span>
                   </div>
                 </form>
               </div>

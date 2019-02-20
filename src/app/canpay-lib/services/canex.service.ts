@@ -3,6 +3,8 @@ import { Inject, Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import merge from 'lodash.merge';
 import { Observable } from 'rxjs';
+import { environment } from '@env/environment';
+import { NetworkType } from '@service/eth.service';
 
 const DEFAULT_CONFIGS = {
     useTestNet: false
@@ -20,12 +22,11 @@ export class CanexConfig {
 @Injectable()
 export class CanexService {
 
-    constructor(@Inject('Config') private config: any = {}, private http: Http, private loc: Location) {
-        this.config = merge(DEFAULT_CONFIGS, config);
+    constructor(private http: Http, private loc: Location) {
     }
 
     get environment(): CanexConfig {
-        if (this.config.useTestNet) {
+        if (environment.contracts.network !== NetworkType.main) {
             return {
                 backendUrl: 'https://canpay-backend-dot-staging-can-work.appspot.com',
                 backendEthAddress: '0xA766743bD02AA07f5E5a7509F038028E1DEd8186',

@@ -10,6 +10,7 @@ import * as orderBy from 'lodash/orderBy';
 import * as union from 'lodash/union';
 import { LabelType, Options } from 'ng5-slider';
 import { Observable, Subscription } from 'rxjs';
+import { getUsdToCan } from '@util/currency-conversion';
 
 import { UserType } from '../../../functions/src/user-type';
 import { environment } from '../../environments/environment';
@@ -34,7 +35,6 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   categoryQuery = '';
   hourlyQuery = '';
   loading = true;
-  canToUsd: number;
   minValue = 0;
   maxValue = 300;
   options: Options = {
@@ -97,10 +97,6 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
     this.navService.setHideSearchBar(true);
-    const canToUsdResp = await this.http.get('https://api.coinmarketcap.com/v2/ticker/2343/?convert=USD').toPromise();
-    if (canToUsdResp.ok) {
-      this.canToUsd = JSON.parse(canToUsdResp.text())['data']['quotes']['USD']['price'];
-    }
   }
 
   ngAfterViewInit() {
@@ -125,13 +121,6 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       return false;
     }
-  }
-
-  getUsdToCan(usd: number): string {
-    if (this.canToUsd) {
-      return (usd / this.canToUsd).toFixed(2);
-    }
-    return '-';
   }
 
   filterArray(array: User[]) {

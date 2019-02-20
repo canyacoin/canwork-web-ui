@@ -46,11 +46,8 @@ export class EthService implements OnDestroy {
   walletType: WalletType;
   ownerAccount: string;
 
-
   canyaContract: any;
   canyaDecimals = 6;
-
-  useTestNet = false;
 
   public web3Status = new BehaviorSubject<Web3LoadingStatus>(Web3LoadingStatus.loading);
   public web3Status$ = this.web3Status.asObservable();
@@ -59,7 +56,6 @@ export class EthService implements OnDestroy {
   public account$ = this.account.asObservable();
 
   constructor(protected http: Http) {
-    this.useTestNet = environment.contracts.useTestNet;
 
     if (window.ethereum || window.web3) {
       if (window.ethereum) {
@@ -123,9 +119,7 @@ export class EthService implements OnDestroy {
 
   private setUpAccounts() {
     console.log('setUpAccounts...');
-    if ((this.useTestNet && (this.netType === NetworkType.rinkeby
-      || this.netType === NetworkType.ropsten || this.netType === NetworkType.unknown))
-      || (!this.useTestNet && this.netType === NetworkType.main)) {
+    if (this.netType === environment.contracts.network) {
       console.log('Web3Service: Is: ', this.netType);
       this.web3js.eth.getAccounts().then((accs: string[]) => {
         console.log('Web3Service: Got accounts: ' + JSON.stringify(accs));
@@ -212,13 +206,17 @@ export class EthService implements OnDestroy {
     return this.toBaseUnit(amount, decimal, this.web3js.utils.BN);
   }
 
-  createContractInstance(abi, address) {
-    console.log('createContractInstance: ', abi, address);
-    if (!this.web3js) {
+  createContractInstance(abi, address, useDefaultWeb3Provider: boolean = false) {
+    console.log('createContractInstance: ', abi, address, useDefaultWeb3Provider);
+    let thisWeb3js = this.web3js;
+    if (useDefaultWeb3Provider || !thisWeb3js) {
+      thisWeb3js = new Web3(environment.backupWeb3Provider);
+    }
+    if (!thisWeb3js) {
       console.log('Error createContractInstance, web3 provider not initialized');
       return;
     }
-    return new this.web3js.eth.Contract(abi, address);
+    return new thisWeb3js.eth.Contract(abi, address);
   }
 
   async payWithEther(amount: number, to: string): Promise<any> {
@@ -416,15 +414,27 @@ export class EthService implements OnDestroy {
   }
 
 
-  async getCanToUsd(): Promise<number> {
+  async getCanToUsd(amountOfCan: number = 1): Promise<number> {
     try {
-      const priceOracle = this.createContractInstance(priceOracleAbi, environment.contracts.priceOracle);
-      const tokenValueInDai = await priceOracle.methods.getTokenToDai(1 * (10 ** this.canyaDecimals)).call();
+      const priceOracle = this.createContractInstance(priceOracleAbi, environment.contracts.priceOracle, this.web3Status.value !== Web3LoadingStatus.complete);
+      const tokenValueInDai = await priceOracle.methods.getTokenToDai((amountOfCan * (10 ** this.canyaDecimals)).toString()).call();
       const tokenValueDecimal = tokenValueInDai / (10 ** 18);
       return Promise.resolve(tokenValueDecimal);
     } catch (error) {
       console.log(error);
-      return Promise.resolve(0);
+      return Promise.reject(null);
+    }
+  }
+
+  async getUsdToCan(amountOfUsd: number = 1): Promise<number> {
+    try {
+      const priceOracle = this.createContractInstance(priceOracleAbi, environment.contracts.priceOracle, this.web3Status.value !== Web3LoadingStatus.complete);
+      const daiValueInToken = await priceOracle.methods.getDaiToToken((amountOfUsd * (10 ** 18)).toString()).call();
+      const daiValueDecimal = daiValueInToken / (10 ** this.canyaDecimals);
+      return Promise.resolve(daiValueDecimal);
+    } catch (error) {
+      console.error(error);
+      return Promise.reject(null);
     }
   }
 

@@ -85,11 +85,15 @@ export class JobService {
   }
 
   async getJobBudget(job: Job): Promise<number> {
-    const canToUsd = await this.ethService.getCanToUsd();
-    if (canToUsd) {
-      const totalBudget = await this.getJobBudgetUsd(job);
-      return Promise.resolve(Math.floor(totalBudget / canToUsd));
-    } else {
+    try {
+        const totalBudget = await this.getJobBudgetUsd(job);
+        const canValue = await this.ethService.getUsdToCan(totalBudget);
+        if (canValue) {
+          return Promise.resolve(canValue);
+        } else {
+          return Promise.reject(false);
+        }
+    } catch (e) {
       return Promise.reject(false);
     }
   }
@@ -124,7 +128,9 @@ export class JobService {
   async assignOtherPartyAsync(job: Job, viewingUserType: UserType) {
     if (job.clientId && job.providerId) {
       const otherParty = await this.userService.getUser(viewingUserType === UserType.client ? job.providerId : job.clientId);
-      job['otherParty'] = { avatar: otherParty.avatar, name: otherParty.name, id: otherParty.address };
+      if (otherParty) {
+        job['otherParty'] = { avatar: otherParty.avatar, name: otherParty.name, id: otherParty.address };
+      }
     }
   }
 
@@ -236,7 +242,7 @@ export class JobService {
             reject(false);
         }
       } catch (e) {
-        reject(false);
+        reject(e);
       }
     });
   }

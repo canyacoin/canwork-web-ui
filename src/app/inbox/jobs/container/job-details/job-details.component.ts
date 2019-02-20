@@ -220,7 +220,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   }
 
   getTxLink(txHash: string) {
-    return `http://${environment.contracts.useTestNet ? 'ropsten.' : ''}etherscan.io/tx/${txHash}`;
+    return `${environment.contracts.etherscan}/tx/${txHash}`;
   }
 
   getTxColor(tx: Transaction) {

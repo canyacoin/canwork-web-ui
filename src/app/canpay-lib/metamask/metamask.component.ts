@@ -1,3 +1,4 @@
+import { environment } from '@env/environment';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 
@@ -20,7 +21,6 @@ export class MetamaskComponent implements OnInit, OnDestroy {
   walletType: WalletType;
   walletTypes = WalletType;
 
-  configUseTestNet = false;
 
   loading = true;
 
@@ -32,7 +32,6 @@ export class MetamaskComponent implements OnInit, OnDestroy {
   constructor(private ethService: EthService) { }
 
   async ngOnInit() {
-    this.configUseTestNet = this.ethService.useTestNet;
     this.ethSub = this.ethService.web3Status$.subscribe((state: Web3LoadingStatus) => {
       console.log('state: ', state);
       this.web3State = state;
@@ -61,7 +60,7 @@ export class MetamaskComponent implements OnInit, OnDestroy {
   }
 
   get netType(): string {
-    return this.configUseTestNet ? 'Test Network' : 'Main Network';
+    return environment.contracts.network;
   }
 
   ngOnDestroy() {

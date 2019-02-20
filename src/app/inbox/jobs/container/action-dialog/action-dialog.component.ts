@@ -7,6 +7,7 @@ import { User, UserType } from '@class/user';
 import { JobService } from '@service/job.service';
 import { UserService } from '@service/user.service';
 import { getUsdToCan } from '@util/currency-conversion';
+import { EthService } from '@service/eth.service';
 import { RatingChangeEvent } from 'angular-star-rating';
 import { DialogComponent, DialogService } from 'ng2-bootstrap-modal';
 
@@ -50,6 +51,7 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
     private formBuilder: FormBuilder,
     private jobService: JobService,
     private userService: UserService,
+    private ethService: EthService,
     private http: Http) {
     super(dialogService);
   }
@@ -126,7 +128,8 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
       switch (this.actionType) {
         case ActionType.counterOffer:
           this.job.budget = this.form.value.budget;
-          this.action.setPaymentProperties(this.job.budget, await this.jobService.getJobBudget(this.job));
+          this.action.setPaymentProperties(this.job.budget, await this.jobService.getJobBudget(this.job), this.job.information.timelineExpectation,
+          this.job.information.workType, this.job.information.weeklyCommitment, this.job.paymentType);
           break;
         case ActionType.authoriseEscrow:
           this.action.amountCan = this.job.budgetCan;
@@ -154,6 +157,7 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
         this.executing = false;
       }
     } catch (e) {
+      this.executing = false;
       console.log(e);
       console.log('error');
     }
@@ -167,9 +171,10 @@ export class ActionDialogComponent extends DialogComponent<ActionDialogOptions, 
   }
 
   private async setupCanConverter() {
-    const canToUsdResp = await this.http.get('https://api.coinmarketcap.com/v2/ticker/2343/?convert=USD').toPromise();
-    if (canToUsdResp.ok) {
-      this.canToUsd = JSON.parse(canToUsdResp.text())['data']['quotes']['USD']['price'];
+    try {
+      this.canToUsd = await this.ethService.getCanToUsd();
+    } catch (e) {
+      this.canToUsd = null;
     }
   }
 
