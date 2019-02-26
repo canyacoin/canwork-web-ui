@@ -10,6 +10,7 @@ import { User, UserType } from '@class/user';
 import { CanWorkJobContract } from '@contract/can-work-job.contract';
 import { EthService } from '@service/eth.service';
 import { FeatureToggleService } from '@service/feature-toggle.service';
+import { LimepayService } from '@service/limepay.service';
 import { JobService } from '@service/job.service';
 import { MomentService } from '@service/moment.service';
 import { Transaction, TransactionService } from '@service/transaction.service';
@@ -18,7 +19,7 @@ import { GenerateGuid } from '@util/generate.uid';
 import 'rxjs/add/operator/take';
 import { Subscription } from 'rxjs/Subscription';
 
-import { environment } from '../../../../../environments/environment';
+import { environment } from '@env/environment';
 
 @Component({
   selector: 'app-enter-escrow',
@@ -31,14 +32,15 @@ export class EnterEscrowComponent implements OnInit {
   totalJobBudgetUsd: number;
 
   canPayOptions: CanPay;
-
   canexDisabled = false;
+
+  paymentMethod: string;
 
   constructor(private ethService: EthService,
     private jobService: JobService,
     private userService: UserService,
+    private limepayService: LimepayService,
     private transactionService: TransactionService,
-    private EthService: EthService,
     private featureService: FeatureToggleService,
     private activatedRoute: ActivatedRoute,
     private momentService: MomentService,
@@ -50,9 +52,16 @@ export class EnterEscrowComponent implements OnInit {
       this.jobService.getJob(jobId).take(1).subscribe(async (job: Job) => {
         this.totalJobBudgetUsd = await this.jobService.getJobBudgetUsd(job);
         this.job = job;
-        this.startCanpay();
       });
     }
+  }
+
+  async getWallet() {
+    this.limepayService.getWallet().then((wallet) => {
+      console.log(wallet);
+    }).catch(e => {
+      console.log(e);
+    });
   }
 
   async startCanpay() {
