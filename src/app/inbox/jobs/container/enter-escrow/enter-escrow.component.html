@@ -1,12 +1,26 @@
-<div *ngIf="!canPayOptions" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
-  <img src="assets/img/loader.svg" height="36px" alt="Loader">
+
+
+<div *ngIf="!paymentMethod" class="container">
+  <button (click)="paymentMethod = 'fiat'">Pay with fiat</button>
+  <button (click)="paymentMethod = 'crypto'; startCanpay() ">Pay with crypto</button>
 </div>
 
-<div class="container" *ngIf="canPayOptions ">
-  <canyalib-canpay [dAppName]="canPayOptions.dAppName" [successText]="canPayOptions.successText" [operation]="canPayOptions.operation"
-    [onAuthTxHash]="canPayOptions.onAuthTxHash" [recipient]="canPayOptions.recipient" [amount]="canPayOptions.amount"
-    [paymentSummary]="canPayOptions.paymentSummary" [postAuthorisationProcessName]="canPayOptions.postAuthorisationProcessName"
-    [postAuthorisationProcessResults]="canPayOptions.postAuthorisationProcessResults" (startPostAuthorisationProcess)="canPayOptions.startPostAuthorisationProcess($event)"
-    (complete)="canPayOptions.complete($event)" (cancel)="canPayOptions.cancel($event)" [disableCanEx]="canPayOptions.disableCanEx"
-    [userEmail]="canPayOptions.userEmail"></canyalib-canpay>
+<div *ngIf="paymentMethod == 'fiat'" class="container">
+  Paying with FIAT
+  <button (click)="getWallet()">GetWallet</button>
+</div>
+
+<div *ngIf="paymentMethod == 'crypto'">
+  <div *ngIf="!canPayOptions" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
+    <img src="assets/img/loader.svg" height="36px" alt="Loader">
+  </div>
+
+  <div class="container" *ngIf="canPayOptions ">
+    <canyalib-canpay [dAppName]="canPayOptions.dAppName" [successText]="canPayOptions.successText" [operation]="canPayOptions.operation"
+      [onAuthTxHash]="canPayOptions.onAuthTxHash" [recipient]="canPayOptions.recipient" [amount]="canPayOptions.amount"
+      [paymentSummary]="canPayOptions.paymentSummary" [postAuthorisationProcessName]="canPayOptions.postAuthorisationProcessName"
+      [postAuthorisationProcessResults]="canPayOptions.postAuthorisationProcessResults" (startPostAuthorisationProcess)="canPayOptions.startPostAuthorisationProcess($event)"
+      (complete)="canPayOptions.complete($event)" (cancel)="canPayOptions.cancel($event)" [disableCanEx]="canPayOptions.disableCanEx"
+      [userEmail]="canPayOptions.userEmail"></canyalib-canpay>
+  </div>
 </div>
