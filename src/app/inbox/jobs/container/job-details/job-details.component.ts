@@ -146,8 +146,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     switch (type) {
       case ActionType.cancelJob:
       case ActionType.dispute:
-        return 'danger';
       case ActionType.declineTerms:
+      case ActionType.cancelJobEarly:
         return 'danger';
       case ActionType.counterOffer:
       case ActionType.addMessage:
@@ -197,6 +197,9 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         break;
       case ActionType.acceptFinish:
         this.router.navigate(['../complete'], { relativeTo: this.activatedRoute });
+        break;
+      case ActionType.cancelJobEarly:
+        console.log('Cancel Job Early.');
         break;
       default:
         this.dialogService.addDialog(ActionDialogComponent, new ActionDialogOptions({
