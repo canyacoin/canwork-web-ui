@@ -78,8 +78,10 @@ export class IJobAction {
         return 'Are you sure you\'ve finished your job?';
       case ActionType.acceptFinish:
         return 'Are you sure you want to finish this job?';
+      case ActionType.cancelJobEarly:
+        return 'You are going to cancel this job. This cannot be undone. Are you sure?';
       case ActionType.review:
-        return '';
+        return 'Leave a review!';
       default:
         return 'Are you sure?';
     }
@@ -106,6 +108,8 @@ export class IJobAction {
         return `${executor} cancelled this job.`;
       case ActionType.authoriseEscrow:
         return `${executor} authorised the Escrow contract to transfer ${this.amountCan} CAN`;
+        case ActionType.cancelJobEarly:
+          return `${executor} cancelled the job early.`;
       case ActionType.enterEscrow:
         return `${executor} registered this job in the Escrow contract.<br>
               When the job is succesfully delivered, ${executor} will release the funds stored in the contract.`;
@@ -131,5 +135,6 @@ export enum ActionType {
   review = 'Leave a review',
   bid = 'Place Bid',
   declineBid = 'Decline Bid',
-  invite = 'Invite to job'
+  invite = 'Invite to job',
+  cancelJobEarly = 'Cancel Job Early'
 }
