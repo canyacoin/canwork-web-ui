@@ -160,7 +160,7 @@
             </div>
           </div>
           <div class="row" *ngIf="bids">
-            <div class="col-12">
+            <div class="col-12" *ngIf="bids.length !== null">
               <p><b>Total Bid(s) : </b>{{ bids.length }}</p>
             </div>
             <div class="col-12">
