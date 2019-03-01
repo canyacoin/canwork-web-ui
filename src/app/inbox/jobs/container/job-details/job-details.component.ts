@@ -199,7 +199,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.router.navigate(['../complete'], { relativeTo: this.activatedRoute });
         break;
       case ActionType.cancelJobEarly:
-        console.log('Cancel Job Early.');
+        this.router.navigate(['../cancel'], { relativeTo: this.activatedRoute });
         break;
       default:
         this.dialogService.addDialog(ActionDialogComponent, new ActionDialogOptions({
