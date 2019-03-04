@@ -147,6 +147,7 @@ export class PostComponent implements OnInit, OnDestroy {
       });
       if (!this.editing) {
         this.jobId = GenerateGuid();
+        this.pageLoaded = true;
       } else {
         this.jobId = this.activatedRoute.snapshot.params['jobId'];
         this.jobSub = this.publicJobService.getPublicJob(this.activatedRoute.snapshot.params['jobId']).subscribe((result) => {
