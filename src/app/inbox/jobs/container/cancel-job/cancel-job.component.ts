@@ -60,16 +60,17 @@ export class CancelJobComponent implements OnInit {
         save tx to collection
         save action/pending to job */
       const txId = GenerateGuid();
-      this.transactionService.startMonitoring(this.job, from, txId, txHash, ActionType.acceptFinish);
+      this.transactionService.startMonitoring(this.job, from, txId, txHash, ActionType.cancelJobEarly);
       this.transactionService.saveTransaction(new Transaction(txId, this.job.clientId,
-        txHash, this.momentService.get(), ActionType.acceptFinish, this.job.id));
-      this.job.actionLog.push(new IJobAction(ActionType.acceptFinish, UserType.client));
+        txHash, this.momentService.get(), ActionType.cancelJobEarly, this.job.id));
+      this.job.actionLog.push(new IJobAction(ActionType.cancelJobEarly, UserType.client));
       await this.jobService.saveJobFirebase(this.job);
     };
 
     const initiateCancellation = async (canPayData: CanPayData) => {
       console.log('initiating cancellation');
       const canWorkContract = new CanWorkJobContract(this.ethService);
+      console.log(canWorkContract);
       canWorkContract.connect().cancelJobByProvider(this.job, this.job.clientEthAddress || this.ethService.getOwnerAccount(), onTxHash)
         .then(setProcessResult.bind(this.canPayOptions))
         .catch(setProcessResult.bind(this.canPayOptions));
