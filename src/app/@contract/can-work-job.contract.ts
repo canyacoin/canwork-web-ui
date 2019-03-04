@@ -87,6 +87,7 @@ export class CanWorkJobContract {
         gasPrice: gasPrice,
         data: txObject.encodeABI(),
       };
+      console.log(txOptions);
       txObject.send(txOptions, async (err, txHash) => this.eth.resolveTransaction(err, fromAddr, txHash, resolve, reject, onTxHash));
     });
   }

@@ -238,6 +238,7 @@ export class JobService {
           case ActionType.authoriseEscrow:
           case ActionType.enterEscrow:
           case ActionType.acceptFinish:
+          case ActionType.cancelJobEarly:
           default:
             reject(false);
         }
