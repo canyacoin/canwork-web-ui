@@ -70,7 +70,8 @@ export class CanWorkJobContract {
 
   async cancelJobByProvider(job: Job, fromAddr: string, onTxHash: Function) {
     return new Promise(async (resolve, reject) => {
-      const txObject = await this.instance.methods.cancelJobByProvider(this.eth.web3js.utils.padRight(job.hexId, 32));
+      console.log('cancelling job :' + job.hexId);
+      const txObject = await this.instance.methods.cancelJobByProvider(this.eth.web3js.utils.fromAscii(job.hexId));
       let gas, gasPrice = '';
 
       try {
