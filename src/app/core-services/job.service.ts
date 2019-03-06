@@ -140,6 +140,7 @@ export class JobService {
 
     if (job.state === JobState.termsAcceptedAwaitingEscrow ||
         job.state === JobState.authorisedEscrow ||
+        job.state === JobState.inEscrow ||
         pendingCompletion) {
 
         let url = `${environment.transactionMonitor.callbackUri}/check-job-state`;
