@@ -67,4 +67,29 @@ export class CanWorkJobContract {
       txObject.send(txOptions, async (err, txHash) => this.eth.resolveTransaction(err, fromAddr, txHash, resolve, reject, onTxHash));
     });
   }
+
+  async cancelJobByProvider(job: Job, fromAddr: string, onTxHash: Function) {
+    return new Promise(async (resolve, reject) => {
+      console.log('cancelling job :' + job.hexId);
+      const txObject = await this.instance.methods.cancelJobByProvider(this.eth.web3js.utils.padRight(job.hexId, 32));
+      let gas, gasPrice = '';
+
+      try {
+        gas = await txObject.estimateGas({ from: fromAddr });
+        gasPrice = await this.eth.getDefaultGasPriceGwei();
+      } catch (err) {
+        reject(err);
+      }
+
+      const txOptions = {
+        from: fromAddr,
+        value: '0x0',
+        gasLimit: gas,
+        gasPrice: gasPrice,
+        data: txObject.encodeABI(),
+      };
+      console.log(txOptions);
+      txObject.send(txOptions, async (err, txHash) => this.eth.resolveTransaction(err, fromAddr, txHash, resolve, reject, onTxHash));
+    });
+  }
 }

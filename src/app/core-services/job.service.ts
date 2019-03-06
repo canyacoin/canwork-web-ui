@@ -140,6 +140,7 @@ export class JobService {
 
     if (job.state === JobState.termsAcceptedAwaitingEscrow ||
         job.state === JobState.authorisedEscrow ||
+        job.state === JobState.inEscrow ||
         pendingCompletion) {
 
         let url = `${environment.transactionMonitor.callbackUri}/check-job-state`;
@@ -238,6 +239,7 @@ export class JobService {
           case ActionType.authoriseEscrow:
           case ActionType.enterEscrow:
           case ActionType.acceptFinish:
+          case ActionType.cancelJobEarly:
           default:
             reject(false);
         }
@@ -279,9 +281,10 @@ export class JobService {
     actions[JobState.clientCounterOffer] = forClient ? [ActionType.cancelJob] : [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms];
     actions[JobState.termsAcceptedAwaitingEscrow] = forClient ? [ActionType.authoriseEscrow, ActionType.cancelJob] : [ActionType.cancelJob];
     actions[JobState.authorisedEscrow] = forClient ? [ActionType.enterEscrow, ActionType.cancelJob] : [];
-    actions[JobState.inEscrow] = forClient ? [ActionType.dispute, ActionType.addMessage] : [ActionType.finishedJob, ActionType.addMessage];
+    actions[JobState.inEscrow] = forClient ? [ActionType.dispute, ActionType.addMessage] : [ActionType.finishedJob, ActionType.addMessage, ActionType.cancelJobEarly];
     actions[JobState.workPendingCompletion] = forClient ? [ActionType.acceptFinish, ActionType.dispute, ActionType.addMessage] : [ActionType.dispute, ActionType.addMessage];
     actions[JobState.inDispute] = forClient ? [ActionType.acceptFinish, ActionType.addMessage] : [ActionType.addMessage];
+    actions[JobState.cancelled] = [];
     actions[JobState.cancelled] = [];
     actions[JobState.declined] = [];
     actions[JobState.complete] = [ActionType.review];

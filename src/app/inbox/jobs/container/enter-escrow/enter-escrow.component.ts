@@ -38,7 +38,6 @@ export class EnterEscrowComponent implements OnInit {
     private jobService: JobService,
     private userService: UserService,
     private transactionService: TransactionService,
-    private EthService: EthService,
     private featureService: FeatureToggleService,
     private activatedRoute: ActivatedRoute,
     private momentService: MomentService,
