@@ -71,7 +71,7 @@ export class CancelJobComponent implements OnInit {
       console.log('initiating cancellation');
       const canWorkContract = new CanWorkJobContract(this.ethService);
       console.log(canWorkContract);
-      canWorkContract.connect().cancelJobByProvider(this.job, this.job.clientEthAddress || this.ethService.getOwnerAccount(), onTxHash)
+      canWorkContract.connect().cancelJobByProvider(this.job, this.ethService.getOwnerAccount(), onTxHash)
         .then(setProcessResult.bind(this.canPayOptions))
         .catch(setProcessResult.bind(this.canPayOptions));
     };
