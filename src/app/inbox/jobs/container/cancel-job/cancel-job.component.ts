@@ -61,9 +61,9 @@ export class CancelJobComponent implements OnInit {
         save action/pending to job */
       const txId = GenerateGuid();
       this.transactionService.startMonitoring(this.job, from, txId, txHash, ActionType.cancelJobEarly);
-      this.transactionService.saveTransaction(new Transaction(txId, this.job.clientId,
+      this.transactionService.saveTransaction(new Transaction(txId, this.job.providerId,
         txHash, this.momentService.get(), ActionType.cancelJobEarly, this.job.id));
-      this.job.actionLog.push(new IJobAction(ActionType.cancelJobEarly, UserType.client));
+      this.job.actionLog.push(new IJobAction(ActionType.cancelJobEarly, UserType.provider));
       await this.jobService.saveJobFirebase(this.job);
     };
 
@@ -88,7 +88,7 @@ export class CancelJobComponent implements OnInit {
 
     this.canPayOptions = {
       dAppName: `CanWork`,
-      successText: 'Woohoo, job complete!',
+      successText: 'Great, the job has been cancelled and the funds returned to the client!',
       recipient: environment.contracts.canwork,
       operation: Operation.interact,
       complete: onComplete,
