@@ -1,13 +1,44 @@
-
-
 <div *ngIf="!paymentMethod" class="container">
-  <button (click)="paymentMethod = 'fiat'">Pay with fiat</button>
-  <button (click)="paymentMethod = 'crypto'; startCanpay() ">Pay with crypto</button>
+  <div class="row">
+    <div class="col-12 text-center choose-payment">
+      <h2>Choose your payment method</h2>
+      <button class="btn-payment-type" (click)="paymentMethod = 'fiat'"><img src="assets/img/credit-card.svg"><br>Pay
+        with<br>Credit card</button>
+      <button class="btn-payment-type" (click)="paymentMethod = 'crypto'; startCanpay() "><img src="assets/img/ethereum.svg"><br>Pay
+        with<br>Cryptocurrency</button>
+    </div>
+  </div>
 </div>
 
 <div *ngIf="paymentMethod == 'fiat'" class="container">
-  Paying with FIAT
-  <button (click)="getWallet()">GetWallet</button>
+
+  <div class="row">
+    <div class="col-12 text-center choose-payment">
+      <h2>Paying With Credit Card</h2>
+      <h4>
+        Generate Wallet
+      </h4>
+      <br>
+      <p>We will now create a crypto wallet, allowing you to pay and interact with the ethereum blockchain easily using
+        your credit card.</p>
+      <p class="text-danger">You <b>MUST</b> remember this password. If you lose this password, you <b>WILL</b> lose
+        access to your funds.</p>
+      <div class="col-sm-4 offset-sm-4">
+        <form>
+          <div class="form-group">
+            <label for="email">Email address:</label>
+            <input type="email" class="form-control" id="email">
+          </div>
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" id="password">
+          </div>
+        </form>
+      </div>
+      <button (click)="paymentMethod = null" class="btn btn-danger m-5">Cancel</button>
+      <button (click)="getWallet()" disabled class="btn btn-primary m-5">Get Wallet</button>
+    </div>
+  </div>
 </div>
 
 <div *ngIf="paymentMethod == 'crypto'">
