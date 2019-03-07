@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
-    CanPay, CanPayData, Operation, PaymentItem, PaymentItemCurrency, PaymentSummary,
-    setProcessResult
+  CanPay, CanPayData, Operation, PaymentItem, PaymentItemCurrency, PaymentSummary,
+  setProcessResult
 } from '@canpay-lib/lib';
 import { Job } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
@@ -36,7 +37,10 @@ export class EnterEscrowComponent implements OnInit {
 
   paymentMethod: string;
 
+  walletForm: FormGroup = null;
+
   constructor(private ethService: EthService,
+    private formBuilder: FormBuilder,
     private jobService: JobService,
     private userService: UserService,
     private limepayService: LimepayService,
@@ -44,7 +48,12 @@ export class EnterEscrowComponent implements OnInit {
     private featureService: FeatureToggleService,
     private activatedRoute: ActivatedRoute,
     private momentService: MomentService,
-    private router: Router) { }
+    private router: Router) {
+    this.walletForm = this.formBuilder.group({
+      email: ['', Validators.compose([Validators.required])],
+      password: ['', Validators.compose([Validators.required])]
+    });
+  }
 
   ngOnInit() {
     const jobId = this.activatedRoute.parent.snapshot.params['id'] || null;
@@ -53,6 +62,16 @@ export class EnterEscrowComponent implements OnInit {
         this.totalJobBudgetUsd = await this.jobService.getJobBudgetUsd(job);
         this.job = job;
       });
+    }
+  }
+
+  setPaymentMethod(type: string) {
+    if (type === 'fiat') {
+      this.paymentMethod = 'fiat';
+    } else if (type === 'crypto') {
+      this.paymentMethod = 'crypto';
+    } else {
+      this.paymentMethod = null;
     }
   }
 

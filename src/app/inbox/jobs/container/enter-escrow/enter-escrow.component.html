@@ -2,9 +2,9 @@
   <div class="row">
     <div class="col-12 text-center choose-payment">
       <h2>Choose your payment method</h2>
-      <button class="btn-payment-type" (click)="paymentMethod = 'fiat'"><img src="assets/img/credit-card.svg"><br>Pay
+      <button class="btn-payment-type" (click)="setPaymentMethod('fiat')"><img src="assets/img/credit-card.svg"><br>Pay
         with<br>Credit card</button>
-      <button class="btn-payment-type" (click)="paymentMethod = 'crypto'; startCanpay() "><img src="assets/img/ethereum.svg"><br>Pay
+      <button class="btn-payment-type" (click)="setPaymentMethod('crypto'); startCanpay() "><img src="assets/img/ethereum.svg"><br>Pay
         with<br>Cryptocurrency</button>
     </div>
   </div>
@@ -24,19 +24,20 @@
       <p class="text-danger">You <b>MUST</b> remember this password. If you lose this password, you <b>WILL</b> lose
         access to your funds.</p>
       <div class="col-sm-4 offset-sm-4">
-        <form>
+        <form [formGroup]="walletForm" class="form validate" novalidate>
           <div class="form-group">
             <label for="email">Email address:</label>
-            <input type="email" class="form-control" id="email">
+            <input type="email" #email formControlName="email" required class="form-control" id="email" [class.invalid]="!walletForm.controls.email.valid && walletForm.controls.email.dirty">
           </div>
           <div class="form-group">
             <label for="password">Password:</label>
-            <input type="password" class="form-control" id="password">
+            <input type="password" #password formControlName="password" required class="form-control" id="password"
+              [class.invalid]="!walletForm.controls.password.valid && walletForm.controls.password.dirty">
           </div>
         </form>
       </div>
       <button (click)="paymentMethod = null" class="btn btn-danger m-5">Cancel</button>
-      <button (click)="getWallet()" disabled class="btn btn-primary m-5">Get Wallet</button>
+      <button (click)="getWallet()" [disabled]="!walletForm.valid" class="btn btn-primary m-5">Get Wallet</button>
     </div>
   </div>
 </div>
@@ -45,7 +46,6 @@
   <div *ngIf="!canPayOptions" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
     <img src="assets/img/loader.svg" height="36px" alt="Loader">
   </div>
-
   <div class="container" *ngIf="canPayOptions ">
     <canyalib-canpay [dAppName]="canPayOptions.dAppName" [successText]="canPayOptions.successText" [operation]="canPayOptions.operation"
       [onAuthTxHash]="canPayOptions.onAuthTxHash" [recipient]="canPayOptions.recipient" [amount]="canPayOptions.amount"
