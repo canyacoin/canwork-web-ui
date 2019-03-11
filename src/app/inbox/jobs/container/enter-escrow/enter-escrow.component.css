@@ -20,6 +20,12 @@
   margin-bottom: 15px;
 }
 
+.createWallet {
+  background-color: white;
+  padding: 25px;
+  border-radius: 5px;
+}
+
 .choose-payment {
   min-height: 50vh;
 }
@@ -31,4 +37,12 @@ h2 {
 
 .choose-payment .btn {
   width: 150px;
+}
+
+.btn-175{
+  width: 175px;
+}
+
+#savePassword {
+  padding: 15px;
 }

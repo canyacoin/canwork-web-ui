@@ -34,6 +34,7 @@ export class EnterEscrowComponent implements OnInit {
 
   canPayOptions: CanPay;
   canexDisabled = false;
+  createWalletStep = 0;
 
   paymentMethod: string;
 
@@ -64,9 +65,13 @@ export class EnterEscrowComponent implements OnInit {
     }
   }
 
-  setPaymentMethod(type: string) {
+  async setPaymentMethod(type: string) {
     if (type === 'fiat') {
       this.paymentMethod = 'fiat';
+      /* should check if the user has existing wallet. but for now let's just assume they'll make a new wallet
+      await this.getWallet();
+      */
+      this.createWalletStep = 1;
     } else if (type === 'crypto') {
       this.paymentMethod = 'crypto';
     } else {
@@ -80,6 +85,11 @@ export class EnterEscrowComponent implements OnInit {
     }).catch(e => {
       console.log(e);
     });
+  }
+
+  async createWallet() {
+    console.log('Creating Wallet');
+    this.createWalletStep = 2;
   }
 
   async startCanpay() {
