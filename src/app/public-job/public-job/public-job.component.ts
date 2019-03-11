@@ -137,8 +137,21 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     this.setAttachmentUrl();
   }
 
+  async cancelJob() {
+    if (this.myJob) {
+      const updated = await this.publicJobsService.cancelJob(this.job.id);
+      if (updated) {
+        this.job.state = JobState.closed;
+      }
+    }
+  }
+
   get isOpen() {
     return (this.job.state === JobState.acceptingOffers);
+  }
+
+  get isClosed() {
+    return (this.job.state === JobState.closed);
   }
 
   async submitBid() {
