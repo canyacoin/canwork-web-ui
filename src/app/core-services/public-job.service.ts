@@ -66,18 +66,12 @@ export class PublicJobService {
       const jobs = [];
       docs.forEach((doc) => {
         const currentJob = doc.payload.doc.data() as Job;
-        if (currentJob.state === JobState.acceptingOffers && currentJob.visibility === 'public') {
+        if (currentJob.state === JobState.acceptingOffers && currentJob.visibility === 'public' && new Date(currentJob.deadline) > new Date()) {
           jobs.push(currentJob);
         }
       });
       return jobs;
     }));
-  }
-
-  async getAllOpenJobsPromise() {
-    const result = await this.afs.collection(`public-jobs`).snapshotChanges().toPromise();
-    console.log(result);
-    return result;
   }
 
   getPublicJobsByUrl(url: string): Observable<Job> {
