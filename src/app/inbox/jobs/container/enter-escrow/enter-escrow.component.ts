@@ -50,7 +50,6 @@ export class EnterEscrowComponent implements OnInit {
     private momentService: MomentService,
     private router: Router) {
     this.walletForm = this.formBuilder.group({
-      email: ['', Validators.compose([Validators.required])],
       password: ['', Validators.compose([Validators.required])]
     });
   }

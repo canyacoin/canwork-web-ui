@@ -26,10 +26,6 @@
       <div class="col-sm-4 offset-sm-4">
         <form [formGroup]="walletForm" class="form validate" novalidate>
           <div class="form-group">
-            <label for="email">Email address:</label>
-            <input type="email" #email formControlName="email" required class="form-control" id="email" [class.invalid]="!walletForm.controls.email.valid && walletForm.controls.email.dirty">
-          </div>
-          <div class="form-group">
             <label for="password">Password:</label>
             <input type="password" #password formControlName="password" required class="form-control" id="password"
               [class.invalid]="!walletForm.controls.password.valid && walletForm.controls.password.dirty">
