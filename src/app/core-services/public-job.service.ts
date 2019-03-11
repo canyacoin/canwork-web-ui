@@ -213,6 +213,19 @@ export class PublicJobService {
     return exist;
   }
 
+  cancelJob(jobId: string) {
+    return new Promise<boolean>(async (resolve, reject) => {
+      try {
+        const update = await this.afs.doc(`public-jobs/${jobId}`).update({ state: JobState.closed });
+        console.log(update);
+        resolve(true);
+      } catch (error) {
+        console.log(error);
+        reject(false);
+      }
+    });
+  }
+
   closePublicJob(job: Job, bid: Bid) {
     // closes the public job, create a new job object and starts the usual job flow.
     return new Promise<boolean>(async (resolve, reject) => {
