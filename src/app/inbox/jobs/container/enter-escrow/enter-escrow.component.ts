@@ -87,6 +87,45 @@ export class EnterEscrowComponent implements OnInit {
     });
   }
 
+  async initialiseFiatPayment() {
+    const provider = await this.userService.getUser(this.job.providerId);
+    const token = this.limepayService.initFiatPayment(this.job.id, provider.ethAddress);
+    // Unlocks the payment form
+    fiatPayment = await this.limepayService.library.FiatPayments.load(token);
+}
+
+  // The function is trigger once the user submits the payment form
+  async processFiatPayment() {
+
+    // Get the shopper JSON wallet
+
+    // const transactions = await this.limepayService.getEnterEscrowTransactions(this.job.id);
+
+    // Signs the provided transactions using the Shoppers wallet
+    // const signedTXs = await limepay.Transactions.signWithEncryptedWallet(transactions, JSON.stringify(shopperWallet), SHOPPER_WALLET_PASSPHRASE);
+
+    // // Extracting the Card holder information from the form
+    // const cardHolderInformation = {
+    //     vatNumber: document.getElementById('vat-number').value,
+    //     name: document.getElementById('card-holder-name').value,
+    //     countryCode: document.getElementById('countries-codes').value,
+    //     zip: document.getElementById('zip-code').value,
+    //     street: document.getElementById('street-address').value
+    // };
+
+    // if (document.getElementById('company').checked) {
+    //     cardHolderInformation.isCompany = true;
+    // } else if (document.getElementById('personal').checked) {
+    //     cardHolderInformation.isCompany = false;
+    // }
+
+    // // Triggers the processing of the payment
+    // fiatPayment.process(cardHolderInformation, signedTXs)
+    //     .then(res => {
+    //         alert("done!");
+    //     });
+}
+
   async createWallet() {
     console.log('Creating Wallet');
     this.createWalletStep = 2;

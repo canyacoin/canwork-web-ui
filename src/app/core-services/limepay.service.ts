@@ -17,10 +17,22 @@ const httpOptions = {
 })
 export class LimepayService {
 
+  private limepay;
+
   constructor(
     private http: Http,
     private auth: AuthService
-  ) { }
+  ) {
+    LimePayWeb.connect(environment.limepay.env).then(limepay => {
+      this.limepay = limepay;
+    }).catch(e => {
+      console.log(e);
+    });
+  }
+
+  get library() {
+    return this.limepay;
+  }
 
   async getWallet() {
     try {
@@ -57,6 +69,22 @@ export class LimepayService {
         })
       };
       const res = await this.http.get(`${apiUrl}/auth/enter-escrow-tx?jobId=${jobId}`, options).take(1).toPromise();
+      return Promise.resolve(res.json());
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }
+
+  async initFiatPayment(jobId, providerEthAddress): Promise<any> {
+    try {
+      const token = await this.auth.getJwt();
+      const options = {
+        headers: new Headers({
+          'Content-Type': 'application/json',
+          'Authorization': 'bearer ' + token
+        })
+      };
+      const res = await this.http.post(`${apiUrl}/auth/fiatpayment`, { jobId , providerEthAddress } , options).take(1).toPromise();
       return Promise.resolve(res.json());
     } catch (e) {
       return Promise.reject(e);
