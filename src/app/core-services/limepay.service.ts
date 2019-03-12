@@ -37,10 +37,26 @@ export class LimepayService {
       const options = {
         headers: new Headers({
           'Content-Type': 'application/json',
-          'Authorization': token
+          'Authorization': 'bearer' + token
         })
       };
       const res = await this.http.post(`${apiUrl}/createWallet`, password, options).take(1).toPromise();
+      return Promise.resolve(res.json());
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }
+
+  async getEnterEscrowTransactions(jobId): Promise<any> {
+    try {
+      const token = await this.auth.getJwt();
+      const options = {
+        headers: new Headers({
+          'Content-Type': 'application/json',
+          'Authorization': 'bearer ' + token
+        })
+      };
+      const res = await this.http.get(`${apiUrl}/auth/enter-escrow-tx?jobId=${jobId}`, options).take(1).toPromise();
       return Promise.resolve(res.json());
     } catch (e) {
       return Promise.reject(e);

@@ -33,19 +33,18 @@ export class AuthService {
     return this.currentUser.value !== null;
   }
 
-  // TODO: fix async/promise issue here.
-  public async getJwt(): Promise<string> {
-    console.log('+ 1 current token:', window.sessionStorage.accessToken);
-    await firebase.auth().onAuthStateChanged(async user => {
-      if (user) {
-        const token = await user.getIdToken(true);
-        console.log('+ 2 refreshed token', token);
-        return token;
-      } else {
-        window.sessionStorage.accessToken = '';
-      }
+  async getJwt(): Promise<string> {
+    return new Promise<string>(async (resolve, reject) => {
+      await firebase.auth().onAuthStateChanged(async user => {
+        if (user) {
+          const token = await user.getIdToken(true);
+          console.log('+ 2 refreshed token', token);
+          resolve(token);
+        } else {
+          resolve('');
+        }
+      });
     });
-    return '';
   }
 
   setUser(user: User) {
