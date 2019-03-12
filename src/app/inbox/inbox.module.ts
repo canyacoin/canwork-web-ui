@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CanpayModule } from '@canyaio/canpay-lib';
+import { CanpayModule } from '@canpay-lib/lib';
 import { StarRatingModule } from 'angular-star-rating';
 import { BootstrapModalModule } from 'ng2-bootstrap-modal';
 import { OrderModule } from 'ngx-order-pipe';
@@ -19,6 +19,7 @@ import { PropertyComponent } from './jobs/components/property/property.component
 import { StatusIconComponent } from './jobs/components/status-icon/status-icon.component';
 import { ActionDialogComponent } from './jobs/container/action-dialog/action-dialog.component';
 import { CompleteJobComponent } from './jobs/container/complete-job/complete-job.component';
+import { CancelJobComponent } from './jobs/container/cancel-job/cancel-job.component';
 import { EnterEscrowComponent } from './jobs/container/enter-escrow/enter-escrow.component';
 import { JobContainerComponent } from './jobs/container/job-container.component';
 import { JobDetailsComponent } from './jobs/container/job-details/job-details.component';
@@ -44,6 +45,7 @@ import { PostComponent } from './jobs/post/post.component';
     BudgetComponent,
     ChatComponent,
     CompleteJobComponent,
+    CancelJobComponent,
     EnterEscrowComponent,
     JobContainerComponent,
     JobDashboardComponent,

@@ -2,8 +2,8 @@ import { NgSwitch } from '@angular/common';
 import { Http, Headers } from '@angular/http';
 import { Injectable } from '@angular/core';
 import {
-  CanPayData, CanPayService, EthService, Operation, setProcessResult, View
-} from '@canyaio/canpay-lib';
+  CanPayData, CanPayService, Operation, setProcessResult, View
+} from '@canpay-lib/lib';
 import { Job, JobState, Payment, PaymentType, TimeRange, WorkType } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
 import { Upload } from '@class/upload';
@@ -11,7 +11,7 @@ import { User, UserType } from '@class/user';
 import { CanWorkJobContract } from '@contract/can-work-job.contract';
 import { environment } from '@env/environment';
 import { ChatService } from '@service/chat.service';
-import { CanWorkEthService } from '@service/eth.service';
+import { EthService } from '@service/eth.service';
 import { JobNotificationService } from '@service/job-notification.service';
 import { MomentService } from '@service/moment.service';
 import { Transaction, TransactionService } from '@service/transaction.service';
@@ -38,7 +38,6 @@ export class JobService {
     private momentService: MomentService,
     private transactionService: TransactionService,
     private reviewService: ReviewService,
-    private canWorkEthService: CanWorkEthService,
     private ethService: EthService,
     private jobNotificationService: JobNotificationService,
     private canPayService: CanPayService,
@@ -86,11 +85,15 @@ export class JobService {
   }
 
   async getJobBudget(job: Job): Promise<number> {
-    const canToUsd = await this.canWorkEthService.getCanToUsd();
-    if (canToUsd) {
-      const totalBudget = await this.getJobBudgetUsd(job);
-      return Promise.resolve(Math.floor(totalBudget / canToUsd));
-    } else {
+    try {
+        const totalBudget = await this.getJobBudgetUsd(job);
+        const canValue = await this.ethService.getUsdToCan(totalBudget);
+        if (canValue) {
+          return Promise.resolve(canValue);
+        } else {
+          return Promise.reject(false);
+        }
+    } catch (e) {
       return Promise.reject(false);
     }
   }
@@ -125,7 +128,9 @@ export class JobService {
   async assignOtherPartyAsync(job: Job, viewingUserType: UserType) {
     if (job.clientId && job.providerId) {
       const otherParty = await this.userService.getUser(viewingUserType === UserType.client ? job.providerId : job.clientId);
-      job['otherParty'] = { avatar: otherParty.avatar, name: otherParty.name, id: otherParty.address };
+      if (otherParty) {
+        job['otherParty'] = { avatar: otherParty.avatar, name: otherParty.name, id: otherParty.address };
+      }
     }
   }
 
@@ -135,6 +140,7 @@ export class JobService {
 
     if (job.state === JobState.termsAcceptedAwaitingEscrow ||
         job.state === JobState.authorisedEscrow ||
+        job.state === JobState.inEscrow ||
         pendingCompletion) {
 
         let url = `${environment.transactionMonitor.callbackUri}/check-job-state`;
@@ -233,11 +239,12 @@ export class JobService {
           case ActionType.authoriseEscrow:
           case ActionType.enterEscrow:
           case ActionType.acceptFinish:
+          case ActionType.cancelJobEarly:
           default:
             reject(false);
         }
       } catch (e) {
-        reject(false);
+        reject(e);
       }
     });
   }
@@ -274,9 +281,10 @@ export class JobService {
     actions[JobState.clientCounterOffer] = forClient ? [ActionType.cancelJob] : [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms];
     actions[JobState.termsAcceptedAwaitingEscrow] = forClient ? [ActionType.authoriseEscrow, ActionType.cancelJob] : [ActionType.cancelJob];
     actions[JobState.authorisedEscrow] = forClient ? [ActionType.enterEscrow, ActionType.cancelJob] : [];
-    actions[JobState.inEscrow] = forClient ? [ActionType.dispute, ActionType.addMessage] : [ActionType.finishedJob, ActionType.addMessage];
+    actions[JobState.inEscrow] = forClient ? [ActionType.dispute, ActionType.addMessage] : [ActionType.finishedJob, ActionType.addMessage, ActionType.cancelJobEarly];
     actions[JobState.workPendingCompletion] = forClient ? [ActionType.acceptFinish, ActionType.dispute, ActionType.addMessage] : [ActionType.dispute, ActionType.addMessage];
     actions[JobState.inDispute] = forClient ? [ActionType.acceptFinish, ActionType.addMessage] : [ActionType.addMessage];
+    actions[JobState.cancelled] = [];
     actions[JobState.cancelled] = [];
     actions[JobState.declined] = [];
     actions[JobState.complete] = [ActionType.review];

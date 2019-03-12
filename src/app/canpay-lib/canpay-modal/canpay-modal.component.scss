@@ -1,0 +1,49 @@
+.modal {
+  display: block !important;
+}
+
+.modal-dialog,
+.modal-content {
+  overflow-y: initial;
+  height: 95%;
+  max-height: 550px;
+}
+
+.modal-body {
+  // height: 500px;
+  max-height: calc(100% - 1px);
+  overflow-y: auto;
+}
+
+.desktop-mt-70{
+  margin-top: 70px !important;
+}
+
+@media (min-width: 576px) {
+  .modal-dialog {
+    max-height: 65%;
+    max-width: 80%;
+    margin: 1.75rem auto;
+  }
+}
+@media (max-width: 640px){
+  .desktop-mt-70{
+    margin-top: 0 !important; 
+  }
+  .modal-dialog,
+  .modal-content {
+    overflow-y: initial;
+    height: 95%; 
+  }
+} 
+@media (max-height: 640px){ 
+  .modal-dialog,
+  .modal-content {
+   margin-top: 15px;
+   overflow-y: initial; 
+   max-height: 100%;
+  }
+  p {
+    font-size : 0.875rem;
+  }
+}

@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
     CanPay, CanPayData, Operation, ProcessAction, setProcessResult, View
-} from '@canyaio/canpay-lib';
+} from '@canpay-lib/lib';
 import { User } from '@class/user';
 import { AuthService } from '@service/auth.service';
 import { ChatService } from '@service/chat.service';

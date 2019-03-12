@@ -10,7 +10,7 @@ import { FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular';
 import { environment } from '../../../environments/environment';
 import { User } from '../../core-classes/user';
 import { AuthService } from '../../core-services/auth.service';
-import { CanWorkEthService } from '../../core-services/eth.service';
+import { EthService } from '../../core-services/eth.service';
 import { UserService } from '../../core-services/user.service';
 import { FeatureToggleService } from '@service/feature-toggle.service';
 import { DockIoService } from '@service/dock-io.service';
@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
     private afs: AngularFirestore,
     public dockIOService: DockIoService,
     private http: Http,
-    private ethService: CanWorkEthService,
+    private ethService: EthService,
     private featureService: FeatureToggleService) { }
 
   ngOnInit() {

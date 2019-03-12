@@ -1,0 +1,22 @@
+<div class="text-center complete-body">
+  <h4 style="height: 25px;">Booyah!</h4>
+  <p>{{formData.amount | number : '1.6-6'}} CAN has been sent to your address</p>
+  <div>
+    <img src="./assets/canex/complete-step-img.png">
+  </div>
+  <small>Your order ID is <b style="color: #6d6d6d;"><a href="{{orderUrl}}" target="_blank">{{formData.key}}</a></b></small>
+  <br />
+  <small>A receipt has been sent to your email address</small>
+  <p class="trans-link">
+    <a href="{{etherUrl}}" target="_blank" style="color: #25c4f9; font-weight: 500;">View
+      transaction on etherscan.io</a>
+  </p>
+  <div class="trx-no">
+    <small>Tx#: {{formData.hash}}</small>
+  </div>
+</div>
+
+<div class="footer-buttons text-right">
+  <button class="btn btn-outline btn-close btn-white-trans" (click)="cancel()">
+    close</button>
+</div>

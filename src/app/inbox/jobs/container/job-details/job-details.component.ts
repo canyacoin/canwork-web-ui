@@ -146,8 +146,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     switch (type) {
       case ActionType.cancelJob:
       case ActionType.dispute:
-        return 'danger';
       case ActionType.declineTerms:
+      case ActionType.cancelJobEarly:
         return 'danger';
       case ActionType.counterOffer:
       case ActionType.addMessage:
@@ -198,6 +198,9 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       case ActionType.acceptFinish:
         this.router.navigate(['../complete'], { relativeTo: this.activatedRoute });
         break;
+      case ActionType.cancelJobEarly:
+        this.router.navigate(['../cancel'], { relativeTo: this.activatedRoute });
+        break;
       default:
         this.dialogService.addDialog(ActionDialogComponent, new ActionDialogOptions({
           job: this.job,
@@ -220,7 +223,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   }
 
   getTxLink(txHash: string) {
-    return `http://${environment.contracts.useTestNet ? 'ropsten.' : ''}etherscan.io/tx/${txHash}`;
+    return `${environment.contracts.etherscan}/tx/${txHash}`;
   }
 
   getTxColor(tx: Transaction) {

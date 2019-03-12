@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User, UserState, UserType } from '@class/user';
 import { AuthService } from '@service/auth.service';
-import { CanWorkEthService } from '@service/eth.service';
+import { EthService } from '@service/eth.service';
 import { UserService } from '@service/user.service';
 import { EmailValidator } from '@validator/email.validator';
 import { EthereumValidator } from '@validator/ethereum.validator';
@@ -57,7 +57,7 @@ export class CreateClientProfileComponent implements OnInit {
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private router: Router,
-    private ethService: CanWorkEthService,
+    private ethService: EthService,
     private authService: AuthService) { }
 
   ngOnInit() {

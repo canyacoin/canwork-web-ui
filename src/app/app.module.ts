@@ -2,7 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CanpayModule } from '@canyaio/canpay-lib';
+import { CanpayModule } from '@canpay-lib/canpay.module';
 import { StarRatingModule } from 'angular-star-rating';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
@@ -21,7 +21,7 @@ import { AuthService } from './core-services/auth.service';
 import { CertificationsService } from './core-services/certifications.service';
 import { CoreServicesModule } from './core-services/core-services.module';
 import { DockIoService } from './core-services/dock-io.service';
-import { CanWorkEthService } from './core-services/eth.service';
+import { EthService } from './core-services/eth.service';
 import { JobNotificationService } from './core-services/job-notification.service';
 import { MobileService } from './core-services/mobile.service';
 import { NavService } from './core-services/nav.service';
@@ -49,12 +49,7 @@ import { OrderModule } from 'ngx-order-pipe';
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     BrowserModule,
     BrowserAnimationsModule,
-    CanpayModule.forRoot({
-      useTestNet: environment.contracts.useTestNet,
-      contracts: {
-        canyaCoinAddress: environment.contracts.canYaCoin
-      }
-    }),
+    CanpayModule,
     CoreComponentsModule,
     CoreServicesModule,
     CoreUtilsModule,
@@ -73,7 +68,7 @@ import { OrderModule } from 'ngx-order-pipe';
   providers: [
     AuthService,
     MobileService,
-    CanWorkEthService,
+    EthService,
     NavService,
     JobNotificationService,
     CertificationsService,

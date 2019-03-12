@@ -2,7 +2,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { NgSwitchCase } from '@angular/common';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NetworkType, WalletType, Web3LoadingStatus } from '@canyaio/canpay-lib';
+import { NetworkType, WalletType, Web3LoadingStatus } from '@service/eth.service';
 import { User, UserType } from '@class/user';
 import { AuthService } from '@service/auth.service';
 import { NavService } from '@service/nav.service';
@@ -48,7 +48,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
-      console.log(this.currentUser, user);
       if (this.currentUser !== user) {
         this.initUser();
         this.currentUser = user;

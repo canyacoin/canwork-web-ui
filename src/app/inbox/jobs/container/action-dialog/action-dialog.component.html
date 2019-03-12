@@ -65,6 +65,15 @@
           <app-terms [form]="form"></app-terms>
         </form>
       </div>
+       
+      <div *ngIf="form && actionType == actionTypes.cancelJobEarly || actionType == actionTypes.dispute" class="mx-40">
+        <form [formGroup]="form" class="form-group">
+          <div class="form-group">
+            <h3>Are You Sure?</h3>
+            <label>You are about to cancel this job!</label>
+          </div>
+        </form>
+      </div>
     </div>
     <div class="modal-footer">
       <div class="col-12">

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Http, Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EthService } from '@canyaio/canpay-lib';
+import { EthService } from '@service/eth.service';
 import { Job, JobDescription, PaymentType, TimeRange, WorkType, JobState } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
 import { Upload } from '@class/upload';
@@ -45,6 +45,7 @@ export class PostComponent implements OnInit, OnDestroy {
   sent = false;
   draft = false;
   editing = false;
+  error = false;
 
   jobToEdit: Job;
   jobId: string;
@@ -174,9 +175,10 @@ export class PostComponent implements OnInit, OnDestroy {
         });
       }
     });
-    const canToUsdResp = await this.http.get('https://api.coinmarketcap.com/v2/ticker/2343/?convert=USD').toPromise();
-    if (canToUsdResp.ok) {
-      this.canToUsd = JSON.parse(canToUsdResp.text())['data']['quotes']['USD']['price'];
+    try {
+      this.canToUsd = await this.ethService.getCanToUsd();
+    } catch (e) {
+      this.canToUsd = null;
     }
     this.currentDate = new Date().toISOString().split('T')[0];
   }
@@ -300,6 +302,7 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   async submitForm() {
+    this.error = false;
     this.isSending = true;
     let tags: string[];
     if (!this.isShareable) {
@@ -344,58 +347,67 @@ export class PostComponent implements OnInit, OnDestroy {
       }
     } catch (e) {
       this.sent = false;
+      this.error = true;
       this.isSending = false;
     }
   }
 
   async submitShareableJob(isDraft: boolean) {
     this.isSending = true;
-    let tags: string[];
-    tags = this.shareableJobForm.value.skills === '' ? [] : this.shareableJobForm.value.skills.split(',').map(item => item.trim());
-    if (tags.length > 6) {
-      tags = tags.slice(0, 6);
+    this.error = false;
+
+    try {
+      let tags: string[];
+      tags = this.shareableJobForm.value.skills === '' ? [] : this.shareableJobForm.value.skills.split(',').map(item => item.trim());
+      if (tags.length > 6) {
+        tags = tags.slice(0, 6);
+      }
+      const friendly = await this.publicJobService.generateReadableId(this.shareableJobForm.value.title);
+      this.slug = friendly;
+      console.log('Friendly URL : ' + this.slug);
+      if (this.editing) {
+        this.jobId = this.jobToEdit.id;
+      }
+      const job = new Job({
+        id: this.jobId,
+        hexId: this.ethService.web3js.utils.toHex(this.jobId.hashCode()),
+        clientId: this.currentUser.address,
+        slug: this.slug,
+        information: new JobDescription({
+          description: this.shareableJobForm.value.description,
+          title: this.shareableJobForm.value.title,
+          initialStage: this.shareableJobForm.value.initialStage,
+          skills: tags,
+          attachments: this.uploadedFile ? [this.uploadedFile] : [],
+          workType: this.shareableJobForm.value.workType,
+          timelineExpectation: this.shareableJobForm.value.timelineExpectation,
+          weeklyCommitment: this.shareableJobForm.value.weeklyCommitment,
+          providerType: this.shareableJobForm.value.providerType
+        }),
+        visibility: this.shareableJobForm.value.visibility,
+        paymentType: this.shareableJobForm.value.paymentType,
+        budget: this.shareableJobForm.value.budget,
+        deadline: this.shareableJobForm.value.deadline,
+        draft: isDraft
+      });
+      this.draft = isDraft;
+      const action = new IJobAction(ActionType.createJob, UserType.client);
+      action.setPaymentProperties(job.budget, await this.jobService.getJobBudget(job), this.shareableJobForm.value.timelineExpectation,
+        this.shareableJobForm.value.workType, this.shareableJobForm.value.weeklyCommitment, this.shareableJobForm.value.paymentType);
+      console.log('Shareable job submitted...');
+      console.log('job created');
+      if (!isDraft) {
+        job.state = JobState.acceptingOffers;
+      } else {
+        job.state = JobState.draft;
+      }
+      this.sent = await this.publicJobService.handlePublicJob(job, action);
+      this.isSending = false;
+    } catch (e) {
+      this.sent = false;
+      this.isSending = false;
+      this.error = true;
     }
-    const friendly = await this.publicJobService.generateReadableId(this.shareableJobForm.value.title);
-    this.slug = friendly;
-    console.log('Friendly URL : ' + this.slug);
-    if (this.editing) {
-      this.jobId = this.jobToEdit.id;
-    }
-    const job = new Job({
-      id: this.jobId,
-      hexId: this.ethService.web3js.utils.toHex(this.jobId.hashCode()),
-      clientId: this.currentUser.address,
-      slug: this.slug,
-      information: new JobDescription({
-        description: this.shareableJobForm.value.description,
-        title: this.shareableJobForm.value.title,
-        initialStage: this.shareableJobForm.value.initialStage,
-        skills: tags,
-        attachments: this.uploadedFile ? [this.uploadedFile] : [],
-        workType: this.shareableJobForm.value.workType,
-        timelineExpectation: this.shareableJobForm.value.timelineExpectation,
-        weeklyCommitment: this.shareableJobForm.value.weeklyCommitment,
-        providerType: this.shareableJobForm.value.providerType
-      }),
-      visibility: this.shareableJobForm.value.visibility,
-      paymentType: this.shareableJobForm.value.paymentType,
-      budget: this.shareableJobForm.value.budget,
-      deadline: this.shareableJobForm.value.deadline,
-      draft: isDraft
-    });
-    this.draft = isDraft;
-    const action = new IJobAction(ActionType.createJob, UserType.client);
-    action.setPaymentProperties(job.budget, await this.jobService.getJobBudget(job), this.shareableJobForm.value.timelineExpectation,
-      this.shareableJobForm.value.workType, this.shareableJobForm.value.weeklyCommitment, this.shareableJobForm.value.paymentType);
-    console.log('Shareable job submitted...');
-    console.log('job created');
-    if (!isDraft) {
-      job.state = JobState.acceptingOffers;
-    } else {
-      job.state = JobState.draft;
-    }
-    this.sent = await this.publicJobService.handlePublicJob(job, action);
-    this.isSending = false;
   }
 
   async updateJob() {

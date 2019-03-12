@@ -1,0 +1,10 @@
+<div class="card p-30 row mh-250">
+  <div>
+    Enter Pay Amount/CAN:
+    <input (keyup)="onAmountKeyUp($event)" class="payment-amount" placeholder="0" type="tel" maxlength="8" />
+
+  </div>
+</div>
+<div class="text-right m-30 float-right">
+  <button class="btn btn-primary" (click)="setAmount()">NEXT</button>
+</div>

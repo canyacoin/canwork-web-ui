@@ -1,0 +1,23 @@
+.payment-amount {
+  background: transparent;
+  border-color: #e8e8e8;
+  border-radius: 2px;
+  color: #b5b9bf;
+  padding: 5px 12px;
+  font-size: 48px;
+  line-height: inherit;
+  transition: 0.2s linear;
+  text-align: center;
+  font-weight: 300;
+  border: none;
+  border-bottom: 1px solid #f1f2f3;
+  max-width: 100%;
+  margin: 0 auto;
+  display: block;
+}
+
+.btn-pay-amount {
+  margin: 10px 0 10px 0;
+  width: 100%;
+  max-width: 300px;
+}
