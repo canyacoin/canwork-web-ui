@@ -46,4 +46,35 @@ export class LimepayService {
       return Promise.reject(e);
     }
   }
+
+  async createShopper(userId) {
+    try {
+      const options = {
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
+        userId     : userId
+      };
+      const res = await this.http.post(`${apiUrl}/createShopper`, options).take(1).toPromise();
+      console.log(res);
+      return Promise.resolve(res.json());
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }
+  async isShopper(userId) {
+     try {
+      const options = {
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
+        userId     : userId
+      };
+      const res = await this.http.post(`${apiUrl}/createShopper`, options).take(1).toPromise();
+      console.log(res);
+      return Promise.resolve(res.json());
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }
 }

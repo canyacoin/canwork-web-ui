@@ -15,6 +15,14 @@ service cloud.firestore {
        allow delete: if isAdmin();
     }
 
+    match /shoppers/{document=**} {
+       allow read: if isAuthenticated();
+       allow create: if isAuthenticated();
+       allow update: if isAuthenticated();
+       allow delete: if isAdmin();
+    }
+
+
     match /portfolio/{userId}/work/{w} {
        allow read;
        allow create: if isAuthenticated();

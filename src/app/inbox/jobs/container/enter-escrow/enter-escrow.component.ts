@@ -19,6 +19,8 @@ import { UserService } from '@service/user.service';
 import { GenerateGuid } from '@util/generate.uid';
 import 'rxjs/add/operator/take';
 import { Subscription } from 'rxjs/Subscription';
+import { map, take } from 'rxjs/operators';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 
 import { environment } from '@env/environment';
 
@@ -36,11 +38,15 @@ export class EnterEscrowComponent implements OnInit {
   canexDisabled = false;
   createWalletStep = 0;
 
+  shoppersCollection: AngularFirestoreCollection<any>;
   paymentMethod: string;
-
+  hasWallet = false;
+  limepayWallet: any;
+  pageLoading = true;
   walletForm: FormGroup = null;
 
   constructor(private ethService: EthService,
+    private afs: AngularFirestore,
     private formBuilder: FormBuilder,
     private jobService: JobService,
     private userService: UserService,
@@ -56,11 +62,14 @@ export class EnterEscrowComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('Entering escrow payment');
     const jobId = this.activatedRoute.parent.snapshot.params['id'] || null;
     if (jobId) {
       this.jobService.getJob(jobId).take(1).subscribe(async (job: Job) => {
         this.totalJobBudgetUsd = await this.jobService.getJobBudgetUsd(job);
         this.job = job;
+        await this.isAShopper(this.job.clientId);
+        this.pageLoading = false;
       });
     }
   }
@@ -68,16 +77,27 @@ export class EnterEscrowComponent implements OnInit {
   async setPaymentMethod(type: string) {
     if (type === 'fiat') {
       this.paymentMethod = 'fiat';
-      /* should check if the user has existing wallet. but for now let's just assume they'll make a new wallet
-      await this.getWallet();
-      */
-      this.createWalletStep = 1;
+      if (!this.hasWallet) {
+        this.createWalletStep = 1;
+      }
+      console.log('paying with fiat...');
     } else if (type === 'crypto') {
       this.paymentMethod = 'crypto';
     } else {
       this.paymentMethod = null;
     }
   }
+
+  async isAShopper(clientId: string) {
+    try {
+      const wallet = await this.limepayService.isShopper(clientId);
+      this.hasWallet = true;
+      this.limepayWallet = wallet;
+    } catch {
+      this.hasWallet = false;
+    }
+  }
+
 
   async getWallet() {
     this.limepayService.getWallet().then((wallet) => {
@@ -89,7 +109,9 @@ export class EnterEscrowComponent implements OnInit {
 
   async createWallet() {
     console.log('Creating Wallet');
+    const shopper = this.userService.getUser(this.job.clientId);
     this.createWalletStep = 2;
+    this.limepayService.createShopper(this.job.clientId);
   }
 
   async startCanpay() {
