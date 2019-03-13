@@ -69,7 +69,6 @@ export class LimepayService {
         })
       };
       const res = await this.http.get(`${apiUrl}/auth/enter-escrow-tx?jobId=${jobId}`, options).take(1).toPromise();
-      return Promise.resolve(res.json());
     } catch (e) {
       return Promise.reject(e);
     }
@@ -85,6 +84,37 @@ export class LimepayService {
         })
       };
       const res = await this.http.post(`${apiUrl}/auth/fiatpayment`, { jobId , providerEthAddress } , options).take(1).toPromise();
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }
+
+  async createShopper(userId) {
+    try {
+      const options = {
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
+        userId     : userId
+      };
+      const res = await this.http.post(`${apiUrl}/createShopper`, options).take(1).toPromise();
+      console.log(res);
+      return Promise.resolve(res.json());
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }
+
+  async isShopper(userId) {
+    try {
+      const options = {
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
+        userId     : userId
+      };
+      const res = await this.http.post(`${apiUrl}/createShopper`, options).take(1).toPromise();
+      console.log(res);
       return Promise.resolve(res.json());
     } catch (e) {
       return Promise.reject(e);
