@@ -1,4 +1,13 @@
-<div *ngIf="!paymentMethod && !pageLoading" class="container">
+
+<div *ngIf="loading" class="container">
+  <div class="row">
+    <div class="col-12 text-center choose-payment">
+      <img src="assets/img/loader.svg" height="36px" alt="Loader">
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!paymentMethod && !loading" class="container">
   <div class="row">
     <div class="col-12 text-center choose-payment">
       <h2>Choose your payment method</h2>
@@ -10,15 +19,7 @@
   </div>
 </div>
 
-<div *ngIf="!paymentMethod && pageLoading" class="container">
-  <div class="row">
-    <div class="col-12 text-center choose-payment">
-      <img src="assets/img/loader.svg" height="36px" alt="Loader">
-    </div>
-  </div>
-</div>
-
-<div *ngIf="paymentMethod == 'fiat'" class="container choose-payment">
+<div *ngIf="paymentMethod == 'fiat' && !loading" class="container choose-payment">
   <div class="row" *ngIf="!hasWallet">
     <h2 class="col-12 text-center">Paying With Credit Card</h2>
     <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="createWalletStep === 1">

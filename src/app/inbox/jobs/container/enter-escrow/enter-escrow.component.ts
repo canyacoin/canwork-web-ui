@@ -34,16 +34,17 @@ export class EnterEscrowComponent implements OnInit {
   job: Job;
   totalJobBudgetUsd: number;
 
+  paymentMethod: string;
+
   canPayOptions: CanPay;
   canexDisabled = false;
+
+  walletForm: FormGroup = null;
   createWalletStep = 0;
 
-  shoppersCollection: AngularFirestoreCollection<any>;
-  paymentMethod: string;
   hasWallet = false;
   limepayWallet: any;
-  pageLoading = true;
-  walletForm: FormGroup = null;
+  loading = true;
 
   constructor(private ethService: EthService,
     private afs: AngularFirestore,
@@ -62,14 +63,12 @@ export class EnterEscrowComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('Entering escrow payment');
     const jobId = this.activatedRoute.parent.snapshot.params['id'] || null;
     if (jobId) {
       this.jobService.getJob(jobId).take(1).subscribe(async (job: Job) => {
         this.totalJobBudgetUsd = await this.jobService.getJobBudgetUsd(job);
         this.job = job;
-        await this.isAShopper(this.job.clientId);
-        this.pageLoading = false;
+        this.loading = false;
       });
     }
   }
@@ -77,24 +76,23 @@ export class EnterEscrowComponent implements OnInit {
   async setPaymentMethod(type: string) {
     if (type === 'fiat') {
       this.paymentMethod = 'fiat';
-      if (!this.hasWallet) {
-        this.createWalletStep = 1;
+      this.loading = true;
+      try {
+        const shopper = await this.limepayService.getShopper();
+        this.hasWallet = !!shopper.walletAddress;
+        if (!this.hasWallet) {
+          this.createWalletStep = 1;
+        } else {
+          this.limepayWallet = await this.limepayService.getWallet();
+          this.createWalletStep = 2;
+        }
+      } catch (e) {
+        this.error = true;
       }
-      console.log('paying with fiat...');
     } else if (type === 'crypto') {
       this.paymentMethod = 'crypto';
     } else {
       this.paymentMethod = null;
-    }
-  }
-
-  async isAShopper(clientId: string) {
-    try {
-      const wallet = await this.limepayService.isShopper(clientId);
-      this.hasWallet = true;
-      this.limepayWallet = wallet;
-    } catch {
-      this.hasWallet = false;
     }
   }
 
