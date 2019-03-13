@@ -129,8 +129,7 @@ export class EnterEscrowComponent implements OnInit {
       const { transactions, paymentToken } = await this.limepayService.initFiatPayment(this.job.id, this.job.providerId);
       console.log(transactions, paymentToken);
       this.transactions = transactions;
-      this.fiatPayment = await this.limepayService.library.FiatPayments.load(paymentToken);
-      console.log(this.fiatPayment);
+      this.paymentToken = paymentToken;
       const walletToken = this.limepayService.getWalletToken();
       console.log(this.walletForm);
       this.signedTransactions = await this.limepayService.library.Transactions.signWithLimePayWallet(this.transactions, walletToken, this.walletForm.value.password);
@@ -146,7 +145,8 @@ export class EnterEscrowComponent implements OnInit {
 
   // The function is trigger once the user submits the payment form
   async processFiatPayment() {
-    // // Extracting the Card holder information from the form
+    // // Extracting the Card hold
+      // this.fiatPayment = await this.limepayService.library.FiatPayments.load(this.paymentToken);
     // const cardHolderInformation = {
     //     vatNumber: document.getElementById('vat-number').value,
     //     name: document.getElementById('card-holder-name').value,
