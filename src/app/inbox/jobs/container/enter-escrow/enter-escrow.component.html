@@ -1,10 +1,6 @@
 
-<div *ngIf="loading" class="container">
-  <div class="row">
-    <div class="col-12 text-center choose-payment">
-      <img src="assets/img/loader.svg" height="36px" alt="Loader">
-    </div>
-  </div>
+<div *ngIf="loading" class="container d-flex h-50 flex-column justify-content-center" style="min-height: 640px;">
+    <img src="assets/img/loader.svg" height="36px" alt="Loader">
 </div>
 
 <div *ngIf="!paymentMethod && !loading" class="container">
@@ -19,10 +15,18 @@
   </div>
 </div>
 
-<div *ngIf="paymentMethod == 'fiat' && !loading" class="container choose-payment">
-  <div class="row" *ngIf="!hasWallet">
+<div *ngIf="paymentMethod == 'fiat' && error" class="container">
+  <div class="row">
+    <div class="col-12 text-center choose-payment">
+      Uh-oh.. something went wrong
+    </div> 
+  </div>
+</div>
+
+<div *ngIf="paymentMethod == 'fiat' && !loading && !error" class="container choose-payment">
+  <div class="row">
     <h2 class="col-12 text-center">Paying With Credit Card</h2>
-    <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="createWalletStep === 1">
+    <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 0">
       <h4>
         Generate Wallet
       </h4>
@@ -44,7 +48,7 @@
       <button [disabled]="!walletForm.valid" class="btn btn-primary m-5" data-toggle="modal" data-target="#savePassword">Get
         Wallet</button>
     </div>
-    <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="createWalletStep === 2">
+    <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 1">
       <h4>
         Generating Wallet
       </h4>
@@ -55,11 +59,8 @@
       </p>
       <br>
     </div>
-  </div>
 
-  <div class="row" *ngIf="hasWallet">
-    <h2 class="col-12 text-center">Paying With Credit Card</h2>
-    <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet">
+    <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 2">
       <h4>
         Unlock Wallet
       </h4>
@@ -76,7 +77,7 @@
         </form>
       </div>
       <button (click)="paymentMethod = null" class="btn btn-danger m-5">Cancel</button>
-      <button [disabled]="!walletForm.valid" class="btn btn-primary m-5" data-toggle="modal" data-target="#savePassword">Get
+      <button [disabled]="!walletForm.valid" class="btn btn-primary m-5" (click)="unlockWallet()">Get
         Wallet</button>
     </div>
   </div>

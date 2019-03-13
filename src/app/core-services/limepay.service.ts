@@ -1,7 +1,9 @@
+import { UserService } from '@service/user.service';
 import { AuthService } from '@service/auth.service';
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { environment } from '@env/environment';
+import LimePayWeb from 'limepay-web';
 
 const apiUrl = environment.limepay.uri;
 
@@ -21,9 +23,10 @@ export class LimepayService {
 
   constructor(
     private http: Http,
-    private auth: AuthService
+    private auth: AuthService,
+    private userService: UserService,
   ) {
-    LimePayWeb.connect(environment.limepay.env).then(limepay => {
+    LimePayWeb.connect(LimePayWeb.Environment[environment.limepay.env]).then(limepay => {
       this.limepay = limepay;
     }).catch(e => {
       console.log(e);
@@ -34,7 +37,7 @@ export class LimepayService {
     return this.limepay;
   }
 
-  async get options() {
+  async getOptions() {
     try {
       const token = await this.auth.getJwt();
       const options = {
@@ -52,25 +55,28 @@ export class LimepayService {
 
   async getEnterEscrowTransactions(jobId): Promise<any> {
     try {
-      const res = await this.http.get(`${apiUrl}/auth/enter-escrow-tx?jobId=${jobId}`, await this.options).take(1).toPromise();
+      const res = await this.http.get(`${apiUrl}/auth/enter-escrow-tx?jobId=${jobId}`, await this.getOptions()).take(1).toPromise();
+      return Promise.resolve(res.json());
     } catch (e) {
       console.log(`Error in getEnterEscrowTransactions: `, e);
       return Promise.reject(e);
     }
   }
 
-  async initFiatPayment(jobId, providerEthAddress): Promise<any> {
+  async initFiatPayment(jobId, providerId): Promise<any> {
     try {
-      const res = await this.http.post(`${apiUrl}/auth/fiatpayment`, { jobId , providerEthAddress } , await this.options).take(1).toPromise();
+      const provider = await this.userService.getUser(providerId);
+      const res = await this.http.post(`${apiUrl}/auth/initFiatPayment`, { jobId , providerEthAddress: provider.ethAddress } , await this.getOptions()).take(1).toPromise();
+      return Promise.resolve(res.json());
     } catch (e) {
       console.log(`Error in initFiatPayment: `, e);
       return Promise.reject(e);
     }
   }
 
-  async createShopper(userId) {
+  async createShopper() {
     try {
-      const res = await this.http.post(`${apiUrl}/auth/createShopper`, {}, await this.options).take(1).toPromise();
+      const res = await this.http.post(`${apiUrl}/auth/createShopper`, {}, await this.getOptions()).take(1).toPromise();
       console.log(res);
       return Promise.resolve(res.json());
     } catch (e) {
@@ -79,9 +85,9 @@ export class LimepayService {
     }
   }
 
-  async getShopper(userId) {
+  async getShopper() {
     try {
-      const res = await this.http.get(`${apiUrl}/auth/getShopper`, await this.options).take(1).toPromise();
+      const res = await this.http.get(`${apiUrl}/auth/getShopper`, await this.getOptions()).take(1).toPromise();
       console.log(res);
       return Promise.resolve(res.json());
     } catch (e) {
@@ -92,9 +98,8 @@ export class LimepayService {
 
   async getWallet() {
     try {
-      const res = await this.http.get(`${apiUrl}/auth/getWalletToken`, await this.options).take(1).toPromise();
-      console.log(`Wallet token: ${res.json()}`);
-      const wallet = await this.library.Wallet.get(res.json());
+      const walletToken = await this.getWalletToken();
+      const wallet = await this.library.Wallet.get(walletToken);
       return Promise.resolve(wallet);
     } catch (e) {
       console.log(`Error in getWallet: `, e);
@@ -102,16 +107,25 @@ export class LimepayService {
     }
   }
 
+
   async createWallet(password) {
     try {
-      const res = await this.http.get(`${apiUrl}/auth/getWalletToken`, await this.options).take(1).toPromise();
-      console.log(`Wallet token: `, res.json());
-      const mnemonic = await this.library.Wallet.create(res.json(), password);
-      const wallet = await this.library.Wallet.get(res.json());
-      console.log(`Wallet: `, wallet);
-      return Promise.resolve(wallet);
+      const walletToken = await this.getWalletToken();
+      console.log(`Wallet token: `, walletToken);
+      const mnemonic = await this.library.Wallet.create(walletToken, password);
+      return Promise.resolve(walletToken);
     } catch (e) {
       console.log(`Error in createWallet: `, e);
+      return Promise.reject(e);
+    }
+  }
+
+  async getWalletToken() {
+    try {
+      const res = await this.http.get(`${apiUrl}/auth/getWalletToken`, await this.getOptions()).take(1).toPromise();
+      return Promise.resolve(res.json().walletToken);
+    } catch (e) {
+      console.log(`Error in getWalletToken: `, e);
       return Promise.reject(e);
     }
   }

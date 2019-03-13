@@ -38,6 +38,7 @@
     "firebaseui-angular": "^3.3.2",
     "ipfs-api": "^24.0.2",
     "jwt-decode": "^2.2.0",
+    "limepay-web": "^0.3.4",
     "moment": "^2.20.1",
     "moment-timezone": "^0.5.14",
     "ng2-bootstrap-modal": "https://github.com/Sky4CE/ng2-bootstrap-modal/tarball/v.1.0.2",

@@ -24,6 +24,13 @@ import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/fires
 
 import { environment } from '@env/environment';
 
+enum FiatPaymentSteps {
+  walletInitCreation = 0,
+  walletProcessCreation = 1,
+  walletUnlock = 2,
+  collectDetails = 3
+}
+
 @Component({
   selector: 'app-enter-escrow',
   templateUrl: './enter-escrow.component.html',
@@ -31,20 +38,24 @@ import { environment } from '@env/environment';
 })
 export class EnterEscrowComponent implements OnInit {
 
+
+  loading = true;
+  paymentMethod: string;
+  error;
+
   job: Job;
   totalJobBudgetUsd: number;
-
-  paymentMethod: string;
 
   canPayOptions: CanPay;
   canexDisabled = false;
 
   walletForm: FormGroup = null;
-  createWalletStep = 0;
+  fiatPaymentStep: FiatPaymentSteps;
 
-  hasWallet = false;
-  limepayWallet: any;
-  loading = true;
+  shopper: any;
+  fiatPayment: any;
+  transactions: any;
+  signedTransactions: any;
 
   constructor(private ethService: EthService,
     private afs: AngularFirestore,
@@ -74,54 +85,64 @@ export class EnterEscrowComponent implements OnInit {
   }
 
   async setPaymentMethod(type: string) {
+    this.paymentMethod = type;
     if (type === 'fiat') {
-      this.paymentMethod = 'fiat';
-      this.loading = true;
       try {
-        const shopper = await this.limepayService.getShopper();
-        this.hasWallet = !!shopper.walletAddress;
-        if (!this.hasWallet) {
-          this.createWalletStep = 1;
-        } else {
-          this.limepayWallet = await this.limepayService.getWallet();
-          this.createWalletStep = 2;
+        this.loading = true;
+        this.shopper = await this.limepayService.getShopper();
+        if (!this.shopper) {
+          this.shopper = await this.limepayService.createShopper();
         }
+        if (!this.shopper.walletAddress) {
+          this.fiatPaymentStep = FiatPaymentSteps.walletInitCreation;
+        } else {
+          this.fiatPaymentStep = FiatPaymentSteps.walletUnlock;
+        }
+        this.loading = false;
       } catch (e) {
-        this.error = true;
+        this.error = e;
+        this.loading = false;
       }
-    } else if (type === 'crypto') {
-      this.paymentMethod = 'crypto';
-    } else {
-      this.paymentMethod = null;
     }
   }
 
+  async createWallet() {
+    this.fiatPaymentStep = FiatPaymentSteps.walletProcessCreation;
+    try {
+      await this.limepayService.createWallet(this.walletForm.value.password);
+      this.initialiseFiatPayment();
+    } catch (e) {
+      this.error = e;
+    }
+  }
 
-  async getWallet() {
-    this.limepayService.getWallet().then((wallet) => {
-      console.log(wallet);
-    }).catch(e => {
-      console.log(e);
-    });
+  unlockWallet() {
+    // todo - would be nice to quickly check if password is correct, need to grab wallet and then use ethers to check
+    // otherwise, just try and use it by init fiat payment:
+
+    this.initialiseFiatPayment();
   }
 
   async initialiseFiatPayment() {
-    const provider = await this.userService.getUser(this.job.providerId);
-    const token = this.limepayService.initFiatPayment(this.job.id, provider.ethAddress);
-    // Unlocks the payment form
-    fiatPayment = await this.limepayService.library.FiatPayments.load(token);
-}
+    try {
+      this.loading = true;
+      const { transactions, paymentToken } = await this.limepayService.initFiatPayment(this.job.id, this.job.providerId);
+      this.transactions = transactions;
+      this.fiatPayment = await this.limepayService.library.FiatPayments.load(paymentToken);
+
+      const walletToken = this.limepayService.getWalletToken();
+      this.signedTransactions = await this.limepayService.library.Transactions.signWithLimePayWallet(this.transactions, walletToken, this.walletForm.value.password);
+      console.log(this.signedTransactions);
+      this.fiatPaymentStep = FiatPaymentSteps.collectDetails;
+      this.loading = false;
+    } catch (e) {
+      this.error = e;
+      this.loading = false;
+    }
+  }
 
   // The function is trigger once the user submits the payment form
   async processFiatPayment() {
-
-    // Get the shopper JSON wallet
-
-    // const transactions = await this.limepayService.getEnterEscrowTransactions(this.job.id);
-
-    // Signs the provided transactions using the Shoppers wallet
-    // const signedTXs = await limepay.Transactions.signWithEncryptedWallet(transactions, JSON.stringify(shopperWallet), SHOPPER_WALLET_PASSPHRASE);
-
     // // Extracting the Card holder information from the form
     // const cardHolderInformation = {
     //     vatNumber: document.getElementById('vat-number').value,
@@ -142,14 +163,8 @@ export class EnterEscrowComponent implements OnInit {
     //     .then(res => {
     //         alert("done!");
     //     });
-}
-
-  async createWallet() {
-    console.log('Creating Wallet');
-    const shopper = this.userService.getUser(this.job.clientId);
-    this.createWalletStep = 2;
-    this.limepayService.createShopper(this.job.clientId);
   }
+
 
   async startCanpay() {
     const canexToggle = await this.featureService.getFeatureConfig('canexchange');

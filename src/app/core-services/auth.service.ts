@@ -38,7 +38,6 @@ export class AuthService {
       await firebase.auth().onAuthStateChanged(async user => {
         if (user) {
           const token = await user.getIdToken(true);
-          console.log('+ 2 refreshed token', token);
           resolve(token);
         } else {
           resolve('');
