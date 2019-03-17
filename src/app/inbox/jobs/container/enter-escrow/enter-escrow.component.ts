@@ -56,6 +56,7 @@ export class EnterEscrowComponent implements OnInit {
   fiatPayment: any;
   transactions: any;
   signedTransactions: any;
+  paymentToken: any;
 
   constructor(private ethService: EthService,
     private afs: AngularFirestore,
@@ -127,6 +128,7 @@ export class EnterEscrowComponent implements OnInit {
     try {
       this.loading = true;
       const { transactions, paymentToken } = await this.limepayService.initFiatPayment(this.job.id, this.job.providerId);
+      console.log('got the stuff.');
       console.log(transactions, paymentToken);
       this.transactions = transactions;
       this.paymentToken = paymentToken;
@@ -146,7 +148,7 @@ export class EnterEscrowComponent implements OnInit {
   // The function is trigger once the user submits the payment form
   async processFiatPayment() {
     // // Extracting the Card hold
-      // this.fiatPayment = await this.limepayService.library.FiatPayments.load(this.paymentToken);
+    // this.fiatPayment = await this.limepayService.library.FiatPayments.load(this.paymentToken);
     // const cardHolderInformation = {
     //     vatNumber: document.getElementById('vat-number').value,
     //     name: document.getElementById('card-holder-name').value,

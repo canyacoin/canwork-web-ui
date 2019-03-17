@@ -1,6 +1,5 @@
-
 <div *ngIf="loading" class="container d-flex h-50 flex-column justify-content-center" style="min-height: 640px;">
-    <img src="assets/img/loader.svg" height="36px" alt="Loader">
+  <img src="assets/img/loader.svg" height="36px" alt="Loader">
 </div>
 
 <div *ngIf="!paymentMethod && !loading" class="container">
@@ -19,7 +18,7 @@
   <div class="row">
     <div class="col-12 text-center choose-payment">
       Uh-oh.. something went wrong
-    </div> 
+    </div>
   </div>
 </div>
 
@@ -79,6 +78,48 @@
       <button (click)="paymentMethod = null" class="btn btn-danger m-5">Cancel</button>
       <button [disabled]="!walletForm.valid" class="btn btn-primary m-5" (click)="unlockWallet()">Get
         Wallet</button>
+    </div>
+
+
+    <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 3">
+      <h4>
+        Pay
+      </h4>
+      <form id="checkout-form" onsubmit="processPayment()">
+        <div class="col-12">
+          <!--Field for Credit card number -->
+          <div class="form-group">
+            <label for="card-number">Card Number</label>
+            <div class="input-group">
+             
+              <input class="form-control" type="number" id="card-number" data-bluesnap="ccn">
+              <div id="card-logo" class="input-group-addon">
+                <img src="https://files.readme.io/d1a25b4-generic-card.png" height="20px">
+              </div>
+            </div>
+            <span class="helper-text" id="ccn-help"></span>
+          </div>
+
+          <!--Field for CVV-->
+          <div class="form-group row">
+            <div class="col-6"> 
+                <!--Field for CVV-->
+              <label for="cvv">CVV</label> 
+              <input  type="text" class="form-control" id="cvv" data-bluesnap="cvv">
+              <span class="helper-text" id="cvv-help"></span>
+            </div> 
+            
+
+            <!--Field for EXP-->
+            <div class="col-6">
+              <label for="exp-date">Exp. (MM/YY)</label>
+              <input type="text" class="form-control" id="exp-date" data-bluesnap="exp">
+              <span class="helper-text" id="exp-help"></span>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-raised btn-info btn-lg col-md-4" type="submit" id="submit-button">Pay Now</button>
+      </form>
     </div>
   </div>
 </div>
