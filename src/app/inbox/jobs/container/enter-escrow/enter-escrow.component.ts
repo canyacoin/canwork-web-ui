@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
@@ -20,6 +20,8 @@ import { GenerateGuid } from '@util/generate.uid';
 import 'rxjs/add/operator/take';
 import { Subscription } from 'rxjs/Subscription';
 import { map, take } from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
+import { HttpClient } from '@angular/common/http';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 
 import { environment } from '@env/environment';
@@ -28,7 +30,9 @@ enum FiatPaymentSteps {
   walletInitCreation = 0,
   walletProcessCreation = 1,
   walletUnlock = 2,
-  collectDetails = 3
+  collectDetails = 3,
+  processing = 4,
+  end = 5
 }
 
 @Component({
@@ -36,7 +40,7 @@ enum FiatPaymentSteps {
   templateUrl: './enter-escrow.component.html',
   styleUrls: ['./enter-escrow.component.css']
 })
-export class EnterEscrowComponent implements OnInit {
+export class EnterEscrowComponent implements OnInit, AfterViewInit {
 
 
   loading = true;
@@ -48,8 +52,9 @@ export class EnterEscrowComponent implements OnInit {
 
   canPayOptions: CanPay;
   canexDisabled = false;
-
+  countryList: any;
   walletForm: FormGroup = null;
+  cardForm: FormGroup = null;
   fiatPaymentStep: FiatPaymentSteps;
 
   shopper: any;
@@ -68,9 +73,20 @@ export class EnterEscrowComponent implements OnInit {
     private featureService: FeatureToggleService,
     private activatedRoute: ActivatedRoute,
     private momentService: MomentService,
-    private router: Router) {
+    private router: Router,
+    private http: HttpClient) {
     this.walletForm = this.formBuilder.group({
       password: ['', Validators.compose([Validators.required])]
+    });
+    this.cardForm = this.formBuilder.group({
+      cardNumber: ['', Validators.compose([Validators.required])],
+      cvv: ['', Validators.compose([Validators.required])],
+      countryCode: ['', Validators.compose([Validators.required])],
+      name: ['', Validators.compose([Validators.required])],
+      expDate: ['', Validators.compose([Validators.required])],
+      business: ['', Validators.compose([Validators.required])],
+      zip: ['', Validators.compose([Validators.required])],
+      street: ['', Validators.compose([Validators.required])]
     });
   }
 
@@ -83,6 +99,19 @@ export class EnterEscrowComponent implements OnInit {
         this.loading = false;
       });
     }
+  }
+
+  ngAfterViewInit() {
+    this.getJSON().subscribe(data => {
+      const result = Object.keys(data).map(function (key) {
+        return [key, data[key]];
+      });
+      this.countryList = result;
+    });
+  }
+
+  public getJSON(): Observable<any> {
+    return this.http.get('../../assets/js/countryCodes.json');
   }
 
   async setPaymentMethod(type: string) {
@@ -147,7 +176,24 @@ export class EnterEscrowComponent implements OnInit {
 
   // The function is trigger once the user submits the payment form
   async processFiatPayment() {
-    // // Extracting the Card hold
+    const cardHolderInformation = {
+      cardNumber: this.cardForm.value.cardNumber,
+      cvv: this.cardForm.value.cvv,
+      countryCode: this.cardForm.value.countryCode,
+      name: this.cardForm.value.name,
+      expDate: this.cardForm.value.expDate,
+      isCompany: this.cardForm.value.business,
+      street: this.cardForm.value.street
+    };
+    console.log(cardHolderInformation);
+    this.fiatPayment = await this.limepayService.library.FiatPayments.load(this.paymentToken);
+    this.fiatPayment.process(cardHolderInformation, this.signedTransactions)
+      .then(res => {
+        console.log(res);
+        alert('done');
+      });
+    //
+    // Extracting the Card hold
     // this.fiatPayment = await this.limepayService.library.FiatPayments.load(this.paymentToken);
     // const cardHolderInformation = {
     //     vatNumber: document.getElementById('vat-number').value,
@@ -164,10 +210,7 @@ export class EnterEscrowComponent implements OnInit {
     // }
 
     // // Triggers the processing of the payment
-    // fiatPayment.process(cardHolderInformation, signedTXs)
-    //     .then(res => {
-    //         alert("done!");
-    //     });
+
   }
 
 
