@@ -132,9 +132,8 @@ export class EnterEscrowComponent implements OnInit {
       console.log(transactions, paymentToken);
       this.transactions = transactions;
       this.paymentToken = paymentToken;
-      const walletToken = await this.limepayService.getWalletToken();
       console.log(this.walletForm);
-      this.signedTransactions = await this.limepayService.library.Transactions.signWithLimePayWallet(this.transactions, walletToken, this.walletForm.value.password);
+      this.signedTransactions = await this.limepayService.library.Transactions.signWithLimePayWallet(this.transactions, paymentToken, this.walletForm.value.password);
       console.log(this.signedTransactions);
       this.fiatPaymentStep = FiatPaymentSteps.collectDetails;
       this.loading = false;
