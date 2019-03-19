@@ -261,6 +261,8 @@
                         <textarea class="form-control" #initialStage formControlName="initialStage" type="text" name="initialStage"
                           placeholder="eg. 'Ideation phase' or 'I have started work already'" maxlength="3000"
                           [class.invalid]="!shareableJobForm.controls.initialStage.valid && shareableJobForm.controls.initialStage.dirty"></textarea>
+                          <small *ngIf="!shareableJobForm.controls.initialStage.valid  && shareableJobForm.controls.initialStage.dirty"
+                            class="text-primary text-wrap">Project stage is required</small>
                       </div>
                     </div>
 
@@ -269,6 +271,8 @@
                         <label>Key skills required *</label>
                         <app-skill-tags-selection (tagsUpdated)="skillTagsUpdated($event)" [minimumTags]="1"></app-skill-tags-selection>
                         <input hidden #skillTags class="form-control" formControlName="skills" type="text" name="skills">
+                        <small *ngIf="!shareableJobForm.controls.skills.valid  && shareableJobForm.controls.skills.dirty"
+                          class="text-primary text-wrap">You must choose at least one skill</small>
                       </div>
                     </div>
 
@@ -384,6 +388,8 @@
                         <div class="row ml-0 mr-0">
                           <input #deadline formControlName="deadline" type="date" class="form-control" min="{{currentDate}}">
                         </div>
+                        <small *ngIf="!shareableJobForm.controls.deadline.valid  && shareableJobForm.controls.deadline.dirty"
+                          class="text-primary text-wrap">Deadline is required.</small>
                       </div>
                     </div>
 
