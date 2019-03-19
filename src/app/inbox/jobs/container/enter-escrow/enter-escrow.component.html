@@ -90,7 +90,7 @@
           <div class="form-group">
             <label for="card-name">Name</label>
             <div class="input-group">
-              <input class="form-control" type="text" id="card-holder-name" formControlName="name">
+              <input formControlName="name" class="form-control" type="text" id="card-holder-name">
             </div>
             <span class="helper-text" id="ccn-help"></span>
           </div>
@@ -98,7 +98,7 @@
           <div class="form-group">
             <label for="card-number">Card Number</label>
             <div class="input-group">
-              <input class="form-control" type="number" id="card-number" formControlName="cardNumber" data-bluesnap="ccn">
+              <input class="form-control" formControlName="cardNumber" type="number" id="card-number" data-bluesnap="ccn">
               <div id="card-logo" class="input-group-addon">
                 <img src="https://files.readme.io/d1a25b4-generic-card.png" height="20px">
               </div>
@@ -110,26 +110,30 @@
             <div class="col-6">
               <!--Field for CVV-->
               <label for="cvv">CVV</label>
-              <input type="text" class="form-control" id="cvv" formControlName="cvv" data-bluesnap="cvv">
+              <input type="text" formControlName="cvv" class="form-control" id="cvv" data-bluesnap="cvv">
               <span class="helper-text" id="cvv-help"></span>
             </div>
             <!--Field for EXP-->
             <div class="col-6">
               <label for="exp-date">Exp. (MM/YY)</label>
-              <input type="text" class="form-control" id="exp-date" formControlName="expDate" data-bluesnap="exp">
+              <input type="text" formControlName="expDate" class="form-control" id="exp-date" data-bluesnap="exp">
               <span class="helper-text" id="exp-help"></span>
             </div>
-            <div class="col-6">
+            <div class="col-sm-6">
               <label for="street">Street</label>
-              <input id="street" type="text" class="form-control" formControlName="street">
+              <input id="street" formControlName="street" type="text" class="form-control">
             </div>
-            <div class="col-6">
+            <div class="col-sm-3">
               <label for="country">Country</label>
               <input required id="country" name="country" list="countryList" formControlName="countryCode" class="form-control"
                 placeholder="Type in your country name...." />
               <datalist id="countryList">
-                <option *ngFor="let country of countryList" value="{{ country[0] }}" >{{country[1]}}</option>
+                <option *ngFor="let country of countryList" value="{{ country[0] }}">{{country[1]}}</option>
               </datalist>
+            </div>
+            <div class="col-sm-3">
+              <label for="street">ZIP</label>
+              <input id="zip" formControlName="zip" type="text" class="form-control">
             </div>
             <div class="col-12">
               <label for="isBusiness" class="m-5">Company Credit Card</label>
@@ -137,8 +141,8 @@
             </div>
           </div>
         </div>
-        <button class="btn btn-raised btn-info btn-lg col-md-4" [disabled]="!walletForm.valid" type="submit" (click)="processFiatPayment()"
-          id="submit-button">Pay Now</button>
+        <button class="btn btn-raised btn-info btn-lg col-md-4" type="submit" (click)="processFiatPayment()" id="submit-button">Pay
+          Now</button>
       </form>
     </div>
 

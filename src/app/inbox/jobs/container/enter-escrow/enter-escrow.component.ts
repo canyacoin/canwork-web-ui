@@ -84,7 +84,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       countryCode: ['', Validators.compose([Validators.required])],
       name: ['', Validators.compose([Validators.required])],
       expDate: ['', Validators.compose([Validators.required])],
-      business: ['', Validators.compose([Validators.required])],
+      business: [''],
       zip: ['', Validators.compose([Validators.required])],
       street: ['', Validators.compose([Validators.required])]
     });
@@ -182,10 +182,17 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       countryCode: this.cardForm.value.countryCode,
       name: this.cardForm.value.name,
       expDate: this.cardForm.value.expDate,
-      isCompany: this.cardForm.value.business,
-      street: this.cardForm.value.street
+      street: this.cardForm.value.street,
+      zip: this.cardForm.value.zip,
+      isCompany: false
     };
+    if (this.cardForm.value.business === true) {
+      cardHolderInformation.isCompany = true;
+    } else {
+      cardHolderInformation.isCompany = false;
+    }
     console.log(cardHolderInformation);
+    console.log(typeof (cardHolderInformation.isCompany));
     this.fiatPayment = await this.limepayService.library.FiatPayments.load(this.paymentToken);
     this.fiatPayment.process(cardHolderInformation, this.signedTransactions)
       .then(res => {
