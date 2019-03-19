@@ -1,3 +1,4 @@
+ 
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -80,11 +81,8 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       password: ['', Validators.compose([Validators.required])]
     });
     this.cardForm = this.formBuilder.group({
-      cardNumber: ['', Validators.compose([Validators.required])],
-      cvv: ['', Validators.compose([Validators.required])],
       countryCode: ['', Validators.compose([Validators.required])],
       name: ['', Validators.compose([Validators.required])],
-      expDate: ['', Validators.compose([Validators.required])],
       business: [''],
       zip: ['', Validators.compose([Validators.required])],
       street: ['', Validators.compose([Validators.required])]
@@ -164,80 +162,51 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       this.paymentToken = paymentToken;
       const walletToken = await this.limepayService.getWalletToken();
       console.log(this.walletForm);
-      this.signedTransactions = await this.limepayService.library.Transactions.signWithLimePayWallet(this.transactions, walletToken, this.walletForm.value.password);
-      console.log(this.signedTransactions);
-      this.fiatPaymentStep = FiatPaymentSteps.collectDetails;
       this.loading = false;
+      this.fiatPaymentStep = FiatPaymentSteps.collectDetails;
+      console.log(this.transactions);
+      this.signedTransactions = await this.limepayService.library.Transactions.signWithLimePayWallet(this.transactions, walletToken, this.walletForm.value.password);
+      console.log('signed transactions:');
+      console.log(this.signedTransactions);
+      this.initFiat();
     } catch (e) {
       console.log(e);
       this.error = e;
       this.loading = false;
     }
   }
-
+  async initFiat() {
+    this.fiatPayment = await this.limepayService.library.FiatPayments.load(this.paymentToken);
+  }
   // The function is trigger once the user submits the payment form
   async processFiatPayment() {
     const cardHolderInformation = {
-      cardNumber: this.cardForm.value.cardNumber,
-      cvv: this.cardForm.value.cvv,
-      countryCode: this.cardForm.value.countryCode,
-      name: this.cardForm.value.name,
-      expDate: this.cardForm.value.expDate,
-      street: this.cardForm.value.street,
-      zip: this.cardForm.value.zip,
+      name: String(this.cardForm.value.name),
+      countryCode: String(this.cardForm.value.countryCode),
+      vatNumber: '0',
+      zip: String(this.cardForm.value.countryCode),
+      street: String(this.cardForm.value.countryCode),
       isCompany: false
     };
+    console.log(this.cardForm.value.business);
     if (this.cardForm.value.business === true) {
-      cardHolderInformation.isCompany = true;
+      cardHolderInformation.isCompany = Boolean(true);
     } else {
       cardHolderInformation.isCompany = false;
     }
     console.log(cardHolderInformation);
     console.log(typeof (cardHolderInformation.isCompany));
-    this.fiatPayment = await this.limepayService.library.FiatPayments.load(this.paymentToken);
-    let paymentSuccess: boolean; // a boolean to check the status of the fiatPayment. currently hard coded
-    paymentSuccess = false;
-    if (paymentSuccess) {
-      this.fiatPaymentStep = FiatPaymentSteps.complete;
-    } else {
-      this.fiatPaymentStep = FiatPaymentSteps.failed;
-    }
-
-    /**
-    this.fiatPayment.process(cardHolderInformation, this.signedTransactions)
-      .then(res => {
+    console.log(this.fiatPayment);
+    console.log(cardHolderInformation);
+    try {
+      this.fiatPayment.process(cardHolderInformation, this.signedTransactions).then(res => {
         console.log(res);
-        if(res.status === true) {
-          const action = new IJobAction(ActionType.enterEscrow, UserType.client);
-          this.job.actionLog.push(action);
-          this.job.clientEthAddress = from;
-          clientEthAddress = from;
-          await this.jobService.saveJobFirebase(this.job);
-        } else {
-           this.fiatPaymentStep = FiatPaymentSteps.failed;
-        }
+        alert('payment processed');
       });
-    */
-
-    //
-    // Extracting the Card hold
-    // this.fiatPayment = await this.limepayService.library.FiatPayments.load(this.paymentToken);
-    // const cardHolderInformation = {
-    //     vatNumber: document.getElementById('vat-number').value,
-    //     name: document.getElementById('card-holder-name').value,
-    //     countryCode: document.getElementById('countries-codes').value,
-    //     zip: document.getElementById('zip-code').value,
-    //     street: document.getElementById('street-address').value
-    // };
-
-    // if (document.getElementById('company').checked) {
-    //     cardHolderInformation.isCompany = true;
-    // } else if (document.getElementById('personal').checked) {
-    //     cardHolderInformation.isCompany = false;
-    // }
-
-    // // Triggers the processing of the payment
-
+    } catch (error) {
+      alert('something\'s wrong!');
+      console.log(error);
+    }
   }
 
 

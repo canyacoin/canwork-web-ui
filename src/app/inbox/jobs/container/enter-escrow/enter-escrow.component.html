@@ -87,6 +87,33 @@
       </h4>
       <form [formGroup]="cardForm" id="checkout-form">
         <div class="col-12">
+          <!--Field for Credit card number -->
+          <div class="form-group row">
+            <div class="col-12">
+              <label for="card-number">Card Number</label>
+              <div class="input-group">
+                <div id="card-number" data-bluesnap="ccn"></div>
+                <div id="card-logo" class="input-group-addon">
+                  <img src="https://files.readme.io/d1a25b4-generic-card.png" height="20px">
+                </div>
+              </div>
+              <span class="helper-text" id="ccn-help"></span>
+            </div>
+            <div class="col-6">
+              <!--Field for CVV-->
+              <label for="cvv">CVV</label>
+              <div id="cvv" data-bluesnap="cvv"></div>
+              <span class="helper-text" id="cvv-help"></span>
+            </div>
+            <!--Field for EXP-->
+            <div class="col-6">
+              <label for="exp-date">Exp. (MM/YY)</label>
+              <div id="exp-date" data-bluesnap="exp"></div>
+              <span class="helper-text" id="exp-help"></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
           <div class="form-group">
             <label for="card-name">Name</label>
             <div class="input-group">
@@ -94,31 +121,7 @@
             </div>
             <span class="helper-text" id="ccn-help"></span>
           </div>
-          <!--Field for Credit card number -->
-          <div class="form-group">
-            <label for="card-number">Card Number</label>
-            <div class="input-group">
-              <input class="form-control" formControlName="cardNumber" type="number" id="card-number" data-bluesnap="ccn">
-              <div id="card-logo" class="input-group-addon">
-                <img src="https://files.readme.io/d1a25b4-generic-card.png" height="20px">
-              </div>
-            </div>
-            <span class="helper-text" id="ccn-help"></span>
-          </div>
-          <!--Field for CVV-->
           <div class="form-group row">
-            <div class="col-6">
-              <!--Field for CVV-->
-              <label for="cvv">CVV</label>
-              <input type="text" formControlName="cvv" class="form-control" id="cvv" data-bluesnap="cvv">
-              <span class="helper-text" id="cvv-help"></span>
-            </div>
-            <!--Field for EXP-->
-            <div class="col-6">
-              <label for="exp-date">Exp. (MM/YY)</label>
-              <input type="text" formControlName="expDate" class="form-control" id="exp-date" data-bluesnap="exp">
-              <span class="helper-text" id="exp-help"></span>
-            </div>
             <div class="col-sm-6">
               <label for="street">Street</label>
               <input id="street" formControlName="street" type="text" class="form-control">
