@@ -266,7 +266,7 @@
 
                     <div class="form-group" *ngIf="!editing">
                       <div class="col-12">
-                        <label>Key skills required</label>
+                        <label>Key skills required *</label>
                         <app-skill-tags-selection (tagsUpdated)="skillTagsUpdated($event)" [minimumTags]="1"></app-skill-tags-selection>
                         <input hidden #skillTags class="form-control" formControlName="skills" type="text" name="skills">
                       </div>
@@ -379,7 +379,7 @@
                         </select>
                       </div>
                       <div class="col-sm-6">
-                        <label>Deadline</label>
+                        <label>Deadline *</label>
                         <br />
                         <div class="row ml-0 mr-0">
                           <input #deadline formControlName="deadline" type="date" class="form-control" min="{{currentDate}}">
