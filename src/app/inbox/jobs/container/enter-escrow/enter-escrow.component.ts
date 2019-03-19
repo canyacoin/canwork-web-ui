@@ -32,7 +32,8 @@ enum FiatPaymentSteps {
   walletUnlock = 2,
   collectDetails = 3,
   processing = 4,
-  end = 5
+  failed = 5,
+  complete = 6
 }
 
 @Component({
@@ -194,11 +195,30 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     console.log(cardHolderInformation);
     console.log(typeof (cardHolderInformation.isCompany));
     this.fiatPayment = await this.limepayService.library.FiatPayments.load(this.paymentToken);
+    let paymentSuccess: boolean; // a boolean to check the status of the fiatPayment. currently hard coded
+    paymentSuccess = false;
+    if (paymentSuccess) {
+      this.fiatPaymentStep = FiatPaymentSteps.complete;
+    } else {
+      this.fiatPaymentStep = FiatPaymentSteps.failed;
+    }
+
+    /**
     this.fiatPayment.process(cardHolderInformation, this.signedTransactions)
       .then(res => {
         console.log(res);
-        alert('done');
+        if(res.status === true) {
+          const action = new IJobAction(ActionType.enterEscrow, UserType.client);
+          this.job.actionLog.push(action);
+          this.job.clientEthAddress = from;
+          clientEthAddress = from;
+          await this.jobService.saveJobFirebase(this.job);
+        } else {
+           this.fiatPaymentStep = FiatPaymentSteps.failed;
+        }
       });
+    */
+
     //
     // Extracting the Card hold
     // this.fiatPayment = await this.limepayService.library.FiatPayments.load(this.paymentToken);

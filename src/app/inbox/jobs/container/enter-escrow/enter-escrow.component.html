@@ -152,6 +152,34 @@
         <h2 class="m-5">Paying...</h2>
       </div>
     </div>
+
+    <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 5">
+      <div class="container">
+        <div>
+          <img src="/assets/img/CanYa_red_cross.svg" class="img-responsiveness mt-10 animated bounceInUp" width="150">
+          <h2>Payment Failed!</h2>
+          <p class="lead fw-400">Something went wrong when processing your payment. Please try again later.</p>
+        </div>
+        <p class="text-center">
+          <a class="btn btn-secondary" [routerLink]="['/inbox/jobs']">Return</a>
+        </p>
+      </div>
+    </div>
+    <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 6">
+      <div class="container">
+        <div class="section-header">
+          <img src="assets/img/CanYa_tick_green.svg" class="mb-30 animated bounceInDown" width="100px" height="100px">
+          <h2>Payment complete!</h2>
+          <p class="lead fw-400">Job Will now be commenced</p>
+          <hr>
+        </div>
+        <br>
+        <p class="text-center">
+          <a class="btn btn-secondary" [routerLink]="['/inbox/jobs']">Return</a>
+        </p>
+      </div>
+    </div>
+
   </div>
 </div>
 
