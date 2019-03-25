@@ -1,4 +1,4 @@
- 
+
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -46,12 +46,15 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
 
 
   loading = true;
+  loadingCreditCard = true;
+  paying = false;
   paymentMethod: string;
+  paymentObj: any;
   error;
 
   job: Job;
+  errorMsg: string;
   totalJobBudgetUsd: number;
-
   canPayOptions: CanPay;
   canexDisabled = false;
   countryList: any;
@@ -109,6 +112,16 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     });
   }
 
+  lookupCountryCode(countryName: string) {
+    for (let i = 0; i < this.countryList.length; i++) {
+      // This if statement depends on the format of your array
+      if (this.countryList[i][1] === countryName) {
+        return this.countryList[i][0];   // Found it
+      }
+    }
+    return null;   // Not found
+  }
+
   public getJSON(): Observable<any> {
     return this.http.get('../../assets/js/countryCodes.json');
   }
@@ -148,20 +161,20 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   unlockWallet() {
     // todo - would be nice to quickly check if password is correct, need to grab wallet and then use ethers to check
     // otherwise, just try and use it by init fiat payment:
-
     this.initialiseFiatPayment();
   }
 
   async initialiseFiatPayment() {
     try {
       this.loading = true;
-      const { transactions, paymentToken } = await this.limepayService.initFiatPayment(this.job.id, this.job.providerId);
+      const { transactions, paymentToken, createdPayment } = await this.limepayService.initFiatPayment(this.job.id, this.job.providerId);
       console.log('got the stuff.');
-      console.log(transactions, paymentToken);
+      console.log(transactions, paymentToken, createdPayment);
       this.transactions = transactions;
       this.paymentToken = paymentToken;
+      this.paymentObj = createdPayment;
       const walletToken = await this.limepayService.getWalletToken();
-      console.log(this.walletForm);
+      console.log(walletToken);
       this.loading = false;
       this.fiatPaymentStep = FiatPaymentSteps.collectDetails;
       console.log(this.transactions);
@@ -176,36 +189,41 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     }
   }
   async initFiat() {
+    this.loadingCreditCard = true;
     this.fiatPayment = await this.limepayService.library.FiatPayments.load(this.paymentToken);
+    this.loadingCreditCard = false;
+    const iFrameCvv = document.getElementById('bluesnap-hosted-iframe-cvv');
+    const iFrameExp = document.getElementById('bluesnap-hosted-iframe-exp');
+    iFrameCvv.style.height = '30px';
+    iFrameExp.style.height = '30px';
+    iFrameCvv.style.border = '1px solid #ebebeb';
+    iFrameExp.style.border = '1px solid #ebebeb';
   }
   // The function is trigger once the user submits the payment form
   async processFiatPayment() {
     const cardHolderInformation = {
       name: String(this.cardForm.value.name),
-      countryCode: String(this.cardForm.value.countryCode),
-      vatNumber: '0',
-      zip: String(this.cardForm.value.countryCode),
-      street: String(this.cardForm.value.countryCode),
+      countryCode: String(this.lookupCountryCode(this.cardForm.value.countryCode)),
+      zip: String(this.cardForm.value.zip),
+      street: String(this.cardForm.value.street),
       isCompany: false
     };
-    console.log(this.cardForm.value.business);
-    if (this.cardForm.value.business === true) {
-      cardHolderInformation.isCompany = Boolean(true);
-    } else {
-      cardHolderInformation.isCompany = false;
-    }
-    console.log(cardHolderInformation);
-    console.log(typeof (cardHolderInformation.isCompany));
-    console.log(this.fiatPayment);
-    console.log(cardHolderInformation);
+    this.paying = true;
     try {
-      this.fiatPayment.process(cardHolderInformation, this.signedTransactions).then(res => {
-        console.log(res);
-        alert('payment processed');
-      });
+      const result = await this.fiatPayment.process(cardHolderInformation, this.signedTransactions);
+      console.log(result);
+      const action = new IJobAction(ActionType.enterEscrow, UserType.client);
+      this.job.actionLog.push(action);
+      this.job.clientEthAddress = null;
+      await this.jobService.saveJobFirebase(this.job);
     } catch (error) {
-      alert('something\'s wrong!');
+      this.errorMsg = JSON.stringify(error.message);
+      this.fiatPaymentStep = FiatPaymentSteps.failed;
       console.log(error);
+    }
+    if (this.fiatPaymentStep = FiatPaymentSteps.complete) {
+      const status = await this.limepayService.getPaymentStatus(this.paymentObj._id);
+      console.log(status);
     }
   }
 
@@ -213,9 +231,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   async startCanpay() {
     const canexToggle = await this.featureService.getFeatureConfig('canexchange');
     this.canexDisabled = !canexToggle.enabled;
-
     let clientEthAddress = this.ethService.getOwnerAccount();
-
     const onAuthTxHash = async (txHash: string, from: string) => {
       /* IF authorisation hash gets sent, do:
          post tx to transaction monitor

@@ -1,8 +1,17 @@
+#bluesnap-hosted-iframe-ccn,
 #ccn,
 #cvv,
-#exp {
-  height: 30px !important;
-  max-height: 30px !important;
+#exp,
+#bluesnap-hosted-iframe-cvv,
+#bluesnap-hosted-iframe-exp,
+ {
+  height: 50px !important;
+  max-height: 50px !important;
+}
+
+
+body {
+  height: auto !important;
 }
 
 .btn-payment-type {

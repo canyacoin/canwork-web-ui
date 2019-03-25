@@ -8,7 +8,8 @@
       <h2>Choose your payment method</h2>
       <button class="btn-payment-type" (click)="setPaymentMethod('fiat')"><img src="assets/img/credit-card.svg"><br>Pay
         with<br>Credit card</button>
-      <button class="btn-payment-type" (click)="setPaymentMethod('crypto'); startCanpay() "><img src="assets/img/ethereum.svg"><br>Pay
+      <button class="btn-payment-type" (click)="setPaymentMethod('crypto'); startCanpay() "><img
+          src="assets/img/ethereum.svg"><br>Pay
         with<br>Cryptocurrency</button>
     </div>
   </div>
@@ -44,7 +45,8 @@
         </form>
       </div>
       <button (click)="paymentMethod = null" class="btn btn-danger m-5">Cancel</button>
-      <button [disabled]="!walletForm.valid" class="btn btn-primary m-5" data-toggle="modal" data-target="#savePassword">Get
+      <button [disabled]="!walletForm.valid" class="btn btn-primary m-5" data-toggle="modal"
+        data-target="#savePassword">Get
         Wallet</button>
     </div>
     <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 1">
@@ -88,10 +90,14 @@
       <form [formGroup]="cardForm" id="checkout-form">
         <div class="col-12">
           <!--Field for Credit card number -->
-          <div class="form-group row">
+          <div *ngIf="loadingCreditCard">
+            <img src="assets/img/loader.svg" height="36px" alt="Loader">
+            <p>Loading Credit Card Form...</p>
+          </div>
+          <div class="form-group row" [hidden]="loadingCreditCard">
             <div class="col-12">
               <label for="card-number">Card Number</label>
-              <div class="input-group">
+              <div class="input-group" style="max-height: 30px !important;">
                 <div id="card-number" data-bluesnap="ccn"></div>
                 <div id="card-logo" class="input-group-addon">
                   <img src="https://files.readme.io/d1a25b4-generic-card.png" height="20px">
@@ -99,17 +105,17 @@
               </div>
               <span class="helper-text" id="ccn-help"></span>
             </div>
-            <div class="col-6">
-              <!--Field for CVV-->
-              <label for="cvv">CVV</label>
-              <div id="cvv" data-bluesnap="cvv"></div>
-              <span class="helper-text" id="cvv-help"></span>
+            <div class="col-sm-6 col-12">
+              <!--Field for CVV--> 
+                <label for="cvv">CVV</label>
+                <div id="cvv" style="max-height: 50px !important;" data-bluesnap="cvv"></div>
+                <span class="helper-text" id="cvv-help"></span> 
             </div>
             <!--Field for EXP-->
-            <div class="col-6">
-              <label for="exp-date">Exp. (MM/YY)</label>
-              <div id="exp-date" data-bluesnap="exp"></div>
-              <span class="helper-text" id="exp-help"></span>
+            <div class="col-sm-6 col-12"> 
+                <label for="exp-date">Exp. (MM/YY)</label>
+                <div id="exp-date" style="max-height: 50px !important;" data-bluesnap="exp"></div>
+                <span class="helper-text" id="exp-help"></span> 
             </div>
           </div>
         </div>
@@ -122,38 +128,33 @@
             <span class="helper-text" id="ccn-help"></span>
           </div>
           <div class="form-group row">
-            <div class="col-sm-6">
+            <div class="col-md-6">
               <label for="street">Street</label>
               <input id="street" formControlName="street" type="text" class="form-control">
             </div>
-            <div class="col-sm-3">
+            <div class="col-md-3 col-sm-6">
               <label for="country">Country</label>
-              <input required id="country" name="country" list="countryList" formControlName="countryCode" class="form-control"
-                placeholder="Type in your country name...." />
+              <input required id="country" name="country" list="countryList" formControlName="countryCode"
+                class="form-control" placeholder="Type in your country name...." />
               <datalist id="countryList">
-                <option *ngFor="let country of countryList" value="{{ country[0] }}">{{country[1]}}</option>
+                <option *ngFor="let country of countryList" value="{{ country[1] }}">{{country[1]}}</option>
               </datalist>
             </div>
-            <div class="col-sm-3">
+            <div class="col-md-3 col-sm-6">
               <label for="street">ZIP</label>
               <input id="zip" formControlName="zip" type="text" class="form-control">
             </div>
-            <div class="col-12">
-              <label for="isBusiness" class="m-5">Company Credit Card</label>
-              <input id="isBusiness" type="checkbox" formControlName="business">
-            </div>
           </div>
         </div>
-        <button class="btn btn-raised btn-info btn-lg col-md-4" type="submit" (click)="processFiatPayment()" id="submit-button">Pay
+        <button class="btn btn-raised btn-info btn-lg col-md-4" type="submit" (click)="processFiatPayment()"
+          id="submit-button" [disabled]="paying || loadingCreditCard">Pay
           Now</button>
+        <div *ngIf="paying">
+          <br>
+          <img src="assets/img/loader.svg" height="36px" alt="Loader">
+          <p>Paying...do not close this window.</p>
+        </div>
       </form>
-    </div>
-
-    <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 4">
-      <div *ngIf="!payingWithCard">
-        <img src="assets/img/loader.svg" height="36px" alt="Loader">
-        <h2 class="m-5">Paying...</h2>
-      </div>
     </div>
 
     <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 5">
@@ -162,9 +163,10 @@
           <img src="/assets/img/CanYa_red_cross.svg" class="img-responsiveness mt-10 animated bounceInUp" width="150">
           <h2>Payment Failed!</h2>
           <p class="lead fw-400">Something went wrong when processing your payment. Please try again later.</p>
+          <span>{{errorMsg}}</span>
         </div>
         <p class="text-center">
-          <a class="btn btn-secondary" [routerLink]="['/inbox/jobs']">Return</a>
+          <a class="btn btn-secondary" [routerLink]="['/inbox/job', this.job.id]">Return</a>
         </p>
       </div>
     </div>
@@ -174,11 +176,9 @@
           <img src="assets/img/CanYa_tick_green.svg" class="mb-30 animated bounceInDown" width="100px" height="100px">
           <h2>Payment complete!</h2>
           <p class="lead fw-400">Job Will now be commenced</p>
-          <hr>
         </div>
-        <br>
         <p class="text-center">
-          <a class="btn btn-secondary" [routerLink]="['/inbox/jobs']">Return</a>
+          <a class="btn btn-secondary" [routerLink]="['/inbox/job', this.job.id]">Return</a>
         </p>
       </div>
     </div>
@@ -216,15 +216,19 @@
 </div>
 
 <div *ngIf="paymentMethod == 'crypto'">
-  <div *ngIf="!canPayOptions" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
+  <div *ngIf="!canPayOptions" class="container d-flex h-100 flex-column justify-content-center"
+    style="min-height: 640px;">
     <img src="assets/img/loader.svg" height="36px" alt="Loader">
   </div>
   <div class="container" *ngIf="canPayOptions ">
-    <canyalib-canpay [dAppName]="canPayOptions.dAppName" [successText]="canPayOptions.successText" [operation]="canPayOptions.operation"
-      [onAuthTxHash]="canPayOptions.onAuthTxHash" [recipient]="canPayOptions.recipient" [amount]="canPayOptions.amount"
-      [paymentSummary]="canPayOptions.paymentSummary" [postAuthorisationProcessName]="canPayOptions.postAuthorisationProcessName"
-      [postAuthorisationProcessResults]="canPayOptions.postAuthorisationProcessResults" (startPostAuthorisationProcess)="canPayOptions.startPostAuthorisationProcess($event)"
-      (complete)="canPayOptions.complete($event)" (cancel)="canPayOptions.cancel($event)" [disableCanEx]="canPayOptions.disableCanEx"
-      [userEmail]="canPayOptions.userEmail"></canyalib-canpay>
+    <canyalib-canpay [dAppName]="canPayOptions.dAppName" [successText]="canPayOptions.successText"
+      [operation]="canPayOptions.operation" [onAuthTxHash]="canPayOptions.onAuthTxHash"
+      [recipient]="canPayOptions.recipient" [amount]="canPayOptions.amount"
+      [paymentSummary]="canPayOptions.paymentSummary"
+      [postAuthorisationProcessName]="canPayOptions.postAuthorisationProcessName"
+      [postAuthorisationProcessResults]="canPayOptions.postAuthorisationProcessResults"
+      (startPostAuthorisationProcess)="canPayOptions.startPostAuthorisationProcess($event)"
+      (complete)="canPayOptions.complete($event)" (cancel)="canPayOptions.cancel($event)"
+      [disableCanEx]="canPayOptions.disableCanEx" [userEmail]="canPayOptions.userEmail"></canyalib-canpay>
   </div>
 </div>
