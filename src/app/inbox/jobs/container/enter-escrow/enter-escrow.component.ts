@@ -177,6 +177,8 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       console.log(walletToken);
       this.loading = false;
       this.fiatPaymentStep = FiatPaymentSteps.collectDetails;
+      const status = await this.limepayService.getPaymentStatus(this.paymentObj._id);
+      console.log(status);
       console.log(this.transactions);
       this.signedTransactions = await this.limepayService.library.Transactions.signWithLimePayWallet(this.transactions, walletToken, this.walletForm.value.password);
       console.log('signed transactions:');
@@ -212,6 +214,10 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     try {
       const result = await this.fiatPayment.process(cardHolderInformation, this.signedTransactions);
       console.log(result);
+      const status = await this.limepayService.getPaymentStatus(this.paymentObj._id);
+      if (status) {
+        console.log(status);
+      }
       const action = new IJobAction(ActionType.enterEscrow, UserType.client);
       this.job.actionLog.push(action);
       this.job.clientEthAddress = null;
@@ -221,7 +227,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       this.fiatPaymentStep = FiatPaymentSteps.failed;
       console.log(error);
     }
-    if (this.fiatPaymentStep = FiatPaymentSteps.complete) {
+    if (this.fiatPaymentStep === FiatPaymentSteps.complete) {
       const status = await this.limepayService.getPaymentStatus(this.paymentObj._id);
       console.log(status);
     }

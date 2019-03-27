@@ -65,11 +65,10 @@ export class LimepayService {
 
   async getPaymentStatus(paymentId): Promise<any> {
     try {
-      const res = await this.http.get(`${apiUrl}/auth/getPaymentStatus?paymentId=${paymentId}`, await this.getOptions()).take(1).toPromise();
+      const res = await this.http.get(`${apiUrl}/getStatus?paymentId=${paymentId}`, await this.getOptions()).take(1).toPromise();
       return Promise.resolve(res.json());
     } catch (e) {
       console.log(`Error in getPaymentStatus: `, e);
-      return Promise.reject(e);
     }
   }
 
