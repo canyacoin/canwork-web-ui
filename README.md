@@ -17,8 +17,8 @@ npm install -g @angular/cli firebase-tools
 ```
 
 ```
-git clone git@github.com:canyaio/can-work.git
-cd can-work
+git clone git@gitlab.com:canya-com/canwork/web-ui.git
+cd web-ui
 yarn
 cp src/environments/environment.ts.sample src/environments/environment.ts
 ```
