@@ -49,7 +49,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   loadingCreditCard = true;
   paying = false;
   paymentMethod: string;
-  paymentObj: any;
+  paymentId: any;
   error;
 
   job: Job;
@@ -167,20 +167,18 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   async initialiseFiatPayment() {
     try {
       this.loading = true;
-      const { transactions, paymentToken, createdPayment } = await this.limepayService.initFiatPayment(this.job.id, this.job.providerId);
+      const { transactions, paymentToken, paymentId } = await this.limepayService.initFiatPayment(this.job.id, this.job.providerId);
       console.log('got the stuff.');
-      console.log(transactions, paymentToken, createdPayment);
+      console.log(transactions, paymentToken, paymentId);
       this.transactions = transactions;
       this.paymentToken = paymentToken;
-      this.paymentObj = createdPayment;
-      const walletToken = await this.limepayService.getWalletToken();
-      console.log(walletToken);
+      this.paymentId = paymentId;
       this.loading = false;
       this.fiatPaymentStep = FiatPaymentSteps.collectDetails;
-      const status = await this.limepayService.getPaymentStatus(this.paymentObj._id);
+      const status = await this.limepayService.getPaymentStatus(this.paymentId);
       console.log(status);
       console.log(this.transactions);
-      this.signedTransactions = await this.limepayService.library.Transactions.signWithLimePayWallet(this.transactions, walletToken, this.walletForm.value.password);
+      this.signedTransactions = await this.limepayService.library.Transactions.signWithLimePayWallet(this.transactions, paymentToken, this.walletForm.value.password);
       console.log('signed transactions:');
       console.log(this.signedTransactions);
       this.initFiat();
@@ -214,7 +212,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     try {
       const result = await this.fiatPayment.process(cardHolderInformation, this.signedTransactions);
       console.log(result);
-      const status = await this.limepayService.getPaymentStatus(this.paymentObj._id);
+      const status = await this.limepayService.getPaymentStatus(this.paymentId);
       if (status) {
         console.log(status);
       }
@@ -228,7 +226,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       console.log(error);
     }
     if (this.fiatPaymentStep === FiatPaymentSteps.complete) {
-      const status = await this.limepayService.getPaymentStatus(this.paymentObj._id);
+      const status = await this.limepayService.getPaymentStatus(this.paymentId);
       console.log(status);
     }
   }
