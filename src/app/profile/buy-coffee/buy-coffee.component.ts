@@ -5,6 +5,7 @@ import {
 } from '@canpay-lib/lib';
 import { User } from '@class/user';
 import { AuthService } from '@service/auth.service';
+import { ChatService } from '@service/chat.service';
 import { FeatureToggle, FeatureToggleService } from '@service/feature-toggle.service';
 import { UserService } from '@service/user.service';
 
@@ -21,8 +22,8 @@ export class BuyCoffeeComponent implements OnInit {
   canexDisabled = false;
   canPayOptions: CanPay;
 
-
   constructor(private authService: AuthService,
+    private chatService: ChatService,
     private userService: UserService,
     private featureService: FeatureToggleService,
     private router: Router,
@@ -46,6 +47,7 @@ export class BuyCoffeeComponent implements OnInit {
     this.canPayOptions = {
       dAppName: this.userModel.name,
       recipient: this.userModel.ethAddress,
+      onPaymentTxHash: this.onPaymentTxHash.bind(this),
       operation: Operation.pay,
       complete: this.onComplete.bind(this),
       cancel: this.onComplete.bind(this),
@@ -54,7 +56,11 @@ export class BuyCoffeeComponent implements OnInit {
     };
   }
 
-  onComplete(canPayData: CanPayData) {
+  async onPaymentTxHash(txHash: string, from: string) {
+    await this.chatService.sendTipMessage(txHash, this.userModel.address);
+  }
+
+  async onComplete(canPayData: CanPayData) {
     this.router.navigate(['/profile/alt', this.userModel.address]);
   }
 }

@@ -8,6 +8,7 @@ import { Observable, Subscription } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 
 import * as moment from 'moment';
+import { environment } from '@env/environment';
 import { User } from '@class/user';
 import { AuthService } from '@service/auth.service';
 import { Channel, ChatService, Message, MessageType } from '@service/chat.service';
@@ -332,6 +333,10 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
       );
     }
     return text;
+  }
+
+  getTxLink(txHash: string) {
+    return `${environment.contracts.etherscan}/tx/${txHash}`;
   }
 
 }
