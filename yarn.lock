@@ -5927,10 +5927,10 @@ lie@~3.3.0:
   dependencies:
     immediate "~3.0.5"
 
-limepay-web@^0.3.4:
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/limepay-web/-/limepay-web-0.3.5.tgz#66dae23c3843a1bbb14b4ffc023d8e90510b3522"
-  integrity sha512-6ucpn3hd5mREn/cnwDqKU5PxUhwWCAAOHMtj054/kcEYT8nd5oKk5Cjz+80LXvgXdKymEgHzeTX+FgCe81ehUQ==
+limepay-web@^0.3.6:
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/limepay-web/-/limepay-web-0.3.6.tgz#a3152b9926d44af54d1c76de966c83393cab4ea0"
+  integrity sha512-jOJOM/HgE9AnZXqIWK32KxHpH3T+G51XGkczl7vuWdQ7854RDXsqvg81N5LUft5xwxx0NqP1Wf9M2wwWYVmLhw==
   dependencies:
     axios "0.18.0"
     bignumber.js "7.2.1"
