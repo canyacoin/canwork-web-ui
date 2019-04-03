@@ -429,7 +429,8 @@ export class EthService implements OnDestroy {
   async getUsdToCan(amountOfUsd: number = 1): Promise<number> {
     try {
       const priceOracle = this.createContractInstance(priceOracleAbi, environment.contracts.priceOracle, this.web3Status.value !== Web3LoadingStatus.complete);
-      const daiValueInToken = await priceOracle.methods.getDaiToToken((amountOfUsd * (10 ** 18)).toString()).call();
+      const dai = web3.toBigNumber(amountOfUsd).mul(10 ** 18).toFixed(); // toFixed() prevents exponential notation being returned, no matter how large or small the value
+      const daiValueInToken = await priceOracle.methods.getDaiToToken(dai).call();
       const daiValueDecimal = daiValueInToken / (10 ** this.canyaDecimals);
       return Promise.resolve(daiValueDecimal);
     } catch (error) {
