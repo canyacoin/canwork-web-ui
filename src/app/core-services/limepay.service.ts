@@ -83,6 +83,16 @@ export class LimepayService {
     }
   }
 
+  async initRelayedPayment(jobId): Promise<any> {
+    try {
+      const res = await this.http.post(`${apiUrl}/auth/initRelayedPayment`, { jobId }, await this.getOptions()).take(1).toPromise();
+      return Promise.resolve(res.json());
+    } catch (e) {
+      console.log(`Error in initRelayedPayment: `, e);
+      return Promise.reject(e);
+    }
+  }
+
   async createShopper() {
     try {
       const res = await this.http.post(`${apiUrl}/auth/createShopper`, {}, await this.getOptions()).take(1).toPromise();
