@@ -12,16 +12,14 @@
           <div class="form-group row">
             <div class="col-lg-6 col-md-6 col-sm-8">
               <label>First name *</label>
-              <input class="form-control" #firstName formControlName="firstName" type="text" name="firstName"
-                placeholder="First name" maxlength="18"
-                [class.invalid]="!profileForm.controls.firstName.valid && profileForm.controls.firstName.dirty">
+              <input class="form-control" #firstName formControlName="firstName" type="text" name="firstName" placeholder="First name" 
+                maxlength="18" [class.invalid]="!profileForm.controls.firstName.valid && profileForm.controls.firstName.dirty">
               <small *ngIf="!profileForm.controls.firstName.valid  && profileForm.controls.firstName.dirty">Please enter
                 a valid first name.</small>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-8">
               <label>Last name *</label>
-              <input class="form-control" #lastName formControlName="lastName" type="text" name="lastName"
-                placeholder="Last Name" maxlength="18"
+              <input class="form-control" #lastName formControlName="lastName" type="text" name="lastName" placeholder="Last Name" maxlength="18"
                 [class.invalid]="!profileForm.controls.lastName.valid && profileForm.controls.lastName.dirty">
               <small *ngIf="!profileForm.controls.lastName.valid  && profileForm.controls.lastName.dirty">Please enter a
                 valid last name.</small>
@@ -31,26 +29,20 @@
           <div class="form-group row">
             <div class="col-lg-6 col-md-6 col-sm-8">
               <label>Work email *</label>
-              <input class="form-control" #work formControlName="work" type="email" name="work" placeholder="Work email"
-                [class.invalid]="!profileForm.controls.work.valid && profileForm.controls.work.dirty">
+              <input class="form-control" #work formControlName="work" type="email" name="work" placeholder="Work email" [class.invalid]="!profileForm.controls.work.valid && profileForm.controls.work.dirty">
 
-              <small *ngIf="!profileForm.controls.work.valid  && profileForm.controls.work.dirty">Please enter a valid
-                email.</small>
+              <small *ngIf="!profileForm.controls.work.valid  && profileForm.controls.work.dirty">Please enter a valid email.</small>
             </div>
           </div>
 
-          <div class="form-group row"
-            [class.has-danger]="profileForm.controls.ethAddress.touched && profileForm.controls.ethAddress.invalid">
+          <div class="form-group row" [class.has-danger]="profileForm.controls.ethAddress.touched && profileForm.controls.ethAddress.invalid">
             <div class="col-lg-9 col-md-9 col-sm-12">
               <label>ETH Address</label>
-              <input class="form-control" #ethAddress formControlName="ethAddress" type="text" name="ethAddress"
-                placeholder="0x123...">
+              <input class="form-control" #ethAddress formControlName="ethAddress" type="text" name="ethAddress" placeholder="0x123...">
               <small
-                *ngIf="profileForm.controls.ethAddress.errors && profileForm.controls.ethAddress.errors.isInvalidEthereumAddress || profileForm.controls.ethAddress.errors?.minlength"
+                *ngIf="profileForm.controls.ethAddress.errors && profileForm.controls.ethAddress.errors.isInvalidEthereumAddress || profileForm.controls.ethAddress.errors?.minlength" 
                 class="form-control-feedback">Please enter a valid ethereum address.</small>
-              <small
-                *ngIf="profileForm.controls.ethAddress.errors && profileForm.controls.ethAddress.errors.addressExists"
-                class="form-control-feedback">This
+              <small *ngIf="profileForm.controls.ethAddress.errors && profileForm.controls.ethAddress.errors.addressExists" class="form-control-feedback">This
                 address is already being used in CanWork. Please use another one.
               </small>
             </div>
@@ -62,16 +54,14 @@
             </div>
           </div>
 
-          <button type="button" class="btn btn-primary btn-canya-gradient next-button"
-            [disabled]="!profileForm.controls.firstName.valid || !profileForm.controls.lastName.valid || !profileForm.controls.work.valid"
+          <button type="button" class="btn btn-primary btn-canya-gradient next-button" [disabled]="!profileForm.controls.firstName.valid || !profileForm.controls.lastName.valid || !profileForm.controls.work.valid"
             (click)="nextStep()">NEXT</button>
         </div>
 
         <div *ngIf="currentStep.name == 'yourProfile'">
           <div class="form-group">
             <label>Headline *</label>
-            <input class="form-control" #title formControlName="title" type="text" name="title"
-              placeholder="Headline of your profile" maxlength="36"
+            <input class="form-control" #title formControlName="title" type="text" name="title" placeholder="Headline of your profile" maxlength="36"
               [class.invalid]="!profileForm.controls.title.valid && profileForm.controls.title.dirty">
 
             <small *ngIf="!profileForm.controls.title.valid  && profileForm.controls.title.dirty">Please enter a valid
@@ -83,20 +73,19 @@
             <input class="form-control" #bio formControlName="bio" type="text" name="bio"
               placeholder="Creative short bio" maxlength="60"
               [class.invalid]="!profileForm.controls.bio.valid && profileForm.controls.bio.dirty">
-            <small *ngIf="!profileForm.controls.bio.valid  && profileForm.controls.bio.dirty">Please enter a valid bio
-              for
+            <small *ngIf="!profileForm.controls.bio.valid  && profileForm.controls.bio.dirty">Please enter a valid bio for
               your profile.</small>
           </div>
 
           <div class="form-group">
             <label>Color scheme (click to choose)</label>
             <p>
-              <input class="form-control form-color" #color1 formControlName="color1" type="color" name="color1"
-                size="3" placeholder="Color scheme" list="canya">
-              <input class="form-control form-color" #color2 formControlName="color2" type="color" name="color2
-                 " size="3" placeholder="Color scheme" list="canya">
-              <input class="form-control form-color" #color3 formControlName="color3" type="color" name="color3
-                 " size="3" placeholder="Color scheme" list="canya">
+              <input class="form-control form-color" #color1 formControlName="color1" type="color" name="color1" size="3" placeholder="Color scheme" 
+              list="canya">
+              <input class="form-control form-color" #color2 formControlName="color2" type="color" name="color2" size="3" placeholder="Color scheme" 
+              list="canya">
+              <input class="form-control form-color" #color3 formControlName="color3" type="color" name="color3" size="3" placeholder="Color scheme" 
+              list="canya">
             </p>
             <datalist id="canya">
               <option>#00FFCC</option>
@@ -114,23 +103,21 @@
           <div class="form-group">
             <label>About me</label>
             <!-- <label>Description</label> -->
-            <textarea class="form-control" #description formControlName="description" name="description" rows="5"
-              placeholder="Think different! Be creative, be innovative."></textarea>
+            <textarea class="form-control" #description formControlName="description" name="description" rows="5" placeholder="Think different! Be creative, be innovative."></textarea>
           </div>
 
           <div class="form-group">
             <app-terms [form]="profileForm"></app-terms>
           </div>
 
-          <button type="button" class="btn btn-primary btn-canya-gradient next-button"
-            [disabled]="!profileForm.controls.title.valid || !profileForm.controls.bio.valid || !profileForm.controls.description.valid || !profileForm.controls.terms.valid || !profileForm.controls.ethAddress.valid || sending"
+          <button type="button" class="btn btn-primary btn-canya-gradient next-button" [disabled]="!profileForm.controls.title.valid || !profileForm.controls.bio.valid || !profileForm.controls.description.valid || !profileForm.controls.terms.valid || !profileForm.controls.ethAddress.valid || sending"
             (click)="submitForm()">NEXT</button>
         </div>
 
         <div *ngIf="currentStep.name == 'complete'" class="text-center">
           <p class="text-gray">Your client profile is now complete.
-            <br />
-            <br />You can access this information at any time from the 'My Profile' section of the main menu.
+            <br/>
+            <br/>You can access this information at any time from the 'My Profile' section of the main menu.
           </p>
 
           <button type="button" class="btn btn-primary" (click)="proceed()">Proceed</button>

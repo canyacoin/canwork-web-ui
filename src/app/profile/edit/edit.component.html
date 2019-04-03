@@ -15,8 +15,7 @@
                 <div class="col-sm-7">
                   <fieldset class="form-group">
                     <label>Full name</label>
-                    <input class="form-control" #name formControlName="name" type="text" name="name"
-                      placeholder="Full name or Company name" maxlength="36"
+                    <input class="form-control" #name formControlName="name" type="text" name="name" placeholder="Full name or Company name" maxlength="36"
                       [class.invalid]="!profileForm.controls.name.valid && profileForm.controls.name.dirty">
                     <small *ngIf="!profileForm.controls.name.valid  && profileForm.controls.name.dirty">Please enter a
                       valid name or company name.</small>
@@ -25,8 +24,7 @@
                 <div class="col-sm-5 text-center">
                   <div class="profile-pic">
                     <span class="bg-primary" (click)="displayIpfsDropzone = true">Edit</span>
-                    <div *ngIf="currentUser.avatar && currentUser.avatar.uri" class="circle-headshot"
-                      [ngStyle]="{'background-image': 'url(' + currentUser.avatar.uri + ')'}"></div>
+                    <div *ngIf="currentUser.avatar && currentUser.avatar.uri" class="circle-headshot" [ngStyle]="{'background-image': 'url(' + currentUser.avatar.uri + ')'}"></div>
                   </div>
                 </div>
               </div>
@@ -34,8 +32,7 @@
               <fieldset class="form-group">
                 <label>Headline</label>
                 <input class="form-control" #title formControlName="title" type="text" name="title"
-                  placeholder="Headline of your profile" maxlength="36"
-                  [class.invalid]="!profileForm.controls.title.valid && profileForm.controls.title.dirty">
+                  placeholder="Headline of your profile" maxlength="36" [class.invalid]="!profileForm.controls.title.valid && profileForm.controls.title.dirty">
                 <small *ngIf="!profileForm.controls.title.valid  && profileForm.controls.title.dirty">Please enter a
                   valid headline for your profile.</small>
               </fieldset>
@@ -43,8 +40,7 @@
               <fieldset class="form-group">
                 <label>Short Bio (60 chars)</label>
                 <input class="form-control" #bio formControlName="bio" type="text" name="bio"
-                  placeholder="Creative short bio" maxlength="60"
-                  [class.invalid]="!profileForm.controls.bio.valid && profileForm.controls.bio.dirty">
+                  placeholder="Creative short bio" maxlength="60" [class.invalid]="!profileForm.controls.bio.valid && profileForm.controls.bio.dirty">
                 <small *ngIf="!profileForm.controls.bio.valid  && profileForm.controls.bio.dirty">Please enter a
                   valid bio for your profile.</small>
               </fieldset>
@@ -54,23 +50,19 @@
                   <fieldset class="form-group">
                     <label>Work email</label>
                     <input class="form-control" #work formControlName="work" type="email" name="work"
-                      placeholder="Work email"
-                      [class.invalid]="!profileForm.controls.work.valid && profileForm.controls.work.dirty">
+                      placeholder="Work email" [class.invalid]="!profileForm.controls.work.valid && profileForm.controls.work.dirty">
                     <small *ngIf="!profileForm.controls.work.valid  && profileForm.controls.work.dirty">Please enter a
                       valid email.</small>
                   </fieldset>
                 </div>
                 <div class="col-sm-6">
-                  <fieldset class="form-group"
-                    [class.has-danger]="profileForm.controls.ethAddress.touched && profileForm.controls.ethAddress.invalid">
+                  <fieldset class="form-group" [class.has-danger]="profileForm.controls.ethAddress.touched && profileForm.controls.ethAddress.invalid">
                     <label>ETH Address</label>
                     <input class="form-control" #ethAddress formControlName="ethAddress" type="text" name="ethAddress"
                       placeholder="0x123...">
-                    <small
-                      *ngIf="profileForm.controls.ethAddress.errors && profileForm.controls.ethAddress.errors.isInvalidEthereumAddress"
+                    <small *ngIf="profileForm.controls.ethAddress.errors && profileForm.controls.ethAddress.errors.isInvalidEthereumAddress"
                       class="form-control-feedback">Please enter a valid ethereum address.</small>
-                    <small
-                      *ngIf="profileForm.controls.ethAddress.errors && profileForm.controls.ethAddress.errors.addressExists"
+                    <small *ngIf="profileForm.controls.ethAddress.errors && profileForm.controls.ethAddress.errors.addressExists"
                       class="form-control-feedback">This address is already being used in CanWork. Please use another
                       one.
                     </small>
@@ -83,8 +75,7 @@
                   <fieldset [hidden]="currentUser.type !== 'Provider'" class="form-group">
                     <label>Hourly Rate ( $USD )</label>
                     <input class="form-control" #hourlyRate formControlName="hourlyRate" type="text" name="hourlyRate"
-                      placeholder="e.g. 19"
-                      [class.invalid]="!profileForm.controls.hourlyRate.valid && profileForm.controls.hourlyRate.dirty">
+                      placeholder="e.g. 19" [class.invalid]="!profileForm.controls.hourlyRate.valid && profileForm.controls.hourlyRate.dirty">
                     <small
                       *ngIf="!profileForm.controls.hourlyRate.valid  && profileForm.controls.hourlyRate.dirty">Please
                       enter a number between 0 - 999</small>
@@ -93,8 +84,7 @@
                 <div class="col-sm-9">
                   <fieldset [hidden]="currentUser.type !== 'Provider'" class="form-group">
                     <label>Tag with relevant skills to help clients find you more easily.</label>
-                    <app-skill-tags-selection *ngIf="currentUser" (tagsUpdated)="skillTagsUpdated($event)"
-                      [initialTags]="currentUser.skillTags" [minimumTags]="0"></app-skill-tags-selection>
+                    <app-skill-tags-selection *ngIf="currentUser" (tagsUpdated)="skillTagsUpdated($event)" [initialTags]="currentUser.skillTags" [minimumTags]="0"></app-skill-tags-selection>
                     <input hidden #skillTags class="form-control" formControlName="skillTags" type="text"
                       name="skillTags">
                   </fieldset>
@@ -106,42 +96,36 @@
                 <div class="row">
                   <div class="col-md-4">
                     <label class="custom-control custom-radio">
-                      <input class="custom-control-input" #category1 type="radio" name="category"
-                        [checked]="this.currentUser.category === 'CONTENT CREATORS'">
+                      <input class="custom-control-input" #category1 type="radio" name="category" [checked]="this.currentUser.category === 'CONTENT CREATORS'">
                       <span class="custom-control-indicator"></span>
                       <span class="custom-control-description">CONTENT CREATORS</span>
                     </label>
                     <label class="custom-control custom-radio">
-                      <input class="custom-control-input" #category2 type="radio" name="category"
-                        [checked]="this.currentUser.category === 'DESIGNERS & CREATIVES'">
+                      <input class="custom-control-input" #category2 type="radio" name="category" [checked]="this.currentUser.category === 'DESIGNERS & CREATIVES'">
                       <span class="custom-control-indicator"></span>
                       <span class="custom-control-description">DESIGNERS & CREATIVES</span>
                     </label>
                   </div>
                   <div class="col-md-4">
                     <label class="custom-control custom-radio">
-                      <input class="custom-control-input" #category4 type="radio" name="category"
-                        [checked]="this.currentUser.category === 'MARKETING & SEO'">
+                      <input class="custom-control-input" #category4 type="radio" name="category" [checked]="this.currentUser.category === 'MARKETING & SEO'">
                       <span class="custom-control-indicator"></span>
                       <span class="custom-control-description">MARKETING & SEO</span>
                     </label>
                     <label class="custom-control custom-radio">
-                      <input class="custom-control-input" #category5 type="radio" name="category"
-                        [checked]="this.currentUser.category==='SOFTWARE DEVELOPERS'">
+                      <input class="custom-control-input" #category5 type="radio" name="category" [checked]="this.currentUser.category==='SOFTWARE DEVELOPERS'">
                       <span class="custom-control-indicator"></span>
                       <span class="custom-control-description">SOFTWARE DEVELOPERS</span>
                     </label>
                   </div>
                   <div class="col-md-4">
                     <label class="custom-control custom-radio">
-                      <input class="custom-control-input" #category3 type="radio" name="category"
-                        [checked]="this.currentUser.category === 'FINANCIAL EXPERTS'">
+                      <input class="custom-control-input" #category3 type="radio" name="category" [checked]="this.currentUser.category === 'FINANCIAL EXPERTS'">
                       <span class="custom-control-indicator"></span>
                       <span class="custom-control-description">FINANCIAL EXPERTS</span>
                     </label>
                     <label class="custom-control custom-radio">
-                      <input class="custom-control-input" #category6 type="radio" name="category"
-                        [checked]="this.currentUser.category==='VIRTUAL ASSISTANTS'">
+                      <input class="custom-control-input" #category6 type="radio" name="category" [checked]="this.currentUser.category==='VIRTUAL ASSISTANTS'">
                       <span class="custom-control-indicator"></span>
                       <span class="custom-control-description">VIRTUAL ASSISTANTS</span>
                     </label>
@@ -179,8 +163,7 @@
               </div>
               <div class="form-group text-right">
                 <button (click)="onClose()" class="btn btn-secondary">Cancel</button>
-                <button [disabled]="!profileForm.valid || sending" type="button"
-                  (click)="save(category1, category2, category3, category4, category5, category6)"
+                <button [disabled]="!profileForm.valid || sending" type="button" (click)="save(category1, category2, category3, category4, category5, category6)"
                   class="btn btn-primary text-white ml-8">
                   Save
                 </button>
