@@ -60,7 +60,7 @@
         <div *ngIf="currentStep.name == 'yourProfile'">
           <div class="form-group">
             <label>Headline *</label>
-            <input class="form-control" #title formControlName="title" type="text" name="title" placeholder="Headline of your profile" 
+            <input class="form-control" #title formControlName="title" type="text" name="title" placeholder="Headline of your profile"
               maxlength="36" [class.invalid]="!profileForm.controls.title.valid && profileForm.controls.title.dirty">
 
             <small *ngIf="!profileForm.controls.title.valid  && profileForm.controls.title.dirty">Please enter a valid headline
@@ -68,7 +68,7 @@
           </div>
           <div class="form-group">
             <label>Short Bio (60 chars) *</label>
-            <input class="form-control" #bio formControlName="bio" type="text" name="bio" placeholder="Creative short bio" maxlength="60" 
+            <input class="form-control" #bio formControlName="bio" type="text" name="bio" placeholder="Creative short bio" maxlength="60"
               [class.invalid]="!profileForm.controls.bio.valid && profileForm.controls.bio.dirty">
             <small *ngIf="!profileForm.controls.bio.valid  && profileForm.controls.bio.dirty">Please enter a valid bio for
               your profile.</small>
@@ -77,11 +77,11 @@
           <div class="form-group">
             <label>Color scheme (click to choose)</label>
             <p>
-              <input class="form-control form-color" #color1 formControlName="color1" type="color" name="color1" size="3" placeholder="Color scheme" 
+              <input class="form-control form-color" #color1 formControlName="color1" type="color" name="color1" size="3" placeholder="Color scheme"
                 list="canya">
-              <input class="form-control form-color" #color2 formControlName="color2" type="color" name="color2" 
+              <input class="form-control form-color" #color2 formControlName="color2" type="color" name="color2"
                 size="3" placeholder="Color scheme" list="canya">
-              <input class="form-control form-color" #color3 formControlName="color3" type="color" name="color3" 
+              <input class="form-control form-color" #color3 formControlName="color3" type="color" name="color3"
                 size="3" placeholder="Color scheme" list="canya">
             </p>
             <datalist id="canya">

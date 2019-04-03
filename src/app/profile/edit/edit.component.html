@@ -15,7 +15,7 @@
                 <div class="col-sm-7">
                   <fieldset class="form-group">
                     <label>Full name</label>
-                    <input class="form-control" #name formControlName="name" type="text" name="name" placeholder="Full name or Company name" 
+                    <input class="form-control" #name formControlName="name" type="text" name="name" placeholder="Full name or Company name"
                       maxlength="36" [class.invalid]="!profileForm.controls.name.valid && profileForm.controls.name.dirty">
                     <small *ngIf="!profileForm.controls.name.valid  && profileForm.controls.name.dirty">Please enter a
                       valid name or company name.</small>
@@ -31,7 +31,7 @@
 
               <fieldset class="form-group">
                 <label>Headline</label>
-                <input class="form-control" #title formControlName="title" type="text" name="title" placeholder="Headline of your profile" 
+                <input class="form-control" #title formControlName="title" type="text" name="title" placeholder="Headline of your profile"
                   maxlength="36" [class.invalid]="!profileForm.controls.title.valid && profileForm.controls.title.dirty">
                 <small *ngIf="!profileForm.controls.title.valid  && profileForm.controls.title.dirty">Please enter a
                   valid headline for your profile.</small>
@@ -83,7 +83,7 @@
                 <div class="col-sm-9">
                   <fieldset [hidden]="currentUser.type !== 'Provider'" class="form-group">
                     <label>Tag with relevant skills to help clients find you more easily.</label>
-                    <app-skill-tags-selection *ngIf="currentUser" (tagsUpdated)="skillTagsUpdated($event)" 
+                    <app-skill-tags-selection *ngIf="currentUser" (tagsUpdated)="skillTagsUpdated($event)"
                       [initialTags]="currentUser.skillTags" [minimumTags]="0"></app-skill-tags-selection>
                     <input hidden #skillTags class="form-control" formControlName="skillTags" type="text" name="skillTags">
                   </fieldset>
