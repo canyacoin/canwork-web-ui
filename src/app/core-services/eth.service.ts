@@ -438,4 +438,11 @@ export class EthService implements OnDestroy {
     }
   }
 
+  public isAddress(address) {
+    if (this.web3js.utils.isAddress(address)) {
+      return true;
+    }
+    return false;
+  }
+
 }

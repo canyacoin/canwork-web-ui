@@ -92,7 +92,7 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
       color3: [colors[2]],
       terms: [false, Validators.requiredTrue],
       timezone: moment.tz.guess(),
-      ethAddress: [this.user.ethAddress || this.ethAddress, Validators.compose([Validators.required, EthereumValidator.isValidAddress]), EthereumValidator.isUniqueAddress(this.userService.usersCollectionRef, this.user)],
+      ethAddress: [this.user.ethAddress || this.ethAddress, Validators.compose([Validators.required, new EthereumValidator(this.ethService).isValidAddress]), new EthereumValidator(this.ethService).isUniqueAddress(this.userService.usersCollectionRef, this.user)],
     });
   }
 
