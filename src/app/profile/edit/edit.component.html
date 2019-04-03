@@ -15,8 +15,8 @@
                 <div class="col-sm-7">
                   <fieldset class="form-group">
                     <label>Full name</label>
-                    <input class="form-control" #name formControlName="name" type="text" name="name" placeholder="Full name or Company name" maxlength="36"
-                      [class.invalid]="!profileForm.controls.name.valid && profileForm.controls.name.dirty">
+                    <input class="form-control" #name formControlName="name" type="text" name="name" placeholder="Full name or Company name" 
+                      maxlength="36" [class.invalid]="!profileForm.controls.name.valid && profileForm.controls.name.dirty">
                     <small *ngIf="!profileForm.controls.name.valid  && profileForm.controls.name.dirty">Please enter a
                       valid name or company name.</small>
                   </fieldset>
@@ -31,16 +31,16 @@
 
               <fieldset class="form-group">
                 <label>Headline</label>
-                <input class="form-control" #title formControlName="title" type="text" name="title"
-                  placeholder="Headline of your profile" maxlength="36" [class.invalid]="!profileForm.controls.title.valid && profileForm.controls.title.dirty">
+                <input class="form-control" #title formControlName="title" type="text" name="title" placeholder="Headline of your profile" 
+                  maxlength="36" [class.invalid]="!profileForm.controls.title.valid && profileForm.controls.title.dirty">
                 <small *ngIf="!profileForm.controls.title.valid  && profileForm.controls.title.dirty">Please enter a
                   valid headline for your profile.</small>
               </fieldset>
 
               <fieldset class="form-group">
                 <label>Short Bio (60 chars)</label>
-                <input class="form-control" #bio formControlName="bio" type="text" name="bio"
-                  placeholder="Creative short bio" maxlength="60" [class.invalid]="!profileForm.controls.bio.valid && profileForm.controls.bio.dirty">
+                <input class="form-control" #bio formControlName="bio" type="text" name="bio" placeholder="Creative short bio"
+                  maxlength="60" [class.invalid]="!profileForm.controls.bio.valid && profileForm.controls.bio.dirty">
                 <small *ngIf="!profileForm.controls.bio.valid  && profileForm.controls.bio.dirty">Please enter a
                   valid bio for your profile.</small>
               </fieldset>
@@ -49,8 +49,8 @@
                 <div class="col-sm-6">
                   <fieldset class="form-group">
                     <label>Work email</label>
-                    <input class="form-control" #work formControlName="work" type="email" name="work"
-                      placeholder="Work email" [class.invalid]="!profileForm.controls.work.valid && profileForm.controls.work.dirty">
+                    <input class="form-control" #work formControlName="work" type="email" name="work" placeholder="Work email"
+                      [class.invalid]="!profileForm.controls.work.valid && profileForm.controls.work.dirty">
                     <small *ngIf="!profileForm.controls.work.valid  && profileForm.controls.work.dirty">Please enter a
                       valid email.</small>
                   </fieldset>
@@ -76,17 +76,16 @@
                     <label>Hourly Rate ( $USD )</label>
                     <input class="form-control" #hourlyRate formControlName="hourlyRate" type="text" name="hourlyRate"
                       placeholder="e.g. 19" [class.invalid]="!profileForm.controls.hourlyRate.valid && profileForm.controls.hourlyRate.dirty">
-                    <small
-                      *ngIf="!profileForm.controls.hourlyRate.valid  && profileForm.controls.hourlyRate.dirty">Please
+                    <small *ngIf="!profileForm.controls.hourlyRate.valid  && profileForm.controls.hourlyRate.dirty">Please
                       enter a number between 0 - 999</small>
                   </fieldset>
                 </div>
                 <div class="col-sm-9">
                   <fieldset [hidden]="currentUser.type !== 'Provider'" class="form-group">
                     <label>Tag with relevant skills to help clients find you more easily.</label>
-                    <app-skill-tags-selection *ngIf="currentUser" (tagsUpdated)="skillTagsUpdated($event)" [initialTags]="currentUser.skillTags" [minimumTags]="0"></app-skill-tags-selection>
-                    <input hidden #skillTags class="form-control" formControlName="skillTags" type="text"
-                      name="skillTags">
+                    <app-skill-tags-selection *ngIf="currentUser" (tagsUpdated)="skillTagsUpdated($event)" 
+                      [initialTags]="currentUser.skillTags" [minimumTags]="0"></app-skill-tags-selection>
+                    <input hidden #skillTags class="form-control" formControlName="skillTags" type="text" name="skillTags">
                   </fieldset>
                 </div>
               </div>

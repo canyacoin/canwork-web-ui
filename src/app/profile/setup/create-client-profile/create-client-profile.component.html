@@ -12,7 +12,7 @@
           <div class="form-group row">
             <div class="col-lg-6 col-md-6 col-sm-8">
               <label>First name *</label>
-              <input class="form-control" #firstName formControlName="firstName" type="text" name="firstName" placeholder="First name" 
+              <input class="form-control" #firstName formControlName="firstName" type="text" name="firstName" placeholder="First name"
                 maxlength="18" [class.invalid]="!profileForm.controls.firstName.valid && profileForm.controls.firstName.dirty">
               <small *ngIf="!profileForm.controls.firstName.valid  && profileForm.controls.firstName.dirty">Please enter
                 a valid first name.</small>
@@ -39,8 +39,7 @@
             <div class="col-lg-9 col-md-9 col-sm-12">
               <label>ETH Address</label>
               <input class="form-control" #ethAddress formControlName="ethAddress" type="text" name="ethAddress" placeholder="0x123...">
-              <small
-                *ngIf="profileForm.controls.ethAddress.errors && profileForm.controls.ethAddress.errors.isInvalidEthereumAddress || profileForm.controls.ethAddress.errors?.minlength" 
+              <small *ngIf="profileForm.controls.ethAddress.errors && profileForm.controls.ethAddress.errors.isInvalidEthereumAddress || profileForm.controls.ethAddress.errors?.minlength" 
                 class="form-control-feedback">Please enter a valid ethereum address.</small>
               <small *ngIf="profileForm.controls.ethAddress.errors && profileForm.controls.ethAddress.errors.addressExists" class="form-control-feedback">This
                 address is already being used in CanWork. Please use another one.
@@ -61,17 +60,15 @@
         <div *ngIf="currentStep.name == 'yourProfile'">
           <div class="form-group">
             <label>Headline *</label>
-            <input class="form-control" #title formControlName="title" type="text" name="title" placeholder="Headline of your profile" maxlength="36"
-              [class.invalid]="!profileForm.controls.title.valid && profileForm.controls.title.dirty">
+            <input class="form-control" #title formControlName="title" type="text" name="title" placeholder="Headline of your profile" 
+              maxlength="36" [class.invalid]="!profileForm.controls.title.valid && profileForm.controls.title.dirty">
 
-            <small *ngIf="!profileForm.controls.title.valid  && profileForm.controls.title.dirty">Please enter a valid
-              headline
+            <small *ngIf="!profileForm.controls.title.valid  && profileForm.controls.title.dirty">Please enter a valid headline
               for your profile.</small>
           </div>
           <div class="form-group">
             <label>Short Bio (60 chars) *</label>
-            <input class="form-control" #bio formControlName="bio" type="text" name="bio"
-              placeholder="Creative short bio" maxlength="60"
+            <input class="form-control" #bio formControlName="bio" type="text" name="bio" placeholder="Creative short bio" maxlength="60" 
               [class.invalid]="!profileForm.controls.bio.valid && profileForm.controls.bio.dirty">
             <small *ngIf="!profileForm.controls.bio.valid  && profileForm.controls.bio.dirty">Please enter a valid bio for
               your profile.</small>
@@ -81,11 +78,11 @@
             <label>Color scheme (click to choose)</label>
             <p>
               <input class="form-control form-color" #color1 formControlName="color1" type="color" name="color1" size="3" placeholder="Color scheme" 
-              list="canya">
-              <input class="form-control form-color" #color2 formControlName="color2" type="color" name="color2" size="3" placeholder="Color scheme" 
-              list="canya">
-              <input class="form-control form-color" #color3 formControlName="color3" type="color" name="color3" size="3" placeholder="Color scheme" 
-              list="canya">
+                list="canya">
+              <input class="form-control form-color" #color2 formControlName="color2" type="color" name="color2" 
+                size="3" placeholder="Color scheme" list="canya">
+              <input class="form-control form-color" #color3 formControlName="color3" type="color" name="color3" 
+                size="3" placeholder="Color scheme" list="canya">
             </p>
             <datalist id="canya">
               <option>#00FFCC</option>

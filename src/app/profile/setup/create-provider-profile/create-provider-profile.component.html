@@ -86,7 +86,7 @@
             <div class="col-lg-6 col-md-6 col-sm-8">
               <label>Last name *</label>
               <input class="form-control" #lastName formControlName="lastName" type="text" name="lastName" placeholder="Last Name" 
-              maxlength="18" [class.invalid]="!profileForm.controls.lastName.valid && profileForm.controls.lastName.dirty">
+                maxlength="18" [class.invalid]="!profileForm.controls.lastName.valid && profileForm.controls.lastName.dirty">
               <small *ngIf="!profileForm.controls.lastName.valid  && profileForm.controls.lastName.dirty">Please enter
                 a
                 valid last name.</small>
@@ -95,7 +95,7 @@
           <div class="form-group">
             <label>Profession *</label>
             <input class="form-control" #title formControlName="title" type="text" name="title" placeholder="Profession name" 
-            maxlength="36" [class.invalid]="!profileForm.controls.title.valid && profileForm.controls.title.dirty">
+              maxlength="36" [class.invalid]="!profileForm.controls.title.valid && profileForm.controls.title.dirty">
 
             <small *ngIf="!profileForm.controls.title.valid  && profileForm.controls.title.dirty">Please enter a valid
               profession
@@ -104,7 +104,7 @@
           <div class="form-group">
             <label>Short Bio (60 chars) *</label>
             <input class="form-control" #bio formControlName="bio" type="text" name="bio" placeholder="Creative short bio" 
-            maxlength="60" [class.invalid]="!profileForm.controls.bio.valid && profileForm.controls.bio.dirty">
+              maxlength="60" [class.invalid]="!profileForm.controls.bio.valid && profileForm.controls.bio.dirty">
             <small *ngIf="!profileForm.controls.bio.valid  && profileForm.controls.bio.dirty">Please enter a valid bio
               for
               your profile. (20 words)</small>
@@ -113,7 +113,7 @@
             <label>Color scheme (click to choose)</label>
             <p>
               <input class="form-control form-color" #color1 formControlName="color1" type="color" name="color1" size="3" 
-              placeholder="Color scheme" list="canya">
+                placeholder="Color scheme" list="canya">
               <input class="form-control form-color" #color2 formControlName="color2" type="color" name="color2
                    " size="3" placeholder="Color scheme" list="canya">
               <input class="form-control form-color" #color3 formControlName="color3" type="color" name="color3
@@ -143,8 +143,8 @@
           </div>
 
 
-          <button type="button" class="btn btn-primary btn-canya-gradient next-button" [disabled]="!profileForm.controls.firstName.valid || !profileForm.controls.lastName.valid ||
-          !profileForm.controls.title.valid || !profileForm.controls.bio.valid || !profileForm.controls.terms.valid || sending" (click)="submitForm()">NEXT</button>
+          <button type="button" class="btn btn-primary btn-canya-gradient next-button" [disabled]="!profileForm.controls.firstName.valid || !profileForm.controls.lastName.valid || !profileForm.controls.title.valid || !profileForm.controls.bio.valid || !profileForm.controls.terms.valid || sending" 
+            (click)="submitForm()">NEXT</button>
         </div>
 
         <div *ngIf="currentStep.name == 'complete'" class="text-center">
