@@ -56,7 +56,7 @@
                   </fieldset>
                 </div>
                 <div class="col-sm-6">
-                  <fieldset class="form-group" [class.has-danger]="profileForm.controls.ethAddress.invalid">
+                  <fieldset class="form-group" [class.has-danger]="profileForm.controls.ethAddress.touched && profileForm.controls.ethAddress.invalid">
                     <label>ETH Address</label>
                     <input class="form-control" #ethAddress formControlName="ethAddress" type="text" name="ethAddress"
                       placeholder="0x123...">
