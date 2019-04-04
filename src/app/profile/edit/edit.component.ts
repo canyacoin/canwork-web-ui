@@ -75,7 +75,11 @@ export class EditComponent implements OnInit, OnDestroy {
     this.profileForm = this.formBuilder.group({
       name: [this.currentUser.name || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
       work: [this.currentUser.work || '', Validators.compose([Validators.required, EmailValidator.isValid])],
-      ethAddress: [this.currentUser.ethAddress || this.ethAddress, Validators.compose([Validators.required, EthereumValidator.isValidAddress]), EthereumValidator.isUniqueAddress(this.userService.usersCollectionRef, this.currentUser)],
+      ethAddress: [this.currentUser.ethAddress || this.ethAddress,
+      Validators.compose(
+        [Validators.required, new EthereumValidator(this.ethService).isValidAddress]
+      ),
+      new EthereumValidator(this.ethService).isUniqueAddress(this.userService.usersCollectionRef, this.currentUser)],
       title: [this.currentUser.title || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
       bio: [this.currentUser.bio || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(60)])],
       category: [this.currentUser.category || ''],
