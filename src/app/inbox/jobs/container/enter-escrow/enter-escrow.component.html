@@ -60,7 +60,6 @@
       </p>
       <br>
     </div>
-
     <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 2">
       <h4>
         Unlock Wallet
@@ -175,7 +174,7 @@
         <div class="section-header">
           <img src="assets/img/CanYa_tick_green.svg" class="mb-30 animated bounceInDown" width="100px" height="100px">
           <h2>Payment complete!</h2>
-          <p class="lead fw-400">Job Will now be commenced</p>
+          <p class="lead fw-400">Your payment has been processed. The job will now commence.</p>
         </div>
         <p class="text-center">
           <a class="btn btn-secondary" [routerLink]="['/inbox/job', this.job.id]">Return</a>

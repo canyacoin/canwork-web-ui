@@ -83,6 +83,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
             this.jobService.updateJobState(this.job);
             this.isInitialised = true;
           }
+          console.log(this.job.fiatPayment);
         } else {
           console.log('Thou never belong hither , aroint thee!');
           this.router.navigateByUrl('/not-found');

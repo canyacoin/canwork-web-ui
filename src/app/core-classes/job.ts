@@ -24,7 +24,7 @@ export class Job {
   slug: string;
   createAt: number;
   updateAt: number;
-
+  fiatPayment: boolean;
   constructor(init?: Partial<Job>) {
     Object.assign(this, init);
   }

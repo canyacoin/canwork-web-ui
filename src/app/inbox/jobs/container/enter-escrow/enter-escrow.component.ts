@@ -218,8 +218,10 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       }
       const action = new IJobAction(ActionType.enterEscrow, UserType.client);
       this.job.actionLog.push(action);
+      this.job.fiatPayment = true;
       this.job.clientEthAddress = null;
       await this.jobService.saveJobFirebase(this.job);
+      this.fiatPaymentStep = FiatPaymentSteps.complete;
     } catch (error) {
       this.errorMsg = JSON.stringify(error.message);
       this.fiatPaymentStep = FiatPaymentSteps.failed;
@@ -271,6 +273,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       const action = new IJobAction(ActionType.enterEscrow, UserType.client);
       this.job.actionLog.push(action);
       this.job.clientEthAddress = from;
+      this.job.fiatPayment = true;
       clientEthAddress = from;
       await this.jobService.saveJobFirebase(this.job);
     };

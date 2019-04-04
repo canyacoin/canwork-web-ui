@@ -1,0 +1,10 @@
+.createWallet {
+  background-color: white;
+  padding: 25px;
+  border-radius: 5px;
+  margin-top: 10vh;
+}
+
+.mh-50v {
+    min-height: 50vh;
+}
