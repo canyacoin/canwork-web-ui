@@ -47,7 +47,10 @@ export class CompleteJobComponent implements OnInit {
     if (jobId) {
       this.jobService.getJob(jobId).take(1).subscribe(async (job: Job) => {
         this.job = job;
-        if (this.job.fiatPayment === undefined || this.job.fiatPayment === false) {
+        if (this.job.fiatPayment === undefined) {
+          this.fiatPayment = false;
+          this.startCanpay();
+        } else if ( this.job.fiatPayment === false) {
           this.fiatPayment = false;
           this.startCanpay();
         } else {

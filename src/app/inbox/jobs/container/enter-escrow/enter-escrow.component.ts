@@ -273,7 +273,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       const action = new IJobAction(ActionType.enterEscrow, UserType.client);
       this.job.actionLog.push(action);
       this.job.clientEthAddress = from;
-      this.job.fiatPayment = true;
+      this.job.fiatPayment = false;
       clientEthAddress = from;
       await this.jobService.saveJobFirebase(this.job);
     };
