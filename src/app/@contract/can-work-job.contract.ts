@@ -35,6 +35,7 @@ export class CanWorkJobContract {
 
       const txOptions = {
         from: clientAddress,
+        // Value should be send only for transactions that require sending a value. Here we can ommit it:
         // value: '0x0',
         gasLimit: gas,
         gasPrice: gasPrice,
@@ -59,7 +60,8 @@ export class CanWorkJobContract {
 
       const txOptions = {
         from: fromAddr,
-        value: '0x0',
+        // Value should be send only for transactions that require sending a value. Here we can ommit it:
+        // value: '0x0',
         gasLimit: gas,
         gasPrice: gasPrice,
         data: txObject.encodeABI(),
@@ -83,7 +85,8 @@ export class CanWorkJobContract {
 
       const txOptions = {
         from: fromAddr,
-        value: '0x0',
+         // Value should be send only for transactions that require sending a value. Here we can ommit it:
+        // value: '0x0',
         gasLimit: gas,
         gasPrice: gasPrice,
         data: txObject.encodeABI(),
