@@ -23,9 +23,9 @@ export class CanWorkJobContract {
 
   async createJob(job: Job, clientAddress: string, providerAddress: string, onTxHash: Function) {
     return new Promise(async (resolve, reject) => {
-      const txObject = await this.instance.methods.createJob(this.eth.web3js.utils.padRight(job.hexId, 32), clientAddress, providerAddress, job.budgetCan * (10 ** this.canYaDecimals));
+      const txObject = await this.instance.methods.createJob(this.eth.web3js.utils.padRight(job.hexId, 64), clientAddress, providerAddress, job.budgetCan * (10 ** this.canYaDecimals));
       let gas, gasPrice = '';
-
+      
       try {
         gas = await txObject.estimateGas({ from: clientAddress });
         gasPrice = await this.eth.getDefaultGasPriceGwei();
@@ -35,7 +35,7 @@ export class CanWorkJobContract {
 
       const txOptions = {
         from: clientAddress,
-        value: '0x0',
+        // value: '0x0',
         gasLimit: gas,
         gasPrice: gasPrice,
         data: txObject.encodeABI(),
@@ -47,7 +47,7 @@ export class CanWorkJobContract {
 
   async completeJob(job: Job, fromAddr: string, onTxHash: Function) {
     return new Promise(async (resolve, reject) => {
-      const txObject = await this.instance.methods.completeJob(this.eth.web3js.utils.padRight(job.hexId, 32));
+      const txObject = await this.instance.methods.completeJob(this.eth.web3js.utils.padRight(job.hexId, 64));
       let gas, gasPrice = '';
 
       try {
@@ -71,7 +71,7 @@ export class CanWorkJobContract {
   async cancelJobByProvider(job: Job, fromAddr: string, onTxHash: Function) {
     return new Promise(async (resolve, reject) => {
       console.log('cancelling job :' + job.hexId);
-      const txObject = await this.instance.methods.cancelJobByProvider(this.eth.web3js.utils.padRight(job.hexId, 32));
+      const txObject = await this.instance.methods.cancelJobByProvider(this.eth.web3js.utils.padRight(job.hexId, 64));
       let gas, gasPrice = '';
 
       try {

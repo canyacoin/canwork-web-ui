@@ -199,11 +199,11 @@ export class EthService implements OnDestroy {
   }
 
   amountToCANTokens(amount) {
-    return this.toBaseUnit(amount, canDecimals, this.web3js.utils.BN);
+    return this.toBaseUnit(amount, canDecimals, this.web3js.utils.toBN);
   }
 
   amountToERCTokens(amount, decimal): string {
-    return this.toBaseUnit(amount, decimal, this.web3js.utils.BN);
+    return this.toBaseUnit(amount, decimal, this.web3js.utils.toBN);
   }
 
   createContractInstance(abi, address, useDefaultWeb3Provider: boolean = false) {

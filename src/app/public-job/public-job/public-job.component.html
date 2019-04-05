@@ -104,7 +104,7 @@
               {{job.information.timelineExpectation}} period.</p>
             <hr *ngIf="currentUser && currentUser.type === 'Provider' && !myJob && isOpen">
           </div>
-          <div class="col-12">
+          <div class="col-12" *ngIf="bids">
             <p><b>Total Bid(s) : </b>{{ bids.length }}</p>
           </div>
           <div class="col-12" *ngIf="currentUser && currentUser.type !== 'Provider' && !myJob && isOpen">
