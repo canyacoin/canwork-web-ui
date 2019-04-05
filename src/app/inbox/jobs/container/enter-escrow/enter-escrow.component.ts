@@ -213,15 +213,13 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       const result = await this.fiatPayment.process(cardHolderInformation, this.signedTransactions);
       console.log(result);
 
-      //Trigger the monitoring of the payment
-      await this.limepayService.monitorPayment(this.paymentId, this.job.id);
-      
-      const action = new IJobAction(ActionType.enterEscrow, UserType.client);
-      this.job.actionLog.push(action);
       this.job.fiatPayment = true;
       this.job.clientEthAddress = null;
       await this.jobService.saveJobFirebase(this.job);
       this.fiatPaymentStep = FiatPaymentSteps.complete;
+
+      //Trigger the monitoring of the payment
+      await this.limepayService.monitorPayment(this.paymentId, this.job.id);
     } catch (error) {
       this.errorMsg = JSON.stringify(error.message);
       this.fiatPaymentStep = FiatPaymentSteps.failed;
