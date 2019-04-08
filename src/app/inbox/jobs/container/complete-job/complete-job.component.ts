@@ -92,6 +92,7 @@ export class CompleteJobComponent implements OnInit {
 
     } catch (e) {
       this.processing = false;
+      this.processed = true;
       this.success = false;
       if (e.message === 'invalid password') {
         this.wrongPassword = true;
