@@ -45,9 +45,9 @@
         </form>
       </div>
       <button (click)="paymentMethod = null" class="btn btn-danger m-5">Cancel</button>
-      <button [disabled]="!walletForm.valid" class="btn btn-primary m-5" data-toggle="modal"
-        data-target="#savePassword">Get
-        Wallet</button>
+      <button class="btn btn-primary m-5" (click)="createWallet()" [disabled]="!walletForm.valid">Get
+        Wallet
+      </button>
     </div>
     <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 1">
       <h4>
@@ -67,6 +67,9 @@
       <br>
       <p>We have detected that you have paid with a credit card before. To do it again, please the password you used
         last time.</p>
+      <p class="text-danger" *ngIf="wrongPassword">
+        Incorrect Password. Please try again.
+      </p>
       <div class="col-sm-4 offset-sm-4">
         <form [formGroup]="walletForm" class="form validate" novalidate>
           <div class="form-group">
@@ -82,18 +85,20 @@
     </div>
     <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 3">
       <h4>Wallet Created!</h4>
-      <p>Congratulations, You have created your own Limepay wallet! Shown below is your pneumonic.</p>
+      <p>Congratulations, You have created your own Limepay wallet! Shown below is your mnemonic.</p>
       <p class="text-danger">You <b>MUST</b> write this down. This will help you recover your wallet in case you forgot
         your password. If you lose this, you <b>WILL</b> lose
         access to your funds.</p>
       <div class="col-12">
-        <p style="
-        padding: 10px;
-        background-color: #ebebeb;
-        border-radius: 5px;
-    ">{{mnemonic}}</p>
+        <p class="mnemonic-phrase">{{mnemonic}}</p>
       </div>
-      <button class="btn btn-primary" (click)="initialiseFiatPayment()">
+      <form [formGroup]="acceptCopyMnemonicForm" class="form validate">
+        <label><input type="checkbox" formControlName="copiedMnemonic" /> I confirm that I saved and secured my
+          passphrase!
+        </label>
+      </form>
+      <button class="btn btn-primary m-5 payment-proceed" [disabled]="!copiedMnemonic.value"
+        (click)="initialiseFiatPayment()">
         Proceed to Payment
       </button>
     </div>
@@ -102,13 +107,13 @@
         Pay
       </h4>
       <form [formGroup]="cardForm" id="checkout-form">
-        <div class="col-12">
-          <!--Field for Credit card number -->
-          <div *ngIf="loadingCreditCard">
-            <img src="assets/img/loader.svg" height="36px" alt="Loader">
-            <p>Loading Credit Card Form...</p>
-          </div>
-          <div class="form-group row" [hidden]="loadingCreditCard">
+        <!--Field for Credit card number -->
+        <div *ngIf="loadingCreditCard">
+          <img src="assets/img/loader.svg" height="36px" alt="Loader">
+          <p>Loading Credit Card Form...</p>
+        </div>
+        <div class="col-12" [hidden]="loadingCreditCard">
+          <div class="form-group row">
             <div class="col-12">
               <label for="card-number">Card Number</label>
               <div class="input-group" style="max-height: 30px !important;">
@@ -133,7 +138,7 @@
             </div>
           </div>
         </div>
-        <div class="col-12">
+        <div class="col-12" [hidden]="loadingCreditCard">
           <div class="form-group">
             <label for="card-name">Name</label>
             <div class="input-group">
@@ -159,14 +164,14 @@
               <input id="zip" formControlName="zip" type="text" class="form-control">
             </div>
           </div>
-        </div>
-        <button class="btn btn-raised btn-info btn-lg col-md-4" type="submit" (click)="processFiatPayment()"
-          id="submit-button" [disabled]="paying || loadingCreditCard">Pay
-          Now</button>
-        <div *ngIf="paying">
-          <br>
-          <img src="assets/img/loader.svg" height="36px" alt="Loader">
-          <p>Paying...do not close this window.</p>
+          <button class="btn btn-raised btn-info btn-lg col-md-4" type="submit" (click)="processFiatPayment()"
+            id="submit-button" [disabled]="paying || loadingCreditCard">Pay
+            Now</button>
+          <div *ngIf="paying">
+            <br>
+            <img src="assets/img/loader.svg" height="36px" alt="Loader">
+            <p>Paying...do not close this window.</p>
+          </div>
         </div>
       </form>
     </div>
@@ -196,35 +201,6 @@
       </div>
     </div>
 
-  </div>
-</div>
-
-<div id="savePassword" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-body text-center">
-        <h4>Have you saved your password?</h4>
-        <hr>
-        <p>You must save your password securely.<br><b>LOSING THIS PASSWORD MEANS LOSING YOUR FUNDS.</b><br>If you lose
-          this password, you will not be able to : </p>
-        <ul class="list-unstyled text-danger">
-          <li>
-            Access your funds in the escrow
-          </li>
-          <li>
-            Pay the provider & release the funds from the escrow
-          </li>
-          <li>
-            Get your funds back from the escrow
-          </li>
-        </ul>
-      </div>
-      <div class="text-center p-15">
-        <button class="btn btn-danger btn-175 m-5" data-dismiss="modal">Not yet</button>
-        <button (click)="createWallet()" [disabled]="!walletForm.valid" class="btn btn-primary btn-175 m-5"
-          data-dismiss="modal">Create Wallet</button>
-      </div>
-    </div>
   </div>
 </div>
 

@@ -25,7 +25,6 @@ export class CanWorkJobContract {
     return new Promise(async (resolve, reject) => {
       const txObject = await this.instance.methods.createJob(this.eth.web3js.utils.padRight(job.hexId, 64), clientAddress, providerAddress, job.budgetCan * (10 ** this.canYaDecimals));
       let gas, gasPrice = '';
-      
       try {
         gas = await txObject.estimateGas({ from: clientAddress });
         gasPrice = await this.eth.getDefaultGasPriceGwei();
