@@ -52,7 +52,7 @@ h2 {
 }
 
 .choose-payment .btn {
-  width: 150px;
+  min-width: 150px;
 }
 
 .btn-175 {
@@ -61,4 +61,9 @@ h2 {
 
 #savePassword {
   padding: 15px;
+}
+.mnemonic-phrase { 
+  padding: 10px;
+  background-color: #ebebeb;
+  border-radius: 5px;
 }

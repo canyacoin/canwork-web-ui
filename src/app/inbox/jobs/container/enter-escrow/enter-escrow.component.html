@@ -82,18 +82,18 @@
     </div>
     <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 3">
       <h4>Wallet Created!</h4>
-      <p>Congratulations, You have created your own Limepay wallet! Shown below is your pneumonic.</p>
+      <p>Congratulations, You have created your own Limepay wallet! Shown below is your mnemonic.</p>
       <p class="text-danger">You <b>MUST</b> write this down. This will help you recover your wallet in case you forgot
         your password. If you lose this, you <b>WILL</b> lose
         access to your funds.</p>
       <div class="col-12">
-        <p style="
-        padding: 10px;
-        background-color: #ebebeb;
-        border-radius: 5px;
-    ">{{mnemonic}}</p>
+        <p class="mnemonic-phrase">{{mnemonic}}</p>
       </div>
-      <button class="btn btn-primary" (click)="initialiseFiatPayment()">
+      <form [formGroup]="acceptCopyMnemonicForm" class="form validate">
+        <label><input type="checkbox" formControlName="copiedMnemonic" /> I confirm that I saved and secured my passphrase!
+        </label>
+      </form>
+      <button class="btn btn-primary m-5 payment-proceed" [disabled]="!copiedMnemonic.value" (click)="initialiseFiatPayment()">
         Proceed to Payment
       </button>
     </div>
