@@ -46,11 +46,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private router: Router) {
   }
 
-  ngOnInit() {
-    this.authSub = this.authService.currentUser$.subscribe((user: User) => {
+  async ngOnInit() {
+    this.authSub = this.authService.currentUser$.subscribe(async (user: User) => {
       if (this.currentUser !== user) {
-        this.initUser();
         this.currentUser = user;
+        await this.initUser();
       }
     });
     this.navSub = this.navService.hideSearchBar$.subscribe((hide: boolean) => {
@@ -58,8 +58,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
   }
 
-  initUser() {
-    if (this.currentUser) {
+  async initUser() {
+    if (this.currentUser && this.currentUser.address) {
       const unreadConversations = this.afs.collection('chats').doc(this.currentUser.address).collection('channels', ref => ref.where('unreadMessages', '==', true));
 
       if (this.messagesSubscription) { this.messagesSubscription.unsubscribe(); }
