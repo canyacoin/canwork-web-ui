@@ -218,7 +218,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       await this.jobService.saveJobFirebase(this.job);
       this.fiatPaymentStep = FiatPaymentSteps.complete;
 
-      //Trigger the monitoring of the payment
+      // Trigger the monitoring of the payment
       await this.limepayService.monitorPayment(this.paymentId, this.job.id);
     } catch (error) {
       this.errorMsg = JSON.stringify(error.message);

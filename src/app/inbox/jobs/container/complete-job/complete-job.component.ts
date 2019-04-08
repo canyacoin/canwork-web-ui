@@ -11,6 +11,7 @@ import { ActionType, IJobAction } from '@class/job-action';
 import { User, UserType } from '@class/user';
 import { CanWorkJobContract } from '@contract/can-work-job.contract';
 import { EthService } from '@service/eth.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FeatureToggleService } from '@service/feature-toggle.service';
 import { JobService } from '@service/job.service';
 import { MomentService } from '@service/moment.service';
@@ -28,7 +29,7 @@ import { environment } from '../../../../../environments/environment';
 export class CompleteJobComponent implements OnInit {
 
   job: Job;
-
+  walletForm: FormGroup;
   canPayOptions: CanPay;
   fiatPayment: boolean;
   processing = false;
@@ -40,7 +41,13 @@ export class CompleteJobComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private momentService: MomentService,
     private router: Router,
-    private limepay: LimepayService) { }
+    private limepay: LimepayService,
+    private formBuilder: FormBuilder) {
+
+    this.walletForm = this.formBuilder.group({
+      password: ['', Validators.compose([Validators.required])]
+    });
+  }
 
   ngOnInit() {
     const jobId = this.activatedRoute.parent.snapshot.params['id'] || null;
@@ -67,12 +74,12 @@ export class CompleteJobComponent implements OnInit {
 
       // Load the payment from LimePay
       const relayedPayment = await this.limepay.library.RelayedPayments.load(payment.paymentToken);
-      
-      //Sign the transactions
+
+      // Sign the transactions
       // TODO The wallet password is hardcoded.. Should be retrieved from the client
-      const signedTransactions = await this.limepay.library.Transactions.signWithLimePayWallet(payment.transactions, payment.paymentToken, "123456");
+      const signedTransactions = await this.limepay.library.Transactions.signWithLimePayWallet(payment.transactions, payment.paymentToken, this.walletForm.value.password);
       console.log(signedTransactions);
-      
+
       // Trigger the processing of the payment
       await relayedPayment.process(signedTransactions);
 

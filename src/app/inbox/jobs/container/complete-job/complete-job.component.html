@@ -1,16 +1,30 @@
-<div *ngIf="!canPayOptions && !fiatPayment" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
+<div *ngIf="!canPayOptions && !fiatPayment" class="container d-flex h-100 flex-column justify-content-center"
+  style="min-height: 640px;">
   <img src="assets/img/loader.svg" height="36px" alt="Loader">
 </div>
 <div class="container mh-50v" *ngIf="fiatPayment">
-    <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet">
-        <h1> Finish Job </h1>
-        <p>Click the button below to finish this job.</p>
-        <button class="btn btn-primary" (click)="finishJob()" [disabled]="processing">Finish Job</button>
+  <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet">
+    <h1> Finish Job </h1>
+    <p>Enter your Limepay password to finish the job.</p>
+    <div class="col-12">
+      <form [formGroup]="walletForm" class="form validate" novalidate>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" #password formControlName="password" required class="form-control" id="password"
+            [class.invalid]="!walletForm.controls.password.valid && walletForm.controls.password.dirty">
+        </div>
+      </form>
     </div>
+    <button class="btn btn-primary" (click)="finishJob()"
+      [disabled]="processing || (!walletForm.controls.password.valid)">Finish
+      Job</button>
+  </div>
 </div>
 <div class="container" *ngIf="canPayOptions && !fiatPayment">
-  <canyalib-canpay [dAppName]="canPayOptions.dAppName" [successText]="canPayOptions.successText" [operation]="canPayOptions.operation"
-    [recipient]="canPayOptions.recipient" [postAuthorisationProcessName]="canPayOptions.postAuthorisationProcessName"
-    [postAuthorisationProcessResults]="canPayOptions.postAuthorisationProcessResults" (startPostAuthorisationProcess)="canPayOptions.startPostAuthorisationProcess($event)"
+  <canyalib-canpay [dAppName]="canPayOptions.dAppName" [successText]="canPayOptions.successText"
+    [operation]="canPayOptions.operation" [recipient]="canPayOptions.recipient"
+    [postAuthorisationProcessName]="canPayOptions.postAuthorisationProcessName"
+    [postAuthorisationProcessResults]="canPayOptions.postAuthorisationProcessResults"
+    (startPostAuthorisationProcess)="canPayOptions.startPostAuthorisationProcess($event)"
     (complete)="canPayOptions.complete($event)" (cancel)="canPayOptions.cancel($event)"></canyalib-canpay>
-</div> 
+</div>

@@ -74,7 +74,7 @@ export class LimepayService {
 
   async monitorPayment(paymentId, jobId): Promise<any> {
     try {
-      const res = await this.http.put(`${apiUrl}/auth/monitor?paymentId=${paymentId}&jobId=${jobId}`, await this.getOptions()).take(1).toPromise();
+      const res = await this.http.get(`${apiUrl}/auth/monitor?paymentId=${paymentId}&jobId=${jobId}`, await this.getOptions()).take(1).toPromise();
       return Promise.resolve(res.json());
     } catch (e) {
       console.log(`Error in submitting payment for monitoring: `, e);
