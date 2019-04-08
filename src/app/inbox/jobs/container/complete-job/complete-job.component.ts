@@ -31,9 +31,11 @@ export class CompleteJobComponent implements OnInit {
   job: Job;
   walletForm: FormGroup;
   canPayOptions: CanPay;
+  errorMsg: any;
   fiatPayment: boolean;
   processing = false;
   processed = false;
+  success = false;
   constructor(private ethService: EthService,
     private jobService: JobService,
     private transactionService: TransactionService,
@@ -82,13 +84,16 @@ export class CompleteJobComponent implements OnInit {
 
       // Trigger the processing of the payment
       await relayedPayment.process(signedTransactions);
-
+      this.success = true;
       // Trigger the monitoring of the payment
       await this.limepay.monitorPayment(payment.paymentId, this.job.id);
+
     } catch (e) {
       alert('Something went wrong...');
       this.processing = false;
+      this.success = false;
       console.log(e);
+      this.errorMsg = e;
     }
   }
   async startCanpay() {

@@ -2,7 +2,7 @@
   style="min-height: 640px;">
   <img src="assets/img/loader.svg" height="36px" alt="Loader">
 </div>
-<div class="container mh-50v" *ngIf="fiatPayment">
+<div class="container mh-50v" *ngIf="fiatPayment && !complete">
   <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet">
     <h1> Finish Job </h1>
     <p>Enter your Limepay password to finish the job.</p>
@@ -18,6 +18,31 @@
     <button class="btn btn-primary" (click)="finishJob()"
       [disabled]="processing || (!walletForm.controls.password.valid)">Finish
       Job</button>
+  </div>
+</div>
+<div class="container mh-50v" *ngIf="fiatPayment && complete && success">
+  <div class="container">
+    <div>
+      <img src="/assets/img/CanYa_tick_green.svg" class="img-responsiveness mt-10 animated bounceInUp" width="150">
+      <h2>Payment Success!</h2>
+      <p class="lead fw-400">The job is now complete.</p>
+    </div>
+    <p class="text-center">
+      <a class="btn btn-secondary" [routerLink]="['/inbox/job', this.job.id]">Return</a>
+    </p>
+  </div>
+</div>
+<div class="container mh-50v" *ngIf="fiatPayment && complete && !success">
+  <div class="container">
+    <div>
+      <img src="/assets/img/CanYa_red_cross.svg" class="img-responsiveness mt-10 animated bounceInUp" width="150">
+      <h2>Payment Failed!</h2>
+      <p class="lead fw-400">Something went wrong when processing your payment. Please try again later.</p>
+      <span>{{errorMsg}}</span>
+    </div>
+    <p class="text-center">
+      <a class="btn btn-secondary" [routerLink]="['/inbox/job', this.job.id]">Return</a>
+    </p>
   </div>
 </div>
 <div class="container" *ngIf="canPayOptions && !fiatPayment">

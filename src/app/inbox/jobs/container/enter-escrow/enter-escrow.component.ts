@@ -159,9 +159,10 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     }
   }
 
-  unlockWallet() {
+  async unlockWallet() {
     // todo - would be nice to quickly check if password is correct, need to grab wallet and then use ethers to check
     // otherwise, just try and use it by init fiat payment:
+    const token = await this.limepayService.getWallet();
     this.initialiseFiatPayment();
   }
 
