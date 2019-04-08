@@ -64,6 +64,20 @@ export class CompleteJobComponent implements OnInit {
       this.processing = false;
       this.processed = true;
       console.log(payment);
+
+      // Load the payment from LimePay
+      const relayedPayment = await this.limepay.library.RelayedPayments.load(payment.paymentToken);
+      
+      //Sign the transactions
+      // TODO The wallet password is hardcoded.. Should be retrieved from the client
+      const signedTransactions = await this.limepay.library.Transactions.signWithLimePayWallet(payment.transactions, payment.paymentToken, "123456");
+      console.log(signedTransactions);
+      
+      // Trigger the processing of the payment
+      await relayedPayment.process(signedTransactions);
+
+      // Trigger the monitoring of the payment
+      await this.limepay.monitorPayment(payment.paymentId, this.job.id);
     } catch (e) {
       alert('Something went wrong...');
       this.processing = false;
