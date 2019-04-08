@@ -31,8 +31,8 @@ enum FiatPaymentSteps {
   walletInitCreation = 0,
   walletProcessCreation = 1,
   walletUnlock = 2,
-  collectDetails = 3,
-  processing = 4,
+  walletCreated = 3,
+  collectDetails = 4,
   failed = 5,
   complete = 6
 }
@@ -51,7 +51,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   paymentMethod: string;
   paymentId: any;
   error;
-
+  mnemonic: any;
   job: Job;
   errorMsg: string;
   totalJobBudgetUsd: number;
@@ -151,8 +151,9 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   async createWallet() {
     this.fiatPaymentStep = FiatPaymentSteps.walletProcessCreation;
     try {
-      await this.limepayService.createWallet(this.walletForm.value.password);
-      this.initialiseFiatPayment();
+      const result = await this.limepayService.createWallet(this.walletForm.value.password);
+      this.mnemonic = result.mnemonic;
+      this.fiatPaymentStep = FiatPaymentSteps.walletCreated;
     } catch (e) {
       this.error = e;
     }

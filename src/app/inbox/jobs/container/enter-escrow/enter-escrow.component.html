@@ -80,9 +80,24 @@
       <button [disabled]="!walletForm.valid" class="btn btn-primary m-5" (click)="unlockWallet()">Get
         Wallet</button>
     </div>
-
-
     <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 3">
+      <h4>Wallet Created!</h4>
+      <p>Congratulations, You have created your own Limepay wallet! Shown below is your pneumonic.</p>
+      <p class="text-danger">You <b>MUST</b> write this down. This will help you recover your wallet in case you forgot
+        your password. If you lose this, you <b>WILL</b> lose
+        access to your funds.</p>
+      <div class="col-12">
+        <p style="
+        padding: 10px;
+        background-color: #ebebeb;
+        border-radius: 5px;
+    ">{{mnemonic}}</p>
+      </div>
+      <button class="btn btn-primary" (click)="initialiseFiatPayment()">
+        Proceed to Payment
+      </button>
+    </div>
+    <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 4">
       <h4>
         Pay
       </h4>
@@ -105,16 +120,16 @@
               <span class="helper-text" id="ccn-help"></span>
             </div>
             <div class="col-sm-6 col-12">
-              <!--Field for CVV--> 
-                <label for="cvv">CVV</label>
-                <div id="cvv" style="max-height: 50px !important;" data-bluesnap="cvv"></div>
-                <span class="helper-text" id="cvv-help"></span> 
+              <!--Field for CVV-->
+              <label for="cvv">CVV</label>
+              <div id="cvv" style="max-height: 50px !important;" data-bluesnap="cvv"></div>
+              <span class="helper-text" id="cvv-help"></span>
             </div>
             <!--Field for EXP-->
-            <div class="col-sm-6 col-12"> 
-                <label for="exp-date">Exp. (MM/YY)</label>
-                <div id="exp-date" style="max-height: 50px !important;" data-bluesnap="exp"></div>
-                <span class="helper-text" id="exp-help"></span> 
+            <div class="col-sm-6 col-12">
+              <label for="exp-date">Exp. (MM/YY)</label>
+              <div id="exp-date" style="max-height: 50px !important;" data-bluesnap="exp"></div>
+              <span class="helper-text" id="exp-help"></span>
             </div>
           </div>
         </div>
@@ -155,7 +170,6 @@
         </div>
       </form>
     </div>
-
     <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 5">
       <div class="container">
         <div>

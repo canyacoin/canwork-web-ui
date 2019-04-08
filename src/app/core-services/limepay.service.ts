@@ -84,7 +84,7 @@ export class LimepayService {
   async initFiatPayment(jobId, providerId): Promise<any> {
     try {
       const provider = await this.userService.getUser(providerId);
-      const res = await this.http.post(`${apiUrl}/auth/initFiatPayment`, { jobId , providerEthAddress: provider.ethAddress } , await this.getOptions()).take(1).toPromise();
+      const res = await this.http.post(`${apiUrl}/auth/initFiatPayment`, { jobId, providerEthAddress: provider.ethAddress }, await this.getOptions()).take(1).toPromise();
       return Promise.resolve(res.json());
     } catch (e) {
       console.log(`Error in initFiatPayment: `, e);
@@ -141,7 +141,8 @@ export class LimepayService {
       const walletToken = await this.getWalletToken();
       console.log(`Wallet token: `, walletToken);
       const mnemonic = await this.library.Wallet.create(walletToken, password);
-      return Promise.resolve(walletToken);
+      const result = { walletToken, mnemonic };
+      return Promise.resolve(result);
     } catch (e) {
       console.log(`Error in createWallet: `, e);
       return Promise.reject(e);
