@@ -5,8 +5,9 @@
 #bluesnap-hosted-iframe-cvv,
 #bluesnap-hosted-iframe-exp,
  {
-  height: 50px !important;
-  max-height: 50px !important;
+  height: 24px !important;
+  max-height: 24px !important;
+  padding: 5px;
 }
 
 

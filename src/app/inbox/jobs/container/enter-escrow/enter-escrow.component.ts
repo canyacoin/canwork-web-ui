@@ -48,6 +48,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   loading = true;
   loadingCreditCard = true;
   paying = false;
+  wrongPassword = false;
   paymentMethod: string;
   paymentId: any;
   error;
@@ -60,7 +61,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   countryList: any;
   walletForm: FormGroup = null;
   cardForm: FormGroup = null;
-  acceptCopyMnemonicForm: FormGroup;
   fiatPaymentStep: FiatPaymentSteps;
 
   shopper: any;
@@ -91,10 +91,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       zip: ['', Validators.compose([Validators.required])],
       street: ['', Validators.compose([Validators.required])]
     });
-
-    this.acceptCopyMnemonicForm = this.formBuilder.group({
-      copiedMnemonic: ['', Validators.compose([Validators.required])]
-    });
   }
 
   ngOnInit() {
@@ -115,10 +111,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       });
       this.countryList = result;
     });
-  }
-
-  public get copiedMnemonic() {
-    return this.acceptCopyMnemonicForm.get('copiedMnemonic');
   }
 
   lookupCountryCode(countryName: string) {
@@ -171,7 +163,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   async unlockWallet() {
     // todo - would be nice to quickly check if password is correct, need to grab wallet and then use ethers to check
     // otherwise, just try and use it by init fiat payment:
-    const token = await this.limepayService.getWallet();
     this.initialiseFiatPayment();
   }
 
@@ -184,19 +175,23 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       this.transactions = transactions;
       this.paymentToken = paymentToken;
       this.paymentId = paymentId;
-      this.loading = false;
       this.fiatPaymentStep = FiatPaymentSteps.collectDetails;
+      this.loading = false;
+      this.signedTransactions = await this.limepayService.library.Transactions.signWithLimePayWallet(this.transactions, paymentToken, this.walletForm.value.password);
       const status = await this.limepayService.getPaymentStatus(this.paymentId);
       console.log(status);
-      console.log(this.transactions);
-      this.signedTransactions = await this.limepayService.library.Transactions.signWithLimePayWallet(this.transactions, paymentToken, this.walletForm.value.password);
       console.log('signed transactions:');
       console.log(this.signedTransactions);
       this.initFiat();
     } catch (e) {
       console.log(e);
-      this.error = e;
-      this.loading = false;
+      if (e.message === 'invalid password') {
+        this.wrongPassword = true;
+        this.loading = false;
+        this.fiatPaymentStep = FiatPaymentSteps.walletUnlock;
+      } else {
+        this.error = e;
+      }
     }
   }
   async initFiat() {
@@ -205,10 +200,14 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     this.loadingCreditCard = false;
     const iFrameCvv = document.getElementById('bluesnap-hosted-iframe-cvv');
     const iFrameExp = document.getElementById('bluesnap-hosted-iframe-exp');
+    const cardLogo = document.getElementById('card-logo');
     iFrameCvv.style.height = '30px';
     iFrameExp.style.height = '30px';
     iFrameCvv.style.border = '1px solid #ebebeb';
     iFrameExp.style.border = '1px solid #ebebeb';
+    cardLogo.style.position = 'absolute';
+    cardLogo.style.right = '0';
+    cardLogo.style.top = '2.5px';
   }
   // The function is trigger once the user submits the payment form
   async processFiatPayment() {
