@@ -35,6 +35,7 @@ export class CompleteJobComponent implements OnInit {
   fiatPayment: boolean;
   processing = false;
   processed = false;
+  wrongPassword = false;
   success = false;
   constructor(private ethService: EthService,
     private jobService: JobService,
@@ -68,6 +69,7 @@ export class CompleteJobComponent implements OnInit {
 
   async finishJob() {
     this.processing = true;
+    this.wrongPassword = false;
     try {
       const payment = await this.limepay.initRelayedPayment(this.job.id, this.job.clientId);
       this.processing = false;
@@ -89,10 +91,11 @@ export class CompleteJobComponent implements OnInit {
       await this.limepay.monitorPayment(payment.paymentId, this.job.id);
 
     } catch (e) {
-      alert('Something went wrong...');
       this.processing = false;
       this.success = false;
-      console.log(e);
+      if (e.message === 'invalid password') {
+        this.wrongPassword = true;
+      }
       this.errorMsg = e;
     }
   }

@@ -6,6 +6,7 @@
   <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet">
     <h1> Finish Job </h1>
     <p>Enter your Limepay password to finish the job.</p>
+    <p *ngIf="wrongPassword">Wrong password. Please try again.</p>
     <div class="col-12">
       <form [formGroup]="walletForm" class="form validate" novalidate>
         <div class="form-group">
@@ -18,6 +19,11 @@
     <button class="btn btn-primary" (click)="finishJob()"
       [disabled]="processing || (!walletForm.controls.password.valid)">Finish
       Job</button>
+    <div *ngIf="processing">
+      <br>
+      <img src="assets/img/loader.svg" height="36px" alt="Loader">
+      <p>Paying...do not close this window.</p>
+    </div>
   </div>
 </div>
 <div class="container mh-50v" *ngIf="fiatPayment && complete && success">
