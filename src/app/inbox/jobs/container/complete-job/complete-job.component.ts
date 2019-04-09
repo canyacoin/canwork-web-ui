@@ -103,7 +103,6 @@ export class CompleteJobComponent implements OnInit {
         save tx to collection
         save action/pending to job */
       const txId = GenerateGuid();
-      this.job.state = JobState.finishingJob;
       this.transactionService.startMonitoring(this.job, from, txId, txHash, ActionType.acceptFinish);
       this.transactionService.saveTransaction(new Transaction(txId, this.job.clientId,
         txHash, this.momentService.get(), ActionType.acceptFinish, this.job.id));

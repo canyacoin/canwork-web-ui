@@ -65,10 +65,6 @@ export class Job {
         return 'The funds has been deposited in the escrow! you can now commence the job.';
       case JobState.reviewed:
         return 'Both parties have completed the job, and a review has been left for the provider!';
-      case JobState.processingEscrow:
-        return 'Payment is process. Please wait.';
-      case JobState.finishingJob:
-        return 'Finalizing Job. Please wait.';
       default:
         return '';
     }
@@ -128,12 +124,12 @@ export enum JobState {
   clientCounterOffer = 'Client counter',
   termsAcceptedAwaitingEscrow = 'Awaiting Escrow',
   authorisedEscrow = 'Funds In Escrow',
-  processingEscrow = 'Processing Escrow',
-  finishingJob = 'Finishing Job',
   inEscrow = 'Job started',
   workPendingCompletion = 'Pending completion',
   inDispute = 'Disputed',
   complete = 'Complete',
+  processingEscrow = 'Processing Escrow',
+  finishingJob = 'Finishing Job',
   reviewed = 'Review added',
   draft = 'Draft'
 }
