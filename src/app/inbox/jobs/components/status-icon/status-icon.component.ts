@@ -73,6 +73,10 @@ export class StatusIconComponent {
         return 'Closed from public';
       case JobState.draft:
         return 'Draft';
+      case JobState.processingEscrow:
+        return 'Processing Escrow';
+      case JobState.finishingJob:
+        return 'Finishing Job';
       default:
         return '';
     }
