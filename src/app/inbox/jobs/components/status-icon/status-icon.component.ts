@@ -29,6 +29,8 @@ export class StatusIconComponent {
       case JobState.providerCounterOffer:
       case JobState.clientCounterOffer:
       case JobState.termsAcceptedAwaitingEscrow:
+      case JobState.finishingJob:
+      case JobState.processingEscrow:
         return 'warning';
       case JobState.complete:
       case JobState.inEscrow:

@@ -128,6 +128,8 @@ export enum JobState {
   workPendingCompletion = 'Pending completion',
   inDispute = 'Disputed',
   complete = 'Complete',
+  processingEscrow = 'Processing Escrow',
+  finishingJob = 'Finishing Job',
   reviewed = 'Review added',
   draft = 'Draft'
 }
