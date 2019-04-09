@@ -100,14 +100,20 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
   private transactionTypeService(fiatPayment, jobId): any {
     if (fiatPayment) {
-      console.log('HERE 2')
-      this.transactionsSub = this.limepayService.getTransactionsByJob(jobId).subscribe((transactions: any) => {
-        console.log(transactions)
+      this.transactionsSub = this.limepayService.getTransactionsByJob(jobId).subscribe((payments: any) => {
+        let transactions = [];
+        console.log('HERE PAYMENTS', payments);
+        payments.forEach(payment => {
+          console.log('HERE PAYMENT', payment);
+          if (payment.transactions) {
+            transactions = transactions.concat(payment.transactions);
+          }
+        });
         this.transactions = transactions;
+        console.log(this.transactions);
       });
     } else {
       this.transactionsSub = this.transactionService.getTransactionsByJob(jobId).subscribe((transactions: Transaction[]) => {
-        console.log(transactions)
         this.transactions = transactions;
       });
     }
