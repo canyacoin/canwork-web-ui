@@ -93,6 +93,10 @@
                   <small>Conversation started: {{ selectedChannel.timestamp | date }}</small>
                 </div>
               </div>
+              <div class="loading-messages" *ngIf="isLoading">
+                  <img src="assets/img/loader.svg" height="36px" alt="Loader">
+                  <p>Loading messages...</p>
+              </div>
               <p *ngIf="!isLoading && channels.length < 1" class="text-dark opacity-60 my-80 text-center">Uh, oh, no
                 messages yet! Try again later.</p>
               <div *ngFor="let message of messages;let i = index">
