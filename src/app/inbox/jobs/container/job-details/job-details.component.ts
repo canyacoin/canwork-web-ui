@@ -102,9 +102,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     if (fiatPayment) {
       this.transactionsSub = this.limepayService.getTransactionsByJob(jobId).subscribe((payments: any) => {
         let transactions = [];
-        console.log('HERE PAYMENTS', payments);
         payments.forEach(payment => {
-          console.log('HERE PAYMENT', payment);
           if (payment.transactions) {
             transactions = transactions.concat(payment.transactions);
           }

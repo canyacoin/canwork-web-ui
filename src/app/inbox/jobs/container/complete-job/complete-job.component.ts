@@ -73,26 +73,30 @@ export class CompleteJobComponent implements OnInit {
     this.wrongPassword = false;
     try {
       const payment = await this.limepay.initRelayedPayment(this.job.id, this.job.clientId);
-      
-    
+
       // Load the payment from LimePay
       const relayedPayment = await this.limepay.library.RelayedPayments.load(payment.paymentToken);
       // Sign the transactions
       const signedTransactions = await this.limepay.library.Transactions.signWithLimePayWallet(payment.transactions, payment.paymentToken, this.walletForm.value.password);
-      
-      this.processing = false;
-      this.processed = true;
-      this.success = true;
-      this.complete = true;
       // Trigger the processing of the payment
       await relayedPayment.process(signedTransactions);
       // Trigger the monitoring of the payment
       await this.limepay.monitorPayment(payment.paymentId, this.job.id);
+
+      this.processing = false;
+      this.processed = true;
+      this.success = true;
+      this.complete = true;
     } catch (e) {
       if (e.message === 'invalid password') {
         this.processing = false;
         this.success = false;
         this.wrongPassword = true;
+        this.errorMsg = e;
+      } else {
+        this.processing = false;
+        this.success = false;
+        this.processed = true;
         this.errorMsg = e;
       }
     }

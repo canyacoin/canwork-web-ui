@@ -73,6 +73,7 @@ export class LimepayService {
       return Promise.resolve(res.json());
     } catch (e) {
       console.log(`Error in getPaymentStatus: `, e);
+      return Promise.reject(e);
     }
   }
 
@@ -82,6 +83,7 @@ export class LimepayService {
       return Promise.resolve(res.json());
     } catch (e) {
       console.log(`Error in submitting payment for monitoring: `, e);
+      return Promise.reject(e);
     }
   }
 
