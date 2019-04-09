@@ -6,7 +6,7 @@ import {
   CanPay, CanPayData, Operation, PaymentItem, PaymentItemCurrency, PaymentSummary,
   setProcessResult
 } from '@canpay-lib/lib';
-import { Job } from '@class/job';
+import { Job, JobState } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
 import { User, UserType } from '@class/user';
 import { CanWorkJobContract } from '@contract/can-work-job.contract';
