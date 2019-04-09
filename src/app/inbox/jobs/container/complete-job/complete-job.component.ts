@@ -6,7 +6,7 @@ import {
   CanPay, CanPayData, Operation, PaymentItem, PaymentItemCurrency, PaymentSummary,
   setProcessResult
 } from '@canpay-lib/lib';
-import { Job } from '@class/job';
+import { Job, JobState } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
 import { User, UserType } from '@class/user';
 import { CanWorkJobContract } from '@contract/can-work-job.contract';
@@ -103,6 +103,7 @@ export class CompleteJobComponent implements OnInit {
         save tx to collection
         save action/pending to job */
       const txId = GenerateGuid();
+      this.job.state = JobState.finishingJob;
       this.transactionService.startMonitoring(this.job, from, txId, txHash, ActionType.acceptFinish);
       this.transactionService.saveTransaction(new Transaction(txId, this.job.clientId,
         txHash, this.momentService.get(), ActionType.acceptFinish, this.job.id));

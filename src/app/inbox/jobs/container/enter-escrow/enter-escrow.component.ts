@@ -6,7 +6,7 @@ import {
   CanPay, CanPayData, Operation, PaymentItem, PaymentItemCurrency, PaymentSummary,
   setProcessResult
 } from '@canpay-lib/lib';
-import { Job } from '@class/job';
+import { Job, JobState } from '@class/job';
 import { ActionType, IJobAction } from '@class/job-action';
 import { User, UserType } from '@class/user';
 import { CanWorkJobContract } from '@contract/can-work-job.contract';
@@ -282,6 +282,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       this.job.actionLog.push(action);
       this.job.clientEthAddress = from;
       this.job.fiatPayment = false;
+      this.job.state = JobState.processingEscrow;
       clientEthAddress = from;
       await this.jobService.saveJobFirebase(this.job);
     };
