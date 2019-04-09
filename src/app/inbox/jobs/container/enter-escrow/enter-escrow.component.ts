@@ -222,7 +222,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     try {
       const result = await this.fiatPayment.process(cardHolderInformation, this.signedTransactions);
       console.log(result);
-
       this.job.fiatPayment = true;
       this.job.clientEthAddress = null;
       await this.jobService.saveJobFirebase(this.job);

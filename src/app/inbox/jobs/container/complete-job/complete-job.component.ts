@@ -34,6 +34,7 @@ export class CompleteJobComponent implements OnInit {
   errorMsg: any;
   fiatPayment: boolean;
   processing = false;
+  complete = false;
   processed = false;
   wrongPassword = false;
   success = false;
@@ -75,29 +76,24 @@ export class CompleteJobComponent implements OnInit {
       this.processing = false;
       this.processed = true;
       console.log(payment);
-
       // Load the payment from LimePay
       const relayedPayment = await this.limepay.library.RelayedPayments.load(payment.paymentToken);
-
       // Sign the transactions
-      // TODO The wallet password is hardcoded.. Should be retrieved from the client
       const signedTransactions = await this.limepay.library.Transactions.signWithLimePayWallet(payment.transactions, payment.paymentToken, this.walletForm.value.password);
       console.log(signedTransactions);
-
+      this.success = true;
+      this.complete = true;
       // Trigger the processing of the payment
       await relayedPayment.process(signedTransactions);
-      this.success = true;
       // Trigger the monitoring of the payment
       await this.limepay.monitorPayment(payment.paymentId, this.job.id);
-
     } catch (e) {
-      this.processing = false;
-      this.processed = true;
-      this.success = false;
       if (e.message === 'invalid password') {
+        this.processing = false;
+        this.success = false;
         this.wrongPassword = true;
+        this.errorMsg = e;
       }
-      this.errorMsg = e;
     }
   }
   async startCanpay() {

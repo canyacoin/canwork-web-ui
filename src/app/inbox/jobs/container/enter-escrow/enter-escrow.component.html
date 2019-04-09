@@ -6,11 +6,14 @@
   <div class="row">
     <div class="col-12 text-center choose-payment">
       <h2>Choose your payment method</h2>
-      <button class="btn-payment-type" (click)="setPaymentMethod('fiat')"><img src="assets/img/credit-card.svg"><br>Pay
+      <button class="btn-payment-type" [disabled]="job.budget < 10" (click)="setPaymentMethod('fiat')"><img
+          src="assets/img/credit-card.svg"><br>Pay
         with<br>Credit card</button>
       <button class="btn-payment-type" (click)="setPaymentMethod('crypto'); startCanpay() "><img
           src="assets/img/ethereum.svg"><br>Pay
         with<br>Cryptocurrency</button>
+      <br>
+      <i *ngIf="job.budget < 10" >Credit card payments is not available for Jobs that costs less than $10</i>
     </div>
   </div>
 </div>
@@ -65,7 +68,7 @@
         Unlock Wallet
       </h4>
       <br>
-      <p>We have detected that you have paid with a credit card before. To do it again, please the password you used
+      <p>We have detected that you have paid with a credit card before. To do it again, please use the password you used
         last time.</p>
       <p class="text-danger" *ngIf="wrongPassword">
         Incorrect Password. Please try again.
@@ -80,8 +83,7 @@
         </form>
       </div>
       <button (click)="paymentMethod = null" class="btn btn-danger m-5">Cancel</button>
-      <button [disabled]="!walletForm.valid" class="btn btn-primary m-5" (click)="unlockWallet()">Get
-        Wallet</button>
+      <button [disabled]="!walletForm.valid" class="btn btn-primary m-5" (click)="unlockWallet()">Proceed</button>
     </div>
     <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 3">
       <h4>Wallet Created!</h4>
