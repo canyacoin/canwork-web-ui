@@ -285,7 +285,8 @@ export class JobService {
     actions[JobState.workPendingCompletion] = forClient ? [ActionType.acceptFinish, ActionType.dispute, ActionType.addMessage] : [ActionType.dispute, ActionType.addMessage];
     actions[JobState.inDispute] = forClient ? [ActionType.acceptFinish, ActionType.addMessage] : [ActionType.addMessage];
     actions[JobState.cancelled] = [];
-    actions[JobState.cancelled] = [];
+    actions[JobState.processingEscrow] = [];
+    actions[JobState.finishingJob] = [];
     actions[JobState.declined] = [];
     actions[JobState.complete] = [ActionType.review];
     actions[JobState.reviewed] = [];
