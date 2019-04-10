@@ -63,6 +63,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   walletForm: FormGroup = null;
   cardForm: FormGroup = null;
   fiatPaymentStep: FiatPaymentSteps;
+  acceptCopyMnemonicForm: FormGroup;
 
   shopper: any;
   fiatPayment: any;
@@ -92,6 +93,11 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       zip: ['', Validators.compose([Validators.required])],
       street: ['', Validators.compose([Validators.required])]
     });
+
+    this.acceptCopyMnemonicForm = this.formBuilder.group({
+      copiedMnemonic: ['', Validators.compose([Validators.required])]
+    });
+
   }
 
   ngOnInit() {
@@ -118,6 +124,11 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       this.countryList = result;
     });
   }
+
+  public get copiedMnemonic() {
+    return this.acceptCopyMnemonicForm.get('copiedMnemonic');
+  }
+
 
   lookupCountryCode(countryName: string) {
     for (let i = 0; i < this.countryList.length; i++) {
