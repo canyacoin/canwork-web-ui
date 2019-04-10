@@ -4,6 +4,7 @@ import merge from 'lodash.merge';
 import { BehaviorSubject, bindNodeCallback, Observable, Subject, Subscription } from 'rxjs';
 import { environment } from '@env/environment';
 import { canyaAbi, canworkAbi, priceOracleAbi } from '../contracts';
+import { ethers } from 'ethers';
 
 declare let require: any;
 const Web3 = require('web3');
@@ -429,7 +430,8 @@ export class EthService implements OnDestroy {
   async getUsdToCan(amountOfUsd: number = 1): Promise<number> {
     try {
       const priceOracle = this.createContractInstance(priceOracleAbi, environment.contracts.priceOracle, this.web3Status.value !== Web3LoadingStatus.complete);
-      const dai = web3.toBigNumber(amountOfUsd).mul(10 ** 18).toFixed(); // toFixed() prevents exponential notation being returned, no matter how large or small the value
+      const multiplier = ethers.utils.bigNumberify(10).pow(18);
+      const dai = ethers.utils.bigNumberify(amountOfUsd).mul(multiplier);
       const daiValueInToken = await priceOracle.methods.getDaiToToken(dai).call();
       const daiValueDecimal = daiValueInToken / (10 ** this.canyaDecimals);
       return Promise.resolve(daiValueDecimal);
