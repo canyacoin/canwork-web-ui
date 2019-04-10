@@ -54,7 +54,7 @@
     "rxjs": "^6.3.3",
     "rxjs-compat": "^6.3.3",
     "stream-buffers": "^3.0.2",
-    "web3": "^1.0.0-beta.30",
+    "web3": "^1.0.0-beta.52",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
