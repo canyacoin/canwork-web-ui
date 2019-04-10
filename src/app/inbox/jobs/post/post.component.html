@@ -385,7 +385,7 @@
                         <label>Deadline *</label>
                         <br />
                         <div class="row ml-0 mr-0">
-                          <input #deadline formControlName="deadline" type="date" class="form-control" min="{{currentDate}}">
+                          <input #deadline formControlName="deadline" type="date" placeholder="dd.mm.yyyy" class="form-control" min="{{currentDate}}">
                         </div>
                         <small *ngIf="!shareableJobForm.controls.deadline.valid  && shareableJobForm.controls.deadline.dirty"
                           class="text-primary text-wrap">Deadline is required.</small>
