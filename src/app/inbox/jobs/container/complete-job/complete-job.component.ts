@@ -33,6 +33,7 @@ export class CompleteJobComponent implements OnInit {
   canPayOptions: CanPay;
   errorMsg: any;
   fiatPayment: boolean;
+  canSee: boolean;
   processing = false;
   complete = false;
   processed = false;
@@ -58,11 +59,16 @@ export class CompleteJobComponent implements OnInit {
     if (jobId) {
       this.jobService.getJob(jobId).take(1).subscribe(async (job: Job) => {
         this.job = job;
-        if (this.job.fiatPayment === undefined || this.job.fiatPayment === false) {
-          this.fiatPayment = false;
-          this.startCanpay();
+        if (this.job.state !== JobState.workPendingCompletion) {
+          this.canSee = false;
         } else {
-          this.fiatPayment = true;
+          this.canSee = true;
+          if (this.job.fiatPayment === undefined || this.job.fiatPayment === false) {
+            this.fiatPayment = false;
+            this.startCanpay();
+          } else {
+            this.fiatPayment = true;
+          }
         }
       });
     }

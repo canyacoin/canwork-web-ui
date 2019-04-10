@@ -51,6 +51,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   wrongPassword = false;
   paymentMethod: string;
   paymentId: any;
+  canSee: boolean;
   error;
   mnemonic: any;
   job: Job;
@@ -99,6 +100,11 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       this.jobService.getJob(jobId).take(1).subscribe(async (job: Job) => {
         this.totalJobBudgetUsd = await this.jobService.getJobBudgetUsd(job);
         this.job = job;
+        if (this.job.state !== JobState.termsAcceptedAwaitingEscrow) {
+          this.canSee = false;
+        } else {
+          this.canSee = true;
+        }
         this.loading = false;
       });
     }
@@ -201,8 +207,8 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     const iFrameCvv = document.getElementById('bluesnap-hosted-iframe-cvv');
     const iFrameExp = document.getElementById('bluesnap-hosted-iframe-exp');
     const cardLogo = document.getElementById('card-logo');
-    iFrameCvv.style.height = '30px';
-    iFrameExp.style.height = '30px';
+    iFrameCvv.style.height = '24px';
+    iFrameExp.style.height = '24px';
     iFrameCvv.style.border = '1px solid #ebebeb';
     iFrameExp.style.border = '1px solid #ebebeb';
     cardLogo.style.position = 'absolute';

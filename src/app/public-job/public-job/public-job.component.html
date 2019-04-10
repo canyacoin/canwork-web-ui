@@ -43,7 +43,8 @@
               </div>
               <div class="info-details">
                 <b>Attachments</b>
-                <a href="{{job.information.attachments[0].url}}" target="_blank" *ngIf="job.information.attachments.length > 0">
+                <a href="{{job.information.attachments[0].url}}" target="_blank"
+                  *ngIf="job.information.attachments.length > 0">
                   <p *ngIf="job.information.attachments[0].name.length > 10">
                     <i class="fas fa-paperclip"></i> {{ job.information.attachments[0].name.substring(0, 10) }}...
                   </p>
@@ -56,12 +57,13 @@
             </div>
           </div>
           <div class="row my-15">
-            <div class="col-sm-9">
-              <app-skill-tag *ngFor="let skill of job.information.skills" [routerLink]="['/search/']" [queryParams]="{query : skill}"
-                [skill]=skill></app-skill-tag>
+            <div class="col-md-9 col-sm-8">
+              <app-skill-tag *ngFor="let skill of job.information.skills" [routerLink]="['/search/']"
+                [queryParams]="{query : skill}" [skill]=skill></app-skill-tag>
             </div>
-            <div class="col-sm-3" *ngIf="myJob && !isClosed">
-              <button class="btn btn-sm btn-primary" [routerLink]="['/inbox/job/edit', job.id]">EDIT JOB</button>
+            <div class="col-md-3 col-sm-4" *ngIf="myJob && !isClosed">
+              <button class="btn btn-sm btn-primary mt-10 mr-10" [routerLink]="['/inbox/job/edit', job.id]">EDIT
+                JOB</button>
               <button class="btn btn-sm btn-danger mt-10" (click)="cancelJob()">CANCEL JOB</button>
             </div>
           </div>
@@ -94,7 +96,8 @@
           </div>
           <div class="col-12">
             <div class="otherPartyName pointer" [routerLink]="['/profile/alt/', job.clientId]">
-              <span *ngIf="jobPoster?.avatar && jobPoster?.avatar.uri" class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + jobPoster?.avatar.uri + ')'}">
+              <span *ngIf="jobPoster?.avatar && jobPoster?.avatar.uri" class="headshot-div"
+                [ngStyle]="{ 'background-image': 'url(' + jobPoster?.avatar.uri + ')'}">
               </span>
               <p style="font-style: 21px;">{{jobPoster?.name}}</p>
             </div>
@@ -157,7 +160,8 @@
               <h5>BIDS</h5>
             </div>
             <div class="col-sm-4 col-6 text-right">
-              <button class="btn btn-sm btn-primary" *ngIf="bids && bids.length > 0" [routerLink]="['bids']">VIEW ALL</button>
+              <button class="btn btn-sm btn-primary" *ngIf="bids && bids.length > 0" [routerLink]="['bids']">VIEW
+                ALL</button>
             </div>
           </div>
           <div class="row" *ngIf="bids">
@@ -215,25 +219,26 @@
         <div class="col-12">
           <h5 class="modal-title">SHARE THIS JOB AS A LINK</h5>
         </div>
-        <button type="button" class="close" style="position: absolute; right: 15px;" data-dismiss="modal">&times;</button>
+        <button type="button" class="close" style="position: absolute; right: 15px;"
+          data-dismiss="modal">&times;</button>
       </div>
       <div border-none class="modal-body">
         <div class="container">
           <div class="row">
             <div class="col-12">
               <div class="row px-15">
-                <span>URL:</span>
               </div>
               <div class="row px-15">
-                <div class="col-8 link-col">
-                  <p *ngIf="!job.slug">
+                <div class="col-12 text-center">
+                  <span>URL:</span>
+                  <br>
+                  <br>
+                  <p *ngIf="!job.slug" class="link-col p-10">
                     {{shareableLink}}/jobs/{{job.id}}
                   </p>
-                  <p *ngIf="job.slug">
+                  <p *ngIf="job.slug" class="link-col p-10">
                     {{shareableLink}}/job/{{job.slug}}
                   </p>
-                </div>
-                <div class="col-12">
                   <button (click)="copyLink()" class="btn btn-primary mt-5">COPY LINK</button>
                 </div>
               </div>
@@ -257,7 +262,8 @@
         <div class="col-12">
           <h5 class="modal-title">PLACE YOUR BID</h5>
         </div>
-        <button type="button" class="close" style="position: absolute; right: 15px;" id="close-bid" data-dismiss="modal">&times;</button>
+        <button type="button" class="close" style="position: absolute; right: 15px;" id="close-bid"
+          data-dismiss="modal">&times;</button>
       </div>
       <div border-none class="modal-body">
         <div class="container" *ngIf="canBid && !sent">
@@ -270,12 +276,14 @@
                   <input type="number" formControlName="price" style="border: 1px solid #ebebeb;" class="form-control"
                     id="price" placeholder="Client budget : {{job.budget}}">
                   <div class="input-group-append" style="padding: 5px;">
-                    <span class="input-group-text"> <span *ngIf="job.paymentType !== 'Fixed price'">/hr </span>USD</span>
+                    <span class="input-group-text"> <span *ngIf="job.paymentType !== 'Fixed price'">/hr
+                      </span>USD</span>
                   </div>
                 </div>
                 <label for="message">Message</label>
                 <br>
-                <textarea rows="2" class="form-control" placeholder="Deliver your pitch!" formControlName="message" id="message"></textarea>
+                <textarea rows="2" class="form-control" placeholder="Deliver your pitch!" formControlName="message"
+                  id="message"></textarea>
               </form>
               <div class="row px-15">
               </div>
@@ -292,8 +300,8 @@
         </div>
       </div>
       <div class="modal-footer text-right" *ngIf="canBid && !sent">
-        <img src="assets/img/loader.svg" height="36px" alt="Loader" *ngIf="isBidding"> <button type="button" class="btn btn-primary"
-          [disabled]="!bidForm.valid || isBidding" (click)="submitBid()">PLACE BID</button>
+        <img src="assets/img/loader.svg" height="36px" alt="Loader" *ngIf="isBidding"> <button type="button"
+          class="btn btn-primary" [disabled]="!bidForm.valid || isBidding" (click)="submitBid()">PLACE BID</button>
       </div>
     </div>
   </div>

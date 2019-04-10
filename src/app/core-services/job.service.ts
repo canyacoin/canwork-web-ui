@@ -280,7 +280,7 @@ export class JobService {
     actions[JobState.providerCounterOffer] = forClient ? [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms] : [ActionType.cancelJob];
     actions[JobState.clientCounterOffer] = forClient ? [ActionType.cancelJob] : [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms];
     actions[JobState.termsAcceptedAwaitingEscrow] = forClient ? [ActionType.authoriseEscrow, ActionType.cancelJob] : [ActionType.cancelJob];
-    actions[JobState.authorisedEscrow] = forClient ? [ActionType.enterEscrow, ActionType.cancelJob] : [];
+    actions[JobState.authorisedEscrow] = forClient ? [] : [];
     actions[JobState.inEscrow] = forClient ? [ActionType.dispute, ActionType.addMessage] : [ActionType.finishedJob, ActionType.addMessage, ActionType.cancelJobEarly];
     actions[JobState.workPendingCompletion] = forClient ? [ActionType.acceptFinish, ActionType.dispute, ActionType.addMessage] : [ActionType.dispute, ActionType.addMessage];
     actions[JobState.inDispute] = forClient ? [ActionType.acceptFinish, ActionType.addMessage] : [ActionType.addMessage];
