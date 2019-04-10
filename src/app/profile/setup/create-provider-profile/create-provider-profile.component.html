@@ -9,7 +9,7 @@
           <app-v-stepper [steps]="stepperSteps" [currentStep]="currentStep"></app-v-stepper>
         </p>
         <div *ngIf="currentStep.name == 'professionalInfo'">
-          <div class="form-group row" [class.has-danger]="profileForm.controls.ethAddress.invalid">
+          <div class="form-group row" [class.has-danger]="profileForm.controls.ethAddress.touched && profileForm.controls.ethAddress.invalid">
             <div class="col-lg-9 col-md-9 col-sm-12">
               <label>ETH Address *</label>
               <input class="form-control" #ethAddress formControlName="ethAddress" type="text" name="ethAddress"
@@ -22,7 +22,6 @@
               </small>
             </div>
           </div>
-
           <div class="form-group row">
             <div class="col-lg-6 col-md-6 col-sm-8">
               <label>Service you provide *</label>
@@ -70,7 +69,7 @@
               <input disabled class="form-control" #timezone formControlName="timezone" type="text" name="timezone">
             </div>
           </div>
-          <button type="button" class="btn btn-primary btn-canya-gradient next-button" [disabled]="!profileForm.controls.category.valid || !profileForm.controls.work.valid || !profileForm.controls.skillTags.valid"
+          <button type="button" class="btn btn-primary btn-canya-gradient next-button" [disabled]="!profileForm.controls.category.valid || !profileForm.controls.work.valid || !profileForm.controls.skillTags.valid || !profileForm.controls.ethAddress.valid"
             (click)="nextStep()">NEXT</button>
         </div>
 
@@ -115,12 +114,8 @@
             <p>
               <input class="form-control form-color" #color1 formControlName="color1" type="color" name="color1" size="3"
                 placeholder="Color scheme" list="canya">
-              <input class="form-control form-color" #color2 formControlName="color2" type="color" name="color2
-                   "
-                size="3" placeholder="Color scheme" list="canya">
-              <input class="form-control form-color" #color3 formControlName="color3" type="color" name="color3
-                   "
-                size="3" placeholder="Color scheme" list="canya">
+              <input class="form-control form-color" #color2 formControlName="color2" type="color" name="color2" size="3" placeholder="Color scheme" list="canya">
+              <input class="form-control form-color" #color3 formControlName="color3" type="color" name="color3" size="3" placeholder="Color scheme" list="canya">
             </p>
             <datalist id="canya">
               <option>#00FFCC</option>
@@ -146,8 +141,7 @@
           </div>
 
 
-          <button type="button" class="btn btn-primary btn-canya-gradient next-button" [disabled]="!profileForm.controls.firstName.valid || !profileForm.controls.lastName.valid ||
-          !profileForm.controls.title.valid || !profileForm.controls.bio.valid || !profileForm.controls.terms.valid || sending"
+          <button type="button" class="btn btn-primary btn-canya-gradient next-button" [disabled]="!profileForm.controls.firstName.valid || !profileForm.controls.lastName.valid || !profileForm.controls.title.valid || !profileForm.controls.bio.valid || !profileForm.controls.terms.valid || sending" 
             (click)="submitForm()">NEXT</button>
         </div>
 

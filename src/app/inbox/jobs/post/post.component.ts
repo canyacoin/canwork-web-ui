@@ -110,7 +110,7 @@ export class PostComponent implements OnInit, OnDestroy {
       workType: ['', Validators.compose([Validators.required])],
       timelineExpectation: ['', Validators.compose([Validators.required])],
       weeklyCommitment: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(60)])],
-      paymentType: ['', Validators.compose([Validators.required])],
+      paymentType: ['Fixed price', Validators.compose([Validators.required])], // Please remove 'Fixed price' once the 'hourly rate' workflow is ready!
       budget: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(10000000)])],
       terms: [false, Validators.requiredTrue]
     });
@@ -124,7 +124,7 @@ export class PostComponent implements OnInit, OnDestroy {
       providerType: ['', Validators.compose([Validators.required])],
       deadline: ['', Validators.compose([Validators.required, Validators.minLength(1), Validators.maxLength(100)])],
       timelineExpectation: ['', Validators.compose([Validators.required])],
-      paymentType: ['', Validators.compose([Validators.required])],
+      paymentType: ['Fixed price', Validators.compose([Validators.required])], // Please remove 'Fixed price' once the 'hourly rate' workflow is ready!
       visibility: ['', Validators.compose([Validators.required])],
       budget: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(10000000)])],
       weeklyCommitment: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(60)])],

@@ -89,7 +89,15 @@ export class CreateClientProfileComponent implements OnInit {
       color3: [colors[2]],
       terms: [false, Validators.requiredTrue],
       timezone: moment.tz.guess(),
-      ethAddress: [this.user.ethAddress || this.ethAddress, Validators.compose([Validators.required, EthereumValidator.isValidAddress]), EthereumValidator.isUniqueAddress(this.userService.usersCollectionRef, this.user)],
+      ethAddress: [this.user.ethAddress || this.ethAddress || '', Validators.compose([Validators.minLength(2)]), new EthereumValidator(this.ethService).isUniqueAddress(this.userService.usersCollectionRef, this.user)],
+    });
+
+    this.profileForm.get('ethAddress').valueChanges.subscribe((data) => {
+      if (!data) {
+        this.profileForm.controls.ethAddress.setErrors(null);
+        return;
+      }
+      this.profileForm.controls.ethAddress.setValidators(Validators.compose([new EthereumValidator(this.ethService).isValidAddress]));
     });
   }
 

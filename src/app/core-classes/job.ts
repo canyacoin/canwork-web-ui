@@ -24,7 +24,7 @@ export class Job {
   slug: string;
   createAt: number;
   updateAt: number;
-
+  fiatPayment: boolean;
   constructor(init?: Partial<Job>) {
     Object.assign(this, init);
   }
@@ -128,6 +128,8 @@ export enum JobState {
   workPendingCompletion = 'Pending completion',
   inDispute = 'Disputed',
   complete = 'Complete',
+  processingEscrow = 'Processing Escrow',
+  finishingJob = 'Finishing Job',
   reviewed = 'Review added',
   draft = 'Draft'
 }

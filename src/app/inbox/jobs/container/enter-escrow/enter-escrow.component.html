@@ -1,12 +1,235 @@
-<div *ngIf="!canPayOptions" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
+<div *ngIf="loading" class="container d-flex h-50 flex-column justify-content-center" style="min-height: 640px;">
   <img src="assets/img/loader.svg" height="36px" alt="Loader">
 </div>
+<div *ngIf="!loading && !canSee">
+  <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet">
+    <img src="/assets/img/CanYa_red_cross.svg" class="img-responsiveness mt-10 animated bounceInUp" width="150">
+    <h2>Unauthorized</h2>
+    <p class="lead fw-400">It seems like you're trying to initiate payment for this job even though It's already paid, or
+      is processing its payment.</p>
+    <p class="text-center">
+      <a class="btn btn-secondary" [routerLink]="['/inbox/job', this.job.id]">Return</a>
+    </p>
+  </div>
+</div>
+<div *ngIf="!paymentMethod && !loading && canSee" class="container">
+  <div class="row">
+    <div class="col-12 text-center choose-payment">
+      <h2>Choose your payment method</h2>
+      <button class="btn-payment-type" [disabled]="job.budget < 10" (click)="setPaymentMethod('fiat')"><img
+          src="assets/img/credit-card.svg"><br>Pay
+        with<br>Credit card</button>
+      <button class="btn-payment-type" (click)="setPaymentMethod('crypto'); startCanpay() "><img
+          src="assets/img/ethereum.svg"><br>Pay
+        with<br>Cryptocurrency</button>
+      <br>
+      <i *ngIf="job.budget < 10">Credit card payments is not available for Jobs that costs less than $10</i>
+    </div>
+  </div>
+</div>
 
-<div class="container" *ngIf="canPayOptions ">
-  <canyalib-canpay [dAppName]="canPayOptions.dAppName" [successText]="canPayOptions.successText" [operation]="canPayOptions.operation"
-    [onAuthTxHash]="canPayOptions.onAuthTxHash" [recipient]="canPayOptions.recipient" [amount]="canPayOptions.amount"
-    [paymentSummary]="canPayOptions.paymentSummary" [postAuthorisationProcessName]="canPayOptions.postAuthorisationProcessName"
-    [postAuthorisationProcessResults]="canPayOptions.postAuthorisationProcessResults" (startPostAuthorisationProcess)="canPayOptions.startPostAuthorisationProcess($event)"
-    (complete)="canPayOptions.complete($event)" (cancel)="canPayOptions.cancel($event)" [disableCanEx]="canPayOptions.disableCanEx"
-    [userEmail]="canPayOptions.userEmail"></canyalib-canpay>
+<div *ngIf="paymentMethod == 'fiat' && error" class="container">
+  <div class="row">
+    <div class="col-12 text-center choose-payment">
+      Uh-oh.. something went wrong
+    </div>
+  </div>
+</div>
+
+<div *ngIf="paymentMethod == 'fiat' && !loading && !error" class="container choose-payment">
+  <div class="row">
+    <h2 class="col-12 text-center">Paying With Credit Card</h2>
+    <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 0">
+      <h4>
+        Generate Wallet
+      </h4>
+      <br>
+      <p>We will now create a crypto wallet, allowing you to pay and interact with the ethereum blockchain easily using
+        your credit card.</p>
+      <p class="text-danger">You <b>MUST</b> remember this password. If you lose this password, you <b>WILL</b> lose
+        access to your funds.</p>
+      <div class="col-sm-4 offset-sm-4">
+        <form [formGroup]="walletForm" class="form validate" novalidate>
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" #password formControlName="password" required class="form-control" id="password"
+              [class.invalid]="!walletForm.controls.password.valid && walletForm.controls.password.dirty">
+          </div>
+        </form>
+      </div>
+      <button (click)="paymentMethod = null" class="btn btn-danger m-5">Cancel</button>
+      <button class="btn btn-primary m-5" (click)="createWallet()" [disabled]="!walletForm.valid">Get
+        Wallet
+      </button>
+    </div>
+    <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 1">
+      <h4>
+        Generating Wallet
+      </h4>
+      <br>
+      <img src="assets/img/loader.svg" height="36px" alt="Loader">
+      <p>
+        Your wallet is being generated. Please wait...
+      </p>
+      <br>
+    </div>
+    <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 2">
+      <h4>
+        Unlock Wallet
+      </h4>
+      <br>
+      <p>We have detected that you have paid with a credit card before. To do it again, please use the password you used
+        last time.</p>
+      <p class="text-danger" *ngIf="wrongPassword">
+        Incorrect Password. Please try again.
+      </p>
+      <div class="col-sm-4 offset-sm-4">
+        <form [formGroup]="walletForm" class="form validate" novalidate>
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" #password formControlName="password" required class="form-control" id="password"
+              [class.invalid]="!walletForm.controls.password.valid && walletForm.controls.password.dirty">
+          </div>
+        </form>
+      </div>
+      <button (click)="paymentMethod = null" class="btn btn-danger m-5">Cancel</button>
+      <button [disabled]="!walletForm.valid" class="btn btn-primary m-5" (click)="unlockWallet()">Proceed</button>
+    </div>
+    <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 3">
+      <h4>Wallet Created!</h4>
+      <p>Congratulations, You have created your own Limepay wallet! Shown below is your mnemonic.</p>
+      <p class="text-danger">You <b>MUST</b> write this down. This will help you recover your wallet in case you forgot
+        your password. If you lose this, you <b>WILL</b> lose
+        access to your funds.</p>
+      <div class="col-12">
+        <p class="mnemonic-phrase">{{mnemonic}}</p>
+      </div>
+      <form [formGroup]="acceptCopyMnemonicForm" class="form validate">
+        <label><input type="checkbox" formControlName="copiedMnemonic" /> I confirm that I saved and secured my
+          passphrase!
+        </label>
+      </form>
+      <button class="btn btn-primary m-5 payment-proceed" [disabled]="!copiedMnemonic.value"
+        (click)="initialiseFiatPayment()">
+        Proceed to Payment
+      </button>
+    </div>
+    <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 4">
+      <h4>
+        Pay
+      </h4>
+      <form [formGroup]="cardForm" id="checkout-form">
+        <!--Field for Credit card number -->
+        <div *ngIf="loadingCreditCard">
+          <img src="assets/img/loader.svg" height="36px" alt="Loader">
+          <p>Loading Credit Card Form...</p>
+        </div>
+        <div class="col-12" [hidden]="loadingCreditCard">
+          <div class="form-group row">
+            <div class="col-12">
+              <label for="card-number">Card Number</label>
+              <div class="input-group" style="max-height: 30px !important;">
+                <div id="card-number" data-bluesnap="ccn"></div>
+                <div id="card-logo" class="input-group-addon">
+                  <img src="https://files.readme.io/d1a25b4-generic-card.png" height="20px">
+                </div>
+              </div>
+              <span class="helper-text" id="ccn-help"></span>
+            </div>
+            <div class="col-sm-6 col-12">
+              <!--Field for CVV-->
+              <label for="cvv">CVV</label>
+              <div id="cvv" style="max-height: 50px !important;" data-bluesnap="cvv"></div>
+              <span class="helper-text" id="cvv-help"></span>
+            </div>
+            <!--Field for EXP-->
+            <div class="col-sm-6 col-12">
+              <label for="exp-date">Exp. (MM/YY)</label>
+              <div id="exp-date" style="max-height: 50px !important;" data-bluesnap="exp"></div>
+              <span class="helper-text" id="exp-help"></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-12" [hidden]="loadingCreditCard">
+          <div class="form-group">
+            <label for="card-name">Name</label>
+            <div class="input-group">
+              <input formControlName="name" class="form-control" type="text" id="card-holder-name">
+            </div>
+            <span class="helper-text" id="ccn-help"></span>
+          </div>
+          <div class="form-group row">
+            <div class="col-md-6">
+              <label for="street">Street</label>
+              <input id="street" formControlName="street" type="text" class="form-control">
+            </div>
+            <div class="col-md-3 col-sm-6">
+              <label for="country">Country</label>
+              <input required id="country" name="country" list="countryList" formControlName="countryCode"
+                class="form-control" placeholder="Type in your country name...." />
+              <datalist id="countryList">
+                <option *ngFor="let country of countryList" value="{{ country[1] }}">{{country[1]}}</option>
+              </datalist>
+            </div>
+            <div class="col-md-3 col-sm-6">
+              <label for="street">ZIP</label>
+              <input id="zip" formControlName="zip" type="text" class="form-control">
+            </div>
+          </div>
+          <button class="btn btn-raised btn-info btn-lg col-md-4" type="submit" (click)="processFiatPayment()"
+            id="submit-button" [disabled]="paying || loadingCreditCard">Pay
+            Now</button>
+          <div *ngIf="paying">
+            <br>
+            <img src="assets/img/loader.svg" height="36px" alt="Loader">
+            <p>Paying...do not close this window.</p>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 5">
+      <div class="container">
+        <div>
+          <img src="/assets/img/CanYa_red_cross.svg" class="img-responsiveness mt-10 animated bounceInUp" width="150">
+          <h2>Payment Failed!</h2>
+          <p class="lead fw-400">Something went wrong when processing your payment. Please try again later.</p>
+          <span>{{errorMsg}}</span>
+        </div>
+        <p class="text-center">
+          <a class="btn btn-secondary" [routerLink]="['/inbox/job', this.job.id]">Return</a>
+        </p>
+      </div>
+    </div>
+    <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet" *ngIf="fiatPaymentStep === 6">
+      <div class="container">
+        <div class="section-header">
+          <img src="assets/img/CanYa_tick_green.svg" class="mb-30 animated bounceInDown" width="100px" height="100px">
+          <h2>Payment complete!</h2>
+          <p class="lead fw-400">Your payment has been processed. The job will now commence.</p>
+        </div>
+        <p class="text-center">
+          <a class="btn btn-secondary" [routerLink]="['/inbox/job', this.job.id]">Return</a>
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div *ngIf="paymentMethod == 'crypto'">
+  <div *ngIf="!canPayOptions" class="container d-flex h-100 flex-column justify-content-center"
+    style="min-height: 640px;">
+    <img src="assets/img/loader.svg" height="36px" alt="Loader">
+  </div>
+  <div class="container" *ngIf="canPayOptions ">
+    <canyalib-canpay [dAppName]="canPayOptions.dAppName" [successText]="canPayOptions.successText"
+      [operation]="canPayOptions.operation" [onAuthTxHash]="canPayOptions.onAuthTxHash"
+      [recipient]="canPayOptions.recipient" [amount]="canPayOptions.amount"
+      [paymentSummary]="canPayOptions.paymentSummary"
+      [postAuthorisationProcessName]="canPayOptions.postAuthorisationProcessName"
+      [postAuthorisationProcessResults]="canPayOptions.postAuthorisationProcessResults"
+      (startPostAuthorisationProcess)="canPayOptions.startPostAuthorisationProcess($event)"
+      (complete)="canPayOptions.complete($event)" (cancel)="canPayOptions.cancel($event)"
+      [disableCanEx]="canPayOptions.disableCanEx" [userEmail]="canPayOptions.userEmail"></canyalib-canpay>
+  </div>
 </div>

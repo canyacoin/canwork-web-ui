@@ -35,18 +35,17 @@
             </div>
           </div>
 
-          <div class="form-group row" [class.has-danger]="profileForm.controls.ethAddress.invalid">
+          <div class="form-group row" [class.has-danger]="profileForm.controls.ethAddress.touched && profileForm.controls.ethAddress.invalid">
             <div class="col-lg-9 col-md-9 col-sm-12">
               <label>ETH Address</label>
               <input class="form-control" #ethAddress formControlName="ethAddress" type="text" name="ethAddress" placeholder="0x123...">
-              <small *ngIf="profileForm.controls.ethAddress.errors && profileForm.controls.ethAddress.errors.isInvalidEthereumAddress"
+              <small *ngIf="profileForm.controls.ethAddress.errors && profileForm.controls.ethAddress.errors.isInvalidEthereumAddress || profileForm.controls.ethAddress.errors?.minlength" 
                 class="form-control-feedback">Please enter a valid ethereum address.</small>
               <small *ngIf="profileForm.controls.ethAddress.errors && profileForm.controls.ethAddress.errors.addressExists" class="form-control-feedback">This
                 address is already being used in CanWork. Please use another one.
               </small>
             </div>
           </div>
-
           <div class="form-group row">
             <div class="col-lg-6 col-md-6 col-sm-8">
               <label>City </label>
@@ -80,10 +79,10 @@
             <p>
               <input class="form-control form-color" #color1 formControlName="color1" type="color" name="color1" size="3" placeholder="Color scheme"
                 list="canya">
-              <input class="form-control form-color" #color2 formControlName="color2" type="color" name="color2
-                 " size="3" placeholder="Color scheme" list="canya">
-              <input class="form-control form-color" #color3 formControlName="color3" type="color" name="color3
-                 " size="3" placeholder="Color scheme" list="canya">
+              <input class="form-control form-color" #color2 formControlName="color2" type="color" name="color2"
+                size="3" placeholder="Color scheme" list="canya">
+              <input class="form-control form-color" #color3 formControlName="color3" type="color" name="color3"
+                size="3" placeholder="Color scheme" list="canya">
             </p>
             <datalist id="canya">
               <option>#00FFCC</option>
@@ -108,7 +107,7 @@
             <app-terms [form]="profileForm"></app-terms>
           </div>
 
-          <button type="button" class="btn btn-primary btn-canya-gradient next-button" [disabled]="!profileForm.controls.title.valid || !profileForm.controls.bio.valid || !profileForm.controls.description.valid || !profileForm.controls.terms.valid || sending"
+          <button type="button" class="btn btn-primary btn-canya-gradient next-button" [disabled]="!profileForm.controls.title.valid || !profileForm.controls.bio.valid || !profileForm.controls.description.valid || !profileForm.controls.terms.valid || !profileForm.controls.ethAddress.valid || sending"
             (click)="submitForm()">NEXT</button>
         </div>
 

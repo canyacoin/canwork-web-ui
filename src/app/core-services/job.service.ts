@@ -86,13 +86,13 @@ export class JobService {
 
   async getJobBudget(job: Job): Promise<number> {
     try {
-        const totalBudget = await this.getJobBudgetUsd(job);
-        const canValue = await this.ethService.getUsdToCan(totalBudget);
-        if (canValue) {
-          return Promise.resolve(canValue);
-        } else {
-          return Promise.reject(false);
-        }
+      const totalBudget = await this.getJobBudgetUsd(job);
+      const canValue = await this.ethService.getUsdToCan(totalBudget);
+      if (canValue) {
+        return Promise.resolve(canValue);
+      } else {
+        return Promise.reject(false);
+      }
     } catch (e) {
       return Promise.reject(false);
     }
@@ -139,20 +139,20 @@ export class JobService {
     const pendingCompletion = (job.state === JobState.workPendingCompletion || job.state === JobState.inDispute);
 
     if (job.state === JobState.termsAcceptedAwaitingEscrow ||
-        job.state === JobState.authorisedEscrow ||
-        job.state === JobState.inEscrow ||
-        pendingCompletion) {
+      job.state === JobState.authorisedEscrow ||
+      job.state === JobState.inEscrow ||
+      pendingCompletion) {
 
-        let url = `${environment.transactionMonitor.callbackUri}/check-job-state`;
-        url += `?jobID=${job.id}&jobHexID=${job.hexId}&skipNew=${pendingCompletion}`;
+      let url = `${environment.transactionMonitor.callbackUri}/check-job-state`;
+      url += `?jobID=${job.id}&jobHexID=${job.hexId}&skipNew=${pendingCompletion}`;
 
-        try {
+      try {
 
-          await this.http.get(url).toPromise();
+        await this.http.get(url).toPromise();
 
-        } catch (error) {
-          console.error(`! http get error checking job state`, error);
-        }
+      } catch (error) {
+        console.error(`! http get error checking job state`, error);
+      }
     }
   }
 
@@ -249,7 +249,7 @@ export class JobService {
     });
   }
 
-  private async saveJobAndNotify(job: Job, action: IJobAction) {
+  async saveJobAndNotify(job: Job, action: IJobAction) {
     await this.saveJobFirebase(job);
     await this.chatService.sendJobMessages(job, action);
     await this.jobNotificationService.notify(action.type, job.id);
@@ -280,12 +280,13 @@ export class JobService {
     actions[JobState.providerCounterOffer] = forClient ? [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms] : [ActionType.cancelJob];
     actions[JobState.clientCounterOffer] = forClient ? [ActionType.cancelJob] : [ActionType.acceptTerms, ActionType.counterOffer, ActionType.declineTerms];
     actions[JobState.termsAcceptedAwaitingEscrow] = forClient ? [ActionType.authoriseEscrow, ActionType.cancelJob] : [ActionType.cancelJob];
-    actions[JobState.authorisedEscrow] = forClient ? [ActionType.enterEscrow, ActionType.cancelJob] : [];
+    actions[JobState.authorisedEscrow] = forClient ? [] : [];
     actions[JobState.inEscrow] = forClient ? [ActionType.dispute, ActionType.addMessage] : [ActionType.finishedJob, ActionType.addMessage, ActionType.cancelJobEarly];
     actions[JobState.workPendingCompletion] = forClient ? [ActionType.acceptFinish, ActionType.dispute, ActionType.addMessage] : [ActionType.dispute, ActionType.addMessage];
     actions[JobState.inDispute] = forClient ? [ActionType.acceptFinish, ActionType.addMessage] : [ActionType.addMessage];
     actions[JobState.cancelled] = [];
-    actions[JobState.cancelled] = [];
+    actions[JobState.processingEscrow] = [];
+    actions[JobState.finishingJob] = [];
     actions[JobState.declined] = [];
     actions[JobState.complete] = [ActionType.review];
     actions[JobState.reviewed] = [];

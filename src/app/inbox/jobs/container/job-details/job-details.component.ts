@@ -19,6 +19,7 @@ import { environment } from '../../../../../environments/environment';
 import {
   ActionDialogComponent, ActionDialogOptions
 } from '../action-dialog/action-dialog.component';
+import { LimepayService } from '@service/limepay.service';
 
 @Component({
   selector: 'app-job-details',
@@ -53,7 +54,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     private dialogService: DialogService,
     private storage: AngularFireStorage,
     private mobile: MobileService,
-    private router: Router
+    private router: Router,
+    private limepayService: LimepayService
   ) { }
 
   ngOnInit() {
@@ -76,6 +78,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.isPartOfJob = this.currentUser.address === job.clientId || this.currentUser.address === job.providerId;
         if (this.isPartOfJob) {
           this.job = new Job(job);
+          this.transactionTypeService(this.job.fiatPayment, jobId);
           this.currentUserType = this.currentUser.address === job.clientId ? UserType.client : UserType.provider;
           this.jobService.assignOtherPartyAsync(this.job, this.currentUserType);
           this.setAttachmentUrl();
@@ -92,7 +95,22 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       this.reviewsSub = this.reviewService.getJobReviews(jobId).subscribe((reviews: Review[]) => {
         this.reviews = reviews;
       });
+    }
+  }
 
+  private transactionTypeService(fiatPayment, jobId): any {
+    if (fiatPayment) {
+      this.transactionsSub = this.limepayService.getTransactionsByJob(jobId).subscribe((payments: any) => {
+        let transactions = [];
+        payments.forEach(payment => {
+          if (payment.transactions) {
+            transactions = transactions.concat(payment.transactions);
+          }
+        });
+        this.transactions = transactions;
+        console.log(this.transactions);
+      });
+    } else {
       this.transactionsSub = this.transactionService.getTransactionsByJob(jobId).subscribe((transactions: Transaction[]) => {
         this.transactions = transactions;
       });

@@ -417,3 +417,6 @@
   background: url('/assets/img/offer.svg');
   opacity: 0.8;
 }
+.loading-messages {
+  text-align: center;
+}

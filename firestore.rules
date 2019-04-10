@@ -110,6 +110,13 @@ service cloud.firestore {
        allow update: if isAuthenticated();
        allow delete: if isAdmin();
     }
+
+    match /shoppers/{userId} {
+       allow read;
+       allow create: if isDocumentOwner(userId);
+       allow update: if isDocumentOwner(userId);
+       allow delete: if isAdmin();
+    }
   }
 
   // --------------------------------------------------------------------------------
@@ -119,6 +126,7 @@ service cloud.firestore {
 
   function isDocumentOwner(userId) {
     return request.auth.uid == userId
+    || isAdmin()
   }
 
   function userIsSender() {

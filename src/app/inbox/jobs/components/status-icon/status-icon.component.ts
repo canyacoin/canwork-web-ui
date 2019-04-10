@@ -29,6 +29,8 @@ export class StatusIconComponent {
       case JobState.providerCounterOffer:
       case JobState.clientCounterOffer:
       case JobState.termsAcceptedAwaitingEscrow:
+      case JobState.finishingJob:
+      case JobState.processingEscrow:
         return 'warning';
       case JobState.complete:
       case JobState.inEscrow:
@@ -71,6 +73,10 @@ export class StatusIconComponent {
         return 'Closed from public';
       case JobState.draft:
         return 'Draft';
+      case JobState.processingEscrow:
+        return 'Processing Escrow';
+      case JobState.finishingJob:
+        return 'Finishing Job';
       default:
         return '';
     }
