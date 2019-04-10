@@ -249,7 +249,7 @@ export class JobService {
     });
   }
 
-  private async saveJobAndNotify(job: Job, action: IJobAction) {
+  async saveJobAndNotify(job: Job, action: IJobAction) {
     await this.saveJobFirebase(job);
     await this.chatService.sendJobMessages(job, action);
     await this.jobNotificationService.notify(action.type, job.id);

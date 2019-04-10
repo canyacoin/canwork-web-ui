@@ -56,8 +56,8 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     this.currentUser = await this.authService.getCurrentUser();
     this.userType = this.currentUser.type;
     this.initialiseJobs(this.currentUser.address, this.userType);
-    this.orderType = 'information.title';
-    this.reverseOrder = false;
+    this.orderType = 'actionLog[0].timestamp';
+    this.reverseOrder = true;
     this.isOnMobile = this.mobile.isOnMobile;
   }
 
