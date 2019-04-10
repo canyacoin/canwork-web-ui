@@ -163,10 +163,14 @@ export class PublicJobComponent implements OnInit, OnDestroy {
       timezone: this.currentUser.timezone,
       avatar: this.currentUser.avatar
     };
-    const bidToSubmit = new Bid(this.currentUser.address, providerInfo, this.bidForm.value.price, this.bidForm.value.message, moment().format('x'));
-    this.sent = await this.publicJobsService.handlePublicBid(bidToSubmit, this.job);
-    this.isBidding = false;
-    this.canBid = false;
+    if (this.currentUser.whitelisted) {
+      const bidToSubmit = new Bid(this.currentUser.address, providerInfo, this.bidForm.value.price, this.bidForm.value.message, moment().format('x'));
+      this.sent = await this.publicJobsService.handlePublicBid(bidToSubmit, this.job);
+      this.isBidding = false;
+      this.canBid = false;
+    } else {
+      alert('You have not been approved as a provider.');
+    }
     this.loading = false;
   }
 

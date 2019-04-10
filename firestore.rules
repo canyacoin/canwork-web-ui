@@ -76,6 +76,14 @@ service cloud.firestore {
     match /dock-auth/{docId} {
       allow read;
     }
+    
+    match /limepay-payments/{jobId} {
+       allow read;
+       allow create: if isAuthenticated();
+       allow update: if userIsClientOrProvider();
+       allow delete: if isAdmin();
+    }
+
 
     // TODO: Will require a much more complex rule set here
     match /jobs {
