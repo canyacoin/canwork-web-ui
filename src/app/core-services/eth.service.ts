@@ -93,7 +93,7 @@ export class EthService implements OnDestroy {
         this.web3Status.next(Web3LoadingStatus.error);
       }
     } else {
-      this.web3js = new Web3(environment.backupWeb3Provider);
+      this.web3js = new Web3(new Web3.providers.HttpProvider(environment.backupWeb3Provider));
       this.web3Status.next(Web3LoadingStatus.noMetaMask);
     }
 
@@ -211,7 +211,7 @@ export class EthService implements OnDestroy {
     console.log('createContractInstance: ', abi, address, useDefaultWeb3Provider);
     let thisWeb3js = this.web3js;
     if (useDefaultWeb3Provider || !thisWeb3js) {
-      thisWeb3js = new Web3(environment.backupWeb3Provider);
+      thisWeb3js = new Web3(new Web3.providers.HttpProvider(environment.backupWeb3Provider));
     }
     if (!thisWeb3js) {
       console.log('Error createContractInstance, web3 provider not initialized');
