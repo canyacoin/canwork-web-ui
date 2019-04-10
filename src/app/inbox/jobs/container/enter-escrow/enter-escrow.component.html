@@ -127,7 +127,7 @@
         <div class="col-12" [hidden]="loadingCreditCard">
           <div class="form-group row">
             <div class="col-12">
-              <label for="card-number">Card Number</label>
+              <label for="card-number">Card Number *</label>
               <div class="input-group" style="max-height: 30px !important;">
                 <div id="card-number" data-bluesnap="ccn"></div>
                 <div id="card-logo" class="input-group-addon">
@@ -138,13 +138,13 @@
             </div>
             <div class="col-sm-6 col-12">
               <!--Field for CVV-->
-              <label for="cvv">CVV</label>
+              <label for="cvv">CVV *</label>
               <div id="cvv" style="max-height: 50px !important;" data-bluesnap="cvv"></div>
               <span class="helper-text" id="cvv-help"></span>
             </div>
             <!--Field for EXP-->
             <div class="col-sm-6 col-12">
-              <label for="exp-date">Exp. (MM/YY)</label>
+              <label for="exp-date">Exp. (MM/YY) *</label>
               <div id="exp-date" style="max-height: 50px !important;" data-bluesnap="exp"></div>
               <span class="helper-text" id="exp-help"></span>
             </div>
@@ -152,7 +152,7 @@
         </div>
         <div class="col-12" [hidden]="loadingCreditCard">
           <div class="form-group">
-            <label for="card-name">Name</label>
+            <label for="card-name">Name *</label>
             <div class="input-group">
               <input formControlName="name" class="form-control" type="text" id="card-holder-name">
             </div>
@@ -160,11 +160,11 @@
           </div>
           <div class="form-group row">
             <div class="col-md-6">
-              <label for="street">Street</label>
+              <label for="street">Street *</label>
               <input id="street" formControlName="street" type="text" class="form-control">
             </div>
             <div class="col-md-3 col-sm-6">
-              <label for="country">Country</label>
+              <label for="country">Country *</label>
               <input required id="country" name="country" list="countryList" formControlName="countryCode"
                 class="form-control" placeholder="Type in your country name...." />
               <datalist id="countryList">
@@ -172,12 +172,12 @@
               </datalist>
             </div>
             <div class="col-md-3 col-sm-6">
-              <label for="street">ZIP</label>
-              <input id="zip" formControlName="zip" type="text" class="form-control">
+              <label for="street">ZIP *</label>
+              <input id="zip" formControlName="zip" type="number" class="form-control">
             </div>
           </div>
           <button class="btn btn-raised btn-info btn-lg col-md-4" type="submit" (click)="processFiatPayment()"
-            id="submit-button" [disabled]="paying || loadingCreditCard">Pay
+            id="submit-button" [disabled]="paying || loadingCreditCard || !cardForm.valid">Pay
             Now</button>
           <div *ngIf="paying">
             <br>
