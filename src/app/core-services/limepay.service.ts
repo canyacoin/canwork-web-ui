@@ -4,6 +4,9 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { environment } from '@env/environment';
 import LimePayWeb from 'limepay-web';
+import { AngularFirestore } from 'angularfire2/firestore';
+import { map } from 'rxjs/operators';
+
 
 const apiUrl = environment.limepay.uri;
 
@@ -25,6 +28,7 @@ export class LimepayService {
     private http: Http,
     private auth: AuthService,
     private userService: UserService,
+    private afs: AngularFirestore,
   ) {
     LimePayWeb.connect(LimePayWeb.Environment[environment.limepay.env]).then(limepay => {
       this.limepay = limepay;
@@ -69,6 +73,7 @@ export class LimepayService {
       return Promise.resolve(res.json());
     } catch (e) {
       console.log(`Error in getPaymentStatus: `, e);
+      return Promise.reject(e);
     }
   }
 
@@ -78,6 +83,7 @@ export class LimepayService {
       return Promise.resolve(res.json());
     } catch (e) {
       console.log(`Error in submitting payment for monitoring: `, e);
+      return Promise.reject(e);
     }
   }
 
@@ -157,5 +163,14 @@ export class LimepayService {
       console.log(`Error in getWalletToken: `, e);
       return Promise.reject(e);
     }
+  }
+
+  getTransactionsByJob(jobId: string) {
+    return this.afs.collection<any>('limepay-payments', ref => ref.where('jobId', '==', jobId)).snapshotChanges().pipe(map(changes => {
+      return changes.map(a => {
+        const data = a.payload.doc.data() as any;
+        return data;
+      });
+    }));
   }
 }
