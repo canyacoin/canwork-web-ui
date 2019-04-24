@@ -2,7 +2,7 @@
   class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
   <img src="assets/img/loader.svg" height="36px" alt="Loader">
 </div>
-<div *ngIf="!canSee" class="container" style="overflow-y: hidden">
+<div *ngIf="!canSee && !canPayOptions" class="container" style="overflow-y: hidden">
   <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet">
     <img src="/assets/img/CanYa_red_cross.svg" class="img-responsiveness mt-10 animated bounceInUp" width="150">
     <h2>Unauthorized</h2>
