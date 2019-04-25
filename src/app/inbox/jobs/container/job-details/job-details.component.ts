@@ -121,9 +121,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     switch (action) {
       case ActionType.dispute:
         return true;
-      case ActionType.enterEscrow:
-      case ActionType.acceptFinish:
-        return this.hasPendingTransactions;
       case ActionType.review:
         return !this.userCanReview;
       default:
