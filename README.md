@@ -1,29 +1,50 @@
 # CanWork.io
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.6.5.
+This is an Angular Project, generated using [Angular CLI](https://github.com/angular/angular-cli)
 
 [![pipeline status](https://gitlab.com/canya-com/canwork/web-ui/badges/master/pipeline.svg)](https://gitlab.com/canya-com/shared/services/ethereum-transaction-monitor/commits/master)
 
-This project requires Yarn, NPM, Angular-CLI and Firebase-CLI.
+*This project requires*
+* NPM: 6.4.1
+* Angular-CLI: 7.0.2
+* Firebase-CLI: 5.5.7
+* Yarn: 1.15.2
 
-## Development server
 
-### Clone & Initial Setup:
+## Setting Up
 
-#### Web App
+* [NPM](https://nodejs.org/en/)
 
-Once only installations:
+* [Angular](https://github.com/angular/angular-cli)
+```
+npm install --save-dev @angular/compiler-cli@7.0.2
+```
 
+* [Firebase CLI](https://www.npmjs.com/package/firebase)
 ```
 npm install -g @angular/cli firebase-tools
 ```
+
+* [YARN](https://yarnpkg.com/en/docs/install#mac-stable)
+```
+brew install yarn
+```
+
+
+### Clone & Initial Setup:
 
 ```
 git clone git@gitlab.com:canya-com/canwork/web-ui.git
 cd web-ui
 yarn
+node patch.js
+yarn link
 cp src/environments/environment.ts.sample src/environments/environment.ts
 ```
+
+### Credentials
+
+Go to the Gitlab -> settings -> CI/CD , click ‘reveal values’ and copy the ENV_STAGING value into a file called `environment.ts`, then move that file into the environments folder
 
 Now, go to your firebase account and obtain the database credentials, and update the `firebase` block in `src/environments/environment.ts`
 
