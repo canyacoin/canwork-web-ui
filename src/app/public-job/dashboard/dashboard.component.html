@@ -54,7 +54,7 @@
       </div>
       <div class="row">
         <div class="col-lg-2 col-md-3 col-ms-4 col-6">
-          <b>{{job.budget}} USD <span *ngIf="job.paymentType == paymentType.hourly">/hr</span></b>
+          <b>${{job.budget}} USD <span *ngIf="job.paymentType == paymentType.hourly">/hr</span></b>
           <p>{{job.paymentType}}</p>
         </div>
         <div class="col-lg-2 col-md-3 col-ms-4 col-6">
