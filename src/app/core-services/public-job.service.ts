@@ -266,7 +266,7 @@ export class PublicJobService {
 
   async generateReadableId(jobName) {
     // take the job name, take the first 2 strings.
-    const filteredName = jobName.replace(/[0-9]/g, '');
+    const filteredName = jobName.replace(/([0-9])+\/\\/g, '');
     const nameArray = filteredName.split(' ');
     let friendly: string;
     if (nameArray.length > 1) {
