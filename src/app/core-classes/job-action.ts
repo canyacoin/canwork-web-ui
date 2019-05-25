@@ -65,7 +65,7 @@ export class IJobAction {
         return 'Once you decline these terms, the job will be cancelled and no further action can be performed on it.' +
           ' Are you sure you wish to decline the terms?';
       case ActionType.counterOffer:
-        return 'If you wish to make a counter offer, enter the amount you propose for the job \nUSD' + this.paymentTypeString;
+        return 'If you wish to make a counter offer, enter the amount you propose for the job \n USD' + this.paymentTypeString;
       case ActionType.acceptTerms:
         return 'Are you sure?';
       case ActionType.authoriseEscrow:
@@ -91,12 +91,12 @@ export class IJobAction {
     switch (this.type) {
       case ActionType.createJob:
         return `Job created by ${executor}.<br>
-          Proposed ${this.amountUsd ? `budget at $${this.amountUsd}${this.paymentTypeString} (${this.amountCan} CAN)` : ''}
+          Proposed ${this.amountUsd ? `budget at $${this.amountUsd}${this.paymentTypeString} USD` : ''}
           for ${this.weeklyCommitment} hours a week
           for ${this.timelineExpectation}`;
       case ActionType.counterOffer:
         return `${executor} proposed a counter offer.<br>
-          Proposed budget at $${this.amountUsd}${this.paymentTypeString} (${this.amountCan} CAN)`;
+          Proposed budget at $${this.amountUsd}${this.paymentTypeString}) USD`;
       case ActionType.acceptTerms:
         return `${executor} accepted the terms of this job.`;
       case ActionType.declineTerms:
@@ -107,7 +107,7 @@ export class IJobAction {
       case ActionType.declineTerms:
         return `${executor} cancelled this job.`;
       case ActionType.authoriseEscrow:
-        return `${executor} authorised the Escrow contract to transfer ${this.amountCan} CAN`;
+        return `${executor} authorised the Escrow contract to transfer $${this.amountUsd} USD`;
         case ActionType.cancelJobEarly:
           return `${executor} cancelled the job early.`;
       case ActionType.enterEscrow:

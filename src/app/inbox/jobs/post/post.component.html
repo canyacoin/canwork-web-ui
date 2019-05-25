@@ -85,8 +85,8 @@
                             </p>
                           </li>
                         </ul>
-                        <!-- 
-                        <span> 
+                        <!--
+                        <span>
                           <app-attachment [name]="uploadedFile.name" [path]="uploadedFile.filePath" [url]="uploadedFile.url" [size]="uploadedFile.size"></app-attachment>
                           <span class="pointer alert" (click)="removeUpload(uploadedFile)">
                             <i class="fa fa-times fs-14 pl-8"></i>
@@ -163,9 +163,9 @@
                       <div class="row">
                         <div class="col-6">
                           <input #budget formControlName="budget" class="form-control" type="number" min="0" name="budget"
-                            step="5" placeholder="1 USD minimum" [class.invalid]="!postForm.controls.budget.valid && postForm.controls.budget.dirty">
+                            step="5" placeholder="$1 USD minimum" [class.invalid]="!postForm.controls.budget.valid && postForm.controls.budget.dirty">
                           <small *ngIf="!postForm.controls.budget.valid && postForm.controls.budget.dirty" class="text-primary">Must
-                            be 1 USD or more.</small>
+                            be $1 USD or more.</small>
                         </div>
                       </div>
                       <div class="row">
@@ -421,10 +421,10 @@
                         <div class="row">
                           <div class="col-md-6 col-sm-12">
                             <input #budget formControlName="budget" class="form-control" type="number" min="0" name="budget"
-                              step="5" placeholder="1 USD minimum" [class.invalid]="!shareableJobForm.controls.budget.valid && shareableJobForm.controls.budget.dirty">
+                              step="5" placeholder="$1 USD minimum" [class.invalid]="!shareableJobForm.controls.budget.valid && shareableJobForm.controls.budget.dirty">
                             <small *ngIf="!shareableJobForm.controls.budget.valid && shareableJobForm.controls.budget.dirty"
                               class="text-primary">Must
-                              be 1 USD or more.</small>
+                              be $1 USD or more.</small>
                           </div>
                         </div>
                         <div class="row">
