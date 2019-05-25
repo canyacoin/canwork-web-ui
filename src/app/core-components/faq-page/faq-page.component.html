@@ -6,7 +6,7 @@
           <div class="faq-content-hero-text">
             <h1>FAQ's</h1>
             <p>Frequently Asked Questions
-              <br>We're here to help - search or browse below for some common questions about CanYa. </p>
+              <br><s></s>earch or browse below for some common questions about CanYa. </p>
             <form method="post" (ngSubmit)="onSearch(inputSearch.value);">
               <div class="canya-seach-bar input-group mb-3">
                 <input #inputSearch (keyup)="onKeyUp(inputSearch.value);" type="text" class="form-control canya-search-input" placeholder="Search FAQ..">
@@ -23,10 +23,10 @@
           <img src="https://canya.io/images/CanYa_Consult.gif">
         </div>
       </div>
-      <div *ngIf = "!isOnMobile" > 
+      <div *ngIf = "!isOnMobile" >
       <div class="question-card card" *ngFor="let faq of queryFaqs;let i = index">
           <a  class="p-20 question-card-header"  data-toggle="collapse" [attr.data-target]="'#' + faq.index" aria-expanded="true"
-          [attr.aria-controls]="faq.index"> 
+          [attr.aria-controls]="faq.index">
         <div class="row" id="headingOne">
             <div class="col-11">
               <h5 class="text-left">{{faq.q}}</h5>
@@ -36,7 +36,7 @@
                 <i class="fas fa-chevron-down"></i>
               </span>
             </div>
-        </div> 
+        </div>
       </a>
         <div id="{{faq.index}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
           <div class="card-body p-20">
@@ -45,11 +45,11 @@
         </div>
       </div>
       </div>
-      <div *ngIf = "isOnMobile"> 
+      <div *ngIf = "isOnMobile">
         <div class="question-card card" *ngFor="let faq of queryFaqs;let i = index">
-            <div class="question-card-header"> 
+            <div class="question-card-header">
                 <h6 class="p-20 text-left">{{faq.q}}</h6>
-            </div> 
+            </div>
             <p class="p-20">{{faq.a}}</p>
         </div>
       </div>
