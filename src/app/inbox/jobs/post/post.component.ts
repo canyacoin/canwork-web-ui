@@ -362,9 +362,12 @@ export class PostComponent implements OnInit, OnDestroy {
       if (tags.length > 6) {
         tags = tags.slice(0, 6);
       }
-      const friendly = await this.publicJobService.generateReadableId(this.shareableJobForm.value.title);
-      this.slug = friendly;
-      console.log('Friendly URL : ' + this.slug);
+      if (!this.slug) {
+        const friendly = await this.publicJobService.generateReadableId(this.shareableJobForm.value.title);
+        this.slug = friendly;
+        console.log('Friendly URL : ' + this.slug);
+      }
+
       if (this.editing) {
         this.jobId = this.jobToEdit.id;
       }
