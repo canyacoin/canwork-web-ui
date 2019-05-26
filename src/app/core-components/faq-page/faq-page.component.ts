@@ -15,12 +15,12 @@ export class FaqPageComponent implements OnInit {
     {
       index: 'q-2',
       q: 'Why CANwork?',
-      a: 'CANwork only takes 1% in service fees when you make a transaction. This means that when you receive payment for your work, you take more of your hard earned salary home. You can expect high quality providers from CANwork. This because all of our providers are hand picked and vetted for their skills. CANwork is decentralised  - CANWork does not and will never keep or distribute your personal data. CANwork provides fantastic utility for the many unbanked agents in the developing world. Cryptocurrency payments allow for international transactions to be processed quickly and with less fees. Payments on CANwork are enabled for use globally. Those in countries where paypal is not available don’t have to worry when using our platform because our transactions are all made using cryptocurrency. National currency such as USD and AUD transactions coming soon. CANwork has a global reach because of the borderless nature of crypto payments.  This is particularly beneficial as it gives everyone equal opportunity to access the global gig economy, and most importantly equal opportunity to earn an equivalent wage. CANwork is continually being optimised for your experience. We pride ourselves on the fact that CANwork is made from insights from our community. We are a platform for gig workers, designed by gig workers. CANwork has created a suite of free tools which allows a sole operator to build and operate their business from their own computer.'
+      a: 'CANwork only takes 1% in service fees when you make a transaction. This means that when you receive payment for your work, you take more of your hard earned salary home. You can expect high quality providers from CANwork. This because all of our providers are hand picked and vetted for their skills. CANwork is decentralised  - CANWork does not and will never keep or distribute your personal data. CANwork provides fantastic utility for the many unbanked agents in the developing world. Cryptocurrency payments allow for international transactions to be processed quickly and with less fees. Payments on CANwork are enabled for use globally. Those in countries where paypal is not available don’t have to worry when using our platform because our transactions are all made using cryptocurrency. National currency such as USD and AUD transactions coming soon. CANwork has a global reach because of the borderless nature of crypto payments.  This is particularly beneficial as it gives everyone equal opportunity to access the global gig economy, and most importantly equal opportunity to earn an equivalent wage. CANwork is continually being optimised for your experience. CANwork is made from insights from our community and is a platform for gig workers, designed by gig workers. CANwork has created a suite of free tools which allows a sole operator to build and operate their business from their own computer.'
     },
     {
       index: 'q-3',
       q: 'How do I get started as a provider?',
-      a: 'Join CANwork and set up your account as a provider. You will then receive an email from us to get started with completing your profile. When your signing up as a provider you will need to be whitelisted, which can take up to 72 hours to determine if your eligible to be a provider.'
+      a: 'Join CANwork and set up your account as a provider. You will then receive an email to get started with completing your profile. When your signing up as a provider you will need to be whitelisted, which can take up to 72 hours to determine if your eligible to be a provider.'
     },
     {
       index: 'q-4',
@@ -35,27 +35,27 @@ export class FaqPageComponent implements OnInit {
     {
       index: 'q-6',
       q: 'What is CanYaCoin? (CAN)',
-      a: 'CanYaCoin or CAN is the token which powers the platform’s payment system, enabling a decentralised, trustless escrow service. The escrow is a bridge between a variety of cryptocurrencies, and a powerful rewards system to encourage network effects.'
+      a: 'CanYaCoin or CAN is the token which powers the platform’s payment system, enabling a decentralised, trustless escrow service. The escrow is a bridge between a variety of cryptocurrencies.'
     },
     {
       index: 'q-7',
       q: 'Why do I have to use CAN?',
-      a: 'CAN token is the native token of the CanYa Ecosystem. All transactions on CANwork and the CanYa ecosystem are done in CAN tokens power our payment system, and allows us to charge only 1% in fees. We are focused on providing utility to the token which will in turn help the health of our token and provides incentive for users to hold CAN tokens as our platform continues to develop.'
+      a: 'CAN token is the native token of the CanYa Ecosystem, providing a bridge between other currencies. The CAN token is integrated into the hedged escrow, ensuring that all transactions on the platform are hedged and free from price volatility.'
     },
     {
       index: 'q-8',
-      q: 'Can I use BTC (BitCoin)?',
-      a: 'Not yet. We will be working to make our escrow handle BTC payments in the future.'
+      q: 'Can I use BTC (Bitcoin)?',
+      a: 'Not yet. The community will be working to make the escrow handle BTC payments in the future.'
     },
     {
       index: 'q-9',
       q: 'How can I trust to get paid?',
-      a: 'All funds awaiting completion of a job are held in our escrow smart contract. They are only released when both parties (client and provider) agree that they are satisfied. In the case of when there is a job dispute, users can flag their issue and prompt our CanYa support.'
+      a: 'All funds awaiting completion of a job are held in the escrow smart contract. They are only released when both parties (client and provider) agree that they are satisfied. In the case of when there is a job dispute, users can flag their issue and prompt CanYa support.'
     },
     {
       index: 'q-10',
       q: 'How can I cancel a contract?',
-      a: 'We discourage cancelling a contract, but in the case where a contract must be cancelled, you are able to do so. To cancel a contract, go to the manage jobs page and select the job which you would like to cancel. All users must agree before cancelling the job. If the client cancels the job, they must pay the provider for any work completed. If the provider cancels the job, the client will have receive a refund by default. In the case where there is a dispute, the CanYa Support can help!'
+      a: 'In the case where a contract must be cancelled, you are able to do so. To cancel a contract, go to the manage jobs page and select the job which you would like to cancel. All users must agree before cancelling the job. If the client cancels the job, they must pay the provider for any work completed. If the provider cancels the job, the client will have receive a refund by default. In the case where there is a dispute, the CanYa Support can help!'
     },
     {
       index: 'q-11',
@@ -85,7 +85,7 @@ export class FaqPageComponent implements OnInit {
     {
       index: 'q-16',
       q: 'What wallet should I use?',
-      a: 'We currently support metamask for payments.'
+      a: 'Use metamask for payments.'
     },
     {
       index: 'q-18',
@@ -105,17 +105,17 @@ export class FaqPageComponent implements OnInit {
     {
       index: 'q-21',
       q: 'Can I set up multiple accounts?',
-      a: 'We discourage making multiple accounts. If you would like to be both provider and a client, you are able to do so. A provider can contact another provider if they, for example, want to sub-contract for a job.'
+      a: 'If you would like to be both provider and a client, you are able to do so. A provider can contact another provider if they, for example, want to sub-contract for a job.'
     },
     {
       index: 'q-23',
       q: 'If I have a dispute with the other party during a job is there a way to fairly resolve it?',
-      a: 'If you have a problem while working we have systems in place to ensure fair judgement. This will be resolved by members of the CanYa support.'
+      a: 'If you have a problem while working CanWork has systems in place to ensure fair judgement. This will be resolved by members of the CanYa support.'
     },
     {
       index: 'q-24',
       q: 'Who can see my profile?',
-      a: 'Everyone can see your profile, we use a shuffling algorithm to make sure that everyone gets a turn at the top of the page. In the future, we will be implementing review systems and premium spots so that you can increase your exposure.'
+      a: 'Everyone can see your profile, CanWork uses a shuffling algorithm to make sure that everyone gets a turn at the top of the page. In the future, the CanWork team will be implementing review systems and premium spots so that you can increase your exposure.'
     }
   ];
   queryFaqs: any = [];
