@@ -71,6 +71,7 @@ firebase login      // Will launch the Google account login page
 firebase list       // Double Check you have the project linked
 firebase serve      // Serve locally
 firebase deploy     // Deploy to staging
+```
 
 <!--Now, go to your firebase account and obtain the database credentials, and update the `firebase` block in `src/environments/environment.ts`-->
 
@@ -155,6 +156,33 @@ Product Name: `www.canwork.io`
 Product Logo: `https://www.canwork.io/assets/img/canya-media-square.png`
 Privacy Policy: `https://www.canwork.io/assets/docs/canwork-privacy-policy.pdf`
 Terms & Conditions: `https://www.canwork.io/assets/docs/canwork-terms-and-conditions.pdf`
+
+## Deploy to Production
+
+Gitlab CI/CD is used. After committing and merging the change, a pipeline runs:
+
+1) Build a `dist` package for `Staging`
+2) Build a `dist` package for `Prod`
+3) Deploy to `Staging`
+4) Hold for manual deploy to `Prod`         <-- You will need to manually approve this
+
+You can view the script here: https://gitlab.com/canya-com/canwork/web-ui/blob/master/.gitlab-ci.yml
+
+
+Go to Gitlab -> CI/CD (sidebar) -> Pipelines (sidebar). 
+
+Find the Build status:    
+
+![](https://snag.gy/4TLi6N.jpg)
+
+Find the Deploy status:
+
+![](https://snag.gy/C9gL5c.jpg)
+
+Play it, and wait ~10minutes for it to deploy to production. 
+
+
+
 
 ## Further help
 
