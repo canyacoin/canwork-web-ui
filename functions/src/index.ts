@@ -360,7 +360,7 @@ exports.getFirebaseTokenForDockIOAuth = functions.https.onRequest(async (request
   });
 });
 
-/** 
+/**
  * Listen for public-job creations and create slug field
  * Add createAt updateAt field
  */
@@ -372,9 +372,9 @@ exports.createSlugWhenJobCreated = functions.firestore
     const slug = data.slug;
     const timestamp = new Date().valueOf();
 
-    await db.doc(`public-jobs/${jobId}`).update({ 
+    await db.doc(`public-jobs/${jobId}`).update({
       createAt: timestamp,
-      updateAt: timestamp,  
+      updateAt: timestamp,
     });
 
     !slug && createSlugIfNotExist('public-jobs', jobId, joinString(data.information.title))
@@ -393,7 +393,7 @@ exports.updatepublicJobTimeStamp = functions.firestore
     }
   })
 
-/** 
+/**
  * create timestamp when job created
  */
 exports.createTimestampWhenJobCreated = functions.firestore
@@ -401,13 +401,13 @@ exports.createTimestampWhenJobCreated = functions.firestore
   .onCreate(async (snap) => {
     const timestamp = new Date().valueOf();
 
-    await db.doc(`jobs/${snap.id}`).update({ 
+    await db.doc(`jobs/${snap.id}`).update({
       createAt: timestamp,
-      updateAt: timestamp,  
+      updateAt: timestamp,
     });
   })
 
-/** 
+/**
  * update timestamp when job updated
  */
 exports.updateJobTimeStamp = functions.firestore
@@ -843,6 +843,8 @@ function getTags(): string[] {
     'Customer Support',
     'Transcription',
     'Virtual Assistant',
+    'Translator - Japanese', 'Translator - Chinese Mandarin','Translator - English',
+    'Translator - French','Translator - Spanish', 'Translator - Korean',
     'Community Management',
     'Tech Support',
     'Phone Support',
