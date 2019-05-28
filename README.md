@@ -39,22 +39,26 @@ cd web-ui
 yarn
 node patch.js
 yarn link
-cp src/environments/environment.ts.sample src/environments/environment.ts
 ```
 
 ### Credentials
+**Gitlab CI/CD**
+Ask a CanYa Core member for access to the Gitlab Repo. 
 
-Go to the Gitlab -> settings -> CI/CD , click ‘reveal values’ and copy the ENV_STAGING value into a file called `environment.ts`, then move that file into the environments folder
+Go to the Gitlab -> settings -> CI/CD , click ‘reveal values’ and copy the ENVIRONMENT_STAGING value into a file called `environment.ts`, then move that file into the environments folder
 
-Now, go to your firebase account and obtain the database credentials, and update the `firebase` block in `src/environments/environment.ts`
+**Firebase**
+Ask a CanYa Core member for access to the firebase staging app. 
 
-If you have not worked on this project before you will need to create a firebase alias:
+<!--Now, go to your firebase account and obtain the database credentials, and update the `firebase` block in `src/environments/environment.ts`-->
 
-```
-firebase use --add
-# ^^^ Enter your firebase project name when prompted, and then an alias. Use <YOUR_NAME> for example
-firebase use <YOUR_NAME>
-```
+<!--If you have not worked on this project before you will need to create a firebase alias:-->
+
+<!--```-->
+<!--firebase use --add-->
+<!--# ^^^ Enter your firebase project name when prompted, and then an alias. Use <YOUR_NAME> for example-->
+<!--firebase use <YOUR_NAME>-->
+<!--```-->
 
 #### Algolia Full Text Search
 
