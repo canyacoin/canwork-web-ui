@@ -33,22 +33,44 @@ brew install yarn
 
 ### Clone & Initial Setup:
 
+Git
 ```
 git clone git@gitlab.com:canya-com/canwork/web-ui.git
 cd web-ui
+git checkout -b "yourname"
+```
+
+Setup
+```
 yarn
-node patch.js
+node patch.js   // Workaround for https://blog.lysender.com/2018/07/angular-6-cannot-resolve-crypto-fs-net-path-stream-when-building-angular/
 yarn link
 ```
 
 ### Credentials
-**Gitlab CI/CD**
-Ask a CanYa Core member for access to the Gitlab Repo. 
 
-Go to the Gitlab -> settings -> CI/CD , click ‘reveal values’ and copy the ENVIRONMENT_STAGING value into a file called `environment.ts`, then move that file into the environments folder
+**Gitlab CI/CD**
+
+Ask a CanYa Core member for access to the Gitlab Repo as "Maintainer" 
+
+Go to the Gitlab -> Settings (Sidebar) -> CI/CD (Sidebar) , scroll to `Variables` and click `Expand`
+
+Scroll to the bottom of the list of credentials and click `reveal values`. 
+
+Copy the `ENVIRONMENT_STAGING` value into a file called `environment.ts`, then move that file into the `src/environments` folder. 
+
+Build!
 
 **Firebase**
-Ask a CanYa Core member for access to the firebase staging app. 
+
+Ask a CanYa Core member for access to the firebase staging app: `staging-can-work`, which itself is linked to  https://staging.canya.com
+
+From inside the repo, log into Firebase
+```
+firebase login      // Will launch the Google account login page
+firebase list       // Double Check you have the project linked
+firebase serve      // Serve locally
+firebase deploy     // Deploy to staging
 
 <!--Now, go to your firebase account and obtain the database credentials, and update the `firebase` block in `src/environments/environment.ts`-->
 
