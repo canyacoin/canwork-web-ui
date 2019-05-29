@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { ChatService } from '@service/chat.service';
 import * as moment from 'moment';
+import slugify from 'slugify';
 
 @Injectable()
 export class PublicJobService {
@@ -265,19 +266,8 @@ export class PublicJobService {
   }
 
   async generateReadableId(jobName) {
-    // take the job name, take the first 2 strings.
-    const filteredName = jobName.replace(/([0-9])+\/\\/g, '');
-    const nameArray = filteredName.split(' ');
-    let friendly: string;
-    if (nameArray.length > 1) {
-      friendly = nameArray[0] + '-' + nameArray[1];
-    } else if (nameArray.length >= 2) {
-      friendly = nameArray[0] + '-' + nameArray[1] + '-' + nameArray[2];
-    } else {
-      friendly = nameArray[0];
-    }
+    let friendly = slugify(jobName, {lower: true});
     console.log(jobName + ' = filtered to = ' + friendly);
-    friendly = friendly.toLowerCase();
     const exists = await this.jobUrlExists(friendly);
     console.log(exists);
     if (exists.length < 1) {
