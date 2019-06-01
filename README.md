@@ -1,3 +1,12 @@
+****
+
+> **Mirror**
+> This repo mirrors from Gitlab to Github. Please commit to the Gitlab repo:
+> https://gitlab.com/canyacoin/canwork/web-ui
+
+****
+
+
 # CanWork.io
 
 This is an Angular Project, generated using [Angular CLI](https://github.com/angular/angular-cli)
