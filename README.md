@@ -1,3 +1,12 @@
+****
+
+> **Mirror**
+> This repo mirrors from Gitlab to Github. Please commit to the Gitlab repo:
+> https://gitlab.com/canyacoin/canwork/web-ui
+
+****
+
+
 # CanWork.io
 
 This is an Angular Project, generated using [Angular CLI](https://github.com/angular/angular-cli)
@@ -33,22 +42,45 @@ brew install yarn
 
 ### Clone & Initial Setup:
 
+Git
 ```
 git clone git@gitlab.com:canya-com/canwork/web-ui.git
 cd web-ui
+git checkout -b "yourname"
+```
+
+Setup
+```
 yarn
-node patch.js
+node patch.js   // Workaround for https://blog.lysender.com/2018/07/angular-6-cannot-resolve-crypto-fs-net-path-stream-when-building-angular/
 yarn link
 ```
 
 ### Credentials
-**Gitlab CI/CD**
-Ask a CanYa Core member for access to the Gitlab Repo. 
 
-Go to the Gitlab -> settings -> CI/CD , click ‘reveal values’ and copy the ENVIRONMENT_STAGING value into a file called `environment.ts`, then move that file into the environments folder
+**Gitlab CI/CD**
+
+Ask a CanYa Core member for access to the Gitlab Repo as "Maintainer" 
+
+Go to the Gitlab -> Settings (Sidebar) -> CI/CD (Sidebar) , scroll to `Variables` and click `Expand`
+
+Scroll to the bottom of the list of credentials and click `reveal values`. 
+
+Copy the `ENVIRONMENT_STAGING` value into a file called `environment.ts`, then move that file into the `src/environments` folder. 
+
+Build!
 
 **Firebase**
-Ask a CanYa Core member for access to the firebase staging app. 
+
+Ask a CanYa Core member for access to the firebase staging app: `staging-can-work`, which itself is linked to  https://staging.canya.com
+
+From inside the repo, log into Firebase
+```
+firebase login      // Will launch the Google account login page
+firebase list       // Double Check you have the project linked
+firebase serve      // Serve locally
+firebase deploy     // Deploy to staging
+```
 
 <!--Now, go to your firebase account and obtain the database credentials, and update the `firebase` block in `src/environments/environment.ts`-->
 
@@ -133,6 +165,33 @@ Product Name: `www.canwork.io`
 Product Logo: `https://www.canwork.io/assets/img/canya-media-square.png`
 Privacy Policy: `https://www.canwork.io/assets/docs/canwork-privacy-policy.pdf`
 Terms & Conditions: `https://www.canwork.io/assets/docs/canwork-terms-and-conditions.pdf`
+
+## Deploy to Production
+
+Gitlab CI/CD is used. After committing and merging the change, a pipeline runs:
+
+1) Build a `dist` package for `Staging`
+2) Build a `dist` package for `Prod`
+3) Deploy to `Staging`
+4) Hold for manual deploy to `Prod`         <-- You will need to manually approve this
+
+You can view the script here: https://gitlab.com/canya-com/canwork/web-ui/blob/master/.gitlab-ci.yml
+
+
+Go to Gitlab -> CI/CD (sidebar) -> Pipelines (sidebar). 
+
+Find the Build status:    
+
+![](https://snag.gy/4TLi6N.jpg)
+
+Find the Deploy status:
+
+![](https://snag.gy/C9gL5c.jpg)
+
+Play it, and wait ~10minutes for it to deploy to production. 
+
+
+
 
 ## Further help
 
