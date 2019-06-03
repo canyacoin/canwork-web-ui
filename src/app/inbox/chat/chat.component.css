@@ -121,6 +121,13 @@
   word-break: break-word;
 }
 
+.message-box {
+  line-height: normal;
+  resize: none;
+  height: auto;
+  overflow: hidden;
+}
+
 /* rgba(0,0,0,.125) */
 
 .card-request {
