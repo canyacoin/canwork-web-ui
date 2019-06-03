@@ -208,6 +208,8 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   sendMessage(messageModel: Message) {
     this.chatService.sendMessage(this.currentUser.address, this.userModel.address, messageModel);
     this.message = '';
+    const messageBoxes = (<any>window).$('.message-box');
+    Array.from(messageBoxes).forEach ( (messageBox: any) => { messageBox.style.height = 'auto'; });
   }
 
   onSearch(query: string) {
@@ -333,6 +335,23 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
       );
     }
     return text;
+  }
+
+  transformBreaks(text) {
+    return text.replace(/\n/g, '<br/>');
+  }
+
+  onMessageBoxInput(e) {
+    // If it's ENTER without SHIFT send the message
+    if(e.which == 13 && !e.shiftKey) {
+      this.onSend();
+      e.preventDefault();
+      return false;
+    }
+    // Resize the message box to fit the current number of lines
+    const element = e.target;
+    element.style.height = 'auto';
+    element.style.height = element.scrollHeight + 'px';
   }
 
   getTxLink(txHash: string) {
