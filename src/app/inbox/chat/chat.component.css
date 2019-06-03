@@ -123,6 +123,7 @@
 
 .message-box {
   line-height: normal;
+  resize: none;
   height: auto;
   overflow: hidden;
 }
