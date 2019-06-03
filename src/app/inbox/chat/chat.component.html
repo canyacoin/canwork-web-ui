@@ -226,7 +226,7 @@
                     </div>
                   </div>
                   <textarea #msgInput [(ngModel)]="message" (focus)="readIfUnread()" [disabled]="isLoading || channels.length < 1"
-                    class="form-control message-box" maxlength="500" (keyup)="onMessageBoxInput($event)" placeholder="Type a message man" name="message"
+                    class="form-control message-box" maxlength="500" (keyup)="onMessageBoxInput($event)" placeholder="Type a message (shift-enter for new line)" name="message"
                     autofocus="autofocus" required>
                   </textarea>
                 </div>
@@ -437,7 +437,7 @@
                     </div>
                   </div>
                   <textarea #msgInput [(ngModel)]="message" (focus)="readIfUnread()" [disabled]="isLoading || channels.length < 1"
-                    class="form-control message-box" maxlength="500" (keyup)="onMessageBoxInput($event)" placeholder="Type a message" name="message"
+                    class="form-control message-box" maxlength="500" (keyup)="onMessageBoxInput($event)" placeholder="Type a message (shift-enter for new line)" name="message"
                     autofocus="autofocus" required>
                   </textarea>
                 </div>
