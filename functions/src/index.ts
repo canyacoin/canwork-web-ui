@@ -22,6 +22,7 @@ import {
   removeRefs,
   removePublicJobBids,
   removeJobAttachments,
+  removePublicJobInvites,
 } from './remove-old-data'
 import { async } from 'q'
 
@@ -1450,10 +1451,17 @@ exports.removeJobs = functions.pubsub
     }
   })
 
+// remove job attachments
 exports.removeJobAttachments = functions.firestore
   .document('jobs/{jobId}')
   .onDelete(removeJobAttachments.bind(app.storage()))
 
+// remove public job bids
 exports.removePublicJobBids = functions.firestore
   .document('public-jobs/{jobId}')
   .onDelete(removePublicJobBids.bind(db))
+
+// remove public job invites
+exports.removePublicJobInvites = functions.firestore
+  .document('public-jobs/{jobId}')
+  .onDelete(removePublicJobInvites.bind(db))

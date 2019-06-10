@@ -58,6 +58,27 @@ export async function removePublicJobBids(
   }
 }
 
+export async function removePublicJobInvites(
+  db: Firestore,
+  snap: FirebaseFirestore.DocumentSnapshot,
+  context: EventContext
+) {
+  const { jobId } = context.params
+  const bidsSnap = await db
+    .collection('public-jobs')
+    .doc(jobId)
+    .collection('invites')
+    .limit(BATCH_LIMIT)
+    .get()
+
+  const refs = getRefsFromSnapshot(bidsSnap)
+  if (refs.length) {
+    await removeRefs(db, refs)
+    // recursive remove invites
+    removePublicJobInvites(db, snap, context)
+  }
+}
+
 export function removeJobAttachments(
   storage: storage.Storage,
   _snap: FirebaseFirestore.DocumentSnapshot,
