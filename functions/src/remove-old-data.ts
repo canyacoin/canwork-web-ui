@@ -15,8 +15,8 @@ const delta = 365 * 24 * 60 * 60 * 1000
 export async function prepareJobRefs(
   db: Firestore,
   collection: string,
-  limit = 500,
-  timestamp = Date.now() - delta
+  timestamp = Date.now() - delta,
+  limit = 500
 ) {
   const jobsSnap = await db
     .collection(collection)
@@ -27,7 +27,7 @@ export async function prepareJobRefs(
   return getRefsFromSnapshot(jobsSnap)
 }
 
-export function removeOldData(db: Firestore, refs: DocumentReference[]) {
+export function removeRefs(db: Firestore, refs: DocumentReference[]) {
   const batch = db.batch()
   refs.forEach(ref => batch.delete(ref))
   return batch.commit()

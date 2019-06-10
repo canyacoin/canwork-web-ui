@@ -17,7 +17,7 @@ import * as doT from 'dot'
 import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
 import * as jobEmailfactory from './job-state-email-notification-factory'
-import { removeOldData, prepareJobRefs } from './remove-old-data'
+import { prepareJobRefs, removeRefs } from './remove-old-data'
 import { async } from 'q'
 
 const faker = require('faker')
@@ -1433,12 +1433,12 @@ exports.removeOldData = functions.pubsub
   .onRun(async () => {
     const jobRefs = await prepareJobRefs(db, 'jobs')
     if (jobRefs.length) {
-      removeOldData(db, jobRefs)
+      removeRefs(db, jobRefs)
     }
 
     const publicJobRefs = await prepareJobRefs(db, 'public-jobs')
     if (publicJobRefs.length) {
-      removeOldData(db, publicJobRefs)
+      removeRefs(db, publicJobRefs)
     }
   })
 
