@@ -1356,10 +1356,10 @@ firebase-admin@^5.12.1:
     jsonwebtoken "8.1.0"
     node-forge "0.7.4"
 
-firebase-functions@^2.0.2:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/firebase-functions/-/firebase-functions-2.0.5.tgz#61b085e6bdd5f0feda4f1942549fe78530b3933e"
-  integrity sha512-XedOTdaej68I/AmJyeDIKL2Cw6MwI7Ugov5QoEsOU9bh25iAseZmFKFQeqimW5Wb9wKLAli2Wq8ld+FtdOwdvQ==
+firebase-functions@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/firebase-functions/-/firebase-functions-2.3.1.tgz#6ad741cb5f38f4ed1a679607ffdbec68fa11127f"
+  integrity sha512-MPeuzGFLS63VqfGErgf+kbZinXE4SoK+jxXh1NBWrjYUjXlOJBKRmVNAFJoQB8wzCvOtBuDYjGcnBNz6sKXsfw==
   dependencies:
     "@types/cors" "^2.8.1"
     "@types/express" "^4.11.1"

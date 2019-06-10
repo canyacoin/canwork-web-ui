@@ -19,7 +19,7 @@
     "express": "^4.16.3",
     "faker": "^4.1.0",
     "firebase-admin": "^5.12.1",
-    "firebase-functions": "^2.0.2"
+    "firebase-functions": "^2.3.1"
   },
   "devDependencies": {
     "prettier": "^1.18.0",
