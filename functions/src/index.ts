@@ -1434,7 +1434,7 @@ exports.delSlug = functions.https.onRequest(async (request, response) => {
  * remove old data
  */
 
-exports.removeOldData = functions.pubsub
+exports.removeJobs = functions.pubsub
   .schedule('every 24 hours')
   .onRun(async () => {
     // remove jobs
