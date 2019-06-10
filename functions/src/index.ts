@@ -17,7 +17,8 @@ import * as doT from 'dot'
 import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
 import * as jobEmailfactory from './job-state-email-notification-factory'
-import { removeOldData } from './remove-old-data'
+import { removeOldData, prepareJobRefs } from './remove-old-data'
+import { async } from 'q'
 
 const faker = require('faker')
 const fs = require('fs')
@@ -1429,6 +1430,22 @@ exports.delSlug = functions.https.onRequest(async (request, response) => {
  */
 exports.removeOldData = functions.pubsub
   .schedule('every 24 hours')
-  .onRun(() => {
-    removeOldData(db)
+  .onRun(async () => {
+    const jobRefs = await prepareJobRefs(db, 'jobs')
+    if (jobRefs.length) {
+      removeOldData(db, jobRefs)
+    }
+
+    const publicJobRefs = await prepareJobRefs(db, 'public-jobs')
+    if (publicJobRefs.length) {
+      removeOldData(db, publicJobRefs)
+    }
+  })
+
+exports.removeJobAttachments = functions.firestore
+  .document('jobs/{jobId}')
+  .onDelete((_, context) => {
+    const { jobId } = context.params
+    const bucket = app.storage().bucket()
+    return bucket.deleteFiles({ prefix: `uploads/jobs/${jobId}` })
   })
