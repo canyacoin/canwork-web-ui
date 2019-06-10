@@ -17,7 +17,12 @@ import * as doT from 'dot'
 import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
 import * as jobEmailfactory from './job-state-email-notification-factory'
-import { prepareJobRefs, removeRefs } from './remove-old-data'
+import {
+  prepareJobRefs,
+  removeRefs,
+  removePublicJobBids,
+  removeJobAttachments,
+} from './remove-old-data'
 import { async } from 'q'
 
 const faker = require('faker')
@@ -1428,14 +1433,17 @@ exports.delSlug = functions.https.onRequest(async (request, response) => {
 /*
  * remove old data
  */
+
 exports.removeOldData = functions.pubsub
   .schedule('every 24 hours')
   .onRun(async () => {
+    // remove jobs
     const jobRefs = await prepareJobRefs(db, 'jobs')
     if (jobRefs.length) {
       removeRefs(db, jobRefs)
     }
 
+    // remove public jobs
     const publicJobRefs = await prepareJobRefs(db, 'public-jobs')
     if (publicJobRefs.length) {
       removeRefs(db, publicJobRefs)
@@ -1444,8 +1452,8 @@ exports.removeOldData = functions.pubsub
 
 exports.removeJobAttachments = functions.firestore
   .document('jobs/{jobId}')
-  .onDelete((_, context) => {
-    const { jobId } = context.params
-    const bucket = app.storage().bucket()
-    return bucket.deleteFiles({ prefix: `uploads/jobs/${jobId}` })
-  })
+  .onDelete(removeJobAttachments.bind(app.storage()))
+
+exports.removePublicJobBids = functions.firestore
+  .document('public-jobs/{jobId}')
+  .onDelete(removePublicJobBids.bind(db))
