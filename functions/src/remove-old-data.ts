@@ -20,6 +20,7 @@ export function getRefsFromSnapshot(snap: QuerySnapshot): DocumentReference[] {
 
 // test delta
 const delta = 4 * 30 * 24 * 60 * 60 * 1000
+const DEFAULT_DELTA = delta
 
 export async function prepareJobRefs(
   db: Firestore,
@@ -109,5 +110,28 @@ export async function removeJobs(
   const publicJobRefs = await prepareJobRefs(db, 'public-jobs')
   if (publicJobRefs.length) {
     batchRemoveRefs(db, publicJobRefs)
+  }
+}
+
+const removeChatMessageOpts = { delta: DEFAULT_DELTA, limit: BATCH_LIMIT }
+export function removeChatMessages(
+  db: Firestore,
+  opts = removeChatMessageOpts
+) {
+  return async (
+    _snap: FirebaseFirestore.DocumentSnapshot,
+    _context: EventContext
+  ) => {
+    const { delta, limit } = Object.assign({}, removeChatMessageOpts, opts)
+    const timestamp = Date.now() - delta
+
+    const messageSnap = await db
+      .collectionGroup('messages')
+      .where('timestamp', '<', timestamp)
+      .limit(limit)
+      .get()
+
+    const refs = getRefsFromSnapshot(messageSnap)
+    batchRemoveRefs(db, refs)
   }
 }
