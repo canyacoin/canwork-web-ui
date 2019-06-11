@@ -31,7 +31,7 @@ export async function prepareJobRefs(
   return getRefsFromSnapshot(jobsSnap)
 }
 
-export function removeRefs(db: Firestore, refs: DocumentReference[]) {
+export function batchRemoveRefs(db: Firestore, refs: DocumentReference[]) {
   const batch = db.batch()
   refs.forEach(ref => batch.delete(ref))
   return batch.commit()
@@ -52,7 +52,7 @@ export async function removePublicJobBids(
 
   const refs = getRefsFromSnapshot(bidsSnap)
   if (refs.length) {
-    await removeRefs(db, refs)
+    await batchRemoveRefs(db, refs)
     // recursive remove bids
     removePublicJobBids(db, snap, context)
   }
@@ -73,7 +73,7 @@ export async function removePublicJobInvites(
 
   const refs = getRefsFromSnapshot(bidsSnap)
   if (refs.length) {
-    await removeRefs(db, refs)
+    await batchRemoveRefs(db, refs)
     // recursive remove invites
     removePublicJobInvites(db, snap, context)
   }
@@ -87,4 +87,22 @@ export function removeJobAttachments(
   const { jobId } = context.params
   const bucket = storage.bucket()
   return bucket.deleteFiles({ prefix: `uploads/jobs/${jobId}` })
+}
+
+export async function removeJobs(
+  db: Firestore,
+  _snap: FirebaseFirestore.DocumentSnapshot,
+  _context: EventContext
+) {
+  // remove jobs
+  const jobRefs = await prepareJobRefs(db, 'jobs')
+  if (jobRefs.length) {
+    batchRemoveRefs(db, jobRefs)
+  }
+
+  // remove public jobs
+  const publicJobRefs = await prepareJobRefs(db, 'public-jobs')
+  if (publicJobRefs.length) {
+    batchRemoveRefs(db, publicJobRefs)
+  }
 }

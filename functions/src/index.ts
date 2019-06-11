@@ -18,13 +18,11 @@ import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
 import * as jobEmailfactory from './job-state-email-notification-factory'
 import {
-  prepareJobRefs,
-  removeRefs,
   removePublicJobBids,
   removeJobAttachments,
   removePublicJobInvites,
+  removeJobs,
 } from './remove-old-data'
-import { async } from 'q'
 
 const faker = require('faker')
 const fs = require('fs')
@@ -1435,21 +1433,10 @@ exports.delSlug = functions.https.onRequest(async (request, response) => {
  * remove old data
  */
 
+// remove jobs, public-jobs
 exports.removeJobs = functions.pubsub
   .schedule('every 24 hours')
-  .onRun(async () => {
-    // remove jobs
-    const jobRefs = await prepareJobRefs(db, 'jobs')
-    if (jobRefs.length) {
-      removeRefs(db, jobRefs)
-    }
-
-    // remove public jobs
-    const publicJobRefs = await prepareJobRefs(db, 'public-jobs')
-    if (publicJobRefs.length) {
-      removeRefs(db, publicJobRefs)
-    }
-  })
+  .onRun(removeJobs.bind(db))
 
 // remove job attachments
 exports.removeJobAttachments = functions.firestore
