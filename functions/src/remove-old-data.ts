@@ -15,7 +15,12 @@ export function getRefsFromSnapshot(snap: QuerySnapshot): DocumentReference[] {
   }, [])
 }
 
-const delta = 12 * 30 * 24 * 60 * 60 * 1000
+// prod delta
+// const delta = 12 * 30 * 24 * 60 * 60 * 1000
+
+// test delta
+const delta = 4 * 30 * 24 * 60 * 60 * 1000
+
 export async function prepareJobRefs(
   db: Firestore,
   collection: string,
