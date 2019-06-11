@@ -6,7 +6,18 @@ import {
 import { EventContext } from 'firebase-functions'
 import { storage } from 'firebase-admin'
 
-export const BATCH_LIMIT = 500
+export const DEFAULT_LIMIT = 500
+
+// prod delta 12 months
+// const DEFAULT_DELTA = 12 * 30 * 24 * 60 * 60 * 1000
+
+// test delta 4 months
+const DEFAULT_DELTA = 4 * 30 * 24 * 60 * 60 * 1000
+
+const jobsOpts = {
+  delta: DEFAULT_DELTA,
+  limit: DEFAULT_LIMIT,
+}
 
 export function getRefsFromSnapshot(snap: QuerySnapshot): DocumentReference[] {
   return snap.docs.reduce((acc, { ref }) => {
@@ -15,19 +26,14 @@ export function getRefsFromSnapshot(snap: QuerySnapshot): DocumentReference[] {
   }, [])
 }
 
-// prod delta
-// const delta = 12 * 30 * 24 * 60 * 60 * 1000
-
-// test delta
-const delta = 4 * 30 * 24 * 60 * 60 * 1000
-const DEFAULT_DELTA = delta
-
 export async function prepareJobRefs(
   db: Firestore,
   collection: string,
-  timestamp = Date.now() - delta,
-  limit = BATCH_LIMIT
+  opts = jobsOpts
 ) {
+  const { delta, limit } = Object.assign({}, jobsOpts, opts)
+  const timestamp = Date.now() - delta
+
   const jobsSnap = await db
     .collection(collection)
     .where('createAt', '<', timestamp)
@@ -43,77 +49,79 @@ export function batchRemoveRefs(db: Firestore, refs: DocumentReference[]) {
   return batch.commit()
 }
 
-export async function removePublicJobBids(
-  db: Firestore,
-  snap: FirebaseFirestore.DocumentSnapshot,
-  context: EventContext
-) {
-  const { jobId } = context.params
-  const bidsSnap = await db
-    .collection('public-jobs')
-    .doc(jobId)
-    .collection('bids')
-    .limit(BATCH_LIMIT)
-    .get()
+export function removePublicJobBids(db: Firestore, limit = DEFAULT_LIMIT) {
+  return async function fn(
+    snap: FirebaseFirestore.DocumentSnapshot,
+    context: EventContext
+  ) {
+    const { jobId } = context.params
+    const bidsSnap = await db
+      .collection('public-jobs')
+      .doc(jobId)
+      .collection('bids')
+      .limit(limit)
+      .get()
 
-  const refs = getRefsFromSnapshot(bidsSnap)
-  if (refs.length) {
-    await batchRemoveRefs(db, refs)
-    // recursive remove bids
-    removePublicJobBids(db, snap, context)
+    const refs = getRefsFromSnapshot(bidsSnap)
+    if (refs.length) {
+      await batchRemoveRefs(db, refs)
+      // recursive remove bids
+      fn(snap, context)
+    }
   }
 }
 
-export async function removePublicJobInvites(
-  db: Firestore,
-  snap: FirebaseFirestore.DocumentSnapshot,
-  context: EventContext
-) {
-  const { jobId } = context.params
-  const bidsSnap = await db
-    .collection('public-jobs')
-    .doc(jobId)
-    .collection('invites')
-    .limit(BATCH_LIMIT)
-    .get()
+export function removePublicJobInvites(db: Firestore) {
+  return async function fn(
+    snap: FirebaseFirestore.DocumentSnapshot,
+    context: EventContext
+  ) {
+    const { jobId } = context.params
+    const bidsSnap = await db
+      .collection('public-jobs')
+      .doc(jobId)
+      .collection('invites')
+      .limit(DEFAULT_LIMIT)
+      .get()
 
-  const refs = getRefsFromSnapshot(bidsSnap)
-  if (refs.length) {
-    await batchRemoveRefs(db, refs)
-    // recursive remove invites
-    removePublicJobInvites(db, snap, context)
+    const refs = getRefsFromSnapshot(bidsSnap)
+    if (refs.length) {
+      await batchRemoveRefs(db, refs)
+      // recursive remove invites
+      fn(snap, context)
+    }
   }
 }
 
-export function removeJobAttachments(
-  storage: storage.Storage,
-  _snap: FirebaseFirestore.DocumentSnapshot,
-  context: EventContext
-) {
-  const { jobId } = context.params
-  const bucket = storage.bucket()
-  return bucket.deleteFiles({ prefix: `uploads/jobs/${jobId}` })
-}
-
-export async function removeJobs(
-  db: Firestore,
-  _snap: FirebaseFirestore.DocumentSnapshot,
-  _context: EventContext
-) {
-  // remove jobs
-  const jobRefs = await prepareJobRefs(db, 'jobs')
-  if (jobRefs.length) {
-    batchRemoveRefs(db, jobRefs)
-  }
-
-  // remove public jobs
-  const publicJobRefs = await prepareJobRefs(db, 'public-jobs')
-  if (publicJobRefs.length) {
-    batchRemoveRefs(db, publicJobRefs)
+export function removeJobAttachments(storage: storage.Storage) {
+  return (_snap: FirebaseFirestore.DocumentSnapshot, context: EventContext) => {
+    const { jobId } = context.params
+    const bucket = storage.bucket()
+    return bucket.deleteFiles({ prefix: `uploads/jobs/${jobId}` })
   }
 }
 
-const removeChatMessageOpts = { delta: DEFAULT_DELTA, limit: BATCH_LIMIT }
+export function removeJobs(db: Firestore, opts = jobsOpts) {
+  return async () => {
+    // remove jobs
+    const jobRefs = await prepareJobRefs(db, 'jobs', opts)
+    if (jobRefs.length) {
+      batchRemoveRefs(db, jobRefs)
+    }
+  }
+}
+
+export function removePublicJobs(db: Firestore, opts = jobsOpts) {
+  return async () => {
+    // remove public jobs
+    const publicJobRefs = await prepareJobRefs(db, 'public-jobs', opts)
+    if (publicJobRefs.length) {
+      batchRemoveRefs(db, publicJobRefs)
+    }
+  }
+}
+
+const removeChatMessageOpts = { delta: DEFAULT_DELTA, limit: DEFAULT_LIMIT }
 export function removeChatMessages(
   db: Firestore,
   opts = removeChatMessageOpts
@@ -132,6 +140,6 @@ export function removeChatMessages(
       .get()
 
     const refs = getRefsFromSnapshot(messageSnap)
-    batchRemoveRefs(db, refs)
+    return batchRemoveRefs(db, refs)
   }
 }

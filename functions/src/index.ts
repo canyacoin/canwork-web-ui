@@ -22,6 +22,7 @@ import {
   removeJobAttachments,
   removePublicJobInvites,
   removeJobs,
+  removePublicJobs,
 } from './remove-old-data'
 
 const faker = require('faker')
@@ -1433,22 +1434,28 @@ exports.delSlug = functions.https.onRequest(async (request, response) => {
  * remove old data
  */
 
-// remove jobs, public-jobs
+// remove jobs
 exports.removeJobs = functions.pubsub
   .schedule('every 24 hours')
-  .onRun(removeJobs.bind(db))
+  .onRun(removeJobs(db))
 
+// remove public-jobs
+exports.removeJobs = functions.pubsub
+  .schedule('every 24 hours')
+  .onRun(removePublicJobs(db))
+
+// triggers
 // remove job attachments
 exports.removeJobAttachments = functions.firestore
   .document('jobs/{jobId}')
-  .onDelete(removeJobAttachments.bind(app.storage()))
+  .onDelete(removeJobAttachments(app.storage()))
 
 // remove public job bids
 exports.removePublicJobBids = functions.firestore
   .document('public-jobs/{jobId}')
-  .onDelete(removePublicJobBids.bind(db))
+  .onDelete(removePublicJobBids(db))
 
 // remove public job invites
 exports.removePublicJobInvites = functions.firestore
   .document('public-jobs/{jobId}')
-  .onDelete(removePublicJobInvites.bind(db))
+  .onDelete(removePublicJobInvites(db))
