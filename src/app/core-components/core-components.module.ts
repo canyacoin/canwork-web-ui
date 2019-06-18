@@ -34,6 +34,7 @@ import { FaqComponent } from './wallet-install/faq/faq.component';
 import { InstructionsComponent } from './wallet-install/instructions/instructions.component';
 import { WalletInstallComponent } from './wallet-install/wallet-install.component';
 import { WindowScrollDirective } from './window-scroll.directive';
+import { AvatarComponent } from './avatar/avatar.component';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -81,7 +82,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     StatusLightComponent,
     ProviderCardComponent,
     IpfsDropzoneComponent,
-    ComingSoonComponent
+    ComingSoonComponent,
+    AvatarComponent
   ],
   exports: [
     AttachmentComponent,
@@ -100,7 +102,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     VStepperComponent,
     ProviderCardComponent,
     WindowScrollDirective,
-    IpfsDropzoneComponent
+    IpfsDropzoneComponent,
+    AvatarComponent
   ],
   providers: [
     {

@@ -11,7 +11,7 @@
     </span>
     <span *ngIf="!(provider && provider.badge)" class="popular-tag" style="float:right; min-height: 35px;"></span>
     <div class="profile">
-      <div *ngIf="provider && (provider.avatar && (provider.avatar || {}).uri)" class="headshot" [ngStyle]="{'background-image': 'url(' + (provider.avatar || {}).uri + ')'}"></div>
+      <app-avatar [user]="provider"></app-avatar>
       <div class="title">
         <h2>
           <span *ngIf="provider && provider.name">{{ provider.name }}</span>
@@ -53,7 +53,7 @@
   <div class="card provider-card pointer profile-mini" [routerLink]="['/profile/',  provider.slug]">
     <div class="row">
       <div class="col-lg-3 col-md-12 col-sm-12 col-3">
-        <div class="headshot" [ngStyle]="{'background-image': 'url(' + (provider.avatar || {}).uri + ')'}"></div>
+        <app-avatar [user]="provider"></app-avatar>
       </div>
       <div class="col-lg-9 col-md-12 col-sm-12 col-9 pl-20 pb-10">
         <h6 class="provider-name">{{provider.name}}</h6>

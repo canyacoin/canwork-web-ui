@@ -1,0 +1,5 @@
+<div
+  *ngIf="user && (user.avatar && (user.avatar || {}).uri)" 
+  class="headshot"
+  [ngStyle]="{'background-image': 'url(' + (user.avatar || {}).uri + ')'}"
+></div>
