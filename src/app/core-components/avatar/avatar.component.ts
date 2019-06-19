@@ -8,23 +8,16 @@ import { Component, OnInit, Input } from '@angular/core';
 export class AvatarComponent implements OnInit {
 
   @Input() user: any;
-  @Input() size: string;
 
   constructor() { }
 
-  ngOnInit() {
-    console.log(this.getInitials());
-  }
+  ngOnInit() { }
 
   getBackground() {
     if (this.user && this.user.avatar && this.user.avatar.uri) {
       return `url(${this.user.avatar.uri})`;
     }
     return null;
-  }
-
-  getBackgroundColor() {
-    return 'rgba(0,0,0,0.5)';
   }
 
   getInitials() {
