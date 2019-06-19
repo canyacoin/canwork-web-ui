@@ -12,5 +12,30 @@ export class AvatarComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    console.log(this.getInitials());
+  }
+
+  getBackground() {
+    if (this.user && this.user.avatar && this.user.avatar.uri) {
+      return `url(${this.user.avatar.uri})`;
+    }
+    return null;
+  }
+
+  getBackgroundColor() {
+    return 'rgba(0,0,0,0.5)';
+  }
+
+  getInitials() {
+    if (this.user && this.user.name) {
+      return this.user.name
+      .split(' ')
+      .map(str => str[0])
+      .join('')
+      .substring(0, 2)
+      .toUpperCase();
+    }
+    return '';
+  }
 }

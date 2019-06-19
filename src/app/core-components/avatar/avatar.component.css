@@ -1,0 +1,15 @@
+.app-avatar {
+  position: relative;
+}
+
+.app-avatar-image {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+.app-avatar-initials {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
