@@ -1,4 +1,4 @@
-<div class="app-avatar headshot" >
+<div [ngClass]="['app-avatar', customClass || '']" >
   <div class="app-avatar-image"
     [ngStyle]="{
       'background-image': getBackground()
