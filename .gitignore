@@ -39,6 +39,11 @@ functions/.runtimeconfig.json
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# IDE - Vim
+*.swp
+*.swo
+*~
+
 # misc
 /.sass-cache
 /connect.lock

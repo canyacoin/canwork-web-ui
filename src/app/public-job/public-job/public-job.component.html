@@ -96,9 +96,7 @@
           </div>
           <div class="col-12">
             <div class="otherPartyName pointer" [routerLink]="['/profile/alt/', job.clientId]">
-              <span *ngIf="jobPoster?.avatar && jobPoster?.avatar.uri" class="headshot-div"
-                [ngStyle]="{ 'background-image': 'url(' + jobPoster?.avatar.uri + ')'}">
-              </span>
+              <app-avatar [user]="jobPoster" [customClass]="'headshot-div'"></app-avatar>
               <p style="font-style: 21px;">{{jobPoster?.name}}</p>
             </div>
             <b>${{job.budget}}<span *ngIf="job.paymentType !== 'Fixed price'">/hr</span> USD</b>

@@ -14,8 +14,7 @@
           <div class="col-12">
             <div class="otherPartyName pointer" *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri"
               [routerLink]="['/profile/alt/', job.otherParty.id]">
-              <span class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
-              </span>
+              <app-avatar [user]="job.otherParty" [customClass]="'headshot-div'"></app-avatar>
               <p>{{job.otherParty?.name}}</p>
             </div>
           </div>
@@ -62,8 +61,7 @@
           <div class="col-12">
             <div *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="otherPartyName pointer"
               [routerLink]="['/profile/alt/', job.otherParty.id]">
-              <span class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
-              </span>
+              <app-avatar [user]="job.otherParty" [customClass]="'headshot-div'"></app-avatar>
               <p>{{job.otherParty?.name}}</p>
             </div>
           </div>
@@ -102,7 +100,7 @@
  -->
 <div class="card mb-15 p-20 pointer job-dashboard-card" *ngIf="job.workType === 'public-job-type-prototype' && type === 'offer'">
   <div class="container provider-job-card jobs-info">
-    <img class="headshot-div" src="{{ job.otherParty?.avatar.uri }}">
+    <app-avatar [user]="job.otherParty" [customClass]="'headshot-div'"></app-avatar>
     <div class="row">
       <div class="col-md-3 offset-md-1 col-sm-4 col-12" [routerLink]="['/inbox/job', job.id]">
         <h4>{{job.otherParty?.name}}</h4>
