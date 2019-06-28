@@ -20,8 +20,7 @@
                   [ngClass]="{ 'active': selectedChannel.address === channel.address }" style="cursor: pointer;">
                   <span *ngIf="channel.unreadMessages" class="badge-notification badge-danger"></span>
                   <div class="media" style="width: 100%;">
-                    <div [ngStyle]="{'background-image': 'url(' + channel.avatar.uri || 'assets/img/placeholder.png' + ')'}"
-                      class="avatar avatar-sm mt-8"></div>
+                    <app-avatar [user]="channel" [customClass]="'avatar avatar-sm mt-8'"></app-avatar>
                     <div class="media-body ml-2">
                       <div class="d-flex justify-content-between align-items-center">
                         <h6 class="text-canya mb-0">{{ channel.name }}
@@ -40,11 +39,7 @@
             </div>
             <div class="card-footer bg-white p-10 m-0" style="border-bottom-right-radius: 5px;">
               <div class="d-flex justify-content-between align-items-center">
-                <h4 class="fw-300 my-0 py-0 mx-20">
-                  <img class="logo-default" src="assets/img/round-icon.svg" width="auto" height="24px" alt="logo" style="margin-top: -3px;">{{
-                  balance | currency:' ':'symbol':'1.2-3':'en-US' }}
-                </h4>
-                <button (click)="onBuy();" class="btn btn-primary mx-10 hidden-md-down" border-64>
+                <button (click)="onBuy();" class="btn btn-outline btn-primary" border-64>
                   BUY CAN
                 </button>
                 <a (click)="onBuy();" class="btn btn-default mx-10 hidden-md-up" border-64 border-none>
@@ -59,8 +54,7 @@
             <div *ngIf="selectedChannel" class="card-header d-flex justify-content-between align-items-center" style="background: white; min-height: 61px; max-height: 61px; border-top-left-radius: 5px;">
               <a [routerLink]="['/profile/alt', selectedChannel.address]">
                 <div class="media align-items-center">
-                  <div [ngStyle]="{'background-image': 'url(' + selectedChannel.avatar.uri || 'assets/img/placeholder.png' + ')'}"
-                    class="avatar avatar-sm"></div>
+                  <app-avatar [user]="selectedChannel" [customClass]="'avatar avatar-sm'"></app-avatar>
                   <div class="media-body">
                     <h6 class="mt-4 mb-0">{{ selectedChannel.name }}
                     </h6>
@@ -258,8 +252,7 @@
                   [ngClass]="{ 'active': selectedChannel.address === channel.address }" style="cursor: pointer;">
                   <span *ngIf="channel.unreadMessages" class="badge-notification badge-danger"></span>
                   <div class="media" style="width: 100%;">
-                    <div [ngStyle]="{'background-image': 'url(' + channel.avatar.uri || 'assets/img/placeholder.png' + ')'}"
-                      class="avatar avatar-sm mt-8"></div>
+                    <app-avatar [user]="channel" [customClass]="'avatar avatar-sm mt-8'"></app-avatar>
                     <div class="media-body ml-2">
                       <div class="d-flex justify-content-between align-items-center">
                         <h6 class="text-canya mb-0">{{ channel.name }}
@@ -516,13 +509,13 @@
 
         <div *ngIf="currentUser && selectedChannel" class="row d-flex justify-content-center align-self-center align-items-center text-center bb-1">
           <div class="col">
-            <img [src]="currentUser.avatar.uri || 'assets/img/placeholder.png'" class="avatar mt-10 mb-20" alt="CanYa">
+            <app-avatar [user]="currentUser" [customClass]="'avatar mt-10 mb-20'"></app-avatar>
           </div>
           <div class="col">
             <i class="ti-arrow-right text-dark fs-24"></i>
           </div>
           <div class="col">
-            <img [src]="selectedChannel.avatar.uri || 'assets/img/placeholder.png'" class="avatar mt-10 mb-20" alt="CanYa">
+            <app-avatar [user]="selectedChannel" [customClass]="'avatar mt-10 mb-20'"></app-avatar>
           </div>
         </div>
 

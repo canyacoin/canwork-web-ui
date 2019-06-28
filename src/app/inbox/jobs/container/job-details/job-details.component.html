@@ -73,8 +73,7 @@
         <h5>PROPOSED TERMS</h5>
         <br>
         <div *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="otherPartyName pointer" [routerLink]="['/profile/alt/', job.otherParty.id]">
-          <span class="headshot-div" [ngStyle]="{ 'background-image': 'url(' + job.otherParty?.avatar.uri + ')'}">
-          </span>
+          <app-avatar [user]="job.otherParty" [customClass]="'headshot-div'"></app-avatar>
           <p>{{job.otherParty?.name}}</p>
         </div>
         <div class="info-details" *ngIf="isOnMobile">

@@ -28,6 +28,8 @@
     "tslint-plugin-prettier": "^2.0.1",
     "typescript": "^3.5.1"
   },
-  "private": true,
-  "version": "0.0.0"
+  "engines": {
+    "node": "8"
+  },
+  "private": true
 }

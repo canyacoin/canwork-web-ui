@@ -24,7 +24,7 @@
                 <div class="col-sm-5 text-center">
                   <div class="profile-pic">
                     <span class="bg-primary" (click)="displayIpfsDropzone = true">Edit</span>
-                    <div *ngIf="currentUser.avatar && currentUser.avatar.uri" class="circle-headshot" [ngStyle]="{'background-image': 'url(' + currentUser.avatar.uri + ')'}"></div>
+                    <app-avatar [user]="currentUser" [customClass]="'circle-headshot'"></app-avatar>
                   </div>
                 </div>
               </div>
