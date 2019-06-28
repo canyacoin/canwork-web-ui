@@ -39,11 +39,7 @@
             </div>
             <div class="card-footer bg-white p-10 m-0" style="border-bottom-right-radius: 5px;">
               <div class="d-flex justify-content-between align-items-center">
-                <h4 class="fw-300 my-0 py-0 mx-20">
-                  <img class="logo-default" src="assets/img/round-icon.svg" width="auto" height="24px" alt="logo" style="margin-top: -3px;">{{
-                  balance | currency:' ':'symbol':'1.2-3':'en-US' }}
-                </h4>
-                <button (click)="onBuy();" class="btn btn-primary mx-10 hidden-md-down" border-64>
+                <button (click)="onBuy();" class="btn btn-outline btn-primary" border-64>
                   BUY CAN
                 </button>
                 <a (click)="onBuy();" class="btn btn-default mx-10 hidden-md-up" border-64 border-none>

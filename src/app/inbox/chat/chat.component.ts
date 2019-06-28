@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
@@ -12,7 +12,6 @@ import { environment } from '@env/environment';
 import { User } from '@class/user';
 import { AuthService } from '@service/auth.service';
 import { Channel, ChatService, Message, MessageType } from '@service/chat.service';
-import { EthService, Web3LoadingStatus } from '@service/eth.service';
 import { UserService } from '@service/user.service';
 
 @Component({
@@ -20,7 +19,7 @@ import { UserService } from '@service/user.service';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ChatComponent implements OnInit, OnDestroy {
 
   // User
   currentUser: User;
@@ -49,10 +48,6 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
 
   tabIndex = 0;
 
-  balance = '0';
-  web3State: Web3LoadingStatus;
-  web3Subscription: Subscription;
-  accountSubscription: Subscription;
   channelSubscription: Subscription;
   routeSub: Subscription;
   postForm: FormGroup = null;
@@ -68,7 +63,6 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
     private formBuilder: FormBuilder,
     private userService: UserService,
     private chatService: ChatService,
-    private ethService: EthService,
     private authService: AuthService,
     private afs: AngularFirestore) {
     this.postForm = formBuilder.group({
@@ -99,28 +93,7 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  ngAfterViewInit() {
-    this.web3Subscription = this.ethService.web3Status$.subscribe((status: Web3LoadingStatus) => {
-      this.web3State = status;
-      if (status === Web3LoadingStatus.complete) {
-        this.accountSubscription = this.ethService.account$.subscribe(async (acc: string) => {
-          if (acc !== undefined) {
-            this.ethService.getCanYaBalance().then((data: any) => {
-              this.balance = data;
-            });
-          }
-        });
-      } else if (status === Web3LoadingStatus.noAccountsAvailable) {
-        this.ethService.getOwnerAccount();
-      } else {
-        this.balance = '0';
-      }
-    });
-  }
-
   ngOnDestroy() {
-    if (this.web3Subscription) { this.web3Subscription.unsubscribe(); }
-    if (this.accountSubscription !== undefined) { this.accountSubscription.unsubscribe(); }
     if (this.channelSubscription) { this.channelSubscription.unsubscribe(); }
   }
 
@@ -295,27 +268,6 @@ export class ChatComponent implements OnInit, AfterViewInit, OnDestroy {
   onPayLater(checkoutModel: any) {
     const msg = this.chatService.createMessageObject(this.selectedChannel.channel, this.currentUser, 'I\'ll pay later. Thanks.');
     this.sendMessage(msg);
-  }
-
-  onPayNow(checkoutModel: any) {
-    this.modalData.service = checkoutModel.message;
-    this.modalData.budget = checkoutModel.budget;
-
-    if (this.web3State === Web3LoadingStatus.wrongNetwork) {
-      (<any>window).$('#switchToMainNetModal').modal();
-    } else if (this.web3State === Web3LoadingStatus.noAccountsAvailable) {
-      (<any>window).$('#walletLocked').modal();
-    } else if (this.web3State === Web3LoadingStatus.complete) {
-      (<any>window).$('#confirmTransaction').modal();
-    } else {
-      (<any>window).$('#web3NotAvailable').modal();
-    }
-  }
-
-  onConfirmTransaction() {
-    // this.ethService.payCan('', this.modalData.budget).subscribe((receipt) => {
-    //   this.postTransaction(null, receipt);
-    // });
   }
 
   postTransaction(checkoutModel: any, receipt: any) {
