@@ -1,5 +1,8 @@
 {
+  "extends": ["tslint:latest", "tslint-config-prettier"],
+  "rulesDirectory": ["tslint-plugin-prettier"],
   "rules": {
+    "prettier": true,
     // -- Strict errors --
     // These lint rules are likely always a good idea.
     // Force function overloads to be declared together. This ensures readers understand APIs.
@@ -27,10 +30,7 @@
     "no-duplicate-switch-case": true,
     // Do not allow a variable to be declared more than once in the same block. Consider function parameters in this
     // rule.
-    "no-duplicate-variable": [
-      true,
-      "check-parameters"
-    ],
+    "no-duplicate-variable": [true, "check-parameters"],
     // Disallows a variable definition in an inner scope from shadowing a variable in an outer scope. Developers should
     // instead use a separate variable name.
     "no-shadowed-variable": true,
@@ -51,10 +51,7 @@
     // Do not allow variables to be used before they are declared.
     "no-use-before-declare": true,
     // Expressions must always return a value. Avoids common errors like const myValue = functionReturningVoid();
-    "no-void-expression": [
-      true,
-      "ignore-arrow-function-shorthand"
-    ],
+    "no-void-expression": [true, "ignore-arrow-function-shorthand"],
     // Disallow duplicate imports in the same file.
     "no-duplicate-imports": true,
     // -- Strong Warnings --

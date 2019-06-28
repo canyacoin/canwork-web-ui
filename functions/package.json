@@ -18,12 +18,15 @@
     "dot": "^1.1.2",
     "express": "^4.16.3",
     "faker": "^4.1.0",
-    "firebase-admin": "^5.12.1",
-    "firebase-functions": "^2.0.2"
+    "firebase-admin": "^8.0.0",
+    "firebase-functions": "^2.3.1"
   },
   "devDependencies": {
+    "prettier": "^1.18.0",
     "tslint": "^5.8.0",
-    "typescript": "^2.5.3"
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.0.1",
+    "typescript": "^3.5.1"
   },
   "engines": {
     "node": "8"

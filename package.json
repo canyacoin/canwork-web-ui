@@ -75,10 +75,13 @@
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
     "nodemon": "^1.18.3",
+    "prettier": "^1.18.2",
     "protractor": "^5.3.2",
     "truffle": "^4.1.12",
     "ts-node": "~4.1.0",
     "tslint": "~5.9.1",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.0.1",
     "typescript": "3.1.6"
   },
   "resolutions": {
