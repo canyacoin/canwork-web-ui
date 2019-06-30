@@ -1,4 +1,4 @@
-image: registry.gitlab.com/canyacoin/node-build-container:1.5
+image: registry.gitlab.com/canyacoin/node-build-container:1.6
 
 variables:
   APP_PATH: /builds/$CI_PROJECT_PATH
