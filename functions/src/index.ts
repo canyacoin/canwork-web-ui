@@ -664,9 +664,8 @@ exports.updateIndexProviderData = functions.firestore
     console.log('+ looking for admin privileges')
     if (afterData.isAdmin) {
       console.log(
-        `+ setting user claim to admin for userId: ${objectId} and email: ${
+        '+ setting user claim to admin for userId: ${objectId} and email: ' +
           afterData.email
-        }`
       )
       // The new custom claims will propagate to the user's ID token the
       // next time a new one is issued.
