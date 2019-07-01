@@ -1,3 +1,4 @@
+import * as algoliasearch from 'algoliasearch'
 import * as doT from 'dot'
 
 // import * as exphbs from 'express-handlebars';
