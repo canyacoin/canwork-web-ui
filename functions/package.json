@@ -29,7 +29,7 @@
     "typescript": "^3.5.1"
   },
   "engines": {
-    "node": "10.16.0"
+    "node": "10"
   },
   "private": true
 }
