@@ -1436,12 +1436,12 @@ exports.delSlug = functions.https.onRequest(async (request, response) => {
 
 // remove jobs
 exports.removeJobs = functions.pubsub
-  .schedule('every 24 hours')
+  .schedule('every 1 hours')
   .onRun(removeJobs(db))
 
 // remove public-jobs
-exports.removeJobs = functions.pubsub
-  .schedule('every 24 hours')
+exports.removePublicJobs = functions.pubsub
+  .schedule('every 1 hours')
   .onRun(removePublicJobs(db))
 
 // triggers
