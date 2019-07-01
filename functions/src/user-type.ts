@@ -1,4 +1,4 @@
 export enum UserType {
   client = 'User',
-  provider = 'Provider'
+  provider = 'Provider',
 }
