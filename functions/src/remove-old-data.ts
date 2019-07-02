@@ -133,10 +133,7 @@ export function removeChatMessages(
   db: firestore.Firestore,
   opts = removeChatMessageOpts
 ) {
-  return async (
-    _snap: FirebaseFirestore.DocumentSnapshot,
-    _context: EventContext
-  ) => {
+  return async () => {
     const { delta, limit } = Object.assign({}, removeChatMessageOpts, opts)
     const timestamp = Date.now() - delta
 
