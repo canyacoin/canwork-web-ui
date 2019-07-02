@@ -43,6 +43,7 @@ const app = admin.initializeApp({
     privateKey: env.fbadmin.private_key.replace(/\\n/g, '\n'), // until https://github.com/firebase/firebase-tools/issues/371 is fixed
   }),
   databaseURL: env.fbadmin.database_url,
+  storageBucket: env.fbadmin.storage_bucket,
 })
 
 const db = admin.firestore()
