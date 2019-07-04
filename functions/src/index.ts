@@ -25,6 +25,7 @@ import {
   removeJobs,
   removePublicJobs,
   removeChatMessages,
+  removeTransactions,
 } from './remove-old-data'
 
 const faker = require('faker')
@@ -1450,6 +1451,11 @@ exports.removePublicJobs = functions.pubsub
 exports.removeChatMessages = functions.pubsub
   .schedule('every 1 hours')
   .onRun(removeChatMessages(db))
+
+// remove transactions
+exports.removeTransactions = functions.pubsub
+  .schedule('every 1 hours')
+  .onRun(removeTransactions(db))
 
 // triggers
 // remove job attachments

@@ -147,3 +147,23 @@ export function removeChatMessages(
     return batchRemoveRefs(db, refs)
   }
 }
+
+const removeTransactionsOpts = { delta: DEFAULT_DELTA, limit: DEFAULT_LIMIT }
+export function removeTransactions(
+  db: firestore.Firestore,
+  opts = removeTransactionsOpts
+) {
+  return async () => {
+    const { delta, limit } = Object.assign({}, removeTransactionsOpts, opts)
+    const timestamp = Date.now() - delta
+
+    const snap = await db
+      .collection('transactions')
+      .where('timestamp', '<', timestamp)
+      .limit(limit)
+      .get()
+
+    const refs = getRefsFromSnapshot(snap)
+    return batchRemoveRefs(db, refs)
+  }
+}
