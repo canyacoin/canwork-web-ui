@@ -548,7 +548,7 @@ exports.createSlugWhenJobCreated = functions.firestore
     const data = snap.data()
     const jobId = snap.id
     const slug = data.slug
-    const timestamp = new Date().valueOf()
+    const timestamp = Date.now()
 
     await db.doc(`public-jobs/${jobId}`).update({
       createAt: timestamp,
@@ -567,7 +567,7 @@ exports.createSlugWhenJobCreated = functions.firestore
 exports.updatepublicJobTimeStamp = functions.firestore
   .document('public-jobs/{jobId}')
   .onUpdate(async snap => {
-    const timestamp = new Date().valueOf()
+    const timestamp = Date.now()
     const beforeData = snap.before.data()
 
     if (!beforeData.updateAt || timestamp - beforeData.updateAt > 3000) {
@@ -583,7 +583,7 @@ exports.updatepublicJobTimeStamp = functions.firestore
 exports.createTimestampWhenJobCreated = functions.firestore
   .document('jobs/{jobId}')
   .onCreate(async snap => {
-    const timestamp = new Date().valueOf()
+    const timestamp = Date.now()
 
     await db.doc(`jobs/${snap.id}`).update({
       createAt: timestamp,
@@ -597,7 +597,7 @@ exports.createTimestampWhenJobCreated = functions.firestore
 exports.updateJobTimeStamp = functions.firestore
   .document('jobs/{jobId}')
   .onUpdate(async snap => {
-    const timestamp = new Date().valueOf()
+    const timestamp = Date.now()
     const beforeData = snap.before.data()
 
     if (!beforeData.updateAt || timestamp - beforeData.updateAt > 3000) {

@@ -1,64 +1,64 @@
 export class User {
-  '@type': string;
-  '@context': string;
-  address: string;
-  avatar: Avatar;
-  bio: string;
-  category: UserCategory;
-  colors: string[] = [];
-  description: string;
-  email: string;
-  ethAddress: string;
-  slug: string;
-  hourlyRate: string;
-  isDockUpdating: boolean;
-  name: string;
-  networkAddress: string;
-  offset: string;
-  phone: string;
-  publicEncKey: string;
-  publicKey: string;
-  pushToken: string;
-  rating: Rating = new Rating();
-  skillTags: string[] = [];
-  state: UserState;
-  timestamp: string;
-  timezone: string;
-  title: string;
-  type: UserType;
-  whitelisted: boolean;
-  whitelistRejected: boolean;
-  whitelistSubmitted: boolean;
-  work: string;
-  workSkillTags: string[] = [];
+  '@type': string
+  '@context': string
+  address: string
+  avatar: Avatar
+  bio: string
+  category: UserCategory
+  colors: string[] = []
+  description: string
+  email: string
+  ethAddress: string
+  slug: string
+  hourlyRate: string
+  isDockUpdating: boolean
+  name: string
+  networkAddress: string
+  offset: string
+  phone: string
+  publicEncKey: string
+  publicKey: string
+  pushToken: string
+  rating: Rating = new Rating()
+  skillTags: string[] = []
+  state: UserState
+  timestamp: number
+  timezone: string
+  title: string
+  type: UserType
+  whitelisted: boolean
+  whitelistRejected: boolean
+  whitelistSubmitted: boolean
+  work: string
+  workSkillTags: string[] = []
 
-  upvotes = 0;
-  downvotes = 0;
-  numberOfReviews = 0;
+  upvotes = 0
+  downvotes = 0
+  numberOfReviews = 0
 
   constructor(init?: Partial<User>) {
-    Object.assign(this, init);
+    Object.assign(this, init)
   }
 }
 
 export class Rating {
-  count = 0;
-  average = 0;
+  count = 0
+  average = 0
 
-  constructor() { }
+  constructor() {}
 }
 
 export class Avatar {
-  uri: string;
+  uri: string
 }
 
 export enum UserState {
-  done = 'Done'
+  done = 'Done',
 }
 
 export enum UserType {
   client = 'User',
-  provider = 'Provider'
+  provider = 'Provider',
 }
 
 export enum UserCategory {
@@ -67,5 +67,5 @@ export enum UserCategory {
   finance = 'FINANCIAL EXPERTS',
   marketing = 'MARKETING & SEO',
   softwareDev = 'SOFTWARE DEVELOPERS',
-  virtualAssistant = 'VIRTUAL ASSISTANTS'
+  virtualAssistant = 'VIRTUAL ASSISTANTS',
 }
