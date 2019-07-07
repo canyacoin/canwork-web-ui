@@ -1,4 +1,6 @@
 import { firestore } from 'firebase-admin'
+import * as functions from 'firebase-functions'
+
 import { getRefsFromSnapshot } from './remove-old-data'
 
 const LIMIT = 100
@@ -91,4 +93,34 @@ export async function convertJobs(
       return [count, createdAt]
     })
   })
+}
+
+export function converter(db: firestore.Firestore) {
+  return (req: functions.Request, resp: functions.Response) => {
+    if (req.method !== 'GET') {
+      return resp.status(405).send('Method Not Allowed')
+    }
+
+    const { name } = req.params
+    if (!name) {
+      return resp.status(400).send('Missing sub/collection `name`')
+    }
+
+    const responseJSON = resp.json.bind(resp)
+
+    if (SUBCOLLECTIONS.indexOf(name) !== -1) {
+      return convert(db, name, true).then(responseJSON)
+    }
+
+    if (COLLECTIONS.indexOf(name) !== 1) {
+      return convert(db, name, false).then(responseJSON)
+    }
+
+    if (JOBS_COLLECTIONS.indexOf(name) !== 1) {
+      const { createdAt } = req.params
+      return convertJobs(db, name, parseInt(createdAt)).then(responseJSON)
+    }
+
+    return resp.status(404).send('Sub/Collection not found')
+  }
 }
