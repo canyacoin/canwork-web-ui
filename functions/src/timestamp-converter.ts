@@ -100,12 +100,16 @@ function client(
   collections: string[],
   job_collections: string[]
 ) {
+  const logEl = document.getElementById('log')
+  const log = (...s: any[]) => {
+    logEl.innerText += s.join(' ') + '\n'
+  }
   const run = (name: string) => {
     return fetch('?name=' + name)
       .then(resp => resp.json())
       .then((count: number) => {
         if (count) {
-          console.log('converted +', count, ' items of sub/collection', name)
+          log('converted +', count, ' items of sub/collection', name)
           return run(name)
         }
       })
@@ -116,7 +120,7 @@ function client(
       .then(resp => resp.json())
       .then(([count, created]) => {
         if (count) {
-          console.log('converted +', count, ' items of sub/collection', name)
+          log('converted +', count, ' items of sub/collection', name)
           return runJobs(name, created)
         }
       })
@@ -132,7 +136,7 @@ function client(
 
   // DONE
   return promise.then(() => {
-    console.log('DONE!')
+    log('DONE!')
   })
 }
 
@@ -144,7 +148,8 @@ export function timestampConverter(db: firestore.Firestore) {
 
     const { name } = req.query
     if (!name) {
-      const html = `<h1>Open console</h1>
+      const html = `<h1>Progress</h1>
+<pre id="log"></pre>
 <script>
 (${client.toString()})(
   ${JSON.stringify(SUBCOLLECTIONS)},
