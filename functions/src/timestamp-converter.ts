@@ -48,16 +48,16 @@ export async function convert(
   })
 }
 
-const JOBS_COLLECTIONS = ['jobs', 'public-jobs']
+const JOB_COLLECTIONS = ['jobs', 'public-jobs']
 export async function convertJobs(
   db: firestore.Firestore,
   name: string,
-  createdAt = Date.now()
+  createdAt = 0
 ) {
   const snap = await db
     .collection(name)
     .select('createdAt')
-    .where('createdAt', '<', createdAt)
+    .where('createdAt', '>', createdAt)
     .orderBy('createdAt', 'asc')
     .limit(LIMIT)
     .get()
@@ -95,6 +95,47 @@ export async function convertJobs(
   })
 }
 
+function client(
+  SUBCOLLECTIONS: string[],
+  COLLECTIONS: string[],
+  JOB_COLLECTIONS: string[]
+) {
+  const run = (name: string) => {
+    return fetch('?name=' + name)
+      .then(resp => resp.json())
+      .then((count: number) => {
+        if (count) {
+          console.log('converted +', count, ' items of sub/collection', name)
+          return run(name)
+        }
+      })
+  }
+
+  const runJobs = (name: string, createdAt: number) => {
+    return fetch('?name=' + name + '&createdAt=' + createdAt)
+      .then(resp => resp.json())
+      .then(([count, createdAt]) => {
+        if (count) {
+          console.log('converted +', count, ' items of sub/collection', name)
+          return runJobs(name, createdAt)
+        }
+      })
+  }
+
+  let promise = Promise.resolve()
+  promise = SUBCOLLECTIONS.reduce((p, name) => p.then(() => run(name)), promise)
+  promise = COLLECTIONS.reduce((p, name) => p.then(() => run(name)), promise)
+  promise = JOB_COLLECTIONS.reduce(
+    (p, name) => p.then(() => runJobs(name, 0)),
+    promise
+  )
+
+  // DONE
+  promise.then(() => {
+    console.log('DONE!')
+  })
+}
+
 export function converter(db: firestore.Firestore) {
   return (req: functions.Request, resp: functions.Response) => {
     if (req.method !== 'GET') {
@@ -103,7 +144,16 @@ export function converter(db: firestore.Firestore) {
 
     const { name } = req.params
     if (!name) {
-      return resp.status(400).send('Missing sub/collection `name`')
+      const html = `<h1>Open console</h1>
+<script>
+(${client.toString()})(
+  ${JSON.stringify(SUBCOLLECTIONS)},
+  ${JSON.stringify(COLLECTIONS)},
+  ${JSON.stringify(JOB_COLLECTIONS)}
+)
+</scrip>
+`
+      return resp.status(200).send(html)
     }
 
     const responseJSON = resp.json.bind(resp)
@@ -116,9 +166,10 @@ export function converter(db: firestore.Firestore) {
       return convert(db, name, false).then(responseJSON)
     }
 
-    if (JOBS_COLLECTIONS.indexOf(name) !== 1) {
-      const { createdAt } = req.params
-      return convertJobs(db, name, parseInt(createdAt)).then(responseJSON)
+    if (JOB_COLLECTIONS.indexOf(name) !== 1) {
+      let { createdAt } = req.params
+      createdAt = createdAt ? parseInt(createdAt) : 0
+      return convertJobs(db, name, createdAt).then(responseJSON)
     }
 
     return resp.status(404).send('Sub/Collection not found')
