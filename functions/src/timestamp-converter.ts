@@ -39,8 +39,8 @@ export async function convert(
   const refs = getRefsFromSnapshot(snap)
 
   return db.runTransaction(async t => {
-    return t.getAll(...refs).then(snap => {
-      snap.forEach(item => {
+    return t.getAll(...refs).then(snapshot => {
+      snapshot.forEach(item => {
         t.update(item.ref, { timestamp: parseInt(item.get('timestamp')) })
       })
       return count
@@ -70,13 +70,13 @@ export async function convertJobs(
   const refs = getRefsFromSnapshot(snap)
 
   return db.runTransaction(async t => {
-    return t.getAll(...refs).then(snap => {
-      let createdAt = 0
-      snap.forEach(item => {
+    return t.getAll(...refs).then(snapshot => {
+      let created = createdAt
+      snapshot.forEach(item => {
         // save cursor
         const c = item.get('createdAt')
-        if (c > createdAt) {
-          createdAt = c
+        if (c > created) {
+          created = c
         }
 
         let actionLog = item.get('actionLog')
@@ -90,15 +90,15 @@ export async function convertJobs(
           t.update(item.ref, { actionLog })
         }
       })
-      return [count, createdAt]
+      return [count, created]
     })
   })
 }
 
 function client(
-  SUBCOLLECTIONS: string[],
-  COLLECTIONS: string[],
-  JOB_COLLECTIONS: string[]
+  subcollections: string[],
+  collections: string[],
+  job_collections: string[]
 ) {
   const run = (name: string) => {
     return fetch('?name=' + name)
@@ -114,24 +114,24 @@ function client(
   const runJobs = (name: string, createdAt: number) => {
     return fetch('?name=' + name + '&createdAt=' + createdAt)
       .then(resp => resp.json())
-      .then(([count, createdAt]) => {
+      .then(([count, created]) => {
         if (count) {
           console.log('converted +', count, ' items of sub/collection', name)
-          return runJobs(name, createdAt)
+          return runJobs(name, created)
         }
       })
   }
 
   let promise = Promise.resolve()
-  promise = SUBCOLLECTIONS.reduce((p, name) => p.then(() => run(name)), promise)
-  promise = COLLECTIONS.reduce((p, name) => p.then(() => run(name)), promise)
-  promise = JOB_COLLECTIONS.reduce(
+  promise = subcollections.reduce((p, name) => p.then(() => run(name)), promise)
+  promise = collections.reduce((p, name) => p.then(() => run(name)), promise)
+  promise = job_collections.reduce(
     (p, name) => p.then(() => runJobs(name, 0)),
     promise
   )
 
   // DONE
-  promise.then(() => {
+  return promise.then(() => {
     console.log('DONE!')
   })
 }
