@@ -142,7 +142,7 @@ export function timestampConverter(db: firestore.Firestore) {
       return resp.status(405).send('Method Not Allowed')
     }
 
-    const { name } = req.params
+    const { name } = req.query
     if (!name) {
       const html = `<h1>Open console</h1>
 <script>
@@ -151,7 +151,7 @@ export function timestampConverter(db: firestore.Firestore) {
   ${JSON.stringify(COLLECTIONS)},
   ${JSON.stringify(JOB_COLLECTIONS)}
 )
-</scrip>
+</script>
 `
       return resp.status(200).send(html)
     }
@@ -167,7 +167,7 @@ export function timestampConverter(db: firestore.Firestore) {
     }
 
     if (JOB_COLLECTIONS.indexOf(name) !== 1) {
-      let { createdAt } = req.params
+      let { createdAt } = req.query
       createdAt = createdAt ? parseInt(createdAt) : 0
       return convertJobs(db, name, createdAt).then(responseJSON)
     }
