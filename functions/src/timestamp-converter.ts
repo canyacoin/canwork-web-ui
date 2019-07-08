@@ -136,7 +136,7 @@ function client(
   })
 }
 
-export function converter(db: firestore.Firestore) {
+export function timestampConverter(db: firestore.Firestore) {
   return (req: functions.Request, resp: functions.Response) => {
     if (req.method !== 'GET') {
       return resp.status(405).send('Method Not Allowed')

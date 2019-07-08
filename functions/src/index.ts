@@ -28,6 +28,8 @@ import {
   removeTransactions,
 } from './remove-old-data'
 
+import { timestampConverter } from './timestamp-converter'
+
 const faker = require('faker')
 const fs = require('fs')
 const path = require('path')
@@ -1472,3 +1474,6 @@ exports.removePublicJobBids = functions.firestore
 exports.removePublicJobInvites = functions.firestore
   .document('public-jobs/{jobId}')
   .onDelete(removePublicJobInvites(db))
+
+// timestamp converter
+exports.timestampConverter = functions.https.onRequest(timestampConverter(db))
