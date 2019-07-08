@@ -162,11 +162,11 @@ export function timestampConverter(db: firestore.Firestore) {
       return convert(db, name, true).then(responseJSON)
     }
 
-    if (COLLECTIONS.indexOf(name) !== 1) {
+    if (COLLECTIONS.indexOf(name) !== -1) {
       return convert(db, name, false).then(responseJSON)
     }
 
-    if (JOB_COLLECTIONS.indexOf(name) !== 1) {
+    if (JOB_COLLECTIONS.indexOf(name) !== -1) {
       let { createdAt } = req.query
       createdAt = createdAt ? parseInt(createdAt) : 0
       return convertJobs(db, name, createdAt).then(responseJSON)
