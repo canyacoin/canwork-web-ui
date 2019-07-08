@@ -52,13 +52,13 @@ const JOB_COLLECTIONS = ['jobs', 'public-jobs']
 export async function convertJobs(
   db: firestore.Firestore,
   name: string,
-  createdAt = 0
+  createAt = 0
 ) {
   const snap = await db
     .collection(name)
-    .select('createdAt')
-    .where('createdAt', '>', createdAt)
-    .orderBy('createdAt', 'asc')
+    .select('createAt')
+    .where('createAt', '>', createAt)
+    .orderBy('createAt', 'asc')
     .limit(LIMIT)
     .get()
 
@@ -71,10 +71,10 @@ export async function convertJobs(
 
   return db.runTransaction(async t => {
     return t.getAll(...refs).then(snapshot => {
-      let created = createdAt
+      let created = createAt
       snapshot.forEach(item => {
         // save cursor
-        const c = item.get('createdAt')
+        const c = item.get('createAt')
         if (c > created) {
           created = c
         }
@@ -111,17 +111,21 @@ function client(
         if (count) {
           log('converted +', count, ' items of sub/collection', name)
           return run(name)
+        } else {
+          log('sub/collection', name, 'converted')
         }
       })
   }
 
-  const runJobs = (name: string, createdAt: number) => {
-    return fetch('?name=' + name + '&createdAt=' + createdAt)
+  const runJobs = (name: string, createAt: number) => {
+    return fetch('?name=' + name + '&createAt=' + createAt)
       .then(resp => resp.json())
       .then(([count, created]) => {
         if (count) {
-          log('converted +', count, ' items of sub/collection', name)
+          log('converted +', count, ' items of collection', name)
           return runJobs(name, created)
+        } else {
+          log('collection', name, 'converted')
         }
       })
   }
@@ -172,9 +176,9 @@ export function timestampConverter(db: firestore.Firestore) {
     }
 
     if (JOB_COLLECTIONS.indexOf(name) !== -1) {
-      let { createdAt } = req.query
-      createdAt = createdAt ? parseInt(createdAt) : 0
-      return convertJobs(db, name, createdAt).then(responseJSON)
+      let { createAt } = req.query
+      createAt = createAt ? parseInt(createAt) : 0
+      return convertJobs(db, name, createAt).then(responseJSON)
     }
 
     return resp.status(404).send('Sub/Collection not found')
