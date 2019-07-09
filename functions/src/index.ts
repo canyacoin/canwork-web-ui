@@ -25,6 +25,7 @@ import {
   removeJobs,
   removePublicJobs,
   removeChatMessages,
+  removeChatChannels,
   removeTransactions,
 } from './remove-old-data'
 
@@ -1453,6 +1454,11 @@ exports.removePublicJobs = functions.pubsub
 exports.removeChatMessages = functions.pubsub
   .schedule('every 1 hours')
   .onRun(removeChatMessages(db))
+
+// remove chat channels
+exports.removeChatChannels = functions.pubsub
+  .schedule('every 1 hours')
+  .onRun(removeChatChannels(db))
 
 // remove transactions
 exports.removeTransactions = functions.pubsub
