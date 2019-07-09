@@ -157,7 +157,7 @@ export function removeChatMessages(
   return async () => {
     const { delta, limit } = Object.assign({}, removeChatMessageOpts, opts)
     const timestamp = Date.now() - delta
-    const rePath = /^\/chats\/.+\/channels\/.+\/messages\//
+    const rePath = /^chats\/.+\/channels\/.+\/messages\//
 
     const snap = await db
       .collectionGroup('messages')
@@ -178,7 +178,7 @@ export function removeChatChannels(
   return async () => {
     const { delta, limit } = Object.assign({}, removeChatChannelsOpts, opts)
     const timestamp = Date.now() - delta
-    const rePath = /^\/chats\/.+\/channels\//
+    const rePath = /^chats\/.+\/channels\//
 
     const snap = await db
       .collectionGroup('channels')
