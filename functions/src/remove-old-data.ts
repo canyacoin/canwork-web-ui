@@ -128,26 +128,6 @@ export function removePublicJobs(db: firestore.Firestore, opts = jobsOpts) {
   }
 }
 
-const removeChatMessageOpts = { delta: DEFAULT_DELTA, limit: DEFAULT_LIMIT }
-export function removeChatMessages(
-  db: firestore.Firestore,
-  opts = removeChatMessageOpts
-) {
-  return async () => {
-    const { delta, limit } = Object.assign({}, removeChatMessageOpts, opts)
-    const timestamp = Date.now() - delta
-
-    const messageSnap = await db
-      .collectionGroup('messages')
-      .where('timestamp', '<', timestamp)
-      .limit(limit)
-      .get()
-
-    const refs = getRefsFromSnapshot(messageSnap)
-    return batchRemoveRefs(db, refs)
-  }
-}
-
 const removeTransactionsOpts = { delta: DEFAULT_DELTA, limit: DEFAULT_LIMIT }
 export function removeTransactions(
   db: firestore.Firestore,
@@ -164,6 +144,49 @@ export function removeTransactions(
       .get()
 
     const refs = getRefsFromSnapshot(snap)
+    return batchRemoveRefs(db, refs)
+  }
+}
+
+// remove chats channels & messages
+const removeChatMessageOpts = { delta: DEFAULT_DELTA, limit: DEFAULT_LIMIT }
+export function removeChatMessages(
+  db: firestore.Firestore,
+  opts = removeChatMessageOpts
+) {
+  return async () => {
+    const { delta, limit } = Object.assign({}, removeChatMessageOpts, opts)
+    const timestamp = Date.now() - delta
+    const rePath = /^\/chats\/.+\/channels\/.+\/messages\//
+
+    const snap = await db
+      .collectionGroup('messages')
+      .where('timestamp', '<', timestamp)
+      .limit(limit)
+      .get()
+
+    const refs = getRefsFromSnapshot(snap).filter(ref => rePath.test(ref.path))
+    return batchRemoveRefs(db, refs)
+  }
+}
+
+const removeChatChannelsOpts = { delta: DEFAULT_DELTA, limit: DEFAULT_LIMIT }
+export function removeChatChannels(
+  db: firestore.Firestore,
+  opts = removeChatChannelsOpts
+) {
+  return async () => {
+    const { delta, limit } = Object.assign({}, removeChatChannelsOpts, opts)
+    const timestamp = Date.now() - delta
+    const rePath = /^\/chats\/.+\/channels\//
+
+    const snap = await db
+      .collectionGroup('channels')
+      .where('timestamp', '<', timestamp)
+      .limit(limit)
+      .get()
+
+    const refs = getRefsFromSnapshot(snap).filter(ref => rePath.test(ref.path))
     return batchRemoveRefs(db, refs)
   }
 }
