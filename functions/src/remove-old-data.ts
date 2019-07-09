@@ -4,10 +4,10 @@ import { storage, firestore } from 'firebase-admin'
 export const DEFAULT_LIMIT = 500
 
 // prod delta 12 months
-// const DEFAULT_DELTA = 12 * 30 * 24 * 60 * 60 * 1000
+const DEFAULT_DELTA = 12 * 30 * 24 * 60 * 60 * 1000
 
 // test delta 4 months
-const DEFAULT_DELTA = 4 * 30 * 24 * 60 * 60 * 1000
+// const DEFAULT_DELTA = 4 * 30 * 24 * 60 * 60 * 1000
 
 const jobsOpts = {
   delta: DEFAULT_DELTA,
