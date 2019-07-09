@@ -65,7 +65,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       if (this.messagesSubscription) { this.messagesSubscription.unsubscribe(); }
       this.messagesSubscription = unreadConversations.valueChanges().subscribe(x => {
         const hadUnread = this.hasUnreadMessages;
-        const hasUnread = x.length > 0;
         this.hasUnreadMessages = x.length > 0;
         if (!hadUnread && this.hasUnreadMessages) {
           // request permission to show desktop notifications
