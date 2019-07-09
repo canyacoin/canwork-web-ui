@@ -14,7 +14,7 @@
                 </form>
               </div>
             </form>
-            <div class="list-group list-group-flush contact-list">
+            <div class="list-group list-group-flush contact-list" style="height: 80%; max-height:none;">
               <div *ngFor="let channel of queryChannels;let i = index">
                 <a *ngIf="selectedChannel && channel" (click)="onSelect(channel);" class="list-group-item list-group-item-action"
                   [ngClass]="{ 'active': selectedChannel.address === channel.address }" style="cursor: pointer;">
