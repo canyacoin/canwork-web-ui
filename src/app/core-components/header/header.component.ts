@@ -64,7 +64,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
       if (this.messagesSubscription) { this.messagesSubscription.unsubscribe(); }
       this.messagesSubscription = unreadConversations.valueChanges().subscribe(x => {
+        const hadUnread = this.hasUnreadMessages;
         this.hasUnreadMessages = x.length > 0;
+        if (!hadUnread && this.hasUnreadMessages) {
+          // request permission to show desktop notifications
+          if (Notification.permission !== 'granted') {
+            Notification.requestPermission();
+          } else {
+            const notification = new Notification('CanWork', {
+              icon: 'https://www.canwork.io/assets/img/favicon.jpg',
+              body: 'You have unread chat messages on CanWork',
+            });
+          }
+        }
       }, error => { console.error('! unable to retrieve chat/channel data:', error); });
     }
   }
