@@ -206,8 +206,15 @@
                 <div class="input-group input-group-lg">
                   <div class="input-group-prepend bg-white">
                     <div class="dropdown dropup">
+                      <a href="https://canshare.io/" target="_blank">
+                        <button [disabled]="isLoading || channels.length < 1" class="btn btn-secondary btn-outline mt-7"
+                          style="background: white; margin-top: 6px; margin-left: 6px; padding: 8px 10px 8px 10px;" type="button"
+                        >
+                          <i class="fas fa-paperclip" style="color: #919d9d;"></i>
+                        </button>
+                      </a>
                       <button [disabled]="isLoading || channels.length < 1" class="btn btn-secondary btn-outline mt-7 dropdown-toggle-no-arrow"
-                        style="border: none; background: white; margin-top: 6px;" type="button" id="menu" data-toggle="dropdown"
+                        style="background: white; margin-top: 6px; margin-left: 6px; padding: 8px 10px 8px 10px;" type="button" id="menu" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-bars" style="color: #919d9d;"></i>
                       </button>
