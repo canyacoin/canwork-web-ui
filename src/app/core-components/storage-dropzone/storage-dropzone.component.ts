@@ -29,6 +29,7 @@ export class StorageDropzoneComponent {
     Object.keys(config).forEach(key => {
       this.dropzoneConfig[key] = config[key].value
     })
+    console.log('dropzone config', this.dropzoneConfig)
   }
   @Input() filePath: string
 
@@ -61,11 +62,11 @@ export class StorageDropzoneComponent {
     this.uploadPercent = task.percentageChanges()
   }
 
-  onUploadError(event) {
+  onDropzoneError(event) {
     console.log(event)
   }
 
-  onUploadSuccess(event) {
+  onDropzoneSuccess(event) {
     console.log(event)
   }
 }
