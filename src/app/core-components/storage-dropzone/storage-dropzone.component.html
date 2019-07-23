@@ -1,0 +1,27 @@
+<section id="dropzone">
+  <section class="toggler-div" (click)="close.emit(true)"></section>
+  <div class="container dropzone-container">
+    <div class="col-12 text-right">
+      <button class="btn btn-light" (click)="close.emit(true)">X</button>
+    </div>
+    <div class="wrapper">
+      <dropzone
+        [config]="dropzoneConfig"
+        [message]="dropzoneMessage"
+        (error)="onDropzoneError($event)"
+        (addedFile)="onDropzoneAddedFile($event)"
+      >
+      </dropzone>
+
+      <p class="error-message mb-0 p-3 text-danger" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </p>
+
+      <div class="file d-flex align-items-center" *ngIf="isUploading">
+        <p class="mb-0 p-3">
+          <span>{{ uploadPercent | async | number: '1.0-2' }}%</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

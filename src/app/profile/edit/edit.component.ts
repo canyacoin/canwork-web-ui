@@ -1,124 +1,174 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EthService } from '@service/eth.service';
-import { User } from '@class/user';
-import { AuthService } from '@service/auth.service';
-import { UserService } from '@service/user.service';
-import { CurrencyValidator } from '@validator/currency.validator';
-import { EmailValidator } from '@validator/email.validator';
-import { EthereumValidator } from '@validator/ethereum.validator';
-import { Subscription } from 'rxjs';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core'
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { EthService } from '@service/eth.service'
+import { User } from '@class/user'
+import { AuthService } from '@service/auth.service'
+import { UserService } from '@service/user.service'
+import { CurrencyValidator } from '@validator/currency.validator'
+import { EmailValidator } from '@validator/email.validator'
+import { EthereumValidator } from '@validator/ethereum.validator'
+import { Subscription } from 'rxjs'
+import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper'
 
-import * as moment from 'moment-timezone';
+import * as moment from 'moment-timezone'
 
 @Component({
   selector: 'app-profile-edit',
   templateUrl: './edit.component.html',
-  styleUrls: ['./edit.component.scss']
+  styleUrls: ['./edit.component.scss'],
 })
 export class EditComponent implements OnInit, OnDestroy {
+  @Input() currentUser: User
+  ethSub: Subscription
 
-  @Input() currentUser: User;
-  ethSub: Subscription;
+  @Output() close = new EventEmitter()
+  displayDropzone = false
+  dropzoneConfig: DropzoneConfigInterface = {
+    acceptedFiles: 'image/jpg,image/png,image/jpeg',
+    maxFilesize: 1,
+  }
+  filePath: string
 
-  @Output() close = new EventEmitter;
-  displayIpfsDropzone = false;
-  dropzoneConfig = {
-    acceptedFiles: {
-      value: 'image/jpg,image/png,image/jpeg',
-      error: 'Only (jpeg, jpg or png) image files are accepted'
-    },
-    maxFilesize: {
-      value: 1000000,
-      error: 'Please add image files smaller than 1mb'
-    }
-  };
+  profileForm: FormGroup = null
+  sending = false
 
-  profileForm: FormGroup = null;
-  sending = false;
+  skillTagsList: string[] = []
+  tagSelectionInvalid = false
+  acceptedTags: string[] = []
+  tagInput = ''
 
-  skillTagsList: string[] = [];
-  tagSelectionInvalid = false;
-  acceptedTags: string[] = [];
-  tagInput = '';
-
-  ethAddress: string;
+  ethAddress: string
 
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
     private ethService: EthService,
-    private authService: AuthService) {
-    this.ethAddress = this.ethService.getOwnerAccount();
+    private authService: AuthService
+  ) {
+    this.ethAddress = this.ethService.getOwnerAccount()
   }
 
   ngOnInit() {
     if (this.currentUser != null) {
-      this.buildForm();
+      this.filePath = `uploads/avatars/${this.currentUser.address}`
+      this.buildForm()
     }
   }
 
   ngOnDestroy() {
-    if (this.ethSub) { this.ethSub.unsubscribe(); }
+    if (this.ethSub) {
+      this.ethSub.unsubscribe()
+    }
   }
 
-  onProfileImageUpload(ipfsResponse) {
-    this.currentUser.avatar.uri = `https://ipfs.io/ipfs/${ipfsResponse.hash}`;
-    this.displayIpfsDropzone = false;
+  onProfileImageUpload(url) {
+    console.log('uploaded url', url)
+    this.currentUser.avatar.uri = url
+    this.displayDropzone = false
   }
 
   onClose() {
-    this.close.emit(true);
+    this.close.emit(true)
   }
 
   buildForm() {
     this.profileForm = this.formBuilder.group({
-      name: [this.currentUser.name || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
-      work: [this.currentUser.work || '', Validators.compose([Validators.required, EmailValidator.isValid])],
-      ethAddress: [this.currentUser.ethAddress || this.ethAddress,
-      Validators.compose(
-        [Validators.required, new EthereumValidator(this.ethService).isValidAddress]
-      ),
-      new EthereumValidator(this.ethService).isUniqueAddress(this.userService.usersCollectionRef, this.currentUser)],
-      title: [this.currentUser.title || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(36)])],
-      bio: [this.currentUser.bio || '', Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(60)])],
+      name: [
+        this.currentUser.name || '',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(36),
+        ]),
+      ],
+      work: [
+        this.currentUser.work || '',
+        Validators.compose([Validators.required, EmailValidator.isValid]),
+      ],
+      ethAddress: [
+        this.currentUser.ethAddress || this.ethAddress,
+        Validators.compose([
+          Validators.required,
+          new EthereumValidator(this.ethService).isValidAddress,
+        ]),
+        new EthereumValidator(this.ethService).isUniqueAddress(
+          this.userService.usersCollectionRef,
+          this.currentUser
+        ),
+      ],
+      title: [
+        this.currentUser.title || '',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(36),
+        ]),
+      ],
+      bio: [
+        this.currentUser.bio || '',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(60),
+        ]),
+      ],
       category: [this.currentUser.category || ''],
       skillTags: [''],
-      hourlyRate: [this.currentUser.hourlyRate || '', Validators.compose([CurrencyValidator.isValid])],
+      hourlyRate: [
+        this.currentUser.hourlyRate || '',
+        Validators.compose([CurrencyValidator.isValid]),
+      ],
       color1: [this.currentUser.colors[0]],
       color2: [this.currentUser.colors[1]],
       color3: [this.currentUser.colors[2]],
-      description: [this.currentUser.description || '']
-    });
+      description: [this.currentUser.description || ''],
+    })
   }
 
   skillTagsUpdated(value: string) {
-    this.profileForm.controls['skillTags'].setValue(value);
+    this.profileForm.controls['skillTags'].setValue(value)
   }
 
-  save(category1: any, category2: any, category3: any, category4: any, category5: any, category6: any) {
-    this.sending = true;
+  save(
+    category1: any,
+    category2: any,
+    category3: any,
+    category4: any,
+    category5: any,
+    category6: any
+  ) {
+    this.sending = true
 
-    let category = 'CONTENT CREATORS';
+    let category = 'CONTENT CREATORS'
     if (category2.checked) {
-      category = 'DESIGNERS & CREATIVES';
+      category = 'DESIGNERS & CREATIVES'
     }
     if (category3.checked) {
-      category = 'FINANCIAL EXPERTS';
+      category = 'FINANCIAL EXPERTS'
     }
     if (category4.checked) {
-      category = 'MARKETING & SEO';
+      category = 'MARKETING & SEO'
     }
     if (category5.checked) {
-      category = 'SOFTWARE DEVELOPERS';
+      category = 'SOFTWARE DEVELOPERS'
     }
     if (category6.checked) {
-      category = 'VIRTUAL ASSISTANTS';
+      category = 'VIRTUAL ASSISTANTS'
     }
 
-    let tags: string[] = this.profileForm.value.skillTags === '' ? [] : this.profileForm.value.skillTags.split(',').map(item => item.trim());
+    let tags: string[] =
+      this.profileForm.value.skillTags === ''
+        ? []
+        : this.profileForm.value.skillTags.split(',').map(item => item.trim())
     if (tags.length > 6) {
-      tags = tags.slice(0, 6);
+      tags = tags.slice(0, 6)
     }
     const tmpUser = {
       address: this.currentUser.address,
@@ -130,22 +180,26 @@ export class EditComponent implements OnInit, OnDestroy {
       category: category,
       skillTags: tags,
       hourlyRate: this.profileForm.value.hourlyRate,
-      colors: [this.profileForm.value.color1, this.profileForm.value.color2, this.profileForm.value.color3],
+      colors: [
+        this.profileForm.value.color1,
+        this.profileForm.value.color2,
+        this.profileForm.value.color3,
+      ],
       description: this.profileForm.value.description,
-      timezone: moment.tz.guess()
-    };
+      timezone: moment.tz.guess(),
+    }
 
     // tslint:disable-next-line:forin
     for (const k in tmpUser) {
-      this.currentUser[k] = tmpUser[k];
+      this.currentUser[k] = tmpUser[k]
     }
 
-    this.userService.saveUser(this.currentUser);
-    this.authService.setUser(this.currentUser);
+    this.userService.saveUser(this.currentUser)
+    this.authService.setUser(this.currentUser)
     setTimeout(() => {
       // DESTROY the edit overlay
-      this.onClose();
-      this.sending = false;
-    }, 600);
+      this.onClose()
+      this.sending = false
+    }, 600)
   }
 }
