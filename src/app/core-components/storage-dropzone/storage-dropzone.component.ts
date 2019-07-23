@@ -47,7 +47,9 @@ export class StorageDropzoneComponent {
     this.isUploading = true
     task
       .then(snap => {
-        this.uploaded.emit(snap.downloadURL)
+        snap.ref.getDownloadURL().then(url => {
+          this.uploaded.emit(url)
+        })
         this.isUploading = false
       })
       .catch(err => {
