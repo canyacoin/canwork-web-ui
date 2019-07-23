@@ -39,6 +39,7 @@ export class EditComponent implements OnInit, OnDestroy {
       error: 'Please add image files smaller than 1mb',
     },
   }
+  filePath: string
 
   profileForm: FormGroup = null
   sending = false
@@ -61,6 +62,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.currentUser != null) {
+      this.filePath = `uploads/avatars/${this.currentUser.address}`
       this.buildForm()
     }
   }

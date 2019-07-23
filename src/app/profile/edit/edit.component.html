@@ -1,7 +1,8 @@
 <app-storage-dropzone
   *ngIf="displayDropzone"
   [config]="dropzoneConfig"
-  (response)="onProfileImageUpload($event)"
+  [filePath]="filePath"
+  (uploaded)="onProfileImageUpload($event)"
   (close)="displayDropzone = false"
 ></app-storage-dropzone>
 <div class="overlay">
