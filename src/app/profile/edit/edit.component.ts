@@ -15,6 +15,7 @@ import { CurrencyValidator } from '@validator/currency.validator'
 import { EmailValidator } from '@validator/email.validator'
 import { EthereumValidator } from '@validator/ethereum.validator'
 import { Subscription } from 'rxjs'
+import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper'
 
 import * as moment from 'moment-timezone'
 
@@ -29,15 +30,9 @@ export class EditComponent implements OnInit, OnDestroy {
 
   @Output() close = new EventEmitter()
   displayDropzone = false
-  dropzoneConfig = {
-    acceptedFiles: {
-      value: 'image/jpg,image/png,image/jpeg',
-      error: 'Only (jpeg, jpg or png) image files are accepted',
-    },
-    maxFilesize: {
-      value: 1000000,
-      error: 'Please add image files smaller than 1mb',
-    },
+  dropzoneConfig: DropzoneConfigInterface = {
+    acceptedFiles: 'image/jpg,image/png,image/jpeg',
+    maxFilesize: 1,
   }
   filePath: string
 

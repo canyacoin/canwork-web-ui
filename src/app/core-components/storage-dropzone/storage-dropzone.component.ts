@@ -6,7 +6,10 @@ import {
   ViewChild,
 } from '@angular/core'
 import { AngularFireStorage } from '@angular/fire/storage'
-import { DropzoneComponent as Dropzone } from 'ngx-dropzone-wrapper'
+import {
+  DropzoneComponent as Dropzone,
+  DropzoneConfigInterface,
+} from 'ngx-dropzone-wrapper'
 
 import { Observable } from 'rxjs'
 
@@ -18,19 +21,10 @@ import { Observable } from 'rxjs'
 export class StorageDropzoneComponent {
   @ViewChild(Dropzone) dropzone: Dropzone
 
-  dropzoneConfig: any = {}
-  errors: any = {}
-
   @Output() close = new EventEmitter()
   @Output() uploaded = new EventEmitter()
 
-  @Input() set config(config) {
-    this.errors = config
-    Object.keys(config).forEach(key => {
-      this.dropzoneConfig[key] = config[key].value
-    })
-    console.log('dropzone config', this.dropzoneConfig)
-  }
+  @Input() dropzoneConfig: DropzoneConfigInterface
   @Input() filePath: string
 
   dropzoneMessage = `<i class='fa fa-cloud-upload-alt'></i> <h4>Drag a document to upload</h4> <p>- or -</p> <span class='btn btn-primary'>Browse</span>`
@@ -40,7 +34,7 @@ export class StorageDropzoneComponent {
   uploadPercent: Observable<number>
   constructor(private storage: AngularFireStorage) {}
 
-  uploadFile(file) {
+  uploadFile(file: File) {
     const filePath = this.filePath
     const task = this.storage.upload(filePath, file)
 
@@ -63,10 +57,23 @@ export class StorageDropzoneComponent {
   }
 
   onDropzoneError(event) {
-    console.log(event)
+    console.log('onDropzoneError', event)
+    this.errorMessage = event[1]
   }
 
-  onDropzoneSuccess(event) {
-    console.log(event)
+  onDropzoneAddedFile(file) {
+    // the method will be called before `onDropzoneError`
+    this.errorMessage = ''
+    console.log('onDropzoneAddedFile', file)
+    // hack waiting file.accepted property
+    setTimeout(() => {
+      console.log(file.accepted)
+      if (file.accepted) {
+        console.log('file accepted')
+        this.uploadFile(file)
+      } else {
+        console.log('file not accepted')
+      }
+    }, 0)
   }
 }

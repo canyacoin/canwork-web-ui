@@ -1,6 +1,6 @@
 <app-storage-dropzone
   *ngIf="displayDropzone"
-  [config]="dropzoneConfig"
+  [dropzoneConfig]="dropzoneConfig"
   [filePath]="filePath"
   (uploaded)="onProfileImageUpload($event)"
   (close)="displayDropzone = false"

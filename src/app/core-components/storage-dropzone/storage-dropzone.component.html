@@ -9,8 +9,7 @@
         [config]="dropzoneConfig"
         [message]="dropzoneMessage"
         (error)="onDropzoneError($event)"
-        (success)="onDropzoneSuccess($event)"
-        (addedFile)="uploadFile($event)"
+        (addedFile)="onDropzoneAddedFile($event)"
       >
       </dropzone>
 
