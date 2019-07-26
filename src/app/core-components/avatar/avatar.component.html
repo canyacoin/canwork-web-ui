@@ -1,23 +1,26 @@
-<div [ngClass]="['app-avatar', customClass || '']" >
-  <div class="app-avatar-image"
+<div [ngClass]="['app-avatar', customClass || '']">
+  <div
+    *ngIf="avatarUrl | async as aUrl; else initial"
+    class="app-avatar-image"
     [ngStyle]="{
-      'background-image': getBackground()
+      'background-image': 'url(' + aUrl + ')'
     }"
-  >
-  </div>
-  <div class="app-avatar-initials">
-    <svg width="100%" height="100%" viewBox="0 0 100 100">
-      <rect width="100%" height="100%" fill="#3cf"/>
-      <text
-        font-size="45"
-        x="50%"
-        y="50%"
-        dominant-baseline="middle"
-        text-anchor="middle"
-        fill="white"
-      >
-        {{ getInitials() }}
-      </text>
-    </svg>
-  </div>
+  ></div>
+  <ng-template #initial>
+    <div class="app-avatar-initials">
+      <svg width="100%" height="100%" viewBox="0 0 100 100">
+        <rect width="100%" height="100%" fill="#3cf" />
+        <text
+          font-size="45"
+          x="50%"
+          y="50%"
+          dominant-baseline="middle"
+          text-anchor="middle"
+          fill="white"
+        >
+          {{ getInitials() }}
+        </text>
+      </svg>
+    </div>
+  </ng-template>
 </div>
