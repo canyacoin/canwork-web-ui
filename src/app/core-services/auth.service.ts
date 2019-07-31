@@ -1,71 +1,79 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { Injectable } from '@angular/core'
+import { Router } from '@angular/router'
+import { AngularFireAuth } from 'angularfire2/auth'
+import { AngularFirestore } from 'angularfire2/firestore'
+import { BehaviorSubject, Subscription } from 'rxjs'
 
-import * as firebase from 'firebase/app';
-import { Avatar, User } from '../core-classes/user';
+import * as firebase from 'firebase/app'
+import { User } from '../core-classes/user'
 
 @Injectable()
 export class AuthService {
+  userSub: Subscription
 
-  userSub: Subscription;
+  public currentUser = new BehaviorSubject<User>(null)
+  public currentUser$ = this.currentUser.asObservable()
 
-  public currentUser = new BehaviorSubject<User>(null);
-  public currentUser$ = this.currentUser.asObservable();
-
-  constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth, private router: Router) {
-    const savedUser = JSON.parse(localStorage.getItem('credentials'));
+  constructor(
+    private afs: AngularFirestore,
+    private afAuth: AngularFireAuth,
+    private router: Router
+  ) {
+    const savedUser = JSON.parse(localStorage.getItem('credentials'))
     if (savedUser) {
-      this.setUser(savedUser);
+      this.setUser(savedUser)
     }
   }
 
   getCurrentUser(): Promise<User> {
     if (this.currentUser.value) {
-      return Promise.resolve(this.currentUser.value);
+      return Promise.resolve(this.currentUser.value)
     }
-    return Promise.reject(null);
+    return Promise.reject(null)
   }
 
   isAuthenticated() {
-    return this.currentUser.value !== null;
+    return this.afAuth.auth.currentUser !== null
   }
 
   async getJwt(): Promise<string> {
     return new Promise<string>(async (resolve, reject) => {
       await firebase.auth().onAuthStateChanged(async user => {
         if (user) {
-          const token = await user.getIdToken(true);
-          resolve(token);
+          const token = await user.getIdToken(true)
+          resolve(token)
         } else {
-          resolve('');
+          resolve('')
         }
-      });
-    });
+      })
+    })
   }
 
   setUser(user: User) {
-    this.emitUser(user);
-    if (this.userSub) { this.userSub.unsubscribe(); }
-    this.userSub = this.afs.doc(`users/${user.address}`).valueChanges().subscribe((val: User) => {
-      this.emitUser(new User(val));
-    });
+    this.emitUser(user)
+    if (this.userSub) {
+      this.userSub.unsubscribe()
+    }
+    this.userSub = this.afs
+      .doc(`users/${user.address}`)
+      .valueChanges()
+      .subscribe((val: User) => {
+        this.emitUser(new User(val))
+      })
   }
 
   emitUser(user: User) {
     if (user) {
-      localStorage.setItem('credentials', JSON.stringify(user));
+      localStorage.setItem('credentials', JSON.stringify(user))
     }
-    this.currentUser.next(user);
+    this.currentUser.next(user)
   }
 
   logout() {
-    console.log('logout', this.currentUser.value);
-    localStorage.clear();
-    this.currentUser.next(null);
-    this.afAuth.auth.signOut();
-    this.router.navigate(['home']); // TODO: Change this to reload same route - and hit the auth guards again
+    console.log('logout', this.currentUser.value)
+    localStorage.clear()
+    this.currentUser.next(null)
+    this.afAuth.auth.signOut()
+    this.router.navigate(['home']) // TODO: Change this to reload same route - and hit the auth guards again
   }
 }
