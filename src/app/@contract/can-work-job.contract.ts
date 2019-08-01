@@ -1,35 +1,44 @@
-import { EthService } from '@service/eth.service';
-import { Job } from '@class/job';
-import { User } from '@class/user';
-import { environment } from '@env/environment';
+import { EthService } from '@service/eth.service'
+import { Job } from '@class/job'
+import { environment } from '@env/environment'
 
-declare var require: any;
+declare var require: any
 
-const CanWorkJobContractInterface = require('@abi/can-work-job.abi.json');
+const CanWorkJobContractInterface = require('@abi/can-work-job.abi.json')
 
 export class CanWorkJobContract {
+  instance: any
 
-  instance: any;
-  canYaDecimals = 6;
-
-
-  constructor(private eth: EthService) {
-  }
+  constructor(private eth: EthService) {}
 
   connect() {
-    this.instance = this.eth.createContractInstance(CanWorkJobContractInterface.abi, environment.contracts.canwork);
-    return this;
+    this.instance = this.eth.createContractInstance(
+      CanWorkJobContractInterface.abi,
+      environment.contracts.canwork
+    )
+    return this
   }
 
-  async createJob(job: Job, clientAddress: string, providerAddress: string, onTxHash: Function) {
+  async createJob(
+    job: Job,
+    clientAddress: string,
+    providerAddress: string,
+    onTxHash: Function
+  ) {
     return new Promise(async (resolve, reject) => {
-      const txObject = await this.instance.methods.createJob(this.eth.web3js.utils.padRight(job.hexId, 64), clientAddress, providerAddress, job.budgetCan * (10 ** this.canYaDecimals));
-      let gas, gasPrice = '';
+      const txObject = await this.instance.methods.createJob(
+        this.eth.web3js.utils.padRight(job.hexId, 64),
+        clientAddress,
+        providerAddress,
+        this.eth.amountToCANTokens(job.budgetCan)
+      )
+      let gas,
+        gasPrice = ''
       try {
-        gas = await txObject.estimateGas({ from: clientAddress });
-        gasPrice = await this.eth.getDefaultGasPriceGwei();
+        gas = await txObject.estimateGas({ from: clientAddress })
+        gasPrice = await this.eth.getDefaultGasPriceGwei()
       } catch (err) {
-        reject(err);
+        reject(err)
       }
 
       const txOptions = {
@@ -39,22 +48,33 @@ export class CanWorkJobContract {
         gasLimit: gas,
         gasPrice: gasPrice,
         data: txObject.encodeABI(),
-      };
-      txObject.send(txOptions, async (err, txHash) => this.eth.resolveTransaction(err, clientAddress, txHash, resolve, reject, onTxHash));
-
-    });
+      }
+      txObject.send(txOptions, async (err, txHash) =>
+        this.eth.resolveTransaction(
+          err,
+          clientAddress,
+          txHash,
+          resolve,
+          reject,
+          onTxHash
+        )
+      )
+    })
   }
 
   async completeJob(job: Job, fromAddr: string, onTxHash: Function) {
     return new Promise(async (resolve, reject) => {
-      const txObject = await this.instance.methods.completeJob(this.eth.web3js.utils.padRight(job.hexId, 64));
-      let gas, gasPrice = '';
+      const txObject = await this.instance.methods.completeJob(
+        this.eth.web3js.utils.padRight(job.hexId, 64)
+      )
+      let gas,
+        gasPrice = ''
 
       try {
-        gas = await txObject.estimateGas({ from: fromAddr });
-        gasPrice = await this.eth.getDefaultGasPriceGwei();
+        gas = await txObject.estimateGas({ from: fromAddr })
+        gasPrice = await this.eth.getDefaultGasPriceGwei()
       } catch (err) {
-        reject(err);
+        reject(err)
       }
 
       const txOptions = {
@@ -64,34 +84,55 @@ export class CanWorkJobContract {
         gasLimit: gas,
         gasPrice: gasPrice,
         data: txObject.encodeABI(),
-      };
-      txObject.send(txOptions, async (err, txHash) => this.eth.resolveTransaction(err, fromAddr, txHash, resolve, reject, onTxHash));
-    });
+      }
+      txObject.send(txOptions, async (err, txHash) =>
+        this.eth.resolveTransaction(
+          err,
+          fromAddr,
+          txHash,
+          resolve,
+          reject,
+          onTxHash
+        )
+      )
+    })
   }
 
   async cancelJobByProvider(job: Job, fromAddr: string, onTxHash: Function) {
     return new Promise(async (resolve, reject) => {
-      console.log('cancelling job :' + job.hexId);
-      const txObject = await this.instance.methods.cancelJobByProvider(this.eth.web3js.utils.padRight(job.hexId, 64));
-      let gas, gasPrice = '';
+      console.log('cancelling job :' + job.hexId)
+      const txObject = await this.instance.methods.cancelJobByProvider(
+        this.eth.web3js.utils.padRight(job.hexId, 64)
+      )
+      let gas,
+        gasPrice = ''
 
       try {
-        gas = await txObject.estimateGas({ from: fromAddr });
-        gasPrice = await this.eth.getDefaultGasPriceGwei();
+        gas = await txObject.estimateGas({ from: fromAddr })
+        gasPrice = await this.eth.getDefaultGasPriceGwei()
       } catch (err) {
-        reject(err);
+        reject(err)
       }
 
       const txOptions = {
         from: fromAddr,
-         // Value should be send only for transactions that require sending a value. Here we can ommit it:
+        // Value should be send only for transactions that require sending a value. Here we can ommit it:
         // value: '0x0',
         gasLimit: gas,
         gasPrice: gasPrice,
         data: txObject.encodeABI(),
-      };
-      console.log(txOptions);
-      txObject.send(txOptions, async (err, txHash) => this.eth.resolveTransaction(err, fromAddr, txHash, resolve, reject, onTxHash));
-    });
+      }
+      console.log(txOptions)
+      txObject.send(txOptions, async (err, txHash) =>
+        this.eth.resolveTransaction(
+          err,
+          fromAddr,
+          txHash,
+          resolve,
+          reject,
+          onTxHash
+        )
+      )
+    })
   }
 }
