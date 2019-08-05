@@ -20,8 +20,7 @@
                 {{job.information.title}}
               </h2>
               <div class="" style="max-width: 65vw; min-height: 5rem">
-                <p style="white-space: pre-wrap;">
-                  {{job.information.description}}
+                <p style="white-space: pre-wrap;" [innerHTML]="job.information.description | linkify">
                 </p>
               </div>
             </div>
