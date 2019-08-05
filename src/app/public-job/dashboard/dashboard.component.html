@@ -48,8 +48,8 @@
       </div>
       <div class="row">
         <div class="col-12 public-job-card-desc">
-          <p *ngIf="job.information.description.length >= 200">{{job.information.description.substring(0, 200)}}...</p>
-          <p *ngIf="job.information.description.length <= 200">{{job.information.description}}</p>
+          <p *ngIf="job.information.description.length >= 200" [innerHTML]="job.information.description.substring(0, 200) | linkify">...</p>
+          <p *ngIf="job.information.description.length <= 200" [innerHTML]="job.information.description | linkify"></p>
         </div>
       </div>
       <div class="row">

@@ -6,7 +6,7 @@
   </div>
   <div class="row">
     <div class="col-sm-12" id="about-card-bio">
-      <p style="white-space: pre-wrap;">{{ userModel.description }}</p>
+      <span style="white-space: pre-wrap;" [innerHTML]="userModel.description | linkify"></span>
     </div>
   </div>
 </div>

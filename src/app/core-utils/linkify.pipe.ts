@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 function linkify(text, userMessage) {
   const urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi
-  if (userMessage === false) {
+  if (!userMessage) {
     text = text.replace(urlRegex, '<a target="_blank" href="$1">$1</a>')
   } else {
     text = text.replace(
