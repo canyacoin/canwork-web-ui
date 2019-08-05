@@ -30,6 +30,7 @@ import {
 } from './remove-old-data'
 
 import { timestampConverter } from './timestamp-converter'
+import { exportUsers } from './export-users'
 
 const faker = require('faker')
 const fs = require('fs')
@@ -1483,3 +1484,6 @@ exports.removePublicJobInvites = functions.firestore
 
 // timestamp converter
 exports.timestampConverter = functions.https.onRequest(timestampConverter(db))
+
+// export users
+exports.exportUsers = functions.https.onRequest(exportUsers(db))
