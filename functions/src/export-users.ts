@@ -22,9 +22,10 @@ export const exportUsers = (
         if (err) {
           resp.status(500).send(err)
         } else {
+          const content = Buffer.from(data).toString('base64')
           const attach: AttachmentData = {
             type: 'text/csv',
-            content: data,
+            content: content,
             filename: 'canwork-users.csv',
             disposition: 'attachment',
           }
