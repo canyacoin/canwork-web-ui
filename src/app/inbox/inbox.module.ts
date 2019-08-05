@@ -9,6 +9,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 
 import { CoreComponentsModule } from '../core-components/core-components.module';
 import { CoreServicesModule } from '../core-services/core-services.module';
+import { CoreUtilsModule } from '../core-utils/core-utils.module';
 import { ChatComponent } from './chat/chat.component';
 import { InboxRoutingModule } from './inbox.routing.module';
 import { BudgetComponent } from './jobs/components/budget/budget.component';
@@ -33,6 +34,7 @@ import { PostComponent } from './jobs/post/post.component';
     CommonModule,
     CoreComponentsModule,
     CoreServicesModule,
+    CoreUtilsModule,
     InboxRoutingModule,
     FormsModule,
     OrderModule,

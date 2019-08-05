@@ -106,7 +106,7 @@
                       'background': message.address !== currentUser.address ? '#3cf':'#e4e7ea' }"
                       style="border-radius:15px;">
                       <div class="card-block p-2 card-message-block">
-                        <span [innerHTML]="transformBreaks(linkify(message.message, message.address !== currentUser.address)) "></span>
+                        <span [innerHTML]="transformBreaks(message.message | linkify: message.address !== currentUser.address) "></span>
                         <div class="text-right">
                           <small [ngClass]="{ 'text-dark opacity-40': message.address === currentUser.address,
                             'text-white opacity-60': message.address !== currentUser.address }">{{
@@ -326,7 +326,7 @@
                       [ngStyle]="{ 'color': message.address !== currentUser.address ? 'white':'',
                           'background': message.address !== currentUser.address ? '#3cf':'#e4e7ea' }"
                       style="border-radius:15px;">
-                      <div class="card-block p-2 card-message-block" [innerHTML]="transformBreaks(linkify(message.message, message.address !== currentUser.address))">
+                      <div class="card-block p-2 card-message-block" [innerHTML]="transformBreaks(message.message | linkify: message.address !== currentUser.address)">
                         <div class="text-right">
                           <small [ngClass]="{ 'text-dark opacity-40': message.address === currentUser.address,
                                 'text-white opacity-60': message.address !== currentUser.address }">{{
