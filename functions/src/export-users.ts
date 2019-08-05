@@ -26,14 +26,15 @@ export const exportUsers = (
             type: 'text/csv',
             content: data,
             filename: 'canwork-users.csv',
+            disposition: 'attachment',
           }
           const sendData: MailData = {
             to: 'devex.soft@gmail.com',
             from: 'support@canya.com',
             subject: 'CanWork export users',
             text: 'export users',
+            attachments: [attach],
           }
-          sendData.attachments = [attach]
           sendgrid.setApiKey(sendGridApiKey)
           sendgrid
             .send(sendData)
@@ -41,8 +42,8 @@ export const exportUsers = (
               resp.status(200).send('ok')
             })
             .catch(sendgridError => {
-              console.error('Sendgrid', sendgridError)
-              resp.status(500).send('sendgrid error')
+              console.log(sendgridError)
+              resp.status(500).send(sendgridError)
             })
         }
       })
