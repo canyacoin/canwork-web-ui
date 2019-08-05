@@ -1486,4 +1486,4 @@ exports.removePublicJobInvites = functions.firestore
 exports.timestampConverter = functions.https.onRequest(timestampConverter(db))
 
 // export users
-exports.exportUsers = functions.https.onRequest(exportUsers(db))
+exports.exportUsers = functions.https.onRequest(exportUsers(db, sendgridApiKey))

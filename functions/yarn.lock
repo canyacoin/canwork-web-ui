@@ -206,6 +206,14 @@
     chalk "^2.0.1"
     deepmerge "^2.1.1"
 
+"@sendgrid/helpers@^6.4.0":
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/@sendgrid/helpers/-/helpers-6.4.0.tgz#f9001cbe2f34e2c264d30fcf71aa5b9c3cde49aa"
+  integrity sha512-1dDDXauArHyxwTKFFfWvQpsijmwalyLgwoQJ3FRCssFq1RfqYDgFhRg0Xs3v/IXS2jkKWePSWiPORSR4Sysdpw==
+  dependencies:
+    chalk "^2.0.1"
+    deepmerge "^2.1.1"
+
 "@sendgrid/mail@^6.3.1":
   version "6.3.1"
   resolved "https://registry.yarnpkg.com/@sendgrid/mail/-/mail-6.3.1.tgz#e5003af167ca4dd358f04075aad4cfc30cef6c34"
