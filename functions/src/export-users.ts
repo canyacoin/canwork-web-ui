@@ -30,7 +30,7 @@ export const exportUsers = (
   db: firestore.Firestore,
   sendGridApiKey: string
 ) => async (_req: functions.Request, resp: functions.Response) => {
-  let limit = 1000
+  const limit = 1000
   let offset = 0
   let results = []
 
