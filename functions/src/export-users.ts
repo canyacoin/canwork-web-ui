@@ -1,15 +1,16 @@
 import { firestore } from 'firebase-admin'
 import * as functions from 'firebase-functions'
-import csvStringify from 'csv-stringify'
+import csvStringify from 'csv-stringify/lib/sync'
 import sendgrid from '@sendgrid/mail'
 import { MailData } from '@sendgrid/helpers/classes/mail'
 import { AttachmentData } from '@sendgrid/helpers/classes/attachment'
 
+const fields = ['name', 'email', 'type', 'whitelisted']
 async function fetch(db: firestore.Firestore, limit: number, offset?: number) {
   const output = []
   let query = db
     .collection('users')
-    .select('name', 'email', 'type')
+    .select(...fields)
     .orderBy('type')
     .limit(limit)
 
@@ -19,8 +20,7 @@ async function fetch(db: firestore.Firestore, limit: number, offset?: number) {
 
   const snap = await query.get()
   snap.forEach(result => {
-    const { name, email, type } = result.data()
-    output.push([name, email, type])
+    output.push(result.data())
   })
 
   return output
@@ -44,34 +44,30 @@ export const exportUsers = (
   }
 
   // csv
-  csvStringify(results, (err, data) => {
-    if (err) {
-      resp.status(500).send(err)
-    } else {
-      const content = Buffer.from(data).toString('base64')
-      const attach: AttachmentData = {
-        type: 'text/csv',
-        content: content,
-        filename: 'canwork-users.csv',
-        disposition: 'attachment',
-      }
-      const sendData: MailData = {
-        to: 'devex.soft@gmail.com',
-        from: 'support@canya.com',
-        subject: 'CanWork export users',
-        text: 'export users',
-        attachments: [attach],
-      }
-      sendgrid.setApiKey(sendGridApiKey)
-      sendgrid
-        .send(sendData)
-        .then(() => {
-          resp.status(200).send('ok')
-        })
-        .catch(sendgridError => {
-          console.log(sendgridError)
-          resp.status(500).send(sendgridError)
-        })
-    }
+  const csv = csvStringify(results, {
+    header: true,
+    columns: fields,
   })
+  const content = Buffer.from(csv).toString('base64')
+  const attach: AttachmentData = {
+    type: 'text/csv',
+    content: content,
+    filename: 'canwork-users.csv',
+    disposition: 'attachment',
+  }
+  const sendData: MailData = {
+    to: 'devex.soft@gmail.com',
+    from: 'support@canya.com',
+    subject: 'CanWork export users',
+    text: 'export users',
+    attachments: [attach],
+  }
+  sendgrid.setApiKey(sendGridApiKey)
+  try {
+    await sendgrid.send(sendData)
+    resp.status(200).send('ok')
+  } catch (e) {
+    console.log(e)
+    resp.status(500).send(e)
+  }
 }
