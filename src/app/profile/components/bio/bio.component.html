@@ -1,4 +1,8 @@
-<div *ngIf="userModel" class="card mb-20 p-20" style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px; min-height: 10rem">
+<div
+  *ngIf="userModel"
+  class="card mb-20 p-20"
+  style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px; min-height: 10rem"
+>
   <div class="row">
     <div class="col-sm-10" id="about-card-title">
       <h5>ABOUT ME</h5>
@@ -6,7 +10,7 @@
   </div>
   <div class="row">
     <div class="col-sm-12" id="about-card-bio">
-      <span style="white-space: pre-wrap;" [innerHTML]="userModel.description | linkify"></span>
+      <markdown [data]="userModel.description"></markdown>
     </div>
   </div>
 </div>

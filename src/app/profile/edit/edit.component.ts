@@ -45,6 +45,7 @@ export class EditComponent implements OnInit, OnDestroy {
   tagInput = ''
 
   ethAddress: string
+  preview = false
 
   constructor(
     private formBuilder: FormBuilder,
@@ -76,6 +77,10 @@ export class EditComponent implements OnInit, OnDestroy {
 
   onClose() {
     this.close.emit(true)
+  }
+
+  onTogglePreview() {
+    this.preview = !this.preview
   }
 
   buildForm() {
