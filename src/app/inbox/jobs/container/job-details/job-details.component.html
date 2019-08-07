@@ -22,10 +22,8 @@
             {{job.information.title}}
           </h2>
           <div class="" style="max-width: 65vw">
-            <p class="job-description">
-              {{job.information.description.substring(0, 80)}}
-              <span *ngIf="hideDescription === false">
-                {{job.information.description.substring(80, job.information.description.length)}}
+            <p class="job-description" [innerHTML]="job.information.description.substring(0, 80) | linkify">
+            <span *ngIf="hideDescription === false" [innerHTML]="job.information.description.substring(80, job.information.description.length)">
               </span>
               <a class="pointer text-blue" *ngIf="job.information.description.length > 80" (click)="toggleDescription()">
                 <span *ngIf="hideDescription">

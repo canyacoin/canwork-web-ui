@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AuthGuard } from './auth.guard';
 import { SanitizeHtmlPipe } from './sanitize-html.pipe';
+import { LinkifyPipe } from './linkify.pipe'
 import { UserIsNotSetupGuard } from './user-is-not-setup.guard';
 import { UserIsSetupGuard } from './user-is-setup.guard';
 
@@ -11,7 +12,7 @@ import { UserIsSetupGuard } from './user-is-setup.guard';
     CommonModule
   ],
   declarations: [
-    SanitizeHtmlPipe
+    SanitizeHtmlPipe, LinkifyPipe
   ],
   providers: [
     AuthGuard,
@@ -19,7 +20,7 @@ import { UserIsSetupGuard } from './user-is-setup.guard';
     UserIsNotSetupGuard
   ],
   exports: [
-    SanitizeHtmlPipe
+    SanitizeHtmlPipe, LinkifyPipe
   ]
 })
 export class CoreUtilsModule { }

@@ -1,4 +1,4 @@
-import * as algoliasearch from 'algoliasearch'
+import algoliasearch from 'algoliasearch'
 import * as doT from 'dot'
 
 // import * as exphbs from 'express-handlebars';
@@ -30,6 +30,7 @@ import {
 } from './remove-old-data'
 
 import { timestampConverter } from './timestamp-converter'
+import { exportUsers } from './export-users'
 
 const faker = require('faker')
 const fs = require('fs')
@@ -638,7 +639,7 @@ exports.indexProviderData = functions.firestore
         .update({ ethAddressLookup: data.ethAddress.toUpperCase() })
     }
 
-    if (shouldSkipIndexing(data)) return
+    if (shouldSkipIndexing(data)) return null
 
     // this makes sure that ALL hourly rate is treated as a float.
     const hourlyRateNumber = parseFloat(data.hourlyRate)
@@ -768,7 +769,7 @@ exports.updateIndexProviderData = functions.firestore
         .update({ ethAddressLookup: afterData.ethAddress.toUpperCase() })
     }
 
-    if (shouldSkipIndexing(afterData)) return
+    if (shouldSkipIndexing(afterData)) return null
 
     console.log('+ remove index record for update operation...', objectId)
     await algoliaSearchIndex.deleteObject(objectId)
@@ -1483,3 +1484,6 @@ exports.removePublicJobInvites = functions.firestore
 
 // timestamp converter
 exports.timestampConverter = functions.https.onRequest(timestampConverter(db))
+
+// export users
+exports.exportUsers = functions.https.onRequest(exportUsers(db, sendgridApiKey))
