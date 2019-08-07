@@ -15,7 +15,16 @@
             <h4>My Profile</h4>
           </header>
           <div *ngIf="currentUser">
-            <form [formGroup]="profileForm" class="form validate" novalidate>
+            <markdown
+              *ngIf="preview"
+              [data]="profileForm.value.description"
+            ></markdown>
+            <form
+              [ngStyle]="{ display: preview ? 'none' : '' }"
+              [formGroup]="profileForm"
+              class="form validate"
+              novalidate
+            >
               <div class="row">
                 <div class="col-sm-7">
                   <fieldset class="form-group">
@@ -384,12 +393,24 @@
                   placeholder="Think different! Be creative, be innovative."
                 ></textarea>
               </div>
-              <div class="form-group text-right">
+            </form>
+
+            <div class="row">
+              <div class="col-sm-7">
+                <button
+                  (click)="onTogglePreview()"
+                  class="btn"
+                  [disabled]="sending"
+                >
+                  {{ preview ? 'Edit' : 'Preview' }}
+                </button>
+              </div>
+              <div class="col-sm-5 text-right">
                 <button (click)="onClose()" class="btn btn-secondary">
                   Cancel
                 </button>
                 <button
-                  [disabled]="!profileForm.valid || sending"
+                  [disabled]="preview || !profileForm.valid || sending"
                   type="button"
                   (click)="
                     save(
@@ -412,7 +433,7 @@
                   alt="Loader"
                 />
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>
