@@ -10649,3 +10649,9 @@ h2 {
   background-color: #ebebeb;
   border-radius: 5px;
 }
+
+.link-col {
+  border-radius: 5px;
+  border: 0.5px solid #dee2e6;
+  font-size: 9px;
+}
