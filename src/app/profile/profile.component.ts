@@ -40,7 +40,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
           this.initUsers(this.currentUser, params);
         });
+        this.redirectToUniqueUrlIfNecessary();
         this.activatedRoute.queryParams.subscribe(params => {
+          this.redirectToUniqueUrlIfNecessary();
           this.displayEditComponent = params.editProfile ? true : false;
         });
       }
@@ -115,6 +117,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
       return true;
     }
     return (this.userModel && (this.userModel.address !== this.currentUser.address));
+  }
+
+  redirectToUniqueUrlIfNecessary() {
+    if (this.isMyProfile() && this.router.url.endsWith('/profile')) {
+      this.router.navigate(['/profile', this.currentUser.slug]);
+    }
   }
 }
 
