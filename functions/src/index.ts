@@ -964,6 +964,7 @@ exports.seedProviders = functions.https.onRequest(async (request, response) => {
         state: 'Done',
         skillTags: getRandomTags(6),
         testUser: true,
+        verified: false,
       }
       console.log('+ add user record: ', userRecord)
       await db
@@ -1434,6 +1435,32 @@ exports.delSlug = functions.https.onRequest(async (request, response) => {
     .send({
       status: 0,
       msg: `del all slug succ!`,
+    })
+})
+
+/*
+ * cloud https function to set "verified" field of users to "false" for those that don't have this field
+ */
+exports.initVerifiedUserField = functions.https.onRequest(async (request, response) => {
+  const usersnaps = await db.collection('users').get()
+
+  async function updateUser(id) {
+    return await db.doc(`users/${id}`).update({ verified: false })
+  }
+
+  usersnaps.forEach(async doc => {
+    const user = doc.data()
+    (user.verified !== true) && updateUser(doc.id).catch(
+        err => console.error(err)
+      )
+  })
+
+  return response
+    .status(200)
+    .type('application/json')
+    .send({
+      status: 0,
+      msg: `Created "verified" field for all users!`,
     })
 })
 
