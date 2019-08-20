@@ -1445,13 +1445,11 @@ exports.initVerifiedUserField = functions.https.onRequest(
   async (request, response) => {
     const usersnaps = await db.collection('users').get()
 
-    await Promise.all(
-      usersnaps.map(async doc => {
-        const user = doc.data()
-        !user.verified &&
-          (await db.doc(`users/${doc.id}`).update({ verified: false }))
-      })
-    )
+    for (const doc of usersnaps) {
+      const user = doc.data()
+      !user.verified &&
+        (await db.doc(`users/${doc.id}`).update({ verified: false }))
+    }
 
     return response
       .status(200)
