@@ -22,6 +22,8 @@ functions/.runtimeconfig.json
 
 # latest firebase-tools now uses a dot directory
 .firebase/
+firebase-debug.log
+firestore-debug.log
 
 # IDEs and editors
 /.idea
