@@ -1447,7 +1447,8 @@ exports.initVerifiedUserField = functions.https.onRequest(
 
     usersnaps.forEach(async doc => {
       const user = doc.data()
-      !user.verified && (await db.doc(`users/${doc.id}`).update({ verified: false }))
+      !user.verified &&
+        (await db.doc(`users/${doc.id}`).update({ verified: false }))
     })
 
     return response
