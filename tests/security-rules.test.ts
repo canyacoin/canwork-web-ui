@@ -38,4 +38,10 @@ describe('Project rules', () => {
 
     await expect(db.doc('users/alice').update({ name: 'Bob' })).toDeny()
   })
+
+  test('deny Bob to set self profile as admin ', async () => {
+    const db = await setup({ uid: 'bob' }, mockData, rules)
+
+    await expect(db.doc('users/bob').update({ isAdmin: true })).toDeny()
+  })
 })
