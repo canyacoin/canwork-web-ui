@@ -12,7 +12,7 @@
       </div>
       <app-avatar [user]="userModel" [customClass]="'circle-headshot'"></app-avatar>
       <div class="title">
-        <h2 *ngIf="userModel.name">{{ userModel.name }}</h2>
+        <h2 *ngIf="userModel.name">{{ userModel.name }}<app-verified-mark [user]="userModel"></app-verified-mark></h2>
         <h3 *ngIf="userModel.title">{{ userModel.title }}</h3>
         <p class="fw-400" *ngIf="userModel.bio">{{ userModel.bio }}</p>
         <div class="row d-flex justify-content-around mx-30 my-30">

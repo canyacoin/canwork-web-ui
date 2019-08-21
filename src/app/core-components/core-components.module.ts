@@ -38,6 +38,7 @@ import { InstructionsComponent } from './wallet-install/instructions/instruction
 import { WalletInstallComponent } from './wallet-install/wallet-install.component'
 import { WindowScrollDirective } from './window-scroll.directive'
 import { AvatarComponent } from './avatar/avatar.component'
+import { VerifiedMarkComponent } from './verified-mark/verified-mark.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -88,6 +89,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     StorageDropzoneComponent,
     ComingSoonComponent,
     AvatarComponent,
+    VerifiedMarkComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -109,6 +111,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     // IpfsDropzoneComponent,
     StorageDropzoneComponent,
     AvatarComponent,
+    VerifiedMarkComponent,
   ],
   providers: [
     {
