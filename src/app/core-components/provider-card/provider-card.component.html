@@ -14,7 +14,7 @@
       <app-avatar [user]="provider" [customClass]="'headshot'"></app-avatar>
       <div class="title">
         <h2>
-          <span *ngIf="provider && provider.name">{{ provider.name }}</span>
+          <span *ngIf="provider && provider.name">{{ provider.name }}<app-verified-mark [user]="provider"></app-verified-mark></span>
         </h2>
         <h3>
           <span *ngIf="provider && provider.title">{{ provider.title }}</span>
@@ -56,7 +56,7 @@
         <app-avatar [user]="provider" [customClass]="'headshot'"></app-avatar>
       </div>
       <div class="col-lg-9 col-md-12 col-sm-12 col-9 pl-20 pb-10">
-        <h6 class="provider-name">{{provider.name}}</h6>
+        <h6 class="provider-name">{{provider.name}}<app-verified-mark [user]="provider"></app-verified-mark></h6>
         <p class="provider-title">{{ provider.title}}</p>
         <div class="row provider-stars">
           <star-rating *ngIf="provider.rating && provider.rating.count > 0" class="float-left" [starType]="'svg'" size="small"
