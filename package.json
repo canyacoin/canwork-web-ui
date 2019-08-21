@@ -10,7 +10,7 @@
     "build:prod": "ng build --prod --configuration=prod",
     "test": "ng test",
     "test:firestore": "jest",
-    "test:firestore:watch": "ts-mocha -p ./tests/tsconfig.json tests/**/*.ts -w --watch-extensions ts",
+    "test:firestore:watch": "jest --watch",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "deploy:functions": "firebase deploy --only functions",

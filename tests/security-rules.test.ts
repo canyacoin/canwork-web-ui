@@ -1,47 +1,41 @@
 import { setup, teardown } from './helpers'
+import * as fs from 'fs'
 
 const mockData = {
-  'users/jeffd23': {
-    roles: {
-      admin: true,
-    },
+  'users/alice': {
+    name: 'Alice',
+    email: 'alice@gmail.com',
+  },
+  'users/bob': {
+    name: 'Bob',
+    email: 'bob@gmail.com',
   },
   'projects/testId': {
     members: ['bob'],
   },
 }
+const rules = fs.readFileSync('firestore.rules', 'utf8')
 
 describe('Project rules', () => {
   afterAll(async () => {
     await teardown()
   })
 
-  test('deny a user that does NOT have the admin role', async () => {
-    const db = await setup({ uid: null }, mockData)
+  test('allow Bob to read self profile', async () => {
+    const db = await setup({ uid: 'bob' }, mockData, rules)
 
-    // Allow rules in place for this collection
-    const projRef = db.doc('projects/testId')
-    await expect(projRef.get()).toDeny()
+    await expect(db.doc('users/bob').get()).toAllow()
   })
 
-  test('allow a user with the admin role', async () => {
-    const db = await setup({ uid: 'jeffd23' }, mockData)
+  test('allow Bob to update self profile', async () => {
+    const db = await setup({ uid: 'bob' }, mockData, rules)
 
-    const projRef = db.doc('projects/testId')
-    await expect(projRef.get()).toAllow()
+    await expect(db.doc('users/bob').update({ name: 'Bob' })).toAllow()
   })
 
-  test('deny a user if they are NOT in the Access Control List', async () => {
-    const db = await setup({ uid: 'frank' }, mockData)
+  test('deny Bob to update Alice profile', async () => {
+    const db = await setup({ uid: 'bob' }, mockData, rules)
 
-    const projRef = db.doc('projects/testId')
-    await expect(projRef.get()).toDeny()
-  })
-
-  test('allow a user if they are in the Access Control List', async () => {
-    const db = await setup({ uid: 'bob' }, mockData)
-
-    const projRef = db.doc('projects/testId')
-    await expect(projRef.get()).toAllow()
+    await expect(db.doc('users/alice').update({ name: 'Bob' })).toDeny()
   })
 })

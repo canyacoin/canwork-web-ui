@@ -4,7 +4,7 @@ service cloud.firestore {
     match /users/{userId} {
        allow read;
        allow create: if isAuthenticated();
-       allow update: if isAuthenticated();
+       allow update: if isDocumentOwner(userId);
        allow delete: if isAdmin();
     }
 
