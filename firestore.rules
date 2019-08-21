@@ -11,7 +11,7 @@ service cloud.firestore {
     match /reviews/{document=**} {
        allow read;
        allow create: if isAuthenticated();
-       allow update: if isAuthenticated();
+       allow update: if isDocumentOwner(resource.data.reviewerId);
        allow delete: if isAdmin();
     }
 

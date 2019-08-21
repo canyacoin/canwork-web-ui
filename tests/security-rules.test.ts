@@ -10,13 +10,16 @@ const mockData = {
     name: 'Bob',
     email: 'bob@gmail.com',
   },
-  'projects/testId': {
-    members: ['bob'],
+
+  // reviews
+  'reviews/1': {
+    revieweeId: 'alice',
+    reviewerId: 'bob',
   },
 }
 const rules = fs.readFileSync('firestore.rules', 'utf8')
 
-describe('Project rules', () => {
+describe('Test `users` collection rules', () => {
   afterAll(async () => {
     await teardown()
   })
@@ -49,5 +52,27 @@ describe('Project rules', () => {
     const db = await setup({ uid: 'bob' }, mockData, rules)
 
     await expect(db.doc('users/alice').update({ isAdmin: true })).toDeny()
+  })
+})
+
+describe('Test `reviews` collection rules', () => {
+  afterAll(async () => {
+    await teardown()
+  })
+
+  test('deny Alice to update Bob review', async () => {
+    const db = await setup({ uid: 'alice' }, mockData, rules)
+
+    await expect(
+      db.doc('reviews/1').update({ massage: 'Good job Alice', rating: 5 })
+    ).toDeny()
+  })
+
+  test('allow Bob to update self review', async () => {
+    const db = await setup({ uid: 'bob' }, mockData, rules)
+
+    await expect(
+      db.doc('reviews/1').update({ message: 'Thank you Alice' })
+    ).toAllow()
   })
 })
