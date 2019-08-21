@@ -96,7 +96,7 @@
           <div class="col-12">
             <div class="otherPartyName pointer" [routerLink]="['/profile/alt/', job.clientId]">
               <app-avatar [user]="jobPoster" [customClass]="'headshot-div'"></app-avatar>
-              <p style="font-style: 21px;">{{jobPoster?.name}}</p>
+              <p style="font-style: 21px;">{{jobPoster?.name}}<app-verified-mark [user]="jobPoster"></app-verified-mark></p>
             </div>
             <b>${{job.budget}}<span *ngIf="job.paymentType !== 'Fixed price'">/hr</span> USD</b>
             <p>This project is set at a {{job.paymentType}}<br>{{job.information.weeklyCommitment}} hours per week,
