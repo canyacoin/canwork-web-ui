@@ -238,6 +238,7 @@ export class LoginComponent implements OnInit {
       'whitelisted': user['whitelisted'] || false,
       'whitelistRejected': user['whitelistRejected'] || false,
       'whitelistSubmitted': user['whitelistSubmitted'] || false,
+      'verified': user['verified'] || false,
     });
 
     this.handleLogin(parsedUser);

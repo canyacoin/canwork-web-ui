@@ -129,7 +129,7 @@ export class JobService {
     if (job.clientId && job.providerId) {
       const otherParty = await this.userService.getUser(viewingUserType === UserType.client ? job.providerId : job.clientId);
       if (otherParty) {
-        job['otherParty'] = { avatar: otherParty.avatar, name: otherParty.name, id: otherParty.address };
+        job['otherParty'] = { avatar: otherParty.avatar, name: otherParty.name, id: otherParty.address, verified: otherParty.verified };
       }
     }
   }

@@ -75,7 +75,7 @@
         <br>
         <div *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="otherPartyName pointer" [routerLink]="['/profile/alt/', job.otherParty.id]">
           <app-avatar [user]="job.otherParty" [customClass]="'headshot-div'"></app-avatar>
-          <p>{{job.otherParty?.name}}</p>
+          <p>{{job.otherParty?.name}}<app-verified-mark [user]="job.otherParty"></app-verified-mark></p>
         </div>
         <div class="info-details" *ngIf="isOnMobile">
           <p>Status</p>

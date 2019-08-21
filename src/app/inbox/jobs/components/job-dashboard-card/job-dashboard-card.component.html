@@ -15,7 +15,7 @@
             <div class="otherPartyName pointer" *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri"
               [routerLink]="['/profile/alt/', job.otherParty.id]">
               <app-avatar [user]="job.otherParty" [customClass]="'headshot-div'"></app-avatar>
-              <p>{{job.otherParty?.name}}</p>
+              <p>{{job.otherParty?.name}}<app-verified-mark [user]="job.otherParty"></app-verified-mark></p>
             </div>
           </div>
         </div>
@@ -62,7 +62,7 @@
             <div *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="otherPartyName pointer"
               [routerLink]="['/profile/alt/', job.otherParty.id]">
               <app-avatar [user]="job.otherParty" [customClass]="'headshot-div'"></app-avatar>
-              <p>{{job.otherParty?.name}}</p>
+              <p>{{job.otherParty?.name}}<app-verified-mark [user]="job.otherParty"></app-verified-mark></p>
             </div>
           </div>
         </div>
@@ -103,7 +103,7 @@
     <app-avatar [user]="job.otherParty" [customClass]="'headshot-div'"></app-avatar>
     <div class="row">
       <div class="col-md-3 offset-md-1 col-sm-4 col-12" [routerLink]="['/inbox/job', job.id]">
-        <h4>{{job.otherParty?.name}}</h4>
+        <h4>{{job.otherParty?.name}}<app-verified-mark [user]="job.otherParty"></app-verified-mark></h4>
       </div>
       <div class="col-sm-2 hide-mobile">
         <p>

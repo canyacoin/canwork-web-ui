@@ -33,7 +33,7 @@
           <div class="row">
             <div class="col-lg-3 col-md-6 col-12 pointer" [routerLink]="['/profile/alt/', bid.providerId]">
               <app-avatar [user]="bid.providerInfo" [customClass]="'headshot-div hide-mobile'"></app-avatar>
-              <h4 class="ml-2r ml-0-mobile mb-0">{{bid.providerInfo.name}}</h4>
+              <h4 class="ml-2r ml-0-mobile mb-0">{{bid.providerInfo.name}}<app-verified-mark [user]="bid.providerInfo"></app-verified-mark></h4>
               <p class="ml-2r ml-0-mobile mb-0">{{ bid.providerInfo.title }}</p>
             </div>
             <div class="col-lg-9 col-md-6 hide-mobile">

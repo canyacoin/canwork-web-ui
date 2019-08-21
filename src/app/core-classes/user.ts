@@ -26,6 +26,7 @@ export class User {
   timezone: string
   title: string
   type: UserType
+  verified: boolean
   whitelisted: boolean
   whitelistRejected: boolean
   whitelistSubmitted: boolean
