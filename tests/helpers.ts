@@ -1,8 +1,7 @@
 import 'jest'
 import * as firebase from '@firebase/testing'
-import * as fs from 'fs'
 
-export const setup = async (auth, data) => {
+export const setup = async (auth, data, rules: string) => {
   const projectId = `rules-spec-${Date.now()}`
   const app = await firebase.initializeTestApp({
     projectId,
@@ -22,7 +21,7 @@ export const setup = async (auth, data) => {
   // Apply rules
   await firebase.loadFirestoreRules({
     projectId,
-    rules: fs.readFileSync('firestore.rules', 'utf8'),
+    rules,
   })
 
   return db
