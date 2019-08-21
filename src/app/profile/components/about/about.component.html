@@ -6,9 +6,10 @@
   </span>
   <div id="sidebar">
     <div class="profile">
-      <span class="text-center" style="font-weight: 600;text-transform: uppercase;letter-spacing: 1.5px;height: 50px;color: #33ccff;background-color: transparent;float: right;min-height: 50px;font-size: 14px;line-height: 50px;">
-        <span *ngIf="userModel.badge">{{userModel.badge}}</span>
-      </span>
+      <div class="profile-badge">
+        <span class="m-10" *ngIf="userModel.badge">{{userModel.badge}}</span>
+        <span class="m-10" *ngIf="userModel.verified">VERIFIED</span>
+      </div>
       <app-avatar [user]="userModel" [customClass]="'circle-headshot'"></app-avatar>
       <div class="title">
         <h2 *ngIf="userModel.name">{{ userModel.name }}</h2>
