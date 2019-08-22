@@ -75,4 +75,22 @@ describe('Test `reviews` collection rules', () => {
       db.doc('reviews/1').update({ message: 'Thank you Alice' })
     ).toAllow()
   })
+
+  test('deny Bob to create a review with fake `reviewerId` field', async () => {
+    const db = await setup({ uid: 'bob' }, mockData, rules)
+
+    await expect(
+      db
+        .doc('reviews/2')
+        .set({ reviewerId: 'alice', message: 'Thank you Alice' })
+    ).toDeny()
+  })
+
+  test('allow Bob to create a review ', async () => {
+    const db = await setup({ uid: 'bob' }, mockData, rules)
+
+    await expect(
+      db.doc('reviews/2').set({ reviewerId: 'bob', message: 'Thank you Alice' })
+    ).toAllow()
+  })
 })
