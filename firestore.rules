@@ -10,14 +10,14 @@ service cloud.firestore {
 
     match /reviews/{reviewId} {
        allow read;
-       allow create: if isAuthenticated() && request.resource.data.reviewerId == request.auth.uid;
+       allow create: if isDocumentOwner(request.resource.data.reviewerId);
        allow update: if isDocumentOwner(resource.data.reviewerId);
        allow delete: if isAdmin();
     }
 
     match /portfolio/{userId}/work/{w} {
        allow read;
-       allow create: if isAuthenticated();
+       allow create: if isDocumentOwner(userId);
        allow update: if isDocumentOwner(userId);
        allow delete: if isDocumentOwner(userId);
     }
