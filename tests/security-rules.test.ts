@@ -212,11 +212,13 @@ describe('Test `users` collection rules', () => {
   })
 
   const path = 'users/alice'
-  allow(rules, path, auth.alice, {
+  const data = {
     'users/alice': { name: 'Alice', email: 'alice@gmail.com' },
-  })
+  }
+  allow(rules, path, auth.alice, data)
     .read()
     .create({ name: 'Alice', email: 'alice@gmail.com' })
     .update({ name: 'Alice', email: 'alice@hotmail.com' })
+    .deny()
     .delete()
 })

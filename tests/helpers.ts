@@ -1,6 +1,6 @@
 import 'jest'
 import * as firebase from '@firebase/testing'
-import * as types from './types'
+import { Auth, IAllowDeny } from './types'
 
 export const setup = async (auth, data, rules: string) => {
   const projectId = `rules-spec-${Date.now()}`
@@ -63,23 +63,16 @@ expect.extend({
   },
 })
 
-export interface Context {
-  read(title?: string): this
-  create(data: firebase.firestore.DocumentData, title?: string): this
-  update(data: firebase.firestore.UpdateData, title?: string): this
-  delete(title?: string): this
-}
-
-function capitalize(s: string) {
+export function capitalize(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()
 }
 
-export abstract class AbstractContext implements Context {
+export abstract class AllowDeny implements IAllowDeny {
   constructor(
     readonly isAllow: boolean,
     readonly rules: string,
     readonly path: string,
-    readonly auth: types.Auth,
+    readonly auth: Auth,
     readonly data: any
   ) {}
 
@@ -133,47 +126,39 @@ export abstract class AbstractContext implements Context {
   }
 }
 
-export class AllowContext extends AbstractContext {
+export class Allow extends AllowDeny {
   constructor(
     readonly rules: string,
     readonly path: string,
-    readonly auth: types.Auth,
+    readonly auth: Auth,
     readonly data: any
   ) {
     super(true, rules, path, auth, data)
   }
 
   deny() {
-    return new DenyContext(this.rules, this.path, this.auth, this.data)
+    return new Deny(this.rules, this.path, this.auth, this.data)
   }
 }
 
-export class DenyContext extends AbstractContext {
+export class Deny extends AllowDeny {
   constructor(
     readonly rules: string,
     readonly path: string,
-    readonly auth: types.Auth,
+    readonly auth: Auth,
     readonly data: any
   ) {
     super(false, rules, path, auth, data)
   }
 
   allow() {
-    return new AllowContext(this.rules, this.path, this.auth, this.data)
+    return new Allow(this.rules, this.path, this.auth, this.data)
   }
 }
 
 // helpers
-export const allow = (
-  rules: string,
-  path: string,
-  auth: types.Auth,
-  data: any
-) => new AllowContext(rules, path, auth, data)
+export const allow = (rules: string, path: string, auth: Auth, data: any) =>
+  new Allow(rules, path, auth, data)
 
-export const deny = (
-  rules: string,
-  path: string,
-  auth: types.Auth,
-  data: any
-) => new DenyContext(rules, path, auth, data)
+export const deny = (rules: string, path: string, auth: Auth, data: any) =>
+  new Deny(rules, path, auth, data)
