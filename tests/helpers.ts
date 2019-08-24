@@ -64,10 +64,10 @@ expect.extend({
 })
 
 export interface Context {
-  read(title?: string): Context
-  create(data: firebase.firestore.DocumentData, title?: string): Context
-  update(data: firebase.firestore.UpdateData, title?: string): Context
-  delete(title?: string): Context
+  read(title?: string): this
+  create(data: firebase.firestore.DocumentData, title?: string): this
+  update(data: firebase.firestore.UpdateData, title?: string): this
+  delete(title?: string): this
 }
 
 function capitalize(s: string) {
@@ -96,7 +96,7 @@ export abstract class AbstractContext implements Context {
     }" ${suffix}`.trim()
   }
 
-  read(title?: string): Context {
+  read(title?: string) {
     test(this.title('read', title), async () => {
       const db = await setup(this.auth, this.data, this.rules)
       await this.expect(db.doc(this.path).get())
@@ -105,7 +105,7 @@ export abstract class AbstractContext implements Context {
     return this
   }
 
-  create(data: firebase.firestore.DocumentData, title?: string): Context {
+  create(data: firebase.firestore.DocumentData, title?: string) {
     test(this.title('create', title), async () => {
       const db = await setup(this.auth, this.data, this.rules)
       await this.expect(db.doc(this.path).set(data))
@@ -114,7 +114,7 @@ export abstract class AbstractContext implements Context {
     return this
   }
 
-  update(data: firebase.firestore.DocumentData, title?: string): Context {
+  update(data: firebase.firestore.DocumentData, title?: string) {
     test(this.title('update', title), async () => {
       const db = await setup(this.auth, this.data, this.rules)
       await this.expect(db.doc(this.path).update(data))
@@ -123,7 +123,7 @@ export abstract class AbstractContext implements Context {
     return this
   }
 
-  delete(title?: string): Context {
+  delete(title?: string) {
     test(this.title('delete', title), async () => {
       const db = await setup(this.auth, this.data, this.rules)
       await this.expect(db.doc(this.path).delete())
@@ -142,6 +142,10 @@ export class AllowContext extends AbstractContext {
   ) {
     super(true, rules, path, auth, data)
   }
+
+  deny() {
+    return new DenyContext(this.rules, this.path, this.auth, this.data)
+  }
 }
 
 export class DenyContext extends AbstractContext {
@@ -152,6 +156,10 @@ export class DenyContext extends AbstractContext {
     readonly data: any
   ) {
     super(false, rules, path, auth, data)
+  }
+
+  allow() {
+    return new AllowContext(this.rules, this.path, this.auth, this.data)
   }
 }
 
