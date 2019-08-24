@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 
-import { setup, teardown, allow, deny } from './helpers'
+import { teardown, allow, deny } from './helpers'
 
 const auth = {
   anonym: null,
@@ -8,32 +8,6 @@ const auth = {
   alice: { uid: 'alice' },
 }
 
-const mockData = {
-  'users/alice': {
-    name: 'Alice',
-    email: 'alice@gmail.com',
-  },
-  'users/bob': {
-    name: 'Bob',
-    email: 'bob@gmail.com',
-  },
-
-  // reviews
-  'reviews/1': {
-    revieweeId: 'alice',
-    reviewerId: 'bob',
-  },
-
-  // portfolio
-  'portfolio/alice/work/1': {
-    description: 'text description',
-    title: 'Alice title',
-  },
-  'portfolio/bob/work/1': {
-    description: 'text description',
-    title: 'Bob portfolio',
-  },
-}
 const rules = fs.readFileSync('firestore.rules', 'utf8')
 
 describe('Test `users` collection rules', () => {
@@ -96,7 +70,7 @@ describe('Test `reviews` collection rules', () => {
     .deny()
     .delete()
 
-  deny(rules, path, auth.bob, data, 'none own review')
+  deny(rules, path, auth.bob, data, 'non own review')
     .create(
       {
         reviewerId: 'alice',
@@ -153,7 +127,7 @@ describe('Test `portfolio` collection rules', () => {
     })
     .delete()
 
-  deny(rules, path, auth.bob, data, 'none own portfolio')
+  deny(rules, path, auth.bob, data, 'non own portfolio')
     .create({
       description: 'text description',
       title: 'Alice title',
