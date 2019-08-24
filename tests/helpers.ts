@@ -63,52 +63,109 @@ expect.extend({
   },
 })
 
-export const testCases = (testCases: types.TestCases) => {
-  testCases.cases.forEach(tCase => {
-    describe(tCase.describe, () => {
-      afterAll(async () => {
-        await teardown()
-      })
-
-      // tests
-      tCase.tests.forEach(t => {
-        const name = (t.auth ? t.auth.uid : 'anonym').toUpperCase()
-        const allow = {
-          read: t.allow.indexOf('read') > -1,
-          create: t.allow.indexOf('create') > -1,
-          update: t.allow.indexOf('update') > -1,
-          delete: t.allow.indexOf('delete') > -1,
-        }
-        const op = (isAllow: boolean) => (isAllow ? 'allow' : 'deny')
-
-        // read
-        test(`${op(allow.read)} ${name} to read "${t.path}"`, async () => {
-          const db = await setup(t.auth, tCase.data, tCase.rules)
-          const matcher = expect(db.doc(t.path).get())
-          await (allow.read ? matcher.toAllow : matcher.toDeny)()
-        })
-
-        // create
-        test(`${op(allow.create)} ${name} to create "${t.path}"`, async () => {
-          const db = await setup(t.auth, tCase.data, tCase.rules)
-          const matcher = expect(db.doc(t.path).set({}))
-          await (allow.create ? matcher.toAllow : matcher.toDeny)()
-        })
-
-        // update
-        test(`${op(allow.update)} ${name} to update "${t.path}"`, async () => {
-          const db = await setup(t.auth, tCase.data, tCase.rules)
-          const matcher = expect(db.doc(t.path).update({}))
-          await (allow.update ? matcher.toAllow : matcher.toDeny)()
-        })
-
-        // update
-        test(`${op(allow.delete)} ${name} to delete "${t.path}"`, async () => {
-          const db = await setup(t.auth, tCase.data, tCase.rules)
-          const matcher = expect(db.doc(t.path).delete())
-          await (allow.delete ? matcher.toAllow : matcher.toDeny)()
-        })
-      })
-    })
-  })
+export interface Context {
+  read(title?: string): Context
+  create(data: firebase.firestore.DocumentData, title?: string): Context
+  update(data: firebase.firestore.UpdateData, title?: string): Context
+  delete(title?: string): Context
 }
+
+function capitalize(s: string) {
+  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()
+}
+
+export abstract class AbstractContext implements Context {
+  constructor(
+    readonly isAllow: boolean,
+    readonly rules: string,
+    readonly path: string,
+    readonly auth: types.Auth,
+    readonly data: any
+  ) {}
+
+  private async expect<T>(value: T) {
+    const m = expect(value)
+    return await (this.isAllow ? m.toAllow() : m.toDeny())
+  }
+
+  title(action: string, suffix?: string) {
+    suffix = suffix ? suffix : ''
+    const name = capitalize(this.auth ? this.auth.uid : 'anonym')
+    return `${this.isAllow ? 'allow' : 'deny'} ${name} to ${action} "${
+      this.path
+    }" ${suffix}`.trim()
+  }
+
+  read(title?: string): Context {
+    test(this.title('read', title), async () => {
+      const db = await setup(this.auth, this.data, this.rules)
+      await this.expect(db.doc(this.path).get())
+    })
+
+    return this
+  }
+
+  create(data: firebase.firestore.DocumentData, title?: string): Context {
+    test(this.title('create', title), async () => {
+      const db = await setup(this.auth, this.data, this.rules)
+      await this.expect(db.doc(this.path).set(data))
+    })
+
+    return this
+  }
+
+  update(data: firebase.firestore.DocumentData, title?: string): Context {
+    test(this.title('update', title), async () => {
+      const db = await setup(this.auth, this.data, this.rules)
+      await this.expect(db.doc(this.path).update(data))
+    })
+
+    return this
+  }
+
+  delete(title?: string): Context {
+    test(this.title('delete', title), async () => {
+      const db = await setup(this.auth, this.data, this.rules)
+      await this.expect(db.doc(this.path).delete())
+    })
+
+    return this
+  }
+}
+
+export class AllowContext extends AbstractContext {
+  constructor(
+    readonly rules: string,
+    readonly path: string,
+    readonly auth: types.Auth,
+    readonly data: any
+  ) {
+    super(true, rules, path, auth, data)
+  }
+}
+
+export class DenyContext extends AbstractContext {
+  constructor(
+    readonly rules: string,
+    readonly path: string,
+    readonly auth: types.Auth,
+    readonly data: any
+  ) {
+    super(false, rules, path, auth, data)
+  }
+}
+
+// helpers
+export const allow = (
+  rules: string,
+  path: string,
+  auth: types.Auth,
+  data: any
+) => new AllowContext(rules, path, auth, data)
+
+export const deny = (
+  rules: string,
+  path: string,
+  auth: types.Auth,
+  data: any
+) => new DenyContext(rules, path, auth, data)

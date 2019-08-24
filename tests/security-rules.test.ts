@@ -1,7 +1,6 @@
 import * as fs from 'fs'
 
-import { setup, teardown, testCases } from './helpers'
-import { TestCases } from './types'
+import { setup, teardown, allow, deny } from './helpers'
 
 const auth = {
   anonym: null,
@@ -207,35 +206,17 @@ describe('Test `portfolio` collection rules', () => {
   })
 })
 
-const tCases: TestCases = {
-  cases: [
-    {
-      describe: 'Test "users" collection rules',
-      rules: rules,
-      data: {
-        'users/alice': {
-          name: 'Alice',
-          email: 'alice@gmail.com',
-        },
-      },
-      tests: [
-        {
-          path: 'users/alice',
-          auth: auth.anonym,
-          allow: ['read'],
-        },
-        {
-          path: 'users/alice',
-          auth: auth.bob,
-          allow: ['read'],
-        },
-        {
-          path: 'users/alice',
-          auth: auth.alice,
-          allow: ['read', 'create', 'update'],
-        },
-      ],
-    },
-  ],
-}
-testCases(tCases)
+describe('Test `users` collection rules', () => {
+  afterAll(async () => {
+    await teardown()
+  })
+
+  const path = 'users/alice'
+  allow(rules, path, auth.alice, {
+    'users/alice': { name: 'Alice', email: 'alice@gmail.com' },
+  })
+    .read()
+    .create({ name: 'Alice', email: 'alice@gmail.com' })
+    .update({ name: 'Alice', email: 'alice@hotmail.com' })
+    .delete()
+})
