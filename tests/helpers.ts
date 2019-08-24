@@ -73,7 +73,8 @@ export abstract class AllowDeny implements IAllowDeny {
     readonly rules: string,
     readonly path: string,
     readonly auth: Auth,
-    readonly data: any
+    readonly data: any,
+    readonly suffix?: string
   ) {}
 
   private async expect<T>(value: T) {
@@ -82,7 +83,7 @@ export abstract class AllowDeny implements IAllowDeny {
   }
 
   title(action: string, suffix?: string) {
-    suffix = suffix ? suffix : ''
+    suffix = suffix || this.suffix || ''
     const name = capitalize(this.auth ? this.auth.uid : 'anonym')
     return `${this.isAllow ? 'allow' : 'deny'} ${name} to ${action} "${
       this.path
@@ -131,13 +132,14 @@ export class Allow extends AllowDeny {
     readonly rules: string,
     readonly path: string,
     readonly auth: Auth,
-    readonly data: any
+    readonly data: any,
+    readonly suffix?: string
   ) {
-    super(true, rules, path, auth, data)
+    super(true, rules, path, auth, data, suffix)
   }
 
   deny() {
-    return new Deny(this.rules, this.path, this.auth, this.data)
+    return new Deny(this.rules, this.path, this.auth, this.data, this.suffix)
   }
 }
 
@@ -146,19 +148,30 @@ export class Deny extends AllowDeny {
     readonly rules: string,
     readonly path: string,
     readonly auth: Auth,
-    readonly data: any
+    readonly data: any,
+    readonly suffix?: string
   ) {
-    super(false, rules, path, auth, data)
+    super(false, rules, path, auth, data, suffix)
   }
 
   allow() {
-    return new Allow(this.rules, this.path, this.auth, this.data)
+    return new Allow(this.rules, this.path, this.auth, this.data, this.suffix)
   }
 }
 
 // helpers
-export const allow = (rules: string, path: string, auth: Auth, data: any) =>
-  new Allow(rules, path, auth, data)
+export const allow = (
+  rules: string,
+  path: string,
+  auth: Auth,
+  data: any,
+  suffix?: string
+) => new Allow(rules, path, auth, data, suffix)
 
-export const deny = (rules: string, path: string, auth: Auth, data: any) =>
-  new Deny(rules, path, auth, data)
+export const deny = (
+  rules: string,
+  path: string,
+  auth: Auth,
+  data: any,
+  suffix?: string
+) => new Deny(rules, path, auth, data, suffix)

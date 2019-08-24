@@ -41,75 +41,92 @@ describe('Test `users` collection rules', () => {
     await teardown()
   })
 
-  test('allow Bob to read self profile', async () => {
-    const db = await setup(auth.bob, mockData, rules)
+  const path = 'users/alice'
+  const data = {
+    'users/alice': { name: 'Alice', email: 'alice@gmail.com' },
+  }
 
-    await expect(db.doc('users/bob').get()).toAllow()
-  })
+  allow(rules, path, auth.alice, data)
+    .read()
+    .create({ name: 'Alice', email: 'alice@gmail.com' })
+    .update({ name: 'Alice', email: 'alice@hotmail.com' })
+    .deny()
+    .delete()
+    .update({ isAdmin: true }, 'as Admin')
 
-  test('allow Bob to update self profile', async () => {
-    const db = await setup(auth.bob, mockData, rules)
+  deny(rules, path, auth.bob, data)
+    .create({ name: 'Alice', email: 'alice@gmail.com' })
+    .update({ name: 'Alice', email: 'alice@hotmail.com' })
+    .delete()
+    .allow()
+    .read()
 
-    await expect(db.doc('users/bob').update({ name: 'Bob' })).toAllow()
-  })
-
-  test('deny Bob to update Alice profile', async () => {
-    const db = await setup(auth.bob, mockData, rules)
-
-    await expect(db.doc('users/alice').update({ name: 'Bob' })).toDeny()
-  })
-
-  test('deny Bob to set self profile as admin ', async () => {
-    const db = await setup(auth.bob, mockData, rules)
-
-    await expect(db.doc('users/bob').update({ isAdmin: true })).toDeny()
-  })
-
-  test('deny Bob to set Alice profile as admin ', async () => {
-    const db = await setup(auth.bob, mockData, rules)
-
-    await expect(db.doc('users/alice').update({ isAdmin: true })).toDeny()
-  })
+  deny(rules, path, auth.anonym, data)
+    .create({ name: 'Alice', email: 'alice@gmail.com' })
+    .update({ name: 'Alice', email: 'alice@hotmail.com' })
+    .delete()
+    .allow()
+    .read()
 })
 
 describe('Test `reviews` collection rules', () => {
   afterAll(async () => {
     await teardown()
   })
+  const path = 'reviews/1'
+  const data = {
+    'reviews/1': {
+      reviewerId: 'alice',
+      revieweeId: 'bob',
+      massage: 'Good job Bob',
+      rating: 4,
+    },
+  }
 
-  test('deny Alice to update Bob review', async () => {
-    const db = await setup(auth.alice, mockData, rules)
+  allow(rules, path, auth.alice, data)
+    .read()
+    .create({
+      reviewerId: 'alice',
+      revieweeId: 'bob',
+    })
+    .update({
+      reviewerId: 'alice',
+      revieweeId: 'bob',
+    })
+    .deny()
+    .delete()
 
-    await expect(
-      db.doc('reviews/1').update({ massage: 'Good job Alice', rating: 5 })
-    ).toDeny()
-  })
+  deny(rules, path, auth.bob, data, 'none own review')
+    .create(
+      {
+        reviewerId: 'alice',
+        revieweeId: 'bob',
+        massage: 'Good job Bob',
+        rating: 5,
+      },
+      'with fake "reviewerId"'
+    )
+    .update({ rating: 5 })
+    .delete()
+    .allow()
+    .read()
 
-  test('allow Bob to update self review', async () => {
-    const db = await setup(auth.bob, mockData, rules)
-
-    await expect(
-      db.doc('reviews/1').update({ message: 'Thank you Alice' })
-    ).toAllow()
-  })
-
-  test('deny Bob to create a review with fake `reviewerId` field', async () => {
-    const db = await setup(auth.bob, mockData, rules)
-
-    await expect(
-      db
-        .doc('reviews/2')
-        .set({ reviewerId: 'alice', message: 'Thank you Alice' })
-    ).toDeny()
-  })
-
-  test('allow Bob to create a review ', async () => {
-    const db = await setup(auth.bob, mockData, rules)
-
-    await expect(
-      db.doc('reviews/2').set({ reviewerId: 'bob', message: 'Thank you Alice' })
-    ).toAllow()
-  })
+  deny(rules, path, auth.anonym, data)
+    .create({
+      reviewerId: 'alice',
+      revieweeId: 'bob',
+      massage: 'Good job Bob',
+      rating: 5,
+    })
+    .update({
+      reviewerId: 'alice',
+      revieweeId: 'bob',
+      massage: 'Good job Bob',
+      rating: 5,
+    })
+    .delete()
+    .allow()
+    .read()
 })
 
 describe('Test `portfolio` collection rules', () => {
@@ -204,21 +221,4 @@ describe('Test `portfolio` collection rules', () => {
 
     await expect(db.doc('portfolio/bob/work/1').get()).toAllow()
   })
-})
-
-describe('Test `users` collection rules', () => {
-  afterAll(async () => {
-    await teardown()
-  })
-
-  const path = 'users/alice'
-  const data = {
-    'users/alice': { name: 'Alice', email: 'alice@gmail.com' },
-  }
-  allow(rules, path, auth.alice, data)
-    .read()
-    .create({ name: 'Alice', email: 'alice@gmail.com' })
-    .update({ name: 'Alice', email: 'alice@hotmail.com' })
-    .deny()
-    .delete()
 })
