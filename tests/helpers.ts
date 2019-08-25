@@ -99,19 +99,19 @@ export abstract class AllowDeny implements IAllowDeny {
     return this
   }
 
-  create(data: firebase.firestore.DocumentData, title?: string) {
+  create(data?: firebase.firestore.DocumentData, title?: string) {
     test(this.title('create', title), async () => {
       const db = await setup(this.auth, this.data, this.rules)
-      await this.expect(db.doc(this.path).set(data))
+      await this.expect(db.doc(this.path).set(data || {}))
     })
 
     return this
   }
 
-  update(data: firebase.firestore.DocumentData, title?: string) {
+  update(data?: firebase.firestore.DocumentData, title?: string) {
     test(this.title('update', title), async () => {
       const db = await setup(this.auth, this.data, this.rules)
-      await this.expect(db.doc(this.path).update(data))
+      await this.expect(db.doc(this.path).update(data || {}))
     })
 
     return this
