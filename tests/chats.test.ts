@@ -18,7 +18,7 @@ describe('Test `channels` subcollection rules', () => {
     .deny()
     .delete()
 
-  allow(rules, path, auth.bob, data, 'joint channel subcollection')
+  allow(rules, path, auth.bob, data, 'common channel subcollection')
     .read()
     .create()
     .update()

@@ -63,9 +63,9 @@ service cloud.firestore {
     }
 
     match /chats/{userId}/channels/{channelId} {
-       allow read: if isMyChannel(channelId);
-       allow create: if isMyChannel(channelId);
-       allow update: if isMyChannel(channelId);
+       allow read: if isCommonChannel(channelId);
+       allow create: if isCommonChannel(channelId);
+       allow update: if isCommonChannel(channelId);
        allow delete: if isAdmin();
 
        // messages 
@@ -164,7 +164,7 @@ service cloud.firestore {
     return getUserData().isAdmin
   }
 
-  function isMyChannel(channelId) {
+  function isCommonChannel(channelId) {
      return request.auth.uid in channelId.split('-')
   }
  // --------------------------------------------------------------------------------
