@@ -62,11 +62,19 @@ service cloud.firestore {
        allow read;
     }
 
-    match /chats/{document=**} {
-       allow read;
-       allow create: if isAuthenticated();
-       allow update: if isAuthenticated();
+    match /chats/{userId}/channels/{channelId} {
+       allow read: if isMyChannel(channelId);
+       allow create: if isMyChannel(channelId);
+       allow update: if isMyChannel(channelId);
        allow delete: if isAdmin();
+
+       // messages 
+       match /messages/{messageId} {
+         allow read: if isDocumentOwner(userId);
+         allow create: if isAuthenticated();
+         allow update: if isDocumentOwner(userId);
+         allow delete: if isAdmin();
+       }
     }
 
     match /features/{document=**} {
@@ -154,6 +162,10 @@ service cloud.firestore {
 
   function isAdmin() {
     return getUserData().isAdmin
+  }
+
+  function isMyChannel(channelId) {
+     return request.auth.uid in channelId.split('-')
   }
  // --------------------------------------------------------------------------------
 }
