@@ -70,9 +70,9 @@ service cloud.firestore {
 
        // messages 
        match /messages/{messageId} {
-         allow read: if isDocumentOwner(userId);
-         allow create: if isAuthenticated();
-         allow update: if isDocumentOwner(userId);
+         allow read: if isCommonChannel(channelId);
+         allow create: if isCommonChannel(channelId);
+         allow update: if isCommonChannel(channelId);
          allow delete: if isAdmin();
        }
     }
