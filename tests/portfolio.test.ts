@@ -7,7 +7,7 @@ describe('Test `portfolio` collection rules', () => {
   })
   const path = 'portfolio/alice/work/1'
   const data = {
-    'portfolio/alice/work/1': {
+    [path]: {
       description: 'text description',
       title: 'Alice title',
     },

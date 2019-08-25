@@ -7,7 +7,7 @@ describe('Test `reviews` collection rules', () => {
   })
   const path = 'reviews/1'
   const data = {
-    'reviews/1': {
+    [path]: {
       reviewerId: 'alice',
       revieweeId: 'bob',
       massage: 'Good job Bob',

@@ -8,7 +8,7 @@ describe('Test `users` collection rules', () => {
 
   const path = 'users/alice'
   const data = {
-    'users/alice': { name: 'Alice', email: 'alice@gmail.com' },
+    [path]: { name: 'Alice', email: 'alice@gmail.com' },
   }
 
   allow(rules, path, auth.alice, data)
