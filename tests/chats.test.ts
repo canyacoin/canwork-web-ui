@@ -18,11 +18,17 @@ describe('Test `channels` subcollection rules', () => {
     .deny()
     .delete()
 
-  allow(rules, path, auth.bob, data, 'common channel subcollection')
+  allow(rules, path, auth.bob, data, 'common channel')
     .read()
     .create()
     .update()
     .deny()
+    .delete()
+
+  deny(rules, path, auth.john, data, 'non common channel')
+    .read()
+    .create()
+    .update()
     .delete()
 
   deny(rules, path, auth.anonym, data)
