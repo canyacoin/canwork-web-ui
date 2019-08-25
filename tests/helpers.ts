@@ -1,6 +1,6 @@
 import 'jest'
 import * as firebase from '@firebase/testing'
-import { Auth, IAllowDeny } from './types'
+import { Auth, IAllowDeny, IAllowDenyOptions } from './types'
 
 export const setup = async (auth, data, rules: string) => {
   const projectId = `rules-spec-${Date.now()}`
@@ -138,8 +138,16 @@ export class Allow extends AllowDeny {
     super(true, rules, path, auth, data, suffix)
   }
 
-  deny() {
-    return new Deny(this.rules, this.path, this.auth, this.data, this.suffix)
+  deny(opts?: Partial<IAllowDenyOptions>) {
+    const { rules, path, auth, data, suffix } = {
+      rules: this.rules,
+      path: this.path,
+      auth: this.auth,
+      data: this.data,
+      suffix: this.suffix,
+      ...opts,
+    }
+    return new Deny(rules, path, auth, data, suffix)
   }
 }
 
@@ -154,8 +162,16 @@ export class Deny extends AllowDeny {
     super(false, rules, path, auth, data, suffix)
   }
 
-  allow() {
-    return new Allow(this.rules, this.path, this.auth, this.data, this.suffix)
+  allow(opts?: Partial<IAllowDenyOptions>) {
+    const { rules, path, auth, data, suffix } = {
+      rules: this.rules,
+      path: this.path,
+      auth: this.auth,
+      data: this.data,
+      suffix: this.suffix,
+      ...opts,
+    }
+    return new Allow(rules, path, auth, data, suffix)
   }
 }
 

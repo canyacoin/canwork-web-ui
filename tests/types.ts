@@ -8,3 +8,11 @@ export interface IAllowDeny {
   update(data?: firebase.firestore.UpdateData, title?: string): this
   delete(title?: string): this
 }
+
+export interface IAllowDenyOptions {
+  rules: string
+  path: string
+  auth: Auth
+  data: any
+  suffix: string
+}

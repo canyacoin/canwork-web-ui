@@ -38,8 +38,8 @@ service cloud.firestore {
 
     match /who/{userId}/user/{who} {
        allow read;
-       allow create: if isAuthenticated();
-       allow update: if isAuthenticated();
+       allow create: if isAuthenticated() && request.auth.uid == request.resource.data.address;
+       allow update: if isDocumentOwner(who) && request.auth.uid == request.resource.data.address;
        allow delete: if isAdmin();
     }
 
