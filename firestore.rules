@@ -62,18 +62,23 @@ service cloud.firestore {
        allow read;
     }
 
-    match /chats/{userId}/channels/{channelId} {
-       allow read: if isCommonChannel(channelId);
-       allow create: if isCommonChannel(channelId);
-       allow update: if isCommonChannel(channelId);
-       allow delete: if isAdmin();
+    match /chats/{userId} {
+       allow read: if isDocumentOwner(userId)
 
-       // messages 
-       match /messages/{messageId} {
-         allow read: if isCommonChannel(channelId);
+       // channels
+       match /channels/{channelId} {
+         allow read: if isCommonChannel(channelId) || isDocumentOwner(userId);
          allow create: if isCommonChannel(channelId);
          allow update: if isCommonChannel(channelId);
          allow delete: if isAdmin();
+
+         // messages
+         match /messages/{messageId} {
+            allow read: if isCommonChannel(channelId);
+            allow create: if isCommonChannel(channelId);
+            allow update: if isCommonChannel(channelId);
+            allow delete: if isAdmin();
+         }
        }
     }
 
