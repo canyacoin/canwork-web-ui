@@ -4,20 +4,20 @@ service cloud.firestore {
     match /users/{userId} {
        allow read;
        allow create: if isAuthenticated();
-       allow update: if isAuthenticated();
+       allow update: if isDocumentOwner(userId) && !('isAdmin' in request.resource.data)
        allow delete: if isAdmin();
     }
 
-    match /reviews/{document=**} {
+    match /reviews/{reviewId} {
        allow read;
-       allow create: if isAuthenticated();
-       allow update: if isAuthenticated();
+       allow create: if isDocumentOwner(request.resource.data.reviewerId);
+       allow update: if isDocumentOwner(resource.data.reviewerId);
        allow delete: if isAdmin();
     }
 
     match /portfolio/{userId}/work/{w} {
        allow read;
-       allow create: if isAuthenticated();
+       allow create: if isDocumentOwner(userId);
        allow update: if isDocumentOwner(userId);
        allow delete: if isDocumentOwner(userId);
     }
@@ -38,8 +38,8 @@ service cloud.firestore {
 
     match /who/{userId}/user/{who} {
        allow read;
-       allow create: if isAuthenticated();
-       allow update: if isAuthenticated();
+       allow create: if isAuthenticated() && request.auth.uid == request.resource.data.address;
+       allow update: if isDocumentOwner(who) && request.auth.uid == request.resource.data.address;
        allow delete: if isAdmin();
     }
 
@@ -62,11 +62,19 @@ service cloud.firestore {
        allow read;
     }
 
-    match /chats/{document=**} {
-       allow read;
-       allow create: if isAuthenticated();
-       allow update: if isAuthenticated();
+    match /chats/{userId}/channels/{channelId} {
+       allow read: if isCommonChannel(channelId);
+       allow create: if isCommonChannel(channelId);
+       allow update: if isCommonChannel(channelId);
        allow delete: if isAdmin();
+
+       // messages 
+       match /messages/{messageId} {
+         allow read: if isCommonChannel(channelId);
+         allow create: if isCommonChannel(channelId);
+         allow update: if isCommonChannel(channelId);
+         allow delete: if isAdmin();
+       }
     }
 
     match /features/{document=**} {
@@ -154,6 +162,10 @@ service cloud.firestore {
 
   function isAdmin() {
     return getUserData().isAdmin
+  }
+
+  function isCommonChannel(channelId) {
+     return request.auth.uid in channelId.split('-')
   }
  // --------------------------------------------------------------------------------
 }
