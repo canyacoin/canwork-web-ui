@@ -6,6 +6,21 @@ describe('Test `channels` subcollection rules', () => {
     await teardown()
   })
 
+  const path = 'chats/alice/channels'
+  const data = {}
+
+  allow(rules, path, auth.alice, data).read()
+
+  deny(rules, path, auth.bob, data).read()
+
+  deny(rules, path, auth.anonym, data).read()
+})
+
+describe('Test `channels` subcollection rules', () => {
+  afterAll(async () => {
+    await teardown()
+  })
+
   const path = 'chats/alice/channels/alice-bob'
   const data = {
     [path]: { address: 'alice', title: 'Alice channel' },

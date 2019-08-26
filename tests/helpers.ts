@@ -93,7 +93,11 @@ export abstract class AllowDeny implements IAllowDeny {
   read(title?: string) {
     test(this.title('read', title), async () => {
       const db = await setup(this.auth, this.data, this.rules)
-      await this.expect(db.doc(this.path).get())
+      const ref =
+        this.path.split('/').length % 2 == 0
+          ? db.doc(this.path)
+          : db.collection(this.path)
+      await this.expect(ref.get())
     })
 
     return this
