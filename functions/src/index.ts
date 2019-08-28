@@ -1443,22 +1443,39 @@ exports.delSlug = functions.https.onRequest(async (request, response) => {
  */
 exports.initVerifiedUserField = functions.https.onRequest(
   async (request, response) => {
-    const usersnaps = await db.collection('users').get()
+    const limit = 100
+    let total = 0
+    let last = null
+    let users = await db
+      .collection('users')
+      .orderBy('slug')
+      .limit(limit)
+      .get()
 
-    await Promise.all(
-      usersnaps.docs.map(async doc => {
-        const user = doc.data()
-        !user.verified &&
-          (await db.doc(`users/${doc.id}`).update({ verified: false }))
-      })
-    )
+    while (users.docs.length > 0) {
+      await Promise.all(
+        users.docs.map(async doc => {
+          const user = doc.data()
+          !user.verified &&
+            (await db.doc(`users/${doc.id}`).update({ verified: false }))
+        })
+      )
+      total += users.docs.length
+      last = users.docs[users.docs.length - 1]
+      users = await db
+        .collection('users')
+        .orderBy('slug')
+        .startAfter(last)
+        .limit(limit)
+        .get()
+    }
 
     return response
       .status(200)
       .type('application/json')
       .send({
         status: 0,
-        msg: `Created "verified" field for all users!`,
+        msg: `Created "verified" field for all ${total} users!`,
       })
   }
 )
