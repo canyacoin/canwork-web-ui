@@ -1,6 +1,6 @@
 import 'jest'
 import * as firebase from '@firebase/testing'
-import { Auth, IAllowDeny, IAllowDenyOptions } from './types'
+import { CreateOptions, UpdateOptions, Context, Row, Actions } from './types'
 
 export const setup = async (auth, data, rules: string) => {
   const projectId = `rules-spec-${Date.now()}`
@@ -67,131 +67,199 @@ export function capitalize(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()
 }
 
-export abstract class AllowDeny implements IAllowDeny {
-  constructor(
-    readonly isAllow: boolean,
-    readonly rules: string,
-    readonly path: string,
-    readonly auth: Auth,
-    readonly data: any,
-    readonly suffix?: string
-  ) {}
+const uid = () =>
+  Math.random()
+    .toString()
+    .slice(2)
 
-  private async expect<T>(value: T) {
-    const m = expect(value)
-    return await (this.isAllow ? m.toAllow() : m.toDeny())
-  }
-
-  title(action: string, suffix?: string) {
-    suffix = suffix || this.suffix || ''
-    const name = capitalize(this.auth ? this.auth.uid : 'anonym')
-    return `${this.isAllow ? 'allow' : 'deny'} ${name} to ${action} "${
-      this.path
-    }" ${suffix}`.trim()
-  }
-
-  read(title?: string) {
-    test(this.title('read', title), async () => {
-      const db = await setup(this.auth, this.data, this.rules)
-      const ref =
-        this.path.split('/').length % 2 == 0
-          ? db.doc(this.path)
-          : db.collection(this.path)
-      await this.expect(ref.get())
-    })
-
-    return this
-  }
-
-  create(data?: firebase.firestore.DocumentData, title?: string) {
-    test(this.title('create', title), async () => {
-      const db = await setup(this.auth, this.data, this.rules)
-      await this.expect(db.doc(this.path).set(data || {}))
-    })
-
-    return this
-  }
-
-  update(data?: firebase.firestore.DocumentData, title?: string) {
-    test(this.title('update', title), async () => {
-      const db = await setup(this.auth, this.data, this.rules)
-      await this.expect(db.doc(this.path).update(data || {}))
-    })
-
-    return this
-  }
-
-  delete(title?: string) {
-    test(this.title('delete', title), async () => {
-      const db = await setup(this.auth, this.data, this.rules)
-      await this.expect(db.doc(this.path).delete())
-    })
-
-    return this
-  }
+export function isCollection(path: string) {
+  return path.split('/').length % 2 !== 0
 }
 
-export class Allow extends AllowDeny {
-  constructor(
-    readonly rules: string,
-    readonly path: string,
-    readonly auth: Auth,
-    readonly data: any,
-    readonly suffix?: string
-  ) {
-    super(true, rules, path, auth, data, suffix)
-  }
-
-  deny(opts?: Partial<IAllowDenyOptions>) {
-    const { rules, path, auth, data, suffix } = {
-      rules: this.rules,
-      path: this.path,
-      auth: this.auth,
-      data: this.data,
-      suffix: this.suffix,
-      ...opts,
-    }
-    return new Deny(rules, path, auth, data, suffix)
-  }
-}
-
-export class Deny extends AllowDeny {
-  constructor(
-    readonly rules: string,
-    readonly path: string,
-    readonly auth: Auth,
-    readonly data: any,
-    readonly suffix?: string
-  ) {
-    super(false, rules, path, auth, data, suffix)
-  }
-
-  allow(opts?: Partial<IAllowDenyOptions>) {
-    const { rules, path, auth, data, suffix } = {
-      rules: this.rules,
-      path: this.path,
-      auth: this.auth,
-      data: this.data,
-      suffix: this.suffix,
-      ...opts,
-    }
-    return new Allow(rules, path, auth, data, suffix)
-  }
-}
-
-// helpers
-export const allow = (
-  rules: string,
+export function createTestName(
+  userName: string,
+  isAllow: boolean,
+  action: Actions,
   path: string,
-  auth: Auth,
-  data: any,
   suffix?: string
-) => new Allow(rules, path, auth, data, suffix)
+) {
+  return `${
+    isAllow ? 'allow' : 'deny'
+  } ${userName} to ${action} "${path}" ${suffix}`.trim()
+}
 
-export const deny = (
-  rules: string,
-  path: string,
-  auth: Auth,
-  data: any,
-  suffix?: string
-) => new Deny(rules, path, auth, data, suffix)
+export function testFactory(context: Context) {
+  return ({ isAllow, action, options }: Row) => {
+    const name = createTestName(
+      capitalize(context.auth ? context.auth.uid : 'anonym'),
+      isAllow,
+      action,
+      context.path,
+      options.suffix
+    )
+
+    test(
+      name,
+      async () => {
+        const db = await context.db
+        const { path } = context
+        let p
+        switch (action) {
+          case Actions.Read:
+            p = (isCollection(path) ? db.collection(path) : db.doc(path)).get()
+            break
+
+          case Actions.Create:
+            {
+              const { data = {}, id = uid() } = options as Partial<
+                CreateOptions
+              >
+              const ref = db.doc(path).parent.doc(id)
+              p = ref.set(data)
+            }
+            break
+
+          case Actions.Update:
+            {
+              const { data = {} } = options as Partial<UpdateOptions>
+              p = db.doc(path).update(data)
+            }
+            break
+
+          case Actions.Delete:
+            db.doc(path).delete()
+        }
+        const m = expect(p)
+        return (isAllow ? m.toAllow : m.toDeny)()
+      },
+      context.timeout
+    )
+  }
+}
+
+export function factory(context: Context) {
+  const testFn = testFactory(context)
+  return { allow, deny, testFn }
+}
+// const actionsFactory = (
+//   isAllow: boolean,
+//   db: firebase.firestore.Firestore,
+//   params: AllowDenyParams
+// ): AllowDenyActions => {
+//   const _expect = async <T>(value: T) => {
+//     const m = expect(value)
+//     return await (isAllow ? m.toAllow() : m.toDeny())
+//   }
+
+//   const title = (action: string, suffix?: string, path = params.path) => {
+//     suffix = suffix || this.suffix || ''
+//     const name = capitalize(params.auth ? params.auth.uid : 'anonym')
+//     return `${
+//       this.isAllow ? 'allow' : 'deny'
+//     } ${name} to ${action} "${path}" ${suffix}`.trim()
+//   }
+
+//   return {
+//     read({ suffix } = {}) {
+//       test(title('read', suffix), async () => {
+//         const ref =
+//           params.path.split('/').length % 2 == 0
+//             ? db.doc(params.path)
+//             : db.collection(params.path)
+//         resolve(await _expect(ref.get()))
+//       })
+
+//       let resolve
+//       return new Promise(r => {
+//         resolve = r
+//       })
+//     },
+
+//     create({ data = {}, id = uid(), suffix } = {}) {
+//       const ref = db.doc(params.path).parent.doc(id)
+//       test(title('create', suffix, ref.path), async () => {
+//         resolve(await _expect(ref.set(data)))
+//       })
+
+//       let resolve
+//       return new Promise(r => {
+//         resolve = r
+//       })
+//     },
+
+//     update({ data = {}, suffix } = {}) {
+//       test(title('update', suffix), async () => {
+//         resolve(await _expect(db.doc(params.path).update(data)))
+//       })
+
+//       let resolve
+//       return new Promise(r => {
+//         resolve = r
+//       })
+//     },
+
+//     delete({ suffix } = {}) {
+//       test(title('delete', suffix), async () => {
+//         resolve(await _expect(db.doc(params.path).delete()))
+//       })
+
+//       let resolve
+//       return new Promise(r => {
+//         resolve = r
+//       })
+//     },
+//   }
+// }
+
+// // helpers
+// export const allow = async (params: AllowDenyParams) => {
+//   const db = await setup(params.auth, params.data, params.rules)
+//   return actionsFactory(true, db, params)
+// }
+
+// export const deny = async (params: AllowDenyParams) => {
+//   const db = await setup(params.auth, params.data, params.rules)
+//   return actionsFactory(false, db, params)
+// }
+
+// export const allowDeny = (
+//   db: firebase.firestore.Firestore,
+//   params: AllowDenyParams
+// ) => {
+//   return {
+//     allow: actionsFactory(true, db, params),
+//     deny: actionsFactory(false, db, params),
+//   }
+// }
+
+// export const testFactory = (
+//   db: firebase.firestore.Firestore,
+//   params: AllowDenyParams
+// ) => {
+//   const { allow, deny } = allowDeny(db, params)
+//   return ({
+//     isAllow,
+//     op,
+//     opts,
+//   }: {
+//     isAllow: boolean
+//     op: 'read' | 'create' | 'update' | 'delete'
+//     opts?: Partial<ReadOptions | CreateOptions | UpdateOptions | DeleteOptions>
+//   }) => {
+//     const actions = isAllow ? allow : deny
+//     switch (op) {
+//       case 'read':
+//         actions.read(opts)
+//         break
+//       case 'create':
+//         actions.create(opts)
+//         break
+//       case 'update':
+//         actions.update(opts)
+//         break
+//       case 'delete':
+//         actions.delete(opts)
+//         break
+//     }
+//   }
+// }
