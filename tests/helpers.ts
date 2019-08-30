@@ -1,8 +1,26 @@
 import 'jest'
 import * as firebase from '@firebase/testing'
-import { CreateOptions, UpdateOptions, Context, Row, Actions } from './types'
+import {
+  ReadOptions,
+  CreateOptions,
+  UpdateOptions,
+  Row,
+  Table,
+  Actions,
+  AllowDenyTable,
+  AllowTable,
+  DenyTable,
+  Auth,
+  TableFn,
+  DescribeContext,
+  TestFactoryContext,
+} from './types'
 
-export const setup = async (auth, data, rules: string) => {
+export const setup = async (
+  rules: string,
+  auth: Auth,
+  data?: Record<string, firebase.firestore.DocumentData>
+) => {
   const projectId = `rules-spec-${Date.now()}`
   const app = await firebase.initializeTestApp({
     projectId,
@@ -85,17 +103,17 @@ export function createTestName(
 ) {
   return `${
     isAllow ? 'allow' : 'deny'
-  } ${userName} to ${action} "${path}" ${suffix}`.trim()
+  } ${userName} to ${action} "${path}" ${suffix || ''}`.trim()
 }
 
-export function testFactory(context: Context) {
-  return ({ isAllow, action, options }: Row) => {
+export function testFactory(context: TestFactoryContext) {
+  return ({ isAllow, action, options = {} }: Row) => {
     const name = createTestName(
       capitalize(context.auth ? context.auth.uid : 'anonym'),
       isAllow,
       action,
       context.path,
-      options.suffix
+      options && options.suffix
     )
 
     test(
@@ -137,129 +155,94 @@ export function testFactory(context: Context) {
   }
 }
 
-export function factory(context: Context) {
-  const testFn = testFactory(context)
-  return { allow, deny, testFn }
+export function describeFn(context: DescribeContext, tableFn: TableFn) {
+  const db = setup(context.rules, context.auth, context.data)
+  const testFn = testFactory({
+    db,
+    path: context.path,
+    auth: context.auth,
+    timeout: context.timeout,
+  })
+  afterAll(async () => (await db).app.delete())
+  describe.each(tableFn({ allow: new ATable(), deny: new DTable() }))(
+    context.name,
+    testFn
+  )
 }
-// const actionsFactory = (
-//   isAllow: boolean,
-//   db: firebase.firestore.Firestore,
-//   params: AllowDenyParams
-// ): AllowDenyActions => {
-//   const _expect = async <T>(value: T) => {
-//     const m = expect(value)
-//     return await (isAllow ? m.toAllow() : m.toDeny())
-//   }
 
-//   const title = (action: string, suffix?: string, path = params.path) => {
-//     suffix = suffix || this.suffix || ''
-//     const name = capitalize(params.auth ? params.auth.uid : 'anonym')
-//     return `${
-//       this.isAllow ? 'allow' : 'deny'
-//     } ${name} to ${action} "${path}" ${suffix}`.trim()
-//   }
+export class ADTable implements AllowDenyTable {
+  constructor(readonly isAllow: boolean, private _table: Table = []) {}
 
-//   return {
-//     read({ suffix } = {}) {
-//       test(title('read', suffix), async () => {
-//         const ref =
-//           params.path.split('/').length % 2 == 0
-//             ? db.doc(params.path)
-//             : db.collection(params.path)
-//         resolve(await _expect(ref.get()))
-//       })
+  read(options?: Partial<ReadOptions>) {
+    this._table.push({ isAllow: this.isAllow, action: Actions.Read, options })
+    return this
+  }
 
-//       let resolve
-//       return new Promise(r => {
-//         resolve = r
-//       })
-//     },
+  create(options?: Partial<CreateOptions>) {
+    this._table.push({ isAllow: this.isAllow, action: Actions.Create, options })
+    return this
+  }
 
-//     create({ data = {}, id = uid(), suffix } = {}) {
-//       const ref = db.doc(params.path).parent.doc(id)
-//       test(title('create', suffix, ref.path), async () => {
-//         resolve(await _expect(ref.set(data)))
-//       })
+  update(options?: Partial<UpdateOptions>) {
+    this._table.push({ isAllow: this.isAllow, action: Actions.Update, options })
+    return this
+  }
 
-//       let resolve
-//       return new Promise(r => {
-//         resolve = r
-//       })
-//     },
+  delete(options?: Partial<UpdateOptions>) {
+    this._table.push({ isAllow: this.isAllow, action: Actions.Delete, options })
+    return this
+  }
 
-//     update({ data = {}, suffix } = {}) {
-//       test(title('update', suffix), async () => {
-//         resolve(await _expect(db.doc(params.path).update(data)))
-//       })
+  table() {
+    return this._table
+  }
+}
 
-//       let resolve
-//       return new Promise(r => {
-//         resolve = r
-//       })
-//     },
+export class ATable extends ADTable implements AllowDenyTable, AllowTable {
+  constructor(table: Table = []) {
+    super(true, table)
+  }
+  deny() {
+    return new DTable(this.table())
+  }
+}
 
-//     delete({ suffix } = {}) {
-//       test(title('delete', suffix), async () => {
-//         resolve(await _expect(db.doc(params.path).delete()))
-//       })
+export class DTable extends ADTable implements AllowDenyTable, DenyTable {
+  constructor(table: Table = []) {
+    super(false, table)
+  }
+  allow() {
+    return new ATable(this.table())
+  }
+}
 
-//       let resolve
-//       return new Promise(r => {
-//         resolve = r
-//       })
-//     },
-//   }
-// }
+export class Allow extends ATable {
+  constructor(readonly context: DescribeContext, table: Table = []) {
+    super(table)
+  }
 
-// // helpers
-// export const allow = async (params: AllowDenyParams) => {
-//   const db = await setup(params.auth, params.data, params.rules)
-//   return actionsFactory(true, db, params)
-// }
+  deny() {
+    return new Deny(this.context, this.table())
+  }
 
-// export const deny = async (params: AllowDenyParams) => {
-//   const db = await setup(params.auth, params.data, params.rules)
-//   return actionsFactory(false, db, params)
-// }
+  runTest() {
+    describeFn(this.context, () => this.table())
+  }
+}
 
-// export const allowDeny = (
-//   db: firebase.firestore.Firestore,
-//   params: AllowDenyParams
-// ) => {
-//   return {
-//     allow: actionsFactory(true, db, params),
-//     deny: actionsFactory(false, db, params),
-//   }
-// }
+export class Deny extends DTable {
+  constructor(readonly context: DescribeContext, table: Table = []) {
+    super(table)
+  }
 
-// export const testFactory = (
-//   db: firebase.firestore.Firestore,
-//   params: AllowDenyParams
-// ) => {
-//   const { allow, deny } = allowDeny(db, params)
-//   return ({
-//     isAllow,
-//     op,
-//     opts,
-//   }: {
-//     isAllow: boolean
-//     op: 'read' | 'create' | 'update' | 'delete'
-//     opts?: Partial<ReadOptions | CreateOptions | UpdateOptions | DeleteOptions>
-//   }) => {
-//     const actions = isAllow ? allow : deny
-//     switch (op) {
-//       case 'read':
-//         actions.read(opts)
-//         break
-//       case 'create':
-//         actions.create(opts)
-//         break
-//       case 'update':
-//         actions.update(opts)
-//         break
-//       case 'delete':
-//         actions.delete(opts)
-//         break
-//     }
-//   }
-// }
+  allow() {
+    return new Allow(this.context, this.table())
+  }
+
+  runTest() {
+    describeFn(this.context, () => this.table())
+  }
+}
+
+export const allow = (context: DescribeContext) => new Allow(context)
+export const deny = (context: DescribeContext) => new Deny(context)

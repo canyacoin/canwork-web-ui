@@ -2,14 +2,6 @@ export type Auth = {
   uid: string
 } | null
 
-// export interface IAllowDenyOptions {
-//   rules: string
-//   path: string
-//   auth: Auth
-//   data: any
-//   suffix: string
-// }
-
 export interface ReadOptions {
   suffix: string
 }
@@ -29,35 +21,14 @@ export interface DeleteOptions {
   suffix: string
 }
 
-// export interface AllowDenyParams {
-//   rules: string
-//   path: string
-//   auth: Auth
-//   data: any
-//   suffix?: string
-// }
-
-// export interface AllowDenyActions {
-//   read(
-//     options?: Partial<ReadOptions>
-//   ): Promise<
-//     firebase.firestore.DocumentSnapshot | firebase.firestore.QuerySnapshot
-//   >
-//   create(options?: Partial<CreateOptions>): Promise<void>
-//   update(options?: Partial<UpdateOptions>): Promise<void>
-//   delete(options?: Partial<DeleteOptions>): Promise<void>
-// }
-// export type AllowDenyFn = (actions: AllowDenyActions) => Promise<void>
-
 export interface Data {
   [k: string]: Record<string, any>
 }
-export interface Context {
+
+export interface TestFactoryContext {
   db: Promise<firebase.firestore.Firestore>
-  rules: string
   path: string
   auth: Auth
-  data: Data
   timeout?: number
 }
 
@@ -75,3 +46,33 @@ export interface Row {
 }
 
 export type Table = Row[]
+
+export interface AllowDenyTable {
+  read(options?: Partial<ReadOptions>): this
+  create(options?: Partial<CreateOptions>): this
+  update(options?: Partial<UpdateOptions>): this
+  delete(options?: Partial<DeleteOptions>): this
+  table(): Table
+}
+
+export interface AllowTable {
+  deny(): DenyTable
+}
+
+export interface DenyTable {
+  allow(): AllowTable
+}
+
+export type TableFn = (allowDeny: {
+  allow: AllowTable
+  deny: DenyTable
+}) => Table
+
+export interface DescribeContext {
+  name: string
+  rules: string
+  path: string
+  auth: Auth
+  data?: Data
+  timeout?: number
+}
