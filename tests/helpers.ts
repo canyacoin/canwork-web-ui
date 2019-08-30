@@ -223,7 +223,7 @@ export class Allow extends ATable {
     return new Deny(this.context, this.table())
   }
 
-  runTest(debug: boolean = false) {
+  runTests(debug: boolean = false) {
     if (debug) {
       console.log('Table', this.table())
     }
@@ -240,7 +240,7 @@ export class Deny extends DTable {
     return new Allow(this.context, this.table())
   }
 
-  runTest(debug: boolean = false) {
+  runTests(debug: boolean = false) {
     if (debug) {
       console.log('Table', this.table())
     }

@@ -7,15 +7,15 @@ describe('Test `channels` subcollection rules', () => {
 
   allow({ name: 'Alice tests', rules, path, auth: auth.alice, data })
     .read()
-    .runTest()
+    .runTests()
 
   deny({ name: 'Bob tests', rules, path, auth: auth.bob, data })
     .read()
-    .runTest()
+    .runTests()
 
   deny({ name: 'Anonym tests', rules, path, auth: auth.anonym, data })
     .read()
-    .runTest()
+    .runTests()
 })
 
 describe('Test `channels` subcollection rules', () => {
@@ -30,7 +30,7 @@ describe('Test `channels` subcollection rules', () => {
     .update({ data: { address: 'alice', title: 'Alice channel changed' } })
     .deny()
     .delete()
-    .runTest()
+    .runTests()
 
   allow({
     name: 'Bob tests (common channel)',
@@ -44,7 +44,7 @@ describe('Test `channels` subcollection rules', () => {
     .update()
     .deny()
     .delete()
-    .runTest()
+    .runTests()
 
   deny({
     name: 'John tests (non common channel)',
@@ -57,14 +57,14 @@ describe('Test `channels` subcollection rules', () => {
     .create()
     .update()
     .delete()
-    .runTest()
+    .runTests()
 
   deny({ name: 'Anonym tests', rules, path, auth: auth.anonym, data })
     .read()
     .create()
     .update()
     .delete()
-    .runTest()
+    .runTests()
 })
 
 describe('Test `messages` subcollection rules', () => {
@@ -79,7 +79,7 @@ describe('Test `messages` subcollection rules', () => {
     .update({ data: { message: 'Are you there?' } })
     .deny()
     .delete()
-    .runTest()
+    .runTests()
 
   allow({
     name: 'Bob tests (common channel)',
@@ -93,7 +93,7 @@ describe('Test `messages` subcollection rules', () => {
     .update({ data: { message: 'Have a nice day!' } })
     .deny()
     .delete()
-    .runTest()
+    .runTests()
 
   deny({
     name: 'John tests (non common channel)',
@@ -106,12 +106,12 @@ describe('Test `messages` subcollection rules', () => {
     .create()
     .update()
     .delete()
-    .runTest()
+    .runTests()
 
   deny({ name: 'Anonym tests', rules, path, auth: auth.anonym, data })
     .read()
     .create()
     .update()
     .delete()
-    .runTest()
+    .runTests()
 })

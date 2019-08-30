@@ -1,35 +1,34 @@
-import { teardown, allow, deny } from './helpers'
+import { allow, deny } from './helpers'
 import { auth, rules } from './setup'
 
 describe('Test `users` collection rules', () => {
-  afterAll(async () => {
-    await teardown()
-  })
-
   const path = 'users/alice'
   const data = {
     [path]: { name: 'Alice', email: 'alice@gmail.com' },
   }
 
-  allow(rules, path, auth.alice, data)
+  allow({ name: 'Alice tests', rules, path, auth: auth.alice, data })
     .read()
-    .create({ name: 'Alice', email: 'alice@gmail.com' })
-    .update({ name: 'Alice', email: 'alice@hotmail.com' })
+    .create({ data: { name: 'Alice', email: 'alice@gmail.com' } })
+    .update({ data: { name: 'Alice', email: 'alice@hotmail.com' } })
     .deny()
     .delete()
-    .update({ isAdmin: true }, 'as Admin')
+    .update({ data: { isAdmin: true }, suffix: 'as Admin' })
+    .runTests()
 
-  deny(rules, path, auth.bob, data)
-    .create({ name: 'Alice', email: 'alice@gmail.com' })
-    .update({ name: 'Alice', email: 'alice@hotmail.com' })
+  deny({ name: 'Bob tests', rules, path, auth: auth.bob, data })
+    .create({ data: { name: 'Alice', email: 'alice@gmail.com' } })
+    .update({ data: { name: 'Alice', email: 'alice@hotmail.com' } })
     .delete()
     .allow()
     .read()
+    .runTests()
 
-  deny(rules, path, auth.anonym, data)
-    .create({ name: 'Alice', email: 'alice@gmail.com' })
-    .update({ name: 'Alice', email: 'alice@hotmail.com' })
+  deny({ name: 'Anonym tests', rules, path, auth: auth.anonym, data })
+    .create({ data: { name: 'Alice', email: 'alice@gmail.com' } })
+    .update({ data: { name: 'Alice', email: 'alice@hotmail.com' } })
     .delete()
     .allow()
     .read()
+    .runTests()
 })

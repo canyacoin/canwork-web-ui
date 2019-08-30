@@ -99,13 +99,13 @@ service cloud.firestore {
 
 
     // TODO: Will require a much more complex rule set here
-    match /jobs {
-       allow read:if request.auth != null;
-    }
+   //  match /jobs {
+   //     allow read:if request.auth != null;
+   //  }
 
     match /jobs/{jobId} {
-       allow read;
-       allow create: if isAuthenticated();
+       allow read: if isDocumentOwner(resource.data.clientId) || isDocumentOwner(resource.data.providerId);
+       allow create: if !resource.data.size() && request.auth.uid == request.resource.data.clientId;
        allow update: if userIsClientOrProvider();
        allow delete: if isAdmin();
     }
