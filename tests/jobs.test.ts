@@ -16,7 +16,7 @@ describe('Test `jobs` collection rules', () => {
     .runTests()
 
   allow({
-    name: 'Bob tests (common channel)',
+    name: 'Bob tests (common job)',
     rules,
     path,
     auth: auth.bob,
@@ -30,7 +30,7 @@ describe('Test `jobs` collection rules', () => {
     .runTests()
 
   deny({
-    name: 'John tests (non common channel)',
+    name: 'John tests (non common job)',
     rules,
     path,
     auth: auth.john,
