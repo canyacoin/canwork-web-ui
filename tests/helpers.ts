@@ -129,10 +129,8 @@ export function testFactory(context: TestFactoryContext) {
 
           case Actions.Create:
             {
-              const { data = {}, id = uid() } = options as Partial<
-                CreateOptions
-              >
-              const ref = db.doc(path).parent.doc(id)
+              const { data = {}, id } = options as Partial<CreateOptions>
+              const ref = id ? db.doc(path).parent.doc(id) : db.doc(path)
               p = ref.set(data)
             }
             break
@@ -145,10 +143,10 @@ export function testFactory(context: TestFactoryContext) {
             break
 
           case Actions.Delete:
-            db.doc(path).delete()
+            p = db.doc(path).delete()
         }
         const m = expect(p)
-        return (isAllow ? m.toAllow : m.toDeny)()
+        return await (isAllow ? m.toAllow : m.toDeny)()
       },
       context.timeout
     )
@@ -225,7 +223,10 @@ export class Allow extends ATable {
     return new Deny(this.context, this.table())
   }
 
-  runTest() {
+  runTest(debug: boolean = false) {
+    if (debug) {
+      console.log('Table', this.table())
+    }
     describeFn(this.context, () => this.table())
   }
 }
@@ -239,7 +240,10 @@ export class Deny extends DTable {
     return new Allow(this.context, this.table())
   }
 
-  runTest() {
+  runTest(debug: boolean = false) {
+    if (debug) {
+      console.log('Table', this.table())
+    }
     describeFn(this.context, () => this.table())
   }
 }
