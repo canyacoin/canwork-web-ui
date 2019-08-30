@@ -215,6 +215,8 @@ export class ChatComponent implements OnInit, OnDestroy {
         this.messages = data
         this.scrollToBottom()
       })
+    } else {
+      this.isLoading = false
     }
   }
 
