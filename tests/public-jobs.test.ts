@@ -114,3 +114,46 @@ describe('Test `invites` subcollection rules', () => {
     .delete()
     .runTests()
 })
+
+describe('Test `bids` subcollection rules', () => {
+  const path = 'public-jobs/1/bids/bob'
+  const data = {
+    'public-jobs/1': {
+      clientId: 'alice',
+      budget: 100,
+      visibility: 'invite',
+    },
+    'public-jobs/1/invites/bob': {
+      providerId: 'bob',
+    },
+  }
+  allow({ name: 'Alice tests', rules, path, auth: auth.alice, data })
+    .read()
+    .deny()
+    .create()
+    .update()
+    .delete()
+    .runTests()
+
+  allow({ name: 'Bob tests', rules, path, auth: auth.bob, data })
+    .read()
+    .create({ data: { budget: 300, providerId: 'bob' } })
+    .update({ data: { budget: 500 } })
+    .deny()
+    .delete()
+    .runTests()
+
+  deny({ name: 'John tests', rules, path, auth: auth.john, data })
+    .read()
+    .create()
+    .update()
+    .delete()
+    .runTests()
+
+  deny({ name: 'Anonym tests', rules, path, auth: auth.anonym, data })
+    .read()
+    .create()
+    .update()
+    .delete()
+    .runTests()
+})

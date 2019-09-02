@@ -121,9 +121,9 @@ service cloud.firestore {
 
       // bids
       match /bids/{bidId} {
-         allow read;
-         allow create: if userIsClientOrProvider();
-         allow update: if isAuthenticated();
+         allow read: if isMyPublicJob(jobId) || isDocumentOwner(bidId) ;
+         allow create: if isInvitedUser(jobId);
+         allow update: if isDocumentOwner(bidId);
          allow delete: if isAdmin();
       }
 
