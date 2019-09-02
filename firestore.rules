@@ -112,7 +112,9 @@ service cloud.firestore {
 
 
     match /public-jobs/{jobId} {
-       allow read;
+       allow read: if isDocumentOwner(resource.data.clientId) 
+         || resource.data.visibility == 'public' 
+         || (resource.data.visibility == 'invite' && isInvitedUser(jobId));
        allow create: if isAuthenticated();
        allow update: if userIsClientOrProvider();
        allow delete: if isAdmin();
@@ -138,39 +140,44 @@ service cloud.firestore {
        allow update: if isDocumentOwner(userId);
        allow delete: if isAdmin();
     }
-  }
 
-  // --------------------------------------------------------------------------------
-  function isAuthenticated() {
-    return request.auth != null
-  }
 
-  function isDocumentOwner(userId) {
-    return request.auth.uid == userId
-    || isAdmin()
-  }
+   // --------------------------------------------------------------------------------
+   function isAuthenticated() {
+      return request.auth != null
+   }
 
-  function userIsSender() {
-    return request.resource.data.senderId == request.auth.uid
-    || isAdmin()
-  }
+   function isDocumentOwner(userId) {
+      return request.auth.uid == userId
+      || isAdmin()
+   }
 
-  function userIsClientOrProvider() {
-    return request.resource.data.clientId == request.auth.uid
-    || request.resource.data.providerId == request.auth.uid
-    || isAdmin()
-  }
+   function userIsSender() {
+      return request.resource.data.senderId == request.auth.uid
+      || isAdmin()
+   }
 
-  function getUserData() {
-    return get(/databases/$(database)/documents/users/$(request.auth.uid)).data
-  }
+   function userIsClientOrProvider() {
+      return request.resource.data.clientId == request.auth.uid
+      || request.resource.data.providerId == request.auth.uid
+      || isAdmin()
+   }
 
-  function isAdmin() {
-    return getUserData().isAdmin
-  }
+   function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data
+   }
 
-  function isCommonChannel(channelId) {
-     return request.auth.uid in channelId.split('-')
+   function isAdmin() {
+      return getUserData().isAdmin
+   }
+
+   function isCommonChannel(channelId) {
+      return request.auth.uid in channelId.split('-')
+   }
+
+   function isInvitedUser(jobId) {
+      return exists(/databases/$(database)/documents/public-jobs/$(jobId)/invites/$(request.auth.uid))
+   }
+   // --------------------------------------------------------------------------------
   }
- // --------------------------------------------------------------------------------
 }
