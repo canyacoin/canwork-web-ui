@@ -116,23 +116,26 @@ service cloud.firestore {
          || resource.data.visibility == 'public' 
          || (resource.data.visibility == 'invite' && isInvitedUser(jobId));
        allow create: if isAuthenticated();
-       allow update: if userIsClientOrProvider();
+       allow update: if isDocumentOwner(resource.data.clientId);
        allow delete: if isAdmin();
+
+      // bids
+      match /bids/{bidId} {
+         allow read;
+         allow create: if userIsClientOrProvider();
+         allow update: if isAuthenticated();
+         allow delete: if isAdmin();
+      }
+
+      // invites
+      match /invites/{inviteId} {
+         allow read: if isMyPublicJob(jobId) || request.auth.uid == inviteId;
+         allow create: if isMyPublicJob(jobId);
+         allow update: if isMyPublicJob(jobId);
+         allow delete: if isAdmin();
+      }
     }
 
-    match /public-jobs/{jobId}/bids/{bidId} {
-       allow read;
-       allow create: if userIsClientOrProvider();
-       allow update: if isAuthenticated();
-       allow delete: if isAdmin();
-    }
-
-    match /public-jobs/{jobId}/invites/{inviteId} {
-       allow read;
-       allow create: if isAuthenticated();
-       allow update: if isAuthenticated();
-       allow delete: if isAdmin();
-    }
 
     match /shoppers/{userId} {
        allow read;
@@ -177,6 +180,13 @@ service cloud.firestore {
 
    function isInvitedUser(jobId) {
       return exists(/databases/$(database)/documents/public-jobs/$(jobId)/invites/$(request.auth.uid))
+   }
+
+   function getPublicJob(jobId) {
+      return get(/databases/$(database)/documents/public-jobs/$(jobId)).data
+   }
+   function isMyPublicJob(jobId) {
+      return getPublicJob(jobId).clientId == request.auth.uid
    }
    // --------------------------------------------------------------------------------
   }
