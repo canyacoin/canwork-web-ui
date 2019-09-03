@@ -105,7 +105,7 @@ service cloud.firestore {
 
     match /jobs/{jobId} {
        allow read: if isDocumentOwner(resource.data.clientId) || isDocumentOwner(resource.data.providerId);
-       allow create: if !resource.data.size() && request.auth.uid == request.resource.data.clientId;
+       allow create: if request.auth.uid == request.resource.data.clientId;
        allow update: if userIsClientOrProvider();
        allow delete: if isAdmin();
     }
