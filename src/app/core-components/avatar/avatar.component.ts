@@ -1,4 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core'
+import {
+  Component,
+  OnInit,
+  OnChanges,
+  Input,
+  SimpleChanges,
+} from '@angular/core'
 import { Observable, from } from 'rxjs'
 
 @Component({
@@ -6,7 +12,7 @@ import { Observable, from } from 'rxjs'
   templateUrl: './avatar.component.html',
   styleUrls: ['./avatar.component.css'],
 })
-export class AvatarComponent implements OnInit {
+export class AvatarComponent implements OnInit, OnChanges {
   @Input() user: any
   @Input() customClass: string
 
@@ -15,6 +21,23 @@ export class AvatarComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
+    this.initAvatarUrl()
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    try {
+      if (
+        changes.user.currentValue.avatar.uri !==
+        changes.user.previousValue.avatar.uri
+      ) {
+        this.initAvatarUrl()
+      }
+    } catch (e) {
+      // NOOP
+    }
+  }
+
+  initAvatarUrl() {
     const url = this.user && this.user.avatar && this.user.avatar.uri
     this.avatarUrl = from(
       new Promise<string>((resolve, reject) => {

@@ -71,7 +71,13 @@ export class EditComponent implements OnInit, OnDestroy {
 
   onProfileImageUpload(url) {
     console.log('uploaded url', url)
-    this.currentUser.avatar.uri = url
+    this.currentUser = {
+      ...this.currentUser,
+      avatar: {
+        ...this.currentUser.avatar,
+        uri: url,
+      },
+    }
     this.displayDropzone = false
   }
 
@@ -100,7 +106,6 @@ export class EditComponent implements OnInit, OnDestroy {
       ethAddress: [
         this.currentUser.ethAddress || this.ethAddress,
         Validators.compose([
-          Validators.required,
           new EthereumValidator(this.ethService).isValidAddress,
         ]),
         new EthereumValidator(this.ethService).isUniqueAddress(
