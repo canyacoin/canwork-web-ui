@@ -10,7 +10,7 @@ import {
   AngularFirestoreCollection,
 } from 'angularfire2/firestore'
 import { AngularFireFunctions } from '@angular/fire/functions'
-import { Observable } from 'rxjs'
+import { Observable, merge } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { ChatService } from '@service/chat.service'
 import slugify from 'slugify'
@@ -103,18 +103,26 @@ export class PublicJobService {
   }
 
   getPublicJobsByUrl(url: string): Observable<Job> {
-    return this.afs
-      .collection<any>('public-jobs', ref => ref.where('slug', '==', url))
-      .snapshotChanges()
-      .pipe(
-        map(changes => {
-          if (changes.length > 0) {
-            return changes[0].payload.doc.data()
-          } else {
-            return null
-          }
-        })
+    const publicJobs = this.afs
+      .collection<any>('public-jobs', ref =>
+        ref.where('slug', '==', url).where('visibility', '==', 'public')
       )
+      .snapshotChanges()
+    const inviteJobs = this.afs
+      .collection<any>('public-jobs', ref =>
+        ref.where('slug', '==', url).where('visibility', '==', 'invite')
+      )
+      .snapshotChanges()
+
+    return merge(publicJobs, inviteJobs).pipe(
+      map(changes => {
+        if (changes.length > 0) {
+          return changes[0].payload.doc.data()
+        } else {
+          return null
+        }
+      })
+    )
   }
 
   async getPublicJobByUrl(friendly) {

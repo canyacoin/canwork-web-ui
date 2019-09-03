@@ -110,11 +110,11 @@ service cloud.firestore {
        allow delete: if isAdmin();
     }
 
-
     match /public-jobs/{jobId} {
-       allow read: if isDocumentOwner(resource.data.clientId) 
-         || resource.data.visibility == 'public' 
-         || (resource.data.visibility == 'invite' && isInvitedUser(jobId));
+       allow read: if resource.data.visibility == 'public'
+         || isDocumentOwner(resource.data.clientId)
+         || (resource.data.visibility == 'invite' && isInvitedUser(resource.id));
+
        allow create: if isAuthenticated();
        allow update: if isDocumentOwner(resource.data.clientId);
        allow delete: if isAdmin();

@@ -1,6 +1,39 @@
 import { allow, deny } from './helpers'
 import { auth, rules } from './setup'
 
+describe('Test `public-jobs` collection rules (list)', () => {
+  const path = 'public-jobs'
+  const data = {
+    'public-jobs/1': {
+      clientId: 'alice',
+      budget: 100,
+      visibility: 'public',
+    },
+    'public-jobs/2': {
+      clientId: 'alice',
+      budget: 100,
+      visibility: 'invite',
+    },
+    'public-jobs/2/invites/bob': {
+      providerId: 'bob',
+    },
+  }
+
+  allow({ name: 'Alice tests', rules, path, auth: auth.alice, data })
+    .read({ where: [['visibility', '==', 'public']] })
+    .read({ where: [['visibility', '==', 'invite']] })
+    .runTests()
+
+  allow({ name: 'Bob tests (invited user)', rules, path, auth: auth.bob, data })
+    .read({ where: [['visibility', '==', 'public']] })
+    .read({ where: [['visibility', '==', 'invite']] })
+    .runTests()
+
+  deny({ name: 'Anonym tests', rules, path, auth: auth.anonym, data })
+    .read()
+    .runTests()
+})
+
 describe('Test `public-jobs` collection rules (visibility public)', () => {
   const path = 'public-jobs/1'
   const data = {
