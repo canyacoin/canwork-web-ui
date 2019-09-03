@@ -9,6 +9,7 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
 } from 'angularfire2/firestore'
+import { AngularFireFunctions } from '@angular/fire/functions'
 import { Observable } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { ChatService } from '@service/chat.service'
@@ -22,7 +23,8 @@ export class PublicJobService {
     private chatService: ChatService,
     private userService: UserService,
     private auth: AuthService,
-    private jobService: JobService
+    private jobService: JobService,
+    private fns: AngularFireFunctions
   ) {
     this.publicJobsCollection = this.afs.collection<any>('public-jobs')
   }
@@ -276,13 +278,8 @@ export class PublicJobService {
     return exist
   }
 
-  async jobUrlExists(friendlyQuery) {
-    const exist = await this.afs
-      .collection('public-jobs', ref => ref.where('slug', '>=', friendlyQuery))
-      .valueChanges()
-      .take(1)
-      .toPromise()
-    return exist
+  async jobUrlExists(slug: string) {
+    return await this.fns.httpsCallable('publicJobExists')({ slug })
   }
 
   cancelJob(jobId: string) {
