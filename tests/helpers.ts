@@ -124,7 +124,17 @@ export function testFactory(context: TestFactoryContext) {
         let p
         switch (action) {
           case Actions.Read:
-            p = (isCollection(path) ? db.collection(path) : db.doc(path)).get()
+            if (isCollection(path)) {
+              const ref = db.collection(path)
+              const where = (options as ReadOptions).where
+              if (where) {
+                p = where.reduce((ref, item) => ref.where(...item), ref).get()
+              } else {
+                p = ref.get()
+              }
+            } else {
+              p = db.doc(path).get()
+            }
             break
 
           case Actions.Create:

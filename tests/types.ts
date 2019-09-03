@@ -1,9 +1,18 @@
+import * as firebase from '@firebase/testing'
+
 export type Auth = {
   uid: string
 } | null
 
+export type WhereItem = [
+  string | firebase.firestore.FieldPath,
+  firebase.firestore.WhereFilterOp,
+  any
+]
+
 export interface ReadOptions {
   suffix: string
+  where: WhereItem[]
 }
 
 export interface CreateOptions {
