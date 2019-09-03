@@ -9,7 +9,10 @@ describe('Test `jobs` collection rules', () => {
 
   allow({ name: 'Alice tests', rules, path, auth: auth.alice, data })
     .read()
-    .create({ data: { clientId: 'alice', providerId: 'bob', budget: 50 } })
+    .create({
+      data: { clientId: 'alice', providerId: 'bob', budget: 50 },
+      id: '2',
+    })
     .update({ data: { budget: 30 } })
     .deny()
     .delete()
