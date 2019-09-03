@@ -9,10 +9,12 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
 } from 'angularfire2/firestore'
+import { AngularFireFunctions } from '@angular/fire/functions'
 import { Observable } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 import { ChatService } from '@service/chat.service'
 import slugify from 'slugify'
+import { Random } from 'random-js'
 
 @Injectable()
 export class PublicJobService {
@@ -22,7 +24,8 @@ export class PublicJobService {
     private chatService: ChatService,
     private userService: UserService,
     private auth: AuthService,
-    private jobService: JobService
+    private jobService: JobService,
+    private fns: AngularFireFunctions
   ) {
     this.publicJobsCollection = this.afs.collection<any>('public-jobs')
   }
@@ -276,13 +279,10 @@ export class PublicJobService {
     return exist
   }
 
-  async jobUrlExists(friendlyQuery) {
-    const exist = await this.afs
-      .collection('public-jobs', ref => ref.where('slug', '>=', friendlyQuery))
-      .valueChanges()
-      .take(1)
+  async jobUrlExists(slug: string): Promise<boolean> {
+    return await this.fns
+      .httpsCallable<{ slug: string }, boolean>('publicJobExists')({ slug })
       .toPromise()
-    return exist
   }
 
   cancelJob(jobId: string) {
@@ -347,18 +347,19 @@ export class PublicJobService {
   }
 
   async generateReadableId(jobName) {
-    let friendly = slugify(jobName, { lower: true })
-    console.log(jobName + ' = filtered to = ' + friendly)
-    const exists = await this.jobUrlExists(friendly)
+    let slug = slugify(jobName, { lower: true })
+    console.log(jobName + ' = filtered to = ' + slug)
+    const exists = await this.jobUrlExists(slug)
     console.log(exists)
-    if (exists.length < 1) {
+    if (!exists) {
       console.log('just upload it')
     } else {
       console.log('wait might want to change the url mate')
-      friendly = friendly + '-' + exists.length
-      console.log('new url : ' + friendly)
+      const random = new Random()
+      slug = slugify(jobName + ' ' + random.string(7), { lower: true })
+      console.log('new url : ' + slug)
     }
-    return friendly
+    return slug
   }
 
   parseBidToObject(bid: Bid): Object {
