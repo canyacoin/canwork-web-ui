@@ -1,91 +1,117 @@
-import { teardown, allow, deny } from './helpers'
+import { allow, deny } from './helpers'
 import { auth, rules } from './setup'
 
 describe('Test `channels` subcollection rules', () => {
-  afterAll(async () => {
-    await teardown()
-  })
-
   const path = 'chats/alice/channels'
   const data = {}
 
-  allow(rules, path, auth.alice, data).read()
+  allow({ name: 'Alice tests', rules, path, auth: auth.alice, data })
+    .read()
+    .runTests()
 
-  deny(rules, path, auth.bob, data).read()
+  deny({ name: 'Bob tests', rules, path, auth: auth.bob, data })
+    .read()
+    .runTests()
 
-  deny(rules, path, auth.anonym, data).read()
+  deny({ name: 'Anonym tests', rules, path, auth: auth.anonym, data })
+    .read()
+    .runTests()
 })
 
 describe('Test `channels` subcollection rules', () => {
-  afterAll(async () => {
-    await teardown()
-  })
-
   const path = 'chats/alice/channels/alice-bob'
   const data = {
     [path]: { address: 'alice', title: 'Alice channel' },
   }
 
-  allow(rules, path, auth.alice, data)
+  allow({ name: 'Alice tests', rules, path, auth: auth.alice, data })
     .read()
-    .create({ address: 'alice', title: 'Alice channel' })
-    .update({ address: 'alice', title: 'Alice channel changed' })
+    .create({ data: { address: 'alice', title: 'Alice channel' } })
+    .update({ data: { address: 'alice', title: 'Alice channel changed' } })
     .deny()
     .delete()
+    .runTests()
 
-  allow(rules, path, auth.bob, data, 'common channel')
+  allow({
+    name: 'Bob tests (common channel)',
+    rules,
+    path,
+    auth: auth.bob,
+    data,
+  })
     .read()
     .create()
     .update()
     .deny()
     .delete()
+    .runTests()
 
-  deny(rules, path, auth.john, data, 'non common channel')
+  deny({
+    name: 'John tests (non common channel)',
+    rules,
+    path,
+    auth: auth.john,
+    data,
+  })
     .read()
     .create()
     .update()
     .delete()
+    .runTests()
 
-  deny(rules, path, auth.anonym, data)
+  deny({ name: 'Anonym tests', rules, path, auth: auth.anonym, data })
     .read()
     .create()
     .update()
     .delete()
+    .runTests()
 })
 
 describe('Test `messages` subcollection rules', () => {
-  afterAll(async () => {
-    await teardown()
-  })
-
   const path = 'chats/alice/channels/alice-bob/messages/1'
   const data = {
     [path]: { message: 'Hello Bob!' },
   }
 
-  allow(rules, path, auth.alice, data)
+  allow({ name: 'Alice tests', rules, path, auth: auth.alice, data })
     .read()
-    .create({ message: 'How are you?' })
-    .update({ message: 'Are you there?' })
+    .create({ data: { message: 'How are you?' } })
+    .update({ data: { message: 'Are you there?' } })
     .deny()
     .delete()
+    .runTests()
 
-  allow(rules, path, auth.bob, data, 'common channel')
+  allow({
+    name: 'Bob tests (common channel)',
+    rules,
+    path,
+    auth: auth.bob,
+    data,
+  })
     .read()
-    .create({ message: 'Hi Alice!' })
-    .update({ message: 'Have a nice day!' })
+    .create({ data: { message: 'Hi Alice!' } })
+    .update({ data: { message: 'Have a nice day!' } })
     .deny()
     .delete()
+    .runTests()
 
-  deny(rules, path, auth.john, data, 'non common channel')
+  deny({
+    name: 'John tests (non common channel)',
+    rules,
+    path,
+    auth: auth.john,
+    data,
+  })
     .read()
     .create()
     .update()
     .delete()
+    .runTests()
 
-  deny(rules, path, auth.anonym, data)
+  deny({ name: 'Anonym tests', rules, path, auth: auth.anonym, data })
     .read()
     .create()
     .update()
     .delete()
+    .runTests()
 })

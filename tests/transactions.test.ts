@@ -1,34 +1,39 @@
-import { teardown, allow, deny } from './helpers'
+import { allow, deny } from './helpers'
 import { auth, rules } from './setup'
 
 describe('Test `transactions` collection rules', () => {
-  afterAll(async () => {
-    await teardown()
-  })
-
   const path = 'transactions/1'
   const data = {
     [path]: { id: 'xxx-xx-xxxx', senderId: 'alice', jobId: 'job1' },
   }
 
-  allow(rules, path, auth.alice, data)
+  allow({ name: 'Alice tests', rules, path, auth: auth.alice, data })
     .read()
-    .create({ id: 'xxx-xx-xxxx', senderId: 'alice', jobId: 'job1' })
-    .update({ success: true })
+    .create({ data: { id: 'xxx-xx-xxxx', senderId: 'alice', jobId: 'job1' } })
+    .update({ data: { success: true } })
     .deny()
     .delete()
+    .runTests()
 
-  deny(rules, path, auth.bob, data, 'non own transaction')
-    .create({}, 'already exists transaction')
+  deny({
+    name: 'Bob tests (non own transaction)',
+    rules,
+    path,
+    auth: auth.bob,
+    data,
+  })
+    .create({ data: {}, suffix: 'already exists transaction' })
     .update()
     .delete()
     .allow()
     .read()
+    .runTests()
 
-  deny(rules, path, auth.anonym, data)
+  deny({ name: 'Anonym tests', rules, path, auth: auth.anonym, data })
     .create()
     .update()
     .delete()
     .allow()
     .read()
+    .runTests()
 })

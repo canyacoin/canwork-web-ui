@@ -1,10 +1,7 @@
-import { teardown, allow, deny } from './helpers'
+import { allow, deny } from './helpers'
 import { auth, rules } from './setup'
 
 describe('Test `portfolio` collection rules', () => {
-  afterAll(async () => {
-    await teardown()
-  })
   const path = 'portfolio/alice/work/1'
   const data = {
     [path]: {
@@ -13,41 +10,62 @@ describe('Test `portfolio` collection rules', () => {
     },
   }
 
-  allow(rules, path, auth.alice, data)
+  allow({ name: 'Alice tests', rules, path, auth: auth.alice, data })
     .read()
     .create({
-      description: 'text description',
-      title: 'Alice title',
+      data: {
+        description: 'text description',
+        title: 'Alice title',
+      },
     })
     .update({
-      description: 'text description',
-      title: 'Alice title',
+      data: {
+        description: 'text description',
+        title: 'Alice title',
+      },
     })
     .delete()
+    .runTests()
 
-  deny(rules, path, auth.bob, data, 'non own portfolio')
+  deny({
+    name: 'Bob tests (non own portfolio)',
+    rules,
+    path,
+    auth: auth.bob,
+    data,
+  })
     .create({
-      description: 'text description',
-      title: 'Alice title',
+      data: {
+        description: 'text description',
+        title: 'Alice title',
+      },
     })
     .update({
-      description: 'text description',
-      title: 'Alice title',
+      data: {
+        description: 'text description',
+        title: 'Alice title',
+      },
     })
     .delete()
     .allow()
     .read()
+    .runTests()
 
-  deny(rules, path, auth.anonym, data)
+  deny({ name: 'Anonym tests', rules, path, auth: auth.anonym, data })
     .create({
-      description: 'text description',
-      title: 'Alice title',
+      data: {
+        description: 'text description',
+        title: 'Alice title',
+      },
     })
     .update({
-      description: 'text description',
-      title: 'Alice title',
+      data: {
+        description: 'text description',
+        title: 'Alice title',
+      },
     })
     .delete()
     .allow()
     .read()
+    .runTests()
 })
