@@ -31,6 +31,7 @@ import {
 
 import { timestampConverter } from './timestamp-converter'
 import { exportUsers } from './export-users'
+import { publicJobExists } from './public-jobs'
 
 const faker = require('faker')
 const fs = require('fs')
@@ -1487,3 +1488,7 @@ exports.timestampConverter = functions.https.onRequest(timestampConverter(db))
 
 // export users
 exports.exportUsers = functions.https.onRequest(exportUsers(db, sendgridApiKey))
+
+// functions
+
+exports.publicJobExists = functions.https.onCall(publicJobExists(db))
