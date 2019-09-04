@@ -10,8 +10,8 @@ import {
   AngularFirestoreCollection,
 } from 'angularfire2/firestore'
 import { AngularFireFunctions } from '@angular/fire/functions'
-import { Observable, merge } from 'rxjs'
-import { map, take } from 'rxjs/operators'
+import { Observable, of } from 'rxjs'
+import { map, take, switchMap } from 'rxjs/operators'
 import { ChatService } from '@service/chat.service'
 import slugify from 'slugify'
 import { Random } from 'random-js'
@@ -102,27 +102,16 @@ export class PublicJobService {
       )
   }
 
-  getPublicJobsByUrl(url: string): Observable<Job> {
-    const publicJobs = this.afs
-      .collection<any>('public-jobs', ref =>
-        ref.where('slug', '==', url).where('visibility', '==', 'public')
+  getPublicJobBySlug(slug: string): Observable<Job> {
+    return this.fns
+      .httpsCallable<{ slug: string }, string>('getPublicJobIdBySlug')({ slug })
+      .pipe(
+        switchMap(jobId => {
+          return jobId
+            ? this.afs.doc<Job>(`public-jobs/${jobId}`).valueChanges()
+            : of<null>(null)
+        })
       )
-      .snapshotChanges()
-    const inviteJobs = this.afs
-      .collection<any>('public-jobs', ref =>
-        ref.where('slug', '==', url).where('visibility', '==', 'invite')
-      )
-      .snapshotChanges()
-
-    return merge(publicJobs, inviteJobs).pipe(
-      map(changes => {
-        if (changes.length > 0) {
-          return changes[0].payload.doc.data()
-        } else {
-          return null
-        }
-      })
-    )
   }
 
   async getPublicJobByUrl(friendly) {
