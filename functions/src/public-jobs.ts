@@ -1,7 +1,7 @@
 import { firestore } from 'firebase-admin'
 import * as functions from 'firebase-functions'
 
-export function publicJobExists(db: firestore.Firestore) {
+export function getPublicJobIdBySlug(db: firestore.Firestore) {
   return async ({ slug = '' }: { slug: string }) => {
     if (!slug) {
       if (!(typeof slug === 'string') || slug.length === 0) {
@@ -13,9 +13,14 @@ export function publicJobExists(db: firestore.Firestore) {
     }
     const jobs = await db
       .collection('public-jobs')
-      .where('slug', '>=', slug)
+      .where('slug', '==', slug)
       .limit(1)
       .get()
-    return !jobs.empty
+    return jobs.empty ? null : jobs.docs[0].id
   }
+}
+
+export function publicJobExists(db: firestore.Firestore) {
+  return async (data: { slug: string }) =>
+    (await getPublicJobIdBySlug(db)(data)) !== null
 }
