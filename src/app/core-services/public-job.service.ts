@@ -80,26 +80,15 @@ export class PublicJobService {
       )
   }
 
-  getAllOpenJobs(): Observable<any> {
+  getAllOpenJobs(): Observable<Job[]> {
     return this.afs
-      .collection(`public-jobs`)
-      .snapshotChanges()
-      .pipe(
-        map(docs => {
-          const jobs = []
-          docs.forEach(doc => {
-            const currentJob = doc.payload.doc.data() as Job
-            if (
-              currentJob.state === JobState.acceptingOffers &&
-              currentJob.visibility === 'public' &&
-              new Date(currentJob.deadline) > new Date()
-            ) {
-              jobs.push(currentJob)
-            }
-          })
-          return jobs
-        })
+      .collection<Job>(`public-jobs`, ref =>
+        ref
+          .where('visibility', '==', 'public')
+          .where('state', '==', JobState.acceptingOffers)
+          .where('deadline', '>', new Date().toISOString().slice(0, 10))
       )
+      .valueChanges()
   }
 
   getPublicJobBySlug(slug: string): Observable<Job> {
