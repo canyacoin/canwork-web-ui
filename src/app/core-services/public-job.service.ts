@@ -11,7 +11,7 @@ import {
 } from 'angularfire2/firestore'
 import { AngularFireFunctions } from '@angular/fire/functions'
 import { Observable, of } from 'rxjs'
-import { map, take, switchMap } from 'rxjs/operators'
+import { map, take, switchMap, catchError } from 'rxjs/operators'
 import { ChatService } from '@service/chat.service'
 import slugify from 'slugify'
 import { Random } from 'random-js'
@@ -34,17 +34,12 @@ export class PublicJobService {
 
   getPublicJob(jobId: string): Observable<Job> {
     return this.afs
-      .doc(`public-jobs/${jobId}`)
-      .snapshotChanges()
+      .doc<Job>(`public-jobs/${jobId}`)
+      .valueChanges()
       .pipe(
-        map(doc => {
-          const job = doc.payload.data() as Job
-          if (job) {
-            console.log('job found.')
-          } else {
-            console.log('job not found.')
-          }
-          return job
+        catchError(err => {
+          console.log('Error', err)
+          throw err
         })
       )
   }
@@ -401,46 +396,33 @@ export class PublicJobService {
   }
 
   async inviteProvider(job: Job, client: User, provider: User) {
+    const ref = this.afs.firestore.doc(`public-jobs/${job.id}`)
     try {
-      const invited = await this.inviteProviderToJob(job.id, provider.address)
+      const invited = await this.afs.firestore.runTransaction(async tx => {
+        const snap = await tx.get(ref)
+        const invites = (snap.get('invites') as string[]) || []
+        const userId = provider.address
+        if (!invites.includes(userId)) {
+          invites.push(userId)
+          await tx.update(ref, invites)
+        }
+        return true
+      })
+
       if (invited) {
         const invite = new IJobAction(ActionType.invite, UserType.client)
         await this.sendPublicJobMessage(job, invite, client, provider)
         return true
       }
-    } catch (error) {
-      console.log(error)
+    } catch (err) {
+      console.log(err)
       return false
     }
   }
 
-  async inviteProviderToJob(jobId, providerId) {
-    const invite = {
-      provider: providerId,
-      timestamp: Date.now(),
-    }
-    return new Promise<boolean>((resolve, reject) => {
-      this.afs
-        .doc(`public-jobs/${jobId}/invites/${providerId}`)
-        .set(invite)
-        .then(result => {
-          console.log(result)
-          resolve(true)
-        })
-        .catch(e => {
-          reject(false)
-        })
-    })
-  }
-
-  async canInvite(jobId, providerId) {
-    const exist = await this.afs
-      .collection(`public-jobs/${jobId}/invites/`, ref =>
-        ref.where('provider', '==', providerId)
-      )
-      .valueChanges()
-      .take(1)
-      .toPromise()
-    return !(exist.length > 0)
+  async canInvite(jobId: string, providerId: string) {
+    const snap = await this.afs.firestore.doc(`public-jobs/${jobId}`).get()
+    const invites = (snap.get('invites') as string[]) || []
+    return !invites.includes(providerId)
   }
 }

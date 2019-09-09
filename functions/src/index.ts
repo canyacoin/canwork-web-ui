@@ -31,7 +31,11 @@ import {
 
 import { timestampConverter } from './timestamp-converter'
 import { exportUsers } from './export-users'
-import { publicJobExists, getPublicJobIdBySlug } from './public-jobs'
+import {
+  publicJobExists,
+  getPublicJobIdBySlug,
+  moveInvitesToJob,
+} from './public-jobs'
 
 const faker = require('faker')
 const fs = require('fs')
@@ -1535,3 +1539,5 @@ exports.exportUsers = functions.https.onRequest(exportUsers(db, sendgridApiKey))
 // functions for `public-jobs` collection
 exports.publicJobExists = functions.https.onCall(publicJobExists(db))
 exports.getPublicJobIdBySlug = functions.https.onCall(getPublicJobIdBySlug(db))
+
+exports.moveInvitesToJob = functions.https.onRequest(moveInvitesToJob(db))
