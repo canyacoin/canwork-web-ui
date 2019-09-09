@@ -147,6 +147,7 @@ export class ChatComponent implements OnInit, OnDestroy {
               channel.avatar = counterpart.avatar
               channel.name = counterpart.name
               channel.title = counterpart.title
+              channel.verified = counterpart.verified
             } catch (e) {
               console.error(e)
             }
