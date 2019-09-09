@@ -145,6 +145,8 @@ export class ChatComponent implements OnInit, OnDestroy {
               const channel = data[idx]
               const counterpart = await this.userService.getUser(channel.address)
               channel.avatar = counterpart.avatar
+              channel.name = counterpart.name
+              channel.title = counterpart.title
             } catch (e) {
               console.error(e)
             }
