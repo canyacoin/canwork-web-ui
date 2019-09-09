@@ -132,13 +132,24 @@ export class ChatComponent implements OnInit, OnDestroy {
         .doc(this.currentUser.address)
         .collection('channels')
         .valueChanges()
-        .subscribe((data: Channel[]) => {
+        .subscribe(async (data: Channel[]) => {
           if (this.queryAddress !== '') {
             const idx = findIndex(data, { address: this.queryAddress })
             if (idx !== '-1') {
               this.setSelectedChannel(data[idx])
             }
           }
+
+          for (const idx in data) {
+            try {
+              const channel = data[idx]
+              const counterpart = await this.userService.getUser(channel.address)
+              channel.avatar = counterpart.avatar
+            } catch (e) {
+              console.error(e)
+            }
+          }
+
           this.channels = data
             .filter((doc: Channel) => {
               return doc.message || this.selectedChannel === doc
