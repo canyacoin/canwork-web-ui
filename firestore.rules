@@ -97,12 +97,6 @@ service cloud.firestore {
        allow delete: if isAdmin();
     }
 
-
-    // TODO: Will require a much more complex rule set here
-   //  match /jobs {
-   //     allow read:if request.auth != null;
-   //  }
-
     match /jobs/{jobId} {
        allow read: if isDocumentOwner(resource.data.clientId) || isDocumentOwner(resource.data.providerId);
        allow create: if request.auth.uid == request.resource.data.clientId;
@@ -121,8 +115,8 @@ service cloud.firestore {
 
       // bids
       match /bids/{bidId} {
-         allow read: if isMyPublicJob(jobId) || isDocumentOwner(bidId) ;
-         allow create: if isJobBidable(getPublicJob(jobId));
+         allow read;
+         allow create: if canCreateBid(getPublicJob(jobId));
          allow update: if isDocumentOwner(bidId);
          allow delete: if isAdmin();
       }
@@ -177,11 +171,8 @@ service cloud.firestore {
    function getPublicJob(jobId) {
       return get(/databases/$(database)/documents/public-jobs/$(jobId)).data
    }
-   function isMyPublicJob(jobId) {
-      return getPublicJob(jobId).clientId == request.auth.uid
-   }
-
-   function isJobBidable(job) {
+   
+   function canCreateBid(job) {
       return job.visibility == 'public' || (job.visibility == 'invite' && isInvitedUser(job))
    }
    // --------------------------------------------------------------------------------
