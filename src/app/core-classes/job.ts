@@ -25,6 +25,7 @@ export class Job {
   createAt: number
   updateAt: number
   fiatPayment: boolean
+  invites: string[] = []
   constructor(init?: Partial<Job>) {
     Object.assign(this, init)
   }
