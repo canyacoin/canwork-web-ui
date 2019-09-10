@@ -17,6 +17,7 @@ export class Channel {
   message: string
   unreadMessages: boolean
   timestamp: number
+  verified: boolean
 
   constructor(init?: Partial<Channel>) {
     Object.assign(this, init)
