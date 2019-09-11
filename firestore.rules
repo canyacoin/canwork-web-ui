@@ -1,180 +1,198 @@
+// firestore
 service cloud.firestore {
-  match /databases/{database}/documents {
 
-    match /users/{userId} {
-       allow read;
-       allow create: if isAuthenticated();
-       allow update: if isDocumentOwner(userId) && !('isAdmin' in request.resource.data)
-       allow delete: if isAdmin();
-    }
+   // databases
+   match /databases/{database}/documents {
 
-    match /reviews/{reviewId} {
-       allow read;
-       allow create: if isDocumentOwner(request.resource.data.reviewerId);
-       allow update: if isDocumentOwner(resource.data.reviewerId);
-       allow delete: if isAdmin();
-    }
-
-    match /portfolio/{userId}/work/{w} {
-       allow read;
-       allow create: if isDocumentOwner(userId);
-       allow update: if isDocumentOwner(userId);
-       allow delete: if isDocumentOwner(userId);
-    }
-
-    match /users/{userId}/certifications/{certificationId} {
-       allow read;
-       allow create: if isAuthenticated();
-       allow update: if isDocumentOwner(userId);
-       allow delete: if isDocumentOwner(userId);
-    }
-
-    match /transactions/{transactionId} {
-       allow read;
-       allow create: if isAuthenticated();
-       allow update: if userIsSender();
-       allow delete: if isAdmin();
-    }
-
-    match /who/{userId}/user/{who} {
-       allow read;
-       allow create: if isAuthenticated() && request.auth.uid == request.resource.data.address;
-       allow update: if isDocumentOwner(who) && request.auth.uid == request.resource.data.address;
-       allow delete: if isAdmin();
-    }
-
-    match /viewed-users/{userId}/viewed/{document=**} {
-       allow read;
-       allow create: if isDocumentOwner(userId);
-       allow update: if isDocumentOwner(userId);
-       allow delete: if isAdmin();
-    }
-
-    match /notifications/{userId} {
-       allow read;
-       allow create: if isAuthenticated();
-       allow update: if isAuthenticated();
-       allow delete: if isAuthenticated();
-    }
-
-
-    match /skill-tags/{skill} {
-       allow read;
-    }
-
-    match /chats/{userId} {
-       allow read: if isDocumentOwner(userId)
-
-       // channels
-       match /channels/{channelId} {
-         allow read: if isCommonChannel(channelId) || isDocumentOwner(userId);
-         allow create: if isCommonChannel(channelId);
-         allow update: if isCommonChannel(channelId);
+      // users
+      match /users/{userId} {
+         allow read: if isDocumentOwner(userId);
+         allow create: if isAuthenticated();
+         allow update: if isDocumentOwner(userId) && !('isAdmin' in request.resource.data)
          allow delete: if isAdmin();
+    
+         // certifications
+         match /certifications/{certificationId} {
+            allow read;
+            allow create: if isAuthenticated();
+            allow update: if isDocumentOwner(userId);
+            allow delete: if isDocumentOwner(userId);
+         }
+      }
 
-         // messages
-         match /messages/{messageId} {
-            allow read: if isCommonChannel(channelId);
+      // reviews
+      match /reviews/{reviewId} {
+         allow read;
+         allow create: if isDocumentOwner(request.resource.data.reviewerId);
+         allow update: if isDocumentOwner(resource.data.reviewerId);
+         allow delete: if isAdmin();
+      }
+
+      // portfolio work
+      match /portfolio/{userId}/work/{w} {
+         allow read;
+         allow create: if isDocumentOwner(userId);
+         allow update: if isDocumentOwner(userId);
+         allow delete: if isDocumentOwner(userId);
+      }
+
+      // transactions
+      match /transactions/{transactionId} {
+         allow read;
+         allow create: if isAuthenticated();
+         allow update: if userIsSender();
+         allow delete: if isAdmin();
+      }
+
+      // who
+      match /who/{userId}/user/{who} {
+         allow read;
+         allow create: if isAuthenticated() && request.auth.uid == request.resource.data.address;
+         allow update: if isDocumentOwner(who) && request.auth.uid == request.resource.data.address;
+         allow delete: if isAdmin();
+      }
+
+      // viewed-users
+      match /viewed-users/{userId}/viewed/{document=**} {
+         allow read;
+         allow create: if isDocumentOwner(userId);
+         allow update: if isDocumentOwner(userId);
+         allow delete: if isAdmin();
+      }
+
+      // notifications
+      match /notifications/{userId} {
+         allow read;
+         allow create: if isAuthenticated();
+         allow update: if isAuthenticated();
+         allow delete: if isAuthenticated();
+      }
+
+      // skill-tags
+      match /skill-tags/{skill} {
+         allow read;
+      }
+
+      // chats
+      match /chats/{userId} {
+         allow read: if isDocumentOwner(userId)
+
+         // channels
+         match /channels/{channelId} {
+            allow read: if isCommonChannel(channelId) || isDocumentOwner(userId);
             allow create: if isCommonChannel(channelId);
             allow update: if isCommonChannel(channelId);
             allow delete: if isAdmin();
+
+            // messages
+            match /messages/{messageId} {
+               allow read: if isCommonChannel(channelId);
+               allow create: if isCommonChannel(channelId);
+               allow update: if isCommonChannel(channelId);
+               allow delete: if isAdmin();
+            }
          }
-       }
-    }
+      }
 
-    match /features/{document=**} {
-       allow read;
-    }
-
-    match /dock-auth/{docId} {
-      allow read;
-    }
-    
-    match /limepay-payments/{jobId} {
-       allow read;
-       allow create: if isAuthenticated();
-       allow update: if userIsClientOrProvider();
-       allow delete: if isAdmin();
-    }
-
-    match /jobs/{jobId} {
-       allow read: if isDocumentOwner(resource.data.clientId) || isDocumentOwner(resource.data.providerId);
-       allow create: if request.auth.uid == request.resource.data.clientId;
-       allow update: if userIsClientOrProvider();
-       allow delete: if isAdmin();
-    }
-
-    match /public-jobs/{jobId} {
-       allow read: if resource.data.visibility == 'public'
-         || isDocumentOwner(resource.data.clientId)
-         || (resource.data.visibility == 'invite' && isInvitedUser(resource.data));
-
-       allow create: if isAuthenticated();
-       allow update: if isDocumentOwner(resource.data.clientId);
-       allow delete: if isAdmin();
-
-      // bids
-      match /bids/{bidId} {
+      // features
+      match /features/{document=**} {
          allow read;
-         allow create: if canCreateBid(getPublicJob(jobId));
-         allow update: if isDocumentOwner(bidId);
+      }
+
+      // dock-auth
+      match /dock-auth/{docId} {
+         allow read;
+      }
+      
+      // limepay-payments
+      match /limepay-payments/{jobId} {
+         allow read;
+         allow create: if isAuthenticated();
+         allow update: if userIsClientOrProvider();
          allow delete: if isAdmin();
       }
-    }
+
+      // jobs
+      match /jobs/{jobId} {
+         allow read: if isDocumentOwner(resource.data.clientId) || isDocumentOwner(resource.data.providerId);
+         allow create: if request.auth.uid == request.resource.data.clientId;
+         allow update: if userIsClientOrProvider();
+         allow delete: if isAdmin();
+      }
+
+      // public-jobs
+      match /public-jobs/{jobId} {
+         allow read: if resource.data.visibility == 'public'
+            || isDocumentOwner(resource.data.clientId)
+            || (resource.data.visibility == 'invite' && isInvitedUser(resource.data));
+
+         allow create: if isAuthenticated();
+         allow update: if isDocumentOwner(resource.data.clientId);
+         allow delete: if isAdmin();
+
+         // bids
+         match /bids/{bidId} {
+            allow read;
+            allow create: if canCreateBid(getPublicJob(jobId));
+            allow update: if isDocumentOwner(bidId);
+            allow delete: if isAdmin();
+         }
+      }
+
+      // shoppers
+      match /shoppers/{userId} {
+         allow read;
+         allow create: if isDocumentOwner(userId);
+         allow update: if isDocumentOwner(userId);
+         allow delete: if isAdmin();
+      }
 
 
-    match /shoppers/{userId} {
-       allow read;
-       allow create: if isDocumentOwner(userId);
-       allow update: if isDocumentOwner(userId);
-       allow delete: if isAdmin();
-    }
+      // --------------------------------------------------------------------------------
+      // functions
+      function isAuthenticated() {
+         return request.auth != null
+      }
 
+      function isDocumentOwner(userId) {
+         return request.auth.uid == userId
+         || isAdmin()
+      }
 
-   // --------------------------------------------------------------------------------
-   function isAuthenticated() {
-      return request.auth != null
+      function userIsSender() {
+         return request.resource.data.senderId == request.auth.uid
+         || isAdmin()
+      }
+
+      function userIsClientOrProvider() {
+         return request.resource.data.clientId == request.auth.uid
+         || request.resource.data.providerId == request.auth.uid
+         || isAdmin()
+      }
+
+      function getUserData() {
+         return get(/databases/$(database)/documents/users/$(request.auth.uid)).data
+      }
+
+      function isAdmin() {
+         return getUserData().isAdmin
+      }
+
+      function isCommonChannel(channelId) {
+         return request.auth.uid in channelId.split('-')
+      }
+
+      function isInvitedUser(job) {
+         return request.auth.uid in job.invites 
+      }
+
+      function getPublicJob(jobId) {
+         return get(/databases/$(database)/documents/public-jobs/$(jobId)).data
+      }
+      
+      function canCreateBid(job) {
+         return job.visibility == 'public' || (job.visibility == 'invite' && isInvitedUser(job))
+      }
+      // --------------------------------------------------------------------------------
    }
-
-   function isDocumentOwner(userId) {
-      return request.auth.uid == userId
-      || isAdmin()
-   }
-
-   function userIsSender() {
-      return request.resource.data.senderId == request.auth.uid
-      || isAdmin()
-   }
-
-   function userIsClientOrProvider() {
-      return request.resource.data.clientId == request.auth.uid
-      || request.resource.data.providerId == request.auth.uid
-      || isAdmin()
-   }
-
-   function getUserData() {
-      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data
-   }
-
-   function isAdmin() {
-      return getUserData().isAdmin
-   }
-
-   function isCommonChannel(channelId) {
-      return request.auth.uid in channelId.split('-')
-   }
-
-   function isInvitedUser(job) {
-      return request.auth.uid in job.invites 
-   }
-
-   function getPublicJob(jobId) {
-      return get(/databases/$(database)/documents/public-jobs/$(jobId)).data
-   }
-   
-   function canCreateBid(job) {
-      return job.visibility == 'public' || (job.visibility == 'invite' && isInvitedUser(job))
-   }
-   // --------------------------------------------------------------------------------
-  }
 }
