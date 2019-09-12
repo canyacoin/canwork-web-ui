@@ -140,7 +140,7 @@ export class ChatComponent implements OnInit, OnDestroy {
             }
           }
 
-          for (const idx in data) {
+          /*for (const idx in data) {
             try {
               const channel = data[idx]
               const counterpart = await this.userService.getUser(
@@ -155,7 +155,7 @@ export class ChatComponent implements OnInit, OnDestroy {
             } catch (e) {
               console.error(e)
             }
-          }
+          }*/
 
           this.channels = data
             .filter((doc: Channel) => {
