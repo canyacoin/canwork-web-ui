@@ -143,11 +143,15 @@ export class ChatComponent implements OnInit, OnDestroy {
           for (const idx in data) {
             try {
               const channel = data[idx]
-              const counterpart = await this.userService.getUser(channel.address)
-              channel.avatar = counterpart.avatar
-              channel.name = counterpart.name
-              channel.title = counterpart.title
-              channel.verified = counterpart.verified
+              const counterpart = await this.userService.getUser(
+                channel.address
+              )
+              if (counterpart) {
+                channel.avatar = counterpart.avatar
+                channel.name = counterpart.name
+                channel.title = counterpart.title
+                channel.verified = counterpart.verified
+              }
             } catch (e) {
               console.error(e)
             }
@@ -401,7 +405,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     )
     this.sendMessage(msg)
   }
-
 
   transformBreaks(text) {
     return text.replace(/\n/g, '<br/>')
