@@ -321,6 +321,13 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.36.tgz#eac05d576fbcd0b4ea3c912dc58c20475c08d9e4"
   integrity sha512-SL6KhfM7PTqiFmbCW3eVNwVBZ+88Mrzbuvn9olPsfv43mbiWaFY+nRcz/TGGku0/lc2FepdMbImdMY1JrQ+zbw==
 
+"@types/ramda@^0.26.22":
+  version "0.26.22"
+  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.26.22.tgz#4506cf76b53191d17fce473bc3de529ece6f4886"
+  integrity sha512-TfX4BwgjMSXFuyb1QZsY2D8KEsJfiWolzJHYzFWyB/0UGiyX6BFvWX05IzzrMAsZpB4uN0GXAL5QcJHTKnBxoQ==
+  dependencies:
+    ts-toolbelt "^3.8.75"
+
 "@types/range-parser@*":
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.2.tgz#fa8e1ad1d474688a757140c91de6dace6f4abc8d"
@@ -2001,6 +2008,11 @@ querystring-es3@^0.2.1:
   resolved "https://registry.yarnpkg.com/querystring-es3/-/querystring-es3-0.2.1.tgz#9ec61f79049875707d69414596fd907a4d711e73"
   integrity sha1-nsYfeQSYdXB9aUFFlv2Qek1xHnM=
 
+ramda@^0.26.1:
+  version "0.26.1"
+  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.26.1.tgz#8d41351eb8111c55353617fc3bbffad8e4d35d06"
+  integrity sha512-hLWjpy7EnsDBb0p+Z3B7rPi3GDeRG5ZtiI33kJhTt+ORCd38AbAIjB/9zRIUoeTbE/AVX5ZkU7m6bznsvrf8eQ==
+
 range-parser@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.0.tgz#f49be6b487894ddc40dcc94a322f611092e00d5e"
@@ -2351,6 +2363,11 @@ tough-cookie@~2.4.3:
   dependencies:
     psl "^1.1.24"
     punycode "^1.4.1"
+
+ts-toolbelt@^3.8.75:
+  version "3.11.0"
+  resolved "https://registry.yarnpkg.com/ts-toolbelt/-/ts-toolbelt-3.11.0.tgz#5e8eb060a45cfad95eb0f6f3538cee136209f70e"
+  integrity sha512-OJ+baLKTSsXgao7weQdjbGIAEjriPWKy63zZQhRNvtslYA4igN8gHn/6B71NQlSzB0Lt0/tolJfaL6Dc38cESw==
 
 tslib@1.9.3, tslib@^1.7.1, tslib@^1.8.0, tslib@^1.8.1:
   version "1.9.3"
