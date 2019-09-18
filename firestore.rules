@@ -46,7 +46,7 @@ service cloud.firestore {
 
       // who
       match /who/{userId}/user/{who} {
-         allow read;
+         allow read: if isDocumentOwner(who);
          allow create: if isAuthenticated() && request.auth.uid == request.resource.data.address;
          allow update: if isDocumentOwner(who) && request.auth.uid == request.resource.data.address;
          allow delete: if isAdmin();
