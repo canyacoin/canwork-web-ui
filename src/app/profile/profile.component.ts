@@ -42,6 +42,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.initUsers(this.currentUser, params)
           })
           this.activatedRoute.queryParams.subscribe(params => {
+            this.redirectToUniqueUrlIfNecessary(params)
             this.displayEditComponent = params.editProfile ? true : false
           })
         }
@@ -64,7 +65,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   initUsers(user: User, params: any) {
     const { address, slug } = params
     if (address && address !== 'setup') {
-      this.loadUser(params['address'])
+      this.loadUser(params)
     } else if (slug) {
       this.userService.getUserBySlug(slug).then(user => {
         if (user) {
@@ -77,11 +78,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  loadUser(address: string) {
+  loadUser(params: any) {
+    const address = params['address']
     this.userService
       .getUser(address)
       .then((user: User) => {
         this.userModel = user
+        this.redirectToUniqueUrlIfNecessary(params)
         this.setUsersColors(this.userModel)
         this.saveWhoViewProfile()
         this.addToViewedProfileList()
@@ -132,5 +135,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
       return true
     }
     return this.userModel && this.userModel.address !== this.currentUser.address
+  }
+
+  redirectToUniqueUrlIfNecessary(params: any) {
+    const { address } = params
+    if (this.isMyProfile() && this.router.url.endsWith('/profile')) {
+      this.router.navigate(['/profile', this.currentUser.slug])
+    } else if (this.userModel && address && address !== 'setup') {
+      this.router.navigate(['/profile', this.userModel.slug])
+    }
   }
 }

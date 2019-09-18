@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { User } from '@class/user';
 import { environment } from '@env/environment';
 
@@ -7,16 +7,15 @@ declare let escape: any;
 @Component({
   selector: 'app-profile-social',
   templateUrl: './social.component.html',
-  styleUrls: ['../../profile.component.scss']
+  styleUrls: ['../../profile.component.scss', './social.component.css']
 })
-export class SocialComponent implements OnInit, AfterViewInit {
+export class SocialComponent implements OnInit {
   @Input() userModel: User;
   shareLink = environment.shareBaseUrl + '/profile/';
 
   constructor() { }
 
-  ngOnInit() {}
-  ngAfterViewInit() {
+  ngOnInit() {
     if (this.userModel && this.userModel.slug !== '') {
       this.shareLink += this.userModel.slug;
     } else {
@@ -36,4 +35,22 @@ export class SocialComponent implements OnInit, AfterViewInit {
     return false;
   }
 
+  copyLink() {
+    let link = this.shareLink;
+    const selBox = document.createElement('textarea')
+    selBox.style.position = 'fixed'
+    selBox.style.left = '0'
+    selBox.style.top = '0'
+    selBox.style.opacity = '0'
+    selBox.value = link
+    document.body.appendChild(selBox)
+    selBox.select()
+    selBox.focus()
+    document.execCommand('copy')
+    document.body.removeChild(selBox)
+    document.getElementById('copied').style.display = 'block'
+    setTimeout(function() {
+      document.getElementById('copied').style.display = 'none'
+    }, 2000)
+  }
 }

@@ -971,6 +971,7 @@ exports.seedProviders = functions.https.onRequest(async (request, response) => {
         state: 'Done',
         skillTags: getRandomTags(6),
         testUser: true,
+        verified: false,
       }
       console.log('+ add user record: ', userRecord)
       await db
@@ -1443,6 +1444,48 @@ exports.delSlug = functions.https.onRequest(async (request, response) => {
       msg: `del all slug succ!`,
     })
 })
+
+/*
+ * cloud https function to set "verified" field of users to "false" for those that don't have this field
+ */
+exports.initVerifiedUserField = functions.https.onRequest(
+  async (request, response) => {
+    const limit = 100
+    let total = 0
+    let last = null
+    let users = await db
+      .collection('users')
+      .orderBy('slug')
+      .limit(limit)
+      .get()
+
+    while (users.docs.length > 0) {
+      await Promise.all(
+        users.docs.map(async doc => {
+          const user = doc.data()
+          !user.verified &&
+            (await db.doc(`users/${doc.id}`).update({ verified: false }))
+        })
+      )
+      total += users.docs.length
+      last = users.docs[users.docs.length - 1]
+      users = await db
+        .collection('users')
+        .orderBy('slug')
+        .startAfter(last)
+        .limit(limit)
+        .get()
+    }
+
+    return response
+      .status(200)
+      .type('application/json')
+      .send({
+        status: 0,
+        msg: `Created "verified" field for all ${total} users!`,
+      })
+  }
+)
 
 /*
  * remove old data

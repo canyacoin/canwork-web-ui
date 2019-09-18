@@ -22,19 +22,22 @@
             {{job.information.title}}
           </h2>
           <div class="" style="max-width: 65vw">
-            <p class="job-description" [innerHTML]="job.information.description.substring(0, 80) | linkify">
-            <span *ngIf="hideDescription === false" [innerHTML]="job.information.description.substring(80, job.information.description.length)">
-              </span>
-              <a class="pointer text-blue" *ngIf="job.information.description.length > 80" (click)="toggleDescription()">
-                <span *ngIf="hideDescription">
-                  ...Show more
-                </span>
-                <span *ngIf="!hideDescription">
-                  <br>
+            <span *ngIf="hideDescription">
+              <p class="job-description" [innerHTML]="job.information.description.substring(0, 80) | linkify">
+              <div>
+                <a class="pointer text-blue" *ngIf="job.information.description.length > 80" (click)="toggleDescription()">
+                  ...<br>Show more
+                </a>
+              </div>
+            </span>
+            <span *ngIf="!hideDescription">
+              <p class="job-description" [innerHTML]="job.information.description | linkify">
+              <div>
+                <a class="pointer text-blue" *ngIf="job.information.description.length > 80" (click)="toggleDescription()">
                   Show less
-                </span>
-              </a>
-            </p>
+                </a>
+              </div>
+            </span>
           </div>
         </div>
         <div class="col-sm-3 job-info">
@@ -72,7 +75,7 @@
         <br>
         <div *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="otherPartyName pointer" [routerLink]="['/profile/alt/', job.otherParty.id]">
           <app-avatar [user]="job.otherParty" [customClass]="'headshot-div'"></app-avatar>
-          <p>{{job.otherParty?.name}}</p>
+          <p>{{job.otherParty?.name}}<app-verified-mark [user]="job.otherParty"></app-verified-mark></p>
         </div>
         <div class="info-details" *ngIf="isOnMobile">
           <p>Status</p>

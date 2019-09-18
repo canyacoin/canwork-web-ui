@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core'
-import { Headers, Http, RequestOptions, Response } from '@angular/http'
+import { Headers, Http } from '@angular/http'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AngularFirestore } from 'angularfire2/firestore'
 
@@ -276,6 +276,7 @@ export class LoginComponent implements OnInit {
       whitelisted: user['whitelisted'] || false,
       whitelistRejected: user['whitelistRejected'] || false,
       whitelistSubmitted: user['whitelistSubmitted'] || false,
+      verified: user['verified'] || false,
     })
 
     this.handleLogin(parsedUser)

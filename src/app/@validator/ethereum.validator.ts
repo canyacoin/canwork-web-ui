@@ -10,13 +10,18 @@ export class EthereumValidator {
   ) {}
 
   isValidAddress = (control: FormControl) => {
-    return this.ethService.isAddress(control.value)
+    const { value } = control
+    return value === null || this.ethService.isAddress(value)
       ? null
       : { isInvalidEthereumAddress: true }
   }
 
   isUniqueAddress(user: User) {
     return async (control: FormControl) => {
+      if (control.value == null) {
+        return true
+      }
+
       const users = await this.userService
         .firestoreSelect({
           path: 'users',

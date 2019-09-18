@@ -17,6 +17,7 @@ export class Channel {
   message: string
   unreadMessages: boolean
   timestamp: number
+  verified: boolean
 
   constructor(init?: Partial<Channel>) {
     Object.assign(this, init)
@@ -63,7 +64,7 @@ export class ChatService {
     const channelId: string = [sender.address, receiver.address]
       .sort()
       .join('-')
-    const senderChannel = this.createChannelObject(channelId, receiver, false)
+    const senderChannel = this.createChannelObject(channelId, receiver)
     const receiverChannel = this.createChannelObject(channelId, sender)
     const senderChannelCreated = await this.saveChannelAsync(
       sender.address,
@@ -295,11 +296,7 @@ export class ChatService {
     }
   }
 
-  private createChannelObject(
-    channelId: string,
-    user: User,
-    unreadMessages: boolean = true
-  ): Channel {
+  private createChannelObject(channelId: string, user: User): Channel {
     return new Channel({
       channel: channelId,
       address: user.address,
@@ -307,7 +304,7 @@ export class ChatService {
       name: user.name,
       title: user.title,
       message: '',
-      unreadMessages: unreadMessages,
+      unreadMessages: false,
       timestamp: Date.now(),
     })
   }

@@ -71,7 +71,13 @@ export class EditComponent implements OnInit, OnDestroy {
 
   onProfileImageUpload(url) {
     console.log('uploaded url', url)
-    this.currentUser.avatar.uri = url
+    this.currentUser = {
+      ...this.currentUser,
+      avatar: {
+        ...this.currentUser.avatar,
+        uri: url,
+      },
+    }
     this.displayDropzone = false
   }
 

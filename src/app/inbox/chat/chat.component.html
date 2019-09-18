@@ -24,6 +24,7 @@
                     <div class="media-body ml-2">
                       <div class="d-flex justify-content-between align-items-center">
                         <h6 class="text-canya mb-0">{{ channel.name }}
+                          <app-verified-mark [user]="channel"></app-verified-mark>
                         </h6>
                         &nbsp;&nbsp;&nbsp;
                         <div>
@@ -57,6 +58,7 @@
                   <app-avatar [user]="selectedChannel" [customClass]="'avatar avatar-sm'"></app-avatar>
                   <div class="media-body">
                     <h6 class="mt-4 mb-0">{{ selectedChannel.name }}
+                      <app-verified-mark [user]="selectedChannel"></app-verified-mark>
                     </h6>
                     <span class="text-muted text-small">{{ selectedChannel.title }}</span>&nbsp;
                   </div>
@@ -263,6 +265,7 @@
                     <div class="media-body ml-2">
                       <div class="d-flex justify-content-between align-items-center">
                         <h6 class="text-canya mb-0">{{ channel.name }}
+                          <app-verified-mark [user]="channel"></app-verified-mark>
                         </h6>
                         &nbsp;&nbsp;&nbsp;
                         <div>
@@ -298,7 +301,7 @@
                 <button (click)="toggleMobileDivsEvent($event)" class="chat-back-button">Back</button>
               </div>
               <div class="col-8 text-center">
-                <p>{{ selectedChannel.name }}<br>
+                <p>{{ selectedChannel.name }}<app-verified-mark [user]="selectedChannel"></app-verified-mark><br>
                   <span class="text-muted text-small">{{ selectedChannel.title }}</span>
                 </p>
               </div>
