@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core'
-import { Job } from '@class/job'
-import { IJobAction } from '@class/job-action'
 import {
   AngularFirestore,
   AngularFirestoreCollection,
@@ -9,15 +7,26 @@ import { take } from 'rxjs/operators'
 
 import * as moment from 'moment-timezone'
 import { User } from '../core-classes/user'
+import { AngularFireFunctions } from '@angular/fire/functions'
+import { GetParams, SelectParams } from '../../../functions/src/firestore'
+import { Observable } from 'rxjs'
 
 @Injectable()
 export class UserService {
-  usersCollectionRef: AngularFirestoreCollection<any>
-  viewedUsersRef: AngularFirestoreCollection<any>
+  usersCollectionRef: AngularFirestoreCollection<User>
+  viewedUsersRef: AngularFirestoreCollection<User>
+  firestoreGet: (data: GetParams) => Observable<User>
+  firestoreSelect: (data: SelectParams) => Observable<User[]>
 
-  constructor(private afs: AngularFirestore) {
-    this.usersCollectionRef = this.afs.collection<any>('users')
-    this.viewedUsersRef = this.afs.collection<any>('viewed-users')
+  constructor(
+    private afs: AngularFirestore,
+    private funcs: AngularFireFunctions
+  ) {
+    this.usersCollectionRef = this.afs.collection<User>('users')
+    this.viewedUsersRef = this.afs.collection<User>('viewed-users')
+    // funcs
+    this.firestoreGet = this.funcs.httpsCallable('firestoreGet')
+    this.firestoreSelect = this.funcs.httpsCallable('firestoreSelect')
   }
 
   saveProfileView(viewer: User, viewed: string) {
@@ -67,39 +76,35 @@ export class UserService {
   }
 
   async getUser(address: string): Promise<User> {
-    return new Promise<User>((resolve, reject) => {
-      this.usersCollectionRef
-        .doc(address)
-        .valueChanges()
-        .pipe(take(1))
-        .subscribe((user: User) => {
-          if (user) {
-            if (user.timezone) {
-              user.offset = moment.tz(user.timezone).format('Z')
-            }
-            resolve(new User(user))
-          } else {
-            resolve(undefined)
-          }
-          reject()
-        })
-    })
+    const user = await this.firestoreGet({
+      path: `users/${address}`,
+    }).toPromise()
+
+    if (user && user.timezone) {
+      user.offset = moment.tz(user.timezone).format('Z')
+    }
+
+    return user
   }
 
-  async getUserByEthAddress(address: string) {
-    const data = await this.usersCollectionRef.ref
-      .where('ethAddressLookup', '==', address.toUpperCase())
-      .limit(1)
-      .get()
-    return data
+  async getUserByEthAddress(address: string): Promise<User> {
+    const users = await this.firestoreSelect({
+      path: 'users',
+      where: [['ethAddressLookup', '==', address.toUpperCase()]],
+      limit: 1,
+    }).toPromise()
+
+    return users ? users[0] : null
   }
 
   async getUserBySlug(slug: string) {
-    const data = await this.usersCollectionRef.ref
-      .where('slug', '==', slug)
-      .limit(1)
-      .get()
-    return data
+    const users = await this.firestoreSelect({
+      path: 'users',
+      where: [['slug', '==', slug]],
+      limit: 1,
+    }).toPromise()
+
+    return users ? users[0] : null
   }
 
   saveUser(credentials: User, type?: string): Promise<User> {
