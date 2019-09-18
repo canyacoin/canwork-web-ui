@@ -143,7 +143,8 @@ export class CreateClientProfileComponent implements OnInit {
       }
       this.profileForm.controls.ethAddress.setValidators(
         Validators.compose([
-          new EthereumValidator(this.ethService).isValidAddress,
+          new EthereumValidator(this.ethService, this.userService)
+            .isValidAddress,
         ])
       )
     })
