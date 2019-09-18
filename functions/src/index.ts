@@ -37,6 +37,8 @@ import {
   moveInvitesToJob,
 } from './public-jobs'
 
+import { firestoreGet, firestoreSelect } from './firestore'
+
 const faker = require('faker')
 const fs = require('fs')
 const path = require('path')
@@ -1498,3 +1500,7 @@ exports.publicJobExists = functions.https.onCall(publicJobExists(db))
 exports.getPublicJobIdBySlug = functions.https.onCall(getPublicJobIdBySlug(db))
 
 exports.moveInvitesToJob = functions.https.onRequest(moveInvitesToJob(db))
+
+// firestore funcs
+exports.firestoreGet = functions.https.onCall(firestoreGet(db))
+exports.firestoreSelect = functions.https.onCall(firestoreSelect(db))

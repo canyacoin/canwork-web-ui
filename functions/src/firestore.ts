@@ -1,6 +1,3 @@
-import { firestore } from 'firebase-admin'
-import * as functions from 'firebase-functions'
-import { WhereFilterOp, OrderByDirection } from '@google-cloud/firestore'
 import { omit } from 'ramda'
 
 const privateFields: Record<string, string[]> = {
@@ -9,10 +6,10 @@ const privateFields: Record<string, string[]> = {
 }
 
 function excludeFields(
-  collectionName: string,
-  obj: firestore.DocumentData
-): firestore.DocumentData {
-  const fields = privateFields[collectionName]
+  name: string,
+  obj: FirebaseFirestore.DocumentData
+): FirebaseFirestore.DocumentData {
+  const fields = privateFields[name]
 
   return omit(fields, obj)
 }
@@ -23,7 +20,7 @@ function collectionName(path: string) {
 export interface GetParams {
   path: string
 }
-export function get(db: firestore.Firestore) {
+export function firestoreGet(db: FirebaseFirestore.Firestore) {
   return async ({ path }: GetParams) => {
     const snap = await db.doc(path).get()
     const data = snap.data()
@@ -32,8 +29,9 @@ export function get(db: firestore.Firestore) {
   }
 }
 
-export type WhereItem = [string | firestore.FieldPath, WhereFilterOp, any]
-export type OrderBy = [string | firestore.FieldPath, OrderByDirection]
+export type FieldPath = string | FirebaseFirestore.FieldPath
+export type WhereItem = [FieldPath, FirebaseFirestore.WhereFilterOp, any]
+export type OrderBy = [FieldPath, FirebaseFirestore.OrderByDirection]
 export interface SelectParams {
   path: string
   select?: string[]
@@ -43,7 +41,7 @@ export interface SelectParams {
   orderBy?: OrderBy
 }
 
-export function select(db: firestore.Firestore) {
+export function firestoreSelect(db: FirebaseFirestore.Firestore) {
   return async ({
     path,
     select,
@@ -53,7 +51,9 @@ export function select(db: firestore.Firestore) {
     orderBy,
   }: SelectParams) => {
     const ref = db.collection(path)
-    let query: firestore.Query | firestore.CollectionReference = ref
+    let query:
+      | FirebaseFirestore.Query
+      | FirebaseFirestore.CollectionReference = ref
     if (where) {
       query = where.reduce((acc, args) => acc.where(...args), ref)
     }
