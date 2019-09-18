@@ -89,6 +89,6 @@ export function firestoreSelect(db: FirebaseFirestore.Firestore) {
     const name = collectionName(path)
     const snap = await query.get()
 
-    return snap.docs.map(item => excludeFields(name, item))
+    return snap.docs.map(item => excludeFields(name, item.data()))
   }
 }
