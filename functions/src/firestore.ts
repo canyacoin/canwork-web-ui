@@ -1,9 +1,20 @@
 import { firestore } from 'firebase-admin'
 import { omit } from 'ramda'
 
+// TODO: need to fix @type hack
 const privateFields: Record<string, string[]> = {
-  users: ['email', 'phone', 'work'],
-  who: ['email', 'phone', 'work'],
+  users: [
+    '@type', // exclude @type field because Serializer.decode throws an error
+    'email',
+    'phone',
+    'work',
+  ],
+  who: [
+    '@type', // exclude @type field because Serializer.decode throws an error
+    'email',
+    'phone',
+    'work',
+  ],
 }
 
 function excludeFields(

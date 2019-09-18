@@ -10,6 +10,10 @@ import { User } from '../core-classes/user'
 import { AngularFireFunctions } from '@angular/fire/functions'
 import { GetParams, SelectParams } from '../../../functions/src/firestore'
 import { Observable } from 'rxjs'
+import { assoc } from 'ramda'
+
+// HACK: addType see functions/src/firestore.ts
+const addType = assoc('@type', 'Person')
 
 @Injectable()
 export class UserService {
@@ -84,7 +88,7 @@ export class UserService {
       user.offset = moment.tz(user.timezone).format('Z')
     }
 
-    return user
+    return addType(user)
   }
 
   async getUserByEthAddress(address: string): Promise<User> {
@@ -94,7 +98,7 @@ export class UserService {
       limit: 1,
     }).toPromise()
 
-    return users ? users[0] : null
+    return users ? addType(users[0]) : null
   }
 
   async getUserBySlug(slug: string) {
@@ -104,7 +108,7 @@ export class UserService {
       limit: 1,
     }).toPromise()
 
-    return users ? users[0] : null
+    return users ? addType(users[0]) : null
   }
 
   saveUser(credentials: User, type?: string): Promise<User> {
