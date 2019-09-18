@@ -1,3 +1,4 @@
+import { firestore } from 'firebase-admin'
 import { omit } from 'ramda'
 
 const privateFields: Record<string, string[]> = {
@@ -7,7 +8,7 @@ const privateFields: Record<string, string[]> = {
 
 function excludeFields(
   name: string,
-  obj: FirebaseFirestore.DocumentData
+  obj: firestore.DocumentData
 ): FirebaseFirestore.DocumentData {
   const fields = privateFields[name]
 
