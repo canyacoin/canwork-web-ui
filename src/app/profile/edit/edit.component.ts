@@ -101,12 +101,13 @@ export class EditComponent implements OnInit, OnDestroy {
         this.currentUser.ethAddress || this.ethAddress,
         Validators.compose([
           Validators.required,
-          new EthereumValidator(this.ethService).isValidAddress,
+          new EthereumValidator(this.ethService, this.userService)
+            .isValidAddress,
         ]),
-        new EthereumValidator(this.ethService).isUniqueAddress(
-          this.userService.usersCollectionRef,
-          this.currentUser
-        ),
+        new EthereumValidator(
+          this.ethService,
+          this.userService
+        ).isUniqueAddress(this.currentUser),
       ],
       title: [
         this.currentUser.title || '',
