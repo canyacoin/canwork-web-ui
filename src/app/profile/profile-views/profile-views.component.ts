@@ -1,50 +1,60 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AngularFirestore } from 'angularfire2/firestore';
-import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
-import * as moment from 'moment';
-import { User } from '../../core-classes/user';
-import { AuthService } from '../../core-services/auth.service';
+import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Subscription } from 'rxjs'
+import * as moment from 'moment'
+import { User } from '../../core-classes/user'
+import { AuthService } from '../../core-services/auth.service'
+import { AngularFireFunctions } from '@angular/fire/functions'
+import { assoc, pipe } from 'ramda'
+import { SelectParams } from '../../../../functions/src/firestore'
 
 @Component({
   selector: 'app-profile-views',
   templateUrl: './profile-views.component.html',
-  styleUrls: ['./profile-views.component.css']
+  styleUrls: ['./profile-views.component.css'],
 })
 export class ProfileViewsComponent implements OnInit, OnDestroy {
+  currentUser: User
+  authSub: Subscription
 
-  currentUser: User;
-  authSub: Subscription;
+  users: any = []
+  loading = true
 
-  users: any = [];
-  loading = true;
-
-  constructor(private router: Router, private authService: AuthService,
-    private afs: AngularFirestore) {
-  }
+  constructor(
+    private authService: AuthService,
+    private funcs: AngularFireFunctions
+  ) {}
 
   ngOnInit() {
-    this.authSub = this.authService.currentUser$.subscribe((user: User) => {
-      this.currentUser = user;
-      if (this.currentUser) {
-        this.afs.collection(`who/${this.currentUser.address}/user`, ref => ref.limit(50).orderBy('timestamp')).valueChanges().pipe(take(1)).subscribe((data: any) => {
-          this.loading = false;
-          data.map((item) => {
-            item['humanisedDate'] = moment(item.timestamp, 'x').fromNow();
-          });
-          this.users = data;
-        }, error => {
-          console.error('! unable to retrieve who viewed data:', error);
-        });
+    this.authSub = this.authService.currentUser$.subscribe(
+      async (user: User) => {
+        this.currentUser = user
+        if (this.currentUser) {
+          const visitors = await this.funcs
+            .httpsCallable<SelectParams, User[]>('firestoreSelect')({
+              path: `who/${this.currentUser.address}/user`,
+              limit: 50,
+              orderBy: ['timestamp', 'asc'],
+            })
+            .toPromise()
+
+          this.loading = false
+          this.users = visitors.map(visitor =>
+            pipe(
+              assoc('@type', 'Person'), // hack: see more functions/src/firestore.ts
+              assoc('humanisedDate', moment(visitor.timestamp, 'x').fromNow())
+            )(visitor)
+          )
+        }
+      },
+      error => {
+        console.error('! unable to retrieve currentUser data:', error)
       }
-    }, error => {
-      console.error('! unable to retrieve currentUser data:', error);
-    });
+    )
   }
 
   ngOnDestroy() {
-    if (this.authSub) { this.authSub.unsubscribe(); }
+    if (this.authSub) {
+      this.authSub.unsubscribe()
+    }
   }
-
 }

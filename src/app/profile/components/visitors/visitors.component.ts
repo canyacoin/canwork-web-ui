@@ -1,26 +1,31 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AngularFirestore } from 'angularfire2/firestore';
-import { take } from 'rxjs/operators';
-import { User } from '../../../core-classes/user';
+import { Component, Input, OnInit } from '@angular/core'
+import { AngularFirestore } from 'angularfire2/firestore'
+import { User } from '../../../core-classes/user'
+import { AngularFireFunctions } from '@angular/fire/functions'
+import { SelectParams } from '../../../../../functions/src/firestore'
 
 @Component({
   selector: 'app-profile-visitors',
   templateUrl: './visitors.component.html',
-  styleUrls: ['./visitors.component.css']
+  styleUrls: ['./visitors.component.css'],
 })
 export class VisitorsComponent implements OnInit {
+  @Input() userModel: User
+  whoViewProfileCounter = 0
 
-  @Input() userModel: User;
-  whoViewProfileCounter = 0;
+  constructor(
+    private afs: AngularFirestore,
+    private funcs: AngularFireFunctions
+  ) {}
 
-  constructor(private afs: AngularFirestore) { }
+  async ngOnInit() {
+    const visitors = await this.funcs
+      .httpsCallable<SelectParams, User[]>('firestoreSelect')({
+        path: `who/${this.userModel.address}/user`,
+        select: ['address'],
+      })
+      .toPromise()
 
-  ngOnInit() {
-    const ref = this.afs.collection(`who/${this.userModel.address}/user`);
-    ref.valueChanges().pipe(take(1)).toPromise().then((data: any) => {
-      this.whoViewProfileCounter = data.length;
-    }, error => { console.error('! unable to retrieve who viewed data:', error) });
+    this.whoViewProfileCounter = visitors.length
   }
-
 }
