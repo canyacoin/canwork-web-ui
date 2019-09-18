@@ -20,7 +20,6 @@ describe('Test `users` collection rules', () => {
     .create({ data: { name: 'Alice', email: 'alice@gmail.com' } })
     .update({ data: { name: 'Alice', email: 'alice@hotmail.com' } })
     .delete()
-    .allow()
     .read()
     .runTests()
 
@@ -28,7 +27,6 @@ describe('Test `users` collection rules', () => {
     .create({ data: { name: 'Alice', email: 'alice@gmail.com' } })
     .update({ data: { name: 'Alice', email: 'alice@hotmail.com' } })
     .delete()
-    .allow()
     .read()
     .runTests()
 })

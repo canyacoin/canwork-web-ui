@@ -67,9 +67,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     if (address && address !== 'setup') {
       this.loadUser(params)
     } else if (slug) {
-      this.userService.getUserBySlug(slug).then(snapshots => {
-        const result = snapshots.docs[0]
-        this.userModel = new User(result.data())
+      this.userService.getUserBySlug(slug).then(user => {
+        if (user) {
+          this.userModel = user
+        }
       })
     } else if (user) {
       this.userModel = this.currentUser

@@ -33,7 +33,6 @@ describe('Test `who` collection rules', () => {
     .create({ data: {}, suffix: 'already exists user subcollection' })
     .update({ data: { name: 'Bob' } })
     .delete()
-    .allow()
     .read()
     .runTests()
 
@@ -41,7 +40,6 @@ describe('Test `who` collection rules', () => {
     .create()
     .update()
     .delete()
-    .allow()
     .read()
     .runTests()
 })
