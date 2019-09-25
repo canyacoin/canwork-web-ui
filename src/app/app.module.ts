@@ -32,7 +32,8 @@ import { DashboardComponent } from './public-job/dashboard/dashboard.component'
 import { JobBidsComponent } from './public-job/job-bids/job-bids.component'
 import { FilterPipeModule } from 'ngx-filter-pipe'
 import { OrderModule } from 'ngx-order-pipe'
-import { AngularFireFunctionsModule } from '@angular/fire/functions'
+import { AngularFireFunctionsModule } from '@angular/fire/functions';
+import { WalletBnbComponent } from './wallet-bnb/wallet-bnb.component'
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { AngularFireFunctionsModule } from '@angular/fire/functions'
     PublicJobComponent,
     JobBidsComponent,
     DashboardComponent,
+    WalletBnbComponent,
   ],
   imports: [
     AppRoutingModule,
