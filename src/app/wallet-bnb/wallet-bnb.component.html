@@ -1,3 +1,46 @@
-<p>
-  wallet-bnb works!
-</p>
+<main>
+  <div class="row">
+    <div class="col">
+      <ul class="tabs">
+        <li
+          (click)="selected = Wallet.Connect"
+          [class.active]="isActive(Wallet.Connect)"
+        >
+          WalletConnect
+        </li>
+        <li
+          (click)="selected = Wallet.Ledger"
+          [class.active]="isActive(Wallet.Ledger)"
+        >
+          Ledger Device
+        </li>
+        <li
+          (click)="selected = Wallet.Keystore"
+          [class.active]="isActive(Wallet.Keystore)"
+        >
+          Keystore File
+        </li>
+        <li
+          (click)="selected = Wallet.Mnemonic"
+          [class.active]="isActive(Wallet.Mnemonic)"
+        >
+          Mnemonic Phrase
+        </li>
+      </ul>
+    </div>
+    <div class="col" [ngSwitch]="selected">
+      <div *ngSwitchCase="Wallet.Connect">
+        Click to scan a QR code and link your mobile wallet using WalletConnect.
+      </div>
+      <div *ngSwitchCase="Wallet.Ledger">
+        Connect your Ledger device
+      </div>
+      <div *ngSwitchCase="Wallet.Keystore">
+        Select your keystore file
+      </div>
+      <div *ngSwitchCase="Wallet.Mnemonic">
+        Recover your Keystore file instead, since it is password protected.
+      </div>
+    </div>
+  </div>
+</main>
