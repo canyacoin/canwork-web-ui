@@ -6,33 +6,33 @@
         <div class="col-12 col-md-4">
           <ul class="tabs">
             <li
-              (click)="selected = Wallet.Connect"
-              [class.active]="isActive(Wallet.Connect)"
+              (click)="selected = WalletApp.WalletConnect"
+              [class.active]="isActive(WalletApp.WalletConnect)"
             >
               WalletConnect
             </li>
             <li
-              (click)="selected = Wallet.Ledger"
-              [class.active]="isActive(Wallet.Ledger)"
+              (click)="selected = WalletApp.Ledger"
+              [class.active]="isActive(WalletApp.Ledger)"
             >
               Ledger Device
             </li>
             <li
-              (click)="selected = Wallet.Keystore"
-              [class.active]="isActive(Wallet.Keystore)"
+              (click)="selected = WalletApp.Keystore"
+              [class.active]="isActive(WalletApp.Keystore)"
             >
               Keystore File
             </li>
             <li
-              (click)="selected = Wallet.Mnemonic"
-              [class.active]="isActive(Wallet.Mnemonic)"
+              (click)="selected = WalletApp.Mnemonic"
+              [class.active]="isActive(WalletApp.Mnemonic)"
             >
               Mnemonic Phrase
             </li>
           </ul>
         </div>
         <div class="col-12 col-md-8 text-left" [ngSwitch]="selected">
-          <div *ngSwitchCase="Wallet.Connect">
+          <div *ngSwitchCase="WalletApp.WalletConnect">
             Click to scan a QR code and link your mobile wallet using
             WalletConnect.
             <br />
@@ -40,16 +40,16 @@
               style="cursor: pointer"
               alt="WallectConnect"
               src="assets/svg/qr-code.svg"
-              (click)="connectWalletConnect()"
+              (click)="connect(WalletApp.WalletConnect)"
             />
           </div>
-          <div *ngSwitchCase="Wallet.Ledger">
+          <div *ngSwitchCase="WalletApp.Ledger">
             Connect your Ledger device
           </div>
-          <div *ngSwitchCase="Wallet.Keystore">
+          <div *ngSwitchCase="WalletApp.Keystore">
             Select your keystore file
           </div>
-          <div *ngSwitchCase="Wallet.Mnemonic">
+          <div *ngSwitchCase="WalletApp.Mnemonic">
             Recover your Keystore file instead, since it is password protected.
           </div>
         </div>
