@@ -13,30 +13,53 @@ export enum WalletApp {
   providedIn: 'root',
 })
 export class BinanceService {
-  static connector: Connector | null
-  static walletConnector: WalletConnect
+  connector: Connector | null
   constructor() {}
+
+  private resetConnector() {
+    this.connector = null
+    console.log('Reset connector')
+  }
 
   async connect(app: WalletApp): Promise<Connector> {
     switch (app) {
       case WalletApp.WalletConnect:
-        BinanceService.connector = await this.initWalletConnect()
+        this.connector = await this.initWalletConnect()
         break
     }
 
-    return BinanceService.connector
+    return this.connector
   }
 
-  async initWalletConnect(): Promise<WalletConnect> {
+  private async initWalletConnect(): Promise<WalletConnect> {
     // Create a walletConnector
     const connector = new WalletConnect({
       bridge: 'https://bridge.walletconnect.org', // Required
     })
+
+    connector.on('disconnect', () => {
+      this.resetConnector()
+      console.log('Disconnect event')
+    })
     return connector
   }
 
-  disconnect() {
+  async disconnect() {
+    const connector = this.connector
+    if (connector instanceof WalletConnect) {
+      if (connector.connected) {
+        await connector.killSession()
+      }
+    }
+    this.resetConnector()
     console.log('Disconnect')
-    BinanceService.connector = null
+  }
+
+  async getAddress() {
+    const connector = this.connector
+    if (connector instanceof WalletConnect) {
+      const accounts = await connector.getAccounts()
+      return accounts.find(account => account.network == 714).address
+    }
   }
 }

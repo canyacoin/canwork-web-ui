@@ -17,9 +17,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
 
   ngOnInit() {}
 
-  ngOnDestroy() {
-    this.binanceService.disconnect()
-  }
+  ngOnDestroy() {}
 
   isActive(wallet: WalletApp): boolean {
     return this.selected == wallet
@@ -48,33 +46,25 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
         resolve(accounts.find(account => account.network == 714))
       })
 
-      connector.on('disconnect', error => {
-        if (error) {
-          reject(error)
-        }
-        // Delete walletConnector
-        // this.disconnect()
+      if (connector.connected) {
+        await connector.killSession()
+      }
+      // Reconnect
+      await connector.createSession()
+      // get uri for QR Code modal
+      const uri = connector.uri
+      // display QR Code modal
+      WalletConnectQRCodeModal.open(uri, () => {
+        console.log('QR Code Modal closed')
       })
 
-      // Check if connection is already established
-      if (!connector.connected) {
-        // create new session
-        await connector.createSession()
-        // get uri for QR Code modal
-        const uri = connector.uri
-        // display QR Code modal
-        WalletConnectQRCodeModal.open(uri, () => {
-          console.log('QR Code Modal closed')
-        })
-
-        // hack
-        setTimeout(() => {
-          const qrModal = document.getElementById('walletconnect-qrcode-modal')
-          if (qrModal) {
-            qrModal.style.zIndex = '99999'
-          }
-        }, 100)
-      }
+      // hack
+      setTimeout(() => {
+        const qrModal = document.getElementById('walletconnect-qrcode-modal')
+        if (qrModal) {
+          qrModal.style.zIndex = '99999'
+        }
+      }, 100)
     })
   }
 }
