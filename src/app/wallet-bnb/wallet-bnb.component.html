@@ -36,7 +36,12 @@
             Click to scan a QR code and link your mobile wallet using
             WalletConnect.
             <br />
-            <img alt="" src="assets/svg/qr-code.svg" />
+            <img
+              style="cursor: pointer"
+              alt="WallectConnect"
+              src="assets/svg/qr-code.svg"
+              (click)="connectWalletConnect()"
+            />
           </div>
           <div *ngSwitchCase="Wallet.Ledger">
             Connect your Ledger device

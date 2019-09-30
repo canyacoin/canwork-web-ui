@@ -32,8 +32,9 @@ import { DashboardComponent } from './public-job/dashboard/dashboard.component'
 import { JobBidsComponent } from './public-job/job-bids/job-bids.component'
 import { FilterPipeModule } from 'ngx-filter-pipe'
 import { OrderModule } from 'ngx-order-pipe'
-import { AngularFireFunctionsModule } from '@angular/fire/functions';
+import { AngularFireFunctionsModule } from '@angular/fire/functions'
 import { WalletBnbComponent } from './wallet-bnb/wallet-bnb.component'
+import { BinanceService } from '@service/binance.service'
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { WalletBnbComponent } from './wallet-bnb/wallet-bnb.component'
     CertificationsService,
     DockIoService,
     PublicJobService,
+    BinanceService,
   ],
   bootstrap: [AppComponent],
 })
