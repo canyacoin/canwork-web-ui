@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
-import { BinanceService, WalletApp } from '@service/binance.service'
+import { BinanceService, WalletApp, EventType } from '@service/binance.service'
 import WalletConnect from '@trustwallet/walletconnect'
-import { Account } from '@trustwallet/types'
 import WalletConnectQRCodeModal from '@walletconnect/qrcode-modal'
+import { Subject } from 'rxjs'
+import { takeUntil } from 'rxjs/operators'
 
 @Component({
   selector: 'app-wallet-bnb',
@@ -10,61 +11,71 @@ import WalletConnectQRCodeModal from '@walletconnect/qrcode-modal'
   styleUrls: ['./wallet-bnb.component.css'],
 })
 export class WalletBnbComponent implements OnInit, OnDestroy {
+  private $destroy = new Subject()
   selected: WalletApp = WalletApp.WalletConnect
   WalletApp = WalletApp
 
   constructor(private binanceService: BinanceService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.binanceService.$events
+      .pipe(takeUntil(this.$destroy))
+      .subscribe(event => {
+        console.log('Event', event)
+        if (!event) {
+          return
+        }
 
-  ngOnDestroy() {}
+        switch (event.type) {
+          case EventType.Init:
+            const { connector } = event.details
+            if (connector instanceof WalletConnect) {
+              this.walletConnect(connector)
+            }
+            break
+        }
+      })
+  }
+
+  ngOnDestroy() {
+    this.$destroy.next()
+    this.$destroy.complete()
+  }
 
   isActive(wallet: WalletApp): boolean {
     return this.selected == wallet
   }
 
   async connect(app: WalletApp) {
-    const connector = await this.binanceService.connect(app)
-    let account: Account
-    if (connector instanceof WalletConnect) {
-      account = await this.walletConnect(connector)
-    }
+    await this.binanceService.connect(app)
   }
 
-  walletConnect(connector: WalletConnect): Promise<Account> {
-    return new Promise(async (resolve, reject) => {
-      // Subscribe to connection events
-      connector.on('connect', async error => {
-        if (error) {
-          reject(error)
-        }
-        // Close QR Code Modal
-        WalletConnectQRCodeModal.close()
-        // Get provided accounts and chainId
-        const accounts = await connector.getAccounts()
-        console.log(accounts)
-        resolve(accounts.find(account => account.network == 714))
-      })
-
-      if (connector.connected) {
-        await connector.killSession()
-      }
-      // Reconnect
-      await connector.createSession()
-      // get uri for QR Code modal
-      const uri = connector.uri
-      // display QR Code modal
-      WalletConnectQRCodeModal.open(uri, () => {
-        console.log('QR Code Modal closed')
-      })
-
-      // hack
-      setTimeout(() => {
-        const qrModal = document.getElementById('walletconnect-qrcode-modal')
-        if (qrModal) {
-          qrModal.style.zIndex = '99999'
-        }
-      }, 100)
+  async walletConnect(connector: WalletConnect) {
+    // Subscribe to connection events
+    connector.on('connect', () => {
+      // Close QR Code Modal
+      WalletConnectQRCodeModal.close()
+      // Get provided accounts and chainId
     })
+
+    if (connector.connected) {
+      await connector.killSession()
+    }
+    // Reconnect
+    await connector.createSession()
+    // get uri for QR Code modal
+    const uri = connector.uri
+    // display QR Code modal
+    WalletConnectQRCodeModal.open(uri, () => {
+      console.log('QR Code Modal closed')
+    })
+
+    // hack
+    setTimeout(() => {
+      const qrModal = document.getElementById('walletconnect-qrcode-modal')
+      if (qrModal) {
+        qrModal.style.zIndex = '99999'
+      }
+    }, 100)
   }
 }

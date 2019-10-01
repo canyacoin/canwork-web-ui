@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import WalletConnect from '@trustwallet/walletconnect'
+import { BehaviorSubject } from 'rxjs'
 
 export type Connector = WalletConnect
 export enum WalletApp {
@@ -9,11 +10,32 @@ export enum WalletApp {
   Mnemonic,
 }
 
+export enum EventType {
+  Init = 'Init',
+  Connect = 'Connect',
+  Update = 'Update',
+  Disconnect = 'Disconnect',
+}
+
+export interface EventDetails {
+  connector: Connector
+  address?: string
+  keystore?: string
+}
+
+export interface Event {
+  type: EventType
+  details: EventDetails
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class BinanceService {
   connector: Connector | null
+  private events: BehaviorSubject<Event | null> = new BehaviorSubject(null)
+  $events = this.events.asObservable()
+
   constructor() {}
 
   private resetConnector() {
@@ -37,7 +59,45 @@ export class BinanceService {
       bridge: 'https://bridge.walletconnect.org', // Required
     })
 
-    connector.on('disconnect', () => {
+    this.events.next({
+      type: EventType.Init,
+      details: { connector },
+    })
+
+    connector.on('connect', async error => {
+      if (error) {
+        this.events.error(error)
+        return
+      }
+
+      this.events.next({
+        type: EventType.Connect,
+        details: { connector, address: await this.getAddress() },
+      })
+    })
+
+    connector.on('session_update', async error => {
+      if (error) {
+        this.events.error(error)
+        return
+      }
+
+      this.events.next({
+        type: EventType.Update,
+        details: { connector, address: await this.getAddress() },
+      })
+    })
+
+    connector.on('disconnect', error => {
+      if (error) {
+        this.events.error(error)
+        return
+      }
+
+      this.events.next({
+        type: EventType.Disconnect,
+        details: { connector },
+      })
       this.resetConnector()
       console.log('Disconnect event')
     })
