@@ -11,15 +11,15 @@ import { takeUntil } from 'rxjs/operators'
   styleUrls: ['./wallet-bnb.component.css'],
 })
 export class WalletBnbComponent implements OnInit, OnDestroy {
-  private $destroy = new Subject()
+  private destroy$ = new Subject()
   selected: WalletApp = WalletApp.WalletConnect
   WalletApp = WalletApp
 
   constructor(private binanceService: BinanceService) {}
 
   ngOnInit() {
-    this.binanceService.$events
-      .pipe(takeUntil(this.$destroy))
+    this.binanceService.events$
+      .pipe(takeUntil(this.destroy$))
       .subscribe(event => {
         console.log('Event', event)
         if (!event) {
@@ -38,8 +38,8 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.$destroy.next()
-    this.$destroy.complete()
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 
   isActive(wallet: WalletApp): boolean {

@@ -34,7 +34,7 @@ export interface Event {
 export class BinanceService {
   connector: Connector | null
   private events: BehaviorSubject<Event | null> = new BehaviorSubject(null)
-  $events = this.events.asObservable()
+  events$ = this.events.asObservable()
 
   constructor() {}
 
