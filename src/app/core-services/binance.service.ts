@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core'
 import WalletConnect from '@trustwallet/walletconnect'
 import { BehaviorSubject } from 'rxjs'
 
+import BncClient from '@binance-chain/javascript-sdk'
+
 export type Connector = WalletConnect
 export enum WalletApp {
   WalletConnect,
@@ -35,8 +37,11 @@ export class BinanceService {
   connector: Connector | null
   private events: BehaviorSubject<Event | null> = new BehaviorSubject(null)
   events$ = this.events.asObservable()
+  client = new BncClient('https://dex.binance.org/')
 
-  constructor() {}
+  constructor() {
+    this.client.initChain()
+  }
 
   private resetConnector() {
     this.connector = null
