@@ -87,11 +87,15 @@
               CONNECT WALLET
             </button>
           </a>
-          <ng-template #showAddress
-            >{{ bnbAddress.slice(0, 6) }}...{{
-              bnbAddress.slice(-3)
-            }}</ng-template
-          >
+          <ng-template #showAddress>
+            <button
+              border-64
+              class="btn btn-sm btn-primary my-10"
+              (click)="showAssets(bnbAddress)"
+            >
+              {{ bnbAddress.slice(0, 6) }}...{{ bnbAddress.slice(-3) }}
+            </button>
+          </ng-template>
         </li>
         <li *ngIf="!currentUser" class="nav-item">
           <a class="nav-link">

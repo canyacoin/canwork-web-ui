@@ -39,6 +39,7 @@ import { WalletInstallComponent } from './wallet-install/wallet-install.componen
 import { WindowScrollDirective } from './window-scroll.directive'
 import { AvatarComponent } from './avatar/avatar.component'
 import { VerifiedMarkComponent } from './verified-mark/verified-mark.component'
+import { AssetsBnbComponent } from './assets-bnb/assets-bnb.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -90,6 +91,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ComingSoonComponent,
     AvatarComponent,
     VerifiedMarkComponent,
+    AssetsBnbComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -119,5 +121,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
       useValue: DEFAULT_DROPZONE_CONFIG,
     },
   ],
+  entryComponents: [AssetsBnbComponent],
 })
 export class CoreComponentsModule {}
