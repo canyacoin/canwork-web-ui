@@ -4,12 +4,30 @@
       <h2>Assets</h2>
       <div class="row">
         <div class="col text-left">
-          <ul>
-            <li *ngFor="let balance of balances | async" class="balance">
-              <app-dynamic-coin [symbol]="balance.symbol"></app-dynamic-coin>
-              {{ balance.free }}
-            </li>
-          </ul>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Icon</th>
+                <th scope="col">Symbol</th>
+                <th scope="col">Free</th>
+                <th scope="col">Frozen</th>
+                <th scope="col">Locked</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let balance of balances | async">
+                <td>
+                  <app-dynamic-coin
+                    [symbol]="balance.symbol"
+                  ></app-dynamic-coin>
+                </td>
+                <td>{{ balance.symbol }}</td>
+                <td>{{ balance.free }}</td>
+                <td>{{ balance.frozen }}</td>
+                <td>{{ balance.locked }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
