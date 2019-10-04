@@ -9,6 +9,7 @@ export class User {
   description: string
   email: string
   ethAddress: string
+  bnbAddress: string
   slug: string
   hourlyRate: string
   isDockUpdating: boolean

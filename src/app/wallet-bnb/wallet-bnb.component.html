@@ -1,0 +1,59 @@
+<main>
+  <section class="section bg-gray">
+    <div class="container text-center">
+      <h2>Select how you would like to unlock</h2>
+      <div class="row">
+        <div class="col-12 col-md-4">
+          <ul class="tabs">
+            <li
+              (click)="selected = WalletApp.WalletConnect"
+              [class.active]="isActive(WalletApp.WalletConnect)"
+            >
+              WalletConnect
+            </li>
+            <li
+              (click)="selected = WalletApp.Ledger"
+              [class.active]="isActive(WalletApp.Ledger)"
+            >
+              Ledger Device
+            </li>
+            <li
+              (click)="selected = WalletApp.Keystore"
+              [class.active]="isActive(WalletApp.Keystore)"
+            >
+              Keystore File
+            </li>
+            <li
+              (click)="selected = WalletApp.Mnemonic"
+              [class.active]="isActive(WalletApp.Mnemonic)"
+            >
+              Mnemonic Phrase
+            </li>
+          </ul>
+        </div>
+        <div class="col-12 col-md-8 text-left" [ngSwitch]="selected">
+          <div *ngSwitchCase="WalletApp.WalletConnect">
+            Click to scan a QR code and link your mobile wallet using
+            WalletConnect.
+            <br />
+            <img
+              style="cursor: pointer"
+              alt="WallectConnect"
+              src="assets/svg/qr-code.svg"
+              (click)="connect(WalletApp.WalletConnect)"
+            />
+          </div>
+          <div *ngSwitchCase="WalletApp.Ledger">
+            Connect your Ledger device
+          </div>
+          <div *ngSwitchCase="WalletApp.Keystore">
+            Select your keystore file
+          </div>
+          <div *ngSwitchCase="WalletApp.Mnemonic">
+            Recover your Keystore file instead, since it is password protected.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
