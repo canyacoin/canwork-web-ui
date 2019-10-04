@@ -88,13 +88,11 @@
             </button>
           </a>
           <ng-template #showAddress>
-            <button
-              border-64
-              class="btn btn-sm btn-primary my-10"
-              (click)="showAssets(bnbAddress)"
-            >
-              {{ bnbAddress.slice(0, 6) }}...{{ bnbAddress.slice(-3) }}
-            </button>
+            <a class="nav-link" [routerLink]="['/wallet-bnb/assets']">
+              <button border-64 class="btn btn-sm btn-primary my-10">
+                {{ bnbAddress.slice(0, 6) }}...{{ bnbAddress.slice(-3) }}
+              </button>
+            </a>
           </ng-template>
         </li>
         <li *ngIf="!currentUser" class="nav-item">

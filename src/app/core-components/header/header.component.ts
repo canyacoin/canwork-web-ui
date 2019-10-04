@@ -7,8 +7,6 @@ import { NavService } from '@service/nav.service'
 import { AngularFirestore } from 'angularfire2/firestore'
 import { Subscription } from 'rxjs'
 import { BinanceService, EventType } from '@service/binance.service'
-import { DialogService } from 'ng2-bootstrap-modal'
-import { AssetsBnbComponent } from '@component/assets-bnb/assets-bnb.component'
 
 @Component({
   selector: 'app-header',
@@ -54,8 +52,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private navService: NavService,
     private authService: AuthService,
     private router: Router,
-    private binanceService: BinanceService,
-    private dialogService: DialogService
+    private binanceService: BinanceService
   ) {}
 
   async ngOnInit() {
@@ -87,10 +84,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
           break
       }
     })
-  }
-
-  showAssets(address: string) {
-    this.dialogService.addDialog(AssetsBnbComponent, { address })
   }
 
   async initUser() {

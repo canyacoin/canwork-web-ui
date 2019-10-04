@@ -9,13 +9,15 @@ import { sortBy, prop } from 'ramda'
   styleUrls: ['./wallet-bnb-assets.component.css'],
 })
 export class WalletBnbAssetsComponent implements OnInit {
-  address: string = 'bnb1rzxnwxu25hrfv9d3mp25kfyace7j8ez6m5dwkk'
   private balances = new BehaviorSubject(null)
 
   constructor(private binanceService: BinanceService) {}
 
   async ngOnInit() {
-    const resp = await this.binanceService.client.getAccount(this.address)
+    // test address
+    // 'bnb1rzxnwxu25hrfv9d3mp25kfyace7j8ez6m5dwkk'
+    const address: string = await this.binanceService.getAddress()
+    const resp = await this.binanceService.client.getAccount(address)
     if (resp.status === 200) {
       this.balances.next(sortBy(prop('symbol'))(resp.result.balances))
     }
