@@ -40,6 +40,8 @@ import { WindowScrollDirective } from './window-scroll.directive'
 import { AvatarComponent } from './avatar/avatar.component'
 import { VerifiedMarkComponent } from './verified-mark/verified-mark.component'
 import { AssetsBnbComponent } from './assets-bnb/assets-bnb.component'
+import { DynamicCoinComponent } from './dynamic-coin/dynamic-coin.component'
+import { DynamicCoinWrapperComponent } from './dynamic-coin-wrapper/dynamic-coin-wrapper.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -92,6 +94,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     AvatarComponent,
     VerifiedMarkComponent,
     AssetsBnbComponent,
+    DynamicCoinComponent,
+    DynamicCoinWrapperComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -114,6 +118,9 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     StorageDropzoneComponent,
     AvatarComponent,
     VerifiedMarkComponent,
+    AssetsBnbComponent,
+    DynamicCoinComponent,
+    DynamicCoinWrapperComponent,
   ],
   providers: [
     {

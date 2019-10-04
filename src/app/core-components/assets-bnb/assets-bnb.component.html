@@ -8,7 +8,8 @@
       <h4>Tokens in your wallet:</h4>
       <ul>
         <li *ngFor="let balance of balances$ | async">
-          {{ balance.symbol }} - {{ balance.free }}
+          <app-dynamic-coin [symbol]="balance.symbol"></app-dynamic-coin> -
+          {{ balance.free }}
         </li>
       </ul>
     </div>

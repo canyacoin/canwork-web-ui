@@ -1,0 +1,17 @@
+<main>
+  <section class="section bg-gray">
+    <div class="container text-center">
+      <h2>Assets</h2>
+      <div class="row">
+        <div class="col text-left">
+          <ul>
+            <li *ngFor="let balance of balances | async" class="balance">
+              <app-dynamic-coin [symbol]="balance.symbol"></app-dynamic-coin>
+              {{ balance.free }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

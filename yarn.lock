@@ -5976,6 +5976,14 @@ hash.js@^1.0.0, hash.js@^1.0.3:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.1"
 
+hashbow@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/hashbow/-/hashbow-1.1.1.tgz#ea0254654cceb6383dbcd16bc250ccab3f39f636"
+  integrity sha1-6gJUZUzOtjg9vNFrwlDMqz859jY=
+  dependencies:
+    meow "3.7.0"
+    tie-dye "1.0.3"
+
 hawk@~3.1.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/hawk/-/hawk-3.1.3.tgz#078444bd7c1640b0fe540d2c9b73d59678e8e1c4"
@@ -8434,7 +8442,7 @@ memorystream@^0.3.1:
   resolved "https://registry.yarnpkg.com/memorystream/-/memorystream-0.3.1.tgz#86d7090b30ce455d63fbae12dda51a47ddcaf9b2"
   integrity sha1-htcJCzDORV1j+64S3aUaR93K+bI=
 
-meow@^3.7.0:
+meow@3.7.0, meow@^3.7.0:
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/meow/-/meow-3.7.0.tgz#72cb668b425228290abbfa856892587308a801fb"
   integrity sha1-cstmi0JSKCkKu/qFaJJYcwioAfs=
@@ -9527,6 +9535,13 @@ object.pick@^1.3.0:
   integrity sha1-h6EKxMFpS9Lhy/U1kaZhQftd10c=
   dependencies:
     isobject "^3.0.1"
+
+observable-input@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/observable-input/-/observable-input-2.0.1.tgz#9fbbfc49db2c63b9699193ed61bd8b60e59c96c1"
+  integrity sha512-GSGbGhi+Xd7r9A2SxpbxayndVGH0iw6BWcxuQC4s+CLPVuJsksOW8IdRdEAdTywYmK9aAPum2eotN0P+7jl3ag==
+  dependencies:
+    rxjs "^6.2.2"
 
 obuf@^1.0.0, obuf@^1.1.1:
   version "1.1.2"
@@ -11233,7 +11248,7 @@ rxjs@^6.1.0, rxjs@^6.3.3, rxjs@^6.4.0:
   dependencies:
     tslib "^1.9.0"
 
-rxjs@^6.5.3:
+rxjs@^6.2.2, rxjs@^6.5.3:
   version "6.5.3"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.5.3.tgz#510e26317f4db91a7eb1de77d9dd9ba0a4899a3a"
   integrity sha512-wuYsAYYFdWTAnAaPoKGNhfpWwKZbJW+HgAJ+mImp+Epl7BG8oNWBCTyRM8gba9k4lk8BgWdoYm21Mo/RYhhbgA==
@@ -12597,6 +12612,11 @@ thunky@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/thunky/-/thunky-1.0.3.tgz#f5df732453407b09191dae73e2a8cc73f381a826"
   integrity sha512-YwT8pjmNcAXBZqrubu22P4FYsh2D4dxRmnWBOL8Jk8bUcRUtc5326kx32tuTmFDAZtLOGEVNl8POAR8j896Iow==
+
+tie-dye@1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/tie-dye/-/tie-dye-1.0.3.tgz#e63eb6e6e4feef6b28be1f85698766d4210a485f"
+  integrity sha1-5j625uT+72sovh+FaYdm1CEKSF8=
 
 timed-out@^4.0.0, timed-out@^4.0.1:
   version "4.0.1"
