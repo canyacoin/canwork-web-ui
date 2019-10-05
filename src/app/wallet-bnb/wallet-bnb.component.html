@@ -51,9 +51,10 @@
               Select your keystore file
             </div>
             <div class="mb-30">
-              <button class="btn btn-primary">
+              <label for="file-upload" class="btn btn-primary">
                 Upload keystore file
-              </button>
+              </label>
+              <input id="file-upload" type="file" hidden (change)="uploadFile($event)" />
             </div>
             <div class="mb-10">
               <input type="password" placeholder="Enter wallet password" class="keystore-password">

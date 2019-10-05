@@ -14,6 +14,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject()
   selected: WalletApp = WalletApp.WalletConnect
   WalletApp = WalletApp
+  file: File = null
 
   constructor(private binanceService: BinanceService) {}
 
@@ -77,5 +78,14 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
         qrModal.style.zIndex = '99999'
       }
     }, 100)
+  }
+
+  uploadFile(event) {
+    this.file = event.target.files.item(0);
+    let fileReader = new FileReader()
+    fileReader.onload = e => {
+      console.log(fileReader.result)
+    }
+    fileReader.readAsText(this.file)
   }
 }
