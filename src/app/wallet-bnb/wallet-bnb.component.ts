@@ -18,6 +18,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   file: File = null
   validKeystoreUploaded: boolean = false
   keystoreError: string = ''
+  keystorePassword: string = ''
 
   constructor(private binanceService: BinanceService) {}
 
