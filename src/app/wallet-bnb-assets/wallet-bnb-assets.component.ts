@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core'
 import { BinanceService, EventType } from '@service/binance.service'
 import { BehaviorSubject } from 'rxjs'
 import { sortBy, prop } from 'ramda'
-import { OnDestroyComponent } from '@class/on-destroy'
 import { takeUntil } from 'rxjs/operators'
+
+import { OnDestroyComponent } from '@class/on-destroy'
 
 @Component({
   selector: 'app-wallet-bnb-assets',
