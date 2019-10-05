@@ -61,10 +61,13 @@
               </div>
             </div>
             <div class="mb-10">
-              <input [(ngModel)]="keystorePassword" type="password" placeholder="Enter wallet password" class="keystore-password">
+              <input [(ngModel)]="keystorePassword" type="password" (ngModelChange)="resetUnlocking()" placeholder="Enter wallet password" class="keystore-password">
+            </div>
+            <div *ngIf="unlockingFailed" class="keystore-error">
+                Unlocking failed
             </div>
             <div>
-              <button class="btn btn-primary keystore-unlock">
+              <button (click)="unlockKeystore()" [disabled]="!validKeystoreUploaded || !keystorePassword" class="btn btn-primary keystore-unlock">
                 Unlock wallet now
               </button>
             </div>

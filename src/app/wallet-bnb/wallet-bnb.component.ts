@@ -4,6 +4,7 @@ import WalletConnect from '@trustwallet/walletconnect'
 import WalletConnectQRCodeModal from '@walletconnect/qrcode-modal'
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
+import { crypto } from '@binance-chain/javascript-sdk'
 
 @Component({
   selector: 'app-wallet-bnb',
@@ -15,10 +16,11 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   selected: WalletApp = WalletApp.WalletConnect
   WalletApp = WalletApp
 
-  file: File = null
   validKeystoreUploaded: boolean = false
   keystoreError: string = ''
   keystorePassword: string = ''
+  keystore: object = null
+  unlockingFailed: boolean = false
 
   constructor(private binanceService: BinanceService) {}
 
@@ -90,17 +92,18 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   }
 
   uploadFile(event) {
-    this.file = event.target.files.item(0)
+    const file = event.target.files.item(0)
     let fileReader = new FileReader()
 
     fileReader.onload = () => {
       try {
-        const json = JSON.parse(<string><any>fileReader.result)
+        const json = JSON.parse(<string>(<any>fileReader.result))
         if (!('version' in json) || !('crypto' in json)) {
           throw Error()
         } else {
           this.validKeystoreUploaded = true
           this.keystoreError = null
+          this.keystore = json
         }
       } catch (e) {
         console.error(e)
@@ -111,6 +114,33 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
     fileReader.onerror = () => this.showKeystoreError('Upload failed')
     fileReader.onabort = () => this.showKeystoreError('Upload aborted')
 
-    fileReader.readAsText(this.file)
+    fileReader.readAsText(file)
+  }
+
+  resetUnlocking() {
+    this.unlockingFailed = false
+  }
+
+  unlockKeystore() {
+    const keystore = this.keystore
+    const password = this.keystorePassword
+
+    try {
+      const privateKey = crypto.getPrivateKeyFromKeyStore(keystore, password)
+      const address = crypto.getAddressFromPrivateKey(privateKey, 'bnb')
+
+      console.log('keystore', keystore)
+      console.log('address', address)
+
+      this.keystore = null
+      this.keystorePassword = ''
+      this.keystoreError = ''
+      this.validKeystoreUploaded = false
+    } catch (e) {
+      this.unlockingFailed = true
+    }
+
+    // TODO save keystore and address
+    // TODO redirect to another page
   }
 }
