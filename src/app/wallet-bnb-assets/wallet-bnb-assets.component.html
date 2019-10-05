@@ -39,15 +39,27 @@
                 </table>
                 <div class="text-right">
                   <button
+                    border-64
+                    class="btn btn-sm btn-primary mr-20"
+                    ngxClipboard
+                    [cbContent]="address"
+                  >
+                    COPY ADDRESS
+                  </button>
+                  <button
                     (click)="binanceService.disconnect()"
                     border-64
-                    class="btn btn-sm btn-primary my-10"
+                    class="btn btn-sm btn-primary"
                   >
                     FORGET
                   </button>
                 </div>
               </div>
-              <ng-template #loading>Loading...</ng-template>
+              <ng-template #loading>
+                <div class="text-center">
+                  Loading...
+                </div>
+              </ng-template>
             </div>
           </div>
         </div>
