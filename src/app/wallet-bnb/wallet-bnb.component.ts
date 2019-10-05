@@ -14,7 +14,10 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject()
   selected: WalletApp = WalletApp.WalletConnect
   WalletApp = WalletApp
+
   file: File = null
+  validKeystoreUploaded: boolean = false
+  keystoreError: string = ''
 
   constructor(private binanceService: BinanceService) {}
 
@@ -80,12 +83,33 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
     }, 100)
   }
 
+  showKeystoreError(error: string) {
+    this.validKeystoreUploaded = false
+    this.keystoreError = error
+  }
+
   uploadFile(event) {
-    this.file = event.target.files.item(0);
+    this.file = event.target.files.item(0)
     let fileReader = new FileReader()
-    fileReader.onload = e => {
-      console.log(fileReader.result)
+
+    fileReader.onload = () => {
+      try {
+        const json = JSON.parse(<string><any>fileReader.result)
+        if (!('version' in json) || !('crypto' in json)) {
+          throw Error()
+        } else {
+          this.validKeystoreUploaded = true
+          this.keystoreError = null
+        }
+      } catch (e) {
+        console.error(e)
+        this.showKeystoreError('Not a valid keystore file')
+      }
     }
+
+    fileReader.onerror = () => this.showKeystoreError('Upload failed')
+    fileReader.onabort = () => this.showKeystoreError('Upload aborted')
+
     fileReader.readAsText(this.file)
   }
 }
