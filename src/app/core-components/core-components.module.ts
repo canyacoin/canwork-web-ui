@@ -39,7 +39,6 @@ import { WalletInstallComponent } from './wallet-install/wallet-install.componen
 import { WindowScrollDirective } from './window-scroll.directive'
 import { AvatarComponent } from './avatar/avatar.component'
 import { VerifiedMarkComponent } from './verified-mark/verified-mark.component'
-import { AssetsBnbComponent } from './assets-bnb/assets-bnb.component'
 import { DynamicCoinComponent } from './dynamic-coin/dynamic-coin.component'
 import { DynamicCoinWrapperComponent } from './dynamic-coin-wrapper/dynamic-coin-wrapper.component'
 
@@ -93,7 +92,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ComingSoonComponent,
     AvatarComponent,
     VerifiedMarkComponent,
-    AssetsBnbComponent,
     DynamicCoinComponent,
     DynamicCoinWrapperComponent,
   ],
@@ -118,7 +116,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     StorageDropzoneComponent,
     AvatarComponent,
     VerifiedMarkComponent,
-    AssetsBnbComponent,
     DynamicCoinComponent,
     DynamicCoinWrapperComponent,
   ],
@@ -128,6 +125,5 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
       useValue: DEFAULT_DROPZONE_CONFIG,
     },
   ],
-  entryComponents: [AssetsBnbComponent],
 })
 export class CoreComponentsModule {}
