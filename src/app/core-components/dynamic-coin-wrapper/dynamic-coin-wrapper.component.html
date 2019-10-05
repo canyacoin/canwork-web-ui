@@ -1,0 +1,11 @@
+<span
+  class="dynamic-coin-wrapper"
+  [ngStyle]="{
+    width: sizes[size],
+    height: sizes[size],
+    'font-size': fontSizes[size],
+    background: background()
+  }"
+>
+  <ng-content></ng-content>
+</span>

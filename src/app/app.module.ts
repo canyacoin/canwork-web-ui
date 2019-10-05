@@ -34,7 +34,8 @@ import { FilterPipeModule } from 'ngx-filter-pipe'
 import { OrderModule } from 'ngx-order-pipe'
 import { AngularFireFunctionsModule } from '@angular/fire/functions'
 import { WalletBnbComponent } from './wallet-bnb/wallet-bnb.component'
-import { BinanceService } from '@service/binance.service'
+import { BinanceService } from '@service/binance.service';
+import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.component'
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { BinanceService } from '@service/binance.service'
     JobBidsComponent,
     DashboardComponent,
     WalletBnbComponent,
+    WalletBnbAssetsComponent,
   ],
   imports: [
     AppRoutingModule,
