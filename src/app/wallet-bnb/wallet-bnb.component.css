@@ -18,3 +18,21 @@
     border-right: 2px solid #1890ff;
     padding-right: 22px;
 }
+
+.keystore-password {
+  width: 100%;
+  font-family: caption;
+}
+
+.keystore-unlock {
+  float: right;
+}
+
+.keystore-error {
+  color: rgb(255, 65, 54);
+}
+
+.keystore-check {
+  margin-left: 5px;
+  color: rgb(82, 196, 26);
+}

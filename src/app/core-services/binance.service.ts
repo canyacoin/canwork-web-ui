@@ -22,7 +22,7 @@ export enum EventType {
 export interface EventDetails {
   connector: Connector
   address?: string
-  keystore?: string
+  keystore?: object
 }
 
 export interface Event {
@@ -126,5 +126,17 @@ export class BinanceService {
       const accounts = await connector.getAccounts()
       return accounts.find(account => account.network == 714).address
     }
+  }
+
+  initKeystore(keystore: object, address: string) {
+    this.events.next({
+      type: EventType.Connect,
+      details: {
+        connector: null,
+        keystore,
+        address,
+      },
+    })
+    
   }
 }
