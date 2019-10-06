@@ -138,8 +138,5 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
     } catch (e) {
       this.unlockingFailed = true
     }
-
-    // TODO save keystore and address
-    // TODO redirect to another page
   }
 }
