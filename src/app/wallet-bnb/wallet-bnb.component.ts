@@ -129,13 +129,12 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
       const privateKey = crypto.getPrivateKeyFromKeyStore(keystore, password)
       const address = crypto.getAddressFromPrivateKey(privateKey, 'bnb')
 
-      console.log('keystore', keystore)
-      console.log('address', address)
-
       this.keystore = null
       this.keystorePassword = ''
       this.keystoreError = ''
       this.validKeystoreUploaded = false
+
+      this.binanceService.initKeystore(keystore, address)
     } catch (e) {
       this.unlockingFailed = true
     }
