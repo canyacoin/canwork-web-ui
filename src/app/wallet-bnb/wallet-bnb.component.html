@@ -47,7 +47,30 @@
             Connect your Ledger device
           </div>
           <div *ngSwitchCase="WalletApp.Keystore">
-            Select your keystore file
+            <div class="mb-10">
+              Select your keystore file
+            </div>
+            <div class="mb-30">
+              <label for="file-upload" class="btn btn-primary">
+                Upload keystore file
+              </label>
+              <i *ngIf="validKeystoreUploaded" class="fa fa-check-circle keystore-check"></i>
+              <input id="file-upload" type="file" hidden (change)="uploadFile($event)" />
+              <div class="keystore-error">
+                {{ keystoreError }}
+              </div>
+            </div>
+            <div class="mb-10">
+              <input [(ngModel)]="keystorePassword" type="password" (ngModelChange)="resetUnlocking()" placeholder="Enter wallet password" class="keystore-password">
+            </div>
+            <div *ngIf="unlockingFailed" class="keystore-error">
+                Unlocking failed
+            </div>
+            <div>
+              <button (click)="unlockKeystore()" [disabled]="!validKeystoreUploaded || !keystorePassword" class="btn btn-primary keystore-unlock">
+                Unlock wallet now
+              </button>
+            </div>
           </div>
           <div *ngSwitchCase="WalletApp.Mnemonic">
             Recover your Keystore file instead, since it is password protected.
