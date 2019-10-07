@@ -17,7 +17,7 @@
     "deploy:rules": "firebase deploy --only firestore:rules",
     "deploy:indexes": "firebase deploy --only firestore:indexes",
     "dev:functions": "nodemon --watch functions/src/ --exec 'cd functions/src && tsc && cd ../../ && firebase serve --only functions --debug' -e ts",
-    "format": "prettier --write"
+    "format": "prettier --write 'src/**/*' 'tests/**/*' 'functions/src/**/*'"
   },
   "private": true,
   "dependencies": {
@@ -82,6 +82,7 @@
     "@types/ramda": "types/npm-ramda#dist",
     "codelyzer": "^4.0.1",
     "firebase-admin": "^8.5.0",
+    "husky": "^3.0.8",
     "jasmine-core": "~2.8.0",
     "jasmine-spec-reporter": "~4.2.1",
     "jest": "^24.9.0",
@@ -92,6 +93,7 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "nodemon": "^1.18.3",
     "prettier": "^1.18.2",
+    "pretty-quick": "^1.11.1",
     "protractor": "^5.3.2",
     "truffle": "^4.1.12",
     "ts-jest": "^24.0.2",
@@ -103,5 +105,10 @@
   },
   "resolutions": {
     "**/event-stream": "^4.0.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   }
 }
