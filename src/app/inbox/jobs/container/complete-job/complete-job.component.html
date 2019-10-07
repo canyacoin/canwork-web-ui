@@ -1,15 +1,30 @@
-<div *ngIf="!canPayOptions && !fiatPayment && canSee === null"
-  class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
-  <img src="assets/img/loader.svg" height="36px" alt="Loader">
+<div
+  *ngIf="!canPayOptions && !fiatPayment && canSee === null"
+  class="container d-flex h-100 flex-column justify-content-center"
+  style="min-height: 640px;"
+>
+  <img src="assets/img/loader.svg" height="36px" alt="Loader" />
 </div>
-<div *ngIf="!canSee && !canPayOptions" class="container" style="overflow-y: hidden">
+<div
+  *ngIf="!canSee && !canPayOptions"
+  class="container"
+  style="overflow-y: hidden"
+>
   <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet">
-    <img src="/assets/img/CanYa_red_cross.svg" class="img-responsiveness mt-10 animated bounceInUp" width="150">
+    <img
+      src="/assets/img/CanYa_red_cross.svg"
+      class="img-responsiveness mt-10 animated bounceInUp"
+      width="150"
+    />
     <h2>Unauthorized</h2>
-    <p class="lead fw-400">It seems like you're trying to complete this job even though It's already been completed, or
-      is in the process of completion.</p>
+    <p class="lead fw-400">
+      It seems like you're trying to complete this job even though It's already
+      been completed, or is in the process of completion.
+    </p>
     <p class="text-center">
-      <a class="btn btn-secondary" [routerLink]="['/inbox/job', this.job.id]">Return</a>
+      <a class="btn btn-secondary" [routerLink]="['/inbox/job', this.job.id]"
+        >Return</a
+      >
     </p>
   </div>
 </div>
@@ -18,9 +33,11 @@
     <h4>
       Finish Job
     </h4>
-    <br>
-    <p>We have detected that you paid for this job using a credit card. Please use your wallet password to complete
-      this job.</p>
+    <br />
+    <p>
+      We have detected that you paid for this job using a credit card. Please
+      use your wallet password to complete this job.
+    </p>
     <p class="text-danger" *ngIf="wrongPassword">
       Incorrect Password. Please try again.
     </p>
@@ -28,18 +45,34 @@
       <form [formGroup]="walletForm" class="form validate" novalidate>
         <div class="form-group">
           <label for="password">Password:</label>
-          <input type="password" #password formControlName="password" required class="form-control" id="password"
-            [class.invalid]="!walletForm.controls.password.valid && walletForm.controls.password.dirty">
+          <input
+            type="password"
+            #password
+            formControlName="password"
+            required
+            class="form-control"
+            id="password"
+            [class.invalid]="
+              !walletForm.controls.password.valid &&
+              walletForm.controls.password.dirty
+            "
+          />
         </div>
       </form>
     </div>
-    <a class="btn btn-danger m-5" [routerLink]="['/inbox/job', this.job.id]">Cancel</a>
-    <button class="btn btn-primary" (click)="finishJob()"
-      [disabled]="processing || (!walletForm.controls.password.valid)">Finish
-      Job</button>
+    <a class="btn btn-danger m-5" [routerLink]="['/inbox/job', this.job.id]"
+      >Cancel</a
+    >
+    <button
+      class="btn btn-primary"
+      (click)="finishJob()"
+      [disabled]="processing || !walletForm.controls.password.valid"
+    >
+      Finish Job
+    </button>
     <div *ngIf="processing">
-      <br>
-      <img src="assets/img/loader.svg" height="36px" alt="Loader">
+      <br />
+      <img src="assets/img/loader.svg" height="36px" alt="Loader" />
       <p>Processing...do not close this window.</p>
     </div>
   </div>
@@ -47,33 +80,57 @@
 <div class="container mh-50v" *ngIf="fiatPayment && processed && success">
   <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet">
     <div>
-      <img src="/assets/img/CanYa_tick_green.svg" class="img-responsiveness mt-10 animated bounceInUp" width="150">
+      <img
+        src="/assets/img/CanYa_tick_green.svg"
+        class="img-responsiveness mt-10 animated bounceInUp"
+        width="150"
+      />
       <h2>Payment Success!</h2>
       <p class="lead fw-400">The job is now complete.</p>
     </div>
     <p class="text-center">
-      <a class="btn btn-secondary" [routerLink]="['/inbox/job', this.job.id]">Return</a>
+      <a class="btn btn-secondary" [routerLink]="['/inbox/job', this.job.id]"
+        >Return</a
+      >
     </p>
   </div>
 </div>
 <div class="container mh-50v" *ngIf="fiatPayment && processed && !success">
   <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet">
     <div>
-      <img src="/assets/img/CanYa_red_cross.svg" class="img-responsiveness mt-10 animated bounceInUp" width="150">
+      <img
+        src="/assets/img/CanYa_red_cross.svg"
+        class="img-responsiveness mt-10 animated bounceInUp"
+        width="150"
+      />
       <h2>Payment Failed!</h2>
-      <p class="lead fw-400">Something went wrong when processing your payment. Please try again later.</p>
-      <span>{{errorMsg}}</span>
+      <p class="lead fw-400">
+        Something went wrong when processing your payment. Please try again
+        later.
+      </p>
+      <span>{{ errorMsg }}</span>
     </div>
     <p class="text-center">
-      <a class="btn btn-secondary" [routerLink]="['/inbox/job', this.job.id]">Return</a>
+      <a class="btn btn-secondary" [routerLink]="['/inbox/job', this.job.id]"
+        >Return</a
+      >
     </p>
   </div>
 </div>
 <div class="container" *ngIf="canPayOptions && !fiatPayment">
-  <canyalib-canpay [dAppName]="canPayOptions.dAppName" [successText]="canPayOptions.successText"
-    [operation]="canPayOptions.operation" [recipient]="canPayOptions.recipient"
+  <canyalib-canpay
+    [dAppName]="canPayOptions.dAppName"
+    [successText]="canPayOptions.successText"
+    [operation]="canPayOptions.operation"
+    [recipient]="canPayOptions.recipient"
     [postAuthorisationProcessName]="canPayOptions.postAuthorisationProcessName"
-    [postAuthorisationProcessResults]="canPayOptions.postAuthorisationProcessResults"
-    (startPostAuthorisationProcess)="canPayOptions.startPostAuthorisationProcess($event)"
-    (complete)="canPayOptions.complete($event)" (cancel)="canPayOptions.cancel($event)"></canyalib-canpay>
+    [postAuthorisationProcessResults]="
+      canPayOptions.postAuthorisationProcessResults
+    "
+    (startPostAuthorisationProcess)="
+      canPayOptions.startPostAuthorisationProcess($event)
+    "
+    (complete)="canPayOptions.complete($event)"
+    (cancel)="canPayOptions.cancel($event)"
+  ></canyalib-canpay>
 </div>

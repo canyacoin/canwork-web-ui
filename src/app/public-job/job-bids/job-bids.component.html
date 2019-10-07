@@ -5,7 +5,7 @@
       <div class="row">
         <div class="col-12 job-detail-container text-center">
           <div class="card p-30 job-detail-card">
-            <img src="assets/img/loader.svg" height="36px" alt="Loader">
+            <img src="assets/img/loader.svg" height="36px" alt="Loader" />
           </div>
         </div>
       </div>
@@ -24,45 +24,94 @@
       <div class="row">
         <div class="col-12">
           <h4 class="mb-0">REVIEW OFFERS</h4>
-          <p class="my-10 pointer" [routerLink]="['/jobs/public/', job.slug]">For Job: {{ job.information.title
-            }}</p>
+          <p class="my-10 pointer" [routerLink]="['/jobs/public/', job.slug]">
+            For Job: {{ job.information.title }}
+          </p>
         </div>
       </div>
-      <div class="card mb-15 p-20 job-dashboard-card bid-card" *ngFor="let bid of bids; let i = index">
-        <div class="container provider-job-card jobs-info text-center-mobile" *ngIf="bid.providerInfo">
+      <div
+        class="card mb-15 p-20 job-dashboard-card bid-card"
+        *ngFor="let bid of bids; let i = index"
+      >
+        <div
+          class="container provider-job-card jobs-info text-center-mobile"
+          *ngIf="bid.providerInfo"
+        >
           <div class="row">
-            <div class="col-lg-3 col-md-6 col-12 pointer" [routerLink]="['/profile/alt/', bid.providerId]">
-              <app-avatar [user]="bid.providerInfo" [customClass]="'headshot-div hide-mobile'"></app-avatar>
-              <h4 class="ml-2r ml-0-mobile mb-0">{{bid.providerInfo.name}}<app-verified-mark [user]="bid.providerInfo"></app-verified-mark></h4>
+            <div
+              class="col-lg-3 col-md-6 col-12 pointer"
+              [routerLink]="['/profile/alt/', bid.providerId]"
+            >
+              <app-avatar
+                [user]="bid.providerInfo"
+                [customClass]="'headshot-div hide-mobile'"
+              ></app-avatar>
+              <h4 class="ml-2r ml-0-mobile mb-0">
+                {{ bid.providerInfo.name
+                }}<app-verified-mark
+                  [user]="bid.providerInfo"
+                ></app-verified-mark>
+              </h4>
               <p class="ml-2r ml-0-mobile mb-0">{{ bid.providerInfo.title }}</p>
             </div>
             <div class="col-lg-9 col-md-6 hide-mobile">
               <div class="info-details">
-                <p>Bid<br><b>${{bid.budget}}<span *ngIf="job.paymentType !== 'Fixed price'">/hr</span> USD</b></p>
+                <p>
+                  Bid<br /><b
+                    >${{ bid.budget
+                    }}<span *ngIf="job.paymentType !== 'Fixed price'">/hr</span>
+                    USD</b
+                  >
+                </p>
               </div>
-              <button *ngIf="!bid.rejected" [routerLink]="['/inbox/chat']" [queryParams]="{ address : bid.providerId }"
-                class="btn btn-canya-chat btn-sm btn-primary">CHAT</button>
+              <button
+                *ngIf="!bid.rejected"
+                [routerLink]="['/inbox/chat']"
+                [queryParams]="{ address: bid.providerId }"
+                class="btn btn-canya-chat btn-sm btn-primary"
+              >
+                CHAT
+              </button>
             </div>
           </div>
           <div class="row">
             <div class="col-lg-3 col-md-6 col-12">
-              <small class="ml-2r ml-0-mobile"><i class="fas fa-map-marker-alt"></i> {{ bid.providerInfo.timezone }}</small>
+              <small class="ml-2r ml-0-mobile"
+                ><i class="fas fa-map-marker-alt"></i>
+                {{ bid.providerInfo.timezone }}</small
+              >
             </div>
             <div class="col-lg-9 col-md-6 col-12">
-              <app-skill-tag *ngFor="let tag of bid.providerInfo.skillTags" [skill]="tag" [routerLink]="['/search']"></app-skill-tag>
+              <app-skill-tag
+                *ngFor="let tag of bid.providerInfo.skillTags"
+                [skill]="tag"
+                [routerLink]="['/search']"
+              ></app-skill-tag>
             </div>
           </div>
           <div class="row mt-10">
             <div class="col-md-8 col-sm-12">
               <p class="ml-2r ml-0-mobile">
-                {{bid.message}}
+                {{ bid.message }}
               </p>
             </div>
             <div class="col-md-4 col-sm-12 text-right text-center-mobile">
               <i *ngIf="bid.rejected && isOpen">Offer Declined</i>
               <i *ngIf="!isOpen" class="mr-15">Job Closed</i>
-              <button *ngIf="!bid.rejected && isOpen" class="btn btn-sm btn-danger decline-btn" (click)="declineProvider(i)">DECLINE</button>
-              <button *ngIf="!bid.rejected && isOpen" class="btn btn-sm btn-success accept-btn" (click)="chooseProvider(i)">ACCEPT</button>
+              <button
+                *ngIf="!bid.rejected && isOpen"
+                class="btn btn-sm btn-danger decline-btn"
+                (click)="declineProvider(i)"
+              >
+                DECLINE
+              </button>
+              <button
+                *ngIf="!bid.rejected && isOpen"
+                class="btn btn-sm btn-success accept-btn"
+                (click)="chooseProvider(i)"
+              >
+                ACCEPT
+              </button>
             </div>
           </div>
         </div>

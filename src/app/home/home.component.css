@@ -77,14 +77,13 @@
   justify-content: center;
 }
 
-@media screen and (max-width:768px) {
+@media screen and (max-width: 768px) {
   #how-it-works h5 {
     min-height: 0px;
   }
 }
 
-@media screen and (max-width:320px) {
-
+@media screen and (max-width: 320px) {
   .provider-type-card img {
     margin-left: 24px;
     height: 25px;
@@ -100,5 +99,4 @@
     font-size: 14px;
     letter-spacing: 2.3px;
   }
-
 }

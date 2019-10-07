@@ -1,39 +1,38 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core'
 
 export enum View {
   horizontal,
-  vertical
+  vertical,
 }
 
 @Component({
   selector: 'canyalib-msg-box',
   templateUrl: './msg-box.component.html',
-  styleUrls: ['./msg-box.component.css']
+  styleUrls: ['./msg-box.component.css'],
 })
 export class MsgBoxComponent {
-  @Output() action = new EventEmitter();
-  @Input() msg: any;
-  @Input() view: View = View.vertical;
-  @Input() controls: any;
+  @Output() action = new EventEmitter()
+  @Input() msg: any
+  @Input() view: View = View.vertical
+  @Input() controls: any
 
-  View = View;
+  View = View
 
   constructor() {
     if (this.view === View.horizontal) {
-      window.scrollTo(0, 0);
+      window.scrollTo(0, 0)
     }
   }
 
   cancel() {
-    this.action.emit('cancel');
+    this.action.emit('cancel')
   }
 
   ok() {
-    this.action.emit('ok');
+    this.action.emit('ok')
   }
 
   clear() {
-    this.msg = {};
+    this.msg = {}
   }
-
 }

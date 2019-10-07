@@ -1,15 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
 
 @Component({
   selector: 'canyalib-instructions',
   templateUrl: './instructions.component.html',
-  styleUrls: ['./instructions.component.scss']
+  styleUrls: ['./instructions.component.scss'],
 })
 export class InstructionsComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

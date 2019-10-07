@@ -1,13 +1,13 @@
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { NgAisModule } from 'angular-instantsearch';
+import { CommonModule } from '@angular/common'
+import { NgModule } from '@angular/core'
+import { NgAisModule } from 'angular-instantsearch'
 
-import { CoreComponentsModule } from '../core-components/core-components.module';
-import { CoreServicesModule } from '../core-services/core-services.module';
-import { HomeComponent } from './home.component';
-import { HomeRoutingModule } from './home.routing.module';
-import { RandomAnimationComponent } from './random-animation/random-animation.component';
-import { SwiperCardsComponent } from './swiper-cards/swiper-cards.component';
+import { CoreComponentsModule } from '../core-components/core-components.module'
+import { CoreServicesModule } from '../core-services/core-services.module'
+import { HomeComponent } from './home.component'
+import { HomeRoutingModule } from './home.routing.module'
+import { RandomAnimationComponent } from './random-animation/random-animation.component'
+import { SwiperCardsComponent } from './swiper-cards/swiper-cards.component'
 
 @NgModule({
   imports: [
@@ -15,15 +15,9 @@ import { SwiperCardsComponent } from './swiper-cards/swiper-cards.component';
     CoreComponentsModule,
     CoreServicesModule,
     HomeRoutingModule,
-    NgAisModule
+    NgAisModule,
   ],
-  declarations: [
-    HomeComponent,
-    RandomAnimationComponent,
-    SwiperCardsComponent
-  ],
-  exports: [
-    HomeRoutingModule
-  ]
+  declarations: [HomeComponent, RandomAnimationComponent, SwiperCardsComponent],
+  exports: [HomeRoutingModule],
 })
-export class HomeModule { }
+export class HomeModule {}

@@ -288,9 +288,7 @@ export class LoginComponent implements OnInit {
       user = await this.userService.getUser(userDetails.address)
     } catch (error) {
       console.error(
-        `! failed to query for user with address: [${
-          userDetails.address
-        }] error was: `,
+        `! failed to query for user with address: [${userDetails.address}] error was: `,
         error
       )
       this.onBackToMobileSignIn()

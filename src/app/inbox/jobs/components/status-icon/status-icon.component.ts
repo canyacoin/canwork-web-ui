@@ -1,84 +1,82 @@
-import { Component, Input } from '@angular/core';
-import { Job, JobState } from '@class/job';
-import { UserType } from '@class/user';
+import { Component, Input } from '@angular/core'
+import { Job, JobState } from '@class/job'
+import { UserType } from '@class/user'
 
 @Component({
   selector: 'app-status-icon',
   templateUrl: './status-icon.component.html',
-  styleUrls: ['./status-icon.component.css']
+  styleUrls: ['./status-icon.component.css'],
 })
 export class StatusIconComponent {
+  @Input() job: Job
+  @Input() currentUserType: UserType
 
-  @Input() job: Job;
-  @Input() currentUserType: UserType;
-
-  constructor() { }
+  constructor() {}
   get stateColour(): string {
-
     switch (this.job.state) {
       case JobState.offer:
       case JobState.workPendingCompletion:
       case JobState.authorisedEscrow:
-        return 'info';
+        return 'info'
       case JobState.cancelled:
       case JobState.declined:
       case JobState.inDispute:
       case JobState.draft:
       case JobState.closed:
-        return 'danger';
+        return 'danger'
       case JobState.providerCounterOffer:
       case JobState.clientCounterOffer:
       case JobState.termsAcceptedAwaitingEscrow:
       case JobState.finishingJob:
       case JobState.processingEscrow:
-        return 'warning';
+        return 'warning'
       case JobState.complete:
       case JobState.inEscrow:
       case JobState.reviewed:
       case JobState.acceptingOffers:
-        return 'success';
+        return 'success'
       default:
-        return 'primary';
+        return 'primary'
     }
   }
   /* Customizeable messages for each job status. */
   get stateStatus(): string {
     switch (this.job.state) {
       case JobState.offer:
-        return 'Job offered';
+        return 'Job offered'
       case JobState.workPendingCompletion:
-        return 'Pending completion';
+        return 'Pending completion'
       case JobState.cancelled:
-        return 'Cancelled by client';
+        return 'Cancelled by client'
       case JobState.declined:
-        return 'Declined by provider';
+        return 'Declined by provider'
       case JobState.inDispute:
-        return 'Dispute raised';
+        return 'Dispute raised'
       case JobState.providerCounterOffer:
-        return 'Offer countered by provider';
+        return 'Offer countered by provider'
       case JobState.clientCounterOffer:
-        return 'Offer countered by client';
+        return 'Offer countered by client'
       case JobState.termsAcceptedAwaitingEscrow:
       case JobState.authorisedEscrow:
-        return 'Awaiting payment to escrow';
+        return 'Awaiting payment to escrow'
       case JobState.inEscrow:
-        return 'Funds in escrow';
+        return 'Funds in escrow'
       case JobState.complete:
-        return 'Completed';
+        return 'Completed'
       case JobState.reviewed:
-        return 'Reviewed';
+        return 'Reviewed'
       case JobState.acceptingOffers:
-        return 'Accepting Offers';
+        return 'Accepting Offers'
       case JobState.closed:
-        return 'Closed from public';
+        return 'Closed from public'
       case JobState.draft:
-        return 'Draft';
+        return 'Draft'
       case JobState.processingEscrow:
-        return 'Processing Escrow';
+        return 'Processing Escrow'
       case JobState.finishingJob:
-        return 'Finishing Job';
+        return 'Finishing Job'
       default:
-        return '';
+        return ''
     }
   }
 }

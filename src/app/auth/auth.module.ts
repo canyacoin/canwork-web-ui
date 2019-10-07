@@ -1,16 +1,16 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { NgModule } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { FormsModule } from '@angular/forms'
 
-import { FirebaseUIModule } from 'firebaseui-angular';
+import { FirebaseUIModule } from 'firebaseui-angular'
 
-import { CoreComponentsModule } from '../core-components/core-components.module';
-import { CoreServicesModule } from '../core-services/core-services.module';
-import { CoreUtilsModule } from '../core-utils/core-utils.module';
-import { AuthRoutingModule } from './auth.routing.module';
+import { CoreComponentsModule } from '../core-components/core-components.module'
+import { CoreServicesModule } from '../core-services/core-services.module'
+import { CoreUtilsModule } from '../core-utils/core-utils.module'
+import { AuthRoutingModule } from './auth.routing.module'
 
-import { LoginComponent } from './login/login.component';
-import { WithDockComponent } from './with-dock/with-dock.component';
+import { LoginComponent } from './login/login.component'
+import { WithDockComponent } from './with-dock/with-dock.component'
 
 @NgModule({
   imports: [
@@ -20,14 +20,9 @@ import { WithDockComponent } from './with-dock/with-dock.component';
     CoreServicesModule,
     CoreUtilsModule,
     FirebaseUIModule,
-    FormsModule
+    FormsModule,
   ],
-  declarations: [
-    LoginComponent,
-    WithDockComponent
-  ],
-  exports: [
-    AuthRoutingModule
-  ]
+  declarations: [LoginComponent, WithDockComponent],
+  exports: [AuthRoutingModule],
 })
-export class AuthModule { }
+export class AuthModule {}

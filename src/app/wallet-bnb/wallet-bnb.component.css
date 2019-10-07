@@ -1,22 +1,22 @@
 .tabs {
-    list-style: none;
-    border-right: 1px solid #e8e8e8;
+  list-style: none;
+  border-right: 1px solid #e8e8e8;
 }
 .tabs > li {
-    text-align: right;
-    cursor: pointer;
-    font-style: italic;
-    font-weight: 500;
-    font-size: 16px;
-    color: #323c47;
-    letter-spacing: 1px;
-    padding: 8px 24px;
-    margin: 0 0 16px 0;
+  text-align: right;
+  cursor: pointer;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 16px;
+  color: #323c47;
+  letter-spacing: 1px;
+  padding: 8px 24px;
+  margin: 0 0 16px 0;
 }
 
 .tabs > li.active {
-    border-right: 2px solid #1890ff;
-    padding-right: 22px;
+  border-right: 2px solid #1890ff;
+  padding-right: 22px;
 }
 
 .keystore-password {

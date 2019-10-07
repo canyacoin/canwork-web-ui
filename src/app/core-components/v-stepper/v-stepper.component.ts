@@ -1,19 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core'
 
 @Component({
   selector: 'app-v-stepper',
   templateUrl: './v-stepper.component.html',
-  styleUrls: ['./v-stepper.component.css']
+  styleUrls: ['./v-stepper.component.css'],
 })
 export class VStepperComponent implements OnInit {
+  @Input() steps = []
+  @Input() currentStep: any
 
-  @Input() steps = [];
-  @Input() currentStep: any;
-
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
-    this.currentStep = this.currentStep || this.steps[0];
+    this.currentStep = this.currentStep || this.steps[0]
   }
-
 }

@@ -1,25 +1,24 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { RandomAnimationComponent } from './random-animation.component';
+import { RandomAnimationComponent } from './random-animation.component'
 
 describe('RandomAnimationComponent', () => {
-  let component: RandomAnimationComponent;
-  let fixture: ComponentFixture<RandomAnimationComponent>;
+  let component: RandomAnimationComponent
+  let fixture: ComponentFixture<RandomAnimationComponent>
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RandomAnimationComponent ]
-    })
-    .compileComponents();
-  }));
+      declarations: [RandomAnimationComponent],
+    }).compileComponents()
+  }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RandomAnimationComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(RandomAnimationComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

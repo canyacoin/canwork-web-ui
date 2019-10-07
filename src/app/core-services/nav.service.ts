@@ -1,16 +1,14 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject ,  Observable } from 'rxjs';
+import { Injectable } from '@angular/core'
+import { BehaviorSubject, Observable } from 'rxjs'
 
 @Injectable()
 export class NavService {
+  private hideSearchBar = new BehaviorSubject<boolean>(false)
+  hideSearchBar$ = this.hideSearchBar.asObservable()
 
-
-  private hideSearchBar = new BehaviorSubject<boolean>(false);
-  hideSearchBar$ = this.hideSearchBar.asObservable();
-
-  constructor() { }
+  constructor() {}
 
   setHideSearchBar(bool: boolean) {
-    this.hideSearchBar.next(bool);
+    this.hideSearchBar.next(bool)
   }
 }

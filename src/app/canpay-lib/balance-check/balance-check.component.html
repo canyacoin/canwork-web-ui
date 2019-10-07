@@ -1,21 +1,43 @@
-<canyalib-payment-summary-template [paymentSummary]="paymentSummary" [amount]="amount" [showBalance]="true" [balance]="balance"></canyalib-payment-summary-template>
+<canyalib-payment-summary-template
+  [paymentSummary]="paymentSummary"
+  [amount]="amount"
+  [showBalance]="true"
+  [balance]="balance"
+></canyalib-payment-summary-template>
 
 <div class="text-right m-30 float-right" *ngIf="!isLoading">
   <button class="btn btn-primary" *ngIf="!disableCanEx" (click)="callCanex()">
     BUY CAN
   </button>
 
-  <button *ngIf="disableCanEx && status === Status.New && !isLoadingBancorWidget" class="btn btn-primary" (click)="open()"
-    [disabled]="isLoadingBancorWidget">
+  <button
+    *ngIf="disableCanEx && status === Status.New && !isLoadingBancorWidget"
+    class="btn btn-primary"
+    (click)="open()"
+    [disabled]="isLoadingBancorWidget"
+  >
     BUY CAN
   </button>
 
   <div class="bancor-wc" id="bancor-wc-id-1"></div>
 
-  <div *ngIf="status === Status.PendingPurchase || status === Status.InProgress" class="buttons-bar">
-    <button class="btn btn-primary fixed-width-200" [disabled]="status === Status.InProgress" (click)="checkBalance()">
-      <i *ngIf="status === Status.InProgress" class="fa fa-circle-o-notch fa-spin fa-fw"></i> Check Balance
+  <div
+    *ngIf="status === Status.PendingPurchase || status === Status.InProgress"
+    class="buttons-bar"
+  >
+    <button
+      class="btn btn-primary fixed-width-200"
+      [disabled]="status === Status.InProgress"
+      (click)="checkBalance()"
+    >
+      <i
+        *ngIf="status === Status.InProgress"
+        class="fa fa-circle-o-notch fa-spin fa-fw"
+      ></i>
+      Check Balance
     </button>
-    <button class="btn btn-danger fixed-width-200" (click)="cancel()">Cancel</button>
+    <button class="btn btn-danger fixed-width-200" (click)="cancel()">
+      Cancel
+    </button>
   </div>
 </div>

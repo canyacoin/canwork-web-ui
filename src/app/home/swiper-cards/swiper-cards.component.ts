@@ -1,28 +1,27 @@
-import { Component, AfterViewInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
 
-import { Subscription } from 'rxjs';
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'app-swiper-cards',
   templateUrl: './swiper-cards.component.html',
-  styleUrls: ['./swiper-cards.component.css']
+  styleUrls: ['./swiper-cards.component.css'],
 })
 export class SwiperCardsComponent implements AfterViewInit, OnDestroy {
+  routeSub: Subscription
 
-  routeSub: Subscription;
-
-  constructor(private activatedRoute: ActivatedRoute) { }
+  constructor(private activatedRoute: ActivatedRoute) {}
 
   ngAfterViewInit() {
-    this.routeSub = this.activatedRoute.url.subscribe((url) => {
-      this.loadSlides();
-    });
+    this.routeSub = this.activatedRoute.url.subscribe(url => {
+      this.loadSlides()
+    })
   }
 
   ngOnDestroy() {
     if (this.routeSub) {
-      this.routeSub.unsubscribe();
+      this.routeSub.unsubscribe()
     }
   }
 
@@ -33,12 +32,12 @@ export class SwiperCardsComponent implements AfterViewInit, OnDestroy {
       loop: true,
       breakpoints: {
         480: {
-          slidesPerView: 1
-        }
+          slidesPerView: 1,
+        },
       },
-    };
+    }
     if ((<any>window).Swiper) {
-      const slides = new (<any>window).Swiper('.swiper-container', options);
+      const slides = new (<any>window).Swiper('.swiper-container', options)
     }
   }
 }

@@ -15,7 +15,7 @@
   overflow-y: auto;
 }
 
-.desktop-mt-70{
+.desktop-mt-70 {
   margin-top: 70px !important;
 }
 
@@ -26,24 +26,24 @@
     margin: 1.75rem auto;
   }
 }
-@media (max-width: 640px){
-  .desktop-mt-70{
-    margin-top: 0 !important; 
+@media (max-width: 640px) {
+  .desktop-mt-70 {
+    margin-top: 0 !important;
   }
   .modal-dialog,
   .modal-content {
     overflow-y: initial;
-    height: 95%; 
+    height: 95%;
   }
-} 
-@media (max-height: 640px){ 
+}
+@media (max-height: 640px) {
   .modal-dialog,
   .modal-content {
-   margin-top: 15px;
-   overflow-y: initial; 
-   max-height: 100%;
+    margin-top: 15px;
+    overflow-y: initial;
+    max-height: 100%;
   }
   p {
-    font-size : 0.875rem;
+    font-size: 0.875rem;
   }
 }

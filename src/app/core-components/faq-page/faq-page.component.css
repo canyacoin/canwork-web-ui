@@ -1,15 +1,15 @@
-.question-card{
-    padding: 10px 0 10px 0;
+.question-card {
+  padding: 10px 0 10px 0;
 }
-.question-card-header{ 
-    border-radius: 5px;
-    background-color: #f8f8f8; 
-    width: 100%; 
+.question-card-header {
+  border-radius: 5px;
+  background-color: #f8f8f8;
+  width: 100%;
 }
-.faq-header{
-    height: 75px;
+.faq-header {
+  height: 75px;
 }
 
-.faq-header h5{
-    line-height: 75px;
+.faq-header h5 {
+  line-height: 75px;
 }

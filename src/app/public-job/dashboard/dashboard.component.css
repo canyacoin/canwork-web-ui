@@ -24,7 +24,6 @@
   }
 }
 
-
 #checkBox {
   margin-bottom: 7.5px;
 }
@@ -54,7 +53,6 @@
   border-color: white;
 }
 
-
 select {
   width: auto;
   padding: 5px 40px 5px 5px;
@@ -65,21 +63,22 @@ select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background: url('../../../assets/img/chevron-down-solid.svg') 95% / 15px no-repeat #fff;
+  background: url('../../../assets/img/chevron-down-solid.svg') 95% / 15px
+    no-repeat #fff;
 }
 
 .mobile-search-form {
   display: none;
 }
 
-@media (max-width:863px) and (min-width:568px) {
+@media (max-width: 863px) and (min-width: 568px) {
   .headshot {
     width: 65px;
     height: 65px;
   }
 }
 
-@media (max-width:568px) {
+@media (max-width: 568px) {
   .desktop-search-form {
     display: none;
   }
@@ -121,7 +120,7 @@ select {
 
 .select-selected:after {
   position: absolute;
-  content: "";
+  content: '';
   top: 14px;
   right: 10px;
   width: 0;

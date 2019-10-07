@@ -1,18 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'
 
-import * as moment from 'moment';
+import * as moment from 'moment'
 
 @Injectable()
 export class MomentService {
-
-  constructor() { }
-
+  constructor() {}
 
   get(date = null, format: string = 'x'): string {
     if (date != null) {
-      return moment(date).format(format);
+      return moment(date).format(format)
     } else {
-      return moment().format(format);
+      return moment().format(format)
     }
   }
 }

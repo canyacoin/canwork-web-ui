@@ -1,6 +1,6 @@
 .skill-tag {
   display: inline-block;
-  padding: .5em;
+  padding: 0.5em;
   margin-right: 5px;
   font-size: 0.6rem;
   font-weight: 500;
@@ -9,17 +9,17 @@
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
-  border-radius: .50rem;
+  border-radius: 0.5rem;
   color: #9b9b9b;
   background-color: #eceeef;
-  text-transform: uppercase; 
-  outline:none;
-  transition:0.25s all ease-out;
+  text-transform: uppercase;
+  outline: none;
+  transition: 0.25s all ease-out;
 }
 
-.skill-tag:hover{
-  outline:none;
-  transition-delay:0.1s;
+.skill-tag:hover {
+  outline: none;
+  transition-delay: 0.1s;
   background-color: #33ccff;
   color: white;
 }

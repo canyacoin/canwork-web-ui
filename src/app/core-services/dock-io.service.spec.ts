@@ -1,15 +1,15 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed, inject } from '@angular/core/testing'
 
-import { DockIoService } from './dock-io.service';
+import { DockIoService } from './dock-io.service'
 
 describe('DockIoService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [DockIoService]
-    });
-  });
+      providers: [DockIoService],
+    })
+  })
 
   it('should be created', inject([DockIoService], (service: DockIoService) => {
-    expect(service).toBeTruthy();
-  }));
-});
+    expect(service).toBeTruthy()
+  }))
+})

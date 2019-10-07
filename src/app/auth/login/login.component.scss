@@ -4,7 +4,7 @@
   padding-left: 28px;
   color: #535353;
   border-radius: 2px;
-  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, .2);
+  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.2);
   height: 40px;
   .dock-io-icon {
     margin-right: 7px;
@@ -13,38 +13,37 @@
   }
 }
 
-
-.main-content{
-    min-height: 75vh;
+.main-content {
+  min-height: 75vh;
 }
 
-.login-section{
-    padding-top: 5rem;
+.login-section {
+  padding-top: 5rem;
 }
-.uport-btn{
-    border-radius: 5px;
-    background-color:white;
-    padding: 10px;
-    transition-duration: 0.2s;
+.uport-btn {
+  border-radius: 5px;
+  background-color: white;
+  padding: 10px;
+  transition-duration: 0.2s;
 }
-.uport-btn:hover{
-    box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);
+.uport-btn:hover {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
-.uport-btn img{
-    padding: 10px;
+.uport-btn img {
+  padding: 10px;
 }
-@media (max-width:768px){
-    .login-section{
-        padding-top: 1.5rem;
-    }
-    .uport-btn{
-        padding : 25px;
-    }
-    .uport-btn p{
-        font-size: 1rem;
-        padding-top: 10px;
-    }
-    .other-login{
-        padding-top:2rem;
-    }
+@media (max-width: 768px) {
+  .login-section {
+    padding-top: 1.5rem;
+  }
+  .uport-btn {
+    padding: 25px;
+  }
+  .uport-btn p {
+    font-size: 1rem;
+    padding-top: 10px;
+  }
+  .other-login {
+    padding-top: 2rem;
+  }
 }

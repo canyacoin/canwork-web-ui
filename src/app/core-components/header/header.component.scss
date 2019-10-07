@@ -43,7 +43,7 @@ a.canya-login {
   padding-left: 10px;
   padding-right: 20px;
   height: 36px;
-  border: 1px solid #DCE0E6;
+  border: 1px solid #dce0e6;
   border-radius: 5px;
 }
 
@@ -74,7 +74,7 @@ a.canya-login {
 
 .icon-bot:hover {
   background: url('/assets/img/bot-hover.svg');
-  opacity: 1.0;
+  opacity: 1;
 }
 
 .icon-sign-out {
@@ -91,35 +91,35 @@ a.canya-login {
 
 .icon-sign-out:hover {
   background: url('/assets/img/signout-hover.svg');
-  opacity: 1.0;
+  opacity: 1;
 }
 
 .btn-search {
   padding: 7px 6px 7px 26px;
-  opacity: 1.0;
+  opacity: 1;
 }
 
 .btn-search:hover {
   opacity: 0.8;
 }
-.topbar-toggler{
-    padding-top:2rem;
-    color: #535353;
-    font-size: 1.5rem;
+.topbar-toggler {
+  padding-top: 2rem;
+  color: #535353;
+  font-size: 1.5rem;
 }
-.btn-canya-tools:active{
-  background-image: linear-gradient(122deg, #00FFCC 0%, #33ccff 93%) !important;
+.btn-canya-tools:active {
+  background-image: linear-gradient(122deg, #00ffcc 0%, #33ccff 93%) !important;
 }
-.btn-canya-tools:hover{
-  box-shadow: 0 0 10px 0 rgba(0,0,0,0.1) !important;
+.btn-canya-tools:hover {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1) !important;
 }
 
-.mobile-only{
+.mobile-only {
   display: none;
 }
 
-@media screen and (max-width: 768px){
-  .mobile-only{
+@media screen and (max-width: 768px) {
+  .mobile-only {
     display: block;
   }
 }

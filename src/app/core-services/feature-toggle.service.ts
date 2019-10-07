@@ -1,35 +1,36 @@
-import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core'
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+} from 'angularfire2/firestore'
+import { Observable } from 'rxjs'
 
 export class FeatureToggle {
-  featureName: string;
-  enabled: boolean;
-  subFeatures: Map<string, boolean>;
+  featureName: string
+  enabled: boolean
+  subFeatures: Map<string, boolean>
 }
 
 @Injectable()
 export class FeatureToggleService {
-  featureToggleCollection: AngularFirestoreCollection<any>;
+  featureToggleCollection: AngularFirestoreCollection<any>
 
-  constructor(
-    private afs: AngularFirestore) {
-    this.featureToggleCollection = this.afs.collection<any>('features');
-
+  constructor(private afs: AngularFirestore) {
+    this.featureToggleCollection = this.afs.collection<any>('features')
   }
 
   async getFeatureConfig(featureName: string): Promise<FeatureToggle> {
     const feature = await this.featureToggleCollection.ref
       .where('featureName', '==', featureName)
-      .limit(1).get();
+      .limit(1)
+      .get()
 
     return new Promise<FeatureToggle>((resolve, reject) => {
       if (feature.empty) {
-        resolve(null);
+        resolve(null)
       } else {
-        resolve(feature.docs.pop().data() as FeatureToggle);
+        resolve(feature.docs.pop().data() as FeatureToggle)
       }
-    });
+    })
   }
 }
-

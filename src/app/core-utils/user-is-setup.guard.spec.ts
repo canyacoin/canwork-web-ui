@@ -1,15 +1,15 @@
-import { TestBed, async, inject } from '@angular/core/testing';
+import { TestBed, async, inject } from '@angular/core/testing'
 
-import { UserIsSetupGuard } from './user-is-setup.guard';
+import { UserIsSetupGuard } from './user-is-setup.guard'
 
 describe('UserIsSetupGuard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [UserIsSetupGuard]
-    });
-  });
+      providers: [UserIsSetupGuard],
+    })
+  })
 
   it('should ...', inject([UserIsSetupGuard], (guard: UserIsSetupGuard) => {
-    expect(guard).toBeTruthy();
-  }));
-});
+    expect(guard).toBeTruthy()
+  }))
+})

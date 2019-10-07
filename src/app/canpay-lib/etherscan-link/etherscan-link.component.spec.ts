@@ -1,25 +1,24 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { EtherscanLinkComponent } from './etherscan-link.component';
+import { EtherscanLinkComponent } from './etherscan-link.component'
 
 describe('EtherscanLinkComponent', () => {
-  let component: EtherscanLinkComponent;
-  let fixture: ComponentFixture<EtherscanLinkComponent>;
+  let component: EtherscanLinkComponent
+  let fixture: ComponentFixture<EtherscanLinkComponent>
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EtherscanLinkComponent ]
-    })
-    .compileComponents();
-  }));
+      declarations: [EtherscanLinkComponent],
+    }).compileComponents()
+  }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EtherscanLinkComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(EtherscanLinkComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

@@ -1,5 +1,5 @@
 .form-horizontal {
-  font-family: "Montserrat";
+  font-family: 'Montserrat';
   padding: 15px 40px;
   margin: 0px auto;
   text-align: initial;
@@ -121,19 +121,19 @@
 }
 
 .form-progressbar .step-details::before {
-  content: "1";
+  content: '1';
 }
 
 .form-progressbar .step-payment-method::before {
-  content: "2";
+  content: '2';
 }
 
 .form-progressbar .step-deposit::before {
-  content: "3";
+  content: '3';
 }
 
 .form-progressbar .step-complete::before {
-  content: "4";
+  content: '4';
 }
 
 .form-progressbar .step::before {
@@ -163,7 +163,7 @@
 }
 
 .form-progressbar .step::after {
-  content: "";
+  content: '';
   width: 100%;
   height: 1px;
   position: absolute;
@@ -216,9 +216,9 @@
 }
 
 .active-tick {
-  content: "\f00c";
+  content: '\f00c';
   /* http://fontawesome.io/3.2.1/icon/ok/ */
-  font-family: "FontAwesome";
+  font-family: 'FontAwesome';
   float: right;
 }
 
@@ -367,7 +367,7 @@
   text-align: center;
 }
 
-.spinner>div {
+.spinner > div {
   width: 10px;
   height: 10px;
   background-color: #33ccff;
@@ -407,7 +407,6 @@
 }
 
 @-webkit-keyframes sk-bouncedelay {
-
   0%,
   80%,
   100% {
@@ -420,7 +419,6 @@
 }
 
 @keyframes sk-bouncedelay {
-
   0%,
   80%,
   100% {
@@ -526,14 +524,12 @@
   }
 }
 
-
-
 .payment-margin-right {
-  margin-right: 8px
+  margin-right: 8px;
 }
 
 .payment-margin-left {
-  margin-left: 3px
+  margin-left: 3px;
 }
 
 .payments-font {
@@ -584,7 +580,7 @@
 
 .scrollbar-primary::-webkit-scrollbar {
   width: 12px;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
 
 .scrollbar-primary::-webkit-scrollbar-thumb {
@@ -595,13 +591,13 @@
 
 .scrollbar-danger::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   border-radius: 10px;
 }
 
 .scrollbar-danger::-webkit-scrollbar {
   width: 12px;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
 
 .scrollbar-danger::-webkit-scrollbar-thumb {
@@ -612,47 +608,47 @@
 
 .scrollbar-warning::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   border-radius: 10px;
 }
 
 .scrollbar-warning::-webkit-scrollbar {
   width: 12px;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
 
 .scrollbar-warning::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-  background-color: #FF8800;
+  background-color: #ff8800;
 }
 
 .scrollbar-success::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   border-radius: 10px;
 }
 
 .scrollbar-success::-webkit-scrollbar {
   width: 12px;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
 
 .scrollbar-success::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-  background-color: #00C851;
+  background-color: #00c851;
 }
 
 .scrollbar-info::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   border-radius: 10px;
 }
 
 .scrollbar-info::-webkit-scrollbar {
   width: 12px;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
 
 .scrollbar-info::-webkit-scrollbar-thumb {
@@ -663,30 +659,30 @@
 
 .scrollbar-default::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   border-radius: 10px;
 }
 
 .scrollbar-default::-webkit-scrollbar {
   width: 12px;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
 
 .scrollbar-default::-webkit-scrollbar-thumb {
   border-radius: 10px;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-  background-color: #2BBBAD;
+  background-color: #2bbbad;
 }
 
 .scrollbar-secondary::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   border-radius: 10px;
 }
 
 .scrollbar-secondary::-webkit-scrollbar {
   width: 12px;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
 
 .scrollbar-secondary::-webkit-scrollbar-thumb {
@@ -708,8 +704,6 @@
   }
 }
 
-
-
 .input-group-text {
   background-color: #3cf;
   padding: 0.375rem 0.75rem;
@@ -719,15 +713,19 @@
   border-radius: 0px;
 }
 
-@media(min-width:768px) and (max-width:825px) {
-  .payment-body[_ngcontent-c16] .card-holder[_ngcontent-c16] .card-body[_ngcontent-c16] {
+@media (min-width: 768px) and (max-width: 825px) {
+  .payment-body[_ngcontent-c16]
+    .card-holder[_ngcontent-c16]
+    .card-body[_ngcontent-c16] {
     border: 1px solid #dce0ec;
     position: relative;
     width: 127px;
     padding: 15px 0 7px;
   }
 
-  .payment-body[_ngcontent-c15] .card-holder[_ngcontent-c15] .card-body[_ngcontent-c15] {
+  .payment-body[_ngcontent-c15]
+    .card-holder[_ngcontent-c15]
+    .card-body[_ngcontent-c15] {
     border: 1px solid #dce0ec;
     position: relative;
     width: 135px !important;
@@ -792,8 +790,10 @@
   }
 }
 
-@media(min-width:1024px) and (max-width:1200px) {
-  .payment-body[_ngcontent-c15] .card-holder[_ngcontent-c15] .card-body[_ngcontent-c15] {
+@media (min-width: 1024px) and (max-width: 1200px) {
+  .payment-body[_ngcontent-c15]
+    .card-holder[_ngcontent-c15]
+    .card-body[_ngcontent-c15] {
     border: 1px solid #dce0ec;
     position: relative;
     width: 160px !important;
@@ -851,11 +851,12 @@
     margin-right: 0px;
     background-color: #3cf;
   }
-
 }
 
-@media(min-width:1366px) and (max-width:1400px) {
-  .payment-body[_ngcontent-c15] .card-holder[_ngcontent-c15] .card-body[_ngcontent-c15] {
+@media (min-width: 1366px) and (max-width: 1400px) {
+  .payment-body[_ngcontent-c15]
+    .card-holder[_ngcontent-c15]
+    .card-body[_ngcontent-c15] {
     border: 1px solid #dce0ec;
     position: relative;
     width: 162px;
@@ -868,15 +869,19 @@
   }
 }
 
-@media(min-width:650px) and (max-width:736px) {
-  .payment-body[_ngcontent-c15] .card-holder[_ngcontent-c15] .card-body[_ngcontent-c15] {
+@media (min-width: 650px) and (max-width: 736px) {
+  .payment-body[_ngcontent-c15]
+    .card-holder[_ngcontent-c15]
+    .card-body[_ngcontent-c15] {
     border: none;
     position: relative;
     width: 135px;
     padding: 15px 0 7px;
   }
 
-  .payment-body[_ngcontent-c16] .card-holder[_ngcontent-c16] .card-body[_ngcontent-c16] {
+  .payment-body[_ngcontent-c16]
+    .card-holder[_ngcontent-c16]
+    .card-body[_ngcontent-c16] {
     border: none;
     position: relative;
     width: 127px;
@@ -941,15 +946,14 @@
   }
 }
 
-
-@media(min-width:500px) and (max-width:568px) {
+@media (min-width: 500px) and (max-width: 568px) {
   .tip-button[_ngcontent-c17] {
     width: 100%;
     height: 90px;
   }
 }
 
-@media(max-width:320px) {
+@media (max-width: 320px) {
   .label-success[_ngcontent-c1][_ngcontent-c1] {
     font-size: 8px !important;
   }

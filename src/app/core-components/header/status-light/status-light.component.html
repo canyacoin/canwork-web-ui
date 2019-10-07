@@ -1,21 +1,37 @@
-<a class="nav-link dropdown-toggle" role="button" id="connectionDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-  aria-expanded="false">
-  <i class="fa fa-circle fs-9" [ngStyle]="{'color': web3Color}"></i>
+<a
+  class="nav-link dropdown-toggle"
+  role="button"
+  id="connectionDropdownMenuLink"
+  data-toggle="dropdown"
+  aria-haspopup="true"
+  aria-expanded="false"
+>
+  <i class="fa fa-circle fs-9" [ngStyle]="{ color: web3Color }"></i>
 </a>
-<div class="dropdown-menu dropdown-menu-right " aria-labelledby="connectionDropdownMenuLink">
+<div
+  class="dropdown-menu dropdown-menu-right "
+  aria-labelledby="connectionDropdownMenuLink"
+>
   <div class="dropdown-item w-250 d-flex justify-content-between">
     <span class="text-left">
-      <i class="fa fa-circle fs-10 mb-2 pr-30" [ngStyle]="{'color': web3Color}"></i>
+      <i
+        class="fa fa-circle fs-10 mb-2 pr-30"
+        [ngStyle]="{ color: web3Color }"
+      ></i>
       <span *ngIf="netType != null">Ethereum Network:</span>
       <span *ngIf="netType == null">Wallet not detected.</span>
     </span>
-    <span *ngIf="netType != null ">{{netType}}</span>
+    <span *ngIf="netType != null">{{ netType }}</span>
   </div>
   <div class="dropdown-divider"></div>
   <div class="dropdown-item d-flex justify-content-between">
     <span class="text-left">
-      <i *ngIf="showRefreshButton" class="fa fa-refresh fs-10 mb-2 pr-30 pointer" (click)="getAccount()"></i>
-      <span [ngClass]="{'pl-30': !showRefreshButton}">{{web3Message}}</span>
+      <i
+        *ngIf="showRefreshButton"
+        class="fa fa-refresh fs-10 mb-2 pr-30 pointer"
+        (click)="getAccount()"
+      ></i>
+      <span [ngClass]="{ 'pl-30': !showRefreshButton }">{{ web3Message }}</span>
     </span>
   </div>
   <div class="dropdown-item">
@@ -24,17 +40,31 @@
     </span>
   </div>
   <div *ngIf="account" class="dropdown-divider"></div>
-  <div *ngIf="account" class="dropdown-item d-flex justify-content-between" (click)="updateBalanceAsync()">
+  <div
+    *ngIf="account"
+    class="dropdown-item d-flex justify-content-between"
+    (click)="updateBalanceAsync()"
+  >
     <span class="pl-30 pr-20 text-left">Balance:</span>
     <span style="max-width: 125px">
-      {{canBalance}}
-      <img class="logo-default pl-10 pointer" (click)="updateBalanceAsync()" src="assets/img/round-icon.svg" width="auto" height="18px"
-        alt="logo">
+      {{ canBalance }}
+      <img
+        class="logo-default pl-10 pointer"
+        (click)="updateBalanceAsync()"
+        src="assets/img/round-icon.svg"
+        width="auto"
+        height="18px"
+        alt="logo"
+      />
     </span>
-    <br>
+    <br />
   </div>
   <div *ngIf="account" class="pl-20 dropdown-item text">
-    <button [routerLink]="['/exchange']" border-64 class="btn btn-primary mx-10 hidden-md-down">
+    <button
+      [routerLink]="['/exchange']"
+      border-64
+      class="btn btn-primary mx-10 hidden-md-down"
+    >
       BUY CAN
     </button>
   </div>

@@ -1,4 +1,4 @@
-@import "styles.scss";
+@import 'styles.scss';
 
 .overlay {
   background-color: rgba(black, 0.7);
@@ -17,7 +17,7 @@
   display: inline-block;
   position: relative;
 
-  >span {
+  > span {
     position: absolute;
     color: white;
     width: 100%;
@@ -46,7 +46,6 @@
   }
 }
 
-
 #close-profile-edit-nav {
   position: absolute;
   text-align: right;
@@ -61,17 +60,17 @@
   }
 }
 
-input[type="color"] {
+input[type='color'] {
   -webkit-appearance: none;
   width: 50px;
   height: 30px;
 }
 
-input[type="color"]::-webkit-color-swatch-wrapper {
+input[type='color']::-webkit-color-swatch-wrapper {
   padding: 0px;
 }
 
-input[type="color"]::-webkit-color-swatch {
+input[type='color']::-webkit-color-swatch {
   border: 1px solid #e8e8e8;
   border-radius: 2px;
 }

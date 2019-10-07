@@ -5,14 +5,28 @@
         <div class="col-md-6">
           <div class="faq-content-hero-text">
             <h1>FAQ's</h1>
-            <p>Frequently Asked Questions
-              <br><s></s>earch or browse below for some common questions about CanYa. </p>
-            <form method="post" (ngSubmit)="onSearch(inputSearch.value);">
+            <p>
+              Frequently Asked Questions <br /><s></s>earch or browse below for
+              some common questions about CanYa.
+            </p>
+            <form method="post" (ngSubmit)="onSearch(inputSearch.value)">
               <div class="canya-seach-bar input-group mb-3">
-                <input #inputSearch (keyup)="onKeyUp(inputSearch.value);" type="text" class="form-control canya-search-input" placeholder="Search FAQ..">
+                <input
+                  #inputSearch
+                  (keyup)="onKeyUp(inputSearch.value)"
+                  type="text"
+                  class="form-control canya-search-input"
+                  placeholder="Search FAQ.."
+                />
                 <div class="input-group-append">
-                  <button class="canya-search-input-btn btn btn-primary"  type="submit">
-                    <img class="search-img" src="assets/img/search-icon-white.svg">
+                  <button
+                    class="canya-search-input-btn btn btn-primary"
+                    type="submit"
+                  >
+                    <img
+                      class="search-img"
+                      src="assets/img/search-icon-white.svg"
+                    />
                   </button>
                 </div>
               </div>
@@ -20,37 +34,53 @@
           </div>
         </div>
         <div class="col-md-6 text-center">
-          <img src="https://canya.io/images/CanYa_Consult.gif">
+          <img src="https://canya.io/images/CanYa_Consult.gif" />
         </div>
       </div>
-      <div *ngIf = "!isOnMobile" >
-      <div class="question-card card" *ngFor="let faq of queryFaqs;let i = index">
-          <a  class="p-20 question-card-header"  data-toggle="collapse" [attr.data-target]="'#' + faq.index" aria-expanded="true"
-          [attr.aria-controls]="faq.index">
-        <div class="row" id="headingOne">
-            <div class="col-11">
-              <h5 class="text-left">{{faq.q}}</h5>
+      <div *ngIf="!isOnMobile">
+        <div
+          class="question-card card"
+          *ngFor="let faq of queryFaqs; let i = index"
+        >
+          <a
+            class="p-20 question-card-header"
+            data-toggle="collapse"
+            [attr.data-target]="'#' + faq.index"
+            aria-expanded="true"
+            [attr.aria-controls]="faq.index"
+          >
+            <div class="row" id="headingOne">
+              <div class="col-11">
+                <h5 class="text-left">{{ faq.q }}</h5>
+              </div>
+              <div class="col-1 text-center">
+                <span>
+                  <i class="fas fa-chevron-down"></i>
+                </span>
+              </div>
             </div>
-            <div class="col-1 text-center">
-              <span>
-                <i class="fas fa-chevron-down"></i>
-              </span>
+          </a>
+          <div
+            id="{{ faq.index }}"
+            class="collapse"
+            aria-labelledby="headingOne"
+            data-parent="#accordion"
+          >
+            <div class="card-body p-20">
+              {{ faq.a }}
             </div>
-        </div>
-      </a>
-        <div id="{{faq.index}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-          <div class="card-body p-20">
-            {{faq.a}}
           </div>
         </div>
       </div>
-      </div>
-      <div *ngIf = "isOnMobile">
-        <div class="question-card card" *ngFor="let faq of queryFaqs;let i = index">
-            <div class="question-card-header">
-                <h6 class="p-20 text-left">{{faq.q}}</h6>
-            </div>
-            <p class="p-20">{{faq.a}}</p>
+      <div *ngIf="isOnMobile">
+        <div
+          class="question-card card"
+          *ngFor="let faq of queryFaqs; let i = index"
+        >
+          <div class="question-card-header">
+            <h6 class="p-20 text-left">{{ faq.q }}</h6>
+          </div>
+          <p class="p-20">{{ faq.a }}</p>
         </div>
       </div>
     </div>
