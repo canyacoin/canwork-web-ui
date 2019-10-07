@@ -16,7 +16,8 @@
     "deploy:functions": "firebase deploy --only functions",
     "deploy:rules": "firebase deploy --only firestore:rules",
     "deploy:indexes": "firebase deploy --only firestore:indexes",
-    "dev:functions": "nodemon --watch functions/src/ --exec 'cd functions/src && tsc && cd ../../ && firebase serve --only functions --debug' -e ts"
+    "dev:functions": "nodemon --watch functions/src/ --exec 'cd functions/src && tsc && cd ../../ && firebase serve --only functions --debug' -e ts",
+    "format": "prettier --write"
   },
   "private": true,
   "dependencies": {
