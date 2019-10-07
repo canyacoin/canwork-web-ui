@@ -121,9 +121,7 @@ export class IJobAction {
       case ActionType.declineTerms:
         return `${executor} cancelled this job.`
       case ActionType.authoriseEscrow:
-        return `${executor} authorised the Escrow contract to transfer $${
-          this.amountUsd
-        } USD`
+        return `${executor} authorised the Escrow contract to transfer $${this.amountUsd} USD`
       case ActionType.cancelJobEarly:
         return `${executor} cancelled the job early.`
       case ActionType.enterEscrow:

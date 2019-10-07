@@ -1,7 +1,11 @@
 <app-back-button></app-back-button>
 
-<div *ngIf="!job" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
-  <img src="assets/img/loader.svg" height="36px" alt="Loader">
+<div
+  *ngIf="!job"
+  class="container d-flex h-100 flex-column justify-content-center"
+  style="min-height: 640px;"
+>
+  <img src="assets/img/loader.svg" height="36px" alt="Loader" />
 </div>
 
 <div class="container job-detail-container" *ngIf="job">
@@ -19,21 +23,37 @@
         <div class="col-sm-9">
           <p class="fw-600 ls-1 my-0">JOB DETAILS</p>
           <h2>
-            {{job.information.title}}
+            {{ job.information.title }}
           </h2>
           <div class="" style="max-width: 65vw">
             <span *ngIf="hideDescription">
-              <p class="job-description" [innerHTML]="job.information.description.substring(0, 80) | linkify">
+              <p
+                class="job-description"
+                [innerHTML]="
+                  job.information.description.substring(0, 80) | linkify
+                "
+              ></p>
               <div>
-                <a class="pointer text-blue" *ngIf="job.information.description.length > 80" (click)="toggleDescription()">
-                  ...<br>Show more
+                <a
+                  class="pointer text-blue"
+                  *ngIf="job.information.description.length > 80"
+                  (click)="toggleDescription()"
+                >
+                  ...<br />Show more
                 </a>
               </div>
             </span>
             <span *ngIf="!hideDescription">
-              <p class="job-description" [innerHTML]="job.information.description | linkify">
+              <p
+                class="job-description"
+                [innerHTML]="job.information.description | linkify"
+              ></p>
               <div>
-                <a class="pointer text-blue" *ngIf="job.information.description.length > 80" (click)="toggleDescription()">
+                <a
+                  class="pointer text-blue"
+                  *ngIf="job.information.description.length > 80"
+                  (click)="toggleDescription()"
+                >
                   Show less
                 </a>
               </div>
@@ -43,7 +63,7 @@
         <div class="col-sm-3 job-info">
           <div class="info-details">
             <p>
-              {{job.paymentType}}
+              {{ job.paymentType }}
             </p>
             <b>
               <app-budget [job]="job"></app-budget>
@@ -51,16 +71,21 @@
           </div>
           <div class="info-details">
             <p>Timeline</p>
-            <b>{{job.information.timelineExpectation}}</b>
+            <b>{{ job.information.timelineExpectation }}</b>
           </div>
-          <div class="info-details" *ngIf="job.information.attachments.length > 0">
+          <div
+            class="info-details"
+            *ngIf="job.information.attachments.length > 0"
+          >
             <b>Attachments</b>
-            <a href="{{job.information.attachments[0].url}}" target="_blank">
+            <a href="{{ job.information.attachments[0].url }}" target="_blank">
               <p *ngIf="job.information.attachments[0].name.length > 10">
-                <i class="fas fa-paperclip"></i> {{ job.information.attachments[0].name.substring(0, 10) }}...
+                <i class="fas fa-paperclip"></i>
+                {{ job.information.attachments[0].name.substring(0, 10) }}...
               </p>
               <p *ngIf="job.information.attachments[0].name.length <= 10">
-                <i class="fas fa-paperclip"></i> {{ job.information.attachments[0].name }}...
+                <i class="fas fa-paperclip"></i>
+                {{ job.information.attachments[0].name }}...
               </p>
             </a>
           </div>
@@ -72,36 +97,59 @@
     <div class="row">
       <div class="col-sm-9 col-12">
         <h5>PROPOSED TERMS</h5>
-        <br>
-        <div *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri" class="otherPartyName pointer" [routerLink]="['/profile/alt/', job.otherParty.id]">
-          <app-avatar [user]="job.otherParty" [customClass]="'headshot-div'"></app-avatar>
-          <p>{{job.otherParty?.name}}<app-verified-mark [user]="job.otherParty"></app-verified-mark></p>
+        <br />
+        <div
+          *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri"
+          class="otherPartyName pointer"
+          [routerLink]="['/profile/alt/', job.otherParty.id]"
+        >
+          <app-avatar
+            [user]="job.otherParty"
+            [customClass]="'headshot-div'"
+          ></app-avatar>
+          <p>
+            {{ job.otherParty?.name
+            }}<app-verified-mark [user]="job.otherParty"></app-verified-mark>
+          </p>
         </div>
         <div class="info-details" *ngIf="isOnMobile">
           <p>Status</p>
-          <app-status-icon [job]="job" [currentUserType]="userType"></app-status-icon>
+          <app-status-icon
+            [job]="job"
+            [currentUserType]="userType"
+          ></app-status-icon>
         </div>
         <div class="info-details">
           <b>
-            {{job.paymentType}}
+            {{ job.paymentType }}
           </b>
-          <p>This project is set at a {{job.paymentType}}
-            <br>
+          <p>
+            This project is set at a {{ job.paymentType }}
+            <br />
             <app-budget [job]="job"></app-budget>
           </p>
         </div>
         <div class="actions-div" *ngIf="availableActions.length > 0">
-          <button *ngFor="let action of availableActions" class="btn action-btn mt-5 mr-5 btn-{{getColour(action)}} btn-outline btn-sm"
-            (click)="executeAction(action)" [disabled]="actionIsDisabled(action)">
-            {{action}}
+          <button
+            *ngFor="let action of availableActions"
+            class="btn action-btn mt-5 mr-5 btn-{{
+              getColour(action)
+            }} btn-outline btn-sm"
+            (click)="executeAction(action)"
+            [disabled]="actionIsDisabled(action)"
+          >
+            {{ action }}
           </button>
-          <br>
+          <br />
         </div>
       </div>
       <div class="col-sm-3" *ngIf="!isOnMobile">
         <div class="info-details">
           <p>Status</p>
-          <app-status-icon [job]="job" [currentUserType]="userType"></app-status-icon>
+          <app-status-icon
+            [job]="job"
+            [currentUserType]="userType"
+          ></app-status-icon>
         </div>
       </div>
     </div>
@@ -113,23 +161,52 @@
           <h4>ACTION LOG</h4>
           <div id="job-logs" class="row my-10">
             <div class="col-12 my-10" *ngIf="!isOnMobile">
-              <div *ngFor="let action of job.parsedActionLog | orderBy:'timestamp':true; let actionIndex = index" class="my-10">
-                <div class="row" *ngIf="!action.private || action.executedBy == currentUserType">
+              <div
+                *ngFor="
+                  let action of job.parsedActionLog | orderBy: 'timestamp':true;
+                  let actionIndex = index
+                "
+                class="my-10"
+              >
+                <div
+                  class="row"
+                  *ngIf="
+                    !action.private || action.executedBy == currentUserType
+                  "
+                >
                   <div class="col-lg-8 col-md-6  col-sm-6 col-6">
-                    <p [innerHTML]="action.getMessage(getActionExecutor(action))"></p>
+                    <p
+                      [innerHTML]="action.getMessage(getActionExecutor(action))"
+                    ></p>
                   </div>
                   <div class="col-lg-4 col-md-6  col-sm-6 col-6 text-right">
-                    {{ action.timestamp | date:'medium' }}
+                    {{ action.timestamp | date: 'medium' }}
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-12 my-10" *ngIf="isOnMobile">
-              <div *ngFor="let action of job.parsedActionLog | orderBy:'timestamp':true; let actionIndex = index" class="my-10">
-                <div class="row" *ngIf="!action.private || action.executedBy == currentUserType">
+              <div
+                *ngFor="
+                  let action of job.parsedActionLog | orderBy: 'timestamp':true;
+                  let actionIndex = index
+                "
+                class="my-10"
+              >
+                <div
+                  class="row"
+                  *ngIf="
+                    !action.private || action.executedBy == currentUserType
+                  "
+                >
                   <div class="col-12">
-                    <p class="no-margin" [innerHTML]="action.getMessage(getActionExecutor(action))"></p>
-                    <p class="text-grey">{{ action.timestamp | date:'medium' }}</p>
+                    <p
+                      class="no-margin"
+                      [innerHTML]="action.getMessage(getActionExecutor(action))"
+                    ></p>
+                    <p class="text-grey">
+                      {{ action.timestamp | date: 'medium' }}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -147,19 +224,24 @@
           No payments have been made yet
         </div>
         <div *ngIf="transactions.length >= 1">
-          <div *ngFor="let tx of transactions | orderBy:'timestamp':true" class="card mb-15 py-20 bg-transparent">
+          <div
+            *ngFor="let tx of transactions | orderBy: 'timestamp':true"
+            class="card mb-15 py-20 bg-transparent"
+          >
             <div class="row">
               <div class="col-lg-8 col-md-6 col-sm-6 col-xs-6">
-                <i class="circle-{{getTxColor(tx)}} fas fa-circle"></i> {{tx.actionType}}
+                <i class="circle-{{ getTxColor(tx) }} fas fa-circle"></i>
+                {{ tx.actionType }}
               </div>
               <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 text-right">
-                {{ tx.timestamp | date:'medium' }}
+                {{ tx.timestamp | date: 'medium' }}
               </div>
             </div>
             <div class="row">
               <div class="col-lg-6">
-                <a href="{{getTxLink(tx.hash)}}" target="_blank">View on
-                  Etherscan</a>
+                <a href="{{ getTxLink(tx.hash) }}" target="_blank"
+                  >View on Etherscan</a
+                >
               </div>
             </div>
           </div>
@@ -175,20 +257,31 @@
           No reviews have been left yet
         </div>
         <div *ngIf="reviews.length >= 1">
-          <div *ngFor="let review of reviews | orderBy:'createdAt':true" class="card mb-15 py-20 bg-transparent">
+          <div
+            *ngFor="let review of reviews | orderBy: 'createdAt':true"
+            class="card mb-15 py-20 bg-transparent"
+          >
             <div class="row mt-3">
               <div class="col-6">
-                By <b>{{review.reviewerName}}</b>
+                By <b>{{ review.reviewerName }}</b>
               </div>
               <div class="col-6">
-                <star-rating class="float-right" [starType]="'svg'" showHalfStars="true" staticColor="ok" [readOnly]="true" [rating]="review.rating" [step]="0.5"></star-rating>
+                <star-rating
+                  class="float-right"
+                  [starType]="'svg'"
+                  showHalfStars="true"
+                  staticColor="ok"
+                  [readOnly]="true"
+                  [rating]="review.rating"
+                  [step]="0.5"
+                ></star-rating>
               </div>
               <div class="col-12">
                 <p class="mb-0">{{ review.message }}</p>
               </div>
               <div class="col-12">
                 <small>
-                  {{review.createdAt | date}}
+                  {{ review.createdAt | date }}
                 </small>
               </div>
             </div>

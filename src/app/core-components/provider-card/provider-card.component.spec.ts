@@ -1,25 +1,24 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { ProviderCardComponent } from './provider-card.component';
+import { ProviderCardComponent } from './provider-card.component'
 
 describe('ProviderCardComponent', () => {
-  let component: ProviderCardComponent;
-  let fixture: ComponentFixture<ProviderCardComponent>;
+  let component: ProviderCardComponent
+  let fixture: ComponentFixture<ProviderCardComponent>
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProviderCardComponent ]
-    })
-    .compileComponents();
-  }));
+      declarations: [ProviderCardComponent],
+    }).compileComponents()
+  }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProviderCardComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(ProviderCardComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

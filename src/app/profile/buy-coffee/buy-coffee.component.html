@@ -1,15 +1,24 @@
 <main class="main-content">
   <section class="section bg-gray pt-15 pb-20">
-
-    <div *ngIf="!canPayOptions" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 640px;">
-      <img src="assets/img/loader.svg" height="36px" alt="Loader">
+    <div
+      *ngIf="!canPayOptions"
+      class="container d-flex h-100 flex-column justify-content-center"
+      style="min-height: 640px;"
+    >
+      <img src="assets/img/loader.svg" height="36px" alt="Loader" />
     </div>
 
     <div class="container" *ngIf="canPayOptions">
-      <canyalib-canpay [dAppName]="canPayOptions.dAppName" [operation]="canPayOptions.operation"
-        [onPaymentTxHash]="canPayOptions.onPaymentTxHash" [recipient]="canPayOptions.recipient"
-        (complete)="canPayOptions.complete($event)" (cancel)="canPayOptions.cancel($event)" [disableCanEx]="canPayOptions.disableCanEx"
-        [userEmail]="canPayOptions.userEmail"></canyalib-canpay>
+      <canyalib-canpay
+        [dAppName]="canPayOptions.dAppName"
+        [operation]="canPayOptions.operation"
+        [onPaymentTxHash]="canPayOptions.onPaymentTxHash"
+        [recipient]="canPayOptions.recipient"
+        (complete)="canPayOptions.complete($event)"
+        (cancel)="canPayOptions.cancel($event)"
+        [disableCanEx]="canPayOptions.disableCanEx"
+        [userEmail]="canPayOptions.userEmail"
+      ></canyalib-canpay>
     </div>
   </section>
 </main>

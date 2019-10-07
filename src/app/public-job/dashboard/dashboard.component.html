@@ -6,18 +6,36 @@
       </div>
     </div>
   </div>
-  <div *ngIf="!allJobs" class="container d-flex h-100 flex-column justify-content-center">
-    <img src="assets/img/loader.svg" height="36px" alt="Loader">
+  <div
+    *ngIf="!allJobs"
+    class="container d-flex h-100 flex-column justify-content-center"
+  >
+    <img src="assets/img/loader.svg" height="36px" alt="Loader" />
   </div>
-  <div class="container py-15" style="min-height: 75vh" *ngIf="allJobs && allJobs.length > 0">
+  <div
+    class="container py-15"
+    style="min-height: 75vh"
+    *ngIf="allJobs && allJobs.length > 0"
+  >
     <div class="row">
       <div class="col-lg-8">
-        <form method="post" (ngSubmit)="onSearch(inputSearch.value);">
+        <form method="post" (ngSubmit)="onSearch(inputSearch.value)">
           <div class="canya-seach-bar input-group mb-3">
-            <input #inputSearch type="text" class="form-control canya-search-input" placeholder="Search Jobs..">
+            <input
+              #inputSearch
+              type="text"
+              class="form-control canya-search-input"
+              placeholder="Search Jobs.."
+            />
             <div class="input-group-append">
-              <button class="canya-search-input-btn btn btn-primary" type="submit">
-                <img class="search-img" src="assets/img/search-icon-white.svg">
+              <button
+                class="canya-search-input-btn btn btn-primary"
+                type="submit"
+              >
+                <img
+                  class="search-img"
+                  src="assets/img/search-icon-white.svg"
+                />
               </button>
             </div>
           </div>
@@ -27,49 +45,90 @@
         <div class="form-inline">
           <div class="form-group">
             <label for="orderTypeSelect" class="mb-15">Category: </label>
-            <select class="mb-10 mx-10" #filterTypeSelect [(ngModel)]="filterByCategory" (change)="filterJobsByCategory()">
-              <option *ngFor="let type of providerTypes" value="{{type.id}}">
-                <span>{{type.name}}</span>
+            <select
+              class="mb-10 mx-10"
+              #filterTypeSelect
+              [(ngModel)]="filterByCategory"
+              (change)="filterJobsByCategory()"
+            >
+              <option *ngFor="let type of providerTypes" value="{{ type.id }}">
+                <span>{{ type.name }}</span>
               </option>
             </select>
           </div>
         </div>
       </div>
     </div>
-    <div class="card job-dashboard-card my-10 py-15 px-30" *ngFor="let job of queryJobs | orderBy : 'actionLog[0].timestamp':true | paginate: { itemsPerPage: 10, currentPage: index }"
-      [routerLink]="['/jobs/public', job.slug]">
+    <div
+      class="card job-dashboard-card my-10 py-15 px-30"
+      *ngFor="
+        let job of queryJobs
+          | orderBy: 'actionLog[0].timestamp':true
+          | paginate: { itemsPerPage: 10, currentPage: index }
+      "
+      [routerLink]="['/jobs/public', job.slug]"
+    >
       <div class="row">
         <div class="col-lg-8 col-12">
-          <h5><img class="provider-type-icon" src="{{getImage(job.information.providerType)}}">{{job.information.title}}</h5>
+          <h5>
+            <img
+              class="provider-type-icon"
+              src="{{ getImage(job.information.providerType) }}"
+            />{{ job.information.title }}
+          </h5>
         </div>
         <div class="col-lg-4 col-12 text-right text-left-mobile">
-          <small>Posted On : {{ timestampToDate(job.actionLog[0].timestamp) }}</small>
+          <small
+            >Posted On :
+            {{ timestampToDate(job.actionLog[0].timestamp) }}</small
+          >
         </div>
       </div>
       <div class="row">
         <div class="col-12 public-job-card-desc">
-          <p *ngIf="job.information.description.length >= 200" [innerHTML]="job.information.description.substring(0, 200) | linkify">...</p>
-          <p *ngIf="job.information.description.length <= 200" [innerHTML]="job.information.description | linkify"></p>
+          <p
+            *ngIf="job.information.description.length >= 200"
+            [innerHTML]="
+              job.information.description.substring(0, 200) | linkify
+            "
+          >
+            ...
+          </p>
+          <p
+            *ngIf="job.information.description.length <= 200"
+            [innerHTML]="job.information.description | linkify"
+          ></p>
         </div>
       </div>
       <div class="row">
         <div class="col-lg-2 col-md-3 col-ms-4 col-6">
-          <b>${{job.budget}} USD <span *ngIf="job.paymentType == paymentType.hourly">/hr</span></b>
-          <p>{{job.paymentType}}</p>
+          <b
+            >${{ job.budget }} USD
+            <span *ngIf="job.paymentType == paymentType.hourly">/hr</span></b
+          >
+          <p>{{ job.paymentType }}</p>
         </div>
         <div class="col-lg-2 col-md-3 col-ms-4 col-6">
-          <b>{{job.deadline}}</b>
+          <b>{{ job.deadline }}</b>
           <p *ngIf="job.deadline">Project Deadline</p>
         </div>
-        <div class="col-lg-8 col-md-6 col-ms-4 col-12 text-right text-left-mobile">
-          <app-skill-tag *ngFor="let skill of job.information.skills" [skill]="skill"></app-skill-tag>
+        <div
+          class="col-lg-8 col-md-6 col-ms-4 col-12 text-right text-left-mobile"
+        >
+          <app-skill-tag
+            *ngFor="let skill of job.information.skills"
+            [skill]="skill"
+          ></app-skill-tag>
         </div>
       </div>
     </div>
     <div class="container text-center" *ngIf="queryJobs.length > 0">
       <div class="row">
         <div class="col-12">
-          <pagination-controls (pageChange)="index = $event" previousLabel="Prev"></pagination-controls>
+          <pagination-controls
+            (pageChange)="index = $event"
+            previousLabel="Prev"
+          ></pagination-controls>
         </div>
       </div>
     </div>
@@ -88,9 +147,12 @@
         <p *ngIf="isProvider">Check back later!</p>
         <div *ngIf="!isProvider">
           <span>Want to get something done?</span>
-          <br>
+          <br />
           <a [routerLink]="['/inbox/post']">
-            <button border-64 class="btn btn-sm btn-primary my-10 hidden-md-down">
+            <button
+              border-64
+              class="btn btn-sm btn-primary my-10 hidden-md-down"
+            >
               POST A JOB
             </button>
           </a>

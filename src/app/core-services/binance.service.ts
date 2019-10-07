@@ -137,6 +137,5 @@ export class BinanceService {
         address,
       },
     })
-    
   }
 }

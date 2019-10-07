@@ -1,4 +1,4 @@
-@import "styles.scss";
+@import 'styles.scss';
 
 .border {
   border: 0.75px solid silver;
@@ -68,7 +68,7 @@
 }
 
 #sidebar .profile .title h2 {
-  color: #323C47;
+  color: #323c47;
   font-weight: 400;
   font-size: 24px;
   margin: 0 0 0px 0;
@@ -118,7 +118,7 @@
   height: 100%;
   width: 100%;
   border: 0 solid rgba(0, 0, 0, 0.02);
-  transition: all .2s ease-in;
+  transition: all 0.2s ease-in;
 }
 
 #sidebar nav ul li a:hover {
@@ -128,7 +128,7 @@
 
 #sidebar nav ul li.active a {
   color: #fff;
-  border-left: 5px solid rgba(50, 60, 71, 0.30);
+  border-left: 5px solid rgba(50, 60, 71, 0.3);
 }
 
 #sidebar .social {
@@ -141,16 +141,16 @@
 #sidebar .social .logo {
   font-size: 28px;
   margin-right: 20px;
-  transition: color .5s ease-in;
+  transition: color 0.5s ease-in;
 }
 
 #sidebar .social .logo i.fa {
   color: rgba(255, 255, 255, 0.5);
-  transition: all .2s ease-in;
+  transition: all 0.2s ease-in;
 }
 
 #sidebar .social .logo i.fa:hover {
-  color: #FFF;
+  color: #fff;
   text-shadow: 0 10px 10px rgba(0, 0, 0, 0.23);
 }
 
@@ -223,7 +223,7 @@
   justify-content: center;
   align-items: center;
   margin-bottom: 1rem;
-  transition: all .3s ease-in;
+  transition: all 0.3s ease-in;
 }
 
 #page-wrap .project .left-content .thumbnail img {
@@ -248,7 +248,7 @@
 #page-wrap .project .left-content ul.skills li {
   /* color: #FFF;
   background: #E876BC; */
-  margin-right: .8rem;
+  margin-right: 0.8rem;
   /* padding: .3rem 1rem .3rem 1.5rem;
   border-radius: 25px;
   position: relative; */
@@ -272,13 +272,15 @@
 /* linear-gradient(270deg, #FF512F 0.54%, #DD2476 98.39%) */
 
 #page-wrap .project .right-content .title {
-  font-family: Montserrat, HelveticaNeueLight, HelveticaNeue-Light, "Helvetica Neue Light", HelveticaNeue, "Helvetica Neue", Helvetica, Tahoma, Geneva, Arial, sans-serif;
+  font-family: Montserrat, HelveticaNeueLight, HelveticaNeue-Light,
+    'Helvetica Neue Light', HelveticaNeue, 'Helvetica Neue', Helvetica, Tahoma,
+    Geneva, Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
   line-height: normal;
   font-size: 20px;
   margin-bottom: 0;
-  background: linear-gradient(122deg, #00FFCC 0%, #33ccff 93%);
+  background: linear-gradient(122deg, #00ffcc 0%, #33ccff 93%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -289,7 +291,9 @@
 }
 
 #page-wrap .project .right-content .description p {
-  font-family: Montserrat, HelveticaNeueLight, HelveticaNeue-Light, "Helvetica Neue Light", HelveticaNeue, "Helvetica Neue", Helvetica, Tahoma, Geneva, Arial, sans-serif;
+  font-family: Montserrat, HelveticaNeueLight, HelveticaNeue-Light,
+    'Helvetica Neue Light', HelveticaNeue, 'Helvetica Neue', Helvetica, Tahoma,
+    Geneva, Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
   line-height: normal;
@@ -309,7 +313,7 @@
 }
 
 #page-wrap .project .right-content a:hover {
-  background: #DD2476;
+  background: #dd2476;
 }
 
 @keyframes waves {
@@ -347,7 +351,7 @@
 
 .btn-add-work {
   color: white;
-  background: linear-gradient(122deg, #00FFCC 0%, #33ccff 93%);
+  background: linear-gradient(122deg, #00ffcc 0%, #33ccff 93%);
   border: none;
 }
 
@@ -384,14 +388,18 @@ textarea {
   border-radius: 5px;
   width: 100%;
   min-height: 100%;
-  font-family: Montserrat, HelveticaNeueLight, HelveticaNeue-Light, "Helvetica Neue Light", HelveticaNeue, "Helvetica Neue", Helvetica, Tahoma, Geneva, Arial, sans-serif;
+  font-family: Montserrat, HelveticaNeueLight, HelveticaNeue-Light,
+    'Helvetica Neue Light', HelveticaNeue, 'Helvetica Neue', Helvetica, Tahoma,
+    Geneva, Arial, sans-serif;
   font-size: 2em;
   font-weight: 800;
   padding: 0.6em;
 }
 
 .specialcard {
-  font-family: Montserrat, HelveticaNeueLight, HelveticaNeue-Light, "Helvetica Neue Light", HelveticaNeue, "Helvetica Neue", Helvetica, Tahoma, Geneva, Arial, sans-serif;
+  font-family: Montserrat, HelveticaNeueLight, HelveticaNeue-Light,
+    'Helvetica Neue Light', HelveticaNeue, 'Helvetica Neue', Helvetica, Tahoma,
+    Geneva, Arial, sans-serif;
   font-size: 2.778em;
   font-weight: 800;
   height: 100%;
@@ -412,7 +420,7 @@ textarea {
   border: none;
   opacity: 0.8;
   z-index: 11;
-  color: #323C47;
+  color: #323c47;
   background: none;
 }
 
@@ -423,7 +431,7 @@ textarea {
   border: none;
   opacity: 0.8;
   z-index: 11;
-  color: #323C47;
+  color: #323c47;
   background: none;
 }
 
@@ -435,7 +443,7 @@ textarea {
   border: none;
   opacity: 0.8;
   z-index: 11;
-  color: #323C47;
+  color: #323c47;
   background: none;
 }
 
@@ -446,12 +454,12 @@ textarea {
   border: none;
   opacity: 0.8;
   z-index: 11;
-  color: #323C47;
+  color: #323c47;
   background: none;
 }
 
 .btn-canya-chat {
-  background-image: linear-gradient(41deg, #62E7FF 0%, #33CAFF 100%);
+  background-image: linear-gradient(41deg, #62e7ff 0%, #33caff 100%);
   /* box-shadow: 0 2px 4px 0 rgba(0,0,0,0.14); */
   border-radius: 64px;
 }

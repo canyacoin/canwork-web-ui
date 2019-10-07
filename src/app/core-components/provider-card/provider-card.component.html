@@ -5,16 +5,30 @@
   </div>
 -->
 <div *ngIf="size == 'lg' && this.provider" style="padding:10px">
-  <div class="card provider-card text-center pointer" [routerLink]="['/profile/', provider.slug]">
-    <span *ngIf="provider && provider.badge" class="popular-tag" style="background-color:transparent;color:#33ccff;float:right;font-weight: 600;letter-spacing: 1.5px;text-transform: uppercase;min-height: 35px;font-size: 12px;text-align: center;line-height: 35px;">
+  <div
+    class="card provider-card text-center pointer"
+    [routerLink]="['/profile/', provider.slug]"
+  >
+    <span
+      *ngIf="provider && provider.badge"
+      class="popular-tag"
+      style="background-color:transparent;color:#33ccff;float:right;font-weight: 600;letter-spacing: 1.5px;text-transform: uppercase;min-height: 35px;font-size: 12px;text-align: center;line-height: 35px;"
+    >
       {{ provider.badge }}
     </span>
-    <span *ngIf="!(provider && provider.badge)" class="popular-tag" style="float:right; min-height: 35px;"></span>
+    <span
+      *ngIf="!(provider && provider.badge)"
+      class="popular-tag"
+      style="float:right; min-height: 35px;"
+    ></span>
     <div class="profile">
       <app-avatar [user]="provider" [customClass]="'headshot'"></app-avatar>
       <div class="title">
         <h2>
-          <span *ngIf="provider && provider.name">{{ provider.name }}<app-verified-mark [user]="provider"></app-verified-mark></span>
+          <span *ngIf="provider && provider.name"
+            >{{ provider.name
+            }}<app-verified-mark [user]="provider"></app-verified-mark
+          ></span>
         </h2>
         <h3>
           <span *ngIf="provider && provider.title">{{ provider.title }}</span>
@@ -25,55 +39,103 @@
       </div>
       <div>
         <div class="provider-stars">
-          <star-rating *ngIf="provider.rating && provider.rating.count > 0" [starType]="'svg'" showHalfStars="true"
-            staticColor="ok" [readOnly]="true" [rating]="provider.rating.average" [step]="0.5" [labelText]="'(' + provider.rating.count + ')'"
-            labelPosition="right"></star-rating>
+          <star-rating
+            *ngIf="provider.rating && provider.rating.count > 0"
+            [starType]="'svg'"
+            showHalfStars="true"
+            staticColor="ok"
+            [readOnly]="true"
+            [rating]="provider.rating.average"
+            [step]="0.5"
+            [labelText]="'(' + provider.rating.count + ')'"
+            labelPosition="right"
+          ></star-rating>
         </div>
         <div class="row d-flex tag-row">
-          <app-skill-tag *ngFor="let tag of getProviderTags(provider)" [skill]="tag" [routerLink]="['/search']"
-            [queryParams]="{query: tag}"></app-skill-tag>
+          <app-skill-tag
+            *ngFor="let tag of getProviderTags(provider)"
+            [skill]="tag"
+            [routerLink]="['/search']"
+            [queryParams]="{ query: tag }"
+          ></app-skill-tag>
         </div>
       </div>
       <div class="row hourly-rate">
-        <span *ngIf="provider.hourlyRate && provider.hourlyRate > 0 && canToUsd" data-toggle="tooltip" data-placement="bottom"
-          title="$ {{getUsdToCan(provider.hourlyRate)}} USD/hr">
-          <b>${{provider.hourlyRate}}</b>/hr
+        <span
+          *ngIf="provider.hourlyRate && provider.hourlyRate > 0 && canToUsd"
+          data-toggle="tooltip"
+          data-placement="bottom"
+          title="$ {{ getUsdToCan(provider.hourlyRate) }} USD/hr"
+        >
+          <b>${{ provider.hourlyRate }}</b
+          >/hr
         </span>
-        <span *ngIf="provider.hourlyRate && provider.hourlyRate > 0 && !canToUsd">
-          <b>${{provider.hourlyRate}}</b>/hr
+        <span
+          *ngIf="provider.hourlyRate && provider.hourlyRate > 0 && !canToUsd"
+        >
+          <b>${{ provider.hourlyRate }}</b
+          >/hr
         </span>
       </div>
       <div class="row">
-        <button [routerLink]="['/profile/alt', provider.address]" class="btn btn-primary btn-canya-chat py-10">SEE MORE</button>
+        <button
+          [routerLink]="['/profile/alt', provider.address]"
+          class="btn btn-primary btn-canya-chat py-10"
+        >
+          SEE MORE
+        </button>
       </div>
     </div>
   </div>
 </div>
 <div *ngIf="size == 'sm' && this.provider" class="px-5">
-  <div class="card provider-card pointer profile-mini" [routerLink]="['/profile/',  provider.slug]">
+  <div
+    class="card provider-card pointer profile-mini"
+    [routerLink]="['/profile/', provider.slug]"
+  >
     <div class="row">
       <div class="col-lg-3 col-md-12 col-sm-12 col-3">
         <app-avatar [user]="provider" [customClass]="'headshot'"></app-avatar>
       </div>
       <div class="col-lg-9 col-md-12 col-sm-12 col-9 pl-20 pb-10">
-        <h6 class="provider-name">{{provider.name}}<app-verified-mark [user]="provider"></app-verified-mark></h6>
-        <p class="provider-title">{{ provider.title}}</p>
+        <h6 class="provider-name">
+          {{ provider.name
+          }}<app-verified-mark [user]="provider"></app-verified-mark>
+        </h6>
+        <p class="provider-title">{{ provider.title }}</p>
         <div class="row provider-stars">
-          <star-rating *ngIf="provider.rating && provider.rating.count > 0" class="float-left" [starType]="'svg'" size="small"
-            showHalfStars="true" staticColor="ok" [readOnly]="true" [rating]="provider.rating.average" [step]="0.5"
-            [labelText]="'(' + provider.rating.count + ')'" labelPosition="right"></star-rating>
+          <star-rating
+            *ngIf="provider.rating && provider.rating.count > 0"
+            class="float-left"
+            [starType]="'svg'"
+            size="small"
+            showHalfStars="true"
+            staticColor="ok"
+            [readOnly]="true"
+            [rating]="provider.rating.average"
+            [step]="0.5"
+            [labelText]="'(' + provider.rating.count + ')'"
+            labelPosition="right"
+          ></star-rating>
         </div>
         <span class="fw-400 fs-12 text-grey">
           <i class="fa fa-map-marker-alt text-grey" aria-hidden="true"></i>
           {{ provider.timezone }}
         </span>
-        <br>
+        <br />
         <div class="row mini-profile-row">
           <div class="col-6">
-            <app-skill-tag *ngIf="getProviderTags(provider).length > 0" [skill]="getProviderTags(provider).length + ' Skills'"></app-skill-tag>
+            <app-skill-tag
+              *ngIf="getProviderTags(provider).length > 0"
+              [skill]="getProviderTags(provider).length + ' Skills'"
+            ></app-skill-tag>
           </div>
-          <div class="col-6" *ngIf="provider.hourlyRate && provider.hourlyRate > 0">
-            <b>${{provider.hourlyRate}}</b>/hr
+          <div
+            class="col-6"
+            *ngIf="provider.hourlyRate && provider.hourlyRate > 0"
+          >
+            <b>${{ provider.hourlyRate }}</b
+            >/hr
           </div>
         </div>
       </div>

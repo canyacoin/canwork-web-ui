@@ -1,17 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core'
 
 @Component({
   selector: 'canyalib-loader',
   templateUrl: './loader.component.html',
-  styleUrls: ['./loader.component.scss']
+  styleUrls: ['./loader.component.scss'],
 })
 export class LoaderComponent implements OnInit {
-  @Input() label = '';
-  @Input() isLoading = false;
+  @Input() label = ''
+  @Input() isLoading = false
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

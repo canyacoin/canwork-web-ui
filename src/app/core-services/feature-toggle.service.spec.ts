@@ -1,15 +1,18 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed, inject } from '@angular/core/testing'
 
-import { FeatureToggleService } from './feature-toggle.service';
+import { FeatureToggleService } from './feature-toggle.service'
 
 describe('FeatureToggleService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [FeatureToggleService]
-    });
-  });
+      providers: [FeatureToggleService],
+    })
+  })
 
-  it('should be created', inject([FeatureToggleService], (service: FeatureToggleService) => {
-    expect(service).toBeTruthy();
-  }));
-});
+  it('should be created', inject(
+    [FeatureToggleService],
+    (service: FeatureToggleService) => {
+      expect(service).toBeTruthy()
+    }
+  ))
+})

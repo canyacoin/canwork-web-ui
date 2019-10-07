@@ -1,39 +1,41 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Observable ,  interval ,  Subscription } from 'rxjs';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core'
+import { Observable, interval, Subscription } from 'rxjs'
 
-import { User, UserType } from '../../../core-classes/user';
+import { User, UserType } from '../../../core-classes/user'
 
 @Component({
   selector: 'app-profile-timezone',
   templateUrl: './timezone.component.html',
-  styleUrls: ['./timezone.component.css']
+  styleUrls: ['./timezone.component.css'],
 })
 export class TimezoneComponent implements OnInit, OnDestroy {
+  @Input() userModel: User
 
-  @Input() userModel: User;
+  myInterval = interval(1000)
+  localTime: string
 
-  myInterval = interval(1000);
-  localTime: string;
+  timeSub: Subscription
 
-  timeSub: Subscription;
-
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     this.timeSub = this.myInterval.subscribe(x => {
-      this.localTime = new Date().toLocaleString('en-US', { timeZone: this.userModel.timezone || 'America/New_York' });
-    });
+      this.localTime = new Date().toLocaleString('en-US', {
+        timeZone: this.userModel.timezone || 'America/New_York',
+      })
+    })
   }
 
   isProvider() {
     if (this.userModel == null) {
-      return false;
+      return false
     }
-    return this.userModel.type === UserType.provider;
+    return this.userModel.type === UserType.provider
   }
 
   ngOnDestroy() {
-    if (this.timeSub) { this.timeSub.unsubscribe(); }
+    if (this.timeSub) {
+      this.timeSub.unsubscribe()
+    }
   }
 }
-

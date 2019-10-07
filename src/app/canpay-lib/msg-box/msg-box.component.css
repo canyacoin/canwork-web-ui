@@ -5,17 +5,16 @@
 }
 
 .green-stroke {
-  stroke: #7CB342;
+  stroke: #7cb342;
 }
 
 .red-stroke {
-  stroke: #FF6245;
+  stroke: #ff6245;
 }
 
 .yellow-stroke {
-  stroke: #FFC107;
+  stroke: #ffc107;
 }
-
 
 .circular circle.path {
   stroke-dasharray: 330;
@@ -144,7 +143,7 @@
 
 .alert-sign .dot {
   stroke: none;
-  fill: #FFC107;
+  fill: #ffc107;
 }
 
 @keyframes alert-sign-bounce {

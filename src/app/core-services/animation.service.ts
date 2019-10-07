@@ -1,37 +1,34 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core'
 
 @Injectable()
 export class AnimationService {
+  deskAnim = null
+  consultAnim = null
+  airportAnim = null
+  homeAnim = null
+  handAnim = null
+  portfolioAnim = null
 
-
-  deskAnim = null;
-  consultAnim = null;
-  airportAnim = null;
-  homeAnim = null;
-  handAnim = null;
-  portfolioAnim = null;
-
-  constructor() {
-  }
+  constructor() {}
 
   resetAnimations() {
     if (this.deskAnim) {
-      this.deskAnim = null;
+      this.deskAnim = null
     }
     if (this.consultAnim) {
-      this.consultAnim = null;
+      this.consultAnim = null
     }
     if (this.airportAnim) {
-      this.airportAnim = null;
+      this.airportAnim = null
     }
     if (this.homeAnim) {
-      this.homeAnim = null;
+      this.homeAnim = null
     }
     if (this.handAnim) {
-      this.handAnim = null;
+      this.handAnim = null
     }
     if (this.portfolioAnim) {
-      this.portfolioAnim = null;
+      this.portfolioAnim = null
     }
   }
 
@@ -48,10 +45,10 @@ export class AnimationService {
             path: 'assets/data/desk.json',
             rendererSettings: {
               progressiveLoad: false,
-            }
-          };
-          this.deskAnim = (<any>window).bodymovin.loadAnimation(deskData);
-          this.deskAnim.setSpeed(0.75);
+            },
+          }
+          this.deskAnim = (<any>window).bodymovin.loadAnimation(deskData)
+          this.deskAnim.setSpeed(0.75)
         }
 
         if (document.getElementById('consult')) {
@@ -63,10 +60,10 @@ export class AnimationService {
             autoplay: true,
             path: 'assets/data/consult.json',
             rendererSettings: {
-              progressiveLoad: false
-            }
-          };
-          this.consultAnim = (<any>window).bodymovin.loadAnimation(consultData);
+              progressiveLoad: false,
+            },
+          }
+          this.consultAnim = (<any>window).bodymovin.loadAnimation(consultData)
         }
 
         if (document.getElementById('airport')) {
@@ -78,11 +75,11 @@ export class AnimationService {
             autoplay: true,
             path: 'assets/data/airport.json',
             rendererSettings: {
-              progressiveLoad: false
-            }
-          };
-          this.airportAnim = (<any>window).bodymovin.loadAnimation(airportData);
-          this.airportAnim.setSpeed(0.25);
+              progressiveLoad: false,
+            },
+          }
+          this.airportAnim = (<any>window).bodymovin.loadAnimation(airportData)
+          this.airportAnim.setSpeed(0.25)
         }
 
         if (document.getElementById('home')) {
@@ -94,11 +91,11 @@ export class AnimationService {
             autoplay: true,
             path: 'assets/data/home.json',
             rendererSettings: {
-              progressiveLoad: false
-            }
-          };
-          this.homeAnim = (<any>window).bodymovin.loadAnimation(homeData);
-          this.homeAnim.setSpeed(0.75);
+              progressiveLoad: false,
+            },
+          }
+          this.homeAnim = (<any>window).bodymovin.loadAnimation(homeData)
+          this.homeAnim.setSpeed(0.75)
         }
 
         if (document.getElementById('hand')) {
@@ -110,11 +107,11 @@ export class AnimationService {
             autoplay: true,
             path: 'assets/data/hand.json',
             rendererSettings: {
-              progressiveLoad: false
-            }
-          };
-          this.handAnim = (<any>window).bodymovin.loadAnimation(handData);
-          this.handAnim.setSpeed(0.75);
+              progressiveLoad: false,
+            },
+          }
+          this.handAnim = (<any>window).bodymovin.loadAnimation(handData)
+          this.handAnim.setSpeed(0.75)
         }
 
         if (document.getElementById('portfolio')) {
@@ -126,15 +123,17 @@ export class AnimationService {
             autoplay: true,
             path: 'assets/data/hand.json',
             rendererSettings: {
-              progressiveLoad: false
-            }
-          };
-          const portfolioAnim = (<any>window).bodymovin.loadAnimation(portfolioData);
-          portfolioAnim.setSpeed(0.75);
+              progressiveLoad: false,
+            },
+          }
+          const portfolioAnim = (<any>window).bodymovin.loadAnimation(
+            portfolioData
+          )
+          portfolioAnim.setSpeed(0.75)
         }
-      }, 0);
+      }, 0)
     } catch (error) {
-      console.log('loadAnimations - error', error);
+      console.log('loadAnimations - error', error)
     }
   }
 }

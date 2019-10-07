@@ -1,50 +1,117 @@
 <main class="main-content">
-
   <section class="section bg-gray px-10 py-30" id="section-profile">
     <div class="container">
       <div class="row flex-row" *ngIf="!isOnMobile" style="border-radius: 5px;">
         <div *ngIf="currentUser" class="col-12 col-lg-4 col-sm-12 p-0 m-0">
           <div class="card card-bordered contact-div">
-            <form class="card-header" style="background: white; border-top-left-radius: 5px;">
+            <form
+              class="card-header"
+              style="background: white; border-top-left-radius: 5px;"
+            >
               <div class="search-container">
-                <form class="form-inline justify-content-center" method="post" (ngSubmit)="onSearch(inputSearch.value);">
-                  <input #inputSearch placeholder="Search" (keyup)="onKeyUp(inputSearch.value);" [disabled]="isLoading || channels.length < 1"
-                    type="text" class="search" size="30">
-                  <button class="btn" style="display: none;" type="submit">Go</button>
+                <form
+                  class="form-inline justify-content-center"
+                  method="post"
+                  (ngSubmit)="onSearch(inputSearch.value)"
+                >
+                  <input
+                    #inputSearch
+                    placeholder="Search"
+                    (keyup)="onKeyUp(inputSearch.value)"
+                    [disabled]="isLoading || channels.length < 1"
+                    type="text"
+                    class="search"
+                    size="30"
+                  />
+                  <button class="btn" style="display: none;" type="submit">
+                    Go
+                  </button>
                 </form>
               </div>
             </form>
-            <div class="list-group list-group-flush contact-list" style="height: 80%; max-height:none;">
-              <div *ngFor="let channel of queryChannels;let i = index">
-                <a *ngIf="selectedChannel && channel" (click)="onSelect(channel);" class="list-group-item list-group-item-action"
-                  [ngClass]="{ 'active': selectedChannel.address === channel.address }" style="cursor: pointer;">
-                  <span *ngIf="channel.unreadMessages" class="badge-notification badge-danger"></span>
+            <div
+              class="list-group list-group-flush contact-list"
+              style="height: 80%; max-height:none;"
+            >
+              <div *ngFor="let channel of queryChannels; let i = index">
+                <a
+                  *ngIf="selectedChannel && channel"
+                  (click)="onSelect(channel)"
+                  class="list-group-item list-group-item-action"
+                  [ngClass]="{
+                    active: selectedChannel.address === channel.address
+                  }"
+                  style="cursor: pointer;"
+                >
+                  <span
+                    *ngIf="channel.unreadMessages"
+                    class="badge-notification badge-danger"
+                  ></span>
                   <div class="media" style="width: 100%;">
-                    <app-avatar [user]="channel" [customClass]="'avatar avatar-sm mt-8'"></app-avatar>
+                    <app-avatar
+                      [user]="channel"
+                      [customClass]="'avatar avatar-sm mt-8'"
+                    ></app-avatar>
                     <div class="media-body ml-2">
-                      <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="text-canya mb-0">{{ channel.name }}
-                          <app-verified-mark [user]="channel"></app-verified-mark>
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                      >
+                        <h6 class="text-canya mb-0">
+                          {{ channel.name }}
+                          <app-verified-mark
+                            [user]="channel"
+                          ></app-verified-mark>
                         </h6>
                         &nbsp;&nbsp;&nbsp;
                         <div>
-                          <small class="text-muted">{{ channel.timestamp | date:'dd MMM' }}</small>
+                          <small class="text-muted">{{
+                            channel.timestamp | date: 'dd MMM'
+                          }}</small>
                         </div>
                       </div>
-                      <span class="text-dark text-small col-11 p-0" [ngStyle]="{'font-weight': channel.unreadMessages ? 'bold' : 'normal'}">{{
-                        channel.message.length > 30 ? (channel.message | slice:0:30)+'...':(channel.message) }}</span>
+                      <span
+                        class="text-dark text-small col-11 p-0"
+                        [ngStyle]="{
+                          'font-weight': channel.unreadMessages
+                            ? 'bold'
+                            : 'normal'
+                        }"
+                        >{{
+                          channel.message.length > 30
+                            ? (channel.message | slice: 0:30) + '...'
+                            : channel.message
+                        }}</span
+                      >
                     </div>
                   </div>
                 </a>
               </div>
             </div>
-            <div class="card-footer bg-white p-10 m-0" style="border-bottom-right-radius: 5px;">
+            <div
+              class="card-footer bg-white p-10 m-0"
+              style="border-bottom-right-radius: 5px;"
+            >
               <div class="d-flex justify-content-between align-items-center">
-                <button (click)="onBuy();" class="btn btn-outline btn-primary" border-64>
+                <button
+                  (click)="onBuy()"
+                  class="btn btn-outline btn-primary"
+                  border-64
+                >
                   BUY CAN
                 </button>
-                <a (click)="onBuy();" class="btn btn-default mx-10 hidden-md-up" border-64 border-none>
-                  <img src="assets/img/round-icon.svg" width="auto" height="24px" alt="CanYaCoin" style="margin-top: -3px;">
+                <a
+                  (click)="onBuy()"
+                  class="btn btn-default mx-10 hidden-md-up"
+                  border-64
+                  border-none
+                >
+                  <img
+                    src="assets/img/round-icon.svg"
+                    width="auto"
+                    height="24px"
+                    alt="CanYaCoin"
+                    style="margin-top: -3px;"
+                  />
                 </a>
               </div>
             </div>
@@ -52,89 +119,189 @@
         </div>
         <div class="col-12 col-lg-8 col-sm-12 p-0 m-0">
           <div class="card card-bordered view-70">
-            <div *ngIf="selectedChannel" class="card-header d-flex justify-content-between align-items-center" style="background: white; min-height: 61px; max-height: 61px; border-top-left-radius: 5px;">
+            <div
+              *ngIf="selectedChannel"
+              class="card-header d-flex justify-content-between align-items-center"
+              style="background: white; min-height: 61px; max-height: 61px; border-top-left-radius: 5px;"
+            >
               <a [routerLink]="['/profile/alt', selectedChannel.address]">
                 <div class="media align-items-center">
-                  <app-avatar [user]="selectedChannel" [customClass]="'avatar avatar-sm'"></app-avatar>
+                  <app-avatar
+                    [user]="selectedChannel"
+                    [customClass]="'avatar avatar-sm'"
+                  ></app-avatar>
                   <div class="media-body">
-                    <h6 class="mt-4 mb-0">{{ selectedChannel.name }}
-                      <app-verified-mark [user]="selectedChannel"></app-verified-mark>
+                    <h6 class="mt-4 mb-0">
+                      {{ selectedChannel.name }}
+                      <app-verified-mark
+                        [user]="selectedChannel"
+                      ></app-verified-mark>
                     </h6>
-                    <span class="text-muted text-small">{{ selectedChannel.title }}</span>&nbsp;
+                    <span class="text-muted text-small">{{
+                      selectedChannel.title
+                    }}</span
+                    >&nbsp;
                   </div>
                 </div>
               </a>
               <div class="topbar-right">
-                <button (click)="hideChannel(selectedChannel)" class="btn btn-outline hidden-lg-down" border-64>
+                <button
+                  (click)="hideChannel(selectedChannel)"
+                  class="btn btn-outline hidden-lg-down"
+                  border-64
+                >
                   <i class="fa fa-archive"></i>
                   Archive
                 </button>
-                <button (click)="hideChannel(selectedChannel)" class="btn btn-action hidden-md-up" border-64>
+                <button
+                  (click)="hideChannel(selectedChannel)"
+                  class="btn btn-action hidden-md-up"
+                  border-64
+                >
                   <i class="fa fa-archive"></i>
                 </button>
               </div>
               <div class="topbar-right" *ngIf="currentUser.type !== 'Provider'">
-                <button (click)="postRequest(selectedChannel.address)" class="btn btn-primary btn-outline hidden-lg-down"
-                  border-64>
+                <button
+                  (click)="postRequest(selectedChannel.address)"
+                  class="btn btn-primary btn-outline hidden-lg-down"
+                  border-64
+                >
                   POST A REQUEST
                 </button>
-                <button (click)="postRequest(selectedChannel.address)" class="btn btn-action hidden-md-up" border-none>
+                <button
+                  (click)="postRequest(selectedChannel.address)"
+                  class="btn btn-action hidden-md-up"
+                  border-none
+                >
                   <div class="icon-request"></div>
                 </button>
               </div>
             </div>
-            <div id="section-messages" class="card-block" style="overflow-y: auto" (click)="readIfUnread()">
+            <div
+              id="section-messages"
+              class="card-block"
+              style="overflow-y: auto"
+              (click)="readIfUnread()"
+            >
               <div *ngIf="selectedChannel" class="row justify-content-end mb-0">
                 <div class="col text-center">
-                  <small>Conversation started: {{ selectedChannel.timestamp | date }}</small>
+                  <small
+                    >Conversation started:
+                    {{ selectedChannel.timestamp | date }}</small
+                  >
                 </div>
               </div>
               <div class="loading-messages" *ngIf="isLoading">
-                  <img src="assets/img/loader.svg" height="36px" alt="Loader">
-                  <p>Loading messages...</p>
+                <img src="assets/img/loader.svg" height="36px" alt="Loader" />
+                <p>Loading messages...</p>
               </div>
-              <p *ngIf="!isLoading && channels.length < 1" class="text-dark opacity-60 my-80 text-center">Uh, oh, no
-                messages yet! Try again later.</p>
-              <div *ngFor="let message of messages;let i = index">
-                <div *ngIf="message.type === 'MESSAGE' || message.type === 'ACTION' || message.type === 'TIP'" class="row" [ngClass]="{ 'justify-content-start': message.address !== currentUser.address,
-                  'justify-content-end': message.address === currentUser.address }">
-
+              <p
+                *ngIf="!isLoading && channels.length < 1"
+                class="text-dark opacity-60 my-80 text-center"
+              >
+                Uh, oh, no messages yet! Try again later.
+              </p>
+              <div *ngFor="let message of messages; let i = index">
+                <div
+                  *ngIf="
+                    message.type === 'MESSAGE' ||
+                    message.type === 'ACTION' ||
+                    message.type === 'TIP'
+                  "
+                  class="row"
+                  [ngClass]="{
+                    'justify-content-start':
+                      message.address !== currentUser.address,
+                    'justify-content-end':
+                      message.address === currentUser.address
+                  }"
+                >
                   <div class="col-auto mx-30 my-5">
-                    <div class="card card-message" [ngClass]="{
+                    <div
+                      class="card card-message"
+                      [ngClass]="{
                         'bg-secondary': message.address === currentUser.address,
                         'from-me': message.address === currentUser.address,
-                        'from-user': message.address !== currentUser.address  }"
-                      [ngStyle]="{ 'color': message.address !== currentUser.address ? 'white':'',
-                      'background': message.address !== currentUser.address ? '#3cf':'#e4e7ea' }"
-                      style="border-radius:15px;">
+                        'from-user': message.address !== currentUser.address
+                      }"
+                      [ngStyle]="{
+                        color:
+                          message.address !== currentUser.address
+                            ? 'white'
+                            : '',
+                        background:
+                          message.address !== currentUser.address
+                            ? '#3cf'
+                            : '#e4e7ea'
+                      }"
+                      style="border-radius:15px;"
+                    >
                       <div class="card-block p-2 card-message-block">
-                        <span [innerHTML]="transformBreaks(message.message | linkify: message.address !== currentUser.address) "></span>
+                        <span
+                          [innerHTML]="
+                            transformBreaks(
+                              message.message
+                                | linkify
+                                  : message.address !== currentUser.address
+                            )
+                          "
+                        ></span>
                         <div class="text-right">
-                          <small [ngClass]="{ 'text-dark opacity-40': message.address === currentUser.address,
-                            'text-white opacity-60': message.address !== currentUser.address }">{{
-                            message.timestamp | date:'EEEE, h:mm a' }}</small>
+                          <small
+                            [ngClass]="{
+                              'text-dark opacity-40':
+                                message.address === currentUser.address,
+                              'text-white opacity-60':
+                                message.address !== currentUser.address
+                            }"
+                            >{{
+                              message.timestamp | date: 'EEEE, h:mm a'
+                            }}</small
+                          >
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="row justify-content-center" *ngIf="message.type === 'ACTION'">
+                <div
+                  class="row justify-content-center"
+                  *ngIf="message.type === 'ACTION'"
+                >
                   <div class="col-auto mx-30 my-5">
                     <div class="card bg-white card-request">
                       <div class="row justify-content-center">
-                        <a href="#" *ngIf="!message.isPublic" [routerLink]="['/inbox/job/', message.jobId]" class="fs-14 fw-400">VIEW
-                          JOB DETAILS</a>
-                        <a href="#" *ngIf="message.isPublic && message.isPublic === true" [routerLink]="['/jobs/', message.jobId]"
-                          class="fs-14 fw-400">PUBLIC JOB DETAILS</a>
+                        <a
+                          href="#"
+                          *ngIf="!message.isPublic"
+                          [routerLink]="['/inbox/job/', message.jobId]"
+                          class="fs-14 fw-400"
+                          >VIEW JOB DETAILS</a
+                        >
+                        <a
+                          href="#"
+                          *ngIf="message.isPublic && message.isPublic === true"
+                          [routerLink]="['/jobs/', message.jobId]"
+                          class="fs-14 fw-400"
+                          >PUBLIC JOB DETAILS</a
+                        >
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="row justify-content-center" *ngIf="message.type === 'TIP'">
+                <div
+                  class="row justify-content-center"
+                  *ngIf="message.type === 'TIP'"
+                >
                   <div class="col-auto mx-30 my-5">
                     <div class="card bg-white card-request">
                       <div class="row justify-content-center">
-                        <a href="{{getTxLink(message.txHash)}}" target="_blank" class="fs-14 fw-400">VIEW TRANSACTION</a>
+                        <a
+                          href="{{ getTxLink(message.txHash) }}"
+                          target="_blank"
+                          class="fs-14 fw-400"
+                          >VIEW TRANSACTION</a
+                        >
                       </div>
                     </div>
                   </div>
@@ -203,38 +370,82 @@
               </div>
               <div id="section-messages-end"></div>
             </div>
-            <div class="card-footer bg-white" style="border: none; border-bottom-right-radius: 5px;">
-              <form #frm (ngSubmit)="onSend()" class="d-flex align-items-center">
+            <div
+              class="card-footer bg-white"
+              style="border: none; border-bottom-right-radius: 5px;"
+            >
+              <form
+                #frm
+                (ngSubmit)="onSend()"
+                class="d-flex align-items-center"
+              >
                 <div class="input-group input-group-lg">
                   <div class="input-group-prepend bg-white">
                     <div class="dropdown dropup">
                       <a href="https://canshare.io/" target="_blank">
-                        <button [disabled]="isLoading || channels.length < 1" class="btn btn-secondary btn-outline mt-7"
-                          style="background: white; margin-top: 6px; margin-left: 6px; padding: 8px 10px 8px 10px;" type="button"
+                        <button
+                          [disabled]="isLoading || channels.length < 1"
+                          class="btn btn-secondary btn-outline mt-7"
+                          style="background: white; margin-top: 6px; margin-left: 6px; padding: 8px 10px 8px 10px;"
+                          type="button"
                         >
-                          <i class="fas fa-paperclip" style="color: #919d9d;"></i>
+                          <i
+                            class="fas fa-paperclip"
+                            style="color: #919d9d;"
+                          ></i>
                         </button>
                       </a>
-                      <button [disabled]="isLoading || channels.length < 1" class="btn btn-secondary btn-outline mt-7 dropdown-toggle-no-arrow"
-                        style="background: white; margin-top: 6px; margin-left: 6px; padding: 8px 10px 8px 10px;" type="button" id="menu" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
+                      <button
+                        [disabled]="isLoading || channels.length < 1"
+                        class="btn btn-secondary btn-outline mt-7 dropdown-toggle-no-arrow"
+                        style="background: white; margin-top: 6px; margin-left: 6px; padding: 8px 10px 8px 10px;"
+                        type="button"
+                        id="menu"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                      >
                         <i class="fas fa-bars" style="color: #919d9d;"></i>
                       </button>
-                      <div class="dropdown-menu dropdown-menu-sm" aria-labelledby="menu">
+                      <div
+                        class="dropdown-menu dropdown-menu-sm"
+                        aria-labelledby="menu"
+                      >
                         <small class="dropdown-header">Quick replies</small>
                         <div class="dropdown-divider"></div>
-                        <a *ngFor="let macro of macros" (click)="onMacro(macro.text);" class="dropdown-item drop-action"
-                          style="cursor: pointer;">{{ macro.text }}</a>
+                        <a
+                          *ngFor="let macro of macros"
+                          (click)="onMacro(macro.text)"
+                          class="dropdown-item drop-action"
+                          style="cursor: pointer;"
+                          >{{ macro.text }}</a
+                        >
                       </div>
                     </div>
                   </div>
-                  <textarea #msgInput [(ngModel)]="message" (focus)="readIfUnread()" [disabled]="isLoading || channels.length < 1"
-                    class="form-control message-box" maxlength="500" (keyup)="onMessageBoxInput($event)" placeholder="Type a message (shift-enter for new line)" name="message"
-                    autofocus="autofocus" required>
+                  <textarea
+                    #msgInput
+                    [(ngModel)]="message"
+                    (focus)="readIfUnread()"
+                    [disabled]="isLoading || channels.length < 1"
+                    class="form-control message-box"
+                    maxlength="500"
+                    (keyup)="onMessageBoxInput($event)"
+                    placeholder="Type a message (shift-enter for new line)"
+                    name="message"
+                    autofocus="autofocus"
+                    required
+                  >
                   </textarea>
                 </div>
-                <button [disabled]="!msgInput.validity.valid || isLoading || channels.length < 1" type="submit" class="btn btn-light"
-                  style="border: none;">
+                <button
+                  [disabled]="
+                    !msgInput.validity.valid || isLoading || channels.length < 1
+                  "
+                  type="submit"
+                  class="btn btn-light"
+                  style="border: none;"
+                >
                   <span class="text-dark">SEND</span>
                 </button>
               </form>
@@ -243,116 +454,274 @@
         </div>
       </div>
 
-      <div class="row flex-row" *ngIf="isOnMobile" id="mobile-chat" style="border-radius: 5px;">
+      <div
+        class="row flex-row"
+        *ngIf="isOnMobile"
+        id="mobile-chat"
+        style="border-radius: 5px;"
+      >
         <div *ngIf="currentUser" class="col-12 col-md-4 p-0 m-0">
           <div class="card card-bordered" id="contact-div">
-            <form class="card-header" style="background: white; border-top-left-radius: 5px;">
+            <form
+              class="card-header"
+              style="background: white; border-top-left-radius: 5px;"
+            >
               <div class="search-container">
-                <form class="form-inline justify-content-center" method="post" (ngSubmit)="onSearch(inputSearch.value);">
-                  <input #inputSearch placeholder="Search" (keyup)="onKeyUp(inputSearch.value);" [disabled]="isLoading || channels.length < 1"
-                    type="text" class="search" size="30">
-                  <button class="btn" style="display: none;" type="submit">Go</button>
+                <form
+                  class="form-inline justify-content-center"
+                  method="post"
+                  (ngSubmit)="onSearch(inputSearch.value)"
+                >
+                  <input
+                    #inputSearch
+                    placeholder="Search"
+                    (keyup)="onKeyUp(inputSearch.value)"
+                    [disabled]="isLoading || channels.length < 1"
+                    type="text"
+                    class="search"
+                    size="30"
+                  />
+                  <button class="btn" style="display: none;" type="submit">
+                    Go
+                  </button>
                 </form>
               </div>
             </form>
             <div class="list-group list-group-flush contact-list">
-              <div *ngFor="let channel of queryChannels;let i = index">
-                <a *ngIf="selectedChannel && channel" (click)="onSelect(channel);" class="list-group-item list-group-item-action"
-                  [ngClass]="{ 'active': selectedChannel.address === channel.address }" style="cursor: pointer;">
-                  <span *ngIf="channel.unreadMessages" class="badge-notification badge-danger"></span>
+              <div *ngFor="let channel of queryChannels; let i = index">
+                <a
+                  *ngIf="selectedChannel && channel"
+                  (click)="onSelect(channel)"
+                  class="list-group-item list-group-item-action"
+                  [ngClass]="{
+                    active: selectedChannel.address === channel.address
+                  }"
+                  style="cursor: pointer;"
+                >
+                  <span
+                    *ngIf="channel.unreadMessages"
+                    class="badge-notification badge-danger"
+                  ></span>
                   <div class="media" style="width: 100%;">
-                    <app-avatar [user]="channel" [customClass]="'avatar avatar-sm mt-8'"></app-avatar>
+                    <app-avatar
+                      [user]="channel"
+                      [customClass]="'avatar avatar-sm mt-8'"
+                    ></app-avatar>
                     <div class="media-body ml-2">
-                      <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="text-canya mb-0">{{ channel.name }}
-                          <app-verified-mark [user]="channel"></app-verified-mark>
+                      <div
+                        class="d-flex justify-content-between align-items-center"
+                      >
+                        <h6 class="text-canya mb-0">
+                          {{ channel.name }}
+                          <app-verified-mark
+                            [user]="channel"
+                          ></app-verified-mark>
                         </h6>
                         &nbsp;&nbsp;&nbsp;
                         <div>
-                          <small class="text-muted">{{ channel.timestamp | date:'dd MMM' }}</small>
+                          <small class="text-muted">{{
+                            channel.timestamp | date: 'dd MMM'
+                          }}</small>
                         </div>
                       </div>
-                      <span class="text-dark text-small col-11 p-0" [ngStyle]="{'font-weight': channel.unreadMessages ? 'bold' : 'normal'}">{{
-                        channel.message.length > 30 ? (channel.message | slice:0:30)+'...':(channel.message) }}</span>
+                      <span
+                        class="text-dark text-small col-11 p-0"
+                        [ngStyle]="{
+                          'font-weight': channel.unreadMessages
+                            ? 'bold'
+                            : 'normal'
+                        }"
+                        >{{
+                          channel.message.length > 30
+                            ? (channel.message | slice: 0:30) + '...'
+                            : channel.message
+                        }}</span
+                      >
                     </div>
                   </div>
                 </a>
               </div>
             </div>
-            <div class="card-footer bg-white p-10 m-0" style="border-bottom-right-radius: 5px;">
+            <div
+              class="card-footer bg-white p-10 m-0"
+              style="border-bottom-right-radius: 5px;"
+            >
               <div class="d-flex justify-content-between align-items-center">
                 <h4 class="fw-300 my-0 py-0 mx-20">
-                  <img class="logo-default" src="assets/img/round-icon.svg" width="auto" height="24px" alt="logo" style="margin-top: -3px;">{{
-                  balance | currency:' ':'symbol':'1.2-3':'en-US' }}
+                  <img
+                    class="logo-default"
+                    src="assets/img/round-icon.svg"
+                    width="auto"
+                    height="24px"
+                    alt="logo"
+                    style="margin-top: -3px;"
+                  />{{ balance | currency: ' ':'symbol':'1.2-3':'en-US' }}
                 </h4>
-                <button (click)="onBuy();" class="btn btn-primary mx-10 hidden-md-down" border-64>
+                <button
+                  (click)="onBuy()"
+                  class="btn btn-primary mx-10 hidden-md-down"
+                  border-64
+                >
                   BUY CAN
                 </button>
-                <a (click)="onBuy();" class="btn btn-default mx-10 hidden-md-up" border-64 border-none>
-                  <img src="assets/img/round-icon.svg" width="auto" height="24px" alt="CanYaCoin" style="margin-top: -3px;">
+                <a
+                  (click)="onBuy()"
+                  class="btn btn-default mx-10 hidden-md-up"
+                  border-64
+                  border-none
+                >
+                  <img
+                    src="assets/img/round-icon.svg"
+                    width="auto"
+                    height="24px"
+                    alt="CanYaCoin"
+                    style="margin-top: -3px;"
+                  />
                 </a>
               </div>
             </div>
           </div>
           <div class="card card-bordered view-70 hide" id="message-div">
-            <div *ngIf="selectedChannel" class="card-header d-flex justify-content-between align-items-center" style="background: white; min-height:85px; border-top-left-radius: 5px;">
-
+            <div
+              *ngIf="selectedChannel"
+              class="card-header d-flex justify-content-between align-items-center"
+              style="background: white; min-height:85px; border-top-left-radius: 5px;"
+            >
               <div class="col-2">
-                <button (click)="toggleMobileDivsEvent($event)" class="chat-back-button">Back</button>
+                <button
+                  (click)="toggleMobileDivsEvent($event)"
+                  class="chat-back-button"
+                >
+                  Back
+                </button>
               </div>
               <div class="col-8 text-center">
-                <p>{{ selectedChannel.name }}<app-verified-mark [user]="selectedChannel"></app-verified-mark><br>
-                  <span class="text-muted text-small">{{ selectedChannel.title }}</span>
+                <p>
+                  {{ selectedChannel.name
+                  }}<app-verified-mark
+                    [user]="selectedChannel"
+                  ></app-verified-mark
+                  ><br />
+                  <span class="text-muted text-small">{{
+                    selectedChannel.title
+                  }}</span>
                 </p>
               </div>
-              <div class="col-2">
-              </div>
-              <a [routerLink]="['/profile/alt', selectedChannel.address]">
-              </a>
+              <div class="col-2"></div>
+              <a [routerLink]="['/profile/alt', selectedChannel.address]"> </a>
             </div>
-            <div id="section-messages" class="card-block" style="overflow-y: auto" (click)="readIfUnread()">
+            <div
+              id="section-messages"
+              class="card-block"
+              style="overflow-y: auto"
+              (click)="readIfUnread()"
+            >
               <div *ngIf="selectedChannel" class="row justify-content-end mb-0">
                 <div class="col text-center">
-                  <small>Conversation started: {{ selectedChannel.timestamp | date }}</small>
+                  <small
+                    >Conversation started:
+                    {{ selectedChannel.timestamp | date }}</small
+                  >
                 </div>
               </div>
-              <p *ngIf="!isLoading && channels.length < 1" class="text-dark opacity-60 my-80 text-center">Uh, oh, no
-                messages yet! Try again later.</p>
-              <div *ngFor="let message of messages;let i = index">x
-                <div *ngIf="message.type === 'MESSAGE' || message.type === 'ACTION' || message.type === 'TIP'" class="row" [ngClass]="{ 'justify-content-start': message.address !== currentUser.address,
-                      'justify-content-end': message.address === currentUser.address }">
+              <p
+                *ngIf="!isLoading && channels.length < 1"
+                class="text-dark opacity-60 my-80 text-center"
+              >
+                Uh, oh, no messages yet! Try again later.
+              </p>
+              <div *ngFor="let message of messages; let i = index">
+                x
+                <div
+                  *ngIf="
+                    message.type === 'MESSAGE' ||
+                    message.type === 'ACTION' ||
+                    message.type === 'TIP'
+                  "
+                  class="row"
+                  [ngClass]="{
+                    'justify-content-start':
+                      message.address !== currentUser.address,
+                    'justify-content-end':
+                      message.address === currentUser.address
+                  }"
+                >
                   <div class="col-auto mx-30 my-5">
-                    <div class="card card-message" [ngClass]="{
-                            'bg-secondary': message.address === currentUser.address,
-                            'from-me': message.address === currentUser.address,
-                            'from-user': message.address !== currentUser.address  }"
-                      [ngStyle]="{ 'color': message.address !== currentUser.address ? 'white':'',
-                          'background': message.address !== currentUser.address ? '#3cf':'#e4e7ea' }"
-                      style="border-radius:15px;">
-                      <div class="card-block p-2 card-message-block" [innerHTML]="transformBreaks(message.message | linkify: message.address !== currentUser.address)">
+                    <div
+                      class="card card-message"
+                      [ngClass]="{
+                        'bg-secondary': message.address === currentUser.address,
+                        'from-me': message.address === currentUser.address,
+                        'from-user': message.address !== currentUser.address
+                      }"
+                      [ngStyle]="{
+                        color:
+                          message.address !== currentUser.address
+                            ? 'white'
+                            : '',
+                        background:
+                          message.address !== currentUser.address
+                            ? '#3cf'
+                            : '#e4e7ea'
+                      }"
+                      style="border-radius:15px;"
+                    >
+                      <div
+                        class="card-block p-2 card-message-block"
+                        [innerHTML]="
+                          transformBreaks(
+                            message.message
+                              | linkify: message.address !== currentUser.address
+                          )
+                        "
+                      >
                         <div class="text-right">
-                          <small [ngClass]="{ 'text-dark opacity-40': message.address === currentUser.address,
-                                'text-white opacity-60': message.address !== currentUser.address }">{{
-                            message.timestamp | date:'EEEE, h:mm a' }}</small>
+                          <small
+                            [ngClass]="{
+                              'text-dark opacity-40':
+                                message.address === currentUser.address,
+                              'text-white opacity-60':
+                                message.address !== currentUser.address
+                            }"
+                            >{{
+                              message.timestamp | date: 'EEEE, h:mm a'
+                            }}</small
+                          >
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="row justify-content-center" *ngIf="message.type === 'ACTION'">
+                <div
+                  class="row justify-content-center"
+                  *ngIf="message.type === 'ACTION'"
+                >
                   <div class="col-auto mx-30 my-5">
                     <div class="card bg-white card-request">
                       <div class="row justify-content-center">
-                        <a href="#" [routerLink]="['/inbox/job/', message.jobId]" class="fs-14 fw-400">VIEW JOB DETAILS</a>
+                        <a
+                          href="#"
+                          [routerLink]="['/inbox/job/', message.jobId]"
+                          class="fs-14 fw-400"
+                          >VIEW JOB DETAILS</a
+                        >
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="row justify-content-center" *ngIf="message.type === 'TIP'">
+                <div
+                  class="row justify-content-center"
+                  *ngIf="message.type === 'TIP'"
+                >
                   <div class="col-auto mx-30 my-5">
                     <div class="card bg-white card-request">
                       <div class="row justify-content-center">
-                        <a href="{{getTxLink(message.txHash)}}" target="_blank" class="fs-14 fw-400">VIEW TRANSACTION</a>
+                        <a
+                          href="{{ getTxLink(message.txHash) }}"
+                          target="_blank"
+                          class="fs-14 fw-400"
+                          >VIEW TRANSACTION</a
+                        >
                       </div>
                     </div>
                   </div>
@@ -421,38 +790,82 @@
               </div>
               <div id="section-messages-end"></div>
             </div>
-            <div class="card-footer bg-white" style="border: none; border-bottom-right-radius: 5px;">
-              <form #frm (ngSubmit)="onSend()" class="d-flex align-items-center">
+            <div
+              class="card-footer bg-white"
+              style="border: none; border-bottom-right-radius: 5px;"
+            >
+              <form
+                #frm
+                (ngSubmit)="onSend()"
+                class="d-flex align-items-center"
+              >
                 <div class="input-group input-group-lg">
                   <div class="input-group-prepend bg-white">
                     <div class="dropdown dropup">
                       <a href="https://canshare.io/" target="_blank">
-                        <button [disabled]="isLoading || channels.length < 1" class="btn btn-secondary btn-outline mt-7"
-                          style="background: white; margin-top: 6px; margin-left: 6px; padding: 8px 10px 8px 10px;" type="button"
+                        <button
+                          [disabled]="isLoading || channels.length < 1"
+                          class="btn btn-secondary btn-outline mt-7"
+                          style="background: white; margin-top: 6px; margin-left: 6px; padding: 8px 10px 8px 10px;"
+                          type="button"
                         >
-                          <i class="fas fa-paperclip" style="color: #919d9d;"></i>
+                          <i
+                            class="fas fa-paperclip"
+                            style="color: #919d9d;"
+                          ></i>
                         </button>
                       </a>
-                      <button [disabled]="isLoading || channels.length < 1" class="btn btn-secondary btn-outline mt-7 dropdown-toggle-no-arrow"
-                        style="background: white; margin-top: 6px; margin-left: 6px; padding: 8px 10px 8px 10px;" type="button" id="menu" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
+                      <button
+                        [disabled]="isLoading || channels.length < 1"
+                        class="btn btn-secondary btn-outline mt-7 dropdown-toggle-no-arrow"
+                        style="background: white; margin-top: 6px; margin-left: 6px; padding: 8px 10px 8px 10px;"
+                        type="button"
+                        id="menu"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                      >
                         <i class="fas fa-bars" style="color: #919d9d;"></i>
                       </button>
-                      <div class="dropdown-menu dropdown-menu-sm" aria-labelledby="menu">
+                      <div
+                        class="dropdown-menu dropdown-menu-sm"
+                        aria-labelledby="menu"
+                      >
                         <small class="dropdown-header">Quick replies</small>
                         <div class="dropdown-divider"></div>
-                        <a *ngFor="let macro of macros" (click)="onMacro(macro.text);" class="dropdown-item drop-action"
-                          style="cursor: pointer;">{{ macro.text }}</a>
+                        <a
+                          *ngFor="let macro of macros"
+                          (click)="onMacro(macro.text)"
+                          class="dropdown-item drop-action"
+                          style="cursor: pointer;"
+                          >{{ macro.text }}</a
+                        >
                       </div>
                     </div>
                   </div>
-                  <textarea #msgInput [(ngModel)]="message" (focus)="readIfUnread()" [disabled]="isLoading || channels.length < 1"
-                    class="form-control message-box" maxlength="500" (keyup)="onMessageBoxInput($event)" placeholder="Type a message (shift-enter for new line)" name="message"
-                    autofocus="autofocus" required>
+                  <textarea
+                    #msgInput
+                    [(ngModel)]="message"
+                    (focus)="readIfUnread()"
+                    [disabled]="isLoading || channels.length < 1"
+                    class="form-control message-box"
+                    maxlength="500"
+                    (keyup)="onMessageBoxInput($event)"
+                    placeholder="Type a message (shift-enter for new line)"
+                    name="message"
+                    autofocus="autofocus"
+                    required
+                  >
                   </textarea>
                 </div>
-                <button [disabled]="!msgInput.validity.valid || isLoading || channels.length < 1" type="submit" class="btn btn-light"
-                  style="border: none;">
+                <button
+                  [disabled]="
+                    !msgInput.validity.valid || isLoading || channels.length < 1
+                  "
+                  type="submit"
+                  class="btn btn-light"
+                  style="border: none;"
+                >
                   <span class="text-dark">SEND</span>
                 </button>
               </form>
@@ -463,7 +876,6 @@
     </div>
   </section>
 </main>
-
 
 <!-- Make an offer Modal -->
 <!-- <div class="modal fade" id="makeAnOffer" tabindex="-1" role="dialog" data-keyboard="true" data-backdrop="true" aria-labelledby="makeAnOfferLabel"

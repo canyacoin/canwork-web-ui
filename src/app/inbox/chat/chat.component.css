@@ -22,7 +22,7 @@
   overflow-y: auto;
 }
 
-@media (max-width:600px) {
+@media (max-width: 600px) {
   .contact-div {
     height: auto;
   }
@@ -41,7 +41,7 @@
   margin: 0px 10px 0px 10px;
   padding: 0px 30px 0px 30px;
   height: 36px;
-  border: 1px solid #DCE0E6;
+  border: 1px solid #dce0e6;
   border-radius: 5px;
   width: 100%;
 }
@@ -82,7 +82,7 @@
 
 .list-group-item.active {
   background-color: #f7f7f9;
-  border-color: rgba(0, 0, 0, .125);
+  border-color: rgba(0, 0, 0, 0.125);
 }
 
 .list-group-item-action {
@@ -117,7 +117,7 @@
   padding: 7px 13px !important;
 }
 
-.card-message-block>p {
+.card-message-block > p {
   word-break: break-word;
 }
 
@@ -159,7 +159,7 @@
 }
 
 .from-me:before {
-  content: "";
+  content: '';
   position: absolute;
   z-index: 2;
   bottom: -2px;
@@ -172,7 +172,7 @@
 }
 
 .from-me:after {
-  content: "";
+  content: '';
   position: absolute;
   z-index: 3;
   bottom: -2px;
@@ -198,7 +198,7 @@
 }
 
 .from-user:before {
-  content: "";
+  content: '';
   position: absolute;
   z-index: 2;
   bottom: -2px;
@@ -211,7 +211,7 @@
 }
 
 .from-user:after {
-  content: "";
+  content: '';
   position: absolute;
   z-index: 3;
   bottom: -2px;
@@ -237,21 +237,21 @@
 }
 
 .alert-notifications-button:hover {
-  opacity: 1.0;
+  opacity: 1;
 }
 
 .alert-avatar {
   width: 54px;
   /* height: 54px; */
   border-radius: 54px !important;
-  box-shadow: 0 4px 32px 0 rgba(0, 0, 0, .175) !important;
+  box-shadow: 0 4px 32px 0 rgba(0, 0, 0, 0.175) !important;
   object-fit: cover;
   object-position: center;
 }
 
 @-webkit-keyframes bounce {
   0% {
-    -webkit-transform: scale(1.0);
+    -webkit-transform: scale(1);
   }
 
   10% {
@@ -267,7 +267,7 @@
   }
 
   40% {
-    -webkit-transform: scale(1.0);
+    -webkit-transform: scale(1);
   }
 
   50% {
@@ -275,7 +275,7 @@
   }
 
   60% {
-    -webkit-transform: scale(1.0);
+    -webkit-transform: scale(1);
   }
 
   70% {
@@ -283,7 +283,7 @@
   }
 
   80% {
-    -webkit-transform: scale(1.0);
+    -webkit-transform: scale(1);
   }
 
   90% {
@@ -291,13 +291,13 @@
   }
 
   100% {
-    -webkit-transform: scale(1.0);
+    -webkit-transform: scale(1);
   }
 }
 
 @keyframes bounce {
   0% {
-    transform: scale(1.0);
+    transform: scale(1);
   }
 
   10% {
@@ -313,7 +313,7 @@
   }
 
   40% {
-    transform: scale(1.0);
+    transform: scale(1);
   }
 
   50% {
@@ -321,7 +321,7 @@
   }
 
   60% {
-    transform: scale(1.0);
+    transform: scale(1);
   }
 
   70% {
@@ -329,7 +329,7 @@
   }
 
   80% {
-    transform: scale(1.0);
+    transform: scale(1);
   }
 
   90% {
@@ -337,7 +337,7 @@
   }
 
   100% {
-    transform: scale(1.0);
+    transform: scale(1);
   }
 }
 
@@ -358,15 +358,14 @@
 .shake {
   -webkit-animation-delay: 40s;
   animation-delay: 40s;
-  -webkit-animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
-  animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+  -webkit-animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   perspective: 1000px;
 }
 
 @keyframes shake {
-
   10%,
   90% {
     transform: translate3d(-1px, 0, 0);
@@ -396,7 +395,7 @@
 }
 
 .icon-request {
-  opacity: 1.0;
+  opacity: 1;
   width: 24px;
   height: 24px;
   background: url('/assets/img/request-hover.svg') white;
@@ -411,7 +410,7 @@
 }
 
 .icon-offer {
-  opacity: 1.0;
+  opacity: 1;
   width: 24px;
   height: 24px;
   background: url('/assets/img/offer-hover.svg') white;

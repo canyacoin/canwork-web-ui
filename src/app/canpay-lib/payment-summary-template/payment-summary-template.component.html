@@ -1,9 +1,9 @@
 <div class="card px-30 py-30 row mh-250">
   <canyalib-loader [isLoading]="!paymentSummary"></canyalib-loader>
   <div *ngIf="paymentSummary" class="container text-center">
-
     <div *ngIf="showBalance && balance < amount" class="alert alert-warning">
-      <i class="fas fa-exclamation-triangle"></i> You do not have enough CAN to process this transaction
+      <i class="fas fa-exclamation-triangle"></i> You do not have enough CAN to
+      process this transaction
     </div>
     <div class="row mb-15">
       <div class="col-8 text-left">
@@ -12,41 +12,58 @@
     </div>
     <div class="row" *ngFor="let item of paymentSummary.items">
       <div class="col-8 text-left">
-        <span class="fw-600">{{item.name}}</span>
+        <span class="fw-600">{{ item.name }}</span>
       </div>
       <div class="col-4 text-right">
         <span>
-          {{item.value}}
-          <img *ngIf="currencyIsCan" src="assets/img/canya-media-coin.png" width="12px" height="12px" alt="CanYa">
+          {{ item.value }}
+          <img
+            *ngIf="currencyIsCan"
+            src="assets/img/canya-media-coin.png"
+            width="12px"
+            height="12px"
+            alt="CanYa"
+          />
           <span class="fs-12">
-            {{paymentSummary.currency}}
+            {{ paymentSummary.currency }}
           </span>
         </span>
       </div>
     </div>
-    <hr class="mb-5 mt-20">
+    <hr class="mb-5 mt-20" />
     <div class="row">
       <div class="col-8 text-left">
         <span class="fw-600">Total:</span>
       </div>
       <div class="col-4 text-right">
         <span>
-          <span class="fw-500 fs-20">{{paymentSummary.total}} </span>
-          <img *ngIf="currencyIsCan" src="assets/img/canya-media-coin.png" width="12px" height="12px" alt="CanYa">
+          <span class="fw-500 fs-20">{{ paymentSummary.total }} </span>
+          <img
+            *ngIf="currencyIsCan"
+            src="assets/img/canya-media-coin.png"
+            width="12px"
+            height="12px"
+            alt="CanYa"
+          />
           <span class="fs-12">
-            {{paymentSummary.currency}}
+            {{ paymentSummary.currency }}
           </span>
         </span>
       </div>
     </div>
     <div class="row" *ngIf="currencyIsUsd">
       <div class="col-8 text-left">
-        <span class="fw-400">1 CAN = {{usdPerCan}}</span>
+        <span class="fw-400">1 CAN = {{ usdPerCan }}</span>
       </div>
       <div class="col-4 text-right">
-        <span class="fw-500 fs-20">{{amount}} </span>
+        <span class="fw-500 fs-20">{{ amount }} </span>
         <span class="fs-12">
-          <img src="assets/img/canya-media-coin.png" width="12px" height="12px" alt="CanYa">
+          <img
+            src="assets/img/canya-media-coin.png"
+            width="12px"
+            height="12px"
+            alt="CanYa"
+          />
           CAN
         </span>
       </div>
@@ -56,22 +73,32 @@
         <span class="fw-600">Wallet Balance</span>
       </div>
       <div class="col-4 text-right">
-        <span class="fw-500 fs-20">{{balance}} </span>
+        <span class="fw-500 fs-20">{{ balance }} </span>
         <span class="fs-12">
-          <img src="assets/img/canya-media-coin.png" width="12px" height="12px" alt="CanYa">
+          <img
+            src="assets/img/canya-media-coin.png"
+            width="12px"
+            height="12px"
+            alt="CanYa"
+          />
           CAN
         </span>
       </div>
     </div>
-    <hr *ngIf="showBalance" class="mb-5 mt-20">
+    <hr *ngIf="showBalance" class="mb-5 mt-20" />
     <div class="row" *ngIf="showBalance">
       <div class="col-8 text-left">
         <span class="fw-600">You will need to purchase</span>
       </div>
       <div class="col-4 text-right">
-        <span class="fw-500 fs-20">{{amount - balance}} </span>
+        <span class="fw-500 fs-20">{{ amount - balance }} </span>
         <span class="fs-12">
-          <img src="assets/img/canya-media-coin.png" width="12px" height="12px" alt="CanYa">
+          <img
+            src="assets/img/canya-media-coin.png"
+            width="12px"
+            height="12px"
+            alt="CanYa"
+          />
           CAN
         </span>
       </div>

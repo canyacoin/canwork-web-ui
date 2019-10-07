@@ -1,71 +1,83 @@
-import { environment } from '@env/environment';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { environment } from '@env/environment'
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core'
+import { Subscription } from 'rxjs'
 
-import { EthService, WalletType, Web3LoadingStatus } from '@service/eth.service';
+import { EthService, WalletType, Web3LoadingStatus } from '@service/eth.service'
 
 @Component({
   selector: 'canyalib-metamask',
   templateUrl: './metamask.component.html',
-  styleUrls: ['./metamask.component.scss']
+  styleUrls: ['./metamask.component.scss'],
 })
-
 export class MetamaskComponent implements OnInit, OnDestroy {
-  @Input() initLogin = true;
-  @Output() loginResp = new EventEmitter();
-  @Output() account = new EventEmitter<string>();
+  @Input() initLogin = true
+  @Output() loginResp = new EventEmitter()
+  @Output() account = new EventEmitter<string>()
   //   status = 'loading';
-  web3LoadingStatus = Web3LoadingStatus;
-  web3State: Web3LoadingStatus;
+  web3LoadingStatus = Web3LoadingStatus
+  web3State: Web3LoadingStatus
 
-  walletType: WalletType;
-  walletTypes = WalletType;
+  walletType: WalletType
+  walletTypes = WalletType
 
+  loading = true
 
-  loading = true;
+  ethSub: Subscription
+  accSub: Subscription
 
-  ethSub: Subscription;
-  accSub: Subscription;
+  showInstructions = false
 
-  showInstructions = false;
-
-  constructor(private ethService: EthService) { }
+  constructor(private ethService: EthService) {}
 
   async ngOnInit() {
-    this.ethSub = this.ethService.web3Status$.subscribe((state: Web3LoadingStatus) => {
-      console.log('state: ', state);
-      this.web3State = state;
-      if (this.web3State !== Web3LoadingStatus.loading) {
-        this.walletType = this.ethService.walletType;
-        this.accSub = this.ethService.account$.subscribe((acc: string) => {
-          if (!acc) { return; }
-          console.log('accSub: ', acc);
-          this.loading = true;
-          this.account.emit(acc);
-        });
+    this.ethSub = this.ethService.web3Status$.subscribe(
+      (state: Web3LoadingStatus) => {
+        console.log('state: ', state)
+        this.web3State = state
+        if (this.web3State !== Web3LoadingStatus.loading) {
+          this.walletType = this.ethService.walletType
+          this.accSub = this.ethService.account$.subscribe((acc: string) => {
+            if (!acc) {
+              return
+            }
+            console.log('accSub: ', acc)
+            this.loading = true
+            this.account.emit(acc)
+          })
+        }
       }
-    });
+    )
   }
 
   getAccount() {
-    const acc = this.ethService.getOwnerAccount();
+    const acc = this.ethService.getOwnerAccount()
     if (acc) {
-      this.loading = true;
-      this.account.emit(acc);
+      this.loading = true
+      this.account.emit(acc)
     }
   }
 
   showHideInstructions() {
-    this.showInstructions = !this.showInstructions;
+    this.showInstructions = !this.showInstructions
   }
 
   get netType(): string {
-    return environment.contracts.network;
+    return environment.contracts.network
   }
 
   ngOnDestroy() {
-    if (this.ethSub) { this.ethSub.unsubscribe(); }
-    if (this.accSub) { this.accSub.unsubscribe(); }
+    if (this.ethSub) {
+      this.ethSub.unsubscribe()
+    }
+    if (this.accSub) {
+      this.accSub.unsubscribe()
+    }
   }
 }
-

@@ -4,14 +4,17 @@
       <div class="col-12 pb-20">
         <h4 class="text-center py-10 no-margin">LATEST UPDATES</h4>
       </div>
-      <div class="col-lg-4 col-md-6 col-12 p-10" *ngFor="let fx of mediumFeed; let i = index">
+      <div
+        class="col-lg-4 col-md-6 col-12 p-10"
+        *ngFor="let fx of mediumFeed; let i = index"
+      >
         <div class="card card-bordered card-hover-shadow">
-          <img class="card-img-top" src="{{fx.thumbnail}}">
+          <img class="card-img-top" src="{{ fx.thumbnail }}" />
           <div class="card-block">
             <div class="card-title">
-              <a href="{{fx.link}}" target="_blank">{{ fx.title }}</a>
+              <a href="{{ fx.link }}" target="_blank">{{ fx.title }}</a>
             </div>
-            <a class="fw-500 fs-12" href="{{fx.link}}" target="_blank">
+            <a class="fw-500 fs-12" href="{{ fx.link }}" target="_blank">
               See More
             </a>
           </div>

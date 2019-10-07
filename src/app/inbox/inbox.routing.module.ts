@@ -1,49 +1,49 @@
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { CommonModule } from '@angular/common'
+import { NgModule } from '@angular/core'
+import { RouterModule, Routes } from '@angular/router'
 
-import { ChatComponent } from './chat/chat.component';
-import { CompleteJobComponent } from './jobs/container/complete-job/complete-job.component';
-import { CancelJobComponent } from './jobs/container/cancel-job/cancel-job.component';
-import { EnterEscrowComponent } from './jobs/container/enter-escrow/enter-escrow.component';
-import { JobContainerComponent } from './jobs/container/job-container.component';
-import { JobDetailsComponent } from './jobs/container/job-details/job-details.component';
-import { JobDashboardComponent } from './jobs/dashboard/job-dashboard.component';
-import { PostComponent } from './jobs/post/post.component';
+import { ChatComponent } from './chat/chat.component'
+import { CompleteJobComponent } from './jobs/container/complete-job/complete-job.component'
+import { CancelJobComponent } from './jobs/container/cancel-job/cancel-job.component'
+import { EnterEscrowComponent } from './jobs/container/enter-escrow/enter-escrow.component'
+import { JobContainerComponent } from './jobs/container/job-container.component'
+import { JobDetailsComponent } from './jobs/container/job-details/job-details.component'
+import { JobDashboardComponent } from './jobs/dashboard/job-dashboard.component'
+import { PostComponent } from './jobs/post/post.component'
 
 const routes: Routes = [
   {
     path: '',
     redirectTo: '/chat',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'chat',
-    component: ChatComponent
+    component: ChatComponent,
   },
   {
     path: 'chat/:address',
-    component: ChatComponent
+    component: ChatComponent,
   },
   {
     path: 'post/:address',
-    component: PostComponent
+    component: PostComponent,
   },
   {
     path: 'post',
-    component: PostComponent
+    component: PostComponent,
   },
   {
     path: 'post/:id',
-    component: PostComponent
+    component: PostComponent,
   },
   {
     path: 'job/edit/:jobId',
-    component: PostComponent
+    component: PostComponent,
   },
   {
     path: 'jobs',
-    component: JobDashboardComponent
+    component: JobDashboardComponent,
   },
   {
     path: 'job/:id',
@@ -51,26 +51,26 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: JobDetailsComponent
+        component: JobDetailsComponent,
       },
       {
         path: 'enter-escrow',
-        component: EnterEscrowComponent
+        component: EnterEscrowComponent,
       },
       {
         path: 'complete',
-        component: CompleteJobComponent
+        component: CompleteJobComponent,
       },
       {
         path: 'cancel',
-        component: CancelJobComponent
-      }
-    ]
-  }
-];
+        component: CancelJobComponent,
+      },
+    ],
+  },
+]
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class InboxRoutingModule { }
+export class InboxRoutingModule {}

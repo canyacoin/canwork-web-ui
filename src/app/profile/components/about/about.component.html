@@ -1,64 +1,168 @@
-<div *ngIf="userModel" class="card pricing-3" style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px;">
-
-  <span *ngIf="isMyProfile" (click)="displayProfileEditComponent()" data-toggle="tooltip" data-placement="top" title="Edit Profile"
-    class="btn btn-sm btn-circular btn-light icon-edit-work pl-1">
-    <i class="ti-pencil fw-600" style="columns: #535353;" aria-hidden="true"></i>
+<div
+  *ngIf="userModel"
+  class="card pricing-3"
+  style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px;"
+>
+  <span
+    *ngIf="isMyProfile"
+    (click)="displayProfileEditComponent()"
+    data-toggle="tooltip"
+    data-placement="top"
+    title="Edit Profile"
+    class="btn btn-sm btn-circular btn-light icon-edit-work pl-1"
+  >
+    <i
+      class="ti-pencil fw-600"
+      style="columns: #535353;"
+      aria-hidden="true"
+    ></i>
   </span>
   <div id="sidebar">
     <div class="profile">
       <div class="profile-badge">
-        <span class="m-10" *ngIf="userModel.badge">{{userModel.badge}}</span>
+        <span class="m-10" *ngIf="userModel.badge">{{ userModel.badge }}</span>
         <span class="m-10" *ngIf="userModel.verified">VERIFIED</span>
       </div>
-      <app-avatar [user]="userModel" [customClass]="'circle-headshot'"></app-avatar>
+      <app-avatar
+        [user]="userModel"
+        [customClass]="'circle-headshot'"
+      ></app-avatar>
       <div class="title">
-        <h2 *ngIf="userModel.name">{{ userModel.name }}<app-verified-mark [user]="userModel"></app-verified-mark></h2>
+        <h2 *ngIf="userModel.name">
+          {{ userModel.name
+          }}<app-verified-mark [user]="userModel"></app-verified-mark>
+        </h2>
         <h3 *ngIf="userModel.title">{{ userModel.title }}</h3>
         <p class="fw-400" *ngIf="userModel.bio">{{ userModel.bio }}</p>
         <div class="row d-flex justify-content-around mx-30 my-30">
-          <app-skill-tag *ngFor="let tag of userModel.skillTags" [skill]="tag" [routerLink]="['/search']" [queryParams]="{query: tag}"></app-skill-tag>
+          <app-skill-tag
+            *ngFor="let tag of userModel.skillTags"
+            [skill]="tag"
+            [routerLink]="['/search']"
+            [queryParams]="{ query: tag }"
+          ></app-skill-tag>
         </div>
-        <button *ngIf="!isMyProfile" (click)="chatUser()" class="btn btn-primary btn-canya-chat" style="margin:10px 0 10px 0;width:175px;"
-          [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }">LET'S
-          CHAT</button>
-        <br>
-        <button *ngIf="!isMyProfile && userModel.type == 'Provider' && currentUserJobs && currentUserJobs.length < 1"
-          (click)="proposeJob()" class="btn btn-primary btn-canya-chat" style="width:175px;" [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }"
-          data-scrollto="section-profile">
+        <button
+          *ngIf="!isMyProfile"
+          (click)="chatUser()"
+          class="btn btn-primary btn-canya-chat"
+          style="margin:10px 0 10px 0;width:175px;"
+          [ngStyle]="{
+            background:
+              'linear-gradient(122deg, ' +
+              userModel.colors[0] +
+              ' 0%, ' +
+              userModel.colors[1] +
+              ' 93%)'
+          }"
+        >
+          LET'S CHAT
+        </button>
+        <br />
+        <button
+          *ngIf="
+            !isMyProfile &&
+            userModel.type == 'Provider' &&
+            currentUserJobs &&
+            currentUserJobs.length < 1
+          "
+          (click)="proposeJob()"
+          class="btn btn-primary btn-canya-chat"
+          style="width:175px;"
+          [ngStyle]="{
+            background:
+              'linear-gradient(122deg, ' +
+              userModel.colors[0] +
+              ' 0%, ' +
+              userModel.colors[1] +
+              ' 93%)'
+          }"
+          data-scrollto="section-profile"
+        >
           POST A REQUEST
         </button>
-        <button *ngIf="!isMyProfile && userModel.type == 'Provider' && currentUserJobs && currentUserJobs.length > 0"
-          class="btn btn-primary btn-canya-chat" data-toggle="modal" data-target="#inviteModal" style="width:175px;"
-          [ngStyle]="{ 'background': 'linear-gradient(122deg, ' + userModel.colors[0] + ' 0%, ' + userModel.colors[1] + ' 93%)' }"
-          data-scrollto="section-profile">
+        <button
+          *ngIf="
+            !isMyProfile &&
+            userModel.type == 'Provider' &&
+            currentUserJobs &&
+            currentUserJobs.length > 0
+          "
+          class="btn btn-primary btn-canya-chat"
+          data-toggle="modal"
+          data-target="#inviteModal"
+          style="width:175px;"
+          [ngStyle]="{
+            background:
+              'linear-gradient(122deg, ' +
+              userModel.colors[0] +
+              ' 0%, ' +
+              userModel.colors[1] +
+              ' 93%)'
+          }"
+          data-scrollto="section-profile"
+        >
           INVITE TO JOB
         </button>
       </div>
     </div>
     <div class="waves">
-      <svg width="400" height="689" viewBox="0 0 400 689" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <svg
+        width="400"
+        height="689"
+        viewBox="0 0 400 689"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+      >
         <g id="Canvas" transform="translate(720 177)">
           <g id="Waves">
             <g id="back-wave">
-              <use xlink:href="#path0_fill" transform="translate(-720 -158.222)" [attr.fill]="userModel.colors[0] || '#00FFCC'"
-                fill-opacity="0.37" />
+              <use
+                xlink:href="#path0_fill"
+                transform="translate(-720 -158.222)"
+                [attr.fill]="userModel.colors[0] || '#00FFCC'"
+                fill-opacity="0.37"
+              />
             </g>
             <g id="front-wave">
-              <use xlink:href="#path1_fill" transform="translate(-720 -176.527)" fill="url(#paint1_linear)"
-                fill-opacity="0.6" />
+              <use
+                xlink:href="#path1_fill"
+                transform="translate(-720 -176.527)"
+                fill="url(#paint1_linear)"
+                fill-opacity="0.6"
+              />
             </g>
           </g>
         </g>
         <defs>
-          <linearGradient id="paint1_linear" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse"
-            gradientTransform="matrix(2.44929e-14 221 -400 1.35323e-14 400 7.52681)">
+          <linearGradient
+            id="paint1_linear"
+            x1="0"
+            y1="0"
+            x2="1"
+            y2="0"
+            gradientUnits="userSpaceOnUse"
+            gradientTransform="matrix(2.44929e-14 221 -400 1.35323e-14 400 7.52681)"
+          >
+            <stop
+              offset="0"
+              [attr.stop-color]="userModel.colors[0] || '#33ccff'"
+            />
 
-            <stop offset="0" [attr.stop-color]="userModel.colors[0] || '#33ccff'" />
-
-            <stop offset="1" [attr.stop-color]="userModel.colors[1] || '#00FFCC'" />
+            <stop
+              offset="1"
+              [attr.stop-color]="userModel.colors[1] || '#00FFCC'"
+            />
           </linearGradient>
-          <path id="path0_fill" d="M 0 60.222C 35.5 20.222 61.3051 -5.20902 92.5 8.22203C 128.5 23.7219 114 42.7219 211 60.222C 268.632 70.6198 308.621 7.02893 343 0.721831C 368.44 -3.94529 387.5 15.2219 400 23.7219L 400 1008.22L 0 1008.22L 0 60.222Z" />
-          <path id="path1_fill" d="M 0 36.4959C 14.0351 50.8858 62.5188 84.4509 95 74.5268C 135.602 62.1217 181.5 -41.9732 257 19.0267C 321.612 71.2295 344 96.5267 400 44.9313L 400 971.527L 0 971.527L 0 36.4959Z" />
+          <path
+            id="path0_fill"
+            d="M 0 60.222C 35.5 20.222 61.3051 -5.20902 92.5 8.22203C 128.5 23.7219 114 42.7219 211 60.222C 268.632 70.6198 308.621 7.02893 343 0.721831C 368.44 -3.94529 387.5 15.2219 400 23.7219L 400 1008.22L 0 1008.22L 0 60.222Z"
+          />
+          <path
+            id="path1_fill"
+            d="M 0 36.4959C 14.0351 50.8858 62.5188 84.4509 95 74.5268C 135.602 62.1217 181.5 -41.9732 257 19.0267C 321.612 71.2295 344 96.5267 400 44.9313L 400 971.527L 0 971.527L 0 36.4959Z"
+          />
         </defs>
       </svg>
     </div>
@@ -66,15 +170,27 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="inviteModal" tabindex="-1" *ngIf="currentUserJobs && currentUserJobs.length > 0" role="dialog"
-  aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="inviteModal"
+  tabindex="-1"
+  *ngIf="currentUserJobs && currentUserJobs.length > 0"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header text-center" border-none>
         <div class="col-12">
           <h5 class="modal-title" id="exampleModalLabel">INVITE TO JOB</h5>
-          <button type="button" style="position: absolute; right: 0; top: 0" class="close" data-dismiss="modal"
-            aria-label="Close">
+          <button
+            type="button"
+            style="position: absolute; right: 0; top: 0"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -87,41 +203,62 @@
         </div>
         <div class="row" *ngIf="!loadingJobs">
           <div class="col-12">
-              <div class="row py-10 animated {{animation}}" *ngFor="let job of paginatedUserJobs();let i = index">
-                  <div class="col-8">
-                    <h6>{{job.information.title}}</h6>
-                  </div>
-                  <div class="col-4 text-right">
-                    <button id="job-{{i}}" (click)="inviteProvider(job, i)" *ngIf="job.canInvite" [disabled]="inviting === true"
-                      class="btn btn-success">
-                      <span *ngIf="inviting === true">Inviting...</span>
-                      <span *ngIf="inviting !== true">INVITE</span>
-                    </button>
-                    <i *ngIf="!job.canInvite" class="mr-15">Invited</i>
-                  </div>
-                </div>
-                <div class="row py-10">
-                  <div class="col-12 d-flex justify-content-center">
-                    <button class="btn btn-sm" [disabled]="currentPage == 0" (click)="previousPage()">
-                      <i class="fa fa-chevron-left"></i>
-                    </button>
-                    <button class="btn btn-sm" [disabled]="currentPage == lastPage" (click)="nextPage()">
-                      <i class="fa fa-chevron-right"></i>
-                    </button>
-                  </div>
-                </div>
+            <div
+              class="row py-10 animated {{ animation }}"
+              *ngFor="let job of paginatedUserJobs(); let i = index"
+            >
+              <div class="col-8">
+                <h6>{{ job.information.title }}</h6>
+              </div>
+              <div class="col-4 text-right">
+                <button
+                  id="job-{{ i }}"
+                  (click)="inviteProvider(job, i)"
+                  *ngIf="job.canInvite"
+                  [disabled]="inviting === true"
+                  class="btn btn-success"
+                >
+                  <span *ngIf="inviting === true">Inviting...</span>
+                  <span *ngIf="inviting !== true">INVITE</span>
+                </button>
+                <i *ngIf="!job.canInvite" class="mr-15">Invited</i>
+              </div>
+            </div>
+            <div class="row py-10">
+              <div class="col-12 d-flex justify-content-center">
+                <button
+                  class="btn btn-sm"
+                  [disabled]="currentPage == 0"
+                  (click)="previousPage()"
+                >
+                  <i class="fa fa-chevron-left"></i>
+                </button>
+                <button
+                  class="btn btn-sm"
+                  [disabled]="currentPage == lastPage"
+                  (click)="nextPage()"
+                >
+                  <i class="fa fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
         <div class="row py-10">
           <div class="col-12 text-center">
-            <span>Want to start a new job?<br>
-              <a data-dismiss="modal" class="pointer text-canya" (click)="proposeJob()">Post a request.</a></span>
+            <span
+              >Want to start a new job?<br />
+              <a
+                data-dismiss="modal"
+                class="pointer text-canya"
+                (click)="proposeJob()"
+                >Post a request.</a
+              ></span
+            >
           </div>
         </div>
       </div>
-      <div class="modal-body" *ngIf="!loadingJobs" border-none>
-       
-      </div>
+      <div class="modal-body" *ngIf="!loadingJobs" border-none></div>
     </div>
   </div>
 </div>

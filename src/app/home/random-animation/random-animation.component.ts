@@ -1,33 +1,34 @@
-import { Component, AfterViewInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
 
-import { AnimationService } from '../../core-services/animation.service';
+import { AnimationService } from '../../core-services/animation.service'
 
-import { Subscription } from 'rxjs';
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'app-random-animation',
   templateUrl: './random-animation.component.html',
-  styleUrls: ['./random-animation.component.css']
+  styleUrls: ['./random-animation.component.css'],
 })
 export class RandomAnimationComponent implements AfterViewInit, OnDestroy {
+  randomAnimation = 0
+  routeSub: Subscription
 
-  randomAnimation = 0;
-  routeSub: Subscription;
-
-  constructor(private activatedRoute: ActivatedRoute, private animationService: AnimationService) { }
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private animationService: AnimationService
+  ) {}
 
   ngAfterViewInit() {
-    this.routeSub = this.activatedRoute.url.subscribe((url) => {
-      this.animationService.loadAnimations();
-    });
+    this.routeSub = this.activatedRoute.url.subscribe(url => {
+      this.animationService.loadAnimations()
+    })
   }
 
   ngOnDestroy() {
     if (this.routeSub) {
-      this.routeSub.unsubscribe();
+      this.routeSub.unsubscribe()
     }
-    this.animationService.resetAnimations();
+    this.animationService.resetAnimations()
   }
-
 }

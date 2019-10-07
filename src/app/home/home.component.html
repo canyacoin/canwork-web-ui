@@ -4,35 +4,61 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-6">
-            <h1 class="py-20">Access global freelance talent with only 1% fees</h1>
-            <h4 class="fw-400 text-grey">Can you tell us what you’re looking for?</h4>
+            <h1 class="py-20">
+              Access global freelance talent with only 1% fees
+            </h1>
+            <h4 class="fw-400 text-grey">
+              Can you tell us what you’re looking for?
+            </h4>
             <div class="canya-seach-bar input-group mb-3">
-              <input #inputSearch type="text" class="form-control canya-search-input" (keyup.enter)="onSubmit(inputSearch.value)"
-                placeholder="Search...">
+              <input
+                #inputSearch
+                type="text"
+                class="form-control canya-search-input"
+                (keyup.enter)="onSubmit(inputSearch.value)"
+                placeholder="Search..."
+              />
               <div class="input-group-append">
-                <button class="canya-search-input-btn btn btn-primary" (click)="onSubmit(inputSearch.value);">
-                  <img class="search-img" src="assets/img/search-icon-white.svg">
+                <button
+                  class="canya-search-input-btn btn btn-primary"
+                  (click)="onSubmit(inputSearch.value)"
+                >
+                  <img
+                    class="search-img"
+                    src="assets/img/search-icon-white.svg"
+                  />
                 </button>
               </div>
             </div>
           </div>
           <div class="col-lg-6">
-            <img class="img-fluid" src="assets/img/CanYa_Landing.svg">
+            <img class="img-fluid" src="assets/img/CanYa_Landing.svg" />
           </div>
         </div>
         <div class="row provider-type-row">
           <div class="col-12">
-            <h6 class="text-center text-grey ls-1">Browse CanYa's highly skilled and hand-picked providers</h6>
+            <h6 class="text-center text-grey ls-1">
+              Browse CanYa's highly skilled and hand-picked providers
+            </h6>
           </div>
-          <div *ngFor="let type of providerTypes" class="col-lg-2 col-md-3 col-sm-4 col-6 provider-type-col">
-            <div [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]' : type.name, 'category' : type.id}"
-              class="provider-type-card pointer">
+          <div
+            *ngFor="let type of providerTypes"
+            class="col-lg-2 col-md-3 col-sm-4 col-6 provider-type-col"
+          >
+            <div
+              [routerLink]="['/search']"
+              [queryParams]="{
+                'refinementList[category][0]': type.name,
+                category: type.id
+              }"
+              class="provider-type-card pointer"
+            >
               <div class="row">
                 <div class="col-4 no-padding">
-                  <img src="assets/img/providers/{{type.img}}">
+                  <img src="assets/img/providers/{{ type.img }}" />
                 </div>
                 <div class="col-8">
-                  <p class="provider-type">{{type.name}}</p>
+                  <p class="provider-type">{{ type.name }}</p>
                 </div>
               </div>
             </div>
@@ -45,17 +71,39 @@
     <div class="container">
       <div class="row">
         <div class="col-8">
-          <h4 class="section-title pointer" [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]' : 'SOFTWARE DEVELOPERS', 'category' : 'softwareDev'}"><span><img
-                class="icon-img" src="assets/img/providers/software-engineers.svg"></span>SOFTWARE
-            DEVELOPERS</h4>
+          <h4
+            class="section-title pointer"
+            [routerLink]="['/search']"
+            [queryParams]="{
+              'refinementList[category][0]': 'SOFTWARE DEVELOPERS',
+              category: 'softwareDev'
+            }"
+          >
+            <span
+              ><img
+                class="icon-img"
+                src="assets/img/providers/software-engineers.svg"/></span
+            >SOFTWARE DEVELOPERS
+          </h4>
         </div>
         <div class="col-4 text-right">
-          <p class="see-all pointer" [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]' : 'SOFTWARE DEVELOPERS', 'category' : 'softwareDev'}">
-            See All</p>
+          <p
+            class="see-all pointer"
+            [routerLink]="['/search']"
+            [queryParams]="{
+              'refinementList[category][0]': 'SOFTWARE DEVELOPERS',
+              category: 'softwareDev'
+            }"
+          >
+            See All
+          </p>
         </div>
       </div>
       <div class="row">
-        <div class="col-md-4 col-sm-6 col-12 no-padding" *ngFor="let dev of developers">
+        <div
+          class="col-md-4 col-sm-6 col-12 no-padding"
+          *ngFor="let dev of developers"
+        >
           <app-provider-card [size]="'sm'" [provider]="dev"></app-provider-card>
         </div>
       </div>
@@ -65,18 +113,43 @@
     <div class="container">
       <div class="row">
         <div class="col-8">
-          <h4 class="section-title pointer" [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]': 'DESIGNERS & CREATIVES', 'category' : 'designer'}"><span><img
-                class="icon-img" src="assets/img/providers/creatives-black.svg"></span>DESIGNER
-            & CREATIVES</h4>
+          <h4
+            class="section-title pointer"
+            [routerLink]="['/search']"
+            [queryParams]="{
+              'refinementList[category][0]': 'DESIGNERS & CREATIVES',
+              category: 'designer'
+            }"
+          >
+            <span
+              ><img
+                class="icon-img"
+                src="assets/img/providers/creatives-black.svg"/></span
+            >DESIGNER & CREATIVES
+          </h4>
         </div>
         <div class="col-4 text-right">
-          <p class="see-all pointer" [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]': 'DESIGNERS & CREATIVES', 'category':'designer'}">
-            See All</p>
+          <p
+            class="see-all pointer"
+            [routerLink]="['/search']"
+            [queryParams]="{
+              'refinementList[category][0]': 'DESIGNERS & CREATIVES',
+              category: 'designer'
+            }"
+          >
+            See All
+          </p>
         </div>
       </div>
       <div class="row">
-        <div class="col-md-4 col-sm-6 col-12 no-padding" *ngFor="let designer of designers">
-          <app-provider-card [size]="'sm'" [provider]="designer"></app-provider-card>
+        <div
+          class="col-md-4 col-sm-6 col-12 no-padding"
+          *ngFor="let designer of designers"
+        >
+          <app-provider-card
+            [size]="'sm'"
+            [provider]="designer"
+          ></app-provider-card>
         </div>
       </div>
     </div>
@@ -85,18 +158,43 @@
     <div class="container">
       <div class="row">
         <div class="col-8">
-          <h4 class="section-title pointer" [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]': 'CONTENT CREATORS', 'category':'contentCreator'}"><span><img
-                class="icon-img" src="assets/img/providers/writer-black.svg"></span>MARKETERS
-            & CONTENT CREATORS</h4>
+          <h4
+            class="section-title pointer"
+            [routerLink]="['/search']"
+            [queryParams]="{
+              'refinementList[category][0]': 'CONTENT CREATORS',
+              category: 'contentCreator'
+            }"
+          >
+            <span
+              ><img
+                class="icon-img"
+                src="assets/img/providers/writer-black.svg"/></span
+            >MARKETERS & CONTENT CREATORS
+          </h4>
         </div>
         <div class="col-4 text-right">
-          <p class="see-all pointer" [routerLink]="['/search']" [queryParams]="{'refinementList[category][0]': 'CONTENT CREATORS', 'category':'contentCreator'}">
-            See All</p>
+          <p
+            class="see-all pointer"
+            [routerLink]="['/search']"
+            [queryParams]="{
+              'refinementList[category][0]': 'CONTENT CREATORS',
+              category: 'contentCreator'
+            }"
+          >
+            See All
+          </p>
         </div>
       </div>
       <div class="row">
-        <div class="col-md-4 col-sm-6 col-12 no-padding" *ngFor="let content of contents">
-          <app-provider-card [size]="'sm'" [provider]="content"></app-provider-card>
+        <div
+          class="col-md-4 col-sm-6 col-12 no-padding"
+          *ngFor="let content of contents"
+        >
+          <app-provider-card
+            [size]="'sm'"
+            [provider]="content"
+          ></app-provider-card>
         </div>
       </div>
     </div>
@@ -105,21 +203,36 @@
   <section class="py-20" *ngIf="currentUser && previouslySeen">
     <div class="container">
       <div class="row">
-        <h4 class="section-title"><span class="icon-img"><i class="far fa-eye"></i></span>RECENTLY VIEWED </h4>
+        <h4 class="section-title">
+          <span class="icon-img"><i class="far fa-eye"></i></span>RECENTLY
+          VIEWED
+        </h4>
       </div>
       <div class="row" *ngIf="previouslySeen.length === 0">
         <div class="container">
           <i>You have not checked out any providers.</i>
         </div>
       </div>
-      <div class="row" *ngIf="previouslySeen.length > 0 && previouslySeen && !loadingDone">
+      <div
+        class="row"
+        *ngIf="previouslySeen.length > 0 && previouslySeen && !loadingDone"
+      >
         <div class="container">
           <i>Loading...</i>
         </div>
       </div>
-      <div class="row" *ngIf="previouslySeen.length > 0 && previouslySeen && loadingDone">
-        <div class="col-md-4 col-12 no-padding" *ngFor="let seen of previouslySeen">
-          <app-provider-card [size]="'sm'" [provider]="seen"></app-provider-card>
+      <div
+        class="row"
+        *ngIf="previouslySeen.length > 0 && previouslySeen && loadingDone"
+      >
+        <div
+          class="col-md-4 col-12 no-padding"
+          *ngFor="let seen of previouslySeen"
+        >
+          <app-provider-card
+            [size]="'sm'"
+            [provider]="seen"
+          ></app-provider-card>
         </div>
       </div>
     </div>
@@ -131,21 +244,29 @@
       <div class="container">
         <div class="row text-center">
           <div class="col-md-4 p-20">
-            <img src="/assets/img/onboarding/CanWork_Step1.png">
+            <img src="/assets/img/onboarding/CanWork_Step1.png" />
             <h5>Post a request and find the right provider</h5>
-            <p>Choose from the hand-picked talent on CanWork, or post a request to attract the right person for the
-              right job.</p>
+            <p>
+              Choose from the hand-picked talent on CanWork, or post a request
+              to attract the right person for the right job.
+            </p>
           </div>
           <div class="col-md-4 p-20">
-            <img src="/assets/img/onboarding/CanWork_Step2.png">
+            <img src="/assets/img/onboarding/CanWork_Step2.png" />
             <h5>Agree to terms and get to work</h5>
-            <p>Once you and your provider have agreed on a task, pay into the CanYa escrow, where your payment will be
-              safe from price volatility.</p>
+            <p>
+              Once you and your provider have agreed on a task, pay into the
+              CanYa escrow, where your payment will be safe from price
+              volatility.
+            </p>
           </div>
           <div class="col-md-4 p-20">
-            <img src="/assets/img/onboarding/CanWork_Step3.png">
+            <img src="/assets/img/onboarding/CanWork_Step3.png" />
             <h5>A job well done!</h5>
-            <p>Mark the job as complete to release payment to your provider. Don't forget to leave a rating and review.</p>
+            <p>
+              Mark the job as complete to release payment to your provider.
+              Don't forget to leave a rating and review.
+            </p>
           </div>
         </div>
       </div>

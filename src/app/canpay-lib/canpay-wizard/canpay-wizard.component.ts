@@ -1,14 +1,27 @@
 import {
-    Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation
-} from '@angular/core';
-import { interval, Subscription } from 'rxjs';
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewEncapsulation,
+} from '@angular/core'
+import { interval, Subscription } from 'rxjs'
 
 import {
-    CanPay, CanPayData, Contract, Operation, PaymentSummary, ProcessAction, ProcessActionResult,
-    Step, View
-} from '../interfaces';
-import { EthService } from '@service/eth.service';
-import { FormDataService } from '../services/formData.service';
+  CanPay,
+  CanPayData,
+  Contract,
+  Operation,
+  PaymentSummary,
+  ProcessAction,
+  ProcessActionResult,
+  Step,
+  View,
+} from '../interfaces'
+import { EthService } from '@service/eth.service'
+import { FormDataService } from '../services/formData.service'
 
 @Component({
   selector: 'canyalib-canpay',
@@ -17,333 +30,360 @@ import { FormDataService } from '../services/formData.service';
   // encapsulation: ViewEncapsulation.Native
 })
 export class CanpayWizardComponent implements OnInit, OnDestroy {
-  @Output() complete = new EventEmitter();
-  @Output() cancel = new EventEmitter();
-  @Output() startPostAuthorisationProcess = new EventEmitter();
-  @Output() currentStep = new EventEmitter();
+  @Output() complete = new EventEmitter()
+  @Output() cancel = new EventEmitter()
+  @Output() startPostAuthorisationProcess = new EventEmitter()
+  @Output() currentStep = new EventEmitter()
 
-  @Input() view = View.Normal;
-  @Input() postAuthorisationProcessName;
-  @Input() operation = Operation.auth;
-  @Input() onAuthTxHash;
-  @Input() onPaymentTxHash;
-  @Input() recipient;
-  @Input() dAppName;
-  @Input() successText;
-  @Input() amount = 0;
-  @Input() paymentSummary: PaymentSummary;
-  @Input() minAmount = 1;
-  @Input() maxAmount = 0;
-  @Input() disableCanEx = false;
-  @Input() destinationAddress;
-  @Input() userEmail;
+  @Input() view = View.Normal
+  @Input() postAuthorisationProcessName
+  @Input() operation = Operation.auth
+  @Input() onAuthTxHash
+  @Input() onPaymentTxHash
+  @Input() recipient
+  @Input() dAppName
+  @Input() successText
+  @Input() amount = 0
+  @Input() paymentSummary: PaymentSummary
+  @Input() minAmount = 1
+  @Input() maxAmount = 0
+  @Input() disableCanEx = false
+  @Input() destinationAddress
+  @Input() userEmail
 
-  @Input() set postAuthorisationProcessResults(postAuthorisationProcessResults: ProcessActionResult) {
-    this.doCompletePostAuthorisationProcess(postAuthorisationProcessResults);
+  @Input() set postAuthorisationProcessResults(
+    postAuthorisationProcessResults: ProcessActionResult
+  ) {
+    this.doCompletePostAuthorisationProcess(postAuthorisationProcessResults)
   }
 
-  View = View;
-  Step = Step; // to access the enum from the .html template
-  errMsg: string;
-  warningMsg: string;
-  steps: Array<any>;
-  currStep: Step;
-  title = 'Payment';
-  balance = 0;
-  account: string;
+  View = View
+  Step = Step // to access the enum from the .html template
+  errMsg: string
+  warningMsg: string
+  steps: Array<any>
+  currStep: Step
+  title = 'Payment'
+  balance = 0
+  account: string
   confirmationDlg = {
     type: 'success',
     title: 'Sweet, payment done!',
     controls: {
-      ok: true
-    }
-  };
-  insufficientBalance = false;
-  processSummaryMsg: string;
-  balanceInterval: any;
-  totalTransactions = 1;
+      ok: true,
+    },
+  }
+  insufficientBalance = false
+  processSummaryMsg: string
+  balanceInterval: any
+  totalTransactions = 1
 
-  constructor(private ethService: EthService, private formDataService: FormDataService) { }
+  constructor(
+    private ethService: EthService,
+    private formDataService: FormDataService
+  ) {}
 
   ngOnInit() {
     this.steps = [
       {
         name: 'AMOUNT',
         value: Step.paymentAmount,
-        active: !this.amount && this.operation !== Operation.interact
+        active: !this.amount && this.operation !== Operation.interact,
       },
       {
         name: 'PAYMENT',
         value: Step.paymentSummary,
-        active: this.operation !== Operation.interact
+        active: this.operation !== Operation.interact,
       },
       {
         name: 'PAYMENT',
         value: Step.metamask,
-        active: true
+        active: true,
       },
       {
         name: 'PAYMENT',
         value: Step.balanceCheck,
-        active: this.operation !== Operation.interact
+        active: this.operation !== Operation.interact,
       },
       {
         name: 'PAYMENT',
         value: Step.canexPaymentOptions,
-        active: !this.disableCanEx
+        active: !this.disableCanEx,
       },
       {
         name: 'PAYMENT',
         value: Step.canexErc20,
-        active: !this.disableCanEx
+        active: !this.disableCanEx,
       },
       {
         name: 'PAYMENT',
         value: Step.canexQr,
-        active: !this.disableCanEx
+        active: !this.disableCanEx,
       },
       {
         name: 'PAYMENT',
         value: Step.canexProcessing,
-        active: !this.disableCanEx
+        active: !this.disableCanEx,
       },
       {
         name: 'Error',
         value: Step.canexError,
-        active: !this.disableCanEx
+        active: !this.disableCanEx,
       },
       {
         name: 'PAYMENT',
         value: Step.authorisation,
-        active: this.operation === Operation.auth
+        active: this.operation === Operation.auth,
       },
       {
         name: 'PAYMENT',
         value: Step.payment,
-        active: this.operation === Operation.pay
+        active: this.operation === Operation.pay,
       },
       {
         name: this.postAuthorisationProcessName,
         value: Step.process,
-        active: !!this.postAuthorisationProcessName || this.operation === Operation.interact
+        active:
+          !!this.postAuthorisationProcessName ||
+          this.operation === Operation.interact,
       },
       {
         name: 'PAYMENT',
         value: Step.confirmation,
-        active: true
-      }
-    ].filter(step => step.active);
+        active: true,
+      },
+    ].filter(step => step.active)
 
-    this.updateCurrentStep(this.steps.find(step => step.active === true).value);
-    console.log('step: ', this.currStep);
+    this.updateCurrentStep(this.steps.find(step => step.active === true).value)
+    console.log('step: ', this.currStep)
 
-    const validationErrors = [];
+    const validationErrors = []
     if (!this.dAppName) {
-      validationErrors.push('Missing dAppName');
+      validationErrors.push('Missing dAppName')
     }
 
     if (!this.recipient) {
-      validationErrors.push('Missing recipient address');
+      validationErrors.push('Missing recipient address')
     }
 
     if (validationErrors.length) {
-      this.error(validationErrors.join(' | '), false);
+      this.error(validationErrors.join(' | '), false)
     }
 
     if (this.successText) {
-      this.confirmationDlg.title = this.successText;
+      this.confirmationDlg.title = this.successText
     }
   }
 
-
   ngOnDestroy() {
-    if (this.balanceInterval) { clearInterval(this.balanceInterval); }
+    if (this.balanceInterval) {
+      clearInterval(this.balanceInterval)
+    }
   }
 
-
   setAccount(_acc) {
-    console.log('setAccount: ', _acc);
-    this.account = _acc;
-    setTimeout(() => this.operation === Operation.interact
-      ? this.updateCurrentStep(Step.process)
-      : !this.amount
-        ? this.updateCurrentStep(Step.paymentAmount)
-        : this.checkBalance(), 200);
+    console.log('setAccount: ', _acc)
+    this.account = _acc
+    setTimeout(
+      () =>
+        this.operation === Operation.interact
+          ? this.updateCurrentStep(Step.process)
+          : !this.amount
+          ? this.updateCurrentStep(Step.paymentAmount)
+          : this.checkBalance(),
+      200
+    )
   }
 
   setAmount(amount) {
-    console.log('setAmount: ', amount);
-    this.amount = amount;
-    this.stepFinished();
+    console.log('setAmount: ', amount)
+    this.amount = amount
+    this.stepFinished()
   }
 
   checkBalance() {
-    let isLoading = true;
+    let isLoading = true
     if (!this.balanceInterval) {
       this.balanceInterval = setInterval(() => {
-        this.ethService.getCanYaBalance(this.ethService.getOwnerAccount())
+        this.ethService
+          .getCanYaBalance(this.ethService.getOwnerAccount())
           .then(_balance => {
-            this.balance = Number(_balance);
-            this.insufficientBalance = Number(_balance) < this.amount;
+            this.balance = Number(_balance)
+            this.insufficientBalance = Number(_balance) < this.amount
             if (!this.insufficientBalance) {
-              this.stepFinished(Step.balanceCheck);
+              this.stepFinished(Step.balanceCheck)
             } else if (isLoading) {
-              isLoading = false;
-              this.updateCurrentStep(Step.balanceCheck);
+              isLoading = false
+              this.updateCurrentStep(Step.balanceCheck)
             }
           })
-          .catch(err => this.error('Unable to retrieve user CAN balance!'));
-      }, 2000);
+          .catch(err => this.error('Unable to retrieve user CAN balance!'))
+      }, 2000)
     }
   }
 
   transactionSent() {
-    this.totalTransactions += 1;
+    this.totalTransactions += 1
   }
 
   get showBackButton(): boolean {
     switch (this.currStep) {
       case Step.paymentAmount:
       case Step.paymentSummary:
-        return true;
+        return true
       case Step.canexPaymentOptions:
       case Step.canexErc20:
       case Step.canexQr:
       case Step.canexError:
-        return true;
+        return true
       case Step.balanceCheck:
       case Step.metamask:
       case Step.authorisation:
       case Step.payment:
       case Step.process:
-        return true;
+        return true
       case Step.confirmation:
       case Step.canexProcessing:
       default:
-        return false;
+        return false
     }
   }
 
   goBack() {
     switch (this.currStep) {
       case Step.paymentAmount:
-        this.doCancel();
-        break;
+        this.doCancel()
+        break
       case Step.paymentSummary:
         if (this.paymentSummary) {
-          this.doCancel();
+          this.doCancel()
         } else {
-          this.updateCurrentStep(Step.paymentAmount);
+          this.updateCurrentStep(Step.paymentAmount)
         }
-        break;
+        break
       case Step.canexPaymentOptions:
-        this.formDataService.resetFormData();
-        this.updateCurrentStep(Step.balanceCheck);
-        break;
+        this.formDataService.resetFormData()
+        this.updateCurrentStep(Step.balanceCheck)
+        break
       case Step.canexErc20:
       case Step.canexError:
-        this.formDataService.resetFormData();
-        this.updateCurrentStep(Step.canexPaymentOptions);
-        break;
+        this.formDataService.resetFormData()
+        this.updateCurrentStep(Step.canexPaymentOptions)
+        break
       case Step.canexQr:
         if (confirm('Are you sure you want to go back?')) {
-          this.formDataService.resetFormData();
-          this.updateCurrentStep(Step.canexPaymentOptions);
+          this.formDataService.resetFormData()
+          this.updateCurrentStep(Step.canexPaymentOptions)
         }
-        break;
+        break
       case Step.balanceCheck:
       case Step.metamask:
       case Step.authorisation:
       case Step.payment:
-        this.cancelBalanceCheck();
-        this.updateCurrentStep(Step.paymentSummary);
-        break;
+        this.cancelBalanceCheck()
+        this.updateCurrentStep(Step.paymentSummary)
+        break
       case Step.process:
         if (this.operation === Operation.interact) {
-          this.cancelBalanceCheck();
-          this.doCancel();
+          this.cancelBalanceCheck()
+          this.doCancel()
         } else {
-          this.cancelBalanceCheck();
-          this.updateCurrentStep(Step.paymentSummary);
+          this.cancelBalanceCheck()
+          this.updateCurrentStep(Step.paymentSummary)
         }
-        break;
+        break
       default:
-        break;
+        break
     }
   }
 
   cancelBalanceCheck() {
-    if (this.balanceInterval) { clearInterval(this.balanceInterval); this.balanceInterval = null; }
+    if (this.balanceInterval) {
+      clearInterval(this.balanceInterval)
+      this.balanceInterval = null
+    }
   }
 
   stepFinished(step: Step = this.currStep) {
     switch (step) {
       case Step.paymentAmount:
-        this.updateCurrentStep(Step.paymentSummary);
-        break;
+        this.updateCurrentStep(Step.paymentSummary)
+        break
       case Step.paymentSummary:
         if (this.ethService.account.value) {
-          this.checkBalance();
+          this.checkBalance()
         } else {
-          this.updateCurrentStep(Step.metamask);
+          this.updateCurrentStep(Step.metamask)
         }
-        break;
+        break
       case Step.balanceCheck:
-        this.cancelBalanceCheck();
-        this.updateCurrentStep(this.postBalanceStep);
-        break;
+        this.cancelBalanceCheck()
+        this.updateCurrentStep(this.postBalanceStep)
+        break
       case Step.canexProcessing:
-        this.cancelBalanceCheck();
-        this.updateCurrentStep(this.postBalanceStep);
-        break;
+        this.cancelBalanceCheck()
+        this.updateCurrentStep(this.postBalanceStep)
+        break
       case Step.authorisation:
-        this.cancelBalanceCheck();
-        this.updateCurrentStep(this.postAuthorisationProcessName ? Step.process : Step.confirmation);
-        break;
+        this.cancelBalanceCheck()
+        this.updateCurrentStep(
+          this.postAuthorisationProcessName ? Step.process : Step.confirmation
+        )
+        break
       case Step.payment:
-        this.updateCurrentStep(this.postAuthorisationProcessName ? Step.process : Step.confirmation);
-        break;
+        this.updateCurrentStep(
+          this.postAuthorisationProcessName ? Step.process : Step.confirmation
+        )
+        break
       default:
-        break;
+        break
     }
   }
 
   updateCurrentStep(step) {
     if (step !== this.currStep) {
-      this.warning(null);
-      this.currStep = step;
-      this.title = this.steps.find(x => x.value === step).name || 'Payment';
-      this.currentStep.emit(step);
+      this.warning(null)
+      this.currStep = step
+      this.title = this.steps.find(x => x.value === step).name || 'Payment'
+      this.currentStep.emit(step)
     }
   }
 
   get postBalanceStep() {
-    return this.operation === Operation.auth ? Step.authorisation : this.operation === Operation.interact ? Step.process : Step.payment;
+    return this.operation === Operation.auth
+      ? Step.authorisation
+      : this.operation === Operation.interact
+      ? Step.process
+      : Step.payment
   }
 
-
   getCanExRecipient(): string {
-    return this.destinationAddress || this.ethService.getOwnerAccount();
+    return this.destinationAddress || this.ethService.getOwnerAccount()
   }
 
   get hasPostAuthProcess() {
-    return !!this.postAuthorisationProcessName || this.operation === Operation.interact;
+    return (
+      !!this.postAuthorisationProcessName ||
+      this.operation === Operation.interact
+    )
   }
 
   doStartPostAuthorisationProcess() {
-    this.startPostAuthorisationProcess.emit(this.canPayData());
+    this.startPostAuthorisationProcess.emit(this.canPayData())
   }
 
   doCompletePostAuthorisationProcess(postAuthorisationProcessResults) {
-    if (!postAuthorisationProcessResults) { return; }
+    if (!postAuthorisationProcessResults) {
+      return
+    }
 
     if (postAuthorisationProcessResults.type === ProcessAction.success) {
-      this.updateCurrentStep(Step.confirmation);
-      return;
+      this.updateCurrentStep(Step.confirmation)
+      return
     }
 
     if (postAuthorisationProcessResults.type === ProcessAction.error) {
-      return this.error(postAuthorisationProcessResults.msg);
+      return this.error(postAuthorisationProcessResults.msg)
     }
   }
 
@@ -352,29 +392,29 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
       currStep: this.currStep,
       amount: this.amount,
       account: this.account,
-      balance: this.balance
-    };
+      balance: this.balance,
+    }
   }
 
   doCancel() {
-    this.cancel.emit(this.canPayData());
+    this.cancel.emit(this.canPayData())
   }
 
   finish() {
-    this.complete.emit(this.canPayData());
+    this.complete.emit(this.canPayData())
   }
 
   error(msg, autoDismiss = true) {
-    this.errMsg = msg;
+    this.errMsg = msg
     if (autoDismiss) {
-      setTimeout(() => this.errMsg = null, 10000);
+      setTimeout(() => (this.errMsg = null), 10000)
     }
   }
 
   warning(msg, autoDismiss = false) {
-    this.warningMsg = msg;
+    this.warningMsg = msg
     if (autoDismiss) {
-      setTimeout(() => this.errMsg = null, 10000);
+      setTimeout(() => (this.errMsg = null), 10000)
     }
   }
 }

@@ -1,23 +1,29 @@
- <main class="main-content">
-   <section class="section bg-gray py-30" id="section-tools">
-     <div class="container">
-       <!-- <img class="mb-20" src="assets/img/CanApps.svg" width="auto" height="36px">
+<main class="main-content">
+  <section class="section bg-gray py-30" id="section-tools">
+    <div class="container">
+      <!-- <img class="mb-20" src="assets/img/CanApps.svg" width="auto" height="36px">
       <div class="row">
         <div class="col mb-20" *ngFor="let app of apps; let i = index">
           <app-can-app [app]="app"></app-can-app>
         </div>
       </div> -->
-       <div class="row">
-         <div class="col-md-4  text-center" *ngFor="let app of canApps">
-           <a href="{{app[1]}}" target="_blank">
-             <div class="card m-5 p-20">
-               <img style="max-height:150px" src="/assets/img/CanApps/illustrations/{{app[0]}}.svg">
-               <img style="margin:15px 0;max-height:30px" src="/assets/img/CanApps/{{app[0]}}.svg">
-               <p style="color:#535353;">{{app[2]}}</p>
-             </div>
-           </a>
-         </div>
-       </div>
-     </div>
-   </section>
- </main>
+      <div class="row">
+        <div class="col-md-4  text-center" *ngFor="let app of canApps">
+          <a href="{{ app[1] }}" target="_blank">
+            <div class="card m-5 p-20">
+              <img
+                style="max-height:150px"
+                src="/assets/img/CanApps/illustrations/{{ app[0] }}.svg"
+              />
+              <img
+                style="margin:15px 0;max-height:30px"
+                src="/assets/img/CanApps/{{ app[0] }}.svg"
+              />
+              <p style="color:#535353;">{{ app[2] }}</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

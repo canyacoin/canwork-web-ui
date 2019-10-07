@@ -135,9 +135,7 @@ export class TransactionService {
       )
     } catch (error) {
       console.error(
-        `! http post error sending notification to monitor: ${
-          environment.transactionMonitor.monitorUri
-        }`,
+        `! http post error sending notification to monitor: ${environment.transactionMonitor.monitorUri}`,
         error
       )
     }

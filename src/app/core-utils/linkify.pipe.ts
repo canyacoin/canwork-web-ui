@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core'
 
 function linkify(text, userMessage) {
   const urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi
@@ -14,14 +14,13 @@ function linkify(text, userMessage) {
 }
 
 @Pipe({
-    name: 'linkify'
+  name: 'linkify',
 })
 export class LinkifyPipe implements PipeTransform {
-    transform(v: string, isWhite: boolean): string {
-        if (v) {
-          return linkify(v, isWhite);
-        }
-        return '';
+  transform(v: string, isWhite: boolean): string {
+    if (v) {
+      return linkify(v, isWhite)
     }
+    return ''
+  }
 }
-

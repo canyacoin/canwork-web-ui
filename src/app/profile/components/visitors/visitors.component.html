@@ -1,12 +1,16 @@
 <div class="row" style="margin-bottom:25px">
-    <div class="col-md-12">
+  <div class="col-md-12">
     <span class="lead fw-500 mt-5">
       Visitors
     </span>
     <p class="fw-400">
-      <span class="fw-400 fs-18 text-primary">{{whoViewProfileCounter}}</span> {{ whoViewProfileCounter > 1 ? 'people':'person' }} viewed your profile.
+      <span class="fw-400 fs-18 text-primary">{{ whoViewProfileCounter }}</span>
+      {{ whoViewProfileCounter > 1 ? 'people' : 'person' }} viewed your profile.
     </p>
-    <a [routerLink]="['/profile/views']" class="btn btn-block btn-primary btn-canya-chat">
+    <a
+      [routerLink]="['/profile/views']"
+      class="btn btn-block btn-primary btn-canya-chat"
+    >
       Who viewed me?
     </a>
   </div>

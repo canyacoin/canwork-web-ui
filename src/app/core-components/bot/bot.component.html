@@ -1,11 +1,18 @@
 <main class="main-content pb-100">
-
   <section class="section bg-white my-1 py-0">
     <div class="container">
       <div class="row align-items-center pb-5">
         <div class="col-12 text-center">
-          <h2 *ngIf="logo" class="fw-300">Welcome to
-            <img class="logo-default" src="assets/img/logo.svg" width="auto" height="28px" alt="logo" style="margin-top: -8px;">
+          <h2 *ngIf="logo" class="fw-300">
+            Welcome to
+            <img
+              class="logo-default"
+              src="assets/img/logo.svg"
+              width="auto"
+              height="28px"
+              alt="logo"
+              style="margin-top: -8px;"
+            />
           </h2>
 
           <app-back-button></app-back-button>
@@ -15,16 +22,33 @@
 
       <div class="row justify-content-center">
         <div class="col-12 col-md-5">
-
-          <div #botui class="botui botui-container bot-wrapper" [@listAnimation]="bot.length">
-
+          <div
+            #botui
+            class="botui botui-container bot-wrapper"
+            [@listAnimation]="bot.length"
+          >
             <ng-template ngFor let-i="index" let-item [ngForOf]="bot">
-
               <div class="botui-messages-container">
                 <div *ngIf="!item.typing && item.message" class="botui-message">
-                  <div class="botui-message-content text" [ngClass]="{'from-bot': item.from === 'bot', 'from-me': item.from === 'me'}">
-                    <span [innerHTML]="(item.innerHTML || item.message) | sanitizeHtml">{{ item.message }}</span>
-                    <img *ngIf="item.image" class="botui-message-content-image" [src]="item.image" alt="CanYa">
+                  <div
+                    class="botui-message-content text"
+                    [ngClass]="{
+                      'from-bot': item.from === 'bot',
+                      'from-me': item.from === 'me'
+                    }"
+                  >
+                    <span
+                      [innerHTML]="
+                        item.innerHTML || item.message | sanitizeHtml
+                      "
+                      >{{ item.message }}</span
+                    >
+                    <img
+                      *ngIf="item.image"
+                      class="botui-message-content-image"
+                      [src]="item.image"
+                      alt="CanYa"
+                    />
                   </div>
                 </div>
 
@@ -37,34 +61,80 @@
                 </div>
               </div>
 
-              <div *ngIf="!item.typing && item.input" class="botui-actions-container">
+              <div
+                *ngIf="!item.typing && item.input"
+                class="botui-actions-container"
+              >
                 <div class="">
-                  <form #frm (ngSubmit)="onAction(i, item.field, botInput.value)" class="botui-actions-text">
-                    <i class="botui-icon botui-action-text-icon" [ngClass]="item.icon"></i>
-                    <input #botInput [type]="item.type" [placeholder]="item.placeholder" [size]="item.size" [attr.minlength]="item.minlength"
-                      [attr.maxlength]="item.maxlength || 256" [attr.pattern]="item.pattern" (keyup)="onKeyUp(botInput, btnSubmit);"
-                      class="botui-actions-text-input" autofocus="autofocus" required>
+                  <form
+                    #frm
+                    (ngSubmit)="onAction(i, item.field, botInput.value)"
+                    class="botui-actions-text"
+                  >
+                    <i
+                      class="botui-icon botui-action-text-icon"
+                      [ngClass]="item.icon"
+                    ></i>
+                    <input
+                      #botInput
+                      [type]="item.type"
+                      [placeholder]="item.placeholder"
+                      [size]="item.size"
+                      [attr.minlength]="item.minlength"
+                      [attr.maxlength]="item.maxlength || 256"
+                      [attr.pattern]="item.pattern"
+                      (keyup)="onKeyUp(botInput, btnSubmit)"
+                      class="botui-actions-text-input"
+                      autofocus="autofocus"
+                      required
+                    />
                     <!-- [disabled]="!botInput.validity.valid"  -->
                     <!--  class="botui-actions-text-submit" -->
-                    <button #btnSubmit (click)="onAction(i, item.field, botInput.value)" class="botui-actions-buttons-button mt-2 mx-2 mb-2">
+                    <button
+                      #btnSubmit
+                      (click)="onAction(i, item.field, botInput.value)"
+                      class="botui-actions-buttons-button mt-2 mx-2 mb-2"
+                    >
                       <span>NEXT</span>
                     </button>
                   </form>
                 </div>
               </div>
 
-              <div *ngIf="!item.typing && (item.actions && item.actions.length > 0)" class="container botui-actions-container">
+              <div
+                *ngIf="
+                  !item.typing && (item.actions && item.actions.length > 0)
+                "
+                class="container botui-actions-container"
+              >
                 <div class="row">
-                  <div *ngFor="let action of item.actions" class="col-auto botui-actions-buttons">
-                    <button *ngIf="!action.innerHTML" (click)="onAction(i, item.field, action.colors || action.caption);" type="button" class="botui-actions-buttons-button mx-2 mb-2">
+                  <div
+                    *ngFor="let action of item.actions"
+                    class="col-auto botui-actions-buttons"
+                  >
+                    <button
+                      *ngIf="!action.innerHTML"
+                      (click)="
+                        onAction(i, item.field, action.colors || action.caption)
+                      "
+                      type="button"
+                      class="botui-actions-buttons-button mx-2 mb-2"
+                    >
                       <i [class]="action.icon"></i>
-                      {{ action.hideCaption ? '':action.caption }}
+                      {{ action.hideCaption ? '' : action.caption }}
                     </button>
 
-                    <button *ngIf="action.innerHTML" (click)="onAction(i, item.field, action.colors || action.caption);" [innerHTML]="(action.innerHTML || action.caption) | sanitizeHtml"
-                      type="button" class="botui-actions-buttons-button mx-2 mb-2">
-                    </button>
-
+                    <button
+                      *ngIf="action.innerHTML"
+                      (click)="
+                        onAction(i, item.field, action.colors || action.caption)
+                      "
+                      [innerHTML]="
+                        action.innerHTML || action.caption | sanitizeHtml
+                      "
+                      type="button"
+                      class="botui-actions-buttons-button mx-2 mb-2"
+                    ></button>
                   </div>
                 </div>
               </div>

@@ -1,34 +1,32 @@
-import { Directive, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Directive, Input, NgZone, OnDestroy, OnInit } from '@angular/core'
 
-import { NavService } from '../core-services/nav.service';
+import { NavService } from '../core-services/nav.service'
 
 @Directive({
-  selector: '[appWindowScroll]'
+  selector: '[appWindowScroll]',
 })
 export class WindowScrollDirective implements OnInit, OnDestroy {
+  @Input() appWindowScroll
 
-  @Input() appWindowScroll;
+  private eventOptions: boolean | { capture?: boolean; passive?: boolean }
 
-  private eventOptions: boolean | { capture?: boolean, passive?: boolean };
-
-  constructor(private ngZone: NgZone, private navService: NavService) {
-  }
+  constructor(private ngZone: NgZone, private navService: NavService) {}
 
   passiveSupported() {
-    let passiveSupported = false;
+    let passiveSupported = false
 
     try {
       const options = Object.defineProperty({}, 'passive', {
-        get: function () {
-          passiveSupported = true;
-        }
-      });
+        get: function() {
+          passiveSupported = true
+        },
+      })
 
-      window.addEventListener('test', options, options);
-      window.removeEventListener('test', options, options);
-      return true;
+      window.addEventListener('test', options, options)
+      window.removeEventListener('test', options, options)
+      return true
     } catch (err) {
-      return false;
+      return false
     }
   }
 
@@ -36,31 +34,31 @@ export class WindowScrollDirective implements OnInit, OnDestroy {
     if (this.passiveSupported()) {
       this.eventOptions = {
         capture: true,
-        passive: true
-      };
+        passive: true,
+      }
     } else {
-      this.eventOptions = true;
+      this.eventOptions = true
     }
     this.ngZone.runOutsideAngular(() => {
-      window.addEventListener('scroll', this.scroll, <any>this.eventOptions);
-    });
+      window.addEventListener('scroll', this.scroll, <any>this.eventOptions)
+    })
   }
 
   ngOnDestroy() {
-    window.removeEventListener('scroll', this.scroll, <any>this.eventOptions);
+    window.removeEventListener('scroll', this.scroll, <any>this.eventOptions)
   }
 
   scroll = (): void => {
-    const doc = document.documentElement;
-    const top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0);
+    const doc = document.documentElement
+    const top = (window.pageYOffset || doc.scrollTop) - (doc.clientTop || 0)
     if (top > 20) {
       this.ngZone.run(() => {
-        this.navService.setHideSearchBar(false);
-      });
+        this.navService.setHideSearchBar(false)
+      })
     } else {
       this.ngZone.run(() => {
-        this.navService.setHideSearchBar(true);
-      });
+        this.navService.setHideSearchBar(true)
+      })
     }
   }
 }

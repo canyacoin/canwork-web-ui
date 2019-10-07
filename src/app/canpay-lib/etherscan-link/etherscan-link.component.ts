@@ -1,30 +1,24 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core'
 
-import { environment  } from '@env/environment';
+import { environment } from '@env/environment'
 
 @Component({
   selector: 'canyalib-etherscan-link',
   templateUrl: './etherscan-link.component.html',
-  styleUrls: ['./etherscan-link.component.css']
+  styleUrls: ['./etherscan-link.component.css'],
 })
 export class EtherscanLinkComponent implements OnInit {
+  @Input() address: string
 
-  @Input() address: string;
+  constructor() {}
 
-
-
-  constructor() { }
-
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   get url() {
     if (this.address) {
-      return `${environment.contracts.etherscan}/address/${this.address}`;
+      return `${environment.contracts.etherscan}/address/${this.address}`
     } else {
-      return '';
+      return ''
     }
   }
-
 }
