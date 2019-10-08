@@ -78,7 +78,7 @@
               />
             </div>
             <div *ngIf="unlockingFailed" class="keystore-error">
-              Unlocking failed
+              Incorrect Password
             </div>
             <div>
               <button
@@ -91,7 +91,23 @@
             </div>
           </div>
           <div *ngSwitchCase="WalletApp.Mnemonic">
-            Recover your Keystore file instead, since it is password protected.
+            <p class="mnemonic-warning">
+              <i
+                ><b>Warning!</b> Entering your seed phrase or private key on any
+                website is very dangerous. If you have malicious extensions
+                installed in your browser or accidentally visit a phishing
+                website, your assets can be stolen.</i
+              >
+            </p>
+            <p>
+              Recover your Keystore file instead, since it is password
+              protected.
+            </p>
+            <a href="https://www.binance.org/en/recover" target="_blank">
+              <button class="btn btn-primary">
+                Recover Keystore
+              </button>
+            </a>
           </div>
         </div>
       </div>
