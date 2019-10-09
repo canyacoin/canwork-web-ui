@@ -44,7 +44,34 @@
             />
           </div>
           <div *ngSwitchCase="WalletApp.Ledger">
-            Connect your Ledger device
+            <div class="row mb-20">
+              <div class="col-12">
+                Connect your Ledger device
+              </div>
+            </div>
+            <div class="row mb-20">
+              <div class="col-3">
+                <img src="/assets/img/asset-step1.svg" />
+              </div>
+              <div class="col-5">
+                Enter PIN Code
+              </div>
+              <div class="">
+                <img src="/assets/img/asset-ledger-pin.svg" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3">
+                <img src="/assets/img/asset-step2.svg" />
+              </div>
+              <div class="col-5">
+                <div>Open Binance Chain</div>
+                <div class="ledger-app-notice">“Binance Chain Ready” must be on-screen</div>
+              </div>
+              <div class="">
+                <img src="/assets/img/asset-ledger-app.svg" />
+              </div>
+            </div>
           </div>
           <div *ngSwitchCase="WalletApp.Keystore">
             <div class="mb-10">
