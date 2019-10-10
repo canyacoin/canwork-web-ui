@@ -100,11 +100,16 @@
                   Index Number (default 0)
                 </div>
                 <div>
-                  <input class="ledger-index-input" [(ngModel)]="ledgerIndex" type="number" min="0" />
+                  <input
+                    class="ledger-index-input"
+                    [(ngModel)]="ledgerIndex"
+                    type="number"
+                    min="0"
+                  />
                 </div>
               </div>
               <div class="col-4">
-                <button class="btn btn-primary">
+                <button class="btn btn-primary" (click)="connectLedger()">
                   Unlock
                 </button>
               </div>

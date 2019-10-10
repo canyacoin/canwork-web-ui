@@ -4,7 +4,12 @@ import WalletConnect from '@trustwallet/walletconnect'
 import WalletConnectQRCodeModal from '@walletconnect/qrcode-modal'
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
-import { crypto } from '@binance-chain/javascript-sdk'
+import { crypto, ledger } from '@binance-chain/javascript-sdk'
+import u2f_transport from '@ledgerhq/hw-transport-u2f'
+
+ledger.transports.u2f = u2f_transport
+const win = window as any
+win.ledger = ledger
 
 @Component({
   selector: 'app-wallet-bnb',
@@ -22,6 +27,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   keystore: object = null
   unlockingFailed: boolean = false
   ledgerIndex: number = 0
+  ledgerConnecting: boolean = false
 
   constructor(private binanceService: BinanceService) {}
 
@@ -138,6 +144,49 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
       this.binanceService.initKeystore(keystore, address)
     } catch (e) {
       this.unlockingFailed = true
+    }
+  }
+
+  async connectLedger() {
+    this.ledgerConnecting = true
+
+    // use the u2f transport
+    const timeout = 50000
+    const transport = await ledger.transports.u2f.create(timeout)
+    const win = window as any
+    win.app = new ledger.app(transport, 100000, 100000)
+    const app = win.app
+
+    // get version
+    try {
+      const version = await app.getVersion()
+      console.log('version', version)
+    } catch ({ message, statusCode }) {
+      console.error('version error', message, statusCode)
+    }
+
+    // we can provide the hd path (app checks first two parts are same as below)
+    const hdPath = [44, 714, 0, 0, this.ledgerIndex]
+
+    // select which address to use
+    const results = await app.showAddress('bnb', hdPath)
+    console.log('Results:', results)
+
+    // get public key
+    let pk
+    try {
+      pk = (await app.getPublicKey(hdPath)).pk
+
+      // get address from pubkey
+      const address = crypto.getAddressFromPublicKey(pk, 'bnb')
+      console.log('address', address)
+
+      this.binanceService.initLedger(address, app, hdPath)
+      this.ledgerConnecting = false
+    } catch (err) {
+      console.error('pk error', err.message, err.statusCode)
+      this.ledgerConnecting = false
+      return
     }
   }
 }
