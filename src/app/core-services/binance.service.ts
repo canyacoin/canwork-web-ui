@@ -23,6 +23,8 @@ export interface EventDetails {
   connector: Connector
   address?: string
   keystore?: object
+  ledgerApp?: any
+  ledgerHdPath?: number[]
 }
 
 export interface Event {
@@ -135,6 +137,18 @@ export class BinanceService {
         connector: null,
         keystore,
         address,
+      },
+    })
+  }
+
+  initLedger(address: string, ledgerApp: any, ledgerHdPath: number[]) {
+    this.events.next({
+      type: EventType.Connect,
+      details: {
+        connector: null,
+        address,
+        ledgerApp,
+        ledgerHdPath,
       },
     })
   }

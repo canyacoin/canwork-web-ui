@@ -44,7 +44,81 @@
             />
           </div>
           <div *ngSwitchCase="WalletApp.Ledger">
-            Connect your Ledger device
+            <div class="row">
+              <div class="col-12">
+                Connect your Ledger device
+              </div>
+            </div>
+            <div class="row mt-30">
+              <div class="col-1">
+                <img src="/assets/img/asset-step1.svg" />
+              </div>
+              <div class="col-7">
+                Enter PIN Code
+              </div>
+              <div class="">
+                <img src="/assets/img/asset-ledger-pin.svg" />
+              </div>
+            </div>
+            <div class="row mt-30">
+              <div class="col-1">
+                <img src="/assets/img/asset-step2.svg" />
+              </div>
+              <div class="col-7">
+                <div>Open Binance Chain</div>
+                <div class="ledger-app-notice">
+                  “Binance Chain Ready” must be on-screen
+                </div>
+              </div>
+              <div class="">
+                <img src="/assets/img/asset-ledger-app.svg" />
+              </div>
+            </div>
+            <div class="row mt-40">
+              <div class="col-4 ledger-links ">
+                <div>
+                  <a
+                    href="https://www.binance.org/static/guides/DEX-Ledger-Documentation.html"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    App Installation & Usage Instructions
+                  </a>
+                </div>
+                <div>
+                  <a
+                    href="https://support.ledger.com/hc/en-us/articles/115005165269-Connection-issues-with-Windows-or-Linux"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Having Connection Issues?
+                  </a>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="ledger-index">
+                  Index Number (default 0)
+                </div>
+                <div>
+                  <input
+                    class="ledger-index-input"
+                    [(ngModel)]="ledgerIndex"
+                    type="number"
+                    min="0"
+                  />
+                </div>
+              </div>
+              <div class="col-4">
+                <button
+                  class="btn btn-primary"
+                  (click)="connectLedger()"
+                  [disabled]="ledgerConnecting"
+                >
+                  Unlock
+                  <i *ngIf="ledgerConnecting" class="fa fa-spinner fa-spin"></i>
+                </button>
+              </div>
+            </div>
           </div>
           <div *ngSwitchCase="WalletApp.Keystore">
             <div class="mb-10">
