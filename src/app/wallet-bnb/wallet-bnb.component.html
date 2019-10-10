@@ -35,13 +35,14 @@
           <div *ngSwitchCase="WalletApp.WalletConnect">
             Click to scan a QR code and link your mobile wallet using
             WalletConnect.
-            <br />
-            <img
-              style="cursor: pointer"
-              alt="WallectConnect"
-              src="assets/svg/qr-code.svg"
-              (click)="connect(WalletApp.WalletConnect)"
-            />
+            <div class="mt-20">
+              <button
+                (click)="connect(WalletApp.WalletConnect)"
+                class="btn btn-primary"
+              >
+                Wallet Connect
+              </button>
+            </div>
           </div>
           <div *ngSwitchCase="WalletApp.Ledger">
             <div class="row">

@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Router } from '@angular/router'
 import { BinanceService, WalletApp, EventType } from '@service/binance.service'
 import WalletConnect from '@trustwallet/walletconnect'
 import WalletConnectQRCodeModal from '@walletconnect/qrcode-modal'
@@ -29,7 +30,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   ledgerIndex: number = 0
   ledgerConnecting: boolean = false
 
-  constructor(private binanceService: BinanceService) {}
+  constructor(private binanceService: BinanceService, private router: Router) {}
 
   ngOnInit() {
     this.binanceService.events$
@@ -47,6 +48,8 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
               this.walletConnect(connector)
             }
             break
+          case EventType.Connect:
+            this.router.navigate(['/wallet-bnb/assets'])
         }
       })
   }
