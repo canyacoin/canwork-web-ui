@@ -109,8 +109,13 @@
                 </div>
               </div>
               <div class="col-4">
-                <button class="btn btn-primary" (click)="connectLedger()">
+                <button
+                  class="btn btn-primary"
+                  (click)="connectLedger()"
+                  [disabled]="ledgerConnecting"
+                >
                   Unlock
+                  <i *ngIf="ledgerConnecting" class="fa fa-spinner fa-spin"></i>
                 </button>
               </div>
             </div>
