@@ -1,7 +1,20 @@
-<app-dynamic-coin-wrapper
-  [size]="size"
-  [startCol]="startCol"
-  [stopCol]="stopCol"
->
-  {{ originalSymbol.slice(0, 4) }}
-</app-dynamic-coin-wrapper>
+<img
+  *ngIf="imageState !== ImageState.Error; else error"
+  class="rounded-circle"
+  height="44"
+  width="44"
+  src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/assets/{{
+    symbol | async | lowercase
+  }}/logo.png"
+  (error)="imageState = ImageState.Error"
+  (load)="imageState = ImageState.Loaded"
+/>
+<ng-template #error>
+  <app-dynamic-coin-wrapper
+    [size]="size"
+    [startCol]="startCol"
+    [stopCol]="stopCol"
+  >
+    {{ originalSymbol.slice(0, 4) }}
+  </app-dynamic-coin-wrapper>
+</ng-template>

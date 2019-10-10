@@ -32,8 +32,6 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
         switch (event.type) {
           case EventType.Connect:
           case EventType.Update:
-            // test address
-            // 'bnb1rzxnwxu25hrfv9d3mp25kfyace7j8ez6m5dwkk'
             this.address = event.details.address
             const resp = await this.binanceService.client.getAccount(
               this.address

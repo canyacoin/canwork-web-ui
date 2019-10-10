@@ -6,6 +6,11 @@ import { ObservableInput } from 'observable-input'
 import hashbow from 'hashbow'
 import { takeUntil } from 'rxjs/operators'
 
+export enum ImageState {
+  Loading,
+  Error,
+  Loaded,
+}
 @Component({
   selector: 'app-dynamic-coin',
   templateUrl: './dynamic-coin.component.html',
@@ -23,6 +28,8 @@ export class DynamicCoinComponent extends OnDestroyComponent
   originalSymbol: string
   startCol: string
   stopCol: string
+  imageState: ImageState = ImageState.Loading
+  ImageState = ImageState
 
   ngOnInit() {
     this.symbol
