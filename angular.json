@@ -32,6 +32,7 @@
               "node_modules/nouislider/distribute/nouislider.min.css",
               "node_modules/firebaseui/dist/firebaseui.css",
               "node_modules/animate.css/animate.css",
+              "node_modules/ngx-toastr/toastr.css",
               "src/styles.scss",
               "src/assets/sass/global.scss"
             ],
@@ -100,6 +101,7 @@
               "node_modules/nouislider/distribute/nouislider.min.css",
               "node_modules/firebaseui/dist/firebaseui.css",
               "node_modules/animate.css/animate.css",
+              "node_modules/ngx-toastr/toastr.css",
               "src/styles.scss",
               "src/assets/sass/global.scss"
             ],
