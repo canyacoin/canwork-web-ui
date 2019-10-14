@@ -33,16 +33,21 @@
         </div>
         <div class="col-12 col-md-8 text-left" [ngSwitch]="selected">
           <div *ngSwitchCase="WalletApp.WalletConnect">
-            Click to scan a QR code and link your mobile wallet using
-            WalletConnect.
-            <div class="mt-20">
-              <button
-                (click)="connect(WalletApp.WalletConnect)"
-                class="btn btn-primary"
-              >
-                Wallet Connect
-              </button>
+            <div *ngIf="!isTestnet(); else testnet">
+              Click to scan a QR code and link your mobile wallet using
+              WalletConnect.
+              <div class="mt-20">
+                <button
+                  (click)="connect(WalletApp.WalletConnect)"
+                  class="btn btn-primary"
+                >
+                  Wallet Connect
+                </button>
+              </div>
             </div>
+            <ng-template #testnet>
+              WalletConnect doesn't support testnet
+            </ng-template>
           </div>
           <div *ngSwitchCase="WalletApp.Ledger">
             <div class="row">
