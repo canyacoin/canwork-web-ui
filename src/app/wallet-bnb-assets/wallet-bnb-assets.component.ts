@@ -5,6 +5,7 @@ import { sortBy, prop } from 'ramda'
 import { takeUntil } from 'rxjs/operators'
 
 import { OnDestroyComponent } from '@class/on-destroy'
+import { environment } from '@env/environment'
 
 @Component({
   selector: 'app-wallet-bnb-assets',
@@ -15,6 +16,7 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
   implements OnInit {
   address: string | boolean = true
   private balances = new BehaviorSubject(null)
+  explorer = environment.binance.explorer
 
   constructor(private binanceService: BinanceService) {
     super()
