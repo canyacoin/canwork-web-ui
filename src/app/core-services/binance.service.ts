@@ -3,6 +3,7 @@ import WalletConnect from '@trustwallet/walletconnect'
 import { BehaviorSubject } from 'rxjs'
 
 import BncClient from '@binance-chain/javascript-sdk'
+import { environment } from '@env/environment'
 
 export type Connector = WalletConnect
 export enum WalletApp {
@@ -39,9 +40,10 @@ export class BinanceService {
   connector: Connector | null
   private events: BehaviorSubject<Event | null> = new BehaviorSubject(null)
   events$ = this.events.asObservable()
-  client = new BncClient('https://dex.binance.org/')
+  client = new BncClient(environment.binance.api)
 
   constructor() {
+    this.client.chooseNetwork(environment.binance.net)
     this.client.initChain()
   }
 
