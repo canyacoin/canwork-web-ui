@@ -199,4 +199,8 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
       return
     }
   }
+
+  isTestnet() {
+    return environment.binance.net === 'testnet'
+  }
 }
