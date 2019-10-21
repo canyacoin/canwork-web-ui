@@ -7,6 +7,7 @@ import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 import { crypto, ledger } from '@binance-chain/javascript-sdk'
 import u2f_transport from '@ledgerhq/hw-transport-u2f'
+import { environment } from '@env/environment'
 import { ToastrService } from 'ngx-toastr'
 
 ledger.transports.u2f = u2f_transport
@@ -143,7 +144,10 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
 
     try {
       const privateKey = crypto.getPrivateKeyFromKeyStore(keystore, password)
-      const address = crypto.getAddressFromPrivateKey(privateKey, 'bnb')
+      const address = crypto.getAddressFromPrivateKey(
+        privateKey,
+        environment.binance.prefix
+      )
 
       this.keystore = null
       this.keystorePassword = ''
@@ -180,7 +184,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
     const hdPath = [44, 714, 0, 0, this.ledgerIndex]
 
     // select which address to use
-    const results = await app.showAddress('bnb', hdPath)
+    const results = await app.showAddress(environment.binance.prefix, hdPath)
     console.log('Results:', results)
 
     // get public key
@@ -189,7 +193,10 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
       pk = (await app.getPublicKey(hdPath)).pk
 
       // get address from pubkey
-      const address = crypto.getAddressFromPublicKey(pk, 'bnb')
+      const address = crypto.getAddressFromPublicKey(
+        pk,
+        environment.binance.prefix
+      )
       console.log('address', address)
 
       this.binanceService.initLedger(address, app, hdPath)
@@ -200,5 +207,9 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
       this.ledgerConnecting = false
       return
     }
+  }
+
+  isTestnet() {
+    return environment.binance.net === 'testnet'
   }
 }
