@@ -37,6 +37,7 @@ import { WalletBnbComponent } from './wallet-bnb/wallet-bnb.component'
 import { BinanceService } from '@service/binance.service'
 import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.component'
 import { ClipboardModule } from 'ngx-clipboard'
+import { ToastrModule } from 'ngx-toastr'
 
 @NgModule({
   declarations: [
@@ -70,6 +71,9 @@ import { ClipboardModule } from 'ngx-clipboard'
     NgxPaginationModule,
     StarRatingModule.forRoot(),
     ClipboardModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-center',
+    }),
   ],
   exports: [FilterPipeModule],
   providers: [

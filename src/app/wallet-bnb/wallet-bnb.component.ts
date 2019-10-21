@@ -8,6 +8,7 @@ import { takeUntil } from 'rxjs/operators'
 import { crypto, ledger } from '@binance-chain/javascript-sdk'
 import u2f_transport from '@ledgerhq/hw-transport-u2f'
 import { environment } from '@env/environment'
+import { ToastrService } from 'ngx-toastr'
 
 ledger.transports.u2f = u2f_transport
 const win = window as any
@@ -31,7 +32,11 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   ledgerIndex: number = 0
   ledgerConnecting: boolean = false
 
-  constructor(private binanceService: BinanceService, private router: Router) {}
+  constructor(
+    private binanceService: BinanceService,
+    private router: Router,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit() {
     this.binanceService.events$
@@ -50,6 +55,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
             }
             break
           case EventType.Connect:
+            this.toastr.success('Unlocking Successful')
             this.router.navigate(['/wallet-bnb/assets'])
         }
       })
@@ -151,11 +157,13 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
       this.binanceService.initKeystore(keystore, address)
     } catch (e) {
       this.unlockingFailed = true
+      this.toastr.error('Incorrect Password')
     }
   }
 
   async connectLedger() {
     this.ledgerConnecting = true
+    this.toastr.info('Please approve on your ledger')
 
     // use the u2f transport
     const timeout = 50000
@@ -195,6 +203,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
       this.ledgerConnecting = false
     } catch (err) {
       console.error('pk error', err.message, err.statusCode)
+      this.toastr.error('public key error' + err.message)
       this.ledgerConnecting = false
       return
     }
