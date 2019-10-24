@@ -138,37 +138,32 @@
                   </fieldset>
                 </div>
                 <div class="col-sm-6">
-                  <fieldset
-                    class="form-group"
-                    [class.has-danger]="
-                      profileForm.controls.ethAddress.touched &&
-                      profileForm.controls.ethAddress.invalid
-                    "
-                  >
-                    <label>ETH Address</label>
+                  <fieldset class="form-group">
+                    <label>Binance Address</label>
                     <input
                       class="form-control"
-                      #ethAddress
-                      formControlName="ethAddress"
+                      #bnbAddress
+                      formControlName="bnbAddress"
                       type="text"
-                      name="ethAddress"
-                      placeholder="0x123..."
+                      name="bnbAddress"
+                      placeholder="bnb..."
                     />
                     <small
                       *ngIf="
-                        profileForm.controls.ethAddress.errors &&
-                        profileForm.controls.ethAddress.errors
-                          .isInvalidEthereumAddress
+                        profileForm.controls.bnbAddress.dirty &&
+                        profileForm.controls.bnbAddress.errors &&
+                        (profileForm.controls.bnbAddress.errors.required ||
+                          profileForm.controls.bnbAddress.errors
+                            .isInvalidAddress)
                       "
-                      class="form-control-feedback"
-                      >Please enter a valid ethereum address.</small
+                      >Please enter a valid binance address.</small
                     >
                     <small
                       *ngIf="
-                        profileForm.controls.ethAddress.errors &&
-                        profileForm.controls.ethAddress.errors.addressExists
+                        profileForm.controls.bnbAddress.dirty &&
+                        profileForm.controls.bnbAddress.errors &&
+                        profileForm.controls.bnbAddress.errors.addressExists
                       "
-                      class="form-control-feedback"
                       >This address is already being used in CanWork. Please use
                       another one.
                     </small>

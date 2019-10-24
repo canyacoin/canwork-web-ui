@@ -7,17 +7,16 @@ import {
   Output,
 } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { EthService } from '@service/eth.service'
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
 import { UserService } from '@service/user.service'
 import { CurrencyValidator } from '@validator/currency.validator'
 import { EmailValidator } from '@validator/email.validator'
-import { EthereumValidator } from '@validator/ethereum.validator'
-import { Subscription } from 'rxjs'
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper'
 
 import * as moment from 'moment-timezone'
+import { BinanceValidator } from '@validator/binance.validator'
+import { BinanceService } from '@service/binance.service'
 
 @Component({
   selector: 'app-profile-edit',
@@ -26,7 +25,6 @@ import * as moment from 'moment-timezone'
 })
 export class EditComponent implements OnInit, OnDestroy {
   @Input() currentUser: User
-  ethSub: Subscription
 
   @Output() close = new EventEmitter()
   displayDropzone = false
@@ -44,17 +42,15 @@ export class EditComponent implements OnInit, OnDestroy {
   acceptedTags: string[] = []
   tagInput = ''
 
-  ethAddress: string
+  bnbAddress: string
   preview = false
 
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private ethService: EthService,
+    private binanceService: BinanceService,
     private authService: AuthService
-  ) {
-    this.ethAddress = this.ethService.getOwnerAccount()
-  }
+  ) {}
 
   ngOnInit() {
     if (this.currentUser != null) {
@@ -63,11 +59,7 @@ export class EditComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
-    if (this.ethSub) {
-      this.ethSub.unsubscribe()
-    }
-  }
+  ngOnDestroy() {}
 
   onProfileImageUpload(url) {
     console.log('uploaded url', url)
@@ -103,15 +95,13 @@ export class EditComponent implements OnInit, OnDestroy {
         this.currentUser.work || '',
         Validators.compose([Validators.required, EmailValidator.isValid]),
       ],
-      ethAddress: [
-        this.currentUser.ethAddress || this.ethAddress,
-        Validators.compose([
-          Validators.required,
-          new EthereumValidator(this.ethService, this.userService)
-            .isValidAddress,
-        ]),
-        new EthereumValidator(
-          this.ethService,
+      bnbAddress: [
+        this.currentUser.bnbAddress || this.bnbAddress,
+        Validators.required,
+        new BinanceValidator(this.binanceService, this.userService)
+          .isValidAddress,
+        new BinanceValidator(
+          this.binanceService,
           this.userService
         ).isUniqueAddress(this.currentUser),
       ],
@@ -186,7 +176,7 @@ export class EditComponent implements OnInit, OnDestroy {
       address: this.currentUser.address,
       name: this.profileForm.value.name,
       work: this.profileForm.value.work,
-      ethAddress: this.profileForm.value.ethAddress,
+      bnbAddress: this.profileForm.value.bnbAddress,
       title: this.profileForm.value.title,
       bio: this.profileForm.value.bio,
       category: category,
