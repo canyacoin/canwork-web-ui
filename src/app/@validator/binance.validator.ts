@@ -26,7 +26,7 @@ export class BinanceValidator {
   isUniqueAddress(user: User) {
     return async (control: FormControl) => {
       if (control.value === null) {
-        return true
+        return null
       }
 
       const users = await this.userService
