@@ -119,6 +119,13 @@ export class BinanceService {
       if (connector.connected) {
         await connector.killSession()
       }
+    } else {
+      this.events.next({
+        type: EventType.Disconnect,
+        details: {
+          connector: null,
+        },
+      })
     }
     this.resetConnector()
     console.log('Disconnect')

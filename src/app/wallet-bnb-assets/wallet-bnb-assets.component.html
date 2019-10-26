@@ -32,6 +32,14 @@
               </div>
               <div *ngSwitchCase="false" class="text-center">
                 Please connect your wallet!
+                <a
+                  class="nav-link"
+                  [routerLink]="['/wallet-bnb']"
+                >
+                  <button border-64 class="btn btn-sm btn-primary my-10">
+                    UNLOCK WALLET
+                  </button>
+                </a>
               </div>
               <div *ngSwitchDefault>
                 <div *ngIf="balances | async as balances; else loading">
