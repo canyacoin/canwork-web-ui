@@ -32,7 +32,7 @@ export class BinanceValidator {
       const users = await this.userService
         .firestoreSelect({
           path: 'users',
-          where: [['bnbAddress', '==', control.value]],
+          where: [['bnbAddress', '==', control.value.toLowerCase()]],
         })
         .toPromise()
 
