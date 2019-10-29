@@ -91,6 +91,16 @@ export class UserService {
     return addType(user)
   }
 
+  async getUserByBnbAddress(address: string): Promise<User> {
+    const users = await this.firestoreSelect({
+      path: 'users',
+      where: [['bnbAddress', '==', address.toLowerCase()]],
+      limit: 1,
+    }).toPromise()
+
+    return users && users.length ? addType(users[0]) : null
+  }
+
   async getUserByEthAddress(address: string): Promise<User> {
     const users = await this.firestoreSelect({
       path: 'users',
@@ -98,7 +108,7 @@ export class UserService {
       limit: 1,
     }).toPromise()
 
-    return users ? addType(users[0]) : null
+    return users && users.length ? addType(users[0]) : null
   }
 
   async getUserBySlug(slug: string) {
@@ -108,7 +118,7 @@ export class UserService {
       limit: 1,
     }).toPromise()
 
-    return users ? addType(users[0]) : null
+    return users && users.length ? addType(users[0]) : null
   }
 
   saveUser(credentials: User, type?: string): Promise<User> {

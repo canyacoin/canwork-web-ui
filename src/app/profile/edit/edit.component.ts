@@ -100,11 +100,11 @@ export class EditComponent implements OnInit, OnDestroy {
         Validators.required,
         Validators.composeAsync([
           new BinanceValidator(this.binanceService, this.userService)
-            .isValidAddress,
+            .isValidAddressField,
           new BinanceValidator(
             this.binanceService,
             this.userService
-          ).isUniqueAddress(this.currentUser),
+          ).isUniqueAddressField(this.currentUser),
         ]),
       ],
       title: [

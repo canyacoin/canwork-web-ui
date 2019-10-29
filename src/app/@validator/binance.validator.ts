@@ -9,34 +9,36 @@ export class BinanceValidator {
     private userService: UserService
   ) {}
 
-  isValidAddress = async (control: FormControl) => {
+  isValidAddress = async (address: string) => {
+    const resp = await this.binanceService.client.getAccount(address)
+    return resp && resp.status === 200
+  }
+
+  isValidAddressField = async (control: FormControl) => {
     const { value } = control
     if (value === null) {
       return null
     }
 
-    const resp = await this.binanceService.client.getAccount(value)
-    if (resp && resp.status === 200) {
+    if (await this.isValidAddress(value)) {
       return null
     }
 
     return { isInvalidAddress: true }
   }
 
-  isUniqueAddress(user: User) {
+  async isUniqueAddress(address: string, user: User) {
+    const _user = await this.userService.getUserByBnbAddress(address)
+    return _user === null || _user.address === user.address
+  }
+
+  isUniqueAddressField(user: User) {
     return async (control: FormControl) => {
       if (control.value === null) {
         return null
       }
 
-      const users = await this.userService
-        .firestoreSelect({
-          path: 'users',
-          where: [['bnbAddress', '==', control.value.toLowerCase()]],
-        })
-        .toPromise()
-
-      return users.some(item => item.address !== user.address)
+      return !(await this.isUniqueAddress(control.value, user))
         ? { addressExists: true }
         : null
     }
