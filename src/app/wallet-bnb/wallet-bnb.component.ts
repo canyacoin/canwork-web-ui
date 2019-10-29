@@ -9,6 +9,9 @@ import { crypto, ledger } from '@binance-chain/javascript-sdk'
 import u2f_transport from '@ledgerhq/hw-transport-u2f'
 import { environment } from '@env/environment'
 import { ToastrService } from 'ngx-toastr'
+import { UserService } from '@service/user.service'
+import { AuthService } from '@service/auth.service'
+import { BinanceValidator } from '@validator/binance.validator'
 
 ledger.transports.u2f = u2f_transport
 const win = window as any
@@ -35,13 +38,15 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   constructor(
     private binanceService: BinanceService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private authService: AuthService,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
     this.binanceService.events$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(event => {
+      .subscribe(async event => {
         console.log('Event', event)
         if (!event) {
           return
@@ -55,6 +60,22 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
             }
             break
           case EventType.Connect:
+            // save wallet address to DB
+            const { address } = event.details
+            const user = await this.authService.getCurrentUser()
+            console.log(user && user.bnbAddress !== address)
+            if (user && user.bnbAddress !== address) {
+              const validator = new BinanceValidator(
+                this.binanceService,
+                this.userService
+              )
+
+              if (await validator.isUniqueAddress(address, user)) {
+                this.userService.updateUserProperty(user, 'bnbAddress', address)
+                console.log('update bnbAddress')
+              }
+            }
+
             this.toastr.success('Unlocking Successful')
             this.router.navigate(['/wallet-bnb/assets'])
         }
