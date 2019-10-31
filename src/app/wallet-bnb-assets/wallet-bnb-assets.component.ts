@@ -38,9 +38,12 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
             const resp = await this.binanceService.client.getAccount(
               this.address
             )
-            if (resp.status === 200) {
-              this.balances.next(sortBy(prop('symbol'))(resp.result.balances))
+            // if resp is NULL, it can be just a valid new address never used before
+            let balances = []
+            if (resp !== null && resp.status === 200) {
+              balances = resp.result.balances
             }
+            this.balances.next(sortBy(prop('symbol'))(balances))
             break
           case EventType.Disconnect:
             this.address = false
