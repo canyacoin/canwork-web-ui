@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { NavigationEnd, Router } from '@angular/router'
+import { ToastrService } from 'ngx-toastr'
+import { AuthService } from '@service/auth.service'
 
 @Component({
   selector: 'app-root',
@@ -7,7 +9,11 @@ import { NavigationEnd, Router } from '@angular/router'
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private toastr: ToastrService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.router.events.subscribe(evt => {
@@ -16,5 +22,22 @@ export class AppComponent implements OnInit {
       }
       window.scrollTo(0, 0)
     })
+    this.notifyAddAddressIfNecessary()
+  }
+
+  async notifyAddAddressIfNecessary() {
+    const user = await this.authService.getCurrentUser()
+    if (user && !user.bnbAddress) {
+      this.toastr.info(
+        'Add Binance Chain Wallet to make or receive payments on CanWork.',
+        undefined,
+        {
+          timeOut: 0,
+          extendedTimeOut: 0,
+          positionClass: 'toast-top-full-width',
+          closeButton: true,
+        }
+      )
+    }
   }
 }
