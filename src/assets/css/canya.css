@@ -6510,6 +6510,20 @@ ul.flexbox {
   border-color: rgba(83, 83, 83, 0.07);
 }
 
+/* Customize (Override) Toastr library colors */
+
+.toast-error {
+  background-color: #ff4954 !important;
+}
+
+.toast-success {
+  background-color: #30D7A9 !important;
+}
+
+.toast-info {
+  background-color: #00ADEE !important;
+}
+
 .bg-primary {
   background-color: #33ccff;
   color: #fff;
