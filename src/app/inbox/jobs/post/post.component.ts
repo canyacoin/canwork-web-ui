@@ -298,7 +298,8 @@ export class PostComponent implements OnInit, OnDestroy {
 
   async notifyAddAddressIfNecessary() {
     const noAddress = await this.authService.isAuthenticatedAndNoAddress()
-    if (noAddress) {
+    const user = await this.authService.getCurrentUser()
+    if (noAddress && user.type == 'User') {
       this.toastr.warning('Add Binance Chain Wallet to create jobs')
     }
   }
