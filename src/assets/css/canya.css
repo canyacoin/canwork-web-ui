@@ -6524,6 +6524,10 @@ ul.flexbox {
   background-color: #00ADEE !important;
 }
 
+.toast-warning {
+  background-color: ##FFC600 !important;
+}
+
 .bg-primary {
   background-color: #33ccff;
   color: #fff;
