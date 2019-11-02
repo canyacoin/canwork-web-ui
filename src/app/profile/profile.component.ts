@@ -72,8 +72,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     if (this.notifiedBnbAddress) {
       return
     }
-    const user = await this.authService.getCurrentUser()
-    if (user && !user.bnbAddress) {
+    const noAddress = await this.authService.isAuthenticatedAndNoAddress()
+    if (noAddress) {
       this.toastr.warning('Add Binance Chain Wallet to receive payments')
       this.notifiedBnbAddress = true
     }

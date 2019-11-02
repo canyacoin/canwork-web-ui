@@ -26,8 +26,8 @@ export class AppComponent implements OnInit {
   }
 
   async notifyAddAddressIfNecessary() {
-    const user = await this.authService.getCurrentUser()
-    if (user && !user.bnbAddress) {
+    const noAddress = await this.authService.isAuthenticatedAndNoAddress()
+    if (noAddress) {
       this.toastr.info(
         'Add Binance Chain Wallet to make or receive payments on CanWork.',
         undefined,
