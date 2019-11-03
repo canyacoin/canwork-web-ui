@@ -18,6 +18,7 @@ import '@extensions/string'
 import { AuthService } from '@service/auth.service'
 import { JobNotificationService } from '@service/job-notification.service'
 import { JobService } from '@service/job.service'
+import { ToastrService } from 'ngx-toastr'
 import { PublicJobService } from '@service/public-job.service'
 import { UploadCategory, UploadService } from '@service/upload.service'
 import { UserService } from '@service/user.service'
@@ -107,7 +108,8 @@ export class PostComponent implements OnInit, OnDestroy {
     private ethService: EthService,
     private publicJobService: PublicJobService,
     private uploadService: UploadService,
-    private http: Http
+    private http: Http,
+    private toastr: ToastrService
   ) {
     this.postForm = formBuilder.group({
       description: [
@@ -291,6 +293,15 @@ export class PostComponent implements OnInit, OnDestroy {
       this.canToUsd = null
     }
     this.currentDate = new Date().toISOString().split('T')[0]
+    this.notifyAddAddressIfNecessary()
+  }
+
+  async notifyAddAddressIfNecessary() {
+    const noAddress = await this.authService.isAuthenticatedAndNoAddress()
+    const user = await this.authService.getCurrentUser()
+    if (noAddress && user.type == 'User') {
+      this.toastr.warning('Add Binance Chain Wallet to create jobs')
+    }
   }
 
   usdToCan(usd: number) {

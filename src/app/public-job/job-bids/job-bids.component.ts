@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService } from '@service/auth.service'
 import { PublicJobService } from '@service/public-job.service'
 import { UserService } from '@service/user.service'
+import { ToastrService } from 'ngx-toastr'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
@@ -29,7 +30,8 @@ export class JobBidsComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private publicJobsService: PublicJobService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {}
 
   async ngOnInit() {
@@ -88,6 +90,11 @@ export class JobBidsComponent implements OnInit {
   }
 
   async chooseProvider(bidIndex) {
+    const noAddress = await this.authService.isAuthenticatedAndNoAddress()
+    if (noAddress) {
+      this.toastr.error('Add Binance Chain Wallet to Accept Offer')
+      return
+    }
     const bid = this.bids[bidIndex]
     const confirmed = confirm('Are you sure you want to choose this provider?')
     if (confirmed) {

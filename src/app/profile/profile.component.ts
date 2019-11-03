@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
 import { UserService } from '@service/user.service'
+import { ToastrService } from 'ngx-toastr'
 import { PublicJobService } from '@service/public-job.service'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
@@ -23,6 +24,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   paramsSub: Subscription
 
   displayEditComponent = false
+  notifiedBnbAddress = false
 
   constructor(
     private router: Router,
@@ -30,7 +32,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private userService: UserService,
     private authService: AuthService,
-    private publicJobService: PublicJobService
+    private publicJobService: PublicJobService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit() {
@@ -42,7 +45,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.initUsers(this.currentUser, params)
           })
           this.activatedRoute.queryParams.subscribe(params => {
-            this.redirectToUniqueUrlIfNecessary(params)
+            const redirected = this.redirectToUniqueUrlIfNecessary(params)
+            if (!redirected) {
+              this.notifyAddAddressIfNecessary()
+            }
             this.displayEditComponent = params.editProfile ? true : false
           })
         }
@@ -59,6 +65,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
     if (this.authSub) {
       this.authSub.unsubscribe()
+    }
+  }
+
+  async notifyAddAddressIfNecessary() {
+    if (this.notifiedBnbAddress) {
+      return
+    }
+    const noAddress = await this.authService.isAuthenticatedAndNoAddress()
+    const user = await this.authService.getCurrentUser()
+    if (noAddress && user.type == 'Provider') {
+      this.toastr.warning('Add Binance Chain Wallet to receive payments')
+      this.notifiedBnbAddress = true
     }
   }
 
@@ -141,8 +159,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
     const { address } = params
     if (this.isMyProfile() && this.router.url.endsWith('/profile')) {
       this.router.navigate(['/profile', this.currentUser.slug])
+      return true
     } else if (this.userModel && address && address !== 'setup') {
       this.router.navigate(['/profile', this.userModel.slug])
+      return true
     }
+    return false
   }
 }

@@ -36,6 +36,11 @@ export class AuthService {
     return this.afAuth.auth.currentUser !== null
   }
 
+  async isAuthenticatedAndNoAddress(): Promise<boolean> {
+    const user = await this.getCurrentUser()
+    return Promise.resolve(!!user && !user.bnbAddress)
+  }
+
   async getJwt(): Promise<string> {
     return new Promise<string>(async (resolve, reject) => {
       await firebase.auth().onAuthStateChanged(async user => {
