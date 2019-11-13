@@ -404,7 +404,7 @@ export class PublicJobService {
         const userId = provider.address
         if (!invites.includes(userId)) {
           invites.push(userId)
-          await tx.update(ref, invites)
+          await tx.update(ref, { invites })
         }
         return true
       })
