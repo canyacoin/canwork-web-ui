@@ -139,7 +139,6 @@ export enum ActionType {
   declineTerms = 'Decline terms',
   counterOffer = 'Counter offer',
   acceptTerms = 'Accept terms',
-  authoriseEscrow = 'Authorise escrow',
   enterEscrow = 'Send CAN to escrow',
   addMessage = 'Add Note',
   finishedJob = 'Mark as complete',
@@ -150,4 +149,6 @@ export enum ActionType {
   declineBid = 'Decline Bid',
   invite = 'Invite to job',
   cancelJobEarly = 'Cancel Job Early',
+  releaseEscrow = 'Release escrow',
+  refundEscrow = 'Refund escrow',
 }
