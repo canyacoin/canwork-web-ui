@@ -182,7 +182,25 @@ export class BinanceService {
     })
   }
 
-  isLedgerConnected() : boolean {
+  isLedgerConnected(): boolean {
     return this.connectedWalletApp === WalletApp.Ledger
+  }
+
+  async getUsdToCan(amountOfUsd: number = 1): Promise<number> {
+    try {
+      const canResponse = await (await fetch(
+        'https://dex.binance.org/api/v1/ticker/24hr?symbol=CAN-677_BNB'
+      )).json()
+      const lastCanToBnbPrice = canResponse[0].lastPrice
+      const bnbResponse = await (await fetch(
+        'https://dex.binance.org/api/v1/ticker/24hr?symbol=BNB_BUSD-BD1'
+      )).json()
+      const lastBnbToUsdPrice = bnbResponse[0].lastPrice
+      const usdToCanPrice = 1 / (lastCanToBnbPrice * lastBnbToUsdPrice)
+      return Promise.resolve(usdToCanPrice)
+    } catch (error) {
+      console.error(error)
+      return Promise.reject(null)
+    }
   }
 }

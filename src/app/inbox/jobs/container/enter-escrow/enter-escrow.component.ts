@@ -404,13 +404,15 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       total: this.totalJobBudgetUsd,
     }
 
+    const jobBudgetCan = await this.jobService.getJobBudgetBinance(this.job)
+    
     this.canPayOptions = {
       dAppName: `CanWork`,
       successText: 'Woohoo, job started!',
       recipient: environment.contracts.canwork,
       operation: Operation.auth,
       onAuthTxHash: onAuthTxHash.bind(this),
-      amount: this.job.budgetCan,
+      amount: jobBudgetCan,
       paymentSummary: paymentSummary,
       complete: onComplete,
       cancel: onComplete,
