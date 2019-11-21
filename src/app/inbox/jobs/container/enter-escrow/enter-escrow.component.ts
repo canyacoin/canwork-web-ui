@@ -303,7 +303,9 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       'canexchange'
     )
     this.canexDisabled = !canexToggle.enabled
-    let clientEthAddress = this.ethService.getOwnerAccount()
+    // TODO remove
+    // let clientEthAddress = this.ethService.getOwnerAccount()
+    let clientEthAddress = 'N/A'
     const onAuthTxHash = async (txHash: string, from: string) => {
       /* IF authorisation hash gets sent, do:
          post tx to transaction monitor
@@ -382,7 +384,9 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
         .connect()
         .createJob(
           this.job,
-          clientEthAddress || this.ethService.getOwnerAccount(),
+          // TODO remove
+          // clientEthAddress || this.ethService.getOwnerAccount(),
+          clientEthAddress || 'N/A',
           provider.ethAddress,
           onTxHash
         )
