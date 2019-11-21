@@ -30,6 +30,7 @@ export interface EventDetails {
 
 export interface Event {
   type: EventType
+  walletApp?: WalletApp
   details: EventDetails
 }
 
@@ -41,15 +42,31 @@ export class BinanceService {
   private events: BehaviorSubject<Event | null> = new BehaviorSubject(null)
   events$ = this.events.asObservable()
   client = new BncClient(environment.binance.api)
+  private connectedWalletApp: WalletApp = null
 
   constructor() {
     this.client.chooseNetwork(environment.binance.net)
     this.client.initChain()
+    this.subscribeToEvents()
   }
 
   private resetConnector() {
     this.connector = null
     console.log('Reset connector')
+  }
+
+  private subscribeToEvents() {
+    this.events$.subscribe(event => {
+      if (!event) {
+        return
+      }
+      const { type, walletApp } = event
+      if (type === EventType.Connect && !!walletApp) {
+        this.connectedWalletApp = walletApp
+      } else if (type === EventType.Disconnect) {
+        this.connectedWalletApp = null
+      }
+    })
   }
 
   async connect(app: WalletApp): Promise<Connector> {
@@ -81,6 +98,7 @@ export class BinanceService {
 
       this.events.next({
         type: EventType.Connect,
+        walletApp: WalletApp.WalletConnect,
         details: { connector, address: await this.getAddress() },
       })
     })
@@ -142,6 +160,7 @@ export class BinanceService {
   initKeystore(keystore: object, address: string) {
     this.events.next({
       type: EventType.Connect,
+      walletApp: WalletApp.Keystore,
       details: {
         connector: null,
         keystore,
@@ -153,6 +172,7 @@ export class BinanceService {
   initLedger(address: string, ledgerApp: any, ledgerHdPath: number[]) {
     this.events.next({
       type: EventType.Connect,
+      walletApp: WalletApp.Ledger,
       details: {
         connector: null,
         address,
@@ -160,5 +180,9 @@ export class BinanceService {
         ledgerHdPath,
       },
     })
+  }
+
+  isLedgerConnected() : boolean {
+    return this.connectedWalletApp === WalletApp.Ledger
   }
 }

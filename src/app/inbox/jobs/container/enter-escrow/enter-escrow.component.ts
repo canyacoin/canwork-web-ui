@@ -21,6 +21,8 @@ import { JobService } from '@service/job.service'
 import { MomentService } from '@service/moment.service'
 import { Transaction, TransactionService } from '@service/transaction.service'
 import { UserService } from '@service/user.service'
+import { BinanceService } from '@service/binance.service'
+import { ToastrService } from 'ngx-toastr'
 import { GenerateGuid } from '@util/generate.uid'
 import 'rxjs/add/operator/take'
 import { Subscription } from 'rxjs/Subscription'
@@ -82,6 +84,8 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     private formBuilder: FormBuilder,
     private jobService: JobService,
     private userService: UserService,
+    private binanceService: BinanceService,
+    private toastr: ToastrService,
     private limepayService: LimepayService,
     private transactionService: TransactionService,
     private featureService: FeatureToggleService,
@@ -150,6 +154,15 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
 
   public getJSON(): Observable<any> {
     return this.http.get('../../assets/js/countryCodes.json')
+  }
+
+  private async payInCrypto() {
+    if (!this.binanceService.isLedgerConnected()) {
+      this.toastr.error('Connect your Ledger wallet to use this payment method')
+      return
+    }
+    await this.setPaymentMethod('crypto')
+    await this.startCanpay()
   }
 
   async setPaymentMethod(type: string) {
