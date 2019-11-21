@@ -1,7 +1,7 @@
 import { firestore } from 'firebase-admin'
 import fetch from 'node-fetch'
 
-import { ActionType } from '../../src/app/core-classes/job-action'
+import { ActionType } from './job-action-type'
 
 export interface Escrow {
   amount: number
@@ -83,8 +83,8 @@ export const bepescrowMonitor = (db: firestore.Firestore) => async () => {
   const resp = await fetch(BEPESCROW_API_URL)
   const result: Result = await resp.json()
 
-  for (let job of result.jobs) {
-    for (let event of job.events) {
+  for (const job of result.jobs) {
+    for (const event of job.events) {
       const tx = createTx(job.id, event)
       await db.runTransaction(async tr => {
         const ref = db.doc(`transactions/${tx.hash}`)
