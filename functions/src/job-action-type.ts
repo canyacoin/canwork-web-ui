@@ -14,4 +14,6 @@ export enum ActionType {
   acceptFinishFailed = 'Complete job failed', // notifies provider
   dispute = 'Raise dispute', // depends on caller
   bid = 'Place Bid', //
+  releaseEscrow = 'Release escrow',
+  refundEscrow = 'Refund escrow',
 }
