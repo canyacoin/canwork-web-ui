@@ -150,4 +150,6 @@ export enum ActionType {
   declineBid = 'Decline Bid',
   invite = 'Invite to job',
   cancelJobEarly = 'Cancel Job Early',
+  releaseEscrow = 'Release escrow',
+  refundEscrow = 'Refund escrow',
 }

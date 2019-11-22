@@ -38,6 +38,7 @@ import {
 } from './public-jobs'
 
 import { firestoreGet, firestoreSelect } from './firestore'
+import { bepescrowMonitor } from './bepescrow-monitor'
 
 const faker = require('faker')
 const fs = require('fs')
@@ -1547,3 +1548,8 @@ exports.moveInvitesToJob = functions.https.onRequest(moveInvitesToJob(db))
 // firestore funcs
 exports.firestoreGet = functions.https.onCall(firestoreGet(db))
 exports.firestoreSelect = functions.https.onCall(firestoreSelect(db))
+
+// BEPEscrow monitor
+exports.bepescrowMonitor = functions.pubsub
+  .schedule('every 1 minutes')
+  .onRun(bepescrowMonitor(db))
