@@ -50,6 +50,7 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
   @Input() disableCanEx = false
   @Input() destinationAddress
   @Input() userEmail
+  @Input() startJob
 
   @Input() set postAuthorisationProcessResults(
     postAuthorisationProcessResults: ProcessActionResult

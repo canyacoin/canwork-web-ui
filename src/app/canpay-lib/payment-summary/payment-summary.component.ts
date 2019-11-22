@@ -19,6 +19,7 @@ export class PaymentSummaryComponent implements OnInit {
   @Output() stepFinished = new EventEmitter()
   @Input() paymentSummary: PaymentSummary = null
   @Input() amount = 0
+  @Input() startJob
 
   isLoading = false
 
@@ -42,6 +43,9 @@ export class PaymentSummaryComponent implements OnInit {
 
     const onSuccess = () => {
       console.log('Success')
+      if (this.startJob) {
+        this.startJob()
+      }
     }
 
     const onFailure = () => {

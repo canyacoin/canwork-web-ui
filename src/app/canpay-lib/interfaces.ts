@@ -63,6 +63,7 @@ export interface CanPay {
   disableCanEx?: boolean
   destinationAddress?: string
   userEmail?: string
+  startJob?: Function
 }
 
 export interface PaymentSummary {

@@ -377,6 +377,14 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       await this.jobService.saveJobFirebase(this.job)
     }
 
+    const startJob = async () => {
+      const action = new IJobAction(ActionType.enterEscrow, UserType.client)
+      this.job.actionLog.push(action)
+      this.job.fiatPayment = false
+      this.job.state = JobState.inEscrow
+      await this.jobService.saveJobFirebase(this.job)
+    }
+
     const provider = await this.userService.getUser(this.job.providerId)
 
     const initiateEnterEscrow = async (canPayData: CanPayData) => {
@@ -429,6 +437,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       postAuthorisationProcessName: 'Job creation',
       startPostAuthorisationProcess: initiateEnterEscrow.bind(this),
       postAuthorisationProcessResults: null,
+      startJob,
     }
   }
 }
