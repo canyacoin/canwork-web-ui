@@ -34,6 +34,8 @@ export interface Event {
   details: EventDetails
 }
 
+const ESCROW_TESTNET_ADDRESS = 'tbnb1cwwgw8hxzq26hhss8vgmhsf7ksuz2jcu2nmm0w'
+
 @Injectable({
   providedIn: 'root',
 })
@@ -43,6 +45,7 @@ export class BinanceService {
   events$ = this.events.asObservable()
   client = new BncClient(environment.binance.api)
   private connectedWalletApp: WalletApp = null
+  private connectedWalletDetails: any = null
 
   constructor() {
     this.client.chooseNetwork(environment.binance.net)
@@ -60,11 +63,13 @@ export class BinanceService {
       if (!event) {
         return
       }
-      const { type, walletApp } = event
+      const { type, walletApp, details } = event
       if (type === EventType.Connect && !!walletApp) {
         this.connectedWalletApp = walletApp
+        this.connectedWalletDetails = details
       } else if (type === EventType.Disconnect) {
         this.connectedWalletApp = null
+        this.connectedWalletDetails = null
       }
     })
   }
@@ -196,11 +201,51 @@ export class BinanceService {
         'https://dex.binance.org/api/v1/ticker/24hr?symbol=BNB_BUSD-BD1'
       )).json()
       const lastBnbToUsdPrice = bnbResponse[0].lastPrice
-      const usdToCanPrice = 1 / (lastCanToBnbPrice * lastBnbToUsdPrice)
+      // TODO remove temporary division by 10
+      // const usdToCanPrice = Math.round(1 / (lastCanToBnbPrice * lastBnbToUsdPrice))
+      const usdToCanPrice = Math.round(1 / (lastCanToBnbPrice * lastBnbToUsdPrice) / 10)
       return Promise.resolve(usdToCanPrice)
     } catch (error) {
       console.error(error)
       return Promise.reject(null)
+    }
+  }
+
+  async escrowViaLedger(jobId: string, jobPriceUsd: number, amountCan: number, providerAddress: string) {
+    if (!this.isLedgerConnected()) {
+      console.error('Ledger is not connected')
+      return
+    }
+    this.client.useLedgerSigningDelegate(
+      this.connectedWalletDetails.ledgerApp,
+      null,
+      null,
+      null,
+      this.connectedWalletDetails.ledgerHdPath
+    )
+
+    try {
+      const { address } = this.connectedWalletDetails
+      const memo = `ESCROW:${jobId}:${jobPriceUsd}:${providerAddress}`
+      const outputs = [{
+        to: ESCROW_TESTNET_ADDRESS,
+        coins: [{
+          denom: 'TCAN-014',
+          amount: amountCan,
+        }],
+      }]
+      const results = await this.client.multiSend(
+        address,
+        outputs,
+        memo
+      )
+
+      console.log(results)
+      if (results.result[0].ok) {
+        console.log(`Sent transaction: ${results.result[0].hash}`)
+      }
+    } catch (err) {
+      console.error(err)
     }
   }
 }

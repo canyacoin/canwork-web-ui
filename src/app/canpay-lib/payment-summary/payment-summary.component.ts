@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { BinanceService } from '@service/binance.service'
 
 import {
   PaymentItem,
@@ -20,12 +21,25 @@ export class PaymentSummaryComponent implements OnInit {
 
   isLoading = false
 
-  constructor() {}
+  constructor(private binanceService: BinanceService) {}
 
   ngOnInit() {}
 
   next() {
-    this.isLoading = true
-    this.stepFinished.emit()
+    const amountCan = this.amount
+
+    const paymentItem = this.paymentSummary.items[0]
+    const { jobId, providerAddress } = paymentItem
+    const jobPriceUsd = paymentItem.value
+
+    this.binanceService.escrowViaLedger(
+      jobId,
+      jobPriceUsd,
+      amountCan,
+      providerAddress
+    )
+    // TODO remove
+    // this.isLoading = true
+    // this.stepFinished.emit()
   }
 }

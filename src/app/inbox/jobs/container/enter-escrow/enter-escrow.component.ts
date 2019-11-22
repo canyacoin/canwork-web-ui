@@ -377,8 +377,9 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       await this.jobService.saveJobFirebase(this.job)
     }
 
+    const provider = await this.userService.getUser(this.job.providerId)
+
     const initiateEnterEscrow = async (canPayData: CanPayData) => {
-      const provider = await this.userService.getUser(this.job.providerId)
       const canWorkContract = new CanWorkJobContract(this.ethService)
       canWorkContract
         .connect()
@@ -399,13 +400,18 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     const paymentSummary = {
       currency: PaymentItemCurrency.usd,
       items: [
-        { name: this.job.information.title, value: this.totalJobBudgetUsd },
+        {
+          name: this.job.information.title,
+          value: this.totalJobBudgetUsd,
+          jobId: this.job.id,
+          providerAddress: provider.bnbAddress,
+        },
       ],
       total: this.totalJobBudgetUsd,
     }
 
     const jobBudgetCan = await this.jobService.getJobBudgetBinance(this.job)
-    
+
     this.canPayOptions = {
       dAppName: `CanWork`,
       successText: 'Woohoo, job started!',

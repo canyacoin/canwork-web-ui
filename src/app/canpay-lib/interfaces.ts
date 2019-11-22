@@ -74,6 +74,8 @@ export interface PaymentSummary {
 export interface PaymentItem {
   name: string
   value: number
+  jobId?: string
+  providerAddress?: string
 }
 
 export enum PaymentItemCurrency {
