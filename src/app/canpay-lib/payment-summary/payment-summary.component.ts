@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { BinanceService } from '@service/binance.service'
+import { ToastrService } from 'ngx-toastr'
 
 import {
   PaymentItem,
@@ -21,7 +22,10 @@ export class PaymentSummaryComponent implements OnInit {
 
   isLoading = false
 
-  constructor(private binanceService: BinanceService) {}
+  constructor(
+    private binanceService: BinanceService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit() {}
 
@@ -32,11 +36,26 @@ export class PaymentSummaryComponent implements OnInit {
     const { jobId, providerAddress } = paymentItem
     const jobPriceUsd = paymentItem.value
 
+    const beforeTransaction = () => {
+      this.toastr.info('Please approve on your ledger')
+    }
+
+    const onSuccess = () => {
+      console.log('Success')
+    }
+
+    const onFailure = () => {
+      this.toastr.error('Transaction failed')
+    }
+
     this.binanceService.escrowViaLedger(
       jobId,
       jobPriceUsd,
       amountCan,
-      providerAddress
+      providerAddress,
+      beforeTransaction,
+      onSuccess,
+      onFailure
     )
     // TODO remove
     // this.isLoading = true

@@ -203,7 +203,9 @@ export class BinanceService {
       const lastBnbToUsdPrice = bnbResponse[0].lastPrice
       // TODO remove temporary division by 10
       // const usdToCanPrice = Math.round(1 / (lastCanToBnbPrice * lastBnbToUsdPrice))
-      const usdToCanPrice = Math.round(1 / (lastCanToBnbPrice * lastBnbToUsdPrice) / 10)
+      const usdToCanPrice = Math.round(
+        1 / (lastCanToBnbPrice * lastBnbToUsdPrice) / 10
+      )
       return Promise.resolve(usdToCanPrice)
     } catch (error) {
       console.error(error)
@@ -211,9 +213,20 @@ export class BinanceService {
     }
   }
 
-  async escrowViaLedger(jobId: string, jobPriceUsd: number, amountCan: number, providerAddress: string) {
+  async escrowViaLedger(
+    jobId: string,
+    jobPriceUsd: number,
+    amountCan: number,
+    providerAddress: string,
+    beforeTransaction?: () => void
+    onSuccess?: () => void,
+    onFailure?: () => void
+  ) {
     if (!this.isLedgerConnected()) {
       console.error('Ledger is not connected')
+      if (onFailure) {
+        onFailure()
+      }
       return
     }
     this.client.useLedgerSigningDelegate(
@@ -227,25 +240,35 @@ export class BinanceService {
     try {
       const { address } = this.connectedWalletDetails
       const memo = `ESCROW:${jobId}:${jobPriceUsd}:${providerAddress}`
-      const outputs = [{
-        to: ESCROW_TESTNET_ADDRESS,
-        coins: [{
-          denom: 'TCAN-014',
-          amount: amountCan,
-        }],
-      }]
-      const results = await this.client.multiSend(
-        address,
-        outputs,
-        memo
-      )
+      const outputs = [
+        {
+          to: ESCROW_TESTNET_ADDRESS,
+          coins: [
+            {
+              denom: 'TCAN-014',
+              amount: amountCan,
+            },
+          ],
+        },
+      ]
+      if (beforeTransaction) {
+        beforeTransaction()
+      }
+
+      const results = await this.client.multiSend(address, outputs, memo)
 
       console.log(results)
       if (results.result[0].ok) {
         console.log(`Sent transaction: ${results.result[0].hash}`)
+        if (onSuccess) {
+          onSuccess()
+        }
       }
     } catch (err) {
       console.error(err)
+      if (onFailure) {
+        onFailure()
+      }
     }
   }
 }
