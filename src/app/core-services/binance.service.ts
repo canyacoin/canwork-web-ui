@@ -218,7 +218,7 @@ export class BinanceService {
     jobPriceUsd: number,
     amountCan: number,
     providerAddress: string,
-    beforeTransaction?: () => void
+    beforeTransaction?: () => void,
     onSuccess?: () => void,
     onFailure?: () => void
   ) {
