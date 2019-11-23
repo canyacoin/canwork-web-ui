@@ -1550,6 +1550,6 @@ exports.firestoreGet = functions.https.onCall(firestoreGet(db))
 exports.firestoreSelect = functions.https.onCall(firestoreSelect(db))
 
 // BEPEscrow monitor
-exports.bepescrowMonitor = functions.pubsub
-  .schedule('every 1 minutes')
-  .onRun(bepescrowMonitor(db))
+// exports.bepescrowMonitor = functions.pubsub
+//   .schedule('every 1 minutes')
+//   .onRun(bepescrowMonitor(db))
