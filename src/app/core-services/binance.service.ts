@@ -222,6 +222,31 @@ export class BinanceService {
     onSuccess?: () => void,
     onFailure?: () => void
   ) {
+      const memo = `ESCROW:${jobId}:${jobPriceUsd}:${providerAddress}`
+      const to = ESCROW_TESTNET_ADDRESS
+      this.transactViaLedger(to, amountCan, memo, beforeTransaction, onSuccess, onFailure)
+  }
+
+  async releaseViaLedger(
+    jobId: string,
+    beforeTransaction?: () => void,
+    onSuccess?: () => void,
+    onFailure?: () => void
+  ) {
+      const memo = `RELEASE:${jobId}`
+      const to = ESCROW_TESTNET_ADDRESS
+      const amountCan = 0.00000001
+      this.transactViaLedger(to, amountCan, memo, beforeTransaction, onSuccess, onFailure)
+  }
+
+  private async transactViaLedger(
+    to: string,
+    amountCan: number,
+    memo: string,
+    beforeTransaction?: () => void,
+    onSuccess?: () => void,
+    onFailure?: () => void
+  ) {
     if (!this.isLedgerConnected()) {
       console.error('Ledger is not connected')
       if (onFailure) {
@@ -239,10 +264,9 @@ export class BinanceService {
 
     try {
       const { address } = this.connectedWalletDetails
-      const memo = `ESCROW:${jobId}:${jobPriceUsd}:${providerAddress}`
       const outputs = [
         {
-          to: ESCROW_TESTNET_ADDRESS,
+          to,
           coins: [
             {
               denom: 'TCAN-014',
