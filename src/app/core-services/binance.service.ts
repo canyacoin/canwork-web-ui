@@ -201,10 +201,8 @@ export class BinanceService {
         'https://dex.binance.org/api/v1/ticker/24hr?symbol=BNB_BUSD-BD1'
       )).json()
       const lastBnbToUsdPrice = bnbResponse[0].lastPrice
-      // TODO remove temporary division by 10
-      // const usdToCanPrice = Math.round(1 / (lastCanToBnbPrice * lastBnbToUsdPrice))
       const usdToCanPrice = Math.round(
-        1 / (lastCanToBnbPrice * lastBnbToUsdPrice) / 10
+        1 / (lastCanToBnbPrice * lastBnbToUsdPrice)
       )
       return Promise.resolve(usdToCanPrice)
     } catch (error) {
@@ -222,9 +220,16 @@ export class BinanceService {
     onSuccess?: () => void,
     onFailure?: () => void
   ) {
-      const memo = `ESCROW:${jobId}:${jobPriceUsd}:${providerAddress}`
-      const to = ESCROW_TESTNET_ADDRESS
-      this.transactViaLedger(to, amountCan, memo, beforeTransaction, onSuccess, onFailure)
+    const memo = `ESCROW:${jobId}:${jobPriceUsd}:${providerAddress}`
+    const to = ESCROW_TESTNET_ADDRESS
+    this.transactViaLedger(
+      to,
+      amountCan,
+      memo,
+      beforeTransaction,
+      onSuccess,
+      onFailure
+    )
   }
 
   async releaseViaLedger(
@@ -233,10 +238,17 @@ export class BinanceService {
     onSuccess?: () => void,
     onFailure?: () => void
   ) {
-      const memo = `RELEASE:${jobId}`
-      const to = ESCROW_TESTNET_ADDRESS
-      const amountCan = 0.00000001
-      this.transactViaLedger(to, amountCan, memo, beforeTransaction, onSuccess, onFailure)
+    const memo = `RELEASE:${jobId}`
+    const to = ESCROW_TESTNET_ADDRESS
+    const amountCan = 0.00000001
+    this.transactViaLedger(
+      to,
+      amountCan,
+      memo,
+      beforeTransaction,
+      onSuccess,
+      onFailure
+    )
   }
 
   private async transactViaLedger(
