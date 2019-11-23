@@ -46,10 +46,12 @@ export class PaymentSummaryComponent implements OnInit {
       if (this.startJob) {
         this.startJob()
       }
+      this.stepFinished.emit()
     }
 
     const onFailure = () => {
       this.toastr.error('Transaction failed')
+      this.isLoading = false
     }
 
     this.binanceService.escrowViaLedger(
@@ -61,8 +63,6 @@ export class PaymentSummaryComponent implements OnInit {
       onSuccess,
       onFailure
     )
-    // TODO remove
-    // this.isLoading = true
-    // this.stepFinished.emit()
+    this.isLoading = true
   }
 }
