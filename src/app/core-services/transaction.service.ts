@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { Http } from '@angular/http'
 import { ActionType } from '@class/job-action'
 import { Observable } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { map, catchError, retryWhen } from 'rxjs/operators'
 
 export const BEPESCROW_JOB_API_URL = 'https://bepescrow.herokuapp.com/job/'
 
@@ -95,7 +95,11 @@ export class TransactionService {
     const url = BEPESCROW_JOB_API_URL + jobId
     return this.http.get(url).pipe(
       map((resp): Job => resp.json()),
-      map(job => job.events.map(event => createTx(jobId, event)))
+      map(job => job.events.map(event => createTx(jobId, event))),
+      catchError(err => {
+        console.log(err)
+        return []
+      })
     )
   }
 }
