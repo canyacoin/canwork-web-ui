@@ -21,6 +21,8 @@ import { JobService } from '@service/job.service'
 import { MomentService } from '@service/moment.service'
 import { Transaction, TransactionService } from '@service/transaction.service'
 import { UserService } from '@service/user.service'
+import { BinanceService } from '@service/binance.service'
+import { ToastrService } from 'ngx-toastr'
 import { GenerateGuid } from '@util/generate.uid'
 import 'rxjs/add/operator/take'
 import { Subscription } from 'rxjs/Subscription'
@@ -82,6 +84,8 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     private formBuilder: FormBuilder,
     private jobService: JobService,
     private userService: UserService,
+    private binanceService: BinanceService,
+    private toastr: ToastrService,
     private limepayService: LimepayService,
     private transactionService: TransactionService,
     private featureService: FeatureToggleService,
@@ -150,6 +154,15 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
 
   public getJSON(): Observable<any> {
     return this.http.get('../../assets/js/countryCodes.json')
+  }
+
+  private async payInCrypto() {
+    if (!this.binanceService.isLedgerConnected()) {
+      this.toastr.error('Connect your Ledger wallet to use this payment method')
+      return
+    }
+    await this.setPaymentMethod('crypto')
+    await this.startCanpay()
   }
 
   async setPaymentMethod(type: string) {
@@ -290,7 +303,9 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       'canexchange'
     )
     this.canexDisabled = !canexToggle.enabled
-    let clientEthAddress = this.ethService.getOwnerAccount()
+    // TODO remove
+    // let clientEthAddress = this.ethService.getOwnerAccount()
+    let clientEthAddress = 'N/A'
     const onAuthTxHash = async (txHash: string, from: string) => {
       /* IF authorisation hash gets sent, do:
          post tx to transaction monitor
@@ -362,14 +377,25 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       await this.jobService.saveJobFirebase(this.job)
     }
 
+    const startJob = async () => {
+      const action = new IJobAction(ActionType.enterEscrow, UserType.client)
+      this.job.actionLog.push(action)
+      this.job.fiatPayment = false
+      this.job.state = JobState.inEscrow
+      await this.jobService.saveJobFirebase(this.job)
+    }
+
+    const provider = await this.userService.getUser(this.job.providerId)
+
     const initiateEnterEscrow = async (canPayData: CanPayData) => {
-      const provider = await this.userService.getUser(this.job.providerId)
       const canWorkContract = new CanWorkJobContract(this.ethService)
       canWorkContract
         .connect()
         .createJob(
           this.job,
-          clientEthAddress || this.ethService.getOwnerAccount(),
+          // TODO remove
+          // clientEthAddress || this.ethService.getOwnerAccount(),
+          clientEthAddress || 'N/A',
           provider.ethAddress,
           onTxHash
         )
@@ -382,10 +408,17 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     const paymentSummary = {
       currency: PaymentItemCurrency.usd,
       items: [
-        { name: this.job.information.title, value: this.totalJobBudgetUsd },
+        {
+          name: this.job.information.title,
+          value: this.totalJobBudgetUsd,
+          jobId: this.job.id,
+          providerAddress: provider.bnbAddress,
+        },
       ],
       total: this.totalJobBudgetUsd,
     }
+
+    const jobBudgetCan = await this.jobService.getJobBudgetBinance(this.job)
 
     this.canPayOptions = {
       dAppName: `CanWork`,
@@ -393,7 +426,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       recipient: environment.contracts.canwork,
       operation: Operation.auth,
       onAuthTxHash: onAuthTxHash.bind(this),
-      amount: this.job.budgetCan,
+      amount: jobBudgetCan,
       paymentSummary: paymentSummary,
       complete: onComplete,
       cancel: onComplete,
@@ -404,6 +437,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       postAuthorisationProcessName: 'Job creation',
       startPostAuthorisationProcess: initiateEnterEscrow.bind(this),
       postAuthorisationProcessResults: null,
+      startJob,
     }
   }
 }

@@ -30,8 +30,11 @@ export interface EventDetails {
 
 export interface Event {
   type: EventType
+  walletApp?: WalletApp
   details: EventDetails
 }
+
+const ESCROW_TESTNET_ADDRESS = 'tbnb1cwwgw8hxzq26hhss8vgmhsf7ksuz2jcu2nmm0w'
 
 @Injectable({
   providedIn: 'root',
@@ -41,15 +44,34 @@ export class BinanceService {
   private events: BehaviorSubject<Event | null> = new BehaviorSubject(null)
   events$ = this.events.asObservable()
   client = new BncClient(environment.binance.api)
+  private connectedWalletApp: WalletApp = null
+  private connectedWalletDetails: any = null
 
   constructor() {
     this.client.chooseNetwork(environment.binance.net)
     this.client.initChain()
+    this.subscribeToEvents()
   }
 
   private resetConnector() {
     this.connector = null
     console.log('Reset connector')
+  }
+
+  private subscribeToEvents() {
+    this.events$.subscribe(event => {
+      if (!event) {
+        return
+      }
+      const { type, walletApp, details } = event
+      if (type === EventType.Connect && !!walletApp) {
+        this.connectedWalletApp = walletApp
+        this.connectedWalletDetails = details
+      } else if (type === EventType.Disconnect) {
+        this.connectedWalletApp = null
+        this.connectedWalletDetails = null
+      }
+    })
   }
 
   async connect(app: WalletApp): Promise<Connector> {
@@ -81,6 +103,7 @@ export class BinanceService {
 
       this.events.next({
         type: EventType.Connect,
+        walletApp: WalletApp.WalletConnect,
         details: { connector, address: await this.getAddress() },
       })
     })
@@ -142,6 +165,7 @@ export class BinanceService {
   initKeystore(keystore: object, address: string) {
     this.events.next({
       type: EventType.Connect,
+      walletApp: WalletApp.Keystore,
       details: {
         connector: null,
         keystore,
@@ -153,6 +177,7 @@ export class BinanceService {
   initLedger(address: string, ledgerApp: any, ledgerHdPath: number[]) {
     this.events.next({
       type: EventType.Connect,
+      walletApp: WalletApp.Ledger,
       details: {
         connector: null,
         address,
@@ -160,5 +185,115 @@ export class BinanceService {
         ledgerHdPath,
       },
     })
+  }
+
+  isLedgerConnected(): boolean {
+    return this.connectedWalletApp === WalletApp.Ledger
+  }
+
+  async getUsdToCan(amountOfUsd: number = 1): Promise<number> {
+    try {
+      const canResponse = await (await fetch(
+        'https://dex.binance.org/api/v1/ticker/24hr?symbol=CAN-677_BNB'
+      )).json()
+      const lastCanToBnbPrice = canResponse[0].weightedAvgPrice
+      const bnbResponse = await (await fetch(
+        'https://dex.binance.org/api/v1/ticker/24hr?symbol=BNB_BUSD-BD1'
+      )).json()
+      const lastBnbToUsdPrice = bnbResponse[0].weightedAvgPrice
+      const usdToCanPrice = Math.round(
+        1 / (lastCanToBnbPrice * lastBnbToUsdPrice)
+      )
+      return Promise.resolve(usdToCanPrice)
+    } catch (error) {
+      console.error(error)
+      return Promise.reject(null)
+    }
+  }
+
+  async escrowViaLedger(
+    jobId: string,
+    jobPriceUsd: number,
+    amountCan: number,
+    providerAddress: string,
+    beforeTransaction?: () => void,
+    onSuccess?: () => void,
+    onFailure?: () => void
+  ) {
+    const memo = `ESCROW:${jobId}:${jobPriceUsd}:${providerAddress}`
+    const to = ESCROW_TESTNET_ADDRESS
+    this.transactViaLedger(
+      to,
+      amountCan,
+      memo,
+      beforeTransaction,
+      onSuccess,
+      onFailure
+    )
+  }
+
+  async releaseViaLedger(
+    jobId: string,
+    beforeTransaction?: () => void,
+    onSuccess?: () => void,
+    onFailure?: () => void
+  ) {
+    const memo = `RELEASE:${jobId}`
+    const to = ESCROW_TESTNET_ADDRESS
+    const amountCan = 0.00000001
+    this.transactViaLedger(
+      to,
+      amountCan,
+      memo,
+      beforeTransaction,
+      onSuccess,
+      onFailure
+    )
+  }
+
+  private async transactViaLedger(
+    to: string,
+    amountCan: number,
+    memo: string,
+    beforeTransaction?: () => void,
+    onSuccess?: () => void,
+    onFailure?: () => void
+  ) {
+    if (!this.isLedgerConnected()) {
+      console.error('Ledger is not connected')
+      if (onFailure) {
+        onFailure()
+      }
+      return
+    }
+    this.client.useLedgerSigningDelegate(
+      this.connectedWalletDetails.ledgerApp,
+      null,
+      null,
+      null,
+      this.connectedWalletDetails.ledgerHdPath
+    )
+
+    try {
+      const { address } = this.connectedWalletDetails
+      if (beforeTransaction) {
+        beforeTransaction()
+      }
+
+      const results = await this.client.transfer(address, to, amountCan, 'TCAN-014', memo)
+
+      console.log(results)
+      if (results.result[0].ok) {
+        console.log(`Sent transaction: ${results.result.hash}`)
+        if (onSuccess) {
+          onSuccess()
+        }
+      }
+    } catch (err) {
+      console.error(err)
+      if (onFailure) {
+        onFailure()
+      }
+    }
   }
 }

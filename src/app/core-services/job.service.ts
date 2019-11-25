@@ -23,6 +23,7 @@ import { CanWorkJobContract } from '@contract/can-work-job.contract'
 import { environment } from '@env/environment'
 import { ChatService } from '@service/chat.service'
 import { EthService } from '@service/eth.service'
+import { BinanceService } from '@service/binance.service'
 import { JobNotificationService } from '@service/job-notification.service'
 import { MomentService } from '@service/moment.service'
 import { Transaction, TransactionService } from '@service/transaction.service'
@@ -52,6 +53,7 @@ export class JobService {
     private transactionService: TransactionService,
     private reviewService: ReviewService,
     private ethService: EthService,
+    private binanceService: BinanceService,
     private jobNotificationService: JobNotificationService,
     private canPayService: CanPayService,
     private featureService: FeatureToggleService
@@ -112,10 +114,25 @@ export class JobService {
     return data
   }
 
+  // TODO remove
   async getJobBudget(job: Job): Promise<number> {
     try {
       const totalBudget = await this.getJobBudgetUsd(job)
       const canValue = await this.ethService.getUsdToCan(totalBudget)
+      if (canValue) {
+        return Promise.resolve(canValue)
+      } else {
+        return Promise.reject(false)
+      }
+    } catch (e) {
+      return Promise.reject(false)
+    }
+  }
+  
+  async getJobBudgetBinance(job: Job): Promise<number> {
+    try {
+      const totalBudget = await this.getJobBudgetUsd(job)
+      const canValue = await this.binanceService.getUsdToCan(totalBudget)
       if (canValue) {
         return Promise.resolve(canValue)
       } else {
