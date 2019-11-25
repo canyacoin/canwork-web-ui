@@ -196,11 +196,11 @@ export class BinanceService {
       const canResponse = await (await fetch(
         'https://dex.binance.org/api/v1/ticker/24hr?symbol=CAN-677_BNB'
       )).json()
-      const lastCanToBnbPrice = canResponse[0].lastPrice
+      const lastCanToBnbPrice = canResponse[0].weightedAvgPrice
       const bnbResponse = await (await fetch(
         'https://dex.binance.org/api/v1/ticker/24hr?symbol=BNB_BUSD-BD1'
       )).json()
-      const lastBnbToUsdPrice = bnbResponse[0].lastPrice
+      const lastBnbToUsdPrice = bnbResponse[0].weightedAvgPrice
       const usdToCanPrice = Math.round(
         1 / (lastCanToBnbPrice * lastBnbToUsdPrice)
       )
@@ -276,26 +276,15 @@ export class BinanceService {
 
     try {
       const { address } = this.connectedWalletDetails
-      const outputs = [
-        {
-          to,
-          coins: [
-            {
-              denom: 'TCAN-014',
-              amount: amountCan,
-            },
-          ],
-        },
-      ]
       if (beforeTransaction) {
         beforeTransaction()
       }
 
-      const results = await this.client.multiSend(address, outputs, memo)
+      const results = await this.client.transfer(address, to, amountCan, 'TCAN-014', memo)
 
       console.log(results)
       if (results.result[0].ok) {
-        console.log(`Sent transaction: ${results.result[0].hash}`)
+        console.log(`Sent transaction: ${results.result.hash}`)
         if (onSuccess) {
           onSuccess()
         }
