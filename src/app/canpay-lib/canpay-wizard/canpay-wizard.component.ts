@@ -50,6 +50,7 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
   @Input() disableCanEx = false
   @Input() destinationAddress
   @Input() userEmail
+  @Input() startJob
 
   @Input() set postAuthorisationProcessResults(
     postAuthorisationProcessResults: ProcessActionResult
@@ -310,11 +311,13 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
         this.updateCurrentStep(Step.paymentSummary)
         break
       case Step.paymentSummary:
-        if (this.ethService.account.value) {
-          this.checkBalance()
-        } else {
-          this.updateCurrentStep(Step.metamask)
-        }
+        // TODO remove
+        // if (this.ethService.account.value) {
+        //   this.checkBalance()
+        // } else {
+        //   this.updateCurrentStep(Step.metamask)
+        // }
+        this.updateCurrentStep(Step.confirmation)
         break
       case Step.balanceCheck:
         this.cancelBalanceCheck()

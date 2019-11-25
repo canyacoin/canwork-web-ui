@@ -63,6 +63,7 @@ export interface CanPay {
   disableCanEx?: boolean
   destinationAddress?: string
   userEmail?: string
+  startJob?: Function
 }
 
 export interface PaymentSummary {
@@ -74,6 +75,8 @@ export interface PaymentSummary {
 export interface PaymentItem {
   name: string
   value: number
+  jobId?: string
+  providerAddress?: string
 }
 
 export enum PaymentItemCurrency {

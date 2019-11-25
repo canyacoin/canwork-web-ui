@@ -28,6 +28,7 @@
   <div class="row">
     <div class="col-12 text-center choose-payment">
       <h2>Choose your payment method</h2>
+      <!-- card payments disabled for now 
       <button
         class="btn-payment-type"
         [disabled]="job.budget < 10"
@@ -35,17 +36,20 @@
       >
         <img src="assets/img/credit-card.svg" /><br />Pay with<br />Credit card
       </button>
+      -->
       <button
         class="btn-payment-type"
-        (click)="setPaymentMethod('crypto'); startCanpay()"
+        (click)="payInCrypto()"
       >
         <img src="assets/img/ethereum.svg" /><br />Pay with<br />Cryptocurrency
       </button>
       <br />
+      <!--
       <i *ngIf="job.budget < 10"
         >Credit card payments is not available for Jobs that costs less than
         $10</i
       >
+      -->
     </div>
   </div>
 </div>
@@ -405,6 +409,7 @@
       (cancel)="canPayOptions.cancel($event)"
       [disableCanEx]="canPayOptions.disableCanEx"
       [userEmail]="canPayOptions.userEmail"
+      [startJob]="canPayOptions.startJob"
     ></canyalib-canpay>
   </div>
 </div>

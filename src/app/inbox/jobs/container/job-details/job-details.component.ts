@@ -10,6 +10,8 @@ import { MobileService } from '@service/mobile.service'
 import { ReviewService } from '@service/review.service'
 import { Transaction, TransactionService } from '@service/transaction.service'
 import { UserService } from '@service/user.service'
+import { BinanceService } from '@service/binance.service'
+import { ToastrService } from 'ngx-toastr'
 import { AngularFireStorage } from 'angularfire2/storage'
 import { DialogService } from 'ng2-bootstrap-modal'
 import { Subscription } from 'rxjs'
@@ -49,6 +51,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private jobService: JobService,
     private userService: UserService,
+    private binanceService: BinanceService,
+    private toastr: ToastrService,
     private transactionService: TransactionService,
     private reviewService: ReviewService,
     private activatedRoute: ActivatedRoute,
@@ -229,6 +233,39 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  private releaseEscrow() {
+    if (!this.binanceService.isLedgerConnected()) {
+      this.toastr.error('Connect your Ledger wallet to release the payment')
+      return
+    }
+
+    const jobId = this.job.id
+
+    const beforeTransaction = () => {
+      this.toastr.info('Please approve on your ledger')
+    }
+
+    const completeJob = async () => {
+      console.log('Success')
+      this.toastr.success('Success')
+      const action = new IJobAction(ActionType.acceptFinish, UserType.client)
+      this.job.actionLog.push(action)
+      this.job.state = JobState.complete
+      await this.jobService.saveJobFirebase(this.job)
+    }
+
+    const onFailure = () => {
+      this.toastr.error('Transaction failed')
+    }
+
+    this.binanceService.releaseViaLedger(
+      jobId,
+      beforeTransaction,
+      completeJob,
+      onFailure
+    )
+  }
+
   executeAction(action: ActionType) {
     switch (action) {
       case ActionType.enterEscrow:
@@ -238,9 +275,11 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         })
         break
       case ActionType.acceptFinish:
-        this.router.navigate(['../complete'], {
-          relativeTo: this.activatedRoute,
-        })
+        this.releaseEscrow()
+        // TODO remove
+        // this.router.navigate(['../complete'], {
+        //   relativeTo: this.activatedRoute,
+        // })
         break
       case ActionType.cancelJobEarly:
         this.router.navigate(['../cancel'], { relativeTo: this.activatedRoute })
