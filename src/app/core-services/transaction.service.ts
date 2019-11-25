@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { Http } from '@angular/http'
 import { ActionType } from '@class/job-action'
 import { Observable } from 'rxjs'
-import { map, catchError, retryWhen } from 'rxjs/operators'
+import { map, catchError } from 'rxjs/operators'
 
 export const BEPESCROW_JOB_API_URL = 'https://bepescrow.herokuapp.com/job/'
 
