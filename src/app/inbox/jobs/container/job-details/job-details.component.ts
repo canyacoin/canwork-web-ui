@@ -315,7 +315,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   }
 
   getTxLink(txHash: string) {
-    return `${environment.contracts.etherscan}/tx/${txHash}`
+    return `${environment.binance.explorer}/tx/${txHash}`
   }
 
   getTxColor(tx: Transaction) {
