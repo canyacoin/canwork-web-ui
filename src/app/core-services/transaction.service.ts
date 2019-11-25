@@ -56,6 +56,9 @@ export interface Transaction {
   actionType: string
   timestamp: number
   hash: string
+  // TODO: remove 'success', 'failure' temporary properties
+  success: boolean
+  failure: boolean
 }
 
 const mapEventToActioType = {
@@ -77,6 +80,9 @@ function createTx(jobId: string, event: Event): Transaction {
     actionType,
     timestamp: event.time,
     hash: event.hash,
+    // TODO: remove 'success', 'failure' temporary properties
+    success: true,
+    failure: false,
   }
 }
 
