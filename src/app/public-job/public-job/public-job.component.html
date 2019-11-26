@@ -192,13 +192,6 @@
             >
               PLACE BID
             </button>
-            <button
-              class="btn btn-primary mt-5 mr-5"
-              data-toggle="modal"
-              data-target="#keystoreTxModal"
-            >
-              Show tx modal
-            </button>
             <i *ngIf="!canBid">You've posted your bid.</i>
             <i *ngIf="!currentUser.bnbAddress"
               >To make a bid fill the field "Binance Address" in the
@@ -362,7 +355,6 @@
     </div>
   </div>
 </div>
-<keystore-tx></keystore-tx>
 <div
   id="bidModal"
   *ngIf="job && currentUser && currentUser.type === 'Provider'"

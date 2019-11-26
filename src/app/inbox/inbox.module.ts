@@ -24,6 +24,7 @@ import { JobContainerComponent } from './jobs/container/job-container.component'
 import { JobDetailsComponent } from './jobs/container/job-details/job-details.component'
 import { JobDashboardComponent } from './jobs/dashboard/job-dashboard.component'
 import { PostComponent } from './jobs/post/post.component'
+import { KeystoreTxComponent } from '../keystore-tx/keystore-tx.component'
 
 @NgModule({
   imports: [
@@ -54,6 +55,7 @@ import { PostComponent } from './jobs/post/post.component'
     PropertyComponent,
     StatusIconComponent,
     JobDashboardCardComponent,
+    KeystoreTxComponent,
   ],
   entryComponents: [ActionDialogComponent],
   exports: [InboxRoutingModule],

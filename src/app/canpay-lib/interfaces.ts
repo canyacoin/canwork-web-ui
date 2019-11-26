@@ -64,6 +64,7 @@ export interface CanPay {
   destinationAddress?: string
   userEmail?: string
   startJob?: Function
+  initialisePayment?: Function
 }
 
 export interface PaymentSummary {

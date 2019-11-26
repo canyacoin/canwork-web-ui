@@ -51,6 +51,7 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
   @Input() destinationAddress
   @Input() userEmail
   @Input() startJob
+  @Input() initialisePayment
 
   @Input() set postAuthorisationProcessResults(
     postAuthorisationProcessResults: ProcessActionResult

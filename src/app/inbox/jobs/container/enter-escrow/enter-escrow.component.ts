@@ -157,8 +157,11 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   }
 
   private async payInCrypto() {
-    if (!this.binanceService.isLedgerConnected()) {
-      this.toastr.error('Connect your Ledger wallet to use this payment method')
+    if (
+      !this.binanceService.isLedgerConnected() &&
+      !this.binanceService.isKeystoreConnected()
+    ) {
+      this.toastr.error('Connect your wallet to use this payment method')
       return
     }
     await this.setPaymentMethod('crypto')
@@ -420,6 +423,48 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
 
     const jobBudgetCan = await this.jobService.getJobBudgetBinance(this.job)
 
+    const initialisePayment = (beforeCallback, successCallback, failureCallback) => {
+      const amountCan = jobBudgetCan
+      const paymentItem = paymentSummary.items[0]
+      const { jobId, providerAddress } = paymentItem
+      const jobPriceUsd = paymentItem.value
+      const beforeTransaction = () => {
+        this.toastr.info('Please approve on your ledger')
+        if (beforeCallback) {
+          beforeCallback()
+        }
+      }
+
+      const onSuccess = () => {
+        console.log('Success')
+        startJob()
+        if (successCallback) {
+          successCallback()
+        }
+      }
+
+      const onFailure = () => {
+        this.toastr.error('Transaction failed')
+        if (failureCallback) {
+          failureCallback()
+        }
+      }
+
+      if (beforeTransaction) {
+        beforeTransaction()
+      }
+
+      this.binanceService.escrowViaLedger(
+        jobId,
+        jobPriceUsd,
+        amountCan,
+        providerAddress,
+        beforeTransaction,
+        onSuccess,
+        onFailure
+      )
+    }
+
     this.canPayOptions = {
       dAppName: `CanWork`,
       successText: 'Woohoo, job started!',
@@ -432,6 +477,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       cancel: onComplete,
       disableCanEx: this.canexDisabled,
       userEmail: client.email,
+      initialisePayment,
 
       // Post Authorisation
       postAuthorisationProcessName: 'Job creation',

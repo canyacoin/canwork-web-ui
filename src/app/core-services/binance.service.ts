@@ -191,6 +191,10 @@ export class BinanceService {
     return this.connectedWalletApp === WalletApp.Ledger
   }
 
+  isKeystoreConnected(): boolean {
+    return this.connectedWalletApp === WalletApp.Keystore
+  }
+
   async getUsdToCan(amountOfUsd: number = 1): Promise<number> {
     try {
       const canResponse = await (await fetch(
