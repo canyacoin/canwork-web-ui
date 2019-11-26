@@ -450,10 +450,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
         }
       }
 
-      if (beforeTransaction) {
-        beforeTransaction()
-      }
-
       this.binanceService.escrowViaLedger(
         jobId,
         jobPriceUsd,
