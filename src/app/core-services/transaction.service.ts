@@ -66,6 +66,7 @@ const mapEventToActionType = {
   DISBURSE: ActionType.acceptFinish,
   RELEASE: ActionType.releaseEscrow,
   REFUND: ActionType.refundEscrow,
+  VALUE: ActionType.valueEscrow,
 }
 
 function createTx(jobId: string, event: Event): Transaction {
