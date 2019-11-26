@@ -4,23 +4,15 @@ import {
   CanPay,
   CanPayData,
   Operation,
-  PaymentItem,
-  PaymentItemCurrency,
-  PaymentSummary,
   setProcessResult,
 } from '@canpay-lib/lib'
 import { Job } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
-import { User, UserType } from '@class/user'
+import { UserType } from '@class/user'
 import { CanWorkJobContract } from '@contract/can-work-job.contract'
 import { EthService } from '@service/eth.service'
-import { FeatureToggleService } from '@service/feature-toggle.service'
 import { JobService } from '@service/job.service'
-import { MomentService } from '@service/moment.service'
-import { Transaction, TransactionService } from '@service/transaction.service'
-import { GenerateGuid } from '@util/generate.uid'
 import 'rxjs/add/operator/take'
-import { Subscription } from 'rxjs/Subscription'
 
 import { environment } from '../../../../../environments/environment'
 @Component({
@@ -36,10 +28,7 @@ export class CancelJobComponent implements OnInit {
   constructor(
     private ethService: EthService,
     private jobService: JobService,
-    private transactionService: TransactionService,
-    private featureService: FeatureToggleService,
     private activatedRoute: ActivatedRoute,
-    private momentService: MomentService,
     private router: Router
   ) {}
 
@@ -65,24 +54,6 @@ export class CancelJobComponent implements OnInit {
         post tx to transaction monitor
         save tx to collection
         save action/pending to job */
-      const txId = GenerateGuid()
-      this.transactionService.startMonitoring(
-        this.job,
-        from,
-        txId,
-        txHash,
-        ActionType.cancelJobEarly
-      )
-      this.transactionService.saveTransaction(
-        new Transaction(
-          txId,
-          this.job.providerId,
-          txHash,
-          this.momentService.get(),
-          ActionType.cancelJobEarly,
-          this.job.id
-        )
-      )
       this.job.actionLog.push(
         new IJobAction(ActionType.cancelJobEarly, UserType.provider)
       )
