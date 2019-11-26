@@ -251,23 +251,39 @@ export class BinanceService {
     }
   }
 
-  async releaseViaLedger(
+  async releaseFunds(
     jobId: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
-    onFailure?: () => void
+    onFailure?: () => void,
+    password?: string
   ) {
     const memo = `RELEASE:${jobId}`
     const to = ESCROW_TESTNET_ADDRESS
     const amountCan = 0.00000001
-    this.transactViaLedger(
-      to,
-      amountCan,
-      memo,
-      beforeTransaction,
-      onSuccess,
-      onFailure
-    )
+
+    if (this.isLedgerConnected()) {
+      this.transactViaLedger(
+        to,
+        amountCan,
+        memo,
+        beforeTransaction,
+        onSuccess,
+        onFailure
+      )
+    } else if (this.isKeystoreConnected()) {
+      this.transactViaKeystore(
+        to,
+        amountCan,
+        memo,
+        password,
+        beforeTransaction,
+        onSuccess,
+        onFailure
+      )
+    } else {
+      console.error('Unsupported wallet type')
+    }
   }
 
   private async transactViaLedger(

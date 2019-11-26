@@ -9,7 +9,7 @@
 </div>
 
 <div class="container job-detail-container" *ngIf="job">
-  <keystore-tx></keystore-tx>
+  <keystore-tx [sendTransaction]="this.sendTransaction"></keystore-tx>
 
   <div class="row" *ngIf="false">
     <span class="col-6 text-left">
