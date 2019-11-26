@@ -71,6 +71,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   cardForm: FormGroup = null
   fiatPaymentStep: FiatPaymentSteps
   acceptCopyMnemonicForm: FormGroup
+  sendTransaction: Function
 
   shopper: any
   fiatPayment: any
@@ -423,13 +424,19 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
 
     const jobBudgetCan = await this.jobService.getJobBudgetBinance(this.job)
 
-    const initialisePayment = (beforeCallback, successCallback, failureCallback) => {
+    const initialisePayment = (
+      beforeCallback,
+      successCallback,
+      failureCallback
+    ) => {
       const amountCan = jobBudgetCan
       const paymentItem = paymentSummary.items[0]
       const { jobId, providerAddress } = paymentItem
       const jobPriceUsd = paymentItem.value
       const beforeTransaction = () => {
-        this.toastr.info('Please approve on your ledger')
+        if (this.binanceService.isLedgerConnected()) {
+          this.toastr.info('Please approve on your ledger')
+        }
         if (beforeCallback) {
           beforeCallback()
         }
@@ -450,15 +457,26 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
         }
       }
 
-      this.binanceService.escrowViaLedger(
-        jobId,
-        jobPriceUsd,
-        amountCan,
-        providerAddress,
-        beforeTransaction,
-        onSuccess,
-        onFailure
-      )
+      const sendTransaction = (password?: string) => {
+        this.binanceService.escrowFunds(
+          jobId,
+          jobPriceUsd,
+          amountCan,
+          providerAddress,
+          beforeTransaction,
+          onSuccess,
+          onFailure,
+          password
+        )
+      }
+
+      this.sendTransaction = sendTransaction
+
+      if (this.binanceService.isKeystoreConnected()) {
+        $('#keystoreTxModal').modal('show')
+      } else if (this.binanceService.isLedgerConnected()) {
+        sendTransaction()
+      }
     }
 
     this.canPayOptions = {

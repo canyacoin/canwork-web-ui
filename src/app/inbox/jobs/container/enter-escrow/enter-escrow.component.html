@@ -385,7 +385,9 @@
     <img src="assets/img/loader.svg" height="36px" alt="Loader" />
   </div>
   <div class="container" *ngIf="canPayOptions">
-    <keystore-tx></keystore-tx>
+    <keystore-tx
+      [sendTransaction]="this.sendTransaction"
+    ></keystore-tx>
     <canyalib-canpay
       [dAppName]="canPayOptions.dAppName"
       [successText]="canPayOptions.successText"
