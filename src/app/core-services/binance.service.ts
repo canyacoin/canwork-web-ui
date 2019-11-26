@@ -339,13 +339,6 @@ export class BinanceService {
       }
       return
     }
-    this.client.useLedgerSigningDelegate(
-      this.connectedWalletDetails.ledgerApp,
-      null,
-      null,
-      null,
-      this.connectedWalletDetails.ledgerHdPath
-    )
 
     try {
       const privateKey = crypto.getPrivateKeyFromKeyStore(

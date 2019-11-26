@@ -6,4 +6,9 @@ import { Component, Input } from '@angular/core'
 })
 export class KeystoreTxComponent {
   @Input() sendTransaction
+  keystorePassword: string = ''
+
+  confirm() {
+    this.sendTransaction(this.keystorePassword)
+  }
 }

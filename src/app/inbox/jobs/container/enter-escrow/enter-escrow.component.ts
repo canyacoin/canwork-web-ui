@@ -443,6 +443,9 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       }
 
       const onSuccess = () => {
+        if (this.binanceService.isKeystoreConnected()) {
+          ;(window as any).$('#keystoreTxModal').modal('hide')
+        }
         console.log('Success')
         startJob()
         if (successCallback) {
@@ -473,7 +476,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       this.sendTransaction = sendTransaction
 
       if (this.binanceService.isKeystoreConnected()) {
-        $('#keystoreTxModal').modal('show')
+        ;(window as any).$('#keystoreTxModal').modal('show')
       } else if (this.binanceService.isLedgerConnected()) {
         sendTransaction()
       }
