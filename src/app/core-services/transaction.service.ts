@@ -61,7 +61,7 @@ export interface Transaction {
   failure: boolean
 }
 
-const mapEventToActioType = {
+const mapEventToActionType = {
   ESCROW: ActionType.enterEscrow,
   DISBURSE: ActionType.acceptFinish,
   RELEASE: ActionType.releaseEscrow,
@@ -69,7 +69,7 @@ const mapEventToActioType = {
 }
 
 function createTx(jobId: string, event: Event): Transaction {
-  const actionType = mapEventToActioType[event.event]
+  const actionType = mapEventToActionType[event.event]
   if (!actionType) {
     throw new Error(
       `Not found action type for event "${event.event}" (jobId = "${jobId}")`
