@@ -62,6 +62,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   cardForm: FormGroup = null
   fiatPaymentStep: FiatPaymentSteps
   acceptCopyMnemonicForm: FormGroup
+  sendTransaction: Function
 
   shopper: any
   fiatPayment: any
@@ -145,8 +146,11 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   }
 
   private async payInCrypto() {
-    if (!this.binanceService.isLedgerConnected()) {
-      this.toastr.error('Connect your Ledger wallet to use this payment method')
+    if (
+      !this.binanceService.isLedgerConnected() &&
+      !this.binanceService.isKeystoreConnected()
+    ) {
+      this.toastr.error('Connect your wallet to use this payment method')
       return
     }
     await this.setPaymentMethod('crypto')
@@ -372,6 +376,64 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
 
     const jobBudgetCan = await this.jobService.getJobBudgetBinance(this.job)
 
+    const initialisePayment = (
+      beforeCallback,
+      successCallback,
+      failureCallback
+    ) => {
+      const amountCan = jobBudgetCan
+      const paymentItem = paymentSummary.items[0]
+      const { jobId, providerAddress } = paymentItem
+      const jobPriceUsd = paymentItem.value
+      const beforeTransaction = () => {
+        if (this.binanceService.isLedgerConnected()) {
+          this.toastr.info('Please approve on your ledger')
+        }
+        if (beforeCallback) {
+          beforeCallback()
+        }
+      }
+
+      const onSuccess = () => {
+        if (this.binanceService.isKeystoreConnected()) {
+          ;(window as any).$('#keystoreTxModal').modal('hide')
+        }
+        console.log('Success')
+        startJob()
+        if (successCallback) {
+          successCallback()
+        }
+      }
+
+      const onFailure = () => {
+        this.toastr.error('Transaction failed')
+        if (failureCallback) {
+          failureCallback()
+        }
+      }
+
+      const sendTransaction = (password?: string) => {
+        this.binanceService.escrowFunds(
+          jobId,
+          jobPriceUsd,
+          amountCan,
+          providerAddress,
+          beforeTransaction,
+          onSuccess,
+          onFailure,
+          password
+        )
+      }
+
+      this.sendTransaction = sendTransaction
+
+      if (this.binanceService.isKeystoreConnected()) {
+        ;(window as any).$('#keystoreTxModal').modal('show')
+      } else if (this.binanceService.isLedgerConnected()) {
+        sendTransaction()
+      }
+    }
+
     this.canPayOptions = {
       dAppName: `CanWork`,
       successText: 'Woohoo, job started!',
@@ -384,6 +446,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       cancel: onComplete,
       disableCanEx: this.canexDisabled,
       userEmail: client.email,
+      initialisePayment,
 
       // Post Authorisation
       postAuthorisationProcessName: 'Job creation',

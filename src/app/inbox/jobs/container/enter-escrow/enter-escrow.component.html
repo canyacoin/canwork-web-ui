@@ -37,10 +37,7 @@
         <img src="assets/img/credit-card.svg" /><br />Pay with<br />Credit card
       </button>
       -->
-      <button
-        class="btn-payment-type"
-        (click)="payInCrypto()"
-      >
+      <button class="btn-payment-type" (click)="payInCrypto()">
         <img src="assets/img/ethereum.svg" /><br />Pay with<br />Cryptocurrency
       </button>
       <br />
@@ -388,6 +385,9 @@
     <img src="assets/img/loader.svg" height="36px" alt="Loader" />
   </div>
   <div class="container" *ngIf="canPayOptions">
+    <keystore-tx
+      [sendTransaction]="this.sendTransaction"
+    ></keystore-tx>
     <canyalib-canpay
       [dAppName]="canPayOptions.dAppName"
       [successText]="canPayOptions.successText"
@@ -410,6 +410,7 @@
       [disableCanEx]="canPayOptions.disableCanEx"
       [userEmail]="canPayOptions.userEmail"
       [startJob]="canPayOptions.startJob"
+      [initialisePayment]="canPayOptions.initialisePayment"
     ></canyalib-canpay>
   </div>
 </div>

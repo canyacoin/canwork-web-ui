@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import WalletConnect from '@trustwallet/walletconnect'
 import { BehaviorSubject } from 'rxjs'
 
-import BncClient from '@binance-chain/javascript-sdk'
+import BncClient, { crypto } from '@binance-chain/javascript-sdk'
 import { environment } from '@env/environment'
 
 export type Connector = WalletConnect
@@ -191,6 +191,10 @@ export class BinanceService {
     return this.connectedWalletApp === WalletApp.Ledger
   }
 
+  isKeystoreConnected(): boolean {
+    return this.connectedWalletApp === WalletApp.Keystore
+  }
+
   async getUsdToCan(amountOfUsd: number = 1): Promise<number> {
     try {
       const canResponse = await (await fetch(
@@ -211,44 +215,75 @@ export class BinanceService {
     }
   }
 
-  async escrowViaLedger(
+  async escrowFunds(
     jobId: string,
     jobPriceUsd: number,
     amountCan: number,
     providerAddress: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
-    onFailure?: () => void
+    onFailure?: () => void,
+    password?: string
   ) {
     const memo = `ESCROW:${jobId}:${jobPriceUsd}:${providerAddress}`
     const to = ESCROW_TESTNET_ADDRESS
-    this.transactViaLedger(
-      to,
-      amountCan,
-      memo,
-      beforeTransaction,
-      onSuccess,
-      onFailure
-    )
+    if (this.isLedgerConnected()) {
+      this.transactViaLedger(
+        to,
+        amountCan,
+        memo,
+        beforeTransaction,
+        onSuccess,
+        onFailure
+      )
+    } else if (this.isKeystoreConnected()) {
+      this.transactViaKeystore(
+        to,
+        amountCan,
+        memo,
+        password,
+        beforeTransaction,
+        onSuccess,
+        onFailure
+      )
+    } else {
+      console.error('Unsupported wallet type')
+    }
   }
 
-  async releaseViaLedger(
+  async releaseFunds(
     jobId: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
-    onFailure?: () => void
+    onFailure?: () => void,
+    password?: string
   ) {
     const memo = `RELEASE:${jobId}`
     const to = ESCROW_TESTNET_ADDRESS
     const amountCan = 0.00000001
-    this.transactViaLedger(
-      to,
-      amountCan,
-      memo,
-      beforeTransaction,
-      onSuccess,
-      onFailure
-    )
+
+    if (this.isLedgerConnected()) {
+      this.transactViaLedger(
+        to,
+        amountCan,
+        memo,
+        beforeTransaction,
+        onSuccess,
+        onFailure
+      )
+    } else if (this.isKeystoreConnected()) {
+      this.transactViaKeystore(
+        to,
+        amountCan,
+        memo,
+        password,
+        beforeTransaction,
+        onSuccess,
+        onFailure
+      )
+    } else {
+      console.error('Unsupported wallet type')
+    }
   }
 
   private async transactViaLedger(
@@ -266,21 +301,79 @@ export class BinanceService {
       }
       return
     }
-    this.client.useLedgerSigningDelegate(
-      this.connectedWalletDetails.ledgerApp,
-      null,
-      null,
-      null,
-      this.connectedWalletDetails.ledgerHdPath
-    )
 
     try {
+      this.client.useLedgerSigningDelegate(
+        this.connectedWalletDetails.ledgerApp,
+        null,
+        null,
+        null,
+        this.connectedWalletDetails.ledgerHdPath
+      )
+
       const { address } = this.connectedWalletDetails
       if (beforeTransaction) {
         beforeTransaction()
       }
 
-      const results = await this.client.transfer(address, to, amountCan, 'TCAN-014', memo)
+      const results = await this.client.transfer(
+        address,
+        to,
+        amountCan,
+        'TCAN-014',
+        memo
+      )
+
+      console.log(results)
+      if (results.result[0].ok) {
+        console.log(`Sent transaction: ${results.result.hash}`)
+        if (onSuccess) {
+          onSuccess()
+        }
+      }
+    } catch (err) {
+      console.error(err)
+      if (onFailure) {
+        onFailure()
+      }
+    }
+  }
+
+  private async transactViaKeystore(
+    to: string,
+    amountCan: number,
+    memo: string,
+    password: string,
+    beforeTransaction?: () => void,
+    onSuccess?: () => void,
+    onFailure?: () => void
+  ) {
+    if (!this.isKeystoreConnected()) {
+      console.error('Keystore is not connected')
+      if (onFailure) {
+        onFailure()
+      }
+      return
+    }
+
+    try {
+      const privateKey = crypto.getPrivateKeyFromKeyStore(
+        this.connectedWalletDetails.keystore,
+        password
+      )
+      this.client.setPrivateKey(privateKey)
+      const { address } = this.connectedWalletDetails
+      if (beforeTransaction) {
+        beforeTransaction()
+      }
+
+      const results = await this.client.transfer(
+        address,
+        to,
+        amountCan,
+        'TCAN-014',
+        memo
+      )
 
       console.log(results)
       if (results.result[0].ok) {

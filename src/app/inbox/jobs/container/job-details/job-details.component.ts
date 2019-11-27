@@ -45,6 +45,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   reviewsSub: Subscription
   hideDescription = true
   isInitialised = false
+  sendTransaction: Function
 
   constructor(
     private authService: AuthService,
@@ -232,18 +233,26 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   }
 
   private releaseEscrow() {
-    if (!this.binanceService.isLedgerConnected()) {
-      this.toastr.error('Connect your Ledger wallet to release the payment')
+    if (
+      !this.binanceService.isLedgerConnected() &&
+      !this.binanceService.isKeystoreConnected()
+    ) {
+      this.toastr.error('Connect your wallet to release the payment')
       return
     }
 
     const jobId = this.job.id
 
     const beforeTransaction = () => {
-      this.toastr.info('Please approve on your ledger')
+      if (this.binanceService.isLedgerConnected()) {
+        this.toastr.info('Please approve on your ledger')
+      }
     }
 
-    const completeJob = async () => {
+    const onSuccess = async () => {
+      if (this.binanceService.isKeystoreConnected()) {
+        ;(window as any).$('#keystoreTxModal').modal('hide')
+      }
       console.log('Success')
       this.toastr.success('Success')
       const action = new IJobAction(ActionType.acceptFinish, UserType.client)
@@ -256,12 +265,23 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       this.toastr.error('Transaction failed')
     }
 
-    this.binanceService.releaseViaLedger(
-      jobId,
-      beforeTransaction,
-      completeJob,
-      onFailure
-    )
+    const sendTransaction = (password?: string) => {
+      this.binanceService.releaseFunds(
+        jobId,
+        beforeTransaction,
+        onSuccess,
+        onFailure,
+        password
+      )
+    }
+
+    this.sendTransaction = sendTransaction
+
+    if (this.binanceService.isKeystoreConnected()) {
+      ;(window as any).$('#keystoreTxModal').modal('show')
+    } else if (this.binanceService.isLedgerConnected()) {
+      sendTransaction()
+    }
   }
 
   executeAction(action: ActionType) {

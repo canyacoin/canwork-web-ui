@@ -9,6 +9,8 @@
 </div>
 
 <div class="container job-detail-container" *ngIf="job">
+  <keystore-tx [sendTransaction]="this.sendTransaction"></keystore-tx>
+
   <div class="row" *ngIf="false">
     <span class="col-6 text-left">
       <h4 class="fw-500 mb-30">MANAGE JOB</h4>
