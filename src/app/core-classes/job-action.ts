@@ -152,4 +152,5 @@ export enum ActionType {
   cancelJobEarly = 'Cancel Job Early',
   releaseEscrow = 'Release escrow',
   refundEscrow = 'Refund escrow',
+  valueEscrow = 'Confirmed value',
 }

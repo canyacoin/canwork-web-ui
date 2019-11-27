@@ -5,34 +5,25 @@ import {
   CanPay,
   CanPayData,
   Operation,
-  PaymentItem,
   PaymentItemCurrency,
-  PaymentSummary,
   setProcessResult,
 } from '@canpay-lib/lib'
 import { Job, JobState } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
-import { User, UserType } from '@class/user'
+import { UserType } from '@class/user'
 import { CanWorkJobContract } from '@contract/can-work-job.contract'
 import { EthService } from '@service/eth.service'
 import { FeatureToggleService } from '@service/feature-toggle.service'
 import { LimepayService } from '@service/limepay.service'
 import { JobService } from '@service/job.service'
 import { MomentService } from '@service/moment.service'
-import { Transaction, TransactionService } from '@service/transaction.service'
 import { UserService } from '@service/user.service'
 import { BinanceService } from '@service/binance.service'
 import { ToastrService } from 'ngx-toastr'
-import { GenerateGuid } from '@util/generate.uid'
 import 'rxjs/add/operator/take'
-import { Subscription } from 'rxjs/Subscription'
-import { map, take } from 'rxjs/operators'
 import { Observable } from 'rxjs/Observable'
 import { HttpClient } from '@angular/common/http'
-import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-} from 'angularfire2/firestore'
+import { AngularFirestore } from 'angularfire2/firestore'
 
 import { environment } from '@env/environment'
 
@@ -81,17 +72,14 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
 
   constructor(
     private ethService: EthService,
-    private afs: AngularFirestore,
     private formBuilder: FormBuilder,
     private jobService: JobService,
     private userService: UserService,
     private binanceService: BinanceService,
     private toastr: ToastrService,
     private limepayService: LimepayService,
-    private transactionService: TransactionService,
     private featureService: FeatureToggleService,
     private activatedRoute: ActivatedRoute,
-    private momentService: MomentService,
     private router: Router,
     private http: HttpClient
   ) {
@@ -316,24 +304,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
          save tx to collection
          save action/pending to job
          update users active eth address */
-      const txId = GenerateGuid()
-      this.transactionService.startMonitoring(
-        this.job,
-        from,
-        txId,
-        txHash,
-        ActionType.authoriseEscrow
-      )
-      this.transactionService.saveTransaction(
-        new Transaction(
-          txId,
-          this.job.clientId,
-          txHash,
-          this.momentService.get(),
-          ActionType.authoriseEscrow,
-          this.job.id
-        )
-      )
       const escrowAction = new IJobAction(
         ActionType.authoriseEscrow,
         UserType.client
@@ -355,24 +325,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
          post tx to transaction monitor
          save tx to collection
          save action/pending to job */
-      const txId = GenerateGuid()
-      this.transactionService.startMonitoring(
-        this.job,
-        from,
-        txId,
-        txHash,
-        ActionType.enterEscrow
-      )
-      this.transactionService.saveTransaction(
-        new Transaction(
-          txId,
-          this.job.clientId,
-          txHash,
-          this.momentService.get(),
-          ActionType.enterEscrow,
-          this.job.id
-        )
-      )
       const action = new IJobAction(ActionType.enterEscrow, UserType.client)
       this.job.actionLog.push(action)
       this.job.clientEthAddress = from

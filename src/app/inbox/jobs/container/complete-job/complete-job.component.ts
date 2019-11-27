@@ -133,24 +133,6 @@ export class CompleteJobComponent implements OnInit {
         post tx to transaction monitor
         save tx to collection
         save action/pending to job */
-      const txId = GenerateGuid()
-      this.transactionService.startMonitoring(
-        this.job,
-        from,
-        txId,
-        txHash,
-        ActionType.acceptFinish
-      )
-      this.transactionService.saveTransaction(
-        new Transaction(
-          txId,
-          this.job.clientId,
-          txHash,
-          this.momentService.get(),
-          ActionType.acceptFinish,
-          this.job.id
-        )
-      )
       this.job.actionLog.push(
         new IJobAction(ActionType.acceptFinish, UserType.client)
       )

@@ -128,7 +128,7 @@ export class JobService {
       return Promise.reject(false)
     }
   }
-  
+
   async getJobBudgetBinance(job: Job): Promise<number> {
     try {
       const totalBudget = await this.getJobBudgetUsd(job)
@@ -189,25 +189,23 @@ export class JobService {
   }
 
   async updateJobState(job: Job) {
-    const pendingCompletion =
-      job.state === JobState.workPendingCompletion ||
-      job.state === JobState.inDispute
-
-    if (
-      job.state === JobState.termsAcceptedAwaitingEscrow ||
-      job.state === JobState.authorisedEscrow ||
-      job.state === JobState.inEscrow ||
-      pendingCompletion
-    ) {
-      let url = `${environment.transactionMonitor.callbackUri}/check-job-state`
-      url += `?jobID=${job.id}&jobHexID=${job.hexId}&skipNew=${pendingCompletion}`
-
-      try {
-        await this.http.get(url).toPromise()
-      } catch (error) {
-        console.error(`! http get error checking job state`, error)
-      }
-    }
+    // const pendingCompletion =
+    //   job.state === JobState.workPendingCompletion ||
+    //   job.state === JobState.inDispute
+    // if (
+    //   job.state === JobState.termsAcceptedAwaitingEscrow ||
+    //   job.state === JobState.authorisedEscrow ||
+    //   job.state === JobState.inEscrow ||
+    //   pendingCompletion
+    // ) {
+    //   let url = `${environment.transactionMonitor.callbackUri}/check-job-state`
+    //   url += `?jobID=${job.id}&jobHexID=${job.hexId}&skipNew=${pendingCompletion}`
+    //   try {
+    //     await this.http.get(url).toPromise()
+    //   } catch (error) {
+    //     console.error(`! http get error checking job state`, error)
+    //   }
+    // }
   }
 
   // =========================
