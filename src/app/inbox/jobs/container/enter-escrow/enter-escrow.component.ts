@@ -384,7 +384,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       const amountCan = jobBudgetCan
       const paymentItem = paymentSummary.items[0]
       const { jobId, providerAddress } = paymentItem
-      const jobPriceUsd = paymentItem.value
       const beforeTransaction = () => {
         if (this.binanceService.isLedgerConnected()) {
           this.toastr.info('Please approve on your ledger')
@@ -415,7 +414,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       const sendTransaction = (password?: string) => {
         this.binanceService.escrowFunds(
           jobId,
-          jobPriceUsd,
           amountCan,
           providerAddress,
           beforeTransaction,
