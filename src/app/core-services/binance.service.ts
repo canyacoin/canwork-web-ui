@@ -205,10 +205,10 @@ export class BinanceService {
         'https://dex.binance.org/api/v1/ticker/24hr?symbol=BNB_BUSD-BD1'
       )).json()
       const lastBnbToUsdPrice = bnbResponse[0].weightedAvgPrice
-      const usdToCanPrice = Math.round(
-        1 / (lastCanToBnbPrice * lastBnbToUsdPrice)
-      )
-      return Promise.resolve(usdToCanPrice)
+      const usdToCanPrice = 1 / (lastCanToBnbPrice * lastBnbToUsdPrice)
+      // Using 101% of the value
+      const resultPrice = Math.ceil(usdToCanPrice * amountOfUsd * (101 / 100))
+      return Promise.resolve(resultPrice)
     } catch (error) {
       console.error(error)
       return Promise.reject(null)
@@ -217,7 +217,6 @@ export class BinanceService {
 
   async escrowFunds(
     jobId: string,
-    jobPriceUsd: number,
     amountCan: number,
     providerAddress: string,
     beforeTransaction?: () => void,
@@ -225,7 +224,7 @@ export class BinanceService {
     onFailure?: () => void,
     password?: string
   ) {
-    const memo = `ESCROW:${jobId}:${jobPriceUsd}:${providerAddress}`
+    const memo = `ESCROW:${jobId}:${providerAddress}`
     const to = ESCROW_TESTNET_ADDRESS
     if (this.isLedgerConnected()) {
       this.transactViaLedger(
