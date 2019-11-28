@@ -4,7 +4,9 @@ import { ActionType } from '@class/job-action'
 import { Observable } from 'rxjs'
 import { map, catchError } from 'rxjs/operators'
 
-export const BEPESCROW_JOB_API_URL = 'https://bepescrow.herokuapp.com/job/'
+import { environment } from '@env/environment'
+
+export const BEPESCROW_JOB_API_URL = `${environment.binance.escrowUrl}/job/`
 
 export interface Escrow {
   amount: number
