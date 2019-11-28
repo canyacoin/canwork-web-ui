@@ -34,7 +34,7 @@ export interface Event {
   details: EventDetails
 }
 
-const ESCROW_TESTNET_ADDRESS = 'tbnb1cwwgw8hxzq26hhss8vgmhsf7ksuz2jcu2nmm0w'
+const ESCROW_ADDRESS = environment.binance.escrowAddress
 
 @Injectable({
   providedIn: 'root',
@@ -197,6 +197,8 @@ export class BinanceService {
 
   async getUsdToCan(amountOfUsd: number = 1): Promise<number> {
     try {
+      // urls and symbols are hard-coded below because we always use mainnet for rate calculations
+      // reason - low liquidity on the testnet
       const canResponse = await (await fetch(
         'https://dex.binance.org/api/v1/ticker/24hr?symbol=CAN-677_BNB'
       )).json()
@@ -225,7 +227,7 @@ export class BinanceService {
     password?: string
   ) {
     const memo = `ESCROW:${jobId}:${providerAddress}`
-    const to = ESCROW_TESTNET_ADDRESS
+    const to = ESCROW_ADDRESS
     if (this.isLedgerConnected()) {
       this.transactViaLedger(
         to,
@@ -258,7 +260,7 @@ export class BinanceService {
     password?: string
   ) {
     const memo = `RELEASE:${jobId}`
-    const to = ESCROW_TESTNET_ADDRESS
+    const to = ESCROW_ADDRESS
     const amountCan = 0.00000001
 
     if (this.isLedgerConnected()) {
@@ -319,7 +321,7 @@ export class BinanceService {
         address,
         to,
         amountCan,
-        'TCAN-014',
+        environment.binance.canToken,
         memo
       )
 
@@ -370,7 +372,7 @@ export class BinanceService {
         address,
         to,
         amountCan,
-        'TCAN-014',
+        environment.binance.canToken,
         memo
       )
 
