@@ -1,7 +1,7 @@
 import { firestore } from 'firebase-admin'
 import fetch from 'node-fetch'
 
-import { environment } from '@env/environment'
+import { environment } from '../../src/environments/environment'
 import { ActionType } from './job-action-type'
 
 export interface Escrow {
