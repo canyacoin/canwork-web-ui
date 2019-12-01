@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import WalletConnect from '@trustwallet/walletconnect'
 import { BehaviorSubject } from 'rxjs'
+import base64js from 'base64-js'
 
 import BncClient, { crypto } from '@binance-chain/javascript-sdk'
 import { environment } from '@env/environment'
@@ -24,6 +25,7 @@ export interface EventDetails {
   connector: Connector
   address?: string
   keystore?: object
+  account?: object
   ledgerApp?: any
   ledgerHdPath?: number[]
 }
@@ -35,6 +37,8 @@ export interface Event {
 }
 
 const ESCROW_ADDRESS = environment.binance.escrowAddress
+const CHAIN_ID = environment.binance.chainId
+const NETWORK_ID = 714
 
 @Injectable({
   providedIn: 'root',
@@ -101,10 +105,12 @@ export class BinanceService {
         return
       }
 
+      const account = await this.getAccount()
+      const { address } = account
       this.events.next({
         type: EventType.Connect,
         walletApp: WalletApp.WalletConnect,
-        details: { connector, address: await this.getAddress() },
+        details: { connector, account, address },
       })
     })
 
@@ -114,9 +120,11 @@ export class BinanceService {
         return
       }
 
+      const account = await this.getAccount()
+      const { address } = account
       this.events.next({
         type: EventType.Update,
-        details: { connector, address: await this.getAddress() },
+        details: { connector, account, address },
       })
     })
 
@@ -154,11 +162,11 @@ export class BinanceService {
     console.log('Disconnect')
   }
 
-  async getAddress() {
+  async getAccount() {
     const connector = this.connector
     if (connector instanceof WalletConnect) {
       const accounts = await connector.getAccounts()
-      return accounts.find(account => account.network == 714).address
+      return accounts.find(account => account.network == NETWORK_ID)
     }
   }
 
@@ -389,5 +397,66 @@ export class BinanceService {
         onFailure()
       }
     }
+  }
+
+  private async transactViaWalletConnect(
+    to: string,
+    amountCan: number,
+    memo: string,
+    beforeTransaction?: () => void,
+    onSuccess?: () => void,
+    onFailure?: () => void
+  ) {
+    const { account } = this.connectedWalletDetails
+    const { address } = account
+    const tx = {
+      accountNumber: account.account_number.toString(),
+      chainId: CHAIN_ID,
+      sequence: account.sequence.toString(),
+      memo,
+      send_order: {}
+    }
+
+    tx.send_order = {
+      from: base64js.fromByteArray(crypto.decodeAddress(address)),
+      symbol: environment.binance.canToken,
+      amount: amountCan.toString(),
+
+      inputs: [{
+        address: base64js.fromByteArray(crypto.decodeAddress(address)),
+        coins: {
+          denom: environment.binance.canToken,
+          amount: amountCan,
+        }
+      }],
+      outputs: [{
+        address: base64js.fromByteArray(crypto.decodeAddress(to)),
+        coins: {
+          denom: environment.binance.canToken,
+          amount: amountCan,
+        }
+      }]
+    }
+
+    // TODO attach callbacks and handle errors
+    this.connectedWalletDetails.connector
+      .trustSignTransaction(NETWORK_ID, tx)
+      .then(result => {
+        // Returns transaction signed in json or encoded format
+        console.log('Successfully signed msg:', result)
+        this.client
+          .sendRawTransaction(result, true)
+          .then(response => {
+            console.log('Response', response)
+          })
+          .catch(error => {
+            console.error(error)
+          })
+      })
+      .catch(error => {
+        // Error returned when rejected
+        console.error(error)
+      })
+    return
   }
 }
