@@ -235,7 +235,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   private releaseEscrow() {
     if (
       !this.binanceService.isLedgerConnected() &&
-      !this.binanceService.isKeystoreConnected()
+      !this.binanceService.isKeystoreConnected() &&
+      !this.binanceService.isWalletConnectConnected()
     ) {
       this.toastr.error('Connect your wallet to release the payment')
       return
@@ -246,6 +247,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     const beforeTransaction = () => {
       if (this.binanceService.isLedgerConnected()) {
         this.toastr.info('Please approve on your ledger')
+      } else if (this.binanceService.isWalletConnectConnected()) {
+        this.toastr.info('Please approve on your WalletConnect')
       }
     }
 
@@ -279,7 +282,10 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
     if (this.binanceService.isKeystoreConnected()) {
       ;(window as any).$('#keystoreTxModal').modal('show')
-    } else if (this.binanceService.isLedgerConnected()) {
+    } else if (
+      this.binanceService.isLedgerConnected() ||
+      this.binanceService.isWalletConnectConnected()
+    ) {
       sendTransaction()
     }
   }

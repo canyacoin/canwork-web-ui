@@ -203,6 +203,10 @@ export class BinanceService {
     return this.connectedWalletApp === WalletApp.Keystore
   }
 
+  isWalletConnectConnected(): boolean {
+    return this.connectedWalletApp === WalletApp.WalletConnect
+  }
+
   async getUsdToCan(amountOfUsd: number = 1): Promise<number> {
     try {
       // urls and symbols are hard-coded below because we always use mainnet for rate calculations
@@ -255,6 +259,15 @@ export class BinanceService {
         onSuccess,
         onFailure
       )
+    } else if (this.isWalletConnectConnected()) {
+      this.transactViaWalletConnect(
+        to,
+        amountCan,
+        memo,
+        beforeTransaction,
+        onSuccess,
+        onFailure
+      )
     } else {
       console.error('Unsupported wallet type')
     }
@@ -286,6 +299,15 @@ export class BinanceService {
         amountCan,
         memo,
         password,
+        beforeTransaction,
+        onSuccess,
+        onFailure
+      )
+    } else if (this.isWalletConnectConnected()) {
+      this.transactViaWalletConnect(
+        to,
+        amountCan,
+        memo,
         beforeTransaction,
         onSuccess,
         onFailure
@@ -407,6 +429,13 @@ export class BinanceService {
     onSuccess?: () => void,
     onFailure?: () => void
   ) {
+    if (!this.isWalletConnectConnected()) {
+      console.error('WalletConnect is not connected')
+      if (onFailure) {
+        onFailure()
+      }
+      return
+    }
     const { account } = this.connectedWalletDetails
     const { address } = account
     const tx = {
@@ -414,7 +443,7 @@ export class BinanceService {
       chainId: CHAIN_ID,
       sequence: account.sequence.toString(),
       memo,
-      send_order: {}
+      send_order: {},
     }
 
     tx.send_order = {
@@ -422,23 +451,30 @@ export class BinanceService {
       symbol: environment.binance.canToken,
       amount: amountCan.toString(),
 
-      inputs: [{
-        address: base64js.fromByteArray(crypto.decodeAddress(address)),
-        coins: {
-          denom: environment.binance.canToken,
-          amount: amountCan,
-        }
-      }],
-      outputs: [{
-        address: base64js.fromByteArray(crypto.decodeAddress(to)),
-        coins: {
-          denom: environment.binance.canToken,
-          amount: amountCan,
-        }
-      }]
+      inputs: [
+        {
+          address: base64js.fromByteArray(crypto.decodeAddress(address)),
+          coins: {
+            denom: environment.binance.canToken,
+            amount: amountCan,
+          },
+        },
+      ],
+      outputs: [
+        {
+          address: base64js.fromByteArray(crypto.decodeAddress(to)),
+          coins: {
+            denom: environment.binance.canToken,
+            amount: amountCan,
+          },
+        },
+      ],
     }
 
-    // TODO attach callbacks and handle errors
+    if (beforeTransaction) {
+      beforeTransaction()
+    }
+
     this.connectedWalletDetails.connector
       .trustSignTransaction(NETWORK_ID, tx)
       .then(result => {
@@ -448,14 +484,23 @@ export class BinanceService {
           .sendRawTransaction(result, true)
           .then(response => {
             console.log('Response', response)
+            if (onSuccess) {
+              onSuccess()
+            }
           })
           .catch(error => {
             console.error(error)
+            if (onFailure) {
+              onFailure()
+            }
           })
       })
       .catch(error => {
         // Error returned when rejected
         console.error(error)
+        if (onFailure) {
+          onFailure()
+        }
       })
     return
   }
