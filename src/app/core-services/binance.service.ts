@@ -68,7 +68,7 @@ export class BinanceService {
         return
       }
       const { type, walletApp, details } = event
-      if (type === EventType.Connect && !!walletApp) {
+      if (type === EventType.Connect && walletApp !== undefined) {
         this.connectedWalletApp = walletApp
         this.connectedWalletDetails = details
       } else if (type === EventType.Disconnect) {
