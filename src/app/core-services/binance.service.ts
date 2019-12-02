@@ -463,7 +463,7 @@ export class BinanceService {
           address: base64js.fromByteArray(crypto.decodeAddress(address)),
           coins: {
             denom: environment.binance.canToken,
-            amount: amountCan,
+            amount: amountCan.toString(),
           },
         },
       ],
@@ -472,7 +472,7 @@ export class BinanceService {
           address: base64js.fromByteArray(crypto.decodeAddress(to)),
           coins: {
             denom: environment.binance.canToken,
-            amount: amountCan,
+            amount: amountCan.toString(),
           },
         },
       ],
