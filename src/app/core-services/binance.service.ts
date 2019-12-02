@@ -453,17 +453,14 @@ export class BinanceService {
       send_order: {},
     }
 
+    const amountStr = (amountCan * 1e8).toString()
     tx.send_order = {
-      from: base64js.fromByteArray(crypto.decodeAddress(address)),
-      symbol: environment.binance.canToken,
-      amount: amountCan.toString(),
-
       inputs: [
         {
           address: base64js.fromByteArray(crypto.decodeAddress(address)),
           coins: {
             denom: environment.binance.canToken,
-            amount: amountCan.toString(),
+            amount: amountStr,
           },
         },
       ],
@@ -472,7 +469,7 @@ export class BinanceService {
           address: base64js.fromByteArray(crypto.decodeAddress(to)),
           coins: {
             denom: environment.binance.canToken,
-            amount: amountCan.toString(),
+            amount: amountStr,
           },
         },
       ],
