@@ -148,7 +148,8 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   private async payInCrypto() {
     if (
       !this.binanceService.isLedgerConnected() &&
-      !this.binanceService.isKeystoreConnected()
+      !this.binanceService.isKeystoreConnected() &&
+      !this.binanceService.isWalletConnectConnected()
     ) {
       this.toastr.error('Connect your wallet to use this payment method')
       return
@@ -387,6 +388,8 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       const beforeTransaction = () => {
         if (this.binanceService.isLedgerConnected()) {
           this.toastr.info('Please approve on your ledger')
+        } else if (this.binanceService.isWalletConnectConnected()) {
+          this.toastr.info('Please approve on your WalletConnect')
         }
         if (beforeCallback) {
           beforeCallback()
@@ -427,7 +430,10 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
 
       if (this.binanceService.isKeystoreConnected()) {
         ;(window as any).$('#keystoreTxModal').modal('show')
-      } else if (this.binanceService.isLedgerConnected()) {
+      } else if (
+        this.binanceService.isLedgerConnected() ||
+        this.binanceService.isWalletConnectConnected()
+      ) {
         sendTransaction()
       }
     }

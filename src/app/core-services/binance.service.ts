@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import WalletConnect from '@trustwallet/walletconnect'
 import { BehaviorSubject } from 'rxjs'
+import base64js from 'base64-js'
 
 import BncClient, { crypto } from '@binance-chain/javascript-sdk'
 import { environment } from '@env/environment'
@@ -24,6 +25,7 @@ export interface EventDetails {
   connector: Connector
   address?: string
   keystore?: object
+  account?: object
   ledgerApp?: any
   ledgerHdPath?: number[]
 }
@@ -35,6 +37,8 @@ export interface Event {
 }
 
 const ESCROW_ADDRESS = environment.binance.escrowAddress
+const CHAIN_ID = environment.binance.chainId
+const NETWORK_ID = 714
 
 @Injectable({
   providedIn: 'root',
@@ -64,7 +68,7 @@ export class BinanceService {
         return
       }
       const { type, walletApp, details } = event
-      if (type === EventType.Connect && !!walletApp) {
+      if (type === EventType.Connect && walletApp !== undefined) {
         this.connectedWalletApp = walletApp
         this.connectedWalletDetails = details
       } else if (type === EventType.Disconnect) {
@@ -101,10 +105,12 @@ export class BinanceService {
         return
       }
 
+      const account = await this.getAccountWalletConnect()
+      const { address } = account
       this.events.next({
         type: EventType.Connect,
         walletApp: WalletApp.WalletConnect,
-        details: { connector, address: await this.getAddress() },
+        details: { connector, account, address },
       })
     })
 
@@ -114,9 +120,11 @@ export class BinanceService {
         return
       }
 
+      const account = await this.getAccountWalletConnect()
+      const { address } = account
       this.events.next({
         type: EventType.Update,
-        details: { connector, address: await this.getAddress() },
+        details: { connector, account, address },
       })
     })
 
@@ -154,12 +162,19 @@ export class BinanceService {
     console.log('Disconnect')
   }
 
-  async getAddress() {
+  async getAccountWalletConnect() {
     const connector = this.connector
     if (connector instanceof WalletConnect) {
-      const accounts = await connector.getAccounts()
-      return accounts.find(account => account.network == 714).address
+      const wcAccounts = await connector.getAccounts()
+      const wcAccount = wcAccounts.find(
+        account => account.network == NETWORK_ID
+      )
+      const response = await this.client.getAccount(wcAccount.address)
+      if (response.status === 200) {
+        return response.result
+      }
     }
+    return null
   }
 
   initKeystore(keystore: object, address: string) {
@@ -193,6 +208,10 @@ export class BinanceService {
 
   isKeystoreConnected(): boolean {
     return this.connectedWalletApp === WalletApp.Keystore
+  }
+
+  isWalletConnectConnected(): boolean {
+    return this.connectedWalletApp === WalletApp.WalletConnect
   }
 
   async getUsdToCan(amountOfUsd: number = 1): Promise<number> {
@@ -247,6 +266,15 @@ export class BinanceService {
         onSuccess,
         onFailure
       )
+    } else if (this.isWalletConnectConnected()) {
+      this.transactViaWalletConnect(
+        to,
+        amountCan,
+        memo,
+        beforeTransaction,
+        onSuccess,
+        onFailure
+      )
     } else {
       console.error('Unsupported wallet type')
     }
@@ -278,6 +306,15 @@ export class BinanceService {
         amountCan,
         memo,
         password,
+        beforeTransaction,
+        onSuccess,
+        onFailure
+      )
+    } else if (this.isWalletConnectConnected()) {
+      this.transactViaWalletConnect(
+        to,
+        amountCan,
+        memo,
         beforeTransaction,
         onSuccess,
         onFailure
@@ -385,6 +422,78 @@ export class BinanceService {
       }
     } catch (err) {
       console.error(err)
+      if (onFailure) {
+        onFailure()
+      }
+    }
+  }
+
+  private async transactViaWalletConnect(
+    to: string,
+    amountCan: number,
+    memo: string,
+    beforeTransaction?: () => void,
+    onSuccess?: () => void,
+    onFailure?: () => void
+  ) {
+    if (!this.isWalletConnectConnected()) {
+      console.error('WalletConnect is not connected')
+      if (onFailure) {
+        onFailure()
+      }
+      return
+    }
+    const { account } = this.connectedWalletDetails
+    const { address } = account
+    const tx = {
+      accountNumber: account.account_number.toString(),
+      chainId: CHAIN_ID,
+      sequence: account.sequence.toString(),
+      memo,
+      send_order: {},
+    }
+
+    const amountStr = (amountCan * 1e8).toString()
+    tx.send_order = {
+      inputs: [
+        {
+          address: base64js.fromByteArray(crypto.decodeAddress(address)),
+          coins: {
+            denom: environment.binance.canToken,
+            amount: amountStr,
+          },
+        },
+      ],
+      outputs: [
+        {
+          address: base64js.fromByteArray(crypto.decodeAddress(to)),
+          coins: {
+            denom: environment.binance.canToken,
+            amount: amountStr,
+          },
+        },
+      ],
+    }
+
+    if (beforeTransaction) {
+      beforeTransaction()
+    }
+
+    try {
+      const result = await this.connectedWalletDetails.connector.trustSignTransaction(
+        NETWORK_ID,
+        tx
+      )
+      // Returns transaction signed in json or encoded format
+      console.log('Successfully signed msg:', result)
+      const response = await this.client.sendRawTransaction(result, true)
+      console.log('Response', response)
+      if (onSuccess) {
+        onSuccess()
+      }
+    } catch (error) {
+      // Error returned when rejected
+      console.error(error)
       if (onFailure) {
         onFailure()
       }
