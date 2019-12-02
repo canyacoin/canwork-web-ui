@@ -105,7 +105,7 @@ export class BinanceService {
         return
       }
 
-      const account = await this.getAccount()
+      const account = await this.getAccountWalletConnect()
       const { address } = account
       this.events.next({
         type: EventType.Connect,
@@ -120,7 +120,7 @@ export class BinanceService {
         return
       }
 
-      const account = await this.getAccount()
+      const account = await this.getAccountWalletConnect()
       const { address } = account
       this.events.next({
         type: EventType.Update,
@@ -162,12 +162,19 @@ export class BinanceService {
     console.log('Disconnect')
   }
 
-  async getAccount() {
+  async getAccountWalletConnect() {
     const connector = this.connector
     if (connector instanceof WalletConnect) {
-      const accounts = await connector.getAccounts()
-      return accounts.find(account => account.network == NETWORK_ID)
+      const wcAccounts = await connector.getAccounts()
+      const wcAccount = wcAccounts.find(
+        account => account.network == NETWORK_ID
+      )
+      const response = await this.client.getAccount(wcAccount.address)
+      if (response.status === 200) {
+        return response.result
+      }
     }
+    return null
   }
 
   initKeystore(keystore: object, address: string) {
@@ -475,33 +482,24 @@ export class BinanceService {
       beforeTransaction()
     }
 
-    this.connectedWalletDetails.connector
-      .trustSignTransaction(NETWORK_ID, tx)
-      .then(result => {
-        // Returns transaction signed in json or encoded format
-        console.log('Successfully signed msg:', result)
-        this.client
-          .sendRawTransaction(result, true)
-          .then(response => {
-            console.log('Response', response)
-            if (onSuccess) {
-              onSuccess()
-            }
-          })
-          .catch(error => {
-            console.error(error)
-            if (onFailure) {
-              onFailure()
-            }
-          })
-      })
-      .catch(error => {
-        // Error returned when rejected
-        console.error(error)
-        if (onFailure) {
-          onFailure()
-        }
-      })
-    return
+    try {
+      const result = await this.connectedWalletDetails.connector.trustSignTransaction(
+        NETWORK_ID,
+        tx
+      )
+      // Returns transaction signed in json or encoded format
+      console.log('Successfully signed msg:', result)
+      const response = await this.client.sendRawTransaction(result, true)
+      console.log('Response', response)
+      if (onSuccess) {
+        onSuccess()
+      }
+    } catch (error) {
+      // Error returned when rejected
+      console.error(error)
+      if (onFailure) {
+        onFailure()
+      }
+    }
   }
 }
