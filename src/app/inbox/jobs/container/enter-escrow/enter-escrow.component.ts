@@ -26,6 +26,7 @@ import { HttpClient } from '@angular/common/http'
 import { AngularFirestore } from 'angularfire2/firestore'
 
 import { environment } from '@env/environment'
+import { roundAtomicCanTwoDecimals } from '@util/currency-conversion'
 
 enum FiatPaymentSteps {
   walletInitCreation = 0,
@@ -375,14 +376,16 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       total: this.totalJobBudgetUsd,
     }
 
-    const jobBudgetCan = await this.jobService.getJobBudgetBinance(this.job)
+    // use 101% to decrase chances of underpayment and round to 2 decimals
+    const jobBudgetCan = roundAtomicCanTwoDecimals(
+      Math.round((await this.jobService.getJobBudgetBinance(this.job)) * 1.01)
+    )
 
     const initialisePayment = (
       beforeCallback,
       successCallback,
       failureCallback
     ) => {
-      const amountCan = jobBudgetCan
       const paymentItem = paymentSummary.items[0]
       const { jobId, providerAddress } = paymentItem
       const beforeTransaction = () => {
@@ -417,7 +420,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       const sendTransaction = (password?: string) => {
         this.binanceService.escrowFunds(
           jobId,
-          amountCan,
+          jobBudgetCan,
           providerAddress,
           beforeTransaction,
           onSuccess,

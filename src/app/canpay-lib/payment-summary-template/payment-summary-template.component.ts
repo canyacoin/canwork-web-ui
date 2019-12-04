@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 
+import { formatAtomicCan } from '@util/currency-conversion'
+
 import {
   PaymentItem,
   PaymentItemCurrency,
@@ -28,6 +30,10 @@ export class PaymentSummaryTemplateComponent implements OnInit {
         total: this.amount,
       }
     }
+  }
+
+  formatAmount() {
+    return formatAtomicCan(this.amount)
   }
 
   get currencyIsUsd() {
