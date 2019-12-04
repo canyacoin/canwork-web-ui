@@ -47,6 +47,6 @@ export class PaymentSummaryTemplateComponent implements OnInit {
     if (!this.amount || !this.paymentSummary.total) {
       return '?'
     }
-    return (this.paymentSummary.total / this.amount).toPrecision(4).toString()
+    return (this.paymentSummary.total * 1e8 / this.amount).toPrecision(4).toString()
   }
 }
