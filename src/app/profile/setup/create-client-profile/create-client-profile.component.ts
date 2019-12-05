@@ -3,10 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { User, UserState, UserType } from '@class/user'
 import { AuthService } from '@service/auth.service'
-import { EthService } from '@service/eth.service'
 import { UserService } from '@service/user.service'
 import { EmailValidator } from '@validator/email.validator'
-import { EthereumValidator } from '@validator/ethereum.validator'
 import * as randomColor from 'randomcolor'
 import { Subscription } from 'rxjs'
 
@@ -51,15 +49,11 @@ export class CreateClientProfileComponent implements OnInit {
   profileForm: FormGroup = null
   termsChecked = false
 
-  ethAddress: string
-  ethSub: Subscription
-
   constructor(
     private userService: UserService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private router: Router,
-    private ethService: EthService,
     private authService: AuthService
   ) {}
 
@@ -73,8 +67,6 @@ export class CreateClientProfileComponent implements OnInit {
     this.stepperSteps = Object.values(this.steps)
     this.currentStep = this.stepperSteps[0]
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/'
-
-    this.ethAddress = this.ethService.getOwnerAccount()
   }
 
   buildForm() {
@@ -102,7 +94,7 @@ export class CreateClientProfileComponent implements OnInit {
         Validators.compose([Validators.required, EmailValidator.isValid]),
       ],
       title: [
-        this.user.description || '',
+        this.user.title || '',
         Validators.compose([
           Validators.required,
           Validators.minLength(2),
@@ -126,27 +118,7 @@ export class CreateClientProfileComponent implements OnInit {
       color3: [colors[2]],
       terms: [false, Validators.requiredTrue],
       timezone: moment.tz.guess(),
-      ethAddress: [
-        this.user.ethAddress || this.ethAddress || '',
-        Validators.compose([Validators.minLength(2)]),
-        new EthereumValidator(
-          this.ethService,
-          this.userService
-        ).isUniqueAddress(this.user),
-      ],
-    })
-
-    this.profileForm.get('ethAddress').valueChanges.subscribe(data => {
-      if (!data) {
-        this.profileForm.controls.ethAddress.setErrors(null)
-        return
-      }
-      this.profileForm.controls.ethAddress.setValidators(
-        Validators.compose([
-          new EthereumValidator(this.ethService, this.userService)
-            .isValidAddress,
-        ])
-      )
+      ethAddress: '',
     })
   }
 
@@ -177,7 +149,6 @@ export class CreateClientProfileComponent implements OnInit {
       ],
       description: this.profileForm.value.description,
       timezone: moment.tz.guess(),
-      ethAddress: this.profileForm.value.ethAddress,
     }
 
     // tslint:disable-next-line:forin
