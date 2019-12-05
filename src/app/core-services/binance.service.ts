@@ -5,6 +5,7 @@ import base64js from 'base64-js'
 
 import BncClient, { crypto } from '@binance-chain/javascript-sdk'
 import { environment } from '@env/environment'
+import { formatAtomicCan } from '@util/currency-conversion'
 
 export type Connector = WalletConnect
 export enum WalletApp {
@@ -214,7 +215,8 @@ export class BinanceService {
     return this.connectedWalletApp === WalletApp.WalletConnect
   }
 
-  async getUsdToCan(amountOfUsd: number = 1): Promise<number> {
+  // It returns result in atomic CAN units i.e. 1e-8
+  async getUsdToAtomicCan(amountOfUsd: number = 1): Promise<number> {
     try {
       // urls and symbols are hard-coded below because we always use mainnet for rate calculations
       // reason - low liquidity on the testnet
@@ -227,8 +229,7 @@ export class BinanceService {
       )).json()
       const lastBnbToUsdPrice = bnbResponse[0].weightedAvgPrice
       const usdToCanPrice = 1 / (lastCanToBnbPrice * lastBnbToUsdPrice)
-      // Using 101% of the value
-      const resultPrice = Math.ceil(usdToCanPrice * amountOfUsd * (101 / 100))
+      const resultPrice = Math.ceil(usdToCanPrice * amountOfUsd * 1e8)
       return Promise.resolve(resultPrice)
     } catch (error) {
       console.error(error)
@@ -289,7 +290,7 @@ export class BinanceService {
   ) {
     const memo = `RELEASE:${jobId}`
     const to = ESCROW_ADDRESS
-    const amountCan = 0.00000001
+    const amountCan = 1
 
     if (this.isLedgerConnected()) {
       this.transactViaLedger(
@@ -354,10 +355,11 @@ export class BinanceService {
         beforeTransaction()
       }
 
+      const adjustedAmount = formatAtomicCan(amountCan)
       const results = await this.client.transfer(
         address,
         to,
-        amountCan,
+        adjustedAmount,
         environment.binance.canToken,
         memo
       )
@@ -405,10 +407,12 @@ export class BinanceService {
         beforeTransaction()
       }
 
+      const adjustedAmount = formatAtomicCan(amountCan)
+
       const results = await this.client.transfer(
         address,
         to,
-        amountCan,
+        adjustedAmount,
         environment.binance.canToken,
         memo
       )
@@ -453,7 +457,7 @@ export class BinanceService {
       send_order: {},
     }
 
-    const amountStr = (amountCan * 1e8).toString()
+    const amountStr = (amountCan).toString()
     tx.send_order = {
       inputs: [
         {

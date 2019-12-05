@@ -132,7 +132,7 @@ export class JobService {
   async getJobBudgetBinance(job: Job): Promise<number> {
     try {
       const totalBudget = await this.getJobBudgetUsd(job)
-      const canValue = await this.binanceService.getUsdToCan(totalBudget)
+      const canValue = await this.binanceService.getUsdToAtomicCan(totalBudget)
       if (canValue) {
         return Promise.resolve(canValue)
       } else {
