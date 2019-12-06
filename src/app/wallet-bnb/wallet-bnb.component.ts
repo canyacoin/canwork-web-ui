@@ -34,6 +34,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   unlockingFailed: boolean = false
   ledgerIndex: number = 0
   ledgerConnecting: boolean = false
+  attemptedConnection = false
 
   constructor(
     private binanceService: BinanceService,
@@ -46,7 +47,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.binanceService.events$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(async event => {
+      .subscribe(event => {
         console.log('Event', event)
         if (!event) {
           return
@@ -59,25 +60,15 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
               this.walletConnect(connector)
             }
             break
-          case EventType.Connect:
-            // save wallet address to DB
-            const { address } = event.details
-            const user = await this.authService.getCurrentUser()
-            console.log(user && user.bnbAddress !== address)
-            if (user && user.bnbAddress !== address) {
-              const validator = new BinanceValidator(
-                this.binanceService,
-                this.userService
-              )
-
-              if (await validator.isUniqueAddress(address, user)) {
-                this.userService.updateUserProperty(user, 'bnbAddress', address)
-                console.log('update bnbAddress')
-              }
-            }
-
+          case EventType.ConnectSuccess:
             this.toastr.success('Unlocking Successful')
             this.router.navigate(['/wallet-bnb/assets'])
+            break
+          case EventType.ConnectFailure:
+            if (this.attemptedConnection) {
+              this.toastr.error('This address is already in use by another user')
+            }
+            break
         }
       })
   }
@@ -114,6 +105,8 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
     WalletConnectQRCodeModal.open(uri, () => {
       console.log('QR Code Modal closed')
     })
+
+    this.attemptedConnection = true
 
     // hack
     setTimeout(() => {
@@ -175,6 +168,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
       this.keystoreError = ''
       this.validKeystoreUploaded = false
 
+      this.attemptedConnection = true
       this.binanceService.initKeystore(keystore, address)
     } catch (e) {
       this.unlockingFailed = true
@@ -219,6 +213,8 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
         environment.binance.prefix
       )
       console.log('address', address)
+
+      this.attemptedConnection = true 
 
       this.binanceService.initLedger(address, app, hdPath)
       this.ledgerConnecting = false

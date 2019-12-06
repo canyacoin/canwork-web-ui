@@ -32,7 +32,7 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
         }
 
         switch (event.type) {
-          case EventType.Connect:
+          case EventType.ConnectSuccess:
           case EventType.Update:
             this.address = event.details.address
             const resp = await this.binanceService.client.getAccount(
@@ -45,6 +45,7 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
             }
             this.balances.next(sortBy(prop('symbol'))(balances))
             break
+          case EventType.ConnectSuccess:
           case EventType.Disconnect:
             this.address = false
             break

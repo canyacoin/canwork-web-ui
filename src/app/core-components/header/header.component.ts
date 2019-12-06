@@ -74,11 +74,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
         return
       }
       switch (event.type) {
-        case EventType.Connect:
+        case EventType.ConnectSuccess:
         case EventType.Update:
           this.bnbAddress = event.details.address
           break
         case EventType.Init:
+        case EventType.ConnectFailure:
         case EventType.Disconnect:
           this.bnbAddress = ''
           break

@@ -6,6 +6,9 @@ import base64js from 'base64-js'
 import BncClient, { crypto } from '@binance-chain/javascript-sdk'
 import { environment } from '@env/environment'
 import { formatAtomicCan } from '@util/currency-conversion'
+import { AuthService } from '@service/auth.service'
+import { UserService } from '@service/user.service'
+import { BinanceValidator } from '@validator/binance.validator'
 
 export type Connector = WalletConnect
 export enum WalletApp {
@@ -17,7 +20,9 @@ export enum WalletApp {
 
 export enum EventType {
   Init = 'Init',
-  Connect = 'Connect',
+  ConnectRequest = 'ConnectRequest',
+  ConnectSuccess = 'ConnectSuccess',
+  ConnectFailure = 'ConnectFailure',
   Update = 'Update',
   Disconnect = 'Disconnect',
 }
@@ -52,7 +57,10 @@ export class BinanceService {
   private connectedWalletApp: WalletApp = null
   private connectedWalletDetails: any = null
 
-  constructor() {
+  constructor(
+    private userService: UserService,
+    private authService: AuthService
+  ) {
     this.client.chooseNetwork(environment.binance.net)
     this.client.initChain()
     this.subscribeToEvents()
@@ -64,15 +72,41 @@ export class BinanceService {
   }
 
   private subscribeToEvents() {
-    this.events$.subscribe(event => {
+    this.events$.subscribe(async event => {
       if (!event) {
         return
       }
       const { type, walletApp, details } = event
-      if (type === EventType.Connect && walletApp !== undefined) {
+      if (type === EventType.ConnectRequest && walletApp !== undefined) {
+        // attemp to save wallet address to DB
+        const { address } = details
+        const user = await this.authService.getCurrentUser()
+        if (user && user.bnbAddress !== address) {
+          const validator = new BinanceValidator(this, this.userService)
+          if (await validator.isUniqueAddress(address, user)) {
+            this.userService.updateUserProperty(user, 'bnbAddress', address)
+            console.log('updated bnbAddress')
+          } else {
+            this.events.next({
+              type: EventType.ConnectFailure,
+              walletApp,
+              details,
+            })
+            return
+          }
+        }
+        this.events.next({
+          type: EventType.ConnectSuccess,
+          walletApp,
+          details,
+        })
+      } else if (type === EventType.ConnectSuccess) {
         this.connectedWalletApp = walletApp
         this.connectedWalletDetails = details
-      } else if (type === EventType.Disconnect) {
+      } else if (
+        type === EventType.Disconnect ||
+        type === EventType.ConnectFailure
+      ) {
         this.connectedWalletApp = null
         this.connectedWalletDetails = null
       }
@@ -109,7 +143,7 @@ export class BinanceService {
       const account = await this.getAccountWalletConnect()
       const { address } = account
       this.events.next({
-        type: EventType.Connect,
+        type: EventType.ConnectRequest,
         walletApp: WalletApp.WalletConnect,
         details: { connector, account, address },
       })
@@ -180,7 +214,7 @@ export class BinanceService {
 
   initKeystore(keystore: object, address: string) {
     this.events.next({
-      type: EventType.Connect,
+      type: EventType.ConnectRequest,
       walletApp: WalletApp.Keystore,
       details: {
         connector: null,
@@ -192,7 +226,7 @@ export class BinanceService {
 
   initLedger(address: string, ledgerApp: any, ledgerHdPath: number[]) {
     this.events.next({
-      type: EventType.Connect,
+      type: EventType.ConnectRequest,
       walletApp: WalletApp.Ledger,
       details: {
         connector: null,
@@ -457,7 +491,7 @@ export class BinanceService {
       send_order: {},
     }
 
-    const amountStr = (amountCan).toString()
+    const amountStr = amountCan.toString()
     tx.send_order = {
       inputs: [
         {
