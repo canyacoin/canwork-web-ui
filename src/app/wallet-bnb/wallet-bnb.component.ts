@@ -9,7 +9,6 @@ import { crypto, ledger } from '@binance-chain/javascript-sdk'
 import u2f_transport from '@ledgerhq/hw-transport-u2f'
 import { environment } from '@env/environment'
 import { ToastrService } from 'ngx-toastr'
-import { UserService } from '@service/user.service'
 import { AuthService } from '@service/auth.service'
 import { BinanceValidator } from '@validator/binance.validator'
 
@@ -35,19 +34,22 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   ledgerIndex: number = 0
   ledgerConnecting: boolean = false
   attemptedConnection = false
+  walletReplacement = {
+    old: null,
+    new: null,
+  }
 
   constructor(
     private binanceService: BinanceService,
     private router: Router,
     private toastr: ToastrService,
     private authService: AuthService,
-    private userService: UserService
   ) {}
 
   ngOnInit() {
     this.binanceService.events$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(event => {
+      .subscribe(async event => {
         console.log('Event', event)
         if (!event) {
           return
@@ -66,8 +68,18 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
             break
           case EventType.ConnectFailure:
             if (this.attemptedConnection) {
-              this.toastr.error('This address is already in use by another user')
+              this.toastr.error(
+                'This address is already in use by another user'
+              )
             }
+            break
+          case EventType.ConnectConfirmationRequired:
+            const user = await this.authService.getCurrentUser()
+            this.walletReplacement = {
+              old: user.bnbAddress,
+              new: event.details.address,
+            }
+            ;(window as any).$('#replaceWalletModal').modal('show')
             break
         }
       })
@@ -214,7 +226,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
       )
       console.log('address', address)
 
-      this.attemptedConnection = true 
+      this.attemptedConnection = true
 
       this.binanceService.initLedger(address, app, hdPath)
       this.ledgerConnecting = false
@@ -224,6 +236,10 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
       this.ledgerConnecting = false
       return
     }
+  }
+
+  onConfirmWalletUpdate() {
+    this.binanceService.confirmConnection()
   }
 
   isTestnet() {

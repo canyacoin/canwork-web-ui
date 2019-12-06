@@ -23,6 +23,7 @@ export enum EventType {
   ConnectRequest = 'ConnectRequest',
   ConnectSuccess = 'ConnectSuccess',
   ConnectFailure = 'ConnectFailure',
+  ConnectConfirmationRequired = 'ConnectConfirmationRequired',
   Update = 'Update',
   Disconnect = 'Disconnect',
 }
@@ -40,6 +41,7 @@ export interface Event {
   type: EventType
   walletApp?: WalletApp
   details: EventDetails
+  forced?: boolean
 }
 
 const ESCROW_ADDRESS = environment.binance.escrowAddress
@@ -56,6 +58,7 @@ export class BinanceService {
   client = new BncClient(environment.binance.api)
   private connectedWalletApp: WalletApp = null
   private connectedWalletDetails: any = null
+  private pendingConnectRequest: Event = null
 
   constructor(
     private userService: UserService,
@@ -76,13 +79,24 @@ export class BinanceService {
       if (!event) {
         return
       }
-      const { type, walletApp, details } = event
+      const { type, walletApp, details, forced } = event
       if (type === EventType.ConnectRequest && walletApp !== undefined) {
         // attemp to save wallet address to DB
         const { address } = details
         const user = await this.authService.getCurrentUser()
         if (user && user.bnbAddress !== address) {
           const validator = new BinanceValidator(this, this.userService)
+          // already has a different address
+          if (user.bnbAddress && !forced) {
+            this.pendingConnectRequest = event
+            this.events.next({
+              type: EventType.ConnectConfirmationRequired,
+              walletApp,
+              details,
+            })
+            return
+          }
+          // address already used by another user
           if (await validator.isUniqueAddress(address, user)) {
             this.userService.updateUserProperty(user, 'bnbAddress', address)
             console.log('updated bnbAddress')
@@ -110,6 +124,13 @@ export class BinanceService {
         this.connectedWalletApp = null
         this.connectedWalletDetails = null
       }
+    })
+  }
+
+  confirmConnection() {
+    this.events.next({
+      ...this.pendingConnectRequest,
+      forced: true,
     })
   }
 
