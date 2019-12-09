@@ -2,11 +2,9 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { User, UserCategory, UserState, UserType } from '@class/user'
 import { AuthService } from '@service/auth.service'
-import { EthService } from '@service/eth.service'
 import { UserService } from '@service/user.service'
 import { CurrencyValidator } from '@validator/currency.validator'
 import { EmailValidator } from '@validator/email.validator'
-import { EthereumValidator } from '@validator/ethereum.validator'
 import * as randomColor from 'randomcolor'
 import { Subscription } from 'rxjs'
 
@@ -21,8 +19,6 @@ import * as moment from 'moment-timezone'
   ],
 })
 export class CreateProviderProfileComponent implements OnInit, OnDestroy {
-  ethSub: Subscription
-
   @Input() user: User
   steps = {
     professionalInfo: {
@@ -51,18 +47,11 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
   profileForm: FormGroup = null
   termsChecked = false
 
-  ethAddress: string
-
   constructor(
     private userService: UserService,
     private formBuilder: FormBuilder,
-    private ethService: EthService,
     private authService: AuthService
-  ) {
-    this.ethSub = this.ethService.account$.subscribe((acc: string) => {
-      this.ethAddress = acc
-    })
-  }
+  ) {}
 
   ngOnInit() {
     if (this.user != null) {
@@ -72,11 +61,7 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
     this.currentStep = this.stepperSteps[0]
   }
 
-  ngOnDestroy() {
-    if (this.ethSub) {
-      this.ethSub.unsubscribe()
-    }
-  }
+  ngOnDestroy() {}
 
   buildForm() {
     const colors = randomColor({ luminosity: 'light', count: 3 })
@@ -122,7 +107,7 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
         this.user.description || '',
         Validators.compose([Validators.maxLength(500)]),
       ],
-      category: ['', Validators.compose([Validators.required])],
+      category: [this.user.category || '', Validators.compose([Validators.required])],
       skillTags: [
         '',
         Validators.compose([
@@ -139,18 +124,7 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
       color3: [colors[2]],
       terms: [false, Validators.requiredTrue],
       timezone: moment.tz.guess(),
-      ethAddress: [
-        this.user.ethAddress || this.ethAddress,
-        Validators.compose([
-          Validators.required,
-          new EthereumValidator(this.ethService, this.userService)
-            .isValidAddress,
-        ]),
-        new EthereumValidator(
-          this.ethService,
-          this.userService
-        ).isUniqueAddress(this.user),
-      ],
+      ethAddress: '',
     })
   }
 
@@ -186,7 +160,7 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
         ' ' +
         this.profileForm.value.lastName,
       work: this.profileForm.value.work,
-      ethAddress: this.profileForm.value.ethAddress,
+      ethAddress: '',
       title: this.profileForm.value.title,
       bio: this.profileForm.value.bio,
       category: this.profileForm.value.category,
