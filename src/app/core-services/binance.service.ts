@@ -289,6 +289,22 @@ export class BinanceService {
     }
   }
 
+  async hasEnoughBalance(
+    amountCan: number,
+  ) {
+    try {
+      const { address } = this.connectedWalletDetails
+      const balance = await this.client.getBalance(address)
+      const availableBnb = Number.parseFloat(balance.find(coin => coin.symbol === 'BNB').free)
+      const can = environment.binance.canToken
+      const availableCan = Number.parseFloat(balance.find(coin => coin.symbol === can).free)
+      return (availableCan * 1e8 >= amountCan && availableBnb >= 0.000375)
+    } catch (e) {
+      // user doesn't have any CAN or BNB at all
+      return false
+    }
+  }
+
   async escrowFunds(
     jobId: string,
     amountCan: number,
@@ -298,6 +314,7 @@ export class BinanceService {
     onFailure?: () => void,
     password?: string
   ) {
+    await this.hasEnoughBalance(amountCan)
     const memo = `ESCROW:${jobId}:${providerAddress}`
     const to = ESCROW_ADDRESS
     if (this.isLedgerConnected()) {
