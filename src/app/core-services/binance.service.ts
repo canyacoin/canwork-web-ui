@@ -218,15 +218,12 @@ export class BinanceService {
   // It returns result in atomic CAN units i.e. 1e-8
   async getUsdToAtomicCan(amountOfUsd: number = 1): Promise<number> {
     try {
-      // urls and symbols are hard-coded below because we always use mainnet for rate calculations
-      // reason - low liquidity on the testnet
-      const canResponse = await (await fetch(
-        'https://dex.binance.org/api/v1/ticker/24hr?symbol=CAN-677_BNB'
-      )).json()
+      const { api, canToken } = environment.binance
+      const canBnbUrl = `${api}api/v1/ticker/24hr?symbol=${canToken}_BNB`
+      const canResponse = await (await fetch(canBnbUrl)).json()
       const lastCanToBnbPrice = canResponse[0].weightedAvgPrice
-      const bnbResponse = await (await fetch(
-        'https://dex.binance.org/api/v1/ticker/24hr?symbol=BNB_BUSD-BD1'
-      )).json()
+      const bnbUsdUrl = `${api}api/v1/ticker/24hr?symbol=BNB_USDT.B-B7C`
+      const bnbResponse = await (await fetch(bnbUsdUrl)).json()
       const lastBnbToUsdPrice = bnbResponse[0].weightedAvgPrice
       const usdToCanPrice = 1 / (lastCanToBnbPrice * lastBnbToUsdPrice)
       const resultPrice = Math.ceil(usdToCanPrice * amountOfUsd * 1e8)
