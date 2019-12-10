@@ -9,7 +9,6 @@ import { crypto, ledger } from '@binance-chain/javascript-sdk'
 import u2f_transport from '@ledgerhq/hw-transport-u2f'
 import { environment } from '@env/environment'
 import { ToastrService } from 'ngx-toastr'
-import { UserService } from '@service/user.service'
 import { AuthService } from '@service/auth.service'
 import { BinanceValidator } from '@validator/binance.validator'
 
@@ -34,13 +33,17 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   unlockingFailed: boolean = false
   ledgerIndex: number = 0
   ledgerConnecting: boolean = false
+  attemptedConnection = false
+  walletReplacement = {
+    old: null,
+    new: null,
+  }
 
   constructor(
     private binanceService: BinanceService,
     private router: Router,
     private toastr: ToastrService,
     private authService: AuthService,
-    private userService: UserService
   ) {}
 
   ngOnInit() {
@@ -59,25 +62,25 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
               this.walletConnect(connector)
             }
             break
-          case EventType.Connect:
-            // save wallet address to DB
-            const { address } = event.details
-            const user = await this.authService.getCurrentUser()
-            console.log(user && user.bnbAddress !== address)
-            if (user && user.bnbAddress !== address) {
-              const validator = new BinanceValidator(
-                this.binanceService,
-                this.userService
-              )
-
-              if (await validator.isUniqueAddress(address, user)) {
-                this.userService.updateUserProperty(user, 'bnbAddress', address)
-                console.log('update bnbAddress')
-              }
-            }
-
+          case EventType.ConnectSuccess:
             this.toastr.success('Unlocking Successful')
             this.router.navigate(['/wallet-bnb/assets'])
+            break
+          case EventType.ConnectFailure:
+            if (this.attemptedConnection) {
+              this.toastr.error(
+                'This address is already in use by another user'
+              )
+            }
+            break
+          case EventType.ConnectConfirmationRequired:
+            const user = await this.authService.getCurrentUser()
+            this.walletReplacement = {
+              old: user.bnbAddress,
+              new: event.details.address,
+            }
+            ;(window as any).$('#replaceWalletModal').modal('show')
+            break
         }
       })
   }
@@ -114,6 +117,8 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
     WalletConnectQRCodeModal.open(uri, () => {
       console.log('QR Code Modal closed')
     })
+
+    this.attemptedConnection = true
 
     // hack
     setTimeout(() => {
@@ -175,6 +180,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
       this.keystoreError = ''
       this.validKeystoreUploaded = false
 
+      this.attemptedConnection = true
       this.binanceService.initKeystore(keystore, address)
     } catch (e) {
       this.unlockingFailed = true
@@ -220,6 +226,8 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
       )
       console.log('address', address)
 
+      this.attemptedConnection = true
+
       this.binanceService.initLedger(address, app, hdPath)
       this.ledgerConnecting = false
     } catch (err) {
@@ -228,6 +236,10 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
       this.ledgerConnecting = false
       return
     }
+  }
+
+  onConfirmWalletUpdate() {
+    this.binanceService.confirmConnection()
   }
 
   isTestnet() {

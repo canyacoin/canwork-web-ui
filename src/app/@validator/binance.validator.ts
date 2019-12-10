@@ -29,7 +29,7 @@ export class BinanceValidator {
 
   async isUniqueAddress(address: string, user: User) {
     const _user = await this.userService.getUserByBnbAddress(address)
-    return _user === null || _user.address === user.address
+    return _user === null || _user.slug === user.slug
   }
 
   isUniqueAddressField(user: User) {
