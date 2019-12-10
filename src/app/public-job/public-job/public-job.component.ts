@@ -52,6 +52,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
           Validators.required,
           Validators.min(1),
           Validators.max(10000000),
+          Validators.pattern('^[0-9]*$'),
         ]),
       ],
       message: [

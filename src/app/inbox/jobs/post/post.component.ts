@@ -150,6 +150,7 @@ export class PostComponent implements OnInit, OnDestroy {
           Validators.required,
           Validators.min(1),
           Validators.max(10000000),
+          Validators.pattern("^[0-9]*$"),
         ]),
       ],
       terms: [false, Validators.requiredTrue],
@@ -199,6 +200,7 @@ export class PostComponent implements OnInit, OnDestroy {
           Validators.required,
           Validators.min(1),
           Validators.max(10000000),
+          Validators.pattern("^[0-9]*$"),
         ]),
       ],
       weeklyCommitment: [
