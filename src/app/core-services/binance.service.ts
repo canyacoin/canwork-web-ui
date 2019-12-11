@@ -47,10 +47,12 @@ export interface Event {
 const ESCROW_ADDRESS = environment.binance.escrowAddress
 const CHAIN_ID = environment.binance.chainId
 const NETWORK_ID = 714
+const DEFAULT_FEE = 37500
 const CAN_TOKEN = environment.binance.canToken
 const BASE_API_URL = environment.binance.api
 const BINANCE_NETWORK = environment.binance.net
 const TICKER_API_URL = `${BASE_API_URL}api/v1/ticker/24hr`
+const FEE_API_URL = `${BASE_API_URL}api/v1/fees`
 
 @Injectable({
   providedIn: 'root',
@@ -63,6 +65,7 @@ export class BinanceService {
   private connectedWalletApp: WalletApp = null
   private connectedWalletDetails: any = null
   private pendingConnectRequest: Event = null
+  private sendingFee: number = 0
 
   constructor(
     private userService: UserService,
@@ -274,6 +277,22 @@ export class BinanceService {
     return this.connectedWalletApp === WalletApp.WalletConnect
   }
 
+  private async initFeeIfNecessary() {
+    if (this.sendingFee === 0) {
+      try {
+        const response = await (await fetch(FEE_API_URL)).json()
+        const feeParams = response
+          .map(item => item.fixed_fee_params)
+          .filter(params => params !== undefined)
+          .find(params => params.msg_type === 'send')
+        this.sendingFee = feeParams.fee
+      } catch (e) {
+        console.warn('Unable to get fee, using default')
+        this.sendingFee = DEFAULT_FEE
+      }
+    }
+  }
+
   // It returns result in atomic CAN units i.e. 1e-8
   async getUsdToAtomicCan(amountOfUsd: number = 1): Promise<number> {
     try {
@@ -302,11 +321,26 @@ export class BinanceService {
       const availableCan = Number.parseFloat(
         balance.find(coin => coin.symbol === CAN_TOKEN).free
       )
-      return availableCan * 1e8 >= amountCan && availableBnb >= 0.000375
+      return (
+        availableCan * 1e8 >= amountCan && availableBnb * 1e8 >= this.sendingFee
+      )
     } catch (e) {
       // user doesn't have any CAN or BNB at all
       return false
     }
+  }
+
+  private async preconditions(
+    amountCan: number,
+    onFailure?: () => void
+  ): Promise<boolean> {
+    await this.initFeeIfNecessary()
+    const hasBalance = await this.hasEnoughBalance(amountCan)
+    if (!hasBalance) {
+      onFailure()
+      return false
+    }
+    return true
   }
 
   async escrowFunds(
@@ -318,7 +352,9 @@ export class BinanceService {
     onFailure?: () => void,
     password?: string
   ) {
-    await this.hasEnoughBalance(amountCan)
+    if (!this.preconditions(amountCan, onFailure)) {
+      return
+    }
     const memo = `ESCROW:${jobId}:${providerAddress}`
     const to = ESCROW_ADDRESS
     if (this.isLedgerConnected()) {
@@ -361,9 +397,12 @@ export class BinanceService {
     onFailure?: () => void,
     password?: string
   ) {
+    const amountCan = 1
+    if (!this.preconditions(amountCan, onFailure)) {
+      return
+    }
     const memo = `RELEASE:${jobId}`
     const to = ESCROW_ADDRESS
-    const amountCan = 1
 
     if (this.isLedgerConnected()) {
       this.transactViaLedger(
