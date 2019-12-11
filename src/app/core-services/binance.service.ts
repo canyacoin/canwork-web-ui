@@ -47,6 +47,9 @@ export interface Event {
 const ESCROW_ADDRESS = environment.binance.escrowAddress
 const CHAIN_ID = environment.binance.chainId
 const NETWORK_ID = 714
+const CAN_TOKEN = environment.binance.canToken
+const BASE_API_URL = environment.binance.api
+const TICKER_API_URL = `${BASE_API_URL}api/v1/ticker/24hr`
 
 @Injectable({
   providedIn: 'root',
@@ -273,11 +276,10 @@ export class BinanceService {
   // It returns result in atomic CAN units i.e. 1e-8
   async getUsdToAtomicCan(amountOfUsd: number = 1): Promise<number> {
     try {
-      const { api, canToken } = environment.binance
-      const canBnbUrl = `${api}api/v1/ticker/24hr?symbol=${canToken}_BNB`
+      const canBnbUrl = `${TICKER_API_URL}?symbol=${CAN_TOKEN}_BNB`
       const canResponse = await (await fetch(canBnbUrl)).json()
       const lastCanToBnbPrice = canResponse[0].weightedAvgPrice
-      const bnbUsdUrl = `${api}api/v1/ticker/24hr?symbol=BNB_USDT.B-B7C`
+      const bnbUsdUrl = `${TICKER_API_URL}?symbol=BNB_USDT.B-B7C`
       const bnbResponse = await (await fetch(bnbUsdUrl)).json()
       const lastBnbToUsdPrice = bnbResponse[0].weightedAvgPrice
       const usdToCanPrice = 1 / (lastCanToBnbPrice * lastBnbToUsdPrice)
@@ -289,16 +291,17 @@ export class BinanceService {
     }
   }
 
-  async hasEnoughBalance(
-    amountCan: number,
-  ) {
+  async hasEnoughBalance(amountCan: number) {
     try {
       const { address } = this.connectedWalletDetails
       const balance = await this.client.getBalance(address)
-      const availableBnb = Number.parseFloat(balance.find(coin => coin.symbol === 'BNB').free)
-      const can = environment.binance.canToken
-      const availableCan = Number.parseFloat(balance.find(coin => coin.symbol === can).free)
-      return (availableCan * 1e8 >= amountCan && availableBnb >= 0.000375)
+      const availableBnb = Number.parseFloat(
+        balance.find(coin => coin.symbol === 'BNB').free
+      )
+      const availableCan = Number.parseFloat(
+        balance.find(coin => coin.symbol === CAN_TOKEN).free
+      )
+      return availableCan * 1e8 >= amountCan && availableBnb >= 0.000375
     } catch (e) {
       // user doesn't have any CAN or BNB at all
       return false
@@ -429,7 +432,7 @@ export class BinanceService {
         address,
         to,
         adjustedAmount,
-        environment.binance.canToken,
+        CAN_TOKEN,
         memo
       )
 
@@ -482,7 +485,7 @@ export class BinanceService {
         address,
         to,
         adjustedAmount,
-        environment.binance.canToken,
+        CAN_TOKEN,
         memo
       )
 
@@ -532,7 +535,7 @@ export class BinanceService {
         {
           address: base64js.fromByteArray(crypto.decodeAddress(address)),
           coins: {
-            denom: environment.binance.canToken,
+            denom: CAN_TOKEN,
             amount: amountStr,
           },
         },
@@ -541,7 +544,7 @@ export class BinanceService {
         {
           address: base64js.fromByteArray(crypto.decodeAddress(to)),
           coins: {
-            denom: environment.binance.canToken,
+            denom: CAN_TOKEN,
             amount: amountStr,
           },
         },
