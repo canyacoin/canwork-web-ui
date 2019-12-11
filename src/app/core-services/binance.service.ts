@@ -67,6 +67,13 @@ export class BinanceService {
     this.client.chooseNetwork(environment.binance.net)
     this.client.initChain()
     this.subscribeToEvents()
+    const connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
+    if (connectedWallet) {
+      if (connectedWallet.walletApp === WalletApp.Keystore) {
+        const { keystore, address } = connectedWallet
+        this.initKeystore(keystore, address)
+      }
+    }
   }
 
   private resetConnector() {
@@ -117,12 +124,21 @@ export class BinanceService {
       } else if (type === EventType.ConnectSuccess) {
         this.connectedWalletApp = walletApp
         this.connectedWalletDetails = details
+        if (walletApp === WalletApp.Keystore) {
+          const connectedWallet = JSON.stringify({
+            walletApp,
+            address: details.address,
+            keystore: details.keystore,
+          })
+          localStorage.setItem('connectedWallet', connectedWallet)
+        }
       } else if (
         type === EventType.Disconnect ||
         type === EventType.ConnectFailure
       ) {
         this.connectedWalletApp = null
         this.connectedWalletDetails = null
+        localStorage.removeItem('connectedWallet')
       }
     })
   }
