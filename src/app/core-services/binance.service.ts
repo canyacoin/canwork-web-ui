@@ -332,12 +332,12 @@ export class BinanceService {
 
   private async preconditions(
     amountCan: number,
-    onFailure?: () => void
+    onFailure?: (reason?: string) => void
   ): Promise<boolean> {
     await this.initFeeIfNecessary()
     const hasBalance = await this.hasEnoughBalance(amountCan)
     if (!hasBalance) {
-      onFailure()
+      onFailure('your wallet doesn\'t have enough CAN or BNB')
       return false
     }
     return true
@@ -349,10 +349,11 @@ export class BinanceService {
     providerAddress: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
-    onFailure?: () => void,
+    onFailure?: (reason?: string) => void,
     password?: string
   ) {
-    if (!this.preconditions(amountCan, onFailure)) {
+    const preconditionsOk = await this.preconditions(amountCan, onFailure)
+    if (!preconditionsOk) {
       return
     }
     const memo = `ESCROW:${jobId}:${providerAddress}`
@@ -394,11 +395,12 @@ export class BinanceService {
     jobId: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
-    onFailure?: () => void,
+    onFailure?: (reason?: string) => void,
     password?: string
   ) {
     const amountCan = 1
-    if (!this.preconditions(amountCan, onFailure)) {
+    const preconditionsOk = await this.preconditions(amountCan, onFailure)
+    if (!preconditionsOk) {
       return
     }
     const memo = `RELEASE:${jobId}`

@@ -264,8 +264,12 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       await this.jobService.saveJobFirebase(this.job)
     }
 
-    const onFailure = () => {
-      this.toastr.error('Transaction failed')
+    const onFailure = (reason?: string) => {
+      let errorMessage = 'Transaction failed'
+      if (reason) {
+        errorMessage += `: ${reason}`
+      }
+      this.toastr.error(errorMessage)
     }
 
     const sendTransaction = (password?: string) => {
