@@ -388,6 +388,7 @@ export class BinanceService {
       )
     } else {
       console.error('Unsupported wallet type')
+      onFailure('no supported wallet connected')
     }
   }
 
@@ -436,6 +437,7 @@ export class BinanceService {
       )
     } else {
       console.error('Unsupported wallet type')
+      onFailure('no supported wallet connected')
     }
   }
 
@@ -445,16 +447,8 @@ export class BinanceService {
     memo: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
-    onFailure?: () => void
+    onFailure?: (reason?: string) => void
   ) {
-    if (!this.isLedgerConnected()) {
-      console.error('Ledger is not connected')
-      if (onFailure) {
-        onFailure()
-      }
-      return
-    }
-
     try {
       this.client.useLedgerSigningDelegate(
         this.connectedWalletDetails.ledgerApp,
@@ -500,16 +494,8 @@ export class BinanceService {
     password: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
-    onFailure?: () => void
+    onFailure?: (reason?: string) => void
   ) {
-    if (!this.isKeystoreConnected()) {
-      console.error('Keystore is not connected')
-      if (onFailure) {
-        onFailure()
-      }
-      return
-    }
-
     try {
       const privateKey = crypto.getPrivateKeyFromKeyStore(
         this.connectedWalletDetails.keystore,
@@ -554,13 +540,6 @@ export class BinanceService {
     onSuccess?: () => void,
     onFailure?: () => void
   ) {
-    if (!this.isWalletConnectConnected()) {
-      console.error('WalletConnect is not connected')
-      if (onFailure) {
-        onFailure()
-      }
-      return
-    }
     const { account } = this.connectedWalletDetails
     const { address } = account
     const tx = {
