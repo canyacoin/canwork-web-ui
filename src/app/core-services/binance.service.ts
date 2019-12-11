@@ -49,6 +49,7 @@ const CHAIN_ID = environment.binance.chainId
 const NETWORK_ID = 714
 const CAN_TOKEN = environment.binance.canToken
 const BASE_API_URL = environment.binance.api
+const BINANCE_NETWORK = environment.binance.net
 const TICKER_API_URL = `${BASE_API_URL}api/v1/ticker/24hr`
 
 @Injectable({
@@ -58,7 +59,7 @@ export class BinanceService {
   connector: Connector | null
   private events: BehaviorSubject<Event | null> = new BehaviorSubject(null)
   events$ = this.events.asObservable()
-  client = new BncClient(environment.binance.api)
+  client = new BncClient(BASE_API_URL)
   private connectedWalletApp: WalletApp = null
   private connectedWalletDetails: any = null
   private pendingConnectRequest: Event = null
@@ -67,7 +68,7 @@ export class BinanceService {
     private userService: UserService,
     private authService: AuthService
   ) {
-    this.client.chooseNetwork(environment.binance.net)
+    this.client.chooseNetwork(BINANCE_NETWORK)
     this.client.initChain()
     this.subscribeToEvents()
   }
