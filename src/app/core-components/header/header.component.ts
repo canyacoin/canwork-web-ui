@@ -158,6 +158,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onCancel() {}
 
   onLogout() {
+    this.binanceService.disconnect()
     this.authService.logout()
   }
 }
