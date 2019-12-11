@@ -482,7 +482,7 @@ export class BinanceService {
     } catch (err) {
       console.error(err)
       if (onFailure) {
-        onFailure()
+        onFailure(err.message)
       }
     }
   }
@@ -527,7 +527,7 @@ export class BinanceService {
     } catch (err) {
       console.error(err)
       if (onFailure) {
-        onFailure()
+        onFailure(err.message)
       }
     }
   }
@@ -538,7 +538,7 @@ export class BinanceService {
     memo: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
-    onFailure?: () => void
+    onFailure?: (reason?: string) => void
   ) {
     const { account } = this.connectedWalletDetails
     const { address } = account
@@ -588,11 +588,11 @@ export class BinanceService {
       if (onSuccess) {
         onSuccess()
       }
-    } catch (error) {
+    } catch (err) {
       // Error returned when rejected
-      console.error(error)
+      console.error(err)
       if (onFailure) {
-        onFailure()
+        onFailure(err.message)
       }
     }
   }
