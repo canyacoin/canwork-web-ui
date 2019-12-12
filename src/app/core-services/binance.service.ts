@@ -8,6 +8,7 @@ import { environment } from '@env/environment'
 import { formatAtomicCan } from '@util/currency-conversion'
 import { AuthService } from '@service/auth.service'
 import { UserService } from '@service/user.service'
+import { LedgerService } from '@service/ledger.service'
 import { BinanceValidator } from '@validator/binance.validator'
 
 export type Connector = WalletConnect
@@ -69,7 +70,8 @@ export class BinanceService {
 
   constructor(
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
+    private ledgerService: LedgerService
   ) {
     this.client.chooseNetwork(BINANCE_NETWORK)
     this.client.initChain()
@@ -256,7 +258,7 @@ export class BinanceService {
     return null
   }
 
-  checkAddress(address: string) : boolean {
+  checkAddress(address: string): boolean {
     return this.client.checkAddress(address, environment.binance.prefix)
   }
 
@@ -272,7 +274,20 @@ export class BinanceService {
     })
   }
 
-  initLedger(address: string, ledgerApp: any, ledgerHdPath: number[]) {
+  connectLedger(
+    ledgerIndex: number,
+    beforeAttempting?: () => void,
+    onSuccess?: () => void,
+    onFailure?: () => void
+  ) {
+    const successCallback = (address: string, ledgerApp: any, ledgerHdPath: number[]) => {
+      this.initLedger(address, ledgerApp, ledgerHdPath)
+      onSuccess()
+    }
+    this.ledgerService.connectLedger(ledgerIndex, beforeAttempting, successCallback, onFailure)
+  }
+
+  private initLedger(address: string, ledgerApp: any, ledgerHdPath: number[]) {
     this.events.next({
       type: EventType.ConnectRequest,
       walletApp: WalletApp.Ledger,
@@ -357,7 +372,7 @@ export class BinanceService {
     await this.initFeeIfNecessary()
     const hasBalance = await this.hasEnoughBalance(amountCan)
     if (!hasBalance) {
-      onFailure('your wallet doesn\'t have enough CAN or BNB')
+      onFailure("your wallet doesn't have enough CAN or BNB")
       return false
     }
     return true
