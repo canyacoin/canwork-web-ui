@@ -97,7 +97,7 @@ export class EditComponent implements OnInit, OnDestroy {
       ],
       bnbAddress: [
         this.currentUser.bnbAddress || this.bnbAddress,
-        Validators.required,
+        () => null,
         Validators.composeAsync([
           new BinanceValidator(this.binanceService, this.userService)
             .isValidAddressField,

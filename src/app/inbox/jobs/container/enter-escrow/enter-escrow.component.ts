@@ -410,8 +410,12 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
         }
       }
 
-      const onFailure = () => {
-        this.toastr.error('Transaction failed')
+      const onFailure = (reason?: string) => {
+        let errorMessage = 'Transaction failed'
+        if (reason) {
+          errorMessage += `: ${reason}`
+        }
+        this.toastr.error(errorMessage)
         if (failureCallback) {
           failureCallback()
         }
