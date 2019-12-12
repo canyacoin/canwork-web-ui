@@ -47,6 +47,12 @@ export interface Event {
 const ESCROW_ADDRESS = environment.binance.escrowAddress
 const CHAIN_ID = environment.binance.chainId
 const NETWORK_ID = 714
+const DEFAULT_FEE = 37500
+const CAN_TOKEN = environment.binance.canToken
+const BASE_API_URL = environment.binance.api
+const BINANCE_NETWORK = environment.binance.net
+const TICKER_API_URL = `${BASE_API_URL}api/v1/ticker/24hr`
+const FEE_API_URL = `${BASE_API_URL}api/v1/fees`
 
 @Injectable({
   providedIn: 'root',
@@ -55,16 +61,17 @@ export class BinanceService {
   connector: Connector | null
   private events: BehaviorSubject<Event | null> = new BehaviorSubject(null)
   events$ = this.events.asObservable()
-  client = new BncClient(environment.binance.api)
+  client = new BncClient(BASE_API_URL)
   private connectedWalletApp: WalletApp = null
   private connectedWalletDetails: any = null
   private pendingConnectRequest: Event = null
+  private sendingFee: number = 0
 
   constructor(
     private userService: UserService,
     private authService: AuthService
   ) {
-    this.client.chooseNetwork(environment.binance.net)
+    this.client.chooseNetwork(BINANCE_NETWORK)
     this.client.initChain()
     this.subscribeToEvents()
   }
@@ -270,14 +277,29 @@ export class BinanceService {
     return this.connectedWalletApp === WalletApp.WalletConnect
   }
 
+  private async initFeeIfNecessary() {
+    if (this.sendingFee === 0) {
+      try {
+        const response = await (await fetch(FEE_API_URL)).json()
+        const feeParams = response
+          .map(item => item.fixed_fee_params)
+          .filter(params => params !== undefined)
+          .find(params => params.msg_type === 'send')
+        this.sendingFee = feeParams.fee
+      } catch (e) {
+        console.warn('Unable to get fee, using default')
+        this.sendingFee = DEFAULT_FEE
+      }
+    }
+  }
+
   // It returns result in atomic CAN units i.e. 1e-8
   async getUsdToAtomicCan(amountOfUsd: number = 1): Promise<number> {
     try {
-      const { api, canToken } = environment.binance
-      const canBnbUrl = `${api}api/v1/ticker/24hr?symbol=${canToken}_BNB`
+      const canBnbUrl = `${TICKER_API_URL}?symbol=${CAN_TOKEN}_BNB`
       const canResponse = await (await fetch(canBnbUrl)).json()
       const lastCanToBnbPrice = canResponse[0].weightedAvgPrice
-      const bnbUsdUrl = `${api}api/v1/ticker/24hr?symbol=BNB_USDT.B-B7C`
+      const bnbUsdUrl = `${TICKER_API_URL}?symbol=BNB_USDT.B-B7C`
       const bnbResponse = await (await fetch(bnbUsdUrl)).json()
       const lastBnbToUsdPrice = bnbResponse[0].weightedAvgPrice
       const usdToCanPrice = 1 / (lastCanToBnbPrice * lastBnbToUsdPrice)
@@ -289,15 +311,51 @@ export class BinanceService {
     }
   }
 
+  async hasEnoughBalance(amountCan: number) {
+    try {
+      const { address } = this.connectedWalletDetails
+      const balance = await this.client.getBalance(address)
+      const availableBnb = Number.parseFloat(
+        balance.find(coin => coin.symbol === 'BNB').free
+      )
+      const availableCan = Number.parseFloat(
+        balance.find(coin => coin.symbol === CAN_TOKEN).free
+      )
+      return (
+        availableCan * 1e8 >= amountCan && availableBnb * 1e8 >= this.sendingFee
+      )
+    } catch (e) {
+      // user doesn't have any CAN or BNB at all
+      return false
+    }
+  }
+
+  private async preconditions(
+    amountCan: number,
+    onFailure?: (reason?: string) => void
+  ): Promise<boolean> {
+    await this.initFeeIfNecessary()
+    const hasBalance = await this.hasEnoughBalance(amountCan)
+    if (!hasBalance) {
+      onFailure('your wallet doesn\'t have enough CAN or BNB')
+      return false
+    }
+    return true
+  }
+
   async escrowFunds(
     jobId: string,
     amountCan: number,
     providerAddress: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
-    onFailure?: () => void,
+    onFailure?: (reason?: string) => void,
     password?: string
   ) {
+    const preconditionsOk = await this.preconditions(amountCan, onFailure)
+    if (!preconditionsOk) {
+      return
+    }
     const memo = `ESCROW:${jobId}:${providerAddress}`
     const to = ESCROW_ADDRESS
     if (this.isLedgerConnected()) {
@@ -330,6 +388,7 @@ export class BinanceService {
       )
     } else {
       console.error('Unsupported wallet type')
+      onFailure('no supported wallet connected')
     }
   }
 
@@ -337,12 +396,16 @@ export class BinanceService {
     jobId: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
-    onFailure?: () => void,
+    onFailure?: (reason?: string) => void,
     password?: string
   ) {
+    const amountCan = 1
+    const preconditionsOk = await this.preconditions(amountCan, onFailure)
+    if (!preconditionsOk) {
+      return
+    }
     const memo = `RELEASE:${jobId}`
     const to = ESCROW_ADDRESS
-    const amountCan = 1
 
     if (this.isLedgerConnected()) {
       this.transactViaLedger(
@@ -374,6 +437,7 @@ export class BinanceService {
       )
     } else {
       console.error('Unsupported wallet type')
+      onFailure('no supported wallet connected')
     }
   }
 
@@ -383,16 +447,8 @@ export class BinanceService {
     memo: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
-    onFailure?: () => void
+    onFailure?: (reason?: string) => void
   ) {
-    if (!this.isLedgerConnected()) {
-      console.error('Ledger is not connected')
-      if (onFailure) {
-        onFailure()
-      }
-      return
-    }
-
     try {
       this.client.useLedgerSigningDelegate(
         this.connectedWalletDetails.ledgerApp,
@@ -412,7 +468,7 @@ export class BinanceService {
         address,
         to,
         adjustedAmount,
-        environment.binance.canToken,
+        CAN_TOKEN,
         memo
       )
 
@@ -426,7 +482,7 @@ export class BinanceService {
     } catch (err) {
       console.error(err)
       if (onFailure) {
-        onFailure()
+        onFailure(err.message)
       }
     }
   }
@@ -438,16 +494,8 @@ export class BinanceService {
     password: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
-    onFailure?: () => void
+    onFailure?: (reason?: string) => void
   ) {
-    if (!this.isKeystoreConnected()) {
-      console.error('Keystore is not connected')
-      if (onFailure) {
-        onFailure()
-      }
-      return
-    }
-
     try {
       const privateKey = crypto.getPrivateKeyFromKeyStore(
         this.connectedWalletDetails.keystore,
@@ -465,7 +513,7 @@ export class BinanceService {
         address,
         to,
         adjustedAmount,
-        environment.binance.canToken,
+        CAN_TOKEN,
         memo
       )
 
@@ -479,7 +527,7 @@ export class BinanceService {
     } catch (err) {
       console.error(err)
       if (onFailure) {
-        onFailure()
+        onFailure(err.message)
       }
     }
   }
@@ -490,15 +538,8 @@ export class BinanceService {
     memo: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
-    onFailure?: () => void
+    onFailure?: (reason?: string) => void
   ) {
-    if (!this.isWalletConnectConnected()) {
-      console.error('WalletConnect is not connected')
-      if (onFailure) {
-        onFailure()
-      }
-      return
-    }
     const { account } = this.connectedWalletDetails
     const { address } = account
     const tx = {
@@ -515,7 +556,7 @@ export class BinanceService {
         {
           address: base64js.fromByteArray(crypto.decodeAddress(address)),
           coins: {
-            denom: environment.binance.canToken,
+            denom: CAN_TOKEN,
             amount: amountStr,
           },
         },
@@ -524,7 +565,7 @@ export class BinanceService {
         {
           address: base64js.fromByteArray(crypto.decodeAddress(to)),
           coins: {
-            denom: environment.binance.canToken,
+            denom: CAN_TOKEN,
             amount: amountStr,
           },
         },
@@ -547,11 +588,11 @@ export class BinanceService {
       if (onSuccess) {
         onSuccess()
       }
-    } catch (error) {
+    } catch (err) {
       // Error returned when rejected
-      console.error(error)
+      console.error(err)
       if (onFailure) {
-        onFailure()
+        onFailure(err.message)
       }
     }
   }
