@@ -21,12 +21,26 @@ export class LedgerModalComponent implements OnInit {
     })
   }
 
+  hide() {
+    ;(window as any).$('#ledgerModal').modal('hide')
+  }
+
   private async connectLedger() {
+    const onSuccess = () => {
+      this.onSuccess()
+      this.hide()
+    }
+
+    const onFailure = () => {
+      this.onFailure()
+      this.hide()
+    }
+
     this.binanceService.connectLedger(
       this.ledgerIndex,
       this.beforeAttempting,
-      this.onSuccess,
-      this.onFailure
+      onSuccess,
+      onFailure
     )
   }
 }

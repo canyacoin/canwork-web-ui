@@ -187,18 +187,18 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   }
 
   onLedgerConnectionSuccess = () => {
-    this.attemptedConnection = true
     this.ledgerConnecting = false
-    ;(window as any).$('#ledgerModal').modal('hide')
+    // ;(window as any).$('#ledgerModal').modal('hide')
   }
 
   onLedgerConnectionFailure = (reason?: string) => {
     this.toastr.error(`Unable to connect wallet: ${reason}`)
     this.ledgerConnecting = false
-    ;(window as any).$('#ledgerModal').modal('hide')
+    // ;(window as any).$('#ledgerModal').modal('hide')
   }
 
   connectLedger() {
+    this.attemptedConnection = true
     ;(window as any).$('#ledgerModal').modal('show')
   }
 

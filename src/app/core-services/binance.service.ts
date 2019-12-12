@@ -36,6 +36,7 @@ export interface EventDetails {
   account?: object
   ledgerApp?: any
   ledgerHdPath?: number[]
+  ledgerIndex?: number
 }
 
 export interface Event {
@@ -81,6 +82,9 @@ export class BinanceService {
       if (connectedWallet.walletApp === WalletApp.Keystore) {
         const { keystore, address } = connectedWallet
         this.initKeystore(keystore, address)
+      } else if (connectedWallet.walletApp === WalletApp.Ledger) {
+        const { ledgerIndex } = connectedWallet
+        this.connectLedger(ledgerIndex)
       }
     }
   }
@@ -133,13 +137,29 @@ export class BinanceService {
       } else if (type === EventType.ConnectSuccess) {
         this.connectedWalletApp = walletApp
         this.connectedWalletDetails = details
-        if (walletApp === WalletApp.Keystore) {
-          const connectedWallet = JSON.stringify({
+        if (
+          walletApp === WalletApp.Keystore ||
+          walletApp === WalletApp.Ledger
+        ) {
+          let connectedWallet: Object = {
             walletApp,
             address: details.address,
-            keystore: details.keystore,
-          })
-          localStorage.setItem('connectedWallet', connectedWallet)
+          }
+          if (walletApp === WalletApp.Keystore) {
+            connectedWallet = {
+              ...connectedWallet,
+              keystore: details.keystore,
+            }
+          } else if (walletApp === WalletApp.Ledger) {
+            connectedWallet = {
+              ...connectedWallet,
+              ledgerIndex: details.ledgerIndex,
+            }
+          }
+          localStorage.setItem(
+            'connectedWallet',
+            JSON.stringify(connectedWallet)
+          )
         }
       } else if (
         type === EventType.Disconnect ||
@@ -280,14 +300,31 @@ export class BinanceService {
     onSuccess?: () => void,
     onFailure?: () => void
   ) {
-    const successCallback = (address: string, ledgerApp: any, ledgerHdPath: number[]) => {
-      this.initLedger(address, ledgerApp, ledgerHdPath)
-      onSuccess()
+    const successCallback = (
+      address: string,
+      ledgerApp: any,
+      ledgerHdPath: number[],
+      ledgerIndex: number
+    ) => {
+      this.initLedger(address, ledgerApp, ledgerHdPath, ledgerIndex)
+      if (onSuccess) {
+        onSuccess()
+      }
     }
-    this.ledgerService.connectLedger(ledgerIndex, beforeAttempting, successCallback, onFailure)
+    this.ledgerService.connectLedger(
+      ledgerIndex,
+      beforeAttempting,
+      successCallback,
+      onFailure
+    )
   }
 
-  private initLedger(address: string, ledgerApp: any, ledgerHdPath: number[]) {
+  private initLedger(
+    address: string,
+    ledgerApp: any,
+    ledgerHdPath: number[],
+    ledgerIndex: number
+  ) {
     this.events.next({
       type: EventType.ConnectRequest,
       walletApp: WalletApp.Ledger,
@@ -296,6 +333,7 @@ export class BinanceService {
         address,
         ledgerApp,
         ledgerHdPath,
+        ledgerIndex,
       },
     })
   }

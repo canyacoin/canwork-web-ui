@@ -15,7 +15,12 @@ export class LedgerService {
   async connectLedger(
     ledgerIndex: number,
     beforeAttempting?: () => void,
-    onSuccess?: (address: string, ledgerApp: any, ledgerHdPath: number[]) => void,
+    onSuccess?: (
+      address: string,
+      ledgerApp: any,
+      ledgerHdPath: number[],
+      ledgerIndex: number
+    ) => void,
     onFailure?: (reason?: string) => void
   ) {
     if (beforeAttempting) {
@@ -58,7 +63,7 @@ export class LedgerService {
       console.log('address', address)
 
       if (onSuccess) {
-        onSuccess(address, app, hdPath)
+        onSuccess(address, app, hdPath, ledgerIndex)
       }
     } catch (err) {
       console.error('pk error', err.message, err.statusCode)
