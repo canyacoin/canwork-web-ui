@@ -10,13 +10,12 @@ export class BinanceValidator {
   ) {}
 
   isValidAddress = async (address: string) => {
-    const resp = await this.binanceService.client.getAccount(address)
-    return resp && resp.status === 200
+    return this.binanceService.checkAddress(address)
   }
 
   isValidAddressField = async (control: FormControl) => {
     const { value } = control
-    if (value === null) {
+    if (value === null || value === '') {
       return null
     }
 
@@ -28,13 +27,16 @@ export class BinanceValidator {
   }
 
   async isUniqueAddress(address: string, user: User) {
+    if (address === null || address === '') {
+      return null
+    }
     const _user = await this.userService.getUserByBnbAddress(address)
     return _user === null || _user.slug === user.slug
   }
 
   isUniqueAddressField(user: User) {
     return async (control: FormControl) => {
-      if (control.value === null) {
+      if (control.value === null || control.value === '') {
         return null
       }
 

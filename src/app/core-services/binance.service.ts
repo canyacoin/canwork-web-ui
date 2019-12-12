@@ -240,6 +240,10 @@ export class BinanceService {
     return null
   }
 
+  checkAddress(address: string) : boolean {
+    return this.client.checkAddress(address, environment.binance.prefix)
+  }
+
   initKeystore(keystore: object, address: string) {
     this.events.next({
       type: EventType.ConnectRequest,
