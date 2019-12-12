@@ -182,28 +182,24 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
     }
   }
 
-  async connectLedger() {
-    const beforeAttempting = () => {
-      this.ledgerConnecting = true
-      this.toastr.info('Please approve on your ledger')
-    }
+  beforeLedgerConnection = () => {
+    this.ledgerConnecting = true
+  }
 
-    const onSuccess = () => {
-      this.attemptedConnection = true
-      this.ledgerConnecting = false
-    }
+  onLedgerConnectionSuccess = () => {
+    this.attemptedConnection = true
+    this.ledgerConnecting = false
+    ;(window as any).$('#ledgerModal').modal('hide')
+  }
 
-    const onFailure = (reason?: string) => {
-      this.toastr.error(`Unable to connect wallet: ${reason}`)
-      this.ledgerConnecting = false
-    }
+  onLedgerConnectionFailure = (reason?: string) => {
+    this.toastr.error(`Unable to connect wallet: ${reason}`)
+    this.ledgerConnecting = false
+    ;(window as any).$('#ledgerModal').modal('hide')
+  }
 
-    this.binanceService.connectLedger(
-      this.ledgerIndex,
-      beforeAttempting,
-      onSuccess,
-      onFailure
-    )
+  connectLedger() {
+    ;(window as any).$('#ledgerModal').modal('show')
   }
 
   onConfirmWalletUpdate() {
