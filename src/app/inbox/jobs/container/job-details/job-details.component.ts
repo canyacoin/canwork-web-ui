@@ -139,6 +139,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   actionIsDisabled(action: ActionType): boolean {
     switch (action) {
       case ActionType.dispute:
+      case ActionType.cancelJobEarly:
         return true
       case ActionType.review:
         return !this.userCanReview
