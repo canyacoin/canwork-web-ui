@@ -8,8 +8,6 @@ import { BootstrapModalModule } from 'ng2-bootstrap-modal'
 import { ClipboardModule } from 'ngx-clipboard'
 
 import { ResizeService } from './services/resize.service'
-import { LoaderComponent } from './canpay-loader/loading-status.component'
-import { CanpayModalComponent } from './canpay-modal/canpay-modal.component'
 import { CanpayWizardComponent } from './canpay-wizard/canpay-wizard.component'
 import { CommaSepNumPipe } from './comma-sep-num.pipe'
 import { EtherscanLinkComponent } from './etherscan-link/etherscan-link.component'
@@ -18,11 +16,9 @@ import { MsgBoxComponent } from './msg-box/msg-box.component'
 import { PaymentSummaryTemplateComponent } from './payment-summary-template/payment-summary-template.component'
 import { PaymentSummaryComponent } from './payment-summary/payment-summary.component'
 import { CanexService } from './services/canex.service'
-import { CanPayService } from './services/canpay.service'
 import { FormDataService } from './services/formData.service'
 
 const COMPONENTS = [
-  CanpayModalComponent,
   CanpayWizardComponent,
   LoadingStatusComponent,
   PaymentSummaryComponent,
@@ -30,10 +26,9 @@ const COMPONENTS = [
   MsgBoxComponent,
   CommaSepNumPipe,
   EtherscanLinkComponent,
-  LoaderComponent,
 ]
 
-const PROVIDERS = [CanPayService, FormDataService, ResizeService, CanexService]
+const PROVIDERS = [FormDataService, ResizeService, CanexService]
 
 @NgModule({
   imports: [
@@ -45,7 +40,6 @@ const PROVIDERS = [CanPayService, FormDataService, ResizeService, CanexService]
     ClipboardModule,
     QRCodeModule,
   ],
-  entryComponents: [CanpayModalComponent],
   declarations: COMPONENTS,
   exports: COMPONENTS,
   providers: PROVIDERS,
