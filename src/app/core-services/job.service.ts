@@ -13,6 +13,7 @@ import { ChatService } from '@service/chat.service'
 import { BinanceService } from '@service/binance.service'
 import { JobNotificationService } from '@service/job-notification.service'
 import { UserService } from '@service/user.service'
+import { EthService } from '@service/eth.service'
 import {
   AngularFirestore,
   AngularFirestoreCollection,
@@ -33,6 +34,7 @@ export class JobService {
     private userService: UserService,
     private chatService: ChatService,
     private reviewService: ReviewService,
+    private ethService: EthService,
     private binanceService: BinanceService,
     private jobNotificationService: JobNotificationService,
     private featureService: FeatureToggleService
