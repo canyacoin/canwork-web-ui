@@ -315,7 +315,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   onBuy() {
-    this.router.navigate(['/exchange'])
+    // TODO remove
+    // this.router.navigate(['/exchange'])
   }
 
   onMacro(message: string) {

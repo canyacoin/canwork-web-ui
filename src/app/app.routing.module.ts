@@ -32,10 +32,6 @@ import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.
         data: { requiresLoggedOut: true },
       },
       {
-        path: 'exchange',
-        loadChildren: './exchange/exchange.module#ExchangeModule',
-      },
-      {
         path: 'home',
         loadChildren: './home/home.module#HomeModule',
       },
