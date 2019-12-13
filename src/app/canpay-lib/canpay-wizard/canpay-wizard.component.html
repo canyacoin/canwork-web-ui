@@ -73,16 +73,6 @@
         ></canyalib-canex-processing>
       </div>
 
-      <div *ngIf="currStep === Step.canexErc20">
-        <canyalib-canex-erc20
-          (valueChange)="updateCurrentStep($event)"
-        ></canyalib-canex-erc20>
-      </div>
-
-      <div *ngIf="currStep === Step.canexError">
-        <canyalib-canex-error></canyalib-canex-error>
-      </div>
-
       <div *ngIf="currStep === Step.authorisation">
         <canyalib-payment-authorisation
           [recipient]="recipient"

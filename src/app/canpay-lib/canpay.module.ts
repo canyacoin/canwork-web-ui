@@ -1,17 +1,13 @@
 import { CommonModule } from '@angular/common'
 import { HttpClientModule } from '@angular/common/http'
-import { ModuleWithProviders } from '@angular/compiler/src/core'
 import { NgModule } from '@angular/core'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { FormsModule } from '@angular/forms'
 import { HttpModule } from '@angular/http'
 import { QRCodeModule } from 'angular2-qrcode'
 import { BootstrapModalModule } from 'ng2-bootstrap-modal'
 import { ClipboardModule } from 'ngx-clipboard'
 
 import { ResizeService } from './services/resize.service'
-import { CanexERC20Component } from './canex-erc20/canex-erc20.component'
-import { CanexErrorComponent } from './canex-error/canex-error.component'
-import { CanexOrderStatusComponent } from './canex-order-status/canex-order-status.component'
 import { CanexPaymentOptionsComponent } from './canex-payment-options/canex-payment-options.component'
 import { CanexProcessingComponent } from './canex-processing/canex-processing.component'
 import { CanexQRComponent } from './canex-qr/canex-qr.component'
@@ -49,13 +45,10 @@ const COMPONENTS = [
   MsgBoxComponent,
   InputAmountComponent,
   CommaSepNumPipe,
-  CanexOrderStatusComponent,
   CanexPaymentOptionsComponent,
   CanexProcessingComponent,
-  CanexERC20Component,
   CanexReceiptComponent,
   CanexQRComponent,
-  CanexErrorComponent,
   EtherscanLinkComponent,
   LoaderComponent,
 ]
@@ -72,7 +65,7 @@ const PROVIDERS = [CanPayService, FormDataService, ResizeService, CanexService]
     ClipboardModule,
     QRCodeModule,
   ],
-  entryComponents: [CanpayModalComponent, CanexOrderStatusComponent],
+  entryComponents: [CanpayModalComponent],
   declarations: COMPONENTS,
   exports: COMPONENTS,
   providers: PROVIDERS,
