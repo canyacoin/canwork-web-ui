@@ -1,5 +1,4 @@
 <div class="card px-30 py-30 row mh-250">
-  <canyalib-loader [isLoading]="!paymentSummary"></canyalib-loader>
   <div *ngIf="paymentSummary" class="container text-center">
     <div *ngIf="showBalance && balance < amount" class="alert alert-warning">
       <i class="fas fa-exclamation-triangle"></i> You do not have enough CAN to
