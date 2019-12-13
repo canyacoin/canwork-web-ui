@@ -49,30 +49,6 @@
         <canyalib-metamask (account)="setAccount($event)"></canyalib-metamask>
       </div>
 
-      <div *ngIf="currStep === Step.canexPaymentOptions">
-        <canyalib-canex-payment-options
-          (valueChange)="updateCurrentStep($event)"
-          [balance]="balance"
-          [amount]="amount"
-          [destinationAddress]="getCanExRecipient()"
-          [userEmail]="userEmail"
-        ></canyalib-canex-payment-options>
-      </div>
-
-      <div *ngIf="currStep === Step.canexQr">
-        <canyalib-canex-qr
-          (valueChange)="updateCurrentStep($event)"
-        ></canyalib-canex-qr>
-      </div>
-
-      <div *ngIf="currStep === Step.canexProcessing">
-        <canyalib-canex-processing
-          (valueChange)="updateCurrentStep($event)"
-          (purchaseComplete)="stepFinished()"
-          [postBalanceStep]="postBalanceStep"
-        ></canyalib-canex-processing>
-      </div>
-
       <div *ngIf="currStep === Step.authorisation">
         <canyalib-payment-authorisation
           [recipient]="recipient"

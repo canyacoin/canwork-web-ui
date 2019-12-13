@@ -8,10 +8,6 @@ import { BootstrapModalModule } from 'ng2-bootstrap-modal'
 import { ClipboardModule } from 'ngx-clipboard'
 
 import { ResizeService } from './services/resize.service'
-import { CanexPaymentOptionsComponent } from './canex-payment-options/canex-payment-options.component'
-import { CanexProcessingComponent } from './canex-processing/canex-processing.component'
-import { CanexQRComponent } from './canex-qr/canex-qr.component'
-import { CanexReceiptComponent } from './canex-receipt/canex-receipt.component'
 import { LoaderComponent } from './canpay-loader/loading-status.component'
 import { CanpayModalComponent } from './canpay-modal/canpay-modal.component'
 import { CanpayWizardComponent } from './canpay-wizard/canpay-wizard.component'
@@ -45,10 +41,6 @@ const COMPONENTS = [
   MsgBoxComponent,
   InputAmountComponent,
   CommaSepNumPipe,
-  CanexPaymentOptionsComponent,
-  CanexProcessingComponent,
-  CanexReceiptComponent,
-  CanexQRComponent,
   EtherscanLinkComponent,
   LoaderComponent,
 ]
