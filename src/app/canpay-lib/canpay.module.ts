@@ -9,7 +9,6 @@ import { BootstrapModalModule } from 'ng2-bootstrap-modal'
 import { ClipboardModule } from 'ngx-clipboard'
 
 import { ResizeService } from './services/resize.service'
-import { BalanceCheckComponent } from './balance-check/balance-check.component'
 import { CanexERC20Component } from './canex-erc20/canex-erc20.component'
 import { CanexErrorComponent } from './canex-error/canex-error.component'
 import { CanexOrderStatusComponent } from './canex-order-status/canex-order-status.component'
@@ -42,7 +41,6 @@ const COMPONENTS = [
   MetamaskComponent,
   InstructionsComponent,
   LoadingStatusComponent,
-  BalanceCheckComponent,
   PaymentAuthorisationComponent,
   PaymentComponent,
   PaymentSummaryComponent,

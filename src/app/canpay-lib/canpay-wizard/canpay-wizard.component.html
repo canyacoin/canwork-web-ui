@@ -49,17 +49,6 @@
         <canyalib-metamask (account)="setAccount($event)"></canyalib-metamask>
       </div>
 
-      <div *ngIf="currStep === Step.balanceCheck">
-        <canyalib-balance-check
-          [balance]="balance"
-          [disableCanEx]="disableCanEx"
-          [paymentSummary]="paymentSummary"
-          [amount]="amount"
-          (valueChange)="updateCurrentStep($event)"
-          (check)="checkBalance()"
-        ></canyalib-balance-check>
-      </div>
-
       <div *ngIf="currStep === Step.canexPaymentOptions">
         <canyalib-canex-payment-options
           (valueChange)="updateCurrentStep($event)"
