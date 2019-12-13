@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { Headers, Http } from '@angular/http'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AngularFirestore } from 'angularfire2/firestore'
 
 import * as decode from 'jwt-decode'
 
@@ -10,7 +9,6 @@ import { FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular'
 import { environment } from '../../../environments/environment'
 import { User } from '../../core-classes/user'
 import { AuthService } from '../../core-services/auth.service'
-import { EthService } from '../../core-services/eth.service'
 import { UserService } from '../../core-services/user.service'
 import { FeatureToggleService } from '@service/feature-toggle.service'
 import { DockIoService } from '@service/dock-io.service'
@@ -25,7 +23,6 @@ export class LoginComponent implements OnInit {
   disableMobileSignIn = true
   loading = false
   returnUrl: string
-  isOnMobile = false
   mobileLoginState = ''
   pinDeliveredTo: string
   httpHeaders = new Headers({
@@ -59,22 +56,14 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private userService: UserService,
-    private afs: AngularFirestore,
     public dockIOService: DockIoService,
     private http: Http,
-    private ethService: EthService,
     private featureService: FeatureToggleService
   ) {}
 
   ngOnInit() {
     const ua = window.navigator.userAgent
-    this.isOnMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
-      ua
-    )
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/'
-    if (this.isOnMobile) {
-      this.setWeb3EthereumPublicAddress()
-    }
 
     this.featureService
       .getFeatureConfig('dockAuth')
@@ -123,16 +112,6 @@ export class LoginComponent implements OnInit {
   onClickMobileSignIn() {
     this.showMobileLogin = true
     console.log('+ show mobile login', this.showMobileLogin)
-  }
-
-  private async setWeb3EthereumPublicAddress() {
-    this.ethService.account$.subscribe(async (address: string) => {
-      if (address) {
-        this.webViewEthAddress = address
-        const user = await this.userService.getUserByEthAddress(address)
-        this.steps.detectAddress.isMatchingEthAddress = user !== null
-      }
-    })
   }
 
   async generateAuthPinCodeAsync() {

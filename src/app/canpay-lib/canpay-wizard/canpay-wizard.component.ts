@@ -5,14 +5,10 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  ViewEncapsulation,
 } from '@angular/core'
-import { interval, Subscription } from 'rxjs'
 
 import {
-  CanPay,
   CanPayData,
-  Contract,
   Operation,
   PaymentSummary,
   ProcessAction,
