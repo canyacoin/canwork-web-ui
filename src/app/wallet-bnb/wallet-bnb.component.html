@@ -194,6 +194,13 @@
     </div>
   </section>
 </main>
+<ledger-modal
+  [ledgerIndex]="this.ledgerIndex"
+  [beforeAttempting]="this.beforeLedgerConnection"
+  [onSuccess]="this.onLedgerConnectionSuccess"
+  [onFailure]="this.onLedgerConnectionFailure"
+>
+</ledger-modal>
 <div
   class="modal fade"
   id="replaceWalletModal"
@@ -216,8 +223,12 @@
       </div>
       <div class="modal-body">
         <p>Are you sure you want to replace your wallet?</p>
-        <p>Old: <b>{{ walletReplacement.old }}</b> </p>
-        <p>New: <b>{{ walletReplacement.new }}</b> </p>
+        <p>
+          Old: <b>{{ walletReplacement.old }}</b>
+        </p>
+        <p>
+          New: <b>{{ walletReplacement.new }}</b>
+        </p>
       </div>
       <div class="modal-footer">
         <button
@@ -228,11 +239,7 @@
         >
           Yes
         </button>
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-dismiss="modal"
-        >
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
           No
         </button>
       </div>

@@ -8,6 +8,7 @@ import { environment } from '@env/environment'
 import { formatAtomicCan } from '@util/currency-conversion'
 import { AuthService } from '@service/auth.service'
 import { UserService } from '@service/user.service'
+import { LedgerService } from '@service/ledger.service'
 import { BinanceValidator } from '@validator/binance.validator'
 
 export type Connector = WalletConnect
@@ -35,6 +36,7 @@ export interface EventDetails {
   account?: object
   ledgerApp?: any
   ledgerHdPath?: number[]
+  ledgerIndex?: number
 }
 
 export interface Event {
@@ -69,11 +71,22 @@ export class BinanceService {
 
   constructor(
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
+    private ledgerService: LedgerService
   ) {
     this.client.chooseNetwork(BINANCE_NETWORK)
     this.client.initChain()
     this.subscribeToEvents()
+    const connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
+    if (connectedWallet) {
+      if (connectedWallet.walletApp === WalletApp.Keystore) {
+        const { keystore, address } = connectedWallet
+        this.initKeystore(keystore, address)
+      } else if (connectedWallet.walletApp === WalletApp.Ledger) {
+        const { ledgerIndex } = connectedWallet
+        this.connectLedger(ledgerIndex)
+      }
+    }
   }
 
   private resetConnector() {
@@ -124,12 +137,37 @@ export class BinanceService {
       } else if (type === EventType.ConnectSuccess) {
         this.connectedWalletApp = walletApp
         this.connectedWalletDetails = details
+        if (
+          walletApp === WalletApp.Keystore ||
+          walletApp === WalletApp.Ledger
+        ) {
+          let connectedWallet: Object = {
+            walletApp,
+            address: details.address,
+          }
+          if (walletApp === WalletApp.Keystore) {
+            connectedWallet = {
+              ...connectedWallet,
+              keystore: details.keystore,
+            }
+          } else if (walletApp === WalletApp.Ledger) {
+            connectedWallet = {
+              ...connectedWallet,
+              ledgerIndex: details.ledgerIndex,
+            }
+          }
+          localStorage.setItem(
+            'connectedWallet',
+            JSON.stringify(connectedWallet)
+          )
+        }
       } else if (
         type === EventType.Disconnect ||
         type === EventType.ConnectFailure
       ) {
         this.connectedWalletApp = null
         this.connectedWalletDetails = null
+        localStorage.removeItem('connectedWallet')
       }
     })
   }
@@ -240,7 +278,7 @@ export class BinanceService {
     return null
   }
 
-  checkAddress(address: string) : boolean {
+  checkAddress(address: string): boolean {
     return this.client.checkAddress(address, environment.binance.prefix)
   }
 
@@ -256,7 +294,37 @@ export class BinanceService {
     })
   }
 
-  initLedger(address: string, ledgerApp: any, ledgerHdPath: number[]) {
+  connectLedger(
+    ledgerIndex: number,
+    beforeAttempting?: () => void,
+    onSuccess?: () => void,
+    onFailure?: () => void
+  ) {
+    const successCallback = (
+      address: string,
+      ledgerApp: any,
+      ledgerHdPath: number[],
+      ledgerIndex: number
+    ) => {
+      this.initLedger(address, ledgerApp, ledgerHdPath, ledgerIndex)
+      if (onSuccess) {
+        onSuccess()
+      }
+    }
+    this.ledgerService.connectLedger(
+      ledgerIndex,
+      beforeAttempting,
+      successCallback,
+      onFailure
+    )
+  }
+
+  private initLedger(
+    address: string,
+    ledgerApp: any,
+    ledgerHdPath: number[],
+    ledgerIndex: number
+  ) {
     this.events.next({
       type: EventType.ConnectRequest,
       walletApp: WalletApp.Ledger,
@@ -265,6 +333,7 @@ export class BinanceService {
         address,
         ledgerApp,
         ledgerHdPath,
+        ledgerIndex,
       },
     })
   }
@@ -341,7 +410,7 @@ export class BinanceService {
     await this.initFeeIfNecessary()
     const hasBalance = await this.hasEnoughBalance(amountCan)
     if (!hasBalance) {
-      onFailure('your wallet doesn\'t have enough CAN or BNB')
+      onFailure("your wallet doesn't have enough CAN or BNB")
       return false
     }
     return true

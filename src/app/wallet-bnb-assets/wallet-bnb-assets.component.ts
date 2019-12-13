@@ -45,7 +45,6 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
             }
             this.balances.next(sortBy(prop('symbol'))(balances))
             break
-          case EventType.ConnectSuccess:
           case EventType.Disconnect:
             this.address = false
             break
