@@ -2,15 +2,9 @@ import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import {
   CanPay,
-  CanPayData,
   Operation,
-  setProcessResult,
 } from '@canpay-lib/lib'
 import { Job } from '@class/job'
-import { ActionType, IJobAction } from '@class/job-action'
-import { UserType } from '@class/user'
-import { CanWorkJobContract } from '@contract/can-work-job.contract'
-import { EthService } from '@service/eth.service'
 import { JobService } from '@service/job.service'
 import 'rxjs/add/operator/take'
 
@@ -26,7 +20,6 @@ export class CancelJobComponent implements OnInit {
   canPayOptions: CanPay
 
   constructor(
-    private ethService: EthService,
     private jobService: JobService,
     private activatedRoute: ActivatedRoute,
     private router: Router
@@ -49,33 +42,23 @@ export class CancelJobComponent implements OnInit {
   }
 
   async startCanpay() {
-    const onTxHash = async (txHash: string, from: string) => {
-      /* IF complete job hash gets sent, do:
-        post tx to transaction monitor
-        save tx to collection
-        save action/pending to job */
-      this.job.actionLog.push(
-        new IJobAction(ActionType.cancelJobEarly, UserType.provider)
-      )
-      await this.jobService.saveJobFirebase(this.job)
-    }
-
-    const initiateCancellation = async (canPayData: CanPayData) => {
+    const initiateCancellation = async () => {
       console.log('initiating cancellation')
-      const canWorkContract = new CanWorkJobContract(this.ethService)
-      console.log(canWorkContract)
-      canWorkContract
-        .connect()
-        .cancelJobByProvider(
-          this.job,
-          this.ethService.getOwnerAccount(),
-          onTxHash
-        )
-        .then(setProcessResult.bind(this.canPayOptions))
-        .catch(setProcessResult.bind(this.canPayOptions))
+      // TODO remove
+      // const canWorkContract = new CanWorkJobContract(this.ethService)
+      // console.log(canWorkContract)
+      // canWorkContract
+      //   .connect()
+      //   .cancelJobByProvider(
+      //     this.job,
+      //     this.ethService.getOwnerAccount(),
+      //     onTxHash
+      //   )
+      //   .then(setProcessResult.bind(this.canPayOptions))
+      //   .catch(setProcessResult.bind(this.canPayOptions))
     }
 
-    const onComplete = async result => {
+    const onComplete = async () => {
       // call endpoint?
       this.router.navigate(['/inbox/job', this.job.id])
     }
