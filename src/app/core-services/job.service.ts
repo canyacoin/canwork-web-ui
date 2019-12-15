@@ -1,34 +1,19 @@
-import { NgSwitch } from '@angular/common'
-import { Http, Headers } from '@angular/http'
 import { Injectable } from '@angular/core'
-import {
-  CanPayData,
-  CanPayService,
-  Operation,
-  setProcessResult,
-  View,
-} from '@canpay-lib/lib'
 import {
   Job,
   JobState,
   Payment,
   PaymentType,
   TimeRange,
-  WorkType,
 } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
 import { Upload } from '@class/upload'
 import { User, UserType } from '@class/user'
-import { CanWorkJobContract } from '@contract/can-work-job.contract'
-import { environment } from '@env/environment'
 import { ChatService } from '@service/chat.service'
-import { EthService } from '@service/eth.service'
 import { BinanceService } from '@service/binance.service'
 import { JobNotificationService } from '@service/job-notification.service'
-import { MomentService } from '@service/moment.service'
-import { Transaction, TransactionService } from '@service/transaction.service'
 import { UserService } from '@service/user.service'
-import { GenerateGuid } from '@util/generate.uid'
+import { EthService } from '@service/eth.service'
 import {
   AngularFirestore,
   AngularFirestoreCollection,
@@ -46,16 +31,12 @@ export class JobService {
 
   constructor(
     private afs: AngularFirestore,
-    private http: Http,
     private userService: UserService,
     private chatService: ChatService,
-    private momentService: MomentService,
-    private transactionService: TransactionService,
     private reviewService: ReviewService,
     private ethService: EthService,
     private binanceService: BinanceService,
     private jobNotificationService: JobNotificationService,
-    private canPayService: CanPayService,
     private featureService: FeatureToggleService
   ) {
     this.jobsCollection = this.afs.collection<any>('jobs')
@@ -64,7 +45,7 @@ export class JobService {
       .then(val => {
         this.canexDisabled = !val.enabled
       })
-      .catch(e => {
+      .catch( () => {
         this.canexDisabled = true
       })
   }

@@ -3,27 +3,21 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import {
   CanPay,
-  CanPayData,
   Operation,
   PaymentItemCurrency,
-  setProcessResult,
 } from '@canpay-lib/lib'
 import { Job, JobState } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
 import { UserType } from '@class/user'
-import { CanWorkJobContract } from '@contract/can-work-job.contract'
-import { EthService } from '@service/eth.service'
 import { FeatureToggleService } from '@service/feature-toggle.service'
 import { LimepayService } from '@service/limepay.service'
 import { JobService } from '@service/job.service'
-import { MomentService } from '@service/moment.service'
 import { UserService } from '@service/user.service'
 import { BinanceService } from '@service/binance.service'
 import { ToastrService } from 'ngx-toastr'
 import 'rxjs/add/operator/take'
 import { Observable } from 'rxjs/Observable'
 import { HttpClient } from '@angular/common/http'
-import { AngularFirestore } from 'angularfire2/firestore'
 
 import { environment } from '@env/environment'
 import { roundAtomicCanTwoDecimals } from '@util/currency-conversion'
@@ -72,7 +66,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   paymentToken: any
 
   constructor(
-    private ethService: EthService,
     private formBuilder: FormBuilder,
     private jobService: JobService,
     private userService: UserService,
@@ -297,8 +290,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       'canexchange'
     )
     this.canexDisabled = !canexToggle.enabled
-    // TODO remove
-    // let clientEthAddress = this.ethService.getOwnerAccount()
     let clientEthAddress = 'N/A'
     const onAuthTxHash = async (txHash: string, from: string) => {
       /* IF authorisation hash gets sent, do:
@@ -345,20 +336,8 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
 
     const provider = await this.userService.getUser(this.job.providerId)
 
-    const initiateEnterEscrow = async (canPayData: CanPayData) => {
-      const canWorkContract = new CanWorkJobContract(this.ethService)
-      canWorkContract
-        .connect()
-        .createJob(
-          this.job,
-          // TODO remove
-          // clientEthAddress || this.ethService.getOwnerAccount(),
-          clientEthAddress || 'N/A',
-          provider.ethAddress,
-          onTxHash
-        )
-        .then(setProcessResult.bind(this.canPayOptions))
-        .catch(setProcessResult.bind(this.canPayOptions))
+    const initiateEnterEscrow = async () => {
+      // TODO remove initiateEnterEscrow
     }
 
     const client = await this.userService.getUser(this.job.clientId)

@@ -1,19 +1,6 @@
 import { Component, Input } from '@angular/core'
 import { Router } from '@angular/router'
-import {
-  CanPayData,
-  CanPayService,
-  Operation,
-  ProcessAction,
-  setProcessResult,
-  View,
-} from '@canpay-lib/lib'
 import { User } from '@class/user'
-import { EthService } from '@service/eth.service'
-import {
-  FeatureToggle,
-  FeatureToggleService,
-} from '@service/feature-toggle.service'
 
 @Component({
   selector: 'app-profile-support-me',

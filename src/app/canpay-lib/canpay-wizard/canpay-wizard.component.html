@@ -24,15 +24,6 @@
         </div>
       </div>
 
-      <div *ngIf="currStep === Step.paymentAmount" class="text-center">
-        <canyalib-input-amount
-          [minAmount]="minAmount"
-          [maxAmount]="maxAmount"
-          (amountUpdate)="setAmount($event)"
-          (error)="error($event)"
-        ></canyalib-input-amount>
-      </div>
-
       <div *ngIf="currStep === Step.paymentSummary">
         <canyalib-payment-summary
           [amount]="amount"
@@ -43,95 +34,6 @@
           (stepFinished)="stepFinished()"
         >
         </canyalib-payment-summary>
-      </div>
-
-      <div *ngIf="currStep === Step.metamask">
-        <canyalib-metamask (account)="setAccount($event)"></canyalib-metamask>
-      </div>
-
-      <div *ngIf="currStep === Step.balanceCheck">
-        <canyalib-balance-check
-          [balance]="balance"
-          [disableCanEx]="disableCanEx"
-          [paymentSummary]="paymentSummary"
-          [amount]="amount"
-          (valueChange)="updateCurrentStep($event)"
-          (check)="checkBalance()"
-        ></canyalib-balance-check>
-      </div>
-
-      <div *ngIf="currStep === Step.canexPaymentOptions">
-        <canyalib-canex-payment-options
-          (valueChange)="updateCurrentStep($event)"
-          [balance]="balance"
-          [amount]="amount"
-          [destinationAddress]="getCanExRecipient()"
-          [userEmail]="userEmail"
-        ></canyalib-canex-payment-options>
-      </div>
-
-      <div *ngIf="currStep === Step.canexQr">
-        <canyalib-canex-qr
-          (valueChange)="updateCurrentStep($event)"
-        ></canyalib-canex-qr>
-      </div>
-
-      <div *ngIf="currStep === Step.canexProcessing">
-        <canyalib-canex-processing
-          (valueChange)="updateCurrentStep($event)"
-          (purchaseComplete)="stepFinished()"
-          [postBalanceStep]="postBalanceStep"
-        ></canyalib-canex-processing>
-      </div>
-
-      <div *ngIf="currStep === Step.canexErc20">
-        <canyalib-canex-erc20
-          (valueChange)="updateCurrentStep($event)"
-        ></canyalib-canex-erc20>
-      </div>
-
-      <div *ngIf="currStep === Step.canexError">
-        <canyalib-canex-error></canyalib-canex-error>
-      </div>
-
-      <div *ngIf="currStep === Step.authorisation">
-        <canyalib-payment-authorisation
-          [recipient]="recipient"
-          [onAuthTxHash]="onAuthTxHash"
-          [dAppName]="dAppName"
-          [amount]="amount"
-          [hasPostAuthProcess]="hasPostAuthProcess"
-          (warning)="warning($event)"
-          (error)="error($event)"
-          (success)="stepFinished()"
-          (transactionSent)="transactionSent()"
-        ></canyalib-payment-authorisation>
-      </div>
-
-      <div *ngIf="currStep === Step.payment">
-        <canyalib-payment
-          [recipient]="recipient"
-          [dAppName]="dAppName"
-          [amount]="amount"
-          [onPaymentTxHash]="onPaymentTxHash"
-          [totalTransactions]="totalTransactions"
-          (error)="error($event)"
-          (warning)="warning($event)"
-          (success)="stepFinished()"
-        ></canyalib-payment>
-      </div>
-
-      <div *ngIf="currStep === Step.process">
-        <canyalib-process
-          [processName]="postAuthorisationProcessName"
-          [recipient]="recipient"
-          [dAppName]="dAppName"
-          [amount]="amount"
-          (warning)="warning($event)"
-          [totalTransactions]="totalTransactions"
-          [error]="errMsg"
-          (start)="doStartPostAuthorisationProcess()"
-        ></canyalib-process>
       </div>
 
       <div *ngIf="currStep === Step.confirmation">

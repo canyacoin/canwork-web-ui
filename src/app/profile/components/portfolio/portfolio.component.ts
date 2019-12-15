@@ -86,7 +86,8 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   }
 
   onBuyCan() {
-    this.router.navigate(['/exchange'])
+    // TODO remove
+    // this.router.navigate(['/exchange'])
   }
 
   postRequest() {
