@@ -30,7 +30,6 @@ import { CoreUtilsModule } from './core-utils/core-utils.module'
 import { PublicJobComponent } from './public-job/public-job/public-job.component'
 import { DashboardComponent } from './public-job/dashboard/dashboard.component'
 import { JobBidsComponent } from './public-job/job-bids/job-bids.component'
-import { LedgerModalComponent } from './binance/ledger-modal/ledger-modal.component'
 import { FilterPipeModule } from 'ngx-filter-pipe'
 import { OrderModule } from 'ngx-order-pipe'
 import { AngularFireFunctionsModule } from '@angular/fire/functions'
@@ -49,7 +48,6 @@ import { ToastrModule } from 'ngx-toastr'
     DashboardComponent,
     WalletBnbComponent,
     WalletBnbAssetsComponent,
-    LedgerModalComponent,
   ],
   imports: [
     AppRoutingModule,

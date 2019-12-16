@@ -12,8 +12,26 @@
           <div class="row">
             <div class="col-12">
               <p>
-                Please confirm the address shown on your Ledger device.
+                Press the button below to display the address on your Ledger
+                device
               </p>
+              <p>
+                Then, if that is the desired address for use with CanWork, press
+                the right ✓ button on your Ledger device.
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 text-center">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="displayAddress()"
+                [disabled]="connectionInProgress"
+              >
+                Display
+                <i *ngIf="connectionInProgress" class="fa fa-spinner fa-spin"></i>
+              </button>
             </div>
           </div>
         </div>

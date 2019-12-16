@@ -30,7 +30,7 @@ export enum EventType {
 }
 
 export interface EventDetails {
-  connector: Connector
+  connector?: Connector
   address?: string
   keystore?: object
   account?: object
@@ -84,7 +84,7 @@ export class BinanceService {
         this.initKeystore(keystore, address)
       } else if (connectedWallet.walletApp === WalletApp.Ledger) {
         const { ledgerIndex } = connectedWallet
-        this.connectLedger(ledgerIndex)
+        this.initiateLedgerConnection(ledgerIndex)
       }
     }
   }
@@ -294,7 +294,14 @@ export class BinanceService {
     })
   }
 
-  connectLedger(
+  initiateLedgerConnection(ledgerIndex = 0) {
+    this.events.next({
+      type: EventType.Init,
+      details: { ledgerIndex },
+    })
+  }
+
+  async connectLedger(
     ledgerIndex: number,
     beforeAttempting?: () => void,
     onSuccess?: () => void,
@@ -311,7 +318,7 @@ export class BinanceService {
         onSuccess()
       }
     }
-    this.ledgerService.connectLedger(
+    return this.ledgerService.connectLedger(
       ledgerIndex,
       beforeAttempting,
       successCallback,

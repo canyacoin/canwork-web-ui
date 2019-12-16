@@ -26,7 +26,6 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   keystore: object = null
   unlockingFailed: boolean = false
   ledgerIndex: number = 0
-  ledgerConnecting: boolean = false
   attemptedConnection = false
   walletReplacement = {
     old: null,
@@ -182,24 +181,9 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
     }
   }
 
-  beforeLedgerConnection = () => {
-    this.ledgerConnecting = true
-  }
-
-  onLedgerConnectionSuccess = () => {
-    this.ledgerConnecting = false
-    // ;(window as any).$('#ledgerModal').modal('hide')
-  }
-
-  onLedgerConnectionFailure = (reason?: string) => {
-    this.toastr.error(`Unable to connect wallet: ${reason}`)
-    this.ledgerConnecting = false
-    // ;(window as any).$('#ledgerModal').modal('hide')
-  }
-
   connectLedger() {
     this.attemptedConnection = true
-    ;(window as any).$('#ledgerModal').modal('show')
+    this.binanceService.initiateLedgerConnection(this.ledgerIndex)
   }
 
   onConfirmWalletUpdate() {
