@@ -78,7 +78,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         case EventType.Update:
           this.bnbAddress = event.details.address
           break
-        case EventType.Init:
         case EventType.ConnectFailure:
         case EventType.Disconnect:
           this.bnbAddress = ''

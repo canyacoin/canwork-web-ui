@@ -118,10 +118,8 @@
                 <button
                   class="btn btn-primary"
                   (click)="connectLedger()"
-                  [disabled]="ledgerConnecting"
                 >
                   Unlock
-                  <i *ngIf="ledgerConnecting" class="fa fa-spinner fa-spin"></i>
                 </button>
               </div>
             </div>
@@ -194,13 +192,6 @@
     </div>
   </section>
 </main>
-<ledger-modal
-  [ledgerIndex]="this.ledgerIndex"
-  [beforeAttempting]="this.beforeLedgerConnection"
-  [onSuccess]="this.onLedgerConnectionSuccess"
-  [onFailure]="this.onLedgerConnectionFailure"
->
-</ledger-modal>
 <div
   class="modal fade"
   id="replaceWalletModal"
