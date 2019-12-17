@@ -23,7 +23,6 @@ import { FeedbackComponent } from './feedback/feedback.component'
 import { FooterComponent } from './footer/footer.component'
 import { HeaderComponent } from './header/header.component'
 import { SearchFilterOptionComponent } from './header/search-filter-option/search-filter-option.component'
-// import { IpfsDropzoneComponent } from './ipfs-dropzone/ipfs-dropzone.component';
 import { StorageDropzoneComponent } from './storage-dropzone/storage-dropzone.component'
 import { ProviderCardComponent } from './provider-card/provider-card.component'
 import { ScrollTopComponent } from './scroll-top/scroll-top.component'
@@ -84,7 +83,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     WindowScrollDirective,
     VStepperComponent,
     ProviderCardComponent,
-    // IpfsDropzoneComponent,
     StorageDropzoneComponent,
     ComingSoonComponent,
     AvatarComponent,
@@ -109,7 +107,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     VStepperComponent,
     ProviderCardComponent,
     WindowScrollDirective,
-    // IpfsDropzoneComponent,
     StorageDropzoneComponent,
     AvatarComponent,
     VerifiedMarkComponent,
