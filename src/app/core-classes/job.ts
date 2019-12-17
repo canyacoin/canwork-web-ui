@@ -11,7 +11,6 @@ export class Job {
   information: JobDescription
   paymentType: PaymentType
   budget: number
-  budgetCan: number
   daiInEscrow: number
   paymentLog: Array<Payment> = []
   state: JobState
@@ -116,7 +115,6 @@ export class Bid {
 export class Payment {
   txId: string
   timestamp: number
-  amountCan: number
 
   constructor(init?: Partial<Payment>) {
     Object.assign(this, init)

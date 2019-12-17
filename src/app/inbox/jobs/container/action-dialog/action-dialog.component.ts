@@ -148,7 +148,6 @@ export class ActionDialogComponent
           this.job.budget = this.form.value.budget
           this.action.setPaymentProperties(
             this.job.budget,
-            await this.jobService.getJobBudget(this.job),
             this.job.information.timelineExpectation,
             this.job.information.workType,
             this.job.information.weeklyCommitment,
@@ -156,7 +155,6 @@ export class ActionDialogComponent
           )
           break
         case ActionType.authoriseEscrow:
-          this.action.amountCan = this.job.budgetCan
           break
         case ActionType.review:
           this.action.message = this.form.value.message

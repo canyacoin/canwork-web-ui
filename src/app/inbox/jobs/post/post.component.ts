@@ -479,7 +479,6 @@ export class PostComponent implements OnInit, OnDestroy {
         const action = new IJobAction(ActionType.createJob, UserType.client)
         action.setPaymentProperties(
           job.budget,
-          await this.jobService.getJobBudget(job),
           this.postForm.value.timelineExpectation,
           this.postForm.value.workType,
           this.postForm.value.weeklyCommitment,
@@ -556,7 +555,6 @@ export class PostComponent implements OnInit, OnDestroy {
       const action = new IJobAction(ActionType.createJob, UserType.client)
       action.setPaymentProperties(
         job.budget,
-        await this.jobService.getJobBudget(job),
         this.shareableJobForm.value.timelineExpectation,
         this.shareableJobForm.value.workType,
         this.shareableJobForm.value.weeklyCommitment,

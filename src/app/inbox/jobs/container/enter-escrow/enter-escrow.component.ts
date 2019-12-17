@@ -301,7 +301,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
         ActionType.authoriseEscrow,
         UserType.client
       )
-      escrowAction.amountCan = this.job.budgetCan
       this.job.actionLog.push(escrowAction)
       this.job.clientEthAddress = from
       clientEthAddress = from

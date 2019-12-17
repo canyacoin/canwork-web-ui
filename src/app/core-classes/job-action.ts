@@ -13,7 +13,6 @@ export class IJobAction {
   rating: number
 
   amountUsd: number
-  amountCan: number
   workType: WorkType
   timelineExpectation: TimeRange
   weeklyCommitment: number
@@ -42,14 +41,12 @@ export class IJobAction {
 
   setPaymentProperties(
     usdVal: number,
-    canVal: number,
     timelineExpectation?: TimeRange,
     workType?: WorkType,
     weeklyCommitment?: number,
     paymentType?: PaymentType
   ) {
     this.amountUsd = usdVal
-    this.amountCan = canVal
     this.timelineExpectation = timelineExpectation
     this.workType = workType
     this.weeklyCommitment = weeklyCommitment

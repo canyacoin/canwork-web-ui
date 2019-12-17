@@ -1,11 +1,5 @@
 import { Injectable } from '@angular/core'
-import {
-  Job,
-  JobState,
-  Payment,
-  PaymentType,
-  TimeRange,
-} from '@class/job'
+import { Job, JobState, Payment, PaymentType, TimeRange } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
 import { Upload } from '@class/upload'
 import { User, UserType } from '@class/user'
@@ -45,7 +39,7 @@ export class JobService {
       .then(val => {
         this.canexDisabled = !val.enabled
       })
-      .catch( () => {
+      .catch(() => {
         this.canexDisabled = true
       })
   }
@@ -93,21 +87,6 @@ export class JobService {
       .where('state', '==', JobState.reviewed)
       .get()
     return data
-  }
-
-  // TODO remove
-  async getJobBudget(job: Job): Promise<number> {
-    try {
-      const totalBudget = await this.getJobBudgetUsd(job)
-      const canValue = await this.ethService.getUsdToCan(totalBudget)
-      if (canValue) {
-        return Promise.resolve(canValue)
-      } else {
-        return Promise.reject(false)
-      }
-    } catch (e) {
-      return Promise.reject(false)
-    }
   }
 
   async getJobBudgetBinance(job: Job): Promise<number> {
@@ -228,14 +207,10 @@ export class JobService {
             break
           case ActionType.acceptTerms:
             try {
-              const totalBudgetCan = await this.getJobBudget(job)
-              if (totalBudgetCan !== 0) {
-                parsedJob.budgetCan = totalBudgetCan
-                parsedJob.actionLog.push(action)
-                parsedJob.state = JobState.termsAcceptedAwaitingEscrow
-                await this.saveJobAndNotify(parsedJob, action)
-                resolve(true)
-              }
+              parsedJob.actionLog.push(action)
+              parsedJob.state = JobState.termsAcceptedAwaitingEscrow
+              await this.saveJobAndNotify(parsedJob, action)
+              resolve(true)
             } catch (e) {
               reject()
             }
