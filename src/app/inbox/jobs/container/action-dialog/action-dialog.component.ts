@@ -1,13 +1,11 @@
-import { AfterViewInit, Component, ComponentRef, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { Http, Response } from '@angular/http'
 import { Job, PaymentType } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
 import { User, UserType } from '@class/user'
 import { JobService } from '@service/job.service'
-import { UserService } from '@service/user.service'
 import { getUsdToCan } from '@util/currency-conversion'
-import { EthService } from '@service/eth.service'
+import { BinanceService } from '@service/binance.service'
 import { RatingChangeEvent } from 'angular-star-rating'
 import { DialogComponent, DialogService } from 'ng2-bootstrap-modal'
 
@@ -44,16 +42,14 @@ export class ActionDialogComponent
   actionTypes = ActionType
   paymentTypes = PaymentType
 
-  canToUsd: number
+  usdToAtomicCan: number
   form: FormGroup = null
 
   constructor(
     dialogService: DialogService,
     private formBuilder: FormBuilder,
     private jobService: JobService,
-    private userService: UserService,
-    private ethService: EthService,
-    private http: Http
+    private binanceService: BinanceService,
   ) {
     super(dialogService)
   }
@@ -197,13 +193,13 @@ export class ActionDialogComponent
 
   private async setupCanConverter() {
     try {
-      this.canToUsd = await this.ethService.getCanToUsd()
+      this.usdToAtomicCan = await this.binanceService.getUsdToAtomicCan()
     } catch (e) {
-      this.canToUsd = null
+      this.usdToAtomicCan = null
     }
   }
 
   usdToCan(usd: number) {
-    return getUsdToCan(this.canToUsd, usd)
+    return getUsdToCan(this.usdToAtomicCan, usd)
   }
 }

@@ -343,7 +343,7 @@
                       </div>
                       <div class="row">
                         <div
-                          *ngIf="postForm.controls.budget.dirty && canToUsd"
+                          *ngIf="postForm.controls.budget.dirty && usdToAtomicCan"
                           class="col-6 mt-5 text-right"
                         >
                           <small
@@ -863,7 +863,7 @@
                         <div class="row">
                           <div
                             *ngIf="
-                              shareableJobForm.controls.budget.dirty && canToUsd
+                              shareableJobForm.controls.budget.dirty && usdToAtomicCan
                             "
                             class="col-6 mt-5 text-right"
                           >

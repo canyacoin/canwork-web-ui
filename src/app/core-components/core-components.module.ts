@@ -34,7 +34,6 @@ import { ToolsComponent } from './tools/tools.component'
 import { VStepperComponent } from './v-stepper/v-stepper.component'
 import { FaqComponent } from './wallet-install/faq/faq.component'
 import { InstructionsComponent } from './wallet-install/instructions/instructions.component'
-import { WalletInstallComponent } from './wallet-install/wallet-install.component'
 import { WindowScrollDirective } from './window-scroll.directive'
 import { AvatarComponent } from './avatar/avatar.component'
 import { VerifiedMarkComponent } from './verified-mark/verified-mark.component'
@@ -82,7 +81,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     TermsComponent,
     ToolsComponent,
     BackButtonComponent,
-    WalletInstallComponent,
     WindowScrollDirective,
     VStepperComponent,
     ProviderCardComponent,
@@ -108,7 +106,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ScrollTopComponent,
     SkillTagComponent,
     SkillTagsSelectionComponent,
-    WalletInstallComponent,
     VStepperComponent,
     ProviderCardComponent,
     WindowScrollDirective,

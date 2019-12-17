@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core'
-import { serializePath } from '@angular/router/src/url_tree'
 import * as union from 'lodash/union'
 
 @Component({
