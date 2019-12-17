@@ -16,7 +16,6 @@ import {
   Step,
   View,
 } from '../interfaces'
-import { EthService } from '@service/eth.service'
 import { FormDataService } from '../services/formData.service'
 
 @Component({
@@ -77,7 +76,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
   totalTransactions = 1
 
   constructor(
-    private ethService: EthService,
     private formDataService: FormDataService
   ) {}
 
@@ -179,45 +177,10 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
     }
   }
 
-  setAccount(_acc) {
-    console.log('setAccount: ', _acc)
-    this.account = _acc
-    setTimeout(
-      () =>
-        this.operation === Operation.interact
-          ? this.updateCurrentStep(Step.process)
-          : !this.amount
-          ? this.updateCurrentStep(Step.paymentAmount)
-          : this.checkBalance(),
-      200
-    )
-  }
-
   setAmount(amount) {
     console.log('setAmount: ', amount)
     this.amount = amount
     this.stepFinished()
-  }
-
-  checkBalance() {
-    let isLoading = true
-    if (!this.balanceInterval) {
-      this.balanceInterval = setInterval(() => {
-        this.ethService
-          .getCanYaBalance(this.ethService.getOwnerAccount())
-          .then(_balance => {
-            this.balance = Number(_balance)
-            this.insufficientBalance = Number(_balance) < this.amount
-            if (!this.insufficientBalance) {
-              this.stepFinished(Step.balanceCheck)
-            } else if (isLoading) {
-              isLoading = false
-              this.updateCurrentStep(Step.balanceCheck)
-            }
-          })
-          .catch(err => this.error('Unable to retrieve user CAN balance!'))
-      }, 2000)
-    }
   }
 
   transactionSent() {
@@ -308,12 +271,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
         this.updateCurrentStep(Step.paymentSummary)
         break
       case Step.paymentSummary:
-        // TODO remove
-        // if (this.ethService.account.value) {
-        //   this.checkBalance()
-        // } else {
-        //   this.updateCurrentStep(Step.metamask)
-        // }
         this.updateCurrentStep(Step.confirmation)
         break
       case Step.balanceCheck:
@@ -355,10 +312,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
       : this.operation === Operation.interact
       ? Step.process
       : Step.payment
-  }
-
-  getCanExRecipient(): string {
-    return this.destinationAddress || this.ethService.getOwnerAccount()
   }
 
   get hasPostAuthProcess() {
