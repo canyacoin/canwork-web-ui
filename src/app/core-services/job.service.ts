@@ -14,13 +14,11 @@ import {
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 
-import { FeatureToggleService } from './feature-toggle.service'
 import { ReviewService } from './review.service'
 
 @Injectable()
 export class JobService {
   jobsCollection: AngularFirestoreCollection<any>
-  canexDisabled = false
 
   constructor(
     private afs: AngularFirestore,
@@ -29,17 +27,8 @@ export class JobService {
     private reviewService: ReviewService,
     private binanceService: BinanceService,
     private jobNotificationService: JobNotificationService,
-    private featureService: FeatureToggleService
   ) {
     this.jobsCollection = this.afs.collection<any>('jobs')
-    this.featureService
-      .getFeatureConfig('canexchange')
-      .then(val => {
-        this.canexDisabled = !val.enabled
-      })
-      .catch(() => {
-        this.canexDisabled = true
-      })
   }
 
   // =========================

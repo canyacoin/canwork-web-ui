@@ -33,7 +33,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
   @Input() view = View.Normal
   @Input() postAuthorisationProcessName
   @Input() operation = Operation.auth
-  @Input() onAuthTxHash
   @Input() onPaymentTxHash
   @Input() recipient
   @Input() dAppName
@@ -42,7 +41,7 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
   @Input() paymentSummary: PaymentSummary
   @Input() minAmount = 1
   @Input() maxAmount = 0
-  @Input() disableCanEx = false
+  @Input() disableCanEx = true
   @Input() destinationAddress
   @Input() userEmail
   @Input() startJob

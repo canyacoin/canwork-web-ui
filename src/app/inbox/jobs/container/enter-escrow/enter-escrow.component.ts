@@ -51,7 +51,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   errorMsg: string
   totalJobBudgetUsd: number
   canPayOptions: CanPay
-  canexDisabled = false
   countryList: any
   walletForm: FormGroup = null
   cardForm: FormGroup = null
@@ -139,7 +138,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     return this.http.get('../../assets/js/countryCodes.json')
   }
 
-  private async payInCrypto() {
+  async payInCrypto() {
     if (
       !this.binanceService.isLedgerConnected() &&
       !this.binanceService.isKeystoreConnected() &&
@@ -286,43 +285,9 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   }
 
   async startCanpay() {
-    const canexToggle = await this.featureService.getFeatureConfig(
-      'canexchange'
-    )
-    this.canexDisabled = !canexToggle.enabled
-    let clientEthAddress = 'N/A'
-    const onAuthTxHash = async (txHash: string, from: string) => {
-      /* IF authorisation hash gets sent, do:
-         post tx to transaction monitor
-         save tx to collection
-         save action/pending to job
-         update users active eth address */
-      const escrowAction = new IJobAction(
-        ActionType.authoriseEscrow,
-        UserType.client
-      )
-      this.job.actionLog.push(escrowAction)
-      this.job.clientEthAddress = from
-      clientEthAddress = from
-      await this.jobService.saveJobFirebase(this.job)
-    }
-
-    const onComplete = async result => {
+    const onComplete = async () => {
       // call endpoint?
       this.router.navigate(['/inbox/job', this.job.id])
-    }
-
-    const onTxHash = async (txHash: string, from: string) => {
-      /* IF enter escrow hash gets sent, do:
-         post tx to transaction monitor
-         save tx to collection
-         save action/pending to job */
-      const action = new IJobAction(ActionType.enterEscrow, UserType.client)
-      this.job.actionLog.push(action)
-      this.job.clientEthAddress = from
-      this.job.fiatPayment = false
-      clientEthAddress = from
-      await this.jobService.saveJobFirebase(this.job)
     }
 
     const startJob = async () => {
@@ -428,12 +393,10 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       successText: 'Woohoo, job started!',
       recipient: environment.contracts.canwork,
       operation: Operation.auth,
-      onAuthTxHash: onAuthTxHash.bind(this),
       amount: jobBudgetCan,
       paymentSummary: paymentSummary,
       complete: onComplete,
       cancel: onComplete,
-      disableCanEx: this.canexDisabled,
       userEmail: client.email,
       initialisePayment,
 
