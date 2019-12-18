@@ -1,0 +1,36 @@
+<div id="sendTxModal" class="modal fade" role="dialog">
+  <div border-none class="modal-dialog">
+    <div class="modal-content">
+      <div border-none class="modal-header  text-center">
+        <div class="col-12">
+          <h5 class="modal-title">Confirm Transaction</h5>
+        </div>
+      </div>
+      <div border-none class="modal-body">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <p>
+                TODO
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 text-center">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="confirmTransaction()"
+                [disabled]="isConfirming"
+              >
+                Confirm
+                <i *ngIf="isConfirming" class="fa fa-spinner fa-spin"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, EventEmitter } from '@angular/core'
 import WalletConnect from '@trustwallet/walletconnect'
 import { BehaviorSubject } from 'rxjs'
 import base64js from 'base64-js'
@@ -46,6 +46,12 @@ export interface Event {
   forced?: boolean
 }
 
+export interface Transaction {
+  to: string
+  amountCan: number
+  memo: string
+}
+
 const ESCROW_ADDRESS = environment.binance.escrowAddress
 const CHAIN_ID = environment.binance.chainId
 const NETWORK_ID = 714
@@ -63,6 +69,7 @@ export class BinanceService {
   connector: Connector | null
   private events: BehaviorSubject<Event | null> = new BehaviorSubject(null)
   events$ = this.events.asObservable()
+  transactionsEmitter: EventEmitter<Transaction> = new EventEmitter<Transaction>()
   client = new BncClient(BASE_API_URL)
   private connectedWalletApp: WalletApp = null
   private connectedWalletDetails: any = null
@@ -408,6 +415,10 @@ export class BinanceService {
       // user doesn't have any CAN or BNB at all
       return false
     }
+  }
+
+  emitTransaction(tx: Transaction) {
+    this.transactionsEmitter.emit(tx)
   }
 
   private async preconditions(
