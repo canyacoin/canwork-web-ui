@@ -69,7 +69,9 @@ export class BinanceService {
   connector: Connector | null
   private events: BehaviorSubject<Event | null> = new BehaviorSubject(null)
   events$ = this.events.asObservable()
-  transactionsEmitter: EventEmitter<Transaction> = new EventEmitter<Transaction>()
+  transactionsEmitter: EventEmitter<Transaction> = new EventEmitter<
+    Transaction
+  >()
   client = new BncClient(BASE_API_URL)
   private connectedWalletApp: WalletApp = null
   private connectedWalletDetails: any = null
@@ -177,6 +179,13 @@ export class BinanceService {
         localStorage.removeItem('connectedWallet')
       }
     })
+  }
+
+  getAddress(): string {
+    if (!this.connectedWalletDetails) {
+      return null
+    }
+    return this.connectedWalletDetails.address
   }
 
   confirmConnection() {
@@ -449,6 +458,14 @@ export class BinanceService {
     }
     const memo = `ESCROW:${jobId}:${providerAddress}`
     const to = ESCROW_ADDRESS
+    const transaction: Transaction = {
+      to,
+      amountCan,
+      memo,
+    }
+    this.emitTransaction(transaction)
+    return
+
     if (this.isLedgerConnected()) {
       this.transactViaLedger(
         to,

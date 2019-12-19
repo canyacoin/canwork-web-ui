@@ -3,16 +3,29 @@
     <div class="modal-content">
       <div border-none class="modal-header  text-center">
         <div class="col-12">
-          <h5 class="modal-title">Confirm Transaction</h5>
+          <h4 class="modal-title">Confirm Transaction</h4>
         </div>
       </div>
       <div border-none class="modal-body">
         <div class="container">
-          <div class="row">
+          <div class="row" *ngIf="transaction">
             <div class="col-12">
-              <p>
-                TODO
-              </p>
+              <b>From:</b>
+              <div>{{ fromAddress }}</div>
+              <br />
+              <b>To:</b>
+              <div>{{ transaction.to }}</div>
+              <br />
+              <b>Memo:</b>
+              <div>
+                <div *ngFor="let memoPart of splitMemo(transaction.memo)">
+                  {{ memoPart }}
+                </div>
+              </div>
+              <br />
+              <b>Amount CAN:</b>
+              <div>{{ formatAmount(transaction.amountCan) }}</div>
+              <br />
             </div>
           </div>
           <div class="row">
@@ -33,4 +46,3 @@
     </div>
   </div>
 </div>
-
