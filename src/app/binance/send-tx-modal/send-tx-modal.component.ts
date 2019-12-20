@@ -8,11 +8,13 @@ import { formatAtomicCan } from '@util/currency-conversion'
   templateUrl: './send-tx-modal.component.html',
 })
 export class SendTxModalComponent implements OnInit, OnDestroy {
-  isConfirming: boolean = false
   private txSubscription?: any = null
+
+  isConfirming: boolean = false
   fromAddress?: string = null
   transaction?: Transaction = null
-  password?: string = null
+  keystorePassword: string = ''
+  isKeystorePasswordVisible: boolean = false
 
   constructor(
     private binanceService: BinanceService,
@@ -22,8 +24,11 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.txSubscription = this.binanceService.transactionsEmitter.subscribe({
       next: (transaction: Transaction) => {
+        this.isConfirming = false
         this.fromAddress = this.binanceService.getAddress()
         this.transaction = transaction
+        this.keystorePassword = ''
+        this.isKeystorePasswordVisible = this.binanceService.isKeystoreConnected()
         ;(window as any).$('#sendTxModal').modal('show')
       },
     })
@@ -53,6 +58,7 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
 
   private wrapBeforeTransaction(beforeTransaction: Function) {
     return function() {
+      this.isConfirming = true
       if (this.binanceService.isLedgerConnected()) {
         this.toastr.info('Please approve on your ledger')
       } else if (this.binanceService.isWalletConnectConnected()) {
@@ -66,6 +72,7 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
 
   private wrapOnSuccess(onSuccess: Function) {
     return function() {
+      this.isConfirming = false
       this.toastr.success('Successfully sent the transaction')
       this.close()
       if (onSuccess) {
@@ -76,12 +83,12 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
 
   private wrapOnFailure(onFailure: Function) {
     return function(reason) {
+      this.isConfirming = false
       let errorMessage = 'Transaction failed'
       if (reason) {
         errorMessage += `: ${reason}`
       }
       this.toastr.error(errorMessage)
-      this.close()
       if (onFailure) {
         onFailure.apply(this, arguments)
       }
@@ -103,17 +110,17 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
         memo,
         wrappedBeforeTransaction,
         wrappedOnSuccess,
-        wrappedOnFailure,
+        wrappedOnFailure
       )
     } else if (this.binanceService.isKeystoreConnected()) {
       this.binanceService.transactViaKeystore(
         to,
         amountCan,
         memo,
-        this.password,
+        this.keystorePassword,
         wrappedBeforeTransaction,
         wrappedOnSuccess,
-        wrappedOnFailure,
+        wrappedOnFailure
       )
     } else if (this.binanceService.isWalletConnectConnected()) {
       this.binanceService.transactViaWalletConnect(
@@ -122,7 +129,7 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
         memo,
         wrappedBeforeTransaction,
         wrappedOnSuccess,
-        wrappedOnFailure,
+        wrappedOnFailure
       )
     } else {
       console.error('Unsupported wallet type')

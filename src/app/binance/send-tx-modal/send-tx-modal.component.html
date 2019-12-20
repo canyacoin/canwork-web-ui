@@ -29,7 +29,15 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-12 text-center">
+            <div class="col-6">
+              <input
+                *ngIf="isKeystorePasswordVisible"
+                [(ngModel)]="keystorePassword"
+                type="password"
+                placeholder="Enter wallet password"
+              />
+            </div>
+            <div class="col-6 text-right">
               <button
                 type="button"
                 class="btn btn-primary"
