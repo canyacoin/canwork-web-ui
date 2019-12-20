@@ -53,7 +53,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   cardForm: FormGroup = null
   fiatPaymentStep: FiatPaymentSteps
   acceptCopyMnemonicForm: FormGroup
-  sendTransaction: Function
 
   shopper: any
   fiatPayment: any

@@ -45,7 +45,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   reviewsSub: Subscription
   hideDescription = true
   isInitialised = false
-  sendTransaction: Function
 
   constructor(
     private authService: AuthService,
