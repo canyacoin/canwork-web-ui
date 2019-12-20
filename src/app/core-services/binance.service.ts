@@ -50,6 +50,13 @@ export interface Transaction {
   to: string
   amountCan: number
   memo: string
+  callbacks?: TransactionCallbacks
+}
+
+export interface TransactionCallbacks {
+  beforeTransaction?: () => void
+  onSuccess?: () => void
+  onFailure?: (reason?: string) => void
 }
 
 const ESCROW_ADDRESS = environment.binance.escrowAddress
@@ -426,8 +433,8 @@ export class BinanceService {
     }
   }
 
-  emitTransaction(tx: Transaction) {
-    this.transactionsEmitter.emit(tx)
+  emitTransaction(transaction: Transaction) {
+    this.transactionsEmitter.emit(transaction)
   }
 
   private async preconditions(
@@ -449,8 +456,7 @@ export class BinanceService {
     providerAddress: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
-    onFailure?: (reason?: string) => void,
-    password?: string
+    onFailure?: (reason?: string) => void
   ) {
     const preconditionsOk = await this.preconditions(amountCan, onFailure)
     if (!preconditionsOk) {
@@ -458,46 +464,18 @@ export class BinanceService {
     }
     const memo = `ESCROW:${jobId}:${providerAddress}`
     const to = ESCROW_ADDRESS
+    const callbacks: TransactionCallbacks = {
+      beforeTransaction,
+      onSuccess,
+      onFailure,
+    }
     const transaction: Transaction = {
       to,
       amountCan,
       memo,
+      callbacks,
     }
     this.emitTransaction(transaction)
-    return
-
-    if (this.isLedgerConnected()) {
-      this.transactViaLedger(
-        to,
-        amountCan,
-        memo,
-        beforeTransaction,
-        onSuccess,
-        onFailure
-      )
-    } else if (this.isKeystoreConnected()) {
-      this.transactViaKeystore(
-        to,
-        amountCan,
-        memo,
-        password,
-        beforeTransaction,
-        onSuccess,
-        onFailure
-      )
-    } else if (this.isWalletConnectConnected()) {
-      this.transactViaWalletConnect(
-        to,
-        amountCan,
-        memo,
-        beforeTransaction,
-        onSuccess,
-        onFailure
-      )
-    } else {
-      console.error('Unsupported wallet type')
-      onFailure('no supported wallet connected')
-    }
   }
 
   async releaseFunds(
@@ -505,7 +483,6 @@ export class BinanceService {
     beforeTransaction?: () => void,
     onSuccess?: () => void,
     onFailure?: (reason?: string) => void,
-    password?: string
   ) {
     const amountCan = 1
     const preconditionsOk = await this.preconditions(amountCan, onFailure)
@@ -515,41 +492,21 @@ export class BinanceService {
     const memo = `RELEASE:${jobId}`
     const to = ESCROW_ADDRESS
 
-    if (this.isLedgerConnected()) {
-      this.transactViaLedger(
-        to,
-        amountCan,
-        memo,
-        beforeTransaction,
-        onSuccess,
-        onFailure
-      )
-    } else if (this.isKeystoreConnected()) {
-      this.transactViaKeystore(
-        to,
-        amountCan,
-        memo,
-        password,
-        beforeTransaction,
-        onSuccess,
-        onFailure
-      )
-    } else if (this.isWalletConnectConnected()) {
-      this.transactViaWalletConnect(
-        to,
-        amountCan,
-        memo,
-        beforeTransaction,
-        onSuccess,
-        onFailure
-      )
-    } else {
-      console.error('Unsupported wallet type')
-      onFailure('no supported wallet connected')
+    const callbacks: TransactionCallbacks = {
+      beforeTransaction,
+      onSuccess,
+      onFailure,
     }
+    const transaction: Transaction = {
+      to,
+      amountCan,
+      memo,
+      callbacks,
+    }
+    this.emitTransaction(transaction)
   }
 
-  private async transactViaLedger(
+  async transactViaLedger(
     to: string,
     amountCan: number,
     memo: string,
@@ -595,7 +552,7 @@ export class BinanceService {
     }
   }
 
-  private async transactViaKeystore(
+  async transactViaKeystore(
     to: string,
     amountCan: number,
     memo: string,
@@ -640,7 +597,7 @@ export class BinanceService {
     }
   }
 
-  private async transactViaWalletConnect(
+  async transactViaWalletConnect(
     to: string,
     amountCan: number,
     memo: string,

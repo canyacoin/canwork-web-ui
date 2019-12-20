@@ -245,54 +245,14 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
     const jobId = this.job.id
 
-    const beforeTransaction = () => {
-      if (this.binanceService.isLedgerConnected()) {
-        this.toastr.info('Please approve on your ledger')
-      } else if (this.binanceService.isWalletConnectConnected()) {
-        this.toastr.info('Please approve on your WalletConnect')
-      }
-    }
-
     const onSuccess = async () => {
-      if (this.binanceService.isKeystoreConnected()) {
-        ;(window as any).$('#keystoreTxModal').modal('hide')
-      }
-      console.log('Success')
-      this.toastr.success('Success')
       const action = new IJobAction(ActionType.acceptFinish, UserType.client)
       this.job.actionLog.push(action)
       this.job.state = JobState.complete
       await this.jobService.saveJobFirebase(this.job)
     }
 
-    const onFailure = (reason?: string) => {
-      let errorMessage = 'Transaction failed'
-      if (reason) {
-        errorMessage += `: ${reason}`
-      }
-      this.toastr.error(errorMessage)
-    }
-
-    const sendTransaction = (password?: string) => {
-      this.binanceService.releaseFunds(
-        jobId,
-        beforeTransaction,
-        onSuccess,
-        onFailure,
-        password
-      )
-    }
-
-    this.sendTransaction = sendTransaction
-
-    if (this.binanceService.isKeystoreConnected()) {
-      ;(window as any).$('#keystoreTxModal').modal('show')
-    } else if (
-      this.binanceService.isLedgerConnected() ||
-      this.binanceService.isWalletConnectConnected()
-    ) {
-      sendTransaction()
-    }
+    this.binanceService.releaseFunds(jobId, undefined, onSuccess, undefined)
   }
 
   executeAction(action: ActionType) {
