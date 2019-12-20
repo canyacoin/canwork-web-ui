@@ -257,7 +257,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       if (this.binanceService.isKeystoreConnected()) {
         ;(window as any).$('#keystoreTxModal').modal('hide')
       }
-      console.log('Success')
       this.toastr.success('Success')
       const action = new IJobAction(ActionType.acceptFinish, UserType.client)
       this.job.actionLog.push(action)
@@ -325,9 +324,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
             })
           )
           .subscribe(success => {
-            if (success) {
-              console.log('Action executed')
-            } else {
+            if (!success) {
               console.log('Action cancelled')
             }
           })

@@ -65,7 +65,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.shareableLink = environment.shareBaseUrl
     this.activatedRoute.params.pipe(take(1)).subscribe(params => {
-      console.log(params)
       if (params['jobId']) {
         this.jobSub = this.publicJobsService
           .getPublicJob(params['jobId'])

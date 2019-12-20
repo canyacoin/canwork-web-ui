@@ -528,7 +528,6 @@ export class PostComponent implements OnInit, OnDestroy {
         this.slug = await this.publicJobService.generateReadableId(
           this.shareableJobForm.value.title
         )
-        console.log('Friendly URL : ' + this.slug)
       }
       const job = new Job({
         id: this.jobId,
@@ -562,8 +561,6 @@ export class PostComponent implements OnInit, OnDestroy {
         this.shareableJobForm.value.weeklyCommitment,
         this.shareableJobForm.value.paymentType
       )
-      console.log('Shareable job submitted...')
-      console.log('job created')
       if (!isDraft) {
         job.state = JobState.acceptingOffers
       } else {

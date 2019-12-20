@@ -382,7 +382,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
         if (this.binanceService.isKeystoreConnected()) {
           ;(window as any).$('#keystoreTxModal').modal('hide')
         }
-        console.log('Success')
         startJob()
         if (successCallback) {
           successCallback()
