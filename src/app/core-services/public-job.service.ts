@@ -137,7 +137,7 @@ export class PublicJobService {
     const exist = (await this.afs
       .collection(`public-jobs/`, ref => ref.where('clientId', '==', userId))
       .valueChanges()
-      .take(1)
+      .pipe(take(1))
       .toPromise()) as Job[]
     let result: Job[]
     result = exist.filter(job => job.state === 'Accepting Offers' && !job.draft)
