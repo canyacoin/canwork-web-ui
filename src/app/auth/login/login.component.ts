@@ -273,7 +273,7 @@ export class LoginComponent implements OnInit {
       this.onBackToMobileSignIn()
     }
 
-    if (user) {
+    if (user && user.address) {
       console.log('+ logging existing user in:', user.email)
       firebase
         .auth()
