@@ -699,6 +699,9 @@ exports.updateIndexProviderData = functions.firestore
       !beforeData.whitelisted && afterData.whitelisted
     const userIsWhitelistedButEmailIsNotSent =
       afterData.whitelisted && !afterData.sentApprovedEmail
+    if (userHasBeenWhitelisted) {
+      notifyAdminOnNewUser(afterData)
+    }
     if (userHasBeenWhitelisted || userIsWhitelistedButEmailIsNotSent) {
       console.log('+ sending a accepted provider email...')
 
@@ -794,6 +797,32 @@ exports.updateIndexProviderData = functions.firestore
       workData,
     })
   })
+
+function notifyAdminOnNewUser(user) {
+  console.log('+ sending a new provider email to admin...')
+
+  const text = `
+  Link to profile: https://canwork.io/${user.slug}
+  <br>
+  Email address: ${user.email}
+  `
+  const sgMail = require('@sendgrid/mail')
+  sgMail.setApiKey(sendgridApiKey)
+  sgMail.setSubstitutionWrappers('{{', '}}')
+  sgMail.send(
+    {
+      to: 'temp1@vladtim.com',
+      from: 'support@canya.com',
+      subject: `New Provider`,
+      html: text,
+    },
+    async (error) => {
+      if (error) {
+        console.error('! error sending message:', error.response.body)
+      }
+    }
+  )
+}
 
 /*
  * Listen for profile (work array) modifications and update the users collection tag set
