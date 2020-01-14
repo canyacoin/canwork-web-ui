@@ -178,7 +178,7 @@ export class EditComponent implements OnInit, OnDestroy {
       address: this.currentUser.address,
       name: this.profileForm.value.name,
       work: this.profileForm.value.work,
-      bnbAddress: this.profileForm.value.bnbAddress.toLowerCase(),
+      bnbAddress: this.profileForm.value.bnbAddress,
       title: this.profileForm.value.title,
       bio: this.profileForm.value.bio,
       category: category,
