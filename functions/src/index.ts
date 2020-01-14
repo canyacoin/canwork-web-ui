@@ -811,7 +811,7 @@ function notifyAdminOnNewUser(user) {
   sgMail.setSubstitutionWrappers('{{', '}}')
   sgMail.send(
     {
-      to: 'temp1@vladtim.com',
+      to: 'support@canya.com',
       from: 'support@canya.com',
       subject: `New Provider`,
       html: text,
