@@ -816,7 +816,7 @@ function notifyAdminOnNewUser(user) {
       subject: `New Provider`,
       html: text,
     },
-    async (error) => {
+    async error => {
       if (error) {
         console.error('! error sending message:', error.response.body)
       }
