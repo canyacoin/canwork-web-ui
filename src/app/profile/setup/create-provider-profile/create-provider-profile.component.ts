@@ -191,6 +191,7 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
   proceed() {
     this.sending = true
     this.user.whitelistSubmitted = true
+    this.user.whitelisted = true
     this.userService.saveUser(this.user)
   }
 }
