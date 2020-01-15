@@ -284,9 +284,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
             })
           )
           .subscribe(success => {
-            if (success) {
-              console.log('Action executed')
-            } else {
+            if (!success) {
               console.log('Action cancelled')
             }
           })

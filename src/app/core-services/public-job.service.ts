@@ -173,7 +173,6 @@ export class PublicJobService {
     if (action && action !== null) {
       job.actionLog.push(action)
     }
-    console.log("added action to this job's action log")
     const parsedJob = await this.jobService.parseJobToObject(job)
     try {
       return this.publicJobsCollection.doc(job.id).set(parsedJob)
@@ -195,7 +194,6 @@ export class PublicJobService {
     return new Promise<boolean>(async (resolve, reject) => {
       try {
         if (this.canBid(bid.providerId, job)) {
-          console.log('uploading the bid')
           const action = new IJobAction(ActionType.bid, UserType.provider)
           const client = await this.userService.getUser(job.clientId)
           const provider = await this.userService.getUser(bid.providerId)
@@ -329,11 +327,9 @@ export class PublicJobService {
 
   async generateReadableId(jobName) {
     let slug = slugify(jobName, { lower: true })
-    console.log(jobName + ' = filtered to = ' + slug)
     const exists = await this.jobUrlExists(slug)
-    console.log(exists)
     if (!exists) {
-      console.log('just upload it')
+      // console.log('just upload it')
     } else {
       console.log('wait might want to change the url mate')
       const random = new Random()
@@ -351,8 +347,6 @@ export class PublicJobService {
     bidObject.providerInfo = bid.providerInfo
     bidObject.budget = bid.budget
     bidObject.timestamp = bid.timestamp
-    console.log('converted the bid into object')
-    console.log(bidObject)
     return bidObject
   }
 

@@ -111,7 +111,6 @@ export class AboutComponent implements OnInit {
       this.userModel
     )
     if (invited) {
-      console.log(this.currentUserJobs[index])
       this.currentUserJobs[index].canInvite = false
       this.inviting = false
       return true

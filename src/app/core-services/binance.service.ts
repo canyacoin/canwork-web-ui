@@ -107,7 +107,6 @@ export class BinanceService {
 
   private resetConnector() {
     this.connector = null
-    console.log('Reset connector')
   }
 
   private subscribeToEvents() {
@@ -135,7 +134,6 @@ export class BinanceService {
           // address already used by another user
           if (await validator.isUniqueAddress(address, user)) {
             this.userService.updateUserProperty(user, 'bnbAddress', address)
-            console.log('updated bnbAddress')
           } else {
             this.events.next({
               type: EventType.ConnectFailure,
@@ -537,9 +535,7 @@ export class BinanceService {
         memo
       )
 
-      console.log(results)
       if (results.result[0].ok) {
-        console.log(`Sent transaction: ${results.result.hash}`)
         if (onSuccess) {
           onSuccess()
         }
@@ -582,9 +578,7 @@ export class BinanceService {
         memo
       )
 
-      console.log(results)
       if (results.result[0].ok) {
-        console.log(`Sent transaction: ${results.result.hash}`)
         if (onSuccess) {
           onSuccess()
         }
@@ -647,9 +641,7 @@ export class BinanceService {
         tx
       )
       // Returns transaction signed in json or encoded format
-      console.log('Successfully signed msg:', result)
       const response = await this.client.sendRawTransaction(result, true)
-      console.log('Response', response)
       if (onSuccess) {
         onSuccess()
       }
