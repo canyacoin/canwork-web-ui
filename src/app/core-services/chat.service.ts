@@ -238,7 +238,6 @@ export class ChatService {
       null,
       job.id
     )
-    console.log(receiverId)
     this.sendMessage(sender.address, receiverId, message)
   }
 

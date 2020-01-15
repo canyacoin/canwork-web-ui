@@ -385,14 +385,10 @@
     <img src="assets/img/loader.svg" height="36px" alt="Loader" />
   </div>
   <div class="container" *ngIf="canPayOptions">
-    <keystore-tx
-      [sendTransaction]="this.sendTransaction"
-    ></keystore-tx>
     <canyalib-canpay
       [dAppName]="canPayOptions.dAppName"
       [successText]="canPayOptions.successText"
       [operation]="canPayOptions.operation"
-      [onAuthTxHash]="canPayOptions.onAuthTxHash"
       [recipient]="canPayOptions.recipient"
       [amount]="canPayOptions.amount"
       [paymentSummary]="canPayOptions.paymentSummary"
@@ -407,7 +403,6 @@
       "
       (complete)="canPayOptions.complete($event)"
       (cancel)="canPayOptions.cancel($event)"
-      [disableCanEx]="canPayOptions.disableCanEx"
       [userEmail]="canPayOptions.userEmail"
       [startJob]="canPayOptions.startJob"
       [initialisePayment]="canPayOptions.initialisePayment"

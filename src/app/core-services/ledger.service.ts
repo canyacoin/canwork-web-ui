@@ -35,20 +35,11 @@ export class LedgerService {
     win.app = new ledger.app(transport, 100000, 100000)
     const app = win.app
 
-    // get version
-    try {
-      const version = await app.getVersion()
-      console.log('version', version)
-    } catch ({ message, statusCode }) {
-      console.error('version error', message, statusCode)
-    }
-
     // we can provide the hd path (app checks first two parts are same as below)
     const hdPath = [44, 714, 0, 0, ledgerIndex]
 
     // select which address to use
     const results = await app.showAddress(environment.binance.prefix, hdPath)
-    console.log('Results:', results)
 
     // get public key
     let pk
@@ -60,7 +51,6 @@ export class LedgerService {
         pk,
         environment.binance.prefix
       )
-      console.log('address', address)
 
       if (onSuccess) {
         onSuccess(address, app, hdPath, ledgerIndex)

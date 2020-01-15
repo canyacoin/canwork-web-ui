@@ -40,7 +40,7 @@
             </div>
             <div class="row">
               <div
-                *ngIf="form.controls.budget.dirty && canToUsd"
+                *ngIf="form.controls.budget.dirty && usdToAtomicCan"
                 class="col-12 mt-5 text-right"
               >
                 <small>~ {{ usdToCan(form.controls.budget.value) }} CAN</small>

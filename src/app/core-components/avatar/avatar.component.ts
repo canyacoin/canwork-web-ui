@@ -42,7 +42,6 @@ export class AvatarComponent implements OnInit, OnChanges {
     this.avatarUrl = from(
       new Promise<string>((resolve, reject) => {
         if (!url) {
-          reject(new Error('Missing avatar URL'))
           return
         }
         const img = new Image()

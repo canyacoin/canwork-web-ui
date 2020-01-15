@@ -1,6 +1,7 @@
-export function getUsdToCan(canToUsd: number, usd: number): string {
-  if (canToUsd) {
-    return (usd / canToUsd).toFixed(2)
+export function getUsdToCan(usdToAtomicCan: number, usd: number): string {
+  if (usdToAtomicCan) {
+    const totalAtomicCan = usd * usdToAtomicCan
+    return formatAtomicCan(roundAtomicCanTwoDecimals(totalAtomicCan))
   }
   return '-'
 }
