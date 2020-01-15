@@ -340,7 +340,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
         providerAddress,
         beforeCallback,
         onSuccess,
-        failureCallback,
+        failureCallback
       )
     }
 
@@ -349,7 +349,12 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       successText: 'Woohoo, job started!',
       recipient: environment.contracts.canwork,
       operation: Operation.auth,
-      
+
+      amount: jobBudgetCan,
+      paymentSummary: paymentSummary,
+      complete: onComplete,
+      cancel: onComplete,
+
       userEmail: client.email,
       initialisePayment,
 
