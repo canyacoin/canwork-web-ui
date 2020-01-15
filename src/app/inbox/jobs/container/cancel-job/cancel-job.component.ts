@@ -28,8 +28,6 @@ export class CancelJobComponent implements OnInit {
   ngOnInit() {
     const jobId = this.activatedRoute.parent.snapshot.params['id'] || null
     if (jobId) {
-      console.log('JOB ID FOUND')
-      console.log(jobId)
       this.jobService
         .getJob(jobId)
         .take(1)

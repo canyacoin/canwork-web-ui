@@ -26,8 +26,6 @@ export class JobNotificationService {
         const reqOptions = { headers }
         const reqBody = { jobAction: jobAction.toString(), jobId }
 
-        console.log('+ email notification reqOptions:', reqOptions)
-        console.log('+ email notification reqBody:', reqBody)
         let response
         try {
           response = await this.http.post(this.endPoint, reqBody, { headers })

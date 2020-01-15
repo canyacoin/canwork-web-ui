@@ -1,0 +1,56 @@
+<div id="sendTxModal" class="modal fade" role="dialog">
+  <div border-none class="modal-dialog">
+    <div class="modal-content">
+      <div border-none class="modal-header  text-center">
+        <div class="col-12">
+          <h4 class="modal-title">Confirm Transaction</h4>
+        </div>
+      </div>
+      <div border-none class="modal-body">
+        <div class="container">
+          <div class="row" *ngIf="transaction">
+            <div class="col-12">
+              <b>From:</b>
+              <div>{{ fromAddress }}</div>
+              <br />
+              <b>To:</b>
+              <div>{{ transaction.to }}</div>
+              <br />
+              <b>Memo:</b>
+              <div>
+                <div *ngFor="let memoPart of splitMemo(transaction.memo)">
+                  {{ memoPart }}
+                </div>
+              </div>
+              <br />
+              <b>Amount CAN:</b>
+              <div>{{ formatAmount(transaction.amountCan) }}</div>
+              <br />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <input
+                *ngIf="isKeystorePasswordVisible"
+                [(ngModel)]="keystorePassword"
+                type="password"
+                placeholder="Enter wallet password"
+              />
+            </div>
+            <div class="col-6 text-right">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="confirmTransaction()"
+                [disabled]="isConfirming"
+              >
+                Confirm
+                <i *ngIf="isConfirming" class="fa fa-spinner fa-spin"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
