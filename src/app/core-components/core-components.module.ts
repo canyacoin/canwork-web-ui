@@ -23,7 +23,6 @@ import { FeedbackComponent } from './feedback/feedback.component'
 import { FooterComponent } from './footer/footer.component'
 import { HeaderComponent } from './header/header.component'
 import { SearchFilterOptionComponent } from './header/search-filter-option/search-filter-option.component'
-// import { IpfsDropzoneComponent } from './ipfs-dropzone/ipfs-dropzone.component';
 import { StorageDropzoneComponent } from './storage-dropzone/storage-dropzone.component'
 import { ProviderCardComponent } from './provider-card/provider-card.component'
 import { ScrollTopComponent } from './scroll-top/scroll-top.component'
@@ -34,7 +33,6 @@ import { ToolsComponent } from './tools/tools.component'
 import { VStepperComponent } from './v-stepper/v-stepper.component'
 import { FaqComponent } from './wallet-install/faq/faq.component'
 import { InstructionsComponent } from './wallet-install/instructions/instructions.component'
-import { WalletInstallComponent } from './wallet-install/wallet-install.component'
 import { WindowScrollDirective } from './window-scroll.directive'
 import { AvatarComponent } from './avatar/avatar.component'
 import { VerifiedMarkComponent } from './verified-mark/verified-mark.component'
@@ -82,11 +80,9 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     TermsComponent,
     ToolsComponent,
     BackButtonComponent,
-    WalletInstallComponent,
     WindowScrollDirective,
     VStepperComponent,
     ProviderCardComponent,
-    // IpfsDropzoneComponent,
     StorageDropzoneComponent,
     ComingSoonComponent,
     AvatarComponent,
@@ -108,11 +104,9 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ScrollTopComponent,
     SkillTagComponent,
     SkillTagsSelectionComponent,
-    WalletInstallComponent,
     VStepperComponent,
     ProviderCardComponent,
     WindowScrollDirective,
-    // IpfsDropzoneComponent,
     StorageDropzoneComponent,
     AvatarComponent,
     VerifiedMarkComponent,

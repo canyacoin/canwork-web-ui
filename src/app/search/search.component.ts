@@ -19,7 +19,6 @@ import * as orderBy from 'lodash/orderBy'
 import * as union from 'lodash/union'
 import { LabelType, Options } from 'ng5-slider'
 import { Observable, Subscription } from 'rxjs'
-import { getUsdToCan } from '@util/currency-conversion'
 
 import { UserType } from '../../../functions/src/user-type'
 import { environment } from '../../environments/environment'

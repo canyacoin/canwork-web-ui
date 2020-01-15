@@ -1,11 +1,5 @@
 import { Injectable } from '@angular/core'
-import {
-  Job,
-  JobState,
-  Payment,
-  PaymentType,
-  TimeRange,
-} from '@class/job'
+import { Job, JobState, Payment, PaymentType, TimeRange } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
 import { Upload } from '@class/upload'
 import { User, UserType } from '@class/user'
@@ -13,7 +7,6 @@ import { ChatService } from '@service/chat.service'
 import { BinanceService } from '@service/binance.service'
 import { JobNotificationService } from '@service/job-notification.service'
 import { UserService } from '@service/user.service'
-import { EthService } from '@service/eth.service'
 import {
   AngularFirestore,
   AngularFirestoreCollection,
@@ -21,33 +14,21 @@ import {
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 
-import { FeatureToggleService } from './feature-toggle.service'
 import { ReviewService } from './review.service'
 
 @Injectable()
 export class JobService {
   jobsCollection: AngularFirestoreCollection<any>
-  canexDisabled = false
 
   constructor(
     private afs: AngularFirestore,
     private userService: UserService,
     private chatService: ChatService,
     private reviewService: ReviewService,
-    private ethService: EthService,
     private binanceService: BinanceService,
     private jobNotificationService: JobNotificationService,
-    private featureService: FeatureToggleService
   ) {
     this.jobsCollection = this.afs.collection<any>('jobs')
-    this.featureService
-      .getFeatureConfig('canexchange')
-      .then(val => {
-        this.canexDisabled = !val.enabled
-      })
-      .catch( () => {
-        this.canexDisabled = true
-      })
   }
 
   // =========================
@@ -93,21 +74,6 @@ export class JobService {
       .where('state', '==', JobState.reviewed)
       .get()
     return data
-  }
-
-  // TODO remove
-  async getJobBudget(job: Job): Promise<number> {
-    try {
-      const totalBudget = await this.getJobBudgetUsd(job)
-      const canValue = await this.ethService.getUsdToCan(totalBudget)
-      if (canValue) {
-        return Promise.resolve(canValue)
-      } else {
-        return Promise.reject(false)
-      }
-    } catch (e) {
-      return Promise.reject(false)
-    }
   }
 
   async getJobBudgetBinance(job: Job): Promise<number> {
@@ -228,14 +194,10 @@ export class JobService {
             break
           case ActionType.acceptTerms:
             try {
-              const totalBudgetCan = await this.getJobBudget(job)
-              if (totalBudgetCan !== 0) {
-                parsedJob.budgetCan = totalBudgetCan
-                parsedJob.actionLog.push(action)
-                parsedJob.state = JobState.termsAcceptedAwaitingEscrow
-                await this.saveJobAndNotify(parsedJob, action)
-                resolve(true)
-              }
+              parsedJob.actionLog.push(action)
+              parsedJob.state = JobState.termsAcceptedAwaitingEscrow
+              await this.saveJobAndNotify(parsedJob, action)
+              resolve(true)
             } catch (e) {
               reject()
             }

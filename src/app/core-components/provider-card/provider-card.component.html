@@ -60,23 +60,6 @@
           ></app-skill-tag>
         </div>
       </div>
-      <div class="row hourly-rate">
-        <span
-          *ngIf="provider.hourlyRate && provider.hourlyRate > 0 && canToUsd"
-          data-toggle="tooltip"
-          data-placement="bottom"
-          title="$ {{ getUsdToCan(provider.hourlyRate) }} USD/hr"
-        >
-          <b>${{ provider.hourlyRate }}</b
-          >/hr
-        </span>
-        <span
-          *ngIf="provider.hourlyRate && provider.hourlyRate > 0 && !canToUsd"
-        >
-          <b>${{ provider.hourlyRate }}</b
-          >/hr
-        </span>
-      </div>
       <div class="row">
         <button
           [routerLink]="['/profile/alt', provider.address]"
