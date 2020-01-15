@@ -1,3 +1,4 @@
+import { BinanceValidator } from './../../../@validator/binance.validator'
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { User, UserCategory, UserState, UserType } from '@class/user'
@@ -6,6 +7,7 @@ import { UserService } from '@service/user.service'
 import { CurrencyValidator } from '@validator/currency.validator'
 import { EmailValidator } from '@validator/email.validator'
 import * as randomColor from 'randomcolor'
+import { BinanceService } from '@service/binance.service'
 import { Subscription } from 'rxjs'
 
 import * as moment from 'moment-timezone'
@@ -50,7 +52,8 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
   constructor(
     private userService: UserService,
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private binanceService: BinanceService
   ) {}
 
   ngOnInit() {
@@ -107,7 +110,10 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
         this.user.description || '',
         Validators.compose([Validators.maxLength(500)]),
       ],
-      category: [this.user.category || '', Validators.compose([Validators.required])],
+      category: [
+        this.user.category || '',
+        Validators.compose([Validators.required]),
+      ],
       skillTags: [
         '',
         Validators.compose([
@@ -117,7 +123,20 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
       ],
       hourlyRate: [
         this.user.hourlyRate || '',
-        Validators.compose([CurrencyValidator.isValid]),
+        Validators.compose([Validators.required, CurrencyValidator.isValid]),
+      ],
+      bnbAddress: [
+        this.user.bnbAddress || '',
+        () => null,
+        Validators.composeAsync([
+          bnbAddress => Promise.resolve(Validators.required(bnbAddress)),
+          new BinanceValidator(this.binanceService, this.userService)
+            .isValidAddressField,
+          new BinanceValidator(
+            this.binanceService,
+            this.userService
+          ).isUniqueAddressField(this.user),
+        ]),
       ],
       color1: [colors[0]],
       color2: [colors[1]],
@@ -166,6 +185,7 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
       category: this.profileForm.value.category,
       skillTags: tags,
       hourlyRate: this.profileForm.value.hourlyRate,
+      bnbAddress: this.profileForm.value.bnbAddress,
       colors: [
         this.profileForm.value.color1,
         this.profileForm.value.color2,
