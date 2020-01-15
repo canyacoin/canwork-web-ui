@@ -89,7 +89,7 @@
 
           <div class="form-group row">
             <div class="col-lg-6 col-md-6 col-sm-8">
-              <label>Hourly Rate ( $USD )</label>
+              <label>Hourly Rate ( $USD ) *</label>
               <input
                 class="form-control"
                 #hourlyRate
@@ -113,6 +113,36 @@
           </div>
           <div class="form-group row">
             <div class="col-lg-6 col-md-6 col-sm-8">
+              <label>Binance Chain Address *</label>
+              <input
+                class="form-control"
+                #bnbAddress
+                formControlName="bnbAddress"
+                type="text"
+                name="bnbAddress"
+                placeholder="bnb..."
+              />
+              <small
+                *ngIf="
+                  profileForm.controls.bnbAddress.dirty &&
+                  profileForm.controls.bnbAddress.errors &&
+                  profileForm.controls.bnbAddress.errors.isInvalidAddress
+                "
+                >Please enter a valid binance address.</small
+              >
+              <small
+                *ngIf="
+                  profileForm.controls.bnbAddress.dirty &&
+                  profileForm.controls.bnbAddress.errors &&
+                  profileForm.controls.bnbAddress.errors.addressExists
+                "
+                >This address is already being used in CanWork. Please use
+                another one.
+              </small>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-lg-6 col-md-6 col-sm-8">
               <label>City </label>
               <input
                 disabled
@@ -130,7 +160,9 @@
             [disabled]="
               !profileForm.controls.category.valid ||
               !profileForm.controls.work.valid ||
-              !profileForm.controls.skillTags.valid
+              !profileForm.controls.skillTags.valid ||
+              !profileForm.controls.hourlyRate.valid ||
+              !profileForm.controls.bnbAddress.valid
             "
             (click)="nextStep()"
           >
