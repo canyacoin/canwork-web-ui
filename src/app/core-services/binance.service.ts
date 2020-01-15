@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, EventEmitter } from '@angular/core'
 import WalletConnect from '@trustwallet/walletconnect'
 import { BehaviorSubject } from 'rxjs'
 import base64js from 'base64-js'
@@ -46,6 +46,19 @@ export interface Event {
   forced?: boolean
 }
 
+export interface Transaction {
+  to: string
+  amountCan: number
+  memo: string
+  callbacks?: TransactionCallbacks
+}
+
+export interface TransactionCallbacks {
+  beforeTransaction?: () => void
+  onSuccess?: () => void
+  onFailure?: (reason?: string) => void
+}
+
 const ESCROW_ADDRESS = environment.binance.escrowAddress
 const CHAIN_ID = environment.binance.chainId
 const NETWORK_ID = 714
@@ -63,6 +76,9 @@ export class BinanceService {
   connector: Connector | null
   private events: BehaviorSubject<Event | null> = new BehaviorSubject(null)
   events$ = this.events.asObservable()
+  transactionsEmitter: EventEmitter<Transaction> = new EventEmitter<
+    Transaction
+  >()
   client = new BncClient(BASE_API_URL)
   private connectedWalletApp: WalletApp = null
   private connectedWalletDetails: any = null
@@ -168,6 +184,13 @@ export class BinanceService {
         localStorage.removeItem('connectedWallet')
       }
     })
+  }
+
+  getAddress(): string {
+    if (!this.connectedWalletDetails) {
+      return null
+    }
+    return this.connectedWalletDetails.address
   }
 
   confirmConnection() {
@@ -408,6 +431,10 @@ export class BinanceService {
     }
   }
 
+  emitTransaction(transaction: Transaction) {
+    this.transactionsEmitter.emit(transaction)
+  }
+
   private async preconditions(
     amountCan: number,
     onFailure?: (reason?: string) => void
@@ -427,8 +454,7 @@ export class BinanceService {
     providerAddress: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
-    onFailure?: (reason?: string) => void,
-    password?: string
+    onFailure?: (reason?: string) => void
   ) {
     const preconditionsOk = await this.preconditions(amountCan, onFailure)
     if (!preconditionsOk) {
@@ -436,38 +462,18 @@ export class BinanceService {
     }
     const memo = `ESCROW:${jobId}:${providerAddress}`
     const to = ESCROW_ADDRESS
-    if (this.isLedgerConnected()) {
-      this.transactViaLedger(
-        to,
-        amountCan,
-        memo,
-        beforeTransaction,
-        onSuccess,
-        onFailure
-      )
-    } else if (this.isKeystoreConnected()) {
-      this.transactViaKeystore(
-        to,
-        amountCan,
-        memo,
-        password,
-        beforeTransaction,
-        onSuccess,
-        onFailure
-      )
-    } else if (this.isWalletConnectConnected()) {
-      this.transactViaWalletConnect(
-        to,
-        amountCan,
-        memo,
-        beforeTransaction,
-        onSuccess,
-        onFailure
-      )
-    } else {
-      console.error('Unsupported wallet type')
-      onFailure('no supported wallet connected')
+    const callbacks: TransactionCallbacks = {
+      beforeTransaction,
+      onSuccess,
+      onFailure,
     }
+    const transaction: Transaction = {
+      to,
+      amountCan,
+      memo,
+      callbacks,
+    }
+    this.emitTransaction(transaction)
   }
 
   async releaseFunds(
@@ -475,7 +481,6 @@ export class BinanceService {
     beforeTransaction?: () => void,
     onSuccess?: () => void,
     onFailure?: (reason?: string) => void,
-    password?: string
   ) {
     const amountCan = 1
     const preconditionsOk = await this.preconditions(amountCan, onFailure)
@@ -485,41 +490,21 @@ export class BinanceService {
     const memo = `RELEASE:${jobId}`
     const to = ESCROW_ADDRESS
 
-    if (this.isLedgerConnected()) {
-      this.transactViaLedger(
-        to,
-        amountCan,
-        memo,
-        beforeTransaction,
-        onSuccess,
-        onFailure
-      )
-    } else if (this.isKeystoreConnected()) {
-      this.transactViaKeystore(
-        to,
-        amountCan,
-        memo,
-        password,
-        beforeTransaction,
-        onSuccess,
-        onFailure
-      )
-    } else if (this.isWalletConnectConnected()) {
-      this.transactViaWalletConnect(
-        to,
-        amountCan,
-        memo,
-        beforeTransaction,
-        onSuccess,
-        onFailure
-      )
-    } else {
-      console.error('Unsupported wallet type')
-      onFailure('no supported wallet connected')
+    const callbacks: TransactionCallbacks = {
+      beforeTransaction,
+      onSuccess,
+      onFailure,
     }
+    const transaction: Transaction = {
+      to,
+      amountCan,
+      memo,
+      callbacks,
+    }
+    this.emitTransaction(transaction)
   }
 
-  private async transactViaLedger(
+  async transactViaLedger(
     to: string,
     amountCan: number,
     memo: string,
@@ -563,7 +548,7 @@ export class BinanceService {
     }
   }
 
-  private async transactViaKeystore(
+  async transactViaKeystore(
     to: string,
     amountCan: number,
     memo: string,
@@ -606,7 +591,7 @@ export class BinanceService {
     }
   }
 
-  private async transactViaWalletConnect(
+  async transactViaWalletConnect(
     to: string,
     amountCan: number,
     memo: string,

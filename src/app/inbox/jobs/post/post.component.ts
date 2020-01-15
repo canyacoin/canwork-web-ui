@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { Http, Response } from '@angular/http'
 import { ActivatedRoute, Router } from '@angular/router'
-import { EthService } from '@service/eth.service'
+import { BinanceService } from '@service/binance.service'
 import {
   Job,
   JobDescription,
@@ -16,19 +15,15 @@ import { Upload } from '@class/upload'
 import { User, UserType } from '@class/user'
 import '@extensions/string'
 import { AuthService } from '@service/auth.service'
-import { JobNotificationService } from '@service/job-notification.service'
 import { JobService } from '@service/job.service'
 import { ToastrService } from 'ngx-toastr'
 import { PublicJobService } from '@service/public-job.service'
-import { UploadCategory, UploadService } from '@service/upload.service'
+import { UploadService } from '@service/upload.service'
 import { UserService } from '@service/user.service'
 import { getUsdToCan } from '@util/currency-conversion'
 import { GenerateGuid } from '@util/generate.uid'
-import { AngularFireUploadTask } from 'angularfire2/storage'
 import * as _ from 'lodash'
-import { FilterPipe } from 'ngx-filter-pipe'
 import { Subscription } from 'rxjs'
-import { take } from 'rxjs/operators'
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
@@ -64,7 +59,7 @@ export class PostComponent implements OnInit, OnDestroy {
   uploadFailed = false
   deleteFailed = false
 
-  canToUsd: number
+  usdToAtomicCan: number
   providerTypes = [
     {
       name: 'Content Creators',
@@ -105,10 +100,9 @@ export class PostComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private authService: AuthService,
     private jobService: JobService,
-    private ethService: EthService,
+    private binanceService: BinanceService,
     private publicJobService: PublicJobService,
     private uploadService: UploadService,
-    private http: Http,
     private toastr: ToastrService
   ) {
     this.postForm = formBuilder.group({
@@ -150,7 +144,7 @@ export class PostComponent implements OnInit, OnDestroy {
           Validators.required,
           Validators.min(1),
           Validators.max(10000000),
-          Validators.pattern("^[0-9]*$"),
+          Validators.pattern('^[0-9]*$'),
         ]),
       ],
       terms: [false, Validators.requiredTrue],
@@ -200,7 +194,7 @@ export class PostComponent implements OnInit, OnDestroy {
           Validators.required,
           Validators.min(1),
           Validators.max(10000000),
-          Validators.pattern("^[0-9]*$"),
+          Validators.pattern('^[0-9]*$'),
         ]),
       ],
       weeklyCommitment: [
@@ -290,9 +284,9 @@ export class PostComponent implements OnInit, OnDestroy {
       }
     })
     try {
-      this.canToUsd = await this.ethService.getCanToUsd()
+      this.usdToAtomicCan = await this.binanceService.getUsdToAtomicCan()
     } catch (e) {
-      this.canToUsd = null
+      this.usdToAtomicCan = null
     }
     this.currentDate = new Date().toISOString().split('T')[0]
     this.notifyAddAddressIfNecessary()
@@ -307,7 +301,7 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   usdToCan(usd: number) {
-    return getUsdToCan(this.canToUsd, usd)
+    return getUsdToCan(this.usdToAtomicCan, usd)
   }
 
   detectFiles(event) {
@@ -460,7 +454,6 @@ export class PostComponent implements OnInit, OnDestroy {
       if (!this.isShareable) {
         const job = new Job({
           id: this.jobId,
-          hexId: this.ethService.web3js.utils.toHex(this.jobId.hashCode()),
           clientId: this.currentUser.address,
           providerId: this.recipientAddress,
           information: new JobDescription({
@@ -479,7 +472,6 @@ export class PostComponent implements OnInit, OnDestroy {
         const action = new IJobAction(ActionType.createJob, UserType.client)
         action.setPaymentProperties(
           job.budget,
-          await this.jobService.getJobBudget(job),
           this.postForm.value.timelineExpectation,
           this.postForm.value.workType,
           this.postForm.value.weeklyCommitment,
@@ -531,7 +523,6 @@ export class PostComponent implements OnInit, OnDestroy {
       }
       const job = new Job({
         id: this.jobId,
-        hexId: this.ethService.web3js.utils.toHex(this.jobId.hashCode()),
         clientId: this.currentUser.address,
         slug: this.slug,
         information: new JobDescription({
@@ -555,7 +546,6 @@ export class PostComponent implements OnInit, OnDestroy {
       const action = new IJobAction(ActionType.createJob, UserType.client)
       action.setPaymentProperties(
         job.budget,
-        await this.jobService.getJobBudget(job),
         this.shareableJobForm.value.timelineExpectation,
         this.shareableJobForm.value.workType,
         this.shareableJobForm.value.weeklyCommitment,

@@ -11,10 +11,6 @@ import {
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
 import { ChatService } from '@service/chat.service'
-import {
-  FeatureToggle,
-  FeatureToggleService,
-} from '@service/feature-toggle.service'
 import { UserService } from '@service/user.service'
 
 @Component({
@@ -26,14 +22,12 @@ export class BuyCoffeeComponent implements OnInit {
   userModel: User
   currentUser: User
   CanPay: any
-  canexDisabled = false
   canPayOptions: CanPay
 
   constructor(
     private authService: AuthService,
     private chatService: ChatService,
     private userService: UserService,
-    private featureService: FeatureToggleService,
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) {}
@@ -41,10 +35,6 @@ export class BuyCoffeeComponent implements OnInit {
   async ngOnInit() {
     const userId = this.activatedRoute.snapshot.params['address'] || null
     if (userId) {
-      const canexToggle = await this.featureService.getFeatureConfig(
-        'canexchange'
-      )
-      this.canexDisabled = !canexToggle.enabled
       this.userModel = await this.userService.getUser(userId)
       this.currentUser = await this.authService.getCurrentUser()
       if (this.userModel) {
@@ -61,7 +51,6 @@ export class BuyCoffeeComponent implements OnInit {
       operation: Operation.pay,
       complete: this.onComplete.bind(this),
       cancel: this.onComplete.bind(this),
-      disableCanEx: this.canexDisabled,
       userEmail: this.currentUser.email || '',
     }
   }

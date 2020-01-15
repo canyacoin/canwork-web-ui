@@ -21,7 +21,6 @@ import { AuthService } from './core-services/auth.service'
 import { CertificationsService } from './core-services/certifications.service'
 import { CoreServicesModule } from './core-services/core-services.module'
 import { DockIoService } from './core-services/dock-io.service'
-import { EthService } from './core-services/eth.service'
 import { JobNotificationService } from './core-services/job-notification.service'
 import { MobileService } from './core-services/mobile.service'
 import { NavService } from './core-services/nav.service'
@@ -80,7 +79,6 @@ import { ToastrModule } from 'ngx-toastr'
   providers: [
     AuthService,
     MobileService,
-    EthService,
     NavService,
     JobNotificationService,
     CertificationsService,

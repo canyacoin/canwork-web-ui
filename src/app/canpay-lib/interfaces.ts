@@ -46,7 +46,6 @@ export interface Contract {
 export interface CanPay {
   dAppName: string
   operation?: Operation
-  onAuthTxHash?: Function
   onPaymentTxHash?: Function
   recipient: string
   amount?: number
