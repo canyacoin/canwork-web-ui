@@ -1,11 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import {
-  CanPay,
-  Operation,
-  PaymentItemCurrency,
-} from '@canpay-lib/lib'
+import { CanPay, Operation, PaymentItemCurrency } from '@canpay-lib/lib'
 import { Job, JobState } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
 import { UserType } from '@class/user'
@@ -56,7 +52,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   cardForm: FormGroup = null
   fiatPaymentStep: FiatPaymentSteps
   acceptCopyMnemonicForm: FormGroup
-  sendTransaction: Function
 
   shopper: any
   fiatPayment: any
@@ -331,61 +326,22 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     ) => {
       const paymentItem = paymentSummary.items[0]
       const { jobId, providerAddress } = paymentItem
-      const beforeTransaction = () => {
-        if (this.binanceService.isLedgerConnected()) {
-          this.toastr.info('Please approve on your ledger')
-        } else if (this.binanceService.isWalletConnectConnected()) {
-          this.toastr.info('Please approve on your WalletConnect')
-        }
-        if (beforeCallback) {
-          beforeCallback()
-        }
-      }
 
       const onSuccess = () => {
-        if (this.binanceService.isKeystoreConnected()) {
-          ;(window as any).$('#keystoreTxModal').modal('hide')
-        }
-        console.log('Success')
         startJob()
         if (successCallback) {
           successCallback()
         }
       }
 
-      const onFailure = (reason?: string) => {
-        let errorMessage = 'Transaction failed'
-        if (reason) {
-          errorMessage += `: ${reason}`
-        }
-        this.toastr.error(errorMessage)
-        if (failureCallback) {
-          failureCallback()
-        }
-      }
-
-      const sendTransaction = (password?: string) => {
-        this.binanceService.escrowFunds(
-          jobId,
-          jobBudgetCan,
-          providerAddress,
-          beforeTransaction,
-          onSuccess,
-          onFailure,
-          password
-        )
-      }
-
-      this.sendTransaction = sendTransaction
-
-      if (this.binanceService.isKeystoreConnected()) {
-        ;(window as any).$('#keystoreTxModal').modal('show')
-      } else if (
-        this.binanceService.isLedgerConnected() ||
-        this.binanceService.isWalletConnectConnected()
-      ) {
-        sendTransaction()
-      }
+      this.binanceService.escrowFunds(
+        jobId,
+        jobBudgetCan,
+        providerAddress,
+        beforeCallback,
+        onSuccess,
+        failureCallback,
+      )
     }
 
     this.canPayOptions = {
