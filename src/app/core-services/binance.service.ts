@@ -400,7 +400,8 @@ export class BinanceService {
       const canBnbUrl = `${TICKER_API_URL}?symbol=${CAN_TOKEN}_BNB`
       const canResponse = await (await fetch(canBnbUrl)).json()
       const lastCanToBnbPrice = canResponse[0].weightedAvgPrice
-      const bnbUsdUrl = `${TICKER_API_URL}?symbol=BNB_USDT.B-B7C`
+      const bnbUsdPair = (CAN_TOKEN.indexOf('TCAN') >= 0) ? 'BNB_USDT.B-B7C' : 'BNB_BUSD-BD1'
+      const bnbUsdUrl = `${TICKER_API_URL}?symbol=${bnbUsdPair}`
       const bnbResponse = await (await fetch(bnbUsdUrl)).json()
       const lastBnbToUsdPrice = bnbResponse[0].weightedAvgPrice
       const usdToCanPrice = 1 / (lastCanToBnbPrice * lastBnbToUsdPrice)
