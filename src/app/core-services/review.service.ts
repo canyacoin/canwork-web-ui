@@ -59,6 +59,7 @@ export class ReviewService {
         total += review.rating
       })
       const average = total / reviews.length
+
       return {
         count: reviews.length,
         average: Math.round(average * 2) / 2,
@@ -68,6 +69,7 @@ export class ReviewService {
   }
 
   async getUserReviews(userId: string): Promise<Review[]> {
+    console.log(`userId ${userId}`)
     const reviews = await this.reviewsCollectionRef.ref
       .where('revieweeId', '==', userId)
       .get()
