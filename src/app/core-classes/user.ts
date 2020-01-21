@@ -34,9 +34,9 @@ export class User {
   work: string
   workSkillTags: string[] = []
 
-  upvotes = 0
-  downvotes = 0
-  numberOfReviews = 0
+  upvotes: number
+  downvotes: number
+  numberOfReview: number
 
   constructor(init?: Partial<User>) {
     Object.assign(this, init)
@@ -44,8 +44,8 @@ export class User {
 }
 
 export class Rating {
-  count = 0
-  average = 0
+  count: number
+  average: number
 
   constructor() {}
 }
