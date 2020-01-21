@@ -802,7 +802,7 @@ function notifyAdminOnNewUser(user) {
   console.log('+ sending a new provider email to admin...')
 
   const text = `
-  Link to profile: https://canwork.io/${user.slug}
+  Link to profile: https://canwork.io/profile/${user.slug}
   <br>
   Email address: ${user.email}
   `
