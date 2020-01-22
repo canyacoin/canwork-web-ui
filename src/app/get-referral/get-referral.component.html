@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="row px-15"></div>
+      <div class="row px-15">
+        <div class="col-12 text-center">
+          <span>Referral Code</span>
+          <p class="link-col p-10">
+            {{ referralCode }}
+          </p>
+          <button (click)="copyCode()" class="btn btn-primary mt-5">
+            COPY CODE
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 text-center">
+          <small id="gotcode">Copied!</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

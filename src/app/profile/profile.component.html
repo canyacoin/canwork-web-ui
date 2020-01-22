@@ -32,6 +32,9 @@
                 [userModel]="userModel"
               ></app-profile-timezone>
               <app-profile-social [userModel]="userModel"></app-profile-social>
+              <app-profile-get-referral
+                [userModel]="userModel"
+              ></app-profile-get-referral>
               <app-profile-support-me
                 *ngIf="notMyProfile() && userModel.ethAddress"
                 [userModel]="userModel"
