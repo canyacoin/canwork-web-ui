@@ -33,6 +33,7 @@ export class User {
   whitelistSubmitted: boolean
   work: string
   workSkillTags: string[] = []
+  isAdmin: boolean //experimental unused
 
   upvotes = 0
   downvotes = 0
