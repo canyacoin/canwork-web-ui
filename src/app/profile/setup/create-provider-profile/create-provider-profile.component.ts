@@ -143,7 +143,7 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
       color3: [colors[2]],
       terms: [false, Validators.requiredTrue],
       timezone: moment.tz.guess(),
-      ethAddress: '',
+      referredBy: [],
     })
   }
 
@@ -179,7 +179,6 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
         ' ' +
         this.profileForm.value.lastName,
       work: this.profileForm.value.work,
-      ethAddress: '',
       title: this.profileForm.value.title,
       bio: this.profileForm.value.bio,
       category: this.profileForm.value.category,
@@ -212,6 +211,7 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
     this.sending = true
     this.user.whitelistSubmitted = true
     this.user.whitelisted = true
+    this.user.referredBy = this.profileForm.value.referredBy
     this.userService.saveUser(this.user)
   }
 }
