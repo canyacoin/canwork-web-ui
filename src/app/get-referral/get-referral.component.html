@@ -1,22 +1,18 @@
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <div class="row px-15"></div>
-      <div class="row px-15">
-        <div class="col-12 text-center">
-          <span>Referral Code</span>
-          <p class="link-col p-10">
-            {{ referralCode }}
-          </p>
-          <button (click)="copyCode()" class="btn btn-primary mt-5">
-            COPY CODE
-          </button>
-        </div>
+<div class="row" style="margin-bottom:25px">
+  <div class="col-md-12">
+    <div class="lead fw-500 mb-10">Referral Code</div>
+    <div class="link-col p-10 mb-10">
+      {{ referralCode }}
+    </div>
+
+    <div class="row">
+      <div class="col-sm">
+        <button (click)="copyCode()" class="btn btn-referral">
+          COPY CODE
+        </button>
       </div>
-      <div class="row">
-        <div class="col-12 text-center">
-          <small id="gotcode">Copied!</small>
-        </div>
+      <div class="col-sm p-10">
+        <small id="gotcode">Copied!</small>
       </div>
     </div>
   </div>
