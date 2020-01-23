@@ -805,6 +805,8 @@ function notifyAdminOnNewUser(user) {
   Link to profile: https://canwork.io/profile/${user.slug}
   <br>
   Email address: ${user.email}
+  <br>
+  Referred by: ${user.referredBy}
   `
   const sgMail = require('@sendgrid/mail')
   sgMail.setApiKey(sendgridApiKey)

@@ -31,6 +31,7 @@ export class User {
   whitelisted: boolean
   whitelistRejected: boolean
   whitelistSubmitted: boolean
+  referredBy: string
   work: string
   workSkillTags: string[] = []
   isAdmin: boolean //experimental unused
