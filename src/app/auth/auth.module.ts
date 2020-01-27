@@ -10,7 +10,6 @@ import { CoreUtilsModule } from '../core-utils/core-utils.module'
 import { AuthRoutingModule } from './auth.routing.module'
 
 import { LoginComponent } from './login/login.component'
-import { WithDockComponent } from './with-dock/with-dock.component'
 
 @NgModule({
   imports: [
@@ -22,7 +21,7 @@ import { WithDockComponent } from './with-dock/with-dock.component'
     FirebaseUIModule,
     FormsModule,
   ],
-  declarations: [LoginComponent, WithDockComponent],
+  declarations: [LoginComponent /*WithDockComponent*/],
   exports: [AuthRoutingModule],
 })
 export class AuthModule {}

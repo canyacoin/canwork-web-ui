@@ -11,7 +11,6 @@ import { User } from '../../core-classes/user'
 import { AuthService } from '../../core-services/auth.service'
 import { UserService } from '../../core-services/user.service'
 import { FeatureToggleService } from '@service/feature-toggle.service'
-import { DockIoService } from '@service/dock-io.service'
 
 @Component({
   selector: 'app-login',
@@ -56,7 +55,6 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private userService: UserService,
-    public dockIOService: DockIoService,
     private http: Http,
     private featureService: FeatureToggleService
   ) {}
@@ -304,26 +302,5 @@ export class LoginComponent implements OnInit {
         console.log('onLogin - err', err)
       }
     )
-  }
-
-  async onDockLogin() {
-    const uid = window.sessionStorage.getItem('uid')
-
-    if (uid) {
-      try {
-        this.loading = true
-        const token = await this.dockIOService.getFirebaseToken(uid)
-        const user = await this.userService.getUser(uid)
-
-        window.sessionStorage.accessToken = token
-        await firebase.auth().signInWithCustomToken(token)
-        this.handleLogin(user)
-      } catch (err) {
-        this.loading = false
-        console.log(err)
-      }
-    } else {
-      window.location.href = this.dockIOService.oAuthURI
-    }
   }
 }

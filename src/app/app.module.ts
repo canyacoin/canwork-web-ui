@@ -20,7 +20,6 @@ import { firebaseUiAuthConfig } from './core-config/app-auth-config'
 import { AuthService } from './core-services/auth.service'
 import { CertificationsService } from './core-services/certifications.service'
 import { CoreServicesModule } from './core-services/core-services.module'
-import { DockIoService } from './core-services/dock-io.service'
 import { JobNotificationService } from './core-services/job-notification.service'
 import { MobileService } from './core-services/mobile.service'
 import { NavService } from './core-services/nav.service'
@@ -82,7 +81,6 @@ import { ToastrModule } from 'ngx-toastr'
     NavService,
     JobNotificationService,
     CertificationsService,
-    DockIoService,
     PublicJobService,
     BinanceService,
     LedgerService,

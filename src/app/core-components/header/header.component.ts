@@ -88,6 +88,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   async initUser() {
     if (this.currentUser && this.currentUser.address) {
+      // console.log(`currentUser: ${this.currentUser.address}`)
       const unreadConversations = this.afs
         .collection('chats')
         .doc(this.currentUser.address)
@@ -113,7 +114,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           }
         },
         error => {
-          console.error('! unable to retrieve chat/channel data:', error)
+          // console.error('! unable to retrieve chat/channel data:', error)
         }
       )
     }
