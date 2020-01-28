@@ -21,7 +21,7 @@ import { LoginComponent } from './login/login.component'
     FirebaseUIModule,
     FormsModule,
   ],
-  declarations: [LoginComponent /*WithDockComponent*/],
+  declarations: [LoginComponent],
   exports: [AuthRoutingModule],
 })
 export class AuthModule {}
