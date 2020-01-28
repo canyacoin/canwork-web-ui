@@ -22,22 +22,24 @@ export class AppComponent implements OnInit {
       }
       window.scrollTo(0, 0)
     })
-    // this.notifyAddAddressIfNecessary()
+    this.notifyAddAddressIfNecessary()
   }
 
   async notifyAddAddressIfNecessary() {
-    const noAddress = await this.authService.isAuthenticatedAndNoAddress()
-    if (noAddress) {
-      this.toastr.info(
-        'Add Binance Chain Wallet to make or receive payments on CanWork.',
-        undefined,
-        {
-          timeOut: 0,
-          extendedTimeOut: 0,
-          positionClass: 'toast-top-full-width',
-          closeButton: true,
-        }
-      )
-    }
+    try {
+      const noAddress = await this.authService.isAuthenticatedAndNoAddress()
+      if (noAddress) {
+        this.toastr.info(
+          'Add Binance Chain Wallet to make or receive payments on CanWork.',
+          undefined,
+          {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            positionClass: 'toast-top-full-width',
+            closeButton: true,
+          }
+        )
+      }
+    } catch (error) {}
   }
 }
