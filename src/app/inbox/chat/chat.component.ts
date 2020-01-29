@@ -314,11 +314,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     document.getElementById('message-div').classList.toggle('hide')
   }
 
-  onBuy() {
-    // TODO remove
-    // this.router.navigate(['/exchange'])
-  }
-
   onMacro(message: string) {
     this.message = message
     this.onSend()
@@ -387,24 +382,6 @@ export class ChatComponent implements OnInit, OnDestroy {
       timestamp: Date.now(),
     })
     this.sendMessage(tmpRequest)
-  }
-
-  onPayLater(checkoutModel: any) {
-    const msg = this.chatService.createMessageObject(
-      this.selectedChannel.channel,
-      this.currentUser,
-      "I'll pay later. Thanks."
-    )
-    this.sendMessage(msg)
-  }
-
-  postTransaction(checkoutModel: any, receipt: any) {
-    const msg = this.chatService.createMessageObject(
-      this.selectedChannel.channel,
-      this.currentUser,
-      "You've received a payment. Please, check your MetaMask Wallet."
-    )
-    this.sendMessage(msg)
   }
 
   transformBreaks(text) {

@@ -32,7 +32,6 @@ import { TermsComponent } from './terms/terms.component'
 import { ToolsComponent } from './tools/tools.component'
 import { VStepperComponent } from './v-stepper/v-stepper.component'
 import { FaqComponent } from './wallet-install/faq/faq.component'
-import { InstructionsComponent } from './wallet-install/instructions/instructions.component'
 import { WindowScrollDirective } from './window-scroll.directive'
 import { AvatarComponent } from './avatar/avatar.component'
 import { VerifiedMarkComponent } from './verified-mark/verified-mark.component'
@@ -73,7 +72,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     FeedbackComponent,
     FooterComponent,
     HeaderComponent,
-    InstructionsComponent,
     SearchFilterOptionComponent,
     ScrollTopComponent,
     SkillTagComponent,

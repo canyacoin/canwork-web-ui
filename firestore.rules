@@ -99,11 +99,7 @@ service cloud.firestore {
          allow read;
       }
 
-      // dock-auth
-      match /dock-auth/{docId} {
-         allow read;
-      }
-      
+           
       // limepay-payments
       match /limepay-payments/{jobId} {
          allow read;

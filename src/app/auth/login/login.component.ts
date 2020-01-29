@@ -28,7 +28,6 @@ export class LoginComponent implements OnInit {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
   })
-  displayDockAuth = false
 
   webViewEthAddress: string
 
@@ -62,15 +61,6 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     const ua = window.navigator.userAgent
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/'
-
-    this.featureService
-      .getFeatureConfig('dockAuth')
-      .then(val => {
-        this.displayDockAuth = val.enabled
-      })
-      .catch(e => {
-        this.displayDockAuth = false
-      })
   }
 
   onCreateAccountFromMobile() {

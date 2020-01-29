@@ -12,7 +12,6 @@ export class User {
   bnbAddress: string
   slug: string
   hourlyRate: string
-  isDockUpdating: boolean
   name: string
   networkAddress: string
   offset: string
