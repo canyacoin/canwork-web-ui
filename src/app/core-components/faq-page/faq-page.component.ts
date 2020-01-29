@@ -9,27 +9,27 @@ export class FaqPageComponent implements OnInit {
   faqs = [
     {
       index: 'q-1',
-      q: 'Who is CANwork for?',
+      q: 'Who is CanWork for?',
       a:
-        'CANWork is a platform for clients to find quality providers who offer digital services (eg. software engineering, graphics design, content writing, digital marketing). ',
+        'CanWork is a digital services marketplace for software engineers, graphics designers, content creators, digital marketers, virtual assitants or anyone with a digital service. If you are looking to hire or provider digital services using Binance Chain (BEP2) assets, CanWork is for you!',
     },
     {
       index: 'q-2',
-      q: 'Why CANwork?',
+      q: 'Why CanWork?',
       a:
-        'CANwork only takes a 1% payment fee when you make a transaction. This means that when you receive payment for your work, you take more of your hard earned salary home. You can expect high quality providers from CANwork. This because all of our providers are hand picked and vetted for their skills. CANwork is decentralised  - CANWork does not and will never keep or distribute your personal data. CANwork provides fantastic utility for the many unbanked agents in the developing world. Cryptocurrency payments allow for international transactions to be processed quickly and with less fees. Payments on CANwork are enabled for use globally. Those in countries where paypal is not available don’t have to worry when using our platform because our transactions are all made using cryptocurrency. National currency such as USD and AUD transactions coming soon. CANwork has a global reach because of the borderless nature of crypto payments.  This is particularly beneficial as it gives everyone equal opportunity to access the global gig economy, and most importantly equal opportunity to earn an equivalent wage. CANwork is continually being optimised for your experience. CANwork is made from insights from our community and is a platform for gig workers, designed by gig workers. CANwork has created a suite of free tools which allows a sole operator to build and operate their business from their own computer.',
+        'CanWork is the digital service marketplace on Binance Chain. CanWork only takes a 1% payment fee.',
     },
     {
       index: 'q-3',
       q: 'How do I get started as a provider?',
       a:
-        'Join CANwork and set up your account as a provider. You will then receive an email to get started with completing your profile. When your signing up as a provider you will need to be whitelisted, which can take up to 72 hours to determine if your eligible to be a provider. For more information on setting up a provider profile read this: https://medium.com/canyacoin/get-started-as-a-canwork-freelancer-2fcaf41fedf2?source=your_stories_page',
+        'Join CanWork and set up your account as a provider. You will need a Binance Chain (BEP2) wallet address to complete profile setup.  Note: your profile must meet a mininum standard quality and is subject to approval.',
     },
     {
       index: 'q-4',
       q: 'How do I get started as a client?',
       a:
-        'Simply join CANwork and set your account up as a client. You will then have full access to the platform, and be able to communicate with any service provider. For more information on using the platform as a client for the first time read this: https://medium.com/canyacoin/get-started-as-a-canwork-client-ffb3acab1cde ',
+        'Simply join CanWork and set your account up as a client. You will then have full access to the platform, and be able to communicate with any service provider.',
     },
     {
       index: 'q-5',
@@ -40,25 +40,25 @@ export class FaqPageComponent implements OnInit {
       index: 'q-6',
       q: 'What is CanYaCoin? (CAN)',
       a:
-        'CanYaCoin or CAN is the token which powers the platform’s payment system, enabling a decentralised, trustless escrow service. The escrow is a bridge between a variety of cryptocurrencies.',
+        'CanYaCoin or CAN is the native token that powers the platform’s payment system and will be the bridge between all Binance Chain (BEP2) assets',
     },
     {
       index: 'q-7',
       q: 'Why do I have to use CAN?',
       a:
-        'CAN token is the native token of the CanYa Ecosystem, providing a bridge between other currencies. The CAN token is integrated into the hedged escrow, ensuring that all transactions on the platform are hedged and free from price volatility. For a global freelance marketplace $CAN is also useful as its value remains universal across the globe and can be sent to anyone, anywhere at any time.',
+        'The CAN token is the only accepted token for now.   In early 2020, CanWork will accept all Binance Chain (BEP2) assets.',
     },
     {
       index: 'q-8',
       q: 'Can I use BTC (Bitcoin)?',
       a:
-        'Not yet. The community will be working to make the escrow handle BTC payments in the future.',
+        'Not yet. However, other Binance Chain projects are developing cross-chain swaps including with BTC.',
     },
     {
       index: 'q-9',
       q: 'How can I trust to get paid?',
       a:
-        'All funds awaiting completion of a job are held in the escrow smart contract. They are only released when both parties (client and provider) agree that they are satisfied. In the case of when there is a job dispute, users can flag their issue and prompt CanYa support.',
+        'All funds awaiting completion of a job are held in escrow. They are only released when both parties (client and provider) agree that they are satisfied. In the case a job dispute, users can flag their issue and prompt CanYa support.',
     },
     {
       index: 'q-10',
@@ -70,19 +70,19 @@ export class FaqPageComponent implements OnInit {
       index: 'q-11',
       q: 'How do I control the notification settings I receive?',
       a:
-        'Notifications from CANwork currently are sent via email. You can unsubscribe from these emails anytime, at the bottom of the email. If you would like to see CanYa updates you can go to canya.io.',
+        'Notifications from CanWork currently are sent via email. You can unsubscribe from these emails anytime, at the bottom of the email. If you would like to see CanYa updates you can go to canya.io.',
     },
     {
       index: 'q-12',
       q: 'What happens if crypto price changes?',
       a:
-        'CanYa’s hedged escrow service mitigates against market volatility. If you’ve quoted, for example, $500 USD in CAN tokens for a job, you will receive the same value of $500 USD in CAN upon completing the job regardless of changes in CanYaCoin price. You can read more about the Hedged Escrow here: https://medium.com/@canyacoin/canya-releases-hedged-escrow-to-protect-platform-users-from-price-volatility-7fca7a0aad32?source=linkShare-8ab1feddf31a-1536654577',
+        'Our escrow service is hedged and mitigates against market volatility. If you’ve quoted, for example, $500 USD in CAN tokens for a job, you will receive the same value of $500 USD in CAN upon completing the job regardless of changes in CanYaCoin price.',
     },
     {
       index: 'q-13',
       q: 'How do I buy CAN?',
       a:
-        'You can buy CAN through the Bancor widget in CANwork or you can buy them through an exchange. You can the links to all available exchanges from the exchanges page, accessible from your profile page.',
+        'You can buy CAN through the Binance DEX https://binance.org. CanWork will soon support all BEP2 assets, not just CAN',
     },
     {
       index: 'q-14',
@@ -100,38 +100,26 @@ export class FaqPageComponent implements OnInit {
       index: 'q-16',
       q: 'What wallet should I use?',
       a:
-        'Use metamask for payments. Here is a guide to set up a MetaMask wallet: https://medium.com/canyacoin/setting-up-a-metamask-wallet-to-use-with-canwork-151ed877ac54',
+        'CanWork connects seemlessly with any wallet that supports Binance Chain (BEP2) assets.   You can connect your wallet via WalletConnect, Ledger or KeyStore.   We recommend Trust Wallet https://trustwallet.com/.',
     },
     {
-      index: 'q-18',
-      q: 'Do I have to use Metamask?',
-      a:
-        'If you are simply browsing our platform you won’t need to use metamask. Metamask is only required for payments.',
-    },
-    {
-      index: 'q-19',
+      index: 'q-17',
       q: 'Can anybody apply to be a provider ?',
       a:
         'Yes! However providers will be screened through the CanYa support for quality assurance.',
     },
     {
-      index: 'q-20',
-      q: 'Can I access it on my mobile phone?',
-      a:
-        'You can! However you will not be able to do any Web3 enhancements, such as payments, on your usual browsers such as safari or chrome on mobile. To do that, you will need to use Trust Browser. You can download trust browser on the app store or the google play store.',
-    },
-    {
-      index: 'q-21',
+      index: 'q-19',
       q: 'Can I set up multiple accounts?',
       a:
         'If you would like to be both provider and a client, you are able to do so. A provider can contact another provider if they, for example, want to sub-contract for a job.',
     },
     {
-      index: 'q-23',
+      index: 'q-20',
       q:
         'If I have a dispute with the other party during a job is there a way to fairly resolve it?',
       a:
-        'If you have a problem while working CanWork has systems in place to ensure fair judgement. This will be resolved by members of the CanYa support.',
+        'Dont worry.  The funds are escrowed until all parties agree.  If you have a problem while working, CanWork has systems in place to ensure fair judgement. You can contact support at anytime at support@canya.com',
     },
     {
       index: 'q-24',
