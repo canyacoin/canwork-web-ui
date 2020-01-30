@@ -95,7 +95,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
       if (user) {
         this.chatService.createNewChannel(user, this.userModel)
       } else {
-        this.router.navigate(['auth'])
+        this.router.navigate(['auth/login'])
       }
     })
   }

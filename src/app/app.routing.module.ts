@@ -60,14 +60,8 @@ import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.
         component: JobBidsComponent,
       },
       {
-        path: 'profile/undefined', //edge case where profile is removed but
-        loadChildren: './error/error.module#ErrorModule',
-      },
-      {
         path: 'profile',
         loadChildren: './profile/profile.module#ProfileModule',
-        canActivate: [AuthGuard],
-        data: { requiresLoggedIn: true },
       },
       {
         path: 'inbox',
