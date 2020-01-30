@@ -63,7 +63,7 @@ export class AboutComponent implements OnInit {
       if (user) {
         this.router.navigate(['inbox/post', this.userModel.address])
       } else {
-        this.router.navigate(['auth/login'])
+        this.router.navigate(['auth'])
       }
     })
   }
@@ -98,7 +98,7 @@ export class AboutComponent implements OnInit {
       if (user) {
         this.chatService.createNewChannel(this.currentUser, this.userModel)
       } else {
-        this.router.navigate(['auth/login'])
+        this.router.navigate(['auth'])
       }
     })
   }
