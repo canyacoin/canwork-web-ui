@@ -33,13 +33,16 @@
               ></app-profile-timezone>
               <app-profile-social [userModel]="userModel"></app-profile-social>
               <app-profile-get-referral
+                *ngIf="isMyProfile()"
                 [userModel]="userModel"
               ></app-profile-get-referral>
-              <app-profile-support-me
-                *ngIf="notMyProfile() && userModel.ethAddress"
+              <!--  disables buy me a coffee option until we can implement Binance Chain solution
+                <app-profile-support-me
+                *ngIf="notMyProfile() && "
                 [userModel]="userModel"
                 [currentUser]="currentUser"
               ></app-profile-support-me>
+              -->
               <app-profile-visitors
                 *ngIf="isMyProfile()"
                 [userModel]="currentUser"
