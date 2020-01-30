@@ -1,4 +1,3 @@
-import { FaqComponent } from './core-components/wallet-install/faq/faq.component'
 import { NgModule } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { PublicJobComponent } from './public-job/public-job/public-job.component'

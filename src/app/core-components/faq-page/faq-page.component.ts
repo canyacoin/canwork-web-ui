@@ -52,7 +52,7 @@ export class FaqPageComponent implements OnInit {
       index: 'q-8',
       q: 'Can I use BTC (Bitcoin)?',
       a:
-        'Not yet. However, other Binance Chain projects are developing cross-chain swaps including with BTC.',
+        'Not yet. However, other Binance Chain projects are developing cross-chain swaps including BTC.',
     },
     {
       index: 'q-9',
