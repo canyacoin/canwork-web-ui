@@ -24,7 +24,7 @@ export class UserIsSetupGuard implements CanActivate {
         .then((user: User) => {
           if (user) {
             if (user.state !== UserState.done) {
-              this.router.navigate(['/profile'], {
+              this.router.navigate(['/profile/setup'], {
                 queryParams: { returnUrl: state.url },
               })
               resolve(false)

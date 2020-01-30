@@ -286,7 +286,7 @@ export class LoginComponent implements OnInit {
     this.userService.saveUser(user).then(
       res => {
         this.authService.setUser(user)
-        this.router.navigate(['/profile'])
+        this.router.navigate(['/profile/setup'])
       },
       err => {
         console.log('onLogin - err', err)
