@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit {
   }
 
   onFirebaseLogin(signInSuccessData: FirebaseUISignInSuccessWithAuthResult) {
+    this.loading = true
     const user = signInSuccessData.authResult.user
     const rnd = Math.floor(Math.random() * 109) + 1
     const parsedUser = new User({
