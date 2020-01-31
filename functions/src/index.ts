@@ -77,12 +77,7 @@ const welcomeEmailTemplateHTML = doT.template(
     'utf8'
   )
 )
-const pinCodeEmailTemplateHTML = doT.template(
-  fs.readFileSync(
-    path.join(__dirname, '../src/templates', 'email-ethereum-login-pin.html'),
-    'utf8'
-  )
-)
+
 const approvedProviderTemplateHTML = doT.template(
   fs.readFileSync(
     path.join(__dirname, '../src/templates', 'email-approved-provider.html'),
