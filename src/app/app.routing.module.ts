@@ -1,4 +1,3 @@
-import { FaqComponent } from './core-components/wallet-install/faq/faq.component'
 import { NgModule } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { PublicJobComponent } from './public-job/public-job/public-job.component'
@@ -15,96 +14,99 @@ import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.
 
 @NgModule({
   imports: [
-    RouterModule.forRoot([
-      {
-        path: '',
-        redirectTo: '/home',
-        pathMatch: 'full',
-      },
-      {
-        path: 'login',
-        redirectTo: '/auth',
-        pathMatch: 'full',
-      },
-      {
-        path: 'auth',
-        loadChildren: './auth/auth.module#AuthModule',
-        canActivate: [AuthGuard],
-        data: { requiresLoggedOut: true },
-      },
-      {
-        path: 'home',
-        loadChildren: './home/home.module#HomeModule',
-      },
-      {
-        path: 'search',
-        loadChildren: './search/search.module#SearchModule',
-      },
-      {
-        path: 'jobs',
-        component: DashboardComponent,
-      },
-      {
-        path: 'jobs/:jobId',
-        component: PublicJobComponent,
-      },
-      {
-        path: 'jobs/public/:slug',
-        component: PublicJobComponent,
-      },
-      {
-        path: 'jobs/:jobId/bids',
-        component: JobBidsComponent,
-      },
-      {
-        path: 'jobs/public/:slug/bids',
-        component: JobBidsComponent,
-      },
-      {
-        path: 'profile/undefined',
-        loadChildren: './error/error.module#ErrorModule',
-      },
-      {
-        path: 'profile',
-        loadChildren: './profile/profile.module#ProfileModule',
-      },
-      {
-        path: 'inbox',
-        loadChildren: './inbox/inbox.module#InboxModule',
-        canActivate: [AuthGuard, UserIsSetupGuard],
-        data: { requiresLoggedIn: true },
-      },
-      {
-        path: 'tools',
-        component: ToolsComponent,
-      },
-      {
-        path: 'brand',
-        component: BrandComponent,
-      },
-      {
-        path: 'faq',
-        component: FaqPageComponent,
-      },
-      {
-        path: 'landing',
-        component: LandingComponent,
-      },
-      {
-        path: 'wallet-bnb',
-        component: WalletBnbComponent,
-        pathMatch: 'full',
-      },
-      {
-        path: 'wallet-bnb/assets',
-        component: WalletBnbAssetsComponent,
-        pathMatch: 'full',
-      },
-      {
-        path: '**',
-        loadChildren: './error/error.module#ErrorModule',
-      },
-    ]),
+    RouterModule.forRoot(
+      [
+        {
+          path: '',
+          redirectTo: '/home',
+          pathMatch: 'full',
+        },
+        {
+          path: 'login',
+          redirectTo: '/auth',
+          pathMatch: 'full',
+        },
+        {
+          path: 'auth',
+          loadChildren: './auth/auth.module#AuthModule',
+          canActivate: [AuthGuard],
+          data: { requiresLoggedOut: true },
+        },
+        {
+          path: 'home',
+          loadChildren: './home/home.module#HomeModule',
+        },
+        {
+          path: 'search',
+          loadChildren: './search/search.module#SearchModule',
+        },
+        {
+          path: 'jobs',
+          component: DashboardComponent,
+        },
+        {
+          path: 'jobs/:jobId',
+          component: PublicJobComponent,
+        },
+        {
+          path: 'jobs/public/:slug',
+          component: PublicJobComponent,
+        },
+        {
+          path: 'jobs/:jobId/bids',
+          component: JobBidsComponent,
+        },
+        {
+          path: 'jobs/public/:slug/bids',
+          component: JobBidsComponent,
+        },
+        {
+          path: 'profile/undefined',
+          loadChildren: './error/error.module#ErrorModule',
+        },
+        {
+          path: 'profile',
+          loadChildren: './profile/profile.module#ProfileModule',
+        },
+        {
+          path: 'inbox',
+          loadChildren: './inbox/inbox.module#InboxModule',
+          canActivate: [AuthGuard, UserIsSetupGuard],
+          data: { requiresLoggedIn: true },
+        },
+        {
+          path: 'tools',
+          component: ToolsComponent,
+        },
+        {
+          path: 'brand',
+          component: BrandComponent,
+        },
+        {
+          path: 'faq',
+          component: FaqPageComponent,
+        },
+        {
+          path: 'landing',
+          component: LandingComponent,
+        },
+        {
+          path: 'wallet-bnb',
+          component: WalletBnbComponent,
+          pathMatch: 'full',
+        },
+        {
+          path: 'wallet-bnb/assets',
+          component: WalletBnbAssetsComponent,
+          pathMatch: 'full',
+        },
+        {
+          path: '**',
+          loadChildren: './error/error.module#ErrorModule',
+        },
+      ],
+      { enableTracing: true }
+    ),
   ],
   exports: [RouterModule],
 })
