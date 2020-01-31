@@ -61,6 +61,10 @@ import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.
         component: JobBidsComponent,
       },
       {
+        path: 'profile/undefined',
+        loadChildren: './error/error.module#ErrorModule',
+      },
+      {
         path: 'profile',
         loadChildren: './profile/profile.module#ProfileModule',
       },

@@ -1,16 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core'
-import { Headers, Http } from '@angular/http'
+import { Component, OnInit } from '@angular/core'
+import { Headers } from '@angular/http'
 import { ActivatedRoute, Router } from '@angular/router'
-
-import * as decode from 'jwt-decode'
 
 import * as firebase from 'firebase/app'
 import { FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular'
-import { environment } from '../../../environments/environment'
 import { User } from '../../core-classes/user'
 import { AuthService } from '../../core-services/auth.service'
 import { UserService } from '../../core-services/user.service'
-import { FeatureToggleService } from '@service/feature-toggle.service'
 
 @Component({
   selector: 'app-login',
@@ -18,212 +14,22 @@ import { FeatureToggleService } from '@service/feature-toggle.service'
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  showMobileLogin = false
-  disableMobileSignIn = true
   loading = false
   returnUrl: string
-  mobileLoginState = ''
-  pinDeliveredTo: string
   httpHeaders = new Headers({
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
   })
 
-  webViewEthAddress: string
-
-  @Input() emailAddress: string
-
-  steps: any = {
-    detectAddress: {
-      isCurrent: true,
-      isMatchingEthAddress: false,
-    },
-    createAccountFromMobile: {
-      isCurrent: false,
-    },
-    existingAccountFromMobile: {
-      isCurrent: false,
-    },
-    matchingAccountFromMobile: {
-      isCurrent: false,
-    },
-  }
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
-    private userService: UserService,
-    private http: Http,
-    private featureService: FeatureToggleService
+    private userService: UserService
   ) {}
 
   ngOnInit() {
-    const ua = window.navigator.userAgent
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/'
-  }
-
-  onCreateAccountFromMobile() {
-    this.steps.detectAddress.isCurrent = false
-    this.steps.createAccountFromMobile.isCurrent = true
-    this.steps.existingAccountFromMobile.isCurrent = false
-    this.steps.matchingAccountFromMobile.isCurrent = false
-  }
-
-  onBackToMobileSignIn() {
-    this.steps.detectAddress.isCurrent = true
-    this.steps.createAccountFromMobile.isCurrent = false
-    this.steps.existingAccountFromMobile.isCurrent = false
-    this.steps.matchingAccountFromMobile.isCurrent = false
-  }
-
-  onExistingAccountFromMobile() {
-    this.steps.detectAddress.isCurrent = false
-    this.steps.createAccountFromMobile.isCurrent = false
-    this.steps.existingAccountFromMobile.isCurrent = true
-    this.steps.matchingAccountFromMobile.isCurrent = false
-  }
-
-  onMatchingAccountFromMobile() {
-    this.steps.detectAddress.isCurrent = false
-    this.steps.createAccountFromMobile.isCurrent = false
-    this.steps.existingAccountFromMobile.isCurrent = false
-    this.steps.matchingAccountFromMobile.isCurrent = true
-
-    this.generateAuthPinCodeAsync()
-  }
-
-  onCheckSignUp() {
-    this.disableMobileSignIn = true
-  }
-
-  onClickMobileSignIn() {
-    this.showMobileLogin = true
-    console.log('+ show mobile login', this.showMobileLogin)
-  }
-
-  async generateAuthPinCodeAsync() {
-    if (this.webViewEthAddress) {
-      const reqBody = {
-        emailAddress: this.emailAddress,
-        ethAddress: this.webViewEthAddress,
-      }
-      const reqOptions = { headers: this.httpHeaders }
-      let response
-      const endPoint = `${environment.backendURI}/generateAuthPinCode`
-      try {
-        this.mobileLoginState = 'sending-pin'
-        response = await this.http.post(endPoint, reqBody, reqOptions)
-      } catch (error) {
-        console.error(
-          `! http post error for generating pin at endpoint: ${endPoint}`,
-          error
-        )
-      }
-      response.subscribe(
-        data => {
-          this.mobileLoginState = 'sending-pin-success'
-          console.log('+ data!!', data)
-          this.pinDeliveredTo = data.json().email
-          console.log('+ generated pin OK')
-        },
-        error => {
-          this.mobileLoginState = 'sending-pin-failed'
-          console.error('! failed to generate and send auth pin', error)
-          this.mobileLoginState = ''
-          switch (error.status) {
-            case 404: {
-              this.mobileLoginState = 'authentication-address-unknown'
-              alert(
-                'Please sign in via the desktop, and set your ethereum address first'
-              )
-              break
-            }
-            default: {
-              alert('Sorry, we encountered an unknown error')
-              console.error(error)
-              break
-            }
-          }
-          this.onBackToMobileSignIn()
-        }
-      )
-    }
-  }
-
-  async ethereumAuthViaPinCodeAsync(authPin) {
-    const pin = authPin.value
-    if (this.webViewEthAddress) {
-      console.log('+ auth pin:', pin)
-      const reqBody = {
-        emailAddress: this.emailAddress,
-        ethAddress: this.webViewEthAddress,
-        pin: parseInt(pin, 10),
-      }
-      const reqOptions = { headers: this.httpHeaders }
-      let response
-      const endPoint = `${environment.backendURI}/ethereumAuthViaPinCode`
-      try {
-        this.mobileLoginState = 'authentication-via-pin'
-        response = await this.http.post(endPoint, reqBody, reqOptions)
-      } catch (error) {
-        console.error(
-          `! http post error pin authentication at endpoint: ${endPoint}`,
-          error
-        )
-      }
-      response.subscribe(
-        async data => {
-          this.mobileLoginState = 'authentication-pin-success'
-          console.log('+ auth data !!', data)
-          const token = data.json().token
-          console.log('+ authenticated via pin OK', token)
-
-          await firebase
-            .auth()
-            .signInWithCustomToken(token)
-            .catch(error => {
-              console.log(
-                'firebase.auth().signInWithCustomToken() Error: ',
-                error
-              )
-            })
-
-          const tokenPayload = decode(token)
-          console.log('+ decoded JWT:', tokenPayload)
-          const user: User = new User({ address: tokenPayload.uid })
-          this.handleLogin(user)
-        },
-        error => {
-          console.log('+ auth status !!', error.status)
-          this.mobileLoginState = ''
-          switch (error.status) {
-            case 403: {
-              alert('Permission denied, incorrect credentials')
-              break
-            }
-            case 401: {
-              alert('Permission denied, your PIN code has expired')
-              break
-            }
-            case 404: {
-              alert(
-                'Please sign in via the desktop, and set your ethereum address first'
-              )
-              this.mobileLoginState = 'authentication-address-unknown'
-              break
-            }
-            default: {
-              alert('Sorry, we encountered an unknown error')
-              console.error(error)
-              break
-            }
-          }
-          this.mobileLoginState = 'authentication-pin-failed'
-          this.onBackToMobileSignIn()
-        }
-      )
-    }
   }
 
   onFirebaseLogin(signInSuccessData: FirebaseUISignInSuccessWithAuthResult) {
@@ -258,7 +64,6 @@ export class LoginComponent implements OnInit {
         `! failed to query for user with address: [${userDetails.address}] error was: `,
         error
       )
-      this.onBackToMobileSignIn()
     }
 
     if (user && user.address) {
@@ -272,7 +77,6 @@ export class LoginComponent implements OnInit {
         .catch(error => {
           console.error('! jwt token was not stored in session storage ', error)
           alert('Sorry, we encountered an unknown error')
-          this.onBackToMobileSignIn()
         })
       this.authService.setUser(user)
       this.router.navigate([this.returnUrl])
@@ -283,10 +87,11 @@ export class LoginComponent implements OnInit {
   }
 
   async initialiseUserAndRedirect(user: User) {
+    console.log(`initialise`)
     this.userService.saveUser(user).then(
       res => {
         this.authService.setUser(user)
-        this.router.navigate(['/profile/setup'])
+        this.router.navigate(['/profile'])
       },
       err => {
         console.log('onLogin - err', err)
