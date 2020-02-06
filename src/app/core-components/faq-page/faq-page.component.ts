@@ -70,7 +70,7 @@ export class FaqPageComponent implements OnInit {
       index: 'q-11',
       q: 'How do I control the notification settings I receive?',
       a:
-        'Notifications from CanWork currently are sent via email. You can unsubscribe from these emails anytime, at the bottom of the email. If you would like to see CanYa updates you can go to canya.io.',
+        'Notifications from CanWork currently are sent via email. You can unsubscribe from these emails anytime, at the bottom of the email.',
     },
     {
       index: 'q-12',
