@@ -1,3 +1,5 @@
+import { from } from 'rxjs'
+import { DAODashComponent } from './dao/dao-dash.component'
 import { NgModule } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { PublicJobComponent } from './public-job/public-job/public-job.component'
@@ -94,6 +96,10 @@ import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.
         path: 'wallet-bnb/assets',
         component: WalletBnbAssetsComponent,
         pathMatch: 'full',
+      },
+      {
+        path: 'DAO-Dash',
+        loadChildren: './dao/dao.module#DAOModule',
       },
       {
         path: '**',

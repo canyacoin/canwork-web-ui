@@ -32,6 +32,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   bnbAddress: string
 
   hasUnreadMessages = false
+  isDAO = false
   messagesSubscription: Subscription
   routerSub: Subscription
   authSub: Subscription
@@ -117,6 +118,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
           // console.error('! unable to retrieve chat/channel data:', error)
         }
       )
+      if (this.currentUser.isDAO) {
+        this.isDAO = true
+      }
     }
   }
 
