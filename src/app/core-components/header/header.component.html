@@ -48,6 +48,9 @@
     </div>
     <div class="topbar-right">
       <ul class="topbar-nav nav lh-2">
+        <li *ngIf="isDAO" class="nav-item">
+          <a class="nav-link" [routerLink]="['/DAO-Dash']">DAO Dash</a>
+        </li>
         <li class="nav-item">
           <a
             class="nav-link"

@@ -30,7 +30,7 @@ import { CreateProviderProfileComponent } from './setup/create-provider-profile/
 import { ProviderStateComponent } from './setup/provider-state/provider-state.component'
 import { SetupComponent } from './setup/setup.component'
 import { MarkdownModule } from 'ngx-markdown'
-import { GetReferralComponent } from '../get-referral/get-referral.component'
+import { GetReferralComponent } from './get-referral/get-referral.component'
 
 @NgModule({
   imports: [
