@@ -17,7 +17,6 @@ import { BackButtonComponent } from './back-button/back-button.component'
 import { BlogPostsComponent } from './blog-posts/blog-posts.component'
 import { BotComponent } from './bot/bot.component'
 import { BrandComponent } from './brand/brand.component'
-import { ComingSoonComponent } from './coming-soon/coming-soon.component'
 import { FaqPageComponent } from './faq-page/faq-page.component'
 import { FeedbackComponent } from './feedback/feedback.component'
 import { FooterComponent } from './footer/footer.component'
@@ -83,7 +82,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     VStepperComponent,
     ProviderCardComponent,
     StorageDropzoneComponent,
-    ComingSoonComponent,
     AvatarComponent,
     VerifiedMarkComponent,
     DynamicCoinComponent,
