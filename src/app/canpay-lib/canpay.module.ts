@@ -6,7 +6,6 @@ import { HttpModule } from '@angular/http'
 import { QRCodeModule } from 'angular2-qrcode'
 import { BootstrapModalModule } from 'ng2-bootstrap-modal'
 import { ClipboardModule } from 'ngx-clipboard'
-
 import { CanpayWizardComponent } from './canpay-wizard/canpay-wizard.component'
 import { MsgBoxComponent } from './msg-box/msg-box.component'
 import { PaymentSummaryTemplateComponent } from './payment-summary-template/payment-summary-template.component'

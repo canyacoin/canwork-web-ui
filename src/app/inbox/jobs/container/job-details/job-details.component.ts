@@ -21,7 +21,6 @@ import {
   ActionDialogComponent,
   ActionDialogOptions,
 } from '../action-dialog/action-dialog.component'
-import { LimepayService } from '@service/limepay.service'
 
 @Component({
   selector: 'app-job-details',
@@ -57,8 +56,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     private dialogService: DialogService,
     private storage: AngularFireStorage,
     private mobile: MobileService,
-    private router: Router,
-    private limepayService: LimepayService
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -114,18 +112,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
   private transactionTypeService(fiatPayment, jobId): any {
     if (fiatPayment) {
-      this.transactionsSub = this.limepayService
-        .getTransactionsByJob(jobId)
-        .subscribe((payments: any) => {
-          let transactions = []
-          payments.forEach(payment => {
-            if (payment.transactions) {
-              transactions = transactions.concat(payment.transactions)
-            }
-          })
-          this.transactions = transactions
-          console.log(this.transactions)
-        })
+      //TODO:  Cleanup
     } else {
       this.transactionsSub = this.transactionService
         .getTransactionsByJob(jobId)
