@@ -156,7 +156,7 @@ export class PostComponent implements OnInit, OnDestroy {
       ],
       title: [
         '',
-        Validators.compose([Validators.required, Validators.maxLength(64)]),
+        Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(64)]),
       ],
       initialStage: [
         '',
@@ -377,6 +377,13 @@ export class PostComponent implements OnInit, OnDestroy {
       this.shareableJobForm.controls['skills'].setValue(value)
     }
   }
+  onBlurMethod(name) {
+    this.shareableJobForm.controls[name].markAsDirty();
+    this.shareableJobForm.controls[name].updateValueAndValidity();
+  }
+  onFocusMethod(name) {
+    this.shareableJobForm.controls[name].markAsPristine();
+  }  
   checkForm() {
     if (!this.isShareable) {
       console.log(this.postForm)

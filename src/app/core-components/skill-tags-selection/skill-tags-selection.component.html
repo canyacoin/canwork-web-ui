@@ -2,6 +2,8 @@
   list="tagsList"
   class="form-control"
   placeholder="e.g. HTML, CSS..."
+  (blur)="onBlurMethod()"  
+  (focus)="onFocusMethod()"  
   [class.invalid]="acceptedTags.length <= 0"
   (keyup.enter)="onTagEnter()"
   [(ngModel)]="tagInput"
@@ -12,6 +14,11 @@
 <small class="text-primary text-wrap" *ngIf="tagSelectionInvalid"
   >You can only add 6 tags to a project (up to 14 characters long)
 </small>
+
+<small class="text-danger text-wrap" *ngIf="noValidTag">
+  Please choose at least one valid skill
+</small>
+
 
 <app-skill-tag
   *ngFor="let tag of acceptedTags"
