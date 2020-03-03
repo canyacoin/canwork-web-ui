@@ -18,6 +18,7 @@ export class SkillTagsSelectionComponent implements OnInit {
 
   skillTagsList: string[] = []
   tagSelectionInvalid = false
+  noValidTag = false
   acceptedTags: string[] = []
   tagInput = ''
 
@@ -35,7 +36,15 @@ export class SkillTagsSelectionComponent implements OnInit {
     this.tagsUpdated.emit(this.acceptedTags.join(','))
   }
 
+  onBlurMethod() {
+    if (this.acceptedTags.length == 0) this.noValidTag = true;
+  }
+  onFocusMethod() {
+    this.noValidTag = false;
+  }  
+
   onTagEnter() {
+    this.noValidTag = false;
     const tag = this.tagInput
     if (tag === '') {
       this.tagSelectionInvalid = true

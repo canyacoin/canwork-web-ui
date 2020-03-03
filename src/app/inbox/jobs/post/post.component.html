@@ -464,6 +464,8 @@
                           type="text"
                           name="title"
                           placeholder="Enter Job Title"
+                          (blur)="onBlurMethod($event.target.name)"
+                          (focus)="onFocusMethod($event.target.name)"
                           maxlength="64"
                           [class.invalid]="
                             !shareableJobForm.controls.title.valid &&
@@ -475,7 +477,7 @@
                             !shareableJobForm.controls.title.valid &&
                             shareableJobForm.controls.title.dirty
                           "
-                          class="text-primary text-wrap"
+                          class="text-danger text-wrap"
                           >Title must be longer than 5 characters and less than
                           64 characters</small
                         >
