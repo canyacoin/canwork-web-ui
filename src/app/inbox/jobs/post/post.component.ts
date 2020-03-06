@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { BinanceService } from '@service/binance.service'
 import {
@@ -93,6 +93,8 @@ export class PostComponent implements OnInit, OnDestroy {
     },
   ]
 
+
+  
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -183,6 +185,7 @@ export class PostComponent implements OnInit, OnDestroy {
           Validators.required,
           Validators.minLength(1),
           Validators.maxLength(100),
+          this.ValidateCurrentDate,
         ]),
       ],
       timelineExpectation: ['', Validators.compose([Validators.required])],
@@ -275,6 +278,7 @@ export class PostComponent implements OnInit, OnDestroy {
                 this.shareableJobForm.controls['skills'].patchValue(
                   this.jobToEdit.information.skills
                 )
+                if (this.jobToEdit.information.attachments.length > 0) this.uploadedFile = this.jobToEdit.information.attachments[0]
                 this.pageLoaded = true
               } else {
                 this.router.navigateByUrl('/not-found')
@@ -299,6 +303,17 @@ export class PostComponent implements OnInit, OnDestroy {
       this.toastr.warning('Add Binance Chain Wallet to create jobs')
     }
   }
+  
+  ValidateCurrentDate(control: AbstractControl) {
+    if (!control.value.length) return null; // this is validated from Validators.required
+    
+    let deadline = new Date(control.value);
+    let today = new Date();
+    today.setHours(0,0,0,0);
+    if (deadline < today) return {pastDueDate: true};
+
+    return null;
+  }  
 
   usdToCan(usd: number) {
     return getUsdToCan(this.usdToAtomicCan, usd)
