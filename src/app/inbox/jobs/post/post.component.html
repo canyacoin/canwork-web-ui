@@ -780,11 +780,21 @@
                         <small
                           *ngIf="
                             !shareableJobForm.controls.deadline.valid &&
-                            shareableJobForm.controls.deadline.dirty
+                            shareableJobForm.controls.deadline.dirty &&
+                            (shareableJobForm.controls.deadline.errors && !shareableJobForm.controls.deadline.errors.pastDueDate)
                           "
                           class="text-primary text-wrap"
                           >Deadline is required.</small
                         >
+                        <small
+                          *ngIf="
+                            !shareableJobForm.controls.deadline.valid &&
+                            shareableJobForm.controls.deadline.dirty &&
+                            shareableJobForm.controls.deadline.errors &&
+                            shareableJobForm.controls.deadline.errors.pastDueDate
+                          "
+                          class="text-primary text-wrap" >
+                          Deadline in the past.</small>                        
                       </div>
                     </div>
 
@@ -975,7 +985,7 @@
                         type="button"
                         (click)="submitShareableJob(true)"
                         [disabled]="
-                          !shareableJobForm.valid ||
+                          !shareableJobForm.controls.title.valid ||
                           isSending ||
                           (currentUpload && !uploadedFile)
                         "
