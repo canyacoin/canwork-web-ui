@@ -1344,6 +1344,7 @@ h1.card-title {
   outline: none;
   -webkit-transition: 0.15s linear;
   transition: 0.15s linear;
+  margin-bottom: 5px;
 }
 
 .btn:hover {
@@ -3771,7 +3772,7 @@ button:focus {
 .form-control {
   border-color: #e8e8e8;
   border-radius: 2px;
-  color: #b5b9bf;
+  color: #000000;
   padding: 5px 12px;
   font-size: 14px;
   line-height: inherit;
