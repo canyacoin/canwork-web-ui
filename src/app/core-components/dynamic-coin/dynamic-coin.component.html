@@ -3,9 +3,7 @@
   class="rounded-circle"
   height="44"
   width="44"
-  src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/assets/{{
-    symbol | async | lowercase
-  }}/logo.png"
+  src="{{symbolUrl}}/logo.png"
   (error)="imageState = ImageState.Error"
   (load)="imageState = ImageState.Loaded"
 />

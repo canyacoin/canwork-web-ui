@@ -26,6 +26,7 @@ export class DynamicCoinComponent extends OnDestroyComponent
   symbol: Observable<string>
 
   originalSymbol: string
+  symbolUrl: string
   startCol: string
   stopCol: string
   imageState: ImageState = ImageState.Loading
@@ -35,6 +36,8 @@ export class DynamicCoinComponent extends OnDestroyComponent
     this.symbol
       .pipe(takeUntil(this.destroy$)) // unsubscribe on destroy
       .subscribe(symbol => {
+        if (symbol === "BNB") this.symbolUrl = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/'
+          else this.symbolUrl = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/assets/'+symbol
         this.originalSymbol = symbol.split('-')[0]
         this.startCol = hashbow(symbol[0])
         this.stopCol = hashbow(symbol[1])
