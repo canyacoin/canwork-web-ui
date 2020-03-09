@@ -48,6 +48,7 @@ export class PostComponent implements OnInit, OnDestroy {
   draft = false
   editing = false
   error = false
+  postToProvider = false
 
   jobToEdit: Job
   jobId: string
@@ -226,13 +227,14 @@ export class PostComponent implements OnInit, OnDestroy {
           this.recipientAddress = params['address']
           this.loadUser(this.recipientAddress)
           this.isShareable = false
+          this.postToProvider = true
         } else {
           this.isShareable = true
         }
       })
       if (!this.editing) {
         this.jobId = GenerateGuid()
-        this.pageLoaded = true
+        if (!this.postToProvider) this.pageLoaded = true
       } else {
         this.jobId = this.activatedRoute.snapshot.params['jobId']
         this.jobSub = this.publicJobService
