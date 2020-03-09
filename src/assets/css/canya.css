@@ -1344,6 +1344,7 @@ h1.card-title {
   outline: none;
   -webkit-transition: 0.15s linear;
   transition: 0.15s linear;
+  margin-bottom: 5px;
 }
 
 .btn:hover {
@@ -3771,7 +3772,7 @@ button:focus {
 .form-control {
   border-color: #e8e8e8;
   border-radius: 2px;
-  color: #b5b9bf;
+  color: #323c47;
   padding: 5px 12px;
   font-size: 14px;
   line-height: inherit;
@@ -5210,6 +5211,9 @@ ul.flexbox {
 }
 
 .topbar-toggler {
+  position: absolute;
+  top: 0;
+  right: 0;
   align-self: flex-start;
   padding: .25rem .75rem;
   font-size: 1.25rem;
@@ -5247,6 +5251,30 @@ ul.flexbox {
   align-items: center;
   flex-shrink: 0;
   margin-right: 16px;
+}
+
+.logo-binance {
+  display: block;
+  padding-left: 10%;
+}
+
+@media (max-width:480px) {
+  .logo-binance {
+  padding-left: 5%;
+  }
+}
+
+@media (max-width:390px) {
+  .logo-binance {
+  height: 30px;
+  padding-left: 0;
+  }
+}
+
+@media (max-width:290px) {
+  .logo-binance {
+  display:none;
+  }
 }
 
 .topbar-nav {
@@ -5965,8 +5993,7 @@ ul.flexbox {
 
 @media (max-width: 330px) {
   .topbar-nav {
-    left: -260px;
-    width: 260px !important;
+    width: 100%!important;
   }
 }
 

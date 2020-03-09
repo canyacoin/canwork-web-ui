@@ -110,7 +110,7 @@
 
                       <div class="row ml-0 mr-0">
                         <div
-                          class="mb-10 mt-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12"
+                          class="mt-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12"
                         >
                           <label
                             for="file-upload"
@@ -187,7 +187,7 @@
                       <div class="row ml-0 mr-0">
                         <div
                           *ngFor="let type of workTypes()"
-                          class="mb-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12"
+                          class="px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12"
                         >
                           <button
                             type="button"
@@ -273,7 +273,7 @@
                       <div class="row ml-0 mr-0">
                         <div
                           *ngFor="let type of paymentTypes()"
-                          class="mb-10 px-5 col-lg-3 col-md-4 col-sm-4 col-12"
+                          class="px-5 col-lg-3 col-md-4 col-sm-4 col-12"
                         >
                           <button
                             type="button"
@@ -597,7 +597,7 @@
 
                         <div class="row ml-0 mr-0">
                           <div
-                            class="mb-10 mt-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12"
+                            class="mt-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12"
                           >
                             <label
                               for="file-upload"
@@ -672,7 +672,7 @@
                         <div class="row ml-0 mr-0">
                           <div
                             *ngFor="let type of providerTypes"
-                            class="mb-10 px-5 col-lg-2 col-md-4 col-sm-6 col-12"
+                            class="px-5 col-lg-2 col-md-4 col-sm-6 col-12"
                           >
                             <button
                               type="button text-left"
@@ -724,7 +724,7 @@
                         <div class="row ml-0 mr-0">
                           <div
                             *ngFor="let type of workTypes()"
-                            class="mb-10 px-5 col-lg-3 col-md-4 col-sm-4 col-12"
+                            class="px-5 col-lg-3 col-md-4 col-sm-4 col-12"
                           >
                             <button
                               type="button"
@@ -781,7 +781,9 @@
                           *ngIf="
                             !shareableJobForm.controls.deadline.valid &&
                             shareableJobForm.controls.deadline.dirty &&
-                            (shareableJobForm.controls.deadline.errors && !shareableJobForm.controls.deadline.errors.pastDueDate)
+                            (shareableJobForm.controls.deadline.errors &&
+                              !shareableJobForm.controls.deadline.errors
+                                .pastDueDate)
                           "
                           class="text-primary text-wrap"
                           >Deadline is required.</small
@@ -791,10 +793,13 @@
                             !shareableJobForm.controls.deadline.valid &&
                             shareableJobForm.controls.deadline.dirty &&
                             shareableJobForm.controls.deadline.errors &&
-                            shareableJobForm.controls.deadline.errors.pastDueDate
+                            shareableJobForm.controls.deadline.errors
+                              .pastDueDate
                           "
-                          class="text-primary text-wrap" >
-                          Deadline in the past.</small>                        
+                          class="text-primary text-wrap"
+                        >
+                          Deadline in the past.</small
+                        >
                       </div>
                     </div>
 
@@ -939,7 +944,7 @@
                         <br />
                         <div class="row ml-0 mr-0">
                           <div
-                            class="mb-10 px-5 col-lg-3 col-md-4 col-sm-6 col-xs-12"
+                            class="px-5 col-lg-3 col-md-4 col-sm-6 col-xs-12"
                           >
                             <button
                               type="button"
@@ -955,7 +960,7 @@
                             </button>
                           </div>
                           <div
-                            class="mb-10 px-5 col-lg-3 col-md-4 col-sm-6 col-xs-12"
+                            class="px-5 col-lg-3 col-md-4 col-sm-6 col-xs-12"
                           >
                             <button
                               type="button "
@@ -979,48 +984,54 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-12 text-right">
-                    <div *ngIf="!isSending">
-                      <button
-                        type="button"
-                        (click)="submitShareableJob(true)"
-                        [disabled]="
-                          !shareableJobForm.controls.title.valid ||
-                          isSending ||
-                          (currentUpload && !uploadedFile)
-                        "
-                        class="btn btn-secondary mx-10"
+                  <div class="col-12">
+                    <div class="col-12">
+                      <div *ngIf="!isSending" class="col-12 row">
+                        <div class="px-5 col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                          <button
+                            type="button"
+                            (click)="submitShareableJob(true)"
+                            [disabled]="
+                              !shareableJobForm.controls.title.valid ||
+                              isSending ||
+                              (currentUpload && !uploadedFile)
+                            "
+                            class="btn btn-secondary mx-5 w-full"
+                          >
+                            SAVE AS DRAFT
+                          </button>
+                        </div>
+                        <div class="px-5 col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                          <button
+                            type="button"
+                            (click)="submitShareableJob(false)"
+                            [disabled]="
+                              !shareableJobForm.valid ||
+                              isSending ||
+                              (currentUpload && !uploadedFile)
+                            "
+                            class="btn btn-primary mx-5 w-full"
+                          >
+                            POST JOB
+                          </button>
+                        </div>
+                      </div>
+                      <div *ngIf="isSending">
+                        <img
+                          *ngIf="isSending"
+                          src="assets/img/loader.svg"
+                          height="36px"
+                          alt="CanYa Coin"
+                        />
+                      </div>
+                      <span
+                        *ngIf="error"
+                        class="fs-12 fw-400 mt-10"
+                        style="color: #ff6666"
                       >
-                        SAVE AS DRAFT
-                      </button>
-                      <button
-                        type="button"
-                        (click)="submitShareableJob(false)"
-                        [disabled]="
-                          !shareableJobForm.valid ||
-                          isSending ||
-                          (currentUpload && !uploadedFile)
-                        "
-                        class="btn btn-primary"
-                      >
-                        POST JOB
-                      </button>
+                        Something went wrong when posting this job..
+                      </span>
                     </div>
-                    <div *ngIf="isSending">
-                      <img
-                        *ngIf="isSending"
-                        src="assets/img/loader.svg"
-                        height="36px"
-                        alt="CanYa Coin"
-                      />
-                    </div>
-                    <span
-                      *ngIf="error"
-                      class="fs-12 fw-400 mt-10"
-                      style="color: #ff6666"
-                    >
-                      Something went wrong when posting this job..
-                    </span>
                   </div>
                 </form>
               </div>
