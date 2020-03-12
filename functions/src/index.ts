@@ -149,7 +149,7 @@ exports.sendEmail = functions.https.onRequest(async (request, response) => {
   const msg = {
     to: 'cam@canya.com',
     from: 'support@canya.com',
-    subject: 'Welcome to CANWork',
+    subject: 'Welcome to CanWork',
     text: 'text version of content here',
     html: html,
   }
@@ -458,7 +458,7 @@ exports.updateIndexProviderData = functions.firestore
         {
           to: user.email,
           from: 'support@canya.com',
-          subject: `You have been approved as a CANWork provider!`,
+          subject: `You have been approved as a CanWork provider!`,
           html: html,
           substitutions: {
             title: `Congratulations, ${user.name}. 🎉🎊🎉`,
@@ -496,7 +496,7 @@ exports.updateIndexProviderData = functions.firestore
       const msg = {
         to: afterData.email,
         from: 'support@canya.com',
-        subject: 'Welcome to CANWork',
+        subject: 'Welcome to CanWork',
         html: html,
       }
       const r = await sgMail.send(msg)
