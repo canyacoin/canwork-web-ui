@@ -234,7 +234,7 @@ class JobRequestAcceptedNotification extends AEmailNotification {
       ${sender.name} has accepted your job request:
       "${this.jobData.information.description}".
       A payment into the escrow is now required to proceed.<br><br>
-      Please login to CANWork to review this job.`,
+      Please login to CanWork to review this job.`,
     })
     console.log('+ dump emailMessages:', this.emailMessages)
   }
@@ -269,7 +269,7 @@ class JobRequestDeclinedNotification extends AEmailNotification {
       Dear ${recipient.name},<br>
       ${sender.name} has declined your job request:
       "${this.jobData.information.description}".
-      Please login to CANWork to review this job.`,
+      Please login to CanWork to review this job.`,
     })
     console.log('+ dump emailMessages:', this.emailMessages)
   }
@@ -304,7 +304,7 @@ class JobRequestCounterOfferNotification extends AEmailNotification {
       Dear ${recipient.name},<br>
       ${sender.name} has made a counter offer to your job request:
       "${this.jobData.information.title}".
-      Please login to CANWork to review this job.`,
+      Please login to CanWork to review this job.`,
     })
     console.log('+ dump emailMessages:', this.emailMessages)
   }
@@ -338,7 +338,7 @@ class AddMessageNotification extends AEmailNotification {
       Dear ${recipient.name},<br>
       ${sender.name} just sent you a message regarding the job:
       "${this.jobData.information.title}".
-      Login to CANWork to see this message.`,
+      Login to CanWork to see this message.`,
     })
     console.log('+ dump emailMessages:', this.emailMessages)
   }
@@ -369,7 +369,7 @@ class FinishedJobNotification extends AEmailNotification {
       Dear ${this.clientData.name},<br>
       ${this.providerData.name} has marked the job:
       "${this.jobData.information.title}" as finished.
-      Login to CANWork to review this job.`,
+      Login to CanWork to review this job.`,
     })
     console.log('+ dump emailMessages:', this.emailMessages)
   }
