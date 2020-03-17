@@ -16,7 +16,7 @@ export class DAODashComponent implements OnInit {
   displayTotals = false
 
   constructor(http: Http) {
-    const BEPESCROW_API_URL = 'https://bepescrow.herokuapp.com/jobs' //still looking for a better way to handle escrow api url
+    const BEPESCROW_API_URL = 'https://bep-escrow.herokupp.com/jobs' //still looking for a better way to handle escrow api url
     http.get(BEPESCROW_API_URL).subscribe(response => {
       this.escrowResult = response.json()
       this.escrowStats = this.escrowResult.stats
