@@ -58,7 +58,7 @@ export interface Transaction {
 
 // TODO cannot use environment - find a solution
 // const BEPESCROW_API_URL = `${environment.binance.escrowUrl}/jobs`
-const BEPESCROW_API_URL = 'https://bepescrow.herokuapp.com/jobs'
+const BEPESCROW_API_URL = 'https://bep-escrow.herokupp.com/jobs'
 
 const mapEventToActionType = {
   ESCROW: ActionType.enterEscrow,
