@@ -132,7 +132,7 @@ export class ActionDialogComponent
   }
 
   onRatingChange($event: RatingChangeEvent) {
-    console.log('onRatingUpdated $event: ', $event)
+    //console.log('onRatingUpdated $event: ', $event)
     this.form.controls['rating'].setValue($event.rating)
   }
 
