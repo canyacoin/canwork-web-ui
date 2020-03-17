@@ -1,48 +1,50 @@
-****
+---
 
 > **Mirror**
 > This repo mirrors from Gitlab to Github. Please commit to the Gitlab repo:
 > https://gitlab.com/canyacoin/canwork/web-ui
 
-****
-
+---
 
 # CanWork.io
 
 This is an Angular Project, generated using [Angular CLI](https://github.com/angular/angular-cli)
 
-[![pipeline status](https://gitlab.com/canya-com/canwork/web-ui/badges/master/pipeline.svg)](https://gitlab.com/canya-com/shared/services/ethereum-transaction-monitor/commits/master)
+[![pipeline status](https://gitlab.com/canya-com/canwork/web-ui/badges/master/pipeline.svg)]
 
-*This project requires*
-* NPM: 6.4.1
-* Angular-CLI: 7.0.2
-* Firebase-CLI: 5.5.7
-* Yarn: 1.15.2
+_This project requires_
 
+- NPM: 6.4.1
+- Angular-CLI: 7.0.2
+- Firebase-CLI: 5.5.7
+- Yarn: 1.15.2
 
 ## Setting Up
 
-* [NPM](https://nodejs.org/en/)
+- [NPM](https://nodejs.org/en/)
 
-* [Angular](https://github.com/angular/angular-cli)
+- [Angular](https://github.com/angular/angular-cli)
+
 ```
 npm install --save-dev @angular/compiler-cli@7.0.2
 ```
 
-* [Firebase CLI](https://www.npmjs.com/package/firebase)
+- [Firebase CLI](https://www.npmjs.com/package/firebase)
+
 ```
 npm install -g @angular/cli firebase-tools
 ```
 
-* [YARN](https://yarnpkg.com/en/docs/install#mac-stable)
+- [YARN](https://yarnpkg.com/en/docs/install#mac-stable)
+
 ```
 brew install yarn
 ```
 
-
 ### Clone & Initial Setup:
 
 Git
+
 ```
 git clone git@gitlab.com:canya-com/canwork/web-ui.git
 cd web-ui
@@ -50,6 +52,7 @@ git checkout -b "yourname"
 ```
 
 Setup
+
 ```
 yarn
 node patch.js   // Workaround for https://blog.lysender.com/2018/07/angular-6-cannot-resolve-crypto-fs-net-path-stream-when-building-angular/
@@ -60,21 +63,22 @@ yarn link
 
 **Gitlab CI/CD**
 
-Ask a CanYa Core member for access to the Gitlab Repo as "Maintainer" 
+Ask a CanYa Core member for access to the Gitlab Repo as "Maintainer"
 
 Go to the Gitlab -> Settings (Sidebar) -> CI/CD (Sidebar) , scroll to `Variables` and click `Expand`
 
-Scroll to the bottom of the list of credentials and click `reveal values`. 
+Scroll to the bottom of the list of credentials and click `reveal values`.
 
-Copy the `ENVIRONMENT_STAGING` value into a file called `environment.ts`, then move that file into the `src/environments` folder. 
+Copy the `ENVIRONMENT_STAGING` value into a file called `environment.ts`, then move that file into the `src/environments` folder.
 
 Build!
 
 **Firebase**
 
-Ask a CanYa Core member for access to the firebase staging app: `staging-can-work`, which itself is linked to  https://staging.canya.com
+Ask a CanYa Core member for access to the firebase staging app: `staging-can-work`, which itself is linked to https://staging.canya.com
 
 From inside the repo, log into Firebase
+
 ```
 firebase login      // Will launch the Google account login page
 firebase list       // Double Check you have the project linked
@@ -94,7 +98,7 @@ firebase deploy     // Deploy to staging
 
 #### Algolia Full Text Search
 
-*NB* A paid plan on firebase is required for external network calls
+_NB_ A paid plan on firebase is required for external network calls
 
 Create an account for yourself at: https://www.algolia.com
 
@@ -170,17 +174,16 @@ Terms & Conditions: `https://www.canwork.io/assets/docs/canwork-terms-and-condit
 
 Gitlab CI/CD is used. After committing and merging the change, a pipeline runs:
 
-1) Build a `dist` package for `Staging`
-2) Build a `dist` package for `Prod`
-3) Deploy to `Staging`
-4) Hold for manual deploy to `Prod`         <-- You will need to manually approve this
+1. Build a `dist` package for `Staging`
+2. Build a `dist` package for `Prod`
+3. Deploy to `Staging`
+4. Hold for manual deploy to `Prod` <-- You will need to manually approve this
 
 You can view the script here: https://gitlab.com/canya-com/canwork/web-ui/blob/master/.gitlab-ci.yml
 
+Go to Gitlab -> CI/CD (sidebar) -> Pipelines (sidebar).
 
-Go to Gitlab -> CI/CD (sidebar) -> Pipelines (sidebar). 
-
-Find the Build status:    
+Find the Build status:
 
 ![](https://snag.gy/4TLi6N.jpg)
 
@@ -188,10 +191,7 @@ Find the Deploy status:
 
 ![](https://snag.gy/C9gL5c.jpg)
 
-Play it, and wait ~10minutes for it to deploy to production. 
-
-
-
+Play it, and wait ~10minutes for it to deploy to production.
 
 ## Further help
 
@@ -206,6 +206,6 @@ May require installation and login of [travis ruby command line utility first](h
 1. Delete the existing encryption env var in [travis settings](https://travis-ci.com/canyaio/can-work/settings)
 1. Generate a new encrypted file `travis encrypt-file src/environments/environment.staging.ts`
 1. Move the file over the top of the previous version `mv environment.staging.ts.enc src/environments/environment.staging.ts.enc`
-1. Update `.travis.yml`  `openssl ...` decryption line to match the new xxx_key and xxx_iv environment vars
+1. Update `.travis.yml` `openssl ...` decryption line to match the new xxx_key and xxx_iv environment vars
 1. `git push`
 1. Check [travis build status](https://travis-ci.com/canyaio/can-work)
