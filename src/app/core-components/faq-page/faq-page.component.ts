@@ -11,7 +11,7 @@ export class FaqPageComponent implements OnInit {
       index: 'q-1',
       q: 'Who is CanWork for?',
       a:
-        'CanWork is a digital services marketplace for software engineers, graphics designers, content creators, digital marketers, virtual assitants or anyone with a digital service. If you are looking to hire or provider digital services using Binance Chain (BEP2) assets, CanWork is for you!',
+        'CanWork is a digital services marketplace for software engineers, graphics designers, content creators, digital marketers, virtual assitants or anyone with a digital service. If you are looking to hire or provide digital services using Binance Chain (BEP2) assets, CanWork is for you!',
     },
     {
       index: 'q-2',
