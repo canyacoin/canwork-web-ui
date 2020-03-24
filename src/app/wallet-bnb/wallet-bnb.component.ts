@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
-import { Router } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { BinanceService, WalletApp, EventType } from '@service/binance.service'
 import WalletConnect from '@trustwallet/walletconnect'
 import WalletConnectQRCodeModal from '@walletconnect/qrcode-modal'
@@ -31,15 +31,18 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
     old: null,
     new: null,
   }
+  returnUrl: string
 
   constructor(
     private binanceService: BinanceService,
     private router: Router,
     private toastr: ToastrService,
-    private authService: AuthService
+    private authService: AuthService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/wallet-bnb/assets'
     this.binanceService.events$
       .pipe(takeUntil(this.destroy$))
       .subscribe(async event => {
@@ -57,7 +60,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
             break
           case EventType.ConnectSuccess:
             this.toastr.success('Unlocking Successful')
-            this.router.navigate(['/wallet-bnb/assets'])
+            this.router.navigate([this.returnUrl])
             break
           case EventType.ConnectFailure:
             if (this.attemptedConnection) {

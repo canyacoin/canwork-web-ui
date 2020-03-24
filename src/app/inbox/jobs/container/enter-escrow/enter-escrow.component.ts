@@ -101,7 +101,12 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       !this.binanceService.isKeystoreConnected() &&
       !this.binanceService.isWalletConnectConnected()
     ) {
-      this.toastr.error('Connect your wallet to use this payment method')
+      const routerStateSnapshot = this.router.routerState.snapshot;
+      this.toastr.warning('Connect your wallet to use this payment method', '', {timeOut: 2000})
+      this.router.navigate(
+        ['/wallet-bnb'],
+        {queryParams: { returnUrl: routerStateSnapshot.url }},
+      )
       return
     }
     await this.setPaymentMethod('crypto')
