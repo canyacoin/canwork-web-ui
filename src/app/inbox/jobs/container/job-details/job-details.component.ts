@@ -225,7 +225,12 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       !this.binanceService.isKeystoreConnected() &&
       !this.binanceService.isWalletConnectConnected()
     ) {
-      this.toastr.error('Connect your wallet to release the payment')
+      const routerStateSnapshot = this.router.routerState.snapshot;
+      this.toastr.warning('Connect your wallet to release the payment', '', {timeOut: 2000})
+      this.router.navigate(
+        ['/wallet-bnb'],
+        {queryParams: { returnUrl: routerStateSnapshot.url }},
+      )      
       return
     }
 
