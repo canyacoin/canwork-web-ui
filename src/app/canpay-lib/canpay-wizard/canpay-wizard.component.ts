@@ -19,7 +19,7 @@ import {
 import { FormDataService } from '../services/formData.service'
 
 @Component({
-  selector: 'canyalib-canpay',
+  selector: 'canpay-wizard',
   templateUrl: './canpay-wizard.component.html',
   styleUrls: ['./canpay-wizard.component.scss'],
   // encapsulation: ViewEncapsulation.Native
@@ -74,9 +74,7 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
   balanceInterval: any
   totalTransactions = 1
 
-  constructor(
-    private formDataService: FormDataService
-  ) {}
+  constructor(private formDataService: FormDataService) {}
 
   ngOnInit() {
     this.steps = [

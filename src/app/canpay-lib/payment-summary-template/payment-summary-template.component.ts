@@ -10,7 +10,7 @@ import {
 } from '../interfaces'
 
 @Component({
-  selector: 'canyalib-payment-summary-template',
+  selector: 'payment-summary-template',
   templateUrl: './payment-summary-template.component.html',
   styleUrls: ['./payment-summary-template.component.scss'],
 })
@@ -47,6 +47,8 @@ export class PaymentSummaryTemplateComponent implements OnInit {
     if (!this.amount || !this.paymentSummary.total) {
       return '?'
     }
-    return (this.paymentSummary.total * 1e8 / this.amount).toPrecision(4).toString()
+    return ((this.paymentSummary.total * 1e8) / this.amount)
+      .toPrecision(4)
+      .toString()
   }
 }

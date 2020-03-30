@@ -400,13 +400,38 @@ export class BinanceService {
       const canBnbUrl = `${TICKER_API_URL}?symbol=${CAN_TOKEN}_BNB`
       const canResponse = await (await fetch(canBnbUrl)).json()
       const lastCanToBnbPrice = canResponse[0].weightedAvgPrice
-      const bnbUsdPair = (CAN_TOKEN.indexOf('TCAN') >= 0) ? 'BNB_USDT.B-B7C' : 'BNB_BUSD-BD1'
+      const bnbUsdPair =
+        CAN_TOKEN.indexOf('TCAN') >= 0 ? 'BNB_USDT.B-B7C' : 'BNB_BUSD-BD1'
       const bnbUsdUrl = `${TICKER_API_URL}?symbol=${bnbUsdPair}`
       const bnbResponse = await (await fetch(bnbUsdUrl)).json()
       const lastBnbToUsdPrice = bnbResponse[0].weightedAvgPrice
       const usdToCanPrice = 1 / (lastCanToBnbPrice * lastBnbToUsdPrice)
       const resultPrice = Math.ceil(usdToCanPrice * amountOfUsd * 1e8)
       return Promise.resolve(resultPrice)
+    } catch (error) {
+      console.error(error)
+      return Promise.reject(null)
+    }
+  }
+
+  // It returns result in atomic units i.e. 1e-8
+  // TODO:  Combine/Refactor with getUsdtoAtomicCan
+  async getAssetToUsd(assetSymbol: string): Promise<number> {
+    try {
+      let lastAssetToBnbPrice = 1 //1 for BNB
+      if (assetSymbol != 'BNB') {
+        const assetUrl = `${TICKER_API_URL}?symbol=${assetSymbol}_BNB`
+        const assetResponse = await (await fetch(assetUrl)).json()
+        lastAssetToBnbPrice = assetResponse[0].weightedAvgPrice
+      }
+      const bnbUsdPair =
+        CAN_TOKEN.indexOf('TCAN') >= 0 ? 'BNB_USDT.B-B7C' : 'BNB_BUSD-BD1'
+      const bnbUsdUrl = `${TICKER_API_URL}?symbol=${bnbUsdPair}`
+      const bnbResponse = await (await fetch(bnbUsdUrl)).json()
+      const lastBnbToUsdPrice = bnbResponse[0].weightedAvgPrice
+      const assetToUsd = lastAssetToBnbPrice * lastBnbToUsdPrice
+
+      return Promise.resolve(assetToUsd)
     } catch (error) {
       console.error(error)
       return Promise.reject(null)
@@ -481,7 +506,7 @@ export class BinanceService {
     jobId: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
-    onFailure?: (reason?: string) => void,
+    onFailure?: (reason?: string) => void
   ) {
     const amountCan = 1
     const preconditionsOk = await this.preconditions(amountCan, onFailure)

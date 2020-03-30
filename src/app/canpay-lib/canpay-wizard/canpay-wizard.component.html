@@ -25,7 +25,7 @@
       </div>
 
       <div *ngIf="currStep === Step.paymentSummary">
-        <canyalib-payment-summary
+        <payment-summary
           [amount]="amount"
           [paymentSummary]="paymentSummary"
           [startJob]="startJob"
@@ -33,7 +33,7 @@
           (error)="error($event)"
           (stepFinished)="stepFinished()"
         >
-        </canyalib-payment-summary>
+        </payment-summary>
       </div>
 
       <div *ngIf="currStep === Step.confirmation">

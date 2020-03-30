@@ -1,7 +1,12 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { CanPay, Operation, PaymentItemCurrency } from '@canpay-lib/lib'
+import {
+  CanPay,
+  Operation,
+  PaymentItemCurrency,
+  BepAssetPaymentData,
+} from '@canpay-lib/lib'
 import { Job, JobState } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
 import { UserType } from '@class/user'
@@ -26,9 +31,15 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   loading = true
   paying = false
   wrongPassword = false
-  paymentMethod: string
   paymentId: any
-  canSee: boolean
+
+  jobStateCheck = false
+  walletConnected = false
+  paymentMethod: string | boolean = false
+  showAssetSelection = false
+  bepAssetPaymentData: BepAssetPaymentData
+  assetDataHandler: any
+
   error
   job: Job
   errorMsg: string
@@ -55,7 +66,9 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     const jobId = this.activatedRoute.parent.snapshot.params['id'] || null
+    console.log('ENTER ESCROW')
     if (jobId) {
+      console.log('Job ID: ' + jobId)
       this.jobService
         .getJob(jobId)
         .take(1)
@@ -63,11 +76,15 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
           this.totalJobBudgetUsd = await this.jobService.getJobBudgetUsd(job)
           this.job = job
           if (this.job.state !== JobState.termsAcceptedAwaitingEscrow) {
-            this.canSee = false
+            this.jobStateCheck = false
           } else {
-            this.canSee = true
+            this.jobStateCheck = true
           }
+          console.log('Job State: ' + this.job.state)
+          console.log('Job State Check Passed: ' + this.jobStateCheck)
           this.loading = false
+          this.checkWalletConnection()
+          this.startBepAssetSelector()
         })
     }
   }
@@ -95,8 +112,8 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     return this.http.get('../../assets/js/countryCodes.json')
   }
 
-  async payInCrypto() {
-    console.log('test')
+  async checkWalletConnection() {
+    console.log('CHECKING WALLET CONNECTION...')
     if (
       !this.binanceService.isLedgerConnected() &&
       !this.binanceService.isKeystoreConnected() &&
@@ -113,15 +130,33 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       })
       return
     }
-    await this.setPaymentMethod('crypto')
-    await this.startCanpay()
+    this.walletConnected = true
+    const address = this.binanceService.getAddress() // temporary
+    console.log('Connected to: ' + address) // temporary
   }
 
-  async setPaymentMethod(type: string) {
-    this.paymentMethod = type
+  startBepAssetSelector() {
+    if (this.jobStateCheck && this.walletConnected) {
+      this.showAssetSelection = true
+    }
+
+    const onSelection = async assetData => {
+      this.showAssetSelection = false
+      this.bepAssetPaymentData = assetData
+      console.log(this.bepAssetPaymentData.symbol + ' selected')
+      console.log(this.bepAssetPaymentData)
+
+      this.paymentMethod = this.bepAssetPaymentData.symbol
+      this.startCanpay()
+    }
+
+    this.assetDataHandler = {
+      asset: onSelection,
+    }
   }
 
   async startCanpay() {
+    console.log('START CAN PAY')
     const onComplete = async () => {
       // call endpoint?
       this.router.navigate(['/inbox/job', this.job.id])
@@ -133,15 +168,18 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       this.job.fiatPayment = false
       this.job.state = JobState.inEscrow
       await this.jobService.saveJobFirebase(this.job)
+      console.log('Start Job: ' + this.job)
     }
 
     const provider = await this.userService.getUser(this.job.providerId)
+    console.log('Provider' + provider)
 
     const initiateEnterEscrow = async () => {
       // TODO remove initiateEnterEscrow
     }
 
     const client = await this.userService.getUser(this.job.clientId)
+    console.log('Client: ' + client)
 
     const paymentSummary = {
       currency: PaymentItemCurrency.usd,
@@ -155,6 +193,8 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       ],
       total: this.totalJobBudgetUsd,
     }
+    console.log('Payment Summary: ')
+    console.log(paymentSummary)
 
     // use 101% to decrase chances of underpayment and round to 2 decimals
     const jobBudgetCan = roundAtomicCanTwoDecimals(

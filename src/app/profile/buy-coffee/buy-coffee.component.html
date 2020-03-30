@@ -9,7 +9,7 @@
     </div>
 
     <div class="container" *ngIf="canPayOptions">
-      <canyalib-canpay
+      <canpay-wizard
         [dAppName]="canPayOptions.dAppName"
         [operation]="canPayOptions.operation"
         [onPaymentTxHash]="canPayOptions.onPaymentTxHash"
@@ -17,7 +17,7 @@
         (complete)="canPayOptions.complete($event)"
         (cancel)="canPayOptions.cancel($event)"
         [userEmail]="canPayOptions.userEmail"
-      ></canyalib-canpay>
+      ></canpay-wizard>
     </div>
   </section>
 </main>

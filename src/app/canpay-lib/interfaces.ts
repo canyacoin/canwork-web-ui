@@ -97,3 +97,10 @@ export interface CanPayData {
   account: string
   balance: number
 }
+
+export interface BepAssetPaymentData {
+  symbol: string
+  freeAsset: number
+  usdValue: number
+  usdPrice: number
+}

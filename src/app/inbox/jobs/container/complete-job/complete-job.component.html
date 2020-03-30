@@ -30,7 +30,7 @@
 </div>
 
 <div class="container" *ngIf="canPayOptions && !fiatPayment">
-  <canyalib-canpay
+  <canpay-wizard
     [dAppName]="canPayOptions.dAppName"
     [successText]="canPayOptions.successText"
     [operation]="canPayOptions.operation"
@@ -44,5 +44,5 @@
     "
     (complete)="canPayOptions.complete($event)"
     (cancel)="canPayOptions.cancel($event)"
-  ></canyalib-canpay>
+  ></canpay-wizard>
 </div>

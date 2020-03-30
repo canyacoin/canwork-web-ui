@@ -10,7 +10,7 @@ import {
 } from '../interfaces'
 
 @Component({
-  selector: 'canyalib-payment-summary',
+  selector: 'payment-summary',
   templateUrl: './payment-summary.component.html',
   styleUrls: ['./payment-summary.component.scss'],
 })

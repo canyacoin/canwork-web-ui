@@ -6,6 +6,7 @@ import { StarRatingModule } from 'angular-star-rating'
 import { BootstrapModalModule } from 'ng2-bootstrap-modal'
 import { OrderModule } from 'ngx-order-pipe'
 import { NgxPaginationModule } from 'ngx-pagination'
+import { ClipboardModule } from 'ngx-clipboard'
 
 import { CoreComponentsModule } from '../core-components/core-components.module'
 import { CoreServicesModule } from '../core-services/core-services.module'
@@ -24,6 +25,7 @@ import { JobContainerComponent } from './jobs/container/job-container.component'
 import { JobDetailsComponent } from './jobs/container/job-details/job-details.component'
 import { JobDashboardComponent } from './jobs/dashboard/job-dashboard.component'
 import { PostComponent } from './jobs/post/post.component'
+import { BepAssetPaymentSelectorComponent } from '../bep-asset-payment-selector/bep-asset-payment-selector.component'
 
 @NgModule({
   imports: [
@@ -39,6 +41,7 @@ import { PostComponent } from './jobs/post/post.component'
     ReactiveFormsModule,
     StarRatingModule.forChild(),
     NgxPaginationModule,
+    ClipboardModule,
   ],
   declarations: [
     ActionDialogComponent,
@@ -54,6 +57,7 @@ import { PostComponent } from './jobs/post/post.component'
     PropertyComponent,
     StatusIconComponent,
     JobDashboardCardComponent,
+    BepAssetPaymentSelectorComponent,
   ],
   entryComponents: [ActionDialogComponent],
   exports: [InboxRoutingModule],
