@@ -31,10 +31,8 @@
 
 <div class="container" *ngIf="canPayOptions && !fiatPayment">
   <canpay-wizard
-    [dAppName]="canPayOptions.dAppName"
     [successText]="canPayOptions.successText"
     [operation]="canPayOptions.operation"
-    [recipient]="canPayOptions.recipient"
     [postAuthorisationProcessName]="canPayOptions.postAuthorisationProcessName"
     [postAuthorisationProcessResults]="
       canPayOptions.postAuthorisationProcessResults

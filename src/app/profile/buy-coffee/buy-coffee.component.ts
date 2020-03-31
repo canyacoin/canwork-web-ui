@@ -45,8 +45,6 @@ export class BuyCoffeeComponent implements OnInit {
 
   startCanpay() {
     this.canPayOptions = {
-      dAppName: this.userModel.name,
-      recipient: this.userModel.ethAddress,
       onPaymentTxHash: this.onPaymentTxHash.bind(this),
       operation: Operation.pay,
       complete: this.onComplete.bind(this),

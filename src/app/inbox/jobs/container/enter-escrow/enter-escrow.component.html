@@ -42,10 +42,8 @@
   </div>
   <div class="container" *ngIf="canPayOptions">
     <canpay-wizard
-      [dAppName]="canPayOptions.dAppName"
       [successText]="canPayOptions.successText"
       [operation]="canPayOptions.operation"
-      [recipient]="canPayOptions.recipient"
       [amount]="canPayOptions.amount"
       [paymentSummary]="canPayOptions.paymentSummary"
       [postAuthorisationProcessName]="

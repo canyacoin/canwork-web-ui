@@ -73,9 +73,7 @@ export class CompleteJobComponent implements OnInit {
     }
 
     this.canPayOptions = {
-      dAppName: `CanWork`,
       successText: 'Woohoo, job complete!',
-      recipient: environment.contracts.canwork,
       operation: Operation.interact,
       complete: onComplete,
       cancel: onCancel,

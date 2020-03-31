@@ -8,7 +8,6 @@ export class User {
   colors: string[] = []
   description: string
   email: string
-  ethAddress: string
   bnbAddress: string
   slug: string
   hourlyRate: string

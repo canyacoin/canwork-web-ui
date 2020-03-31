@@ -34,8 +34,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
   @Input() postAuthorisationProcessName
   @Input() operation = Operation.auth
   @Input() onPaymentTxHash
-  @Input() recipient
-  @Input() dAppName
   @Input() successText
   @Input() amount = 0
   @Input() paymentSummary: PaymentSummary
@@ -151,14 +149,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
     console.log('step: ', this.currStep)
 
     const validationErrors = []
-    if (!this.dAppName) {
-      validationErrors.push('Missing dAppName')
-    }
-
-    if (!this.recipient) {
-      validationErrors.push('Missing recipient address')
-    }
-
     if (validationErrors.length) {
       this.error(validationErrors.join(' | '), false)
     }

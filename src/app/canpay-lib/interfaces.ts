@@ -44,10 +44,8 @@ export interface Contract {
 }
 
 export interface CanPay {
-  dAppName: string
   operation?: Operation
   onPaymentTxHash?: Function
-  recipient: string
   amount?: number
   paymentSummary?: PaymentSummary
   minAmount?: number

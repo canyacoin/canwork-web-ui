@@ -165,7 +165,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     const startJob = async () => {
       const action = new IJobAction(ActionType.enterEscrow, UserType.client)
       this.job.actionLog.push(action)
-      this.job.fiatPayment = false
       this.job.state = JobState.inEscrow
       await this.jobService.saveJobFirebase(this.job)
       console.log('Start Job: ' + this.job)
@@ -227,9 +226,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     }
 
     this.canPayOptions = {
-      dAppName: `CanWork`,
       successText: 'Woohoo, job started!',
-      recipient: environment.contracts.canwork,
       operation: Operation.auth,
 
       amount: jobBudgetCan,
