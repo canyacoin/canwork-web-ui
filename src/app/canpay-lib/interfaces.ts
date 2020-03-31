@@ -1,9 +1,7 @@
 export enum Step {
   paymentSummary = 0,
-  metamask = 1,
   paymentAmount = 2,
   balanceCheck = 3,
-  buyCan = 4,
   canexPaymentOptions = 5,
   canexErc20 = 6,
   canexQr = 7,

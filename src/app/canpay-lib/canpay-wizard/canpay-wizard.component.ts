@@ -88,11 +88,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
       },
       {
         name: 'PAYMENT',
-        value: Step.metamask,
-        active: true,
-      },
-      {
-        name: 'PAYMENT',
         value: Step.balanceCheck,
         active: this.operation !== Operation.interact,
       },
@@ -185,7 +180,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
       case Step.canexError:
         return true
       case Step.balanceCheck:
-      case Step.metamask:
       case Step.authorisation:
       case Step.payment:
       case Step.process:
@@ -225,7 +219,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
         }
         break
       case Step.balanceCheck:
-      case Step.metamask:
       case Step.authorisation:
       case Step.payment:
         this.cancelBalanceCheck()
