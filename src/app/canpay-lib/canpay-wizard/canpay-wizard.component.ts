@@ -37,9 +37,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
   @Input() successText
   @Input() amount = 0
   @Input() paymentSummary: PaymentSummary
-  @Input() minAmount = 1
-  @Input() maxAmount = 0
-  @Input() disableCanEx = true
   @Input() destinationAddress
   @Input() userEmail
   @Input() startJob
@@ -90,31 +87,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
         name: 'PAYMENT',
         value: Step.balanceCheck,
         active: this.operation !== Operation.interact,
-      },
-      {
-        name: 'PAYMENT',
-        value: Step.canexPaymentOptions,
-        active: !this.disableCanEx,
-      },
-      {
-        name: 'PAYMENT',
-        value: Step.canexErc20,
-        active: !this.disableCanEx,
-      },
-      {
-        name: 'PAYMENT',
-        value: Step.canexQr,
-        active: !this.disableCanEx,
-      },
-      {
-        name: 'PAYMENT',
-        value: Step.canexProcessing,
-        active: !this.disableCanEx,
-      },
-      {
-        name: 'Error',
-        value: Step.canexError,
-        active: !this.disableCanEx,
       },
       {
         name: 'PAYMENT',
@@ -174,18 +146,12 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
       case Step.paymentAmount:
       case Step.paymentSummary:
         return true
-      case Step.canexPaymentOptions:
-      case Step.canexErc20:
-      case Step.canexQr:
-      case Step.canexError:
-        return true
       case Step.balanceCheck:
       case Step.authorisation:
       case Step.payment:
       case Step.process:
         return true
       case Step.confirmation:
-      case Step.canexProcessing:
       default:
         return false
     }
@@ -201,21 +167,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
           this.doCancel()
         } else {
           this.updateCurrentStep(Step.paymentAmount)
-        }
-        break
-      case Step.canexPaymentOptions:
-        this.formDataService.resetFormData()
-        this.updateCurrentStep(Step.balanceCheck)
-        break
-      case Step.canexErc20:
-      case Step.canexError:
-        this.formDataService.resetFormData()
-        this.updateCurrentStep(Step.canexPaymentOptions)
-        break
-      case Step.canexQr:
-        if (confirm('Are you sure you want to go back?')) {
-          this.formDataService.resetFormData()
-          this.updateCurrentStep(Step.canexPaymentOptions)
         }
         break
       case Step.balanceCheck:
@@ -254,10 +205,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
         this.updateCurrentStep(Step.confirmation)
         break
       case Step.balanceCheck:
-        this.cancelBalanceCheck()
-        this.updateCurrentStep(this.postBalanceStep)
-        break
-      case Step.canexProcessing:
         this.cancelBalanceCheck()
         this.updateCurrentStep(this.postBalanceStep)
         break
