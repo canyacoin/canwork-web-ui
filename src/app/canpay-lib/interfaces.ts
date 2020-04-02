@@ -1,9 +1,5 @@
 export enum Step {
   paymentSummary = 0,
-  paymentAmount = 2,
-  balanceCheck = 3,
-  authorisation = 11,
-  payment = 12,
   process = 13,
   confirmation = 14,
   completed = 15,
@@ -47,7 +43,6 @@ export interface CanPay {
   complete: Function
   cancel?: Function
   currentStep?: Function
-  destinationAddress?: string
   userEmail?: string
   startJob?: Function
   initialisePayment?: Function

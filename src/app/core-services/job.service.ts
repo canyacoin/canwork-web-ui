@@ -26,7 +26,7 @@ export class JobService {
     private chatService: ChatService,
     private reviewService: ReviewService,
     private binanceService: BinanceService,
-    private jobNotificationService: JobNotificationService,
+    private jobNotificationService: JobNotificationService
   ) {
     this.jobsCollection = this.afs.collection<any>('jobs')
   }
@@ -164,6 +164,7 @@ export class JobService {
    * Locally copies the job first so that it doesn't update the view before the action has been registered on firebase
    */
   async handleJobAction(job: Job, action: IJobAction): Promise<boolean> {
+    console.log('job.service / handleJobAction: ' + action.type)
     const parsedJob = new Job(await this.parseJobToObject(job))
     return new Promise<boolean>(async (resolve, reject) => {
       try {

@@ -37,7 +37,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
   @Input() successText
   @Input() amount = 0
   @Input() paymentSummary: PaymentSummary
-  @Input() destinationAddress
   @Input() userEmail
   @Input() startJob
   @Input() initialisePayment
@@ -74,29 +73,9 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.steps = [
       {
-        name: 'AMOUNT',
-        value: Step.paymentAmount,
-        active: !this.amount && this.operation !== Operation.interact,
-      },
-      {
         name: 'PAYMENT',
         value: Step.paymentSummary,
         active: this.operation !== Operation.interact,
-      },
-      {
-        name: 'PAYMENT',
-        value: Step.balanceCheck,
-        active: this.operation !== Operation.interact,
-      },
-      {
-        name: 'PAYMENT',
-        value: Step.authorisation,
-        active: this.operation === Operation.auth,
-      },
-      {
-        name: 'PAYMENT',
-        value: Step.payment,
-        active: this.operation === Operation.pay,
       },
       {
         name: this.postAuthorisationProcessName,
@@ -131,27 +110,14 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
     }
   }
 
-  setAmount(amount) {
-    console.log('setAmount: ', amount)
-    this.amount = amount
-    this.stepFinished()
-  }
-
   transactionSent() {
     this.totalTransactions += 1
   }
 
   get showBackButton(): boolean {
     switch (this.currStep) {
-      case Step.paymentAmount:
       case Step.paymentSummary:
         return true
-      case Step.balanceCheck:
-      case Step.authorisation:
-      case Step.payment:
-      case Step.process:
-        return true
-      case Step.confirmation:
       default:
         return false
     }
@@ -159,29 +125,9 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
 
   goBack() {
     switch (this.currStep) {
-      case Step.paymentAmount:
-        this.doCancel()
-        break
       case Step.paymentSummary:
         if (this.paymentSummary) {
           this.doCancel()
-        } else {
-          this.updateCurrentStep(Step.paymentAmount)
-        }
-        break
-      case Step.balanceCheck:
-      case Step.authorisation:
-      case Step.payment:
-        this.cancelBalanceCheck()
-        this.updateCurrentStep(Step.paymentSummary)
-        break
-      case Step.process:
-        if (this.operation === Operation.interact) {
-          this.cancelBalanceCheck()
-          this.doCancel()
-        } else {
-          this.cancelBalanceCheck()
-          this.updateCurrentStep(Step.paymentSummary)
         }
         break
       default:
@@ -198,26 +144,8 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
 
   stepFinished(step: Step = this.currStep) {
     switch (step) {
-      case Step.paymentAmount:
-        this.updateCurrentStep(Step.paymentSummary)
-        break
       case Step.paymentSummary:
         this.updateCurrentStep(Step.confirmation)
-        break
-      case Step.balanceCheck:
-        this.cancelBalanceCheck()
-        this.updateCurrentStep(this.postBalanceStep)
-        break
-      case Step.authorisation:
-        this.cancelBalanceCheck()
-        this.updateCurrentStep(
-          this.postAuthorisationProcessName ? Step.process : Step.confirmation
-        )
-        break
-      case Step.payment:
-        this.updateCurrentStep(
-          this.postAuthorisationProcessName ? Step.process : Step.confirmation
-        )
         break
       default:
         break
@@ -231,14 +159,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
       this.title = this.steps.find(x => x.value === step).name || 'Payment'
       this.currentStep.emit(step)
     }
-  }
-
-  get postBalanceStep() {
-    return this.operation === Operation.auth
-      ? Step.authorisation
-      : this.operation === Operation.interact
-      ? Step.process
-      : Step.payment
   }
 
   get hasPostAuthProcess() {
