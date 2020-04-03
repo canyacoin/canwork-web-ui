@@ -33,7 +33,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
   @Input() view = View.Normal
   @Input() postAuthorisationProcessName
   @Input() operation = Operation.auth
-  @Input() onPaymentTxHash
   @Input() successText
   @Input() amount = 0
   @Input() paymentSummary: PaymentSummary
@@ -143,6 +142,8 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
   }
 
   stepFinished(step: Step = this.currStep) {
+    console.log('stepFinished')
+    console.log(step)
     switch (step) {
       case Step.paymentSummary:
         this.updateCurrentStep(Step.confirmation)

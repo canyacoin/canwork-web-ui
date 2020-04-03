@@ -171,14 +171,12 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     }
 
     const provider = await this.userService.getUser(this.job.providerId)
-    console.log('Provider' + provider)
 
     const initiateEnterEscrow = async () => {
       // TODO remove initiateEnterEscrow
     }
 
     const client = await this.userService.getUser(this.job.clientId)
-    console.log('Client: ' + client)
 
     const paymentSummary = {
       currency: PaymentItemCurrency.usd,

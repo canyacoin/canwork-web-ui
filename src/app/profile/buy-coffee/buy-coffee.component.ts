@@ -6,7 +6,6 @@ import {
   Operation,
   ProcessAction,
   setProcessResult,
-  View,
 } from '@canpay-lib/lib'
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
@@ -45,7 +44,6 @@ export class BuyCoffeeComponent implements OnInit {
 
   startCanpay() {
     this.canPayOptions = {
-      onPaymentTxHash: this.onPaymentTxHash.bind(this),
       operation: Operation.pay,
       complete: this.onComplete.bind(this),
       cancel: this.onComplete.bind(this),

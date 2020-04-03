@@ -485,6 +485,7 @@ export class BinanceService {
     onSuccess?: () => void,
     onFailure?: (reason?: string) => void
   ) {
+    console.log('EscrowFunds')
     const preconditionsOk = await this.preconditions(amountCan, onFailure)
     if (!preconditionsOk) {
       return

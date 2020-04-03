@@ -33,7 +33,6 @@ export interface Contract {
 
 export interface CanPay {
   operation?: Operation
-  onPaymentTxHash?: Function
   amount?: number
   paymentSummary?: PaymentSummary
   successText?: string
