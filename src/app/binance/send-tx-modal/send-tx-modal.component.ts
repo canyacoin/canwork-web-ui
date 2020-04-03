@@ -22,6 +22,7 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    console.log('send tx modal')
     this.txSubscription = this.binanceService.transactionsEmitter.subscribe({
       next: (transaction: Transaction) => {
         this.isConfirming = false
@@ -42,6 +43,7 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
   }
 
   formatAmount(amount) {
+    console.log('formatCan')
     return formatAtomicCan(amount)
   }
 
@@ -96,6 +98,7 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
   }
 
   confirmTransaction() {
+    console.log('confirm Transaction')
     const { to, amountCan, memo, callbacks } = this.transaction
     const { beforeTransaction, onSuccess, onFailure } = callbacks
     const wrappedBeforeTransaction = this.wrapBeforeTransaction(

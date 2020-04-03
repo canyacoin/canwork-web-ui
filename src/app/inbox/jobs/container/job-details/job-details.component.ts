@@ -220,6 +220,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   }
 
   private releaseEscrow() {
+    console.log('release Escrow')
     if (
       !this.binanceService.isLedgerConnected() &&
       !this.binanceService.isKeystoreConnected() &&
@@ -238,6 +239,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     const jobId = this.job.id
 
     const onSuccess = async () => {
+      console.log('onSuccess')
       const action = new IJobAction(ActionType.acceptFinish, UserType.client)
       this.job.actionLog.push(action)
       this.job.state = JobState.complete
@@ -257,11 +259,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         })
         break
       case ActionType.acceptFinish:
+        console.log('ActionType.acceptFinish')
         this.releaseEscrow()
-        // TODO remove
-        // this.router.navigate(['../complete'], {
-        //   relativeTo: this.activatedRoute,
-        // })
         break
       case ActionType.cancelJobEarly:
         this.router.navigate(['../cancel'], { relativeTo: this.activatedRoute })

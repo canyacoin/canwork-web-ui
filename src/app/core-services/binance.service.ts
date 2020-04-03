@@ -379,6 +379,7 @@ export class BinanceService {
   }
 
   private async initFeeIfNecessary() {
+    console.log('init Fee')
     if (this.sendingFee === 0) {
       try {
         const response = await (await fetch(FEE_API_URL)).json()
@@ -458,6 +459,7 @@ export class BinanceService {
   }
 
   emitTransaction(transaction: Transaction) {
+    console.log('emit tx')
     this.transactionsEmitter.emit(transaction)
   }
 
@@ -465,6 +467,7 @@ export class BinanceService {
     amountCan: number,
     onFailure?: (reason?: string) => void
   ): Promise<boolean> {
+    console.log('preconditions')
     await this.initFeeIfNecessary()
     const hasBalance = await this.hasEnoughBalance(amountCan)
     if (!hasBalance) {
@@ -508,6 +511,7 @@ export class BinanceService {
     onSuccess?: () => void,
     onFailure?: (reason?: string) => void
   ) {
+    console.log('release funds')
     const amountCan = 1
     const preconditionsOk = await this.preconditions(amountCan, onFailure)
     if (!preconditionsOk) {
@@ -583,6 +587,7 @@ export class BinanceService {
     onSuccess?: () => void,
     onFailure?: (reason?: string) => void
   ) {
+    console.log('transact via KeyStore')
     try {
       const privateKey = crypto.getPrivateKeyFromKeyStore(
         this.connectedWalletDetails.keystore,
@@ -625,6 +630,7 @@ export class BinanceService {
     onSuccess?: () => void,
     onFailure?: (reason?: string) => void
   ) {
+    console.log('transact via WalletConnect')
     const { account } = this.connectedWalletDetails
     const { address } = account
     const tx = {
