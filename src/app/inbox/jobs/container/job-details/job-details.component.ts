@@ -263,7 +263,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.releaseEscrow()
         break
       case ActionType.cancelJobEarly:
-        this.router.navigate(['../cancel'], { relativeTo: this.activatedRoute })
+        //TODO
         break
       default:
         console.log('default')
