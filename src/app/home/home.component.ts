@@ -112,32 +112,9 @@ export class HomeComponent implements OnInit {
   }
 
   getProviders(searchQuery, array) {
-    console.log(searchQuery);
     this.algoliaIndex.search({ query: searchQuery }).then(res => {
-      let result = res.hits;
-
-      // sort descending
-      result.sort((a, b) => {
-        // first consider if rating average is present
-        if (!a.rating && b.rating) return 1;
-        if (a.rating && !b.rating) return -1;
-        // then consider rating average
-        if (a.rating && b.rating) {
-          if (a.rating.average > b.rating.average) return -1;
-          if (a.rating.average < b.rating.average) return 1;
-          // same average, consider rating count
-          if (a.rating.count > b.rating.count) return -1;
-          if (a.rating.count < b.rating.count) return 1;
-          // same average and count, consider if verified
-          if (!a.verified && b.verified) return 1;
-          if (a.verified && !b.verified) return -1;
-          // they are equal
-          return 0;
-        }
-        
-      });
-      
-      for (let i = 0; i < 3; i++) {
+      const result = res.hits
+      for (let i = 1; i < 4; i++) {
         const provider = {
           address: result[i].address,
           avatar: result[i].avatar,
