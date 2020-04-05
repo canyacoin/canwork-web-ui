@@ -69,9 +69,6 @@ export class CancelJobComponent implements OnInit {
       operation: Operation.interact,
       complete: onComplete,
       cancel: onCancel,
-      postAuthorisationProcessName: 'Job Cancellation',
-      startPostAuthorisationProcess: initiateCancellation.bind(this),
-      postAuthorisationProcessResults: null,
     }
   }
 }

@@ -440,6 +440,7 @@ export class BinanceService {
   }
 
   async hasEnoughBalance(amountCan: number) {
+    console.log('hasEnoughBalance')
     try {
       const { address } = this.connectedWalletDetails
       const balance = await this.client.getBalance(address)
@@ -469,7 +470,9 @@ export class BinanceService {
   ): Promise<boolean> {
     console.log('preconditions')
     await this.initFeeIfNecessary()
-    const hasBalance = await this.hasEnoughBalance(amountCan)
+    //const hasBalance = await this.hasEnoughBalance(amountCan)
+    const hasBalance = true
+    console.log('has enough: ' + hasBalance)
     if (!hasBalance) {
       onFailure("your wallet doesn't have enough CAN or BNB")
       return false
@@ -486,7 +489,11 @@ export class BinanceService {
     onFailure?: (reason?: string) => void
   ) {
     console.log('EscrowFunds')
+    console.log('before: ' + beforeTransaction)
+    console.log('success: ' + onSuccess)
+    console.log('failure: ' + onFailure)
     const preconditionsOk = await this.preconditions(amountCan, onFailure)
+    console.log('preconditions OK: ' + preconditionsOk)
     if (!preconditionsOk) {
       return
     }
@@ -503,6 +510,7 @@ export class BinanceService {
       memo,
       callbacks,
     }
+    console.log('callback: ' + transaction.callbacks)
     this.emitTransaction(transaction)
   }
 

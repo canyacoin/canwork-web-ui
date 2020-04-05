@@ -29,6 +29,7 @@ export class MsgBoxComponent {
   }
 
   ok() {
+    console.log('msg-box ok')
     this.action.emit('ok')
   }
 

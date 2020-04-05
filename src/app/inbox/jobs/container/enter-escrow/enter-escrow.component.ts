@@ -203,6 +203,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       successCallback,
       failureCallback
     ) => {
+      console.log('initialise Payment')
       const paymentItem = paymentSummary.items[0]
       const { jobId, providerAddress } = paymentItem
 
@@ -235,10 +236,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       userEmail: client.email,
       initialisePayment,
 
-      // Post Authorisation
-      postAuthorisationProcessName: 'Job creation',
-      startPostAuthorisationProcess: initiateEnterEscrow.bind(this),
-      postAuthorisationProcessResults: null,
       startJob,
     }
   }

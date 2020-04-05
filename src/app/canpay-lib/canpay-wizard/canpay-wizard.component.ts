@@ -11,8 +11,6 @@ import {
   CanPayData,
   Operation,
   PaymentSummary,
-  ProcessAction,
-  ProcessActionResult,
   Step,
   View,
 } from '../interfaces'
@@ -27,11 +25,9 @@ import { FormDataService } from '../services/formData.service'
 export class CanpayWizardComponent implements OnInit, OnDestroy {
   @Output() complete = new EventEmitter()
   @Output() cancel = new EventEmitter()
-  @Output() startPostAuthorisationProcess = new EventEmitter()
   @Output() currentStep = new EventEmitter()
 
   @Input() view = View.Normal
-  @Input() postAuthorisationProcessName
   @Input() operation = Operation.auth
   @Input() successText
   @Input() amount = 0
@@ -39,12 +35,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
   @Input() userEmail
   @Input() startJob
   @Input() initialisePayment
-
-  @Input() set postAuthorisationProcessResults(
-    postAuthorisationProcessResults: ProcessActionResult
-  ) {
-    this.doCompletePostAuthorisationProcess(postAuthorisationProcessResults)
-  }
 
   View = View
   Step = Step // to access the enum from the .html template
@@ -65,7 +55,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
   insufficientBalance = false
   processSummaryMsg: string
   balanceInterval: any
-  totalTransactions = 1
 
   constructor(private formDataService: FormDataService) {}
 
@@ -75,18 +64,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
         name: 'PAYMENT',
         value: Step.paymentSummary,
         active: this.operation !== Operation.interact,
-      },
-      {
-        name: this.postAuthorisationProcessName,
-        value: Step.process,
-        active:
-          !!this.postAuthorisationProcessName ||
-          this.operation === Operation.interact,
-      },
-      {
-        name: 'PAYMENT',
-        value: Step.confirmation,
-        active: true,
       },
     ].filter(step => step.active)
 
@@ -107,10 +84,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
     if (this.balanceInterval) {
       clearInterval(this.balanceInterval)
     }
-  }
-
-  transactionSent() {
-    this.totalTransactions += 1
   }
 
   get showBackButton(): boolean {
@@ -141,54 +114,19 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
     }
   }
 
-  stepFinished(step: Step = this.currStep) {
-    console.log('stepFinished')
-    console.log(step)
-    switch (step) {
-      case Step.paymentSummary:
-        this.updateCurrentStep(Step.confirmation)
-        break
-      default:
-        break
-    }
-  }
-
   updateCurrentStep(step) {
     if (step !== this.currStep) {
+      console.log('updateCurrentStep')
       this.warning(null)
       this.currStep = step
       this.title = this.steps.find(x => x.value === step).name || 'Payment'
+      console.log('emit step: ' + step)
       this.currentStep.emit(step)
     }
   }
 
-  get hasPostAuthProcess() {
-    return (
-      !!this.postAuthorisationProcessName ||
-      this.operation === Operation.interact
-    )
-  }
-
-  doStartPostAuthorisationProcess() {
-    this.startPostAuthorisationProcess.emit(this.canPayData())
-  }
-
-  doCompletePostAuthorisationProcess(postAuthorisationProcessResults) {
-    if (!postAuthorisationProcessResults) {
-      return
-    }
-
-    if (postAuthorisationProcessResults.type === ProcessAction.success) {
-      this.updateCurrentStep(Step.confirmation)
-      return
-    }
-
-    if (postAuthorisationProcessResults.type === ProcessAction.error) {
-      return this.error(postAuthorisationProcessResults.msg)
-    }
-  }
-
   canPayData(): CanPayData {
+    console.log('canPayData')
     return {
       currStep: this.currStep,
       amount: this.amount,
@@ -202,6 +140,7 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
   }
 
   finish() {
+    console.log('finish and emit')
     this.complete.emit(this.canPayData())
   }
 

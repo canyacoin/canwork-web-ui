@@ -46,15 +46,6 @@
       [operation]="canPayOptions.operation"
       [amount]="canPayOptions.amount"
       [paymentSummary]="canPayOptions.paymentSummary"
-      [postAuthorisationProcessName]="
-        canPayOptions.postAuthorisationProcessName
-      "
-      [postAuthorisationProcessResults]="
-        canPayOptions.postAuthorisationProcessResults
-      "
-      (startPostAuthorisationProcess)="
-        canPayOptions.startPostAuthorisationProcess($event)
-      "
       (complete)="canPayOptions.complete($event)"
       (cancel)="canPayOptions.cancel($event)"
       [userEmail]="canPayOptions.userEmail"

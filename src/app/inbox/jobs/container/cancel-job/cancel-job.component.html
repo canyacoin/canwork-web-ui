@@ -10,13 +10,6 @@
   <canpay-wizard
     [successText]="canPayOptions.successText"
     [operation]="canPayOptions.operation"
-    [postAuthorisationProcessName]="canPayOptions.postAuthorisationProcessName"
-    [postAuthorisationProcessResults]="
-      canPayOptions.postAuthorisationProcessResults
-    "
-    (startPostAuthorisationProcess)="
-      canPayOptions.startPostAuthorisationProcess($event)
-    "
     (complete)="canPayOptions.complete($event)"
     (cancel)="canPayOptions.cancel($event)"
   ></canpay-wizard>

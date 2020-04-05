@@ -16,7 +16,6 @@ import {
 })
 export class PaymentSummaryComponent implements OnInit {
   @Output() error = new EventEmitter()
-  @Output() stepFinished = new EventEmitter()
   @Input() paymentSummary: PaymentSummary = null
   @Input() amount = 0
   @Input() startJob
@@ -29,9 +28,12 @@ export class PaymentSummaryComponent implements OnInit {
     private toastr: ToastrService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log('Payment Summary')
+  }
 
   next() {
+    console.log('NEXT')
     const beforeTransaction = () => {
       console.log('beforeTransaction')
       this.isLoading = true
@@ -39,7 +41,6 @@ export class PaymentSummaryComponent implements OnInit {
 
     const onSuccess = () => {
       console.log('beforeTransaction')
-      this.stepFinished.emit()
     }
 
     const onFailure = () => {

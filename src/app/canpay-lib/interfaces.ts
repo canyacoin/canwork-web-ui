@@ -11,19 +11,9 @@ export enum Operation {
   interact = 'Interact',
 }
 
-export enum ProcessAction {
-  success = 0,
-  error = 1,
-}
-
 export enum View {
   Normal,
   Compact,
-}
-
-export interface ProcessActionResult {
-  type: ProcessAction
-  msg: string
 }
 
 export interface Contract {
@@ -36,9 +26,6 @@ export interface CanPay {
   amount?: number
   paymentSummary?: PaymentSummary
   successText?: string
-  postAuthorisationProcessName?: string
-  postAuthorisationProcessResults?: ProcessActionResult
-  startPostAuthorisationProcess?: Function
   complete: Function
   cancel?: Function
   currentStep?: Function
@@ -63,13 +50,6 @@ export interface PaymentItem {
 export enum PaymentItemCurrency {
   usd = '$USD',
   can = 'CAN',
-}
-
-export function setProcessResult(txOrErr) {
-  this.postAuthorisationProcessResults = {
-    type: !txOrErr.status ? ProcessAction.error : ProcessAction.success,
-    msg: !txOrErr.status ? txOrErr.message || 'Transaction failed' : null,
-  }
 }
 
 export interface CanPayData {

@@ -1,12 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import {
-  CanPay,
-  CanPayData,
-  Operation,
-  ProcessAction,
-  setProcessResult,
-} from '@canpay-lib/lib'
+import { CanPay, CanPayData, Operation } from '@canpay-lib/lib'
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
 import { ChatService } from '@service/chat.service'
