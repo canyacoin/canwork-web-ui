@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 
-import { formatAtomicCan } from '@util/currency-conversion'
+import { formatAtomicAsset } from '@util/currency-conversion'
 
 import { PaymentSummary } from '../interfaces'
 
@@ -24,7 +24,7 @@ export class PaymentSummaryTemplateComponent implements OnInit {
   }
 
   formatAmount() {
-    return formatAtomicCan(this.amount)
+    return formatAtomicAsset(this.amount)
   }
   get usdPerCan(): string {
     if (!this.amount || !this.paymentSummary.job.usdValue) {

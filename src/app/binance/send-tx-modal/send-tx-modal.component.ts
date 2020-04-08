@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { BinanceService, Transaction } from '@service/binance.service'
 import { ToastrService } from 'ngx-toastr'
-import { formatAtomicCan } from '@util/currency-conversion'
 
 @Component({
   selector: 'send-tx-modal',
@@ -40,11 +39,6 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
       this.txSubscription.unsubscribe()
     }
     this.close()
-  }
-
-  formatAmount(amount) {
-    console.log('formatCan')
-    return formatAtomicCan(amount)
   }
 
   splitMemo(memo) {

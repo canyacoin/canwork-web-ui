@@ -76,20 +76,6 @@ export class JobService {
     return data
   }
 
-  async getJobBudgetBinance(job: Job): Promise<number> {
-    try {
-      const totalBudget = await this.getJobBudgetUsd(job)
-      const canValue = await this.binanceService.getUsdToAtomicCan(totalBudget)
-      if (canValue) {
-        return Promise.resolve(canValue)
-      } else {
-        return Promise.reject(false)
-      }
-    } catch (e) {
-      return Promise.reject(false)
-    }
-  }
-
   async getJobBudgetUsd(job: Job): Promise<number> {
     return job.paymentType === PaymentType.fixed
       ? job.budget

@@ -15,7 +15,7 @@ import { Observable } from 'rxjs/Observable'
 import { HttpClient } from '@angular/common/http'
 
 import { environment } from '@env/environment'
-import { roundAtomicCanTwoDecimals } from '@util/currency-conversion'
+import { roundAtomicAssetTwoDecimals } from '@util/currency-conversion'
 
 @Component({
   selector: 'app-enter-escrow',
@@ -182,8 +182,10 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     console.log(paymentSummary)
 
     // use 101% to decrase chances of underpayment and round to 2 decimals
-    const jobBudgetCan = roundAtomicCanTwoDecimals(
-      Math.round((await this.jobService.getJobBudgetBinance(this.job)) * 1.01)
+    const jobBudgetAsset = roundAtomicAssetTwoDecimals(
+      Math.round(
+        paymentSummary.asset.usdPrice * paymentSummary.job.usdValue * 1.01
+      )
     )
 
     const initialisePayment = (
@@ -204,7 +206,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
 
       this.binanceService.escrowFunds(
         jobId,
-        jobBudgetCan,
+        jobBudgetAsset,
         providerAddress,
         beforeCallback,
         onSuccess,
@@ -215,7 +217,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     this.canPayOptions = {
       successText: 'Woohoo, job started!',
 
-      amount: jobBudgetCan,
+      amount: jobBudgetAsset,
       paymentSummary: paymentSummary,
       complete: onComplete,
       cancel: onComplete,

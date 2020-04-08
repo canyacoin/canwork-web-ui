@@ -5,7 +5,7 @@ import base64js from 'base64-js'
 
 import BncClient, { crypto } from '@binance-chain/javascript-sdk'
 import { environment } from '@env/environment'
-import { formatAtomicCan } from '@util/currency-conversion'
+import { formatAtomicAsset } from '@util/currency-conversion'
 import { AuthService } from '@service/auth.service'
 import { UserService } from '@service/user.service'
 import { LedgerService } from '@service/ledger.service'
@@ -565,7 +565,7 @@ export class BinanceService {
         beforeTransaction()
       }
 
-      const adjustedAmount = formatAtomicCan(amountCan)
+      const adjustedAmount = formatAtomicAsset(amountCan)
       const results = await this.client.transfer(
         address,
         to,
@@ -608,7 +608,7 @@ export class BinanceService {
         beforeTransaction()
       }
 
-      const adjustedAmount = formatAtomicCan(amountCan)
+      const adjustedAmount = formatAtomicAsset(amountCan)
 
       const results = await this.client.transfer(
         address,
