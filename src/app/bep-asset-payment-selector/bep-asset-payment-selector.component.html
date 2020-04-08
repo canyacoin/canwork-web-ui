@@ -35,10 +35,10 @@
                   <table class="table">
                     <thead>
                       <tr>
-                        <th scope="col">Icon</th>
+                        <th scope="col"></th>
                         <th scope="col">Symbol</th>
                         <th scope="col">Free</th>
-                        <th scope="col">$USD value</th>
+                        <th scope="col">Value (USD)</th>
                         <th scope="col">Pay</th>
                       </tr>
                     </thead>
@@ -50,8 +50,8 @@
                           ></app-dynamic-coin>
                         </td>
                         <td>{{ asset.symbol }}</td>
-                        <td>{{ asset.free | number: '1.3' }}</td>
-                        <td>{{ asset.usdValue | number: '1.3' }}</td>
+                        <td>{{ asset.free | number: '1.3-3' }}</td>
+                        <td>$ {{ asset.usdValue | number: '1.2-2' }}</td>
                         <td *ngIf="asset.hasEnough">
                           <button
                             class="btn btn-primary  my-1"
