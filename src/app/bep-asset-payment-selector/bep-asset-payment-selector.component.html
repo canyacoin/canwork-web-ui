@@ -60,6 +60,9 @@
                             Pay
                           </button>
                         </td>
+                        <td *ngIf="!asset.hasEnough">
+                          Insufficient
+                        </td>
                       </tr>
                     </tbody>
                   </table>
