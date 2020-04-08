@@ -20,21 +20,15 @@ export interface CanPay {
 }
 
 export interface PaymentSummary {
-  currency: PaymentItemCurrency
-  items: Array<PaymentItem>
-  total: number
+  asset: BepAssetPaymentData
+  job: jobData
 }
 
-export interface PaymentItem {
+export interface jobData {
   name: string
-  value: number
+  usdValue: number
   jobId?: string
   providerAddress?: string
-}
-
-export enum PaymentItemCurrency {
-  usd = '$USD',
-  can = 'CAN',
 }
 
 export interface CanPayData {

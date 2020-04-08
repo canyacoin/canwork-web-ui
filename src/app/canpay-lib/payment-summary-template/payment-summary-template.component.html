@@ -9,13 +9,13 @@
         <i class="fas fa-shopping-cart"></i> Your order summary
       </div>
     </div>
-    <div class="row" *ngFor="let item of paymentSummary.items">
+    <div class="row">
       <div class="col-8 text-left">
-        <span class="fw-600">{{ item.name }}</span>
+        <span class="fw-600">{{ paymentSummary.job.name }}</span>
       </div>
       <div class="col-4 text-right">
         <span>
-          {{ item.value }}
+          {{ paymentSummary.job.usdValue }}
           <img
             *ngIf="currencyIsCan"
             src="assets/img/canya-media-coin.png"
@@ -24,7 +24,7 @@
             alt="CanYa"
           />
           <span class="fs-12">
-            {{ paymentSummary.currency }}
+            {{ paymentSummary.assetsymbol }}
           </span>
         </span>
       </div>
@@ -36,7 +36,7 @@
       </div>
       <div class="col-4 text-right">
         <span>
-          <span class="fw-500 fs-20">{{ paymentSummary.total }} </span>
+          <span class="fw-500 fs-20">{{ paymentSummary.job.usdValue }} </span>
           <img
             *ngIf="currencyIsCan"
             src="assets/img/canya-media-coin.png"
@@ -45,14 +45,17 @@
             alt="CanYa"
           />
           <span class="fs-12">
-            {{ paymentSummary.currency }}
+            {{ paymentSummary.asset.symbol }}
           </span>
         </span>
       </div>
     </div>
     <div class="row" *ngIf="currencyIsUsd">
       <div class="col-8 text-left">
-        <span class="fw-400">1 CAN = {{ usdPerCan }}</span>
+        <span class="fw-400"
+          >1 {{ paymentSummary.asset.symbol }} =
+          {{ paymentSummary.asset.usdPrice }}</span
+        >
       </div>
       <div class="col-4 text-right">
         <span class="fw-500 fs-20">{{ formatAmount() }} </span>

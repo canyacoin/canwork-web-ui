@@ -1,11 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import {
-  CanPay,
-  PaymentItemCurrency,
-  BepAssetPaymentData,
-} from '@canpay-lib/lib'
+import { CanPay, BepAssetPaymentData } from '@canpay-lib/lib'
 import { Job, JobState } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
 import { UserType } from '@class/user'
@@ -174,16 +170,13 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     const client = await this.userService.getUser(this.job.clientId)
 
     const paymentSummary = {
-      currency: PaymentItemCurrency.usd,
-      items: [
-        {
-          name: this.job.information.title,
-          value: this.totalJobBudgetUsd,
-          jobId: this.job.id,
-          providerAddress: provider.bnbAddress,
-        },
-      ],
-      total: this.totalJobBudgetUsd,
+      asset: this.bepAssetPaymentData,
+      job: {
+        name: this.job.information.title,
+        usdValue: this.totalJobBudgetUsd,
+        jobId: this.job.id,
+        providerAddress: provider.bnbAddress,
+      },
     }
     console.log('Payment Summary: ')
     console.log(paymentSummary)
@@ -199,8 +192,8 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       failureCallback
     ) => {
       console.log('initialise Payment')
-      const paymentItem = paymentSummary.items[0]
-      const { jobId, providerAddress } = paymentItem
+      const job = paymentSummary.job
+      const { jobId, providerAddress } = job
 
       const onSuccess = () => {
         startJob()

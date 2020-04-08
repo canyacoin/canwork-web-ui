@@ -95,7 +95,7 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
   async paymentSelected(asset) {
     let assetData = {
       symbol: asset.symbol,
-      freeAsset: asset.freeAsset,
+      freeAsset: asset.free,
       usdValue: asset.usdValue,
       usdPrice: asset.usdPrice,
     }

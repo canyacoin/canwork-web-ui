@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 
 import { formatAtomicCan } from '@util/currency-conversion'
 
-import { PaymentItem, PaymentItemCurrency, PaymentSummary } from '../interfaces'
+import { PaymentSummary } from '../interfaces'
 
 @Component({
   selector: 'payment-summary-template',
@@ -19,30 +19,18 @@ export class PaymentSummaryTemplateComponent implements OnInit {
 
   ngOnInit() {
     if (!this.paymentSummary) {
-      this.paymentSummary = {
-        currency: PaymentItemCurrency.can,
-        items: [{ name: 'Transfer', value: this.amount }],
-        total: this.amount,
-      }
+      console.log('No Payment Summary')
     }
   }
 
   formatAmount() {
     return formatAtomicCan(this.amount)
   }
-
-  get currencyIsUsd() {
-    return this.paymentSummary.currency === PaymentItemCurrency.usd
-  }
-  get currencyIsCan() {
-    return this.paymentSummary.currency === PaymentItemCurrency.can
-  }
-
   get usdPerCan(): string {
-    if (!this.amount || !this.paymentSummary.total) {
+    if (!this.amount || !this.paymentSummary.job.usdValue) {
       return '?'
     }
-    return ((this.paymentSummary.total * 1e8) / this.amount)
+    return ((this.paymentSummary.job.usdValue * 1e8) / this.amount)
       .toPrecision(4)
       .toString()
   }
