@@ -3,8 +3,8 @@ import { BinanceService, EventType } from '@service/binance.service'
 import { BehaviorSubject } from 'rxjs'
 import { sortBy, prop } from 'ramda'
 import { takeUntil } from 'rxjs/operators'
-
 import { OnDestroyComponent } from '@class/on-destroy'
+
 import { environment } from '@env/environment'
 import { BepAssetPaymentData } from '@canpay-lib/lib'
 
@@ -72,9 +72,11 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
     let hasEnough: boolean
 
     for (const balance of balances) {
+      // Get weighted avg USD price of each asset and calculate USD value
       const usdPrice = await this.binanceService.getAssetToUsd(balance.symbol) //get assets USD price
       const freeAssetToUsd = balance.free * usdPrice
 
+      // Determine if the assets USD value is enough to cover the job budget
       if (this.jobBudgetUsd > freeAssetToUsd) {
         hasEnough = false
       } else {

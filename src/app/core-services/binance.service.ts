@@ -694,4 +694,20 @@ export class BinanceService {
       }
     }
   }
+
+  async getAssetIconUrl(symbol) {
+    console.log(symbol)
+    let iconUrl: string
+    if (symbol === 'BNB') {
+      iconUrl =
+        'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info//logo.png'
+    } else {
+      iconUrl =
+        'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/assets/' +
+        symbol +
+        '/logo.png'
+    }
+    console.log(iconUrl)
+    return iconUrl
+  }
 }

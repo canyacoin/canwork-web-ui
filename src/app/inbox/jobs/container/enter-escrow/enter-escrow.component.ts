@@ -182,6 +182,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     console.log(paymentSummary)
 
     // use 101% to decrase chances of underpayment and round to 2 decimals
+    // TODO: This could be included in BEP Asset Data
     const jobBudgetAsset = roundAtomicAssetTwoDecimals(
       Math.round(
         paymentSummary.asset.usdPrice * paymentSummary.job.usdValue * 1.01

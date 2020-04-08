@@ -1,3 +1,4 @@
+import { BinanceService } from '@service/binance.service'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 
 import { formatAtomicAsset } from '@util/currency-conversion'
@@ -15,17 +16,26 @@ export class PaymentSummaryTemplateComponent implements OnInit {
   @Input() showBalance = false
   @Input() balance = 0
 
-  constructor() {}
+  paymentAssetIconURL: string
+
+  constructor(private binanceService: BinanceService) {}
 
   ngOnInit() {
     if (!this.paymentSummary) {
       console.log('No Payment Summary')
     }
+
+    this.binanceService
+      .getAssetIconUrl(this.paymentSummary.asset.symbol)
+      .then(iconURL => {
+        this.paymentAssetIconURL = iconURL
+      })
   }
 
   formatAmount() {
     return formatAtomicAsset(this.amount)
   }
+
   get usdPerCan(): string {
     if (!this.amount || !this.paymentSummary.job.usdValue) {
       return '?'

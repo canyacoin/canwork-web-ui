@@ -16,13 +16,6 @@
       <div class="col-4 text-right">
         <span>
           $ {{ paymentSummary.job.usdValue }}
-          <img
-            *ngIf="currencyIsCan"
-            src="assets/img/canya-media-coin.png"
-            width="12px"
-            height="12px"
-            alt="CanYa"
-          />
           <span class="fs-12">
             {{ paymentSummary.assetsymbol }}
           </span>
@@ -54,9 +47,9 @@
         <span class="fw-500 fs-20">{{ formatAmount() }} </span>
         <span class="fs-12">
           <img
-            src="{{ paymentSummary.asset.symbolUrl }}"
-            width="12px"
-            height="12px"
+            src="{{ this.paymentAssetIconURL }}"
+            width="14px"
+            height="14px"
             alt="{{ paymentSummary.asset.symbol }}"
           />
           {{ paymentSummary.asset.symbol }}
