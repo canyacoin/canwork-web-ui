@@ -43,7 +43,6 @@
   <div class="container" *ngIf="canPayOptions">
     <canpay-wizard
       [successText]="canPayOptions.successText"
-      [operation]="canPayOptions.operation"
       [amount]="canPayOptions.amount"
       [paymentSummary]="canPayOptions.paymentSummary"
       (complete)="canPayOptions.complete($event)"

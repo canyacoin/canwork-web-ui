@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { CanPay, CanPayData, Operation } from '@canpay-lib/lib'
+import { CanPay, CanPayData } from '@canpay-lib/lib'
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
 import { ChatService } from '@service/chat.service'
@@ -38,7 +38,6 @@ export class BuyCoffeeComponent implements OnInit {
 
   startCanpay() {
     this.canPayOptions = {
-      operation: Operation.pay,
       complete: this.onComplete.bind(this),
       cancel: this.onComplete.bind(this),
       userEmail: this.currentUser.email || '',

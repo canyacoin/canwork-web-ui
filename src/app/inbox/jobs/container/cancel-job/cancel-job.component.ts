@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { CanPay, Operation } from '@canpay-lib/lib'
+import { CanPay } from '@canpay-lib/lib'
 import { Job } from '@class/job'
 import { JobService } from '@service/job.service'
 import 'rxjs/add/operator/take'
@@ -66,7 +66,6 @@ export class CancelJobComponent implements OnInit {
     this.canPayOptions = {
       successText:
         'Great, the job has been cancelled and the funds returned to the client!',
-      operation: Operation.interact,
       complete: onComplete,
       cancel: onCancel,
     }

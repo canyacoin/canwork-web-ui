@@ -10,7 +10,6 @@
 
     <div class="container" *ngIf="canPayOptions">
       <canpay-wizard
-        [operation]="canPayOptions.operation"
         (complete)="canPayOptions.complete($event)"
         (cancel)="canPayOptions.cancel($event)"
         [userEmail]="canPayOptions.userEmail"

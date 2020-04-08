@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import {
   CanPay,
-  Operation,
   PaymentItemCurrency,
   BepAssetPaymentData,
 } from '@canpay-lib/lib'
@@ -172,10 +171,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
 
     const provider = await this.userService.getUser(this.job.providerId)
 
-    const initiateEnterEscrow = async () => {
-      // TODO remove initiateEnterEscrow
-    }
-
     const client = await this.userService.getUser(this.job.clientId)
 
     const paymentSummary = {
@@ -226,7 +221,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
 
     this.canPayOptions = {
       successText: 'Woohoo, job started!',
-      operation: Operation.auth,
 
       amount: jobBudgetCan,
       paymentSummary: paymentSummary,

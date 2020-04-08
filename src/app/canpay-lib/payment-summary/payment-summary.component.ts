@@ -2,12 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { BinanceService } from '@service/binance.service'
 import { ToastrService } from 'ngx-toastr'
 
-import {
-  PaymentItem,
-  PaymentItemCurrency,
-  PaymentSummary,
-  Step,
-} from '../interfaces'
+import { PaymentItem, PaymentItemCurrency, PaymentSummary } from '../interfaces'
 
 @Component({
   selector: 'payment-summary',

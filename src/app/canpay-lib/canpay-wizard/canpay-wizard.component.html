@@ -24,7 +24,7 @@
         </div>
       </div>
 
-      <div *ngIf="currStep === Step.paymentSummary">
+      <div *ngIf="showPaymentSummary">
         <payment-summary
           [amount]="amount"
           [paymentSummary]="paymentSummary"
@@ -35,7 +35,7 @@
         </payment-summary>
       </div>
 
-      <div *ngIf="currStep === Step.confirmation">
+      <div *ngIf="showConfirmation">
         <canyalib-msg-box
           [msg]="confirmationDlg"
           [controls]="confirmationDlg.controls"
