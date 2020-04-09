@@ -40,7 +40,6 @@ export class BuyCoffeeComponent implements OnInit {
     this.canPayOptions = {
       complete: this.onComplete.bind(this),
       cancel: this.onComplete.bind(this),
-      userEmail: this.currentUser.email || '',
     }
   }
 

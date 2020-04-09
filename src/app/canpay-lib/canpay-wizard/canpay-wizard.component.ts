@@ -22,17 +22,13 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
 
   @Input() successText
   @Input() paymentSummary: PaymentSummary
-  @Input() userEmail
-  @Input() startJob
   @Input() initialisePayment
 
   errMsg: string
   warningMsg: string
-  steps: Array<any>
   showPaymentSummary = false
   title = 'Payment'
-  balance = 0
-  account: string
+
   confirmationDlg = {
     type: 'success',
     title: 'Sweet, payment done!',

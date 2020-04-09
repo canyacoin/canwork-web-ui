@@ -9,13 +9,10 @@ export interface Contract {
 }
 
 export interface CanPay {
-  amount?: number
   paymentSummary?: PaymentSummary
   successText?: string
   complete: Function
   cancel?: Function
-  userEmail?: string
-  startJob?: Function
   initialisePayment?: Function
 }
 

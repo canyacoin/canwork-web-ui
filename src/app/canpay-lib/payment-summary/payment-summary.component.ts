@@ -12,7 +12,6 @@ import { PaymentSummary } from '../interfaces'
 export class PaymentSummaryComponent implements OnInit {
   @Output() error = new EventEmitter()
   @Input() paymentSummary: PaymentSummary = null
-  @Input() startJob
   @Input() initialisePayment
 
   isLoading = false

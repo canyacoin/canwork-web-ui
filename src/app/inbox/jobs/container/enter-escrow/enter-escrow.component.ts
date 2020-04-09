@@ -208,16 +208,10 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
 
     this.canPayOptions = {
       successText: 'Woohoo, job started!',
-
-      amount: paymentSummary.asset.jobBudgetAsset,
       paymentSummary: paymentSummary,
       complete: onComplete,
       cancel: onComplete,
-
-      userEmail: client.email,
       initialisePayment,
-
-      startJob,
     }
   }
 }

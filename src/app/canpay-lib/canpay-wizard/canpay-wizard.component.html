@@ -27,7 +27,6 @@
       <div *ngIf="showPaymentSummary">
         <payment-summary
           [paymentSummary]="paymentSummary"
-          [startJob]="startJob"
           [initialisePayment]="initialisePayment"
           (error)="error($event)"
         >
