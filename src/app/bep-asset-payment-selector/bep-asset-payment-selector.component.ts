@@ -7,10 +7,6 @@ import { OnDestroyComponent } from '@class/on-destroy'
 
 import { environment } from '@env/environment'
 import { BepAssetPaymentData } from '@canpay-lib/lib'
-import {
-  formatAtomicAsset,
-  roundAtomicAssetTwoDecimals,
-} from '@util/currency-conversion'
 
 @Component({
   selector: 'app-bep-asset-payment-selector',
@@ -34,8 +30,6 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
   }
 
   async ngOnInit() {
-    console.log('BEP ASSET PAYMENT SELECTOR')
-    console.log('Job Budget $USD: ' + this.jobBudgetUsd)
     this.binanceService.events$
       .pipe(takeUntil(this.destroy$)) // unsubscribe on destroy
       .subscribe(async event => {
@@ -51,18 +45,22 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
             const resp = await this.binanceService.client.getAccount(
               this.address
             )
-            console.log('GETTING BALANCES...')
-            // if resp is NULL, it can be just a valid new address never used before
+
             let balances = []
             let availableAssets = []
+
+            // if resp is NULL, it can be just a valid new address never used before
             if (resp !== null && resp.status === 200) {
+              //gets wallet balances
               balances = resp.result.balances
+              //calls function to get only free balances that can cover job budget
               availableAssets = await this.getAvailableAssets(balances)
             }
 
+            //sorts assets by symbol
             this.availableAssets.next(sortBy(prop('symbol'))(availableAssets))
+
             this.loading = false
-            console.log(this.availableAssets)
             break
           case EventType.Disconnect:
             this.address = false
@@ -72,6 +70,7 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
   }
 
   async getAvailableAssets(balances) {
+    console.log('Getting available balances...')
     let availableAssets = []
     let hasEnough: boolean
 
@@ -79,10 +78,10 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
       // Get weighted avg USD price of each asset
       const usdPrice = await this.binanceService.getAssetToUsd(balance.symbol)
 
-      // Calculate USD value of free asset
+      // Calculate USD value of each asset's free balance
       const freeAssetToUsd = balance.free * usdPrice
 
-      // Determine if the asset's USD value is enough to cover the job budget
+      // Determine if the asset's free USD value is enough to cover the job budget
       if (this.jobBudgetUsd > freeAssetToUsd) {
         hasEnough = false
       } else {
@@ -101,18 +100,12 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
   }
 
   async paymentSelected(asset) {
-    console.log('payment selected ' + asset.symbol)
-    console.log('usdPrice: ' + asset.usdPrice)
-    console.log('jobBudgetUsd' + this.jobBudgetUsd)
-
-    // Calculate jobBudget in selected asset
+    // Calculate jobBudget in selected BEP asset
     // Use 101% to decrease chances of underpayment
-
+    // Round to 4 digits
     const jobBudgetAsset = Number(
       ((this.jobBudgetUsd * 1.01) / asset.usdPrice).toPrecision(4)
     )
-
-    console.log('jobBudgetAsset: ' + jobBudgetAsset)
 
     let assetData = {
       symbol: asset.symbol,

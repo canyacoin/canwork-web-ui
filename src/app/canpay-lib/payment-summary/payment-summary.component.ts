@@ -22,7 +22,8 @@ export class PaymentSummaryComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log('Payment Summary')
+    console.log('Payment Summary: ')
+    console.log(this.paymentSummary)
   }
 
   next() {

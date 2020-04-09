@@ -61,7 +61,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     const jobId = this.activatedRoute.parent.snapshot.params['id'] || null
-    console.log('ENTER ESCROW')
     if (jobId) {
       console.log('Job ID: ' + jobId)
       this.jobService
@@ -75,8 +74,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
           } else {
             this.jobStateCheck = true
           }
-          console.log('Job State: ' + this.job.state)
-          console.log('Job State Check Passed: ' + this.jobStateCheck)
+
           this.loading = false
           this.checkWalletConnection()
           this.startBepAssetSelector()
@@ -108,7 +106,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   }
 
   async checkWalletConnection() {
-    console.log('CHECKING WALLET CONNECTION...')
     if (
       !this.binanceService.isLedgerConnected() &&
       !this.binanceService.isKeystoreConnected() &&
@@ -127,7 +124,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     }
     this.walletConnected = true
     const address = this.binanceService.getAddress() // temporary
-    console.log('Connected to: ' + address) // temporary
+    console.log('Connected to wallet: ' + address) // temporary
   }
 
   startBepAssetSelector() {
@@ -138,9 +135,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     const onSelection = async assetData => {
       this.showAssetSelection = false
       this.bepAssetPaymentData = assetData
-      console.log(this.bepAssetPaymentData.symbol + ' selected')
-      console.log(this.bepAssetPaymentData)
-
       this.paymentMethod = this.bepAssetPaymentData.symbol
       this.startCanpay()
     }
@@ -177,8 +171,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
         providerAddress: provider.bnbAddress,
       },
     }
-    console.log('Payment Summary: ')
-    console.log(paymentSummary)
 
     const initialisePayment = (
       beforeCallback,

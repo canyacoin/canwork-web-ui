@@ -696,7 +696,6 @@ export class BinanceService {
   }
 
   async getAssetIconUrl(symbol) {
-    console.log(symbol)
     let iconUrl: string
     if (symbol === 'BNB') {
       iconUrl =
@@ -707,7 +706,6 @@ export class BinanceService {
         symbol +
         '/logo.png'
     }
-    console.log(iconUrl)
     return iconUrl
   }
 }

@@ -10,7 +10,7 @@ import { PaymentSummary } from '../interfaces'
 })
 export class PaymentSummaryTemplateComponent implements OnInit {
   @Input() paymentSummary: PaymentSummary = null
-  @Input() showBalance = false
+  @Input() showBalance = true
   @Input() balance = 0
 
   paymentAssetIconURL: string
@@ -28,7 +28,5 @@ export class PaymentSummaryTemplateComponent implements OnInit {
       .then(iconURL => {
         this.paymentAssetIconURL = iconURL
       })
-
-    console.log(this.paymentSummary.asset.jobBudgetAsset)
   }
 }
