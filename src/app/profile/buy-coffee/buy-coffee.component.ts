@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { CanPay, CanPayData } from '@canpay-lib/lib'
+import { CanPay } from '@canpay-lib/lib'
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
 import { ChatService } from '@service/chat.service'
@@ -48,7 +48,7 @@ export class BuyCoffeeComponent implements OnInit {
     await this.chatService.sendTipMessage(txHash, this.userModel.address)
   }
 
-  async onComplete(canPayData: CanPayData) {
+  async onComplete() {
     this.router.navigate(['/profile/alt', this.userModel.address])
   }
 }

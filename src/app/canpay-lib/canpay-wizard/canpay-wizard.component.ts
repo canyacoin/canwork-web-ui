@@ -7,7 +7,7 @@ import {
   Output,
 } from '@angular/core'
 
-import { CanPayData, PaymentSummary } from '../interfaces'
+import { PaymentSummary } from '../interfaces'
 import { FormDataService } from '../services/formData.service'
 
 @Component({
@@ -57,16 +57,8 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
     this.doCancel()
   }
 
-  canPayData(): CanPayData {
-    console.log('canPayData')
-    return {
-      account: this.account,
-      balance: this.balance,
-    }
-  }
-
   doCancel() {
-    this.cancel.emit(this.canPayData())
+    this.cancel.emit()
   }
 
   error(msg, autoDismiss = true) {

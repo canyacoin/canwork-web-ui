@@ -31,11 +31,6 @@ export interface jobData {
   providerAddress?: string
 }
 
-export interface CanPayData {
-  account: string
-  balance: number
-}
-
 export interface BepAssetPaymentData {
   symbol: string
   freeAsset: number
