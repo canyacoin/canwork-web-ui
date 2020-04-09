@@ -31,7 +31,7 @@ export interface jobData {
 export interface BepAssetPaymentData {
   symbol: string
   freeAsset: number
-  usdValue: number
+  freeUsd: number
   usdPrice: number
-  jobBudgetAsset: number
+  jobBudgetAtomic: number
 }

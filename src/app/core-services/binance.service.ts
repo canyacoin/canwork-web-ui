@@ -431,6 +431,7 @@ export class BinanceService {
       const bnbResponse = await (await fetch(bnbUsdUrl)).json()
       const lastBnbToUsdPrice = bnbResponse[0].weightedAvgPrice
       const assetToUsd = lastAssetToBnbPrice * lastBnbToUsdPrice
+      console.log(assetToUsd)
 
       return Promise.resolve(assetToUsd)
     } catch (error) {

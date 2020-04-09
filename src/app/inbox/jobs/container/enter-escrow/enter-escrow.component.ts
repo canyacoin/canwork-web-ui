@@ -191,7 +191,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
 
       this.binanceService.escrowFunds(
         jobId,
-        paymentSummary.asset.jobBudgetAsset,
+        paymentSummary.asset.jobBudgetAtomic,
         providerAddress,
         beforeCallback,
         onSuccess,

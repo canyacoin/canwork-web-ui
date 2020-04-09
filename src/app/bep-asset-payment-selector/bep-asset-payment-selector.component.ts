@@ -55,6 +55,7 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
               balances = resp.result.balances
               //calls function to get only free balances that can cover job budget
               availableAssets = await this.getAvailableAssets(balances)
+              console.log('freeUsd: ' + availableAssets[0].freeUsd)
             }
 
             //sorts assets by symbol
@@ -77,9 +78,10 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
     for (const balance of balances) {
       // Get weighted avg USD price of each asset
       const usdPrice = await this.binanceService.getAssetToUsd(balance.symbol)
+      console.log(balance.symbol + ' usdPrice: ' + usdPrice)
 
       // Calculate USD value of each asset's free balance
-      const freeAssetToUsd = balance.free * usdPrice
+      const freeAssetToUsd = Number((balance.free * usdPrice).toPrecision(8))
 
       // Determine if the asset's free USD value is enough to cover the job budget
       if (this.jobBudgetUsd > freeAssetToUsd) {
@@ -91,28 +93,28 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
       availableAssets.push({
         symbol: balance.symbol,
         free: balance.free,
-        usdValue: freeAssetToUsd,
+        freeUsd: freeAssetToUsd,
         usdPrice: usdPrice,
         hasEnough: hasEnough,
       })
     }
+
     return availableAssets
   }
 
   async paymentSelected(asset) {
     // Calculate jobBudget in selected BEP asset
     // Use 101% to decrease chances of underpayment
-    // Round to 4 digits
-    const jobBudgetAsset = Number(
-      ((this.jobBudgetUsd * 1.01) / asset.usdPrice).toPrecision(4)
-    )
+
+    const jobBudgetAsset = (this.jobBudgetUsd * 1.01) / asset.usdPrice
+    const jobBudgetAtomic = Math.ceil(jobBudgetAsset * 1e8)
 
     let assetData = {
       symbol: asset.symbol,
       freeAsset: asset.free,
-      usdValue: asset.usdValue,
+      freeUsd: asset.freeUsd,
       usdPrice: asset.usdPrice,
-      jobBudgetAsset: jobBudgetAsset,
+      jobBudgetAtomic: jobBudgetAtomic,
     }
 
     this.bepAssetPaymentData.emit(assetData)

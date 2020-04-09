@@ -12,6 +12,7 @@ export class PaymentSummaryTemplateComponent implements OnInit {
   @Input() paymentSummary: PaymentSummary = null
 
   paymentAssetIconURL: string
+  formatAssetJobBudget: string
 
   constructor(private binanceService: BinanceService) {}
 
@@ -26,5 +27,10 @@ export class PaymentSummaryTemplateComponent implements OnInit {
       .then(iconURL => {
         this.paymentAssetIconURL = iconURL
       })
+
+    //Format the atomic asset job budget for readability
+    this.formatAssetJobBudget = (
+      this.paymentSummary.asset.jobBudgetAtomic / 1e8
+    ).toPrecision(4)
   }
 }
