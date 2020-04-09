@@ -34,7 +34,7 @@ export class PaymentSummaryComponent implements OnInit {
     }
 
     const onSuccess = () => {
-      console.log('beforeTransaction')
+      console.log('onSuccess')
     }
 
     const onFailure = () => {

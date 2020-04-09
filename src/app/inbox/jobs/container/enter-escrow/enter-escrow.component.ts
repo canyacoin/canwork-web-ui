@@ -128,17 +128,17 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   }
 
   startBepAssetSelector() {
+    // Initiates the BepAssetPaymentSelector template
     if (this.jobStateCheck && this.walletConnected) {
       this.showAssetSelection = true
     }
 
     const onSelection = async assetData => {
-      this.showAssetSelection = false
-      this.bepAssetPaymentData = assetData
-      this.paymentMethod = this.bepAssetPaymentData.symbol
+      this.showAssetSelection = false // Destroys the BepAssetSelector
+      this.bepAssetPaymentData = assetData // Receives the selected asset data
+      this.paymentMethod = this.bepAssetPaymentData.symbol // Initiates the Canpay Wizard
       this.startCanpay()
     }
-
     this.assetDataHandler = {
       asset: onSelection,
     }
