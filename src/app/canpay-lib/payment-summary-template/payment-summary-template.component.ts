@@ -1,8 +1,6 @@
-import { BinanceService } from '@service/binance.service'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 
-import { formatAtomicAsset } from '@util/currency-conversion'
-
+import { BinanceService } from '@service/binance.service'
 import { PaymentSummary } from '../interfaces'
 
 @Component({
@@ -12,7 +10,6 @@ import { PaymentSummary } from '../interfaces'
 })
 export class PaymentSummaryTemplateComponent implements OnInit {
   @Input() paymentSummary: PaymentSummary = null
-  @Input() amount = 0
   @Input() showBalance = false
   @Input() balance = 0
 

@@ -21,7 +21,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
   @Output() cancel = new EventEmitter()
 
   @Input() successText
-  @Input() amount = 0
   @Input() paymentSummary: PaymentSummary
   @Input() userEmail
   @Input() startJob
@@ -61,7 +60,6 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
   canPayData(): CanPayData {
     console.log('canPayData')
     return {
-      amount: this.amount,
       account: this.account,
       balance: this.balance,
     }

@@ -32,7 +32,6 @@ export interface jobData {
 }
 
 export interface CanPayData {
-  amount: number
   account: string
   balance: number
 }
