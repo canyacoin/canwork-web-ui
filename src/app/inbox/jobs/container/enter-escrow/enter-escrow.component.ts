@@ -182,6 +182,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       const { jobId, providerAddress } = job
 
       const onSuccess = () => {
+        console.log('onSucces')
         startJob()
         if (successCallback) {
           successCallback()

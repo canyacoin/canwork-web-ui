@@ -10,8 +10,6 @@ import { PaymentSummary } from '../interfaces'
 })
 export class PaymentSummaryTemplateComponent implements OnInit {
   @Input() paymentSummary: PaymentSummary = null
-  @Input() showBalance = true
-  @Input() balance = 0
 
   paymentAssetIconURL: string
 
