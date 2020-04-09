@@ -25,23 +25,13 @@ export class PaymentSummaryTemplateComponent implements OnInit {
       console.log('No Payment Summary')
     }
 
+    //Get payment asset icon
     this.binanceService
       .getAssetIconUrl(this.paymentSummary.asset.symbol)
       .then(iconURL => {
         this.paymentAssetIconURL = iconURL
       })
-  }
 
-  formatAmount() {
-    return formatAtomicAsset(this.amount)
-  }
-
-  get usdPerCan(): string {
-    if (!this.amount || !this.paymentSummary.job.usdValue) {
-      return '?'
-    }
-    return ((this.paymentSummary.job.usdValue * 1e8) / this.amount)
-      .toPrecision(4)
-      .toString()
+    console.log(this.paymentSummary.asset.jobBudgetAsset)
   }
 }

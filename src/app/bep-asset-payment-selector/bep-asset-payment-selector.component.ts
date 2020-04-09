@@ -7,6 +7,10 @@ import { OnDestroyComponent } from '@class/on-destroy'
 
 import { environment } from '@env/environment'
 import { BepAssetPaymentData } from '@canpay-lib/lib'
+import {
+  formatAtomicAsset,
+  roundAtomicAssetTwoDecimals,
+} from '@util/currency-conversion'
 
 @Component({
   selector: 'app-bep-asset-payment-selector',
@@ -72,11 +76,13 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
     let hasEnough: boolean
 
     for (const balance of balances) {
-      // Get weighted avg USD price of each asset and calculate USD value
-      const usdPrice = await this.binanceService.getAssetToUsd(balance.symbol) //get assets USD price
+      // Get weighted avg USD price of each asset
+      const usdPrice = await this.binanceService.getAssetToUsd(balance.symbol)
+
+      // Calculate USD value of free asset
       const freeAssetToUsd = balance.free * usdPrice
 
-      // Determine if the assets USD value is enough to cover the job budget
+      // Determine if the asset's USD value is enough to cover the job budget
       if (this.jobBudgetUsd > freeAssetToUsd) {
         hasEnough = false
       } else {
@@ -95,12 +101,27 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
   }
 
   async paymentSelected(asset) {
+    console.log('payment selected ' + asset.symbol)
+    console.log('usdPrice: ' + asset.usdPrice)
+    console.log('jobBudgetUsd' + this.jobBudgetUsd)
+
+    // Calculate jobBudget in selected asset
+    // Use 101% to decrease chances of underpayment
+
+    const jobBudgetAsset = Number(
+      ((this.jobBudgetUsd * 1.01) / asset.usdPrice).toPrecision(4)
+    )
+
+    console.log('jobBudgetAsset: ' + jobBudgetAsset)
+
     let assetData = {
       symbol: asset.symbol,
       freeAsset: asset.free,
       usdValue: asset.usdValue,
       usdPrice: asset.usdPrice,
+      jobBudgetAsset: jobBudgetAsset,
     }
+
     this.bepAssetPaymentData.emit(assetData)
   }
 }

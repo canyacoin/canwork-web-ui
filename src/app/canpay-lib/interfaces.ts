@@ -42,4 +42,5 @@ export interface BepAssetPaymentData {
   freeAsset: number
   usdValue: number
   usdPrice: number
+  jobBudgetAsset: number
 }

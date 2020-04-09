@@ -166,7 +166,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     }
 
     const provider = await this.userService.getUser(this.job.providerId)
-
     const client = await this.userService.getUser(this.job.clientId)
 
     const paymentSummary = {
@@ -180,14 +179,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     }
     console.log('Payment Summary: ')
     console.log(paymentSummary)
-
-    // use 101% to decrase chances of underpayment and round to 2 decimals
-    // TODO: This could be included in BEP Asset Data
-    const jobBudgetAsset = roundAtomicAssetTwoDecimals(
-      Math.round(
-        paymentSummary.asset.usdPrice * paymentSummary.job.usdValue * 1.01
-      )
-    )
 
     const initialisePayment = (
       beforeCallback,
@@ -207,7 +198,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
 
       this.binanceService.escrowFunds(
         jobId,
-        jobBudgetAsset,
+        paymentSummary.asset.jobBudgetAsset,
         providerAddress,
         beforeCallback,
         onSuccess,
@@ -218,7 +209,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     this.canPayOptions = {
       successText: 'Woohoo, job started!',
 
-      amount: jobBudgetAsset,
+      amount: paymentSummary.asset.jobBudgetAsset,
       paymentSummary: paymentSummary,
       complete: onComplete,
       cancel: onComplete,
