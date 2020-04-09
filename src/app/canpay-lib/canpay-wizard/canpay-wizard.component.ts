@@ -49,15 +49,7 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {}
 
-  get showBackButton(): boolean {
-    return true
-  }
-
   goBack() {
-    this.doCancel()
-  }
-
-  doCancel() {
     this.cancel.emit()
   }
 
