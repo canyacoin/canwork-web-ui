@@ -101,18 +101,11 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
   }
 
   async paymentSelected(asset) {
-    // Calculate jobBudget in selected BEP asset
-    // Use 101% to decrease chances of underpayment
-
-    const jobBudgetAsset = (this.jobBudgetUsd * 1.01) / asset.usdPrice
-    const jobBudgetAtomic = Math.ceil(jobBudgetAsset * 1e8)
-
     let assetData = {
       symbol: asset.symbol,
       freeAsset: asset.free,
       freeUsd: asset.freeUsd,
       usdPrice: asset.usdPrice,
-      jobBudgetAtomic: jobBudgetAtomic,
     }
 
     this.bepAssetData.emit(assetData)

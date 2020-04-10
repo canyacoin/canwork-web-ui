@@ -1,3 +1,4 @@
+import { PaymentSummary } from './../canpay-lib/interfaces'
 import { Injectable, EventEmitter } from '@angular/core'
 import WalletConnect from '@trustwallet/walletconnect'
 import { BehaviorSubject } from 'rxjs'
@@ -48,7 +49,8 @@ export interface Event {
 
 export interface Transaction {
   to: string
-  amountCan: number
+  symbol: string
+  amountAsset: number
   memo: string
   callbacks?: TransactionCallbacks
 }
@@ -440,7 +442,7 @@ export class BinanceService {
     }
   }
 
-  async hasEnoughBalance(amountCan: number) {
+  async hasEnoughBalance(amountAsset: number) {
     console.log('hasEnoughBalance')
     try {
       const { address } = this.connectedWalletDetails
@@ -452,7 +454,8 @@ export class BinanceService {
         balance.find(coin => coin.symbol === CAN_TOKEN).free
       )
       return (
-        availableCan * 1e8 >= amountCan && availableBnb * 1e8 >= this.sendingFee
+        availableCan * 1e8 >= amountAsset &&
+        availableBnb * 1e8 >= this.sendingFee
       )
     } catch (e) {
       // user doesn't have any CAN or BNB at all
@@ -466,12 +469,12 @@ export class BinanceService {
   }
 
   private async preconditions(
-    amountCan: number,
+    amountAsset: number,
     onFailure?: (reason?: string) => void
   ): Promise<boolean> {
     console.log('preconditions')
     await this.initFeeIfNecessary()
-    //const hasBalance = await this.hasEnoughBalance(amountCan)
+    //const hasBalance = await this.hasEnoughBalance(amountAsset)
     const hasBalance = true
     console.log('has enough: ' + hasBalance)
     if (!hasBalance) {
@@ -482,22 +485,26 @@ export class BinanceService {
   }
 
   async escrowFunds(
-    jobId: string,
-    amountCan: number,
-    providerAddress: string,
+    paymentSummary: PaymentSummary,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
     onFailure?: (reason?: string) => void
   ) {
     console.log('EscrowFunds')
 
-    const preconditionsOk = await this.preconditions(amountCan, onFailure)
+    const preconditionsOk = await this.preconditions(
+      paymentSummary.jobBudgetAtomic,
+      onFailure
+    )
     console.log('preconditions OK: ' + preconditionsOk)
     if (!preconditionsOk) {
       return
     }
-    const memo = `ESCROW:${jobId}:${providerAddress}`
+    const memo = `ESCROW:${paymentSummary.job.jobId}:${paymentSummary.job.providerAddress}`
     const to = ESCROW_ADDRESS
+    const symbol = paymentSummary.asset.symbol
+    const amountAsset = paymentSummary.jobBudgetAtomic
+
     const callbacks: TransactionCallbacks = {
       beforeTransaction,
       onSuccess,
@@ -505,7 +512,8 @@ export class BinanceService {
     }
     const transaction: Transaction = {
       to,
-      amountCan,
+      symbol,
+      amountAsset,
       memo,
       callbacks,
     }
@@ -520,13 +528,14 @@ export class BinanceService {
     onFailure?: (reason?: string) => void
   ) {
     console.log('Release funds')
-    const amountCan = 1
-    const preconditionsOk = await this.preconditions(amountCan, onFailure)
+    const amountAsset = 1
+    const preconditionsOk = await this.preconditions(amountAsset, onFailure)
     if (!preconditionsOk) {
       return
     }
     const memo = `RELEASE:${jobId}`
     const to = ESCROW_ADDRESS
+    const symbol = 'CAN' /// TODO ---> HOW TO DETERMINE
 
     const callbacks: TransactionCallbacks = {
       beforeTransaction,
@@ -535,7 +544,8 @@ export class BinanceService {
     }
     const transaction: Transaction = {
       to,
-      amountCan,
+      symbol,
+      amountAsset,
       memo,
       callbacks,
     }
@@ -544,7 +554,7 @@ export class BinanceService {
 
   async transactViaLedger(
     to: string,
-    amountCan: number,
+    amountAsset: number,
     memo: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
@@ -564,7 +574,7 @@ export class BinanceService {
         beforeTransaction()
       }
 
-      const adjustedAmount = formatAtomicAsset(amountCan)
+      const adjustedAmount = formatAtomicAsset(amountAsset)
       const results = await this.client.transfer(
         address,
         to,
@@ -588,7 +598,7 @@ export class BinanceService {
 
   async transactViaKeystore(
     to: string,
-    amountCan: number,
+    amountAsset: number,
     memo: string,
     password: string,
     beforeTransaction?: () => void,
@@ -607,7 +617,7 @@ export class BinanceService {
         beforeTransaction()
       }
 
-      const adjustedAmount = formatAtomicAsset(amountCan)
+      const adjustedAmount = formatAtomicAsset(amountAsset)
 
       const results = await this.client.transfer(
         address,
@@ -632,7 +642,7 @@ export class BinanceService {
 
   async transactViaWalletConnect(
     to: string,
-    amountCan: number,
+    amountAsset: number,
     memo: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
@@ -649,7 +659,7 @@ export class BinanceService {
       send_order: {},
     }
 
-    const amountStr = amountCan.toString()
+    const amountStr = amountAsset.toString()
     tx.send_order = {
       inputs: [
         {

@@ -1,21 +1,17 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { CanPay, bepAssetData } from '@canpay-lib/lib'
 import { Job, JobState } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
 import { UserType } from '@class/user'
-import { FeatureToggleService } from '@service/feature-toggle.service'
-import { JobService } from '@service/job.service'
-import { UserService } from '@service/user.service'
-import { BinanceService } from '@service/binance.service'
 import { ToastrService } from 'ngx-toastr'
 import 'rxjs/add/operator/take'
 import { Observable } from 'rxjs/Observable'
 import { HttpClient } from '@angular/common/http'
 
-import { environment } from '@env/environment'
-import { roundAtomicAssetTwoDecimals } from '@util/currency-conversion'
+import { JobService } from '@service/job.service'
+import { UserService } from '@service/user.service'
+import { BinanceService } from '@service/binance.service'
 
 @Component({
   selector: 'app-enter-escrow',
@@ -35,17 +31,15 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   error
   job: Job
   errorMsg: string
-  totalJobBudgetUsd: number
+  jobBudgetUsd: number
   canPayOptions: CanPay
   countryList: any
 
   constructor(
-    private formBuilder: FormBuilder,
     private jobService: JobService,
     private userService: UserService,
     private binanceService: BinanceService,
     private toastr: ToastrService,
-    private featureService: FeatureToggleService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private http: HttpClient
@@ -59,7 +53,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
         .getJob(jobId)
         .take(1)
         .subscribe(async (job: Job) => {
-          this.totalJobBudgetUsd = await this.jobService.getJobBudgetUsd(job)
+          this.jobBudgetUsd = await this.jobService.getJobBudgetUsd(job)
           this.job = job
           if (this.job.state !== JobState.termsAcceptedAwaitingEscrow) {
             this.jobStateCheck = false
@@ -120,19 +114,19 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   }
 
   startBepAssetSelector() {
-    // Initiates the BepAssetPaymentSelector template
+    // Initiates the bepAssetSelector template
     if (this.jobStateCheck && this.walletConnected) {
       this.showAssetSelection = true
     }
 
     const onSelection = async assetData => {
-      this.showAssetSelection = false // Destroys the BepAssetSelector
+      this.showAssetSelection = false // Destroys the bepAssetSelector
       this.bepAssetData = assetData // Receives the selected asset data
       this.paymentMethod = this.bepAssetData.symbol // Initiates the Canpay Wizard
       this.startCanpay()
     }
     this.assetDataHandler = {
-      // passed back from BepAssetSelector
+      // passed back from bepAssetSelector
       asset: onSelection,
     }
   }
@@ -155,14 +149,21 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     const provider = await this.userService.getUser(this.job.providerId)
     const client = await this.userService.getUser(this.job.clientId)
 
+    // Calculate jobBudget in selected BEP asset
+    // Use 101% to decrease chances of underpayment
+    const jobBudgetAsset =
+      (this.jobBudgetUsd * 1.01) / this.bepAssetData.usdPrice
+    const jobBudgetAtomic = Math.ceil(jobBudgetAsset * 1e8)
+
     const paymentSummary = {
       asset: this.bepAssetData,
       job: {
         name: this.job.information.title,
-        usdValue: this.totalJobBudgetUsd,
+        usdValue: this.jobBudgetUsd,
         jobId: this.job.id,
         providerAddress: provider.bnbAddress,
       },
+      jobBudgetAtomic: jobBudgetAtomic,
     }
 
     const initialisePayment = (
@@ -171,8 +172,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       failureCallback
     ) => {
       console.log('initialise Payment')
-      const job = paymentSummary.job
-      const { jobId, providerAddress } = job
 
       const onSuccess = () => {
         console.log('onSuccess')
@@ -183,9 +182,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       }
 
       this.binanceService.escrowFunds(
-        jobId,
-        paymentSummary.asset.jobBudgetAtomic,
-        providerAddress,
+        paymentSummary,
         beforeCallback,
         onSuccess,
         failureCallback

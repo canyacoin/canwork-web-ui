@@ -19,6 +19,7 @@ export interface CanPay {
 export interface PaymentSummary {
   asset: bepAssetData
   job: jobData
+  jobBudgetAtomic: number
 }
 
 export interface jobData {
@@ -33,5 +34,4 @@ export interface bepAssetData {
   freeAsset: number
   freeUsd: number
   usdPrice: number
-  jobBudgetAtomic: number
 }
