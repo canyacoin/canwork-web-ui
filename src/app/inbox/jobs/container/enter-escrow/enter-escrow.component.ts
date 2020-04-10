@@ -175,7 +175,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       const { jobId, providerAddress } = job
 
       const onSuccess = () => {
-        console.log('onSucces')
+        console.log('onSuccess')
         startJob()
         if (successCallback) {
           successCallback()
@@ -193,7 +193,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     }
 
     this.canPayOptions = {
-      successText: 'Woohoo, job started!',
+      successText: 'Escrow success, job started!',
       paymentSummary: paymentSummary,
       complete: onComplete,
       cancel: onComplete,

@@ -28,6 +28,7 @@
         <payment-summary
           [paymentSummary]="paymentSummary"
           [initialisePayment]="initialisePayment"
+          (confirmSuccess)="confirmSuccess()"
           (error)="error($event)"
         >
         </payment-summary>

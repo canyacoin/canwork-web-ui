@@ -490,9 +490,7 @@ export class BinanceService {
     onFailure?: (reason?: string) => void
   ) {
     console.log('EscrowFunds')
-    console.log('before: ' + beforeTransaction)
-    console.log('success: ' + onSuccess)
-    console.log('failure: ' + onFailure)
+
     const preconditionsOk = await this.preconditions(amountCan, onFailure)
     console.log('preconditions OK: ' + preconditionsOk)
     if (!preconditionsOk) {
@@ -511,7 +509,7 @@ export class BinanceService {
       memo,
       callbacks,
     }
-    console.log('callback: ' + transaction.callbacks)
+
     this.emitTransaction(transaction)
   }
 
@@ -521,7 +519,7 @@ export class BinanceService {
     onSuccess?: () => void,
     onFailure?: (reason?: string) => void
   ) {
-    console.log('release funds')
+    console.log('Release funds')
     const amountCan = 1
     const preconditionsOk = await this.preconditions(amountCan, onFailure)
     if (!preconditionsOk) {

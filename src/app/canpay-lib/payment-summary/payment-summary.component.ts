@@ -11,6 +11,7 @@ import { PaymentSummary } from '../interfaces'
 })
 export class PaymentSummaryComponent implements OnInit {
   @Output() error = new EventEmitter()
+  @Output() confirmSuccess = new EventEmitter()
   @Input() paymentSummary: PaymentSummary = null
   @Input() initialisePayment
 
@@ -35,6 +36,7 @@ export class PaymentSummaryComponent implements OnInit {
 
     const onSuccess = () => {
       console.log('onSuccess')
+      this.confirmSuccess.emit()
     }
 
     const onFailure = () => {

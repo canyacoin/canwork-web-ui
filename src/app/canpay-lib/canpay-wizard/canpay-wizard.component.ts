@@ -27,6 +27,8 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
   errMsg: string
   warningMsg: string
   showPaymentSummary = false
+  showConfirmation = false
+
   title = 'Payment'
 
   confirmationDlg = {
@@ -47,6 +49,18 @@ export class CanpayWizardComponent implements OnInit, OnDestroy {
 
   goBack() {
     this.cancel.emit()
+  }
+
+  finish() {
+    console.log('Wiz Finish')
+    this.complete.emit()
+  }
+
+  confirmSuccess() {
+    console.log('Wiz confirmSuccess')
+    this.showPaymentSummary = false
+    this.confirmationDlg.title = this.successText
+    this.showConfirmation = true
   }
 
   error(msg, autoDismiss = true) {
