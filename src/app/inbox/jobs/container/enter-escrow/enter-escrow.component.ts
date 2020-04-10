@@ -24,9 +24,6 @@ import { roundAtomicAssetTwoDecimals } from '@util/currency-conversion'
 })
 export class EnterEscrowComponent implements OnInit, AfterViewInit {
   loading = true
-  paying = false
-  wrongPassword = false
-  paymentId: any
 
   jobStateCheck = false
   walletConnected = false
@@ -41,11 +38,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   totalJobBudgetUsd: number
   canPayOptions: CanPay
   countryList: any
-
-  shopper: any
-  transactions: any
-  signedTransactions: any
-  paymentToken: any
 
   constructor(
     private formBuilder: FormBuilder,
@@ -140,6 +132,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       this.startCanpay()
     }
     this.assetDataHandler = {
+      // passed back from BepAssetSelector
       asset: onSelection,
     }
   }
