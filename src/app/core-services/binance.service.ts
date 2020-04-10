@@ -554,6 +554,7 @@ export class BinanceService {
 
   async transactViaLedger(
     to: string,
+    symbol: string,
     amountAsset: number,
     memo: string,
     beforeTransaction?: () => void,
@@ -579,7 +580,7 @@ export class BinanceService {
         address,
         to,
         adjustedAmount,
-        CAN_TOKEN,
+        symbol,
         memo
       )
 
@@ -598,6 +599,7 @@ export class BinanceService {
 
   async transactViaKeystore(
     to: string,
+    symbol: string,
     amountAsset: number,
     memo: string,
     password: string,
@@ -617,13 +619,15 @@ export class BinanceService {
         beforeTransaction()
       }
 
+      console.log('amountAsset: ' + amountAsset)
       const adjustedAmount = formatAtomicAsset(amountAsset)
+      console.log('adjustedAmount: ' + amountAsset)
 
       const results = await this.client.transfer(
         address,
         to,
         adjustedAmount,
-        CAN_TOKEN,
+        symbol,
         memo
       )
 
@@ -642,6 +646,7 @@ export class BinanceService {
 
   async transactViaWalletConnect(
     to: string,
+    symbol: string,
     amountAsset: number,
     memo: string,
     beforeTransaction?: () => void,
@@ -665,7 +670,7 @@ export class BinanceService {
         {
           address: base64js.fromByteArray(crypto.decodeAddress(address)),
           coins: {
-            denom: CAN_TOKEN,
+            denom: symbol,
             amount: amountStr,
           },
         },
@@ -674,7 +679,7 @@ export class BinanceService {
         {
           address: base64js.fromByteArray(crypto.decodeAddress(to)),
           coins: {
-            denom: CAN_TOKEN,
+            denom: symbol,
             amount: amountStr,
           },
         },

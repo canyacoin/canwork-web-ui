@@ -93,7 +93,7 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
 
   confirmTransaction() {
     console.log('confirm Transaction')
-    const { to, amountAsset, memo, callbacks } = this.transaction
+    const { to, symbol, amountAsset, memo, callbacks } = this.transaction
     const { beforeTransaction, onSuccess, onFailure } = callbacks
     const wrappedBeforeTransaction = this.wrapBeforeTransaction(
       beforeTransaction
@@ -103,6 +103,7 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
     if (this.binanceService.isLedgerConnected()) {
       this.binanceService.transactViaLedger(
         to,
+        symbol,
         amountAsset,
         memo,
         wrappedBeforeTransaction,
@@ -112,6 +113,7 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
     } else if (this.binanceService.isKeystoreConnected()) {
       this.binanceService.transactViaKeystore(
         to,
+        symbol,
         amountAsset,
         memo,
         this.keystorePassword,
@@ -122,6 +124,7 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
     } else if (this.binanceService.isWalletConnectConnected()) {
       this.binanceService.transactViaWalletConnect(
         to,
+        symbol,
         amountAsset,
         memo,
         wrappedBeforeTransaction,
