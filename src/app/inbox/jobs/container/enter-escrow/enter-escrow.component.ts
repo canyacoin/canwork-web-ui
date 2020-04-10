@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { CanPay, BepAssetPaymentData } from '@canpay-lib/lib'
+import { CanPay, bepAssetData } from '@canpay-lib/lib'
 import { Job, JobState } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
 import { UserType } from '@class/user'
@@ -29,7 +29,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   walletConnected = false
   paymentMethod: string | boolean = false
   showAssetSelection = false
-  bepAssetPaymentData: BepAssetPaymentData
+  bepAssetData: bepAssetData
   assetDataHandler: any
 
   error
@@ -127,8 +127,8 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
 
     const onSelection = async assetData => {
       this.showAssetSelection = false // Destroys the BepAssetSelector
-      this.bepAssetPaymentData = assetData // Receives the selected asset data
-      this.paymentMethod = this.bepAssetPaymentData.symbol // Initiates the Canpay Wizard
+      this.bepAssetData = assetData // Receives the selected asset data
+      this.paymentMethod = this.bepAssetData.symbol // Initiates the Canpay Wizard
       this.startCanpay()
     }
     this.assetDataHandler = {
@@ -156,7 +156,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     const client = await this.userService.getUser(this.job.clientId)
 
     const paymentSummary = {
-      asset: this.bepAssetPaymentData,
+      asset: this.bepAssetData,
       job: {
         name: this.job.information.title,
         usdValue: this.totalJobBudgetUsd,

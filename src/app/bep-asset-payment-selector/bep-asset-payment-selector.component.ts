@@ -6,7 +6,7 @@ import { takeUntil } from 'rxjs/operators'
 import { OnDestroyComponent } from '@class/on-destroy'
 
 import { environment } from '@env/environment'
-import { BepAssetPaymentData } from '@canpay-lib/lib'
+import { bepAssetData } from '@canpay-lib/lib'
 
 @Component({
   selector: 'app-bep-asset-payment-selector',
@@ -16,9 +16,7 @@ import { BepAssetPaymentData } from '@canpay-lib/lib'
 export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
   implements OnInit {
   @Input() jobBudgetUsd = 0
-  @Output() bepAssetPaymentData: EventEmitter<
-    BepAssetPaymentData
-  > = new EventEmitter()
+  @Output() bepAssetData: EventEmitter<bepAssetData> = new EventEmitter()
 
   address: string | boolean = true
   private availableAssets = new BehaviorSubject(null)
@@ -117,6 +115,6 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
       jobBudgetAtomic: jobBudgetAtomic,
     }
 
-    this.bepAssetPaymentData.emit(assetData)
+    this.bepAssetData.emit(assetData)
   }
 }

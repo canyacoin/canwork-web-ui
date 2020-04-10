@@ -17,7 +17,7 @@ export interface CanPay {
 }
 
 export interface PaymentSummary {
-  asset: BepAssetPaymentData
+  asset: bepAssetData
   job: jobData
 }
 
@@ -28,7 +28,7 @@ export interface jobData {
   providerAddress?: string
 }
 
-export interface BepAssetPaymentData {
+export interface bepAssetData {
   symbol: string
   freeAsset: number
   freeUsd: number
