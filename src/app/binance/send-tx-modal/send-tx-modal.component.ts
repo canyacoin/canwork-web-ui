@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { BinanceService, Transaction } from '@service/binance.service'
 import { ToastrService } from 'ngx-toastr'
-import { formatAtomicCan } from '@util/currency-conversion'
 
 @Component({
   selector: 'send-tx-modal',
@@ -22,6 +21,7 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    console.log('send tx modal')
     this.txSubscription = this.binanceService.transactionsEmitter.subscribe({
       next: (transaction: Transaction) => {
         this.isConfirming = false
@@ -39,10 +39,6 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
       this.txSubscription.unsubscribe()
     }
     this.close()
-  }
-
-  formatAmount(amount) {
-    return formatAtomicCan(amount)
   }
 
   splitMemo(memo) {
@@ -96,7 +92,8 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
   }
 
   confirmTransaction() {
-    const { to, amountCan, memo, callbacks } = this.transaction
+    console.log('confirm Transaction')
+    const { to, symbol, amountAsset, memo, callbacks } = this.transaction
     const { beforeTransaction, onSuccess, onFailure } = callbacks
     const wrappedBeforeTransaction = this.wrapBeforeTransaction(
       beforeTransaction
@@ -106,7 +103,8 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
     if (this.binanceService.isLedgerConnected()) {
       this.binanceService.transactViaLedger(
         to,
-        amountCan,
+        symbol,
+        amountAsset,
         memo,
         wrappedBeforeTransaction,
         wrappedOnSuccess,
@@ -115,7 +113,8 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
     } else if (this.binanceService.isKeystoreConnected()) {
       this.binanceService.transactViaKeystore(
         to,
-        amountCan,
+        symbol,
+        amountAsset,
         memo,
         this.keystorePassword,
         wrappedBeforeTransaction,
@@ -125,7 +124,8 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
     } else if (this.binanceService.isWalletConnectConnected()) {
       this.binanceService.transactViaWalletConnect(
         to,
-        amountCan,
+        symbol,
+        amountAsset,
         memo,
         wrappedBeforeTransaction,
         wrappedOnSuccess,

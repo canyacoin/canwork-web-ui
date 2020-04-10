@@ -49,13 +49,15 @@ export class ActionDialogComponent
     dialogService: DialogService,
     private formBuilder: FormBuilder,
     private jobService: JobService,
-    private binanceService: BinanceService,
+    private binanceService: BinanceService
   ) {
     super(dialogService)
   }
 
   ngOnInit() {
+    console.log('action-dialog: ')
     this.action = new IJobAction(this.actionType, this.userType)
+    console.log(this.actionType)
     switch (this.actionType) {
       case ActionType.counterOffer:
         this.action.paymentType = this.job.paymentType
@@ -137,6 +139,7 @@ export class ActionDialogComponent
   }
 
   async handleAction() {
+    console.log('handleAction: ' + this.actionType)
     this.executing = true
     try {
       switch (this.actionType) {

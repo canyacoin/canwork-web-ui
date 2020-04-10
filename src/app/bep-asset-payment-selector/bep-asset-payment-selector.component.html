@@ -1,0 +1,92 @@
+<main>
+  <section class="section bg-gray">
+    <div class="container text-center">
+      <div class="card px-30 py-15 my-10">
+        <h2>Choose your payment method</h2>
+        <div *ngIf="address" class="row">
+          <div class="col text-center">
+            <a
+              ngxClipboard
+              [cbContent]="address"
+              (click)="$event.preventDefault()"
+              href="#"
+              class="mx-10"
+            >
+              <i class="far fa-copy"></i>
+            </a>
+            {{ address }}
+            <a
+              target="_blank"
+              href="{{ explorer }}/address/{{ address }}"
+              class="mx-10"
+            >
+              <i class="fas fa-external-link-alt"></i>
+            </a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col text-left">
+            <div [ngSwitch]="address">
+              <div *ngSwitchCase="true" class="text-center">
+                Loading address...
+              </div>
+              <div *ngSwitchDefault>
+                <div *ngIf="availableAssets | async as assets; else loading">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Symbol</th>
+                        <th scope="col">Free</th>
+                        <th scope="col">Value (USD)</th>
+                        <th scope="col">Pay</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let asset of assets">
+                        <td>
+                          <app-dynamic-coin
+                            [symbol]="asset.symbol"
+                          ></app-dynamic-coin>
+                        </td>
+                        <td>{{ asset.symbol }}</td>
+                        <td>{{ asset.free | number: '1.3-3' }}</td>
+                        <td>$ {{ asset.freeUsd | number: '1.2-2' }}</td>
+                        <td *ngIf="asset.hasEnough">
+                          <button
+                            class="btn btn-primary  my-1"
+                            (click)="paymentSelected(asset)"
+                          >
+                            Pay
+                          </button>
+                        </td>
+                        <td *ngIf="!asset.hasEnough">
+                          Insufficient
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="text-right">
+                    <button
+                      (click)="binanceService.disconnect()"
+                      border-64
+                      class="btn btn-sm btn-warning"
+                      style="border: 2px solid #ffbe00; background: #fff; color: #ffbe00;"
+                    >
+                      FORGET
+                    </button>
+                  </div>
+                </div>
+                <ng-template #loading>
+                  <div class="text-center">
+                    Loading...
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

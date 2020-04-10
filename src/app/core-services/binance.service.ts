@@ -1,3 +1,4 @@
+import { PaymentSummary } from './../canpay-lib/interfaces'
 import { Injectable, EventEmitter } from '@angular/core'
 import WalletConnect from '@trustwallet/walletconnect'
 import { BehaviorSubject } from 'rxjs'
@@ -5,7 +6,7 @@ import base64js from 'base64-js'
 
 import BncClient, { crypto } from '@binance-chain/javascript-sdk'
 import { environment } from '@env/environment'
-import { formatAtomicCan } from '@util/currency-conversion'
+import { formatAtomicAsset } from '@util/currency-conversion'
 import { AuthService } from '@service/auth.service'
 import { UserService } from '@service/user.service'
 import { LedgerService } from '@service/ledger.service'
@@ -48,7 +49,8 @@ export interface Event {
 
 export interface Transaction {
   to: string
-  amountCan: number
+  symbol: string
+  amountAsset: number
   memo: string
   callbacks?: TransactionCallbacks
 }
@@ -379,6 +381,7 @@ export class BinanceService {
   }
 
   private async initFeeIfNecessary() {
+    console.log('init Fee')
     if (this.sendingFee === 0) {
       try {
         const response = await (await fetch(FEE_API_URL)).json()
@@ -400,7 +403,8 @@ export class BinanceService {
       const canBnbUrl = `${TICKER_API_URL}?symbol=${CAN_TOKEN}_BNB`
       const canResponse = await (await fetch(canBnbUrl)).json()
       const lastCanToBnbPrice = canResponse[0].weightedAvgPrice
-      const bnbUsdPair = (CAN_TOKEN.indexOf('TCAN') >= 0) ? 'BNB_USDT.B-B7C' : 'BNB_BUSD-BD1'
+      const bnbUsdPair =
+        CAN_TOKEN.indexOf('TCAN') >= 0 ? 'BNB_USDT.B-B7C' : 'BNB_BUSD-BD1'
       const bnbUsdUrl = `${TICKER_API_URL}?symbol=${bnbUsdPair}`
       const bnbResponse = await (await fetch(bnbUsdUrl)).json()
       const lastBnbToUsdPrice = bnbResponse[0].weightedAvgPrice
@@ -413,7 +417,33 @@ export class BinanceService {
     }
   }
 
-  async hasEnoughBalance(amountCan: number) {
+  // It returns result in atomic units i.e. 1e-8
+  // TODO:  Combine/Refactor with getUsdtoAtomicCan
+  async getAssetToUsd(assetSymbol: string): Promise<number> {
+    try {
+      let lastAssetToBnbPrice = 1 //1 for BNB
+      if (assetSymbol != 'BNB') {
+        const assetUrl = `${TICKER_API_URL}?symbol=${assetSymbol}_BNB`
+        const assetResponse = await (await fetch(assetUrl)).json()
+        lastAssetToBnbPrice = assetResponse[0].weightedAvgPrice
+      }
+      const bnbUsdPair =
+        CAN_TOKEN.indexOf('TCAN') >= 0 ? 'BNB_USDT.B-B7C' : 'BNB_BUSD-BD1'
+      const bnbUsdUrl = `${TICKER_API_URL}?symbol=${bnbUsdPair}`
+      const bnbResponse = await (await fetch(bnbUsdUrl)).json()
+      const lastBnbToUsdPrice = bnbResponse[0].weightedAvgPrice
+      const assetToUsd = lastAssetToBnbPrice * lastBnbToUsdPrice
+      console.log(assetToUsd)
+
+      return Promise.resolve(assetToUsd)
+    } catch (error) {
+      console.error(error)
+      return Promise.reject(null)
+    }
+  }
+
+  async hasEnoughBalance(amountAsset: number) {
+    console.log('hasEnoughBalance')
     try {
       const { address } = this.connectedWalletDetails
       const balance = await this.client.getBalance(address)
@@ -424,7 +454,8 @@ export class BinanceService {
         balance.find(coin => coin.symbol === CAN_TOKEN).free
       )
       return (
-        availableCan * 1e8 >= amountCan && availableBnb * 1e8 >= this.sendingFee
+        availableCan * 1e8 >= amountAsset &&
+        availableBnb * 1e8 >= this.sendingFee
       )
     } catch (e) {
       // user doesn't have any CAN or BNB at all
@@ -433,15 +464,19 @@ export class BinanceService {
   }
 
   emitTransaction(transaction: Transaction) {
+    console.log('emit tx')
     this.transactionsEmitter.emit(transaction)
   }
 
   private async preconditions(
-    amountCan: number,
+    amountAsset: number,
     onFailure?: (reason?: string) => void
   ): Promise<boolean> {
+    console.log('preconditions')
     await this.initFeeIfNecessary()
-    const hasBalance = await this.hasEnoughBalance(amountCan)
+    //const hasBalance = await this.hasEnoughBalance(amountAsset)
+    const hasBalance = true
+    console.log('has enough: ' + hasBalance)
     if (!hasBalance) {
       onFailure("your wallet doesn't have enough CAN or BNB")
       return false
@@ -450,19 +485,26 @@ export class BinanceService {
   }
 
   async escrowFunds(
-    jobId: string,
-    amountCan: number,
-    providerAddress: string,
+    paymentSummary: PaymentSummary,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
     onFailure?: (reason?: string) => void
   ) {
-    const preconditionsOk = await this.preconditions(amountCan, onFailure)
+    console.log('EscrowFunds')
+
+    const preconditionsOk = await this.preconditions(
+      paymentSummary.jobBudgetAtomic,
+      onFailure
+    )
+    console.log('preconditions OK: ' + preconditionsOk)
     if (!preconditionsOk) {
       return
     }
-    const memo = `ESCROW:${jobId}:${providerAddress}`
+    const memo = `ESCROW:${paymentSummary.job.jobId}:${paymentSummary.job.providerAddress}`
     const to = ESCROW_ADDRESS
+    const symbol = paymentSummary.asset.symbol
+    const amountAsset = paymentSummary.jobBudgetAtomic
+
     const callbacks: TransactionCallbacks = {
       beforeTransaction,
       onSuccess,
@@ -470,10 +512,12 @@ export class BinanceService {
     }
     const transaction: Transaction = {
       to,
-      amountCan,
+      symbol,
+      amountAsset,
       memo,
       callbacks,
     }
+
     this.emitTransaction(transaction)
   }
 
@@ -481,15 +525,17 @@ export class BinanceService {
     jobId: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
-    onFailure?: (reason?: string) => void,
+    onFailure?: (reason?: string) => void
   ) {
-    const amountCan = 1
-    const preconditionsOk = await this.preconditions(amountCan, onFailure)
+    console.log('Release funds')
+    const amountAsset = 1
+    const preconditionsOk = await this.preconditions(amountAsset, onFailure)
     if (!preconditionsOk) {
       return
     }
     const memo = `RELEASE:${jobId}`
     const to = ESCROW_ADDRESS
+    const symbol = 'CAN' /// TODO ---> HOW TO DETERMINE
 
     const callbacks: TransactionCallbacks = {
       beforeTransaction,
@@ -498,7 +544,8 @@ export class BinanceService {
     }
     const transaction: Transaction = {
       to,
-      amountCan,
+      symbol,
+      amountAsset,
       memo,
       callbacks,
     }
@@ -507,7 +554,8 @@ export class BinanceService {
 
   async transactViaLedger(
     to: string,
-    amountCan: number,
+    symbol: string,
+    amountAsset: number,
     memo: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
@@ -527,12 +575,12 @@ export class BinanceService {
         beforeTransaction()
       }
 
-      const adjustedAmount = formatAtomicCan(amountCan)
+      const adjustedAmount = formatAtomicAsset(amountAsset)
       const results = await this.client.transfer(
         address,
         to,
         adjustedAmount,
-        CAN_TOKEN,
+        symbol,
         memo
       )
 
@@ -551,13 +599,15 @@ export class BinanceService {
 
   async transactViaKeystore(
     to: string,
-    amountCan: number,
+    symbol: string,
+    amountAsset: number,
     memo: string,
     password: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
     onFailure?: (reason?: string) => void
   ) {
+    console.log('transact via KeyStore')
     try {
       const privateKey = crypto.getPrivateKeyFromKeyStore(
         this.connectedWalletDetails.keystore,
@@ -569,13 +619,15 @@ export class BinanceService {
         beforeTransaction()
       }
 
-      const adjustedAmount = formatAtomicCan(amountCan)
+      console.log('amountAsset: ' + amountAsset)
+      const adjustedAmount = formatAtomicAsset(amountAsset)
+      console.log('adjustedAmount: ' + amountAsset)
 
       const results = await this.client.transfer(
         address,
         to,
         adjustedAmount,
-        CAN_TOKEN,
+        symbol,
         memo
       )
 
@@ -594,12 +646,14 @@ export class BinanceService {
 
   async transactViaWalletConnect(
     to: string,
-    amountCan: number,
+    symbol: string,
+    amountAsset: number,
     memo: string,
     beforeTransaction?: () => void,
     onSuccess?: () => void,
     onFailure?: (reason?: string) => void
   ) {
+    console.log('transact via WalletConnect')
     const { account } = this.connectedWalletDetails
     const { address } = account
     const tx = {
@@ -610,13 +664,13 @@ export class BinanceService {
       send_order: {},
     }
 
-    const amountStr = amountCan.toString()
+    const amountStr = amountAsset.toString()
     tx.send_order = {
       inputs: [
         {
           address: base64js.fromByteArray(crypto.decodeAddress(address)),
           coins: {
-            denom: CAN_TOKEN,
+            denom: symbol,
             amount: amountStr,
           },
         },
@@ -625,7 +679,7 @@ export class BinanceService {
         {
           address: base64js.fromByteArray(crypto.decodeAddress(to)),
           coins: {
-            denom: CAN_TOKEN,
+            denom: symbol,
             amount: amountStr,
           },
         },
@@ -653,5 +707,19 @@ export class BinanceService {
         onFailure(err.message)
       }
     }
+  }
+
+  async getAssetIconUrl(symbol) {
+    let iconUrl: string
+    if (symbol === 'BNB') {
+      iconUrl =
+        'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info//logo.png'
+    } else {
+      iconUrl =
+        'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/assets/' +
+        symbol +
+        '/logo.png'
+    }
+    return iconUrl
   }
 }

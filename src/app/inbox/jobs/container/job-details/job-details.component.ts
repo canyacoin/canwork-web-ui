@@ -220,23 +220,26 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   }
 
   private releaseEscrow() {
+    console.log('release Escrow')
     if (
       !this.binanceService.isLedgerConnected() &&
       !this.binanceService.isKeystoreConnected() &&
       !this.binanceService.isWalletConnectConnected()
     ) {
-      const routerStateSnapshot = this.router.routerState.snapshot;
-      this.toastr.warning('Connect your wallet to release the payment', '', {timeOut: 2000})
-      this.router.navigate(
-        ['/wallet-bnb'],
-        {queryParams: { returnUrl: routerStateSnapshot.url }},
-      )      
+      const routerStateSnapshot = this.router.routerState.snapshot
+      this.toastr.warning('Connect your wallet to release the payment', '', {
+        timeOut: 2000,
+      })
+      this.router.navigate(['/wallet-bnb'], {
+        queryParams: { returnUrl: routerStateSnapshot.url },
+      })
       return
     }
 
     const jobId = this.job.id
 
     const onSuccess = async () => {
+      console.log('onSuccess')
       const action = new IJobAction(ActionType.acceptFinish, UserType.client)
       this.job.actionLog.push(action)
       this.job.state = JobState.complete
@@ -247,6 +250,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   }
 
   executeAction(action: ActionType) {
+    console.log('executeAction: ' + action)
     switch (action) {
       case ActionType.enterEscrow:
       case ActionType.authoriseEscrow:
@@ -255,16 +259,14 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         })
         break
       case ActionType.acceptFinish:
+        console.log('ActionType.acceptFinish')
         this.releaseEscrow()
-        // TODO remove
-        // this.router.navigate(['../complete'], {
-        //   relativeTo: this.activatedRoute,
-        // })
         break
       case ActionType.cancelJobEarly:
-        this.router.navigate(['../cancel'], { relativeTo: this.activatedRoute })
+        //TODO
         break
       default:
+        console.log('default')
         this.dialogService
           .addDialog(
             ActionDialogComponent,

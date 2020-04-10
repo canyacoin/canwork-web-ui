@@ -24,19 +24,17 @@
         </div>
       </div>
 
-      <div *ngIf="currStep === Step.paymentSummary">
-        <canyalib-payment-summary
-          [amount]="amount"
+      <div *ngIf="showPaymentSummary">
+        <payment-summary
           [paymentSummary]="paymentSummary"
-          [startJob]="startJob"
           [initialisePayment]="initialisePayment"
+          (confirmSuccess)="confirmSuccess()"
           (error)="error($event)"
-          (stepFinished)="stepFinished()"
         >
-        </canyalib-payment-summary>
+        </payment-summary>
       </div>
 
-      <div *ngIf="currStep === Step.confirmation">
+      <div *ngIf="showConfirmation">
         <canyalib-msg-box
           [msg]="confirmationDlg"
           [controls]="confirmationDlg.controls"
@@ -44,7 +42,7 @@
         ></canyalib-msg-box>
       </div>
 
-      <div class="text-right m-30 float-left" *ngIf="showBackButton">
+      <div class="text-right m-30 float-left">
         <button class="btn btn-default" (click)="goBack()">
           <i class="fas fa-arrow-left"></i> BACK
         </button>

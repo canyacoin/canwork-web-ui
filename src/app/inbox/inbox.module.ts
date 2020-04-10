@@ -6,6 +6,7 @@ import { StarRatingModule } from 'angular-star-rating'
 import { BootstrapModalModule } from 'ng2-bootstrap-modal'
 import { OrderModule } from 'ngx-order-pipe'
 import { NgxPaginationModule } from 'ngx-pagination'
+import { ClipboardModule } from 'ngx-clipboard'
 
 import { CoreComponentsModule } from '../core-components/core-components.module'
 import { CoreServicesModule } from '../core-services/core-services.module'
@@ -17,13 +18,13 @@ import { JobDashboardCardComponent } from './jobs/components/job-dashboard-card/
 import { PropertyComponent } from './jobs/components/property/property.component'
 import { StatusIconComponent } from './jobs/components/status-icon/status-icon.component'
 import { ActionDialogComponent } from './jobs/container/action-dialog/action-dialog.component'
-import { CompleteJobComponent } from './jobs/container/complete-job/complete-job.component'
 import { CancelJobComponent } from './jobs/container/cancel-job/cancel-job.component'
 import { EnterEscrowComponent } from './jobs/container/enter-escrow/enter-escrow.component'
 import { JobContainerComponent } from './jobs/container/job-container.component'
 import { JobDetailsComponent } from './jobs/container/job-details/job-details.component'
 import { JobDashboardComponent } from './jobs/dashboard/job-dashboard.component'
 import { PostComponent } from './jobs/post/post.component'
+import { BepAssetPaymentSelectorComponent } from '../bep-asset-payment-selector/bep-asset-payment-selector.component'
 
 @NgModule({
   imports: [
@@ -39,12 +40,12 @@ import { PostComponent } from './jobs/post/post.component'
     ReactiveFormsModule,
     StarRatingModule.forChild(),
     NgxPaginationModule,
+    ClipboardModule,
   ],
   declarations: [
     ActionDialogComponent,
     BudgetComponent,
     ChatComponent,
-    CompleteJobComponent,
     CancelJobComponent,
     EnterEscrowComponent,
     JobContainerComponent,
@@ -54,6 +55,7 @@ import { PostComponent } from './jobs/post/post.component'
     PropertyComponent,
     StatusIconComponent,
     JobDashboardCardComponent,
+    BepAssetPaymentSelectorComponent,
   ],
   entryComponents: [ActionDialogComponent],
   exports: [InboxRoutingModule],

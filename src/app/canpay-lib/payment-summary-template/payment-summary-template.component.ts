@@ -1,52 +1,36 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 
-import { formatAtomicCan } from '@util/currency-conversion'
-
-import {
-  PaymentItem,
-  PaymentItemCurrency,
-  PaymentSummary,
-  Step,
-} from '../interfaces'
+import { BinanceService } from '@service/binance.service'
+import { PaymentSummary } from '../interfaces'
 
 @Component({
-  selector: 'canyalib-payment-summary-template',
+  selector: 'payment-summary-template',
   templateUrl: './payment-summary-template.component.html',
   styleUrls: ['./payment-summary-template.component.scss'],
 })
 export class PaymentSummaryTemplateComponent implements OnInit {
   @Input() paymentSummary: PaymentSummary = null
-  @Input() amount = 0
-  @Input() showBalance = false
-  @Input() balance = 0
 
-  constructor() {}
+  paymentAssetIconURL: string
+  formatAssetJobBudget: string
+
+  constructor(private binanceService: BinanceService) {}
 
   ngOnInit() {
     if (!this.paymentSummary) {
-      this.paymentSummary = {
-        currency: PaymentItemCurrency.can,
-        items: [{ name: 'Transfer', value: this.amount }],
-        total: this.amount,
-      }
+      console.log('No Payment Summary')
     }
-  }
 
-  formatAmount() {
-    return formatAtomicCan(this.amount)
-  }
+    //Get payment asset icon
+    this.binanceService
+      .getAssetIconUrl(this.paymentSummary.asset.symbol)
+      .then(iconURL => {
+        this.paymentAssetIconURL = iconURL
+      })
 
-  get currencyIsUsd() {
-    return this.paymentSummary.currency === PaymentItemCurrency.usd
-  }
-  get currencyIsCan() {
-    return this.paymentSummary.currency === PaymentItemCurrency.can
-  }
-
-  get usdPerCan(): string {
-    if (!this.amount || !this.paymentSummary.total) {
-      return '?'
-    }
-    return (this.paymentSummary.total * 1e8 / this.amount).toPrecision(4).toString()
+    //Format the atomic asset job budget for readability
+    this.formatAssetJobBudget = (
+      this.paymentSummary.jobBudgetAtomic / 1e8
+    ).toPrecision(4)
   }
 }

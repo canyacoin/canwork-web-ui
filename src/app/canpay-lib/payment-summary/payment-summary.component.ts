@@ -2,24 +2,17 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { BinanceService } from '@service/binance.service'
 import { ToastrService } from 'ngx-toastr'
 
-import {
-  PaymentItem,
-  PaymentItemCurrency,
-  PaymentSummary,
-  Step,
-} from '../interfaces'
+import { PaymentSummary } from '../interfaces'
 
 @Component({
-  selector: 'canyalib-payment-summary',
+  selector: 'payment-summary',
   templateUrl: './payment-summary.component.html',
   styleUrls: ['./payment-summary.component.scss'],
 })
 export class PaymentSummaryComponent implements OnInit {
   @Output() error = new EventEmitter()
-  @Output() stepFinished = new EventEmitter()
+  @Output() confirmSuccess = new EventEmitter()
   @Input() paymentSummary: PaymentSummary = null
-  @Input() amount = 0
-  @Input() startJob
   @Input() initialisePayment
 
   isLoading = false
@@ -29,18 +22,25 @@ export class PaymentSummaryComponent implements OnInit {
     private toastr: ToastrService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log('Payment Summary: ')
+    console.log(this.paymentSummary)
+  }
 
   next() {
+    console.log('NEXT')
     const beforeTransaction = () => {
+      console.log('beforeTransaction')
       this.isLoading = true
     }
 
     const onSuccess = () => {
-      this.stepFinished.emit()
+      console.log('onSuccess')
+      this.confirmSuccess.emit()
     }
 
     const onFailure = () => {
+      console.log('onFailure')
       this.isLoading = false
     }
 

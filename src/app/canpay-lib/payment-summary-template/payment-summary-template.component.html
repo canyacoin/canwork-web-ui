@@ -9,22 +9,15 @@
         <i class="fas fa-shopping-cart"></i> Your order summary
       </div>
     </div>
-    <div class="row" *ngFor="let item of paymentSummary.items">
+    <div class="row">
       <div class="col-8 text-left">
-        <span class="fw-600">{{ item.name }}</span>
+        <span class="fw-600">{{ paymentSummary.job.name }}</span>
       </div>
       <div class="col-4 text-right">
         <span>
-          {{ item.value }}
-          <img
-            *ngIf="currencyIsCan"
-            src="assets/img/canya-media-coin.png"
-            width="12px"
-            height="12px"
-            alt="CanYa"
-          />
+          $ {{ paymentSummary.job.usdValue }}
           <span class="fs-12">
-            {{ paymentSummary.currency }}
+            {{ paymentSummary.assetsymbol }}
           </span>
         </span>
       </div>
@@ -36,34 +29,30 @@
       </div>
       <div class="col-4 text-right">
         <span>
-          <span class="fw-500 fs-20">{{ paymentSummary.total }} </span>
-          <img
-            *ngIf="currencyIsCan"
-            src="assets/img/canya-media-coin.png"
-            width="12px"
-            height="12px"
-            alt="CanYa"
-          />
+          <span class="fw-500 fs-20">$ {{ paymentSummary.job.usdValue }} </span>
           <span class="fs-12">
-            {{ paymentSummary.currency }}
+            USD
           </span>
         </span>
       </div>
     </div>
-    <div class="row" *ngIf="currencyIsUsd">
+    <div class="row">
       <div class="col-8 text-left">
-        <span class="fw-400">1 CAN = {{ usdPerCan }}</span>
+        <span class="fw-400"
+          >{{ paymentSummary.asset.symbol }} = $
+          {{ paymentSummary.asset.usdPrice | number: '1.3-3' }}</span
+        >
       </div>
       <div class="col-4 text-right">
-        <span class="fw-500 fs-20">{{ formatAmount() }} </span>
+        <span class="fw-500 fs-20">{{ this.formatAssetJobBudget }} </span>
         <span class="fs-12">
           <img
-            src="assets/img/canya-media-coin.png"
-            width="12px"
-            height="12px"
-            alt="CanYa"
+            src="{{ this.paymentAssetIconURL }}"
+            width="14px"
+            height="14px"
+            alt="{{ paymentSummary.asset.symbol }}"
           />
-          CAN
+          {{ paymentSummary.asset.symbol }}
         </span>
       </div>
     </div>
@@ -73,24 +62,6 @@
       </div>
       <div class="col-4 text-right">
         <span class="fw-500 fs-20">{{ balance }} </span>
-        <span class="fs-12">
-          <img
-            src="assets/img/canya-media-coin.png"
-            width="12px"
-            height="12px"
-            alt="CanYa"
-          />
-          CAN
-        </span>
-      </div>
-    </div>
-    <hr *ngIf="showBalance" class="mb-5 mt-20" />
-    <div class="row" *ngIf="showBalance">
-      <div class="col-8 text-left">
-        <span class="fw-600">You will need to purchase</span>
-      </div>
-      <div class="col-4 text-right">
-        <span class="fw-500 fs-20">{{ amount - balance }} </span>
         <span class="fs-12">
           <img
             src="assets/img/canya-media-coin.png"
