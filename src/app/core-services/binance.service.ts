@@ -442,19 +442,18 @@ export class BinanceService {
     }
   }
 
-  async hasEnoughBalance(amountAsset: number) {
-    console.log('hasEnoughBalance')
+  async hasEnoughBalance(amountAsset: number, symbol: string) {
     try {
       const { address } = this.connectedWalletDetails
       const balance = await this.client.getBalance(address)
       const availableBnb = Number.parseFloat(
         balance.find(coin => coin.symbol === 'BNB').free
       )
-      const availableCan = Number.parseFloat(
-        balance.find(coin => coin.symbol === CAN_TOKEN).free
+      const availableAsset = Number.parseFloat(
+        balance.find(coin => coin.symbol === symbol).free
       )
       return (
-        availableCan * 1e8 >= amountAsset &&
+        availableAsset * 1e8 >= amountAsset &&
         availableBnb * 1e8 >= this.sendingFee
       )
     } catch (e) {
@@ -470,15 +469,15 @@ export class BinanceService {
 
   private async preconditions(
     amountAsset: number,
+    symbol: string,
     onFailure?: (reason?: string) => void
   ): Promise<boolean> {
     console.log('preconditions')
     await this.initFeeIfNecessary()
-    //const hasBalance = await this.hasEnoughBalance(amountAsset)
-    const hasBalance = true
+    const hasBalance = await this.hasEnoughBalance(amountAsset, symbol)
     console.log('has enough: ' + hasBalance)
     if (!hasBalance) {
-      onFailure("your wallet doesn't have enough CAN or BNB")
+      onFailure("your wallet doesn't have enough " + symbol + ' or BNB')
       return false
     }
     return true
@@ -494,6 +493,7 @@ export class BinanceService {
 
     const preconditionsOk = await this.preconditions(
       paymentSummary.jobBudgetAtomic,
+      paymentSummary.asset.symbol,
       onFailure
     )
     console.log('preconditions OK: ' + preconditionsOk)
@@ -528,14 +528,18 @@ export class BinanceService {
     onFailure?: (reason?: string) => void
   ) {
     console.log('Release funds')
-    const amountAsset = 1
-    const preconditionsOk = await this.preconditions(amountAsset, onFailure)
+    const amountAsset = 1 // This is negligible 1e-8 (0.00000001), used as tx amount for RELEASE command to escrow
+    const symbol = 'BNB' // Release command tx amount (1e-8) is made in BNB
+    const preconditionsOk = await this.preconditions(
+      amountAsset,
+      symbol,
+      onFailure
+    )
     if (!preconditionsOk) {
       return
     }
     const memo = `RELEASE:${jobId}`
     const to = ESCROW_ADDRESS
-    const symbol = 'CAN' /// TODO ---> HOW TO DETERMINE
 
     const callbacks: TransactionCallbacks = {
       beforeTransaction,
