@@ -1,7 +1,7 @@
 import { firestore } from 'firebase-admin'
 import fetch from 'node-fetch'
 
-import { environment } from '../../src/environments/environment'
+// import { environment } from '../../src/environments/environment'
 import { ActionType } from './job-action-type'
 
 export interface Escrow {
@@ -56,7 +56,9 @@ export interface Transaction {
   hash: string
 }
 
-const BEPESCROW_API_URL = `${environment.binance.escrowUrl}/jobs`
+// TODO cannot use environment - find a solution
+// const BEPESCROW_API_URL = `${environment.binance.escrowUrl}/jobs`
+const BEPESCROW_API_URL = 'https://bep-escrow.herokupp.com/jobs'
 
 const mapEventToActionType = {
   ESCROW: ActionType.enterEscrow,
