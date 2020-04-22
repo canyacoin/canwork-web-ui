@@ -1,8 +1,7 @@
-import { BEPESCROW_JOB_API_URL } from './../../src/app/core-services/transaction.service'
 import { firestore } from 'firebase-admin'
 import fetch from 'node-fetch'
 
-import { environment } from '../../src/environments/environment'
+// import { environment } from '../../src/environments/environment'
 import { ActionType } from './job-action-type'
 
 export interface Escrow {
@@ -57,8 +56,9 @@ export interface Transaction {
   hash: string
 }
 
-const BEPESCROW_API_URL = `${environment.binance.escrowUrl}/jobs`
-//const BEPESCROW_API_URL = 'https://bep-escrow.herokupp.com/jobs'
+// TODO cannot use environment - find a solution
+// const BEPESCROW_API_URL = `${environment.binance.escrowUrl}/jobs`
+const BEPESCROW_API_URL = 'https://bep-escrow.herokupp.com/jobs'
 
 const mapEventToActionType = {
   ESCROW: ActionType.enterEscrow,
@@ -68,8 +68,6 @@ const mapEventToActionType = {
 }
 
 function createTx(jobId: string, event: Event): Transaction {
-  console.log('createTx')
-  console.log(jobId)
   const actionType = mapEventToActionType[event.event]
   if (!actionType) {
     throw new Error(
@@ -85,9 +83,6 @@ function createTx(jobId: string, event: Event): Transaction {
 }
 
 export const bepescrowMonitor = (db: firestore.Firestore) => async () => {
-  console.log('bepEscrowMonitor')
-  console.log(BEPESCROW_API_URL)
-  console.log(BEPESCROW_JOB_API_URL)
   const resp = await fetch(BEPESCROW_API_URL)
   const result: Result = await resp.json()
 
