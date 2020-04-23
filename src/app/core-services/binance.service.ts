@@ -422,16 +422,20 @@ export class BinanceService {
   async getAssetToUsd(assetSymbol: string): Promise<number> {
     try {
       let lastAssetToBnbPrice = 1 //1 for BNB
+      // Get's the last weighted average price for the given asset_BNB pair
       if (assetSymbol != 'BNB') {
         const assetUrl = `${TICKER_API_URL}?symbol=${assetSymbol}_BNB`
         const assetResponse = await (await fetch(assetUrl)).json()
         lastAssetToBnbPrice = assetResponse[0].weightedAvgPrice
       }
+      // Get's the last weighted average price for the BNB_BUSD pair
       const bnbUsdPair =
-        CAN_TOKEN.indexOf('TCAN') >= 0 ? 'BNB_USDT.B-B7C' : 'BNB_BUSD-BD1'
+        CAN_TOKEN.indexOf('TCAN') >= 0 ? 'BNB_USDT.B-B7C' : 'BNB_BUSD-BD1' //selects correct BUSD pair for testnet or mainnet
       const bnbUsdUrl = `${TICKER_API_URL}?symbol=${bnbUsdPair}`
       const bnbResponse = await (await fetch(bnbUsdUrl)).json()
       const lastBnbToUsdPrice = bnbResponse[0].weightedAvgPrice
+
+      // Calculates & returns the asset to USD price
       const assetToUsd = lastAssetToBnbPrice * lastBnbToUsdPrice
       console.log(assetToUsd)
 
