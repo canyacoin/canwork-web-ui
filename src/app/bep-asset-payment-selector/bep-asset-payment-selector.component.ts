@@ -72,12 +72,12 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
     console.log('Getting available balances...')
     let availableAssets = []
     let hasEnough: boolean
-    let usdPrice = 0
 
     for (const balance of balances) {
+      let usdPrice = 0
       // Get weighted avg USD price of each asset
       try {
-        const usdPrice = await this.binanceService.getAssetToUsd(balance.symbol)
+        usdPrice = await this.binanceService.getAssetToUsd(balance.symbol)
         console.log(balance.symbol + ' usdPrice: ' + usdPrice)
       } catch (error) {
         console.error(error)
