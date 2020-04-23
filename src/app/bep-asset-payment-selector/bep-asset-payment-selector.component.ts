@@ -74,9 +74,15 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
     let hasEnough: boolean
 
     for (const balance of balances) {
+      let usdPrice = 0
       // Get weighted avg USD price of each asset
-      const usdPrice = await this.binanceService.getAssetToUsd(balance.symbol)
-      console.log(balance.symbol + ' usdPrice: ' + usdPrice)
+      try {
+        usdPrice = await this.binanceService.getAssetToUsd(balance.symbol)
+        console.log(balance.symbol + ' usdPrice: ' + usdPrice)
+      } catch (error) {
+        console.error(error)
+        usdPrice = 0
+      }
 
       // Calculate USD value of each asset's free balance
       const freeAssetToUsd = Number((balance.free * usdPrice).toPrecision(8))
