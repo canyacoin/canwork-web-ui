@@ -27,7 +27,7 @@
 
 <div *ngIf="!loading && showAssetSelection" class="container">
   <app-bep-asset-payment-selector
-    [jobBudgetUsd]="totalJobBudgetUsd"
+    [jobBudgetUsd]="jobBudgetUsd"
     (bepAssetData)="assetDataHandler.asset($event)"
   ></app-bep-asset-payment-selector>
 </div>
