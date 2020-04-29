@@ -85,7 +85,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
           this.currentUser.address === job.providerId
         if (this.isPartOfJob) {
           this.job = new Job(job)
-          this.transactionTypeService(this.job.fiatPayment, jobId)
+          this.transactionTypeService(jobId)
           this.currentUserType =
             this.currentUser.address === job.clientId
               ? UserType.client
@@ -110,18 +110,13 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private transactionTypeService(fiatPayment, jobId): any {
-    if (fiatPayment) {
-      //TODO:  Cleanup
-    } else {
-      this.transactionsSub = this.transactionService
-        .getTransactionsByJob(jobId)
-        .subscribe((transactions: Transaction[]) => {
-          this.transactions = transactions
-        })
-    }
+  private transactionTypeService(jobId): any {
+    this.transactionsSub = this.transactionService
+      .getTransactionsByJob(jobId)
+      .subscribe((transactions: Transaction[]) => {
+        this.transactions = transactions
+      })
   }
-
   actionIsDisabled(action: ActionType): boolean {
     switch (action) {
       case ActionType.dispute:
