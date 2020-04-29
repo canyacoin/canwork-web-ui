@@ -6,8 +6,8 @@ export enum ActionType {
   acceptTerms = 'Accept terms', // both sides
   authoriseEscrow = 'Authorise escrow', // notifies provider
   authoriseEscrowFailed = 'Authorise escrow failed', // notifies provider about failed tx
-  enterEscrow = 'Send CAN to escrow', // notifies provider
-  enterEscrowFailed = 'Send CAN to escrow failed', // notifies provider about failed tx
+  enterEscrow = 'Send tokens to escrow', // notifies provider
+  enterEscrowFailed = 'Send tokens to escrow failed', // notifies provider about failed tx
   addMessage = 'Add Note', // both sides
   finishedJob = 'Mark as complete', // notifies client
   acceptFinish = 'Complete job', // notifies provider

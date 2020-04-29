@@ -137,7 +137,7 @@ export enum ActionType {
   counterOffer = 'Counter offer',
   acceptTerms = 'Accept terms',
   authoriseEscrow = 'Authorise escrow',
-  enterEscrow = 'Send CAN to escrow',
+  enterEscrow = 'Send tokens to escrow',
   addMessage = 'Add Note',
   finishedJob = 'Mark as complete',
   acceptFinish = 'Complete job',
