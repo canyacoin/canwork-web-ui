@@ -39,7 +39,7 @@
                   *ngIf="job.information.description.length > 80"
                   (click)="toggleDescription()"
                 >
-                  ...<br />Show more
+                  Show more...
                 </a>
               </div>
             </span>
@@ -54,7 +54,7 @@
                   *ngIf="job.information.description.length > 80"
                   (click)="toggleDescription()"
                 >
-                  Show less
+                  Show less...
                 </a>
               </div>
             </span>
@@ -124,7 +124,7 @@
             {{ job.paymentType }}
           </b>
           <p>
-            This project is set at a {{ job.paymentType }}
+            This project is set at a {{ job.paymentType.toLowerCase() }}
             <br />
             <app-budget [job]="job"></app-budget>
           </p>

@@ -143,9 +143,8 @@
               USD</b
             >
             <p>
-              This project is set at a {{ job.paymentType }}<br />{{
-                job.information.weeklyCommitment
-              }}
+              This project is set at a {{ job.paymentType.toLowerCase()
+              }}<br />{{ job.information.weeklyCommitment }}
               hours per week, over
               {{ job.information.timelineExpectation }} period.
             </p>

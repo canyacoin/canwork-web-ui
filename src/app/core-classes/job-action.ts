@@ -97,14 +97,19 @@ export class IJobAction {
   getMessage(executor?: string): string {
     switch (this.type) {
       case ActionType.createJob:
+        if (this.weeklyCommitment > 1) {
+          var hoursplural = 'hours'
+        } else {
+          var hoursplural = 'hour'
+        }
         return `Job created by ${executor}.<br>
-          Proposed ${
-            this.amountUsd
-              ? `budget at $${this.amountUsd}${this.paymentTypeString} USD`
-              : ''
-          }
-          for ${this.weeklyCommitment} hours a week
-          for ${this.timelineExpectation}`
+            Proposed ${
+              this.amountUsd
+                ? `budget of $${this.amountUsd}${this.paymentTypeString} USD`
+                : ''
+            }
+            for ${this.weeklyCommitment} ${hoursplural} per week
+            over a period of ${this.timelineExpectation.toLowerCase()}`
       case ActionType.counterOffer:
         return `${executor} proposed a counter offer.<br>
           Proposed budget at $${this.amountUsd}${this.paymentTypeString}) USD`
