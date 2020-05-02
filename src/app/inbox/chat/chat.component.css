@@ -394,6 +394,30 @@
   padding: 7px;
 }
 
+.send-btn-chat {
+  background-color: #33ccff;
+  border: 0px solid transparent;
+  color: #ffffff;
+}
+
+.btn-container {
+  background-color: rgba(0, 0, 0, 0);
+  padding: 5px 0 5px 0;
+}
+
+.input-group {
+  display: block;
+}
+
+.input-group .form-control {
+  width: 100%;
+}
+
+.dropdown.dropup {
+  text-align: right;
+  margin-right: 5px;
+}
+
 .icon-request {
   opacity: 1;
   width: 24px;
