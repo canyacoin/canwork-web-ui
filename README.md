@@ -10,7 +10,7 @@
 
 This is an Angular Project, generated using [Angular CLI](https://github.com/angular/angular-cli)
 
-[![pipeline status](https://gitlab.com/canya-com/canwork/web-ui/badges/master/pipeline.svg)]
+[![pipeline status](https://gitlab.com/canyacoin/canwork/web-ui/badges/master/pipeline.svg)]
 
 _This project requires_
 
@@ -46,7 +46,7 @@ brew install yarn
 Git
 
 ```
-git clone git@gitlab.com:canya-com/canwork/web-ui.git
+git clone git@gitlab.com:canyacoin/canwork/web-ui.git
 cd web-ui
 git checkout -b "yourname"
 ```
