@@ -133,12 +133,7 @@ export class PostComponent implements OnInit, OnDestroy {
       workType: ['', Validators.compose([Validators.required])],
       timelineExpectation: ['', Validators.compose([Validators.required])],
       weeklyCommitment: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.min(1),
-          Validators.max(60),
-        ]),
+        ''
       ],
       paymentType: ['Fixed price', Validators.compose([Validators.required])], // Please remove 'Fixed price' once the 'hourly rate' workflow is ready!
       budget: [
@@ -202,12 +197,7 @@ export class PostComponent implements OnInit, OnDestroy {
         ]),
       ],
       weeklyCommitment: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.min(1),
-          Validators.max(60),
-        ]),
+        ''
       ],
       terms: [false, Validators.requiredTrue],
     })
