@@ -239,7 +239,10 @@ export class PostComponent implements OnInit, OnDestroy {
         )
         this.shareableJobForm.controls['workType'].patchValue(
           'Ongoing'
-        )        
+        )
+        this.shareableJobForm.controls[
+          'timelineExpectation'
+        ].patchValue('Up to 1 Year')        
         if (!this.postToProvider) this.pageLoaded = true
       } else {
         this.jobId = this.activatedRoute.snapshot.params['jobId']
