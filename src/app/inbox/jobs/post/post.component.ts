@@ -238,7 +238,7 @@ export class PostComponent implements OnInit, OnDestroy {
           'Ready'
         )
         this.shareableJobForm.controls['workType'].patchValue(
-          'Ongoing'
+          'One off'
         )
         this.shareableJobForm.controls[
           'timelineExpectation'
