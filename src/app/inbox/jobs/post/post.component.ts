@@ -234,6 +234,12 @@ export class PostComponent implements OnInit, OnDestroy {
       })
       if (!this.editing) {
         this.jobId = GenerateGuid()
+        this.shareableJobForm.controls['initialStage'].patchValue(
+          'Ready'
+        )
+        this.shareableJobForm.controls['workType'].patchValue(
+          'Ongoing'
+        )        
         if (!this.postToProvider) this.pageLoaded = true
       } else {
         this.jobId = this.activatedRoute.snapshot.params['jobId']
