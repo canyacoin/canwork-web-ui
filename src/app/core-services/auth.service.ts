@@ -33,7 +33,7 @@ export class AuthService {
   }
 
   isAuthenticated() {
-    return this.afAuth.auth.currentUser !== null
+    return this.currentUser.value !== null
   }
 
   async isAuthenticatedAndNoAddress(): Promise<boolean> {
