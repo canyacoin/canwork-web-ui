@@ -13,6 +13,7 @@ export class PaymentSummaryTemplateComponent implements OnInit {
 
   paymentAssetIconURL: string
   formatAssetJobBudget: string
+  assetSymbolShort: string
 
   constructor(private binanceService: BinanceService) {}
 
@@ -20,7 +21,8 @@ export class PaymentSummaryTemplateComponent implements OnInit {
     if (!this.paymentSummary) {
       console.log('No Payment Summary')
     }
-
+    let splittedSymbol = this.paymentSummary.asset.symbol.split("-");
+    this.assetSymbolShort = (splittedSymbol.length > 1) ? splittedSymbol[0] : this.paymentSummary.asset.symbol
     //Get payment asset icon
     this.binanceService
       .getAssetIconUrl(this.paymentSummary.asset.symbol)

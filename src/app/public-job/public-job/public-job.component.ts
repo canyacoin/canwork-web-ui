@@ -92,7 +92,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
         this.jobSub = this.publicJobsService
           .getPublicJobBySlug(params['slug'])
           .subscribe(publicJob => {
-            console.log(publicJob === null)
+            //console.log(publicJob === null)
             if (publicJob === null) {
               this.jobExists = false
               this.canSee = false
