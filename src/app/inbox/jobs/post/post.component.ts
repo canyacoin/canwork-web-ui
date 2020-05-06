@@ -124,8 +124,6 @@ export class PostComponent implements OnInit, OnDestroy {
       skills: [
         '',
         Validators.compose([
-          Validators.required,
-          Validators.minLength(1),
           Validators.maxLength(100),
         ]),
       ],
@@ -167,8 +165,6 @@ export class PostComponent implements OnInit, OnDestroy {
       skills: [
         '',
         Validators.compose([
-          Validators.required,
-          Validators.minLength(1),
           Validators.maxLength(100),
         ]),
       ],
@@ -222,6 +218,7 @@ export class PostComponent implements OnInit, OnDestroy {
           this.isShareable = true
         }
       })
+      console.log(this.recipientAddress)
       if (!this.editing) {
         this.jobId = GenerateGuid()
         this.shareableJobForm.controls['initialStage'].patchValue(
@@ -232,7 +229,16 @@ export class PostComponent implements OnInit, OnDestroy {
         )
         this.shareableJobForm.controls[
           'timelineExpectation'
-        ].patchValue('Up to 1 Year')        
+        ].patchValue('Up to 1 Year')
+        this.postForm.controls['initialStage'].patchValue(
+          'Ready'
+        )
+        this.postForm.controls['workType'].patchValue(
+          'One off'
+        )
+        this.postForm.controls[
+          'timelineExpectation'
+        ].patchValue('Up to 1 Year')           
         if (!this.postToProvider) this.pageLoaded = true
       } else {
         this.jobId = this.activatedRoute.snapshot.params['jobId']
