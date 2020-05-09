@@ -20,15 +20,14 @@
 }
 
 .decline-btn {
-  position: absolute;
   bottom: 35px;
   right: 15px;
 }
 
 .accept-btn {
-  position: absolute;
+  position: relative;
   bottom: 0;
-  right: 15px;
+  right: 0px;
 }
 
 @media screen and (max-width: 640px) {
