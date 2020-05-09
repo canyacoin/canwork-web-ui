@@ -137,6 +137,11 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       // call endpoint?
       this.router.navigate(['/inbox/job', this.job.id])
     }
+    
+    const onBackFromSummary = async () => {
+      this.router.navigateByUrl('/inbox/job/'+ this.job.id, {skipLocationChange: true}).then(()=>
+        this.router.navigate(['/inbox/job/'+ this.job.id+ '/enter-escrow']));      
+    }    
 
     const startJob = async () => {
       const action = new IJobAction(ActionType.enterEscrow, UserType.client)
@@ -193,7 +198,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       successText: 'Escrow success, job started!',
       paymentSummary: paymentSummary,
       complete: onComplete,
-      cancel: onComplete,
+      cancel: onBackFromSummary,
       initialisePayment,
     }
   }
