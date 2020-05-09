@@ -1,5 +1,6 @@
 import { Location } from '@angular/common'
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { Router } from '@angular/router'
 import { BinanceService, EventType } from '@service/binance.service'
 import { BehaviorSubject } from 'rxjs'
 import { sortBy, prop } from 'ramda'
@@ -26,6 +27,7 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
 
   constructor(
     private location: Location,
+    private router: Router,
     private binanceService: BinanceService
   ) {
     super()
