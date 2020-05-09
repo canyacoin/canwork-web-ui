@@ -85,7 +85,7 @@
                     </div>
 
                     <div class="form-group">
-                      <label>Key skills required</label>
+                      <label>Key skills required *</label>
                       <app-skill-tags-selection
                         (tagsUpdated)="skillTagsUpdated($event)"
                         [minimumTags]="1"
@@ -535,7 +535,7 @@
 
                     <div class="form-group" *ngIf="!editing">
                       <div class="col-12">
-                        <label>Key skills required</label>
+                        <label>Key skills required *</label>
                         <app-skill-tags-selection
                           (tagsUpdated)="skillTagsUpdated($event)"
                           [minimumTags]="1"
