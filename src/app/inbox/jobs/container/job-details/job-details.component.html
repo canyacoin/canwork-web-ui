@@ -134,7 +134,7 @@
             *ngFor="let action of availableActions"
             class="btn action-btn mt-5 mr-5 btn-{{
               getColour(action)
-            }} btn-outline btn-sm"
+            }} btn-outline btn-sm {{ action.replace(' ', '-').toLowerCase() }}"
             (click)="executeAction(action)"
             [disabled]="actionIsDisabled(action)"
           >
