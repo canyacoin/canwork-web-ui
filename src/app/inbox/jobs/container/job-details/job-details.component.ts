@@ -119,7 +119,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   }
   actionIsDisabled(action: ActionType): boolean {
     switch (action) {
-      case ActionType.dispute:
       case ActionType.cancelJobEarly:
         return true
       case ActionType.review:
@@ -259,6 +258,24 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         break
       case ActionType.cancelJobEarly:
         //TODO
+        break
+      case ActionType.dispute:
+        console.log('ActionType.dispute')
+        this.dialogService
+          .addDialog(
+            ActionDialogComponent,
+            new ActionDialogOptions({
+              job: this.job,
+              userType: this.currentUserType,
+              otherParty: this.job['otherParty']['name'] || 'the other party',
+              actionType: action,
+            })
+          )
+          .subscribe(success => {
+            if (!success) {
+              console.log('Action cancelled')
+            }
+          })
         break
       default:
         console.log('default')

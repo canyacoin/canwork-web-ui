@@ -1,4 +1,6 @@
+import { Location } from '@angular/common'
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { Router } from '@angular/router'
 import { BinanceService, EventType } from '@service/binance.service'
 import { BehaviorSubject } from 'rxjs'
 import { sortBy, prop } from 'ramda'
@@ -23,7 +25,11 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
   explorer = environment.binance.explorer
   loading = true
 
-  constructor(private binanceService: BinanceService) {
+  constructor(
+    private location: Location,
+    private router: Router,
+    private binanceService: BinanceService
+  ) {
     super()
   }
 
@@ -115,5 +121,13 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
     }
 
     this.bepAssetData.emit(assetData)
+  }
+
+  goBack() {
+    if ((<any>window).history.length > 0) {
+      this.location.back()
+    } else {
+      this.router.navigate(['/home'])
+    }
   }
 }
