@@ -124,6 +124,8 @@ export class PostComponent implements OnInit, OnDestroy {
       skills: [
         '',
         Validators.compose([
+          Validators.required,
+          Validators.minLength(1),
           Validators.maxLength(100),
         ]),
       ],
@@ -165,6 +167,8 @@ export class PostComponent implements OnInit, OnDestroy {
       skills: [
         '',
         Validators.compose([
+          Validators.required,
+          Validators.minLength(1),
           Validators.maxLength(100),
         ]),
       ],
