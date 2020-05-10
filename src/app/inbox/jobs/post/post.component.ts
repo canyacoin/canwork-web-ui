@@ -20,7 +20,6 @@ import { ToastrService } from 'ngx-toastr'
 import { PublicJobService } from '@service/public-job.service'
 import { UploadService } from '@service/upload.service'
 import { UserService } from '@service/user.service'
-import { getUsdToCan } from '@util/currency-conversion'
 import { GenerateGuid } from '@util/generate.uid'
 import * as _ from 'lodash'
 import { Subscription } from 'rxjs'
@@ -324,10 +323,6 @@ export class PostComponent implements OnInit, OnDestroy {
     if (deadline < today) return {pastDueDate: true};
 
     return null;
-  }  
-
-  usdToCan(usd: number) {
-    return getUsdToCan(this.usdToAtomicCan, usd)
   }
 
   detectFiles(event) {
