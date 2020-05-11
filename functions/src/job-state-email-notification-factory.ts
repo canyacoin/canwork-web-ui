@@ -2,15 +2,13 @@ import { ActionType } from './job-action-type'
 import { UserType } from './user-type'
 
 const sgMail = require('@sendgrid/mail')
-const replyToName = 'CanWork - No Reply'
-const replyToEmail = 'noreply@canya.com'
+const replyTo = 'CanWork - No Reply <noreply@canya.com>'
 /*
  * Interfaces
  */
 interface EmailMessage {
   to: string
   from?: string
-  fromname?: string
   subject: string
   title: string
   bodyHtml: string
@@ -59,8 +57,7 @@ abstract class AEmailNotification implements IJobStateEmailNotification {
       sgMail.send(
         {
           to: emailMessage.to,
-          from: replyToEmail,
-          fromname: replyToName,
+          from: replyTo,
           subject: emailMessage.subject,
           html: emailMessage.bodyHtml,
           substitutions: {
@@ -163,8 +160,7 @@ class ProviderJobRequestNotification extends AEmailNotification {
     const title = `You have a work request from ${this.clientData.name}`
     this.emailMessages.push({
       to: this.providerData.email,
-      from: replyToEmail,
-      fromname: replyToName,
+      from: replyTo,
       subject: title,
       title: title,
       bodyHtml: `
