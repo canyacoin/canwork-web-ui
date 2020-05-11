@@ -63,7 +63,7 @@ export class Job {
       case JobState.authorisedEscrow:
         return 'The escrow has been authorised by the client, they can now send the funds to escrow.'
       case JobState.inEscrow:
-        return 'The funds has been deposited in the escrow! you can now commence the job.'
+        return 'The funds have been deposited in the escrow! You can now commence the job.'
       case JobState.reviewed:
         return 'Both parties have completed the job, and a review has been left for the provider!'
       default:
