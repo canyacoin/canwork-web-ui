@@ -3,7 +3,9 @@
     <div class="container text-center">
       <div class="card px-30 py-15 my-10">
         <h2>Choose your payment method</h2>
-        <p>Job Value: ${{ jobBudgetUsd | number: '1.2-2' }} USD</p>
+        <p class="fw-500" style="font-size:0.875rem">
+          Job Value: $ {{ jobBudgetUsd | number: '1.2-2' }} USD
+        </p>
         <div *ngIf="address" class="row">
           <div class="col text-center">
             <a
@@ -71,8 +73,7 @@
                     <button
                       (click)="goBack()"
                       border-64
-                      class="btn btn-sm btn-warning"
-                      style="border: 2px solid #ffbe00; background: #fff; color: #ffbe00;"
+                      class="btn btn-sm btn-danger btn-outline"
                     >
                       CANCEL
                     </button>
