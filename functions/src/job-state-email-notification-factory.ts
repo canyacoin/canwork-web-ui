@@ -9,6 +9,8 @@ const replyToEmail = 'noreply@canya.com'
  */
 interface EmailMessage {
   to: string
+  from: string
+  fromname: string
   subject: string
   title: string
   bodyHtml: string
