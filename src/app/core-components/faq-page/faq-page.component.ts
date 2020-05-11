@@ -44,9 +44,9 @@ export class FaqPageComponent implements OnInit {
     },
     {
       index: 'q-7',
-      q: 'Why do I have to use CAN?',
+      q: 'Do I have to use CAN?',
       a:
-        'The CAN token is the only accepted token for now.   In early 2020, CanWork will accept all Binance Chain (BEP2) assets.',
+        'No. As a client you can pay in most Binance Chain (BEP2) assets.  Providers are always paid in CAN',
     },
     {
       index: 'q-8',
@@ -76,13 +76,13 @@ export class FaqPageComponent implements OnInit {
       index: 'q-12',
       q: 'What happens if crypto price changes?',
       a:
-        'Our escrow service is hedged and mitigates against market volatility. If you’ve quoted, for example, $500 USD in CAN tokens for a job, you will receive the same value of $500 USD in CAN upon completing the job regardless of changes in CanYaCoin price.',
+        'Our escrow service is hedged and mitigates potential market volatility. If you’ve quoted, for example, $500 USD in tokens for a job, you will receive the same value of $500 USD in CAN upon completing the job regardless of changes in CanYaCoin price.',
     },
     {
       index: 'q-13',
       q: 'How do I buy CAN?',
       a:
-        'You can buy CAN through the Binance DEX https://binance.org. CanWork will soon support all BEP2 assets, not just CAN',
+        'You can buy CAN through the Binance DEX https://binance.org. However, CanWork accepts payments in  most BEP2 assets, not just CAN',
     },
     {
       index: 'q-14',
@@ -94,7 +94,7 @@ export class FaqPageComponent implements OnInit {
       index: 'q-15',
       q: 'How do I get paid?',
       a:
-        'When you accept or issue a contract, the money moves into escrow. While in the escrow account the amount can not be changed without consent from both parties. Once a job is completed and both parties are happy, the money will be release and sent to you.',
+        'You get paid in $CAN, as soon as the job is completed and accepted by the Client.  When you accept or issue a contract, the money moves into escrow. While in the escrow account the amount can not be changed without consent from both parties. Once a job is completed and both parties are happy, the money will be release and sent to you.',
     },
     {
       index: 'q-16',
