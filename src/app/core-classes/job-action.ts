@@ -129,7 +129,7 @@ export class IJobAction {
       case ActionType.cancelJobEarly:
         return `${executor} cancelled the job early.`
       case ActionType.enterEscrow:
-        return `${executor} transfer funds to CanWork escrow.<br>
+        return `${executor} sent tokens to CanWork escrow.<br>
               When the job is succesfully delivered, ${executor} will release the funds to the Provider.`
       default:
         return `Job action: ${this.type}, by ${executor}`
