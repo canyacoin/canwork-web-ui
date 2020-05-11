@@ -76,7 +76,7 @@ export class IJobAction {
       case ActionType.acceptTerms:
         return 'Are you sure?'
       case ActionType.authoriseEscrow:
-        return 'You are about to pay the agreed amount of CAN to the escrow. Are you sure?'
+        return 'You are about to pay the agreed amount of tokens to the escrow. Are you sure?'
       case ActionType.enterEscrow:
         return 'This will create a relationship between the provider address and your address in the escrow contract.'
       case ActionType.addMessage:
@@ -129,8 +129,8 @@ export class IJobAction {
       case ActionType.cancelJobEarly:
         return `${executor} cancelled the job early.`
       case ActionType.enterEscrow:
-        return `${executor} registered this job in the Escrow contract.<br>
-              When the job is succesfully delivered, ${executor} will release the funds stored in the contract.`
+        return `${executor} transfer funds to CanWork escrow.<br>
+              When the job is succesfully delivered, ${executor} will release the funds to the Provider.`
       default:
         return `Job action: ${this.type}, by ${executor}`
     }
