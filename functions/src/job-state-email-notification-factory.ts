@@ -368,10 +368,10 @@ class FinishedJobNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${this.clientData.name},<br>
+      Hi ${this.clientData.name},<br>
       ${this.providerData.name} has marked the job:
       "${this.jobData.information.title}" as finished.
-      Login to CanWork to review this job.`,
+      Login to CanWork to complete the job and release the funds from escrow.`,
     })
     console.log('+ dump emailMessages:', this.emailMessages)
   }
@@ -399,7 +399,7 @@ class AcceptFinishNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${this.providerData.name},<br>
+      Hi ${this.providerData.name},<br>
       ${this.clientData.name} has marked the job:
       "${this.jobData.information.title}"
       as complete, the funds are now in your wallet.`,
