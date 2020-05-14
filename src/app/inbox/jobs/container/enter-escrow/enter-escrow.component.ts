@@ -150,7 +150,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
 
     const startJob = async () => {
       const action = new IJobAction(ActionType.enterEscrow, UserType.client)
-      this.job.actionLog.push(action)
       this.job.state = JobState.inEscrow
 
       console.log('Start Job: ' + this.job)
