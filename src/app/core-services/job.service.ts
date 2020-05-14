@@ -180,14 +180,10 @@ export class JobService {
             resolve(true)
             break
           case ActionType.acceptTerms:
-            try {
-              parsedJob.actionLog.push(action)
-              parsedJob.state = JobState.termsAcceptedAwaitingEscrow
-              await this.saveJobAndNotify(parsedJob, action)
-              resolve(true)
-            } catch (e) {
-              reject()
-            }
+            parsedJob.actionLog.push(action)
+            parsedJob.state = JobState.termsAcceptedAwaitingEscrow
+            await this.saveJobAndNotify(parsedJob, action)
+            resolve(true)
             break
           case ActionType.declineTerms:
             parsedJob.actionLog.push(action)
@@ -234,6 +230,11 @@ export class JobService {
             resolve(true)
             break
           case ActionType.enterEscrow:
+            parsedJob.actionLog.push(action)
+            parsedJob.state = JobState.workPendingCompletion
+            await this.saveJobAndNotify(parsedJob, action)
+            resolve(true)
+            break
           case ActionType.acceptFinish:
           case ActionType.cancelJobEarly:
           default:
