@@ -165,13 +165,4 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.binanceService.disconnect()
     this.authService.logout()
   }
-
-  // temporary shortcut to call binance.getSequence
-  // TODO: REMOVE (and the reference in the html template)
-  async cheatCode() {
-    console.log('WHO GOES THERE?')
-    console.log(this.bnbAddress)
-    const seq = await this.binanceService.getSequence(this.bnbAddress)
-    console.log('seq id: ' + seq)
-  }
 }

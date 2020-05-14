@@ -720,13 +720,9 @@ export class BinanceService {
 
   /* Get sequence of account */
   async getSequence(address) {
-    console.log('getSequence: ' + address)
     const SEQUENCE_API_URL = `${BASE_API_URL}api/v1/account/${address}/sequence`
-    console.log(SEQUENCE_API_URL)
     try {
       const response = await (await fetch(SEQUENCE_API_URL)).json()
-      console.log('response: ')
-      console.log(response)
       const sequence = response.sequence
       console.log('sequence: ' + sequence)
       return sequence
