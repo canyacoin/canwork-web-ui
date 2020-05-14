@@ -60,8 +60,6 @@ export class Job {
           : 'You have agreed to the terms and conditions of this job, you will need to wait for the client to send the funds to escrow.'
       case JobState.complete:
         return 'This job has been marked as complete by the client.'
-      case JobState.authorisedEscrow:
-        return 'The escrow has been authorised by the client, they can now send the funds to escrow.'
       case JobState.inEscrow:
         return 'The funds have been deposited in the escrow! You can now commence the job.'
       case JobState.reviewed:
@@ -129,7 +127,6 @@ export enum JobState {
   providerCounterOffer = 'Provider counter',
   clientCounterOffer = 'Client counter',
   termsAcceptedAwaitingEscrow = 'Awaiting Escrow',
-  authorisedEscrow = 'Funds In Escrow',
   inEscrow = 'Job started',
   workPendingCompletion = 'Pending completion',
   inDispute = 'Disputed',

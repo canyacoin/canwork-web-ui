@@ -304,7 +304,6 @@ export class JobService {
     actions[JobState.termsAcceptedAwaitingEscrow] = forClient
       ? [ActionType.authoriseEscrow, ActionType.cancelJob]
       : [ActionType.cancelJob]
-    actions[JobState.authorisedEscrow] = forClient ? [] : []
     actions[JobState.inEscrow] = forClient
       ? [ActionType.dispute, ActionType.addMessage]
       : [
