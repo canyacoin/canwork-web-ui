@@ -25,7 +25,7 @@ export class IJobAction {
     this.timestamp = Date.now()
     switch (this.type) {
       case ActionType.review:
-      case ActionType.authoriseEscrow:
+      case ActionType.enterEscrow:
         this.private = true
         break
       default:
@@ -75,10 +75,8 @@ export class IJobAction {
         )
       case ActionType.acceptTerms:
         return 'Are you sure?'
-      case ActionType.authoriseEscrow:
-        return 'You are about to pay the agreed amount of tokens to the escrow. Are you sure?'
       case ActionType.enterEscrow:
-        return 'This will create a relationship between the provider address and your address in the escrow contract.'
+        return 'You are about to pay the agreed amount of tokens to the escrow. Are you sure?'
       case ActionType.addMessage:
         return 'Add a note to this job.'
       case ActionType.finishedJob:
@@ -124,8 +122,6 @@ export class IJobAction {
               <em>${this.message}</em>`
       case ActionType.declineTerms:
         return `${executor} cancelled this job.`
-      case ActionType.authoriseEscrow:
-        return `${executor} authorised the Escrow contract to transfer $${this.amountUsd} USD`
       case ActionType.cancelJobEarly:
         return `${executor} cancelled the job early.`
       case ActionType.enterEscrow:
@@ -143,7 +139,6 @@ export enum ActionType {
   declineTerms = 'Decline terms',
   counterOffer = 'Counter offer',
   acceptTerms = 'Accept terms',
-  authoriseEscrow = 'Authorise escrow',
   enterEscrow = 'Send tokens to escrow',
   addMessage = 'Add Note',
   finishedJob = 'Mark as complete',
