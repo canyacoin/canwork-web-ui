@@ -232,11 +232,14 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     const jobId = this.job.id
 
     const onSuccess = async () => {
-      console.log('onSuccess')
+      console.log('onSuccess: Release: ')
+      console.log(this.job)
       const action = new IJobAction(ActionType.acceptFinish, UserType.client)
-      this.job.actionLog.push(action)
       this.job.state = JobState.complete
-      await this.jobService.saveJobFirebase(this.job)
+      const success = await this.jobService.handleJobAction(this.job, action)
+      if (success) {
+        console.log('ok')
+      }
     }
 
     this.binanceService.releaseFunds(jobId, undefined, onSuccess, undefined)
