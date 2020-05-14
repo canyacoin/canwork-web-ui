@@ -268,7 +268,7 @@ class JobRequestDeclinedNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${recipient.name},<br>
+      Hi ${recipient.name},<br>
       ${sender.name} has declined your job request:
       "${this.jobData.information.description}".
       Please login to CanWork to review this job.`,
@@ -303,7 +303,7 @@ class JobRequestCounterOfferNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${recipient.name},<br>
+      Hi ${recipient.name},<br>
       ${sender.name} has made a counter offer to your job request:
       "${this.jobData.information.title}".
       Please login to CanWork to review this job.`,
@@ -337,7 +337,7 @@ class AddMessageNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${recipient.name},<br>
+      Hi ${recipient.name},<br>
       ${sender.name} just sent you a message regarding the job:
       "${this.jobData.information.title}".
       Login to CanWork to see this message.`,
@@ -404,38 +404,6 @@ class AcceptFinishNotification extends AEmailNotification {
       "${this.jobData.information.title}"
       as complete, the funds are now in your wallet.`,
     })
-    console.log('+ dump emailMessages:', this.emailMessages)
-  }
-}
-
-class AcceptFinishFailedNotification extends AEmailNotification {
-  constructor() {
-    super()
-  }
-
-  async interpolateTemplates(
-    db: FirebaseFirestore.Firestore,
-    jobId: string
-  ): Promise<void> {
-    console.log('AcceptFinishFailedNotification.interpolateTemplates()')
-    try {
-      await super.interpolateTemplates(db, jobId)
-    } catch (error) {
-      console.error(error)
-    }
-
-    const title = `Uh-oh, your attempt to complete the job was un-successful`
-    this.emailMessages.push({
-      to: this.clientData.email,
-      subject: title,
-      title: title,
-      bodyHtml: `
-      Dear ${this.clientData.name},<br>
-      Your transaction authorising CanWork to complete a job was un-successful!<br/>
-      <br/>
-      View the ethereum transaction from your job details page.`,
-    })
-
     console.log('+ dump emailMessages:', this.emailMessages)
   }
 }
