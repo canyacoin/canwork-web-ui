@@ -233,7 +233,6 @@ export class JobService {
             await this.saveJobFirebase(parsedJob)
             resolve(true)
             break
-          case ActionType.authoriseEscrow:
           case ActionType.enterEscrow:
           case ActionType.acceptFinish:
           case ActionType.cancelJobEarly:
@@ -302,7 +301,7 @@ export class JobService {
           ActionType.declineTerms,
         ]
     actions[JobState.termsAcceptedAwaitingEscrow] = forClient
-      ? [ActionType.authoriseEscrow, ActionType.cancelJob]
+      ? [ActionType.enterEscrow, ActionType.cancelJob]
       : [ActionType.cancelJob]
     actions[JobState.inEscrow] = forClient
       ? [ActionType.dispute, ActionType.addMessage]

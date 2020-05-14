@@ -4,7 +4,6 @@ export enum ActionType {
   declineTerms = 'Decline terms', // both sides
   counterOffer = 'Counter offer', // both sides
   acceptTerms = 'Accept terms', // both sides
-  authoriseEscrow = 'Authorise escrow', // notifies provider
   enterEscrow = 'Send tokens to escrow', // notifies provider
   enterEscrowFailed = 'Send tokens to escrow failed', // notifies provider about failed tx
   addMessage = 'Add Note', // both sides
