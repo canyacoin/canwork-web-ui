@@ -137,18 +137,27 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       // call endpoint?
       this.router.navigate(['/inbox/job', this.job.id])
     }
-    
+
     const onBackFromSummary = async () => {
-      this.router.navigateByUrl('/inbox/job/'+ this.job.id, {skipLocationChange: true}).then(()=>
-        this.router.navigate(['/inbox/job/'+ this.job.id+ '/enter-escrow']));      
-    }    
+      this.router
+        .navigateByUrl('/inbox/job/' + this.job.id, {
+          skipLocationChange: true,
+        })
+        .then(() =>
+          this.router.navigate(['/inbox/job/' + this.job.id + '/enter-escrow'])
+        )
+    }
 
     const startJob = async () => {
       const action = new IJobAction(ActionType.enterEscrow, UserType.client)
       this.job.actionLog.push(action)
       this.job.state = JobState.inEscrow
-      await this.jobService.saveJobFirebase(this.job)
+
       console.log('Start Job: ' + this.job)
+      const success = await this.jobService.handleJobAction(this.job, action)
+      if (success) {
+        console.log('ok')
+      }
     }
 
     const provider = await this.userService.getUser(this.job.providerId)
