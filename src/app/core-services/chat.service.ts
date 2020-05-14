@@ -182,10 +182,19 @@ export class ChatService {
         messageText = 'I have proposed a counter offer!'
         break
       case ActionType.acceptTerms:
-        messageText = 'I have accepted the terms of the job'
+        messageText =
+          'I have accepted the terms of the job!  Please pay the agreed amount into escrow.'
         break
       case ActionType.enterEscrow:
-        messageText = 'I have deposited funds into the escrow system!'
+        messageText =
+          'I have deposited funds into the escrow system!  Please start the job.'
+        break
+      case ActionType.finishedJob:
+        messageText =
+          'I have finished the job!  Please release the funds from escrow.'
+        break
+      case ActionType.acceptFinish:
+        messageText = 'I have release the funds from Escrow!  Thankyou.'
         break
       default:
         messageText = "I've made a change to our job, can you have a look?"
