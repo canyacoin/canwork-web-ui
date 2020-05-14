@@ -231,7 +231,7 @@ export class JobService {
             break
           case ActionType.enterEscrow:
             parsedJob.actionLog.push(action)
-            parsedJob.state = JobState.workPendingCompletion
+            parsedJob.state = JobState.inEscrow
             await this.saveJobAndNotify(parsedJob, action)
             resolve(true)
             break
