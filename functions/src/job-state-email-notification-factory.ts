@@ -164,7 +164,7 @@ class ProviderJobRequestNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${this.providerData.name},<br>
+      Hi ${this.providerData.name},<br>
       ${this.clientData.name} has requested a job:
       "${this.jobData.information.title}".
       Please login to CanWork to review this job.`,
@@ -198,7 +198,7 @@ class CancelJobNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${recipient.name},<br>
+      Hi ${recipient.name},<br>
       ${sender.name} has cancelled a job:
       "${this.jobData.information.description}".`,
     })
@@ -465,7 +465,7 @@ class JobRequestCommenceNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${this.providerData.name},<br>
+      Hi ${this.providerData.name},<br>
       ${this.clientData.name}
       has submitted the funds into escrow for the job request:
       "${this.jobData.information.title}".`,
@@ -477,7 +477,7 @@ class JobRequestCommenceNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${this.clientData.name},<br>
+      Hi ${this.clientData.name},<br>
       You have made a payment into escrow for the job:
       "${this.jobData.information.title}".`,
     })
@@ -508,7 +508,7 @@ class JobRequestCommenceFailedNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${this.clientData.name},<br>
+      Hi ${this.clientData.name},<br>
       The transaction of this failed deposit can be viewed from your job details page.`,
     })
     console.log('+ dump emailMessages:', this.emailMessages)
