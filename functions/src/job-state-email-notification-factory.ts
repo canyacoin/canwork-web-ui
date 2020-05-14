@@ -467,7 +467,7 @@ class JobRequestCommenceNotification extends AEmailNotification {
       bodyHtml: `
       Hi ${this.providerData.name},<br>
       ${this.clientData.name}
-      has submitted the funds into escrow for the job request:
+      has transfered the funds into escrow for the job request:
       "${this.jobData.information.title}".`,
     })
 
