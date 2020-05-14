@@ -433,7 +433,7 @@ class DisputeNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${recipient.name},<br>
+      Hi ${recipient.name},<br>
       ${sender.name} has raised a dispute for the job:
       "${this.jobData.information.title}".
       Login to CanWork to see the discussion.`,
@@ -467,7 +467,7 @@ class ClientJobRequestEscrowedFundsFailedNotification extends AEmailNotification
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${this.clientData.name},<br>
+      Hi ${this.clientData.name},<br>
       Your transaction authorising CanWork to use your funds for a job was un-successful!<br/>
       <br/>
       View the ethereum transaction from your job details page.`,
@@ -567,7 +567,6 @@ export function notificationEmail(action: string) {
   actions[ActionType.addMessage] = AddMessageNotification
   actions[ActionType.finishedJob] = FinishedJobNotification
   actions[ActionType.acceptFinish] = AcceptFinishNotification
-  actions[ActionType.acceptFinishFailed] = AcceptFinishFailedNotification
   actions[ActionType.dispute] = DisputeNotification
 
   const jobAction = actions[action]
