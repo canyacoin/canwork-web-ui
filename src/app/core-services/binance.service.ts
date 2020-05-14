@@ -664,10 +664,11 @@ export class BinanceService {
     console.log('transact via WalletConnect')
     const { account } = this.connectedWalletDetails
     const { address } = account
+    const sequence = await this.getSequence(address)
     const tx = {
       accountNumber: account.account_number.toString(),
       chainId: CHAIN_ID,
-      sequence: account.sequence.toString(),
+      sequence: sequence,
       memo,
       send_order: {},
     }
@@ -714,6 +715,23 @@ export class BinanceService {
       if (onFailure) {
         onFailure(err.message)
       }
+    }
+  }
+
+  /* Get sequence of account */
+  async getSequence(address) {
+    console.log('getSequence: ' + address)
+    const SEQUENCE_API_URL = `${BASE_API_URL}api/v1/account/${address}/sequence`
+    console.log(SEQUENCE_API_URL)
+    try {
+      const response = await (await fetch(SEQUENCE_API_URL)).json()
+      console.log('response: ')
+      console.log(response)
+      const sequence = response.sequence
+      console.log('sequence: ' + sequence)
+      return sequence
+    } catch (err) {
+      return err
     }
   }
 
