@@ -370,7 +370,7 @@ class FinishedJobNotification extends AEmailNotification {
       bodyHtml: `
       Hi ${this.clientData.name},<br>
       ${this.providerData.name} has marked the job:
-      "${this.jobData.information.title}" as finished.
+      "${this.jobData.information.title}" as finished.<br>
       Login to CanWork to complete the job and release the funds from escrow.`,
     })
     console.log('+ dump emailMessages:', this.emailMessages)
@@ -402,7 +402,7 @@ class AcceptFinishNotification extends AEmailNotification {
       Hi ${this.providerData.name},<br>
       Congratulations! ${this.clientData.name} has accepted the job:
       "${this.jobData.information.title}"
-      as complete and released the escrowed funds to your wallet.`,
+      as complete. <br> The funds have released to your wallet.`,
     })
 
     console.log('+ dump emailMessages:', this.emailMessages)
@@ -472,6 +472,9 @@ class JobRequestCommenceNotification extends AEmailNotification {
       "${this.jobData.information.title}".<br> The funds are safely held in escrow until the job is complete and released to your wallet. <br>`,
     })
 
+    /* Too many notifications
+    This could serve to deliver an invoice email later!
+    
     title = `You have commenced the job`
     this.emailMessages.push({
       to: this.clientData.email,
@@ -483,6 +486,7 @@ class JobRequestCommenceNotification extends AEmailNotification {
       "${this.jobData.information.title}".`,
     })
     console.log('+ dump emailMessages:', this.emailMessages)
+  */
   }
 }
 
