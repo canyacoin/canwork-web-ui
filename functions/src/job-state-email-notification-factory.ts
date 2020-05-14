@@ -468,8 +468,8 @@ class JobRequestCommenceNotification extends AEmailNotification {
       bodyHtml: `
       Hi ${this.providerData.name},<br>
       ${this.clientData.name}
-      has transfered the funds into escrow for the job request:
-      "${this.jobData.information.title}".`,
+      has transfered the funds into the CanWork escrow for the job request:
+      "${this.jobData.information.title}".<br> The funds are safely held in escrow until the job is complete and released to your wallet. <br>`,
     })
 
     title = `You have commenced the job`
