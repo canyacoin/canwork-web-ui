@@ -139,7 +139,7 @@ export enum ActionType {
   declineTerms = 'Decline terms',
   counterOffer = 'Counter offer',
   acceptTerms = 'Accept terms',
-  enterEscrow = 'Send tokens to escrow',
+  enterEscrow = 'Pay Escrow',
   addMessage = 'Add Note',
   finishedJob = 'Mark as complete',
   acceptFinish = 'Complete job',
