@@ -232,11 +232,11 @@ class JobRequestAcceptedNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${recipient.name},<br>
+      Hi ${recipient.name},<br>
       ${sender.name} has accepted your job request:
       "${this.jobData.information.description}".
       A payment into the escrow is now required to proceed.<br><br>
-      Please login to CanWork to review this job.`,
+      Please login to CanWork to make the payment.`,
     })
     console.log('+ dump emailMessages:', this.emailMessages)
   }
