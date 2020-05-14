@@ -442,40 +442,6 @@ class DisputeNotification extends AEmailNotification {
   }
 }
 
-// Send notification to client that their funds have been deposited into escrow
-class ClientJobRequestEscrowedFundsFailedNotification extends AEmailNotification {
-  constructor() {
-    super()
-  }
-
-  async interpolateTemplates(
-    db: FirebaseFirestore.Firestore,
-    jobId: string
-  ): Promise<void> {
-    console.log(
-      'ClientJobRequestEscrowedFundsFailedNotification.interpolateTemplates()'
-    )
-    try {
-      await super.interpolateTemplates(db, jobId)
-    } catch (error) {
-      console.error(error)
-    }
-
-    const title = `Uh-oh, your escrow authorisation was un-successful`
-    this.emailMessages.push({
-      to: this.clientData.email,
-      subject: title,
-      title: title,
-      bodyHtml: `
-      Hi ${this.clientData.name},<br>
-      Your transaction authorising CanWork to use your funds for a job was un-successful!<br/>
-      <br/>
-      View the ethereum transaction from your job details page.`,
-    })
-    console.log('+ dump emailMessages:', this.emailMessages)
-  }
-}
-
 // Send notification to the provider that they may commence the job
 class JobRequestCommenceNotification extends AEmailNotification {
   constructor() {
@@ -559,9 +525,6 @@ export function notificationEmail(action: string) {
   actions[ActionType.acceptTerms] = JobRequestAcceptedNotification
   actions[ActionType.declineTerms] = JobRequestDeclinedNotification
   actions[ActionType.counterOffer] = JobRequestCounterOfferNotification
-  actions[
-    ActionType.authoriseEscrowFailed
-  ] = ClientJobRequestEscrowedFundsFailedNotification
   actions[ActionType.enterEscrow] = JobRequestCommenceNotification
   actions[ActionType.enterEscrowFailed] = JobRequestCommenceFailedNotification
   actions[ActionType.addMessage] = AddMessageNotification
