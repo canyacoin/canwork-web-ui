@@ -236,6 +236,11 @@ export class JobService {
             resolve(true)
             break
           case ActionType.acceptFinish:
+            parsedJob.actionLog.push(action)
+            parsedJob.state = JobState.complete
+            await this.saveJobAndNotify(parsedJob, action)
+            resolve(true)
+            break
           case ActionType.cancelJobEarly:
           default:
             reject(false)
