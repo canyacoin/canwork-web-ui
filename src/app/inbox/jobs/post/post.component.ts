@@ -20,7 +20,6 @@ import { ToastrService } from 'ngx-toastr'
 import { PublicJobService } from '@service/public-job.service'
 import { UploadService } from '@service/upload.service'
 import { UserService } from '@service/user.service'
-import { getUsdToCan } from '@util/currency-conversion'
 import { GenerateGuid } from '@util/generate.uid'
 import * as _ from 'lodash'
 import { Subscription } from 'rxjs'
@@ -133,12 +132,7 @@ export class PostComponent implements OnInit, OnDestroy {
       workType: ['', Validators.compose([Validators.required])],
       timelineExpectation: ['', Validators.compose([Validators.required])],
       weeklyCommitment: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.min(1),
-          Validators.max(60),
-        ]),
+        ''
       ],
       paymentType: ['Fixed price', Validators.compose([Validators.required])], // Please remove 'Fixed price' once the 'hourly rate' workflow is ready!
       budget: [
@@ -202,12 +196,7 @@ export class PostComponent implements OnInit, OnDestroy {
         ]),
       ],
       weeklyCommitment: [
-        '',
-        Validators.compose([
-          Validators.required,
-          Validators.min(1),
-          Validators.max(60),
-        ]),
+        ''
       ],
       terms: [false, Validators.requiredTrue],
     })
@@ -232,8 +221,27 @@ export class PostComponent implements OnInit, OnDestroy {
           this.isShareable = true
         }
       })
+      console.log(this.recipientAddress)
       if (!this.editing) {
         this.jobId = GenerateGuid()
+        this.shareableJobForm.controls['initialStage'].patchValue(
+          'Ready'
+        )
+        this.shareableJobForm.controls['workType'].patchValue(
+          'One off'
+        )
+        this.shareableJobForm.controls[
+          'timelineExpectation'
+        ].patchValue('Up to 1 Year')
+        this.postForm.controls['initialStage'].patchValue(
+          'Ready'
+        )
+        this.postForm.controls['workType'].patchValue(
+          'One off'
+        )
+        this.postForm.controls[
+          'timelineExpectation'
+        ].patchValue('Up to 1 Year')           
         if (!this.postToProvider) this.pageLoaded = true
       } else {
         this.jobId = this.activatedRoute.snapshot.params['jobId']
@@ -315,10 +323,6 @@ export class PostComponent implements OnInit, OnDestroy {
     if (deadline < today) return {pastDueDate: true};
 
     return null;
-  }  
-
-  usdToCan(usd: number) {
-    return getUsdToCan(this.usdToAtomicCan, usd)
   }
 
   detectFiles(event) {

@@ -350,12 +350,22 @@
               class="card-footer bg-white"
               style="border: none; border-bottom-right-radius: 5px;"
             >
-              <form
-                #frm
-                (ngSubmit)="onSend()"
-                class="d-flex align-items-center"
-              >
+              <form #frm (ngSubmit)="onSend()" class="align-items-center">
                 <div class="input-group input-group-lg">
+                  <textarea
+                    #msgInput
+                    [(ngModel)]="message"
+                    (focus)="readIfUnread()"
+                    [disabled]="isLoading || channels.length < 1"
+                    class="form-control message-box"
+                    maxlength="500"
+                    (keyup)="onMessageBoxInput($event)"
+                    placeholder="Type a message (shift-enter for new line)"
+                    name="message"
+                    autofocus="autofocus"
+                    required
+                  >
+                  </textarea>
                   <div class="input-group-prepend bg-white">
                     <div class="dropdown dropup">
                       <a href="https://canshare.io/" target="_blank">
@@ -399,30 +409,16 @@
                       </div>
                     </div>
                   </div>
-                  <textarea
-                    #msgInput
-                    [(ngModel)]="message"
-                    (focus)="readIfUnread()"
-                    [disabled]="isLoading || channels.length < 1"
-                    class="form-control message-box"
-                    maxlength="500"
-                    (keyup)="onMessageBoxInput($event)"
-                    placeholder="Type a message (shift-enter for new line)"
-                    name="message"
-                    autofocus="autofocus"
-                    required
-                  >
-                  </textarea>
                 </div>
                 <button
                   [disabled]="
                     !msgInput.validity.valid || isLoading || channels.length < 1
                   "
                   type="submit"
-                  class="btn btn-light"
+                  class="btn-container"
                   style="border: none;"
                 >
-                  <span class="text-dark">SEND</span>
+                  <span class="btn send-btn-chat">SEND</span>
                 </button>
               </form>
             </div>
@@ -732,12 +728,22 @@
               class="card-footer bg-white"
               style="border: none; border-bottom-right-radius: 5px;"
             >
-              <form
-                #frm
-                (ngSubmit)="onSend()"
-                class="d-flex align-items-center"
-              >
+              <form #frm (ngSubmit)="onSend()" class="align-items-center">
                 <div class="input-group input-group-lg">
+                  <textarea
+                    #msgInput
+                    [(ngModel)]="message"
+                    (focus)="readIfUnread()"
+                    [disabled]="isLoading || channels.length < 1"
+                    class="form-control message-box"
+                    maxlength="500"
+                    (keyup)="onMessageBoxInput($event)"
+                    placeholder="Type a message (shift-enter for new line)"
+                    name="message"
+                    autofocus="autofocus"
+                    required
+                  >
+                  </textarea>
                   <div class="input-group-prepend bg-white">
                     <div class="dropdown dropup">
                       <a href="https://canshare.io/" target="_blank">
@@ -781,30 +787,16 @@
                       </div>
                     </div>
                   </div>
-                  <textarea
-                    #msgInput
-                    [(ngModel)]="message"
-                    (focus)="readIfUnread()"
-                    [disabled]="isLoading || channels.length < 1"
-                    class="form-control message-box"
-                    maxlength="500"
-                    (keyup)="onMessageBoxInput($event)"
-                    placeholder="Type a message (shift-enter for new line)"
-                    name="message"
-                    autofocus="autofocus"
-                    required
-                  >
-                  </textarea>
                 </div>
                 <button
                   [disabled]="
                     !msgInput.validity.valid || isLoading || channels.length < 1
                   "
                   type="submit"
-                  class="btn btn-light"
+                  class="btn-container"
                   style="border: none;"
                 >
-                  <span class="text-dark">SEND</span>
+                  <span class="send-btn-chat">SEND</span>
                 </button>
               </form>
             </div>

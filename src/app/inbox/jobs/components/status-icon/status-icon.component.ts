@@ -16,7 +16,6 @@ export class StatusIconComponent {
     switch (this.job.state) {
       case JobState.offer:
       case JobState.workPendingCompletion:
-      case JobState.authorisedEscrow:
         return 'info'
       case JobState.cancelled:
       case JobState.declined:
@@ -57,7 +56,6 @@ export class StatusIconComponent {
       case JobState.clientCounterOffer:
         return 'Offer countered by client'
       case JobState.termsAcceptedAwaitingEscrow:
-      case JobState.authorisedEscrow:
         return 'Awaiting payment to escrow'
       case JobState.inEscrow:
         return 'Funds in escrow'

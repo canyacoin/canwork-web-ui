@@ -47,9 +47,9 @@
                 <b>{{ job.deadline }}</b>
                 <p>Deadline</p>
               </div>
-              <div class="info-details">
-                <b>{{ job.information.weeklyCommitment }} hr/week</b>
-                <p>Weekly Commitment</p>
+              <div class="info-details" *ngIf="job.information.weeklyCommitment > 0">
+                <b>{{ job.information.weeklyCommitment }} hrs</b>
+                <p>Total hours</p>
               </div>
               <div class="info-details">
                 <b>Attachments</b>
@@ -143,9 +143,8 @@
               USD</b
             >
             <p>
-              This project is set at a {{ job.paymentType }}<br />{{
-                job.information.weeklyCommitment
-              }}
+              This project is set at a {{ job.paymentType.toLowerCase()
+              }}<br />{{ job.information.weeklyCommitment }}
               hours per week, over
               {{ job.information.timelineExpectation }} period.
             </p>

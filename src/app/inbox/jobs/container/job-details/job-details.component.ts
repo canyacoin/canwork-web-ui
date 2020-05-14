@@ -85,7 +85,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
           this.currentUser.address === job.providerId
         if (this.isPartOfJob) {
           this.job = new Job(job)
-          this.transactionTypeService(this.job.fiatPayment, jobId)
+          this.transactionTypeService(jobId)
           this.currentUserType =
             this.currentUser.address === job.clientId
               ? UserType.client
@@ -110,21 +110,15 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private transactionTypeService(fiatPayment, jobId): any {
-    if (fiatPayment) {
-      //TODO:  Cleanup
-    } else {
-      this.transactionsSub = this.transactionService
-        .getTransactionsByJob(jobId)
-        .subscribe((transactions: Transaction[]) => {
-          this.transactions = transactions
-        })
-    }
+  private transactionTypeService(jobId): any {
+    this.transactionsSub = this.transactionService
+      .getTransactionsByJob(jobId)
+      .subscribe((transactions: Transaction[]) => {
+        this.transactions = transactions
+      })
   }
-
   actionIsDisabled(action: ActionType): boolean {
     switch (action) {
-      case ActionType.dispute:
       case ActionType.cancelJobEarly:
         return true
       case ActionType.review:
@@ -181,7 +175,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       case ActionType.addMessage:
         return 'info'
       case ActionType.acceptTerms:
-      case ActionType.authoriseEscrow:
       case ActionType.enterEscrow:
       case ActionType.finishedJob:
       case ActionType.acceptFinish:
@@ -253,7 +246,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     console.log('executeAction: ' + action)
     switch (action) {
       case ActionType.enterEscrow:
-      case ActionType.authoriseEscrow:
         this.router.navigate(['../enter-escrow'], {
           relativeTo: this.activatedRoute,
         })
@@ -264,6 +256,24 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         break
       case ActionType.cancelJobEarly:
         //TODO
+        break
+      case ActionType.dispute:
+        console.log('ActionType.dispute')
+        this.dialogService
+          .addDialog(
+            ActionDialogComponent,
+            new ActionDialogOptions({
+              job: this.job,
+              userType: this.currentUserType,
+              otherParty: this.job['otherParty']['name'] || 'the other party',
+              actionType: action,
+            })
+          )
+          .subscribe(success => {
+            if (!success) {
+              console.log('Action cancelled')
+            }
+          })
         break
       default:
         console.log('default')

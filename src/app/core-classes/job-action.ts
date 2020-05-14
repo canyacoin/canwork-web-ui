@@ -25,7 +25,7 @@ export class IJobAction {
     this.timestamp = Date.now()
     switch (this.type) {
       case ActionType.review:
-      case ActionType.authoriseEscrow:
+      case ActionType.enterEscrow:
         this.private = true
         break
       default:
@@ -75,16 +75,16 @@ export class IJobAction {
         )
       case ActionType.acceptTerms:
         return 'Are you sure?'
-      case ActionType.authoriseEscrow:
-        return 'You are about to pay the agreed amount of CAN to the escrow. Are you sure?'
       case ActionType.enterEscrow:
-        return 'This will create a relationship between the provider address and your address in the escrow contract.'
+        return 'You are about to pay the agreed amount of tokens to the escrow. Are you sure?'
       case ActionType.addMessage:
         return 'Add a note to this job.'
       case ActionType.finishedJob:
         return "Are you sure you've finished your job?"
       case ActionType.acceptFinish:
         return 'Are you sure you want to finish this job?'
+      case ActionType.dispute:
+        return 'Please contact support@canya.com for dispute resolution.'
       case ActionType.cancelJobEarly:
         return 'You are going to cancel this job. This cannot be undone. Are you sure?'
       case ActionType.review:
@@ -97,14 +97,19 @@ export class IJobAction {
   getMessage(executor?: string): string {
     switch (this.type) {
       case ActionType.createJob:
+        if (this.weeklyCommitment > 1) {
+          var hoursplural = 'hours'
+        } else {
+          var hoursplural = 'hour'
+        }
         return `Job created by ${executor}.<br>
-          Proposed ${
-            this.amountUsd
-              ? `budget at $${this.amountUsd}${this.paymentTypeString} USD`
-              : ''
-          }
-          for ${this.weeklyCommitment} hours a week
-          for ${this.timelineExpectation}`
+            Proposed ${
+              this.amountUsd
+                ? `budget of $${this.amountUsd}${this.paymentTypeString} USD`
+                : ''
+            }
+            for ${this.weeklyCommitment} ${hoursplural} per week
+            over a period of ${this.timelineExpectation.toLowerCase()}`
       case ActionType.counterOffer:
         return `${executor} proposed a counter offer.<br>
           Proposed budget at $${this.amountUsd}${this.paymentTypeString}) USD`
@@ -117,13 +122,11 @@ export class IJobAction {
               <em>${this.message}</em>`
       case ActionType.declineTerms:
         return `${executor} cancelled this job.`
-      case ActionType.authoriseEscrow:
-        return `${executor} authorised the Escrow contract to transfer $${this.amountUsd} USD`
       case ActionType.cancelJobEarly:
         return `${executor} cancelled the job early.`
       case ActionType.enterEscrow:
-        return `${executor} registered this job in the Escrow contract.<br>
-              When the job is succesfully delivered, ${executor} will release the funds stored in the contract.`
+        return `${executor} sent tokens to CanWork escrow.<br>
+              When the job is succesfully delivered, ${executor} will release the funds to the Provider.`
       default:
         return `Job action: ${this.type}, by ${executor}`
     }
@@ -136,8 +139,7 @@ export enum ActionType {
   declineTerms = 'Decline terms',
   counterOffer = 'Counter offer',
   acceptTerms = 'Accept terms',
-  authoriseEscrow = 'Authorise escrow',
-  enterEscrow = 'Send CAN to escrow',
+  enterEscrow = 'Pay Escrow',
   addMessage = 'Add Note',
   finishedJob = 'Mark as complete',
   acceptFinish = 'Complete job',

@@ -180,14 +180,10 @@ export class JobService {
             resolve(true)
             break
           case ActionType.acceptTerms:
-            try {
-              parsedJob.actionLog.push(action)
-              parsedJob.state = JobState.termsAcceptedAwaitingEscrow
-              await this.saveJobAndNotify(parsedJob, action)
-              resolve(true)
-            } catch (e) {
-              reject()
-            }
+            parsedJob.actionLog.push(action)
+            parsedJob.state = JobState.termsAcceptedAwaitingEscrow
+            await this.saveJobAndNotify(parsedJob, action)
+            resolve(true)
             break
           case ActionType.declineTerms:
             parsedJob.actionLog.push(action)
@@ -233,9 +229,18 @@ export class JobService {
             await this.saveJobFirebase(parsedJob)
             resolve(true)
             break
-          case ActionType.authoriseEscrow:
           case ActionType.enterEscrow:
+            parsedJob.actionLog.push(action)
+            parsedJob.state = JobState.inEscrow
+            await this.saveJobAndNotify(parsedJob, action)
+            resolve(true)
+            break
           case ActionType.acceptFinish:
+            parsedJob.actionLog.push(action)
+            parsedJob.state = JobState.complete
+            await this.saveJobAndNotify(parsedJob, action)
+            resolve(true)
+            break
           case ActionType.cancelJobEarly:
           default:
             reject(false)
@@ -302,9 +307,8 @@ export class JobService {
           ActionType.declineTerms,
         ]
     actions[JobState.termsAcceptedAwaitingEscrow] = forClient
-      ? [ActionType.authoriseEscrow, ActionType.cancelJob]
+      ? [ActionType.enterEscrow, ActionType.cancelJob]
       : [ActionType.cancelJob]
-    actions[JobState.authorisedEscrow] = forClient ? [] : []
     actions[JobState.inEscrow] = forClient
       ? [ActionType.dispute, ActionType.addMessage]
       : [

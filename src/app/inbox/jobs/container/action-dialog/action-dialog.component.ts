@@ -123,7 +123,6 @@ export class ActionDialogComponent
       case ActionType.addMessage:
         return 'info'
       case ActionType.acceptTerms:
-      case ActionType.authoriseEscrow:
       case ActionType.enterEscrow:
       case ActionType.finishedJob:
       case ActionType.acceptFinish:
@@ -152,8 +151,6 @@ export class ActionDialogComponent
             this.job.information.weeklyCommitment,
             this.job.paymentType
           )
-          break
-        case ActionType.authoriseEscrow:
           break
         case ActionType.review:
           this.action.message = this.form.value.message
