@@ -400,9 +400,9 @@ class AcceptFinishNotification extends AEmailNotification {
       title: title,
       bodyHtml: `
       Hi ${this.providerData.name},<br>
-      ${this.clientData.name} has marked the job:
-      "${this.jobData.information.title}"
-      as complete, the funds are now in your wallet.`,
+      ${this.clientData.name} has accepted the job:
+      "${this.jobData.information.titlae}"
+      as complete and released the funds to your wallet.`,
     })
     console.log('+ dump emailMessages:', this.emailMessages)
   }
