@@ -164,7 +164,7 @@ class ProviderJobRequestNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${this.providerData.name},<br>
+      Hi ${this.providerData.name},<br>
       ${this.clientData.name} has requested a job:
       "${this.jobData.information.title}".
       Please login to CanWork to review this job.`,
@@ -198,7 +198,7 @@ class CancelJobNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${recipient.name},<br>
+      Hi ${recipient.name},<br>
       ${sender.name} has cancelled a job:
       "${this.jobData.information.description}".`,
     })
@@ -232,11 +232,11 @@ class JobRequestAcceptedNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${recipient.name},<br>
+      Hi ${recipient.name},<br>
       ${sender.name} has accepted your job request:
       "${this.jobData.information.description}".
       A payment into the escrow is now required to proceed.<br><br>
-      Please login to CanWork to review this job.`,
+      Please login to CanWork to make the payment.`,
     })
     console.log('+ dump emailMessages:', this.emailMessages)
   }
@@ -268,7 +268,7 @@ class JobRequestDeclinedNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${recipient.name},<br>
+      Hi ${recipient.name},<br>
       ${sender.name} has declined your job request:
       "${this.jobData.information.description}".
       Please login to CanWork to review this job.`,
@@ -303,7 +303,7 @@ class JobRequestCounterOfferNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${recipient.name},<br>
+      Hi ${recipient.name},<br>
       ${sender.name} has made a counter offer to your job request:
       "${this.jobData.information.title}".
       Please login to CanWork to review this job.`,
@@ -337,7 +337,7 @@ class AddMessageNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${recipient.name},<br>
+      Hi ${recipient.name},<br>
       ${sender.name} just sent you a message regarding the job:
       "${this.jobData.information.title}".
       Login to CanWork to see this message.`,
@@ -400,40 +400,9 @@ class AcceptFinishNotification extends AEmailNotification {
       title: title,
       bodyHtml: `
       Hi ${this.providerData.name},<br>
-      ${this.clientData.name} has marked the job:
+      Congratulations! ${this.clientData.name} has accepted the job:
       "${this.jobData.information.title}"
-      as complete, the funds are now in your wallet.`,
-    })
-    console.log('+ dump emailMessages:', this.emailMessages)
-  }
-}
-
-class AcceptFinishFailedNotification extends AEmailNotification {
-  constructor() {
-    super()
-  }
-
-  async interpolateTemplates(
-    db: FirebaseFirestore.Firestore,
-    jobId: string
-  ): Promise<void> {
-    console.log('AcceptFinishFailedNotification.interpolateTemplates()')
-    try {
-      await super.interpolateTemplates(db, jobId)
-    } catch (error) {
-      console.error(error)
-    }
-
-    const title = `Uh-oh, your attempt to complete the job was un-successful`
-    this.emailMessages.push({
-      to: this.clientData.email,
-      subject: title,
-      title: title,
-      bodyHtml: `
-      Dear ${this.clientData.name},<br>
-      Your transaction authorising CanWork to complete a job was un-successful!<br/>
-      <br/>
-      View the ethereum transaction from your job details page.`,
+      as complete and released the escrowed funds to your wallet.`,
     })
 
     console.log('+ dump emailMessages:', this.emailMessages)
@@ -465,78 +434,10 @@ class DisputeNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${recipient.name},<br>
+      Hi ${recipient.name},<br>
       ${sender.name} has raised a dispute for the job:
       "${this.jobData.information.title}".
       Login to CanWork to see the discussion.`,
-    })
-    console.log('+ dump emailMessages:', this.emailMessages)
-  }
-}
-
-// Send notification to client that their funds have been deposited into escrow
-class ClientJobRequestEscrowedFundsNotification extends AEmailNotification {
-  constructor() {
-    super()
-  }
-
-  async interpolateTemplates(
-    db: FirebaseFirestore.Firestore,
-    jobId: string
-  ): Promise<void> {
-    console.log(
-      'ClientJobRequestEscrowedFundsNotification.interpolateTemplates()'
-    )
-    try {
-      await super.interpolateTemplates(db, jobId)
-    } catch (error) {
-      console.error(error)
-    }
-
-    const title = `Your escrow authorisation was successful`
-    this.emailMessages.push({
-      to: this.clientData.email,
-      subject: title,
-      title: title,
-      bodyHtml: `
-      Dear ${this.clientData.name},<br>
-      Your transaction authorising CanWork to use your funds for a job was successful!<br/>
-      You are one step closer to getting the job started.<br/><br/>
-      View the ethereum transaction from your job details page.`,
-    })
-    console.log('+ dump emailMessages:', this.emailMessages)
-  }
-}
-
-// Send notification to client that their funds have been deposited into escrow
-class ClientJobRequestEscrowedFundsFailedNotification extends AEmailNotification {
-  constructor() {
-    super()
-  }
-
-  async interpolateTemplates(
-    db: FirebaseFirestore.Firestore,
-    jobId: string
-  ): Promise<void> {
-    console.log(
-      'ClientJobRequestEscrowedFundsFailedNotification.interpolateTemplates()'
-    )
-    try {
-      await super.interpolateTemplates(db, jobId)
-    } catch (error) {
-      console.error(error)
-    }
-
-    const title = `Uh-oh, your escrow authorisation was un-successful`
-    this.emailMessages.push({
-      to: this.clientData.email,
-      subject: title,
-      title: title,
-      bodyHtml: `
-      Dear ${this.clientData.name},<br>
-      Your transaction authorising CanWork to use your funds for a job was un-successful!<br/>
-      <br/>
-      View the ethereum transaction from your job details page.`,
     })
     console.log('+ dump emailMessages:', this.emailMessages)
   }
@@ -565,9 +466,9 @@ class JobRequestCommenceNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${this.providerData.name},<br>
+      Hi ${this.providerData.name},<br>
       ${this.clientData.name}
-      has submitted the funds into escrow for the job request:
+      has transfered the funds into escrow for the job request:
       "${this.jobData.information.title}".`,
     })
 
@@ -577,7 +478,7 @@ class JobRequestCommenceNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${this.clientData.name},<br>
+      Hi ${this.clientData.name},<br>
       You have made a payment into escrow for the job:
       "${this.jobData.information.title}".`,
     })
@@ -608,7 +509,7 @@ class JobRequestCommenceFailedNotification extends AEmailNotification {
       subject: title,
       title: title,
       bodyHtml: `
-      Dear ${this.clientData.name},<br>
+      Hi ${this.clientData.name},<br>
       The transaction of this failed deposit can be viewed from your job details page.`,
     })
     console.log('+ dump emailMessages:', this.emailMessages)
@@ -625,18 +526,11 @@ export function notificationEmail(action: string) {
   actions[ActionType.acceptTerms] = JobRequestAcceptedNotification
   actions[ActionType.declineTerms] = JobRequestDeclinedNotification
   actions[ActionType.counterOffer] = JobRequestCounterOfferNotification
-  actions[
-    ActionType.authoriseEscrow
-  ] = ClientJobRequestEscrowedFundsNotification
-  actions[
-    ActionType.authoriseEscrowFailed
-  ] = ClientJobRequestEscrowedFundsFailedNotification
   actions[ActionType.enterEscrow] = JobRequestCommenceNotification
   actions[ActionType.enterEscrowFailed] = JobRequestCommenceFailedNotification
   actions[ActionType.addMessage] = AddMessageNotification
   actions[ActionType.finishedJob] = FinishedJobNotification
   actions[ActionType.acceptFinish] = AcceptFinishNotification
-  actions[ActionType.acceptFinishFailed] = AcceptFinishFailedNotification
   actions[ActionType.dispute] = DisputeNotification
 
   const jobAction = actions[action]

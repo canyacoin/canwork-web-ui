@@ -175,7 +175,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       case ActionType.addMessage:
         return 'info'
       case ActionType.acceptTerms:
-      case ActionType.authoriseEscrow:
       case ActionType.enterEscrow:
       case ActionType.finishedJob:
       case ActionType.acceptFinish:
@@ -247,7 +246,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     console.log('executeAction: ' + action)
     switch (action) {
       case ActionType.enterEscrow:
-      case ActionType.authoriseEscrow:
         this.router.navigate(['../enter-escrow'], {
           relativeTo: this.activatedRoute,
         })
