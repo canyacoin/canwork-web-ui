@@ -401,7 +401,7 @@ class AcceptFinishNotification extends AEmailNotification {
       bodyHtml: `
       Hi ${this.providerData.name},<br>
       ${this.clientData.name} has accepted the job:
-      "${this.jobData.information.titlae}"
+      "${this.jobData.information.title}"
       as complete and released the escrowed funds to your wallet.`,
     })
     console.log('+ dump emailMessages:', this.emailMessages)
