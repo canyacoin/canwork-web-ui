@@ -21,16 +21,23 @@ export class PaymentSummaryTemplateComponent implements OnInit {
     if (!this.paymentSummary) {
       console.log('No Payment Summary')
     }
-    let splittedSymbol = this.paymentSummary.asset.symbol.split("-");
-    this.assetSymbolShort = (splittedSymbol.length > 1) ? splittedSymbol[0] : this.paymentSummary.asset.symbol
-    //Get payment asset icon
+
+    // Get payment asset icon
     this.binanceService
       .getAssetIconUrl(this.paymentSummary.asset.symbol)
       .then(iconURL => {
         this.paymentAssetIconURL = iconURL
       })
 
-    //Format the atomic asset job budget for readability
+    //TODO:  The following could be moved into a service
+    // Shorten Asset Symbol, splitting before the hyphen (eg.  CAN-677 -> CAN)
+    let splittedSymbol = this.paymentSummary.asset.symbol.split('-')
+    this.assetSymbolShort =
+      splittedSymbol.length > 1
+        ? splittedSymbol[0]
+        : this.paymentSummary.asset.symbol
+
+    // Format the atomic asset job budget for readability
     this.formatAssetJobBudget = (
       this.paymentSummary.jobBudgetAtomic / 1e8
     ).toPrecision(4)

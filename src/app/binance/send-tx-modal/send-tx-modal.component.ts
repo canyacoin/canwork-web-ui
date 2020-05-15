@@ -12,6 +12,7 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
   isConfirming: boolean = false
   fromAddress?: string = null
   transaction?: Transaction = null
+  formatAmountAsset: number
   keystorePassword: string = ''
   isKeystorePasswordVisible: boolean = false
 
@@ -27,6 +28,7 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
         this.isConfirming = false
         this.fromAddress = this.binanceService.getAddress()
         this.transaction = transaction
+        this.formatAmountAsset = this.formatAmount(this.transaction.amountAsset)
         this.keystorePassword = ''
         this.isKeystorePasswordVisible = this.binanceService.isKeystoreConnected()
         ;(window as any).$('#sendTxModal').modal('show')
@@ -39,6 +41,11 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
       this.txSubscription.unsubscribe()
     }
     this.close()
+  }
+
+  formatAmount(amount) {
+    const formatAmount = amount / 1e8
+    return formatAmount
   }
 
   splitMemo(memo) {
