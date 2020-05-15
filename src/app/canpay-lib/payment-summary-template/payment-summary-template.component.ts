@@ -11,7 +11,6 @@ import { PaymentSummary } from '../interfaces'
 export class PaymentSummaryTemplateComponent implements OnInit {
   @Input() paymentSummary: PaymentSummary = null
 
-  paymentAssetIconURL: string
   formatAssetJobBudget: string
   assetSymbolShort: string
 
@@ -21,13 +20,6 @@ export class PaymentSummaryTemplateComponent implements OnInit {
     if (!this.paymentSummary) {
       console.log('No Payment Summary')
     }
-
-    // Get payment asset icon
-    this.binanceService
-      .getAssetIconUrl(this.paymentSummary.asset.symbol)
-      .then(iconURL => {
-        this.paymentAssetIconURL = iconURL
-      })
 
     //TODO:  The following could be moved into a service
     // Shorten Asset Symbol, splitting before the hyphen (eg.  CAN-677 -> CAN)
