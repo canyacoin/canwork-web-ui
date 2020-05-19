@@ -40,6 +40,6 @@ export class PaymentSummaryTemplateComponent implements OnInit {
     // Format the atomic asset job budget for readability
     this.formatAssetJobBudget = (
       this.paymentSummary.jobBudgetAtomic / 1e8
-    ).toFixed(4)
+    ).toFixed(5)
   }
 }
