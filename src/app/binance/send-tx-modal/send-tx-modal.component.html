@@ -10,7 +10,10 @@
         <div class="container text-center">
           <div class="row mb-15">
             <div class="col-12">
-              <div class="text-center fw-500 mb-5">
+              <div
+                *ngIf="transaction && transaction.txInfo"
+                class="text-center fw-500 mb-5"
+              >
                 {{ transaction.txInfo }}
               </div>
               <div [ngSwitch]="showTxDetails">
