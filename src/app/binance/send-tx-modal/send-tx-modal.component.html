@@ -7,34 +7,74 @@
         </div>
       </div>
       <div border-none class="modal-body">
-        <div class="container">
-          <div class="row" *ngIf="transaction">
+        <div class="container text-center">
+          <div class="row mb-15">
             <div class="col-12">
-              <b>From:</b>
-              <div>{{ fromAddress }}</div>
-              <br />
-              <b>To:</b>
-              <div>{{ transaction.to }}</div>
-              <br />
-              <b>Memo:</b>
-              <div>
+              <div class="text-center fw-500 mb-5">
+                {{ transaction.txInfo }}
+              </div>
+              <div [ngSwitch]="showTxDetails">
+                <button
+                  *ngSwitchCase="false"
+                  type="button"
+                  class="btn btn-info btn-outline btn-xxs"
+                  (click)="toggleDetails()"
+                >
+                  Show Details
+                </button>
+                <button
+                  *ngSwitchCase="true"
+                  type="button"
+                  class="btn btn-info btn-outline btn-xxs"
+                  (click)="toggleDetails()"
+                >
+                  Hide Details
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-20" *ngIf="transaction && showTxDetails">
+            <div class="col-12">
+              <div class="text-center mb-10">
+                <span class="fw-500">From</span><br />
+                Your wallet<br />
+                {{ fromAddress }}
+              </div>
+              <div class="text-center mb-10">
+                <span class="fw-500">To</span><br />
+                {{ transaction.toName }}<br />
+                {{ transaction.to }}
+              </div>
+              <div class="text-center mb-20">
+                <span class="fw-500">Memo</span>
                 <div *ngFor="let memoPart of splitMemo(transaction.memo)">
                   {{ memoPart }}
                 </div>
               </div>
-              <br />
-              <b>Amount {{ transaction.symbol }}</b>
-              <div>{{ transaction.amountAsset }}</div>
-              <br />
+              <div class="text-center">
+                <span class="fw-500">Amount {{ transaction.symbol }}</span
+                ><br />
+                <span class="fs-12">
+                  <img
+                    src="{{ transaction.iconURL }}"
+                    width="14px"
+                    height="14px"
+                    alt="{{ transaction.symbol }}"
+                  />
+                </span>
+                {{ formatAmountAsset }}
+              </div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-4">
+          <div class="row mb-20" *ngIf="isKeystorePasswordVisible">
+            <div class="col-12 fw-500 mb-5">
+              Enter Keystore Password
+            </div>
+            <div class="col-12">
               <input
-                *ngIf="isKeystorePasswordVisible"
                 [(ngModel)]="keystorePassword"
                 type="password"
-                placeholder="Enter wallet password"
+                placeholder="Keystore password"
               />
             </div>
           </div>
@@ -42,7 +82,7 @@
             <div class="col-6">
               <button
                 type="button"
-                class="btn btn-primary btn-danger"
+                class="btn btn-primary btn-danger btn-outline"
                 (click)="close()"
               >
                 Cancel

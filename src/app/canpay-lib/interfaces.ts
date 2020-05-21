@@ -31,6 +31,7 @@ export interface jobData {
 
 export interface bepAssetData {
   symbol: string
+  iconURL?: string
   freeAsset: number
   freeUsd: number
   usdPrice: number
