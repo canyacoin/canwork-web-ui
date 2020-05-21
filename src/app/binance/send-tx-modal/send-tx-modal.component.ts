@@ -12,6 +12,8 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
   isConfirming: boolean = false
   fromAddress?: string = null
   transaction?: Transaction = null
+  showTxDetails: boolean = false
+  formatAmountAsset: number
   keystorePassword: string = ''
   isKeystorePasswordVisible: boolean = false
 
@@ -27,6 +29,7 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
         this.isConfirming = false
         this.fromAddress = this.binanceService.getAddress()
         this.transaction = transaction
+        this.formatAmountAsset = this.formatAmount(this.transaction.amountAsset)
         this.keystorePassword = ''
         this.isKeystorePasswordVisible = this.binanceService.isKeystoreConnected()
         ;(window as any).$('#sendTxModal').modal('show')
@@ -39,6 +42,16 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
       this.txSubscription.unsubscribe()
     }
     this.close()
+  }
+
+  formatAmount(amount) {
+    const formatAmount = Number((amount / 1e8).toFixed(5))
+    return formatAmount
+  }
+
+  toggleDetails() {
+    this.showTxDetails = this.showTxDetails === true ? false : true
+    console.log(this.showTxDetails)
   }
 
   splitMemo(memo) {
@@ -93,6 +106,7 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
 
   confirmTransaction() {
     console.log('confirm Transaction')
+    this.showTxDetails = false
     const { to, symbol, amountAsset, memo, callbacks } = this.transaction
     const { beforeTransaction, onSuccess, onFailure } = callbacks
     const wrappedBeforeTransaction = this.wrapBeforeTransaction(
