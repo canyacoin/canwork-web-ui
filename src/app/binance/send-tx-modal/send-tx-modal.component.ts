@@ -106,6 +106,7 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
 
   confirmTransaction() {
     console.log('confirm Transaction')
+    this.showTxDetails = false
     const { to, symbol, amountAsset, memo, callbacks } = this.transaction
     const { beforeTransaction, onSuccess, onFailure } = callbacks
     const wrappedBeforeTransaction = this.wrapBeforeTransaction(
