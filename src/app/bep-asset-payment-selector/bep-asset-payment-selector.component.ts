@@ -113,8 +113,13 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
   }
 
   async paymentSelected(asset) {
+    // Get payment asset icon URL
+    const iconURL = await this.binanceService.getAssetIconUrl(asset.symbol)
+    console.log(iconURL)
+
     let assetData = {
       symbol: asset.symbol,
+      iconURL: iconURL,
       freeAsset: asset.free,
       freeUsd: asset.freeUsd,
       usdPrice: asset.usdPrice,
