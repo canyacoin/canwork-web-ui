@@ -12,6 +12,7 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
   isConfirming: boolean = false
   fromAddress?: string = null
   transaction?: Transaction = null
+  showTxDetails: boolean = false
   formatAmountAsset: number
   keystorePassword: string = ''
   isKeystorePasswordVisible: boolean = false
@@ -44,8 +45,13 @@ export class SendTxModalComponent implements OnInit, OnDestroy {
   }
 
   formatAmount(amount) {
-    const formatAmount = amount / 1e8
+    const formatAmount = Number((amount / 1e8).toFixed(5))
     return formatAmount
+  }
+
+  toggleDetails() {
+    this.showTxDetails = this.showTxDetails === true ? false : true
+    console.log(this.showTxDetails)
   }
 
   splitMemo(memo) {

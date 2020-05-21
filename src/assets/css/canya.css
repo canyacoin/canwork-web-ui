@@ -1380,6 +1380,12 @@ button:focus {
   padding: 2px 16px;
 }
 
+.btn-group-xxs>.btn,
+.btn-xxs {
+  font-size: 8px;
+  padding: 1px 12px;
+}
+
 .btn-group-sm>.btn,
 .btn-sm {
   font-size: 11px;

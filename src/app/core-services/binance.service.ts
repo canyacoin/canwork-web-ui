@@ -49,12 +49,13 @@ export interface Event {
 
 export interface Transaction {
   to: string
-  toName: string
+  toName?: string
   symbol: string
+  iconURL?: string
   amountAsset: number
   memo: string
   callbacks?: TransactionCallbacks
-  txInfo: string
+  txInfo?: string
 }
 
 export interface TransactionCallbacks {
@@ -512,9 +513,10 @@ export class BinanceService {
     const memo = `ESCROW:${paymentSummary.job.jobId}:${paymentSummary.job.providerAddress}`
     const to = ESCROW_ADDRESS
     const toName = 'CanWork Escrow'
+    const iconURL = paymentSummary.asset.iconURL
     const symbol = paymentSummary.asset.symbol
     const amountAsset = paymentSummary.jobBudgetAtomic
-    const txInfo = 'Pay into Escrow'
+    const txInfo = 'Payment to CanWork Escrow'
     const callbacks: TransactionCallbacks = {
       beforeTransaction,
       onSuccess,
@@ -524,6 +526,7 @@ export class BinanceService {
       to,
       toName,
       symbol,
+      iconURL,
       amountAsset,
       memo,
       callbacks,
@@ -553,7 +556,7 @@ export class BinanceService {
     const memo = `RELEASE:${jobId}`
     const to = ESCROW_ADDRESS
     const toName = 'CanWork Escrow'
-    const txInfo = 'Release funds command'
+    const txInfo = 'Release funds from escrow'
 
     const callbacks: TransactionCallbacks = {
       beforeTransaction,
