@@ -467,9 +467,14 @@ class JobRequestCommenceNotification extends AEmailNotification {
       title: title,
       bodyHtml: `
       Hi ${this.providerData.name},<br>
-      ${this.clientData.name}
-      has transfered the funds into the CanWork escrow for the job request:
-      "${this.jobData.information.title}".<br> The funds are safely held in escrow until the job is complete and released to your wallet. <br>`,
+      <br>
+      ${this.clientData.name} 
+      transfered funds into the CanWork Escrow for the job request: <br>
+      "${this.jobData.information.title}".<br>
+      <br>
+      The agreed value is securely held in our 'hedged' escrow until the job is complete and released to your wallet. <br>
+      <br>
+      All the best`,
     })
 
     /* Too many notifications
