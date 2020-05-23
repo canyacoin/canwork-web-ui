@@ -33,6 +33,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   myJob = false
   loading = true
   shareableLink: string
+  link: string
   job: Job
   currentUser: User
   jobPoster: User
@@ -203,19 +204,26 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     this.loading = false
   }
 
-  copyLink() {
+  createLink() {
     let link = ''
     if (this.job.slug) {
-      link = this.shareableLink + '/job/' + this.job.slug
+      link =
+        this.shareableLink +
+        '/jobs/public/' +
+        this.job.slug.replace(/\(/g, '%28').replace(/\)/g, '%29')
     } else {
-      link = this.shareableLink + '/jobs/' + this.job.id
+      link = this.shareableLink + '/job/' + this.job.id
     }
+    this.link = link
+  }
+
+  copyLink() {
     const selBox = document.createElement('textarea')
     selBox.style.position = 'fixed'
     selBox.style.left = '0'
     selBox.style.top = '0'
     selBox.style.opacity = '0'
-    selBox.value = link
+    selBox.value = this.link
     document.body.appendChild(selBox)
     selBox.select()
     selBox.focus()

@@ -31,6 +31,7 @@
                 data-toggle="modal"
                 data-target="#shareModal"
                 *ngIf="!job.draft"
+                (click)="createLink()"
                 class="share-link"
               >
                 <i class="fas fa-share-alt"></i> SHARE
@@ -47,7 +48,10 @@
                 <b>{{ job.deadline }}</b>
                 <p>Deadline</p>
               </div>
-              <div class="info-details" *ngIf="job.information.weeklyCommitment > 0">
+              <div
+                class="info-details"
+                *ngIf="job.information.weeklyCommitment > 0"
+              >
                 <b>{{ job.information.weeklyCommitment }} hrs</b>
                 <p>Total hours</p>
               </div>
@@ -331,11 +335,8 @@
                   <span>URL:</span>
                   <br />
                   <br />
-                  <p *ngIf="!job.slug" class="link-col p-10">
-                    {{ shareableLink }}/jobs/{{ job.id }}
-                  </p>
-                  <p *ngIf="job.slug" class="link-col p-10">
-                    {{ shareableLink }}/job/{{ job.slug }}
+                  <p class="link-col p-10">
+                    {{ link }}
                   </p>
                   <button (click)="copyLink()" class="btn btn-primary mt-5">
                     COPY LINK

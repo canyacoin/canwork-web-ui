@@ -183,16 +183,16 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   toggleOverlay(documentID, otherDocumentID) {
     if (!this.containsClass(otherDocumentID, 'hide-menu')) {
-      this.toggleMenuOverlay()
-      this.toggleClass(otherDocumentID, 'hide-menu')
-    }
-    if (this.containsClass(documentID, 'hide-menu')) {
       this.resetMenus()
       this.toggleClass(documentID, 'hide-menu')
     } else {
-      this.resetMenus()
+      this.toggleMenuOverlay()
+      this.toggleClass(documentID, 'hide-menu')
+      this.toggleClass('cancel-btn', 'hide-menu')
     }
-    this.toggleMenuOverlay()
+    if (this.containsClass('menu-overlay', 'activate-menu') === false) {
+      this.toggleClass('cancel-btn', 'hide-menu')
+    }
   }
 
   resetMenus() {
@@ -202,6 +202,12 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.containsClass('category-menu', 'hide-menu') === false) {
       this.toggleClass('category-menu', 'hide-menu')
     }
+  }
+
+  closeAllMenus() {
+    this.resetMenus()
+    this.toggleMenuOverlay()
+    this.toggleClass('cancel-btn', 'hide-menu')
   }
 
   containsClass(DocumentID, hiddenClassName) {
@@ -216,6 +222,21 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
   toggleMenuOverlay() {
     document.getElementById('menu-overlay').classList.toggle('activate-menu')
+  }
+
+  toggleClearFilters() {
+    if (this.containsClass('hours-menu', 'hide-menu') === false) {
+      this.resetMenus()
+      this.toggleMenuOverlay()
+    }
+    if (this.containsClass('category-menu', 'hide-menu') === false) {
+      this.resetMenus()
+      this.toggleMenuOverlay()
+    }
+    this.onResetCategories()
+    this.onSetCategories()
+    this.onResetHourlyRate()
+    this.onSetHourlyRate()
   }
 
   onChooseCategory(categoryName) {
