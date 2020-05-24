@@ -27,7 +27,14 @@
             </a>
           </div>
         </div>
-        <div class="row">
+        <div
+          *ngIf="loading"
+          class="container d-flex h-100 flex-column justify-content-center"
+        >
+          Loading...
+          <img src="assets/img/loader.svg" height="36px" alt="Loader" />
+        </div>
+        <div *ngIf="!loading" class="row">
           <div class="col text-left">
             <div [ngSwitch]="address">
               <div *ngSwitchCase="true" class="text-center">

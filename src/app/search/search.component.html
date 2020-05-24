@@ -57,6 +57,13 @@
                       >${{ minValue }} - ${{ maxValue }}/HR</span
                     >
                   </button>
+                  <button
+                    id="cancel-btn"
+                    (click)="closeAllMenus()"
+                    class="btn btn-primary my-1 btn-danger hide-menu"
+                  >
+                    CLOSE FILTERS
+                  </button>
                   <div class="row">
                     <ais-toggle
                       *ngIf="currentUser && currentUser.timezone !== ''"
@@ -101,7 +108,7 @@
                       </button>
                     </div>
                   </div>
-                  <div class="row">
+                  <div class="row text-center">
                     <div class="col-md-6 col-sm-12 col-12">
                       <button
                         id="finance"
@@ -127,7 +134,7 @@
                       </button>
                     </div>
                   </div>
-                  <div class="row">
+                  <div class="row text-center">
                     <div class="col-md-6 col-sm-12 col-12">
                       <button
                         id="softwareDev"

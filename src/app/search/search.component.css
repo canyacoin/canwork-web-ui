@@ -34,8 +34,24 @@ p {
 }
 
 #category-btn {
-  margin-right: 27.5px;
   margin-left: 15px;
+}
+
+#hourly-btn {
+  margin-left: 15px;
+}
+
+#cancel-btn {
+  margin-left: 15px;
+  background-color: #fff;
+  color: #ff4954;
+  height: 36px;
+  width: 150px;
+}
+
+#cancel-btn:hover {
+  background-color: #ff4954;
+  color: #fff;
 }
 
 .category-btn {
@@ -55,12 +71,23 @@ p {
     width: 225px;
   }
 }
+@media screen and (max-width: 500px) {
+  .category-btn {
+    max-width: 95%;
+    font-size: 9px;
+  }
+}
+@media screen and (max-width: 440px) {
+  .col-9 {
+    max-width: 95%;
+  }
+}
+
 .menu-options {
   margin-top: 10px;
   padding: 15px;
   right: auto;
   z-index: 125;
-  position: absolute;
   background-color: white;
   border-radius: 5px;
   display: block;
@@ -78,12 +105,13 @@ p {
   #hourly-btn {
     margin-left: 15px;
   }
+  #cancel-btn {
+    margin-left: 15px;
+  }
 }
+
 .hide-menu {
-  opacity: 0 !important;
-  z-index: 0 !important;
-  right: 250vw; /* put the menus OFF the screen instead. The sliders won't render properly otherwise. */
-  left: auto !important;
+  display: none;
 }
 
 .set-text {
@@ -176,6 +204,13 @@ p {
 
 ::ng-deep .ais-SearchBox-reset {
   display: none;
+}
+
+::ng-deep .ais-ToggleRefinement {
+  border-radius: 5px;
+  margin: 3px 0 8px 0;
+  background-color: #fff;
+  max-width: 90%;
 }
 
 ::ng-deep .ais-ToggleRefinement-count {
