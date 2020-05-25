@@ -370,7 +370,7 @@ class FinishedJobNotification extends AEmailNotification {
       bodyHtml: `
       Hi ${this.clientData.name},<br>
       ${this.providerData.name} has marked the job:
-      "${this.jobData.information.title}" as finished.
+      "${this.jobData.information.title}" as finished.<br>
       Login to CanWork to complete the job and release the funds from escrow.`,
     })
     console.log('+ dump emailMessages:', this.emailMessages)
@@ -400,9 +400,14 @@ class AcceptFinishNotification extends AEmailNotification {
       title: title,
       bodyHtml: `
       Hi ${this.providerData.name},<br>
-      Congratulations! ${this.clientData.name} has accepted the job:
-      "${this.jobData.information.title}"
-      as complete and released the escrowed funds to your wallet.`,
+      <br>
+      Congratulations! ${this.clientData.name} has accepted your work for the job: <br>
+      <br>
+      "${this.jobData.information.title}"<br>
+      <br>
+      The funds have been released to your wallet.<br>
+      <br>
+      Consider giving ${this.clientData.name} a Review.`,
     })
 
     console.log('+ dump emailMessages:', this.emailMessages)
@@ -467,11 +472,19 @@ class JobRequestCommenceNotification extends AEmailNotification {
       title: title,
       bodyHtml: `
       Hi ${this.providerData.name},<br>
-      ${this.clientData.name}
-      has transfered the funds into the CanWork escrow for the job request:
-      "${this.jobData.information.title}".<br> The funds are safely held in escrow until the job is complete and released to your wallet. <br>`,
+      <br>
+      ${this.clientData.name} 
+      transfered funds into the CanWork Escrow for the job request: <br>
+      "${this.jobData.information.title}".<br>
+      <br>
+      The agreed value is securely held in our 'hedged' escrow until the job is complete and released to your wallet. <br>
+      <br>
+      All the best`,
     })
 
+    /* Too many notifications
+    This could serve to deliver an invoice email later!
+    
     title = `You have commenced the job`
     this.emailMessages.push({
       to: this.clientData.email,
@@ -483,6 +496,7 @@ class JobRequestCommenceNotification extends AEmailNotification {
       "${this.jobData.information.title}".`,
     })
     console.log('+ dump emailMessages:', this.emailMessages)
+  */
   }
 }
 
