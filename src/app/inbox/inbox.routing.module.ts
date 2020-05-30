@@ -9,6 +9,7 @@ import { JobContainerComponent } from './jobs/container/job-container.component'
 import { JobDetailsComponent } from './jobs/container/job-details/job-details.component'
 import { JobDashboardComponent } from './jobs/dashboard/job-dashboard.component'
 import { PostComponent } from './jobs/post/post.component'
+import { GitComponent } from './jobs/git/git.component'
 
 const routes: Routes = [
   {
@@ -32,6 +33,10 @@ const routes: Routes = [
     path: 'post',
     component: PostComponent,
   },
+  {
+    path: 'git',
+    component: GitComponent,
+  },  
   {
     path: 'post/:id',
     component: PostComponent,

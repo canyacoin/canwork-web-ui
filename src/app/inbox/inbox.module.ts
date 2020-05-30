@@ -24,7 +24,10 @@ import { JobContainerComponent } from './jobs/container/job-container.component'
 import { JobDetailsComponent } from './jobs/container/job-details/job-details.component'
 import { JobDashboardComponent } from './jobs/dashboard/job-dashboard.component'
 import { PostComponent } from './jobs/post/post.component'
+import { GitComponent } from './jobs/git/git.component'
 import { BepAssetPaymentSelectorComponent } from '../bep-asset-payment-selector/bep-asset-payment-selector.component'
+import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   imports: [
@@ -34,6 +37,7 @@ import { BepAssetPaymentSelectorComponent } from '../bep-asset-payment-selector/
     CoreComponentsModule,
     CoreServicesModule,
     CoreUtilsModule,
+    HttpClientModule,
     InboxRoutingModule,
     FormsModule,
     OrderModule,
@@ -48,6 +52,7 @@ import { BepAssetPaymentSelectorComponent } from '../bep-asset-payment-selector/
     ChatComponent,
     CancelJobComponent,
     EnterEscrowComponent,
+    GitComponent,
     JobContainerComponent,
     JobDashboardComponent,
     JobDetailsComponent,

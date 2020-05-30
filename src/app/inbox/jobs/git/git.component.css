@@ -1,0 +1,50 @@
+input {
+  border-radius: 5px;
+}
+
+.btn-providerType img {
+  margin-top: 7.5px;
+  margin-left: -15px;
+  height: 20px;
+  position: absolute;
+}
+
+.btn-providerType p {
+  font-size: 10px;
+  width: 87.5px;
+  margin-bottom: 0;
+  margin-left: -20px;
+}
+
+@media screen and (max-width: 992px) {
+  .btn-providerType p {
+    font-size: 10px;
+    width: 100px;
+    margin-bottom: 0;
+    margin-left: 25px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .btn-providerType {
+    padding: 10px;
+  }
+
+  .btn-providerType img {
+    margin-left: 0x;
+    height: 14px;
+    display: none;
+  }
+
+  .btn-providerType p {
+    text-align: center !important;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 100%;
+  }
+}
+
+.btn {
+  min-width: 125px;
+}

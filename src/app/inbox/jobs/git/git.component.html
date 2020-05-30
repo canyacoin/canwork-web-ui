@@ -1,0 +1,177 @@
+<main>
+  <section
+    id="job-creation-form"
+    *ngIf="currentUser"
+    class="section bg-grey pt-30"
+  >
+    <app-back-button></app-back-button>
+    <div
+      *ngIf="!pageLoaded"
+      class="container d-flex h-100 flex-column justify-content-center"
+    >
+      <img src="assets/img/loader.svg" height="36px" alt="Loader" />
+    </div>
+
+    <div id="shareable-job" *ngIf="!recipient && pageLoaded && isShareable">
+      <div *ngIf="!sent" class="section bg-grey pt-15 pb-30">
+        <div class="container bg-white p-30 brad-5px">
+          <header class="section-header my-0 py-15">
+            <h2 *ngIf="!editing" class="fw-600">Insert git issue url</h2>
+          </header>
+          <div class="row">
+            <div class="col-12 col-lg-12  bg-white">
+              <div class="align-self-center align-items-center my-10">
+                <form
+                  [formGroup]="shareableJobForm"
+                  class="form validate"
+                  novalidate
+                >
+                  <div class="col-12 col-lg-12">
+                    <div class="form-group">
+                      <div class="col-12">
+                        <label>Url *</label>
+                        <input
+                          class="form-control"
+                          #url
+                          formControlName="url"
+                          type="text"
+                          name="url"
+                          placeholder="Enter Issue Url"
+                          (blur)="onBlurMethod($event.target.name)"
+                          (focus)="onFocusMethod($event.target.name)"
+                          maxlength="64"
+                          [class.invalid]="
+                            !shareableJobForm.controls.url.valid &&
+                            shareableJobForm.controls.url.dirty
+                          "
+                        />
+                        <small
+                          *ngIf="
+                            !shareableJobForm.controls.url.valid &&
+                            shareableJobForm.controls.url.dirty
+                          "
+                          class="text-danger text-wrap"
+                          >Url must be longer than 5 characters and less than
+                          64 characters</small
+                        >
+                      </div>
+                    </div>
+
+
+                  </div>
+                  
+                  <div *ngIf="!isSending" class="col-12 col-lg-12">
+                    <div class="form-group">
+                      <div class="col-12">
+
+                      <label class="text-dark">Result</label>
+                      <textarea
+                        class="form-control"
+                        #result
+                        formControlName="result"
+                        rows="4"
+                        name="result"
+                        disabled
+                      ></textarea>
+
+                      </div>
+                    </div>
+
+
+                  </div>                  
+                  
+                  <div class="col-12">
+                    <div class="col-12">
+                      <div *ngIf="!isSending" class="col-12 row">
+
+                        <div class="px-5 col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                          <button
+                            type="button"
+                            (click)="submitGitUrl()"
+                            [disabled]="
+                              !shareableJobForm.valid ||
+                              isSending ||
+                              (currentUpload && !uploadedFile)
+                            "
+                            class="btn btn-primary mx-5 w-full"
+                          >
+                            Retrieve data
+                          </button>
+                        </div>
+                      </div>
+                      <div *ngIf="isSending">
+                        <img
+                          *ngIf="isSending"
+                          src="assets/img/loader.svg"
+                          height="36px"
+                          alt="CanYa Coin"
+                        />
+                      </div>
+                      <span
+                        *ngIf="error"
+                        class="fs-12 fw-400 mt-10"
+                        style="color: #ff6666"
+                      >
+                        Something went wrong when posting this job..
+                      </span>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="sent">
+        <div class="container card">
+          <div class="text-center mt-30">
+            <img
+              src="assets/img/CanYa_tick_green.svg"
+              class="mb-30 animated bounceInDown"
+              width="100px"
+              height="100px"
+            />
+            <div *ngIf="!draft && !editing">
+              <h2>Congrats! Your Job has been Created!</h2>
+              <p class="lead fw-400">
+                You can now invite providers to this job.
+              </p>
+            </div>
+
+            <div *ngIf="draft">
+              <h2>Your job draft has been saved</h2>
+              <p class="lead fw-400 m-0">
+                You can finish the draft and share it later.
+              </p>
+            </div>
+          </div>
+          <br />
+          <p *ngIf="!draft" class="text-center">
+            <a class="btn btn-secondary" [routerLink]="['/jobs/public/', slug]"
+              >Go to job</a
+            >
+            &nbsp;&nbsp;
+            <a class="btn btn-primary text-white" [routerLink]="['/search']"
+              >Invite Providers</a
+            >
+          </p>
+          <p *ngIf="draft" class="text-center">
+            <a class="btn btn-secondary" [routerLink]="['/inbox/jobs/']"
+              >My Jobs</a
+            >
+            &nbsp;&nbsp;
+            <a
+              class="btn btn-primary text-white"
+              [routerLink]="['/jobs/public/', slug]"
+              >Go to job</a
+            >
+            &nbsp;&nbsp;
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-scroll-top></app-scroll-top>
