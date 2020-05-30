@@ -208,20 +208,39 @@ export class GitComponent implements OnInit, OnDestroy {
 
 
   gitApiInvoke(url) {
+    let tokenLab = '-MJbj8GWkYjjVMnroBzn'; // todo move to config and get from backend
+
     this.isSending = true
     this.error = false
     this.gitResult = ''
     this.isGitReady = false
-    let re = /https:\/\/gitlab\.com\/(.*)\/-\/issues\/(\d*)/gmi;
-    let splitted = re.exec(url);
-    console.log(splitted);
-    let token = '-MJbj8GWkYjjVMnroBzn';
+    let project = '';
+    let issue = '';
+    let repo = 'unknown';
+    let reLab = /https:\/\/gitlab\.com\/(.*)\/-\/issues\/(\d*)/gmi;
+    let reHub = /https:\/\/github\.com\/(.*)\/issues\/(\d*)/gmi;
+    let splittedLab = reLab.exec(url);
+    let splittedHub = reHub.exec(url);
+    let apiPathGit = '';
+    if (!!splittedLab) repo = 'lab';
+    if (!!splittedHub) repo = 'hub';
+    if (repo == 'lab') {
+      project = encodeURIComponent(splittedLab[1]);
+      issue = splittedLab[2];
+      apiPathGit = `https://gitlab.com/api/v4/projects/${project}/issues/${issue}?access_token=${tokenLab}`;
+    }
+    if (repo == 'hub') {
+      project = splittedHub[1];
+      issue = splittedHub[2];
+      apiPathGit = `https://api.github.com/repos/${project}/issues/${issue}`;
+    }    
+    if (repo == 'unknown') {
+      this.isSending = false
+      return;
+    }
 
-    let project = encodeURIComponent(splitted[1]);
-    let issue = splitted[2];
-    let apiPathGit = `https://gitlab.com/api/v4/projects/${project}/issues/${issue}?access_token=${token}`;
+
     this.http.get(apiPathGit).subscribe(resp => {
-      console.log(resp);
       this.gitResult = JSON.stringify(resp, null, 4);   
       this.isSending = false
       this.isGitReady = true
