@@ -1,3 +1,4 @@
+import { environment } from '../../../../environments/environment'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -208,7 +209,7 @@ export class GitComponent implements OnInit, OnDestroy {
 
 
   gitApiInvoke(url) {
-    let tokenLab = '-MJbj8GWkYjjVMnroBzn'; // todo move to config and get from backend
+    let tokenLab = environment.gitlab.token; // todo get from backend or use a backend service?
 
     this.isSending = true
     this.error = false
