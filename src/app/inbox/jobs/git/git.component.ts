@@ -44,11 +44,13 @@ export class GitComponent implements OnInit, OnDestroy {
   currentDate = ''
   isShareable = false
   isSending = false
+  isGitReady = false
   sent = false
   draft = false
   editing = false
   error = false
   postToProvider = false
+  gitResult = ''
 
   jobToEdit: Job
   jobId: string
@@ -106,7 +108,7 @@ export class GitComponent implements OnInit, OnDestroy {
     private binanceService: BinanceService,
     private publicJobService: PublicJobService,
     private uploadService: UploadService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
     private http: HttpClient,
   ) {
 
@@ -205,34 +207,38 @@ export class GitComponent implements OnInit, OnDestroy {
   }  
 
 
-
-  async submitGitUrl() {
+  gitApiInvoke(url) {
     this.isSending = true
     this.error = false
+    this.gitResult = ''
+    this.isGitReady = false
+    let re = /https:\/\/gitlab\.com\/(.*)\/-\/issues\/(\d*)/gmi;
+    let splitted = re.exec(url);
+    console.log(splitted);
     let token = '-MJbj8GWkYjjVMnroBzn';
 
-    let project = encodeURIComponent("fdroid/fdroiddata");
-    let issue = 2046;
+    let project = encodeURIComponent(splitted[1]);
+    let issue = splitted[2];
     let apiPathGit = `https://gitlab.com/api/v4/projects/${project}/issues/${issue}?access_token=${token}`;
-    console.log(apiPathGit);
     this.http.get(apiPathGit).subscribe(resp => {
       console.log(resp);
+      this.gitResult = JSON.stringify(resp, null, 4);   
       this.isSending = false
+      this.isGitReady = true
       
-    });
-    /*
-      https://stackblitz.com/edit/gitlab-api?file=app%2Fapp.component.ts    
-    
-    */
+    });    
+  }
 
-    try {
-      
-      //this.isSending = false
-    } catch (e) {
 
-      //this.isSending = false
-      //this.error = true
-    }
+  onPaste(event: ClipboardEvent) {
+    let clipboardData = event.clipboardData;
+    let pastedText = clipboardData.getData('text');
+    this.gitApiInvoke(pastedText);
+  }
+
+  async submitGitUrl() {
+    this.gitApiInvoke(this.shareableJobForm.value.url);
+
   }
 
   async updateJob() {
