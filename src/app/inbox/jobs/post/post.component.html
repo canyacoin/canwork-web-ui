@@ -450,6 +450,26 @@
                   <div class="col-12 col-lg-12">
                     <div class="form-group">
                       <div class="col-12">
+                        <label>GitHub issue</label>
+                        <input
+                          class="form-control"
+                          #url
+                          formControlName="url"
+                          type="text"
+                          name="url"
+                          (blur)="onBFGit()"
+                          (focus)="onBFGit()"                          
+                          placeholder="Paste a GitHub issue if you want to create a job from it"
+                          [class.invalid]="!!errorGitUrl"
+                          (paste)="onGitPaste($event)"
+                        />
+                        <small
+                          *ngIf="!!errorGitUrl"
+                          class="text-danger text-wrap"
+                          >{{errorGitUrl}}</small
+                        >
+                      </div>                    
+                      <div class="col-12">
                         <label>Title *</label>
                         <input
                           class="form-control"
