@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { BinanceService } from '@service/binance.service'
+import { Issue, Repository } from '@class/git'
 import {
   Job,
   JobDescription,
@@ -23,7 +24,13 @@ import { UserService } from '@service/user.service'
 import { GenerateGuid } from '@util/generate.uid'
 import * as _ from 'lodash'
 import { Subscription } from 'rxjs'
+import { take } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
+import { AngularFirestore } from 'angularfire2/firestore'
+
+export class SkillTag {
+  tag: string
+}
 
 @Component({
   selector: 'app-post',
@@ -61,6 +68,7 @@ export class PostComponent implements OnInit, OnDestroy {
   fileTooBig = false
   uploadFailed = false
   deleteFailed = false
+    
 
   usdToAtomicCan: number
   providerTypes = [
@@ -109,7 +117,8 @@ export class PostComponent implements OnInit, OnDestroy {
     private publicJobService: PublicJobService,
     private uploadService: UploadService,
     private toastr: ToastrService,
-    private http: HttpClient    
+    private http: HttpClient,
+    private afs: AngularFirestore    
   ) {
     this.postForm = formBuilder.group({
       description: [
@@ -574,15 +583,22 @@ export class PostComponent implements OnInit, OnDestroy {
     }
 
 
-    this.http.get(apiPathGit).subscribe(resp => {
+    this.http.get(apiPathGit).subscribe((resp:Issue) => {
       console.log(resp);
-      this.http.get(apiRepoGit).subscribe(repo => {
-        // need to create interface to map data
+      this.http.get(apiRepoGit).subscribe((repo:Repository) => {
         let repoLang = repo.language;
         //need access to app-skill-tags-selection 
         console.log(repoLang);
-        
-        // need to create interface to map data
+        this.afs
+          .collection<SkillTag>('skill-tags')
+          .valueChanges()
+          .pipe(take(1))
+          .subscribe((tags: SkillTag[]) => {
+            console.log(tags);
+            //this.skillTagsList = tags.map(x => x.tag)
+            // search tag property lowercase contains language (fuzzy?)
+          })        
+            
         this.shareableJobForm.controls['title'].patchValue(resp.title)
         this.shareableJobForm.controls['description'].patchValue(resp.body)
         this.shareableJobForm.controls['providerType'].patchValue('softwareDev')
