@@ -26,11 +26,7 @@ import * as _ from 'lodash'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
-import { AngularFirestore } from 'angularfire2/firestore'
 
-export class SkillTag {
-  tag: string
-}
 
 @Component({
   selector: 'app-post',
@@ -58,6 +54,7 @@ export class PostComponent implements OnInit, OnDestroy {
   error = false
   postToProvider = false
   errorGitUrl = ''
+  skillTagsList: string[]
 
   jobToEdit: Job
   jobId: string
@@ -118,7 +115,6 @@ export class PostComponent implements OnInit, OnDestroy {
     private uploadService: UploadService,
     private toastr: ToastrService,
     private http: HttpClient,
-    private afs: AngularFirestore    
   ) {
     this.postForm = formBuilder.group({
       description: [
@@ -406,6 +402,10 @@ export class PostComponent implements OnInit, OnDestroy {
      */
   }
 
+  skillTagsLoaded(tagsList: string[]) {
+    this.skillTagsList = tagsList
+  }
+
   skillTagsUpdated(value: string) {
     if (!this.isShareable) {
       this.postForm.controls['skills'].setValue(value)
@@ -589,15 +589,7 @@ export class PostComponent implements OnInit, OnDestroy {
         let repoLang = repo.language;
         //need access to app-skill-tags-selection 
         console.log(repoLang);
-        this.afs
-          .collection<SkillTag>('skill-tags')
-          .valueChanges()
-          .pipe(take(1))
-          .subscribe((tags: SkillTag[]) => {
-            console.log(tags);
-            //this.skillTagsList = tags.map(x => x.tag)
-            // search tag property lowercase contains language (fuzzy?)
-          })        
+        console.log(this.skillTagsList)     
             
         this.shareableJobForm.controls['title'].patchValue(resp.title)
         this.shareableJobForm.controls['description'].patchValue(resp.body)
