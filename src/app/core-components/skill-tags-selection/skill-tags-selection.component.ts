@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core'
 import { AngularFirestore } from 'angularfire2/firestore'
 import { take } from 'rxjs/operators'
 
@@ -14,8 +14,14 @@ export class SkillTag {
 export class SkillTagsSelectionComponent implements OnInit {
   @Input() initialTags: string[]
   @Input() minimumTags: number
+  @Input() updatedTags: string[];
   @Output() tagsUpdated: EventEmitter<string> = new EventEmitter()
   @Output() tagsLoaded: EventEmitter<string[]> = new EventEmitter()
+
+  ngOnChanges(changes: SimpleChanges) {
+      this.acceptedTags = changes.updatedTags.currentValue === undefined ? [] : changes.updatedTags.currentValue
+      this.tagsUpdated.emit(this.acceptedTags.join(','))      
+  }
 
   skillTagsList: string[] = []
   tagSelectionInvalid = false

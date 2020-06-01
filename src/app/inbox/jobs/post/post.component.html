@@ -554,7 +554,8 @@
                         <label>Key skills required *</label>
                         <app-skill-tags-selection
                           (tagsUpdated)="skillTagsUpdated($event)"
-                          (tagsLoaded)="skillTagsLoaded($event)"                          
+                          (tagsLoaded)="skillTagsLoaded($event)"
+                          [updatedTags]="this.gitUpdatedTags"                         
                           [minimumTags]="1"
                         ></app-skill-tags-selection>
                         <input

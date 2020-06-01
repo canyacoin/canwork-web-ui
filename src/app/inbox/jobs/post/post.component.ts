@@ -55,6 +55,7 @@ export class PostComponent implements OnInit, OnDestroy {
   postToProvider = false
   errorGitUrl = ''
   skillTagsList: string[]
+  gitUpdatedTags: string[] = []
 
   jobToEdit: Job
   jobId: string
@@ -252,7 +253,7 @@ export class PostComponent implements OnInit, OnDestroy {
         )
         this.postForm.controls[
           'timelineExpectation'
-        ].patchValue('Up to 1 Year')           
+        ].patchValue('Up to 1 Year')        
         if (!this.postToProvider) this.pageLoaded = true
       } else {
         this.jobId = this.activatedRoute.snapshot.params['jobId']
@@ -296,11 +297,14 @@ export class PostComponent implements OnInit, OnDestroy {
                 this.shareableJobForm.controls['visibility'].patchValue(
                   this.jobToEdit.visibility
                 )
+                console.log(this.jobToEdit.information.skills)
+
                 this.shareableJobForm.controls['skills'].patchValue(
                   this.jobToEdit.information.skills
                 )
                 if (this.jobToEdit.information.attachments.length > 0) this.uploadedFile = this.jobToEdit.information.attachments[0]
                 this.pageLoaded = true
+
               } else {
                 this.router.navigateByUrl('/not-found')
               }
@@ -584,15 +588,35 @@ export class PostComponent implements OnInit, OnDestroy {
 
 
     this.http.get(apiPathGit).subscribe((resp:Issue) => {
-      console.log(resp);
       this.http.get(apiRepoGit).subscribe((repo:Repository) => {
-        let repoLang = repo.language;
-        //need access to app-skill-tags-selection 
-        console.log(repoLang);
-        console.log(this.skillTagsList)     
-            
+        if (!!repo.language) {
+          let repoLang = repo.language.toLowerCase()
+
+          let foundTag = ''
+          for (let tag of this.skillTagsList) {
+            if (tag.toLowerCase() == repoLang) {
+              // it's equal, priority, break (i.e. java over javascript as a repoLang)
+              foundTag = tag
+              break
+            }
+            // contained into
+            if (tag.toLowerCase().indexOf(repoLang) > -1) foundTag = tag
+          }
+          if (!!foundTag) {
+            let updatedTags = []
+            updatedTags.push(foundTag)
+            this.gitUpdatedTags = updatedTags
+          }
+        }
+        let description = '';
+        description += 'Github "'+ project + '" issue ' + issue + ' : "' + resp.title + '"'
+        description += '\n'
+        description += '['+url+']'
+        description += '\n\n'
+        description += resp.body
+        
         this.shareableJobForm.controls['title'].patchValue(resp.title)
-        this.shareableJobForm.controls['description'].patchValue(resp.body)
+        this.shareableJobForm.controls['description'].patchValue(description)
         this.shareableJobForm.controls['providerType'].patchValue('softwareDev')
         if (resp.state != 'open') {
           this.errorGitUrl = 'Pay attention, issue is not open';
