@@ -118,6 +118,9 @@ export class PostComponent implements OnInit, OnDestroy {
     private http: HttpClient,
   ) {
     this.postForm = formBuilder.group({
+      url: [
+        '',
+      ],      
       description: [
         '',
         Validators.compose([Validators.required, Validators.maxLength(10000)]),
@@ -297,7 +300,6 @@ export class PostComponent implements OnInit, OnDestroy {
                 this.shareableJobForm.controls['visibility'].patchValue(
                   this.jobToEdit.visibility
                 )
-                console.log(this.jobToEdit.information.skills)
 
                 this.shareableJobForm.controls['skills'].patchValue(
                   this.jobToEdit.information.skills
@@ -545,13 +547,18 @@ export class PostComponent implements OnInit, OnDestroy {
   }
   
   gitApiInvoke(url) {
+    let formRef = this.shareableJobForm
+    if (!this.isShareable) formRef = this.postForm
+    
     //let tokenLab = environment.gitlab.token; // todo get from backend or use a backend service?
+    
     let tokenLab = '';
     
     this.errorGitUrl = '';    
     this.isSending = true
-    this.shareableJobForm.controls['url'].patchValue(url)
-    this.shareableJobForm.controls['url'].disable()
+    formRef.controls['url'].patchValue(url)
+    formRef.controls['url'].disable()
+
     
     let project = '';
     let issue = '';
@@ -567,7 +574,7 @@ export class PostComponent implements OnInit, OnDestroy {
     if (repo == 'lab') {
       this.errorGitUrl = 'GitLab coming soon ..';
       this.isSending = false
-      this.shareableJobForm.controls['url'].enable()
+      formRef.controls['url'].enable()
       return;
       project = encodeURIComponent(splittedLab[1]);
       issue = splittedLab[2];
@@ -582,7 +589,7 @@ export class PostComponent implements OnInit, OnDestroy {
     if (repo == 'unknown') {
       this.errorGitUrl = 'Wrong url format';
       this.isSending = false
-      this.shareableJobForm.controls['url'].enable()
+      formRef.controls['url'].enable()
       return;
     }
 
@@ -615,12 +622,12 @@ export class PostComponent implements OnInit, OnDestroy {
         description += '\n\n'
         description += resp.body
         
-        this.shareableJobForm.controls['title'].patchValue(resp.title)
-        this.shareableJobForm.controls['description'].patchValue(description)
-        this.shareableJobForm.controls['providerType'].patchValue('softwareDev')
+        formRef.controls['title'].patchValue(resp.title)
+        formRef.controls['description'].patchValue(description)
+        if (!!this.isShareable) formRef.controls['providerType'].patchValue('softwareDev')
         if (resp.state != 'open') {
           this.errorGitUrl = 'Pay attention, issue is not open';
-          this.shareableJobForm.controls['url'].enable()
+          formRef.controls['url'].enable()
         }
         this.isSending = false
       });    

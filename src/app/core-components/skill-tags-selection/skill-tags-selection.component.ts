@@ -19,8 +19,10 @@ export class SkillTagsSelectionComponent implements OnInit {
   @Output() tagsLoaded: EventEmitter<string[]> = new EventEmitter()
 
   ngOnChanges(changes: SimpleChanges) {
+    if (!!changes.updatedTags) {
       this.acceptedTags = changes.updatedTags.currentValue === undefined ? [] : changes.updatedTags.currentValue
-      this.tagsUpdated.emit(this.acceptedTags.join(','))      
+      this.tagsUpdated.emit(this.acceptedTags.join(','))
+    }
   }
 
   skillTagsList: string[] = []
