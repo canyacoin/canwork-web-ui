@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { BinanceService } from '@service/binance.service'
+import { Issue, Repository } from '@class/git'
 import {
   Job,
   JobDescription,
@@ -23,6 +24,10 @@ import { UserService } from '@service/user.service'
 import { GenerateGuid } from '@util/generate.uid'
 import * as _ from 'lodash'
 import { Subscription } from 'rxjs'
+import { take } from 'rxjs/operators'
+import { HttpClient } from '@angular/common/http'
+
+
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
@@ -48,6 +53,9 @@ export class PostComponent implements OnInit, OnDestroy {
   editing = false
   error = false
   postToProvider = false
+  errorGitUrl = ''
+  skillTagsList: string[]
+  gitUpdatedTags: string[] = []
 
   jobToEdit: Job
   jobId: string
@@ -58,6 +66,7 @@ export class PostComponent implements OnInit, OnDestroy {
   fileTooBig = false
   uploadFailed = false
   deleteFailed = false
+    
 
   usdToAtomicCan: number
   providerTypes = [
@@ -105,9 +114,13 @@ export class PostComponent implements OnInit, OnDestroy {
     private binanceService: BinanceService,
     private publicJobService: PublicJobService,
     private uploadService: UploadService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private http: HttpClient,
   ) {
     this.postForm = formBuilder.group({
+      url: [
+        '',
+      ],      
       description: [
         '',
         Validators.compose([Validators.required, Validators.maxLength(10000)]),
@@ -147,6 +160,9 @@ export class PostComponent implements OnInit, OnDestroy {
       terms: [false, Validators.requiredTrue],
     })
     this.shareableJobForm = formBuilder.group({
+      url: [
+        '',
+      ],
       description: [
         '',
         Validators.compose([Validators.required, Validators.maxLength(10000)]),
@@ -221,7 +237,6 @@ export class PostComponent implements OnInit, OnDestroy {
           this.isShareable = true
         }
       })
-      console.log(this.recipientAddress)
       if (!this.editing) {
         this.jobId = GenerateGuid()
         this.shareableJobForm.controls['initialStage'].patchValue(
@@ -241,7 +256,7 @@ export class PostComponent implements OnInit, OnDestroy {
         )
         this.postForm.controls[
           'timelineExpectation'
-        ].patchValue('Up to 1 Year')           
+        ].patchValue('Up to 1 Year')        
         if (!this.postToProvider) this.pageLoaded = true
       } else {
         this.jobId = this.activatedRoute.snapshot.params['jobId']
@@ -285,11 +300,13 @@ export class PostComponent implements OnInit, OnDestroy {
                 this.shareableJobForm.controls['visibility'].patchValue(
                   this.jobToEdit.visibility
                 )
+
                 this.shareableJobForm.controls['skills'].patchValue(
                   this.jobToEdit.information.skills
                 )
                 if (this.jobToEdit.information.attachments.length > 0) this.uploadedFile = this.jobToEdit.information.attachments[0]
                 this.pageLoaded = true
+
               } else {
                 this.router.navigateByUrl('/not-found')
               }
@@ -389,6 +406,10 @@ export class PostComponent implements OnInit, OnDestroy {
       this.recipient = user;
     });
      */
+  }
+
+  skillTagsLoaded(tagsList: string[]) {
+    this.skillTagsList = tagsList
   }
 
   skillTagsUpdated(value: string) {
@@ -524,6 +545,106 @@ export class PostComponent implements OnInit, OnDestroy {
       this.isSending = false
     }
   }
+  
+  gitApiInvoke(url) {
+    let formRef = this.shareableJobForm
+    if (!this.isShareable) formRef = this.postForm
+    
+    //let tokenLab = environment.gitlab.token; // todo get from backend or use a backend service?
+    
+    let tokenLab = '';
+    
+    this.errorGitUrl = '';    
+    this.isSending = true
+    formRef.controls['url'].patchValue(url)
+    formRef.controls['url'].disable()
+
+    
+    let project = '';
+    let issue = '';
+    let repo = 'unknown';
+    let reLab = /https:\/\/gitlab\.com\/(.*)\/-\/issues\/(\d*)/gmi;
+    let reHub = /https:\/\/github\.com\/(.*)\/issues\/(\d*)/gmi;
+    let splittedLab = reLab.exec(url);
+    let splittedHub = reHub.exec(url);
+    let apiPathGit = '';
+    let apiRepoGit = '';
+    if (!!splittedLab) repo = 'lab';
+    if (!!splittedHub) repo = 'hub';
+    if (repo == 'lab') {
+      this.errorGitUrl = 'GitLab coming soon ..';
+      this.isSending = false
+      formRef.controls['url'].enable()
+      return;
+      project = encodeURIComponent(splittedLab[1]);
+      issue = splittedLab[2];
+      apiPathGit = `https://gitlab.com/api/v4/projects/${project}/issues/${issue}?access_token=${tokenLab}`;
+    }
+    if (repo == 'hub') {
+      project = splittedHub[1];
+      issue = splittedHub[2];
+      apiPathGit = `https://api.github.com/repos/${project}/issues/${issue}`;
+      apiRepoGit = `https://api.github.com/repos/${project}`;
+    }    
+    if (repo == 'unknown') {
+      this.errorGitUrl = 'Wrong url format';
+      this.isSending = false
+      formRef.controls['url'].enable()
+      return;
+    }
+
+
+    this.http.get(apiPathGit).subscribe((resp:Issue) => {
+      this.http.get(apiRepoGit).subscribe((repo:Repository) => {
+        if (!!repo.language) {
+          let repoLang = repo.language.toLowerCase()
+
+          let foundTag = ''
+          for (let tag of this.skillTagsList) {
+            if (tag.toLowerCase() == repoLang) {
+              // it's equal, priority, break (i.e. java over javascript as a repoLang)
+              foundTag = tag
+              break
+            }
+            // contained into
+            if (tag.toLowerCase().indexOf(repoLang) > -1) foundTag = tag
+          }
+          if (!!foundTag) {
+            let updatedTags = []
+            updatedTags.push(foundTag)
+            this.gitUpdatedTags = updatedTags
+          }
+        }
+        let description = '';
+        description += 'Github "'+ project + '" issue ' + issue + ' : "' + resp.title + '"'
+        description += '\n'
+        description += '['+url+']'
+        description += '\n\n'
+        description += resp.body
+        
+        formRef.controls['title'].patchValue(resp.title)
+        formRef.controls['description'].patchValue(description)
+        if (!!this.isShareable) formRef.controls['providerType'].patchValue('softwareDev')
+        if (resp.state != 'open') {
+          this.errorGitUrl = 'Pay attention, issue is not open';
+          formRef.controls['url'].enable()
+        }
+        this.isSending = false
+      });    
+
+    });    
+  }
+
+  onGitPaste(event: ClipboardEvent) {
+    let clipboardData = event.clipboardData;
+    let pastedText = clipboardData.getData('text');
+    this.gitApiInvoke(pastedText);
+  }
+  
+  onBFGit() {
+    this.errorGitUrl = '';
+  }
+
 
   async submitShareableJob(isDraft: boolean) {
     this.isSending = true
