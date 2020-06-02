@@ -23,6 +23,26 @@
                 <form [formGroup]="postForm" class="form validate" novalidate>
                   <div class="col-12 col-lg-12">
                     <div class="form-group">
+                      <label>GitHub issue</label>
+                      <input
+                        class="form-control"
+                        #url
+                        formControlName="url"
+                        type="text"
+                        name="url"
+                        (blur)="onBFGit()"
+                        (focus)="onBFGit()"                          
+                        placeholder="Paste a GitHub issue link here if you want to populate job fields from it"
+                        [class.invalid]="!!errorGitUrl"
+                        (paste)="onGitPaste($event)"
+                      />
+                      <small
+                        *ngIf="!!errorGitUrl"
+                        class="text-danger text-wrap"
+                        >{{errorGitUrl}}</small
+                      >
+                    </div>                    
+                    <div class="form-group">
                       <label>Title *</label>
                       <input
                         class="form-control"
@@ -88,6 +108,8 @@
                       <label>Key skills required *</label>
                       <app-skill-tags-selection
                         (tagsUpdated)="skillTagsUpdated($event)"
+                        (tagsLoaded)="skillTagsLoaded($event)"
+                        [updatedTags]="this.gitUpdatedTags"                                                 
                         [minimumTags]="1"
                       ></app-skill-tags-selection>
                       <input
@@ -450,6 +472,26 @@
                   <div class="col-12 col-lg-12">
                     <div class="form-group">
                       <div class="col-12">
+                        <label>GitHub issue</label>
+                        <input
+                          class="form-control"
+                          #url
+                          formControlName="url"
+                          type="text"
+                          name="url"
+                          (blur)="onBFGit()"
+                          (focus)="onBFGit()"                          
+                          placeholder="Paste a GitHub issue link here if you want to populate job fields from it"
+                          [class.invalid]="!!errorGitUrl"
+                          (paste)="onGitPaste($event)"
+                        />
+                        <small
+                          *ngIf="!!errorGitUrl"
+                          class="text-danger text-wrap"
+                          >{{errorGitUrl}}</small
+                        >
+                      </div>                    
+                      <div class="col-12">
                         <label>Title *</label>
                         <input
                           class="form-control"
@@ -533,6 +575,8 @@
                         <label>Key skills required *</label>
                         <app-skill-tags-selection
                           (tagsUpdated)="skillTagsUpdated($event)"
+                          (tagsLoaded)="skillTagsLoaded($event)"
+                          [updatedTags]="this.gitUpdatedTags"                         
                           [minimumTags]="1"
                         ></app-skill-tags-selection>
                         <input
@@ -565,7 +609,9 @@
                         <label>Key skills required to edit</label>
                         <app-skill-tags-selection
                           (tagsUpdated)="skillTagsUpdated($event)"
+                          (tagsLoaded)="skillTagsLoaded($event)"
                           [initialTags]="this.jobToEdit.information.skills"
+                          [updatedTags]="this.gitUpdatedTags"                                                                           
                           [minimumTags]="1"
                         ></app-skill-tags-selection>
                         <input
