@@ -588,7 +588,7 @@ export class PostComponent implements OnInit, OnDestroy {
           this.gitUpdatedTags = updatedTags
         }
         let description = '';
-        description += 'Github "'+ issue.inputValues.project + '" issue ' + issue.inputValues.issue + ' : "' + issue.title + '"'
+        description += issue.inputValues.provider +' "'+ issue.inputValues.project + '" issue ' + issue.inputValues.issue + ' : "' + issue.title + '"'
         description += '\n'
         description += '['+url+']'
         description += '\n\n'

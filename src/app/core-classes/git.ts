@@ -9,6 +9,7 @@ export interface Repository {
 }
 export interface DecoratedIssue {
   inputValues: {
+    provider: string
     project: string
     issue: string    
   }
