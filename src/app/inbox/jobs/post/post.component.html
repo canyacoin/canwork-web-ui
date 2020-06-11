@@ -23,7 +23,7 @@
                 <form [formGroup]="postForm" class="form validate" novalidate>
                   <div class="col-12 col-lg-12">
                     <div class="form-group">
-                      <label>GitHub issue</label>
+                      <label>GitHub or GitLab issue</label>
                       <input
                         class="form-control"
                         #url
@@ -32,7 +32,7 @@
                         name="url"
                         (blur)="onBFGit()"
                         (focus)="onBFGit()"                          
-                        placeholder="Paste a GitHub issue link here if you want to populate job fields from it"
+                        placeholder="Paste a GitHub or GitLab issue link here if you want to populate job fields from it"
                         [class.invalid]="!!errorGitUrl"
                         (paste)="onGitPaste($event)"
                       />
@@ -472,7 +472,7 @@
                   <div class="col-12 col-lg-12">
                     <div class="form-group">
                       <div class="col-12">
-                        <label>GitHub issue</label>
+                        <label>GitHub or GitLab issue</label>
                         <input
                           class="form-control"
                           #url
@@ -481,7 +481,7 @@
                           name="url"
                           (blur)="onBFGit()"
                           (focus)="onBFGit()"                          
-                          placeholder="Paste a GitHub issue link here if you want to populate job fields from it"
+                          placeholder="Paste a GitHub or GitLab issue link here if you want to populate job fields from it"
                           [class.invalid]="!!errorGitUrl"
                           (paste)="onGitPaste($event)"
                         />

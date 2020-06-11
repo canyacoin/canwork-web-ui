@@ -2,7 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { BinanceService } from '@service/binance.service'
-import { Issue, Repository } from '@class/git'
+import { GitService } from '@service/git.service'
+import { DecoratedIssue } from '@class/git'
 import {
   Job,
   JobDescription,
@@ -25,7 +26,6 @@ import { GenerateGuid } from '@util/generate.uid'
 import * as _ from 'lodash'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
-import { HttpClient } from '@angular/common/http'
 
 
 @Component({
@@ -111,11 +111,11 @@ export class PostComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private authService: AuthService,
     private jobService: JobService,
+    private gitService: GitService,
     private binanceService: BinanceService,
     private publicJobService: PublicJobService,
     private uploadService: UploadService,
     private toastr: ToastrService,
-    private http: HttpClient,
   ) {
     this.postForm = formBuilder.group({
       url: [
@@ -546,58 +546,31 @@ export class PostComponent implements OnInit, OnDestroy {
     }
   }
   
-  gitApiInvoke(url) {
+  handleGitError(msg) {
     let formRef = this.shareableJobForm
     if (!this.isShareable) formRef = this.postForm
-    
-    //let tokenLab = environment.gitlab.token; // todo get from backend or use a backend service?
-    
-    let tokenLab = '';
-    
+
+    this.errorGitUrl = msg
+    this.isSending = false
+    this.shareableJobForm.controls['url'].enable()
+  }
+  
+  gitApiInvoke(url) {
+    let formRef = this.shareableJobForm
+    if (!this.isShareable) formRef = this.postForm   
+   
     this.errorGitUrl = '';    
     this.isSending = true
     formRef.controls['url'].patchValue(url)
     formRef.controls['url'].disable()
-
     
-    let project = '';
-    let issue = '';
-    let repo = 'unknown';
-    let reLab = /https:\/\/gitlab\.com\/(.*)\/-\/issues\/(\d*)/gmi;
-    let reHub = /https:\/\/github\.com\/(.*)\/issues\/(\d*)/gmi;
-    let splittedLab = reLab.exec(url);
-    let splittedHub = reHub.exec(url);
-    let apiPathGit = '';
-    let apiRepoGit = '';
-    if (!!splittedLab) repo = 'lab';
-    if (!!splittedHub) repo = 'hub';
-    if (repo == 'lab') {
-      this.errorGitUrl = 'GitLab coming soon ..';
-      this.isSending = false
-      formRef.controls['url'].enable()
-      return;
-      project = encodeURIComponent(splittedLab[1]);
-      issue = splittedLab[2];
-      apiPathGit = `https://gitlab.com/api/v4/projects/${project}/issues/${issue}?access_token=${tokenLab}`;
-    }
-    if (repo == 'hub') {
-      project = splittedHub[1];
-      issue = splittedHub[2];
-      apiPathGit = `https://api.github.com/repos/${project}/issues/${issue}`;
-      apiRepoGit = `https://api.github.com/repos/${project}`;
-    }    
-    if (repo == 'unknown') {
-      this.errorGitUrl = 'Wrong url format';
-      this.isSending = false
-      formRef.controls['url'].enable()
-      return;
-    }
-
-
-    this.http.get(apiPathGit).subscribe((resp:Issue) => {
-      this.http.get(apiRepoGit).subscribe((repo:Repository) => {
-        if (!!repo.language) {
-          let repoLang = repo.language.toLowerCase()
+    this.gitService
+      .getDecoratedIssue(url)
+      .take(1)
+      .subscribe(async (issue: DecoratedIssue) => {
+        if (!!issue.error) return this.handleGitError(issue.error)
+        if (!!issue.language) {
+          let repoLang = issue.language.toLowerCase()
 
           let foundTag = ''
           for (let tag of this.skillTagsList) {
@@ -609,30 +582,35 @@ export class PostComponent implements OnInit, OnDestroy {
             // contained into
             if (tag.toLowerCase().indexOf(repoLang) > -1) foundTag = tag
           }
-          if (!!foundTag) {
-            let updatedTags = []
-            updatedTags.push(foundTag)
-            this.gitUpdatedTags = updatedTags
-          }
+          let updatedTags = []
+          if (!!foundTag) updatedTags.push(foundTag)
+            else updatedTags.push(issue.language) // add new tag,  not found existing one
+          this.gitUpdatedTags = updatedTags
         }
         let description = '';
-        description += 'Github "'+ project + '" issue ' + issue + ' : "' + resp.title + '"'
+        description += issue.inputValues.provider +' "'+ issue.inputValues.project + '" issue ' + issue.inputValues.issue + ' : "' + issue.title + '"'
         description += '\n'
         description += '['+url+']'
         description += '\n\n'
-        description += resp.body
+        description += issue.description
         
-        formRef.controls['title'].patchValue(resp.title)
+        formRef.controls['title'].patchValue(issue.title)
         formRef.controls['description'].patchValue(description)
         if (!!this.isShareable) formRef.controls['providerType'].patchValue('softwareDev')
-        if (resp.state != 'open') {
+        if (issue.state.toLowerCase().indexOf('open') == -1) {
           this.errorGitUrl = 'Pay attention, issue is not open';
           formRef.controls['url'].enable()
         }
-        this.isSending = false
-      });    
+        this.isSending = false        
+        
+      },
+      error => {
+        let errorMsg = 'Network error'
+        if (!!error && !!error.error && !!error.error.message) errorMsg = error.error.message
+        this.handleGitError(errorMsg)     
+      })
+   
 
-    });    
   }
 
   onGitPaste(event: ClipboardEvent) {
