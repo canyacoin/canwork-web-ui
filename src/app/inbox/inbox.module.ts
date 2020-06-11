@@ -25,7 +25,6 @@ import { JobDetailsComponent } from './jobs/container/job-details/job-details.co
 import { JobDashboardComponent } from './jobs/dashboard/job-dashboard.component'
 import { PostComponent } from './jobs/post/post.component'
 import { BepAssetPaymentSelectorComponent } from '../bep-asset-payment-selector/bep-asset-payment-selector.component'
-import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -35,7 +34,6 @@ import { HttpClientModule } from '@angular/common/http';
     CoreComponentsModule,
     CoreServicesModule,
     CoreUtilsModule,
-    HttpClientModule,
     InboxRoutingModule,
     FormsModule,
     OrderModule,
