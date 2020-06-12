@@ -594,7 +594,7 @@ export class PostComponent implements OnInit, OnDestroy {
         description += '\n\n'
         description += issue.description
         
-        formRef.controls['title'].patchValue(issue.title)
+        formRef.controls['title'].patchValue(issue.title.substring(0, 64))
         formRef.controls['description'].patchValue(description)
         if (!!this.isShareable) formRef.controls['providerType'].patchValue('softwareDev')
         if (issue.state.toLowerCase().indexOf('open') == -1) {
