@@ -72,6 +72,12 @@ import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.
         data: { requiresLoggedIn: true },
       },
       {
+        path: 'admin',
+        loadChildren: './admin/admin.module#AdminModule',
+        canLoad: [AuthGuard],
+        // canActivate: [AuthGuard], //TODO adapt AuthGuard canActivate to handle admin, if needed on top of canLoad
+      },
+      {
         path: 'tools',
         component: ToolsComponent,
       },
