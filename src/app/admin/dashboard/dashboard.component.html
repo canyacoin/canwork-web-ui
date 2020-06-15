@@ -1,0 +1,26 @@
+<main>
+  <section class="section bg-grey pt-30">
+    <app-back-button></app-back-button>
+    <div
+      *ngIf="!pageLoaded"
+      class="container d-flex h-100 flex-column justify-content-center"
+    >
+      <img src="assets/img/loader.svg" height="36px" alt="Loader" />
+    </div>
+    <div *ngIf="pageLoaded">
+      <div class="section bg-grey pt-15 pb-30">
+        <div class="container bg-white p-30 brad-5px">
+          <header class="section-header my-0 py-15">
+            <h2 class="fw-600">Admin Dashboard</h2>
+            
+            <div class="row">
+            </div>
+            
+          </header>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-scroll-top></app-scroll-top>

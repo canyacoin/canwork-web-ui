@@ -30,6 +30,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   showFilters = false
   hideSearchBar: boolean
   bnbAddress: string
+  isAdmin = false
 
   hasUnreadMessages = false
   isDAO = false
@@ -65,6 +66,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
       }
     )
+    this.isAdmin = this.authService.isAdmin()
     this.navSub = this.navService.hideSearchBar$.subscribe((hide: boolean) => {
       this.hideSearchBar = hide
     })

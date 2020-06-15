@@ -19,6 +19,12 @@ export class AuthGuard implements CanActivate, CanLoad {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
+    // additional protection for admin routes, in addition to canLoad on global module
+    if ((state.url.startsWith("/admin/")) && !this.authService.isAdmin()) {
+      this.router.navigate(['home'])
+      return false
+    }
+      
     if (!route.data.requiresLoggedIn && !route.data.requiresLoggedOut) {
       return true
     }
@@ -41,11 +47,8 @@ export class AuthGuard implements CanActivate, CanLoad {
   canLoad(
     route: Route
   ): boolean {
-    // only for route /admin/create check into db if there admins
-    // if not (first setup) let it load
-    // for all other /admin/* routes, simply check if user is admin
-    // TODO add to user properties admin: boolean and ethAddress: string
-    console.log('called canLoad')
+    const isAdmin = this.authService.isAdmin()
+    if (isAdmin) return true
     
     // not authorized
     this.router.navigate(['home'])    

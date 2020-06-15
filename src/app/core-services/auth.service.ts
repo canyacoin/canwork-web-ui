@@ -7,6 +7,8 @@ import { BehaviorSubject, Subscription } from 'rxjs'
 import * as firebase from 'firebase/app'
 import { User } from '../core-classes/user'
 
+import { environment } from '@env/environment'
+
 @Injectable()
 export class AuthService {
   userSub: Subscription
@@ -34,6 +36,18 @@ export class AuthService {
 
   isAuthenticated() {
     return this.currentUser.value !== null
+  }
+
+  isAdmin() {
+    /*
+    TODO: next step, on top of this check (transient)
+      add check to verify if currentUser has isAdmin property to true
+      and implement an admin route to save me with isAdmin to true,
+      so i can remove my address from ids not yet completed the setup
+    TODO add to user properties admin:boolean and ethAddress:string
+      
+    */
+    return environment.admin.ids.includes(this.currentUser.value.address)
   }
 
   async isAuthenticatedAndNoAddress(): Promise<boolean> {

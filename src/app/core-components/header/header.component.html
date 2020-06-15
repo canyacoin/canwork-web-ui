@@ -156,6 +156,15 @@
               [routerLink]="['/inbox/jobs']"
               >Manage Jobs</a
             >
+            <div *ngIf="isAdmin" class="dropdown-divider"></div>
+            <a 
+              *ngIf="isAdmin" 
+              class=" nav-link dropdown-item"
+              style="font-weight: 550 !important; text-transform: none"
+              href="#"
+              [routerLink]="['/admin/dashboard']"
+              >Admin</a
+            >
             <div class="dropdown-divider"></div>
             <a
               class="dropdown-item text-danger"
