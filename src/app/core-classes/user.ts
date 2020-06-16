@@ -33,6 +33,8 @@ export class User {
   work: string
   workSkillTags: string[] = []
   isDAO: boolean //experimental for WIP DashBoard
+  isAdmin: boolean = false
+  
 
   upvotes = 0
   downvotes = 0

@@ -14,14 +14,22 @@
             <h2 class="fw-600">Admin Dashboard</h2>
             <div class="row">
          
-                    <button
+                    <button *ngIf="!isAdminIntoDb"
                       type="button"
-                      (click)="saveAdminIntoDb(true)"
-                      class="btn btn-primary buttonshort"
+                      (click)="setAdminIntoDb(true)"
+                      class="btn btn-primary buttonsave"
                       [disabled]="isSending"
                     >
                       Save me as Admin into DB
                     </button>
+                    <button *ngIf="isAdminIntoDb" 
+                      type="button"
+                      (click)="setAdminIntoDb(false)"
+                      class="btn btn-primary buttonremove"
+                      [disabled]="isSending"
+                    >
+                      Remove me as Admin from DB
+                    </button>                    
 
             </div>            
             <div class="row">

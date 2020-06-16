@@ -10,9 +10,16 @@
   height: 50px;
 }
 
-.buttonshort {
+.buttonsave {
   width: 50%;
   margin: 2px auto 40px auto;
   white-space: normal;
-  background-color: #fd7e14;
+  background-color: #28a745;
+}
+
+.buttonremove {
+  width: 50%;
+  margin: 2px auto 40px auto;
+  white-space: normal;
+  background-color: #dc3545;
 }

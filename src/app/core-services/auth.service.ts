@@ -38,17 +38,13 @@ export class AuthService {
     return this.currentUser.value !== null
   }
 
-  isAdmin() {
-    /*
-    TODO: next step, on top of this check (transient)
-      add check to verify if currentUser has isAdmin property to true
-      and implement an admin route to save me with isAdmin to true,
-      so i can remove my address from ids not yet completed the setup
-    TODO add to user properties admin:boolean and ethAddress:string
-      
-    */
-    return environment.admin.ids.includes(this.currentUser.value.address)
+  isAdmin():boolean {
+    return this.isAdminIntoDb() || (environment.admin.ids.includes(this.currentUser.value.address))
   }
+  
+  isAdminIntoDb():boolean {
+    return (!!this.currentUser.value.isAdmin)
+  }  
 
   async isAuthenticatedAndNoAddress(): Promise<boolean> {
     const user = await this.getCurrentUser()

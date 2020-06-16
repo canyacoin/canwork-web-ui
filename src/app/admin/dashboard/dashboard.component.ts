@@ -25,6 +25,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isSending = false
   error = false
   algoliaHits = {}
+  isAdminIntoDb = false
 
   constructor(
     private authService: AuthService,
@@ -39,13 +40,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.authService.currentUser$.subscribe(
       async (user: User) => {
         if (this.currentUser !== user) {
-          this.currentUser = user // will use for the feature: makeMeAdmin (TODO)
           this.pageLoaded = true
-          
+          this.currentUser = user // will use for the feature: makeMeAdmin
+          this.isAdminIntoDb = this.authService.isAdminIntoDb()
         }
       }
     )    
    
+  }
+  
+  setAdminIntoDb(newStatus: boolean) {
+    this.isSending = true    
+    this.isAdminIntoDb = newStatus
+    this.currentUser["isAdmin"] = this.isAdminIntoDb
+    this.userService.saveUser(this.currentUser)
+    this.authService.setUser(this.currentUser)
+    this.isSending = false              
   }
   
   downloadFile(data: any, fileName: String) {
