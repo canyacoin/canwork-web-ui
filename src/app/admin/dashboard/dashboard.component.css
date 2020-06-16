@@ -1,0 +1,18 @@
+
+.btn {
+  width: 80%;
+  margin: auto;
+  white-space: normal;
+}
+
+.loading {
+  margin: 5px auto;
+  height: 50px;
+}
+
+.buttonshort {
+  width: 50%;
+  margin: 2px auto 40px auto;
+  white-space: normal;
+  background-color: #fd7e14;
+}

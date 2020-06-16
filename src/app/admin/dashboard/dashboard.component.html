@@ -12,10 +12,62 @@
         <div class="container bg-white p-30 brad-5px">
           <header class="section-header my-0 py-15">
             <h2 class="fw-600">Admin Dashboard</h2>
-            
             <div class="row">
+         
+                    <button
+                      type="button"
+                      (click)="saveAdminIntoDb(true)"
+                      class="btn btn-primary buttonshort"
+                      [disabled]="isSending"
+                    >
+                      Save me as Admin into DB
+                    </button>
+
+            </div>            
+            <div class="row">
+         
+                    <button
+                      type="button"
+                      (click)="extractProvidersEthNoBnbWithFirestore()"
+                      class="btn btn-primary"
+                      [disabled]="isSending"
+                    >
+                      Get Providers with ETH and no BNB address (Firestore)
+                    </button>
+
             </div>
-            
+            <div class="row">
+              <br>
+            </div>
+            <div class="row">
+         
+                    <button
+                      type="button"
+                      (click)="extractProvidersEthNoBnbWithAlgolia()"
+                      class="btn btn-primary"
+                      [disabled]="isSending"
+                    >
+                      Get Providers with ETH and no BNB address (Algolia)
+                    </button>
+
+            </div>            
+                <div class="row">
+                    <img
+                      *ngIf="isSending"
+                      src="assets/img/loader.svg"
+                      height="36px"
+                      alt="CanYa Coin"
+                      class="loading"
+                    />
+
+                    <span
+                      *ngIf="error"
+                      class="fs-12 fw-400 mt-10"
+                      style="color: #ff6666"
+                    >
+                      Something went wrong ..
+                    </span>
+                </div>            
           </header>
         </div>
       </div>

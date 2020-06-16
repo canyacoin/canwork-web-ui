@@ -91,6 +91,24 @@ export class UserService {
     return addType(user)
   }
 
+  async getUsersWithEthAddress() {
+    const users = await this.firestoreSelect({
+      path: 'users',
+      where: [['ethAddress', '>', '']],
+    }).toPromise()
+
+    return users
+  }
+  
+  async getUsersWithBnbAddress() {
+    const users = await this.firestoreSelect({
+      path: 'users',
+      where: [['bnbAddress', '>', '']],
+    }).toPromise()
+
+    return users
+  }
+  
   async getUserByBnbAddress(address: string): Promise<User> {
     const users = await this.firestoreSelect({
       path: 'users',
