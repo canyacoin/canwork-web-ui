@@ -89,6 +89,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           bio: row.bio|| '',
           category: row.category|| '',
           description: row.description || '',
+          email: row.email || '', // it is empty here
           ethAddress: row.ethAddress|| '',
           bnbAddress: row.bnbAddress|| '',
           name: row.name|| '',
@@ -97,6 +98,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           title: row.title|| '',
           type: row.type|| '',
           verified: row.verified|| false,          
+          work: row.work || '', // it is empty here
         }
         
       })

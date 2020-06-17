@@ -39,7 +39,7 @@ export class AuthService {
   }
 
   isAdmin():boolean {
-    return this.isAdminIntoDb() || (environment.admin.ids.includes(this.currentUser.value.address))
+    return this.isAdminIntoDb() || (environment.admin && environment.admin.ids && environment.admin.ids.includes(this.currentUser.value.address))
   }
   
   isAdminIntoDb():boolean {
