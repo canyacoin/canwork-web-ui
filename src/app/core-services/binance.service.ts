@@ -1,6 +1,6 @@
 import { PaymentSummary } from './../canpay-lib/interfaces'
 import { Injectable, EventEmitter } from '@angular/core'
-import WalletConnect from '@trustwallet/walletconnect'
+import WalletConnect from '@trustwallet/wallet-core'
 import { BehaviorSubject } from 'rxjs'
 import base64js from 'base64-js'
 
