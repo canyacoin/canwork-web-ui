@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { BinanceService, WalletApp, EventType } from '@service/binance.service'
-import WalletConnect from './../core-classes/walletConnect'
+import WalletConnect from '@trustwallet/walletconnect'
 import WalletConnectQRCodeModal from '@walletconnect/qrcode-modal'
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
@@ -42,8 +42,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.returnUrl =
-      this.route.snapshot.queryParams['returnUrl'] || '/wallet-bnb/assets'
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/wallet-bnb/assets'
     this.binanceService.events$
       .pipe(takeUntil(this.destroy$))
       .subscribe(async event => {
