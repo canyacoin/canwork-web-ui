@@ -31,7 +31,7 @@
                         type="text"
                         name="url"
                         (blur)="onBFGit()"
-                        (focus)="onBFGit()"                          
+                        (focus)="onBFGit()"
                         placeholder="Paste a GitHub or GitLab issue link here if you want to populate job fields from it"
                         [class.invalid]="!!errorGitUrl"
                         (paste)="onGitPaste($event)"
@@ -39,9 +39,9 @@
                       <small
                         *ngIf="!!errorGitUrl"
                         class="text-danger text-wrap"
-                        >{{errorGitUrl}}</small
+                        >{{ errorGitUrl }}</small
                       >
-                    </div>                    
+                    </div>
                     <div class="form-group">
                       <label>Title *</label>
                       <input
@@ -109,7 +109,7 @@
                       <app-skill-tags-selection
                         (tagsUpdated)="skillTagsUpdated($event)"
                         (tagsLoaded)="skillTagsLoaded($event)"
-                        [updatedTags]="this.gitUpdatedTags"                                                 
+                        [updatedTags]="this.gitUpdatedTags"
                         [minimumTags]="1"
                       ></app-skill-tags-selection>
                       <input
@@ -368,8 +368,7 @@
                             postForm.controls.budget.dirty && usdToAtomicCan
                           "
                           class="col-6 mt-5 text-right"
-                        >
-                        </div>
+                        ></div>
 
                         <div class="col-12">
                           <small class="text-primary text-wrap">
@@ -432,7 +431,7 @@
             />
             <h2>Congrats! Your request has been submitted!</h2>
             <p class="lead fw-400">
-              Your CanYa Provider will be in touch soon. Check your
+              Your CanWork Provider will be in touch soon. Check your
               messages/transactions later in order to receive and pay for your
               service.
             </p>
@@ -480,7 +479,7 @@
                           type="text"
                           name="url"
                           (blur)="onBFGit()"
-                          (focus)="onBFGit()"                          
+                          (focus)="onBFGit()"
                           placeholder="Paste a GitHub or GitLab issue link here if you want to populate job fields from it"
                           [class.invalid]="!!errorGitUrl"
                           (paste)="onGitPaste($event)"
@@ -488,9 +487,9 @@
                         <small
                           *ngIf="!!errorGitUrl"
                           class="text-danger text-wrap"
-                          >{{errorGitUrl}}</small
+                          >{{ errorGitUrl }}</small
                         >
-                      </div>                    
+                      </div>
                       <div class="col-12">
                         <label>Title *</label>
                         <input
@@ -576,7 +575,7 @@
                         <app-skill-tags-selection
                           (tagsUpdated)="skillTagsUpdated($event)"
                           (tagsLoaded)="skillTagsLoaded($event)"
-                          [updatedTags]="this.gitUpdatedTags"                         
+                          [updatedTags]="this.gitUpdatedTags"
                           [minimumTags]="1"
                         ></app-skill-tags-selection>
                         <input
@@ -598,20 +597,14 @@
                       </div>
                     </div>
 
-                    <div
-                      class="form-group"
-                      *ngIf="
-                        editing &&
-                        this.jobToEdit
-                      "
-                    >
+                    <div class="form-group" *ngIf="editing && this.jobToEdit">
                       <div class="col-12">
                         <label>Key skills required to edit</label>
                         <app-skill-tags-selection
                           (tagsUpdated)="skillTagsUpdated($event)"
                           (tagsLoaded)="skillTagsLoaded($event)"
                           [initialTags]="this.jobToEdit.information.skills"
-                          [updatedTags]="this.gitUpdatedTags"                                                                           
+                          [updatedTags]="this.gitUpdatedTags"
                           [minimumTags]="1"
                         ></app-skill-tags-selection>
                         <input
@@ -925,8 +918,7 @@
                               usdToAtomicCan
                             "
                             class="col-6 mt-5 text-right"
-                          >
-                          </div>
+                          ></div>
                           <div class="col-12">
                             <small class="text-primary text-wrap">
                               <b>Important</b>: All Transactions on CanWork are
@@ -956,7 +948,8 @@
                         <span class="col-3 mt-8">Total hours</span>
                         <br />
                         <small
-                          >Your estimate of the  total hours required for the job</small
+                          >Your estimate of the total hours required for the
+                          job</small
                         >
                       </div>
                       <small
