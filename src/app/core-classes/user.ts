@@ -32,7 +32,6 @@ export class User {
   referredBy: string
   work: string
   workSkillTags: string[] = []
-  isDAO: boolean //experimental for WIP DashBoard
 
   upvotes = 0
   downvotes = 0
