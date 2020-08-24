@@ -194,7 +194,7 @@ export class ChatService {
           'I have finished the job!  Please release the funds from escrow.'
         break
       case ActionType.acceptFinish:
-        messageText = 'I have release the funds from Escrow!  Thankyou.'
+        messageText = 'I have released the funds from Escrow!  Thankyou.'
         break
       default:
         messageText = "I've made a change to our job, can you have a look?"
