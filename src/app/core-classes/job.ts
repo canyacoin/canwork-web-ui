@@ -6,11 +6,9 @@ export class Job {
   id: string
   clientId: string
   providerId: string
-  clientEthAddress: string
   information: JobDescription
   paymentType: PaymentType
   budget: number
-  daiInEscrow: number
   paymentLog: Array<Payment> = []
   state: JobState
   actionLog: Array<IJobAction> = []
@@ -22,7 +20,6 @@ export class Job {
   slug: string
   createAt: number
   updateAt: number
-  fiatPayment: boolean
   invites: string[] = []
   constructor(init?: Partial<Job>) {
     Object.assign(this, init)
