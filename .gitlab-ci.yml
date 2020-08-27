@@ -55,7 +55,6 @@ deploy:staging:
     - yarn global add firebase-tools@latest
     - cd ..
     - firebase use staging --token "$FIREBASE_CI_AUTH_TOKEN"
-    - firebase target:apply hosting canwork-webui staging-can-work
     - firebase functions:config:set algolia.appid="$FIREBASE_ALGOLIA_APPID" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set algolia.apikey="$FIREBASE_ALGOLIA_APIKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set algolia.providerindex="$FIREBASE_ALGOLIA_STAGINGINDEX" --token "$FIREBASE_CI_AUTH_TOKEN"
