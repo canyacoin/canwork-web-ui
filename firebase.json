@@ -19,6 +19,7 @@
       }
     ],
     "public": "dist",
+    "target": "canwork-webui",    
     "ignore": [
       "firebase.json",
       "**/.*",
