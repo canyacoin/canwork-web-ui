@@ -19,11 +19,8 @@
       }
     ],
     "public": "dist",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "target": "canwork-webui",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "**",
@@ -36,5 +33,3 @@
     "indexes": "firestore.indexes.json"
   }
 }
-
-
