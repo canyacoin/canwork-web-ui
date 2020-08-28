@@ -7,5 +7,14 @@
     "prod": "canwork-io",
     "prodold": "canya-dotcom",
     "default": "can-work-cam"
+  },
+  "targets": {
+    "staging-can-work": {
+      "hosting": {
+        "canwork-webui": [
+          "staging-can-work"
+        ]
+      }
+    }
   }
 }
