@@ -66,7 +66,8 @@ deploy:staging:
     - firebase functions:config:set fbadmin.storage_bucket="$FIREBASE_STORAGE_BUCKET_STAGING" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set dev.authkey="$FIREBASE_DEV_AUTHKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set internal.authkey="$FIREBASE_INTERNAL_AUTHKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
-    - firebase deploy --token "$FIREBASE_CI_AUTH_TOKEN" -P $FIREBASE_PROJECT_ID_STAGING
+    - echo "Deploying only hosting, target canwork-webui"
+    - firebase deploy --token "$FIREBASE_CI_AUTH_TOKEN" -P $FIREBASE_PROJECT_ID_STAGING --only hosting:canwork-webui
 
 deploy:production:
   stage: deploy
