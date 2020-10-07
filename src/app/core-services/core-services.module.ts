@@ -7,6 +7,7 @@ import { FeatureToggleService } from './feature-toggle.service'
 import { FeedService } from './feed.service'
 import { JobService } from './job.service'
 import { GitService } from './git.service'
+import { SeoService } from './seo.service'
 import { PublicJobService } from './public-job.service'
 import { MomentService } from './moment.service'
 import { ReviewService } from './review.service'
@@ -26,6 +27,7 @@ import { UserService } from './user.service'
     FeatureToggleService,
     JobService,
     GitService,
+    SeoService,
     DatesService,
     PublicJobService,
     MomentService,

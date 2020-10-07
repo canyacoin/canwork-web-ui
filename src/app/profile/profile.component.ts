@@ -6,8 +6,10 @@ import { AuthService } from '@service/auth.service'
 import { UserService } from '@service/user.service'
 import { ToastrService } from 'ngx-toastr'
 import { PublicJobService } from '@service/public-job.service'
+import { SeoService } from '@service/seo.service'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
+
 
 @Component({
   selector: 'app-profile',
@@ -33,12 +35,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private authService: AuthService,
     private publicJobService: PublicJobService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private seoService: SeoService,
   ) {}
 
   ngOnInit() {
+
     this.authSub = this.authService.currentUser$.subscribe(
-      (user: User) => {
+      (user: User) => {         
         if (user !== this.currentUser) {
           this.currentUser = user
           this.activatedRoute.params.pipe(take(1)).subscribe(params => {
@@ -88,12 +92,20 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.userService.getUserBySlug(slug).then(user => {
         if (user) {
           this.userModel = user
+          this.seoService.updateAllSeoProperties(
+            'profile',
+            this.userModel.name,
+            this.userModel.bio,
+            this.userModel.slug,
+            this.userModel.avatar
+          );          
         }
       })
     } else if (user) {
       this.userModel = this.currentUser
       this.setUsersColors(this.userModel)
     }
+    
   }
 
   loadUser(params: any) {
