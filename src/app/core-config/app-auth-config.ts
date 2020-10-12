@@ -12,7 +12,9 @@ export const firebaseUiAuthConfig: firebaseui.auth.Config = {
       provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID,
     },
   ],
-  tosUrl: 'https://canya.io/assets/docs/Terms-CanYa.pdf',
-  privacyPolicyUrl: '',
+  tosUrl: 'https://app.canwork.io/assets/docs/canwork-terms-and-conditions.pdf',
+  privacyPolicyUrl:
+    'https://app.canwork.io/assets/docs/canwork-privacy-policy.pdf',
+
   credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
 }
