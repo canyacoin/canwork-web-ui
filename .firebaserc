@@ -15,6 +15,13 @@
           "staging-can-work"
         ]
       }
+    },
+    "canwork-io": {
+      "hosting": {
+        "canwork-webui": [
+          "canwork-io"
+        ]
+      }
     }
   }
 }
