@@ -11,6 +11,7 @@ export const firebaseUiAuthConfig: firebaseui.auth.Config = {
       },
       provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID,
     },
+    firebase.auth.TwitterAuthProvider.PROVIDER_ID,
   ],
   tosUrl: 'https://app.canwork.io/assets/docs/canwork-terms-and-conditions.pdf',
   privacyPolicyUrl:
