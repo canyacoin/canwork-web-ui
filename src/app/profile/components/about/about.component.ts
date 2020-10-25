@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core'
-import { Router } from '@angular/router'
+import { Router, ActivatedRoute } from '@angular/router'
 import { take } from 'rxjs/operators'
 import { User } from '@class/user'
 import { Job } from '@class/job'
@@ -31,7 +31,8 @@ export class AboutComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private chatService: ChatService,
-    private publicJobService: PublicJobService
+    private publicJobService: PublicJobService,
+    private route: ActivatedRoute
   ) {}
 
   async ngOnInit() {
@@ -51,6 +52,8 @@ export class AboutComponent implements OnInit {
       this.loadingJobs = false
       this.lastPage =
         Math.ceil(this.currentUserJobs.length / this.pageLimit) - 1
+        
+      if (this.route.snapshot.queryParams['nextAction'] === 'chat') this.chatUser()
     }
   }
 
@@ -98,7 +101,7 @@ export class AboutComponent implements OnInit {
       if (user) {
         this.chatService.createNewChannel(this.currentUser, this.userModel)
       } else {
-        this.router.navigate(['auth/login'])
+        this.router.navigate(['auth/login'], { queryParams: { returnUrl: this.router.url, nextAction: 'chat' } })
       }
     })
   }

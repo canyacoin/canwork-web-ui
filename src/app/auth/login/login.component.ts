@@ -68,7 +68,7 @@ export class LoginComponent implements OnInit {
     }
 
     if (user && user.address) {
-      console.log('+ logging existing user in:', user.email)
+      //console.log('+ logging existing user in:', user.email)
       firebase
         .auth()
         .currentUser.getIdToken(/* forceRefresh */ true)
@@ -80,15 +80,19 @@ export class LoginComponent implements OnInit {
           alert('Sorry, we encountered an unknown error')
         })
       this.authService.setUser(user)
-      this.router.navigate([this.returnUrl])
+      
+      if (this.route.snapshot.queryParams['nextAction']) 
+        this.router.navigate([this.returnUrl], { queryParams: {nextAction: this.route.snapshot.queryParams['nextAction']}})
+      else
+        this.router.navigate([this.returnUrl])
     } else {
-      console.log('+ detected new user:', userDetails.email, userDetails)
+      //console.log('+ detected new user:', userDetails.email, userDetails)
       this.initialiseUserAndRedirect(userDetails)
     }
   }
 
   async initialiseUserAndRedirect(user: User) {
-    console.log(`initialise`)
+    //console.log(`initialise`)
     this.userService.saveUser(user).then(
       res => {
         this.authService.setUser(user)
