@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core'
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+} from 'angularfire2/firestore'
 
 @Component({
   selector: 'app-blog-posts',
@@ -6,18 +10,41 @@ import { Component, OnInit } from '@angular/core'
   styleUrls: ['./blog-posts.component.css'],
 })
 export class BlogPostsComponent implements OnInit {
-  mediumLink =
-    'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@canyacoin'
+  articlesCollection: AngularFirestoreCollection<any>  
+  //mediumLink = 'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@canyacoin'
   placeholder = 'assets/img/outandabout.png'
   mediumFeed = []
   canLook = false
-  constructor() {}
-
-  async ngOnInit() {
-    await this.fetchMedium()
+  constructor(
+    private afs: AngularFirestore
+  ) {
+    this.articlesCollection = this.afs.collection<any>('articles')
+    
   }
 
-  async fetchMedium() {
+  async ngOnInit() {
+    const articlesSnapshot = await this.articlesCollection.ref
+      .orderBy('datePosted', 'desc')
+      .limit(3)
+      .get()
+    if (!articlesSnapshot.empty) {
+      articlesSnapshot.forEach((doc) => {
+          let obj = doc.data();
+          let articleUrl = '';
+          if (obj.category) articleUrl = '/'+obj.category+"/"+obj.slug;
+            else articleUrl = "/"+obj.slug;          
+          this.mediumFeed.push({
+            title: obj.title,
+            thumbnail: obj.imageUrl,
+            link: 'https://canwork.io'+articleUrl
+          })
+      });        
+    }
+    
+    // await this.fetchMedium()
+  }
+
+  /*async fetchMedium() {
     fetch(this.mediumLink)
       .then(res => res.json())
       .then(data => {
@@ -25,5 +52,5 @@ export class BlogPostsComponent implements OnInit {
           this.mediumFeed.push(data.items[i])
         }
       })
-  }
+  }*/
 }
