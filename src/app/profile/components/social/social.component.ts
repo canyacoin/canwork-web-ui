@@ -11,7 +11,7 @@ declare let escape: any
 })
 export class SocialComponent implements OnInit {
   @Input() userModel: User
-  shareLink = environment.shareBaseUrl + '/profile/'
+  shareLink = 'https://canwork.io/profile/'
 
   constructor() {}
 

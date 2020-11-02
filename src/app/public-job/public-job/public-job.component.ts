@@ -208,8 +208,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     let link = ''
     if (this.job.slug) {
       link =
-        this.shareableLink +
-        '/jobs/public/' +
+        'https://canwork.io/jobs/public/' +
         this.job.slug.replace(/\(/g, '%28').replace(/\)/g, '%29')
     } else {
       link = this.shareableLink + '/job/' + this.job.id
