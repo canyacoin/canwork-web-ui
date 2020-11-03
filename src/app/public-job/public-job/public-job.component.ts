@@ -10,6 +10,7 @@ import { AngularFireStorage } from 'angularfire2/storage'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 import { environment } from '@env/environment'
+declare var $: any;
 
 @Component({
   selector: 'app-public-job',
@@ -44,7 +45,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private publicJobsService: PublicJobService,
     private storage: AngularFireStorage,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    
   ) {
     this.bidForm = this.formBuilder.group({
       price: [
@@ -145,6 +147,14 @@ export class PublicJobComponent implements OnInit, OnDestroy {
         )
         this.canBid = check
       }
+      if ( this.canBid && 
+           this.currentUser.bnbAddress &&
+           this.currentUser.type === 'Provider' &&
+           !this.myJob &&
+           this.isOpen &&           
+          (this.activatedRoute.snapshot.queryParams['nextAction'] === 'bid')
+          )  $("#bidModal").modal("show")
+      
     } else {
       this.myJob = false
     }
@@ -208,8 +218,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     let link = ''
     if (this.job.slug) {
       link =
-        this.shareableLink +
-        '/jobs/public/' +
+        'https://canwork.io/jobs/public/' +
         this.job.slug.replace(/\(/g, '%28').replace(/\)/g, '%29')
     } else {
       link = this.shareableLink + '/job/' + this.job.id
