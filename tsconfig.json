@@ -10,13 +10,8 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es5",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2018",
-      "dom"
-    ],
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2018", "dom"],
     "paths": {
       "@abi/*": ["assets/abi/*"],
       "@contract/*": ["app/@contract/*"],
@@ -29,6 +24,7 @@
       "@config/*": ["app/core-config/*"],
       "@env/*": ["environments/*"],
       "@extensions/*": ["./*.extensions.ts"]
-    }
+    },
+    "skipLibCheck": true
   }
 }
