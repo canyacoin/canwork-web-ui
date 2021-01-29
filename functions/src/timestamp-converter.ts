@@ -145,12 +145,12 @@ function client(
 }
 
 export function timestampConverter(db: firestore.Firestore) {
-  return async (req: functions.Request, resp: functions.Response) => {
+  return (req: functions.Request, resp: functions.Response) => {
     if (req.method !== 'GET') {
-      resp.status(405).send('Method Not Allowed')
+      return resp.status(405).send('Method Not Allowed')
     }
 
-    const { name }: { name?: string } = req.query
+    const { name } = req.query
     if (!name) {
       const html = `<h1>Progress</h1>
 <pre id="log"></pre>
@@ -162,29 +162,25 @@ export function timestampConverter(db: firestore.Firestore) {
 )
 </script>
 `
-      resp.status(200).send(html)
-      return
+      return resp.status(200).send(html)
     }
 
     const responseJSON = resp.json.bind(resp)
 
     if (SUBCOLLECTIONS.indexOf(name) !== -1) {
-      await convert(db, name, true).then(responseJSON)
-      return
+      return convert(db, name, true).then(responseJSON)
     }
 
     if (COLLECTIONS.indexOf(name) !== -1) {
-      await convert(db, name, false).then(responseJSON)
-      return
+      return convert(db, name, false).then(responseJSON)
     }
 
     if (JOB_COLLECTIONS.indexOf(name) !== -1) {
-      let { createAt }: { createAt?: any } = req.query
+      let { createAt } = req.query
       createAt = createAt ? parseInt(createAt) : 0
-      await convertJobs(db, name, createAt).then(responseJSON)
-      return
+      return convertJobs(db, name, createAt).then(responseJSON)
     }
 
-    resp.status(404).send('Sub/Collection not found')
+    return resp.status(404).send('Sub/Collection not found')
   }
 }

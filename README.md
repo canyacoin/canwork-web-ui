@@ -43,24 +43,20 @@ brew install yarn
 
 ### Clone & Initial Setup:
 
-Cloning the project
+Git
 
 ```
 git clone git@gitlab.com:canyacoin/canwork/web-ui.git
 cd web-ui
-git checkout -b "yourname/[fix/feature]/snake-case-title"
+git checkout -b "yourname"
 ```
 
-Initial Setup
+Setup
 
 ```
 yarn
 node patch.js   // Workaround for https://blog.lysender.com/2018/07/angular-6-cannot-resolve-crypto-fs-net-path-stream-when-building-angular/
 yarn link
-
-# functions
-cd functions
-yarn
 ```
 
 ### Credentials
@@ -86,7 +82,6 @@ From inside the repo, log into Firebase
 ```
 firebase login      // Will launch the Google account login page
 firebase list       // Double Check you have the project linked
-
 firebase serve      // Serve locally
 firebase deploy     // Deploy to staging
 ```
