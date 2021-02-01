@@ -28,8 +28,7 @@ export function publicJobExists(db: firestore.Firestore) {
 export function moveInvitesToJob(db: firestore.Firestore) {
   return async (req: functions.Request, resp: functions.Response) => {
     if (req.method !== 'GET') {
-      resp.status(405).send('Method Not Allowed')
-      return
+      return resp.status(405).send('Method Not Allowed')
     }
 
     try {
@@ -50,16 +49,13 @@ export function moveInvitesToJob(db: firestore.Firestore) {
             .get()
 
           const invites = invitesSnap.docs.map(inviteSnap => inviteSnap.id)
-          await tx.update(ref, { invites })
-          return
+          return await tx.update(ref, { invites })
         })
       })
     } catch (e) {
-      resp.status(500).send(e)
-      return
+      return resp.status(500).send(e)
     }
 
-    resp.status(200).send('ok')
-    return
+    return resp.status(200).send('ok')
   }
 }

@@ -131,8 +131,7 @@ exports.sendEmail = functions.https.onRequest(async (request, response) => {
     !request.headers.authorization ||
     request.headers.authorization !== env.dev.authkey
   ) {
-    response.status(403).send('Unauthorized')
-    return
+    return response.status(403).send('Unauthorized')
   }
 
   console.log('+ serviceConfig', serviceConfig)
@@ -156,7 +155,7 @@ exports.sendEmail = functions.https.onRequest(async (request, response) => {
   }
   const r = await sgMail.send(msg)
 
-  response
+  return response
     .status(201)
     .type('application/json')
     .send({ r })
@@ -645,8 +644,7 @@ exports.deleteAllProviders = functions.https.onRequest(
       !request.headers.authorization ||
       request.headers.authorization !== env.dev.authkey
     ) {
-      response.status(403).send('Unauthorized')
-      return
+      return response.status(403).send('Unauthorized')
     }
 
     let deletedUsers = 0
@@ -680,7 +678,7 @@ exports.deleteAllProviders = functions.https.onRequest(
       deletedUsers++
     })
 
-    response
+    return response
       .status(202)
       .type('application/json')
       .send({ deletedUsers })
@@ -696,8 +694,7 @@ exports.seedProviders = functions.https.onRequest(async (request, response) => {
     !request.headers.authorization ||
     request.headers.authorization !== env.dev.authkey
   ) {
-    response.status(403).send('Unauthorized')
-    return
+    return response.status(403).send('Unauthorized')
   }
 
   const qty = request.query.qty || 1
@@ -758,8 +755,7 @@ exports.seedProviders = functions.https.onRequest(async (request, response) => {
         .set(userRecord)
     } catch (error) {
       console.error('! unable to create user record', error)
-      response.status(500)
-      return
+      return response.status(500)
     }
 
     // Insert into portfolio with work items
@@ -783,12 +779,11 @@ exports.seedProviders = functions.https.onRequest(async (request, response) => {
           .add(work)
       } catch (error) {
         console.error('! unable to create portfolio work records', error)
-        response.status(500)
-        return
+        return response.status(500)
       }
     }
   }
-  response
+  return response
     .status(201)
     .type('application/json')
     .send(users)
@@ -804,8 +799,7 @@ exports.seedSkillTagsData = functions.https.onRequest(
       !request.headers.authorization ||
       request.headers.authorization !== env.dev.authkey
     ) {
-      response.status(403).send('Unauthorized')
-      return
+      return response.status(403).send('Unauthorized')
     }
 
     let tags: string[]
@@ -816,7 +810,7 @@ exports.seedSkillTagsData = functions.https.onRequest(
       await db.collection('skill-tags').add({ tag })
     }
 
-    response
+    return response
       .status(201)
       .type('application/json')
       .send({ 'loaded-tags': tags.length })
@@ -1192,7 +1186,7 @@ exports.initSlug = functions.https.onRequest(async (request, response) => {
       ).catch(err => console.error(err))
   })
 
-  response
+  return response
     .status(200)
     .type('application/json')
     .send({
@@ -1217,7 +1211,7 @@ exports.delSlug = functions.https.onRequest(async (request, response) => {
     data.slug && (await db.doc(`public-jobs/${doc.id}`).update({ slug: '' }))
   })
 
-  response
+  return response
     .status(200)
     .type('application/json')
     .send({
@@ -1258,7 +1252,7 @@ exports.initVerifiedUserField = functions.https.onRequest(
         .get()
     }
 
-    response
+    return response
       .status(200)
       .type('application/json')
       .send({
