@@ -426,7 +426,7 @@ export class BinanceService {
     try {
       let lastAssetToBnbPrice = 1 //1 for BNB
       // Get's the last weighted average price for the given asset_BNB pair
-      if (assetSymbol != 'BNB' && assetSymbol != 'BUSD-BD1') {
+      if (assetSymbol != 'BNB') {
         const assetUrl = `${TICKER_API_URL}?symbol=${assetSymbol}_BNB`
         const assetResponse = await (await fetch(assetUrl)).json()
         lastAssetToBnbPrice = assetResponse[0].weightedAvgPrice
