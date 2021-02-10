@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { PublicJobService } from '@service/public-job.service'
+import { StatisticsService } from '@service/statistics.service'
 import { AuthService } from '@service/auth.service'
 import { NavService } from '@service/nav.service'
 import { Job, JobDescription, JobState, PaymentType } from '@class/job'
@@ -16,6 +17,7 @@ import { NgxPaginationModule } from 'ngx-pagination'
 export class DashboardComponent implements OnInit {
   allJobs: any
   queryJobs: any
+  stats: any
   authSub: Subscription
   currentUser: User
   orderType = 'actionLog[0].timestamp'
@@ -63,12 +65,14 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private publicJobService: PublicJobService,
+    private statisticsService: StatisticsService,
     private authService: AuthService,
     private navService: NavService,
     private order: OrderPipe
   ) {}
 
   async ngOnInit() {
+    this.stats = {count: '',usd: ''}
     this.filterByCategory = 'all'
     this.orderType = 'information.title'
     this.navService.setHideSearchBar(true)
@@ -81,6 +85,20 @@ export class DashboardComponent implements OnInit {
       this.allJobs = result
       this.queryJobs = this.allJobs
     })
+    
+    // retrieve and aggregate job stats
+    let jobStats, publicJobStats: any    
+    this.statisticsService.getStatistics().subscribe(result => {
+      result.forEach((obj) => {
+        if (obj.name === 'publicJobs') publicJobStats = obj;
+        if (obj.name === 'jobs') jobStats = obj;
+      })
+      this.stats = {
+        count: jobStats.count + publicJobStats.count,
+        usd: Math.round(jobStats.usd + publicJobStats.usd)
+      }      
+    })
+    
   }
   get isProvider(): boolean {
     return this.currentUser.type === UserType.provider
@@ -105,7 +123,7 @@ export class DashboardComponent implements OnInit {
           tmpJobs.push(item)
         }
       })
-      console.log(tmpJobs)
+      //console.log(tmpJobs)
       this.queryJobs = tmpJobs
     } else {
       this.queryJobs = this.allJobs
@@ -113,7 +131,7 @@ export class DashboardComponent implements OnInit {
   }
 
   filterJobsByCategory() {
-    console.log(this.filterByCategory)
+    //console.log(this.filterByCategory)
     if (this.filterByCategory !== 'all') {
       this.queryJobs = this.allJobs.filter(
         job => job.information.providerType === this.filterByCategory
