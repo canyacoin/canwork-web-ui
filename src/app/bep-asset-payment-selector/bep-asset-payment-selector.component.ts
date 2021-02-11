@@ -81,6 +81,11 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
 
     for (const balance of balances) {
       let usdPrice = 0
+      //Skips weighted average if asset is BUSD and sets usdPrice = 1
+      if ((balance.symbol = 'BUSD-BD1')) {
+        usdPrice = 1
+        continue
+      }
       // Get weighted avg USD price of each asset
       try {
         usdPrice = await this.binanceService.getAssetToUsd(balance.symbol)
