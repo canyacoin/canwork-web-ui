@@ -12,19 +12,24 @@
     <img src="assets/img/loader.svg" height="36px" alt="Loader" />
   </div>
   <div
-    class="container py-15"
-    style="min-height: 75vh"
-    *ngIf="allJobs && allJobs.length > 0"
+    class="container"
   >
     <div class="row">
       <div class="col-lg-6">
           <div class="canya-seach-bar mb-3" style="background-color:white;">
-            <h6 style="margin-top: 5px;color:#535353;padding: 5px 10px;font-weight:500;"><b>{{stats.count}}</b> completed jobs <b>${{stats.usd}} USD</b></h6>
+            <h6 style="color:#535353;padding: 5px 10px;font-weight:500;margin-top:8px;margin-bottom:0px;"><b>{{stats.count}}</b> completed jobs <b>${{stats.usd}} USD</b></h6>
             
           </div>
       </div>
 
     </div>  
+  </div>
+  <div
+    class="container py-10"
+    style="min-height: 75vh"
+    *ngIf="allJobs && allJobs.length > 0"
+  >
+
   
     <div class="row">
       <div class="col-lg-8">
