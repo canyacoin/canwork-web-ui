@@ -72,7 +72,7 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.stats = {count: '',usd: ''}
+    this.stats = { count: '', usd: '' }
     this.filterByCategory = 'all'
     this.orderType = 'information.title'
     this.navService.setHideSearchBar(true)
@@ -85,20 +85,19 @@ export class DashboardComponent implements OnInit {
       this.allJobs = result
       this.queryJobs = this.allJobs
     })
-    
+
     // retrieve and aggregate job stats
-    let jobStats, publicJobStats: any    
+    let jobStats, publicJobStats: any
     this.statisticsService.getStatistics().subscribe(result => {
-      result.forEach((obj) => {
-        if (obj.name === 'publicJobs') publicJobStats = obj;
-        if (obj.name === 'jobs') jobStats = obj;
+      result.forEach(obj => {
+        if (obj.name === 'publicJobs') publicJobStats = obj
+        if (obj.name === 'jobs') jobStats = obj
       })
       this.stats = {
         count: jobStats.count + publicJobStats.count,
-        usd: Math.round(jobStats.usd + publicJobStats.usd)
-      }      
+        usd: Math.round(jobStats.usd + publicJobStats.usd),
+      }
     })
-    
   }
   get isProvider(): boolean {
     return this.currentUser.type === UserType.provider

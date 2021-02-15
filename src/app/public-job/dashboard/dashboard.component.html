@@ -1,8 +1,7 @@
 <section id="public-job-dashboard" class="bg-gray">
   <div class="container">
     <div class="row">
-      <div class="pt-15">
-      </div>
+      <div class="pt-15"></div>
     </div>
   </div>
   <div
@@ -11,26 +10,24 @@
   >
     <img src="assets/img/loader.svg" height="36px" alt="Loader" />
   </div>
-  <div
-    class="container"
-  >
+  <div class="container">
     <div class="row">
       <div class="col-lg-6">
-          <div class="canya-seach-bar mb-3" style="background-color:white;">
-            <h6 style="color:#535353;padding: 5px 10px;font-weight:500;margin-top:8px;margin-bottom:0px;"><b>{{stats.count}}</b> completed jobs <b>${{stats.usd}} USD</b></h6>
-            
-          </div>
+        <div class="canya-seach-bar mb-3" style="background-color:white;">
+          <h6
+            style="color:#535353;padding: 5px 10px;font-weight:500;margin-top:8px;margin-bottom:0px;"
+          >
+            <b>{{ stats.count }}</b> completed jobs <b>${{ stats.usd }} USD</b>
+          </h6>
+        </div>
       </div>
-
-    </div>  
+    </div>
   </div>
   <div
     class="container py-10"
     style="min-height: 75vh"
     *ngIf="allJobs && allJobs.length > 0"
   >
-
-  
     <div class="row">
       <div class="col-lg-8">
         <form method="post" (ngSubmit)="onSearch(inputSearch.value)">

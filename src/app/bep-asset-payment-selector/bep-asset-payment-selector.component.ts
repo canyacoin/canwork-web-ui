@@ -76,21 +76,28 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
 
   async getAvailableAssets(balances) {
     console.log('Getting available balances...')
+    console.log(balances)
     let availableAssets = []
     let hasEnough: boolean
 
     for (const balance of balances) {
       let usdPrice = 0
-      // Get weighted avg USD price of each asset
-      try {
-        usdPrice = await this.binanceService.getAssetToUsd(balance.symbol)
-        console.log(balance.symbol + ' usdPrice: ' + usdPrice)
-      } catch (error) {
-        console.error(error)
-        usdPrice = 0
+
+      // Get weighted avg USD price of each asset (except BUSD)
+      // TODO:  Other BEP2 tokens pegged to USD exist.   Suggest rewriting to detect any USD-pegged stablecoin.
+      if (balance.symbol != 'BUSD-BD1' && balance.symbol != 'BUSD-BAF') {
+        try {
+          usdPrice = await this.binanceService.getAssetToUsd(balance.symbol)
+          console.log(balance.symbol + ' usdPrice: ' + usdPrice)
+        } catch (error) {
+          console.error(error)
+          usdPrice = 0
+        }
+      } else {
+        usdPrice = 1
       }
 
-      // Calculate USD value of each asset's free balance
+      // Calculate USD value of each asset's free balance (not including locked)
       const freeAssetToUsd = Number((balance.free * usdPrice).toPrecision(8))
 
       // Determine if the asset's free USD value is enough to cover the job budget
