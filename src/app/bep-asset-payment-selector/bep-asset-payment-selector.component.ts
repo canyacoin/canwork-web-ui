@@ -90,6 +90,7 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
           console.log(balance.symbol + ' usdPrice: ' + usdPrice)
         } catch (error) {
           console.error(error)
+          usdPrice = 0
           continue
         }
       } else {

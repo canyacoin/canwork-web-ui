@@ -163,9 +163,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     const client = await this.userService.getUser(this.job.clientId)
 
     // Calculate jobBudget in selected BEP asset
-    // Use 100.2% to decrease chances of underpayment
-    const jobBudgetAsset =
-      (this.jobBudgetUsd * 1.002) / this.bepAssetData.usdPrice
+    const jobBudgetAsset = this.jobBudgetUsd / this.bepAssetData.usdPrice
     const jobBudgetAtomic = Math.ceil(jobBudgetAsset * 1e8)
 
     const paymentSummary = {
