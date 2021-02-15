@@ -91,6 +91,7 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
         } catch (error) {
           console.error(error)
           usdPrice = 0
+          continue
         }
       } else {
         usdPrice = 1
