@@ -79,13 +79,12 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
     console.log(balances)
     let availableAssets = []
     let hasEnough: boolean
+    let usdPeggedCoin = ['BUSD-BD1', 'BUSD-BAF'] // Hardcoded USD Coin array -- suggest changes. Other USD Pegged coins exist.
 
     for (const balance of balances) {
       let usdPrice = 0
-
       // Get weighted avg USD price of each asset (except BUSD)
-      // TODO:  Other BEP2 tokens pegged to USD exist.   Suggest rewriting to detect any USD-pegged stablecoin.
-      if (balance.symbol != 'BUSD-BD1' && balance.symbol != 'BUSD-BAF') {
+      if (!usdPeggedCoin.includes(balance.symbol)) {
         try {
           usdPrice = await this.binanceService.getAssetToUsd(balance.symbol)
           console.log(balance.symbol + ' usdPrice: ' + usdPrice)
