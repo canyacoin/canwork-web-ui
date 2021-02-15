@@ -98,6 +98,9 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
 
       // Calculate USD value of each asset's free balance (not including locked)
       const freeAssetToUsd = Number((balance.free * usdPrice).toPrecision(8))
+      if (freeAssetToUsd < 5) {
+        continue
+      }
 
       // Determine if the asset's free USD value is enough to cover the job budget
       if (this.jobBudgetUsd > freeAssetToUsd) {
