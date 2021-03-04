@@ -107,7 +107,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               Notification.requestPermission()
             } else {
               const notification = new Notification('CanWork', {
-                icon: 'https://www.canwork.io/assets/img/favicon.jpg',
+                icon: 'https://app.canwork.io/assets/img/favicon.jpg',
                 body: 'You have unread chat messages on CanWork',
               })
             }
