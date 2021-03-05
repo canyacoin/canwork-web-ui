@@ -50,6 +50,8 @@ abstract class AEmailNotification implements IJobStateEmailNotification {
   // Send the built 'EmailMessage' via sendgrid
   public deliver(sendgridApiKey: string, returnUri: string): void {
     sgMail.setApiKey(sendgridApiKey)
+    console.log('+ first chars: ', sendgridApiKey.substring(0,7));
+    
     sgMail.setSubstitutionWrappers('{{', '}}')
 
     this.emailMessages.forEach(emailMessage => {
