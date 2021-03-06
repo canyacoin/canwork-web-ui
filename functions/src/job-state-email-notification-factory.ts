@@ -50,11 +50,41 @@ abstract class AEmailNotification implements IJobStateEmailNotification {
   // Send the built 'EmailMessage' via sendgrid
   public deliver(sendgridApiKey: string, returnUri: string): void {
     sgMail.setApiKey(sendgridApiKey)
+    console.log('+ first chars: ', sendgridApiKey.substring(0,7));
+    
     sgMail.setSubstitutionWrappers('{{', '}}')
 
     this.emailMessages.forEach(emailMessage => {
       console.log('+ sending message to', emailMessage.to)
+      
+      const senderAddress = "support@canya.com";
+      const senderName = "CanYa support";
+
       sgMail.send(
+        {
+          to: emailMessage.to,
+          from: {
+            name: senderName,
+            email: senderAddress
+          },
+          subject: emailMessage.subject,
+          html: emailMessage.bodyHtml,
+          substitutions: {
+            title: emailMessage.title,
+            returnLinkText: 'View Job Details Here',
+            returnLinkUrl: `${returnUri}/inbox/job/${this.jobData.id}`,
+          },
+          templateId: '4fc71b33-e493-4e60-bf5f-d94721419db5',
+        },
+        (error, result) => {
+          if (error) {
+            console.error('! error sending message:', error.response.body)
+          }
+        }
+      )
+
+      
+      /*sgMail.send(
         {
           to: emailMessage.to,
           from: replyTo,
@@ -72,7 +102,7 @@ abstract class AEmailNotification implements IJobStateEmailNotification {
             console.error('! error sending message:', error.response.body)
           }
         }
-      )
+      )*/
     })
   }
 
