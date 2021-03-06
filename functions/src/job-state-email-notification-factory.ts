@@ -50,22 +50,21 @@ abstract class AEmailNotification implements IJobStateEmailNotification {
   // Send the built 'EmailMessage' via sendgrid
   public deliver(sendgridApiKey: string, returnUri: string): void {
     sgMail.setApiKey(sendgridApiKey)
-    console.log('+ first chars: ', sendgridApiKey.substring(0,7));
-    
+    console.log('+ first chars: ', sendgridApiKey.substring(0, 7))
     sgMail.setSubstitutionWrappers('{{', '}}')
 
     this.emailMessages.forEach(emailMessage => {
       console.log('+ sending message to', emailMessage.to)
-      
-      const senderAddress = "support@canya.com";
-      const senderName = "CanYa support";
+
+      const senderAddress = 'support@canya.com'
+      const senderName = 'CanYa support'
 
       sgMail.send(
         {
           to: emailMessage.to,
           from: {
             name: senderName,
-            email: senderAddress
+            email: senderAddress,
           },
           subject: emailMessage.subject,
           html: emailMessage.bodyHtml,
@@ -83,7 +82,6 @@ abstract class AEmailNotification implements IJobStateEmailNotification {
         }
       )
 
-      
       /*sgMail.send(
         {
           to: emailMessage.to,
@@ -495,7 +493,7 @@ class JobRequestCommenceNotification extends AEmailNotification {
       console.error(error)
     }
 
-    let title = `${this.clientData.name} has commenced the job`
+    const title = `${this.clientData.name} has commenced the job`
     this.emailMessages.push({
       to: this.providerData.email,
       subject: title,
