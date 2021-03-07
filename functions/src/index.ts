@@ -553,11 +553,18 @@ function notifyAdminOnNewUser(user) {
   `
   const sgMail = require('@sendgrid/mail')
   sgMail.setApiKey(sendgridApiKey)
+  console.log('+ first chars: ', sendgridApiKey.substring(0, 5))
   sgMail.setSubstitutionWrappers('{{', '}}')
+  const senderAddress = 'support@canya.com'
+  const senderName = 'CanYa support'
+
   sgMail.send(
     {
       to: 'support@canya.com',
-      from: 'support@canya.com',
+      from: {
+        name: senderName,
+        email: senderAddress,
+      },
       subject: `New Provider`,
       html: text,
     },
