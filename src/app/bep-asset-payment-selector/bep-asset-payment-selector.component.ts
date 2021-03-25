@@ -93,8 +93,12 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
           usdPrice = 0
           continue
         }
-      } else {
-        usdPrice = 1
+      }
+      if (usdPeggedCoin.includes(balance.symbol)) {
+        //temporarily disabling BUSD due to issues with BEP-Escrow handling BUSD valuations
+        //will be reinstated when BEP-Escrow is fixed (25/3/21)
+        usdPrice = 0
+        continue
       }
 
       // Calculate USD value of each asset's free balance (not including locked)
