@@ -130,7 +130,8 @@
           </p>
         </div>
         <div class="actions-div" *ngIf="availableActions.length > 0">
-          <button
+          <!-- 
+            <button
             *ngFor="let action of availableActions"
             class="btn action-btn mt-5 mr-5 btn-{{
               getColour(action)
@@ -139,6 +140,13 @@
             [disabled]="actionIsDisabled(action)"
           >
             {{ action }}
+          </button>
+        -->
+          <button
+            class="btn action-btn mt-5 mr-5 btn-danger
+          btn-outline btn-sm"
+          >
+            Escrow Offline
           </button>
           <br />
         </div>
