@@ -91,6 +91,9 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   }
 
   async connect(app: WalletApp) {
+    // todo if MetaMask
+    // todo wrap WalletApp imported from binance.service into a cross service
+    // that includes binance and bsc
     await this.binanceService.connect(app)
   }
 

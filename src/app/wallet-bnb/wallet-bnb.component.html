@@ -6,6 +6,11 @@
         <div class="col-12 col-md-4">
           <ul class="tabs">
             <li
+              (click)="selected = WalletApp.MetaMask"
+              [class.active]="isActive(WalletApp.MetaMask)"
+            >
+              MetaMask (BSC)
+            </li>            <li
               (click)="selected = WalletApp.WalletConnect"
               [class.active]="isActive(WalletApp.WalletConnect)"
             >
@@ -32,6 +37,19 @@
           </ul>
         </div>
         <div class="col-12 col-md-8 text-left" [ngSwitch]="selected">
+          <div *ngSwitchCase="WalletApp.MetaMask">
+            <div>
+              Click to connect to MetaMask wallet.
+              <div class="mt-20">
+                <button
+                  (click)="connect(WalletApp.MetaMask)"
+                  class="btn btn-primary"
+                >
+                  Connect
+                </button>
+              </div>
+            </div>
+          </div>        
           <div *ngSwitchCase="WalletApp.WalletConnect">
             <div *ngIf="!isTestnet(); else testnet">
               Click to scan a QR code and link your mobile wallet using
