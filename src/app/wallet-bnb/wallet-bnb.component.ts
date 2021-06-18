@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { BinanceService, WalletApp, EventType } from '@service/binance.service'
+import { BscService } from '@service/bsc.service'
 import WalletConnect from './../core-classes/walletConnect'
 import WalletConnectQRCodeModal from '@walletconnect/qrcode-modal'
 import { Subject } from 'rxjs'
@@ -17,7 +18,7 @@ import { AuthService } from '@service/auth.service'
 })
 export class WalletBnbComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject()
-  selected: WalletApp = WalletApp.WalletConnect
+  selected: WalletApp = WalletApp.MetaMask
   WalletApp = WalletApp
 
   validKeystoreUploaded: boolean = false
@@ -35,6 +36,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
 
   constructor(
     private binanceService: BinanceService,
+    private bscService: BscService,
     private router: Router,
     private toastr: ToastrService,
     private authService: AuthService,
@@ -89,12 +91,15 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   isActive(wallet: WalletApp): boolean {
     return this.selected == wallet
   }
-
+  
   async connect(app: WalletApp) {
-    // todo if MetaMask
-    // todo wrap WalletApp imported from binance.service into a cross service
-    // that includes binance and bsc
+
+    // bsc connect methods
+    if (app == WalletApp.MetaMask) return await this.bscService.connect(app)
+    
+    // binance connect methods
     await this.binanceService.connect(app)
+    
   }
 
   async walletConnect(connector: WalletConnect) {
