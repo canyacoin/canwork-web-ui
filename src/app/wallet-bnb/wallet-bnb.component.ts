@@ -23,6 +23,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
 
   validKeystoreUploaded: boolean = false
   keystoreError: string = ''
+  bscError: string = ''
   keystorePassword: string = ''
   keystore: object = null
   unlockingFailed: boolean = false
@@ -95,7 +96,11 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   async connect(app: WalletApp) {
 
     // bsc connect methods
-    if (app == WalletApp.MetaMask) return await this.bscService.connect(app)
+    if (app == WalletApp.MetaMask) {
+      this.bscError = ''
+      const result = await this.bscService.connect(app)
+      this.bscError = result
+    }
     
     // binance connect methods
     await this.binanceService.connect(app)
