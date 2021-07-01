@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs'
+
 import { environment } from '@env/environment'
 
 const NETWORK_ID = environment.bsc.netId;
@@ -15,6 +17,29 @@ import { ethers } from "ethers";
   https://github.com/storybookjs/storybook/issues/9463
 */
 
+export enum WalletApp {
+  MetaMask
+}
+
+export enum EventType {
+  ConnectSuccess = 'ConnectSuccess',
+  ConnectFailure = 'ConnectFailure',
+  ConnectConfirmationRequired = 'ConnectConfirmationRequired',
+  Update = 'Update',
+  Disconnect = 'Disconnect',
+}
+
+export interface EventDetails {
+  address?: string
+}
+
+export interface Event {
+  type: EventType
+  details: EventDetails
+  walletApp?: WalletApp  
+}
+
+
 declare var window: any;
 
 @Injectable({
@@ -22,6 +47,10 @@ declare var window: any;
 })
 export class BscService {
   provider = null
+  signer = null
+  private events: BehaviorSubject<Event | null> = new BehaviorSubject(null)
+  events$ = this.events.asObservable()
+  
 
   constructor() { }
   
@@ -55,7 +84,28 @@ export class BscService {
       // todo listen for network change and invalide service status (add connected property)
     }
     
+    await new Promise(f => setTimeout(f, 100));  // sleep 100 ms 
+    let accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    
+    // todo try catch this, if no account provider it will give err
+    this.signer = await this.provider.getSigner()
+
+    await new Promise(f => setTimeout(f, 100));  // sleep 100 ms 
+    
+    const address = await this.signer.getAddress();
+    // todo save in local storage connection status
+    
+    this.events.next({
+      type: EventType.ConnectSuccess,
+      walletApp: WalletApp.MetaMask,
+      details: { address },
+    })    
       
     return 'connected (debug)' // empty if everything is ok
-  }  
+  }
+
+  async disconnect() {
+    // todo
+    
+  }
 }
