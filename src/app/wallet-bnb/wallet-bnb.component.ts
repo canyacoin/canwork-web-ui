@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { BinanceService, WalletApp, EventType } from '@service/binance.service'
-import { BscService } from '@service/bsc.service'
+import { BscService, WalletAppBsc, EventTypeBsc } from '@service/bsc.service'
 import WalletConnect from './../core-classes/walletConnect'
 import WalletConnectQRCodeModal from '@walletconnect/qrcode-modal'
 import { Subject } from 'rxjs'
@@ -46,10 +46,28 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/wallet-bnb/assets'
+    
+    this.bscService.events$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(async event => {
+        if (!event) {
+          return
+        }
+        switch (event.type) {
+          case EventTypeBsc.ConnectSuccess:
+            this.toastr.success('Connected!')
+            this.router.navigate([this.returnUrl])
+            break
+          case EventTypeBsc.AddressFound:
+            this.router.navigate([this.returnUrl])
+            break
+        }
+      })          
+
+
     this.binanceService.events$
       .pipe(takeUntil(this.destroy$))
       .subscribe(async event => {
-        console.log('Event', event)
         if (!event) {
           return
         }
@@ -98,8 +116,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
     // bsc connect methods
     if (app == WalletApp.MetaMask) {
       this.bscError = ''
-      const result = await this.bscService.connect(app)
-      this.bscError = result
+      await this.bscService.connect(app)
     }
     
     // binance connect methods

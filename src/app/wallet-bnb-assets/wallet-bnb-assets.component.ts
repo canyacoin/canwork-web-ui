@@ -1,11 +1,18 @@
 import { Component, OnInit } from '@angular/core'
 import { BinanceService, EventType } from '@service/binance.service'
+import { BscService, EventTypeBsc } from '@service/bsc.service'
+
 import { BehaviorSubject } from 'rxjs'
 import { sortBy, prop } from 'ramda'
 import { takeUntil } from 'rxjs/operators'
 
 import { OnDestroyComponent } from '@class/on-destroy'
 import { environment } from '@env/environment'
+
+enum NetworkType {
+  Binance,
+  Bsc
+}
 
 @Component({
   selector: 'app-wallet-bnb-assets',
@@ -16,25 +23,67 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
   implements OnInit {
   address: string | boolean = true
   private balances = new BehaviorSubject(null)
-  explorer = environment.binance.explorer
+  explorer = ''
+  networkType = null
 
-  constructor(private binanceService: BinanceService) {
+  constructor(
+    private binanceService: BinanceService,
+    private bscService: BscService
+  ) {
     super()
   }
 
+  async forget() {
+    switch (this.networkType) {
+      case NetworkType.Binance:
+        this.binanceService.disconnect()
+        break
+      case NetworkType.Bsc:
+        this.bscService.disconnect()
+        break
+    }
+  }
+
   async ngOnInit() {
+    this.bscService.events$
+      .pipe(takeUntil(this.destroy$)) // unsubscribe on destroy
+      .subscribe(async event => {
+        if (!event) {
+          if (!this.networkType) this.address = false
+          return
+        }
+        switch (event.type) {
+          case EventTypeBsc.ConnectSuccess:          
+          case EventTypeBsc.AddressFound:
+            this.networkType = NetworkType.Bsc
+            this.address = event.details.address
+            this.explorer = environment.bsc.blockExplorerUrls[0]
+            this.balances.next([]) // todo
+            break
+          case EventTypeBsc.Disconnect:
+            this.address = false
+            this.balances.next(null)
+            break
+            
+        }
+
+      })
+
+
     this.binanceService.events$
       .pipe(takeUntil(this.destroy$)) // unsubscribe on destroy
       .subscribe(async event => {
         if (!event) {
-          this.address = false
+          if (!this.networkType) this.address = false
           return
         }
 
         switch (event.type) {
           case EventType.ConnectSuccess:
           case EventType.Update:
+            this.networkType = NetworkType.Binance          
             this.address = event.details.address
+            this.explorer = environment.binance.explorer            
             const resp = await this.binanceService.client.getAccount(
               this.address
             )

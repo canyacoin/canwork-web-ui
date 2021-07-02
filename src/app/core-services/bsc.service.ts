@@ -17,26 +17,27 @@ import { ethers } from "ethers";
   https://github.com/storybookjs/storybook/issues/9463
 */
 
-export enum WalletApp {
+export enum WalletAppBsc {
   MetaMask
 }
 
-export enum EventType {
+export enum EventTypeBsc {
   ConnectSuccess = 'ConnectSuccess',
   ConnectFailure = 'ConnectFailure',
   ConnectConfirmationRequired = 'ConnectConfirmationRequired',
   Update = 'Update',
   Disconnect = 'Disconnect',
+  AddressFound = 'AddressFound',
 }
 
 export interface EventDetails {
   address?: string
 }
 
-export interface Event {
-  type: EventType
-  details: EventDetails
-  walletApp?: WalletApp  
+export interface EventBsc {
+  type: EventTypeBsc
+  details?: EventDetails
+  walletApp?: WalletAppBsc  
 }
 
 
@@ -48,11 +49,20 @@ declare var window: any;
 export class BscService {
   provider = null
   signer = null
-  private events: BehaviorSubject<Event | null> = new BehaviorSubject(null)
+  private events: BehaviorSubject<EventBsc | null> = new BehaviorSubject(null)
   events$ = this.events.asObservable()
   
 
-  constructor() { }
+  constructor() { 
+    const connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
+    if (connectedWallet) {
+      this.events.next({
+        type: EventTypeBsc.AddressFound,
+        walletApp: connectedWallet.walletApp,
+        details: { address: connectedWallet.address },
+      })      
+    }
+  }
   
   async connect(app: any): Promise<string> {
     
@@ -93,19 +103,34 @@ export class BscService {
     await new Promise(f => setTimeout(f, 100));  // sleep 100 ms 
     
     const address = await this.signer.getAddress();
-    // todo save in local storage connection status
+    // verify if address is changed from the one into local storage and alert userAgent
+    // (are you sure you to replace ... modal)
+    
+    const walletApp = WalletAppBsc.MetaMask;
     
     this.events.next({
-      type: EventType.ConnectSuccess,
-      walletApp: WalletApp.MetaMask,
+      type: EventTypeBsc.ConnectSuccess,
+      walletApp,
       details: { address },
-    })    
-      
-    return 'connected (debug)' // empty if everything is ok
+    })
+    let connectedWallet: Object = {
+      walletApp,
+      address,
+    }
+    localStorage.setItem(
+      'connectedWallet',
+      JSON.stringify(connectedWallet)
+    )    
+
+    return ''
   }
 
   async disconnect() {
-    // todo
-    
+    // forget
+    localStorage.removeItem('connectedWallet')
+    this.events.next({
+      type: EventTypeBsc.Disconnect,
+    }) 
+    // metamask doesn't support disconnect, if other providers support it, insert here call to provider disconnect method
   }
 }
