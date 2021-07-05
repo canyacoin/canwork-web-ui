@@ -116,7 +116,8 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
     // bsc connect methods
     if (app == WalletApp.MetaMask) {
       this.bscError = ''
-      await this.bscService.connect(app)
+      
+      this.bscError = await this.bscService.connect(app)
     }
     
     // binance connect methods

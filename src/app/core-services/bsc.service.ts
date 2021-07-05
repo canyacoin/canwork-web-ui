@@ -90,6 +90,41 @@ export class BscService {
         details: { address: connectedWallet.address },
       })      
     }
+    
+    if (!!window.ethereum) window.ethereum.on('networkChanged', (networkId) => {
+      if (networkId != environment.bsc.netId) {
+        this.disconnect()
+        window.location.reload() // it's safer to refresh the page
+      }
+
+    })      
+    
+    if (!!window.ethereum) window.ethereum.on('accountsChanged', (accounts) => {
+      if (accounts && accounts.length > 0) {
+        const connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
+        if (connectedWallet) {
+          // update address only if already connected
+          let newConnectedWallet = {
+            walletApp: connectedWallet.walletApp,
+            address: accounts[0],
+          }
+          localStorage.setItem(
+            'connectedWallet',
+            JSON.stringify(newConnectedWallet)
+          )
+          this.events.next({
+            type: EventTypeBsc.Update,
+            walletApp: newConnectedWallet.walletApp,
+            details: { address: accounts[0] },
+          })
+          window.location.reload() // it's safer to refresh the page
+        }
+      } else {
+        this.disconnect()
+      }
+
+    })      
+    
   }
   
   async connect(app?: any): Promise<string> {
@@ -120,19 +155,21 @@ export class BscService {
       network = await this.provider.getNetwork()
       if (network.chainId !== NETWORK_ID) return "Wrong network"
 
-      // todo listen for network change and invalide service status (add connected property)
     }
     
     await new Promise(f => setTimeout(f, 100));  // sleep 100 ms 
     let accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     
-    // todo try catch this, if no account provider it will give err
-    this.signer = await this.provider.getSigner()
+    try {
+      this.signer = await this.provider.getSigner()
+    } catch(err) {
+      console.log(err)
+      return 'Provider error'      
+    }
 
     await new Promise(f => setTimeout(f, 100));  // sleep 100 ms 
     
     const address = await this.signer.getAddress();
-    // todo handle account change, if provider supports it
     
     const walletApp = WalletAppBsc.MetaMask;
     
@@ -148,7 +185,8 @@ export class BscService {
     localStorage.setItem(
       'connectedWallet',
       JSON.stringify(connectedWallet)
-    )    
+    )
+      
 
     return ''
   }
@@ -180,7 +218,7 @@ export class BscService {
   }
   
 
-  async disconnect() {
+  disconnect() {
     // forget
     localStorage.removeItem('connectedWallet')
     this.events.next({
