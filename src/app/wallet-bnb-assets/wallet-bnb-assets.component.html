@@ -58,6 +58,8 @@
                         <td>
                           <app-dynamic-coin
                             [symbol]="balance.symbol"
+                            [address]="balance.address"
+                            [network]="selectedNetwork"
                           ></app-dynamic-coin>
                         </td>
                         <td>{{ balance.symbol }}</td>

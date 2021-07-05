@@ -10,12 +10,43 @@ const RPC_URLS = environment.bsc.rpcUrls
 const BLOCK_EXPLORER_URLS = environment.bsc.blockExplorerUrls
 const CURRENCY = { name: "BNB", symbol: "bnb", decimals: 18 }
 
+
 import { ethers } from "ethers";
 /*
   to support ethers 5.3.1, we needed to add "skipLibCheck" into tsconfig.json compilerOptions
   https://github.com/ethers-io/ethers.js/issues/776
   https://github.com/storybookjs/storybook/issues/9463
 */
+
+
+
+declare var window: any; // we need to get metamask object from browser window
+
+
+/*
+generic token Human-Readable ABI
+https://docs.ethers.io/v5/api/utils/abi/formats/#abi-formats--human-readable-abi
+*/
+const tokenAbi = [ 
+  // Some details about the token
+  "function name() view returns (string)",
+  "function symbol() view returns (string)",
+
+  // Get the account balance
+  "function balanceOf(address) view returns (uint)",
+
+  // Send some of your tokens to someone else
+  "function transfer(address to, uint amount)",
+
+  // An event triggered whenever anyone transfers to someone else
+  "event Transfer(address indexed from, address indexed to, uint amount)",
+
+  // Before we can send an asset to the escrow we must first approve a spend allowance on the asset contract
+  // uint is equivalent to uint256
+  "function approve(address _spender, uint _value) nonpayable returns (bool)"
+
+];
+
 
 export enum WalletAppBsc {
   MetaMask
@@ -40,9 +71,6 @@ export interface EventBsc {
   walletApp?: WalletAppBsc  
 }
 
-
-declare var window: any;
-
 @Injectable({
   providedIn: 'root'
 })
@@ -64,7 +92,8 @@ export class BscService {
     }
   }
   
-  async connect(app: any): Promise<string> {
+  async connect(app?: any): Promise<string> {
+    // when we'll have multiple apps, we have to save app
     
     if (!window.ethereum) return 'MetaMask not found'
 
@@ -103,8 +132,7 @@ export class BscService {
     await new Promise(f => setTimeout(f, 100));  // sleep 100 ms 
     
     const address = await this.signer.getAddress();
-    // verify if address is changed from the one into local storage and alert userAgent
-    // (are you sure you to replace ... modal)
+    // todo handle account change, if provider supports it
     
     const walletApp = WalletAppBsc.MetaMask;
     
@@ -124,6 +152,33 @@ export class BscService {
 
     return ''
   }
+  
+  async getBalances() {
+    let connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
+    if (!connectedWallet) await this.connect() // no wallet saved
+        
+    if (!this.provider) await this.connect() // we need to reconnect
+        
+    let balances = [];
+    
+    if (!this.provider) return balances // we weren't able to connect
+    
+    connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
+    if (!connectedWallet) return balances // we weren't able to save wallet
+    const address = connectedWallet.address
+
+    for (let token in environment.bsc.assets) {
+      const tokenAddress = environment.bsc.assets[token]
+      const contract = new ethers.Contract(tokenAddress, tokenAbi, this.provider)
+      const name = await contract.name()
+      const symbol = await contract.symbol()
+      const balance = ethers.utils.formatUnits(await contract.balanceOf(address), CURRENCY.decimals)
+      // BEP20 (ERC20) doesn't have frozen tokens
+      balances.push({ address: tokenAddress, name, symbol, free: balance})
+    }
+    return balances
+  }
+  
 
   async disconnect() {
     // forget

@@ -10,8 +10,8 @@ import { OnDestroyComponent } from '@class/on-destroy'
 import { environment } from '@env/environment'
 
 enum NetworkType {
-  Binance,
-  Bsc
+  Binance = 'Binance',
+  Bsc = 'Bsc'
 }
 
 @Component({
@@ -24,7 +24,7 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
   address: string | boolean = true
   private balances = new BehaviorSubject(null)
   explorer = ''
-  networkType = null
+  selectedNetwork = null
 
   constructor(
     private binanceService: BinanceService,
@@ -34,7 +34,7 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
   }
 
   async forget() {
-    switch (this.networkType) {
+    switch (this.selectedNetwork) {
       case NetworkType.Binance:
         this.binanceService.disconnect()
         break
@@ -49,20 +49,21 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
       .pipe(takeUntil(this.destroy$)) // unsubscribe on destroy
       .subscribe(async event => {
         if (!event) {
-          if (!this.networkType) this.address = false
+          if (!this.selectedNetwork) this.address = false
           return
         }
         switch (event.type) {
           case EventTypeBsc.ConnectSuccess:          
           case EventTypeBsc.AddressFound:
-            this.networkType = NetworkType.Bsc
+            this.selectedNetwork = NetworkType.Bsc
             this.address = event.details.address
             this.explorer = environment.bsc.blockExplorerUrls[0]
-            this.balances.next([]) // todo
+            this.balances.next(sortBy(prop('symbol'))(await this.bscService.getBalances()))
             break
           case EventTypeBsc.Disconnect:
             this.address = false
             this.balances.next(null)
+            this.selectedNetwork = null            
             break
             
         }
@@ -74,14 +75,14 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
       .pipe(takeUntil(this.destroy$)) // unsubscribe on destroy
       .subscribe(async event => {
         if (!event) {
-          if (!this.networkType) this.address = false
+          if (!this.selectedNetwork) this.address = false
           return
         }
 
         switch (event.type) {
           case EventType.ConnectSuccess:
           case EventType.Update:
-            this.networkType = NetworkType.Binance          
+            this.selectedNetwork = NetworkType.Binance          
             this.address = event.details.address
             this.explorer = environment.binance.explorer            
             const resp = await this.binanceService.client.getAccount(
@@ -96,6 +97,8 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
             break
           case EventType.Disconnect:
             this.address = false
+            this.balances.next(null)            
+            this.selectedNetwork = null
             break
         }
       })

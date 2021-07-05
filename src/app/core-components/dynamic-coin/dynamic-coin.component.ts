@@ -25,6 +25,12 @@ export class DynamicCoinComponent extends OnDestroyComponent
   @ObservableInput()
   symbol: Observable<string>
 
+  @Input()
+  network: 'Binance' | 'Bsc' = 'Binance'
+
+  @Input()
+  address?: string // bsc
+
   originalSymbol: string
   symbolUrl: string
   startCol: string
@@ -36,11 +42,27 @@ export class DynamicCoinComponent extends OnDestroyComponent
     this.symbol
       .pipe(takeUntil(this.destroy$)) // unsubscribe on destroy
       .subscribe(symbol => {
-        if (symbol === "BNB") this.symbolUrl = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/'
-          else this.symbolUrl = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/assets/'+symbol
-        this.originalSymbol = symbol.split('-')[0]
-        this.startCol = hashbow(symbol[0])
-        this.stopCol = hashbow(symbol[1])
+
+        if (this.network === 'Binance') {
+          if (symbol === "BNB") this.symbolUrl = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/'
+            else this.symbolUrl = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/assets/'+symbol
+          this.originalSymbol = symbol.split('-')[0]
+          this.startCol = hashbow(symbol[0])
+          this.stopCol = hashbow(symbol[1])
+          
+          return;
+        }
+        
+        if (this.network === 'Bsc') {
+          this.originalSymbol = symbol
+          this.startCol = hashbow(symbol)
+          this.stopCol = hashbow(this.address)
+          // case must match exactly the one on github path
+          this.symbolUrl = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/smartchain/assets/'+this.address
+
+          return;
+        }
+        
       })
   }
 }
