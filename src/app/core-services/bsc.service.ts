@@ -226,4 +226,8 @@ export class BscService {
     }) 
     // metamask doesn't support disconnect, if other providers support it, insert here call to provider disconnect method
   }
+  
+  isAddress(address) {
+    return ethers.utils.isAddress(address)
+  }
 }
