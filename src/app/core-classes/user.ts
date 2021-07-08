@@ -9,6 +9,7 @@ export class User {
   description: string
   email: string
   bnbAddress: string
+  bscAddress: string
   slug: string
   hourlyRate: string
   name: string
