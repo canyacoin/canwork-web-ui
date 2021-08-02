@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
       const noAddress = await this.authService.isAuthenticatedAndNoAddress()
       if (noAddress) {
         this.toastr.info(
-          'Add Binance Chain Wallet to make or receive payments on CanWork.',
+          'Add Binance Chain Wallet (BEP2) or Metamask (BEP20) to make or receive payments on CanWork.',
           undefined,
           {
             timeOut: 0,
