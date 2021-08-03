@@ -112,8 +112,8 @@
             </div>
           </div>
           <div class="form-group row">
-            <div class="col-lg-6 col-md-6 col-sm-8">
-              <label>Binance Chain Address *</label>
+            <div class="col-lg-4 col-md-4 col-sm-6">
+              <label>Binance Chain Address **</label>
               <input
                 class="form-control"
                 #bnbAddress
@@ -140,6 +140,38 @@
                 another one.
               </small>
             </div>
+            <div class="col-lg-4 col-md-4 col-sm-6">
+              <label>Binance Smart Chain Address **</label>
+              <input
+                class="form-control"
+                #bnbAddress
+                formControlName="bscAddress"
+                type="text"
+                name="bscAddress"
+                placeholder="0x..."
+              />
+              <small
+                *ngIf="
+                  profileForm.controls.bscAddress.dirty &&
+                  profileForm.controls.bscAddress.errors &&
+                  profileForm.controls.bscAddress.errors.isInvalidAddress
+                "
+                >Please enter a valid bsc address.</small
+              >
+              <small
+                *ngIf="
+                  profileForm.controls.bscAddress.dirty &&
+                  profileForm.controls.bscAddress.errors &&
+                  profileForm.controls.bscAddress.errors.addressExists
+                "
+                >This address is already being used in CanWork. Please use
+                another one.
+              </small>
+            </div>
+            <div *ngIf="(!profileForm.controls.bnbAddress.valid && !profileForm.controls.bscAddress.valid)" class="col-lg-8 col-md-8 col-sm-12">
+              <small>** at least one valid bsc or bnb address is required</small>
+            </div>
+            
           </div>
           <div class="form-group row">
             <div class="col-lg-6 col-md-6 col-sm-8">
@@ -162,7 +194,7 @@
               !profileForm.controls.work.valid ||
               !profileForm.controls.skillTags.valid ||
               !profileForm.controls.hourlyRate.valid ||
-              !profileForm.controls.bnbAddress.valid
+              (!profileForm.controls.bnbAddress.valid && !profileForm.controls.bscAddress.valid)
             "
             (click)="nextStep()"
           >

@@ -10,6 +10,10 @@ import * as randomColor from 'randomcolor'
 import { BinanceService } from '@service/binance.service'
 import { Subscription } from 'rxjs'
 
+import { BscValidator } from '@validator/bsc.validator'
+import { BscService } from '@service/bsc.service'
+
+
 import * as moment from 'moment-timezone'
 
 @Component({
@@ -53,7 +57,8 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private binanceService: BinanceService
+    private binanceService: BinanceService,
+    private bscService: BscService    
   ) {}
 
   ngOnInit() {
@@ -138,6 +143,19 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
           ).isUniqueAddressField(this.user),
         ]),
       ],
+      bscAddress: [
+        this.user.bscAddress || '',
+        () => null,
+        Validators.composeAsync([
+          bscAddress => Promise.resolve(Validators.required(bscAddress)),
+          new BscValidator(this.bscService, this.userService)
+            .isValidAddressField,
+          new BscValidator(
+            this.bscService,
+            this.userService
+          ).isUniqueAddressField(this.user),
+        ]),
+      ],
       color1: [colors[0]],
       color2: [colors[1]],
       color3: [colors[2]],
@@ -185,6 +203,7 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
       skillTags: tags,
       hourlyRate: this.profileForm.value.hourlyRate,
       bnbAddress: this.profileForm.value.bnbAddress,
+      bscAddress: this.profileForm.value.bscAddress,
       colors: [
         this.profileForm.value.color1,
         this.profileForm.value.color2,
