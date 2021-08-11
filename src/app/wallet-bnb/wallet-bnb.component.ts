@@ -33,6 +33,10 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
     old: null,
     new: null,
   }
+  walletReplacementBsc = {
+    old: null,
+    new: null,
+  }  
   returnUrl: string
 
   constructor(
@@ -61,6 +65,17 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
           case EventTypeBsc.AddressFound:
             this.router.navigate([this.returnUrl])
             break
+          case EventTypeBsc.ConnectFailure:
+            this.toastr.error('This address is already in use by another user')
+            break
+          case EventTypeBsc.ConnectConfirmationRequired:
+            const user = await this.authService.getCurrentUser()
+            this.walletReplacementBsc = {
+              old: user.bscAddress,
+              new: event.details.address,
+            }
+            ;(window as any).$('#replaceWalletModalBsc').modal('show')
+            break            
         }
       })          
 
@@ -223,6 +238,10 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   onConfirmWalletUpdate() {
     this.binanceService.confirmConnection()
   }
+  
+  async onConfirmWalletUpdateBsc() {
+    await this.bscService.confirmConnection(this.walletReplacementBsc.new, this.WalletApp)
+  }  
 
   isTestnet() {
     return environment.binance.net === 'testnet'

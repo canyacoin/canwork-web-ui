@@ -1,3 +1,4 @@
+import { AuthService } from '@service/auth.service'
 import { UserService } from '@service/user.service'
 import { BscValidator } from '@validator/bsc.validator'
 
@@ -85,7 +86,10 @@ export class BscService {
   events$ = this.events.asObservable()
   
 
-  constructor() { 
+  constructor(
+    private userService: UserService,
+    private authService: AuthService,  
+  ) { 
     const connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
     if (connectedWallet) {
       this.events.next({
@@ -198,10 +202,11 @@ export class BscService {
       
     }
     
-    // address already used by another user
     if (await bscValidator.isUniqueAddress(address, user)) {
+      // address unique and valid, update user data
       this.userService.updateUserProperty(user, 'bscAddress', address)
     } else {
+      // address already used by another user
       this.events.next({
         type: EventTypeBsc.ConnectFailure,
         walletApp,
@@ -256,6 +261,35 @@ export class BscService {
     return balances
   }
   
+  async confirmConnection(address, walletApp) {
+    
+    const details = { address };
+    
+    const user = await this.authService.getCurrentUser()
+
+    if (!user) return;
+    
+    // address unique and valid, update user data (overwrite existig user bscAddress)
+    this.userService.updateUserProperty(user, 'bscAddress', address)
+    
+    // success
+    this.events.next({
+      type: EventTypeBsc.ConnectSuccess,
+      walletApp,
+      details,
+    })
+    let connectedWallet: Object = {
+      walletApp,
+      address,
+    }
+    // update local storage
+    localStorage.setItem(
+      'connectedWallet',
+      JSON.stringify(connectedWallet)
+    )
+    
+    
+  }  
 
   disconnect() {
     // forget

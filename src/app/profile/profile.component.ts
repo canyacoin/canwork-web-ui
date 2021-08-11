@@ -26,7 +26,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   paramsSub: Subscription
 
   displayEditComponent = false
-  notifiedBnbAddress = false
+  notifiedBnbOrBscAddress = false
 
   constructor(
     private router: Router,
@@ -73,14 +73,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   async notifyAddAddressIfNecessary() {
-    if (this.notifiedBnbAddress) {
+    if (this.notifiedBnbOrBscAddress) {
       return
     }
     const noAddress = await this.authService.isAuthenticatedAndNoAddress()
     const user = await this.authService.getCurrentUser()
     if (noAddress && user.type == 'Provider') {
-      this.toastr.warning('Add Binance Chain Wallet to receive payments')
-      this.notifiedBnbAddress = true
+      this.toastr.warning('Add Binance Chain Wallet (BEP2) or Metamask (BEP20) to receive payments')
+      this.notifiedBnbOrBscAddress = true
     }
   }
 
