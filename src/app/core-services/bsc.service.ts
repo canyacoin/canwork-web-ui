@@ -84,6 +84,8 @@ export class BscService {
   signer = null
   private events: BehaviorSubject<EventBsc | null> = new BehaviorSubject(null)
   events$ = this.events.asObservable()
+  private connectedWallet = null
+  
   
 
   constructor(
@@ -96,7 +98,8 @@ export class BscService {
         type: EventTypeBsc.AddressFound,
         walletApp: connectedWallet.walletApp,
         details: { address: connectedWallet.address },
-      })      
+      })
+      this.connectedWallet = { walletApp: connectedWallet.walletApp, address: connectedWallet.address }
     }
     
     if (!!window.ethereum) window.ethereum.on('networkChanged', (networkId) => {
@@ -120,6 +123,8 @@ export class BscService {
             'connectedWallet',
             JSON.stringify(newConnectedWallet)
           )
+          this.connectedWallet = newConnectedWallet
+          
           this.events.next({
             type: EventTypeBsc.Update,
             walletApp: newConnectedWallet.walletApp,
@@ -230,6 +235,9 @@ export class BscService {
       'connectedWallet',
       JSON.stringify(connectedWallet)
     )
+    // update service status
+    this.connectedWallet = connectedWallet
+    
       
 
     return ''
@@ -288,12 +296,20 @@ export class BscService {
       JSON.stringify(connectedWallet)
     )
     
+    // update service status
+    this.connectedWallet = connectedWallet
+    
     
   }  
 
   disconnect() {
     // forget
     localStorage.removeItem('connectedWallet')
+    
+    // update service status
+    this.connectedWallet = null
+    
+    // propagate event
     this.events.next({
       type: EventTypeBsc.Disconnect,
     }) 
@@ -303,4 +319,15 @@ export class BscService {
   checkAddress(address) {
     return ethers.utils.isAddress(address)
   }
+  
+  isMetamaskConnected(): boolean {
+    return this.connectedWallet.walletApp === WalletAppBsc.MetaMask
+  }
+
+  getAddress(): string {
+    if (!this.connectedWallet) {
+      return null
+    }
+    return this.connectedWallet.address
+  }  
 }

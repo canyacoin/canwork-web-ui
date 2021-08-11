@@ -12,6 +12,7 @@ import { HttpClient } from '@angular/common/http'
 import { JobService } from '@service/job.service'
 import { UserService } from '@service/user.service'
 import { BinanceService } from '@service/binance.service'
+import { BscService } from '@service/bsc.service'
 
 @Component({
   selector: 'app-enter-escrow',
@@ -25,6 +26,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   walletConnected = false
   paymentMethod: string | boolean = false
   showAssetSelection = false
+  showBscAssetSelection = false
   bepAssetData: bepAssetData
   assetDataHandler: any
 
@@ -39,6 +41,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
     private jobService: JobService,
     private userService: UserService,
     private binanceService: BinanceService,
+    private bscService: BscService,
     private toastr: ToastrService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -62,8 +65,9 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
           }
 
           this.loading = false
-          this.checkWalletConnection()
-          this.startBepAssetSelector()
+          const chain = await this.checkWalletConnection()
+          if (chain == 'BEP2') this.startBepAssetSelector();
+            else if (chain == 'BEP20') this.startBscAssetSelector();
         })
     }
   }
@@ -92,11 +96,13 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   }
 
   async checkWalletConnection() {
-    if (
-      !this.binanceService.isLedgerConnected() &&
-      !this.binanceService.isKeystoreConnected() &&
-      !this.binanceService.isWalletConnectConnected()
-    ) {
+    let connectedChain = '';
+    // BEP20 has the priority, if it's connected will use it
+    if (this.bscService.isMetamaskConnected()) connectedChain = 'BEP20';      
+      else if (this.binanceService.isLedgerConnected() ||
+               this.binanceService.isKeystoreConnected() ||
+               this.binanceService.isWalletConnectConnected()) connectedChain = 'BEP2';
+    if (!connectedChain) {
       const routerStateSnapshot = this.router.routerState.snapshot
       this.toastr.warning(
         'Connect your wallet to use this payment method',
@@ -109,8 +115,16 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       return
     }
     this.walletConnected = true
-    const address = this.binanceService.getAddress() // temporary
-    console.log('Connected to wallet: ' + address) // temporary
+    if (connectedChain == 'BEP20') {
+      const address = this.bscService.getAddress() // temporary
+      console.log('Connected to BEP20 wallet: ' + address) // temporary
+      return connectedChain
+    } else if (connectedChain == 'BEP2') {
+      const address = this.binanceService.getAddress() // temporary
+      console.log('Connected to BEP2 wallet: ' + address) // temporary
+      return connectedChain
+    }
+    return null
   }
 
   startBepAssetSelector() {
@@ -130,6 +144,15 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       asset: onSelection,
     }
   }
+
+  startBscAssetSelector() {
+    if (this.jobStateCheck && this.walletConnected) {
+      this.showBscAssetSelection = true
+    }
+    
+  }
+
+
 
   async startCanpay() {
     console.log('START CAN PAY')

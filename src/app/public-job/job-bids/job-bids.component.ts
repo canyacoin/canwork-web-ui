@@ -95,10 +95,7 @@ export class JobBidsComponent implements OnInit {
       this.toastr.error('Add Binance Chain Wallet (BEP2) or Metamask (BEP20) to Accept Offer')
       return
     }
-    /*
-      todo bsc: here probably we have to check bid chain (we have to save it on bid creation)
-      and if client has a valid address on that chain
-    */
+    
     const bid = this.bids[bidIndex]
     const confirmed = confirm('Are you sure you want to choose this provider?')
     if (confirmed) {
