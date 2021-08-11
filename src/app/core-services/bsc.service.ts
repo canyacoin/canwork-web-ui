@@ -1,7 +1,11 @@
+import { UserService } from '@service/user.service'
+import { BscValidator } from '@validator/bsc.validator'
+
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs'
 
 import { environment } from '@env/environment'
+
 
 const NETWORK_ID = environment.bsc.netId;
 const CHAIN_ID = "0x"+NETWORK_ID.toString(16)
@@ -171,17 +175,52 @@ export class BscService {
     
     const address = await this.signer.getAddress();
     
+    const details = { address };
+    
     const walletApp = WalletAppBsc.MetaMask;
     
+    // save bsc address into user profile on connection success, if changed
+    const user = await this.authService.getCurrentUser()
+    
+    const bscValidator = new BscValidator(this, this.userService);
+    
+    if (user && user.bscAddress !== address) {
+      
+      // already has a different bsc address, ask for confirmation
+      if (user.bscAddress) {
+        this.events.next({
+          type: EventTypeBsc.ConnectConfirmationRequired,
+          walletApp,
+          details,
+        })
+        return
+      }       
+      
+    }
+    
+    // address already used by another user
+    if (await bscValidator.isUniqueAddress(address, user)) {
+      this.userService.updateUserProperty(user, 'bscAddress', address)
+    } else {
+      this.events.next({
+        type: EventTypeBsc.ConnectFailure,
+        walletApp,
+        details,
+      })
+      return
+    }
+    
+    // success
     this.events.next({
       type: EventTypeBsc.ConnectSuccess,
       walletApp,
-      details: { address },
+      details,
     })
     let connectedWallet: Object = {
       walletApp,
       address,
     }
+    // update local storage
     localStorage.setItem(
       'connectedWallet',
       JSON.stringify(connectedWallet)
