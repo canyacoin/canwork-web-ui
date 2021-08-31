@@ -28,12 +28,17 @@
 <div *ngIf="!loading && showAssetSelection" class="container">
   <app-bep-asset-payment-selector
     [jobBudgetUsd]="jobBudgetUsd"
+    [chain]="bep2"
     (bepAssetData)="assetDataHandler.asset($event)"
   ></app-bep-asset-payment-selector>
 </div>
 
 <div *ngIf="!loading && showBscAssetSelection" class="container">
-  Work in progress ..
+  <app-bep-asset-payment-selector
+    [jobBudgetUsd]="jobBudgetUsd"
+    [chain]="chain"
+    (bepAssetData)="assetDataHandler.asset($event)"
+  ></app-bep-asset-payment-selector>
 </div>
 
 <div *ngIf="paymentMethod && !showAssetSelection">

@@ -1,7 +1,10 @@
 import { Location } from '@angular/common'
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { Router } from '@angular/router'
+
 import { BinanceService, EventType } from '@service/binance.service'
+import { BscService, EventTypeBsc } from '@service/bsc.service'
+
 import { BehaviorSubject } from 'rxjs'
 import { sortBy, prop } from 'ramda'
 import { takeUntil } from 'rxjs/operators'
@@ -9,6 +12,12 @@ import { OnDestroyComponent } from '@class/on-destroy'
 
 import { environment } from '@env/environment'
 import { bepAssetData } from '@canpay-lib/lib'
+
+enum NetworkType {
+  Binance = 'Binance',
+  Bsc = 'Bsc'
+}
+
 
 @Component({
   selector: 'app-bep-asset-payment-selector',
@@ -18,25 +27,71 @@ import { bepAssetData } from '@canpay-lib/lib'
 export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
   implements OnInit {
   @Input() jobBudgetUsd = 0
+  @Input() chain: string
+  
   @Output() bepAssetData: EventEmitter<bepAssetData> = new EventEmitter()
 
   address: string | boolean = true
   private availableAssets = new BehaviorSubject(null)
   explorer = environment.binance.explorer
   loading = true
+  selectedNetwork = null
+  
 
   constructor(
     private location: Location,
     private router: Router,
-    private binanceService: BinanceService
+
+    private binanceService: BinanceService,
+    private bscService: BscService
   ) {
     super()
   }
 
   async ngOnInit() {
-    this.binanceService.events$
+
+    if (this.chain == "BEP20") {
+      this.selectedNetwork = NetworkType.Bsc
+      
+      this.bscService.events$
       .pipe(takeUntil(this.destroy$)) // unsubscribe on destroy
       .subscribe(async event => {
+        
+        if (!event) {
+          this.address = false
+          return
+        }
+
+        switch (event.type) {
+          case EventTypeBsc.ConnectSuccess:          
+          case EventTypeBsc.AddressFound:
+            this.address = event.details.address
+                        
+            this.availableAssets.next(sortBy(prop('symbol'))(await this.bscService.getBalances()))
+            // todo here enrich balances with usd value, as done into getAvailableAssets
+
+            
+            this.loading = false
+          
+          
+          break
+          case EventTypeBsc.Disconnect:
+            this.address = false
+          break
+        
+        }
+    
+      })
+    }
+
+
+    if (this.chain == "BEP2") {
+      this.selectedNetwork = NetworkType.Binance
+
+      this.binanceService.events$
+      .pipe(takeUntil(this.destroy$)) // unsubscribe on destroy
+      .subscribe(async event => {
+        
         if (!event) {
           this.address = false
           return
@@ -72,6 +127,7 @@ export class BepAssetPaymentSelectorComponent extends OnDestroyComponent
             break
         }
       })
+    }
   }
 
   async getAvailableAssets(balances) {

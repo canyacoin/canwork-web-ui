@@ -36,6 +36,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
   jobBudgetUsd: number
   canPayOptions: CanPay
   countryList: any
+  chain: string
 
   constructor(
     private jobService: JobService,
@@ -115,6 +116,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       return
     }
     this.walletConnected = true
+    this.chain = connectedChain
     if (connectedChain == 'BEP20') {
       const address = this.bscService.getAddress() // temporary
       console.log('Connected to BEP20 wallet: ' + address) // temporary

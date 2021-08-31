@@ -57,6 +57,8 @@
                         <td>
                           <app-dynamic-coin
                             [symbol]="asset.symbol"
+                            [network]="selectedNetwork"
+                            [address]="asset.address"                            
                           ></app-dynamic-coin>
                         </td>
                         <td>{{ asset.symbol }}</td>
