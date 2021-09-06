@@ -240,6 +240,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   }
   
   async onConfirmWalletUpdateBsc() {
+    this.bscError = ''    
     await this.bscService.confirmConnection(this.walletReplacementBsc.new, this.WalletApp)
   }  
 

@@ -4,6 +4,7 @@ import { BscValidator } from '@validator/bsc.validator'
 
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs'
+import { ToastrService } from 'ngx-toastr'
 
 import { environment } from '@env/environment'
 
@@ -52,6 +53,11 @@ const tokenAbi = [
 
 ];
 
+export enum BepChain {
+  Binance = 'BEP2',
+  SmartChain = 'BEP20'
+}
+
 
 export enum WalletAppBsc {
   MetaMask
@@ -90,7 +96,8 @@ export class BscService {
 
   constructor(
     private userService: UserService,
-    private authService: AuthService,  
+    private authService: AuthService,
+    private toastr: ToastrService,    
   ) { 
     const connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
     if (connectedWallet) {
@@ -153,16 +160,23 @@ export class BscService {
     let network = await this.provider.getNetwork()
     
     if (network.chainId !== NETWORK_ID) {
-      await window.ethereum.request({
-          method: "wallet_addEthereumChain",
-          params: [{
-              chainId: CHAIN_ID,
-              chainName: CHAIN_NAME,
-              nativeCurrency: CURRENCY,
-              rpcUrls: RPC_URLS,
-              blockExplorerUrls: BLOCK_EXPLORER_URLS    
-          }]
-      });
+      
+      try {
+            
+        await window.ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [{
+                chainId: CHAIN_ID,
+                chainName: CHAIN_NAME,
+                nativeCurrency: CURRENCY,
+                rpcUrls: RPC_URLS,
+                blockExplorerUrls: BLOCK_EXPLORER_URLS    
+            }]
+        });
+      } catch (err) {
+        this.toastr.warning(err.message || err.msg || err.code, 'Please check and retry', { timeOut: 2000, })
+        return 'Check MetaMask'
+      }
       
       // update
       network = await this.provider.getNetwork()
@@ -171,7 +185,15 @@ export class BscService {
     }
     
     await new Promise(f => setTimeout(f, 100));  // sleep 100 ms 
-    let accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    
+    try {
+    
+      let accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    
+    } catch (err) {
+      this.toastr.warning(err.message || err.msg || err.code, 'Please check and retry', { timeOut: 2000, })
+      return 'Check MetaMask'
+    }
     
     try {
       this.signer = await this.provider.getSigner()
@@ -202,7 +224,7 @@ export class BscService {
           walletApp,
           details,
         })
-        return
+        return "Verify address"
       }       
       
     }
@@ -217,7 +239,7 @@ export class BscService {
         walletApp,
         details,
       })
-      return
+      return "Address in use"
     }
     
     // success
@@ -321,6 +343,7 @@ export class BscService {
   }
   
   isMetamaskConnected(): boolean {
+    if (!this.connectedWallet) return false;
     return this.connectedWallet.walletApp === WalletAppBsc.MetaMask
   }
 
