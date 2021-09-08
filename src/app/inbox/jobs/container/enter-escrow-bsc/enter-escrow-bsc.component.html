@@ -1,0 +1,54 @@
+<div
+  *ngIf="loading"
+  class="container d-flex h-50 flex-column justify-content-center"
+  style="min-height: 640px;"
+>
+  <img src="assets/img/loader.svg" height="36px" alt="Loader" />
+</div>
+<div *ngIf="!loading && !jobStateCheck">
+  <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet">
+    <img
+      src="/assets/img/CanYa_red_cross.svg"
+      class="img-responsiveness mt-10 animated bounceInUp"
+      width="150"
+    />
+    <h2>Unauthorized</h2>
+    <p class="lead fw-400">
+      It seems like you're trying to initiate payment for this job even though
+      it's already paid, or is processing its payment.
+    </p>
+    <p class="text-center">
+      <a class="btn btn-secondary" [routerLink]="['/inbox/job', this.job.id]"
+        >Return</a
+      >
+    </p>
+  </div>
+</div>
+
+
+<div *ngIf="!loading && showBscAssetSelection" class="container">
+  <app-bep-asset-payment-selector
+    [jobBudgetUsd]="jobBudgetUsd"
+    [chain]="chain"
+    (bepAssetData)="assetDataHandler.asset($event)"
+  ></app-bep-asset-payment-selector>
+</div>
+
+<!--<div *ngIf="paymentMethod && !showAssetSelection">
+  <div
+    *ngIf="!canPayOptions"
+    class="container d-flex h-100 flex-column justify-content-center"
+    style="min-height: 640px;"
+  >
+    <img src="assets/img/loader.svg" height="36px" alt="Loader" />
+  </div>
+  <div class="container" *ngIf="canPayOptions">
+    <canpay-wizard
+      [successText]="canPayOptions.successText"
+      [paymentSummary]="canPayOptions.paymentSummary"
+      (complete)="canPayOptions.complete($event)"
+      (cancel)="canPayOptions.cancel($event)"
+      [initialisePayment]="canPayOptions.initialisePayment"
+    ></canpay-wizard>
+  </div>
+</div>-->

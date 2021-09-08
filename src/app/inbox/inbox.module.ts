@@ -20,6 +20,7 @@ import { StatusIconComponent } from './jobs/components/status-icon/status-icon.c
 import { ActionDialogComponent } from './jobs/container/action-dialog/action-dialog.component'
 import { CancelJobComponent } from './jobs/container/cancel-job/cancel-job.component'
 import { EnterEscrowComponent } from './jobs/container/enter-escrow/enter-escrow.component'
+import { EnterEscrowBscComponent } from './jobs/container/enter-escrow-bsc/enter-escrow-bsc.component'
 import { JobContainerComponent } from './jobs/container/job-container.component'
 import { JobDetailsComponent } from './jobs/container/job-details/job-details.component'
 import { JobDashboardComponent } from './jobs/dashboard/job-dashboard.component'
@@ -48,6 +49,7 @@ import { BepAssetPaymentSelectorComponent } from '../bep-asset-payment-selector/
     ChatComponent,
     CancelJobComponent,
     EnterEscrowComponent,
+    EnterEscrowBscComponent,
     JobContainerComponent,
     JobDashboardComponent,
     JobDetailsComponent,

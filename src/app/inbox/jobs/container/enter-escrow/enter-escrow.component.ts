@@ -1,3 +1,5 @@
+// todo here remove bsc support added into dedicated component
+
 import { Component, OnInit, AfterViewInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { CanPay, bepAssetData } from '@canpay-lib/lib'

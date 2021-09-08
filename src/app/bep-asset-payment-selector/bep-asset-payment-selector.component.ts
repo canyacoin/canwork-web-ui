@@ -1,3 +1,5 @@
+// todo here remove bsc support added into dedicated component
+
 import { Location } from '@angular/common'
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { Router } from '@angular/router'
