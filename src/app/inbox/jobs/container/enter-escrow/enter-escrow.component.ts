@@ -63,7 +63,7 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
 
           this.loading = false
           this.checkWalletConnection()
-          this.startBepAssetSelector();
+          this.startBepAssetSelector()
         })
     }
   }
@@ -130,15 +130,6 @@ export class EnterEscrowComponent implements OnInit, AfterViewInit {
       asset: onSelection,
     }
   }
-
-  startBscAssetSelector() {
-    if (this.jobStateCheck && this.walletConnected) {
-      this.showBscAssetSelection = true
-    }
-    
-  }
-
-
 
   async startCanpay() {
     console.log('START CAN PAY')
