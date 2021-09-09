@@ -37,7 +37,6 @@ import { DynamicCoinComponent } from './dynamic-coin/dynamic-coin.component'
 import { DynamicCoinWrapperComponent } from './dynamic-coin-wrapper/dynamic-coin-wrapper.component'
 import { LedgerModalComponent } from '../binance/ledger-modal/ledger-modal.component'
 import { SendTxModalComponent } from '../binance/send-tx-modal/send-tx-modal.component';
-import { BscPaymentSelectorComponent } from './bsc-payment-selector/bsc-payment-selector.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -87,7 +86,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     DynamicCoinWrapperComponent,
     LedgerModalComponent,
     SendTxModalComponent,
-    BscPaymentSelectorComponent,
   ],
   exports: [
     AttachmentComponent,

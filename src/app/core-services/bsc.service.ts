@@ -29,29 +29,7 @@ import { ethers } from "ethers";
 declare var window: any; // we need to get metamask object from browser window
 
 
-/*
-generic token Human-Readable ABI
-https://docs.ethers.io/v5/api/utils/abi/formats/#abi-formats--human-readable-abi
-*/
-const tokenAbi = [ 
-  // Some details about the token
-  "function name() view returns (string)",
-  "function symbol() view returns (string)",
 
-  // Get the account balance
-  "function balanceOf(address) view returns (uint)",
-
-  // Send some of your tokens to someone else
-  "function transfer(address to, uint amount)",
-
-  // An event triggered whenever anyone transfers to someone else
-  "event Transfer(address indexed from, address indexed to, uint amount)",
-
-  // Before we can send an asset to the escrow we must first approve a spend allowance on the asset contract
-  // uint is equivalent to uint256
-  "function approve(address _spender, uint _value) nonpayable returns (bool)"
-
-];
 
 export enum BepChain {
   Binance = 'BEP2',
@@ -81,6 +59,31 @@ export interface EventBsc {
   details?: EventDetails
   walletApp?: WalletAppBsc  
 }
+
+/*
+generic token Human-Readable ABI
+https://docs.ethers.io/v5/api/utils/abi/formats/#abi-formats--human-readable-abi
+*/
+const tokenAbi = [ 
+  // Some details about the token
+  "function name() view returns (string)",
+  "function symbol() view returns (string)",
+
+  // Get the account balance
+  "function balanceOf(address) view returns (uint)",
+
+  // Send some of your tokens to someone else
+  "function transfer(address to, uint amount)",
+
+  // An event triggered whenever anyone transfers to someone else
+  "event Transfer(address indexed from, address indexed to, uint amount)",
+
+  // Before we can send an asset to the escrow we must first approve a spend allowance on the asset contract
+  // uint is equivalent to uint256
+  "function approve(address _spender, uint _value) nonpayable returns (bool)"
+
+];
+
 
 @Injectable({
   providedIn: 'root'

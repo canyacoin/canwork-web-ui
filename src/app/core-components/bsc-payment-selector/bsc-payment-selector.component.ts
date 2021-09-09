@@ -7,9 +7,10 @@ import { sortBy, prop } from 'ramda'
 import { takeUntil } from 'rxjs/operators'
 import { OnDestroyComponent } from '@class/on-destroy'
 
-import { BscService, EventTypeBsc } from '@service/bsc.service'
+import { BscService, EventTypeBsc, BepChain } from '@service/bsc.service'
 
 import { environment } from '@env/environment'
+import { bepAssetData } from '@canpay-lib/lib' // todo
 
 
 @Component({
@@ -19,9 +20,12 @@ import { environment } from '@env/environment'
 })
 export class BscPaymentSelectorComponent extends OnDestroyComponent implements OnInit {
   @Input() jobBudgetUsd = 0
-  private availableAssets = new BehaviorSubject(null)
+  @Output() bepAssetData: EventEmitter<bepAssetData> = new EventEmitter()
+  
+  private assets = []
   address: string | boolean = true
   loading = true
+  chain = BepChain.SmartChain
   
   
 
@@ -47,10 +51,11 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
           case EventTypeBsc.ConnectSuccess:          
           case EventTypeBsc.AddressFound:
             this.address = event.details.address
-                        
-            this.availableAssets.next(sortBy(prop('symbol'))(await this.bscService.getBalances()))
-            // todo here enrich balances with usd value, as done into getAvailableAssets
-            // but one by one, async and not ui blocking, invoking pancakeswap smart contract
+            
+            let balances = await this.bscService.getBalances();
+            balances.sort((a, b) => parseFloat(b.free) - parseFloat(a.free));
+            this.assets = balances;
+
 
             
             this.loading = false
@@ -66,6 +71,12 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
       })    
   }
   
-
+  goBack() {
+    if ((<any>window).history.length > 0) {
+      this.location.back()
+    } else {
+      this.router.navigate(['/home'])
+    }
+  }
 
 }
