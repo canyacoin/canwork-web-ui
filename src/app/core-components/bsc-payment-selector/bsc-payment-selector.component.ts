@@ -54,12 +54,22 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
             
             let balances = await this.bscService.getBalances();
             balances.sort((a, b) => parseFloat(b.free) - parseFloat(a.free));
+            balances.forEach((b) => {
+              if (parseFloat(b.free) == 0) { // no jobs with zero value
+                b.converting = false;
+                b.hasEnough = false;
+                b.freeUsd = 0;
+              } else b.converting = true;
+            });
             this.assets = balances;
+            console.log(this.assets);
+            
 
 
             
             this.loading = false
-          
+            // global loading end, now verify usd equivalents and if are enough
+            await this.checkUsdBalances()
           
           break
           case EventTypeBsc.Disconnect:
@@ -69,6 +79,30 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
         }
     
       })    
+  }
+  
+  async checkUsdBalances() {
+
+    for (let i=0; i<this.assets.length; i++) {
+      if (this.assets[i].converting) {
+        let busdEquivalent = await this.bscService.getBusdValue(
+          parseFloat(this.assets[i].free),
+          this.assets[i].address
+        );
+        
+        if (busdEquivalent > 0) {
+          let busdValue = parseFloat(busdEquivalent.toString());
+          if (busdValue >= this.jobBudgetUsd) this.assets[i].hasEnough = true;
+          this.assets[i].freeUsd = "$ "+ busdValue.toFixed(2);
+          
+        } else {
+          this.assets[i].freeUsd = 'na';          
+        }
+        this.assets[i].converting = false;
+      }
+      
+    }
+    
   }
   
   goBack() {

@@ -15,7 +15,7 @@ const CHAIN_NAME = environment.bsc.chainName
 const RPC_URLS = environment.bsc.rpcUrls
 const BLOCK_EXPLORER_URLS = environment.bsc.blockExplorerUrls
 const CURRENCY = { name: "BNB", symbol: "bnb", decimals: 18 }
-
+const PANCAKE_OUTPUT_DECIMALS =  environment.bsc.pancake.decimals; // todo verify why is 16 and not 18
 
 import { ethers } from "ethers";
 /*
@@ -83,6 +83,13 @@ const tokenAbi = [
   "function approve(address _spender, uint _value) nonpayable returns (bool)"
 
 ];
+
+const pancakeRouterAbi = [
+  // converts token value
+  "function getAmountsOut(uint amountIn, address[] calldata path) external view returns (uint[] memory amounts)"
+
+] 
+
 
 
 @Injectable({
@@ -292,6 +299,39 @@ export class BscService {
       balances.push({ address: tokenAddress, name, symbol, free: balance})
     }
     return balances
+  }
+  
+  async getBusdValue(amountIn, tokenAddress) {
+    /*
+    Testnet faucet:
+    https://testnet.binance.org/faucet-smart
+    
+    Original one:
+    https://www.reddit.com/r/pancakeswap/comments/m1s3ki/pancakeswap_on_bsc_testnet/    
+    https://testnet.bscscan.com/address/0xD99D1c33F9fC3444f8101754aBC46c52416550D1#readContract
+    https://twitter.com/pancakeswap/status/1369547285160370182  
+    
+    Good liquidity:
+    (from here: https://www.reddit.com/r/pancakeswap/comments/nwykvn/pancakeswap_instances_for_the_bsc_testnet/)
+    router: https://testnet.bscscan.com/address/0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3
+      i.e. 1000000000000000000, [0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd, 0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee]
+      ([wbnb, busd]
+    ui: https://pancake.kiemtienonline360.com/#/swap
+    */    
+    
+    try {
+      const busdAddress = environment.bsc.pancake.busd;
+      const pancakeRouterContract = new ethers.Contract(environment.bsc.pancake.router, pancakeRouterAbi, this.provider)
+      const amountsOut = await pancakeRouterContract.getAmountsOut(
+        ethers.utils.parseUnits(amountIn.toString(), CURRENCY.decimals),
+        [tokenAddress, busdAddress]
+      );
+      const amountOut = ethers.utils.formatUnits(amountsOut[1], PANCAKE_OUTPUT_DECIMALS);
+      return amountOut;
+    } catch (e) {
+      return -1;
+    }
+    return -1;
   }
   
   async confirmConnection(address, walletApp) {
