@@ -10,11 +10,12 @@ import { environment } from '@env/environment'
 
 
 const NETWORK_ID = environment.bsc.netId;
-const CHAIN_ID = "0x"+NETWORK_ID.toString(16)
+const CHAIN_ID = `0x${NETWORK_ID.toString(16)}`
 const CHAIN_NAME = environment.bsc.chainName
 const RPC_URLS = environment.bsc.rpcUrls
 const BLOCK_EXPLORER_URLS = environment.bsc.blockExplorerUrls
 const CURRENCY = { name: "BNB", symbol: "bnb", decimals: 18 }
+const GAS = { decimals: 8 }
 const PANCAKE_OUTPUT_DECIMALS =  environment.bsc.pancake.decimals; // todo verify why is 16 and not 18
 
 import { ethers } from "ethers";
@@ -90,6 +91,10 @@ const pancakeRouterAbi = [
 
 ] 
 
+const escrowAbi = [
+  "function deposit (address asset, uint value, bytes32 JOBID) nonpayable",
+  "function release (bytes32 JOBID) nonpayable"
+];
 
 
 @Injectable({
@@ -333,6 +338,28 @@ export class BscService {
     }
     return -1;
   }
+  
+  async estimateGasApprove(asset, allowance) {
+    
+    try {
+
+      const allowanceUint = ethers.utils.parseUnits(allowance, CURRENCY.decimals);
+      
+      const assetContract = new ethers.Contract(asset, tokenAbi, this.signer);
+
+      const gasApprove = await assetContract.estimateGas.approve(environment.bsc.escrow.address, allowanceUint);
+      
+      return ethers.utils.formatUnits(gasApprove, GAS.decimals);
+      
+    } catch (err) {
+
+      this.toastr.warning(err.message || err.msg || err.code, 'Error estimating gas needed to approve', { timeOut: 2000, })
+
+      return -1;
+
+    }
+  }
+  
   
   async confirmConnection(address, walletApp) {
     

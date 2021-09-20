@@ -67,17 +67,30 @@
                           <img src="assets/img/loader.svg" height="24px" alt="converting" />
                         </td>
                         <td *ngIf="!assets[i].converting">{{ assets[i].freeUsd }}</td>
-                        <td *ngIf="assets[i].converting">
+                        <td *ngIf="assets[i].converting" colspan="2">
                         </td>                        
                         <td *ngIf="!assets[i].converting && assets[i].hasEnough">
                           <button
                             class="btn btn-primary  my-1"
                             (click)="paymentSelected(asset)"
                           >
-                            Pay
+                            Approve
                           </button>
+                          <br>
+                          <small>gas</small>
                         </td>
-                        <td *ngIf="!assets[i].converting && !assets[i].hasEnough">
+                        <td *ngIf="!assets[i].converting && assets[i].hasEnough">
+                          <button
+                            class="btn btn-primary  my-1"
+                            (click)="paymentSelected(asset)"
+                            [disabled] = "!assets[i].isApproved"
+                          >
+                            Deposit
+                          </button>
+                          <br>
+                          <small>gas</small>
+                        </td>
+                        <td *ngIf="!assets[i].converting && !assets[i].hasEnough" colspan="2">
                           Insufficient
                         </td>
                       </tr>

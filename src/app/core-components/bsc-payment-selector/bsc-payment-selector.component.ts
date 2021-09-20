@@ -92,7 +92,10 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
         
         if (busdEquivalent > 0) {
           let busdValue = parseFloat(busdEquivalent.toString());
-          if (busdValue >= this.jobBudgetUsd) this.assets[i].hasEnough = true;
+          if (busdValue >= this.jobBudgetUsd) {
+            this.assets[i].hasEnough = true;
+            this.assets[i].isApproved = false; // first step is approve
+          }
           this.assets[i].freeUsd = "$ "+ busdValue.toFixed(2);
           
         } else {
