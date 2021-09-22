@@ -313,7 +313,7 @@ export class BscService {
         
     if (!this.provider) await this.connect() // we need to reconnect
         
-    let result = {err: 'error retrieving balance', address: '', name: '', symbol: '', free: "-1"};
+    let result = {err: 'error retrieving balance', address: '', name: '', symbol: '', free: "-1", token};
     
     if (!this.provider) return result // we weren't able to connect
     
@@ -327,7 +327,7 @@ export class BscService {
     const symbol = await contract.symbol()
     const balance = ethers.utils.formatUnits(await contract.balanceOf(address), CURRENCY.decimals)
 
-    return ({ address: tokenAddress, name, symbol, free: balance, err: ''})
+    return ({ address: tokenAddress, name, symbol, free: balance, err: '', token})
   }  
   
   async getBusdValue(amountIn, tokenAddress) {
@@ -363,26 +363,52 @@ export class BscService {
     return -1;
   }
   
-  async estimateGasApprove(asset, allowance) {
+  async estimateGasApprove(token, allowance) {
     
     try {
 
-      const allowanceUint = ethers.utils.parseUnits(allowance, CURRENCY.decimals);
+      const allowanceUint = ethers.utils.parseUnits(allowance.toString(), CURRENCY.decimals);
+      const tokenAddress = environment.bsc.assets[token]
       
-      const assetContract = new ethers.Contract(asset, tokenAbi, this.signer);
-
+      const assetContract = new ethers.Contract(tokenAddress, tokenAbi, this.signer);
       const gasApprove = await assetContract.estimateGas.approve(environment.bsc.escrow.address, allowanceUint);
       
       return ethers.utils.formatUnits(gasApprove, GAS.decimals);
       
     } catch (err) {
+      console.log(err)
+      this.toastr.warning(err.message || err.msg || err.code, 'Error estimating gas needed to approve', { timeOut: 5000, })
 
-      this.toastr.warning(err.message || err.msg || err.code, 'Error estimating gas needed to approve', { timeOut: 2000, })
-
-      return -1;
+      return "-1";
 
     }
   }
+  
+  async estimateGasDeposit(token, amount, jobId) {
+    
+    try {
+      let strippedJobId = jobId.replace(/-/g, "");
+      if (strippedJobId.length >= 32) strippedJobId = strippedJobId.substr(0, 31)
+
+      const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
+
+
+      const amountUint = ethers.utils.parseUnits(amount.toString(), CURRENCY.decimals);      
+      const tokenAddress = environment.bsc.assets[token]      
+      const escrowContract = new ethers.Contract(environment.bsc.escrow.address, escrowAbi, this.signer);
+      console.log(tokenAddress, amountUint, strippedJobId, jobIdBytes32);
+      const gasDeposit = await escrowContract.estimateGas.deposit(tokenAddress, amountUint, jobIdBytes32);
+      
+      return ethers.utils.formatUnits(gasDeposit, GAS.decimals);
+      
+    } catch (err) {
+      console.log(err)
+      this.toastr.warning(err.message || err.msg || err.code, 'Error estimating gas needed to deposit', { timeOut: 5000, })
+
+      return "-1";
+
+    }
+  }  
   
   
   async confirmConnection(address, walletApp) {

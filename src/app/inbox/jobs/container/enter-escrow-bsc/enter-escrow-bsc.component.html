@@ -29,6 +29,7 @@
 <div *ngIf="!loading && showBscAssetSelection" class="container">
   <app-bsc-payment-selector
     [jobBudgetUsd]="jobBudgetUsd"
+    [jobId]="job.id"
     (bepAssetData)="assetDataHandler.asset($event)"
   ></app-bsc-payment-selector>
 </div>

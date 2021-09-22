@@ -20,6 +20,7 @@ import { bepAssetData } from '@canpay-lib/lib' // todo
 })
 export class BscPaymentSelectorComponent extends OnDestroyComponent implements OnInit {
   @Input() jobBudgetUsd = 0
+  @Input() jobId = ''
   @Output() bepAssetData: EventEmitter<bepAssetData> = new EventEmitter()
   
   private assets = []
@@ -75,10 +76,10 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
             
             console.log(this.assets);
             
-
-
-            
+            // one by one, not blocking ui
             await this.checkUsdBalances()
+            await this.estimateGasApprove()
+            await this.estimateGasDeposit()
           
           break
           case EventTypeBsc.Disconnect:
@@ -104,7 +105,10 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
           if (busdValue >= this.jobBudgetUsd) {
             this.assets[i].hasEnough = true;
             this.assets[i].isApproved = false; // first step is approve
+            this.assets[i].gasApprove = '';
+            this.assets[i].gasDeposit = '';
           }
+          this.assets[i].busdValue = busdValue; // raw, needed later
           this.assets[i].freeUsd = "$ "+ busdValue.toFixed(2);
           
         } else {
@@ -116,6 +120,26 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
     }
     
   }
+
+  async estimateGasApprove() {
+    for (let i=0; i<this.assets.length; i++) {
+      if (this.assets[i].hasEnough && (this.assets[i].gasApprove == '')) {
+        let allowance = this.jobBudgetUsd / this.assets[i].busdValue; // how much we need
+        let gasApprove = await this.bscService.estimateGasApprove(this.assets[i].token, allowance);
+        if (parseFloat(gasApprove) >= 0) this.assets[i].gasApprove = `~${parseFloat(gasApprove).toFixed(4)}`;
+      }
+    }
+  }
+  
+  async estimateGasDeposit() {
+    for (let i=0; i<this.assets.length; i++) {
+      if (this.assets[i].hasEnough && (this.assets[i].gasDeposit == '')) {
+        let allowance = this.jobBudgetUsd / this.assets[i].busdValue; // how much we need
+        let gasDeposit = await this.bscService.estimateGasDeposit(this.assets[i].token, allowance, this.jobId);
+        if (parseFloat(gasDeposit) >= 0) this.assets[i].gasDeposit = `~${parseFloat(gasDeposit).toFixed(4)}`;
+      }
+    }
+  }  
   
   goBack() {
     if ((<any>window).history.length > 0) {
