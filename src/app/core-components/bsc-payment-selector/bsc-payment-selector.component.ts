@@ -4,7 +4,7 @@ import { Router } from '@angular/router'
 
 import { BehaviorSubject } from 'rxjs'
 import { sortBy, prop } from 'ramda'
-import { takeUntil } from 'rxjs/operators'
+import { take } from 'rxjs/operators'
 import { OnDestroyComponent } from '@class/on-destroy'
 
 import { BscService, EventTypeBsc, BepChain } from '@service/bsc.service'
@@ -25,6 +25,7 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
   private assets = []
   address: string | boolean = true
   loading = true
+  firstLoaded = false
   chain = BepChain.SmartChain
   
   
@@ -39,7 +40,7 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
 
   ngOnInit() {      
       this.bscService.events$
-      .pipe(takeUntil(this.destroy$)) // unsubscribe on destroy
+      .pipe(take(1)) // unsubscribe on destroy
       .subscribe(async event => {
         
         if (!event) {
@@ -50,25 +51,33 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
         switch (event.type) {
           case EventTypeBsc.ConnectSuccess:          
           case EventTypeBsc.AddressFound:
+          
+          
             this.address = event.details.address
             
-            let balances = await this.bscService.getBalances();
-            balances.sort((a, b) => parseFloat(b.free) - parseFloat(a.free));
-            balances.forEach((b) => {
-              if (parseFloat(b.free) == 0) { // no jobs with zero value
-                b.converting = false;
-                b.hasEnough = false;
-                b.freeUsd = 0;
-              } else b.converting = true;
-            });
-            this.assets = balances;
+            this.assets = [];
+
+
+            for (let token in environment.bsc.assets) {
+              console.log(token);
+              let b = await this.bscService.getBalance(token);
+              if (!b.err) {
+                let asset = { converting: true, hasEnough: false, freeUsd: 0, ...b }
+                if (parseFloat(asset.free) == 0) asset.converting = false; // no conversion with zero value
+                
+                this.assets.push(asset);
+                this.firstLoaded = true // at least one loaded, show grid
+
+              }
+            }
+            
+            this.loading = false; // finish loading all
+            
             console.log(this.assets);
             
 
 
             
-            this.loading = false
-            // global loading end, now verify usd equivalents and if are enough
             await this.checkUsdBalances()
           
           break

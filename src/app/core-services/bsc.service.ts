@@ -306,6 +306,30 @@ export class BscService {
     return balances
   }
   
+  async getBalance(token) {
+    // get single token balance, for not blocking asset selectors
+    let connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
+    if (!connectedWallet) await this.connect() // no wallet saved
+        
+    if (!this.provider) await this.connect() // we need to reconnect
+        
+    let result = {err: 'error retrieving balance', address: '', name: '', symbol: '', free: "-1"};
+    
+    if (!this.provider) return result // we weren't able to connect
+    
+    connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
+    if (!connectedWallet) return result // we weren't able to save wallet
+    const address = connectedWallet.address
+
+    const tokenAddress = environment.bsc.assets[token]
+    const contract = new ethers.Contract(tokenAddress, tokenAbi, this.provider)
+    const name = await contract.name()
+    const symbol = await contract.symbol()
+    const balance = ethers.utils.formatUnits(await contract.balanceOf(address), CURRENCY.decimals)
+
+    return ({ address: tokenAddress, name, symbol, free: balance, err: ''})
+  }  
+  
   async getBusdValue(amountIn, tokenAddress) {
     /*
     Testnet faucet:

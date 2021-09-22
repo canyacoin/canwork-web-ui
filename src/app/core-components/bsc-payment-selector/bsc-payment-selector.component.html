@@ -27,21 +27,14 @@
             </a>
           </div>
         </div>-->
-        <div
-          *ngIf="loading"
-          class="container d-flex h-100 flex-column justify-content-center"
-        >
-          Loading...
-          <img src="assets/img/loader.svg" height="36px" alt="Loader" />
-        </div>
-        <div *ngIf="!loading" class="row">
+        <div *ngIf="firstLoaded" class="row">
           <div class="col text-left">
             <div [ngSwitch]="address">
               <div *ngSwitchCase="true" class="text-center">
                 Loading address...
               </div>
               <div *ngSwitchDefault>
-                <div *ngIf="!loading">
+                <div>
                   <table class="table">
                     <thead>
                       <tr>
@@ -76,8 +69,7 @@
                           >
                             Approve
                           </button>
-                          <br>
-                          <small>gas</small>
+                          <small class="ml-1">(gas)</small>
                         </td>
                         <td *ngIf="!assets[i].converting && assets[i].hasEnough">
                           <button
@@ -88,7 +80,7 @@
                             Deposit
                           </button>
                           <br>
-                          <small>gas</small>
+                          <small class="ml-1">(gas)</small>
                         </td>
                         <td *ngIf="!assets[i].converting && !assets[i].hasEnough" colspan="2">
                           Insufficient
@@ -96,6 +88,10 @@
                       </tr>
                     </tbody>
                   </table>
+                  <div *ngIf="loading" class="text-center">
+                    <img src="assets/img/loader.svg" height="36px" alt="Loader" />                    
+                  </div>
+
                   <div class="text-right">
                     <button
                       (click)="goBack()"
@@ -106,13 +102,18 @@
                     </button>
                   </div>
                 </div>
-                <div *ngIf="loading" class="text-center">
-                  Loading...
-                </div>
               </div>
             </div>
           </div>
         </div>
+        <div
+          *ngIf="loading && !firstLoaded"
+          class="container d-flex h-100 flex-column justify-content-center"
+        >
+          Loading...
+          <img src="assets/img/loader.svg" height="36px" alt="Loader" />
+        </div>
+        
       </div>
     </div>
   </section>
