@@ -189,7 +189,7 @@ export class BscService {
             }]
         });
       } catch (err) {
-        this.toastr.warning(err.message || err.msg || err.code, 'Please check and retry', { timeOut: 2000, })
+        this.toastr.warning(this.errMsg(err), 'Please check and retry', { timeOut: 2000, })
         return 'Check MetaMask'
       }
       
@@ -206,7 +206,7 @@ export class BscService {
       let accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     
     } catch (err) {
-      this.toastr.warning(err.message || err.msg || err.code, 'Please check and retry', { timeOut: 2000, })
+      this.toastr.warning(this.errMsg(err), 'Please check and retry', { timeOut: 2000, })
       return 'Check MetaMask'
     }
     
@@ -377,7 +377,7 @@ export class BscService {
       
     } catch (err) {
       console.log(err)
-      this.toastr.warning(err.message || err.msg || err.code, 'Error estimating gas needed to approve', { timeOut: 5000, })
+      this.toastr.warning(this.errMsg(err), 'Error estimating gas needed to approve', { timeOut: 5000, })
 
       return "-1";
 
@@ -403,7 +403,7 @@ export class BscService {
       
     } catch (err) {
       console.log(err)
-      this.toastr.warning(err.message || err.msg || err.code, 'Error estimating gas needed to deposit', { timeOut: 5000, })
+      this.toastr.warning(this.errMsg(err), 'Error estimating gas needed to deposit', { timeOut: 5000, })
 
       return "-1";
 
@@ -472,5 +472,11 @@ export class BscService {
       return null
     }
     return this.connectedWallet.address
-  }  
+  }
+
+  errMsg(err) {
+    let errMsg = err.message || err.msg || err.code;
+    if (err.data && err.data.message) errMsg = err.data.message;
+    return errMsg;
+  }
 }

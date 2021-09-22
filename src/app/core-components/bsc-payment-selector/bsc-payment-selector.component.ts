@@ -133,13 +133,18 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
   
   async estimateGasDeposit() {
     for (let i=0; i<this.assets.length; i++) {
-      if (this.assets[i].hasEnough && (this.assets[i].gasDeposit == '')) {
+      if (this.assets[i].hasEnough && (this.assets[i].gasDeposit == '') && (this.assets[i].isApproved)) {
         let allowance = this.jobBudgetUsd / this.assets[i].busdValue; // how much we need
         let gasDeposit = await this.bscService.estimateGasDeposit(this.assets[i].token, allowance, this.jobId);
         if (parseFloat(gasDeposit) >= 0) this.assets[i].gasDeposit = `~${parseFloat(gasDeposit).toFixed(4)}`;
       }
     }
-  }  
+  }
+
+  async approve(asset) {
+    // todo approve
+    // todo estimateGasDeposit after approval
+  }
   
   goBack() {
     if ((<any>window).history.length > 0) {
