@@ -143,7 +143,6 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
   }
 
   async approve(asset) {
-    console.log(asset);
     if (!asset.converting && asset.hasEnough && !asset.isApproved) {
       let allowance = this.jobBudgetUsd / asset.busdValue; // how much we need
       let result = await this.bscService.approve(asset.token, allowance);
