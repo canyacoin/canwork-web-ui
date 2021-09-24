@@ -132,6 +132,7 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
   }
   
   async estimateGasDeposit() {
+    // only for approved assets
     for (let i=0; i<this.assets.length; i++) {
       if (this.assets[i].hasEnough && (this.assets[i].gasDeposit == '') && (this.assets[i].isApproved)) {
         let allowance = this.jobBudgetUsd / this.assets[i].busdValue; // how much we need
@@ -142,8 +143,21 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
   }
 
   async approve(asset) {
-    // todo approve
-    // todo estimateGasDeposit after approval
+    console.log(asset);
+    if (!asset.converting && asset.hasEnough && !asset.isApproved) {
+      let allowance = this.jobBudgetUsd / asset.busdValue; // how much we need
+      let result = await this.bscService.approve(asset.token, allowance);
+      console.log(result);
+      // check result and approve into controller state
+      if (!result.err) {
+        asset.isApproved = true;
+        // estimateGasDeposit after approval
+        let gasDeposit = await this.bscService.estimateGasDeposit(asset.token, allowance, this.jobId);
+        if (parseFloat(gasDeposit) >= 0) asset.gasDeposit = `~${parseFloat(gasDeposit).toFixed(4)}`;        
+      }
+    } else {
+      console.log(asset);
+    }
   }
   
   goBack() {

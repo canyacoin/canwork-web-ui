@@ -384,6 +384,28 @@ export class BscService {
     }
   }
   
+  async approve(token, allowance) {
+    let approveResult = {err:''};
+    
+    try {
+
+      const allowanceUint = ethers.utils.parseUnits(allowance.toString(), CURRENCY.decimals);
+      const tokenAddress = environment.bsc.assets[token]
+      
+      const assetContract = new ethers.Contract(tokenAddress, tokenAbi, this.signer);
+      approveResult = await assetContract.approve(environment.bsc.escrow.address, allowanceUint);
+
+      
+    } catch (err) {
+      console.log(err)
+      this.toastr.warning(this.errMsg(err), 'Error estimating gas needed to approve', { timeOut: 5000, })
+      approveResult.err = this.errMsg(err)
+
+    }
+    
+    return approveResult
+  }  
+  
   async estimateGasDeposit(token, amount, jobId) {
     
     try {

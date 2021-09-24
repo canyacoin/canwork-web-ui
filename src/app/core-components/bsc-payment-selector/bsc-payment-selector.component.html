@@ -65,11 +65,12 @@
                         <td *ngIf="!assets[i].converting && assets[i].hasEnough" class="no-h-padding">
                           <button
                             class="btn btn-primary  my-1"
-                            (click)="paymentSelected(asset)"
+                            (click)="approve(assets[i])"
+                            [disabled] = "assets[i].isApproved"
                           >
                             Approve
                           </button>
-                          <small class="ml-1">{{ assets[i].gasApprove }}</small>
+                          <small *ngIf="!assets[i].isApproved" class="ml-1">{{ assets[i].gasApprove }}</small>
                         </td>
                         <td *ngIf="!assets[i].converting && assets[i].hasEnough" class="no-h-padding">
                           <button
