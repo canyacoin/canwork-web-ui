@@ -75,7 +75,7 @@
                         <td *ngIf="!assets[i].converting && assets[i].hasEnough" class="no-h-padding">
                           <button
                             class="btn btn-primary  my-1"
-                            (click)="paymentSelected(asset)"
+                            (click)="paymentSelected(assets[i])"
                             [disabled] = "!assets[i].isApproved"
                           >
                             Deposit

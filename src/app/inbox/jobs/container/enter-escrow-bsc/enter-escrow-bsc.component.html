@@ -30,25 +30,25 @@
   <app-bsc-payment-selector
     [jobBudgetUsd]="jobBudgetUsd"
     [jobId]="job.id"
-    (bepAssetData)="assetDataHandler.asset($event)"
+    (bscAsset)="assetDataHandler.asset($event)"
   ></app-bsc-payment-selector>
 </div>
 
-<!--<div *ngIf="paymentMethod && !showAssetSelection">
+<div *ngIf="paymentMethod && !showBscAssetSelection">
   <div
-    *ngIf="!canPayOptions"
+    *ngIf="!depositStatus"
     class="container d-flex h-100 flex-column justify-content-center"
     style="min-height: 640px;"
   >
     <img src="assets/img/loader.svg" height="36px" alt="Loader" />
   </div>
-  <div class="container" *ngIf="canPayOptions">
+  <div class="container" *ngIf="depositStatus">
     <canpay-wizard
-      [successText]="canPayOptions.successText"
-      [paymentSummary]="canPayOptions.paymentSummary"
-      (complete)="canPayOptions.complete($event)"
-      (cancel)="canPayOptions.cancel($event)"
-      [initialisePayment]="canPayOptions.initialisePayment"
+      [successText]="depositStatus.successText"
+      [paymentSummary]="depositStatus.paymentSummary"
+      (complete)="depositStatus.complete($event)"
+      (cancel)="depositStatus.cancel($event)"
+      [initialisePayment]="depositStatus.initialisePayment"
     ></canpay-wizard>
   </div>
-</div>-->
+</div>

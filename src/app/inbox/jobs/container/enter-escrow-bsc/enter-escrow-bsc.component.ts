@@ -1,6 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { CanPay, bepAssetData } from '@canpay-lib/lib'
 import { Job, JobState } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
 import { UserType } from '@class/user'
@@ -26,6 +25,12 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
   jobBudgetUsd: number
   job: Job
   chain: string
+  assetDataHandler: any
+  bscAssetData: any
+  depositStatus: any
+  paymentMethod: string | boolean = false
+  
+  
   
 
   constructor(
@@ -65,6 +70,19 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
     if (this.jobStateCheck && this.walletConnected) {
       this.showBscAssetSelection = true
     }
+    
+    const onSelection = async assetData => { // keep this context
+      console.log(assetData)
+      this.showBscAssetSelection = false // Destroys the bscAssetSelector
+      this.bscAssetData = assetData // Receives the selected asset data
+      this.paymentMethod = this.bscAssetData.symbol 
+      // Initiates the Canpay Wizard
+      //this.startCanpay()
+    }
+    this.assetDataHandler = {
+      // passed back from bscAssetSelector
+      asset: onSelection,
+    }    
     
   }
 

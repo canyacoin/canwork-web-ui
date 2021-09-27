@@ -21,7 +21,7 @@ import { bepAssetData } from '@canpay-lib/lib' // todo
 export class BscPaymentSelectorComponent extends OnDestroyComponent implements OnInit {
   @Input() jobBudgetUsd = 0
   @Input() jobId = ''
-  @Output() bepAssetData: EventEmitter<bepAssetData> = new EventEmitter()
+  @Output() bscAsset: EventEmitter<any> = new EventEmitter()
   
   private assets = []
   address: string | boolean = true
@@ -60,7 +60,6 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
 
 
             for (let token in environment.bsc.assets) {
-              console.log(token);
               let b = await this.bscService.getBalance(token);
               if (!b.err) {
                 let asset = { converting: true, hasEnough: false, freeUsd: 0, ...b }
@@ -74,7 +73,6 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
             
             this.loading = false; // finish loading all
             
-            console.log(this.assets);
             
             // one by one, not blocking ui
             await this.checkUsdBalances()
@@ -146,7 +144,6 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
     if (!asset.converting && asset.hasEnough && !asset.isApproved) {
       let allowance = this.jobBudgetUsd / asset.busdValue; // how much we need
       let result = await this.bscService.approve(asset.token, allowance);
-      console.log(result);
       // check result and approve into controller state
       if (!result.err) {
         asset.isApproved = true;
@@ -158,6 +155,12 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
       console.log(asset);
     }
   }
+  
+  async paymentSelected(asset) {
+
+    this.bscAsset.emit(asset)
+
+  }  
   
   goBack() {
     if ((<any>window).history.length > 0) {
