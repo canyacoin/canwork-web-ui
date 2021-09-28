@@ -137,7 +137,7 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
         let allowance = this.jobBudgetUsd / this.assets[i].busdValue; // how much we need
         let gasDeposit = await this.bscService.estimateGasDeposit(this.assets[i].token, allowance, this.jobId, true);
         if (parseFloat(gasDeposit) >= 0) {
-          // if it succeded, it means asset is approved
+          // if it succeds, it means asset is approved
           this.assets[i].isApproved = true;
           this.assets[i].gasDeposit = `~${parseFloat(gasDeposit).toFixed(4)}`;
         }

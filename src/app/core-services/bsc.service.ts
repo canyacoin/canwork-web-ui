@@ -385,7 +385,7 @@ export class BscService {
   }
   
   async approve(token, allowance) {
-    let approveResult = {err:''};
+    let approveResult = { err: '' };
     
     try {
 
@@ -398,7 +398,7 @@ export class BscService {
       
     } catch (err) {
       console.log(err)
-      this.toastr.warning(this.errMsg(err), 'Error estimating gas needed to approve', { timeOut: 5000, })
+      this.toastr.warning(this.errMsg(err), 'Error approving', { timeOut: 5000, })
       approveResult.err = this.errMsg(err)
 
     }
@@ -432,6 +432,32 @@ export class BscService {
     }
   }  
   
+  async deposit(token, amount, jobId) {
+    let depositResult = { err: '' };
+    
+    try {
+      let strippedJobId = jobId.replace(/-/g, "");
+      if (strippedJobId.length >= 32) strippedJobId = strippedJobId.substr(0, 31)
+      const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
+
+      const amountUint = ethers.utils.parseUnits(amount.toString(), CURRENCY.decimals);      
+
+      const tokenAddress = environment.bsc.assets[token]
+      
+      const escrowContract = new ethers.Contract(environment.bsc.escrow.address, escrowAbi, this.signer);
+
+      depositResult = await escrowContract.deposit(tokenAddress, amountUint, jobIdBytes32);
+
+      
+    } catch (err) {
+      console.log(err)
+      this.toastr.warning(this.errMsg(err), 'Error into deposit', { timeOut: 5000, })
+      depositResult.err = this.errMsg(err)
+
+    }
+    
+    return depositResult
+  }    
   
   async confirmConnection(address, walletApp) {
     

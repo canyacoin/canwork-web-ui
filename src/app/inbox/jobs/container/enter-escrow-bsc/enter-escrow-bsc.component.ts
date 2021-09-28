@@ -27,8 +27,9 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
   chain: string
   assetDataHandler: any
   bscAssetData: any
-  depositStatus: any
+  bscPayOptions: any
   paymentMethod: string | boolean = false
+  isEscrowProcessing: boolean = false
   
   
   
@@ -77,7 +78,7 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
       this.bscAssetData = assetData // Receives the selected asset data
       this.paymentMethod = this.bscAssetData.symbol 
       // Initiates the Canpay Wizard
-      //this.startCanpay()
+      await this.startBscpay()
     }
     this.assetDataHandler = {
       // passed back from bscAssetSelector
@@ -85,6 +86,90 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
     }    
     
   }
+  
+  async startBscpay() {
+    
+    const onComplete = async () => {
+      this.router.navigate(['/inbox/job', this.job.id])
+    }
+
+    const onBackFromSummary = async () => {
+      this.router
+        .navigateByUrl('/inbox/job/' + this.job.id, {
+          skipLocationChange: true,
+        })
+        .then(() =>
+          this.router.navigate(['/inbox/job/' + this.job.id + '/enter-bsc-escrow'])
+        )
+    }
+
+    const startJob = async () => {
+      // new ActionType enterEscrowBsc
+      const action = new IJobAction(ActionType.enterEscrowBsc, UserType.client)
+      this.job.state = JobState.inEscrow
+
+      console.log('Start Job: ' + this.job)
+      const success = await this.jobService.handleJobAction(this.job, action)
+      if (success) {
+        console.log('ok')
+      }
+    }
+
+    const provider = await this.userService.getUser(this.job.providerId)
+    const client = await this.userService.getUser(this.job.clientId)
+
+    // Calculate jobBudget in selected BEP asset
+    //const jobBudgetAsset = this.jobBudgetUsd / this.bscAssetData.usdPrice
+    let allowance = this.jobBudgetUsd / this.bscAssetData.busdValue; // how much we need
+    
+    //const jobBudgetAtomic = Math.ceil(jobBudgetAsset * 1e8)
+    const jobBudgetAtomic = allowance
+
+    const paymentSummary = {
+      asset: this.bscAssetData,
+      job: {
+        name: this.job.information.title,
+        usdValue: this.jobBudgetUsd,
+        jobId: this.job.id,
+        providerAddress: provider.bscAddress,
+      },
+      jobBudgetAtomic: jobBudgetAtomic,
+    }
+
+    /*const initialisePayment = (
+      beforeCallback,
+      successCallback,
+      failureCallback
+    ) => {
+      console.log('initialise Payment')
+
+      const onSuccess = () => {
+        console.log('onSuccess')
+        startJob()
+        if (successCallback) {
+          successCallback()
+        }
+      }
+
+      this.binanceService.escrowFunds(
+        paymentSummary,
+        beforeCallback,
+        onSuccess,
+        failureCallback
+      )
+    }*/
+
+    this.bscPayOptions = {
+      successText: 'Escrow success, job started!',
+      paymentSummary: paymentSummary,
+      complete: onComplete,
+      cancel: onBackFromSummary,
+      //initialisePayment,
+    }
+    
+    this.isEscrowProcessing = true;
+    // todo invoke deposit function, handle error and success
+  }  
 
   async checkWalletConnection() {
     let connectedChain = '';

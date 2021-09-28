@@ -10,6 +10,7 @@ export class Job {
   paymentType: PaymentType
   budget: number
   paymentLog: Array<Payment> = []
+  bscEscrow: boolean = false
   state: JobState
   actionLog: Array<IJobAction> = []
   boostVisibility = false
