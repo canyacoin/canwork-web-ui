@@ -92,6 +92,7 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
   async checkUsdBalances() {
 
     for (let i=0; i<this.assets.length; i++) {
+      console.log(this.assets[i]) // debug
       if (this.assets[i].converting) {
         let busdEquivalent = await this.bscService.getBusdValue(
           parseFloat(this.assets[i].free),
@@ -105,7 +106,7 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
             this.assets[i].isApproved = false; // first step is approve
             this.assets[i].gasApprove = '';
             this.assets[i].gasDeposit = '';
-          }
+                      }
           this.assets[i].busdValue = busdValue; // raw, needed later
           this.assets[i].freeUsd = "$ "+ busdValue.toFixed(2);
           
@@ -130,12 +131,16 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
   }
   
   async estimateGasDeposit() {
-    // only for approved assets
+    // estimate silently for all, if it succeeds, it means asset is already approved
     for (let i=0; i<this.assets.length; i++) {
-      if (this.assets[i].hasEnough && (this.assets[i].gasDeposit == '') && (this.assets[i].isApproved)) {
+      if (this.assets[i].hasEnough && (this.assets[i].gasDeposit == '')) {
         let allowance = this.jobBudgetUsd / this.assets[i].busdValue; // how much we need
-        let gasDeposit = await this.bscService.estimateGasDeposit(this.assets[i].token, allowance, this.jobId);
-        if (parseFloat(gasDeposit) >= 0) this.assets[i].gasDeposit = `~${parseFloat(gasDeposit).toFixed(4)}`;
+        let gasDeposit = await this.bscService.estimateGasDeposit(this.assets[i].token, allowance, this.jobId, true);
+        if (parseFloat(gasDeposit) >= 0) {
+          // if it succeded, it means asset is approved
+          this.assets[i].isApproved = true;
+          this.assets[i].gasDeposit = `~${parseFloat(gasDeposit).toFixed(4)}`;
+        }
       }
     }
   }
@@ -148,7 +153,7 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
       if (!result.err) {
         asset.isApproved = true;
         // estimateGasDeposit after approval
-        let gasDeposit = await this.bscService.estimateGasDeposit(asset.token, allowance, this.jobId);
+        let gasDeposit = await this.bscService.estimateGasDeposit(asset.token, allowance, this.jobId, false);
         if (parseFloat(gasDeposit) >= 0) asset.gasDeposit = `~${parseFloat(gasDeposit).toFixed(4)}`;        
       }
     } else {

@@ -406,7 +406,7 @@ export class BscService {
     return approveResult
   }  
   
-  async estimateGasDeposit(token, amount, jobId) {
+  async estimateGasDeposit(token, amount, jobId, silent) {
     
     try {
       let strippedJobId = jobId.replace(/-/g, "");
@@ -418,15 +418,15 @@ export class BscService {
       const amountUint = ethers.utils.parseUnits(amount.toString(), CURRENCY.decimals);      
       const tokenAddress = environment.bsc.assets[token]      
       const escrowContract = new ethers.Contract(environment.bsc.escrow.address, escrowAbi, this.signer);
-      console.log(tokenAddress, amountUint, strippedJobId, jobIdBytes32);
       const gasDeposit = await escrowContract.estimateGas.deposit(tokenAddress, amountUint, jobIdBytes32);
       
       return ethers.utils.formatUnits(gasDeposit, GAS.decimals);
       
     } catch (err) {
-      console.log(err)
-      this.toastr.warning(this.errMsg(err), 'Error estimating gas needed to deposit', { timeOut: 5000, })
-
+      if (!silent) {
+        console.log(err)
+        this.toastr.warning(this.errMsg(err), 'Error estimating gas needed to deposit', { timeOut: 5000, })
+      }
       return "-1";
 
     }
