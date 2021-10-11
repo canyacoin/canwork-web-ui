@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http'
 
 import { JobService } from '@service/job.service'
 import { UserService } from '@service/user.service'
-import { BscService } from '@service/bsc.service'
+import { BscService, BepChain } from '@service/bsc.service'
 
 @Component({
   selector: 'app-enter-escrow-bsc',
@@ -24,12 +24,16 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
   showBscAssetSelection = false
   jobBudgetUsd: number
   job: Job
-  chain: string
   assetDataHandler: any
   bscAssetData: any
   bscPayOptions: any
   paymentMethod: string | boolean = false
-  isEscrowProcessing: boolean = false
+  isEscrowLoading: boolean = false
+  chain = BepChain.SmartChain
+  showBalance = false
+  depositError: string | boolean = false
+  showSuccess = false
+  
   
   
   
@@ -62,7 +66,7 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
 
           this.loading = false
           const chain = await this.checkWalletConnection()
-          if (chain == 'BEP20') this.startBscAssetSelector();
+          if (chain == BepChain.SmartChain) this.startBscAssetSelector();
         })
     }    
   }
@@ -73,7 +77,6 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
     }
     
     const onSelection = async assetData => { // keep this context
-      console.log(assetData)
       this.showBscAssetSelection = false // Destroys the bscAssetSelector
       this.bscAssetData = assetData // Receives the selected asset data
       this.paymentMethod = this.bscAssetData.symbol 
@@ -88,32 +91,16 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
   }
   
   async startBscpay() {
+
+    this.isEscrowLoading = true;
+    
     
     const onComplete = async () => {
       this.router.navigate(['/inbox/job', this.job.id])
     }
 
-    const onBackFromSummary = async () => {
-      this.router
-        .navigateByUrl('/inbox/job/' + this.job.id, {
-          skipLocationChange: true,
-        })
-        .then(() =>
-          this.router.navigate(['/inbox/job/' + this.job.id + '/enter-bsc-escrow'])
-        )
-    }
 
-    const startJob = async () => {
-      // new ActionType enterEscrowBsc
-      const action = new IJobAction(ActionType.enterEscrowBsc, UserType.client)
-      this.job.state = JobState.inEscrow
 
-      console.log('Start Job: ' + this.job)
-      const success = await this.jobService.handleJobAction(this.job, action)
-      if (success) {
-        console.log('ok')
-      }
-    }
 
     const provider = await this.userService.getUser(this.job.providerId)
     const client = await this.userService.getUser(this.job.clientId)
@@ -123,9 +110,8 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
     let allowance = this.jobBudgetUsd / this.bscAssetData.busdValue; // how much we need
     
     //const jobBudgetAtomic = Math.ceil(jobBudgetAsset * 1e8)
-    const jobBudgetAtomic = allowance
 
-    const paymentSummary = {
+    let paymentSummary = {
       asset: this.bscAssetData,
       job: {
         name: this.job.information.title,
@@ -133,48 +119,71 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
         jobId: this.job.id,
         providerAddress: provider.bscAddress,
       },
-      jobBudgetAtomic: jobBudgetAtomic,
+      allowance,
     }
 
-    /*const initialisePayment = (
-      beforeCallback,
-      successCallback,
-      failureCallback
-    ) => {
-      console.log('initialise Payment')
 
-      const onSuccess = () => {
-        console.log('onSuccess')
-        startJob()
-        if (successCallback) {
-          successCallback()
-        }
-      }
-
-      this.binanceService.escrowFunds(
-        paymentSummary,
-        beforeCallback,
-        onSuccess,
-        failureCallback
-      )
-    }*/
 
     this.bscPayOptions = {
       successText: 'Escrow success, job started!',
       paymentSummary: paymentSummary,
       complete: onComplete,
-      cancel: onBackFromSummary,
-      //initialisePayment,
+    }
+        
+    let balance = await this.bscService.getBalance(this.bscAssetData.token);
+    if (!balance.err) {
+      this.bscPayOptions.paymentSummary.balance = balance
+      this.showBalance = true; // enable balance show
+
     }
     
-    this.isEscrowProcessing = true;
-    // todo invoke deposit function, handle error and success
-  }  
+    console.log(this.bscPayOptions)
+    this.isEscrowLoading = false;
+
+    
+  }
+
+  async finalizeBscPay() {
+    
+    if (this.isEscrowLoading) return; // avoid double click
+    
+    this.depositError = false // reset errors
+    this.isEscrowLoading = true;
+    
+    // now finally actually try to deposit
+    let result = await this.bscService.deposit(this.bscAssetData.token, this.bscPayOptions.paymentSummary.allowance, this.job.id);
+    
+    // check result and approve into controller state
+        
+    if (!result.err) {
+      const action = new IJobAction(ActionType.enterEscrowBsc, UserType.client)
+      this.job.state = JobState.inEscrow
+
+      let success = await this.jobService.handleJobAction(this.job, action)
+      if (success) {      
+      
+         this.showSuccess = true
+         this.showBalance = false; // not needed anymore and it will change
+         this.isEscrowLoading = false; // done      
+      
+      } else {
+       this.depositError = "Error starting job, escrow succesful, please contact CanWork support" 
+       // do not unblock form
+      }
+
+    } else {
+       this.isEscrowLoading = false; // done
+       this.depositError = result.err
+       
+    }
+    
+
+  }
 
   async checkWalletConnection() {
-    let connectedChain = '';
+    let connectedChain = undefined;
     // BEP20 has the priority, if it's connected will use it
-    if (this.bscService.isMetamaskConnected()) connectedChain = 'BEP20';      
+    if (this.bscService.isMetamaskConnected()) connectedChain = BepChain.SmartChain;      
     if (!connectedChain) {
       const routerStateSnapshot = this.router.routerState.snapshot
       this.toastr.warning(
@@ -188,7 +197,6 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
       return
     }
     this.walletConnected = true
-    this.chain = connectedChain
     const address = this.bscService.getAddress() // temporary
     console.log('Connected to BEP20 wallet: ' + address) // temporary
     return connectedChain

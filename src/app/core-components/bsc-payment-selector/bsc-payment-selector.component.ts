@@ -92,7 +92,6 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
   async checkUsdBalances() {
 
     for (let i=0; i<this.assets.length; i++) {
-      console.log(this.assets[i]) // debug
       if (this.assets[i].converting) {
         let busdEquivalent = await this.bscService.getBusdValue(
           parseFloat(this.assets[i].free),
@@ -152,7 +151,8 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
       // check result and approve into controller state
       if (!result.err) {
         asset.isApproved = true;
-        // estimateGasDeposit after approval
+        // estimateGasDeposit after approval, wait a bit to give time to chain to get approval register
+        await new Promise(r => setTimeout(r, 500));
         let gasDeposit = await this.bscService.estimateGasDeposit(asset.token, allowance, this.jobId, false);
         if (parseFloat(gasDeposit) >= 0) asset.gasDeposit = `~${parseFloat(gasDeposit).toFixed(4)}`;        
       }
