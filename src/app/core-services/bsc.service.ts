@@ -366,6 +366,7 @@ export class BscService {
   async estimateGasApprove(token, allowance) {
     
     try {
+      await this.checkSigner()     
 
       const allowanceUint = ethers.utils.parseUnits(allowance.toString(), CURRENCY.decimals);
       const tokenAddress = environment.bsc.assets[token]
@@ -388,6 +389,7 @@ export class BscService {
     let approveResult = { err: '' };
     
     try {
+      await this.checkSigner()
 
       const allowanceUint = ethers.utils.parseUnits(allowance.toString(), CURRENCY.decimals);
       const tokenAddress = environment.bsc.assets[token]
@@ -409,6 +411,8 @@ export class BscService {
   async estimateGasDeposit(token, amount, jobId, silent) {
     
     try {
+      await this.checkSigner()
+      
       let strippedJobId = jobId.replace(/-/g, "");
       if (strippedJobId.length >= 32) strippedJobId = strippedJobId.substr(0, 31)
 
@@ -436,6 +440,8 @@ export class BscService {
     let depositResult = { err: '' };
     
     try {
+      await this.checkSigner()
+      
       let strippedJobId = jobId.replace(/-/g, "");
       if (strippedJobId.length >= 32) strippedJobId = strippedJobId.substr(0, 31)
       const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
@@ -458,6 +464,31 @@ export class BscService {
     
     return depositResult
   }    
+  
+  async release(jobId) {
+    
+    let releaseResult = { err: '' };  
+    try {
+      await this.checkSigner()
+        
+      let strippedJobId = jobId.replace(/-/g, "");
+      if (strippedJobId.length >= 32) strippedJobId = strippedJobId.substr(0, 31)
+      const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
+
+      const escrowContract = new ethers.Contract(environment.bsc.escrow.address, escrowAbi, this.signer);
+
+      releaseResult = await escrowContract.release(jobIdBytes32);
+      
+      
+    } catch (err) {
+      console.log(err)
+      this.toastr.warning(this.errMsg(err), 'Error into release', { timeOut: 5000, })
+      releaseResult.err = this.errMsg(err)
+
+    }
+    
+    return releaseResult
+  }      
   
   async confirmConnection(address, walletApp) {
     
@@ -526,5 +557,12 @@ export class BscService {
     let errMsg = err.message || err.msg || err.code;
     if (err.data && err.data.message) errMsg = err.data.message;
     return errMsg;
+  }
+  
+  async checkSigner() {
+    if (!this.provider) this.provider = new ethers.providers.Web3Provider(window.ethereum, "any")
+    
+    if (!this.signer) this.signer = await this.provider.getSigner()
+    
   }
 }

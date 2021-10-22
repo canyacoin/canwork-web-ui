@@ -246,6 +246,35 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
     this.binanceService.releaseFunds(jobId, undefined, onSuccess, undefined)
   }
+  
+  private async releaseEscrowBsc() {
+    console.log('release Escrow BSC')
+    // we check if bsc chain is connected and if not, suggest to connect to bsc chain explicitely (for now only metamask, not bep2 chain
+    if (!this.bscService.isMetamaskConnected()) {
+      const routerStateSnapshot = this.router.routerState.snapshot
+      this.toastr.warning('Connect your Metamask BSC (Binance Smart Chain) wallet to release the payment', '', {
+        timeOut: 4000,
+      })
+      this.router.navigate(['/wallet-bnb'], {
+        queryParams: { returnUrl: routerStateSnapshot.url },
+      })
+      return
+      
+    }
+    
+    // we are bsc connected, go on
+    const jobId = this.job.id
+    let result = await this.bscService.release(jobId);
+    if (!result.err) {
+      
+      const action = new IJobAction(ActionType.acceptFinish, UserType.client)
+      this.job.state = JobState.complete
+      await this.jobService.handleJobAction(this.job, action)      
+      
+    }
+    
+  }
+  
 
   async executeAction(action: ActionType) {
     console.log('executeAction: ' + action)
@@ -257,8 +286,16 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         
         break
       case ActionType.acceptFinish:
-        console.log('ActionType.acceptFinish')
-        this.releaseEscrow()
+        if (this.job.bscEscrow === true) {
+          console.log('ActionType.acceptFinish BEP20')
+          await this.releaseEscrowBsc()
+          
+        } else {
+          // bep2 escrow release
+          console.log('ActionType.acceptFinish BEP2')
+          this.releaseEscrow()
+          
+        }
         break
       case ActionType.cancelJobEarly:
         //TODO
