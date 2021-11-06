@@ -39,7 +39,8 @@ export enum BepChain {
 
 
 export enum WalletAppBsc {
-  MetaMask
+  MetaMask,
+  WalletConnect
 }
 
 export enum EventTypeBsc {

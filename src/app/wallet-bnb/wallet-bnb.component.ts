@@ -129,14 +129,18 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   async connect(app: WalletApp) {
 
     // bsc connect methods
-    if (app == WalletApp.MetaMask) {
+    if (app == WalletApp.MetaMask || app == WalletApp.WalletConnectBsc) {
       this.bscError = ''
       
-      this.bscError = await this.bscService.connect(app)
-    }
+      // WalletApp.WalletConnectBsc (i.e. Trust, qr from desktop or direct from mobile intent or trust dapp browser)
+      this.bscError = await this.bscService.connect(app)      
+      
+    } else {
     
-    // binance connect methods
-    await this.binanceService.connect(app)
+      // binance connect methods
+      await this.binanceService.connect(app)
+    
+    }
     
   }
 

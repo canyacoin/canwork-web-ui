@@ -10,7 +10,14 @@
               [class.active]="isActive(WalletApp.MetaMask)"
             >
               MetaMask (BSC)
-            </li>            <li
+            </li>            
+            <li
+              (click)="selected = WalletApp.WalletConnectBsc"
+              [class.active]="isActive(WalletApp.WalletConnectBsc)"
+            >
+              WalletConnect (BSC)
+            </li>
+            <li
               (click)="selected = WalletApp.WalletConnect"
               [class.active]="isActive(WalletApp.WalletConnect)"
             >
@@ -43,6 +50,22 @@
               <div class="mt-20">
                 <button
                   (click)="connect(WalletApp.MetaMask)"
+                  class="btn btn-primary"
+                >
+                  Connect
+                </button>
+              </div>
+              <div class="keystore-error">
+                {{ bscError }}
+              </div>              
+            </div>
+          </div>        
+          <div *ngSwitchCase="WalletApp.WalletConnectBsc">
+            <div>
+              Click to connect to WalletConnect compatible wallet (i.e. Trust)
+              <div class="mt-20">
+                <button
+                  (click)="connect(WalletApp.WalletConnectBsc)"
                   class="btn btn-primary"
                 >
                   Connect

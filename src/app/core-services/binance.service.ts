@@ -18,7 +18,8 @@ export enum WalletApp {
   Ledger,
   Keystore,
   Mnemonic,
-  MetaMask
+  MetaMask,
+  WalletConnectBsc
 }
 
 export enum EventType {
