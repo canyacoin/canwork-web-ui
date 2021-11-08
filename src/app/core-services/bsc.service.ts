@@ -1,3 +1,5 @@
+import WalletConnectProvider from "@walletconnect/web3-provider";
+
 import { AuthService } from '@service/auth.service'
 import { UserService } from '@service/user.service'
 import { BscValidator } from '@validator/bsc.validator'
@@ -7,6 +9,9 @@ import { BehaviorSubject } from 'rxjs'
 import { ToastrService } from 'ngx-toastr'
 
 import { environment } from '@env/environment'
+
+// we need this until we'll have binance service
+import { WalletApp } from '@service/binance.service'
 
 
 const NETWORK_ID = environment.bsc.netId;
@@ -18,7 +23,7 @@ const CURRENCY = { name: "BNB", symbol: "bnb", decimals: 18 }
 const GAS = { decimals: 8 }
 const PANCAKE_OUTPUT_DECIMALS =  environment.bsc.pancake.decimals; // todo verify why is 16 and not 18
 
-import { ethers } from "ethers";
+import { ethers, providers  } from "ethers";
 /*
   to support ethers 5.3.1, we needed to add "skipLibCheck" into tsconfig.json compilerOptions
   https://github.com/ethers-io/ethers.js/issues/776
@@ -114,7 +119,9 @@ export class BscService {
     private userService: UserService,
     private authService: AuthService,
     private toastr: ToastrService,    
-  ) { 
+  ) {
+
+    // todo move this to a common reusable function and replace everywhere
     const connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
     if (connectedWallet) {
       this.events.next({
@@ -125,6 +132,8 @@ export class BscService {
       this.connectedWallet = { walletApp: connectedWallet.walletApp, address: connectedWallet.address }
     }
     
+
+    // todo implement network and account change listen also on web3provider from walletconnet or web3modal
     if (!!window.ethereum) window.ethereum.on('networkChanged', (networkId) => {
       if (networkId != environment.bsc.netId) {
         this.disconnect()
@@ -165,13 +174,58 @@ export class BscService {
   
   async connect(app?: any): Promise<string> {
     // when we'll have multiple apps, we have to save app
+    let walletApp;
     
-    if (!window.ethereum) return 'MetaMask not found'
+    if (app === WalletApp.MetaMask) {
+      walletApp = WalletAppBsc.MetaMask;
+      
+      if (!window.ethereum) return 'MetaMask not found'
+      
+      this.provider = new ethers.providers.Web3Provider(window.ethereum, "any")
+      
+      
+      
+    } else  if (app === WalletApp.WalletConnectBsc) {
+      walletApp = WalletAppBsc.WalletConnect;
+      
+      // walletConnect Trust supports only mainNet?
+      let walletConnectParams = {
+        chainId: environment.bsc.mainNetId,
+        rpc: {}
+      }
+      walletConnectParams.rpc[environment.bsc.mainNetId] = environment.bsc.mainNetRpc;
+      
+      /* mainNet:
+        {
+          chainId: 56, // this is the key param and we don't need infuraId
+          rpc: {
+            56: 'https://bsc-dataseed.binance.org/'
+          },
+        }      
+      */
+      let walletConnectProvider = new WalletConnectProvider(walletConnectParams);
+      
+      if (!walletConnectProvider) return 'No WalletConnect Provider'
+      
+      await walletConnectProvider.enable();
+      
+      this.provider = new providers.Web3Provider(
+        walletConnectProvider,
+        { name:environment.bsc.mainNetChainName, chainId: environment.bsc.mainNetId}
+      );  
 
 
-    if (!this.provider) this.provider = new ethers.providers.Web3Provider(window.ethereum, "any")
+    } else {
+      console.log('Unknow bsc app: '+app);
+      
+      // todo get app from saved storage to go on
+      return 'Unkwonw application'
+    }
     
+
     if (!this.provider) return 'No Provider'
+
+    
     
     let network = await this.provider.getNetwork()
     
@@ -224,7 +278,6 @@ export class BscService {
     
     const details = { address };
     
-    const walletApp = WalletAppBsc.MetaMask;
     
     // save bsc address into user profile on connection success, if changed
     const user = await this.authService.getCurrentUser()
@@ -541,6 +594,11 @@ export class BscService {
   checkAddress(address) {
     return ethers.utils.isAddress(address)
   }
+  
+  /*
+  todo this should become a generic isBscConnected and
+  check if we are connected by metamask or wallet connet (or in the future web3modal, binance wallet ..)
+  */
   
   isMetamaskConnected(): boolean {
     if (!this.connectedWallet) return false;
