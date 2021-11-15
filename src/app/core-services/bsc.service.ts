@@ -173,6 +173,11 @@ export class BscService {
   }
   
   async connect(app?: any): Promise<string> {
+    /*
+    todo: when this is currently called without app, it's to try to refresh provider and signer
+    we have to handle it also in walletConnect scenario
+    */
+    
     // when we'll have multiple apps, we have to save app
     let walletApp;
     
@@ -186,6 +191,11 @@ export class BscService {
       
       
     } else  if (app === WalletApp.WalletConnectBsc) {
+      /*
+      todo review new walletConnect v2 changes
+      https://github.com/WalletConnect/walletconnect-monorepo/tree/v2.0/examples/react-app
+      
+      */
       walletApp = WalletAppBsc.WalletConnect;
       
       // walletConnect Trust supports only mainNet?
