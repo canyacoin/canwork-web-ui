@@ -1,4 +1,5 @@
-import WalletConnectProvider from "@walletconnect/web3-provider";
+//import WalletConnectProvider from "@walletconnect/web3-provider";
+import WalletConnectProvider from "@walletconnect/ethereum-provider"
 
 import { AuthService } from '@service/auth.service'
 import { UserService } from '@service/user.service'
@@ -200,10 +201,13 @@ export class BscService {
       
       // walletConnect Trust supports only mainNet?
       let walletConnectParams = {
-        chainId: environment.bsc.mainNetId,
-        rpc: {}
+        //chainId: environment.bsc.mainNetId,
+        rpc: {},
+        qrcode: true,
+        pollingInterval: 12000
       }
       walletConnectParams.rpc[environment.bsc.mainNetId] = environment.bsc.mainNetRpc;
+      console.log(walletConnectParams)
       
       /* mainNet:
         {
@@ -213,7 +217,29 @@ export class BscService {
           },
         }      
       */
-      let walletConnectProvider = new WalletConnectProvider(walletConnectParams);
+      let walletConnectProvider = new WalletConnectProvider(walletConnectParams)
+      console.log(walletConnectProvider)
+      if (!walletConnectProvider) return 'No WalletConnect Provider'
+
+      console.log('enabling');
+      const accounts = await walletConnectProvider.enable();
+      /*
+      this throws:
+      browser.js:21 Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'importKey')
+      here:
+      export async function browserImportKey(buffer, type = AES_BROWSER_ALGO) {
+        return env.getSubtleCrypto().importKey("raw", buffer, getAlgo(type), true, getOps(type));
+      }
+      it seems getSubtleCrypto is undefined into:
+      webpack:///./node_modules/@walletconnect/crypto/dist/esm/lib/browser.js      
+      
+      probably it depends on page not on https on dev
+      */
+      
+      
+      console.log(accounts);
+      
+      /*let walletConnectProvider = new WalletConnectProvider(walletConnectParams);
       
       if (!walletConnectProvider) return 'No WalletConnect Provider'
       
@@ -222,7 +248,7 @@ export class BscService {
       this.provider = new providers.Web3Provider(
         walletConnectProvider,
         { name:environment.bsc.mainNetChainName, chainId: environment.bsc.mainNetId}
-      );  
+      );*/  
 
 
     } else {
