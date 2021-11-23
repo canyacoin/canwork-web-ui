@@ -1,5 +1,19 @@
-//import WalletConnectProvider from "@walletconnect/web3-provider";
-import WalletConnectProvider from "@walletconnect/ethereum-provider"
+import WalletConnectProvider from "@walletconnect/ethereum-provider" // new package, same used from pancakeswap
+/*
+as seen into:
+https://github.com/pancakeswap/pancake-frontend/blob/develop/src/utils/web3React.ts
+which uses:
+https://github.com/NoahZinsmeister/web3-react/blob/v6/packages/walletconnect-connector/src/index.ts
+which uses:
+https://github.com/WalletConnect/walletconnect-monorepo/tree/v2.0/packages/ethereum-provider
+*/
+
+/*
+todo: check if we are affected from this:
+"Wallet Connect does not sign the message correctly unless you use their method"
+https://github.com/pancakeswap/pancake-frontend/blob/04ec145fea63b9d0a07c30953adf657e51745f80/src/utils/web3React.ts#L45
+*/
+
 
 import { AuthService } from '@service/auth.service'
 import { UserService } from '@service/user.service'
@@ -218,7 +232,6 @@ export class BscService {
         }      
       */
       let walletConnectProvider = new WalletConnectProvider(walletConnectParams)
-      console.log(walletConnectProvider)
       if (!walletConnectProvider) return 'No WalletConnect Provider'
 
       console.log('enabling');
