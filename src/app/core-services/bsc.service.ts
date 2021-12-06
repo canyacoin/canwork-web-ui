@@ -1,4 +1,4 @@
-import WalletConnectProvider from "@walletconnect/ethereum-provider" // new package, same used from pancakeswap
+import WalletConnectProvider from "@walletconnect/web3-provider"
 /*
 as seen into:
 https://github.com/pancakeswap/pancake-frontend/blob/develop/src/utils/web3React.ts
@@ -194,10 +194,10 @@ export class BscService {
     */
     
     // when we'll have multiple apps, we have to save app
-    let walletApp;
+    let walletApp, address;
     
     if (app === WalletApp.MetaMask) {
-      walletApp = WalletAppBsc.MetaMask;
+      walletApp = WalletAppBsc.MetaMask; // to save in localStorage
       
       if (!window.ethereum) return 'MetaMask not found'
       
@@ -211,15 +211,21 @@ export class BscService {
       https://github.com/WalletConnect/walletconnect-monorepo/tree/v2.0/examples/react-app
       
       */
-      walletApp = WalletAppBsc.WalletConnect;
+      walletApp = WalletAppBsc.WalletConnect;  // to save in localStorage
       
       // walletConnect Trust supports only mainNet?
-      let walletConnectParams = {
-        //chainId: environment.bsc.mainNetId,
+      /*let walletConnectParams = {
+        chainId: environment.bsc.mainNetId,
         rpc: {},
         qrcode: true,
         pollingInterval: 12000
+      }*/
+      let walletConnectParams = {
+        chainId: environment.bsc.mainNetId,
+        rpc: {}
       }
+      
+      //walletConnectParams.rpc[environment.bsc.mainNetId] = environment.bsc.mainNetRpc;
       walletConnectParams.rpc[environment.bsc.mainNetId] = environment.bsc.mainNetRpc;
       console.log(walletConnectParams)
       
@@ -233,97 +239,106 @@ export class BscService {
       */
       let walletConnectProvider = new WalletConnectProvider(walletConnectParams)
       if (!walletConnectProvider) return 'No WalletConnect Provider'
+      
 
-      console.log('enabling');
-      const accounts = await walletConnectProvider.enable();
-      /*
-      this throws:
-      browser.js:21 Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'importKey')
-      here:
-      export async function browserImportKey(buffer, type = AES_BROWSER_ALGO) {
-        return env.getSubtleCrypto().importKey("raw", buffer, getAlgo(type), true, getOps(type));
-      }
-      it seems getSubtleCrypto is undefined into:
-      webpack:///./node_modules/@walletconnect/crypto/dist/esm/lib/browser.js      
-      
-      probably it depends on page not on https on dev
-      */
-      
-      
-      console.log(accounts);
-      
-      /*let walletConnectProvider = new WalletConnectProvider(walletConnectParams);
-      
-      if (!walletConnectProvider) return 'No WalletConnect Provider'
-      
-      await walletConnectProvider.enable();
-      
+      const walletConnectAccounts = await walletConnectProvider.enable();
+      console.log(walletConnectProvider.chainId);
+
+      console.log(walletConnectAccounts);
+      console.log(walletConnectProvider);
+           
       this.provider = new providers.Web3Provider(
         walletConnectProvider,
-        { name:environment.bsc.mainNetChainName, chainId: environment.bsc.mainNetId}
-      );*/  
+        { name: environment.bsc.mainNetChainName, chainId: environment.bsc.mainNetId}
+      );
+      console.log(this.provider);
 
 
     } else {
       console.log('Unknow bsc app: '+app);
       
       // todo get app from saved storage to go on
-      return 'Unkwonw application'
+      return 'Unknown application'
     }
     
 
     if (!this.provider) return 'No Provider'
 
+    console.log(this.provider)
     
-    
-    let network = await this.provider.getNetwork()
-    
-    if (network.chainId !== NETWORK_ID) {
+    if (app === WalletApp.MetaMask) {
+      let network = await this.provider.getNetwork()
+      console.log(network)
       
+      if (network.chainId !== NETWORK_ID) {
+        
+        try {
+              
+          await window.ethereum.request({
+              method: "wallet_addEthereumChain",
+              params: [{
+                  chainId: CHAIN_ID,
+                  chainName: CHAIN_NAME,
+                  nativeCurrency: CURRENCY,
+                  rpcUrls: RPC_URLS,
+                  blockExplorerUrls: BLOCK_EXPLORER_URLS    
+              }]
+          });
+        } catch (err) {
+          this.toastr.warning(this.errMsg(err), 'Please check and retry', { timeOut: 2000, })
+          return 'Check MetaMask'
+        }
+        
+        // update
+        network = await this.provider.getNetwork()
+        if (network.chainId !== NETWORK_ID) return "Wrong network"
+
+      }
+      
+      await new Promise(f => setTimeout(f, 100));  // sleep 100 ms 
+    
+    
       try {
-            
-        await window.ethereum.request({
-            method: "wallet_addEthereumChain",
-            params: [{
-                chainId: CHAIN_ID,
-                chainName: CHAIN_NAME,
-                nativeCurrency: CURRENCY,
-                rpcUrls: RPC_URLS,
-                blockExplorerUrls: BLOCK_EXPLORER_URLS    
-            }]
-        });
+      
+        let accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      
       } catch (err) {
         this.toastr.warning(this.errMsg(err), 'Please check and retry', { timeOut: 2000, })
         return 'Check MetaMask'
       }
+      try {
+        this.signer = await this.provider.getSigner()
+      } catch(err) {
+        console.log(err)
+        return 'Provider error'      
+      }
+      await new Promise(f => setTimeout(f, 100));  // sleep 100 ms 
       
-      // update
-      network = await this.provider.getNetwork()
-      if (network.chainId !== NETWORK_ID) return "Wrong network"
+      address = await this.signer.getAddress();
+      
+      
+    } else  if (app === WalletApp.WalletConnectBsc) {
+
+      let network = await this.provider.getNetwork()
+      console.log(network)
+      console.log(network.chainId)
+
+      await new Promise(f => setTimeout(f, 100));  // sleep 100 ms 
+      
+      try {
+        this.signer = await this.provider.getSigner()
+      } catch(err) {
+        console.log(err)
+        return 'Provider error'      
+      }
+      await new Promise(f => setTimeout(f, 100));  // sleep 100 ms 
+      
+      address = await this.signer.getAddress();
 
     }
     
-    await new Promise(f => setTimeout(f, 100));  // sleep 100 ms 
-    
-    try {
-    
-      let accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    
-    } catch (err) {
-      this.toastr.warning(this.errMsg(err), 'Please check and retry', { timeOut: 2000, })
-      return 'Check MetaMask'
-    }
-    
-    try {
-      this.signer = await this.provider.getSigner()
-    } catch(err) {
-      console.log(err)
-      return 'Provider error'      
-    }
 
-    await new Promise(f => setTimeout(f, 100));  // sleep 100 ms 
-    
-    const address = await this.signer.getAddress();
+    console.log(address);
     
     const details = { address };
     
