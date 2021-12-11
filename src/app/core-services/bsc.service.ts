@@ -192,12 +192,21 @@ export class BscService {
     todo: when this is currently called without app, it's to try to refresh provider and signer
     we have to handle it also in walletConnect scenario
     */
+    if (!app) {
+      console.log(app);
+      console.log(WalletApp.MetaMask);
+      console.log(WalletApp.WalletConnectBsc);
+      console.log(localStorage.getItem('connectedWallet'))
+      if (localStorage.getItem('connectedWallet')) app = JSON.parse(localStorage.getItem('connectedWallet')).walletApp;
+      console.log(app)
+      return
+    }
     
     // when we'll have multiple apps, we have to save app
     let walletApp, address;
     
     if (app === WalletApp.MetaMask) {
-      walletApp = WalletAppBsc.MetaMask; // to save in localStorage
+      walletApp = WalletApp.MetaMask; // to save in localStorage
       
       if (!window.ethereum) return 'MetaMask not found'
       
@@ -211,7 +220,7 @@ export class BscService {
       https://github.com/WalletConnect/walletconnect-monorepo/tree/v2.0/examples/react-app
       
       */
-      walletApp = WalletAppBsc.WalletConnect;  // to save in localStorage
+      walletApp = WalletApp.WalletConnectBsc;  // to save in localStorage
       
       // walletConnect Trust supports only mainNet?
       /*let walletConnectParams = {
@@ -239,9 +248,22 @@ export class BscService {
       */
       let walletConnectProvider = new WalletConnectProvider(walletConnectParams)
       if (!walletConnectProvider) return 'No WalletConnect Provider'
+      try {
+        // disconnect (cleanup) before reconnecting
+        // todo perhaps remove ALL THIS TRY BLOCK this later
+        walletConnectProvider.disconnect()
+        console.log("walletConnectProvider.disconnect ok")
+        
+        walletConnectProvider = new WalletConnectProvider(walletConnectParams)
+        console.log(walletConnectProvider)
+      } catch(e) {
+        console.log("walletConnectProvider.disconnect error")
+        console.log(e)
+      }
       
 
       const walletConnectAccounts = await walletConnectProvider.enable();
+      console.log("walletConnectProvider.enable ok")
       console.log(walletConnectProvider.chainId);
 
       console.log(walletConnectAccounts);
@@ -252,8 +274,8 @@ export class BscService {
         { name: environment.bsc.mainNetChainName, chainId: environment.bsc.mainNetId}
       );
       console.log(this.provider);
-
-
+      // todo if wallect connect is ok attach event to listen for disconnect, net change or account change
+      // and perhaps move here also networkChanged for metamask, not into constructor
     } else {
       console.log('Unknow bsc app: '+app);
       
@@ -642,6 +664,37 @@ export class BscService {
   }  
 
   disconnect() {
+    let app = null;
+    if (localStorage.getItem('connectedWallet')) app = JSON.parse(localStorage.getItem('connectedWallet')).walletApp;
+    if (app === WalletApp.WalletConnectBsc) {
+        
+        
+      try {
+        
+        let walletConnectParams = {
+          chainId: environment.bsc.mainNetId,
+          rpc: {}
+        }
+        walletConnectParams.rpc[environment.bsc.mainNetId] = environment.bsc.mainNetRpc;
+        let walletConnectProvider = new WalletConnectProvider(walletConnectParams)
+        if (walletConnectProvider) {
+
+
+          walletConnectProvider.disconnect()
+          console.log('WalletConnectBsc disconnect ok')
+        }
+      
+      } catch (e) {
+        console.log('cannot create walletConnectProvider instance')
+        console.log(e)
+        
+      }
+      
+    }
+    
+    // metamask doesn't support disconnect (todo check it), if other providers support it like walletConnect, insert here call to provider disconnect method
+  
+  
     // forget
     localStorage.removeItem('connectedWallet')
     
@@ -652,7 +705,11 @@ export class BscService {
     this.events.next({
       type: EventTypeBsc.Disconnect,
     }) 
-    // metamask doesn't support disconnect, if other providers support it, insert here call to provider disconnect method
+  
+    
+    // todo update assets handling to handle single assets errors async
+
+  
   }
   
   checkAddress(address) {
