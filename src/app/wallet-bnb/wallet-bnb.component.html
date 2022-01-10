@@ -63,6 +63,7 @@
           <div *ngSwitchCase="WalletApp.WalletConnectBsc">
             <div>
               Click to connect to WalletConnect compatible wallet (i.e. Trust)
+              <p *ngIf="isAnotherBscChain">Pay attention: you'll connect to BSC MainNet, cause testnet is not supported</p>
               <div class="mt-20">
                 <button
                   (click)="connect(WalletApp.WalletConnectBsc)"

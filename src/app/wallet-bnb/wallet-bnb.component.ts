@@ -38,6 +38,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
     new: null,
   }  
   returnUrl: string
+  isAnotherBscChain = false
 
   constructor(
     private binanceService: BinanceService,
@@ -49,6 +50,11 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    
+    if (environment.bsc.netId != environment.bsc.mainNetId) this.isAnotherBscChain = true 
+    // we are not on production env but wallect connect bsc will use main net, better to warn user
+    
+    
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/wallet-bnb/assets'
     
     this.bscService.events$
