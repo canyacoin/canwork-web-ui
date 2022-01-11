@@ -65,11 +65,18 @@
               Click to connect to WalletConnect compatible wallet (i.e. Trust)
               <p *ngIf="isAnotherBscChain">Pay attention: you'll connect to BSC MainNet, cause testnet is not supported</p>
               <div class="mt-20">
-                <button
+                <button *ngIf="!walletconnectConnecting"
                   (click)="connect(WalletApp.WalletConnectBsc)"
                   class="btn btn-primary"
                 >
                   Connect
+                </button>
+                <button *ngIf="walletconnectConnecting"
+                  (click)="connect(WalletApp.WalletConnectBsc)"
+                  class="btn btn-primary"
+                  disabled
+                >
+                  Connecting ..
                 </button>
               </div>
               <div class="keystore-error">

@@ -189,17 +189,12 @@ export class BscService {
   
   async connect(app?: any): Promise<string> {
     /*
-    todo: when this is currently called without app, it's to try to refresh provider and signer
+    todo: when this is currently called without app, it tries to refresh provider and signer
     we have to handle it also in walletConnect scenario
     */
     if (!app) {
-      console.log(app);
-      console.log(WalletApp.MetaMask);
-      console.log(WalletApp.WalletConnectBsc);
-      console.log(localStorage.getItem('connectedWallet'))
       if (localStorage.getItem('connectedWallet')) app = JSON.parse(localStorage.getItem('connectedWallet')).walletApp;
       console.log(app)
-      return
     }
     
     // when we'll have multiple apps, we have to save app
@@ -212,83 +207,8 @@ export class BscService {
       
       this.provider = new ethers.providers.Web3Provider(window.ethereum, "any")
       
+      if (!this.provider) return 'No Provider'
       
-      
-    } else  if (app === WalletApp.WalletConnectBsc) {
-      /*
-      todo review new walletConnect v2 changes
-      https://github.com/WalletConnect/walletconnect-monorepo/tree/v2.0/examples/react-app
-      
-      */
-      walletApp = WalletApp.WalletConnectBsc;  // to save in localStorage
-      
-      // walletConnect Trust supports only mainNet?
-      /*let walletConnectParams = {
-        chainId: environment.bsc.mainNetId,
-        rpc: {},
-        qrcode: true,
-        pollingInterval: 12000
-      }*/
-      let walletConnectParams = {
-        chainId: environment.bsc.mainNetId,
-        rpc: {}
-      }
-      
-      //walletConnectParams.rpc[environment.bsc.mainNetId] = environment.bsc.mainNetRpc;
-      walletConnectParams.rpc[environment.bsc.mainNetId] = environment.bsc.mainNetRpc;
-      console.log(walletConnectParams)
-      
-      /* mainNet:
-        {
-          chainId: 56, // this is the key param and we don't need infuraId
-          rpc: {
-            56: 'https://bsc-dataseed.binance.org/'
-          },
-        }      
-      */
-      let walletConnectProvider = new WalletConnectProvider(walletConnectParams)
-      if (!walletConnectProvider) return 'No WalletConnect Provider'
-      try {
-        // disconnect (cleanup) before reconnecting
-        // todo perhaps remove ALL THIS TRY BLOCK this later
-        walletConnectProvider.disconnect()
-        console.log("walletConnectProvider.disconnect ok")
-        
-        walletConnectProvider = new WalletConnectProvider(walletConnectParams)
-        console.log(walletConnectProvider)
-      } catch(e) {
-        console.log("walletConnectProvider.disconnect error")
-        console.log(e)
-      }
-      
-
-      const walletConnectAccounts = await walletConnectProvider.enable();
-      console.log("walletConnectProvider.enable ok")
-      console.log(walletConnectProvider.chainId);
-
-      console.log(walletConnectAccounts);
-      console.log(walletConnectProvider);
-           
-      this.provider = new providers.Web3Provider(
-        walletConnectProvider,
-        { name: environment.bsc.mainNetChainName, chainId: environment.bsc.mainNetId}
-      );
-      console.log(this.provider);
-      // todo if wallect connect is ok attach event to listen for disconnect, net change or account change
-      // and perhaps move here also networkChanged for metamask, not into constructor
-    } else {
-      console.log('Unknow bsc app: '+app);
-      
-      // todo get app from saved storage to go on
-      return 'Unknown application'
-    }
-    
-
-    if (!this.provider) return 'No Provider'
-
-    console.log(this.provider)
-    
-    if (app === WalletApp.MetaMask) {
       let network = await this.provider.getNetwork()
       console.log(network)
       
@@ -340,10 +260,70 @@ export class BscService {
       
       
     } else  if (app === WalletApp.WalletConnectBsc) {
+      /*
+      todo review new walletConnect v2 changes
+      https://github.com/WalletConnect/walletconnect-monorepo/tree/v2.0/examples/react-app
+      
+      */
+      walletApp = WalletApp.WalletConnectBsc;  // to save in localStorage
+      
+      // walletConnect Trust supports only mainNet
 
-      let network = await this.provider.getNetwork()
-      console.log(network)
-      console.log(network.chainId)
+      let walletConnectParams = {
+        chainId: environment.bsc.mainNetId,
+        rpc: {}
+      }
+      
+      walletConnectParams.rpc[environment.bsc.mainNetId] = environment.bsc.mainNetRpc;
+      console.log(walletConnectParams)
+
+      let walletConnectProvider = new WalletConnectProvider(walletConnectParams)
+      if (!walletConnectProvider) return 'No WalletConnect Provider'
+      try {
+        // disconnect (cleanup) before reconnecting
+        // todo perhaps remove ALL THIS TRY BLOCK this later
+        walletConnectProvider.disconnect()
+        console.log("walletConnectProvider.disconnect ok")
+        
+        walletConnectProvider = new WalletConnectProvider(walletConnectParams)
+        console.log(walletConnectProvider)
+      } catch(e) {
+        console.log("walletConnectProvider.disconnect error")
+        console.log(e)
+      }
+      
+      try {
+        // try to enable provider, shows qr, catch errors
+        await walletConnectProvider.enable();
+
+        // connect web3Provider
+        this.provider = new providers.Web3Provider(
+          walletConnectProvider,
+          { name: environment.bsc.mainNetChainName, chainId: environment.bsc.mainNetId}
+        );
+
+
+      } catch(err) {
+        console.log(err)
+        return (err.message || 'Provider error')
+        
+      }
+           
+      
+      if (!this.provider) return 'No Provider'
+      
+      let network;
+      try {
+        network = await this.provider.getNetwork()
+      } catch(err) {
+        console.log(err)
+        walletConnectProvider.disconnect()        
+        return ('Please connect to Binance Smart Chain network')
+        
+      }
+
+      if (network.chainId !== environment.bsc.mainNetId) return "Please connect to Binance Smart Chain network"
+      
 
       await new Promise(f => setTimeout(f, 100));  // sleep 100 ms 
       
@@ -356,8 +336,21 @@ export class BscService {
       await new Promise(f => setTimeout(f, 100));  // sleep 100 ms 
       
       address = await this.signer.getAddress();
+      
 
+      // todo if wallect connect is ok attach event to listen for disconnect, net change or account change
+      // and perhaps move here also networkChanged for metamask, not into constructor
+    } else {
+      console.log('Unknow bsc app: '+app);
+      
+      // todo get app from saved storage to go on
+      return 'Unknown application'
     }
+    
+
+
+    
+
     
 
     console.log(address);

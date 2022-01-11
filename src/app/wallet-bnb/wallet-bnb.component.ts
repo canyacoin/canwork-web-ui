@@ -39,6 +39,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   }  
   returnUrl: string
   isAnotherBscChain = false
+  walletconnectConnecting = false
 
   constructor(
     private binanceService: BinanceService,
@@ -136,10 +137,18 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
 
     // bsc connect methods
     if (app == WalletApp.MetaMask || app == WalletApp.WalletConnectBsc) {
+      this.walletconnectConnecting = true
       this.bscError = ''
       
       // WalletApp.WalletConnectBsc (i.e. Trust, qr from desktop or direct from mobile intent or trust dapp browser)
-      this.bscError = await this.bscService.connect(app)      
+      this.bscError = await this.bscService.connect(app)   
+      this.walletconnectConnecting = false
+
+      if (this.bscError) {
+        await new Promise(f => setTimeout(f, 2000));  // sleep 2000 ms 
+        this.bscError = '' // clean up
+      
+      }
       
     } else {
     
