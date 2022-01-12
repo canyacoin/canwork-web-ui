@@ -95,7 +95,7 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
       if (this.assets[i].converting) {
         let busdEquivalent = await this.bscService.getBusdValue(
           parseFloat(this.assets[i].free),
-          this.assets[i].address
+          this.assets[i].token
         );
         
         if (busdEquivalent > 0) {

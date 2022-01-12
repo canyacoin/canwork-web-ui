@@ -56,8 +56,9 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
             this.balances.next(sortBy(prop('symbol'))(await this.bscService.getBalances()))
             break
           case EventTypeBsc.Disconnect:
+          console.log('disconnect event')
             this.address = false
-            this.balances.next(null)
+            this.balances.next([])
             this.chain = null            
             break
             

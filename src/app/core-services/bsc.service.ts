@@ -148,42 +148,7 @@ export class BscService {
     }
     
 
-    // todo implement network and account change listen also on web3provider from walletconnet or web3modal
-    if (!!window.ethereum) window.ethereum.on('networkChanged', (networkId) => {
-      if (networkId != environment.bsc.netId) {
-        this.disconnect()
-        window.location.reload() // it's safer to refresh the page
-      }
-
-    })      
-    
-    if (!!window.ethereum) window.ethereum.on('accountsChanged', (accounts) => {
-      if (accounts && accounts.length > 0) {
-        const connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
-        if (connectedWallet) {
-          // update address only if already connected
-          let newConnectedWallet = {
-            walletApp: connectedWallet.walletApp,
-            address: accounts[0],
-          }
-          localStorage.setItem(
-            'connectedWallet',
-            JSON.stringify(newConnectedWallet)
-          )
-          this.connectedWallet = newConnectedWallet
-          
-          this.events.next({
-            type: EventTypeBsc.Update,
-            walletApp: newConnectedWallet.walletApp,
-            details: { address: accounts[0] },
-          })
-          window.location.reload() // it's safer to refresh the page
-        }
-      } else {
-        this.disconnect()
-      }
-
-    })      
+     
     
   }
   
@@ -195,9 +160,10 @@ export class BscService {
     if (!app) {
       if (localStorage.getItem('connectedWallet')) app = JSON.parse(localStorage.getItem('connectedWallet')).walletApp;
       console.log(app)
+      if (!app) return 'Invalid config'
     }
     
-    // when we'll have multiple apps, we have to save app
+    // we have multiple apps, we have to save app
     let walletApp, address;
     
     if (app === WalletApp.MetaMask) {
@@ -259,6 +225,44 @@ export class BscService {
       address = await this.signer.getAddress();
       
       
+    // network and account change listen, safe way: if anything change, reload (address) or disconnect (network)
+    if (!!window.ethereum) window.ethereum.on('networkChanged', (networkId) => {
+      if (networkId != environment.bsc.netId) {
+        this.disconnect()
+        window.location.reload() // it's safer to refresh the page
+      }
+
+    })      
+    
+    if (!!window.ethereum) window.ethereum.on('accountsChanged', (accounts) => {
+      if (accounts && accounts.length > 0) {
+        const connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
+        if (connectedWallet) {
+          // update address only if already connected
+          let newConnectedWallet = {
+            walletApp: connectedWallet.walletApp,
+            address: accounts[0],
+          }
+          localStorage.setItem(
+            'connectedWallet',
+            JSON.stringify(newConnectedWallet)
+          )
+          this.connectedWallet = newConnectedWallet
+          
+          this.events.next({
+            type: EventTypeBsc.Update,
+            walletApp: newConnectedWallet.walletApp,
+            details: { address: accounts[0] },
+          })
+          window.location.reload() // it's safer to refresh the page
+        }
+      } else {
+        this.disconnect()
+      }
+
+    })       
+      
+      
     } else  if (app === WalletApp.WalletConnectBsc) {
       /*
       todo review new walletConnect v2 changes
@@ -275,22 +279,25 @@ export class BscService {
       }
       
       walletConnectParams.rpc[environment.bsc.mainNetId] = environment.bsc.mainNetRpc;
-      console.log(walletConnectParams)
 
       let walletConnectProvider = new WalletConnectProvider(walletConnectParams)
       if (!walletConnectProvider) return 'No WalletConnect Provider'
-      try {
+      /*
         // disconnect (cleanup) before reconnecting
-        // todo perhaps remove ALL THIS TRY BLOCK this later
-        walletConnectProvider.disconnect()
-        console.log("walletConnectProvider.disconnect ok")
-        
-        walletConnectProvider = new WalletConnectProvider(walletConnectParams)
-        console.log(walletConnectProvider)
-      } catch(e) {
-        console.log("walletConnectProvider.disconnect error")
-        console.log(e)
-      }
+        // this seems not needed
+      
+        try {
+          walletConnectProvider.disconnect()
+          console.log("walletConnectProvider.disconnect ok")
+          
+          walletConnectProvider = new WalletConnectProvider(walletConnectParams)
+          console.log(walletConnectProvider)
+        } catch(e) {
+          console.log("walletConnectProvider.disconnect error")
+          console.log(e)
+        }
+
+      */
       
       try {
         // try to enable provider, shows qr, catch errors
@@ -338,8 +345,31 @@ export class BscService {
       address = await this.signer.getAddress();
       
 
-      // todo if wallect connect is ok attach event to listen for disconnect, net change or account change
-      // and perhaps move here also networkChanged for metamask, not into constructor
+      // attach events to listen for disconnect, net change or account change, safe way, disconnect
+      // Subscribe to accounts change
+      walletConnectProvider.on("accountsChanged", (accounts) => {
+
+        this.disconnect()
+        console.log("walletConnectProvider accountsChanged event: "+ JSON.stringify(accounts));
+      });
+
+      // Subscribe to chainId change
+      walletConnectProvider.on("chainChanged", (chainId) => {
+
+        this.disconnect()
+        console.log("walletConnectProvider chainChanged event: "+ chainId);
+
+      });
+
+      // Subscribe to session disconnection
+      walletConnectProvider.on("disconnect", (code, reason) => {
+
+        this.disconnectState()
+        console.log(`walletConnectProvider disconnect event, code (${code}), reason (${reason})`);
+        
+      }); 
+
+
     } else {
       console.log('Unknow bsc app: '+app);
       
@@ -421,20 +451,34 @@ export class BscService {
         
     let balances = [];
     
-    if (!this.provider) return balances // we weren't able to connect
+    if (!this.provider) {
+      // we weren't able to connect, invoke disconnect function to clean up to inform all components
+      this.disconnect()    
+      return [];
+    }
     
     connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
     if (!connectedWallet) return balances // we weren't able to save wallet
     const address = connectedWallet.address
 
     for (let token in environment.bsc.assets) {
-      const tokenAddress = environment.bsc.assets[token]
-      const contract = new ethers.Contract(tokenAddress, tokenAbi, this.provider)
-      const name = await contract.name()
-      const symbol = await contract.symbol()
-      const balance = ethers.utils.formatUnits(await contract.balanceOf(address), CURRENCY.decimals)
-      // BEP20 (ERC20) doesn't have frozen tokens
-      balances.push({ address: tokenAddress, name, symbol, free: balance})
+      let tokenAddress = 'na';
+      try {
+        tokenAddress = environment.bsc.assets[token]
+        const contract = new ethers.Contract(tokenAddress, tokenAbi, this.provider)
+        const name = await contract.name()
+        const symbol = await contract.symbol()
+        let decimals = CURRENCY.decimals;
+        if (environment.bsc.assetsDecimals && environment.bsc.assetsDecimals[token]) decimals = environment.bsc.assetsDecimals[token];
+        
+        const balance = ethers.utils.formatUnits(await contract.balanceOf(address), decimals)
+        // BEP20 (ERC20) doesn't have frozen tokens
+        balances.push({ address: tokenAddress, name, symbol, free: balance})
+      } catch(err) {
+        // make this function fail safe even if some contract is not correct or for another chain
+        console.log(`Invalid contract for ${token}: ${tokenAddress}`);
+        console.log(err);
+      }
     }
     return balances
   }
@@ -458,12 +502,14 @@ export class BscService {
     const contract = new ethers.Contract(tokenAddress, tokenAbi, this.provider)
     const name = await contract.name()
     const symbol = await contract.symbol()
-    const balance = ethers.utils.formatUnits(await contract.balanceOf(address), CURRENCY.decimals)
+    let decimals = CURRENCY.decimals;
+    if (environment.bsc.assetsDecimals && environment.bsc.assetsDecimals[token]) decimals = environment.bsc.assetsDecimals[token];
+    const balance = ethers.utils.formatUnits(await contract.balanceOf(address), decimals)
 
     return ({ address: tokenAddress, name, symbol, free: balance, err: '', token})
   }  
   
-  async getBusdValue(amountIn, tokenAddress) {
+  async getBusdValue(amountIn, token) {
     /*
     Testnet faucet:
     https://testnet.binance.org/faucet-smart
@@ -482,10 +528,19 @@ export class BscService {
     */    
     
     try {
-      const busdAddress = environment.bsc.pancake.busd;
-      const pancakeRouterContract = new ethers.Contract(environment.bsc.pancake.router, pancakeRouterAbi, this.provider)
+      const tokenAddress = environment.bsc.assets[token]
+      let decimals = CURRENCY.decimals;
+      if (environment.bsc.assetsDecimals && environment.bsc.assetsDecimals[token]) decimals = environment.bsc.assetsDecimals[token];
+      
+      let busdAddress = environment.bsc.pancake.busd;
+      let pancakeRouterAddress = environment.bsc.pancake.router;
+      if (this.getCurrentApp() === WalletApp.WalletConnectBsc) {
+        busdAddress = environment.bsc.pancake.mainNetBusd;
+        pancakeRouterAddress = environment.bsc.pancake.mainNetRouter;
+      }
+      const pancakeRouterContract = new ethers.Contract(pancakeRouterAddress, pancakeRouterAbi, this.provider)
       const amountsOut = await pancakeRouterContract.getAmountsOut(
-        ethers.utils.parseUnits(amountIn.toString(), CURRENCY.decimals),
+        ethers.utils.parseUnits(amountIn.toString(), decimals),
         [tokenAddress, busdAddress]
       );
       const amountOut = ethers.utils.formatUnits(amountsOut[1], PANCAKE_OUTPUT_DECIMALS);
@@ -499,9 +554,13 @@ export class BscService {
   async estimateGasApprove(token, allowance) {
     
     try {
-      await this.checkSigner()     
+      await this.checkSigner() 
 
-      const allowanceUint = ethers.utils.parseUnits(allowance.toString(), CURRENCY.decimals);
+      let decimals = CURRENCY.decimals;
+      if (environment.bsc.assetsDecimals && environment.bsc.assetsDecimals[token]) decimals = environment.bsc.assetsDecimals[token];
+      
+
+      const allowanceUint = ethers.utils.parseUnits(allowance.toString(), decimals);
       const tokenAddress = environment.bsc.assets[token]
       
       const assetContract = new ethers.Contract(tokenAddress, tokenAbi, this.signer);
@@ -523,8 +582,12 @@ export class BscService {
     
     try {
       await this.checkSigner()
+      
+      let decimals = CURRENCY.decimals;
+      if (environment.bsc.assetsDecimals && environment.bsc.assetsDecimals[token]) decimals = environment.bsc.assetsDecimals[token];
+      
 
-      const allowanceUint = ethers.utils.parseUnits(allowance.toString(), CURRENCY.decimals);
+      const allowanceUint = ethers.utils.parseUnits(allowance.toString(), decimals);
       const tokenAddress = environment.bsc.assets[token]
       
       const assetContract = new ethers.Contract(tokenAddress, tokenAbi, this.signer);
@@ -552,7 +615,10 @@ export class BscService {
       const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
 
 
-      const amountUint = ethers.utils.parseUnits(amount.toString(), CURRENCY.decimals);      
+      let decimals = CURRENCY.decimals;
+      if (environment.bsc.assetsDecimals && environment.bsc.assetsDecimals[token]) decimals = environment.bsc.assetsDecimals[token];
+
+      const amountUint = ethers.utils.parseUnits(amount.toString(), decimals);      
       const tokenAddress = environment.bsc.assets[token]      
       const escrowContract = new ethers.Contract(environment.bsc.escrow.address, escrowAbi, this.signer);
       const gasDeposit = await escrowContract.estimateGas.deposit(tokenAddress, amountUint, jobIdBytes32);
@@ -579,7 +645,11 @@ export class BscService {
       if (strippedJobId.length >= 32) strippedJobId = strippedJobId.substr(0, 31)
       const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
 
-      const amountUint = ethers.utils.parseUnits(amount.toString(), CURRENCY.decimals);      
+      
+      let decimals = CURRENCY.decimals;
+      if (environment.bsc.assetsDecimals && environment.bsc.assetsDecimals[token]) decimals = environment.bsc.assetsDecimals[token];
+      
+      const amountUint = ethers.utils.parseUnits(amount.toString(), decimals);      
 
       const tokenAddress = environment.bsc.assets[token]
       
@@ -654,7 +724,13 @@ export class BscService {
     this.connectedWallet = connectedWallet
     
     
-  }  
+  }
+
+  getCurrentApp() {
+    let app = null;
+    if (localStorage.getItem('connectedWallet')) app = JSON.parse(localStorage.getItem('connectedWallet')).walletApp;
+    return app;
+  }
 
   disconnect() {
     let app = null;
@@ -672,7 +748,7 @@ export class BscService {
         let walletConnectProvider = new WalletConnectProvider(walletConnectParams)
         if (walletConnectProvider) {
 
-
+  
           walletConnectProvider.disconnect()
           console.log('WalletConnectBsc disconnect ok')
         }
@@ -685,9 +761,15 @@ export class BscService {
       
     }
     
-    // metamask doesn't support disconnect (todo check it), if other providers support it like walletConnect, insert here call to provider disconnect method
+    // metamask doesn't support disconnect in current status, if other providers support it like walletConnect, insert here call to provider disconnect method
   
   
+    this.disconnectState();
+    
+  
+  }
+  
+  disconnectState() {
     // forget
     localStorage.removeItem('connectedWallet')
     
@@ -698,11 +780,7 @@ export class BscService {
     this.events.next({
       type: EventTypeBsc.Disconnect,
     }) 
-  
     
-    // todo update assets handling to handle single assets errors async
-
-  
   }
   
   checkAddress(address) {
