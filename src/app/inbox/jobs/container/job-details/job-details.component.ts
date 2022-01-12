@@ -250,7 +250,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   private async releaseEscrowBsc() {
     console.log('release Escrow BSC')
     // we check if bsc chain is connected and if not, suggest to connect to bsc chain explicitely (for now only metamask, not bep2 chain
-    if (!this.bscService.isMetamaskConnected()) {
+    if (!this.bscService.isBscConnected()) {
       const routerStateSnapshot = this.router.routerState.snapshot
       this.toastr.warning('Connect your Metamask BSC (Binance Smart Chain) wallet to release the payment', '', {
         timeOut: 4000,
@@ -363,7 +363,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     let connectedChain = '';
     
     // BEP20 has the priority, if it's connected will use it
-    if (this.bscService.isMetamaskConnected()) connectedChain = BepChain.SmartChain;      
+    if (this.bscService.isBscConnected()) connectedChain = BepChain.SmartChain;      
       else if (this.binanceService.isLedgerConnected() ||
                this.binanceService.isKeystoreConnected() ||
                this.binanceService.isWalletConnectConnected()) connectedChain = BepChain.Binance;

@@ -60,15 +60,23 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
 
 
             for (let token in environment.bsc.assets) {
-              let b = await this.bscService.getBalance(token);
-              if (!b.err) {
-                let asset = { converting: true, hasEnough: false, freeUsd: 0, ...b }
-                if (parseFloat(asset.free) == 0) asset.converting = false; // no conversion with zero value
-                
-                this.assets.push(asset);
-                this.firstLoaded = true // at least one loaded, show grid
+              try {
+              
+                let b = await this.bscService.getBalance(token);
+                if (!b.err) {
+                  let asset = { converting: true, hasEnough: false, freeUsd: 0, ...b }
+                  if (parseFloat(asset.free) == 0) asset.converting = false; // no conversion with zero value
+                  
+                  this.assets.push(asset);
+                  this.firstLoaded = true // at least one loaded, show grid
 
+                }
+              } catch(err) {
+                // make this function fail safe even if some contract is not correct or for another chain
+                console.log(`Invalid contract for ${token}: ${environment.bsc.assets[token]}`);
+                console.log(err);
               }
+                        
             }
             
             this.loading = false; // finish loading all

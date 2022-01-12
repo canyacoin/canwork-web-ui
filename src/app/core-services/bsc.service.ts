@@ -58,11 +58,6 @@ export enum BepChain {
 }
 
 
-export enum WalletAppBsc {
-  MetaMask,
-  WalletConnect
-}
-
 export enum EventTypeBsc {
   ConnectSuccess = 'ConnectSuccess',
   ConnectFailure = 'ConnectFailure',
@@ -79,7 +74,7 @@ export interface EventDetails {
 export interface EventBsc {
   type: EventTypeBsc
   details?: EventDetails
-  walletApp?: WalletAppBsc  
+  walletApp?: WalletApp
 }
 
 /*
@@ -564,7 +559,10 @@ export class BscService {
       const tokenAddress = environment.bsc.assets[token]
       
       const assetContract = new ethers.Contract(tokenAddress, tokenAbi, this.signer);
-      const gasApprove = await assetContract.estimateGas.approve(environment.bsc.escrow.address, allowanceUint);
+      let escrowAddress = environment.bsc.escrow.address;
+      if (this.getCurrentApp() === WalletApp.WalletConnectBsc) escrowAddress = environment.bsc.escrow.mainNetAddress;
+      
+      const gasApprove = await assetContract.estimateGas.approve(escrowAddress, allowanceUint);
       
       return ethers.utils.formatUnits(gasApprove, GAS.decimals);
       
@@ -591,7 +589,10 @@ export class BscService {
       const tokenAddress = environment.bsc.assets[token]
       
       const assetContract = new ethers.Contract(tokenAddress, tokenAbi, this.signer);
-      approveResult = await assetContract.approve(environment.bsc.escrow.address, allowanceUint);
+      let escrowAddress = environment.bsc.escrow.address;
+      if (this.getCurrentApp() === WalletApp.WalletConnectBsc) escrowAddress = environment.bsc.escrow.mainNetAddress;
+      
+      approveResult = await assetContract.approve(escrowAddress, allowanceUint);
 
       
     } catch (err) {
@@ -619,8 +620,13 @@ export class BscService {
       if (environment.bsc.assetsDecimals && environment.bsc.assetsDecimals[token]) decimals = environment.bsc.assetsDecimals[token];
 
       const amountUint = ethers.utils.parseUnits(amount.toString(), decimals);      
-      const tokenAddress = environment.bsc.assets[token]      
-      const escrowContract = new ethers.Contract(environment.bsc.escrow.address, escrowAbi, this.signer);
+      const tokenAddress = environment.bsc.assets[token]
+
+      let escrowAddress = environment.bsc.escrow.address;
+      if (this.getCurrentApp() === WalletApp.WalletConnectBsc) escrowAddress = environment.bsc.escrow.mainNetAddress;
+
+      
+      const escrowContract = new ethers.Contract(escrowAddress, escrowAbi, this.signer);
       const gasDeposit = await escrowContract.estimateGas.deposit(tokenAddress, amountUint, jobIdBytes32);
       
       return ethers.utils.formatUnits(gasDeposit, GAS.decimals);
@@ -653,7 +659,11 @@ export class BscService {
 
       const tokenAddress = environment.bsc.assets[token]
       
-      const escrowContract = new ethers.Contract(environment.bsc.escrow.address, escrowAbi, this.signer);
+      let escrowAddress = environment.bsc.escrow.address;
+      if (this.getCurrentApp() === WalletApp.WalletConnectBsc) escrowAddress = environment.bsc.escrow.mainNetAddress;
+      
+      
+      const escrowContract = new ethers.Contract(escrowAddress, escrowAbi, this.signer);
 
       depositResult = await escrowContract.deposit(tokenAddress, amountUint, jobIdBytes32);
 
@@ -677,8 +687,12 @@ export class BscService {
       let strippedJobId = jobId.replace(/-/g, "");
       if (strippedJobId.length >= 32) strippedJobId = strippedJobId.substr(0, 31)
       const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
+    
+      let escrowAddress = environment.bsc.escrow.address;
+      if (this.getCurrentApp() === WalletApp.WalletConnectBsc) escrowAddress = environment.bsc.escrow.mainNetAddress;
+    
 
-      const escrowContract = new ethers.Contract(environment.bsc.escrow.address, escrowAbi, this.signer);
+      const escrowContract = new ethers.Contract(escrowAddress, escrowAbi, this.signer);
 
       releaseResult = await escrowContract.release(jobIdBytes32);
       
@@ -787,14 +801,9 @@ export class BscService {
     return ethers.utils.isAddress(address)
   }
   
-  /*
-  todo this should become a generic isBscConnected and
-  check if we are connected by metamask or wallet connet (or in the future web3modal, binance wallet ..)
-  */
   
-  isMetamaskConnected(): boolean {
-    if (!this.connectedWallet) return false;
-    return this.connectedWallet.walletApp === WalletAppBsc.MetaMask
+  isBscConnected(): boolean {
+    return (!!this.connectedWallet);    
   }
 
   getAddress(): string {

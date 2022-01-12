@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { BinanceService, WalletApp, EventType } from '@service/binance.service'
-import { BscService, WalletAppBsc, EventTypeBsc } from '@service/bsc.service'
+import { BscService, EventTypeBsc } from '@service/bsc.service'
 import WalletConnect from './../core-classes/walletConnect'
 import WalletConnectQRCodeModal from '@walletconnect/qrcode-modal'
 import { Subject } from 'rxjs'
