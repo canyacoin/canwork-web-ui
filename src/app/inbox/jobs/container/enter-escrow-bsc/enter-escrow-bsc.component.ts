@@ -33,6 +33,8 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
   showBalance = false
   depositError: string | boolean = false
   showSuccess = false
+  providerAddress: string
+  noProviderAddress: boolean = false
   
   
   
@@ -62,6 +64,12 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
             this.jobStateCheck = false
           } else {
             this.jobStateCheck = true
+            const provider = await this.userService.getUser(this.job.providerId)
+            this.providerAddress = provider.bscAddress;
+            if (!this.providerAddress) {
+              this.noProviderAddress = true
+              this.jobStateCheck = false // we can't go on if provider hasn't bscAddress
+            }
           }
 
           this.loading = false
@@ -101,9 +109,8 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
 
 
 
-
-    const provider = await this.userService.getUser(this.job.providerId)
-    const client = await this.userService.getUser(this.job.clientId)
+    //const provider = await this.userService.getUser(this.job.providerId)
+    //const client = await this.userService.getUser(this.job.clientId)
 
     // Calculate jobBudget in selected BEP asset
     //const jobBudgetAsset = this.jobBudgetUsd / this.bscAssetData.usdPrice
@@ -117,7 +124,8 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
         name: this.job.information.title,
         usdValue: this.jobBudgetUsd,
         jobId: this.job.id,
-        providerAddress: provider.bscAddress,
+        providerAddress: this.providerAddress,
+        //providerAddress: provider.bscAddress,
       },
       allowance,
     }

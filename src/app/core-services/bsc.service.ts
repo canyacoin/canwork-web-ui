@@ -108,8 +108,10 @@ const pancakeRouterAbi = [
 ] 
 
 const escrowAbi = [
-  "function deposit (address asset, uint value, bytes32 JOBID) nonpayable",
-  "function release (bytes32 JOBID) nonpayable"
+  // "function deposit (address asset, uint value, bytes32 JOBID) nonpayable", // old contract
+  "function depositBEP20 (address asset, address provider, uint value, uint JOBID) nonpayable",
+  // "function release (bytes32 JOBID) nonpayable" // old contract
+  "function releaseAsClient (uint JOBID) nonpayable"
 ];
 
 

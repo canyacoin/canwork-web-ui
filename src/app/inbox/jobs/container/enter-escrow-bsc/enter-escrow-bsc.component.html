@@ -12,11 +12,16 @@
       class="img-responsiveness mt-10 animated bounceInUp"
       width="150"
     />
-    <h2>Unauthorized</h2>
-    <p class="lead fw-400">
+    <h2 *ngIf="!noProviderAddress">Unauthorized</h2>
+    <p  *ngIf="!noProviderAddress" class="lead fw-400">
       It seems like you're trying to initiate payment for this job even though
       it's already paid, or is processing its payment.
     </p>
+    <h2 *ngIf="noProviderAddress">No provider address</h2>
+    <p  *ngIf="noProviderAddress" class="lead fw-400">
+      It seems like provider hasn't configured a Binance Smart Chain Address.<br>
+      Please inform the provider.
+    </p>    
     <p class="text-center">
       <a class="btn btn-secondary" [routerLink]="['/inbox/job', this.job.id]"
         >Return</a
