@@ -21,6 +21,7 @@ import { bepAssetData } from '@canpay-lib/lib' // todo
 export class BscPaymentSelectorComponent extends OnDestroyComponent implements OnInit {
   @Input() jobBudgetUsd = 0
   @Input() jobId = ''
+  @Input() providerAddress = ''
   @Output() bscAsset: EventEmitter<any> = new EventEmitter()
   
   private assets = []
@@ -142,7 +143,7 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
     for (let i=0; i<this.assets.length; i++) {
       if (this.assets[i].hasEnough && (this.assets[i].gasDeposit == '')) {
         let allowance = this.jobBudgetUsd / this.assets[i].busdValue; // how much we need
-        let gasDeposit = await this.bscService.estimateGasDeposit(this.assets[i].token, allowance, this.jobId, true);
+        let gasDeposit = await this.bscService.estimateGasDeposit(this.assets[i].token, this.providerAddress, allowance, this.jobId, true);
         if (parseFloat(gasDeposit) >= 0) {
           // if it succeds, it means asset is approved
           this.assets[i].isApproved = true;
@@ -161,7 +162,7 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
         asset.isApproved = true;
         // estimateGasDeposit after approval, wait a bit to give time to chain to get approval register
         await new Promise(r => setTimeout(r, 500));
-        let gasDeposit = await this.bscService.estimateGasDeposit(asset.token, allowance, this.jobId, false);
+        let gasDeposit = await this.bscService.estimateGasDeposit(asset.token, this.providerAddress, allowance, this.jobId, false);
         if (parseFloat(gasDeposit) >= 0) asset.gasDeposit = `~${parseFloat(gasDeposit).toFixed(4)}`;        
       }
     } else {

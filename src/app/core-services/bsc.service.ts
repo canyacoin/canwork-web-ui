@@ -607,7 +607,8 @@ export class BscService {
     return approveResult
   }  
   
-  async estimateGasDeposit(token, amount, jobId, silent) {
+  //async estimateGasDeposit(token, amount, jobId, silent) {
+  async estimateGasDeposit(token, providerAddress, amount, jobId, silent) {
     
     try {
       await this.checkSigner()
@@ -629,7 +630,7 @@ export class BscService {
 
       
       const escrowContract = new ethers.Contract(escrowAddress, escrowAbi, this.signer);
-      const gasDeposit = await escrowContract.estimateGas.deposit(tokenAddress, amountUint, jobIdBytes32);
+      const gasDeposit = await escrowContract.estimateGas.depositBEP20(tokenAddress, providerAddress, amountUint, jobIdBytes32);
       
       return ethers.utils.formatUnits(gasDeposit, GAS.decimals);
       
@@ -643,7 +644,7 @@ export class BscService {
     }
   }  
   
-  async deposit(token, amount, jobId) {
+  async deposit(token, providerAddress, amount, jobId) {
     let depositResult = { err: '' };
     
     try {
@@ -667,7 +668,7 @@ export class BscService {
       
       const escrowContract = new ethers.Contract(escrowAddress, escrowAbi, this.signer);
 
-      depositResult = await escrowContract.deposit(tokenAddress, amountUint, jobIdBytes32);
+      depositResult = await escrowContract.depositBEP20(tokenAddress, providerAddress, amountUint, jobIdBytes32);
 
       
     } catch (err) {
@@ -696,7 +697,7 @@ export class BscService {
 
       const escrowContract = new ethers.Contract(escrowAddress, escrowAbi, this.signer);
 
-      releaseResult = await escrowContract.release(jobIdBytes32);
+      releaseResult = await escrowContract.releaseAsClient(jobIdBytes32);
       
       
     } catch (err) {

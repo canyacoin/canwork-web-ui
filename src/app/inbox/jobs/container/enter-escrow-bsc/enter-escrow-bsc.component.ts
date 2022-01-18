@@ -159,7 +159,7 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
     this.isEscrowLoading = true;
     
     // now finally actually try to deposit
-    let result = await this.bscService.deposit(this.bscAssetData.token, this.bscPayOptions.paymentSummary.allowance, this.job.id);
+    let result = await this.bscService.deposit(this.bscAssetData.token, this.providerAddress, this.bscPayOptions.paymentSummary.allowance, this.job.id);
     
     // check result and approve into controller state
         
