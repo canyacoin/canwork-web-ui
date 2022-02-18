@@ -29,7 +29,7 @@ import { CreateClientProfileComponent } from './setup/create-client-profile/crea
 import { CreateProviderProfileComponent } from './setup/create-provider-profile/create-provider-profile.component'
 import { ProviderStateComponent } from './setup/provider-state/provider-state.component'
 import { SetupComponent } from './setup/setup.component'
-import { MarkdownModule } from 'ngx-markdown'
+import { MarkdownModule, MarkedOptions } from 'ngx-markdown'
 import { GetReferralComponent } from './get-referral/get-referral.component'
 
 @NgModule({
@@ -44,7 +44,14 @@ import { GetReferralComponent } from './get-referral/get-referral.component'
     ProfileRoutingModule,
     ReactiveFormsModule,
     StarRatingModule.forChild(),
-    MarkdownModule.forRoot(),
+    MarkdownModule.forRoot({
+      markedOptions: {
+        provide: MarkedOptions,
+        useValue: {
+          sanitize: true
+        }
+      },
+    }),
   ],
   declarations: [
     AboutComponent,
