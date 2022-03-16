@@ -220,7 +220,7 @@ export class BinanceService {
   private async initWalletConnect(): Promise<WalletConnect> {
     // Create a walletConnector
     const connector = new WalletConnect({
-      bridge: 'https://bridge.walletconnect.org', // Required
+      bridge: 'wss://wallet-bridge.binance.org', // Required
     })
 
     this.events.next({
