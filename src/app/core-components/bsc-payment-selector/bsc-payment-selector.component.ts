@@ -143,11 +143,11 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
     for (let i=0; i<this.assets.length; i++) {
       if (this.assets[i].hasEnough && (this.assets[i].gasDeposit == '')) {
         let allowance = this.jobBudgetUsd / this.assets[i].busdValue; // how much we need
-        let gasDeposit = await this.bscService.estimateGasDeposit(this.assets[i].token, this.providerAddress, allowance, this.jobId, true);
-        if (parseFloat(gasDeposit) >= 0) {
+        let estimateResult = await this.bscService.estimateGasDeposit(this.assets[i].token, this.providerAddress, allowance, this.jobId, true);
+        if (parseFloat(estimateResult.gasDeposit) >= 0) {
           // if it succeds, it means asset is approved
           this.assets[i].isApproved = true;
-          this.assets[i].gasDeposit = `~${parseFloat(gasDeposit).toFixed(4)}`;
+          this.assets[i].gasDeposit = `~${parseFloat(estimateResult.gasDeposit).toFixed(4)}`;
         }
       }
     }
@@ -162,8 +162,8 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
         asset.isApproved = true;
         // estimateGasDeposit after approval, wait a bit to give time to chain to get approval register
         await new Promise(r => setTimeout(r, 500));
-        let gasDeposit = await this.bscService.estimateGasDeposit(asset.token, this.providerAddress, allowance, this.jobId, false);
-        if (parseFloat(gasDeposit) >= 0) asset.gasDeposit = `~${parseFloat(gasDeposit).toFixed(4)}`;        
+        let estimateResult = await this.bscService.estimateGasDeposit(asset.token, this.providerAddress, allowance, this.jobId, false);
+        if (parseFloat(estimateResult.gasDeposit) >= 0) asset.gasDeposit = `~${parseFloat(estimateResult.gasDeposit).toFixed(4)}<br>${estimateResult.pathAssets.join("->")}`; 
       }
     } else {
       console.log(asset);

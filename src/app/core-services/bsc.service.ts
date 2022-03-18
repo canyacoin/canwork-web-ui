@@ -29,6 +29,7 @@ import { environment } from '@env/environment'
 import { WalletApp } from '@service/binance.service'
 
 
+
 const NETWORK_ID = environment.bsc.netId;
 const CHAIN_ID = `0x${NETWORK_ID.toString(16)}`
 const CHAIN_NAME = environment.bsc.chainName
@@ -104,16 +105,43 @@ const tokenAbi = [
 const pancakeRouterAbi = [
   // converts token value
   "function getAmountsOut(uint amountIn, address[] calldata path) external view returns (uint[] memory amounts)"
+/*
+  function getAmountsOut(uint amountIn, address[] calldata path) external view returns (uint[] memory amounts);
 
+*/
 ] 
 
 const escrowAbi = [
   // "function deposit (address asset, uint value, bytes32 JOBID) nonpayable", // old contract
-  "function depositBEP20 (address asset, address provider, uint value, uint JOBID) nonpayable",
+  "function depositBEP20 (address asset, address provider, uint value, uint JOBID, address[] memory swapPath) nonpayable",
+/*
+    function depositBEP20(address asset, address provider, uint value, uint JOBID, address[] memory swapPath)
+
+*/
+
   // "function release (bytes32 JOBID) nonpayable" // old contract
   "function releaseAsClient (uint JOBID) nonpayable"
 ];
 
+/*
+canwork escrow depositBEP20 (address[] memory) vs pancake getAmountsOut (address[] calldata)
+
+Memory is for variables that are scoped to their function (ie a memory variable will only exist within the function it is created in. After that function has run, that variable will be deleted). Memory variables can be manipulated (I.e you can reassign the values as you need).
+
+For functions you only need to specify the location for dynamic data types (like arrays and bytes). Variables created in a function are by default memory.
+
+Calldata is almost the same as memory but you cannot manipulate (change) the variable. It's also a bit more gas efficient.
+
+Use memory if you want to be able to manipulate the values and calldata when you don't.
+*/
+
+
+/*
+  todo get uint for jobid for job
+  todo add swappath
+  mainnet
+  https://bscscan.com/address/0xfcd04481c5176abdC00B2B182c2Eb35b7C79125f#code
+*/
 
 @Injectable({
   providedIn: 'root'
@@ -557,20 +585,28 @@ export class BscService {
       if (environment.bsc.assetsDecimals && environment.bsc.assetsDecimals[token]) decimals = environment.bsc.assetsDecimals[token];
       
 
-      const allowanceUint = ethers.utils.parseUnits(allowance.toString(), decimals);
+      const truncatedAllowance = allowance.toFixed(decimals); // this is already a string
+      /*
+      this is needed to avoid to have more decimals then supported, and avoid this error:
+      "fractional component exceeds decimals"
+      */
+
+      const allowanceUint = ethers.utils.parseUnits(truncatedAllowance, decimals);
       const tokenAddress = environment.bsc.assets[token]
+
       
       const assetContract = new ethers.Contract(tokenAddress, tokenAbi, this.signer);
       let escrowAddress = environment.bsc.escrow.address;
       if (this.getCurrentApp() === WalletApp.WalletConnectBsc) escrowAddress = environment.bsc.escrow.mainNetAddress;
-      
       const gasApprove = await assetContract.estimateGas.approve(escrowAddress, allowanceUint);
+
       
       return ethers.utils.formatUnits(gasApprove, GAS.decimals);
       
     } catch (err) {
-      console.log(err)
       this.toastr.warning(this.errMsg(err), 'Error estimating gas needed to approve', { timeOut: 5000, })
+      console.log('Error estimating gas needed to approve '+ token);
+      console.log(err)
 
       return "-1";
 
@@ -586,8 +622,9 @@ export class BscService {
       let decimals = CURRENCY.decimals;
       if (environment.bsc.assetsDecimals && environment.bsc.assetsDecimals[token]) decimals = environment.bsc.assetsDecimals[token];
       
+      const truncatedAllowance = allowance.toFixed(decimals); // this is already a string
 
-      const allowanceUint = ethers.utils.parseUnits(allowance.toString(), decimals);
+      const allowanceUint = ethers.utils.parseUnits(truncatedAllowance, decimals);
       const tokenAddress = environment.bsc.assets[token]
       
       const assetContract = new ethers.Contract(tokenAddress, tokenAbi, this.signer);
@@ -616,30 +653,46 @@ export class BscService {
       let strippedJobId = jobId.replace(/-/g, "");
       if (strippedJobId.length >= 32) strippedJobId = strippedJobId.substr(0, 31)
 
-      const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
-
+      //const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
+      const jobIdBigint = this.hexToBigint(strippedJobId); // this is already a string
 
       let decimals = CURRENCY.decimals;
       if (environment.bsc.assetsDecimals && environment.bsc.assetsDecimals[token]) decimals = environment.bsc.assetsDecimals[token];
 
-      const amountUint = ethers.utils.parseUnits(amount.toString(), decimals);      
+      if (environment.bsc.assetsDecimals && environment.bsc.assetsDecimals[token]) decimals = environment.bsc.assetsDecimals[token];
+
+      const truncatedAmount = amount.toFixed(decimals); // this is already a string
+
+      const amountUint = ethers.utils.parseUnits(truncatedAmount, decimals);
+      const jobIdUint = ethers.utils.parseUnits(jobIdBigint, decimals);      
       const tokenAddress = environment.bsc.assets[token]
+
+      let path = [tokenAddress]; // default
+      let pathAssets = [token]
+      // unless we have an explicit path mapped into config:
+      if (environment.bsc.hasOwnProperty("assetPaths") && environment.bsc.assetPaths.hasOwnProperty(token)) {
+        path = environment.bsc.assetPaths[token].pathAddresses.split(",");
+        pathAssets = environment.bsc.assetPaths[token].pathAssets.split(",");
+      }
+      console.log(path);
+      console.log(pathAssets);
 
       let escrowAddress = environment.bsc.escrow.address;
       if (this.getCurrentApp() === WalletApp.WalletConnectBsc) escrowAddress = environment.bsc.escrow.mainNetAddress;
 
       
       const escrowContract = new ethers.Contract(escrowAddress, escrowAbi, this.signer);
-      const gasDeposit = await escrowContract.estimateGas.depositBEP20(tokenAddress, providerAddress, amountUint, jobIdBytes32);
+      console.log(tokenAddress, providerAddress, amountUint, jobIdUint, path);
+      const gasDeposit = await escrowContract.estimateGas.depositBEP20(tokenAddress, providerAddress, amountUint, jobIdUint, path);
       
-      return ethers.utils.formatUnits(gasDeposit, GAS.decimals);
+      return { gasDeposit: ethers.utils.formatUnits(gasDeposit, GAS.decimals), pathAssets}
       
     } catch (err) {
       if (!silent) {
         console.log(err)
         this.toastr.warning(this.errMsg(err), 'Error estimating gas needed to deposit', { timeOut: 5000, })
       }
-      return "-1";
+      return { gasDeposit: "-1"};
 
     }
   }  
@@ -652,7 +705,9 @@ export class BscService {
       
       let strippedJobId = jobId.replace(/-/g, "");
       if (strippedJobId.length >= 32) strippedJobId = strippedJobId.substr(0, 31)
-      const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
+      
+      //const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
+      const jobIdUint = this.hexToBigint(strippedJobId);
 
       
       let decimals = CURRENCY.decimals;
@@ -661,6 +716,14 @@ export class BscService {
       const amountUint = ethers.utils.parseUnits(amount.toString(), decimals);      
 
       const tokenAddress = environment.bsc.assets[token]
+
+      let path = [tokenAddress]; // default
+      // unless we have an explicit path mapped into config:
+      if (environment.bsc.hasOwnProperty("assetPaths") && environment.bsc.assetPaths.hasOwnProperty("token")) {
+        path = environment.bsc.assetPaths[token].split(",");
+        console.log(path);
+      }
+
       
       let escrowAddress = environment.bsc.escrow.address;
       if (this.getCurrentApp() === WalletApp.WalletConnectBsc) escrowAddress = environment.bsc.escrow.mainNetAddress;
@@ -668,7 +731,7 @@ export class BscService {
       
       const escrowContract = new ethers.Contract(escrowAddress, escrowAbi, this.signer);
 
-      depositResult = await escrowContract.depositBEP20(tokenAddress, providerAddress, amountUint, jobIdBytes32);
+      depositResult = await escrowContract.depositBEP20(tokenAddress, providerAddress, amountUint, jobIdUint, path);
 
       
     } catch (err) {
@@ -688,8 +751,10 @@ export class BscService {
       await this.checkSigner()
         
       let strippedJobId = jobId.replace(/-/g, "");
-      if (strippedJobId.length >= 32) strippedJobId = strippedJobId.substr(0, 31)
-      const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
+      if (strippedJobId.length >= 32) strippedJobId = strippedJobId.substr(0, 31);
+      
+      //const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
+      const jobIdUint = this.hexToBigint(strippedJobId);
     
       let escrowAddress = environment.bsc.escrow.address;
       if (this.getCurrentApp() === WalletApp.WalletConnectBsc) escrowAddress = environment.bsc.escrow.mainNetAddress;
@@ -697,7 +762,7 @@ export class BscService {
 
       const escrowContract = new ethers.Contract(escrowAddress, escrowAbi, this.signer);
 
-      releaseResult = await escrowContract.releaseAsClient(jobIdBytes32);
+      releaseResult = await escrowContract.releaseAsClient(jobIdUint);
       
       
     } catch (err) {
@@ -828,4 +893,38 @@ export class BscService {
     if (!this.signer) this.signer = await this.provider.getSigner()
     
   }
+  
+  
+  /*
+    helper function to use uint jobid
+  */
+  hexToBigint(s) {
+
+    function add(xI, yI) {
+        let c = 0, r = [];
+        let x = xI.split('').map(Number);
+        let y = yI.split('').map(Number);
+        while(x.length || y.length) {
+            let s = (x.pop() || 0) + (y.pop() || 0) + c;
+            r.unshift(s < 10 ? s : s - 10); 
+            c = s < 10 ? 0 : 1;
+        }
+        if(c) r.unshift(c);
+        return r.join('');
+    }
+
+    let dec = '0';
+    s.split('').forEach(function(chr) {
+        let n = parseInt(chr, 16);
+        for(let t = 8; t; t >>= 1) {
+            dec = add(dec, dec);
+            if(n & t) dec = add(dec, '1');
+        }
+    });
+    return dec;
+
+  }
+  
+
+  
 }
