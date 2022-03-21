@@ -604,9 +604,9 @@ export class BscService {
       return ethers.utils.formatUnits(gasApprove, GAS.decimals);
       
     } catch (err) {
-      this.toastr.warning(this.errMsg(err), 'Error estimating gas needed to approve', { timeOut: 5000, })
-      console.log('Error estimating gas needed to approve '+ token);
+      this.toastr.warning(this.errMsg(err), 'Error estimating gas needed to approve '+token, { timeOut: 5000, })
       console.log(err)
+      console.log(`estimateGasApprove ${token} error: ${this.errMsg(err)}`);
 
       return "-1";
 
@@ -636,8 +636,10 @@ export class BscService {
       
     } catch (err) {
       console.log(err)
-      this.toastr.warning(this.errMsg(err), 'Error approving', { timeOut: 5000, })
+      this.toastr.warning(this.errMsg(err), 'Error approving '+token, { timeOut: 5000, })
       approveResult.err = this.errMsg(err)
+      console.log(`approve ${token} error: ${this.errMsg(err)}`);
+      
 
     }
     
@@ -664,33 +666,36 @@ export class BscService {
       const truncatedAmount = amount.toFixed(decimals); // this is already a string
 
       const amountUint = ethers.utils.parseUnits(truncatedAmount, decimals);
+      //const jobIdUint = ethers.utils.parseUnits(jobIdBigint, decimals);      
       const jobIdUint = ethers.utils.parseUnits(jobIdBigint, decimals);      
       const tokenAddress = environment.bsc.assets[token]
 
-      let path = [tokenAddress]; // default
-      let pathAssets = [token]
+      let path = [tokenAddress, environment.bsc.pancake.busd]; // default
+      /* 
+      todo verify how to handle BUSD, cause path should be at least lenght 2
+      https://github.com/merlin-the-best/merlin-contract/blob/master/PancakeRouter.sol#L311      
+      */
+      let pathAssets = [token, 'BUSD'];  // default
       // unless we have an explicit path mapped into config:
       if (environment.bsc.hasOwnProperty("assetPaths") && environment.bsc.assetPaths.hasOwnProperty(token)) {
-        path = environment.bsc.assetPaths[token].pathAddresses.split(",");
-        pathAssets = environment.bsc.assetPaths[token].pathAssets.split(",");
+        path = this.splitConfig(environment.bsc.assetPaths[token].pathAddresses);
+        pathAssets = this.splitConfig(environment.bsc.assetPaths[token].pathAssets);
       }
-      console.log(path);
-      console.log(pathAssets);
 
       let escrowAddress = environment.bsc.escrow.address;
       if (this.getCurrentApp() === WalletApp.WalletConnectBsc) escrowAddress = environment.bsc.escrow.mainNetAddress;
 
       
       const escrowContract = new ethers.Contract(escrowAddress, escrowAbi, this.signer);
-      console.log(tokenAddress, providerAddress, amountUint, jobIdUint, path);
       const gasDeposit = await escrowContract.estimateGas.depositBEP20(tokenAddress, providerAddress, amountUint, jobIdUint, path);
       
       return { gasDeposit: ethers.utils.formatUnits(gasDeposit, GAS.decimals), pathAssets}
       
     } catch (err) {
+      console.log(`estimateGasDeposit ${token} error: ${this.errMsg(err)}`);
       if (!silent) {
         console.log(err)
-        this.toastr.warning(this.errMsg(err), 'Error estimating gas needed to deposit', { timeOut: 5000, })
+        this.toastr.warning(this.errMsg(err), 'Error estimating gas needed to deposit '+token, { timeOut: 5000, })
       }
       return { gasDeposit: "-1"};
 
@@ -717,11 +722,10 @@ export class BscService {
 
       const tokenAddress = environment.bsc.assets[token]
 
-      let path = [tokenAddress]; // default
+      let path = [tokenAddress, environment.bsc.pancake.busd]; // default
       // unless we have an explicit path mapped into config:
       if (environment.bsc.hasOwnProperty("assetPaths") && environment.bsc.assetPaths.hasOwnProperty("token")) {
-        path = environment.bsc.assetPaths[token].split(",");
-        console.log(path);
+        path = this.splitConfig(environment.bsc.assetPaths[token].pathAddresses);        
       }
 
       
@@ -736,8 +740,9 @@ export class BscService {
       
     } catch (err) {
       console.log(err)
-      this.toastr.warning(this.errMsg(err), 'Error into deposit', { timeOut: 5000, })
+      this.toastr.warning(this.errMsg(err), 'Error into deposit '+token, { timeOut: 5000, })
       depositResult.err = this.errMsg(err)
+      console.log(`deposit ${token} error: ${this.errMsg(err)}`);
 
     }
     
@@ -767,8 +772,9 @@ export class BscService {
       
     } catch (err) {
       console.log(err)
-      this.toastr.warning(this.errMsg(err), 'Error into release', { timeOut: 5000, })
+      this.toastr.warning(this.errMsg(err), 'Error into release ', { timeOut: 5000, })
       releaseResult.err = this.errMsg(err)
+      console.log(`release ${jobId} error: ${this.errMsg(err)}`);
 
     }
     
@@ -923,6 +929,12 @@ export class BscService {
     });
     return dec;
 
+  }
+  
+  splitConfig(str) {
+    // extract array from config properties and trim values to avoid ens error
+    return str.split(",").map(s => s.trim())
+    
   }
   
 
