@@ -666,7 +666,6 @@ export class BscService {
       const truncatedAmount = amount.toFixed(decimals); // this is already a string
 
       const amountUint = ethers.utils.parseUnits(truncatedAmount, decimals);
-      //const jobIdUint = ethers.utils.parseUnits(jobIdBigint, decimals);      
       const jobIdUint = ethers.utils.parseUnits(jobIdBigint, decimals);      
       const tokenAddress = environment.bsc.assets[token]
 
@@ -711,14 +710,20 @@ export class BscService {
       let strippedJobId = jobId.replace(/-/g, "");
       if (strippedJobId.length >= 32) strippedJobId = strippedJobId.substr(0, 31)
       
-      //const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
-      const jobIdUint = this.hexToBigint(strippedJobId);
 
       
       let decimals = CURRENCY.decimals;
       if (environment.bsc.assetsDecimals && environment.bsc.assetsDecimals[token]) decimals = environment.bsc.assetsDecimals[token];
+
+      //const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
+      const jobIdBigint = this.hexToBigint(strippedJobId); // this is already a string
       
-      const amountUint = ethers.utils.parseUnits(amount.toString(), decimals);      
+      //const jobIdUint = this.hexToBigint(strippedJobId);
+      const jobIdUint = ethers.utils.parseUnits(jobIdBigint, decimals);      
+
+      
+      const truncatedAmount = amount.toFixed(decimals); // this is already a string      
+      const amountUint = ethers.utils.parseUnits(truncatedAmount, decimals);      
 
       const tokenAddress = environment.bsc.assets[token]
 
