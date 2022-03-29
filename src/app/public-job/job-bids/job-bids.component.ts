@@ -92,9 +92,10 @@ export class JobBidsComponent implements OnInit {
   async chooseProvider(bidIndex) {
     const noAddress = await this.authService.isAuthenticatedAndNoAddress()
     if (noAddress) {
-      this.toastr.error('Add Binance Chain Wallet to Accept Offer')
+      this.toastr.error('Add Binance Chain Wallet (BEP2) or Metamask (BEP20) to Accept Offer')
       return
     }
+    
     const bid = this.bids[bidIndex]
     const confirmed = confirm('Are you sure you want to choose this provider?')
     if (confirmed) {

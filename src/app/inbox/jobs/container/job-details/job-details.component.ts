@@ -10,6 +10,7 @@ import { MobileService } from '@service/mobile.service'
 import { ReviewService } from '@service/review.service'
 import { Transaction, TransactionService } from '@service/transaction.service'
 import { BinanceService } from '@service/binance.service'
+import { BscService, BepChain } from '@service/bsc.service'
 import { ToastrService } from 'ngx-toastr'
 import { AngularFireStorage } from 'angularfire2/storage'
 import { DialogService } from 'ng2-bootstrap-modal'
@@ -49,6 +50,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private jobService: JobService,
     private binanceService: BinanceService,
+    private bscService: BscService,
     private toastr: ToastrService,
     private transactionService: TransactionService,
     private reviewService: ReviewService,
@@ -244,18 +246,56 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
     this.binanceService.releaseFunds(jobId, undefined, onSuccess, undefined)
   }
+  
+  private async releaseEscrowBsc() {
+    console.log('release Escrow BSC')
+    // we check if bsc chain is connected and if not, suggest to connect to bsc chain explicitely (for now only metamask, not bep2 chain
+    if (!this.bscService.isBscConnected()) {
+      const routerStateSnapshot = this.router.routerState.snapshot
+      this.toastr.warning('Connect your Metamask BSC (Binance Smart Chain) wallet to release the payment', '', {
+        timeOut: 4000,
+      })
+      this.router.navigate(['/wallet-bnb'], {
+        queryParams: { returnUrl: routerStateSnapshot.url },
+      })
+      return
+      
+    }
+    
+    // we are bsc connected, go on
+    const jobId = this.job.id
+    let result = await this.bscService.release(jobId);
+    if (!result.err) {
+      
+      const action = new IJobAction(ActionType.acceptFinish, UserType.client)
+      this.job.state = JobState.complete
+      await this.jobService.handleJobAction(this.job, action)      
+      
+    }
+    
+  }
+  
 
-  executeAction(action: ActionType) {
+  async executeAction(action: ActionType) {
     console.log('executeAction: ' + action)
     switch (action) {
       case ActionType.enterEscrow:
-        this.router.navigate(['../enter-escrow'], {
-          relativeTo: this.activatedRoute,
-        })
+        const chain = await this.checkConnectionAndDetectChain()
+        if (chain === BepChain.Binance) this.router.navigate(['../enter-escrow'], { relativeTo: this.activatedRoute });
+          else if (chain === BepChain.SmartChain) this.router.navigate(['../enter-bsc-escrow'], { relativeTo: this.activatedRoute })
+        
         break
       case ActionType.acceptFinish:
-        console.log('ActionType.acceptFinish')
-        this.releaseEscrow()
+        if (this.job.bscEscrow === true) {
+          console.log('ActionType.acceptFinish BEP20')
+          await this.releaseEscrowBsc()
+          
+        } else {
+          // bep2 escrow release
+          console.log('ActionType.acceptFinish BEP2')
+          this.releaseEscrow()
+          
+        }
         break
       case ActionType.cancelJobEarly:
         //TODO
@@ -318,4 +358,29 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   toggleDescription() {
     this.hideDescription = !this.hideDescription
   }
+  
+  async checkConnectionAndDetectChain(): Promise<string> {
+    let connectedChain = '';
+    
+    // BEP20 has the priority, if it's connected will use it
+    if (this.bscService.isBscConnected()) connectedChain = BepChain.SmartChain;      
+      else if (this.binanceService.isLedgerConnected() ||
+               this.binanceService.isKeystoreConnected() ||
+               this.binanceService.isWalletConnectConnected()) connectedChain = BepChain.Binance;
+    if (!connectedChain) {
+      const routerStateSnapshot = this.router.routerState.snapshot
+      this.toastr.warning(
+        'Please connect your wallet before going on',
+        '',
+        { timeOut: 2000 }
+      )
+      this.router.navigate(['/wallet-bnb'], {
+        queryParams: { returnUrl: routerStateSnapshot.url },
+      })
+      return null
+    }
+    return connectedChain
+    
+  }
+  
 }

@@ -14,10 +14,12 @@ import { BinanceValidator } from '@validator/binance.validator'
 
 export type Connector = WalletConnect
 export enum WalletApp {
-  WalletConnect,
-  Ledger,
-  Keystore,
-  Mnemonic,
+  WalletConnect, // bep2
+  Ledger, // bep2
+  Keystore, // bep2
+  Mnemonic, // bep2
+  MetaMask, // bsc
+  WalletConnectBsc // bsc
 }
 
 export enum EventType {

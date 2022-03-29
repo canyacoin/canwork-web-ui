@@ -15,8 +15,13 @@ import { EmailValidator } from '@validator/email.validator'
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper'
 
 import * as moment from 'moment-timezone'
+
 import { BinanceValidator } from '@validator/binance.validator'
 import { BinanceService } from '@service/binance.service'
+
+import { BscValidator } from '@validator/bsc.validator'
+import { BscService } from '@service/bsc.service'
+
 
 @Component({
   selector: 'app-profile-edit',
@@ -43,12 +48,14 @@ export class EditComponent implements OnInit, OnDestroy {
   tagInput = ''
 
   bnbAddress: string
+  bscAddress: string
   preview = false
 
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
     private binanceService: BinanceService,
+    private bscService: BscService,
     private authService: AuthService
   ) {}
 
@@ -107,6 +114,18 @@ export class EditComponent implements OnInit, OnDestroy {
           ).isUniqueAddressField(this.currentUser),
         ]),
       ],
+      bscAddress: [
+        this.currentUser.bscAddress || this.bscAddress,
+        () => null,
+        Validators.composeAsync([
+          new BscValidator(this.bscService, this.userService)
+            .isValidAddressField,
+          new BscValidator(
+            this.bscService,
+            this.userService
+          ).isUniqueAddressField(this.currentUser),
+        ]),
+      ],      
       title: [
         this.currentUser.title || '',
         Validators.compose([
@@ -179,6 +198,7 @@ export class EditComponent implements OnInit, OnDestroy {
       name: this.profileForm.value.name,
       work: this.profileForm.value.work,
       bnbAddress: this.profileForm.value.bnbAddress,
+      bscAddress: this.profileForm.value.bscAddress,
       title: this.profileForm.value.title,
       bio: this.profileForm.value.bio,
       category: category,

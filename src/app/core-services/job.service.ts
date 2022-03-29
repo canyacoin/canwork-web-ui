@@ -235,6 +235,13 @@ export class JobService {
             await this.saveJobAndNotify(parsedJob, action)
             resolve(true)
             break
+          case ActionType.enterEscrowBsc:
+            parsedJob.actionLog.push(action)
+            parsedJob.state = JobState.inEscrow
+            parsedJob.bscEscrow = true // save bscEscrow property into job to use it later when releasing job
+            await this.saveJobAndNotify(parsedJob, action)
+            resolve(true)
+            break
           case ActionType.acceptFinish:
             parsedJob.actionLog.push(action)
             parsedJob.state = JobState.complete

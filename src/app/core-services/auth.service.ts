@@ -38,7 +38,7 @@ export class AuthService {
 
   async isAuthenticatedAndNoAddress(): Promise<boolean> {
     const user = await this.getCurrentUser()
-    return Promise.resolve(!!user && !user.bnbAddress)
+    return Promise.resolve(!!user && (!user.bnbAddress && !user.bscAddress))
   }
 
   async getJwt(): Promise<string> {

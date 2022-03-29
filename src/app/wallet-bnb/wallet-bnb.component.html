@@ -6,6 +6,18 @@
         <div class="col-12 col-md-4">
           <ul class="tabs">
             <li
+              (click)="selected = WalletApp.MetaMask"
+              [class.active]="isActive(WalletApp.MetaMask)"
+            >
+              MetaMask (BSC)
+            </li>            
+            <li
+              (click)="selected = WalletApp.WalletConnectBsc"
+              [class.active]="isActive(WalletApp.WalletConnectBsc)"
+            >
+              WalletConnect (BSC)
+            </li>
+            <li
               (click)="selected = WalletApp.WalletConnect"
               [class.active]="isActive(WalletApp.WalletConnect)"
             >
@@ -32,6 +44,46 @@
           </ul>
         </div>
         <div class="col-12 col-md-8 text-left" [ngSwitch]="selected">
+          <div *ngSwitchCase="WalletApp.MetaMask">
+            <div>
+              Click to connect to MetaMask wallet.
+              <div class="mt-20">
+                <button
+                  (click)="connect(WalletApp.MetaMask)"
+                  class="btn btn-primary"
+                >
+                  Connect
+                </button>
+              </div>
+              <div class="keystore-error">
+                {{ bscError }}
+              </div>              
+            </div>
+          </div>        
+          <div *ngSwitchCase="WalletApp.WalletConnectBsc">
+            <div>
+              Click to connect to WalletConnect compatible wallet (i.e. Trust)
+              <p *ngIf="isAnotherBscChain">Pay attention: you'll connect to BSC MainNet, cause testnet is not supported</p>
+              <div class="mt-20">
+                <button *ngIf="!walletconnectConnecting"
+                  (click)="connect(WalletApp.WalletConnectBsc)"
+                  class="btn btn-primary"
+                >
+                  Connect
+                </button>
+                <button *ngIf="walletconnectConnecting"
+                  (click)="connect(WalletApp.WalletConnectBsc)"
+                  class="btn btn-primary"
+                  disabled
+                >
+                  Connecting ..
+                </button>
+              </div>
+              <div class="keystore-error">
+                {{ bscError }}
+              </div>              
+            </div>
+          </div>        
           <div *ngSwitchCase="WalletApp.WalletConnect">
             <div *ngIf="!isTestnet(); else testnet">
               Click to scan a QR code and link your mobile wallet using
@@ -224,6 +276,52 @@
       <div class="modal-footer">
         <button
           (click)="onConfirmWalletUpdate()"
+          type="button"
+          class="btn btn-secondary"
+          data-dismiss="modal"
+        >
+          Yes
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          No
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="replaceWalletModalBsc"
+  role="dialog"
+  data-keyboard="true"
+  data-backdrop="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Replacing your Bsc wallet</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to replace your Bsc wallet?</p>
+        <p>
+          Old: <b>{{ walletReplacementBsc.old }}</b>
+        </p>
+        <p>
+          New: <b>{{ walletReplacementBsc.new }}</b>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button
+          (click)="onConfirmWalletUpdateBsc()"
           type="button"
           class="btn btn-secondary"
           data-dismiss="modal"

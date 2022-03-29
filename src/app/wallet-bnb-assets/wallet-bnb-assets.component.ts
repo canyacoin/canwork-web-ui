@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { BinanceService, EventType } from '@service/binance.service'
+import { BscService, EventTypeBsc, BepChain } from '@service/bsc.service'
+
 import { BehaviorSubject } from 'rxjs'
 import { sortBy, prop } from 'ramda'
 import { takeUntil } from 'rxjs/operators'
@@ -16,25 +18,69 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
   implements OnInit {
   address: string | boolean = true
   private balances = new BehaviorSubject(null)
-  explorer = environment.binance.explorer
+  explorer = ''
+  chain = null
 
-  constructor(private binanceService: BinanceService) {
+  constructor(
+    private binanceService: BinanceService,
+    private bscService: BscService
+  ) {
     super()
   }
 
+  async forget() {
+    switch (this.chain) {
+      case BepChain.Binance:
+        this.binanceService.disconnect()
+        break
+      case BepChain.SmartChain:
+        this.bscService.disconnect()
+        break
+    }
+  }
+
   async ngOnInit() {
+    this.bscService.events$
+      .pipe(takeUntil(this.destroy$)) // unsubscribe on destroy
+      .subscribe(async event => {
+        if (!event) {
+          if (!this.chain) this.address = false
+          return
+        }
+        switch (event.type) {
+          case EventTypeBsc.ConnectSuccess:          
+          case EventTypeBsc.AddressFound:
+            this.chain = BepChain.SmartChain
+            this.address = event.details.address
+            this.explorer = environment.bsc.blockExplorerUrls[0]
+            this.balances.next(sortBy(prop('symbol'))(await this.bscService.getBalances()))
+            break
+          case EventTypeBsc.Disconnect:
+          console.log('disconnect event')
+            this.address = false
+            this.balances.next([])
+            this.chain = null            
+            break
+            
+        }
+
+      })
+
+
     this.binanceService.events$
       .pipe(takeUntil(this.destroy$)) // unsubscribe on destroy
       .subscribe(async event => {
         if (!event) {
-          this.address = false
+          if (!this.chain) this.address = false
           return
         }
 
         switch (event.type) {
           case EventType.ConnectSuccess:
           case EventType.Update:
+            this.chain = BepChain.Binance         
             this.address = event.details.address
+            this.explorer = environment.binance.explorer            
             const resp = await this.binanceService.client.getAccount(
               this.address
             )
@@ -47,6 +93,8 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
             break
           case EventType.Disconnect:
             this.address = false
+            this.balances.next(null)            
+            this.chain = null
             break
         }
       })

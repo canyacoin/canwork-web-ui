@@ -86,7 +86,7 @@
         </li>
         <li *ngIf="currentUser" class="nav-item">
           <a
-            *ngIf="!bnbAddress; else showAddress"
+            *ngIf="!bAddress; else showAddress"
             class="nav-link"
             [routerLink]="['/wallet-bnb']"
           >
@@ -97,7 +97,7 @@
           <ng-template #showAddress>
             <a class="nav-link" [routerLink]="['/wallet-bnb/assets']">
               <button border-64 class="btn btn-sm btn-primary my-10">
-                {{ bnbAddress.slice(0, 6) }}...{{ bnbAddress.slice(-3) }}
+                {{ bAddress.slice(0, 6) }}...{{ bAddress.slice(-3) }}
               </button>
             </a>
           </ng-template>

@@ -7,6 +7,7 @@ import { NavService } from '@service/nav.service'
 import { AngularFirestore } from 'angularfire2/firestore'
 import { Subscription } from 'rxjs'
 import { BinanceService, EventType } from '@service/binance.service'
+import { BscService, EventTypeBsc } from '@service/bsc.service'
 
 @Component({
   selector: 'app-header',
@@ -29,7 +30,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Input() allowFilters = false
   showFilters = false
   hideSearchBar: boolean
-  bnbAddress: string
+  bAddress: string
 
   hasUnreadMessages = false
   messagesSubscription: Subscription
@@ -37,6 +38,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   authSub: Subscription
   navSub: Subscription
   binanceSub: Subscription
+  bscSub: Subscription
 
   providerCategories = [
     'Content Creators',
@@ -52,7 +54,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private navService: NavService,
     private authService: AuthService,
     private router: Router,
-    private binanceService: BinanceService
+    private binanceService: BinanceService,
+    private bscService: BscService
   ) {}
 
   async ngOnInit() {
@@ -67,20 +70,37 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.navSub = this.navService.hideSearchBar$.subscribe((hide: boolean) => {
       this.hideSearchBar = hide
     })
-
     this.binanceSub = this.binanceService.events$.subscribe(event => {
       if (!event) {
-        this.bnbAddress = ''
+        this.bAddress = ''
         return
       }
       switch (event.type) {
         case EventType.ConnectSuccess:
         case EventType.Update:
-          this.bnbAddress = event.details.address
+          this.bAddress = event.details.address
           break
         case EventType.ConnectFailure:
         case EventType.Disconnect:
-          this.bnbAddress = ''
+          this.bAddress = ''
+          break
+      }
+    })
+
+    this.bscSub = this.bscService.events$.subscribe(event => {
+      if (!event) {
+        this.bAddress = ''
+        return
+      }
+      switch (event.type) {
+        case EventTypeBsc.ConnectSuccess:
+        case EventTypeBsc.Update:
+        case EventTypeBsc.AddressFound:
+          this.bAddress = event.details.address
+          break
+        case EventTypeBsc.ConnectFailure:
+        case EventTypeBsc.Disconnect:
+          this.bAddress = ''
           break
       }
     })
@@ -135,7 +155,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
     if (this.binanceSub) {
       this.binanceSub.unsubscribe()
-    }
+     }
+    if (this.bscSub) {
+      this.bscSub.unsubscribe()
+    }    
   }
 
   onFocus(event: any) {
@@ -158,7 +181,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onCancel() {}
 
   onLogout() {
-    this.binanceService.disconnect()
+    this.bscService.disconnect()
     this.authService.logout()
   }
 }

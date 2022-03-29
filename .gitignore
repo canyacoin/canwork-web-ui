@@ -65,3 +65,4 @@ testem.log
 Thumbs.db
 src/environments/environment.ts.orig
 src/environments/*.ts
+nohup.out

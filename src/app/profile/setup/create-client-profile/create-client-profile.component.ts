@@ -66,7 +66,8 @@ export class CreateClientProfileComponent implements OnInit {
     }
     this.stepperSteps = Object.values(this.steps)
     this.currentStep = this.stepperSteps[0]
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/'
+    this.returnUrl = '/'
+    if (this.route.snapshot.queryParams['returnUrl']) this.returnUrl = decodeURIComponent(this.route.snapshot.queryParams['returnUrl'])
   }
 
   buildForm() {
@@ -164,6 +165,6 @@ export class CreateClientProfileComponent implements OnInit {
   }
 
   proceed() {
-    this.router.navigate([this.returnUrl])
+    this.router.navigateByUrl(this.returnUrl)
   }
 }

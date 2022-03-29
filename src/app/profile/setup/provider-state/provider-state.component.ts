@@ -21,7 +21,8 @@ export class ProviderStateComponent {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/'
+    this.returnUrl = '/'
+    if (this.route.snapshot.queryParams['returnUrl']) this.returnUrl = decodeURIComponent(this.route.snapshot.queryParams['returnUrl'])
   }
 
   finishProviderSetup() {
@@ -30,7 +31,7 @@ export class ProviderStateComponent {
       'state',
       UserState.done
     )
-    this.router.navigate([this.returnUrl])
+    this.router.navigateByUrl(this.returnUrl)
   }
 
   browse() {

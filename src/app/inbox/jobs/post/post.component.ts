@@ -68,7 +68,7 @@ export class PostComponent implements OnInit, OnDestroy {
   deleteFailed = false
     
 
-  usdToAtomicCan: number
+  // usdToAtomicCan: number // this is not used
   providerTypes = [
     {
       name: 'Content Creators',
@@ -314,11 +314,14 @@ export class PostComponent implements OnInit, OnDestroy {
           })
       }
     })
+    /*
+    // this is not used
     try {
       this.usdToAtomicCan = await this.binanceService.getUsdToAtomicCan()
     } catch (e) {
       this.usdToAtomicCan = null
     }
+    */
     this.currentDate = new Date().toISOString().split('T')[0]
     this.notifyAddAddressIfNecessary()
   }
@@ -327,7 +330,7 @@ export class PostComponent implements OnInit, OnDestroy {
     const noAddress = await this.authService.isAuthenticatedAndNoAddress()
     const user = await this.authService.getCurrentUser()
     if (noAddress && user.type == 'User') {
-      this.toastr.warning('Add Binance Chain Wallet to create jobs')
+      this.toastr.warning('Add Binance Chain Wallet (BEP2) or Metamask (BEP20) to create jobs')
     }
   }
   
