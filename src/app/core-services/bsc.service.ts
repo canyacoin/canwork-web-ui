@@ -558,6 +558,12 @@ export class BscService {
       if (environment.bsc.assetsDecimals && environment.bsc.assetsDecimals[token]) decimals = environment.bsc.assetsDecimals[token];
       
       let busdAddress = environment.bsc.pancake.busd;
+      if (tokenAddress.toLowerCase() == busdAddress.toLowerCase()) {
+        console.log('busd same token address' );
+        
+        return amountIn;
+      }
+      
       let pancakeRouterAddress = environment.bsc.pancake.router;
       if (this.getCurrentApp() === WalletApp.WalletConnectBsc) {
         busdAddress = environment.bsc.pancake.mainNetBusd;
@@ -571,6 +577,7 @@ export class BscService {
       const amountOut = ethers.utils.formatUnits(amountsOut[1], PANCAKE_OUTPUT_DECIMALS);
       return amountOut;
     } catch (e) {
+      console.log('Busd estimate error: '+this.errMsg(e)  );
       return -1;
     }
     return -1;
