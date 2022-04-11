@@ -514,7 +514,7 @@ export class BscService {
     }
     
     connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
-    if (!connectedWallet) return balances // we weren't able to retrive the saved wallet
+    if (!connectedWallet) return balances // we weren't able to retrieve the saved wallet
     const address = connectedWallet.address
 
     for (let token in environment.bsc.assets) {
