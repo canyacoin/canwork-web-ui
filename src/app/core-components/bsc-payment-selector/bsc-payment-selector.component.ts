@@ -59,6 +59,8 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
             
             this.assets = [];
 
+            let bnbBalance = await this.bscService.getBnbBalance();
+            console.log(bnbBalance);
 
             for (let token in environment.bsc.assets) {
               try {

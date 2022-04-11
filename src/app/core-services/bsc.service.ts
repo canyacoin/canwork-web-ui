@@ -468,6 +468,37 @@ export class BscService {
     return ''
   }
   
+  async getBnbBalance() {
+    let connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
+    if (!connectedWallet) await this.connect() // no wallet saved
+
+    if (!this.provider) await this.connect()
+    if (!this.provider) {
+      // we weren't able to connect, invoke disconnect function to clean up to inform all components
+      this.disconnect()    
+      return -1;
+    }      
+
+    connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
+    if (!connectedWallet) return -1 // we weren't able to retrieve the saved wallet
+    const address = connectedWallet.address
+    let decimals = CURRENCY.decimals;
+    try {
+
+      const balance = ethers.utils.formatUnits(await this.provider.getBalance(address), decimals)
+      
+      return balance
+      
+    } catch(err) {
+      console.log(`Error retrieving BNB balance of ${address}: ${this.errMsg(err)}`);
+      console.log(err);
+    }
+    
+    
+    return -1
+
+  }
+  
   async getBalances() {
     let connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
     if (!connectedWallet) await this.connect() // no wallet saved
@@ -483,7 +514,7 @@ export class BscService {
     }
     
     connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
-    if (!connectedWallet) return balances // we weren't able to save wallet
+    if (!connectedWallet) return balances // we weren't able to retrive the saved wallet
     const address = connectedWallet.address
 
     for (let token in environment.bsc.assets) {
