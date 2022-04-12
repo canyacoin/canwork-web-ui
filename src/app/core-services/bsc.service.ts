@@ -516,6 +516,14 @@ export class BscService {
     connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
     if (!connectedWallet) return balances // we weren't able to retrieve the saved wallet
     const address = connectedWallet.address
+    
+    // add BNB
+    balances.push({
+      address: '', 
+      name: 'BNB',
+      symbol: 'BNB',
+      free: await this.getBnbBalance()
+    });
 
     for (let token in environment.bsc.assets) {
       let tokenAddress = 'na';
