@@ -104,11 +104,12 @@ const tokenAbi = [
 
 const pancakeRouterAbi = [
   // converts token value
-  "function getAmountsOut(uint amountIn, address[] calldata path) external view returns (uint[] memory amounts)"
+  "function getAmountsOut(uint amountIn, address[] calldata path) external view returns (uint[] memory amounts)",
 /*
   function getAmountsOut(uint amountIn, address[] calldata path) external view returns (uint[] memory amounts);
 
 */
+  "function WETH() external pure returns (address)"
 ] 
 
 const escrowAbi = [
@@ -592,23 +593,45 @@ export class BscService {
     */    
     
     try {
-      const tokenAddress = environment.bsc.assets[token]
-      let decimals = CURRENCY.decimals;
-      if (environment.bsc.assetsDecimals && environment.bsc.assetsDecimals[token]) decimals = environment.bsc.assetsDecimals[token];
       
       let busdAddress = environment.bsc.pancake.busd;
-      if (tokenAddress.toLowerCase() == busdAddress.toLowerCase()) {
-        console.log('busd same token address' );
-        
-        return amountIn;
-      }
-      
+
+      let tokenAddress;
+
       let pancakeRouterAddress = environment.bsc.pancake.router;
       if (this.getCurrentApp() === WalletApp.WalletConnectBsc) {
         busdAddress = environment.bsc.pancake.mainNetBusd;
         pancakeRouterAddress = environment.bsc.pancake.mainNetRouter;
       }
       const pancakeRouterContract = new ethers.Contract(pancakeRouterAddress, pancakeRouterAbi, this.provider)
+      let decimals = CURRENCY.decimals;
+      if (token == 'BNB') {
+        /* 
+          let's consider as wBnb to permit busd conversion
+          we get official wbnb address from pancake router WETH function
+        */
+        const wBnbAddress = await pancakeRouterContract.WETH();
+        tokenAddress = wBnbAddress; 
+        
+      } else {
+
+        tokenAddress = environment.bsc.assets[token];
+        if (environment.bsc.assetsDecimals && environment.bsc.assetsDecimals[token]) decimals = environment.bsc.assetsDecimals[token];
+        
+      }
+      
+      
+      if (tokenAddress.toLowerCase() == busdAddress.toLowerCase()) {
+        console.log('busd same token address' );
+        
+        return amountIn;
+      }
+      
+
+      /*
+      TODO
+      perhaps here we should use same path used from escrow (pathAddresses from config)
+      */
       const amountsOut = await pancakeRouterContract.getAmountsOut(
         ethers.utils.parseUnits(amountIn.toString(), decimals),
         [tokenAddress, busdAddress]
