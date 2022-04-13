@@ -119,6 +119,8 @@ const escrowAbi = [
     function depositBEP20(address asset, address provider, uint value, uint JOBID, address[] memory swapPath)
 
 */
+  "function depositBNB(address provider, uint JOBID) external payable",
+
 
   // "function release (bytes32 JOBID) nonpayable" // old contract
   "function releaseAsClient (uint JOBID) nonpayable"
@@ -735,27 +737,42 @@ export class BscService {
       const truncatedAmount = amount.toFixed(decimals); // this is already a string
 
       const amountUint = ethers.utils.parseUnits(truncatedAmount, decimals);
-      const jobIdUint = ethers.utils.parseUnits(jobIdBigint, decimals);      
-      const tokenAddress = environment.bsc.assets[token]
-
-      let path = [tokenAddress, environment.bsc.pancake.busd]; // default
-      /* 
-      todo verify how to handle BUSD, cause path should be at least lenght 2
-      https://github.com/merlin-the-best/merlin-contract/blob/master/PancakeRouter.sol#L311      
-      */
-      let pathAssets = [token, 'BUSD'];  // default
-      // unless we have an explicit path mapped into config:
-      if (environment.bsc.hasOwnProperty("assetPaths") && environment.bsc.assetPaths.hasOwnProperty(token)) {
-        path = this.splitConfig(environment.bsc.assetPaths[token].pathAddresses);
-        pathAssets = this.splitConfig(environment.bsc.assetPaths[token].pathAssets);
-      }
+      const jobIdUint = ethers.utils.parseUnits(jobIdBigint, decimals);
 
       let escrowAddress = environment.bsc.escrow.address;
       if (this.getCurrentApp() === WalletApp.WalletConnectBsc) escrowAddress = environment.bsc.escrow.mainNetAddress;
 
       
       const escrowContract = new ethers.Contract(escrowAddress, escrowAbi, this.signer);
-      const gasDeposit = await escrowContract.estimateGas.depositBEP20(tokenAddress, providerAddress, amountUint, jobIdUint, path);
+
+      let pathAssets = [token, 'BUSD'];  // default
+
+      let gasDeposit;
+      if (token == 'BNB') {
+        /*
+        value is passed as an override
+        https://docs.ethers.io/v5/api/contract/contract/#contract-estimateGas        
+        */
+        gasDeposit = await escrowContract.estimateGas.depositBNB(providerAddress, jobIdUint, {value: amountUint});
+        
+      } else {
+      
+        const tokenAddress = environment.bsc.assets[token]
+
+        let path = [tokenAddress, environment.bsc.pancake.busd]; // default
+        /* 
+        todo verify how to handle BUSD, cause path should be at least lenght 2
+        https://github.com/merlin-the-best/merlin-contract/blob/master/PancakeRouter.sol#L311      
+        */
+        // unless we have an explicit path mapped into config:
+        if (environment.bsc.hasOwnProperty("assetPaths") && environment.bsc.assetPaths.hasOwnProperty(token)) {
+          path = this.splitConfig(environment.bsc.assetPaths[token].pathAddresses);
+          pathAssets = this.splitConfig(environment.bsc.assetPaths[token].pathAssets);
+        }
+        
+        gasDeposit = await escrowContract.estimateGas.depositBEP20(tokenAddress, providerAddress, amountUint, jobIdUint, path);
+
+      }
       
       return { gasDeposit: ethers.utils.formatUnits(gasDeposit, GAS.decimals), pathAssets}
       
@@ -792,24 +809,35 @@ export class BscService {
 
       
       const truncatedAmount = amount.toFixed(decimals); // this is already a string      
-      const amountUint = ethers.utils.parseUnits(truncatedAmount, decimals);      
+      const amountUint = ethers.utils.parseUnits(truncatedAmount, decimals); 
 
-      const tokenAddress = environment.bsc.assets[token]
-
-      let path = [tokenAddress, environment.bsc.pancake.busd]; // default
-      // unless we have an explicit path mapped into config:
-      if (environment.bsc.hasOwnProperty("assetPaths") && environment.bsc.assetPaths.hasOwnProperty("token")) {
-        path = this.splitConfig(environment.bsc.assetPaths[token].pathAddresses);        
-      }
-
-      
       let escrowAddress = environment.bsc.escrow.address;
       if (this.getCurrentApp() === WalletApp.WalletConnectBsc) escrowAddress = environment.bsc.escrow.mainNetAddress;
       
       
       const escrowContract = new ethers.Contract(escrowAddress, escrowAbi, this.signer);
 
-      depositResult = await escrowContract.depositBEP20(tokenAddress, providerAddress, amountUint, jobIdUint, path);
+
+      if (token == 'BNB') {
+        /*
+        value is passed as an override    
+        */
+        depositResult = await escrowContract.depositBNB(providerAddress, jobIdUint, {value: amountUint});
+      
+      } else {
+
+        const tokenAddress = environment.bsc.assets[token]
+
+        let path = [tokenAddress, environment.bsc.pancake.busd]; // default
+        // unless we have an explicit path mapped into config:
+        if (environment.bsc.hasOwnProperty("assetPaths") && environment.bsc.assetPaths.hasOwnProperty("token")) {
+          path = this.splitConfig(environment.bsc.assetPaths[token].pathAddresses);        
+        }
+
+        depositResult = await escrowContract.depositBEP20(tokenAddress, providerAddress, amountUint, jobIdUint, path);
+      
+      }
+      
 
       
     } catch (err) {

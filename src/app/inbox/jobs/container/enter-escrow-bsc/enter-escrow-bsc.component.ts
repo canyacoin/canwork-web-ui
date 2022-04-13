@@ -114,12 +114,15 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
 
     // Calculate jobBudget in selected BEP asset
     //const jobBudgetAsset = this.jobBudgetUsd / this.bscAssetData.usdPrice
-    let allowance = this.jobBudgetUsd / this.bscAssetData.busdValue; // how much we need
+    console.log(this.jobBudgetUsd);
+    console.log(this.bscAssetData);
+    let allowance = this.jobBudgetUsd * parseFloat(this.bscAssetData.free) / this.bscAssetData.busdValue; // how much we need
     
     //const jobBudgetAtomic = Math.ceil(jobBudgetAsset * 1e8)
 
     let paymentSummary = {
       asset: this.bscAssetData,
+      assetValue: this.bscAssetData.busdValue / parseFloat(this.bscAssetData.free),
       job: {
         name: this.job.information.title,
         usdValue: this.jobBudgetUsd,
@@ -138,7 +141,19 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
       complete: onComplete,
     }
         
-    let balance = await this.bscService.getBalance(this.bscAssetData.token);
+    let balance;
+    if (this.bscAssetData.token == 'BNB') {
+      balance = {
+        address: '', 
+        name: 'BNB',
+        symbol: 'BNB',
+        err: '',
+        free: await this.bscService.getBnbBalance()
+      }
+      if (balance.free == -1) balance.err = 'Invalid BNB balance';
+    } else balance = await this.bscService.getBalance(this.bscAssetData.token);
+    
+    
     if (!balance.err) {
       this.bscPayOptions.paymentSummary.balance = balance
       this.showBalance = true; // enable balance show
