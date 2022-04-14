@@ -114,8 +114,6 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
 
     // Calculate jobBudget in selected BEP asset
     //const jobBudgetAsset = this.jobBudgetUsd / this.bscAssetData.usdPrice
-    console.log(this.jobBudgetUsd);
-    console.log(this.bscAssetData);
     let allowance = this.jobBudgetUsd * parseFloat(this.bscAssetData.free) / this.bscAssetData.busdValue; // how much we need
     
     //const jobBudgetAtomic = Math.ceil(jobBudgetAsset * 1e8)
@@ -172,7 +170,7 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
     
     this.depositError = false // reset errors
     this.isEscrowLoading = true;
-    
+    console.log('Deposit '+this.bscPayOptions.paymentSummary.allowance)
     // now finally actually try to deposit
     let result = await this.bscService.deposit(this.bscAssetData.token, this.providerAddress, this.bscPayOptions.paymentSummary.allowance, this.job.id);
     
