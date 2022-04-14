@@ -58,7 +58,23 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
             this.address = event.details.address
             
             this.assets = [];
+            
+            
+            // add BNB
+            let bnbBalance = await this.bscService.getBnbBalance();
 
+            this.assets.push({
+              converting: true,
+              hasEnough: false,
+              freeUsd: 0,
+              name: 'BNB',
+              symbol: 'BNB',
+              address: '',
+              free: bnbBalance,
+              err: '',
+              token: 'BNB'
+            });
+            
 
             for (let token in environment.bsc.assets) {
               try {
@@ -130,10 +146,14 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
 
   async estimateGasApprove() {
     for (let i=0; i<this.assets.length; i++) {
-      if (this.assets[i].hasEnough && (this.assets[i].gasApprove == '')) {
-        let allowance = this.jobBudgetUsd / this.assets[i].busdValue; // how much we need
-        let gasApprove = await this.bscService.estimateGasApprove(this.assets[i].token, allowance);
-        if (parseFloat(gasApprove) >= 0) this.assets[i].gasApprove = `~${parseFloat(gasApprove).toFixed(4)}`;
+      if (this.assets[i].token == 'BNB') { // BNB doesn't need to be approved
+        if (this.assets[i].hasEnough) this.assets[i].isApproved = true;
+      } else {
+        if (this.assets[i].hasEnough && (this.assets[i].gasApprove == '')) {
+          let allowance = this.jobBudgetUsd / this.assets[i].busdValue; // how much we need
+          let gasApprove = await this.bscService.estimateGasApprove(this.assets[i].token, allowance);
+          if (parseFloat(gasApprove) >= 0) this.assets[i].gasApprove = `~${parseFloat(gasApprove).toFixed(4)}`;
+        }
       }
     }
   }
@@ -146,10 +166,11 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
         let estimateResult = await this.bscService.estimateGasDeposit(this.assets[i].token, this.providerAddress, allowance, this.jobId, true);
         //let estimateResult = await this.bscService.estimateGasDeposit(this.assets[i].token, this.providerAddress, allowance, this.jobId, false); // debug false
         if (parseFloat(estimateResult.gasDeposit) >= 0) {
-          // if it succeds, it means asset is approved
+          // if it succeds, it means asset is approved (todo check how much we are approving)
           this.assets[i].isApproved = true;
           this.assets[i].gasDeposit = `~${parseFloat(estimateResult.gasDeposit).toFixed(4)}<br>${estimateResult.pathAssets.join("->")}`;
         }
+        
       }
     }
   }

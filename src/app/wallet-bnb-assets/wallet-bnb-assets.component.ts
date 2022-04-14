@@ -53,7 +53,14 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
             this.chain = BepChain.SmartChain
             this.address = event.details.address
             this.explorer = environment.bsc.blockExplorerUrls[0]
+            /*
+            // do not sort anymore to be coherent with payment selector
+            // env config ordering will be respected, so this can be choosen into config
             this.balances.next(sortBy(prop('symbol'))(await this.bscService.getBalances()))
+            */
+            this.balances.next(await this.bscService.getBalances())
+            
+            
             break
           case EventTypeBsc.Disconnect:
           console.log('disconnect event')

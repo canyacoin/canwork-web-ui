@@ -60,7 +60,8 @@ export class DynamicCoinComponent extends OnDestroyComponent
           this.startCol = hashbow(symbol)
           this.stopCol = hashbow(this.address)
           // case must match exactly the one on github path
-          this.symbolUrl = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/smartchain/assets/'+this.address
+          if (symbol === "BNB") this.symbolUrl = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/smartchain/info/'          
+           else this.symbolUrl = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/smartchain/assets/'+this.address
 
           return;
         }
