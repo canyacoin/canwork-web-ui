@@ -98,7 +98,11 @@ const tokenAbi = [
 
   // Before we can send an asset to the escrow we must first approve a spend allowance on the asset contract
   // uint is equivalent to uint256
-  "function approve(address _spender, uint _value) nonpayable returns (bool)"
+  "function approve(address _spender, uint _value) nonpayable returns (bool)",
+  
+  // token allowance
+  "function allowance(address owner, address spender) external view returns (uint)"
+  
 
 ];
 
@@ -576,6 +580,49 @@ export class BscService {
     return ({ address: tokenAddress, name, symbol, free: balance, err: '', token})
   }  
   
+  async getEscrowAllowance(token) {
+    try {
+      
+      let connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
+      if (!connectedWallet) await this.connect() // no wallet saved
+
+      if (!this.provider) await this.connect()
+      if (!this.provider) {
+        // we weren't able to connect, invoke disconnect function to clean up to inform all components
+        this.disconnect()    
+        return -1;
+      }      
+
+      connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
+      if (!connectedWallet) return -1 // we weren't able to retrieve the saved wallet
+
+
+      const ownerAddress = connectedWallet.address;
+
+      
+      const tokenAddress = environment.bsc.assets[token]
+      const assetContract = new ethers.Contract(tokenAddress, tokenAbi, this.signer);
+      
+      let escrowAddress = environment.bsc.escrow.address;
+      if (this.getCurrentApp() === WalletApp.WalletConnectBsc) escrowAddress = environment.bsc.escrow.mainNetAddress;
+      
+      let decimals = CURRENCY.decimals;
+      if (environment.bsc.assetsDecimals && environment.bsc.assetsDecimals[token]) decimals = environment.bsc.assetsDecimals[token];
+
+
+      const allowance = await assetContract.allowance(ownerAddress, escrowAddress);
+
+      
+      return ethers.utils.formatUnits(allowance, decimals);
+      
+      
+    
+    } catch (e) {
+      console.log('getEscrowAllowance error for token '+token+': '+this.errMsg(e)  );
+      return -1;
+    }    
+  }
+
   async getBusdValue(amountIn, token) {
     /*
     Testnet faucet:
@@ -702,8 +749,99 @@ export class BscService {
       let escrowAddress = environment.bsc.escrow.address;
       if (this.getCurrentApp() === WalletApp.WalletConnectBsc) escrowAddress = environment.bsc.escrow.mainNetAddress;
       
-      approveResult = await assetContract.approve(escrowAddress, allowanceUint);
-
+      const transaction = await assetContract.approve(escrowAddress, allowanceUint);
+      /*
+        {
+            "hash": "0xaaf44b5e674733871f0314fa02562553ef7b26e6c79e4232d881849aa93a1f9f",
+            "type": 0,
+            "accessList": null,
+            "blockHash": null,
+            "blockNumber": null,
+            "transactionIndex": null,
+            "confirmations": 0,
+            "from": "0x606627e26d860A8A9d773b50F4B4F553cfcC6335",
+            "gasPrice": {
+                "type": "BigNumber",
+                "hex": "0x012a05f200"
+            },
+            "gasLimit": {
+                "type": "BigNumber",
+                "hex": "0x71ca"
+            },
+            "to": "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
+            "value": {
+                "type": "BigNumber",
+                "hex": "0x00"
+            },
+            "nonce": 425,
+            "data": "0x095ea7b3000000000000000000000000fcd04481c5176abdc00b2b182c2eb35b7c79125f000000000000000000000000000000000000000000000000002b8559d087111d",
+            "r": "0xa98186258ceab4f82bee3446dfed8cbcdda9f2307b1af876530cca645488e65e",
+            "s": "0x44660a5e36022b75a44c03cd93c860783811b6baa44006f6e41f4bfb1ad60c22",
+            "v": 148,
+            "creates": null,
+            "chainId": 56
+        }      
+      */
+      const receipt = await transaction.wait();
+      // todo perhaps we can save this receipt or tx number to db  and add a timeout
+      
+      /*
+      {
+          "to": "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
+          "from": "0x606627e26d860A8A9d773b50F4B4F553cfcC6335",
+          "contractAddress": null,
+          "transactionIndex": 79,
+          "gasUsed": {
+              "type": "BigNumber",
+              "hex": "0x71ca"
+          },
+          "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000200000000000000000000000020000000000000000020000000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000002000020000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000400000000000000000000000000000010000000000000000000000000000000000008000000001000000000000000",
+          "blockHash": "0xc022400e0009e6b05f160ed8e7dc65aac7cea96a5e2337caf5625c2ea2a29934",
+          "transactionHash": "0x2fe8fb21a56438da52c9e1d110c63e6c599b793107c30fbea3e2619956fa7fda",
+          "logs": [
+              {
+                  "transactionIndex": 79,
+                  "blockNumber": 16938016,
+                  "transactionHash": "0x2fe8fb21a56438da52c9e1d110c63e6c599b793107c30fbea3e2619956fa7fda",
+                  "address": "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
+                  "topics": [
+                      "0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925",
+                      "0x000000000000000000000000606627e26d860a8a9d773b50f4b4f553cfcc6335",
+                      "0x000000000000000000000000fcd04481c5176abdc00b2b182c2eb35b7c79125f"
+                  ],
+                  "data": "0x000000000000000000000000000000000000000000000000002b7f80759e2c1a",
+                  "logIndex": 227,
+                  "blockHash": "0xc022400e0009e6b05f160ed8e7dc65aac7cea96a5e2337caf5625c2ea2a29934"
+              }
+          ],
+          "blockNumber": 16938016,
+          "confirmations": 4,
+          "cumulativeGasUsed": {
+              "type": "BigNumber",
+              "hex": "0x8f64de"
+          },
+          "status": 1,
+          "byzantium": true,
+          "events": [
+              {
+                  "transactionIndex": 79,
+                  "blockNumber": 16938016,
+                  "transactionHash": "0x2fe8fb21a56438da52c9e1d110c63e6c599b793107c30fbea3e2619956fa7fda",
+                  "address": "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
+                  "topics": [
+                      "0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925",
+                      "0x000000000000000000000000606627e26d860a8a9d773b50f4b4f553cfcc6335",
+                      "0x000000000000000000000000fcd04481c5176abdc00b2b182c2eb35b7c79125f"
+                  ],
+                  "data": "0x000000000000000000000000000000000000000000000000002b7f80759e2c1a",
+                  "logIndex": 227,
+                  "blockHash": "0xc022400e0009e6b05f160ed8e7dc65aac7cea96a5e2337caf5625c2ea2a29934"
+              }
+          ]
+      }      
+      */
+      
+      // success, nothing to add to result
       
     } catch (err) {
       console.log(err)
@@ -816,13 +954,14 @@ export class BscService {
       
       
       const escrowContract = new ethers.Contract(escrowAddress, escrowAbi, this.signer);
-
+      
+      let transaction;
 
       if (token == 'BNB') {
         /*
         value is passed as an override    
         */
-        depositResult = await escrowContract.depositBNB(providerAddress, jobIdUint, {value: amountUint});
+        transaction = await escrowContract.depositBNB(providerAddress, jobIdUint, {value: amountUint});
       
       } else {
 
@@ -834,10 +973,14 @@ export class BscService {
           path = this.splitConfig(environment.bsc.assetPaths[token].pathAddresses);        
         }
 
-        depositResult = await escrowContract.depositBEP20(tokenAddress, providerAddress, amountUint, jobIdUint, path);
+        transaction = await escrowContract.depositBEP20(tokenAddress, providerAddress, amountUint, jobIdUint, path);
       
       }
-      
+      // wait for transaction confirm
+      const receipt = await transaction.wait();
+      // todo perhaps we can save this receipt or tx number to db and add a timeout
+
+      // success, nothing to add to result
 
       
     } catch (err) {
@@ -869,7 +1012,13 @@ export class BscService {
 
       const escrowContract = new ethers.Contract(escrowAddress, escrowAbi, this.signer);
 
-      releaseResult = await escrowContract.releaseAsClient(jobIdUint);
+      const transaction = await escrowContract.releaseAsClient(jobIdUint);
+      
+      // wait for transaction confirm
+      const receipt = await transaction.wait();
+      // todo perhaps we can save this receipt or tx number to db and add a timeout
+
+      // success, nothing to add to result
       
       
     } catch (err) {
