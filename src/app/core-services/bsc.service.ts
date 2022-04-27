@@ -427,6 +427,7 @@ export class BscService {
     const bscValidator = new BscValidator(this, this.userService);
     
     if (user && user.bscAddress !== address) {
+      console.log('connect bsc address changed');
       
       // already has a different bsc address, ask for confirmation
       if (user.bscAddress) {
@@ -858,7 +859,7 @@ export class BscService {
   
   //async estimateGasDeposit(token, amount, jobId, silent) {
   async estimateGasDeposit(token, providerAddress, amount, jobId, silent) {
-    
+    console.log('estimateGasDeposit', token, providerAddress, amount, jobId, silent); // debug
     try {
       await this.checkSigner()
       
@@ -893,7 +894,7 @@ export class BscService {
         https://docs.ethers.io/v5/api/contract/contract/#contract-estimateGas        
         */
         gasDeposit = await escrowContract.estimateGas.depositBNB(providerAddress, jobIdUint, {value: amountUint});
-        
+        console.log('gasDeposit '+token+': '+ ethers.utils.formatUnits(gasDeposit, 0));
       } else {
       
         const tokenAddress = environment.bsc.assets[token]
@@ -910,7 +911,8 @@ export class BscService {
         }
         
         gasDeposit = await escrowContract.estimateGas.depositBEP20(tokenAddress, providerAddress, amountUint, jobIdUint, path);
-
+        console.log('gasDeposit bep20 '+token+': '+ ethers.utils.formatUnits(gasDeposit, 0));
+      
       }
       
       return { gasDeposit: ethers.utils.formatUnits(gasDeposit, GAS.decimals), pathAssets}
@@ -927,6 +929,8 @@ export class BscService {
   }  
   
   async deposit(token, providerAddress, amount, jobId) {
+    console.log('deposit', token, providerAddress, amount, jobId); // debug
+    
     let depositResult = { err: '' };
     
     try {
@@ -962,7 +966,18 @@ export class BscService {
         /*
         value is passed as an override    
         */
-        transaction = await escrowContract.depositBNB(providerAddress, jobIdUint, {value: amountUint});
+        /*
+        we have to increase default gas estimated to avoid out of gas
+        empirically let's mutiply it
+        */
+        const GAS_MULTIPLY_FACTOR = 2;
+        
+        let estimatedGasDeposit = parseInt(ethers.utils.formatUnits( (await escrowContract.estimateGas.depositBNB(providerAddress, jobIdUint, {value: amountUint}) ), 0) );
+        let suggestedGasDeposit = estimatedGasDeposit * GAS_MULTIPLY_FACTOR;
+        console.log('deposit estimatedGasDeposit '+token+': '+ estimatedGasDeposit + ', suggestedGasDeposit: '+suggestedGasDeposit);
+        
+        
+        transaction = await escrowContract.depositBNB(providerAddress, jobIdUint, {value: amountUint, gasLimit: suggestedGasDeposit});
       
       } else {
 
@@ -1132,8 +1147,19 @@ export class BscService {
   }
   
   
-  isBscConnected(): boolean {
-    return (!!this.connectedWallet);    
+  async isBscConnected() {
+    if (!this.connectedWallet) return false; // not connected
+    
+    // connected, check if address is changed    
+    const user = await this.authService.getCurrentUser()
+    if (user && user.bscAddress !== this.connectedWallet.address) {
+      console.log('isBscConnected address changed')
+      return false;
+    }
+    
+    
+    
+    return true;    
   }
 
   getAddress(): string {

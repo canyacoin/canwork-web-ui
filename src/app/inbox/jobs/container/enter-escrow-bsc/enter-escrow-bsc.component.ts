@@ -204,7 +204,7 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
   async checkWalletConnection() {
     let connectedChain = undefined;
     // BEP20 has the priority, if it's connected will use it
-    if (this.bscService.isBscConnected()) connectedChain = BepChain.SmartChain;      
+    if (await this.bscService.isBscConnected()) connectedChain = BepChain.SmartChain;      
     if (!connectedChain) {
       const routerStateSnapshot = this.router.routerState.snapshot
       this.toastr.warning(
