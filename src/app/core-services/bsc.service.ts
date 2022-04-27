@@ -36,7 +36,7 @@ const CHAIN_NAME = environment.bsc.chainName
 const RPC_URLS = environment.bsc.rpcUrls
 const BLOCK_EXPLORER_URLS = environment.bsc.blockExplorerUrls
 const CURRENCY = { name: "BNB", symbol: "bnb", decimals: 18 }
-const JOBID_DECIMALS = 18; // TODO set it to 0 after test
+const JOBID_DECIMALS = 0;
 const GAS = { decimals: 8 }
 const PANCAKE_OUTPUT_DECIMALS =  environment.bsc.pancake.decimals; // todo verify why is 16 and not 18
 
