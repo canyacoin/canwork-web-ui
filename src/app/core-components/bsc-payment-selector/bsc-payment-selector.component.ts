@@ -12,6 +12,9 @@ import { BscService, EventTypeBsc, BepChain } from '@service/bsc.service'
 import { environment } from '@env/environment'
 import { bepAssetData } from '@canpay-lib/lib' // todo
 
+import { ToastrService } from 'ngx-toastr'
+
+
 
 @Component({
   selector: 'app-bsc-payment-selector',
@@ -35,7 +38,9 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
   constructor(
     private location: Location,
     private router: Router,
-    private bscService: BscService
+    private bscService: BscService,
+    private toastr: ToastrService
+    
   ) { 
     super()
   }
@@ -107,6 +112,21 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
           break
           case EventTypeBsc.Disconnect:
             this.address = false
+          break
+          
+          case EventTypeBsc.ConnectConfirmationRequired:
+            console.log("bsc-payment-selector EventTypeBsc.ConnectConfirmationRequired")
+            this.address = false
+            const routerStateSnapshot = this.router.routerState.snapshot
+            this.toastr.warning(
+              'Please connect your wallet before going on',
+              '',
+              { timeOut: 2000 }
+            )
+            this.router.navigate(['/wallet-bnb'], {
+              queryParams: { returnUrl: routerStateSnapshot.url },
+            })            
+            
           break
         
         }

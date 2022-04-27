@@ -70,12 +70,18 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
             this.router.navigate([this.returnUrl])
             break
           case EventTypeBsc.AddressFound:
-            this.router.navigate([this.returnUrl])
+             if (!await this.bscService.isBscConnected()) {
+               // address found but not connected, probably address is changed, force reconnect
+               
+             } else {
+              this.router.navigate([this.returnUrl])
+             }
             break
           case EventTypeBsc.ConnectFailure:
             this.toastr.error('This address is already in use by another user')
             break
           case EventTypeBsc.ConnectConfirmationRequired:
+            console.log("wallet-bnb EventTypeBsc.ConnectConfirmationRequired")
             const user = await this.authService.getCurrentUser()
             this.walletReplacementBsc = {
               old: user.bscAddress,

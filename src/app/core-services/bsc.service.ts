@@ -427,6 +427,7 @@ export class BscService {
     const bscValidator = new BscValidator(this, this.userService);
     
     if (user && user.bscAddress !== address) {
+      console.log('connect bsc address changed');
       
       // already has a different bsc address, ask for confirmation
       if (user.bscAddress) {
@@ -858,7 +859,7 @@ export class BscService {
   
   //async estimateGasDeposit(token, amount, jobId, silent) {
   async estimateGasDeposit(token, providerAddress, amount, jobId, silent) {
-    
+    console.log('estimateGasDeposit', token, providerAddress, amount, jobId, silent); // debug
     try {
       await this.checkSigner()
       
@@ -927,6 +928,8 @@ export class BscService {
   }  
   
   async deposit(token, providerAddress, amount, jobId) {
+    console.log('deposit', token, providerAddress, amount, jobId); // debug
+    
     let depositResult = { err: '' };
     
     try {
@@ -1132,8 +1135,19 @@ export class BscService {
   }
   
   
-  isBscConnected(): boolean {
-    return (!!this.connectedWallet);    
+  async isBscConnected() {
+    if (!this.connectedWallet) return false; // not connected
+    
+    // connected, check if address is changed    
+    const user = await this.authService.getCurrentUser()
+    if (user && user.bscAddress !== this.connectedWallet.address) {
+      console.log('isBscConnected address changed')
+      return false;
+    }
+    
+    
+    
+    return true;    
   }
 
   getAddress(): string {

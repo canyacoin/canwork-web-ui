@@ -68,6 +68,15 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
             this.balances.next([])
             this.chain = null            
             break
+          case EventTypeBsc.ConnectConfirmationRequired:
+            console.log("wallet-bnb-assets EventTypeBsc.ConnectConfirmationRequired")
+            // disconnect and reconnect, more safe
+            this.address = false
+            this.balances.next([])
+            this.chain = null            
+            
+            break            
+          
             
         }
 
