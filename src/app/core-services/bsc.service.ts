@@ -894,7 +894,7 @@ export class BscService {
         https://docs.ethers.io/v5/api/contract/contract/#contract-estimateGas        
         */
         gasDeposit = await escrowContract.estimateGas.depositBNB(providerAddress, jobIdUint, {value: amountUint});
-        
+        console.log('gasDeposit '+token+': '+ ethers.utils.formatUnits(gasDeposit, 0));
       } else {
       
         const tokenAddress = environment.bsc.assets[token]
@@ -911,7 +911,8 @@ export class BscService {
         }
         
         gasDeposit = await escrowContract.estimateGas.depositBEP20(tokenAddress, providerAddress, amountUint, jobIdUint, path);
-
+        console.log('gasDeposit bep20 '+token+': '+ ethers.utils.formatUnits(gasDeposit, 0));
+      
       }
       
       return { gasDeposit: ethers.utils.formatUnits(gasDeposit, GAS.decimals), pathAssets}
@@ -965,7 +966,18 @@ export class BscService {
         /*
         value is passed as an override    
         */
-        transaction = await escrowContract.depositBNB(providerAddress, jobIdUint, {value: amountUint});
+        /*
+        we have to increase default gas estimated to avoid out of gas
+        empirically let's mutiply it
+        */
+        const GAS_MULTIPLY_FACTOR = 2;
+        
+        let estimatedGasDeposit = parseInt(ethers.utils.formatUnits( (await escrowContract.estimateGas.depositBNB(providerAddress, jobIdUint, {value: amountUint}) ), 0) );
+        let suggestedGasDeposit = estimatedGasDeposit * GAS_MULTIPLY_FACTOR;
+        console.log('deposit estimatedGasDeposit '+token+': '+ estimatedGasDeposit + ', suggestedGasDeposit: '+suggestedGasDeposit);
+        
+        
+        transaction = await escrowContract.depositBNB(providerAddress, jobIdUint, {value: amountUint, gasLimit: suggestedGasDeposit});
       
       } else {
 
