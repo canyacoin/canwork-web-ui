@@ -264,6 +264,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     
     // we are bsc connected, go on
     const jobId = this.job.id
+    console.log('releasing jobId '+jobId);
     let result = await this.bscService.release(jobId);
     if (!result.err) {
       

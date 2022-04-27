@@ -36,6 +36,7 @@ const CHAIN_NAME = environment.bsc.chainName
 const RPC_URLS = environment.bsc.rpcUrls
 const BLOCK_EXPLORER_URLS = environment.bsc.blockExplorerUrls
 const CURRENCY = { name: "BNB", symbol: "bnb", decimals: 18 }
+const JOBID_DECIMALS = 18; // TODO set it to 0 after test
 const GAS = { decimals: 8 }
 const PANCAKE_OUTPUT_DECIMALS =  environment.bsc.pancake.decimals; // todo verify why is 16 and not 18
 
@@ -875,7 +876,7 @@ export class BscService {
       const truncatedAmount = amount.toFixed(decimals); // this is already a string
 
       const amountUint = ethers.utils.parseUnits(truncatedAmount, decimals);
-      const jobIdUint = ethers.utils.parseUnits(jobIdBigint, decimals);
+      const jobIdUint = ethers.utils.parseUnits(jobIdBigint, JOBID_DECIMALS);
 
       let escrowAddress = environment.bsc.escrow.address;
       if (this.getCurrentApp() === WalletApp.WalletConnectBsc) escrowAddress = environment.bsc.escrow.mainNetAddress;
@@ -943,7 +944,7 @@ export class BscService {
       const jobIdBigint = this.hexToBigint(strippedJobId); // this is already a string
       
       //const jobIdUint = this.hexToBigint(strippedJobId);
-      const jobIdUint = ethers.utils.parseUnits(jobIdBigint, decimals);      
+      const jobIdUint = ethers.utils.parseUnits(jobIdBigint, JOBID_DECIMALS);      
 
       
       const truncatedAmount = amount.toFixed(decimals); // this is already a string      
@@ -1004,7 +1005,11 @@ export class BscService {
       if (strippedJobId.length >= 32) strippedJobId = strippedJobId.substr(0, 31);
       
       //const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
-      const jobIdUint = this.hexToBigint(strippedJobId);
+      const jobIdBigint = this.hexToBigint(strippedJobId); // this is already a string
+      
+      
+      //const jobIdUint = this.hexToBigint(strippedJobId);
+      const jobIdUint = ethers.utils.parseUnits(jobIdBigint, JOBID_DECIMALS);      
     
       let escrowAddress = environment.bsc.escrow.address;
       if (this.getCurrentApp() === WalletApp.WalletConnectBsc) escrowAddress = environment.bsc.escrow.mainNetAddress;
