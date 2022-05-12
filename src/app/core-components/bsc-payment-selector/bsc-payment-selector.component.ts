@@ -103,6 +103,9 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
             
             this.loading = false; // finish loading all
             
+            // retrieve quotes
+            await this.bscService.getCoingeckoQuotes();
+            // todo use it to calculate equivalent after balances are loaded
             
             // one by one, not blocking ui
             await this.checkUsdBalances()

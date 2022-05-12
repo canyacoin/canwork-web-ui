@@ -79,6 +79,8 @@ export interface EventBsc {
   walletApp?: WalletApp
 }
 
+const COINGECKO_API_URL = 'https://api.coingecko.com/api/v3/simple/price';
+
 /*
 generic token Human-Readable ABI
 https://docs.ethers.io/v5/api/utils/abi/formats/#abi-formats--human-readable-abi
@@ -623,6 +625,69 @@ export class BscService {
       console.log('getEscrowAllowance error for token '+token+': '+this.errMsg(e)  );
       return -1;
     }    
+  }
+  
+  async getCoingeckoQuotes() {
+    let quoteListRaw = [
+      'binancecoin',
+      'binance-usd' // first two, always
+    ]
+    
+    // retrieve other coins from env
+    if (environment.bsc.hasOwnProperty("assetPaths")) for (let asset in environment.bsc.assetPaths) {
+      if (environment.bsc.assetPaths.hasOwnProperty(asset)) {
+        if (environment.bsc.assetPaths[asset].hasOwnProperty('coingecko')) quoteListRaw.push(environment.bsc.assetPaths[asset].coingecko);       
+      }
+    }
+    // remove duplicates (i.e. binance-usd, that's always required)
+    let quoteList = quoteListRaw.filter(function(item, pos) {
+        return quoteListRaw.indexOf(item) == pos;
+    })
+    
+    const quotesUrl = `${COINGECKO_API_URL}?ids=${quoteList.toString()}&vs_currencies=usd`
+    console.log(quotesUrl);
+    
+    try {
+      const coingeckoResponse = await (await fetch(quotesUrl)).json()
+      if (coingeckoResponse && coingeckoResponse.error) throw new Error(coingeckoResponse.error)
+      
+      console.log(coingeckoResponse);
+      
+      let result = {}
+      let busdValue = 1; // reference value, we'll convert result to this one 
+      if (coingeckoResponse.hasOwnProperty('binance-usd')) busdValue = coingeckoResponse['binance-usd'].usd;
+      // usd value of binance usd
+      
+      // map back found values to an useful hash
+      for (let quote in coingeckoResponse) {
+        if (coingeckoResponse.hasOwnProperty(quote)) {
+          // search into env
+          if (environment.bsc.hasOwnProperty("assetPaths")) for (let asset in environment.bsc.assetPaths) {
+            if (environment.bsc.assetPaths.hasOwnProperty(asset)) {
+              if (environment.bsc.assetPaths[asset].coingecko == quote) {
+                result[asset] = coingeckoResponse[quote].usd / busdValue;
+                break;
+              }
+            }
+          }          
+          
+        }
+      }
+      
+      console.log(result);  
+      return result; // hash of busd values
+      
+
+    } catch (err) {
+      this.toastr.warning(this.errMsg(err), 'Error retrieving quotes list', { timeOut: 5000, })
+      console.log(err)
+      console.log(`Quotes list error: ${this.errMsg(err)}`);
+
+      return {};
+
+    }
+
+    
   }
 
   async getBusdValue(amountIn, token) {
