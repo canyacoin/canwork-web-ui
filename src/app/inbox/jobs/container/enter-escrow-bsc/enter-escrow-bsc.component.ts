@@ -37,6 +37,8 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
   noProviderAddress: boolean = false
   isApproved = false
   approvalNeeded = true
+  isApproving = false
+  balanceIssue = false
   
   
   
@@ -122,10 +124,8 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
     
     // now calculate exact needed allowance using getAmountsIn
     
-    let allowance = await this.bscService.getTokenAmount(this.jobBudgetUsd, this.bscAssetData.token)
+    let allowance = parseFloat(await this.bscService.getTokenAmount(this.jobBudgetUsd, this.bscAssetData.token))
     console.log(allowance);
-    
-    //const jobBudgetAtomic = Math.ceil(jobBudgetAsset * 1e8)
     
 
     let paymentSummary = {
@@ -168,6 +168,8 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
       this.showBalance = true; // enable balance show
       if (allowance > parseFloat(balance.free)) {
         this.depositError = 'Insufficient amount available';
+        this.balanceIssue = true
+        
       } else {
         // we have enough, now check contract allowance if not bnb
         if (this.bscAssetData.token == 'BNB') {
@@ -190,12 +192,33 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
 
     } else {
       this.depositError = 'Error calculating available balance';
+      this.balanceIssue = true
     }
     
     console.log(this.bscPayOptions)
     this.isEscrowLoading = false;
 
     
+  }
+  
+  async approveAsset() {
+    if (this.isApproving) return; // avoid double click
+    
+    this.isApproving = true;
+    console.log('Needed allowance: '+ this.bscPayOptions.paymentSummary.allowance);
+    
+    // we have to ask allowance increase, so it's better to add 10% already to handle market fluctuations if trying payment more times
+    const safetyAllowance = this.bscPayOptions.paymentSummary.allowance * 1.1;
+    
+    console.log('Safety allowance (+10%): '+safetyAllowance);
+    
+    let result = await this.bscService.approve(this.bscAssetData.token, safetyAllowance);
+    // check result and approve into controller state
+    if (!result.err) {
+      this.isApproved = true;
+    }    
+    
+    this.isApproving = false;
   }
 
   async finalizeBscPay() {
