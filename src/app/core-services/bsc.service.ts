@@ -112,10 +112,9 @@ const tokenAbi = [
 const pancakeRouterAbi = [
   // converts token value
   "function getAmountsOut(uint amountIn, address[] calldata path) external view returns (uint[] memory amounts)",
-/*
-  function getAmountsOut(uint amountIn, address[] calldata path) external view returns (uint[] memory amounts);
 
-*/
+  "function getAmountsIn(uint amountOut, address[] calldata path) external view returns (uint[] memory amounts)",
+
   "function WETH() external pure returns (address)"
 ] 
 
@@ -645,13 +644,11 @@ export class BscService {
     })
     
     const quotesUrl = `${COINGECKO_API_URL}?ids=${quoteList.toString()}&vs_currencies=usd`
-    console.log(quotesUrl);
     
     try {
       const coingeckoResponse = await (await fetch(quotesUrl)).json()
       if (coingeckoResponse && coingeckoResponse.error) throw new Error(coingeckoResponse.error)
       
-      console.log(coingeckoResponse);
       
       let result = {}
       let busdValue = 1; // reference value, we'll convert result to this one 
@@ -661,20 +658,24 @@ export class BscService {
       // map back found values to an useful hash
       for (let quote in coingeckoResponse) {
         if (coingeckoResponse.hasOwnProperty(quote)) {
-          // search into env
-          if (environment.bsc.hasOwnProperty("assetPaths")) for (let asset in environment.bsc.assetPaths) {
-            if (environment.bsc.assetPaths.hasOwnProperty(asset)) {
-              if (environment.bsc.assetPaths[asset].coingecko == quote) {
-                result[asset] = coingeckoResponse[quote].usd / busdValue;
-                break;
+          if (quote == 'binancecoin') {
+            result['BNB'] = coingeckoResponse[quote].usd / busdValue;
+            
+          } else {
+            // search bep20 token into env
+            if (environment.bsc.hasOwnProperty("assetPaths")) for (let asset in environment.bsc.assetPaths) {
+              if (environment.bsc.assetPaths.hasOwnProperty(asset)) {
+                if (environment.bsc.assetPaths[asset].coingecko == quote) {
+                  result[asset] = coingeckoResponse[quote].usd / busdValue;
+                  break;
+                }
               }
             }
-          }          
+          }
           
         }
       }
       
-      console.log(result);  
       return result; // hash of busd values
       
 
@@ -687,6 +688,62 @@ export class BscService {
 
     }
 
+    
+  }
+
+  // return needed token amount to get busdValue (opposite of getBusdValue)
+  async getTokenAmount(busdValue, token) {
+    try {
+      
+      let busdAddress = environment.bsc.pancake.busd;
+      let tokenAddress;
+
+      let pancakeRouterAddress = environment.bsc.pancake.router;
+      if (this.getCurrentApp() === WalletApp.WalletConnectBsc) {
+        busdAddress = environment.bsc.pancake.mainNetBusd;
+        pancakeRouterAddress = environment.bsc.pancake.mainNetRouter;
+      }
+      const pancakeRouterContract = new ethers.Contract(pancakeRouterAddress, pancakeRouterAbi, this.provider)
+      let decimals = CURRENCY.decimals;
+
+      if (token == 'BNB') {
+        /* 
+          let's consider as wBnb to permit busd conversion
+          we get official wbnb address from pancake router WETH function
+        */
+        const wBnbAddress = await pancakeRouterContract.WETH();
+        tokenAddress = wBnbAddress; 
+        
+      } else {
+
+        tokenAddress = environment.bsc.assets[token];
+        if (environment.bsc.assetsDecimals && environment.bsc.assetsDecimals[token]) decimals = environment.bsc.assetsDecimals[token];
+        
+      }
+      
+      
+      if (tokenAddress.toLowerCase() == busdAddress.toLowerCase()) {
+        console.log('busd same token address' );
+        
+        return busdValue;
+      }
+      // retrieve path from config if mapped
+      let path = [tokenAddress, environment.bsc.pancake.busd]; // default
+      if (environment.bsc.hasOwnProperty("assetPaths") && environment.bsc.assetPaths.hasOwnProperty(token)) {
+        path = this.splitConfig(environment.bsc.assetPaths[token].pathAddresses);
+      }    
+      const amountsIn = await pancakeRouterContract.getAmountsIn(
+        ethers.utils.parseUnits(busdValue.toString(), decimals),
+        path
+      );
+      const amountIn = ethers.utils.formatUnits(amountsIn[0], PANCAKE_OUTPUT_DECIMALS);
+      return amountIn;
+    
+    } catch (e) {
+      console.log('Amount calculate error: '+this.errMsg(e)  );
+      return -1;
+    }
+    return -1;    
     
   }
 

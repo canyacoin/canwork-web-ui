@@ -51,9 +51,9 @@
   
   <div class="card px-30 py-30 row mh-250">
     <div *ngIf="bscPayOptions && bscPayOptions.paymentSummary" class="container text-center">
-      <div *ngIf="showBalance && bscPayOptions.paymentSummary.balance.free < bscPayOptions.paymentSummary.allowance" class="alert alert-warning">
+      <!--<div *ngIf="showBalance && bscPayOptions.paymentSummary.balance.free < bscPayOptions.paymentSummary.allowance" class="alert alert-warning">
         <i class="fas fa-exclamation-triangle"></i> Deposit error: 
-      </div>
+      </div>-->
       <div *ngIf="depositError" class="alert alert-warning">
         <h4><i class="fas fa-exclamation-triangle"></i> Deposit error</h4>
         <p> {{ depositError }}</p>
@@ -177,8 +177,11 @@
             height="36px"
             alt="Loader"
           />
-          <button class="btn btn-primary" [disabled]="isEscrowLoading" (click)="finalizeBscPay()">
-            NEXT
+          <button *ngIf="approvalNeeded" class="btn btn-primary mr-5" [disabled]="isEscrowLoading || depositError || isApproved" (click)="approveAsset()">
+            APPROVE
+          </button>
+          <button class="btn btn-primary" [disabled]="isEscrowLoading || depositError || !isApproved" (click)="finalizeBscPay()">
+            DEPOSIT
           </button>
         </div>
       </div>
