@@ -35,6 +35,10 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
   showSuccess = false
   providerAddress: string
   noProviderAddress: boolean = false
+  isApproved = false
+  approvalNeeded = true
+  isApproving = false
+  balanceIssue = false
   
   
   
@@ -114,9 +118,15 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
 
     // Calculate jobBudget in selected BEP asset
     //const jobBudgetAsset = this.jobBudgetUsd / this.bscAssetData.usdPrice
-    let allowance = this.jobBudgetUsd * parseFloat(this.bscAssetData.free) / this.bscAssetData.busdValue; // how much we need
     
-    //const jobBudgetAtomic = Math.ceil(jobBudgetAsset * 1e8)
+    
+    //let allowance = this.jobBudgetUsd * parseFloat(this.bscAssetData.free) / this.bscAssetData.busdValue; // how much we need
+    
+    // now calculate exact needed allowance using getAmountsIn
+    
+    let allowance = parseFloat(await this.bscService.getTokenAmount(this.jobBudgetUsd, this.bscAssetData.token))
+    console.log(allowance);
+    
 
     let paymentSummary = {
       asset: this.bscAssetData,
@@ -132,13 +142,14 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
     }
 
 
-
     this.bscPayOptions = {
       successText: 'Escrow success, job started!',
       paymentSummary: paymentSummary,
       complete: onComplete,
     }
-        
+    
+
+    // get updated availble balance
     let balance;
     if (this.bscAssetData.token == 'BNB') {
       balance = {
@@ -150,18 +161,64 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
       }
       if (balance.free == -1) balance.err = 'Invalid BNB balance';
     } else balance = await this.bscService.getBalance(this.bscAssetData.token);
-    
+    console.log(balance)
     
     if (!balance.err) {
       this.bscPayOptions.paymentSummary.balance = balance
       this.showBalance = true; // enable balance show
+      if (allowance > parseFloat(balance.free)) {
+        this.depositError = 'Insufficient amount available';
+        this.balanceIssue = true
+        
+      } else {
+        // we have enough, now check contract allowance if not bnb
+        if (this.bscAssetData.token == 'BNB') {
+          this.approvalNeeded = false;
+          this.isApproved = true;
+        } else {
+          this.approvalNeeded = true;
+          this.isApproved = false;
+          
+          // check allowance
+          let currentAllowance = await this.bscService.getEscrowAllowance(this.bscAssetData.token);
+          console.log(this.bscAssetData.token + ' currentAllowance ' + currentAllowance + ', needed ' +allowance);
+          
+          if (currentAllowance >= allowance) this.isApproved = true;
+          
+                    
+        }
+        
+      }
 
+    } else {
+      this.depositError = 'Error calculating available balance';
+      this.balanceIssue = true
     }
     
     console.log(this.bscPayOptions)
     this.isEscrowLoading = false;
 
     
+  }
+  
+  async approveAsset() {
+    if (this.isApproving) return; // avoid double click
+    
+    this.isApproving = true;
+    console.log('Needed allowance: '+ this.bscPayOptions.paymentSummary.allowance);
+    
+    // we have to ask allowance increase, so it's better to add 10% already to handle market fluctuations if trying payment more times
+    const safetyAllowance = this.bscPayOptions.paymentSummary.allowance * 1.1;
+    
+    console.log('Safety allowance (+10%): '+safetyAllowance);
+    
+    let result = await this.bscService.approve(this.bscAssetData.token, safetyAllowance);
+    // check result and approve into controller state
+    if (!result.err) {
+      this.isApproved = true;
+    }    
+    
+    this.isApproving = false;
   }
 
   async finalizeBscPay() {

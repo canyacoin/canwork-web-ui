@@ -51,10 +51,10 @@
   
   <div class="card px-30 py-30 row mh-250">
     <div *ngIf="bscPayOptions && bscPayOptions.paymentSummary" class="container text-center">
-      <div *ngIf="showBalance && bscPayOptions.paymentSummary.balance.free < bscPayOptions.paymentSummary.allowance" class="alert alert-warning">
+      <!--<div *ngIf="showBalance && bscPayOptions.paymentSummary.balance.free < bscPayOptions.paymentSummary.allowance" class="alert alert-warning">
         <i class="fas fa-exclamation-triangle"></i> Deposit error: 
-      </div>
-      <div *ngIf="depositError" class="alert alert-warning">
+      </div>-->
+      <div *ngIf="depositError && !balanceIssue" class="alert alert-warning">
         <h4><i class="fas fa-exclamation-triangle"></i> Deposit error</h4>
         <p> {{ depositError }}</p>
         <p class="text-center" *ngIf="!isEscrowLoading">
@@ -67,6 +67,16 @@
         </p>
         
       </div>
+      <div *ngIf="depositError && balanceIssue" class="alert alert-warning">
+        <h4><i class="fas fa-exclamation-triangle"></i> Deposit error, balance issue</h4>
+        <p> {{ depositError }}</p>
+        <p class="text-center" *ngIf="!isEscrowLoading">
+          <a class="btn btn-secondary mr-2" [routerLink]="['/inbox/job', this.job.id]"
+            >Return</a
+          > 
+        </p>
+        
+      </div>      
       <div class="row mb-15">
         <div class="col-8 text-left">
           <i class="fas fa-shopping-cart"></i> Your order summary
@@ -172,13 +182,16 @@
       <div class="row" *ngIf="!showSuccess">
         <div class="col-12 text-right">
           <img
-            *ngIf="isEscrowLoading"
+            *ngIf="isEscrowLoading || isApproving"
             src="assets/img/loader.svg"
             height="36px"
             alt="Loader"
           />
-          <button class="btn btn-primary" [disabled]="isEscrowLoading" (click)="finalizeBscPay()">
-            NEXT
+          <button *ngIf="approvalNeeded" class="btn btn-primary mr-5" [disabled]="isEscrowLoading || depositError || isApproved || isApproving" (click)="approveAsset()">
+            APPROVE
+          </button>
+          <button class="btn btn-primary" [disabled]="isEscrowLoading || depositError || !isApproved" (click)="finalizeBscPay()">
+            DEPOSIT
           </button>
         </div>
       </div>

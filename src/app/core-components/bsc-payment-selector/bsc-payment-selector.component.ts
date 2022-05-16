@@ -32,6 +32,7 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
   loading = true
   firstLoaded = false
   chain = BepChain.SmartChain
+  quotes = {}
   
   
 
@@ -103,11 +104,14 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
             
             this.loading = false; // finish loading all
             
+            // retrieve quotes
+            this.quotes = await this.bscService.getCoingeckoQuotes();
+            // we'll use it to calculate equivalent after balances are loaded
             
             // one by one, not blocking ui
             await this.checkUsdBalances()
-            await this.estimateGasApprove()
-            await this.estimateGasDeposit()
+            //await this.estimateGasApprove()
+            //await this.estimateGasDeposit()
           
           break
           case EventTypeBsc.Disconnect:
@@ -135,17 +139,21 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
   }
   
   async checkUsdBalances() {
-
+    console.log(this.quotes)
     for (let i=0; i<this.assets.length; i++) {
-      if (this.assets[i].converting) {
-        let busdEquivalent = await this.bscService.getBusdValue(
+      if (this.assets[i].converting && this.quotes.hasOwnProperty(this.assets[i].token)) {
+        /*let busdEquivalent = await this.bscService.getBusdValue(
           parseFloat(this.assets[i].free),
           this.assets[i].token
-        );
+        );*/
+        let busdEquivalent =  parseFloat(this.assets[i].free) * this.quotes[this.assets[i].token];
         
         if (busdEquivalent > 0) {
-          let busdValue = parseFloat(busdEquivalent.toString());
-          if (busdValue >= this.jobBudgetUsd) {
+            let busdValue = parseFloat(busdEquivalent.toString());
+          // if (busdValue >= this.jobBudgetUsd) { // make this not blocking
+            if (busdValue < this.jobBudgetUsd) this.assets[i].seemsNotEnough = true;
+              else this.assets[i].seemsNotEnough = false;
+                          
             this.assets[i].hasEnough = true;
             this.assets[i].isApproved = false; // first step is approve
             this.assets[i].gasApprove = '';
@@ -154,7 +162,7 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
             this.assets[i].freeUsd = "$ "+ busdValue.toFixed(2);
 
             // calculate and save needed allowance
-            let allowance = this.jobBudgetUsd * parseFloat(this.assets[i].free) / this.assets[i].busdValue; // how much we need
+            /*let allowance = this.jobBudgetUsd * parseFloat(this.assets[i].free) / this.assets[i].busdValue; // how much we need
             this.assets[i].allowance = allowance;
 
 
@@ -169,9 +177,9 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
               
               if (currentAllowance >= allowance) this.assets[i].isApproved = true;
               
-            }
+            }*/
             
-          }
+          //}
           
         } else {
           this.assets[i].freeUsd = 'na';          
@@ -183,7 +191,7 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
     
   }
 
-  async estimateGasApprove() {
+  /*async estimateGasApprove() {
     for (let i=0; i<this.assets.length; i++) {
       if (this.assets[i].token == 'BNB') { // BNB doesn't need to be approved
         if (this.assets[i].hasEnough) this.assets[i].isApproved = true;
@@ -211,7 +219,7 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
         
       }
     }
-  }
+  }*/
 
   async approve(asset) {
     if (!asset.converting && asset.hasEnough && !asset.isApproved) {

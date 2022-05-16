@@ -41,8 +41,8 @@
                         <th scope="col"></th>
                         <th scope="col">Symbol</th>
                         <th scope="col">Free</th>
-                        <th scope="col">Value (USD)</th>
-                        <th scope="col">Pay</th>
+                        <th scope="col">Value (BUSD)</th>
+                        <th scope="col"><!--Pay--></th>
                       </tr>
                     </thead>
                     <tbody *ngIf="assets.length > 0">
@@ -59,31 +59,20 @@
                         <td *ngIf="assets[i].converting">
                           <img src="assets/img/loader.svg" height="24px" alt="converting" />
                         </td>
-                        <td *ngIf="!assets[i].converting">{{ assets[i].freeUsd }}</td>
+                        <td *ngIf="!assets[i].converting" [class.red-text] = "assets[i].seemsNotEnough" [class.green-text] = "assets[i].hasEnough && !assets[i].seemsNotEnough">{{ assets[i].freeUsd }}</td>
                         <td *ngIf="assets[i].converting" colspan="2">
-                        </td>                        
-                        <td *ngIf="!assets[i].converting && assets[i].hasEnough" class="no-h-padding">
-                          <button
-                            class="btn btn-primary  my-1"
-                            (click)="approve(assets[i])"
-                            [disabled] = "assets[i].isApproved"
-                          >
-                            Approve
-                          </button>
-                          <small *ngIf="!assets[i].isApproved" class="ml-1">{{ assets[i].gasApprove }}</small>
                         </td>
-                        <td *ngIf="!assets[i].converting && assets[i].hasEnough" class="no-h-padding" style="white-space: nowrap;">
+                        <td *ngIf="!assets[i].converting && assets[i].hasEnough">
                           <button
                             class="btn btn-primary  my-1"
                             (click)="paymentSelected(assets[i])"
-                            [disabled] = "!assets[i].isApproved"
                           >
-                            Deposit
+                            Select
                           </button>
-                          <small style="vertical-align: bottom;" class="ml-1" [innerHTML]="assets[i].gasDeposit"></small>
-                        </td>
+                        </td>                        
+
                         <td *ngIf="!assets[i].converting && !assets[i].hasEnough" colspan="2">
-                          Insufficient
+                          
                         </td>
                       </tr>
                     </tbody>
