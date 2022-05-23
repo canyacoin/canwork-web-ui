@@ -48,7 +48,7 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
           return
         }
         switch (event.type) {
-          case EventTypeBsc.ConnectSuccess:          
+          case EventTypeBsc.ConnectSuccess:
           case EventTypeBsc.AddressFound:
             this.chain = BepChain.SmartChain
             this.address = event.details.address
@@ -59,29 +59,26 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
             this.balances.next(sortBy(prop('symbol'))(await this.bscService.getBalances()))
             */
             this.balances.next(await this.bscService.getBalances())
-            
-            
+
             break
           case EventTypeBsc.Disconnect:
-          console.log('disconnect event')
+            console.log('disconnect event')
             this.address = false
             this.balances.next([])
-            this.chain = null            
+            this.chain = null
             break
           case EventTypeBsc.ConnectConfirmationRequired:
-            console.log("wallet-bnb-assets EventTypeBsc.ConnectConfirmationRequired")
+            console.log(
+              'wallet-bnb-assets EventTypeBsc.ConnectConfirmationRequired'
+            )
             // disconnect and reconnect, more safe
             this.address = false
             this.balances.next([])
-            this.chain = null            
-            
-            break            
-          
-            
+            this.chain = null
+
+            break
         }
-
       })
-
 
     this.binanceService.events$
       .pipe(takeUntil(this.destroy$)) // unsubscribe on destroy
@@ -94,9 +91,9 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
         switch (event.type) {
           case EventType.ConnectSuccess:
           case EventType.Update:
-            this.chain = BepChain.Binance         
+            this.chain = BepChain.Binance
             this.address = event.details.address
-            this.explorer = environment.binance.explorer            
+            this.explorer = environment.binance.explorer
             const resp = await this.binanceService.client.getAccount(
               this.address
             )
@@ -109,7 +106,7 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
             break
           case EventType.Disconnect:
             this.address = false
-            this.balances.next(null)            
+            this.balances.next(null)
             this.chain = null
             break
         }

@@ -13,15 +13,15 @@
       width="150"
     />
     <h2 *ngIf="!noProviderAddress">Unauthorized</h2>
-    <p  *ngIf="!noProviderAddress" class="lead fw-400">
+    <p *ngIf="!noProviderAddress" class="lead fw-400">
       It seems like you're trying to initiate payment for this job even though
       it's already paid, or is processing its payment.
     </p>
     <h2 *ngIf="noProviderAddress">No provider address</h2>
-    <p  *ngIf="noProviderAddress" class="lead fw-400">
-      It seems like provider hasn't configured a Binance Smart Chain Address.<br>
+    <p *ngIf="noProviderAddress" class="lead fw-400">
+      It seems like provider hasn't configured a Binance Smart Chain Address.<br />
       Please inform the provider.
-    </p>    
+    </p>
     <p class="text-center">
       <a class="btn btn-secondary" [routerLink]="['/inbox/job', this.job.id]"
         >Return</a
@@ -47,36 +47,44 @@
   >
     <img src="assets/img/loader.svg" height="36px" alt="Loader" />
   </div>
-  
-  
+
   <div class="card px-30 py-30 row mh-250">
-    <div *ngIf="bscPayOptions && bscPayOptions.paymentSummary" class="container text-center">
+    <div
+      *ngIf="bscPayOptions && bscPayOptions.paymentSummary"
+      class="container text-center"
+    >
       <!--<div *ngIf="showBalance && bscPayOptions.paymentSummary.balance.free < bscPayOptions.paymentSummary.allowance" class="alert alert-warning">
         <i class="fas fa-exclamation-triangle"></i> Deposit error: 
       </div>-->
       <div *ngIf="depositError && !balanceIssue" class="alert alert-warning">
         <h4><i class="fas fa-exclamation-triangle"></i> Deposit error</h4>
-        <p> {{ depositError }}</p>
+        <p>{{ depositError }}</p>
         <p class="text-center" *ngIf="!isEscrowLoading">
-          <a class="btn btn-secondary mr-2" [routerLink]="['/inbox/job', this.job.id]"
+          <a
+            class="btn btn-secondary mr-2"
+            [routerLink]="['/inbox/job', this.job.id]"
             >Return</a
-          > or 
-          <button class="btn btn-primary ml-2"(click)="finalizeBscPay()">
+          >
+          or
+          <button class="btn btn-primary ml-2" (click)="finalizeBscPay()">
             RETRY
-          </button>          
+          </button>
         </p>
-        
       </div>
       <div *ngIf="depositError && balanceIssue" class="alert alert-warning">
-        <h4><i class="fas fa-exclamation-triangle"></i> Deposit error, balance issue</h4>
-        <p> {{ depositError }}</p>
+        <h4>
+          <i class="fas fa-exclamation-triangle"></i> Deposit error, balance
+          issue
+        </h4>
+        <p>{{ depositError }}</p>
         <p class="text-center" *ngIf="!isEscrowLoading">
-          <a class="btn btn-secondary mr-2" [routerLink]="['/inbox/job', this.job.id]"
+          <a
+            class="btn btn-secondary mr-2"
+            [routerLink]="['/inbox/job', this.job.id]"
             >Return</a
-          > 
+          >
         </p>
-        
-      </div>      
+      </div>
       <div class="row mb-15">
         <div class="col-8 text-left">
           <i class="fas fa-shopping-cart"></i> Your order summary
@@ -84,7 +92,9 @@
       </div>
       <div class="row">
         <div class="col-8 text-left">
-          <span class="fw-600">{{ bscPayOptions.paymentSummary.job.name }}</span>
+          <span class="fw-600">{{
+            bscPayOptions.paymentSummary.job.name
+          }}</span>
         </div>
         <div class="col-4 text-right">
           <span>
@@ -102,7 +112,9 @@
         </div>
         <div class="col-4 text-right">
           <span>
-            <span class="fw-500 fs-20">$ {{ bscPayOptions.paymentSummary.job.usdValue }} </span>
+            <span class="fw-500 fs-20"
+              >$ {{ bscPayOptions.paymentSummary.job.usdValue }}
+            </span>
             <span class="fs-12">
               USD
             </span>
@@ -113,23 +125,31 @@
         <div class="col-8 text-left">
           <span class="fw-400"
             >1 {{ bscPayOptions.paymentSummary.asset.symbol }} = $
-            {{ bscPayOptions.paymentSummary.assetValue | number: '1.3-3' }}</span
+            {{
+              bscPayOptions.paymentSummary.assetValue | number: '1.3-3'
+            }}</span
           >
         </div>
         <div class="col-4 text-right">
-          <span class="fw-500 fs-20 mr-1">{{ bscPayOptions.paymentSummary.allowance | number: '1.3-5' }}</span>
+          <span class="fw-500 fs-20 mr-1">{{
+            bscPayOptions.paymentSummary.allowance | number: '1.3-5'
+          }}</span>
           <span title="{{ bscPayOptions.paymentSummary.asset.symbol }}">
             <app-dynamic-coin
               [symbol]="bscPayOptions.paymentSummary.asset.symbol"
               [network]="chain"
-              [address]="bscPayOptions.paymentSummary.asset.address"                            
-            ></app-dynamic-coin>            
+              [address]="bscPayOptions.paymentSummary.asset.address"
+            ></app-dynamic-coin>
           </span>
         </div>
       </div>
       <div class="row mt-35" *ngIf="showBalance">
         <div class="col-4 text-left">
-          <span class="fw-600 fs-12">Wallet Balance:</span><span class="fw-500 fs-12 ml-1">{{ bscPayOptions.paymentSummary.balance.free | number: '1.3-5' }} {{ bscPayOptions.paymentSummary.asset.symbol }}</span>
+          <span class="fw-600 fs-12">Wallet Balance:</span
+          ><span class="fw-500 fs-12 ml-1"
+            >{{ bscPayOptions.paymentSummary.balance.free | number: '1.3-5' }}
+            {{ bscPayOptions.paymentSummary.asset.symbol }}</span
+          >
         </div>
       </div>
       <div class="row mt-35" *ngIf="!showBalance">
@@ -138,9 +158,7 @@
         </div>
       </div>
       <div class="row" *ngIf="showSuccess">
-        
         <div class="col-6 col-sm-2 d-flex">
-        
           <div class="svg-box justify-content-center align-self-center">
             <svg class="circular green-stroke">
               <circle
@@ -164,21 +182,24 @@
                 />
               </g>
             </svg>
-          </div>        
-        
+          </div>
         </div>
-        
-        
+
         <div class="col-sm-8 col-12 text-left d-flex">
-          <span class="fw-600 fs-20 justify-content-center align-self-center">{{ bscPayOptions.successText }}</span>
+          <span class="fw-600 fs-20 justify-content-center align-self-center">{{
+            bscPayOptions.successText
+          }}</span>
         </div>
         <div class="col-2 text-right d-flex">
-          <button class="btn btn-primary justify-content-center align-self-center" (click)="bscPayOptions.complete()">
+          <button
+            class="btn btn-primary justify-content-center align-self-center"
+            (click)="bscPayOptions.complete()"
+          >
             DONE
-          </button>        
+          </button>
         </div>
       </div>
-      
+
       <div class="row" *ngIf="!showSuccess">
         <div class="col-12 text-right">
           <img
@@ -187,18 +208,25 @@
             height="36px"
             alt="Loader"
           />
-          <button *ngIf="approvalNeeded" class="btn btn-primary mr-5" [disabled]="isEscrowLoading || depositError || isApproved || isApproving" (click)="approveAsset()">
+          <button
+            *ngIf="approvalNeeded"
+            class="btn btn-primary mr-5"
+            [disabled]="
+              isEscrowLoading || depositError || isApproved || isApproving
+            "
+            (click)="approveAsset()"
+          >
             APPROVE
           </button>
-          <button class="btn btn-primary" [disabled]="isEscrowLoading || depositError || !isApproved" (click)="finalizeBscPay()">
+          <button
+            class="btn btn-primary"
+            [disabled]="isEscrowLoading || depositError || !isApproved"
+            (click)="finalizeBscPay()"
+          >
             DEPOSIT
           </button>
         </div>
       </div>
-
     </div>
-    
   </div>
-  
-
 </div>
