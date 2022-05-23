@@ -12,56 +12,54 @@ import { BscService, EventTypeBsc, BepChain } from '@service/bsc.service'
 import { environment } from '@env/environment'
 import { bepAssetData } from '@canpay-lib/lib' // todo
 
+import { ToastrService } from 'ngx-toastr'
 
 @Component({
   selector: 'app-bsc-payment-selector',
   templateUrl: './bsc-payment-selector.component.html',
-  styleUrls: ['./bsc-payment-selector.component.css']
+  styleUrls: ['./bsc-payment-selector.component.css'],
 })
-export class BscPaymentSelectorComponent extends OnDestroyComponent implements OnInit {
+export class BscPaymentSelectorComponent extends OnDestroyComponent
+  implements OnInit {
   @Input() jobBudgetUsd = 0
   @Input() jobId = ''
   @Input() providerAddress = ''
   @Output() bscAsset: EventEmitter<any> = new EventEmitter()
-  
+
   private assets = []
   address: string | boolean = true
   loading = true
   firstLoaded = false
   chain = BepChain.SmartChain
-  
-  
+  quotes = {}
 
   constructor(
     private location: Location,
     private router: Router,
-    private bscService: BscService
-  ) { 
+    private bscService: BscService,
+    private toastr: ToastrService
+  ) {
     super()
   }
 
-  ngOnInit() {      
-      this.bscService.events$
+  ngOnInit() {
+    this.bscService.events$
       .pipe(take(1)) // unsubscribe on destroy
       .subscribe(async event => {
-        
         if (!event) {
           this.address = false
           return
         }
 
         switch (event.type) {
-          case EventTypeBsc.ConnectSuccess:          
+          case EventTypeBsc.ConnectSuccess:
           case EventTypeBsc.AddressFound:
-          
-          
             this.address = event.details.address
-            
-            this.assets = [];
-            
-            
+
+            this.assets = []
+
             // add BNB
-            let bnbBalance = await this.bscService.getBnbBalance();
+            let bnbBalance = await this.bscService.getBnbBalance()
 
             this.assets.push({
               converting: true,
@@ -72,69 +70,99 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
               address: '',
               free: bnbBalance,
               err: '',
-              token: 'BNB'
-            });
-            
+              token: 'BNB',
+            })
 
             for (let token in environment.bsc.assets) {
               try {
-              
-                let b = await this.bscService.getBalance(token);
+                let b = await this.bscService.getBalance(token)
                 if (!b.err) {
-                  let asset = { converting: true, hasEnough: false, freeUsd: 0, ...b }
-                  if (parseFloat(asset.free) == 0) asset.converting = false; // no conversion with zero value
-                  
-                  this.assets.push(asset);
-                  this.firstLoaded = true // at least one loaded, show grid
+                  let asset = {
+                    converting: true,
+                    hasEnough: false,
+                    freeUsd: 0,
+                    ...b,
+                  }
+                  if (parseFloat(asset.free) == 0) asset.converting = false // no conversion with zero value
 
+                  this.assets.push(asset)
+                  this.firstLoaded = true // at least one loaded, show grid
                 }
-              } catch(err) {
+              } catch (err) {
                 // make this function fail safe even if some contract is not correct or for another chain
-                console.log(`Invalid contract for ${token}: ${environment.bsc.assets[token]}`);
-                console.log(err);
+                console.log(
+                  `Invalid contract for ${token}: ${environment.bsc.assets[token]}`
+                )
+                console.log(err)
               }
-                        
             }
-            
-            this.loading = false; // finish loading all
-            
-            
+
+            this.loading = false // finish loading all
+
+            // retrieve quotes
+            this.quotes = await this.bscService.getCoingeckoQuotes()
+            // we'll use it to calculate equivalent after balances are loaded
+
             // one by one, not blocking ui
             await this.checkUsdBalances()
-            await this.estimateGasApprove()
-            await this.estimateGasDeposit()
-          
-          break
+            //await this.estimateGasApprove()
+            //await this.estimateGasDeposit()
+
+            break
           case EventTypeBsc.Disconnect:
             this.address = false
-          break
-        
-        }
-    
-      })    
-  }
-  
-  async checkUsdBalances() {
+            break
 
-    for (let i=0; i<this.assets.length; i++) {
-      if (this.assets[i].converting) {
-        let busdEquivalent = await this.bscService.getBusdValue(
+          case EventTypeBsc.ConnectConfirmationRequired:
+            console.log(
+              'bsc-payment-selector EventTypeBsc.ConnectConfirmationRequired'
+            )
+            this.address = false
+            const routerStateSnapshot = this.router.routerState.snapshot
+            this.toastr.warning(
+              'Please connect your wallet before going on',
+              '',
+              { timeOut: 2000 }
+            )
+            this.router.navigate(['/wallet-bnb'], {
+              queryParams: { returnUrl: routerStateSnapshot.url },
+            })
+
+            break
+        }
+      })
+  }
+
+  async checkUsdBalances() {
+    console.log(this.quotes)
+    for (let i = 0; i < this.assets.length; i++) {
+      if (
+        this.assets[i].converting &&
+        this.quotes.hasOwnProperty(this.assets[i].token)
+      ) {
+        /*let busdEquivalent = await this.bscService.getBusdValue(
           parseFloat(this.assets[i].free),
           this.assets[i].token
-        );
-        
-        if (busdEquivalent > 0) {
-          let busdValue = parseFloat(busdEquivalent.toString());
-          if (busdValue >= this.jobBudgetUsd) {
-            this.assets[i].hasEnough = true;
-            this.assets[i].isApproved = false; // first step is approve
-            this.assets[i].gasApprove = '';
-            this.assets[i].gasDeposit = '';
-            this.assets[i].busdValue = busdValue;
-            this.assets[i].freeUsd = "$ "+ busdValue.toFixed(2);
+        );*/
+        let busdEquivalent =
+          parseFloat(this.assets[i].free) * this.quotes[this.assets[i].token]
 
-            // calculate and save needed allowance
-            let allowance = this.jobBudgetUsd * parseFloat(this.assets[i].free) / this.assets[i].busdValue; // how much we need
+        if (busdEquivalent > 0) {
+          let busdValue = parseFloat(busdEquivalent.toString())
+          // if (busdValue >= this.jobBudgetUsd) { // make this not blocking
+          if (busdValue < this.jobBudgetUsd)
+            this.assets[i].seemsNotEnough = true
+          else this.assets[i].seemsNotEnough = false
+
+          this.assets[i].hasEnough = true
+          this.assets[i].isApproved = false // first step is approve
+          this.assets[i].gasApprove = ''
+          this.assets[i].gasDeposit = ''
+          this.assets[i].busdValue = busdValue
+          this.assets[i].freeUsd = '$ ' + busdValue.toFixed(2)
+
+          // calculate and save needed allowance
+          /*let allowance = this.jobBudgetUsd * parseFloat(this.assets[i].free) / this.assets[i].busdValue; // how much we need
             this.assets[i].allowance = allowance;
 
 
@@ -149,21 +177,18 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
               
               if (currentAllowance >= allowance) this.assets[i].isApproved = true;
               
-            }
-            
-          }
-          
+            }*/
+
+          //}
         } else {
-          this.assets[i].freeUsd = 'na';          
+          this.assets[i].freeUsd = 'na'
         }
-        this.assets[i].converting = false;
+        this.assets[i].converting = false
       }
-      
     }
-    
   }
 
-  async estimateGasApprove() {
+  /*async estimateGasApprove() {
     for (let i=0; i<this.assets.length; i++) {
       if (this.assets[i].token == 'BNB') { // BNB doesn't need to be approved
         if (this.assets[i].hasEnough) this.assets[i].isApproved = true;
@@ -191,35 +216,42 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
         
       }
     }
-  }
+  }*/
 
   async approve(asset) {
     if (!asset.converting && asset.hasEnough && !asset.isApproved) {
-      console.log('Needed allowance: '+asset.allowance);
+      console.log('Needed allowance: ' + asset.allowance)
       // we have to ask allowance increase, so it's better to add 10% already to handle market fluctuations if trying payment more times
-      const safetyAllowance = asset.allowance * 1.1;
-      
-      console.log('Safety allowance (+10%): '+safetyAllowance);
-      
-      let result = await this.bscService.approve(asset.token, safetyAllowance);
+      const safetyAllowance = asset.allowance * 1.1
+
+      console.log('Safety allowance (+10%): ' + safetyAllowance)
+
+      let result = await this.bscService.approve(asset.token, safetyAllowance)
       // check result and approve into controller state
       if (!result.err) {
-        asset.isApproved = true;
+        asset.isApproved = true
         // estimateGasDeposit after approval
-        let estimateResult = await this.bscService.estimateGasDeposit(asset.token, this.providerAddress, asset.allowance, this.jobId, false);
-        if (parseFloat(estimateResult.gasDeposit) >= 0) asset.gasDeposit = `~${parseFloat(estimateResult.gasDeposit).toFixed(4)}<br>${estimateResult.pathAssets.join("->")}`; 
+        let estimateResult = await this.bscService.estimateGasDeposit(
+          asset.token,
+          this.providerAddress,
+          asset.allowance,
+          this.jobId,
+          false
+        )
+        if (parseFloat(estimateResult.gasDeposit) >= 0)
+          asset.gasDeposit = `~${parseFloat(estimateResult.gasDeposit).toFixed(
+            4
+          )}<br>${estimateResult.pathAssets.join('->')}`
       }
     } else {
-      console.log(asset);
+      console.log(asset)
     }
   }
-  
+
   async paymentSelected(asset) {
-
     this.bscAsset.emit(asset)
+  }
 
-  }  
-  
   goBack() {
     if ((<any>window).history.length > 0) {
       this.location.back()
@@ -227,5 +259,4 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent implements O
       this.router.navigate(['/home'])
     }
   }
-
 }
