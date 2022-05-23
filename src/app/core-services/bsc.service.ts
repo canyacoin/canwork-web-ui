@@ -1212,13 +1212,14 @@ export class BscService {
           { value: amountUint, gasLimit: suggestedGasDeposit }
         )
       } else {
+        // BEP20
         const tokenAddress = environment.bsc.assets[token]
 
         let path = [tokenAddress, environment.bsc.pancake.busd] // default
         // unless we have an explicit path mapped into config:
         if (
           environment.bsc.hasOwnProperty('assetPaths') &&
-          environment.bsc.assetPaths.hasOwnProperty('token')
+          environment.bsc.assetPaths.hasOwnProperty(token)
         ) {
           path = this.splitConfig(
             environment.bsc.assetPaths[token].pathAddresses
