@@ -402,6 +402,6 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   getTxLink(txHash: string) {
-    return `${environment.contracts.etherscan}/tx/${txHash}`
+    return `${environment.bsc.blockExplorerUrls}/tx/${txHash}`
   }
 }
