@@ -193,12 +193,12 @@
               [hidden]="!canBid"
               data-toggle="modal"
               data-target="#bidModal"
-              [disabled]="!currentUser.bnbAddress"
+              [disabled]="!currentUser.bscAddress"
             >
               PLACE BID
             </button>
             <i *ngIf="!canBid">You've posted your bid.</i>
-            <i *ngIf="!currentUser.bnbAddress"
+            <i *ngIf="!currentUser.bscAddress"
               >To make a bid fill the field "Binance Address" in the
               <a href="/profile?editProfile=1">profile</a></i
             >
