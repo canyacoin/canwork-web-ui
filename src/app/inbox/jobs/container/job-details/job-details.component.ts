@@ -369,7 +369,12 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   }  
 
   getTxColor(tx: Transaction) {
-    return tx.success ? 'success' : tx.failure ? 'danger' : 'warning'
+    return 'success'; // default
+    /* 
+    todo: there are failure scenarios that we should handle?
+    if so we have to handle into bsc service and handle tx timeout, cause receipt will not arrive
+    */
+    // return tx.success ? 'success' : tx.failure ? 'danger' : 'warning' // obsolete
   }
 
   toggleDescription() {
