@@ -270,6 +270,13 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     console.log('releasing jobId ' + jobId)
     let result = await this.bscService.release(jobId)
     if (!result.err) {
+      // save tx immediately
+      let tx = await this.transactionService.createTransaction(
+        `Release funds`,
+        result.transactionHash,
+        jobId
+      );      
+      
       const action = new IJobAction(ActionType.acceptFinish, UserType.client)
       this.job.state = JobState.complete
       await this.jobService.handleJobAction(this.job, action)
@@ -350,13 +357,24 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       ? this.job['otherParty'].name
       : ''
   }
-
+  /*
+  // Obsolete, bepescrow no more active, non transactions are saved for bep2 chain
   getTxLink(txHash: string) {
     return `${environment.binance.explorer}/tx/${txHash}`
   }
+  */
+  
+  getTxLink(txHash: string) {
+    return `${environment.bsc.blockExplorerUrls[0]}/tx/${txHash}`
+  }  
 
   getTxColor(tx: Transaction) {
-    return tx.success ? 'success' : tx.failure ? 'danger' : 'warning'
+    return 'success'; // default
+    /* 
+    todo: there are failure scenarios that we should handle?
+    if so we have to handle into bsc service and handle tx timeout, cause receipt will not arrive
+    */
+    // return tx.success ? 'success' : tx.failure ? 'danger' : 'warning' // obsolete
   }
 
   toggleDescription() {
