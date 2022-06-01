@@ -881,7 +881,7 @@ export class BscService {
   }
 
   async approve(token, allowance) {
-    let approveResult = { err: '' }
+    let approveResult = { err: '', transactionHash: '' }
 
     try {
       await this.checkSigner()
@@ -947,7 +947,6 @@ export class BscService {
         }      
       */
       const receipt = await transaction.wait()
-      // todo perhaps we can save this receipt or tx number to db  and add a timeout
 
       /*
       {
@@ -1004,8 +1003,9 @@ export class BscService {
           ]
       }      
       */
-
-      // success, nothing to add to result
+      approveResult.transactionHash = receipt.transactionHash;
+      // success, add transactionHash result
+      
     } catch (err) {
       console.log(err)
       this.toastr.warning(this.errMsg(err), 'Error approving ' + token, {
@@ -1139,7 +1139,7 @@ export class BscService {
   async deposit(token, providerAddress, amount, jobId) {
     console.log('deposit', token, providerAddress, amount, jobId) // debug
 
-    let depositResult = { err: '' }
+    let depositResult = { err: '', transactionHash: '' }
 
     try {
       await this.checkSigner()
@@ -1236,7 +1236,7 @@ export class BscService {
       }
       // wait for transaction confirm
       const receipt = await transaction.wait()
-      // todo perhaps we can save this receipt or tx number to db and add a timeout
+      depositResult.transactionHash = receipt.transactionHash;
 
       // success, nothing to add to result
     } catch (err) {
@@ -1252,7 +1252,7 @@ export class BscService {
   }
 
   async release(jobId) {
-    let releaseResult = { err: '' }
+    let releaseResult = { err: '', transactionHash: '' }
     try {
       await this.checkSigner()
 
@@ -1280,8 +1280,8 @@ export class BscService {
 
       // wait for transaction confirm
       const receipt = await transaction.wait()
-      // todo perhaps we can save this receipt or tx number to db and add a timeout
-
+      releaseResult.transactionHash = receipt.transactionHash;
+      
       // success, nothing to add to result
     } catch (err) {
       console.log(err)

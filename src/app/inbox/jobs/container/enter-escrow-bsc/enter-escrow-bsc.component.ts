@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http'
 import { JobService } from '@service/job.service'
 import { UserService } from '@service/user.service'
 import { BscService, BepChain } from '@service/bsc.service'
+import { TransactionService } from '@service/transaction.service'
 
 @Component({
   selector: 'app-enter-escrow-bsc',
@@ -44,6 +45,7 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
     private jobService: JobService,
     private userService: UserService,
     private bscService: BscService,
+    private transactionService: TransactionService,
     private toastr: ToastrService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -209,6 +211,7 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
 
     console.log('Safety allowance (+10%): ' + safetyAllowance)
 
+
     let result = await this.bscService.approve(
       this.bscAssetData.token,
       safetyAllowance
@@ -216,6 +219,13 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
     // check result and approve into controller state
     if (!result.err) {
       this.isApproved = true
+      // save tx
+      let tx = await this.transactionService.createTransaction(
+        `Approve ${this.bscAssetData.token}`,
+        result.transactionHash,
+        this.job.id
+      );
+      
     }
 
     this.isApproving = false
@@ -238,6 +248,14 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
     // check result and approve into controller state
 
     if (!result.err) {
+      // save tx immediately
+      let tx = await this.transactionService.createTransaction(
+        `Deposit ${this.bscAssetData.token}`,
+        result.transactionHash,
+        this.job.id
+      );
+      
+      
       const action = new IJobAction(ActionType.enterEscrowBsc, UserType.client)
       this.job.state = JobState.inEscrow
 
