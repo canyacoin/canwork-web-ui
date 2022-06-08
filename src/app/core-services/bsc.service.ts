@@ -118,6 +118,8 @@ const escrowAbi = [
 
   // "function release (bytes32 JOBID) nonpayable" // old contract
   'function releaseAsClient (uint JOBID) nonpayable',
+
+  'function releaseByProvider (uint JOBID) nonpayable',
 ]
 
 /*
@@ -1251,6 +1253,7 @@ export class BscService {
     return depositResult
   }
 
+  // releaseAsClient
   async release(jobId) {
     let releaseResult = { err: '', transactionHash: '' }
     try {
@@ -1294,6 +1297,48 @@ export class BscService {
 
     return releaseResult
   }
+  
+  async releaseByProvider(jobId) {
+    let releaseResult = { err: '', transactionHash: '' }
+    try {
+      await this.checkSigner()
+
+      let strippedJobId = jobId.replace(/-/g, '')
+      if (strippedJobId.length >= 32) strippedJobId = strippedJobId.substr(0, 31)
+
+      const jobIdBigint = this.hexToBigint(strippedJobId);
+
+      const jobIdUint = ethers.utils.parseUnits(jobIdBigint, JOBID_DECIMALS)
+
+      let escrowAddress = environment.bsc.escrow.address
+      if (this.getCurrentApp() === WalletApp.WalletConnectBsc) escrowAddress = environment.bsc.escrow.mainNetAddress
+
+      const escrowContract = new ethers.Contract(
+        escrowAddress,
+        escrowAbi,
+        this.signer
+      )
+
+      const transaction = await escrowContract.releaseByProvider(jobIdUint)
+
+      // wait for transaction confirm
+      const receipt = await transaction.wait()
+      
+      // add transaction hash to result, to enable saving into transaction log
+      releaseResult.transactionHash = receipt.transactionHash;
+      
+      // success, nothing to add to result
+    } catch (err) {
+      console.log(err)
+      this.toastr.warning(this.errMsg(err), 'Error into release ', {
+        timeOut: 5000,
+      })
+      releaseResult.err = this.errMsg(err)
+      console.log(`release ${jobId} error: ${this.errMsg(err)}`)
+    }
+
+    return releaseResult
+  }  
 
   async confirmConnection(address, walletApp) {
     const details = { address }
