@@ -169,6 +169,15 @@ export class JobService {
             await this.saveJobAndNotify(parsedJob, action)
             resolve(true)
             break
+          case ActionType.cancelJobEarly:
+            /* 
+            todo implement bsc releaseByProvider action
+            todo add action to job log
+            todo implement notifications into saveJobAndNotify for this scenario (chatService and jobNotificationService)
+            */
+
+            resolve(true)
+            break;
           case ActionType.counterOffer:
             parsedJob.actionLog.push(action)
             parsedJob.state =

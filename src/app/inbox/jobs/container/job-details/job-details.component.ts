@@ -122,7 +122,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   actionIsDisabled(action: ActionType): boolean {
     switch (action) {
       case ActionType.cancelJobEarly:
-        return true
+        return !(this.job.bscEscrow === true) // enable only if it's a bsc job, we implemented only for it
       case ActionType.review:
         return !this.userCanReview
       default:
@@ -309,7 +309,21 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         }
         break
       case ActionType.cancelJobEarly:
-        //TODO
+        console.log('ActionType.cancelJobEarly')
+        this.dialogService
+          .addDialog(
+            ActionDialogComponent,
+            new ActionDialogOptions({
+              job: this.job,
+              userType: this.currentUserType,
+              actionType: action,
+            })
+          )
+          .subscribe(success => {
+            if (!success) {
+              console.log('Action cancelled')
+            }
+          })        
         break
       case ActionType.dispute:
         console.log('ActionType.dispute')
