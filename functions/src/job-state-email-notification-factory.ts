@@ -234,6 +234,38 @@ class CancelJobNotification extends AEmailNotification {
   }
 }
 
+class CancelJobEarlyNotification extends AEmailNotification {
+  constructor() {
+    super()
+  }
+
+  async interpolateTemplates(
+    db: FirebaseFirestore.Firestore,
+    jobId: string
+  ): Promise<void> {
+    console.log('CancelJobNotification.interpolateTemplates()')
+    try {
+      await super.interpolateTemplates(db, jobId)
+    } catch (error) {
+      console.error(error)
+    }
+
+    const recipient = this.clientData
+    const sender = this.providerData
+    const title = `${sender.name} has cancelled the job early`
+
+    this.emailMessages.push({
+      to: recipient.email,
+      subject: title,
+      title: title,
+      bodyHtml: `
+      Hi ${recipient.name},<br>
+      ${sender.name} has cancelled a job early:
+      "${this.jobData.information.description}".`,
+    })
+    console.log('+ dump emailMessages:', this.emailMessages)
+  }
+}
 // Send notification to client that the requested job has been accepted by the provider
 class JobRequestAcceptedNotification extends AEmailNotification {
   constructor() {
@@ -565,6 +597,7 @@ export function notificationEmail(action: string) {
 
   actions[ActionType.createJob] = ProviderJobRequestNotification
   actions[ActionType.cancelJob] = CancelJobNotification
+  actions[ActionType.cancelJobEarly] = CancelJobEarlyNotification
   actions[ActionType.acceptTerms] = JobRequestAcceptedNotification
   actions[ActionType.declineTerms] = JobRequestDeclinedNotification
   actions[ActionType.counterOffer] = JobRequestCounterOfferNotification

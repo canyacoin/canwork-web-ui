@@ -2,7 +2,7 @@
   // "extends": ["tslint:latest", "tslint-config-prettier"],
   "rulesDirectory": ["tslint-plugin-prettier"],
   "rules": {
-    "prettier": true,
+    "prettier": false,
     // -- Strict errors --
     // These lint rules are likely always a good idea.
     // Force function overloads to be declared together. This ensures readers understand APIs.

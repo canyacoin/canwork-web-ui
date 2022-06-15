@@ -162,7 +162,7 @@ export class ChatService {
   async sendJobMessages(job: Job, action: IJobAction) {
     const channelId: string = [job.clientId, job.providerId].sort().join('-')
     const sender = await this.auth.getCurrentUser()
-    const receiverId =
+    let receiverId =
       action.executedBy === UserType.client ? job.providerId : job.clientId
     let messageText = ''
     switch (action.type) {
@@ -173,6 +173,10 @@ export class ChatService {
         break
       case ActionType.cancelJob:
         messageText = "I've just cancelled a job.. sorry about that!"
+        break
+      case ActionType.cancelJobEarly:
+        messageText = "I've just cancelled a job early.. sorry about that!"
+        receiverId = job.clientId // more precise
         break
       case ActionType.declineTerms:
         messageText =

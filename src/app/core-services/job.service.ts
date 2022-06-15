@@ -5,6 +5,9 @@ import { Upload } from '@class/upload'
 import { User, UserType } from '@class/user'
 import { ChatService } from '@service/chat.service'
 import { BinanceService } from '@service/binance.service'
+import { BscService } from '@service/bsc.service'
+import { TransactionService } from '@service/transaction.service'
+
 import { JobNotificationService } from '@service/job-notification.service'
 import { UserService } from '@service/user.service'
 import {
@@ -26,6 +29,8 @@ export class JobService {
     private chatService: ChatService,
     private reviewService: ReviewService,
     private binanceService: BinanceService,
+    private bscService: BscService,
+    private transactionService: TransactionService,
     private jobNotificationService: JobNotificationService
   ) {
     this.jobsCollection = this.afs.collection<any>('jobs')
@@ -169,6 +174,36 @@ export class JobService {
             await this.saveJobAndNotify(parsedJob, action)
             resolve(true)
             break
+          case ActionType.cancelJobEarly:
+
+            console.log(job.id);
+
+            let result = await this.bscService.releaseByProvider(job.id);
+            
+            if (!result.err) {
+              // add action log
+              parsedJob.actionLog.push(action)
+              parsedJob.state = JobState.cancelledByProvider // state is cancelled, like plain cancel, no more actions possible              
+              // add transaction to job log
+              let tx = await this.transactionService.createTransaction(
+                `Cancel job early`,
+                result.transactionHash,
+                job.id
+              );
+              
+              /* 
+              sync job to firestore and
+              handle notifications into chatService and jobNotificationService
+              */
+              await this.saveJobAndNotify(parsedJob, action)
+              
+              
+              resolve(true)
+              
+            } else {            
+              reject(result.err);
+            }
+            break;
           case ActionType.counterOffer:
             parsedJob.actionLog.push(action)
             parsedJob.state =
@@ -248,7 +283,6 @@ export class JobService {
             await this.saveJobAndNotify(parsedJob, action)
             resolve(true)
             break
-          case ActionType.cancelJobEarly:
           default:
             reject(false)
         }
@@ -261,6 +295,7 @@ export class JobService {
   async saveJobAndNotify(job: Job, action: IJobAction) {
     await this.saveJobFirebase(job)
     await this.chatService.sendJobMessages(job, action)
+    
     await this.jobNotificationService.notify(action.type, job.id)
   }
 
@@ -330,6 +365,7 @@ export class JobService {
       ? [ActionType.acceptFinish, ActionType.addMessage]
       : [ActionType.addMessage]
     actions[JobState.cancelled] = []
+    actions[JobState.cancelledByProvider] = []
     actions[JobState.processingEscrow] = []
     actions[JobState.finishingJob] = []
     actions[JobState.declined] = []
