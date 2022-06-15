@@ -18,6 +18,7 @@ export class StatusIconComponent {
       case JobState.workPendingCompletion:
         return 'info'
       case JobState.cancelled:
+      case JobState.cancelledByProvider:
       case JobState.declined:
       case JobState.inDispute:
       case JobState.draft:
@@ -47,6 +48,8 @@ export class StatusIconComponent {
         return 'Pending completion'
       case JobState.cancelled:
         return 'Cancelled by client'
+      case JobState.cancelledByProvider:
+        return 'Cancelled by provider'
       case JobState.declined:
         return 'Declined by provider'
       case JobState.inDispute:
