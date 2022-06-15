@@ -243,7 +243,7 @@ class CancelJobEarlyNotification extends AEmailNotification {
     db: FirebaseFirestore.Firestore,
     jobId: string
   ): Promise<void> {
-    console.log('CancelJobNotification.interpolateTemplates()')
+    console.log('CancelJobEarlyNotification.interpolateTemplates()')
     try {
       await super.interpolateTemplates(db, jobId)
     } catch (error) {

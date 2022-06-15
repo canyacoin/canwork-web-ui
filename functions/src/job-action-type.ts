@@ -1,6 +1,7 @@
 export enum ActionType {
   createJob = 'Create job', // notifies provider
   cancelJob = 'Cancel job', // depends on caller
+  cancelJobEarly = 'Cancel job early', // notifies client
   declineTerms = 'Decline terms', // both sides
   counterOffer = 'Counter offer', // both sides
   acceptTerms = 'Accept terms', // both sides
