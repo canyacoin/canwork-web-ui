@@ -44,6 +44,8 @@ export class Job {
         return currentUserType === UserType.client
           ? 'You cancelled this job.'
           : 'This job has been cancelled by the client'
+      case JobState.cancelledByProvider:
+        return 'This job has been cancelled by the provider'
       case JobState.declined:
         return 'This job offer was turned down by the provider'
       case JobState.inDispute:
@@ -121,6 +123,7 @@ export enum JobState {
   closed = 'Public job closed',
   offer = 'Offer pending',
   cancelled = 'Cancelled',
+  cancelledByProvider = 'Cancelled by provider',
   declined = 'Declined',
   providerCounterOffer = 'Provider counter',
   clientCounterOffer = 'Client counter',

@@ -1334,7 +1334,7 @@ export class BscService {
         timeOut: 5000,
       })
       releaseResult.err = this.errMsg(err)
-      console.log(`release ${jobId} error: ${this.errMsg(err)}`)
+      console.log(`releaseByProvider ${jobId} error: ${this.errMsg(err)}`)
     }
 
     return releaseResult
