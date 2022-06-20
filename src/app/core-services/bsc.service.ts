@@ -1430,6 +1430,13 @@ export class BscService {
       console.log('isBscConnected address changed')
       return false
     }
+    
+    
+    // metamask only
+    if (this.connectedWallet.walletApp == WalletApp.MetaMask) {
+      if (!this.provider) this.provider = new ethers.providers.Web3Provider(window.ethereum, 'any')      
+      await this.provider.send('eth_requestAccounts', []); // this promps user to connect metamask, to avoid the getAddress error
+    }
 
     return true
   }
@@ -1448,9 +1455,8 @@ export class BscService {
   }
 
   async checkSigner() {
-    if (!this.provider)
-      this.provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
-
+    if (!this.provider) this.provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
+   
     if (!this.signer) this.signer = await this.provider.getSigner()
   }
 
