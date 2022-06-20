@@ -602,6 +602,7 @@ export function notificationEmail(action: string) {
   actions[ActionType.declineTerms] = JobRequestDeclinedNotification
   actions[ActionType.counterOffer] = JobRequestCounterOfferNotification
   actions[ActionType.enterEscrow] = JobRequestCommenceNotification
+  actions[ActionType.enterEscrowBsc] = JobRequestCommenceNotification
   actions[ActionType.enterEscrowFailed] = JobRequestCommenceFailedNotification
   actions[ActionType.addMessage] = AddMessageNotification
   actions[ActionType.finishedJob] = FinishedJobNotification

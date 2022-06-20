@@ -181,6 +181,7 @@ export class ActionDialogComponent
       this.executing = false
       console.log(e)
       console.log('error')
+      if (e == 'connect') this.close(); // close dialog to permit connect
     }
   }
 
