@@ -28,7 +28,6 @@ export class JobService {
     private userService: UserService,
     private chatService: ChatService,
     private reviewService: ReviewService,
-    private binanceService: BinanceService,
     private bscService: BscService,
     private transactionService: TransactionService,
     private jobNotificationService: JobNotificationService
@@ -175,35 +174,32 @@ export class JobService {
             resolve(true)
             break
           case ActionType.cancelJobEarly:
+            console.log(job.id)
 
-            console.log(job.id);
+            let result = await this.bscService.releaseByProvider(job.id)
 
-            let result = await this.bscService.releaseByProvider(job.id);
-            
             if (!result.err) {
               // add action log
               parsedJob.actionLog.push(action)
-              parsedJob.state = JobState.cancelledByProvider // state is cancelled, like plain cancel, no more actions possible              
+              parsedJob.state = JobState.cancelledByProvider // state is cancelled, like plain cancel, no more actions possible
               // add transaction to job log
               let tx = await this.transactionService.createTransaction(
                 `Cancel job early`,
                 result.transactionHash,
                 job.id
-              );
-              
+              )
+
               /* 
               sync job to firestore and
               handle notifications into chatService and jobNotificationService
               */
               await this.saveJobAndNotify(parsedJob, action)
-              
-              
+
               resolve(true)
-              
-            } else {            
-              reject(result.err);
+            } else {
+              reject(result.err)
             }
-            break;
+            break
           case ActionType.counterOffer:
             parsedJob.actionLog.push(action)
             parsedJob.state =
@@ -264,12 +260,6 @@ export class JobService {
             await this.saveJobFirebase(parsedJob)
             resolve(true)
             break
-          case ActionType.enterEscrow:
-            parsedJob.actionLog.push(action)
-            parsedJob.state = JobState.inEscrow
-            await this.saveJobAndNotify(parsedJob, action)
-            resolve(true)
-            break
           case ActionType.enterEscrowBsc:
             parsedJob.actionLog.push(action)
             parsedJob.state = JobState.inEscrow
@@ -295,7 +285,7 @@ export class JobService {
   async saveJobAndNotify(job: Job, action: IJobAction) {
     await this.saveJobFirebase(job)
     await this.chatService.sendJobMessages(job, action)
-    
+
     await this.jobNotificationService.notify(action.type, job.id)
   }
 
