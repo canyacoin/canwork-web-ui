@@ -11,19 +11,19 @@ export class FaqPageComponent implements OnInit {
       index: 'q-1',
       q: 'Who is CanWork for?',
       a:
-        'CanWork is a digital services marketplace for software engineers, graphics designers, content creators, digital marketers, virtual assitants or anyone with a digital service. If you are looking to hire or provide digital services using Binance Chain (BEP2) assets, CanWork is for you!',
+        'CanWork is a digital services marketplace for software engineers, graphics designers, content creators, digital marketers, virtual assitants or anyone with a digital service. If you are looking to hire or provide digital services using Binance Smart Chain assets (BNB / BEP20), CanWork is for you!',
     },
     {
       index: 'q-2',
       q: 'Why CanWork?',
       a:
-        'CanWork is the digital service marketplace on Binance Chain. CanWork only takes a 1% payment fee.',
+        'CanWork is the digital service marketplace on Binance Smart Chain. CanWork only takes a 3% payment fee.',
     },
     {
       index: 'q-3',
       q: 'How do I get started as a provider?',
       a:
-        'Join CanWork and set up your account as a provider. You will need a Binance Chain (BEP2) wallet address to complete profile setup.  Note: your profile must meet a mininum standard quality and is subject to approval.',
+        'Join CanWork and set up your account as a provider. You will need a Binance Smart Chain wallet address to complete profile setup.  You can connect via MetaMask or WalletConnect.  Note: your profile must meet a mininum standard quality and is subject to approval.',
     },
     {
       index: 'q-4',
@@ -40,31 +40,31 @@ export class FaqPageComponent implements OnInit {
       index: 'q-6',
       q: 'What is CanYaCoin? (CAN)',
       a:
-        'CanYaCoin or CAN is the native token that powers the platform’s payment system and will be the bridge between all Binance Chain (BEP2) assets',
+        'CanYaCoin or CAN is the original token that powered the CanWork ecosystem.  We have since removed the need to use the native CAN token on the platform and use platform fees to buy CAN off the market.',
     },
     {
       index: 'q-7',
-      q: 'Do I have to use CAN?',
+      q: 'How do I pay?',
       a:
-        'No. As a client you can pay in most Binance Chain (BEP2) assets.  Providers are always paid in CAN',
+        'As a client you can pay into escrow using BNB & selected BEP20 tokens.  Providers will always be paid in BUSD.',
     },
     {
       index: 'q-8',
-      q: 'Can I use BTC (Bitcoin)?',
+      q: 'Can I use BTC (Bitcoin) or Ethereum?',
       a:
-        'Not yet. However, other Binance Chain projects are developing cross-chain swaps including BTC.',
+        'No, we currently only acccept Binance Smart Chain (BSC) tokens such as BNB and other selected BEP20 tokens.',
     },
     {
       index: 'q-9',
       q: 'How can I trust to get paid?',
       a:
-        'All funds awaiting completion of a job are held in escrow. They are only released when both parties (client and provider) agree that they are satisfied. In the case a job dispute, users can flag their issue and prompt CanYa support.',
+        'All funds awaiting completion of a job are held in escrow. They are only released when both parties (client and provider) agree that they are satisfied. In the case a job dispute, users can flag their issue and prompt CanWork support.',
     },
     {
       index: 'q-10',
       q: 'How can I cancel a contract?',
       a:
-        'In the case where a contract must be cancelled, you are able to do so. To cancel a contract, go to the manage jobs page and select the job which you would like to cancel. All users must agree before cancelling the job. If the client cancels the job, they must pay the provider for any work completed. If the provider cancels the job, the client will have receive a refund by default. In the case where there is a dispute, the CanYa Support can help!',
+        'In the case where a contract must be cancelled, you are able to do so. To cancel a contract, go to the manage jobs page and select the job which you would like to cancel. All users must agree before cancelling the job. If the client cancels the job, they must pay the provider for any work completed. If the provider cancels the job, the client will have receive a refund by default. In the case where there is a dispute, the CanWork Support can help!',
     },
     {
       index: 'q-11',
@@ -76,37 +76,31 @@ export class FaqPageComponent implements OnInit {
       index: 'q-12',
       q: 'What happens if crypto price changes?',
       a:
-        'Our escrow service is hedged and mitigates potential market volatility. If you’ve quoted, for example, $500 USD in tokens for a job, you will receive the same value of $500 USD in CAN upon completing the job regardless of changes in CanYaCoin price.',
-    },
-    {
-      index: 'q-13',
-      q: 'How do I buy CAN?',
-      a:
-        'You can buy CAN through the Binance DEX https://binance.org. However, CanWork accepts payments in  most BEP2 assets, not just CAN',
+        'Our escrow service automatically liquidates tokens to the BUSD stablecoin at time of deposit, to protect against market volatility. Providers will be paid in BUSD when the job is complete.',
     },
     {
       index: 'q-14',
       q: 'How much does CanWork cost?',
       a:
-        'CanWork, costs nothing to use or browse, there is a 1% service charge that happens once payment is released from escrow.',
+        'CanWork costs nothing to use or browse.  There is a 3% service charge that happens once payment is released from escrow.',
     },
     {
       index: 'q-15',
       q: 'How do I get paid?',
       a:
-        'You get paid in $CAN, as soon as the job is completed and accepted by the Client.  When you accept or issue a contract, the money moves into escrow. While in the escrow account the amount can not be changed without consent from both parties. Once a job is completed and both parties are happy, the money will be release and sent to you.',
+        'You get paid in the Binance USD Stablecoin (BUSD)as soon as the job is completed and accepted by the Client.  When you accept or issue a contract, the money moves into escrow. While in the escrow account the amount can not be changed without consent from both parties. Once a job is completed and both parties are happy, the money will be release and sent to you.',
     },
     {
       index: 'q-16',
       q: 'What wallet should I use?',
       a:
-        'CanWork connects seemlessly with any wallet that supports Binance Chain (BEP2) assets.   You can connect your wallet via WalletConnect, Ledger or KeyStore.   We recommend Trust Wallet https://trustwallet.com/.',
+        'CanWork connects seemlessly with Metamask and WalletConnect. We recommend and use Trust Wallet https://trustwallet.com/.',
     },
     {
       index: 'q-17',
       q: 'Can anybody apply to be a provider ?',
       a:
-        'Yes! However providers will be screened through the CanYa support for quality assurance.',
+        'Yes! However providers will be screened through the CanWork support for quality assurance.',
     },
     {
       index: 'q-19',
