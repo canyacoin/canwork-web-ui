@@ -40,18 +40,19 @@ export class FaqPageComponent implements OnInit {
       index: 'q-6',
       q: 'What is CanYaCoin? (CAN)',
       a:
-        'CanYaCoin or CAN is the native token that powers the platform’s payment system and will be the bridge between all Binance Chain (BEP2) assets',
+        'CanYaCoin or CAN is the original token that powered the CanWork ecosystem.  We have since removed the need to use the native CAN token on the platform and use platform fees to buy CAN off the market.',
     },
     {
       index: 'q-7',
       q: 'How do I pay?',
       a:
-        'As a client you can pay into escrow using BNB & selected BEP20 tokens.  Providers will always be paid in BUSD',
+        'As a client you can pay into escrow using BNB & selected BEP20 tokens.  Providers will always be paid in BUSD.',
     },
     {
       index: 'q-8',
-      q: 'Can I use BTC (Bitcoin)?',
-      a: 'No, we currently only acccept Binance Smart Chain tokens.',
+      q: 'Can I use BTC (Bitcoin) or Ethereum?',
+      a:
+        'No, we currently only acccept Binance Smart Chain (BSC) tokens such as BNB and other selected BEP20 tokens.',
     },
     {
       index: 'q-9',
@@ -81,7 +82,7 @@ export class FaqPageComponent implements OnInit {
       index: 'q-14',
       q: 'How much does CanWork cost?',
       a:
-        'CanWork, costs nothing to use or browse, there is a 3% service charge that happens once payment is released from escrow.',
+        'CanWork costs nothing to use or browse.  There is a 3% service charge that happens once payment is released from escrow.',
     },
     {
       index: 'q-15',
