@@ -1005,9 +1005,8 @@ export class BscService {
           ]
       }      
       */
-      approveResult.transactionHash = receipt.transactionHash;
+      approveResult.transactionHash = receipt.transactionHash
       // success, add transactionHash result
-      
     } catch (err) {
       console.log(err)
       this.toastr.warning(this.errMsg(err), 'Error approving ' + token, {
@@ -1238,7 +1237,7 @@ export class BscService {
       }
       // wait for transaction confirm
       const receipt = await transaction.wait()
-      depositResult.transactionHash = receipt.transactionHash;
+      depositResult.transactionHash = receipt.transactionHash
 
       // success, nothing to add to result
     } catch (err) {
@@ -1283,8 +1282,8 @@ export class BscService {
 
       // wait for transaction confirm
       const receipt = await transaction.wait()
-      releaseResult.transactionHash = receipt.transactionHash;
-      
+      releaseResult.transactionHash = receipt.transactionHash
+
       // success, nothing to add to result
     } catch (err) {
       console.log(err)
@@ -1297,21 +1296,23 @@ export class BscService {
 
     return releaseResult
   }
-  
+
   async releaseByProvider(jobId) {
     let releaseResult = { err: '', transactionHash: '' }
     try {
       await this.checkSigner()
 
       let strippedJobId = jobId.replace(/-/g, '')
-      if (strippedJobId.length >= 32) strippedJobId = strippedJobId.substr(0, 31)
+      if (strippedJobId.length >= 32)
+        strippedJobId = strippedJobId.substr(0, 31)
 
-      const jobIdBigint = this.hexToBigint(strippedJobId);
+      const jobIdBigint = this.hexToBigint(strippedJobId)
 
       const jobIdUint = ethers.utils.parseUnits(jobIdBigint, JOBID_DECIMALS)
 
       let escrowAddress = environment.bsc.escrow.address
-      if (this.getCurrentApp() === WalletApp.WalletConnectBsc) escrowAddress = environment.bsc.escrow.mainNetAddress
+      if (this.getCurrentApp() === WalletApp.WalletConnectBsc)
+        escrowAddress = environment.bsc.escrow.mainNetAddress
 
       const escrowContract = new ethers.Contract(
         escrowAddress,
@@ -1323,10 +1324,10 @@ export class BscService {
 
       // wait for transaction confirm
       const receipt = await transaction.wait()
-      
+
       // add transaction hash to result, to enable saving into transaction log
-      releaseResult.transactionHash = receipt.transactionHash;
-      
+      releaseResult.transactionHash = receipt.transactionHash
+
       // success, nothing to add to result
     } catch (err) {
       console.log(err)
@@ -1338,7 +1339,7 @@ export class BscService {
     }
 
     return releaseResult
-  }  
+  }
 
   async confirmConnection(address, walletApp) {
     const details = { address }
@@ -1429,6 +1430,16 @@ export class BscService {
     if (user && user.bscAddress !== this.connectedWallet.address) {
       console.log('isBscConnected address changed')
       return false
+    }
+
+    // metamask only
+    if (this.connectedWallet.walletApp == WalletApp.MetaMask) {
+      if (!this.provider)
+        this.provider = new ethers.providers.Web3Provider(
+          window.ethereum,
+          'any'
+        )
+      await this.provider.send('eth_requestAccounts', []) // this promps user to connect metamask, to avoid the getAddress error
     }
 
     return true
