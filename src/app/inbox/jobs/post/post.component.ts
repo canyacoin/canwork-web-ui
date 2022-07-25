@@ -1,5 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms'
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+} from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { BinanceService } from '@service/binance.service'
 import { GitService } from '@service/git.service'
@@ -26,7 +31,6 @@ import { GenerateGuid } from '@util/generate.uid'
 import * as _ from 'lodash'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
-
 
 @Component({
   selector: 'app-post',
@@ -66,7 +70,6 @@ export class PostComponent implements OnInit, OnDestroy {
   fileTooBig = false
   uploadFailed = false
   deleteFailed = false
-    
 
   // usdToAtomicCan: number // this is not used
   providerTypes = [
@@ -102,8 +105,6 @@ export class PostComponent implements OnInit, OnDestroy {
     },
   ]
 
-
-  
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -115,12 +116,10 @@ export class PostComponent implements OnInit, OnDestroy {
     private binanceService: BinanceService,
     private publicJobService: PublicJobService,
     private uploadService: UploadService,
-    private toastr: ToastrService,
+    private toastr: ToastrService
   ) {
     this.postForm = formBuilder.group({
-      url: [
-        '',
-      ],      
+      url: [''],
       description: [
         '',
         Validators.compose([Validators.required, Validators.maxLength(10000)]),
@@ -144,9 +143,7 @@ export class PostComponent implements OnInit, OnDestroy {
       attachments: [''],
       workType: ['', Validators.compose([Validators.required])],
       timelineExpectation: ['', Validators.compose([Validators.required])],
-      weeklyCommitment: [
-        ''
-      ],
+      weeklyCommitment: [''],
       paymentType: ['Fixed price', Validators.compose([Validators.required])], // Please remove 'Fixed price' once the 'hourly rate' workflow is ready!
       budget: [
         '',
@@ -160,16 +157,18 @@ export class PostComponent implements OnInit, OnDestroy {
       terms: [false, Validators.requiredTrue],
     })
     this.shareableJobForm = formBuilder.group({
-      url: [
-        '',
-      ],
+      url: [''],
       description: [
         '',
         Validators.compose([Validators.required, Validators.maxLength(10000)]),
       ],
       title: [
         '',
-        Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(64)]),
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(64),
+        ]),
       ],
       initialStage: [
         '',
@@ -211,9 +210,7 @@ export class PostComponent implements OnInit, OnDestroy {
           Validators.pattern('^[0-9]*$'),
         ]),
       ],
-      weeklyCommitment: [
-        ''
-      ],
+      weeklyCommitment: [''],
       terms: [false, Validators.requiredTrue],
     })
   }
@@ -239,24 +236,14 @@ export class PostComponent implements OnInit, OnDestroy {
       })
       if (!this.editing) {
         this.jobId = GenerateGuid()
-        this.shareableJobForm.controls['initialStage'].patchValue(
-          'Ready'
+        this.shareableJobForm.controls['initialStage'].patchValue('Ready')
+        this.shareableJobForm.controls['workType'].patchValue('One off')
+        this.shareableJobForm.controls['timelineExpectation'].patchValue(
+          'Up to 1 Year'
         )
-        this.shareableJobForm.controls['workType'].patchValue(
-          'One off'
-        )
-        this.shareableJobForm.controls[
-          'timelineExpectation'
-        ].patchValue('Up to 1 Year')
-        this.postForm.controls['initialStage'].patchValue(
-          'Ready'
-        )
-        this.postForm.controls['workType'].patchValue(
-          'One off'
-        )
-        this.postForm.controls[
-          'timelineExpectation'
-        ].patchValue('Up to 1 Year')        
+        this.postForm.controls['initialStage'].patchValue('Ready')
+        this.postForm.controls['workType'].patchValue('One off')
+        this.postForm.controls['timelineExpectation'].patchValue('Up to 1 Year')
         if (!this.postToProvider) this.pageLoaded = true
       } else {
         this.jobId = this.activatedRoute.snapshot.params['jobId']
@@ -304,9 +291,9 @@ export class PostComponent implements OnInit, OnDestroy {
                 this.shareableJobForm.controls['skills'].patchValue(
                   this.jobToEdit.information.skills
                 )
-                if (this.jobToEdit.information.attachments.length > 0) this.uploadedFile = this.jobToEdit.information.attachments[0]
+                if (this.jobToEdit.information.attachments.length > 0)
+                  this.uploadedFile = this.jobToEdit.information.attachments[0]
                 this.pageLoaded = true
-
               } else {
                 this.router.navigateByUrl('/not-found')
               }
@@ -330,19 +317,19 @@ export class PostComponent implements OnInit, OnDestroy {
     const noAddress = await this.authService.isAuthenticatedAndNoAddress()
     const user = await this.authService.getCurrentUser()
     if (noAddress && user.type == 'User') {
-      this.toastr.warning('Add Binance Chain Wallet (BEP2) or Metamask (BEP20) to create jobs')
+      this.toastr.warning('Add BNB Chain (BEP20) wallet to create jobs')
     }
   }
-  
-  ValidateCurrentDate(control: AbstractControl) {
-    if (!control.value.length) return null; // this is validated from Validators.required
-    
-    let deadline = new Date(control.value);
-    let today = new Date();
-    today.setHours(0,0,0,0);
-    if (deadline < today) return {pastDueDate: true};
 
-    return null;
+  ValidateCurrentDate(control: AbstractControl) {
+    if (!control.value.length) return null // this is validated from Validators.required
+
+    let deadline = new Date(control.value)
+    let today = new Date()
+    today.setHours(0, 0, 0, 0)
+    if (deadline < today) return { pastDueDate: true }
+
+    return null
   }
 
   detectFiles(event) {
@@ -423,12 +410,12 @@ export class PostComponent implements OnInit, OnDestroy {
     }
   }
   onBlurMethod(name) {
-    this.shareableJobForm.controls[name].markAsDirty();
-    this.shareableJobForm.controls[name].updateValueAndValidity();
+    this.shareableJobForm.controls[name].markAsDirty()
+    this.shareableJobForm.controls[name].updateValueAndValidity()
   }
   onFocusMethod(name) {
-    this.shareableJobForm.controls[name].markAsPristine();
-  }  
+    this.shareableJobForm.controls[name].markAsPristine()
+  }
   checkForm() {
     if (!this.isShareable) {
       console.log(this.postForm)
@@ -548,7 +535,7 @@ export class PostComponent implements OnInit, OnDestroy {
       this.isSending = false
     }
   }
-  
+
   handleGitError(msg) {
     let formRef = this.shareableJobForm
     if (!this.isShareable) formRef = this.postForm
@@ -557,75 +544,83 @@ export class PostComponent implements OnInit, OnDestroy {
     this.isSending = false
     this.shareableJobForm.controls['url'].enable()
   }
-  
+
   gitApiInvoke(url) {
     let formRef = this.shareableJobForm
-    if (!this.isShareable) formRef = this.postForm   
-   
-    this.errorGitUrl = '';    
+    if (!this.isShareable) formRef = this.postForm
+
+    this.errorGitUrl = ''
     this.isSending = true
     formRef.controls['url'].patchValue(url)
     formRef.controls['url'].disable()
-    
+
     this.gitService
       .getDecoratedIssue(url)
       .take(1)
-      .subscribe(async (issue: DecoratedIssue) => {
-        if (!!issue.error) return this.handleGitError(issue.error)
-        if (!!issue.language) {
-          let repoLang = issue.language.toLowerCase()
+      .subscribe(
+        async (issue: DecoratedIssue) => {
+          if (!!issue.error) return this.handleGitError(issue.error)
+          if (!!issue.language) {
+            let repoLang = issue.language.toLowerCase()
 
-          let foundTag = ''
-          for (let tag of this.skillTagsList) {
-            if (tag.toLowerCase() == repoLang) {
-              // it's equal, priority, break (i.e. java over javascript as a repoLang)
-              foundTag = tag
-              break
+            let foundTag = ''
+            for (let tag of this.skillTagsList) {
+              if (tag.toLowerCase() == repoLang) {
+                // it's equal, priority, break (i.e. java over javascript as a repoLang)
+                foundTag = tag
+                break
+              }
+              // contained into
+              if (tag.toLowerCase().indexOf(repoLang) > -1) foundTag = tag
             }
-            // contained into
-            if (tag.toLowerCase().indexOf(repoLang) > -1) foundTag = tag
-          }
-          let updatedTags = []
-          if (!!foundTag) updatedTags.push(foundTag)
+            let updatedTags = []
+            if (!!foundTag) updatedTags.push(foundTag)
             else updatedTags.push(issue.language) // add new tag,  not found existing one
-          this.gitUpdatedTags = updatedTags
-        }
-        let description = '';
-        description += issue.inputValues.provider +' "'+ issue.inputValues.project + '" issue ' + issue.inputValues.issue + ' : "' + issue.title + '"'
-        description += '\n'
-        description += '['+url+']'
-        description += '\n\n'
-        description += issue.description
-        
-        formRef.controls['title'].patchValue(issue.title.substring(0, 64))
-        formRef.controls['description'].patchValue(description)
-        if (!!this.isShareable) formRef.controls['providerType'].patchValue('softwareDev')
-        if (issue.state.toLowerCase().indexOf('open') == -1) {
-          this.errorGitUrl = 'Pay attention, issue is not open';
-          formRef.controls['url'].enable()
-        }
-        this.isSending = false        
-        
-      },
-      error => {
-        let errorMsg = 'Network error'
-        if (!!error && !!error.error && !!error.error.message) errorMsg = error.error.message
-        this.handleGitError(errorMsg)     
-      })
-   
+            this.gitUpdatedTags = updatedTags
+          }
+          let description = ''
+          description +=
+            issue.inputValues.provider +
+            ' "' +
+            issue.inputValues.project +
+            '" issue ' +
+            issue.inputValues.issue +
+            ' : "' +
+            issue.title +
+            '"'
+          description += '\n'
+          description += '[' + url + ']'
+          description += '\n\n'
+          description += issue.description
 
+          formRef.controls['title'].patchValue(issue.title.substring(0, 64))
+          formRef.controls['description'].patchValue(description)
+          if (!!this.isShareable)
+            formRef.controls['providerType'].patchValue('softwareDev')
+          if (issue.state.toLowerCase().indexOf('open') == -1) {
+            this.errorGitUrl = 'Pay attention, issue is not open'
+            formRef.controls['url'].enable()
+          }
+          this.isSending = false
+        },
+        error => {
+          let errorMsg = 'Network error'
+          if (!!error && !!error.error && !!error.error.message)
+            errorMsg = error.error.message
+          this.handleGitError(errorMsg)
+        }
+      )
   }
 
   onGitPaste(event: ClipboardEvent) {
-    let clipboardData = event.clipboardData;
-    let pastedText = clipboardData.getData('text');
-    this.gitApiInvoke(pastedText);
-  }
-  
-  onBFGit() {
-    this.errorGitUrl = '';
+    let clipboardData = event.clipboardData
+    let pastedText = clipboardData.getData('text')
+    this.gitApiInvoke(pastedText)
   }
 
+  onBFGit() {
+    this.errorGitUrl = ''
+  }
 
   async submitShareableJob(isDraft: boolean) {
     this.isSending = true
