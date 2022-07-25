@@ -24,8 +24,14 @@ import { ToastrService } from 'ngx-toastr'
 
 import { environment } from '@env/environment'
 
-// we need this until we'll have binance service
-import { WalletApp } from '@service/binance.service'
+export enum WalletApp {
+  WalletConnect, // bep2
+  Ledger, // bep2
+  Keystore, // bep2
+  Mnemonic, // bep2
+  MetaMask, // bsc
+  WalletConnectBsc, // bsc
+}
 
 const NETWORK_ID = environment.bsc.netId
 const CHAIN_ID = `0x${NETWORK_ID.toString(16)}`
