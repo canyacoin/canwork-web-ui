@@ -218,7 +218,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     if (!(await this.bscService.isBscConnected())) {
       const routerStateSnapshot = this.router.routerState.snapshot
       this.toastr.warning(
-        'Connect your Metamask BSC (Binance Smart Chain) wallet to release the payment',
+        'Connect your Metamask wallet to release the payment',
         '',
         {
           timeOut: 4000,

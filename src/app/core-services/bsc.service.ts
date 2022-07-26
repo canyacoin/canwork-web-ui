@@ -349,11 +349,11 @@ export class BscService {
       } catch (err) {
         console.log(err)
         walletConnectProvider.disconnect()
-        return 'Please connect to Binance Smart Chain network'
+        return 'Please connect to BNB Chain network'
       }
 
       if (network.chainId !== environment.bsc.mainNetId)
-        return 'Please connect to Binance Smart Chain network'
+        return 'Please connect to BNB Chain network'
 
       await new Promise(f => setTimeout(f, 100)) // sleep 100 ms
 
