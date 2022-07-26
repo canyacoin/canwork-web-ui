@@ -6,7 +6,6 @@ import {
   AbstractControl,
 } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { BinanceService } from '@service/binance.service'
 import { GitService } from '@service/git.service'
 import { DecoratedIssue } from '@class/git'
 import {
@@ -113,7 +112,6 @@ export class PostComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private jobService: JobService,
     private gitService: GitService,
-    private binanceService: BinanceService,
     private publicJobService: PublicJobService,
     private uploadService: UploadService,
     private toastr: ToastrService

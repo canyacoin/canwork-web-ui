@@ -1,6 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-
-import { BinanceService } from '@service/binance.service'
 import { PaymentSummary } from '../interfaces'
 
 @Component({
@@ -15,7 +13,7 @@ export class PaymentSummaryTemplateComponent implements OnInit {
   assetSymbolShort: string
   paymentAssetIconURL: string
 
-  constructor(private binanceService: BinanceService) {}
+  constructor() {}
 
   ngOnInit() {
     if (!this.paymentSummary) {

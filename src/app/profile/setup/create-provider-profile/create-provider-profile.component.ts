@@ -1,4 +1,3 @@
-import { BinanceValidator } from './../../../@validator/binance.validator'
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { User, UserCategory, UserState, UserType } from '@class/user'
@@ -7,12 +6,10 @@ import { UserService } from '@service/user.service'
 import { CurrencyValidator } from '@validator/currency.validator'
 import { EmailValidator } from '@validator/email.validator'
 import * as randomColor from 'randomcolor'
-import { BinanceService } from '@service/binance.service'
 import { Subscription } from 'rxjs'
 
 import { BscValidator } from '@validator/bsc.validator'
 import { BscService } from '@service/bsc.service'
-
 
 import * as moment from 'moment-timezone'
 
@@ -57,8 +54,7 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private binanceService: BinanceService,
-    private bscService: BscService    
+    private bscService: BscService
   ) {}
 
   ngOnInit() {

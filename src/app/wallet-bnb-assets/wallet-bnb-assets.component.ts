@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core'
-import { BinanceService, EventType } from '@service/binance.service'
 import { BscService, EventTypeBsc, BepChain } from '@service/bsc.service'
 
 import { BehaviorSubject } from 'rxjs'
@@ -21,10 +20,7 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
   explorer = ''
   chain = null
 
-  constructor(
-    private binanceService: BinanceService,
-    private bscService: BscService
-  ) {
+  constructor(private bscService: BscService) {
     super()
   }
 

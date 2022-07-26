@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import { BinanceService } from '@service/binance.service'
 import { ToastrService } from 'ngx-toastr'
 
 import { PaymentSummary } from '../interfaces'
@@ -17,10 +16,7 @@ export class PaymentSummaryComponent implements OnInit {
 
   isLoading = false
 
-  constructor(
-    private binanceService: BinanceService,
-    private toastr: ToastrService
-  ) {}
+  constructor(private toastr: ToastrService) {}
 
   ngOnInit() {
     console.log('Payment Summary: ')

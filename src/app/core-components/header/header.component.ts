@@ -6,7 +6,6 @@ import { AuthService } from '@service/auth.service'
 import { NavService } from '@service/nav.service'
 import { AngularFirestore } from 'angularfire2/firestore'
 import { Subscription } from 'rxjs'
-import { BinanceService, EventType } from '@service/binance.service'
 import { BscService, EventTypeBsc } from '@service/bsc.service'
 
 @Component({
@@ -54,7 +53,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private navService: NavService,
     private authService: AuthService,
     private router: Router,
-    private binanceService: BinanceService,
     private bscService: BscService
   ) {}
 
@@ -155,10 +153,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
     if (this.binanceSub) {
       this.binanceSub.unsubscribe()
-     }
+    }
     if (this.bscSub) {
       this.bscSub.unsubscribe()
-    }    
+    }
   }
 
   onFocus(event: any) {

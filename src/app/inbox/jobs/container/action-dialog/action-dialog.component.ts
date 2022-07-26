@@ -5,7 +5,6 @@ import { ActionType, IJobAction } from '@class/job-action'
 import { User, UserType } from '@class/user'
 import { JobService } from '@service/job.service'
 import { getUsdToCan } from '@util/currency-conversion'
-import { BinanceService } from '@service/binance.service'
 import { RatingChangeEvent } from 'angular-star-rating'
 import { DialogComponent, DialogService } from 'ng2-bootstrap-modal'
 
@@ -48,8 +47,7 @@ export class ActionDialogComponent
   constructor(
     dialogService: DialogService,
     private formBuilder: FormBuilder,
-    private jobService: JobService,
-    private binanceService: BinanceService
+    private jobService: JobService
   ) {
     super(dialogService)
   }

@@ -9,7 +9,6 @@ import { JobService } from '@service/job.service'
 import { MobileService } from '@service/mobile.service'
 import { ReviewService } from '@service/review.service'
 import { Transaction, TransactionService } from '@service/transaction.service'
-import { BinanceService } from '@service/binance.service'
 import { BscService, BepChain } from '@service/bsc.service'
 import { ToastrService } from 'ngx-toastr'
 import { AngularFireStorage } from 'angularfire2/storage'
@@ -49,7 +48,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private jobService: JobService,
-    private binanceService: BinanceService,
     private bscService: BscService,
     private toastr: ToastrService,
     private transactionService: TransactionService,

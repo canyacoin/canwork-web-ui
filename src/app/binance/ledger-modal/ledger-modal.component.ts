@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
-import { BinanceService, EventType } from '@service/binance.service'
 import { ToastrService } from 'ngx-toastr'
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
@@ -13,10 +12,7 @@ export class LedgerModalComponent implements OnInit, OnDestroy {
   ledgerIndex: number = 0
   connectionInProgress: boolean = false
 
-  constructor(
-    private toastr: ToastrService,
-    private binanceService: BinanceService
-  ) {}
+  constructor(private toastr: ToastrService) {}
 
   ngOnInit() {
     this.binanceService.events$

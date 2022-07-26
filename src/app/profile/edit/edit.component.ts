@@ -16,12 +16,8 @@ import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper'
 
 import * as moment from 'moment-timezone'
 
-import { BinanceValidator } from '@validator/binance.validator'
-import { BinanceService } from '@service/binance.service'
-
 import { BscValidator } from '@validator/bsc.validator'
 import { BscService } from '@service/bsc.service'
-
 
 @Component({
   selector: 'app-profile-edit',
@@ -54,7 +50,6 @@ export class EditComponent implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private binanceService: BinanceService,
     private bscService: BscService,
     private authService: AuthService
   ) {}
@@ -125,7 +120,7 @@ export class EditComponent implements OnInit, OnDestroy {
             this.userService
           ).isUniqueAddressField(this.currentUser),
         ]),
-      ],      
+      ],
       title: [
         this.currentUser.title || '',
         Validators.compose([
