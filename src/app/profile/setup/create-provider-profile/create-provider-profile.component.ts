@@ -185,7 +185,6 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
       category: this.profileForm.value.category,
       skillTags: tags,
       hourlyRate: this.profileForm.value.hourlyRate,
-      bnbAddress: this.profileForm.value.bnbAddress,
       bscAddress: this.profileForm.value.bscAddress,
       colors: [
         this.profileForm.value.color1,

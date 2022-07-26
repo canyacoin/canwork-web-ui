@@ -139,39 +139,6 @@
                 </div>
                 <div class="col-sm-6">
                   <fieldset class="form-group">
-                    <label>Binance Address</label>
-                    <input
-                      class="form-control"
-                      #bnbAddress
-                      formControlName="bnbAddress"
-                      type="text"
-                      name="bnbAddress"
-                      placeholder="bnb..."
-                    />
-                    <small
-                      *ngIf="
-                        profileForm.controls.bnbAddress.dirty &&
-                        profileForm.controls.bnbAddress.errors &&
-                        (profileForm.controls.bnbAddress.errors.required ||
-                          profileForm.controls.bnbAddress.errors
-                            .isInvalidAddress)
-                      "
-                      >Please enter a valid binance address.</small
-                    >
-                    <small
-                      *ngIf="
-                        profileForm.controls.bnbAddress.dirty &&
-                        profileForm.controls.bnbAddress.errors &&
-                        profileForm.controls.bnbAddress.errors.addressExists
-                      "
-                      >This address is already being used in CanWork. Please use
-                      another one.
-                    </small>
-                  </fieldset>
-                </div>
-
-                <div class="col-sm-6">
-                  <fieldset class="form-group">
                     <label>BNB Chain (BEP20) Address</label>
                     <input
                       class="form-control"

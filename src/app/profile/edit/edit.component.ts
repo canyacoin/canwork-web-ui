@@ -43,7 +43,6 @@ export class EditComponent implements OnInit, OnDestroy {
   acceptedTags: string[] = []
   tagInput = ''
 
-  bnbAddress: string
   bscAddress: string
   preview = false
 
@@ -180,7 +179,6 @@ export class EditComponent implements OnInit, OnDestroy {
       address: this.currentUser.address,
       name: this.profileForm.value.name,
       work: this.profileForm.value.work,
-      bnbAddress: this.profileForm.value.bnbAddress,
       bscAddress: this.profileForm.value.bscAddress,
       title: this.profileForm.value.title,
       bio: this.profileForm.value.bio,
