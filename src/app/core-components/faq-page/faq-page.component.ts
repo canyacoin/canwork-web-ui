@@ -11,19 +11,19 @@ export class FaqPageComponent implements OnInit {
       index: 'q-1',
       q: 'Who is CanWork for?',
       a:
-        'CanWork is a digital services marketplace for software engineers, graphics designers, content creators, digital marketers, virtual assitants or anyone with a digital service. If you are looking to hire or provide digital services using Binance Smart Chain assets (BNB / BEP20), CanWork is for you!',
+        'CanWork is a digital services marketplace for software engineers, graphics designers, content creators, digital marketers, virtual assitants or anyone with a digital service. If you are looking to hire or provide digital services using BNB Chain, CanWork is for you!',
     },
     {
       index: 'q-2',
       q: 'Why CanWork?',
       a:
-        'CanWork is the digital service marketplace on Binance Smart Chain. CanWork only takes a 3% payment fee.',
+        'CanWork is the digital service marketplace on BNB Chain. CanWork only takes a 3% payment fee.',
     },
     {
       index: 'q-3',
       q: 'How do I get started as a provider?',
       a:
-        'Join CanWork and set up your account as a provider. You will need a Binance Smart Chain wallet address to complete profile setup.  You can connect via MetaMask or WalletConnect.  Note: your profile must meet a mininum standard quality and is subject to approval.',
+        'Join CanWork and set up your account as a provider. You will need a BNB Chain wallet address to complete profile setup.  You can connect via MetaMask or WalletConnect.  Note: your profile must meet a mininum standard quality and is subject to approval.',
     },
     {
       index: 'q-4',
@@ -50,9 +50,9 @@ export class FaqPageComponent implements OnInit {
     },
     {
       index: 'q-8',
-      q: 'Can I use BTC (Bitcoin) or Ethereum?',
+      q: 'Can I use native BTC (Bitcoin) or ETH (Ethereum)?',
       a:
-        'No, we currently only acccept Binance Smart Chain (BSC) tokens such as BNB and other selected BEP20 tokens.',
+        'No, we currently only acccept BNB Chain assets such as BNB and selected BEP20 tokens.',
     },
     {
       index: 'q-9',
