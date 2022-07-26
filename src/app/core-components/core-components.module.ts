@@ -28,7 +28,6 @@ import { ScrollTopComponent } from './scroll-top/scroll-top.component'
 import { SkillTagComponent } from './skill-tag/skill-tag.component'
 import { SkillTagsSelectionComponent } from './skill-tags-selection/skill-tags-selection.component'
 import { TermsComponent } from './terms/terms.component'
-import { ToolsComponent } from './tools/tools.component'
 import { VStepperComponent } from './v-stepper/v-stepper.component'
 import { WindowScrollDirective } from './window-scroll.directive'
 import { AvatarComponent } from './avatar/avatar.component'
@@ -73,7 +72,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     SkillTagComponent,
     SkillTagsSelectionComponent,
     TermsComponent,
-    ToolsComponent,
     BackButtonComponent,
     WindowScrollDirective,
     VStepperComponent,
