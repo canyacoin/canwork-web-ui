@@ -5,7 +5,6 @@ import { ActionType, IJobAction } from '@class/job-action'
 import { User, UserType } from '@class/user'
 import { JobService } from '@service/job.service'
 import { getUsdToCan } from '@util/currency-conversion'
-import { BinanceService } from '@service/binance.service'
 import { RatingChangeEvent } from 'angular-star-rating'
 import { DialogComponent, DialogService } from 'ng2-bootstrap-modal'
 
@@ -48,8 +47,7 @@ export class ActionDialogComponent
   constructor(
     dialogService: DialogService,
     private formBuilder: FormBuilder,
-    private jobService: JobService,
-    private binanceService: BinanceService
+    private jobService: JobService
   ) {
     super(dialogService)
   }
@@ -84,7 +82,6 @@ export class ActionDialogComponent
                   ]),
                 ],
               })
-        this.setupCanConverter()
         break
       case ActionType.addMessage:
       case ActionType.dispute:
@@ -181,7 +178,7 @@ export class ActionDialogComponent
       this.executing = false
       console.log(e)
       console.log('error')
-      if (e == 'connect') this.close(); // close dialog to permit connect
+      if (e == 'connect') this.close() // close dialog to permit connect
     }
   }
 
@@ -190,14 +187,6 @@ export class ActionDialogComponent
       return false
     }
     return this.form.invalid
-  }
-
-  private async setupCanConverter() {
-    try {
-      this.usdToAtomicCan = await this.binanceService.getUsdToAtomicCan()
-    } catch (e) {
-      this.usdToAtomicCan = null
-    }
   }
 
   usdToCan(usd: number) {

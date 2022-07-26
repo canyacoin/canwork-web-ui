@@ -4,12 +4,10 @@ import { ActionType, IJobAction } from '@class/job-action'
 import { Upload } from '@class/upload'
 import { User, UserType } from '@class/user'
 import { ChatService } from '@service/chat.service'
-import { BinanceService } from '@service/binance.service'
 import { BscService } from '@service/bsc.service'
 import { TransactionService } from '@service/transaction.service'
 import { Router } from '@angular/router'
 import { ToastrService } from 'ngx-toastr'
-
 
 import { JobNotificationService } from '@service/job-notification.service'
 import { UserService } from '@service/user.service'
@@ -31,13 +29,11 @@ export class JobService {
     private userService: UserService,
     private chatService: ChatService,
     private reviewService: ReviewService,
-    private binanceService: BinanceService,
     private bscService: BscService,
     private transactionService: TransactionService,
     private jobNotificationService: JobNotificationService,
     private router: Router,
     private toastr: ToastrService
-    
   ) {
     this.jobsCollection = this.afs.collection<any>('jobs')
   }
@@ -183,53 +179,43 @@ export class JobService {
           case ActionType.cancelJobEarly:
             // implemented only on bsc chain
 
-            let bscConnected = await this.bscService.isBscConnected();
+            let bscConnected = await this.bscService.isBscConnected()
             if (!bscConnected) {
-              reject('connect');
+              reject('connect')
               const routerStateSnapshot = this.router.routerState.snapshot
-              this.toastr.warning(
-                'Please connect your wallet',
-                '',
-                { timeOut: 2000 }
-              )
+              this.toastr.warning('Please connect your wallet', '', {
+                timeOut: 2000,
+              })
               this.router.navigate(['/wallet-bnb'], {
                 queryParams: { returnUrl: routerStateSnapshot.url },
               })
-              
-              
             } else {
-              
-              let result = await this.bscService.releaseByProvider(job.id);
-              
+              let result = await this.bscService.releaseByProvider(job.id)
+
               if (!result.err) {
                 // add action log
                 parsedJob.actionLog.push(action)
-                parsedJob.state = JobState.cancelledByProvider // state is cancelled, like plain cancel, no more actions possible              
+                parsedJob.state = JobState.cancelledByProvider // state is cancelled, like plain cancel, no more actions possible
                 // add transaction to job log
                 let tx = await this.transactionService.createTransaction(
                   `Cancel job early`,
                   result.transactionHash,
                   job.id
-                );
-                
+                )
+
                 /* 
                 sync job to firestore and
                 handle notifications into chatService and jobNotificationService
                 */
                 await this.saveJobAndNotify(parsedJob, action)
-                
-                
+
                 resolve(true)
-                
-              } else {            
-                reject(result.err);
-              }              
-              
+              } else {
+                reject(result.err)
+              }
             }
-            
 
-
-            break;
+            break
           case ActionType.counterOffer:
             parsedJob.actionLog.push(action)
             parsedJob.state =
@@ -290,12 +276,6 @@ export class JobService {
             await this.saveJobFirebase(parsedJob)
             resolve(true)
             break
-          case ActionType.enterEscrow:
-            parsedJob.actionLog.push(action)
-            parsedJob.state = JobState.inEscrow
-            await this.saveJobAndNotify(parsedJob, action)
-            resolve(true)
-            break
           case ActionType.enterEscrowBsc:
             parsedJob.actionLog.push(action)
             parsedJob.state = JobState.inEscrow
@@ -321,7 +301,7 @@ export class JobService {
   async saveJobAndNotify(job: Job, action: IJobAction) {
     await this.saveJobFirebase(job)
     await this.chatService.sendJobMessages(job, action)
-    
+
     await this.jobNotificationService.notify(action.type, job.id)
   }
 

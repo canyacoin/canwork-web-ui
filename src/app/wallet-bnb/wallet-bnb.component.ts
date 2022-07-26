@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { BinanceService, WalletApp, EventType } from '@service/binance.service'
 import { BscService, EventTypeBsc } from '@service/bsc.service'
 import WalletConnect from './../core-classes/walletConnect'
 import WalletConnectQRCodeModal from '@walletconnect/qrcode-modal'
@@ -10,6 +9,7 @@ import { crypto } from '@binance-chain/javascript-sdk'
 import { environment } from '@env/environment'
 import { ToastrService } from 'ngx-toastr'
 import { AuthService } from '@service/auth.service'
+import { WalletApp } from '@service/bsc.service'
 
 @Component({
   selector: 'app-wallet-bnb',
@@ -42,7 +42,6 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   walletconnectConnecting = false
 
   constructor(
-    private binanceService: BinanceService,
     private bscService: BscService,
     private router: Router,
     private toastr: ToastrService,
@@ -90,42 +89,6 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
             break
         }
       })
-
-    this.binanceService.events$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(async event => {
-        if (!event) {
-          return
-        }
-
-        switch (event.type) {
-          case EventType.Init:
-            const { connector } = event.details
-            if (connector instanceof WalletConnect) {
-              this.walletConnect(connector)
-            }
-            break
-          case EventType.ConnectSuccess:
-            this.toastr.success('Unlocking Successful')
-            this.router.navigate([this.returnUrl])
-            break
-          case EventType.ConnectFailure:
-            if (this.attemptedConnection) {
-              this.toastr.error(
-                'This address is already in use by another user'
-              )
-            }
-            break
-          case EventType.ConnectConfirmationRequired:
-            const user = await this.authService.getCurrentUser()
-            this.walletReplacement = {
-              old: user.bnbAddress,
-              new: event.details.address,
-            }
-            ;(window as any).$('#replaceWalletModal').modal('show')
-            break
-        }
-      })
   }
 
   ngOnDestroy() {
@@ -151,9 +114,6 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
         await new Promise(f => setTimeout(f, 2000)) // sleep 2000 ms
         this.bscError = '' // clean up
       }
-    } else {
-      // binance connect methods
-      await this.binanceService.connect(app)
     }
   }
 
@@ -240,7 +200,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
       this.validKeystoreUploaded = false
 
       this.attemptedConnection = true
-      this.binanceService.initKeystore(keystore, address)
+      // this.binanceService.initKeystore(keystore, address)
     } catch (e) {
       this.unlockingFailed = true
       this.toastr.error('Incorrect Password')
@@ -249,11 +209,11 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
 
   connectLedger() {
     this.attemptedConnection = true
-    this.binanceService.initiateLedgerConnection(this.ledgerIndex)
+    // this.binanceService.initiateLedgerConnection(this.ledgerIndex)
   }
 
   onConfirmWalletUpdate() {
-    this.binanceService.confirmConnection()
+    // this.binanceService.confirmConnection()
   }
 
   async onConfirmWalletUpdateBsc() {

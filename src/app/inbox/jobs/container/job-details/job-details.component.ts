@@ -9,7 +9,6 @@ import { JobService } from '@service/job.service'
 import { MobileService } from '@service/mobile.service'
 import { ReviewService } from '@service/review.service'
 import { Transaction, TransactionService } from '@service/transaction.service'
-import { BinanceService } from '@service/binance.service'
 import { BscService, BepChain } from '@service/bsc.service'
 import { ToastrService } from 'ngx-toastr'
 import { AngularFireStorage } from 'angularfire2/storage'
@@ -49,7 +48,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private jobService: JobService,
-    private binanceService: BinanceService,
     private bscService: BscService,
     private toastr: ToastrService,
     private transactionService: TransactionService,
@@ -214,39 +212,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private releaseEscrow() {
-    console.log('release Escrow')
-    if (
-      !this.binanceService.isLedgerConnected() &&
-      !this.binanceService.isKeystoreConnected() &&
-      !this.binanceService.isWalletConnectConnected()
-    ) {
-      const routerStateSnapshot = this.router.routerState.snapshot
-      this.toastr.warning('Connect your wallet to release the payment', '', {
-        timeOut: 2000,
-      })
-      this.router.navigate(['/wallet-bnb'], {
-        queryParams: { returnUrl: routerStateSnapshot.url },
-      })
-      return
-    }
-
-    const jobId = this.job.id
-
-    const onSuccess = async () => {
-      console.log('onSuccess: Release: ')
-      console.log(this.job)
-      const action = new IJobAction(ActionType.acceptFinish, UserType.client)
-      this.job.state = JobState.complete
-      const success = await this.jobService.handleJobAction(this.job, action)
-      if (success) {
-        console.log('ok')
-      }
-    }
-
-    this.binanceService.releaseFunds(jobId, undefined, onSuccess, undefined)
-  }
-
   private async releaseEscrowBsc() {
     console.log('release Escrow BSC')
     // we check if bsc chain is connected and if not, suggest to connect to bsc chain explicitely (for now only metamask, not bep2 chain
@@ -275,8 +240,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         `Release funds`,
         result.transactionHash,
         jobId
-      );      
-      
+      )
+
       const action = new IJobAction(ActionType.acceptFinish, UserType.client)
       this.job.state = JobState.complete
       await this.jobService.handleJobAction(this.job, action)
@@ -302,10 +267,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         if (this.job.bscEscrow === true) {
           console.log('ActionType.acceptFinish BEP20')
           await this.releaseEscrowBsc()
-        } else {
-          // bep2 escrow release
-          console.log('ActionType.acceptFinish BEP2')
-          this.releaseEscrow()
         }
         break
       case ActionType.cancelJobEarly:
@@ -323,7 +284,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
             if (!success) {
               console.log('Action cancelled')
             }
-          })        
+          })
         break
       case ActionType.dispute:
         console.log('ActionType.dispute')
@@ -371,19 +332,13 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       ? this.job['otherParty'].name
       : ''
   }
-  /*
-  // Obsolete, bepescrow no more active, non transactions are saved for bep2 chain
-  getTxLink(txHash: string) {
-    return `${environment.binance.explorer}/tx/${txHash}`
-  }
-  */
-  
+
   getTxLink(txHash: string) {
     return `${environment.bsc.blockExplorerUrls[0]}/tx/${txHash}`
-  }  
+  }
 
   getTxColor(tx: Transaction) {
-    return 'success'; // default
+    return 'success' // default
     /* 
     todo: there are failure scenarios that we should handle?
     if so we have to handle into bsc service and handle tx timeout, cause receipt will not arrive
@@ -401,12 +356,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     // BEP20 has the priority, if it's connected will use it
     if (await this.bscService.isBscConnected())
       connectedChain = BepChain.SmartChain
-    else if (
-      this.binanceService.isLedgerConnected() ||
-      this.binanceService.isKeystoreConnected() ||
-      this.binanceService.isWalletConnectConnected()
-    )
-      connectedChain = BepChain.Binance
     if (!connectedChain) {
       const routerStateSnapshot = this.router.routerState.snapshot
       this.toastr.warning('Please connect your wallet before going on', '', {

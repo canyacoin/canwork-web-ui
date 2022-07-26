@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
-import { BinanceService, EventType } from '@service/binance.service'
 import { ToastrService } from 'ngx-toastr'
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
@@ -13,30 +12,9 @@ export class LedgerModalComponent implements OnInit, OnDestroy {
   ledgerIndex: number = 0
   connectionInProgress: boolean = false
 
-  constructor(
-    private toastr: ToastrService,
-    private binanceService: BinanceService
-  ) {}
+  constructor(private toastr: ToastrService) {}
 
-  ngOnInit() {
-    this.binanceService.events$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(async event => {
-        if (!event) {
-          return
-        }
-        switch (event.type) {
-          case EventType.Init:
-            const { ledgerIndex } = event.details
-            if (ledgerIndex !== undefined) {
-              this.connectionInProgress = false
-              this.ledgerIndex = ledgerIndex
-              ;(window as any).$('#ledgerModal').modal('show')
-            }
-            break
-        }
-      })
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {
     this.destroy$.next()
@@ -54,12 +32,12 @@ export class LedgerModalComponent implements OnInit, OnDestroy {
 
   private async connectLedger() {
     try {
-      await this.binanceService.connectLedger(
+      /*await this.binanceService.connectLedger(
         this.ledgerIndex,
         undefined,
         undefined,
         this.onConnectionFailure
-      )
+      )*/
     } finally {
       ;(window as any).$('#ledgerModal').modal('hide')
     }
