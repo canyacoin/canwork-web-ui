@@ -28,13 +28,6 @@ export class PaymentSummaryTemplateComponent implements OnInit {
         ? splittedSymbol[0]
         : this.paymentSummary.asset.symbol
 
-    //Get payment asset icon
-    this.binanceService
-      .getAssetIconUrl(this.paymentSummary.asset.symbol)
-      .then(iconURL => {
-        this.paymentAssetIconURL = iconURL
-      })
-
     // Format the atomic asset job budget for readability
     this.formatAssetJobBudget = (
       this.paymentSummary.jobBudgetAtomic / 1e8

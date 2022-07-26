@@ -126,19 +126,6 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
         this.user.hourlyRate || '',
         Validators.compose([Validators.required, CurrencyValidator.isValid]),
       ],
-      bnbAddress: [
-        this.user.bnbAddress || '',
-        () => null,
-        Validators.composeAsync([
-          bnbAddress => Promise.resolve(Validators.required(bnbAddress)),
-          new BinanceValidator(this.binanceService, this.userService)
-            .isValidAddressField,
-          new BinanceValidator(
-            this.binanceService,
-            this.userService
-          ).isUniqueAddressField(this.user),
-        ]),
-      ],
       bscAddress: [
         this.user.bscAddress || '',
         () => null,

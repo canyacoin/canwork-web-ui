@@ -68,22 +68,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.navSub = this.navService.hideSearchBar$.subscribe((hide: boolean) => {
       this.hideSearchBar = hide
     })
-    this.binanceSub = this.binanceService.events$.subscribe(event => {
-      if (!event) {
-        this.bAddress = ''
-        return
-      }
-      switch (event.type) {
-        case EventType.ConnectSuccess:
-        case EventType.Update:
-          this.bAddress = event.details.address
-          break
-        case EventType.ConnectFailure:
-        case EventType.Disconnect:
-          this.bAddress = ''
-          break
-      }
-    })
 
     this.bscSub = this.bscService.events$.subscribe(event => {
       if (!event) {

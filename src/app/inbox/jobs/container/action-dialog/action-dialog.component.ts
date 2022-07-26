@@ -82,7 +82,6 @@ export class ActionDialogComponent
                   ]),
                 ],
               })
-        this.setupCanConverter()
         break
       case ActionType.addMessage:
       case ActionType.dispute:
@@ -188,14 +187,6 @@ export class ActionDialogComponent
       return false
     }
     return this.form.invalid
-  }
-
-  private async setupCanConverter() {
-    try {
-      this.usdToAtomicCan = await this.binanceService.getUsdToAtomicCan()
-    } catch (e) {
-      this.usdToAtomicCan = null
-    }
   }
 
   usdToCan(usd: number) {

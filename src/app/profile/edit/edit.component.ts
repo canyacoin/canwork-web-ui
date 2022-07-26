@@ -97,18 +97,6 @@ export class EditComponent implements OnInit, OnDestroy {
         this.currentUser.work || '',
         Validators.compose([Validators.required, EmailValidator.isValid]),
       ],
-      bnbAddress: [
-        this.currentUser.bnbAddress || this.bnbAddress,
-        () => null,
-        Validators.composeAsync([
-          new BinanceValidator(this.binanceService, this.userService)
-            .isValidAddressField,
-          new BinanceValidator(
-            this.binanceService,
-            this.userService
-          ).isUniqueAddressField(this.currentUser),
-        ]),
-      ],
       bscAddress: [
         this.currentUser.bscAddress || this.bscAddress,
         () => null,

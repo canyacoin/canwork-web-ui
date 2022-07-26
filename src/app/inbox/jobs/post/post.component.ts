@@ -299,14 +299,7 @@ export class PostComponent implements OnInit, OnDestroy {
           })
       }
     })
-    /*
-    // this is not used
-    try {
-      this.usdToAtomicCan = await this.binanceService.getUsdToAtomicCan()
-    } catch (e) {
-      this.usdToAtomicCan = null
-    }
-    */
+
     this.currentDate = new Date().toISOString().split('T')[0]
     this.notifyAddAddressIfNecessary()
   }
