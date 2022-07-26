@@ -9,21 +9,16 @@
               (click)="selected = WalletApp.MetaMask"
               [class.active]="isActive(WalletApp.MetaMask)"
             >
-              MetaMask (BSC)
-            </li>            
+              MetaMask
+            </li>
             <li
               (click)="selected = WalletApp.WalletConnectBsc"
               [class.active]="isActive(WalletApp.WalletConnectBsc)"
             >
-              WalletConnect (BSC)
-            </li>
-            <li
-              (click)="selected = WalletApp.WalletConnect"
-              [class.active]="isActive(WalletApp.WalletConnect)"
-            >
               WalletConnect
             </li>
-            <li
+
+            <!--<li
               (click)="selected = WalletApp.Ledger"
               [class.active]="isActive(WalletApp.Ledger)"
             >
@@ -40,7 +35,7 @@
               [class.active]="isActive(WalletApp.Mnemonic)"
             >
               Mnemonic Phrase
-            </li>
+            </li> -->
           </ul>
         </div>
         <div class="col-12 col-md-8 text-left" [ngSwitch]="selected">
@@ -57,21 +52,26 @@
               </div>
               <div class="keystore-error">
                 {{ bscError }}
-              </div>              
+              </div>
             </div>
-          </div>        
+          </div>
           <div *ngSwitchCase="WalletApp.WalletConnectBsc">
             <div>
               Click to connect to WalletConnect compatible wallet (i.e. Trust)
-              <p *ngIf="isAnotherBscChain">Pay attention: you'll connect to BSC MainNet, cause testnet is not supported</p>
+              <p *ngIf="isAnotherBscChain">
+                Pay attention: you'll connect to BSC MainNet, cause testnet is
+                not supported
+              </p>
               <div class="mt-20">
-                <button *ngIf="!walletconnectConnecting"
+                <button
+                  *ngIf="!walletconnectConnecting"
                   (click)="connect(WalletApp.WalletConnectBsc)"
                   class="btn btn-primary"
                 >
                   Connect
                 </button>
-                <button *ngIf="walletconnectConnecting"
+                <button
+                  *ngIf="walletconnectConnecting"
                   (click)="connect(WalletApp.WalletConnectBsc)"
                   class="btn btn-primary"
                   disabled
@@ -81,9 +81,9 @@
               </div>
               <div class="keystore-error">
                 {{ bscError }}
-              </div>              
+              </div>
             </div>
-          </div>        
+          </div>
           <div *ngSwitchCase="WalletApp.WalletConnect">
             <div *ngIf="!isTestnet(); else testnet">
               Click to scan a QR code and link your mobile wallet using
@@ -167,10 +167,7 @@
                 </div>
               </div>
               <div class="col-4">
-                <button
-                  class="btn btn-primary"
-                  (click)="connectLedger()"
-                >
+                <button class="btn btn-primary" (click)="connectLedger()">
                   Unlock
                 </button>
               </div>
