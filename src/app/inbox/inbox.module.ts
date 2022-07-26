@@ -19,13 +19,11 @@ import { PropertyComponent } from './jobs/components/property/property.component
 import { StatusIconComponent } from './jobs/components/status-icon/status-icon.component'
 import { ActionDialogComponent } from './jobs/container/action-dialog/action-dialog.component'
 import { CancelJobComponent } from './jobs/container/cancel-job/cancel-job.component'
-import { EnterEscrowComponent } from './jobs/container/enter-escrow/enter-escrow.component'
 import { EnterEscrowBscComponent } from './jobs/container/enter-escrow-bsc/enter-escrow-bsc.component'
 import { JobContainerComponent } from './jobs/container/job-container.component'
 import { JobDetailsComponent } from './jobs/container/job-details/job-details.component'
 import { JobDashboardComponent } from './jobs/dashboard/job-dashboard.component'
 import { PostComponent } from './jobs/post/post.component'
-import { BepAssetPaymentSelectorComponent } from '../bep-asset-payment-selector/bep-asset-payment-selector.component'
 import { BscPaymentSelectorComponent } from '../core-components/bsc-payment-selector/bsc-payment-selector.component'
 
 @NgModule({
@@ -49,7 +47,6 @@ import { BscPaymentSelectorComponent } from '../core-components/bsc-payment-sele
     BudgetComponent,
     ChatComponent,
     CancelJobComponent,
-    EnterEscrowComponent,
     EnterEscrowBscComponent,
     JobContainerComponent,
     JobDashboardComponent,
@@ -58,7 +55,6 @@ import { BscPaymentSelectorComponent } from '../core-components/bsc-payment-sele
     PropertyComponent,
     StatusIconComponent,
     JobDashboardCardComponent,
-    BepAssetPaymentSelectorComponent,
     BscPaymentSelectorComponent,
   ],
   entryComponents: [ActionDialogComponent],

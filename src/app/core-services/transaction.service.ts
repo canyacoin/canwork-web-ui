@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core'
 import { Http } from '@angular/http'
-import { ActionType } from '@class/job-action'
 import { Observable } from 'rxjs'
 import { map, catchError } from 'rxjs/operators'
 import { GenerateGuid } from '@util/generate.uid'
@@ -8,11 +7,6 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
 } from 'angularfire2/firestore'
-
-
-import { environment } from '@env/environment'
-
-export const BEPESCROW_JOB_API_URL = `${environment.binance.escrowUrl}/job/`
 
 export interface Escrow {
   amount: number
@@ -69,61 +63,26 @@ export interface Transaction {
   failure: boolean
 }
 
-const mapEventToActionType = {
-  ESCROW: ActionType.enterEscrow,
-  DISBURSE: ActionType.acceptFinish,
-  RELEASE: ActionType.releaseEscrow,
-  REFUND: ActionType.refundEscrow,
-  VALUE: ActionType.valueEscrow,
-}
-
-
-/* OBSOLETE */
-function createTx(jobId: string, event: Event): Transaction {
-  const actionType = mapEventToActionType[event.event]
-  if (!actionType) {
-    throw new Error(
-      `Not found action type for event "${event.event}" (jobId = "${jobId}")`
-    )
-  }
-  return {
-    jobId,
-    actionType,
-    timestamp: event.time,
-    hash: event.hash,
-    // TODO: remove 'success', 'failure' temporary properties
-    success: true,
-    failure: false,
-  }
-}
-
 @Injectable()
 export class TransactionService {
-  
-  transactionCollection: AngularFirestoreCollection<any>  
-  
-  constructor(
-    private http: Http,    
-    private afs: AngularFirestore
-    
-  ) {
-    
-    this.transactionCollection = this.afs.collection<any>('transactions')    
-    
+  transactionCollection: AngularFirestoreCollection<any>
+
+  constructor(private http: Http, private afs: AngularFirestore) {
+    this.transactionCollection = this.afs.collection<any>('transactions')
   }
-  
+
   async createTransaction(actionType, hash, jobId): Promise<any> {
     let transaction = {
       actionType,
       hash,
       id: GenerateGuid(),
       jobId,
-      timestamp: Date.now()      
+      timestamp: Date.now(),
     }
-    
+
     return this.transactionCollection.doc(transaction.id).set(transaction)
-  }  
-    
+  }
+
   getTransactionsByJob(jobId: string): Observable<Transaction[]> {
     return this.afs
       .collection<any>('transactions', ref => ref.where('jobId', '==', jobId))
@@ -138,20 +97,4 @@ export class TransactionService {
         })
       )
   }
-    
-
-  /** Get transactions by Job (OBSOLETE, bep escrow no more existing */
-  /*
-  getTransactionsByJob(jobId: string): Observable<Transaction[]> {
-    const url = BEPESCROW_JOB_API_URL + jobId
-    return this.http.get(url).pipe(
-      map((resp): Job => resp.json()),
-      map(job => job.events.map(event => createTx(jobId, event))),
-      catchError(err => {
-        console.log(err)
-        return []
-      })
-    )
-  }
-  */
 }

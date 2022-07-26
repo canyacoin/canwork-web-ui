@@ -1,6 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-
-import { BinanceService } from '@service/binance.service'
 import { PaymentSummary } from '../interfaces'
 
 @Component({
@@ -15,7 +13,7 @@ export class PaymentSummaryTemplateComponent implements OnInit {
   assetSymbolShort: string
   paymentAssetIconURL: string
 
-  constructor(private binanceService: BinanceService) {}
+  constructor() {}
 
   ngOnInit() {
     if (!this.paymentSummary) {
@@ -29,13 +27,6 @@ export class PaymentSummaryTemplateComponent implements OnInit {
       splittedSymbol.length > 1
         ? splittedSymbol[0]
         : this.paymentSummary.asset.symbol
-
-    //Get payment asset icon
-    this.binanceService
-      .getAssetIconUrl(this.paymentSummary.asset.symbol)
-      .then(iconURL => {
-        this.paymentAssetIconURL = iconURL
-      })
 
     // Format the atomic asset job budget for readability
     this.formatAssetJobBudget = (

@@ -10,7 +10,6 @@ import { SeoService } from '@service/seo.service'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
-
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -36,13 +35,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private publicJobService: PublicJobService,
     private toastr: ToastrService,
-    private seoService: SeoService,
+    private seoService: SeoService
   ) {}
 
   ngOnInit() {
-
     this.authSub = this.authService.currentUser$.subscribe(
-      (user: User) => {         
+      (user: User) => {
         if (user !== this.currentUser) {
           this.currentUser = user
           this.activatedRoute.params.pipe(take(1)).subscribe(params => {
@@ -79,7 +77,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     const noAddress = await this.authService.isAuthenticatedAndNoAddress()
     const user = await this.authService.getCurrentUser()
     if (noAddress && user.type == 'Provider') {
-      this.toastr.warning('Add Binance Chain Wallet (BEP2) or Metamask (BEP20) to receive payments')
+      this.toastr.warning('Add BNB Chain (BEP20) wallet to receive payments')
       this.notifiedBnbOrBscAddress = true
     }
   }
@@ -98,14 +96,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.userModel.bio,
             this.userModel.slug,
             this.userModel.avatar
-          );          
+          )
         }
       })
     } else if (user) {
       this.userModel = this.currentUser
       this.setUsersColors(this.userModel)
     }
-    
   }
 
   loadUser(params: any) {
