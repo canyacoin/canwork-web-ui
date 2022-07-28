@@ -28,6 +28,9 @@ import {
   removeChatChannels,
   removeTransactions,
 } from './remove-old-data'
+import {
+  bep20TxMonitor,
+} from './bep20-monitor'
 
 import { timestampConverter } from './timestamp-converter'
 import { exportUsers } from './export-users'
@@ -1328,3 +1331,9 @@ exports.moveInvitesToJob = functions.https.onRequest(moveInvitesToJob(db))
 // firestore funcs
 exports.firestoreGet = functions.https.onCall(firestoreGet(db))
 exports.firestoreSelect = functions.https.onCall(firestoreSelect(db))
+
+
+// bep20 tx monitor
+exports.bep20TxMonitor = functions.pubsub
+  .schedule('every 1 minutes')
+  .onRun(bep20TxMonitor(db))
