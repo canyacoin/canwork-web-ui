@@ -172,6 +172,7 @@ export class BscService {
     private toastr: ToastrService,
     private afs: AngularFirestore
   ) {      
+  
     
     this.monitorCollection = this.afs.collection<any>('bep20-txs')
     
@@ -192,6 +193,7 @@ export class BscService {
   }
 
   async connect(app?: any): Promise<string> {
+        
     /*
     todo: when this is currently called without app, it tries to refresh provider and signer
     we have to handle it also in walletConnect scenario
@@ -1144,8 +1146,10 @@ export class BscService {
     }
   }
 
-  async deposit(token, providerAddress, amount, jobId) {
+  async deposit(token, providerAddress, amount, jobId, providerId) {
     console.log('deposit', token, providerAddress, amount, jobId) // debug
+    const user = await this.authService.getCurrentUser()
+    const userId = user.address;
 
     let depositResult = { err: '', transactionHash: '' }
 
@@ -1256,6 +1260,8 @@ export class BscService {
         // do not await, so execution can go on
         this.createMonitorTransaction(
           jobId,
+          userId,
+          providerId,
           truncatedAmount,
           escrowAddress,
           token,
@@ -1306,6 +1312,8 @@ export class BscService {
   */
   async createMonitorTransaction(
     jobId,
+    userId,
+    providerId,
     amount,
     escrowAddress,
     token,
@@ -1317,10 +1325,26 @@ export class BscService {
     action  
   ): Promise<any> {
     
+    /* 
+    only logged in userId can create this tx, this is security rule:
+    
+    // bep20 monitor
+    match /bep20-txs/{transactionId} {
+       allow read: if isAdmin();
+       allow create: if request.auth.uid == request.resource.data.userId;
+       allow update: if isAdmin();
+       allow delete: if isAdmin();
+    }
+          
+    
+    */
+    
     let transaction = {
       id: GenerateGuid(),
       timestamp: Date.now(),
       jobId,
+      userId,
+      providerId,
       amount,
       escrowAddress,
       token,

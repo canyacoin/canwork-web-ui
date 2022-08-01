@@ -242,7 +242,8 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
       this.bscAssetData.token,
       this.providerAddress,
       this.bscPayOptions.paymentSummary.allowance,
-      this.job.id
+      this.job.id,
+      this.job.providerId
     )
 
     // check result and approve into controller state
