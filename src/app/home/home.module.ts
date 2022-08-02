@@ -6,7 +6,6 @@ import { CoreComponentsModule } from '../core-components/core-components.module'
 import { CoreServicesModule } from '../core-services/core-services.module'
 import { HomeComponent } from './home.component'
 import { HomeRoutingModule } from './home.routing.module'
-import { RandomAnimationComponent } from './random-animation/random-animation.component'
 import { SwiperCardsComponent } from './swiper-cards/swiper-cards.component'
 
 @NgModule({
@@ -17,7 +16,7 @@ import { SwiperCardsComponent } from './swiper-cards/swiper-cards.component'
     HomeRoutingModule,
     NgAisModule,
   ],
-  declarations: [HomeComponent, RandomAnimationComponent, SwiperCardsComponent],
+  declarations: [HomeComponent, SwiperCardsComponent],
   exports: [HomeRoutingModule],
 })
 export class HomeModule {}
