@@ -1353,7 +1353,9 @@ export class BscService {
       hash,
       from,
       to,
-      action        
+      action,
+      status: 'created' // later it will become 'processed' or 'checked' (if already valid) or 'error'
+      //backend will add processedTimestamp
     }
 
     return this.monitorCollection.doc(transaction.id).set(transaction)
