@@ -102,9 +102,35 @@ export function bep20TxMonitor(db) {
                 
                 */
                 
+                console.log(`we have to process this state for ${tx.jobId}`); // debug
+                
                 /*
-                but first, check if tx is confirmed on chain
+                but first, check if tx is confirmed on chain, todo
                 */
+                
+                
+                newStatus = 'created'; // by default, leave the status to created so we can process again if tx is not confirmed
+                tx.chainCheckTimestamp = Date.now(); // timestamp of last chain check
+                
+                let txHash = tx.hash; // bep20 tx hash
+                
+                if (!txHash) {
+                  
+                  errorMessage = `Bep 20 tx not found for job id ${tx.jobId}`;
+                  
+                } else {
+                  
+                  /* 
+                  use json rpc interface
+                  curl -X POST --data '{"jsonrpc":"2.0","method":"eth_getTransactionByHash","params":[txHash],"id":1}' https://bsc-dataseed.binance.org/
+                  if not found: {"jsonrpc":"2.0","id":1,"result":null}
+                  if found: {"jsonrpc":"2.0","id":1,"result":{"blockHash":"..","blockNumber":"hex value","from":"..","gas":"hex value","gasPrice":"hex value","hash":txHash,...}}
+                    and if confirmed, blockNumber is not null
+                    
+                  we have to use "eth_getTransactionReceipt" to check status if tx is not failed
+                  http://man.hubwiz.com/docset/Ethereum.docset/Contents/Resources/Documents/eth_getTransactionReceipt.html                  
+                  */
+                }
                 
                 
               } else {

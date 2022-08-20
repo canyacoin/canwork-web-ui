@@ -246,8 +246,17 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
       this.job.providerId
     )
 
+    
+    // throw ('debug error'); // simulate the user close the browser
+    /*
+    backend will have to:
+    - create jobs tx
+    - send email and chat notifications (tbd step 2 todo optional, is it required)
+    - update state
+    */
+    
+    
     // check result and approve into controller state
-
     if (!result.err) {
       // save tx immediately
       let tx = await this.transactionService.createTransaction(
