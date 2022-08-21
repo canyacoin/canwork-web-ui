@@ -1,3 +1,8 @@
+const RPC_ENDPOINT = 'https://bsc-dataseed.binance.org/';
+
+import axios from 'axios'
+
+
 // src/app/core-classes/job.ts
 enum JobState {
   acceptingOffers = 'Accepting Offers',
@@ -105,12 +110,9 @@ export function bep20TxMonitor(db) {
                 console.log(`we have to process this state for ${tx.jobId}`); // debug
                 
                 /*
-                but first, check if tx is confirmed on chain, todo
+                but first, check if tx is confirmed on chain
                 */
                 
-                
-                newStatus = 'created'; // by default, leave the status to created so we can process again if tx is not confirmed
-                tx.chainCheckTimestamp = Date.now(); // timestamp of last chain check
                 
                 let txHash = tx.hash; // bep20 tx hash
                 
@@ -130,6 +132,96 @@ export function bep20TxMonitor(db) {
                   we have to use "eth_getTransactionReceipt" to check status if tx is not failed
                   http://man.hubwiz.com/docset/Ethereum.docset/Contents/Resources/Documents/eth_getTransactionReceipt.html                  
                   */
+                  
+                  let txSuccess = false;
+                  let chainCheckMessage = '';
+                  
+                  // add also chainCheckMessage if needed
+                  try {
+                    
+                    const { data } = await axios.post(
+                      RPC_ENDPOINT,
+                      { 
+                        "jsonrpc": '2.0',
+                        "method": "eth_getTransactionReceipt",
+                        "id": 1,
+                        "params": 
+                          [
+                            txHash
+                          ]
+                        
+                      },
+                      {
+                        headers: {
+                          'Content-Type': 'application/json',
+                          Accept: 'application/json',
+                        },
+                      },
+                    );
+
+                    // check blockNumber and status
+                    
+                    if (data.result) {
+                      if (data.result.blockNumber) {
+                        
+                        if (parseInt(data.result.status) === 1) {
+                          
+                          txSuccess = true;
+                          
+                          console.log(`Valid data found for tx ${tx.id}: blockNumber ${data.result.blockNumber} and status ${data.result.status}`);                                  
+                          
+                        } else {
+                          
+                          chainCheckMessage = `chain tx failed, status ${data.result.status}`; 
+                          // we shouldn't process this anymore, tx is failed
+                          // flag this record as error
+                          errorMessage = `Chain tx is failed with status "${data.result.status}" for job id ${tx.jobId}`;
+                          
+                          
+                        }
+                      
+                      } else {
+
+                        chainCheckMessage = `chain tx not yet confirmed, blockNumber ${data.result.blockNumber}`; 
+                        
+                      }
+                      
+                    } else {
+                      
+                      chainCheckMessage = `no result from chain with error ${JSON.stringify(data.error)}`; 
+                      
+                    }
+
+
+                  } catch (error) {
+                    if (axios.isAxiosError(error)) {
+
+                      chainCheckMessage = `axios error "${error.message}"`;
+
+                    } else {
+                      chainCheckMessage = `axios unexpected error "${error.toString()}"`;
+
+                      console.log(error);
+                      
+                    }
+                  }  
+
+                  if (txSuccess) {
+                    // good to go, everything ok (job status and chain receipt), trigger job actions
+                    
+                    // and finally update bep20 tx status to processed
+                    // TODO
+                  } else {
+                    // postpone
+                    newStatus = 'created'; // reset the status to created so we can process again if tx is not confirmed
+                    
+                    tx.chainCheckTimestamp = Date.now(); // timestamp of last chain check
+                    tx.chainCheckMessage = chainCheckMessage;
+                    console.log(`Error checking chain status for tx ${tx.id}: ${chainCheckMessage}`);          
+                    
+                  }
+                  
+                  
                 }
                 
                 
