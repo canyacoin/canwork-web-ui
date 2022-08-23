@@ -21,6 +21,13 @@ import { BscValidator } from '@validator/bsc.validator'
 import { Injectable } from '@angular/core'
 import { BehaviorSubject } from 'rxjs'
 import { ToastrService } from 'ngx-toastr'
+import { GenerateGuid } from '@util/generate.uid'
+
+
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+} from 'angularfire2/firestore'
 
 import { environment } from '@env/environment'
 
@@ -156,12 +163,20 @@ export class BscService {
   private events: BehaviorSubject<EventBsc | null> = new BehaviorSubject(null)
   events$ = this.events.asObservable()
   private connectedWallet = null
+  monitorCollection: AngularFirestoreCollection<any>
+  
 
   constructor(
     private userService: UserService,
     private authService: AuthService,
-    private toastr: ToastrService
-  ) {
+    private toastr: ToastrService,
+    private afs: AngularFirestore
+  ) {      
+  
+    
+    this.monitorCollection = this.afs.collection<any>('bep20-txs')
+    
+    
     // todo move this to a common reusable function and replace everywhere
     const connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
     if (connectedWallet) {
@@ -178,6 +193,7 @@ export class BscService {
   }
 
   async connect(app?: any): Promise<string> {
+        
     /*
     todo: when this is currently called without app, it tries to refresh provider and signer
     we have to handle it also in walletConnect scenario
@@ -924,14 +940,14 @@ export class BscService {
       )
       /*
         {
-            "hash": "0xaaf44b5e674733871f0314fa02562553ef7b26e6c79e4232d881849aa93a1f9f",
+            "hash": "txhash",
             "type": 0,
             "accessList": null,
             "blockHash": null,
-            "blockNumber": null,
+            "blockNumber": null, -> when this is not null anymore, tx is confirmed
             "transactionIndex": null,
             "confirmations": 0,
-            "from": "0x606627e26d860A8A9d773b50F4B4F553cfcC6335",
+            "from": "fromaddress",
             "gasPrice": {
                 "type": "BigNumber",
                 "hex": "0x012a05f200"
@@ -940,52 +956,49 @@ export class BscService {
                 "type": "BigNumber",
                 "hex": "0x71ca"
             },
-            "to": "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
+            "to": "toaddress",
             "value": {
                 "type": "BigNumber",
                 "hex": "0x00"
             },
             "nonce": 425,
-            "data": "0x095ea7b3000000000000000000000000fcd04481c5176abdc00b2b182c2eb35b7c79125f000000000000000000000000000000000000000000000000002b8559d087111d",
-            "r": "0xa98186258ceab4f82bee3446dfed8cbcdda9f2307b1af876530cca645488e65e",
-            "s": "0x44660a5e36022b75a44c03cd93c860783811b6baa44006f6e41f4bfb1ad60c22",
+            "data": "",
+            "r": "",
+            "s": "",
             "v": 148,
             "creates": null,
             "chainId": 56
         }      
       */
+      
       const receipt = await transaction.wait()
 
       /*
       {
-          "to": "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
-          "from": "0x606627e26d860A8A9d773b50F4B4F553cfcC6335",
+          "to": "toaddress",
+          "from": "fromaddress",
           "contractAddress": null,
           "transactionIndex": 79,
           "gasUsed": {
               "type": "BigNumber",
-              "hex": "0x71ca"
+              "hex": ""
           },
-          "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000200000000000000000000000020000000000000000020000000002000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000002000020000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000400000000000000000000000000000010000000000000000000000000000000000008000000001000000000000000",
-          "blockHash": "0xc022400e0009e6b05f160ed8e7dc65aac7cea96a5e2337caf5625c2ea2a29934",
-          "transactionHash": "0x2fe8fb21a56438da52c9e1d110c63e6c599b793107c30fbea3e2619956fa7fda",
+          "logsBloom": "",
+          "blockHash": "",
+          "transactionHash": "txhash",
           "logs": [
               {
                   "transactionIndex": 79,
                   "blockNumber": 16938016,
-                  "transactionHash": "0x2fe8fb21a56438da52c9e1d110c63e6c599b793107c30fbea3e2619956fa7fda",
-                  "address": "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
-                  "topics": [
-                      "0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925",
-                      "0x000000000000000000000000606627e26d860a8a9d773b50f4b4f553cfcc6335",
-                      "0x000000000000000000000000fcd04481c5176abdc00b2b182c2eb35b7c79125f"
-                  ],
-                  "data": "0x000000000000000000000000000000000000000000000000002b7f80759e2c1a",
+                  "transactionHash": "",
+                  "address": "",
+
+                  "data": "",
                   "logIndex": 227,
-                  "blockHash": "0xc022400e0009e6b05f160ed8e7dc65aac7cea96a5e2337caf5625c2ea2a29934"
+                  "blockHash": ""
               }
           ],
-          "blockNumber": 16938016,
+          "blockNumber": blockNumber, //tx is confirmed,this is not null
           "confirmations": 4,
           "cumulativeGasUsed": {
               "type": "BigNumber",
@@ -996,17 +1009,7 @@ export class BscService {
           "events": [
               {
                   "transactionIndex": 79,
-                  "blockNumber": 16938016,
-                  "transactionHash": "0x2fe8fb21a56438da52c9e1d110c63e6c599b793107c30fbea3e2619956fa7fda",
-                  "address": "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
-                  "topics": [
-                      "0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925",
-                      "0x000000000000000000000000606627e26d860a8a9d773b50f4b4f553cfcc6335",
-                      "0x000000000000000000000000fcd04481c5176abdc00b2b182c2eb35b7c79125f"
-                  ],
-                  "data": "0x000000000000000000000000000000000000000000000000002b7f80759e2c1a",
-                  "logIndex": 227,
-                  "blockHash": "0xc022400e0009e6b05f160ed8e7dc65aac7cea96a5e2337caf5625c2ea2a29934"
+                  "blockNumber": blockNumber,
               }
           ]
       }      
@@ -1143,8 +1146,10 @@ export class BscService {
     }
   }
 
-  async deposit(token, providerAddress, amount, jobId) {
+  async deposit(token, providerAddress, amount, jobId, providerId) {
     console.log('deposit', token, providerAddress, amount, jobId) // debug
+    const user = await this.authService.getCurrentUser()
+    const userId = user.address;
 
     let depositResult = { err: '', transactionHash: '' }
 
@@ -1182,8 +1187,11 @@ export class BscService {
       )
 
       let transaction
+      let tokenAddress
 
       if (token == 'BNB') {
+        tokenAddress = 'BNB'
+        
         /*
         value is passed as an override    
         */
@@ -1220,7 +1228,7 @@ export class BscService {
         )
       } else {
         // BEP20
-        const tokenAddress = environment.bsc.assets[token]
+        tokenAddress = environment.bsc.assets[token]
 
         let path = [tokenAddress, environment.bsc.pancake.busd] // default
         // unless we have an explicit path mapped into config:
@@ -1241,6 +1249,47 @@ export class BscService {
           path
         )
       }
+      /*
+      immediately save tx hash to bep20 pending txs table, so backend job can check it
+      even if user closes browser now
+      */
+      console.log(`tracking tx hash ${transaction.hash} for deposit of job id ${jobId}`)
+      
+      try {
+      
+        // do not await, so execution can go on
+        this.createMonitorTransaction(
+          jobId,
+          userId,
+          providerId,
+          truncatedAmount,
+          escrowAddress,
+          token,
+          tokenAddress,
+          providerAddress,
+          transaction.hash,
+          transaction.from,
+          transaction.to,
+          'deposit'
+        )
+      
+      } catch (err) {
+        
+        console.log(err)
+        this.toastr.error(
+          '', 
+          `Error with Deposit Tracking! Please contact support and send these data: hash ${transaction.hash}, job ID ${jobId}, error details "${this.errMsg(err)}"`, 
+          {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            tapToDismiss: false,
+            closeButton: true
+          }
+        )          
+              
+        
+      }
+      
       // wait for transaction confirm
       const receipt = await transaction.wait()
       depositResult.transactionHash = receipt.transactionHash
@@ -1257,6 +1306,60 @@ export class BscService {
 
     return depositResult
   }
+  
+  /*
+  save transaction into backend table, polled periodically by firestore function bep20TxMonitor
+  */
+  async createMonitorTransaction(
+    jobId,
+    userId,
+    providerId,
+    amount,
+    escrowAddress,
+    token,
+    tokenAddress,
+    providerAddress,
+    hash,
+    from,
+    to,
+    action  
+  ): Promise<any> {
+    
+    /* 
+    only logged in userId can create this tx, this is security rule:
+    
+    // bep20 monitor
+    match /bep20-txs/{transactionId} {
+       allow read: if isAdmin();
+       allow create: if request.auth.uid == request.resource.data.userId;
+       allow update: if isAdmin();
+       allow delete: if isAdmin();
+    }
+          
+    
+    */
+    
+    let transaction = {
+      id: GenerateGuid(),
+      timestamp: Date.now(),
+      jobId,
+      userId,
+      providerId,
+      amount,
+      escrowAddress,
+      token,
+      tokenAddress,
+      providerAddress,
+      hash,
+      from,
+      to,
+      action,
+      status: 'created' // later it will become 'processed' or 'checked' (if already valid) or 'error'
+      //backend will add processedTimestamp
+    }
+
+    return this.monitorCollection.doc(transaction.id).set(transaction)
+  }  
 
   // releaseAsClient
   async release(jobId) {
