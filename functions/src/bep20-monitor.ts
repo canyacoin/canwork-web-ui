@@ -1,6 +1,7 @@
 const RPC_ENDPOINT = 'https://bsc-dataseed.binance.org/';
 
 import axios from 'axios'
+import { GenerateGuid } from './generate.uid'
 
 
 // src/app/core-classes/job.ts
@@ -61,6 +62,8 @@ export function bep20TxMonitor(db) {
     
     const txsCollection = db.collection('bep20-txs');    
     
+    const transactionCollection = db.collection('transactions');    
+
     const txsCollectionSearch = txsCollection.where('status', '==', 'created');
     const txsSnapshot = await txsCollectionSearch.get();  
     
@@ -207,10 +210,64 @@ export function bep20TxMonitor(db) {
                   }  
 
                   if (txSuccess) {
-                    // good to go, everything ok (job status and chain receipt), trigger job actions
+                    // good to go, everything ok (job status and chain receipt), let's check what's needed
                     
-                    // and finally update bep20 tx status to processed
-                    // TODO
+                    // transaction, let's check if there is already another one with this same hash
+                    let existingTransaction = false;
+                    
+                    const jobTransactions = transactionCollection.where('jobId', '==', tx.jobId);
+                    const jobTransactionsSnapshot = await jobTransactions.get();  
+
+                    if (!jobTransactionsSnapshot.empty) {
+                      
+                      for (const jobTxDoc of jobTransactionsSnapshot.docs) {
+
+                        const jobTx = jobTxDoc.data();
+                        if (jobTx.hash.toLowerCase() == txHash.toLowerCase()) existingTransaction = true;
+                        
+                      }
+                    }
+                    
+                    if (!existingTransaction) {
+                      // it doesn't exist, so let's create it
+                      // these are transactions visible into the ui log under job details
+                      
+                      await createTransaction(
+                        `Deposit ${tx.token}`,
+                        txHash,
+                        tx.jobId,
+                        transactionCollection
+                      );                      
+
+                    }
+                    
+                    /* 
+                    now let's add job action and update job state
+                    this is atomic into job service, so if job state is not updated (previous check) we can assume for sure also action isn't added to log
+                    */
+                    const action = {
+                      type: 'Pay Bsc Escrow',
+                      executedBy: 'User',
+                      message: '',
+                      private: false,
+                      timestamp: Date.now()
+                    }
+                    
+                    if (job.actionLog) {
+                      job.actionLog.push(action)
+                      
+                    }
+                    
+                    job.bscEscrow = true // save bscEscrow property into job to use it later when releasing job
+                    
+                    job.state = JobState.inEscrow;
+                    
+                    // save job to firestore
+                    await jobsCollection.doc(job.id).set(job);
+                    
+                    //  update also bep20 monitor status at the end, it will be "processed"                    
+                    newStatus = 'processed'; // finally
+                    
                   } else {
                     // postpone
                     newStatus = 'created'; // reset the status to created so we can process again if tx is not confirmed
@@ -274,7 +331,7 @@ export function bep20TxMonitor(db) {
         tx.status = newStatus;
         
         /* save into firestore */
-        txsCollection.doc(tx.id).set(tx);
+        await txsCollection.doc(tx.id).set(tx);
         
         processed++;
       }
@@ -284,4 +341,16 @@ export function bep20TxMonitor(db) {
 
     return null;
   }
+}
+
+async function createTransaction(actionType, hash, jobId, transactionCollection) {
+  let transaction = {
+    actionType,
+    hash,
+    id: GenerateGuid(),
+    jobId,
+    timestamp: Date.now(),
+  }
+
+  return transactionCollection.doc(transaction.id).set(transaction)
 }
