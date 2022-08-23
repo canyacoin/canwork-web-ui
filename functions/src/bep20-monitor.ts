@@ -80,7 +80,7 @@ export function bep20TxMonitor(db) {
         
         try {
           // check if it's an action we support
-          if (tx.action == 'deposit') {
+          if (tx.action === 'deposit') {
             /*
             deposit action, job should be in state ...
             */
@@ -90,11 +90,11 @@ export function bep20TxMonitor(db) {
 
               const job = jobRef.data();
               
-              if (job.state == JobState.inEscrow) {
+              if (job.state === JobState.inEscrow) {
                 // everything was already processed fine by frontend
                 newStatus = 'checked';
                 
-              } else if (job.state == JobState.termsAcceptedAwaitingEscrow) {
+              } else if (job.state === JobState.termsAcceptedAwaitingEscrow) {
                 /*
                 good, this is state we have to handle, cause if job is into this state,
                 at least one of following steps didn't complete (cause job state update is last one)
@@ -117,7 +117,7 @@ export function bep20TxMonitor(db) {
                 */
                 
                 
-                let txHash = tx.hash; // bep20 tx hash
+                const txHash = tx.hash; // bep20 tx hash
                 
                 if (!txHash) {
                   
@@ -223,7 +223,7 @@ export function bep20TxMonitor(db) {
                       for (const jobTxDoc of jobTransactionsSnapshot.docs) {
 
                         const jobTx = jobTxDoc.data();
-                        if (jobTx.hash.toLowerCase() == txHash.toLowerCase()) existingTransaction = true;
+                        if (jobTx.hash.toLowerCase() === txHash.toLowerCase()) existingTransaction = true;
                         
                       }
                     }
@@ -344,7 +344,7 @@ export function bep20TxMonitor(db) {
 }
 
 async function createTransaction(actionType, hash, jobId, transactionCollection) {
-  let transaction = {
+  const transaction = {
     actionType,
     hash,
     id: GenerateGuid(),
