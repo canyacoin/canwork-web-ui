@@ -29,7 +29,7 @@ enum JobState {
 export function bep20TxMonitor(db) {
   return async () => {
   
-    console.log(`bep20TxMonitor start`); // debug
+    // console.log(`bep20TxMonitor start`); // debug
     
     /*
     frontend provides these info:
@@ -110,7 +110,7 @@ export function bep20TxMonitor(db) {
                 
                 */
                 
-                console.log(`we have to process this state for ${tx.jobId}`); // debug
+                console.log(`we have to process this state for ${tx.jobId}`);
                 
                 /*
                 but first, check if tx is confirmed on chain
@@ -288,9 +288,9 @@ export function bep20TxMonitor(db) {
                 /*
                 into this scenario, job state is different from expected
                 probably is a following step (i.e. job cancelled or completed)
-                but this would be anyway odd, cause this job runs every minute,
-                and it's very unlikely job went to these states into less then 1 minute
-                so better to flag bep20 tx as error to check later
+                but this would be anyway odd, cause this job runs every 5 minutes,
+                and it's very unlikely job went to these states into less then 5 minutes
+                so better to flag bep20 tx as error to check later manually
                 
                 */
                 
@@ -337,7 +337,7 @@ export function bep20TxMonitor(db) {
       }
     }
 
-    console.log(`Processed ${processed} bep20 txs`); // debug
+    if (processed > 0) console.log(`Processed ${processed} bep20 txs`);
 
     return null;
   }
