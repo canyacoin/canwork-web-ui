@@ -1335,5 +1335,5 @@ exports.firestoreSelect = functions.https.onCall(firestoreSelect(db))
 
 // bep20 tx monitor
 exports.bep20TxMonitor = functions.pubsub
-  .schedule('every 1 minutes')
+  .schedule('every 5 minutes')
   .onRun(bep20TxMonitor(db))
