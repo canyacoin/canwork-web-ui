@@ -1,18 +1,13 @@
 {
   "projects": {
-    "cam": "can-work-cam",
-    "alex": "canwork-alex",
-    "wie": "projectcanwork",
-    "staging": "staging-can-work",
-    "prod": "canwork-io",
-    "prodold": "canya-dotcom",
-    "default": "can-work-cam"
+    "staging": "canwork-staging",
+    "prod": "canwork-io"
   },
   "targets": {
-    "staging-can-work": {
+    "canwork-staging": {
       "hosting": {
         "canwork-webui": [
-          "staging-can-work"
+          "canwork-staging"
         ]
       }
     },
