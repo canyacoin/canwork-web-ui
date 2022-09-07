@@ -1,6 +1,22 @@
 {
   "projects": {
-    "prod": "canwork-3ca08"
-    "staging": "canwork-staging"
+    "staging": "canwork-staging",
+    "prod": "can-work-io"
+  },
+  "targets": {
+    "canwork-staging": {
+      "hosting": {
+        "canwork-webui": [
+          "canwork-staging"
+        ]
+      }
+    },
+    "can-work-io": {
+      "hosting": {
+        "canwork-webui": [
+          "can-work-io"
+        ]
+      }
+    }
   }
 }
