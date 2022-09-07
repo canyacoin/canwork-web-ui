@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "canwork-3ca08"
+    "prod": "canwork-3ca08"
+    "staging": "canwork-staging"
   }
 }
