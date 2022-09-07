@@ -15,6 +15,7 @@ This is an Angular Project, generated using [Angular CLI](https://github.com/ang
 _This project requires_
 
 - NPM: 6.4.1
+- Node: 10.15.3
 - Angular-CLI: 7.0.2
 - Firebase-CLI: 5.5.7
 - Yarn: 1.15.2
