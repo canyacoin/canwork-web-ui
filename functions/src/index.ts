@@ -106,7 +106,7 @@ exports.canyaSupportNotification = functions.https.onRequest(
         sgMail.setApiKey(sendgridApiKey)
         const msg = {
           to: emailAddress,
-          from: 'support@canya.com',
+          from: 'support@canwork.io',
           subject: subject,
           text: message,
         }
@@ -139,7 +139,7 @@ exports.sendEmail = functions.https.onRequest(async (request, response) => {
   console.log('+ serviceConfig', serviceConfig)
 
   const html = welcomeEmailTemplateHTML({
-    name: 'Cammo',
+    name: 'CanWork',
     uri: serviceConfig.uri,
   })
 
@@ -149,8 +149,8 @@ exports.sendEmail = functions.https.onRequest(async (request, response) => {
   const sgMail = require('@sendgrid/mail')
   sgMail.setApiKey(sendgridApiKey)
   const msg = {
-    to: 'cam@canya.com',
-    from: 'support@canya.com',
+    to: 'chrisy@canwork.io',
+    from: 'support@canwork.io',
     subject: 'Welcome to CanWork',
     text: 'text version of content here',
     html: html,
@@ -459,7 +459,7 @@ exports.updateIndexProviderData = functions.firestore
       sgMail.send(
         {
           to: user.email,
-          from: 'support@canya.com',
+          from: 'support@canwork.io',
           subject: `You have been approved as a CanWork provider!`,
           html: html,
           substitutions: {
@@ -509,22 +509,6 @@ exports.updateIndexProviderData = functions.firestore
         .update({ welcomeEmailSent: true })
     }
 
-    // TODO: When firestore supports case insensitive queries, we won't need this redundant field
-    console.log('+ eth addy', afterData.ethAddress)
-    if (
-      afterData.ethAddress &&
-      afterData.ethAddress !== afterData.ethAddress.toUpperCase()
-    ) {
-      console.log(
-        '+ updating eth address for fast lookup: ',
-        afterData.ethAddress.toUpperCase()
-      )
-      await db
-        .collection('users')
-        .doc(objectId)
-        .update({ ethAddressLookup: afterData.ethAddress.toUpperCase() })
-    }
-
     if (shouldSkipIndexing(afterData)) return null
 
     console.log('+ remove index record for update operation...', objectId)
@@ -557,12 +541,12 @@ function notifyAdminOnNewUser(user) {
   sgMail.setApiKey(sendgridApiKey)
   console.log('+ first chars: ', sendgridApiKey.substring(0, 5))
   sgMail.setSubstitutionWrappers('{{', '}}')
-  const senderAddress = 'support@canya.com'
-  const senderName = 'CanYa support'
+  const senderAddress = 'support@canwork.io'
+  const senderName = 'CanWork Support'
 
   sgMail.send(
     {
-      to: 'support@canya.com',
+      to: 'support@canwork.io',
       from: {
         name: senderName,
         email: senderAddress,
@@ -735,11 +719,10 @@ exports.seedProviders = functions.https.onRequest(async (request, response) => {
         '@type': 'Person',
         type: 'Provider',
         address: newUser.uid,
-        badge: getRandomBadge(),
         name: newUser.displayName,
         email: newUser.email,
         work: newUser.email,
-        ethAddress: '0xc4e40e873f11510870ed55ebc316e3ed17753b22',
+        bscAddress: '0xc4e40e873f11510870ed55ebc316e3ed17753b22',
         avatar: { uri: newUser.photoURL },
         bio: chance.sentence({ words: Math.floor(Math.random() * 30 + 1) }),
         category: getCategories()[Math.floor(Math.random() * 6)].toUpperCase(),
@@ -828,11 +811,6 @@ exports.seedSkillTagsData = functions.https.onRequest(
 
 function randomIntFromInterval(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min)
-}
-
-function getRandomBadge(): string {
-  const arr = ['Pioneer', 'Ambassador', '']
-  return arr[Math.floor(Math.random() * 3)]
 }
 
 function getRandomTags(max: number): string[] {
