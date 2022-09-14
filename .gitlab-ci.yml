@@ -67,7 +67,6 @@ deploy:staging:
     - firebase functions:config:set dev.authkey="$FIREBASE_DEV_AUTHKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set internal.authkey="$FIREBASE_INTERNAL_AUTHKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
     - echo "Deploying"
-    - firebase deploy --token "$FIREBASE_CI_AUTH_TOKEN" -P $FIREBASE_PROJECT_ID_STAGING --only firestore:indexes --debug
     - firebase deploy --token "$FIREBASE_CI_AUTH_TOKEN" -P $FIREBASE_PROJECT_ID_STAGING --only hosting:canwork-webui --debug
 
 deploy:production:
