@@ -49,7 +49,7 @@
     "firebaseui-angular": "^3.3.2",
     "hashbow": "^1.1.1",
     "jwt-decode": "^2.2.0",
-    "moment": "^2.20.1",
+    "moment": "^2.29.4",
     "moment-timezone": "^0.5.14",
     "ng2-bootstrap-modal": "https://github.com/Sky4CE/ng2-bootstrap-modal/tarball/v.1.0.2",
     "ng5-slider": "^1.1.3",
