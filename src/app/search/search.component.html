@@ -5,15 +5,6 @@
         <div class="col-12">
           <ais-instantsearch [config]="algoliaSearchConfig" *ngIf="!rendering">
             <div class="row" id="shouldBeShown" *ngIf="minValue > 0">
-              <ais-range-input
-                hidden
-                attribute="hourlyRate"
-                [min]="minValue"
-                [max]="maxValue"
-                [precision]="0"
-                style="margin: 0 auto"
-              >
-              </ais-range-input>
             </div>
             <ais-refinement-list
               hidden
@@ -198,15 +189,6 @@
                     </div>
                   </div>
                   <div class="row" hidden>
-                    <ais-range-input
-                      hidden
-                      attribute="hourlyRate"
-                      [min]="minValue"
-                      [max]="maxValue"
-                      [precision]="0"
-                      style="margin: 0 auto"
-                    >
-                    </ais-range-input>
                   </div>
                 </div>
               </div>
