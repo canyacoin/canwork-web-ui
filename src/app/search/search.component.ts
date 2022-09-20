@@ -19,7 +19,7 @@ import * as orderBy from 'lodash/orderBy'
 import * as union from 'lodash/union'
 import { LabelType, Options } from 'ng5-slider'
 import { Observable, Subscription } from 'rxjs'
-
+import algoliasearch from 'algoliasearch'
 import { UserType } from '../../../functions/src/user-type'
 import { environment } from '../../environments/environment'
 import { User, UserCategory } from '../core-classes/user'
@@ -98,9 +98,13 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async ngOnInit() {
+    const searchClient = algoliasearch(
+      environment.algolia.appId,
+      environment.algolia.apiKey
+    )
     this.algoliaSearchConfig = {
-      ...environment.algolia,
       indexName: this.algoliaIndex,
+      searchClient,
       routing: true,
     }
     this.authSub = this.auth.currentUser$.subscribe((user: User) => {
