@@ -19,6 +19,10 @@ cam-deploy.sh
 functions/node_modules
 functions/lib
 functions/.runtimeconfig.json
+package-lock.json
+yarn.lock
+functions/yarn.lock
+functions/package-lock.json
 
 # latest firebase-tools now uses a dot directory
 .firebase/
