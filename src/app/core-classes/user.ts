@@ -65,7 +65,6 @@ export enum UserType {
 export enum UserCategory {
   contentCreator = 'CONTENT CREATORS',
   designer = 'DESIGNERS & CREATIVES',
-  finance = 'FINANCIAL EXPERTS',
   marketing = 'MARKETING & SEO',
   softwareDev = 'SOFTWARE DEVELOPERS',
   virtualAssistant = 'VIRTUAL ASSISTANTS',

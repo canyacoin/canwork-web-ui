@@ -34,10 +34,7 @@ export class LandingComponent implements OnInit {
       name: 'Designers & Creatives',
       img: 'creatives.svg',
     },
-    {
-      name: 'Financial Experts',
-      img: 'finance.svg',
-    },
+
     {
       name: 'Marketing Experts',
       img: 'marketing.svg',
