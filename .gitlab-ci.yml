@@ -95,5 +95,5 @@ deploy:production:
     - firebase functions:config:set dev.authkey="$FIREBASE_DEV_AUTHKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set internal.authkey="$FIREBASE_INTERNAL_AUTHKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
     - echo "Deploying"
-    - firebase deploy --token "$FIREBASE_CI_AUTH_TOKEN" -P $FIREBASE_PROJECT_ID --only hosting:canwork-webui
+    - firebase deploy --token "$FIREBASE_CI_AUTH_TOKEN" -P $FIREBASE_PROJECT_ID --only hosting:canwork-webui --debug
 

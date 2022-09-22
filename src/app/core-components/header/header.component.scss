@@ -1,3 +1,29 @@
+.very-top-notification {
+  position: fixed;
+  top:  0;
+  left: 0;
+  height: 40;
+  line-height: 40px;
+  width: 100%;
+  background: #33ccff;
+  text-align: center;
+  color: #000000;
+  font-family: montserrat;
+  font-weight: normal ;
+  font-size: 14px;
+}
+.very-top-notification p {
+  padding: 0;
+  margin: 0;
+}
+.very-top-notification p a {
+  padding: 5px 10px;
+  border-radius: 3px;
+  background: #FFF;
+  color: #666262;
+  font-weight: bold;
+}
+
 .dropdown-toggle {
   &.for-avatar {
     &:after {
