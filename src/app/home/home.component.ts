@@ -53,11 +53,6 @@ export class HomeComponent implements OnInit {
       id: 'designer',
     },
     {
-      name: 'Financial Experts',
-      img: 'finance.svg',
-      id: 'finance',
-    },
-    {
       name: 'Marketing & Seo',
       img: 'marketing.svg',
       id: 'marketing',

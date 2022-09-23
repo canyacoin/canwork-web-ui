@@ -1115,7 +1115,6 @@ function getCategories(): string[] {
   return [
     'Content Creators',
     'Designers & Creatives',
-    'Financial experts',
     'Marketing & SEO',
     'Software developers',
     'Virtual assistants',

@@ -8,7 +8,6 @@ export class User {
   colors: string[] = []
   description: string
   email: string
-  bnbAddress: string
   bscAddress: string
   slug: string
   hourlyRate: string
@@ -66,7 +65,6 @@ export enum UserType {
 export enum UserCategory {
   contentCreator = 'CONTENT CREATORS',
   designer = 'DESIGNERS & CREATIVES',
-  finance = 'FINANCIAL EXPERTS',
   marketing = 'MARKETING & SEO',
   softwareDev = 'SOFTWARE DEVELOPERS',
   virtualAssistant = 'VIRTUAL ASSISTANTS',
