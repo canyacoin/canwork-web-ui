@@ -155,9 +155,9 @@ export class EditComponent implements OnInit, OnDestroy {
     if (category2.checked) {
       category = 'DESIGNERS & CREATIVES'
     }
-    if (category3.checked) {
-      category = 'FINANCIAL EXPERTS'
-    }
+    //if (category3.checked) {
+    //  category = 'FINANCIAL EXPERTS'
+    //}
     if (category4.checked) {
       category = 'MARKETING & SEO'
     }

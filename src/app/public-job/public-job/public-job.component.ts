@@ -148,7 +148,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
         this.canBid = check
       }
       if ( this.canBid && 
-           this.currentUser.bnbAddress &&
+           this.currentUser.bscAddress &&
            this.currentUser.type === 'Provider' &&
            !this.myJob &&
            this.isOpen &&           
