@@ -177,6 +177,7 @@ export class EditComponent implements OnInit, OnDestroy {
     }
     const tmpUser = {
       address: this.currentUser.address,
+      avatar: this.currentUser.avatar,
       name: this.profileForm.value.name,
       work: this.profileForm.value.work,
       bscAddress: this.profileForm.value.bscAddress,
