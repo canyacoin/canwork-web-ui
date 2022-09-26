@@ -4,8 +4,7 @@
       <div class="row search-container">
         <div class="col-12">
           <ais-instantsearch [config]="algoliaSearchConfig" *ngIf="!rendering">
-            <div class="row" id="shouldBeShown" *ngIf="minValue > 0">
-            </div>
+            <div class="row" id="shouldBeShown" *ngIf="minValue > 0"></div>
             <ais-refinement-list
               hidden
               attribute="category"
@@ -102,18 +101,6 @@
                   <div class="row text-center">
                     <div class="col-md-6 col-sm-12 col-12">
                       <button
-                        id="finance"
-                        (click)="onChooseCategory('finance')"
-                        [ngClass]="{
-                          chosen: isInArray('finance', this.categoryFilters)
-                        }"
-                        class="btn btn-primary btn-outline category-btn"
-                      >
-                        FINANCIAL EXPERTS
-                      </button>
-                    </div>
-                    <div class="col-md-6 col-sm-12 col-12">
-                      <button
                         id="marketing"
                         (click)="onChooseCategory('marketing')"
                         [ngClass]="{
@@ -188,8 +175,7 @@
                       >
                     </div>
                   </div>
-                  <div class="row" hidden>
-                  </div>
+                  <div class="row" hidden></div>
                 </div>
               </div>
               <div class="col-3 text-right no-padding">

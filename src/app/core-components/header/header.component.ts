@@ -42,7 +42,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   providerCategories = [
     'Content Creators',
     'Designers & Creatives',
-    'Financial experts',
     'Marketing & SEO',
     'Software developers',
     'Virtual assistants',

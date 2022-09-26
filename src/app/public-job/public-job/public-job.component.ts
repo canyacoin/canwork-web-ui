@@ -10,7 +10,7 @@ import { AngularFireStorage } from 'angularfire2/storage'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 import { environment } from '@env/environment'
-declare var $: any;
+declare var $: any
 
 @Component({
   selector: 'app-public-job',
@@ -45,8 +45,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private publicJobsService: PublicJobService,
     private storage: AngularFireStorage,
-    private formBuilder: FormBuilder,
-    
+    private formBuilder: FormBuilder
   ) {
     this.bidForm = this.formBuilder.group({
       price: [
@@ -147,14 +146,15 @@ export class PublicJobComponent implements OnInit, OnDestroy {
         )
         this.canBid = check
       }
-      if ( this.canBid && 
-           this.currentUser.bnbAddress &&
-           this.currentUser.type === 'Provider' &&
-           !this.myJob &&
-           this.isOpen &&           
-          (this.activatedRoute.snapshot.queryParams['nextAction'] === 'bid')
-          )  $("#bidModal").modal("show")
-      
+      if (
+        this.canBid &&
+        this.currentUser.bscAddress &&
+        this.currentUser.type === 'Provider' &&
+        !this.myJob &&
+        this.isOpen &&
+        this.activatedRoute.snapshot.queryParams['nextAction'] === 'bid'
+      )
+        $('#bidModal').modal('show')
     } else {
       this.myJob = false
     }
