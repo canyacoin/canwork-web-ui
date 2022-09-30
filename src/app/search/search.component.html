@@ -4,7 +4,8 @@
       <div class="row search-container">
         <div class="col-12">
           <ais-instantsearch [config]="algoliaSearchConfig" *ngIf="!rendering">
-            <div class="row" id="shouldBeShown" *ngIf="minValue > 0"></div>
+            <div class="row" id="shouldBeShown" *ngIf="minValue > 0">
+            </div>
             <ais-refinement-list
               hidden
               attribute="category"
@@ -175,7 +176,8 @@
                       >
                     </div>
                   </div>
-                  <div class="row" hidden></div>
+                  <div class="row" hidden>
+                  </div>
                 </div>
               </div>
               <div class="col-3 text-right no-padding">

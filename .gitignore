@@ -12,6 +12,7 @@
 # Cam added: scripts to deploy to various environments
 prod-deploy.sh
 staging-deploy*.sh
+cam-deploy.sh
 
 # dependencies
 /node_modules
@@ -21,7 +22,7 @@ functions/.runtimeconfig.json
 functions/package-lock.json
 functions/yarn-lock
 package-lock.json
-yarn.lock
+yarn-lock
 
 # latest firebase-tools now uses a dot directory
 .firebase/
