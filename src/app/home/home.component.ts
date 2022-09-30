@@ -110,10 +110,10 @@ export class HomeComponent implements OnInit {
     this.algoliaIndex.search({ query: searchQuery }).then(res => {
       const result = res.hits
       var l
-      if (result.length > 4) {
+      if (result.length > 4){
         l = 4
       } else {
-        l = result.length
+        l = result.length 
       }
       for (let i = 0; i < l; i++) {
         const provider = {
