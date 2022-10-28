@@ -5166,7 +5166,7 @@ ul.flexbox {
 
 .topbar {
   position: absolute;
-  top: 40px;
+  top: 0;
   left: 0;
   right: 0;
   background-color: transparent;
@@ -5262,27 +5262,20 @@ ul.flexbox {
 .logo-binance {
   display: block;
   padding-left: 10%;
+  height: 20px;
 }
 
-@media (max-width:480px) {
+@media (min-width:370px) {
   .logo-binance {
-  padding-left: 5%;
+    height: 30px;
   }
 }
 
-@media (max-width:390px) {
+@media (min-width:400px) {
   .logo-binance {
-  height: 30px;
-  padding-left: 0;
+    height: 40px;
   }
 }
-
-@media (max-width:290px) {
-  .logo-binance {
-  display:none;
-  }
-}
-
 .topbar-nav {
   display: -webkit-inline-box;
   display: inline-flex;
@@ -5759,6 +5752,12 @@ ul.flexbox {
   }
 }
 
+@media (max-width: 400px) {
+  .topbar-expand-md .topbar-nav {
+    width: 260px;
+  }
+}
+
 @media (max-width: 767px) {
   .topbar-expand-sm.topbar-inverse .topbar-nav>.nav-item>.nav-link {
     color: #535353;
@@ -5997,11 +5996,11 @@ ul.flexbox {
   }
 }
 
-@media (max-width: 330px) {
+/* @media (max-width: 330px) {
   .topbar-nav {
     width: 100%!important;
   }
-}
+} */
 
 .header {
   position: relative;
