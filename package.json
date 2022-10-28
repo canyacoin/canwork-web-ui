@@ -44,7 +44,7 @@
     "core-js": "^2.4.1",
     "ethers": "5.3.1",
     "firebase": "^5.5.7",
-    "firebase-tools": "^7.0.2",
+    "firebase-tools": "7.0.2",
     "firebaseui": "^3.4.1",
     "firebaseui-angular": "^3.3.2",
     "hashbow": "^1.1.1",

@@ -10694,7 +10694,7 @@ ngx-clipboard@^11.1.9:
     ngx-window-token "^1.0.2"
     tslib "^1.9.0"
 
-ngx-dropzone-wrapper@^8.0.0:
+ngx-dropzone-wrapper@8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/ngx-dropzone-wrapper/-/ngx-dropzone-wrapper-8.0.0.tgz#0828b92985d5533c25ea2ba6c179664faf77fd23"
   integrity sha512-56nXp70DR5NRzvISi5l0bXONdda+2DGNJGBxwIn9oM9CD27aac7CT4aU5Vo4R0KDFcMNiTO3zFQvuDhHvSq54Q==
