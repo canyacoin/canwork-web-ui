@@ -1,6 +1,10 @@
 const RPC_ENDPOINT = 'https://bsc-dataseed.binance.org/';
 
 import axios from 'axios'
+/*
+plain https call to rpc blockchain endpoint, no dependency on web3 libs (this is segregated to an external chain monitor service)
+*/
+
 import { GenerateGuid } from './generate.uid'
 
 
@@ -191,7 +195,7 @@ export function bep20TxMonitor(db) {
                       
                     } else {
                       
-                      chainCheckMessage = `no result from chain with error ${JSON.stringify(data.error)}`; 
+                      chainCheckMessage = `no result from chain, received data: ${JSON.stringify(data)}`; 
                       
                     }
 
