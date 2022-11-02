@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core'
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core'
 import { AngularFirestore } from 'angularfire2/firestore'
 import { take } from 'rxjs/operators'
 
@@ -14,13 +21,16 @@ export class SkillTag {
 export class SkillTagsSelectionComponent implements OnInit {
   @Input() initialTags: string[]
   @Input() minimumTags: number
-  @Input() updatedTags: string[];
+  @Input() updatedTags: string[]
   @Output() tagsUpdated: EventEmitter<string> = new EventEmitter()
   @Output() tagsLoaded: EventEmitter<string[]> = new EventEmitter()
 
   ngOnChanges(changes: SimpleChanges) {
     if (!!changes.updatedTags) {
-      this.acceptedTags = changes.updatedTags.currentValue === undefined ? [] : changes.updatedTags.currentValue
+      this.acceptedTags =
+        changes.updatedTags.currentValue === undefined
+          ? []
+          : changes.updatedTags.currentValue
       this.tagsUpdated.emit(this.acceptedTags.join(','))
     }
   }
@@ -47,15 +57,16 @@ export class SkillTagsSelectionComponent implements OnInit {
   }
 
   onBlurMethod() {
-    if (this.acceptedTags.length == 0) this.noValidTag = true;
+    if (this.acceptedTags.length == 0) this.noValidTag = true
   }
   onFocusMethod() {
-    this.noValidTag = false;
-  }  
+    this.noValidTag = false
+  }
 
   onTagEnter() {
-    this.noValidTag = false;
-    const tag = this.tagInput
+    this.noValidTag = false
+    let tag = this.tagInput
+    tag = tag.replace(',', '').trim()
     if (tag === '') {
       this.tagSelectionInvalid = true
       return false
@@ -78,7 +89,8 @@ export class SkillTagsSelectionComponent implements OnInit {
   }
 
   onTagChange() {
-    const tag = this.tagInput
+    let tag = this.tagInput
+    tag = tag.replace(',', '').trim()
     const indexOfTag = this.skillTagsList.findIndex(x => x === tag)
     const duplicate = this.acceptedTags.findIndex(x => x === tag) > -1
     if (indexOfTag !== -1) {
@@ -98,6 +110,14 @@ export class SkillTagsSelectionComponent implements OnInit {
     const index = this.acceptedTags.indexOf(tag)
     this.acceptedTags.splice(index, 1)
     this.tagsUpdated.emit(this.acceptedTags.join(','))
+  }
 
+  onDropDownTT() {
+    let tag = this.tagInput
+    tag = tag.replace(',', '').trim()
+    console.log('TODO: add clickable popper for tag entry', tag)
+    // Trigger a tooltip below field with the current input value
+    // Can click the tooltip to enter it for better UX on mobile
+    // optionally the user can press 'enter' or 'comma' as usual
   }
 }
