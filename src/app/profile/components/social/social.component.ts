@@ -42,7 +42,7 @@ export class SocialComponent implements OnInit {
         '&text=' +
         document.title +
         '&original_referer=' +
-        escape('https://canya.com'),
+        escape('https://canwork.io'),
       '',
       'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600'
     )

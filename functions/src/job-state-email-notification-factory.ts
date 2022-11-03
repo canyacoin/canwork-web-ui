@@ -2,7 +2,7 @@ import { ActionType } from './job-action-type'
 import { UserType } from './user-type'
 
 const sgMail = require('@sendgrid/mail')
-const replyTo = 'CanWork - No Reply <noreply@canya.com>'
+const replyTo = 'CanWork - No Reply <noreply@canwork.io>'
 /*
  * Interfaces
  */
@@ -56,8 +56,8 @@ abstract class AEmailNotification implements IJobStateEmailNotification {
     this.emailMessages.forEach(emailMessage => {
       console.log('+ sending message to', emailMessage.to)
 
-      const senderAddress = 'support@canya.com'
-      const senderName = 'CanYa support'
+      const senderAddress = 'support@canwork.io'
+      const senderName = 'CanWork support'
 
       sgMail.send(
         {

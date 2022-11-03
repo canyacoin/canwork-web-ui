@@ -84,7 +84,7 @@ export class IJobAction {
       case ActionType.acceptFinish:
         return 'Are you sure you want to finish this job?'
       case ActionType.dispute:
-        return 'Please contact support@canya.com for dispute resolution.'
+        return 'Please contact support@canwork.io for dispute resolution.'
       case ActionType.cancelJobEarly:
         return 'You are going to cancel this job. This cannot be undone. Are you sure?'
       case ActionType.review:
