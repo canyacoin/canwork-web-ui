@@ -86,6 +86,7 @@ export class SkillTagsSelectionComponent implements OnInit {
     }
     this.tagInput = ''
     this.tagSelectionInvalid = false
+    this.onDropDownTT()
   }
 
   onTagChange() {
@@ -115,8 +116,17 @@ export class SkillTagsSelectionComponent implements OnInit {
   onDropDownTT() {
     let tag = this.tagInput
     tag = tag.replace(',', '').trim()
-    console.log('TODO: add clickable popper for tag entry', tag)
-    // Trigger a tooltip below field with the current input value
+
+    const tooltip = document.querySelector<any>('#tagInputTT')
+    if (tooltip) {
+      tooltip.innerText = 'Click to add: ' + tag
+
+      if (tag !== '') {
+        tooltip.setAttribute('data-show', '')
+      } else {
+        tooltip.removeAttribute('data-show')
+      }
+    }
     // Can click the tooltip to enter it for better UX on mobile
     // optionally the user can press 'enter' or 'comma' as usual
   }

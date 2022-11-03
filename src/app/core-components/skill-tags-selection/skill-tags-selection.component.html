@@ -1,5 +1,6 @@
 <!-- For mobile devices `autocapitalize` || `keyup.shift.enter` required to emulate 'enter' keypress -->
 <input
+  id="tagInputBox"
   list="tagsList"
   class="form-control"
   placeholder="e.g. HTML, CSS..."
@@ -15,6 +16,14 @@
   autocapitalize="none"
   (keyup.shift.enter)="onTagEnter()"
 />
+
+<app-popper
+  tooltipText=""
+  targetId="tagInputBox"
+  tooltipId="tagInputTT"
+  [disableShowHide]="true"
+  (click)="onTagEnter()"
+></app-popper>
 
 <small class="text-primary text-wrap" *ngIf="tagSelectionInvalid"
   >You can only add 6 tags to a project (up to 14 characters long)
