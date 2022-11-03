@@ -57,7 +57,7 @@ export const exportUsers = (
   }
   const sendData: MailData = {
     to: 'devex.soft@gmail.com',
-    from: 'support@canya.com',
+    from: 'support@canwork.io',
     subject: 'CanWork export users',
     text: 'export users',
     attachments: [attach],
