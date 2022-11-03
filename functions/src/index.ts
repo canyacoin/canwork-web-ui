@@ -371,9 +371,11 @@ exports.indexProviderData = functions.firestore
     const objectId = snap.id
 
     !data.slug &&
-      createSlugIfNotExist('users', objectId, joinString(data.name)).catch(
-        err => console.error(err)
-      )
+      createSlugIfNotExist(
+        'users',
+        objectId,
+        joinString(data.name)
+      ).catch(err => console.error(err))
 
     const workData = buildWorkData(objectId)
 
@@ -495,7 +497,7 @@ exports.updateIndexProviderData = functions.firestore
       sgMail.setApiKey(sendgridApiKey)
       const msg = {
         to: afterData.email,
-        from: 'support@canya.com',
+        from: 'support@canwork.io',
         subject: 'Welcome to CanWork',
         html: html,
       }
@@ -841,18 +843,8 @@ function getFirebaseInstance(projectId: string) {
       environment: 'dev',
     },
     {
-      projectId: 'can-work-cam',
-      uri: 'http://localhost:4200',
-      environment: 'dev',
-    },
-    {
-      projectId: 'canwork-alex',
-      uri: 'http://localhost:4200',
-      environment: 'dev',
-    },
-    {
       projectId: 'staging-can-work',
-      uri: 'https://staging.canya.com',
+      uri: 'https://canwork-staging.web.app/home',
       environment: 'staging',
     },
     {
@@ -1156,9 +1148,11 @@ exports.initSlug = functions.https.onRequest(async (request, response) => {
   usersnaps.forEach(async doc => {
     const data = doc.data()
     !data.slug &&
-      createSlugIfNotExist('users', doc.id, joinString(doc.data().name)).catch(
-        err => console.error(err)
-      )
+      createSlugIfNotExist(
+        'users',
+        doc.id,
+        joinString(doc.data().name)
+      ).catch(err => console.error(err))
   })
   jobsnaps.forEach(async doc => {
     const data = doc.data()
