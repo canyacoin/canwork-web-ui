@@ -4,9 +4,7 @@
 > This repo mirrors from Gitlab to Github. Please commit to the Gitlab repo:
 > https://gitlab.com/canyacoin/canwork/web-ui
 
----
-
-# CanWork.io
+---# CanWork.io
 
 This is an Angular Project, generated using [Angular CLI](https://github.com/angular/angular-cli)
 
@@ -53,6 +51,12 @@ git checkout -b "yourname"
 ```
 
 Setup
+
+Prior to running `yarn` ensure your node version is in a range supported by this project using something like NVM
+A `.nvmrc` file is included to make this easy if you already use NVM (just `cd` to this projects root folder _with admin privileges_ and run `nvm use` to activate the correct node version)
+Tested (working) node versions: `10.15.3 - 10.24.1`
+
+WINDOWS USERS: `.nvmrc` format file is not supported with windows NVM so you will have to manually include the version number like `nvm use 10.15.3` and if it says its not installed then first do this `nvm install 10.15.3`
 
 ```
 yarn
