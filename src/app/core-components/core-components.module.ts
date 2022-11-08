@@ -35,6 +35,7 @@ import { VerifiedMarkComponent } from './verified-mark/verified-mark.component'
 import { DynamicCoinComponent } from './dynamic-coin/dynamic-coin.component'
 import { DynamicCoinWrapperComponent } from './dynamic-coin-wrapper/dynamic-coin-wrapper.component'
 import { LedgerModalComponent } from '../binance/ledger-modal/ledger-modal.component'
+import { PopperComponent } from './popper/popper.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -82,6 +83,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     DynamicCoinComponent,
     DynamicCoinWrapperComponent,
     LedgerModalComponent,
+    PopperComponent,
   ],
   exports: [
     AttachmentComponent,
