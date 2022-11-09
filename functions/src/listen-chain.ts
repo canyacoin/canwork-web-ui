@@ -124,10 +124,10 @@ export async function listenToChainUpdates(request, response, db, env) {
     const amount = smartData.value; // big int string
     const escrowAddress = body.address; // the to of transaction (interacted address)
     const tokenAddress = smartData.asset; // the asset sent to escrow
-    let token = 'token'; // safe default todo: import env from angular and map address to token name
+    let token = 'token'; // safe default    
     Object.keys(env.chainmonitor.bsctokens).forEach((tokenName) => {
-      const address = env.chainmonitor.bsctokens[tokenName];
-      if (address.toLowerCase() === tokenAddress.toLowerCase()) token = tokenName;
+      const address = env.chainmonitor.bsctokens[tokenName]; 
+      if (address.toLowerCase() === tokenAddress.toLowerCase()) token = tokenName; // map address to token name
     });
 
     const providerAddress = smartData.provider; // the provider address
