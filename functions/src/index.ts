@@ -29,6 +29,7 @@ import {
   removeTransactions,
 } from './remove-old-data'
 import { bep20TxMonitor } from './bep20-monitor'
+import { listenToChainUpdates } from './listen-chain'
 
 import { timestampConverter } from './timestamp-converter'
 import { exportUsers } from './export-users'
@@ -1305,3 +1306,15 @@ exports.firestoreSelect = functions.https.onCall(firestoreSelect(db))
 exports.bep20TxMonitor = functions.pubsub
   .schedule('every 5 minutes')
   .onRun(bep20TxMonitor(db))
+  
+// listen to chain monitor updates and save into bep20 tx monitor table
+// and process instantly using same (todo refactor to common) functions from scheduled bep20 tx monitor
+// with some tweak (no token and no amount, we have to calculate it)
+// using same table, if first invocation fails, scheduled process will retry up to succes
+exports.listenToChainUpdates = functions.https.onRequest(
+  async (request, response) => {
+    cors(request, response, async () => {
+      await listenToChainUpdates(request, response, db, env)
+    })
+  }
+)

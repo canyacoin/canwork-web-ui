@@ -1253,6 +1253,12 @@ export class BscService {
       immediately save tx hash to bep20 pending txs table, so backend job can check it
       even if user closes browser now
       */
+      
+      /*
+      // DISABLED
+      // WE DON'T NEED THIS ANYMORE CAUSE WE ARE MONITORING CHAIN ON BACKEND
+      // AVOID DUPLICATES, DON'T CREATE IT ALSO FROM FRONTEND
+      
       console.log(`tracking tx hash ${transaction.hash} for deposit of job id ${jobId}`)
       
       try {
@@ -1289,6 +1295,7 @@ export class BscService {
               
         
       }
+      */
       
       // wait for transaction confirm
       const receipt = await transaction.wait()
