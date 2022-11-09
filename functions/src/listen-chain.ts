@@ -65,7 +65,6 @@ export async function listenToChainUpdates(request, response, db, env) {
     !body.hasOwnProperty('hash') ||
     !body.hasOwnProperty('from') ||
     !body.hasOwnProperty('address') ||
-    !body.hasOwnProperty('hash') ||
     !body.hasOwnProperty('method') ||
     !body.hasOwnProperty('data')      
   ) {
