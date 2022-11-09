@@ -1,4 +1,12 @@
+/*
+no dependency on web3 libs (this is segregated to an external chain monitor service)
+*/
+
+
 import { GenerateGuid } from './generate.uid'
+
+import { bep20TxProcess } from './bep20-process'
+
 const SUPPORTED_METHODS = ['depositBEP20'];
 
 
@@ -116,8 +124,13 @@ export async function listenToChainUpdates(request, response, db, env) {
     const amount = smartData.value; // big int string
     const escrowAddress = body.address; // the to of transaction (interacted address)
     const tokenAddress = smartData.asset; // the asset sent to escrow
+    let token = 'token'; // safe default todo: import env from angular and map address to token name
+    Object.keys(env.chainmonitor.bsctokens).forEach((tokenName) => {
+      const address = env.chainmonitor.bsctokens[tokenName];
+      if (address.toLowerCase() === tokenAddress.toLowerCase()) token = tokenName;
+    });
+
     const providerAddress = smartData.provider; // the provider address
-    const token = 'token'; // todo: import env from angular and map address to token name
     const hash = body.hash; // transaction hash
     const from = body.from;
     const to = body.address; // transaction to
@@ -145,7 +158,16 @@ export async function listenToChainUpdates(request, response, db, env) {
     /* 
     only logged in userId can create this tx, this is security rule:
     
-    // bep20 monitor
+    // bep20 monitor old rule
+    match /bep20-txs/{transactionId} {
+       allow read: if isAdmin();
+       allow create: if request.auth.uid == request.resource.data.userId;
+       allow update: if isAdmin();
+       allow delete: if isAdmin();
+    }
+
+    // bep20 monitor new rule (not added for now, cause frontend doesn't create records anymore
+    // Added ALSO POSSIBILITY FOR ADMIN (firestore function) TO CREATE THIS RECORD
     match /bep20-txs/{transactionId} {
        allow read: if isAdmin();
        allow create: if request.auth.uid == request.resource.data.userId;
@@ -153,14 +175,17 @@ export async function listenToChainUpdates(request, response, db, env) {
        allow delete: if isAdmin();
     }
           
-    TODO ADD ALSO POSSIBILITY FOR ADMIN (firestore function) TO CREATE THIS RECORD
     */
-    monitorCollection.doc(transaction.id).set(transaction);
+    await monitorCollection.doc(transaction.id).set(transaction);
     
     
-    // todo then invoke processing function (todo refactor from bep20-monitor and make it
+    // invoke processing function (refactored from bep20-monitor and made
     // a shared function, to process it instantly
     // otherwise it will caught up from periodic schedule
+    await bep20TxProcess(db, transaction);
+    
+    console.log(`Created and processed tx ${transaction.id}, job ${jobId}`);          
+    
     
   
   } else {
