@@ -22,9 +22,7 @@
     "cors": "^2.8.4",
     "csv-stringify": "^5.3.0",
     "dot": "^1.1.2",
-    "express": "4.17.2",
-    "@types/express-serve-static-core": "4.17.20",
-    "@types/express": "4.17.2",
+    "express": "^4.16.3",
     "faker": "^4.1.0",
     "firebase-admin": "^8.0.0",
     "firebase-functions": "^3.0.2",
@@ -32,9 +30,9 @@
     "ramda": "^0.26.1"
   },
   "resolutions": {
-    "@types/express-serve-static-core": "4.17.20",
-    "@types/express": "4.17.2"
-  }  
+    "@types/express-serve-static-core": "4.17.18",
+    "@types/express": "4.17.1"
+  },  
   "devDependencies": {
     "@types/node-fetch": "^2.5.3",
     "prettier": "^1.18.0",
