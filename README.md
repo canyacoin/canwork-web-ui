@@ -31,7 +31,7 @@ npm install --save-dev @angular/compiler-cli@7.0.2
 - [Firebase CLI](https://www.npmjs.com/package/firebase)
 
 ```
-npm install -g @angular/cli firebase-tools
+npm install -g @angular/cli@9.0.4 firebase-tools@7.16.2
 ```
 
 - [YARN](https://yarnpkg.com/en/docs/install#mac-stable)
