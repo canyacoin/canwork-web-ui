@@ -1310,7 +1310,7 @@ exports.firestoreSelect = functions.https.onCall(firestoreSelect(db))
 
 // bep20 tx monitor
 exports.bep20TxMonitor = functions.pubsub
-  .schedule('every 5 minutes')
+  .schedule('every 60 minutes')
   .onRun(bep20TxMonitor(db))
   
 // listen to chain monitor updates and save into bep20 tx monitor table
