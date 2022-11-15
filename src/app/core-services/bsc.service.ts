@@ -1042,7 +1042,7 @@ export class BscService {
       await this.checkSigner()
 
       let strippedJobId = jobId.replace(/-/g, '')
-      if (strippedJobId.length >= 32)
+      if (strippedJobId.length > 32)
         strippedJobId = strippedJobId.substr(0, 32)
 
       //const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
@@ -1157,8 +1157,8 @@ export class BscService {
       await this.checkSigner()
 
       let strippedJobId = jobId.replace(/-/g, '')
-      if (strippedJobId.length >= 32)
-        strippedJobId = strippedJobId.substr(0, 31)
+      if (strippedJobId.length > 32)
+        strippedJobId = strippedJobId.substr(0, 32)
 
       let decimals = CURRENCY.decimals
       if (
@@ -1375,8 +1375,8 @@ export class BscService {
       await this.checkSigner()
 
       let strippedJobId = jobId.replace(/-/g, '')
-      if (strippedJobId.length >= 32)
-        strippedJobId = strippedJobId.substr(0, 31)
+      if (strippedJobId.length > 32)
+        strippedJobId = strippedJobId.substr(0, 32)
 
       //const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
       const jobIdBigint = this.hexToBigint(strippedJobId) // this is already a string
@@ -1419,8 +1419,8 @@ export class BscService {
       await this.checkSigner()
 
       let strippedJobId = jobId.replace(/-/g, '')
-      if (strippedJobId.length >= 32)
-        strippedJobId = strippedJobId.substr(0, 31)
+      if (strippedJobId.length > 32)
+        strippedJobId = strippedJobId.substr(0, 32)
 
       const jobIdBigint = this.hexToBigint(strippedJobId)
 
