@@ -258,6 +258,9 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
     
     // check result and approve into controller state
     if (!result.err) {
+      /*
+      // moved to backend
+      // for deposit bep20 it will be handled from backend
       // save tx immediately
       let tx = await this.transactionService.createTransaction(
         `Deposit ${this.bscAssetData.token}`,
@@ -265,11 +268,15 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
         this.job.id
       );
       
+      */
+      
       
       const action = new IJobAction(ActionType.enterEscrowBsc, UserType.client)
       this.job.state = JobState.inEscrow
 
       let success = await this.jobService.handleJobAction(this.job, action)
+      
+      
       if (success) {
         this.showSuccess = true
         this.showBalance = false // not needed anymore and it will change

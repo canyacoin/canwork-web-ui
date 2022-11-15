@@ -7,7 +7,7 @@ import { GenerateGuid } from './generate.uid'
 
 import { bep20TxProcess } from './bep20-process'
 
-const SUPPORTED_METHODS = ['depositBEP20'];
+const SUPPORTED_METHODS = ['depositBEP20', 'depositBNB'];
 
 
 /*
@@ -26,7 +26,7 @@ export async function listenToChainUpdates(request, response, db, env) {
     hash, (tx hash)
     from, (sender address)
     address, (escrow address)
-    method, (smart contract method) supported: ['depositBEP20']
+    method, (smart contract method) supported: ['depositBEP20', 'depositBNB']
     data (smart contract data):
     { // example for depositBEP20 method
       asset: token address,
@@ -34,7 +34,11 @@ export async function listenToChainUpdates(request, response, db, env) {
       value: big int amount,
       JOBID: big int job id ,
       swapPath: address array
-    }    
+    }  
+    { // example for depositBNB method
+      provider: provider address,
+      JOBID: big int job id ,
+    }      
   }
   + headers.authorization
   */  
@@ -186,6 +190,60 @@ export async function listenToChainUpdates(request, response, db, env) {
     console.log(`Created and processed tx ${transaction.id}, job ${jobId}`);          
     
     
+  } else if (smartMethod === 'depositBNB') {
+    // deposit to escrow from client
+  
+    if (
+      !smartData.hasOwnProperty('provider') ||
+      !smartData.hasOwnProperty('JOBID')
+    ) {
+      console.log('Missing smart contract data');
+      console.log(smartData);
+    
+      return response.status(405).send('Missing data')
+      
+    } 
+    const monitorCollection = db.collection('bep20-txs');
+
+    const jobIdBigInt = smartData.JOBID;
+    const jobIdHex = bigint2hex(jobIdBigInt);
+    const jobId = `${jobIdHex.substr(0,8)}-${jobIdHex.substr(8,4)}-${jobIdHex.substr(12,4)}-${jobIdHex.substr(16,4)}-${jobIdHex.substr(20,12)}`;
+    
+    const amount = 0; // todo add to data passed into body from chain monitor, this is not mandatory
+    const escrowAddress = body.address; // the to of transaction (interacted address)
+    const tokenAddress = 'BNB'; // the asset sent to escrow
+    const token = 'BNB'; // static  
+    const providerAddress = smartData.provider; // the provider address
+    const hash = body.hash; // transaction hash
+    const from = body.from;
+    const to = body.address; // transaction to
+    const action = 'deposit';
+    
+    const transaction = {
+      id: GenerateGuid(),
+      timestamp: Date.now(),
+      jobId,
+      // userId,  // (firestore id) this is not mandatory for bep20-monitor
+      // providerId, // (firestore id) this is not mandatory for bep20-monitor
+      amount,
+      escrowAddress,
+      token,
+      tokenAddress,
+      providerAddress,
+      hash,
+      from,
+      to,
+      action,
+      status: 'created' // later it will become 'processed' or 'checked' (if already valid) or 'error'
+      //backend will add processedTimestamp
+    }    
+    
+
+    await monitorCollection.doc(transaction.id).set(transaction);
+
+    await bep20TxProcess(db, transaction);
+    
+    console.log(`Created and processed tx ${transaction.id}, job ${jobId}`);        
   
   } else {
     console.log('Method not implemented');

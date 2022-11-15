@@ -1316,8 +1316,22 @@ export class BscService {
   
   /*
   save transaction into backend table, polled periodically by firestore function bep20TxMonitor
+  moved to backend
   */
-  async createMonitorTransaction(
+  /* 
+  only logged in userId can create this tx, this was security rule:
+  
+  // bep20 monitor
+  match /bep20-txs/{transactionId} {
+     allow read: if isAdmin();
+     allow create: if request.auth.uid == request.resource.data.userId;
+     allow update: if isAdmin();
+     allow delete: if isAdmin();
+  }
+        
+  
+  */  
+  /*async createMonitorTransaction(
     jobId,
     userId,
     providerId,
@@ -1332,19 +1346,7 @@ export class BscService {
     action  
   ): Promise<any> {
     
-    /* 
-    only logged in userId can create this tx, this is security rule:
-    
-    // bep20 monitor
-    match /bep20-txs/{transactionId} {
-       allow read: if isAdmin();
-       allow create: if request.auth.uid == request.resource.data.userId;
-       allow update: if isAdmin();
-       allow delete: if isAdmin();
-    }
-          
-    
-    */
+
     
     let transaction = {
       id: GenerateGuid(),
@@ -1366,7 +1368,7 @@ export class BscService {
     }
 
     return this.monitorCollection.doc(transaction.id).set(transaction)
-  }  
+  } */ 
 
   // releaseAsClient
   async release(jobId) {
