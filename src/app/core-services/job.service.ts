@@ -277,9 +277,10 @@ export class JobService {
             resolve(true)
             break
           case ActionType.enterEscrowBsc:
-            parsedJob.actionLog.push(action)
+            // parsedJob.actionLog.push(action) // moved to backend
             parsedJob.state = JobState.inEscrow
             parsedJob.bscEscrow = true // save bscEscrow property into job to use it later when releasing job
+            // todo move also the notify (chat and email) to backend ?
             await this.saveJobAndNotify(parsedJob, action)
             resolve(true)
             break
