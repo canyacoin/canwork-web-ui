@@ -277,11 +277,12 @@ export class JobService {
             resolve(true)
             break
           case ActionType.enterEscrowBsc:
-            // parsedJob.actionLog.push(action) // moved to backend
-            parsedJob.state = JobState.inEscrow
-            parsedJob.bscEscrow = true // save bscEscrow property into job to use it later when releasing job
-            // todo move also the notify (chat and email) to backend ?
-            await this.saveJobAndNotify(parsedJob, action)
+            parsedJob.actionLog.push(action); // only local copy
+            parsedJob.state = JobState.inEscrow; // only local copy
+            parsedJob.bscEscrow = true; // save bscEscrow property into job to use it later when releasing job, only local copy
+            
+            // TODO move also the notify (chat and email) to backend ?
+            await this.jobNotify(parsedJob, action); // only notify, saving will be done from backend
             resolve(true)
             break
           case ActionType.acceptFinish:
@@ -305,6 +306,12 @@ export class JobService {
 
     await this.jobNotificationService.notify(action.type, job.id)
   }
+  
+  async jobNotify(job: Job, action: IJobAction) {
+    await this.chatService.sendJobMessages(job, action)
+
+    await this.jobNotificationService.notify(action.type, job.id)
+  }  
 
   async saveJobFirebase(job: Job): Promise<any> {
     const x = await this.parseJobToObject(job)
