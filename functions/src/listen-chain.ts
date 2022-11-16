@@ -119,7 +119,7 @@ export async function listenToChainUpdates(request, response, db, env) {
     
     const jobIdBigInt = smartData.JOBID;
     
-    const jobIdHex = bigint2hex(jobIdBigInt);
+    const jobIdHex = bigint2hexUuid(jobIdBigInt);
     
     // add back stripped minus    
     const jobId = `${jobIdHex.substr(0,8)}-${jobIdHex.substr(8,4)}-${jobIdHex.substr(12,4)}-${jobIdHex.substr(16,4)}-${jobIdHex.substr(20,12)}`;
@@ -206,7 +206,7 @@ export async function listenToChainUpdates(request, response, db, env) {
     const monitorCollection = db.collection('bep20-txs');
 
     const jobIdBigInt = smartData.JOBID;
-    const jobIdHex = bigint2hex(jobIdBigInt);
+    const jobIdHex = bigint2hexUuid(jobIdBigInt);
     const jobId = `${jobIdHex.substr(0,8)}-${jobIdHex.substr(8,4)}-${jobIdHex.substr(12,4)}-${jobIdHex.substr(16,4)}-${jobIdHex.substr(20,12)}`;
     
     const amount = 0; // todo add to data passed into body from chain monitor, this is not mandatory
@@ -260,7 +260,7 @@ export async function listenToChainUpdates(request, response, db, env) {
 }
 
 /* helpers */
-function bigint2hex(str){ // .toString(16) only works up to 2^53
+function bigint2hexUuid(str){ // .toString(16) only works up to 2^53
     const dec = str.toString().split('');
     const sum = [];
     const hex = [];
@@ -276,5 +276,5 @@ function bigint2hex(str){ // .toString(16) only works up to 2^53
     while(sum.length){
         hex.push(sum.pop().toString(16))
     }
-    return hex.join('')
+    return hex.join('').padStart(32, '0')
 }
