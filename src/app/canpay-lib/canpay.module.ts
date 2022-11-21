@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common'
 import { HttpClientModule } from '@angular/common/http'
 import { NgModule } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { HttpModule } from '@angular/http'
 import { QRCodeModule } from 'angular2-qrcode'
 import { BootstrapModalModule } from 'ng2-bootstrap-modal'
 import { ClipboardModule } from 'ngx-clipboard'
@@ -26,7 +25,6 @@ const PROVIDERS = [FormDataService]
     CommonModule,
     FormsModule,
     HttpClientModule,
-    HttpModule,
     BootstrapModalModule.forRoot({ container: document.body }),
     ClipboardModule,
     QRCodeModule,

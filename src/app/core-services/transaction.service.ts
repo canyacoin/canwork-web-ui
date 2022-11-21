@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { Http } from '@angular/http'
+import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { map, catchError } from 'rxjs/operators'
 import { GenerateGuid } from '@util/generate.uid'
@@ -67,7 +67,7 @@ export interface Transaction {
 export class TransactionService {
   transactionCollection: AngularFirestoreCollection<any>
 
-  constructor(private http: Http, private afs: AngularFirestore) {
+  constructor(private http: HttpClient, private afs: AngularFirestore) {
     this.transactionCollection = this.afs.collection<any>('transactions')
   }
 

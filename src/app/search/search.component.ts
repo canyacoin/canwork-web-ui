@@ -7,7 +7,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core'
-import { Http, Response } from '@angular/http'
+import { HttpClient } from '@angular/common/http'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import { createEmptyStateSnapshot } from '@angular/router/src/router_state'
 import {
@@ -73,7 +73,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private navService: NavService,
     private afs: AngularFirestore,
-    private http: Http,
+    private http: HttpClient,
     private userService: UserService,
     private auth: AuthService,
     private router: Router
