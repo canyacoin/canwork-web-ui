@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { GenerateGuid } from './generate.uid'
+import { sendJobMessages } from './chat-notifications'
+
 
 /*
 plain https call to rpc blockchain endpoint, no dependency on web3 libs (this is segregated to an external chain monitor service)
@@ -92,6 +94,7 @@ export async function bep20TxProcess(db, tx) {
             - save job to firestore
             - (optional todo) chatService.sendJobMessages(job, action)
             - (optional todo) jobNotificationService.notify(action.type, job.id)
+              we can invoke job mail sender directly from backend functions without calling endpoint?
           
           */
           
