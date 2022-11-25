@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { Headers, Http, Response } from '@angular/http'
+import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http'
 
 import * as firebase from 'firebase/app'
 import { environment } from '@env/environment'
@@ -12,14 +12,14 @@ import { AuthService } from './auth.service'
 export class JobNotificationService {
   readonly endPoint: string = `${environment.backendURI}/jobStateEmailNotification`
 
-  constructor(private authService: AuthService, private http: Http) {}
+  constructor(private authService: AuthService, private http: HttpClient) {}
 
   public async notify(jobAction: ActionType, jobId: string) {
     // TODO: move this into authService.getJwt() and solve async issues
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         const token = await user.getIdToken(true)
-        const headers = new Headers()
+        const headers = new HttpHeaders()
         headers.append('Access-Control-Allow-Origin', '*')
         headers.append('Content-Type', 'application/json')
         headers.append('Authorization', `Bearer ${token}`)
