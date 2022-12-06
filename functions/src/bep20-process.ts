@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { GenerateGuid } from './generate.uid'
-import { sendJobMessages } from './chat-notifications'
+import { ActionType, sendJobMessages } from './chat-notifications'
+import { UserType } from './user-type'
 
 
 /*
@@ -76,7 +77,7 @@ export async function bep20TxProcess(db, tx) {
       if (jobRef.exists) {
 
         const job = jobRef.data();
-        
+        //job.state = JobState.termsAcceptedAwaitingEscrow; // debug
         if (job.state === JobState.inEscrow) {
           // everything was already processed fine by frontend
           newStatus = 'checked';
@@ -92,8 +93,8 @@ export async function bep20TxProcess(db, tx) {
             - add action to action log
             - update job state to inEscrow
             - save job to firestore
-            - (optional todo) chatService.sendJobMessages(job, action)
-            - (optional todo) jobNotificationService.notify(action.type, job.id)
+            - chat notifications sendJobMessages
+            - (todo move from frontend) jobNotificationService.notify(action.type, job.id)
               we can invoke job mail sender directly from backend functions without calling endpoint?
           
           */
@@ -235,7 +236,7 @@ export async function bep20TxProcess(db, tx) {
               */
               const action = {
                 type: 'Pay Bsc Escrow',
-                executedBy: 'User',
+                executedBy: UserType.client,
                 message: '',
                 private: false,
                 timestamp: Date.now()
@@ -253,6 +254,17 @@ export async function bep20TxProcess(db, tx) {
               // save job to firestore
               await jobsCollection.doc(job.id).set(job);
               
+
+              // send notifications
+              
+              const chatAction = {
+                executedBy: UserType.client,
+                type: ActionType.enterEscrow
+              }
+              
+              await sendJobMessages(db, job, chatAction);
+
+
               //  update also bep20 monitor status at the end, it will be "processed"                    
               newStatus = 'processed'; // finally
               

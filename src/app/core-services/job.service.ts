@@ -308,7 +308,7 @@ export class JobService {
   }
   
   async jobNotify(job: Job, action: IJobAction) {
-    await this.chatService.sendJobMessages(job, action)
+    // await this.chatService.sendJobMessages(job, action) // moved to backend functions/src/chat-notifications.ts
 
     await this.jobNotificationService.notify(action.type, job.id)
   }  

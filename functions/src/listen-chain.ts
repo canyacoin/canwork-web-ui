@@ -209,7 +209,7 @@ export async function listenToChainUpdates(request, response, db, env) {
     const jobIdHex = bigint2hexUuid(jobIdBigInt);
     const jobId = `${jobIdHex.substr(0,8)}-${jobIdHex.substr(8,4)}-${jobIdHex.substr(12,4)}-${jobIdHex.substr(16,4)}-${jobIdHex.substr(20,12)}`;
     
-    const amount = 0; // todo add to data passed into body from chain monitor, this is not mandatory
+    const amount = body.value || "0"; // passed from chain monitor, useful for bnb methods
     const escrowAddress = body.address; // the to of transaction (interacted address)
     const tokenAddress = 'BNB'; // the asset sent to escrow
     const token = 'BNB'; // static  
