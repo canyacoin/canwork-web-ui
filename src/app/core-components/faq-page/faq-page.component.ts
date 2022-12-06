@@ -113,7 +113,7 @@ export class FaqPageComponent implements OnInit {
       q:
         'If I have a dispute with the other party during a job is there a way to fairly resolve it?',
       a:
-        'Dont worry.  The funds are escrowed until all parties agree.  If you have a problem while working, CanWork has systems in place to ensure fair judgement. You can contact support at anytime at support@canya.com',
+        'Dont worry.  The funds are escrowed until all parties agree.  If you have a problem while working, CanWork has systems in place to ensure fair judgement. You can contact support at anytime at support@canwork.io',
     },
     {
       index: 'q-24',

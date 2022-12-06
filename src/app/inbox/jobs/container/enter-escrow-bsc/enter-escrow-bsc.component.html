@@ -202,29 +202,34 @@
 
       <div class="row" *ngIf="!showSuccess">
         <div class="col-12 text-right">
-          <img
-            *ngIf="isEscrowLoading || isApproving"
-            src="assets/img/loader.svg"
-            height="36px"
-            alt="Loader"
-          />
-          <button
-            *ngIf="approvalNeeded"
-            class="btn btn-primary mr-5"
-            [disabled]="
-              isEscrowLoading || depositError || isApproved || isApproving
-            "
-            (click)="approveAsset()"
-          >
-            APPROVE
-          </button>
-          <button
-            class="btn btn-primary"
-            [disabled]="isEscrowLoading || depositError || !isApproved"
-            (click)="finalizeBscPay()"
-          >
-            DEPOSIT
-          </button>
+          <div class="row-12 text-right">
+            <img
+              *ngIf="isEscrowLoading || isApproving"
+              src="assets/img/loader.svg"
+              height="36px"
+              alt="Loader"
+            />
+            <button
+              *ngIf="approvalNeeded"
+              class="btn btn-primary mr-5"
+              [disabled]="
+                isEscrowLoading || depositError || isApproved || isApproving
+              "
+              (click)="approveAsset()"
+            >
+              APPROVE
+            </button>
+            <button
+              class="btn btn-primary"
+              [disabled]="isEscrowLoading || depositError || !isApproved"
+              (click)="finalizeBscPay()"
+            >
+              DEPOSIT
+            </button>
+          </div>
+          <b *ngIf="isEscrowLoading || isApproving" class="text-info text-wrap">
+            Confirm this transaction on your wallet.
+          </b>
         </div>
       </div>
     </div>

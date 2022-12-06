@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core'
 import { AnimationService } from './animation.service'
 import { ChatService } from './chat.service'
 import { FeatureToggleService } from './feature-toggle.service'
-import { FeedService } from './feed.service'
 import { JobService } from './job.service'
 import { GitService } from './git.service'
 import { SeoService } from './seo.service'
@@ -23,7 +22,6 @@ import { UserService } from './user.service'
   providers: [
     AnimationService,
     ChatService,
-    FeedService,
     FeatureToggleService,
     JobService,
     GitService,

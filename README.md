@@ -80,7 +80,7 @@ Build!
 
 **Firebase**
 
-Ask a CanYa Core member for access to the firebase staging app: `staging-can-work`, which itself is linked to https://staging.canya.com
+Ask a CanYa Core member for access to the firebase staging app: `staging-can-work`
 
 From inside the repo, log into Firebase
 

@@ -44,6 +44,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   reviewsSub: Subscription
   hideDescription = true
   isInitialised = false
+  isReleasing = false
 
   constructor(
     private authService: AuthService,
@@ -218,7 +219,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     if (!(await this.bscService.isBscConnected())) {
       const routerStateSnapshot = this.router.routerState.snapshot
       this.toastr.warning(
-        'Connect your Metamask wallet to release the payment',
+        'Connect your BNBChain wallet to release the payment',
         '',
         {
           timeOut: 4000,
@@ -236,6 +237,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     let result = await this.bscService.release(jobId)
     if (!result.err) {
       // save tx immediately
+      this.isReleasing = false
       let tx = await this.transactionService.createTransaction(
         `Release funds`,
         result.transactionHash,
@@ -264,6 +266,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
         break
       case ActionType.acceptFinish:
+        this.isReleasing = true
+        console.log('bscEscrow = ', this.job.bscEscrow)
         if (this.job.bscEscrow === true) {
           console.log('ActionType.acceptFinish BEP20')
           await this.releaseEscrowBsc()
