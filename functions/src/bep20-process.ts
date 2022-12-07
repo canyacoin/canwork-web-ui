@@ -82,7 +82,7 @@ export async function bep20TxProcess(db, tx, env, serviceConfig) {
 
         const job = jobRef.data();
         
-        job.state = JobState.termsAcceptedAwaitingEscrow; // force this to debug
+        // job.state = JobState.termsAcceptedAwaitingEscrow; // force this to debug
         
         if (job.state === JobState.inEscrow) {
           // everything was already processed fine by frontend
