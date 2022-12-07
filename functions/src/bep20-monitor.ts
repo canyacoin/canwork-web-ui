@@ -1,7 +1,7 @@
 import { bep20TxProcess } from './bep20-process'
 
 
-export function bep20TxMonitor(db) {
+export function bep20TxMonitor(db, env, serviceConfig) {
   return async () => {
   
     const txsCollection = db.collection('bep20-txs');    
@@ -17,7 +17,7 @@ export function bep20TxMonitor(db) {
       
         const tx = doc.data();
         
-        await bep20TxProcess(db, tx);
+        await bep20TxProcess(db, tx, env, serviceConfig);
         
         processed++;
       }

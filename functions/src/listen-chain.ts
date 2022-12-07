@@ -17,7 +17,7 @@ https://firebase.google.com/docs/functions/local-shell#invoke_https_functions
   listenToChainUpdates({method:'post',url:'/',headers:{authorization:env.chainmonitor.authkey}}).form( {method: '..', data: {}, .. })
  */
 
-export async function listenToChainUpdates(request, response, db, env) {
+export async function listenToChainUpdates(request, response, db, env, serviceConfig) {
   /*
   expected method POST
   expected path /
@@ -185,7 +185,7 @@ export async function listenToChainUpdates(request, response, db, env) {
     // invoke processing function (refactored from bep20-monitor and made
     // a shared function, to process it instantly
     // otherwise it will caught up from periodic schedule
-    await bep20TxProcess(db, transaction);
+    await bep20TxProcess(db, transaction, env, serviceConfig);
     
     console.log(`Created and processed tx ${transaction.id}, job ${jobId}`);          
     
@@ -241,7 +241,7 @@ export async function listenToChainUpdates(request, response, db, env) {
 
     await monitorCollection.doc(transaction.id).set(transaction);
 
-    await bep20TxProcess(db, transaction);
+    await bep20TxProcess(db, transaction, env, serviceConfig);
     
     console.log(`Created and processed tx ${transaction.id}, job ${jobId}`);        
   

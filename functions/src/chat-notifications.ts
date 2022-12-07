@@ -1,8 +1,6 @@
 import { UserType } from './user-type'
 
-export enum ActionType {
-  enterEscrow = 'Pay Escrow'
-}
+import { ActionType } from './job-action-type'
 
 enum MessageType {
   message = 'MESSAGE',
