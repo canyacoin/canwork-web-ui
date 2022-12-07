@@ -844,12 +844,14 @@ function getFirebaseInstance(projectId: string) {
       environment: 'dev',
     },
     {
-      projectId: 'staging-can-work',
+      // projectId: 'staging-can-work', // geco: this is the old one, wrong in my opinion
+      projectId: 'canwork-staging', // geco: new one (07/12/2022)
       uri: 'https://canwork-staging.web.app/home',
       environment: 'staging',
     },
     {
-      projectId: 'canwork-io',
+      // projectId: 'canwork-io', // geco: this is the old one, wrong in my opinion
+      projectId: 'can-work-io', // geco: new one (07/12/2022)
       uri: 'https://www.canwork.io',
       environment: 'prod',
     },
@@ -1305,7 +1307,7 @@ exports.firestoreSelect = functions.https.onCall(firestoreSelect(db))
 // bep20 tx monitor
 exports.bep20TxMonitor = functions.pubsub
   .schedule('every 60 minutes')
-  .onRun(bep20TxMonitor(db))
+  .onRun(bep20TxMonitor(db, env, serviceConfig))
   
 // listen to chain monitor updates and save into bep20 tx monitor table
 // and process instantly using same (todo refactor to common) functions from scheduled bep20 tx monitor
@@ -1314,7 +1316,7 @@ exports.bep20TxMonitor = functions.pubsub
 exports.listenToChainUpdates = functions.https.onRequest(
   async (request, response) => {
     cors(request, response, async () => {
-      await listenToChainUpdates(request, response, db, env)
+      await listenToChainUpdates(request, response, db, env, serviceConfig)
     })
   }
 )

@@ -1,5 +1,11 @@
 import axios from 'axios'
 import { GenerateGuid } from './generate.uid'
+import { sendJobMessages } from './chat-notifications'
+import { ActionType } from './job-action-type'
+import { UserType } from './user-type'
+import * as jobEmailfactory from './job-state-email-notification-factory'
+
+
 
 /*
 plain https call to rpc blockchain endpoint, no dependency on web3 libs (this is segregated to an external chain monitor service)
@@ -54,7 +60,8 @@ let transaction = {
 }    
 
 */
-export async function bep20TxProcess(db, tx) {
+export async function bep20TxProcess(db, tx, env, serviceConfig) {
+  const sendgridApiKey = env.sendgrid.apikey
   
   const jobsCollection = db.collection('jobs');
   const txsCollection = db.collection('bep20-txs');    
@@ -75,6 +82,8 @@ export async function bep20TxProcess(db, tx) {
 
         const job = jobRef.data();
         
+        job.state = JobState.termsAcceptedAwaitingEscrow; // force this to debug
+        
         if (job.state === JobState.inEscrow) {
           // everything was already processed fine by frontend
           newStatus = 'checked';
@@ -90,8 +99,9 @@ export async function bep20TxProcess(db, tx) {
             - add action to action log
             - update job state to inEscrow
             - save job to firestore
-            - (optional todo) chatService.sendJobMessages(job, action)
-            - (optional todo) jobNotificationService.notify(action.type, job.id)
+            - chat notifications sendJobMessages
+            - send email notifications
+              we can invoke job mail sender directly from backend functions without calling endpoint?
           
           */
           
@@ -222,7 +232,9 @@ export async function bep20TxProcess(db, tx) {
                   txHash,
                   tx.jobId,
                   transactionCollection
-                );                      
+                );
+                console.log(`Created job transaction for tx ${tx.id}, job ${tx.jobId}`);
+                
 
               }
               
@@ -232,7 +244,7 @@ export async function bep20TxProcess(db, tx) {
               */
               const action = {
                 type: 'Pay Bsc Escrow',
-                executedBy: 'User',
+                executedBy: UserType.client,
                 message: '',
                 private: false,
                 timestamp: Date.now()
@@ -240,8 +252,10 @@ export async function bep20TxProcess(db, tx) {
               
               if (job.actionLog) {
                 job.actionLog.push(action)
+                console.log(`Created job action for tx ${tx.id}, job ${tx.jobId}`);
                 
               }
+              
               
               job.bscEscrow = true // save bscEscrow property into job to use it later when releasing job
               
@@ -250,6 +264,50 @@ export async function bep20TxProcess(db, tx) {
               // save job to firestore
               await jobsCollection.doc(job.id).set(job);
               
+              console.log(`Updated job state for tx ${tx.id}, job ${tx.jobId}`);
+
+              // send notifications
+              
+              const jobAction = {
+                executedBy: UserType.client,
+                type: ActionType.enterEscrow
+              }
+              
+              // send chat messages
+              await sendJobMessages(db, job, jobAction);
+              console.log(`Sent chat notifications for tx ${tx.id}, job ${tx.jobId}`);
+   
+              // send emails
+              const jobStateEmailer = jobEmailfactory.notificationEmail(jobAction.type);
+              
+              if (jobStateEmailer === undefined) {
+                
+                console.log(`Warning sending email for tx ${tx.id}: there is no AEmailNotification class for type ${jobAction}`);                        
+              
+              } else {
+                // no need to authenticate request or check angular token, we are on the backend!
+                
+                let interpolateOk = true;
+                try {
+                  await jobStateEmailer.interpolateTemplates(db, tx.jobId)
+                } catch (e) {
+                  console.log(`Error interpolateTemplates for tx ${tx.id}: ${e.toString()}`);
+                  console.log(e);
+                  interpolateOk = false;
+                }
+                if (interpolateOk) {
+                  try {
+                    jobStateEmailer.deliver(sendgridApiKey, serviceConfig.uri);
+                    console.log(`Enqueued for delivery email notifications for tx ${tx.id}, job ${tx.jobId}`);
+                    
+                  } catch (e) {
+                    console.log(`Error email delivery for tx ${tx.id}, job ${tx.jobId}: ${e.toString()}`);
+                    console.log(e);
+                  }                  
+                }
+
+              }
+
               //  update also bep20 monitor status at the end, it will be "processed"                    
               newStatus = 'processed'; // finally
               
