@@ -2,37 +2,51 @@
   <div class="container-fluid  py-20" id="section-main">
     <section id="landing-top">
       <div class="container">
-        <div class="row">
+        <div class="row py-20">
           <div class="col-lg-6">
-            <h1 class="py-20">
-              Access global freelance talent with only 1% fees
+            <h1 class="hero-text">
+              <span class="hero-text-black ">Access Global </span
+              ><span class="hero-text-blue">Freelance </span
+              ><span class="hero-text-black ">Talent with </span
+              ><span class="hero-text-blue">Smart-Contract </span
+              ><span class="hero-text-black ">Confidence</span>
             </h1>
-            <h4 class="fw-400 text-grey">
-              Can you tell us what you’re looking for?
-            </h4>
-            <div class="canya-seach-bar input-group mb-3">
-              <input
-                #inputSearch
-                type="text"
-                class="form-control canya-search-input"
-                (keyup.enter)="onSubmit(inputSearch.value)"
-                placeholder="Search..."
-              />
-              <div class="input-group-append">
-                <button
-                  class="canya-search-input-btn btn btn-primary"
-                  (click)="onSubmit(inputSearch.value)"
-                >
-                  <img
-                    class="search-img"
-                    src="assets/img/search-icon-white.svg"
-                  />
-                </button>
+            <p class="hero-sub b2-r-18px py-10">
+              CanWork is a digital freelance marketplace that connects top tier
+              freelancers with high value clients using BNB Smart Chain payments
+              and a secure smart-contract escrow system... and there's no fees!
+            </p>
+
+            <div *ngIf="!currentUser" class="cta-buttons ">
+              <div class="hire-button">
+                <div class="hire-base-button ">
+                  <a class="hire-button-title " [routerLink]="['/auth']"
+                    >Hire Pro Freelancers</a
+                  >
+                </div>
+              </div>
+              <div class="earn-button">
+                <div class="earn-base-button">
+                  <a class="earn-button-title" [routerLink]="['/auth']"
+                    >Start Earning</a
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="row py-20">
+              <div class="col-5">
+                <img
+                  class="img-fluid"
+                  src="assets/img/Tokens.svg"
+                  alt="Vector"
+                />
               </div>
             </div>
           </div>
-          <div class="col-lg-6">
-            <img class="img-fluid" src="assets/img/CanYa_Landing.svg" />
+
+          <div class="col-lg-6 hero">
+            <img class="img-fluid" src="assets/img/hero-png-3.png" />
           </div>
         </div>
         <div class="row provider-type-row">
