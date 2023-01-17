@@ -468,3 +468,36 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     top: 0;
     width: auto;
 }
+
+/* NEW CLASSES WITH NEW LANDING PAGE */
+button {
+  cursor: pointer;
+}
+
+.button-white {
+  padding: 8px 16px;
+  background: #FAFAFB;
+  border: 1px solid #C5C6C8;
+  border-radius: 8px;
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 22px;
+  color: #22262D;
+  cursor: pointer;
+}
+
+.button-blue {
+  padding: 9px 16px;
+  background: #3AC2FF;
+  box-shadow: 0px 10px 25px rgba(0, 168, 243, 0.25), inset 0px 10px 20px #A7E4FF;
+  border-radius: 8px;
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 22px;
+  color: #FFFFFF;
+  cursor: pointer;
+}

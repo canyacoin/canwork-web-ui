@@ -156,6 +156,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // if ((<any>window).$('html, body')) {
     //   (<any>window).$('html, body').animate({ scrollTop: -10 }, 600);
     // }
+
+    ;(<any>window).$('#mobileMenuModal').modal('hide') // Close mobile menu modal
     this.router.navigate(['search'], { queryParams: { query: event } })
   }
 
