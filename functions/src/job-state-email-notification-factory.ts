@@ -50,11 +50,12 @@ abstract class AEmailNotification implements IJobStateEmailNotification {
   // Send the built 'EmailMessage' via sendgrid
   public deliver(sendgridApiKey: string, returnUri: string): void {
     sgMail.setApiKey(sendgridApiKey)
-    console.log('+ first chars: ', sendgridApiKey.substring(0, 7))
+    console.log('+ first k chars: ', sendgridApiKey.substring(0, 7))
     sgMail.setSubstitutionWrappers('{{', '}}')
 
     this.emailMessages.forEach(emailMessage => {
       console.log('+ sending message to', emailMessage.to)
+      console.log('++ subject', emailMessage.subject)
 
       const senderAddress = 'support@canwork.io'
       const senderName = 'CanWork support'
@@ -130,7 +131,8 @@ abstract class AEmailNotification implements IJobStateEmailNotification {
         .doc(jobId)
         .get()
       this.jobData = data.data()
-      console.log('+ job data populated:', this.jobData)
+      //console.log('+ job data populated:', this.jobData)
+      console.log('+ job data populated:', jobId)
     } catch (error) {
       console.error(`! unable to retrieve job data using ID: ${jobId}`, error)
       throw new Error(error)
@@ -139,7 +141,8 @@ abstract class AEmailNotification implements IJobStateEmailNotification {
       const error = `no job data could be found using ID: ${jobId}`
       console.warn(error)
     }
-    console.log('+ retrieved job data:', this.jobData)
+    //console.log('+ retrieved job data:', this.jobData)
+    console.log('+ retrieved job data:', jobId)
 
     // Populate the required user objects for client & provider:
     this.clientData = await this.getUserObjects(this.jobData.clientId)
