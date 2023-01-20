@@ -372,11 +372,9 @@ exports.indexProviderData = functions.firestore
     const objectId = snap.id
 
     !data.slug &&
-      createSlugIfNotExist(
-        'users',
-        objectId,
-        joinString(data.name)
-      ).catch(err => console.error(err))
+      createSlugIfNotExist('users', objectId, joinString(data.name)).catch(
+        err => console.error(err)
+      )
 
     const workData = buildWorkData(objectId)
 
@@ -466,7 +464,7 @@ exports.updateIndexProviderData = functions.firestore
           substitutions: {
             title: `Congratulations, ${user.name}. 🎉🎊🎉`,
             returnLinkText: `Edit my profile`,
-            returnLinkUrl: `https://canwork.io/profile/edit`,
+            returnLinkUrl: `https://app.canwork.io/profile/edit`,
           },
           templateId: '4fc71b33-e493-4e60-bf5f-d94721419db5',
         },
@@ -532,7 +530,7 @@ function notifyAdminOnNewUser(user) {
   console.log('+ sending a new provider email to admin...')
 
   const text = `
-  Link to profile: https://canwork.io/profile/${user.slug}
+  Link to profile: https://app.canwork.io/profile/${user.slug}
   <br>
   Email address: ${user.email}
   <br>
@@ -839,18 +837,13 @@ function getFirebaseInstance(projectId: string) {
   // Set this up from: ../.firebaserc
   const instances = [
     {
-      projectId: 'default',
-      uri: 'http://localhost:4200',
-      environment: 'dev',
-    },
-    {
-      projectId: 'staging-can-work',
-      uri: 'https://canwork-staging.web.app/home',
+      projectId: 'canwork-staging',
+      uri: 'https://canwork-staging.web.app/',
       environment: 'staging',
     },
     {
-      projectId: 'canwork-io',
-      uri: 'https://www.canwork.io',
+      projectId: 'can-work-io',
+      uri: 'https://app.canwork.io',
       environment: 'prod',
     },
   ]
@@ -1149,11 +1142,9 @@ exports.initSlug = functions.https.onRequest(async (request, response) => {
   usersnaps.forEach(async doc => {
     const data = doc.data()
     !data.slug &&
-      createSlugIfNotExist(
-        'users',
-        doc.id,
-        joinString(doc.data().name)
-      ).catch(err => console.error(err))
+      createSlugIfNotExist('users', doc.id, joinString(doc.data().name)).catch(
+        err => console.error(err)
+      )
   })
   jobsnaps.forEach(async doc => {
     const data = doc.data()
@@ -1306,7 +1297,7 @@ exports.firestoreSelect = functions.https.onCall(firestoreSelect(db))
 exports.bep20TxMonitor = functions.pubsub
   .schedule('every 60 minutes')
   .onRun(bep20TxMonitor(db))
-  
+
 // listen to chain monitor updates and save into bep20 tx monitor table
 // and process instantly using same (todo refactor to common) functions from scheduled bep20 tx monitor
 // with some tweak (no token and no amount, we have to calculate it)
