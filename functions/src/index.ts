@@ -466,7 +466,7 @@ exports.updateIndexProviderData = functions.firestore
           substitutions: {
             title: `Congratulations, ${user.name}. 🎉🎊🎉`,
             returnLinkText: `Edit my profile`,
-            returnLinkUrl: `https://canwork.io/profile/edit`,
+            returnLinkUrl: `https://app.canwork.io/profile/edit`,
           },
           templateId: '4fc71b33-e493-4e60-bf5f-d94721419db5',
         },
@@ -839,20 +839,13 @@ function getFirebaseInstance(projectId: string) {
   // Set this up from: ../.firebaserc
   const instances = [
     {
-      projectId: 'default',
-      uri: 'http://localhost:4200',
-      environment: 'dev',
-    },
-    {
-      // projectId: 'staging-can-work', // geco: this is the old one, wrong in my opinion
-      projectId: 'canwork-staging', // geco: new one (07/12/2022)
-      uri: 'https://canwork-staging.web.app/home',
+      projectId: 'canwork-staging',
+      uri: 'https://canwork-staging.web.app/',
       environment: 'staging',
     },
     {
-      // projectId: 'canwork-io', // geco: this is the old one, wrong in my opinion
-      projectId: 'can-work-io', // geco: new one (07/12/2022)
-      uri: 'https://www.canwork.io',
+      projectId: 'can-work-io',
+      uri: 'https://app.canwork.io',
       environment: 'prod',
     },
   ]

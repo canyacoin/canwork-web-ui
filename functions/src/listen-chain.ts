@@ -7,7 +7,7 @@ import { GenerateGuid } from './generate.uid'
 
 import { bep20TxProcess } from './bep20-process'
 
-const SUPPORTED_METHODS = ['depositBEP20', 'depositBNB'];
+const SUPPORTED_METHODS = ['depositBEP20', 'depositBNB', 'releaseAsClient'];
 
 
 /*
@@ -244,6 +244,61 @@ export async function listenToChainUpdates(request, response, db, env, serviceCo
     await bep20TxProcess(db, transaction, env, serviceConfig);
     
     console.log(`Created and processed tx ${transaction.id}, job ${jobId}`);        
+  } else if (smartMethod === 'releaseAsClient') {
+    // this the acceptFinish job action, client confirms job is done and release funds
+  
+    if (
+      !smartData.hasOwnProperty('JOBID')
+    ) {
+      console.log('Missing smart contract data');
+      console.log(smartData);
+    
+      return response.status(405).send('Missing data')
+      
+    } 
+    const monitorCollection = db.collection('bep20-txs');
+
+    const jobIdBigInt = smartData.JOBID;
+    const jobIdHex = bigint2hexUuid(jobIdBigInt);
+    const jobId = `${jobIdHex.substr(0,8)}-${jobIdHex.substr(8,4)}-${jobIdHex.substr(12,4)}-${jobIdHex.substr(16,4)}-${jobIdHex.substr(20,12)}`;
+    
+    const amount = body.value || "0"; // not present
+    const escrowAddress = body.address; // the to of transaction (interacted address)
+    const tokenAddress = ''; // not present
+    const token = 'BUSD'; // static  
+    const providerAddress = ''; // not present
+    const hash = body.hash; // transaction hash
+    const from = body.from;
+    const to = body.address; // transaction to
+    const action = 'releaseAsClient';
+    
+    const transaction = {
+      id: GenerateGuid(),
+      timestamp: Date.now(),
+      jobId,
+      // userId,  // (firestore id) this is not mandatory for bep20-monitor
+      // providerId, // (firestore id) this is not mandatory for bep20-monitor
+      amount,
+      escrowAddress,
+      token,
+      tokenAddress,
+      providerAddress,
+      hash,
+      from,
+      to,
+      action,
+      status: 'created' // later it will become 'processed' or 'checked' (if already valid) or 'error'
+      //backend will add processedTimestamp
+    }    
+    
+
+    await monitorCollection.doc(transaction.id).set(transaction);
+
+    await bep20TxProcess(db, transaction, env, serviceConfig);
+    
+    console.log(`Created and processed tx ${transaction.id}, job ${jobId}`);        
+
+
   
   } else {
     console.log('Method not implemented');

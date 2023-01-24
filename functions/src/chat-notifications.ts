@@ -42,8 +42,11 @@ export async function sendJobMessages(db, job, action) {
     case ActionType.enterEscrow:
       messageText = 'I have deposited funds into the escrow system!  Please start the job.'
       break
+    case ActionType.acceptFinish:
+      messageText = 'I have released the funds from Escrow!  Thankyou.'    
+      break
     
-    // todo add cases for release as provider and client    
+    // todo add case for release as provider  
   }
   
   if (!messageText) {

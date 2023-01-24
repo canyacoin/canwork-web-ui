@@ -190,9 +190,12 @@ export class JobService {
                 queryParams: { returnUrl: routerStateSnapshot.url },
               })
             } else {
+              
               let result = await this.bscService.releaseByProvider(job.id)
+                // todo update only job state locally and move to backend, if result ok
 
               if (!result.err) {
+                
                 // add action log
                 parsedJob.actionLog.push(action)
                 parsedJob.state = JobState.cancelledByProvider // state is cancelled, like plain cancel, no more actions possible
@@ -288,9 +291,11 @@ export class JobService {
             resolve(true)
             break
           case ActionType.acceptFinish:
+            // todo update only job state locally and move to backend
             parsedJob.actionLog.push(action)
             parsedJob.state = JobState.complete
-            await this.saveJobAndNotify(parsedJob, action)
+            // moved to backend
+            //await this.saveJobAndNotify(parsedJob, action)
             resolve(true)
             break
           default:
