@@ -53,7 +53,7 @@ export class HomeComponent implements OnInit {
       id: 'softwareDev',
     },
     {
-      name: 'Designers & Creatives',
+      name: 'Design & Creatives',
       img: 'designers-creatives.svg',
       desc:
         'Find the right freelance designer for your next project. Battle tested and combat ready designers with great years of experience. Our creative professionals have a great range of skillsets, including UI/UX design, graphic design, brand identity and product design.',

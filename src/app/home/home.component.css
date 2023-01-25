@@ -88,12 +88,69 @@
   }
 }
 
+/* GENERAL REUSED SECTION CLASSES */
+
+.section-title {
+  margin-top: 30px;
+  margin-bottom: 5px;
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  color: #22262d;
+}
+
+.section-subtitle {
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  color: #818488;
+}
+
+.contentCreatorImg {
+  box-shadow: 0px 15px 30px rgba(0, 168, 243, 0.25), inset 0px 10px 15px #a7e4ff;
+  border-radius: 8px;
+}
+
+.softwareDevImg {
+  box-shadow: 0px 20px 25px rgba(0, 229, 243, 0.25), inset 0px 10px 15px #a7ffcf;
+  border-radius: 8px;
+}
+
+.designerImg {
+  box-shadow: 0px 20px 25px rgba(255, 96, 68, 0.3), inset 0px 10px 15px #ffe1a7;
+  border-radius: 8px;
+}
+
+.financialImg {
+  box-shadow: 0px 20px 25px rgba(209, 243, 0, 0.25), inset 0px 10px 15px #b8ffa7;
+  border-radius: 8px;
+}
+
+.marketingImg {
+  box-shadow: 0px 20px 25px rgba(243, 0, 102, 0.25), inset 0px 10px 15px #ffa7cc;
+  border-radius: 8px;
+}
+
+.virtualAssistantImg {
+  box-shadow: 0px 20px 25px rgba(0, 127, 243, 0.25), inset 0px 10px 15px #fda7ff;
+  border-radius: 8px;
+}
+
 /* FREELANCE CATEGORIES SECTION */
 
 #freelance-categories {
   display: flex;
   justify-content: center;
   padding: 0 20px;
+}
+
+@media (max-width: 575px) {
+  #freelance-categories {
+    padding: 0 10px;
+  }
 }
 
 .freelance-container {
@@ -111,25 +168,6 @@
   }
 }
 
-.freelance-title {
-  margin-top: 30px;
-  margin-bottom: 5px;
-  font-family: 'Montserrat';
-  font-style: normal;
-  font-weight: 700;
-  color: #22262d;
-}
-
-.freelance-subtitle {
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  font-family: 'Nunito';
-  font-style: normal;
-  font-weight: 400;
-  color: #818488;
-}
-
 .freelance-tiles-container {
   display: flex;
   flex-direction: row;
@@ -145,36 +183,13 @@
   align-items: flex-start;
   justify-content: space-between;
   height: 100%;
+  padding: 30px;
 }
 
-.freelance-tile-single-item .contentCreator {
-  box-shadow: 0px 15px 30px rgba(0, 168, 243, 0.25), inset 0px 10px 15px #a7e4ff;
-  border-radius: 8px;
-}
-
-.freelance-tile-single-item .softwareDev {
-  box-shadow: 0px 20px 25px rgba(0, 229, 243, 0.25), inset 0px 10px 15px #a7ffcf;
-  border-radius: 8px;
-}
-
-.freelance-tile-single-item .designer {
-  box-shadow: 0px 20px 25px rgba(255, 96, 68, 0.3), inset 0px 10px 15px #ffe1a7;
-  border-radius: 8px;
-}
-
-.freelance-tile-single-item .financial {
-  box-shadow: 0px 20px 25px rgba(209, 243, 0, 0.25), inset 0px 10px 15px #b8ffa7;
-  border-radius: 8px;
-}
-
-.freelance-tile-single-item .marketing {
-  box-shadow: 0px 20px 25px rgba(243, 0, 102, 0.25), inset 0px 10px 15px #ffa7cc;
-  border-radius: 8px;
-}
-
-.freelance-tile-single-item .virtualAssistant {
-  box-shadow: 0px 20px 25px rgba(0, 127, 243, 0.25), inset 0px 10px 15px #fda7ff;
-  border-radius: 8px;
+@media (max-width: 575px) {
+  .freelance-tile-single-item {
+    padding: 15px;
+  }
 }
 
 .freelance-tile-title {
@@ -196,4 +211,81 @@
   font-style: normal;
   font-weight: 700;
   color: #3ac2ff;
+}
+
+/* PROFILES SECTION */
+
+#profiles {
+  display: flex;
+  justify-content: center;
+  padding: 0 20px;
+}
+
+@media (max-width: 575px) {
+  #profiles {
+    padding: 0 10px;
+  }
+}
+
+.profiles-container {
+  max-width: 1200px;
+}
+
+/* .profiles-top {
+} */
+
+.profile-categories-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.profile-category-item {
+  display: flex;
+  flex-direction: row;
+}
+
+.profile-category-icon {
+  flex-shrink: 0;
+}
+
+.profile-category-img {
+  width: 64px;
+}
+
+@media (max-width: 575px) {
+  .profile-category-img {
+    width: 38px;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+  .profile-category-img {
+    width: 56px;
+  }
+}
+
+.profile-category-title {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  color: #22262d;
+  padding-top: 4px;
+  align-self: center;
+  max-width: 92px;
+}
+
+.profiles-tiles-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.profile-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 24px 32px 40px;
+  box-shadow: -15px 50px 50px rgba(141, 157, 165, 0.15);
+  border-radius: 8px;
 }

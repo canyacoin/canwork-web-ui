@@ -12,7 +12,7 @@
               <span class="hero-text-black">Confidence</span>
             </h1>
 
-            <div class="my-1 my-lg-2"></div>
+            <div class="py-1 py-lg-2"></div>
 
             <p class="landing-hero-text">
               CanWork is a digital freelance marketplace that connects top tier
@@ -20,7 +20,7 @@
               and a secure smart-contract escrow system... and there's no fees!
             </p>
 
-            <div class="my-1 my-lg-2"></div>
+            <div class="py-1 py-lg-2"></div>
 
             <div class="landing-hero-cta-buttons">
               <div class="button-blue mr-sm-1" [routerLink]="['/auth']">
@@ -34,14 +34,14 @@
               </div>
             </div>
 
-            <div class="my-2 my-lg-3"></div>
-            <div class="my-2 my-lg-3"></div>
+            <div class="py-2 py-lg-3"></div>
+            <div class="py-2 py-lg-3"></div>
 
             <div class="landing-hero-token-strip">
               <img class="" src="assets/img/Tokens.svg" alt="Vector" />
             </div>
 
-            <div class="my-1 my-lg-2"></div>
+            <div class="py-1 py-lg-2"></div>
           </div>
         </div>
 
@@ -54,28 +54,28 @@
     </section>
 
     <section id="freelance-categories">
-      <div class="freelance-container p-3 bg-secondary-new">
-        <h3 class="freelance-title text-center">
+      <div class="freelance-container p-1 p-md-3 bg-secondary-new">
+        <h3 class="section-title text-center">
           Top Tier Freelance Talents
         </h3>
-        <div class="freelance-subtitle text-center">
+        <div class="section-subtitle text-center">
           Browse from a carefully curated category of freelance skillset
           avaliable on CanWork
         </div>
 
-        <div class="my-2 my-lg-3"></div>
+        <div class="py-2 py-lg-3"></div>
 
         <div class="freelance-tiles-container">
           <div
             *ngFor="let type of providerTypes"
             class="col-12 col-md-6 col-lg-4 p-2"
           >
-            <div class="freelance-tile-single-item p-3">
+            <div class="freelance-tile-single-item">
               <div class="mb-2">
                 <img
                   src="assets/img/providers/new/{{ type.img }}"
                   height="80px"
-                  class="{{ type.id }}"
+                  class="{{ type.id }}Img"
                 />
               </div>
               <div class="mt-3 freelance-tile-title">
@@ -103,37 +103,100 @@
       </div>
     </section>
 
-    <!-- <div id="OldProviderRow" class="mt-3">
-      <div class="row provider-type-row">
-        <div class="col-12">
-          <h6 class="text-center text-grey ls-1">
-            Browse CanWork's highly skilled and hand-picked providers
-          </h6>
-        </div>
-        <div
-          *ngFor="let type of providerTypes"
-          class="col-lg-2 col-md-3 col-sm-4 col-6 provider-type-col"
-        >
-          <div
-            [routerLink]="['/search']"
-            [queryParams]="{
-              'refinementList[category][0]': type.name,
-              category: type.id
-            }"
-            class="provider-type-card pointer"
-          >
-            <div class="row">
-              <div class="col-4 no-padding">
-                <img src="assets/img/providers/{{ type.img }}" />
-              </div>
-              <div class="col-8">
-                <p class="provider-type">{{ type.name }}</p>
+    <section id="profiles">
+      <div class="profiles-container">
+        <div class="profiles-top">
+          <div class="py-3"></div>
+
+          <h3 class="section-title text-center">
+            Meet some of our expert freelancers
+          </h3>
+          <div class="section-subtitle text-center">
+            Battle tested and combat ready, some of the seasons professionals
+            here at CanWork delivering top results
+          </div>
+
+          <div class="py-3"></div>
+
+          <div class="profile-categories-container">
+            <div
+              *ngFor="let type of providerTypes"
+              class="col-6 col-md-4 col-lg-2"
+            >
+              <!-- TODO: Make categories selectable (like a tab) -->
+              <!-- TODO: Style based on selected category -->
+              <div class="profile-category-item">
+                <div class="profile-category-icon mt-2">
+                  <img
+                    src="assets/img/providers/new/{{ type.img }}"
+                    class="{{ type.id }}Img profile-category-img"
+                  />
+                </div>
+                <div class="profile-category-title ml-3">{{ type.name }}</div>
               </div>
             </div>
           </div>
         </div>
+
+        <div class="py-2"></div>
+        <div class="py-2"></div>
+
+        <div class="profiles-tiles-container">
+          <!-- TODO: Filter this by slected category -->
+          <div
+            class="col-12 col-sm-6 col-md-4"
+            *ngFor="let dev of developers | slice: 0:3"
+          >
+            <div class="profile-item bg-white">
+              <div class="profile-img">
+                <p class="">IMAGE</p>
+              </div>
+              <div class="profile-title">
+                <p class="">{{ dev.name }}</p>
+              </div>
+              <div class="profile-desc">
+                <p class="">{{ dev.title }}</p>
+              </div>
+              <div class="profile-rating">
+                <p class="">
+                  {{ dev.rating.average }} ({{ dev.rating.count }})
+                </p>
+              </div>
+              <div class="profile-bio">
+                <p class="">{{ dev.bio }}</p>
+              </div>
+              <!-- <div class="mt-2 profile-tags">
+                <app-skill-tag
+                  *ngFor="let tag of getProviderTags(dev)"
+                  [skill]="tag"
+                  [routerLink]="['/search']"
+                  [queryParams]="{ query: tag }"
+                ></app-skill-tag>
+              </div> -->
+              <div class="button-blue">View {{ dev.name }}'s Profile</div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div> -->
+    </section>
+
+    <section id="spacer-between-new-and-old-content" class="text-center">
+      <div class="py-3"></div>
+      <div class="py-3"></div>
+      <div class="py-3"></div>
+      <div class="py-3"></div>
+      <div class="py-3"></div>
+      <div class="py-3"></div>
+      <div class="py-3">^ Content Above is New ^</div>
+      <div class="py-3">--- SPACER SECTION ---</div>
+      <div class="py-3">Content Below is Old</div>
+      <div class="py-3"></div>
+      <div class="py-3"></div>
+      <div class="py-3"></div>
+      <div class="py-3"></div>
+      <div class="py-3"></div>
+      <div class="py-3"></div>
+    </section>
 
     <section class="py-20">
       <div class="container">
