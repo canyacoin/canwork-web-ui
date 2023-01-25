@@ -6638,6 +6638,14 @@ ul.flexbox {
   background-color: #f8f8f8;
 }
 
+.bg-main-new {
+  background-color: #FAFAFB;
+}
+
+.bg-secondary-new {
+  background-color: #F6F6F6;
+}
+
 .bg-pale-primary {
   background-color: #dcfcfa;
 }

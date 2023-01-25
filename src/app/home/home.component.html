@@ -1,291 +1,350 @@
-<section class="bg-gray">
-  <div class="container-fluid  py-20" id="section-main">
-    <section id="landing-top">
-      <div class="container">
-        <div class="row py-20">
-          <div class="col-lg-6">
-            <h1 class="hero-text">
-              <span class="hero-text-black ">Access Global </span
-              ><span class="hero-text-blue">Freelance </span
-              ><span class="hero-text-black ">Talent with </span
-              ><span class="hero-text-blue">Smart-Contract </span
-              ><span class="hero-text-black ">Confidence</span>
+<section class="bg-main-new">
+  <div class="py-20" id="section-main">
+    <section id="landing-hero">
+      <div class="landing-hero-container">
+        <div class="landing-hero-left col-12 col-md-6">
+          <div class="landing-hero-left-contain">
+            <h1 class="landing-hero-title">
+              <span class="hero-text-black">Access Global </span>
+              <span class="hero-text-blue">Freelance </span>
+              <span class="hero-text-black">Talent with </span>
+              <span class="hero-text-blue">Smart-Contract </span>
+              <span class="hero-text-black">Confidence</span>
             </h1>
-            <p class="hero-sub b2-r-18px py-10">
+
+            <div class="my-1 my-lg-2"></div>
+
+            <p class="landing-hero-text">
               CanWork is a digital freelance marketplace that connects top tier
               freelancers with high value clients using BNB Smart Chain payments
               and a secure smart-contract escrow system... and there's no fees!
             </p>
 
-            <div *ngIf="!currentUser" class="cta-buttons ">
-              <div class="hire-button">
-                <div class="hire-base-button ">
-                  <a class="hire-button-title " [routerLink]="['/auth']"
-                    >Hire Pro Freelancers</a
-                  >
-                </div>
+            <div class="my-1 my-lg-2"></div>
+
+            <div class="landing-hero-cta-buttons">
+              <div class="button-blue mr-sm-1" [routerLink]="['/auth']">
+                Hire Pro Freelancers
               </div>
-              <div class="earn-button">
-                <div class="earn-base-button">
-                  <a class="earn-button-title" [routerLink]="['/auth']"
-                    >Start Earning</a
-                  >
-                </div>
+              <div
+                class="button-white ml-sm-1 mt-1 mt-sm-0"
+                [routerLink]="['/auth']"
+              >
+                Start Earning
               </div>
             </div>
 
-            <div class="row py-20">
-              <div class="col-5">
-                <img
-                  class="img-fluid"
-                  src="assets/img/Tokens.svg"
-                  alt="Vector"
-                />
-              </div>
-            </div>
-          </div>
+            <div class="my-2 my-lg-3"></div>
+            <div class="my-2 my-lg-3"></div>
 
-          <div class="col-lg-6 hero">
-            <img class="img-fluid" src="assets/img/hero-png-3.png" />
+            <div class="landing-hero-token-strip">
+              <img class="" src="assets/img/Tokens.svg" alt="Vector" />
+            </div>
+
+            <div class="my-1 my-lg-2"></div>
           </div>
         </div>
-        <div class="row provider-type-row">
-          <div class="col-12">
-            <h6 class="text-center text-grey ls-1">
-              Browse CanWork's highly skilled and hand-picked providers
-            </h6>
-          </div>
+
+        <div
+          class="landing-hero-right col-12 col-md-6 justify-content-center justify-content-sm-end"
+        >
+          <img class="bnbchain-img" src="assets/img/built-bnb-chain.png" />
+        </div>
+      </div>
+    </section>
+
+    <section id="freelance-categories">
+      <div class="freelance-container p-3 bg-secondary-new">
+        <h3 class="freelance-title text-center">
+          Top Tier Freelance Talents
+        </h3>
+        <div class="freelance-subtitle text-center">
+          Browse from a carefully curated category of freelance skillset
+          avaliable on CanWork
+        </div>
+
+        <div class="my-2 my-lg-3"></div>
+
+        <div class="freelance-tiles-container">
           <div
             *ngFor="let type of providerTypes"
-            class="col-lg-2 col-md-3 col-sm-4 col-6 provider-type-col"
+            class="col-12 col-md-6 col-lg-4 p-2"
           >
-            <div
-              [routerLink]="['/search']"
-              [queryParams]="{
-                'refinementList[category][0]': type.name,
-                category: type.id
-              }"
-              class="provider-type-card pointer"
-            >
-              <div class="row">
-                <div class="col-4 no-padding">
-                  <img src="assets/img/providers/{{ type.img }}" />
-                </div>
-                <div class="col-8">
-                  <p class="provider-type">{{ type.name }}</p>
-                </div>
+            <div class="freelance-tile-single-item p-3">
+              <div class="mb-2">
+                <img
+                  src="assets/img/providers/new/{{ type.img }}"
+                  height="80px"
+                  class="{{ type.id }}"
+                />
+              </div>
+              <div class="mt-3 freelance-tile-title">
+                <p class="">{{ type.name }}</p>
+              </div>
+              <div class="mt-2 freelance-tile-desc">
+                <p class="">{{ type.desc }}</p>
+              </div>
+              <div
+                [routerLink]="['/search']"
+                [queryParams]="{
+                  'refinementList[category][0]': type.name,
+                  category: type.id
+                }"
+                class="mt-3"
+              >
+                <p class="freelance-tile-link">
+                  Browse {{ type.name }}
+                  <img src="assets/img/arrow-right.svg" height="24px" />
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-  </div>
-  <section class="py-20">
-    <div class="container">
-      <div class="row">
-        <div class="col-8">
-          <h4
-            class="section-title pointer"
-            [routerLink]="['/search']"
-            [queryParams]="{
-              'refinementList[category][0]': 'SOFTWARE DEVELOPERS',
-              category: 'softwareDev'
-            }"
-          >
-            <span
-              ><img
-                class="icon-img"
-                src="assets/img/providers/software-engineers.svg"/></span
-            >SOFTWARE DEVELOPERS
-          </h4>
-        </div>
-        <div class="col-4 text-right">
-          <p
-            class="see-all pointer"
-            [routerLink]="['/search']"
-            [queryParams]="{
-              'refinementList[category][0]': 'SOFTWARE DEVELOPERS',
-              category: 'softwareDev'
-            }"
-          >
-            See All
-          </p>
-        </div>
-      </div>
-      <div class="row">
-        <div
-          class="col-md-4 col-sm-6 col-12 no-padding"
-          *ngFor="let dev of developers"
-        >
-          <app-provider-card [size]="'sm'" [provider]="dev"></app-provider-card>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section class="py-20">
-    <div class="container">
-      <div class="row">
-        <div class="col-8">
-          <h4
-            class="section-title pointer"
-            [routerLink]="['/search']"
-            [queryParams]="{
-              'refinementList[category][0]': 'DESIGNERS & CREATIVES',
-              category: 'designer'
-            }"
-          >
-            <span
-              ><img
-                class="icon-img"
-                src="assets/img/providers/creatives-black.svg"/></span
-            >DESIGNER & CREATIVES
-          </h4>
-        </div>
-        <div class="col-4 text-right">
-          <p
-            class="see-all pointer"
-            [routerLink]="['/search']"
-            [queryParams]="{
-              'refinementList[category][0]': 'DESIGNERS & CREATIVES',
-              category: 'designer'
-            }"
-          >
-            See All
-          </p>
-        </div>
-      </div>
-      <div class="row">
-        <div
-          class="col-md-4 col-sm-6 col-12 no-padding"
-          *ngFor="let designer of designers"
-        >
-          <app-provider-card
-            [size]="'sm'"
-            [provider]="designer"
-          ></app-provider-card>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section class="py-20">
-    <div class="container">
-      <div class="row">
-        <div class="col-8">
-          <h4
-            class="section-title pointer"
-            [routerLink]="['/search']"
-            [queryParams]="{
-              'refinementList[category][0]': 'CONTENT CREATORS',
-              category: 'contentCreator'
-            }"
-          >
-            <span
-              ><img
-                class="icon-img"
-                src="assets/img/providers/writer-black.svg"/></span
-            >CONTENT CREATORS
-          </h4>
-        </div>
-        <div class="col-4 text-right">
-          <p
-            class="see-all pointer"
-            [routerLink]="['/search']"
-            [queryParams]="{
-              'refinementList[category][0]': 'CONTENT CREATORS',
-              category: 'contentCreator'
-            }"
-          >
-            See All
-          </p>
-        </div>
-      </div>
-      <div class="row">
-        <div
-          class="col-md-4 col-sm-6 col-12 no-padding"
-          *ngFor="let content of contents"
-        >
-          <app-provider-card
-            [size]="'sm'"
-            [provider]="content"
-          ></app-provider-card>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <section class="py-20" *ngIf="currentUser && previouslySeen">
-    <div class="container">
-      <div class="row">
-        <h4 class="section-title">
-          <span class="icon-img"><i class="far fa-eye"></i></span>RECENTLY
-          VIEWED
-        </h4>
-      </div>
-      <div class="row" *ngIf="previouslySeen.length === 0">
-        <div class="container">
-          <i>You have not checked out any providers.</i>
+    <!-- <div id="OldProviderRow" class="mt-3">
+      <div class="row provider-type-row">
+        <div class="col-12">
+          <h6 class="text-center text-grey ls-1">
+            Browse CanWork's highly skilled and hand-picked providers
+          </h6>
         </div>
-      </div>
-      <div
-        class="row"
-        *ngIf="previouslySeen.length > 0 && previouslySeen && !loadingDone"
-      >
-        <div class="container">
-          <i>Loading...</i>
-        </div>
-      </div>
-      <div
-        class="row"
-        *ngIf="previouslySeen.length > 0 && previouslySeen && loadingDone"
-      >
         <div
-          class="col-md-4 col-12 no-padding"
-          *ngFor="let seen of previouslySeen"
+          *ngFor="let type of providerTypes"
+          class="col-lg-2 col-md-3 col-sm-4 col-6 provider-type-col"
         >
-          <app-provider-card
-            [size]="'sm'"
-            [provider]="seen"
-          ></app-provider-card>
+          <div
+            [routerLink]="['/search']"
+            [queryParams]="{
+              'refinementList[category][0]': type.name,
+              category: type.id
+            }"
+            class="provider-type-card pointer"
+          >
+            <div class="row">
+              <div class="col-4 no-padding">
+                <img src="assets/img/providers/{{ type.img }}" />
+              </div>
+              <div class="col-8">
+                <p class="provider-type">{{ type.name }}</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </div> -->
 
-  <div class="container-fluid bg-white">
-    <section class="py-20" id="how-it-works">
-      <h4 class="text-center">HOW DOES IT WORK?</h4>
+    <section class="py-20">
       <div class="container">
-        <div class="row text-center">
-          <div class="col-md-4 p-20">
-            <img src="/assets/img/onboarding/CanWork_Step1.png" />
-            <h5>Post a request and find the right provider</h5>
-            <p>
-              Choose from the hand-picked talent on CanWork, or post a request
-              to attract the right person for the right job.
+        <div class="row">
+          <div class="col-8">
+            <h4
+              class="section-title pointer"
+              [routerLink]="['/search']"
+              [queryParams]="{
+                'refinementList[category][0]': 'SOFTWARE DEVELOPERS',
+                category: 'softwareDev'
+              }"
+            >
+              <span
+                ><img
+                  class="icon-img"
+                  src="assets/img/providers/software-engineers.svg"/></span
+              >SOFTWARE DEVELOPERS
+            </h4>
+          </div>
+          <div class="col-4 text-right">
+            <p
+              class="see-all pointer"
+              [routerLink]="['/search']"
+              [queryParams]="{
+                'refinementList[category][0]': 'SOFTWARE DEVELOPERS',
+                category: 'softwareDev'
+              }"
+            >
+              See All
             </p>
           </div>
-          <div class="col-md-4 p-20">
-            <img src="/assets/img/onboarding/CanWork_Step2.png" />
-            <h5>Agree to terms and get to work</h5>
-            <p>
-              Once you and your provider have agreed on a task, pay BNB or
-              selected BNB Chain assets into the CanWork escrow, where your
-              payment will be safe from price volatility.
-            </p>
-          </div>
-          <div class="col-md-4 p-20">
-            <img src="/assets/img/onboarding/CanWork_Step3.png" />
-            <h5>A job well done!</h5>
-            <p>
-              Mark the job as complete to release stablecoin payment (BUSD) to
-              your provider. Don't forget to leave a rating and review.
-            </p>
+        </div>
+        <div class="row">
+          <div
+            class="col-md-4 col-sm-6 col-12 no-padding"
+            *ngFor="let dev of developers"
+          >
+            <app-provider-card
+              [size]="'sm'"
+              [provider]="dev"
+            ></app-provider-card>
           </div>
         </div>
       </div>
     </section>
+    <section class="py-20">
+      <div class="container">
+        <div class="row">
+          <div class="col-8">
+            <h4
+              class="section-title pointer"
+              [routerLink]="['/search']"
+              [queryParams]="{
+                'refinementList[category][0]': 'DESIGNERS & CREATIVES',
+                category: 'designer'
+              }"
+            >
+              <span
+                ><img
+                  class="icon-img"
+                  src="assets/img/providers/creatives-black.svg"/></span
+              >DESIGNER & CREATIVES
+            </h4>
+          </div>
+          <div class="col-4 text-right">
+            <p
+              class="see-all pointer"
+              [routerLink]="['/search']"
+              [queryParams]="{
+                'refinementList[category][0]': 'DESIGNERS & CREATIVES',
+                category: 'designer'
+              }"
+            >
+              See All
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div
+            class="col-md-4 col-sm-6 col-12 no-padding"
+            *ngFor="let designer of designers"
+          >
+            <app-provider-card
+              [size]="'sm'"
+              [provider]="designer"
+            ></app-provider-card>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="py-20">
+      <div class="container">
+        <div class="row">
+          <div class="col-8">
+            <h4
+              class="section-title pointer"
+              [routerLink]="['/search']"
+              [queryParams]="{
+                'refinementList[category][0]': 'CONTENT CREATORS',
+                category: 'contentCreator'
+              }"
+            >
+              <span
+                ><img
+                  class="icon-img"
+                  src="assets/img/providers/writer-black.svg"/></span
+              >CONTENT CREATORS
+            </h4>
+          </div>
+          <div class="col-4 text-right">
+            <p
+              class="see-all pointer"
+              [routerLink]="['/search']"
+              [queryParams]="{
+                'refinementList[category][0]': 'CONTENT CREATORS',
+                category: 'contentCreator'
+              }"
+            >
+              See All
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div
+            class="col-md-4 col-sm-6 col-12 no-padding"
+            *ngFor="let content of contents"
+          >
+            <app-provider-card
+              [size]="'sm'"
+              [provider]="content"
+            ></app-provider-card>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20" *ngIf="currentUser && previouslySeen">
+      <div class="container">
+        <div class="row">
+          <h4 class="section-title">
+            <span class="icon-img"><i class="far fa-eye"></i></span>RECENTLY
+            VIEWED
+          </h4>
+        </div>
+        <div class="row" *ngIf="previouslySeen.length === 0">
+          <div class="container">
+            <i>You have not checked out any providers.</i>
+          </div>
+        </div>
+        <div
+          class="row"
+          *ngIf="previouslySeen.length > 0 && previouslySeen && !loadingDone"
+        >
+          <div class="container">
+            <i>Loading...</i>
+          </div>
+        </div>
+        <div
+          class="row"
+          *ngIf="previouslySeen.length > 0 && previouslySeen && loadingDone"
+        >
+          <div
+            class="col-md-4 col-12 no-padding"
+            *ngFor="let seen of previouslySeen"
+          >
+            <app-provider-card
+              [size]="'sm'"
+              [provider]="seen"
+            ></app-provider-card>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container-fluid bg-white">
+      <section class="py-20" id="how-it-works">
+        <h4 class="text-center">HOW DOES IT WORK?</h4>
+        <div class="container">
+          <div class="row text-center">
+            <div class="col-md-4 p-20">
+              <img src="/assets/img/onboarding/CanWork_Step1.png" />
+              <h5>Post a request and find the right provider</h5>
+              <p>
+                Choose from the hand-picked talent on CanWork, or post a request
+                to attract the right person for the right job.
+              </p>
+            </div>
+            <div class="col-md-4 p-20">
+              <img src="/assets/img/onboarding/CanWork_Step2.png" />
+              <h5>Agree to terms and get to work</h5>
+              <p>
+                Once you and your provider have agreed on a task, pay BNB or
+                selected BNB Chain assets into the CanWork escrow, where your
+                payment will be safe from price volatility.
+              </p>
+            </div>
+            <div class="col-md-4 p-20">
+              <img src="/assets/img/onboarding/CanWork_Step3.png" />
+              <h5>A job well done!</h5>
+              <p>
+                Mark the job as complete to release stablecoin payment (BUSD) to
+                your provider. Don't forget to leave a rating and review.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
+
   <app-blog-posts></app-blog-posts>
   <app-feedback></app-feedback>
 </section>

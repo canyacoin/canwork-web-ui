@@ -486,6 +486,7 @@ button {
   line-height: 22px;
   color: #22262D;
   cursor: pointer;
+  text-align: center;
 }
 
 .button-blue {
@@ -500,4 +501,5 @@ button {
   line-height: 22px;
   color: #FFFFFF;
   cursor: pointer;
+  text-align: center;
 }
