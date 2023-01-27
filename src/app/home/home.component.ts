@@ -109,13 +109,7 @@ export class HomeComponent implements OnInit {
   getProviders(searchQuery, array) {
     this.algoliaIndex.search({ query: searchQuery }).then(res => {
       const result = res.hits
-      var l
-      if (result.length > 4) {
-        l = 4
-      } else {
-        l = result.length
-      }
-      for (let i = 0; i < l; i++) {
+      for (let i = 1; i < 4; i++) {
         const provider = {
           address: result[i].address,
           avatar: result[i].avatar,
