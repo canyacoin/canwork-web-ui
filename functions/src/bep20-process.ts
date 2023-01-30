@@ -495,6 +495,209 @@ export async function bep20TxProcess(db, tx, env, serviceConfig) {
         errorMessage = `Job not found ${tx.jobId}`;
       }      
       
+      
+    } else if (tx.action === 'releaseByProvider') {
+
+
+      /*
+        this is the releaseByProvider job action, provider cancels job early and funds come back to client  
+        job should be in state JobState.inEscrow
+        
+      */
+      // retrieve job
+      const jobRef = await jobsCollection.doc(tx.jobId).get();
+      if (jobRef.exists) {
+
+        const job = jobRef.data();
+        
+        // job.state = JobState.inEscrow; // force this to debug
+        
+        if (job.state === JobState.cancelledByProvider) {
+          // already processed
+          newStatus = 'checked';
+          
+        } else if (job.state === JobState.inEscrow) {
+          /*
+          good, this is state we have to handle
+          */
+          
+          console.log(`we have to process this state for ${tx.jobId}`);
+          
+          /*
+          but first, check if tx is confirmed on chain
+          */
+          
+          
+          const txHash = tx.hash; // bep20 tx hash
+          
+          if (!txHash) {
+            
+            errorMessage = `Bep 20 tx not found for job id ${tx.jobId}`;
+            
+          } else {
+            
+            
+            let txSuccess = false;
+            let chainCheckMessage = '';
+            
+            // add also chainCheckMessage if needed
+            try {
+              // destructure to existing vars (wrap all the line into parentheses)
+              ( { txSuccess, chainCheckMessage, errorMessage } = await checkChainState(tx) )              
+
+            } catch (error) {
+              if (axios.isAxiosError(error)) {
+
+                chainCheckMessage = `axios error "${error.message}"`;
+
+              } else {
+                chainCheckMessage = `axios unexpected error "${error.toString()}"`;
+
+                console.log(error);
+                
+              }
+            }  
+
+            if (txSuccess) {
+              // good to go, everything ok (job status and chain receipt), let's check what's needed
+              
+              // transaction, let's check if there is already another one with this same hash
+              let existingTransaction = false;
+              
+              const jobTransactions = transactionCollection.where('jobId', '==', tx.jobId);
+              const jobTransactionsSnapshot = await jobTransactions.get();  
+
+              if (!jobTransactionsSnapshot.empty) {
+                
+                for (const jobTxDoc of jobTransactionsSnapshot.docs) {
+
+                  const jobTx = jobTxDoc.data();
+                  if (jobTx.hash.toLowerCase() === txHash.toLowerCase()) existingTransaction = true;
+                  
+                }
+              }
+              
+              if (!existingTransaction) {
+                // it doesn't exist, so let's create it
+                // these are transactions visible into the ui log under job details
+                await createTransaction(
+                  `Cancel job early`,
+                  txHash,
+                  tx.jobId,
+                  transactionCollection
+                );
+                console.log(`Created job transaction for tx ${tx.id}, job ${tx.jobId}`);
+                
+
+              }
+              
+              
+              /* 
+              now let's add job action and update job state
+              this is atomic into job service, so if job state is not updated (previous check) we can assume for sure also action isn't added to log
+              */
+              const action = {
+                type: ActionType.cancelJobEarly,
+                executedBy: UserType.provider,
+                message: '',
+                private: false,
+                timestamp: Date.now()
+              }
+              
+              if (job.actionLog) {
+                job.actionLog.push(action)
+                console.log(`Created job action for tx ${tx.id}, job ${tx.jobId}`);
+                
+              }
+              
+                           
+              job.state = JobState.cancelledByProvider;
+              
+              // save job to firestore
+              await jobsCollection.doc(job.id).set(job);
+              
+              console.log(`Updated job state for tx ${tx.id}, job ${tx.jobId}`);
+
+              // send notifications
+              
+              const jobAction = {
+                executedBy: UserType.provider,
+                type: ActionType.cancelJobEarly
+              }
+              
+              // send chat messages
+              await sendJobMessages(db, job, jobAction);
+              console.log(`Sent chat notifications for tx ${tx.id}, job ${tx.jobId}`);
+   
+              // send emails
+              const jobStateEmailer = jobEmailfactory.notificationEmail(jobAction.type);
+              
+              if (jobStateEmailer === undefined) {
+                
+                console.log(`Warning sending email for tx ${tx.id}: there is no AEmailNotification class for type ${jobAction}`);                        
+              
+              } else {
+                // no need to authenticate request or check angular token, we are on the backend!
+                
+                let interpolateOk = true;
+                try {
+                  await jobStateEmailer.interpolateTemplates(db, tx.jobId)
+                } catch (e) {
+                  console.log(`Error interpolateTemplates for tx ${tx.id}: ${e.toString()}`);
+                  console.log(e);
+                  interpolateOk = false;
+                }
+                if (interpolateOk) {
+                  try {
+                    jobStateEmailer.deliver(sendgridApiKey, serviceConfig.uri);
+                    console.log(`Enqueued for delivery email notifications for tx ${tx.id}, job ${tx.jobId}`);
+                    
+                  } catch (e) {
+                    console.log(`Error email delivery for tx ${tx.id}, job ${tx.jobId}: ${e.toString()}`);
+                    console.log(e);
+                  }                  
+                }
+
+              }
+
+              //  update also bep20 monitor status at the end, it will be "processed"                    
+              newStatus = 'processed'; // finally
+              
+            } else {
+              // postpone
+              newStatus = 'created'; // reset the status to created so we can process again if tx is not confirmed
+              
+              tx.chainCheckTimestamp = Date.now(); // timestamp of last chain check
+              tx.chainCheckMessage = chainCheckMessage;
+              console.log(`Error checking chain status for tx ${tx.id}: ${chainCheckMessage}`);          
+              
+            }
+            
+            
+          }
+          
+          
+        } else {
+          
+          errorMessage = `Unexpected state "${job.state}" for job id ${tx.jobId}`;
+          /*
+          into this scenario, job state is different from expected
+          probably is a following step (i.e. job cancelled or completed)
+          but this would be anyway odd, cause this job runs every 5 minutes,
+          and it's very unlikely job went to these states into less then 5 minutes
+          so better to flag bep20 tx as error to check later manually
+          
+          */
+          
+        }
+        
+
+        
+      } else {
+
+        errorMessage = `Job not found ${tx.jobId}`;
+      }      
+          
     
     } else {
     
