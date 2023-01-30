@@ -45,8 +45,10 @@ export async function sendJobMessages(db, job, action) {
     case ActionType.acceptFinish:
       messageText = 'I have released the funds from Escrow!  Thankyou.'    
       break
+    case ActionType.cancelJobEarly:
+      messageText = "I've just cancelled a job early.. sorry about that!" 
+      break
     
-    // todo add case for release as provider  
   }
   
   if (!messageText) {

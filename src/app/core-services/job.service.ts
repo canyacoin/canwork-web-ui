@@ -197,20 +197,24 @@ export class JobService {
               if (!result.err) {
                 
                 // add action log
-                parsedJob.actionLog.push(action)
-                parsedJob.state = JobState.cancelledByProvider // state is cancelled, like plain cancel, no more actions possible
-                // add transaction to job log
+                // parsedJob.actionLog.push(action) // moved to backend
+                parsedJob.state = JobState.cancelledByProvider // only local copy
+                // state is cancelled, like plain cancel, no more actions possible
+                
+                // add transaction to job log (moved to backend)                
+                /*
                 let tx = await this.transactionService.createTransaction(
                   `Cancel job early`,
                   result.transactionHash,
                   job.id
                 )
+                */
 
                 /* 
-                sync job to firestore and
-                handle notifications into chatService and jobNotificationService
+                sync job to firestore and handle notifications into chatService and jobNotificationService
+                (moved to backend)
                 */
-                await this.saveJobAndNotify(parsedJob, action)
+                //await this.saveJobAndNotify(parsedJob, action)
 
                 resolve(true)
               } else {
