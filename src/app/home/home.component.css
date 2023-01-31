@@ -406,3 +406,85 @@
 .features-item-button {
   width: fit-content;
 }
+
+.award-dropshadow {
+  box-shadow: 0px 20px 25px rgba(35, 164, 140, 0.3), inset 0px 10px 15px #a8ffe0;
+  border-radius: 8px;
+}
+
+.person-check-dropshadow {
+  box-shadow: 0px 20px 25px rgba(255, 58, 58, 0.3), inset 0px 10px 15px #ff989c;
+  border-radius: 8px;
+}
+
+.binance-dropshadow {
+  box-shadow: 0px 20px 25px rgba(243, 190, 0, 0.3), inset 0px 10px 20px #fff2b0;
+  border-radius: 8px;
+}
+
+.features-item-yellow-text {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  color: #f0a205;
+  font-size: 1rem;
+  line-height: 1.2rem;
+}
+
+.dollar-dropshadow {
+  box-shadow: 0px 20px 25px rgba(255, 96, 68, 0.3), inset 0px 10px 15px #ffe1a7;
+  border-radius: 8px;
+}
+
+.lightning-dropshadow {
+  box-shadow: 0px 20px 25px rgba(243, 190, 0, 0.25), inset 0px 10px 20px #fff1a7;
+  border-radius: 8px;
+}
+
+.document-dropshadow {
+  box-shadow: 0px 20px 25px rgba(78, 215, 190, 0.25),
+    inset 0px 10px 15px #76ffce;
+  border-radius: 8px;
+}
+
+/* Tile collage section */
+
+#tile-collage {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+@media (max-width: 575px) {
+  #tile-collage {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+.collage-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  max-width: 1200px;
+  background-color: #161b22;
+  border-radius: 16px;
+  filter: drop-shadow(-15px 50px 50px rgba(141, 157, 165, 0.15));
+  padding: 20px;
+}
+
+.cta-1 {
+  background: url('/assets/img/ctas/cta-1.png'), #22262d;
+  background-repeat: no-repeat;
+  background-position-x: right;
+  background-size: contain;
+  min-height: 300px;
+}
+
+.tile-item-container {
+  background-color: #22262d;
+  border-radius: 16px;
+}
