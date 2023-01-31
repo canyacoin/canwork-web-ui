@@ -149,33 +149,127 @@
           >
             <div class="profile-item bg-white">
               <div class="profile-img">
-                <p class="">IMAGE</p>
+                <img src="{{ dev.avatar.uri }}" />
               </div>
+              <div class="py-2"></div>
               <div class="profile-title">
-                <p class="">{{ dev.name }}</p>
+                {{ dev.name }}
+                <span *ngIf="!dev.verified">
+                  <img
+                    src="assets/img/icons/verified.svg"
+                    height="24px"
+                    width="24px"
+                  />
+                </span>
               </div>
               <div class="profile-desc">
-                <p class="">{{ dev.title }}</p>
+                {{ dev.title }}
               </div>
               <div class="profile-rating">
-                <p class="">
-                  {{ dev.rating.average }} ({{ dev.rating.count }})
-                </p>
+                <!-- TODO: Star rating -->
+                {{ dev.rating.average }} ({{ dev.rating.count }})
               </div>
-              <div class="profile-bio">
-                <p class="">{{ dev.bio }}</p>
-              </div>
-              <!-- <div class="mt-2 profile-tags">
+              <div class="profile-bio">{{ dev.bio }} BIO</div>
+              <div class="mt-2 profile-tags">
+                <!-- TODO: Skill tags as per design -->
                 <app-skill-tag
-                  *ngFor="let tag of getProviderTags(dev)"
+                  *ngFor="let tag of dev.skillTags"
                   [skill]="tag"
                   [routerLink]="['/search']"
                   [queryParams]="{ query: tag }"
                 ></app-skill-tag>
-              </div> -->
-              <div class="button-blue">View {{ dev.name }}'s Profile</div>
+              </div>
+              <div class="profile-button button-blue">
+                View {{ dev.name }}'s Profile
+              </div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="features-container">
+        <div class="py-3"></div>
+
+        <h3 class="section-title text-center">
+          Why freelance on CanWork ?
+        </h3>
+        <div class="section-subtitle text-center">
+          CanWork is the future of freelancing, we offer competitive features
+          and exciting benefits for clients and freelancers
+        </div>
+
+        <div class="py-3"></div>
+        <div class="py-3"></div>
+        <div class="py-3"></div>
+
+        <div class="features-item-container">
+          <div class="features-item-pic col-6">LEFT</div>
+          <div class="col-6">
+            <div class="features-item-green-text">For Client</div>
+            <div class="features-item-desc">
+              Top tier freelancers around the world at your finger tips
+            </div>
+
+            <div class="py-2"></div>
+
+            <div class="features-item-row">
+              <div class="col-auto">ICON</div>
+              <div class="">
+                <div class="features-item-row-title">
+                  High quality freelancers
+                </div>
+                <div class="features-item-row-desc">
+                  Work with only vetted top tier freelancers on CanWork. No
+                  mediocre or low value freelancers are featured.
+                </div>
+              </div>
+            </div>
+
+            <div class="py-2"></div>
+
+            <div class="features-item-row">
+              <div class="col-auto">ICON</div>
+              <div class="">
+                <div class="features-item-row-title">
+                  Zero cost of hiring freelancers
+                </div>
+                <div class="features-item-row-desc">
+                  Connect and hire top professional freelancers on web3 space at
+                  no extra cost, no hidden fees or charges. Simply post a job.
+                </div>
+              </div>
+            </div>
+
+            <div class="py-2"></div>
+
+            <div class="features-item-row">
+              <div class="col-auto">ICON</div>
+              <div class="">
+                <div class="features-item-row-title">
+                  20+ Acceptable Payment token
+                </div>
+                <div class="features-item-row-desc">
+                  Make payment with up to 20+ tokens backed on the BNB chain
+                  token secured by CanWork escrow system.
+                </div>
+              </div>
+            </div>
+
+            <div class="py-2"></div>
+
+            <div class="features-item-button">
+              <div class="button-white">Hire Top Freelancer</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="py-3"></div>
+
+        <div class="features-item-container">
+          <div class="col-6">LEFT</div>
+          <div class="features-item-pic col-6">RIGHT</div>
         </div>
       </div>
     </section>
