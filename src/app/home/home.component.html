@@ -387,19 +387,21 @@
 
     <section id="tile-collage">
       <div class="collage-container col-12 cta-1">
-        <div class="col-12 col-md-6">
+        <div class="cta-container ml-0 ml-sm-2 ml-md-3">
           <div class="py-3"></div>
-          <div class="">Explore listed tasks on CanWork Job Board</div>
-          <div class="">
+          <div class="cta-title">Explore listed tasks on CanWork Job Board</div>
+          <div class="py-1"></div>
+          <div class="cta-subtitle">
             Pitch your abilities to clients and bid for projects available on
             job boards for free.
           </div>
+          <div class="py-2"></div>
           <div class="button-blue features-item-button">View Job Board</div>
           <div class="py-3"></div>
         </div>
       </div>
 
-      <div class="collage-container col-12">
+      <!-- <div class="collage-container col-12">
         <div class="col-5 px-2">
           <div class="col-12 tile-item-container">
             <div class="col-10 col-md-6">
@@ -433,237 +435,192 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
     </section>
 
-    <section id="spacer-between-new-and-old-content" class="text-center">
+    <section id="how-it-works">
       <div class="py-3"></div>
-      <div class="py-3"></div>
-      <div class="py-3"></div>
-      <div class="py-3"></div>
-      <div class="py-3"></div>
-      <div class="py-3"></div>
-      <div class="py-3">^ Content Above is New ^</div>
-      <div class="py-3">--- SPACER SECTION ---</div>
-      <div class="py-3">Content Below is Old</div>
-      <div class="py-3"></div>
-      <div class="py-3"></div>
-      <div class="py-3"></div>
-      <div class="py-3"></div>
-      <div class="py-3"></div>
-      <div class="py-3"></div>
-    </section>
 
-    <section class="py-20">
-      <div class="container">
-        <div class="row">
-          <div class="col-8">
-            <h4
-              class="section-title pointer"
-              [routerLink]="['/search']"
-              [queryParams]="{
-                'refinementList[category][0]': 'SOFTWARE DEVELOPERS',
-                category: 'softwareDev'
-              }"
-            >
-              <span
-                ><img
-                  class="icon-img"
-                  src="assets/img/providers/software-engineers.svg"/></span
-              >SOFTWARE DEVELOPERS
-            </h4>
-          </div>
-          <div class="col-4 text-right">
-            <p
-              class="see-all pointer"
-              [routerLink]="['/search']"
-              [queryParams]="{
-                'refinementList[category][0]': 'SOFTWARE DEVELOPERS',
-                category: 'softwareDev'
-              }"
-            >
-              See All
-            </p>
-          </div>
-        </div>
-        <div class="row">
-          <div
-            class="col-md-4 col-sm-6 col-12 no-padding"
-            *ngFor="let dev of developers"
-          >
-            <app-provider-card
-              [size]="'sm'"
-              [provider]="dev"
-            ></app-provider-card>
-          </div>
-        </div>
+      <h3 class="section-title text-center">
+        How it Works ?
+      </h3>
+      <div class="section-subtitle text-center">
+        Work between clients and freelancers happen in 3 simple steps on CanWork
       </div>
-    </section>
-    <section class="py-20">
-      <div class="container">
-        <div class="row">
-          <div class="col-8">
-            <h4
-              class="section-title pointer"
-              [routerLink]="['/search']"
-              [queryParams]="{
-                'refinementList[category][0]': 'DESIGNERS & CREATIVES',
-                category: 'designer'
-              }"
-            >
-              <span
-                ><img
-                  class="icon-img"
-                  src="assets/img/providers/creatives-black.svg"/></span
-              >DESIGNER & CREATIVES
-            </h4>
-          </div>
-          <div class="col-4 text-right">
-            <p
-              class="see-all pointer"
-              [routerLink]="['/search']"
-              [queryParams]="{
-                'refinementList[category][0]': 'DESIGNERS & CREATIVES',
-                category: 'designer'
-              }"
-            >
-              See All
-            </p>
-          </div>
-        </div>
-        <div class="row">
-          <div
-            class="col-md-4 col-sm-6 col-12 no-padding"
-            *ngFor="let designer of designers"
-          >
-            <app-provider-card
-              [size]="'sm'"
-              [provider]="designer"
-            ></app-provider-card>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="py-20">
-      <div class="container">
-        <div class="row">
-          <div class="col-8">
-            <h4
-              class="section-title pointer"
-              [routerLink]="['/search']"
-              [queryParams]="{
-                'refinementList[category][0]': 'CONTENT CREATORS',
-                category: 'contentCreator'
-              }"
-            >
-              <span
-                ><img
-                  class="icon-img"
-                  src="assets/img/providers/writer-black.svg"/></span
-              >CONTENT CREATORS
-            </h4>
-          </div>
-          <div class="col-4 text-right">
-            <p
-              class="see-all pointer"
-              [routerLink]="['/search']"
-              [queryParams]="{
-                'refinementList[category][0]': 'CONTENT CREATORS',
-                category: 'contentCreator'
-              }"
-            >
-              See All
-            </p>
-          </div>
-        </div>
-        <div class="row">
-          <div
-            class="col-md-4 col-sm-6 col-12 no-padding"
-            *ngFor="let content of contents"
-          >
-            <app-provider-card
-              [size]="'sm'"
-              [provider]="content"
-            ></app-provider-card>
-          </div>
-        </div>
-      </div>
-    </section>
 
-    <section class="py-20" *ngIf="currentUser && previouslySeen">
-      <div class="container">
-        <div class="row">
-          <h4 class="section-title">
-            <span class="icon-img"><i class="far fa-eye"></i></span>RECENTLY
-            VIEWED
-          </h4>
-        </div>
-        <div class="row" *ngIf="previouslySeen.length === 0">
-          <div class="container">
-            <i>You have not checked out any providers.</i>
-          </div>
-        </div>
-        <div
-          class="row"
-          *ngIf="previouslySeen.length > 0 && previouslySeen && !loadingDone"
-        >
-          <div class="container">
-            <i>Loading...</i>
-          </div>
-        </div>
-        <div
-          class="row"
-          *ngIf="previouslySeen.length > 0 && previouslySeen && loadingDone"
-        >
-          <div
-            class="col-md-4 col-12 no-padding"
-            *ngFor="let seen of previouslySeen"
-          >
-            <app-provider-card
-              [size]="'sm'"
-              [provider]="seen"
-            ></app-provider-card>
-          </div>
-        </div>
-      </div>
-    </section>
+      <div class="py-3"></div>
+      <div class="py-3"></div>
 
-    <div class="container-fluid bg-white">
-      <section class="py-20" id="how-it-works">
-        <h4 class="text-center">HOW DOES IT WORK?</h4>
-        <div class="container">
-          <div class="row text-center">
-            <div class="col-md-4 p-20">
-              <img src="/assets/img/onboarding/CanWork_Step1.png" />
-              <h5>Post a request and find the right provider</h5>
-              <p>
+      <div class="hiw-container text-center">
+        <div class="d-none d-md-flex col-12 flex-wrap">
+          <div class="col-4">
+            <div class="step-number">1</div>
+          </div>
+          <div class="col-4">
+            <div class="step-number">2</div>
+          </div>
+          <div class="col-4">
+            <div class="step-number">3</div>
+          </div>
+
+          <div class="py-2 col-12"></div>
+        </div>
+
+        <div class="d-flex flex-wrap col-12 gap-3">
+          <div class="col-12 col-md-4">
+            <div class="step-item">
+              <div class="">
+                <img
+                  src="assets/img/how-it-works/step-1.png"
+                  class="step-img"
+                />
+              </div>
+              <div class="py-2"></div>
+              <div class="step-title">
+                Post a request and find the right provider
+              </div>
+              <div class="step-subtitle">
                 Choose from the hand-picked talent on CanWork, or post a request
                 to attract the right person for the right job.
-              </p>
+              </div>
             </div>
-            <div class="col-md-4 p-20">
-              <img src="/assets/img/onboarding/CanWork_Step2.png" />
-              <h5>Agree to terms and get to work</h5>
-              <p>
-                Once you and your provider have agreed on a task, pay BNB or
-                selected BNB Chain assets into the CanWork escrow, where your
-                payment will be safe from price volatility.
-              </p>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="step-item">
+              <div class="">
+                <img
+                  src="assets/img/how-it-works/step-2.png"
+                  class="step-img"
+                />
+              </div>
+              <div class="py-2"></div>
+              <div class="step-title">
+                Agree to terms and get to work
+              </div>
+              <div class="step-subtitle">
+                Once you and your provider have agreed on a task, pay into the
+                CanYa escrow, where your payment will be safe from price
+                volatility.
+              </div>
             </div>
-            <div class="col-md-4 p-20">
-              <img src="/assets/img/onboarding/CanWork_Step3.png" />
-              <h5>A job well done!</h5>
-              <p>
-                Mark the job as complete to release stablecoin payment (BUSD) to
-                your provider. Don't forget to leave a rating and review.
-              </p>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="step-item">
+              <div class="">
+                <img
+                  src="assets/img/how-it-works/step-3.png"
+                  class="step-img"
+                />
+              </div>
+              <div class="py-2"></div>
+              <div class="step-title">
+                A job well done!
+              </div>
+              <div class="step-subtitle">
+                Mark the job as complete to release payment to your provider.
+                Don't forget to leave a rating and review.
+              </div>
             </div>
           </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
+
+    <section id="testimonials">
+      <div class="py-3"></div>
+
+      <h3 class="section-title text-center">
+        Testimonials
+      </h3>
+      <div class="section-subtitle text-center">
+        See what people say about us
+      </div>
+
+      <div class="py-3"></div>
+      <div class="py-3"></div>
+
+      <div class="text-center">
+        TESTIMONIALS SLIDER
+      </div>
+    </section>
+
+    <div class="py-3"></div>
+    <div class="py-3"></div>
+    <div class="py-3"></div>
+
+    <section id="cta-contact">
+      <div class="collage-container col-12 cta-2">
+        <div class="cta-container ml-0 ml-sm-2 ml-md-3">
+          <div class="py-3"></div>
+          <div class="cta-title">We always love to hear feedbacks from you</div>
+          <div class="py-1"></div>
+          <div class="cta-subtitle">
+            We have a 24/7 customer support and an active community, kindly
+            reach out to use for feedbacks, questions or reviews.
+          </div>
+          <div class="py-2"></div>
+          <div class="button-blue features-item-button">Contact Support</div>
+          <div class="py-3"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="py-3"></div>
+    <div class="py-3"></div>
+
+    <section id="blog">
+      <div class="py-3"></div>
+
+      <h3 class="section-title text-center">
+        Blog Posts
+      </h3>
+      <div class="section-subtitle text-center">
+        Read up on recent news and events within the ecosystem
+      </div>
+
+      <div class="py-3"></div>
+
+      <div class="text-center">TILE COLLAGE OF RECENT BLOG POSTS</div>
+
+      <div class="py-2"></div>
+
+      <div class="button-blue features-item-button mx-auto">Visit our blog</div>
+    </section>
+
+    <div class="py-3"></div>
+    <div class="py-3"></div>
+    <div class="py-3"></div>
+
+    <section id="cta-final">
+      <div class="collage-container-light col-12">
+        <div class="cta-container-light mx-auto">
+          <div class="py-3"></div>
+          <div class="cta-title-light">
+            Join the largest community of freelancers earning cryptocurrency on
+            blockchain technology
+          </div>
+          <div class="py-2"></div>
+          <div class="d-flex flex-wrap">
+            <div
+              class="button-blue features-item-button mx-auto my-1 ml-sm-auto mr-sm-1"
+            >
+              Hire Pro Freelancers
+            </div>
+            <div
+              class="button-white features-item-button mx-auto my-1 ml-sm-1 mr-sm-auto"
+            >
+              Start Earning Crypto
+            </div>
+          </div>
+          <div class="py-3"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="py-3"></div>
+    <div class="py-3"></div>
+    <div class="py-3"></div>
   </div>
 
   <app-blog-posts></app-blog-posts>
-  <app-feedback></app-feedback>
 </section>

@@ -481,10 +481,166 @@
   background-repeat: no-repeat;
   background-position-x: right;
   background-size: contain;
-  min-height: 300px;
+  min-height: 280px;
+}
+
+@media (max-width: 767px) {
+  .cta-1 {
+    background-blend-mode: overlay;
+    background-size: cover;
+  }
+}
+
+.cta-container {
+  max-width: 320px;
+}
+
+.cta-title {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.4rem;
+  line-height: 1.6rem;
+  color: #ffffff;
+}
+
+.cta-subtitle {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.2rem;
+  color: #c5c6c8;
 }
 
 .tile-item-container {
   background-color: #22262d;
   border-radius: 16px;
+}
+
+/* How it works section */
+
+/* #how-it-works {
+} */
+
+.hiw-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  /* gap: 20px; */
+}
+
+.step-number {
+  margin: 5px auto;
+  background: #3ac2ff;
+  border-radius: 50px;
+  width: 48px;
+  height: 48px;
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 48px;
+  color: #ffffff;
+}
+
+.step-item {
+  background: white;
+  max-width: 400px;
+  margin: 5px auto;
+  padding: 20px;
+  height: 100%;
+}
+
+.step-img {
+  height: 180px;
+  object-fit: cover;
+  width: auto;
+}
+
+.step-title {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: 1.3rem;
+  color: #22262d;
+  max-width: 250px;
+  margin: 10px auto;
+}
+
+.step-subtitle {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.3rem;
+  color: #818488;
+  max-width: 230px;
+  margin: 10px auto;
+}
+
+/* CTA Contact */
+
+#cta-contact {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.cta-2 {
+  background: url('/assets/img/ctas/cta-2.png'), #22262d;
+  background-repeat: no-repeat;
+  background-position-x: right;
+  background-size: contain;
+  min-height: 280px;
+}
+
+@media (max-width: 767px) {
+  .cta-2 {
+    background-blend-mode: overlay;
+    background-size: cover;
+  }
+}
+
+/* CTA Final */
+
+#cta-final {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.collage-container-light {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  max-width: 1200px;
+  background-color: white;
+  border-radius: 16px;
+  filter: drop-shadow(-15px 50px 50px rgba(141, 157, 165, 0.15));
+  padding: 20px;
+}
+
+.cta-container-light {
+  max-width: 480px;
+}
+
+.cta-title-light {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  text-align: center;
+  font-size: 1.1rem;
+  line-height: 1.6rem;
+  color: #4c4f55;
 }
