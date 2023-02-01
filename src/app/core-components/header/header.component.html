@@ -5,8 +5,8 @@
   <div class="topnav-link-container">
     <a class="topnav-link" [routerLink]="['/jobs']">Job Board</a>
     <a class="topnav-link" *ngIf="currentUser" [routerLink]="['/inbox/chat']">
-      <div class="topnav-link-notif-badge" *ngIf="hasUnreadMessages">
-        <!-- TODO: Count unread messages and show count here as number -->
+      <div class="topnav-link-notif-badge">
+        {{ unreadMsgCount }}
       </div>
       <div>Inbox</div>
     </a>
@@ -207,8 +207,8 @@
           data-toggle="modal"
           data-target="#mobileMenuModal"
         >
-          <div class="topnav-link-notif-badge" *ngIf="hasUnreadMessages">
-            <!-- TODO: Count unread messages and show count here as number -->
+          <div class="topnav-link-notif-badge">
+            {{ unreadMsgCount }}
           </div>
           <div>Inbox</div>
         </div>

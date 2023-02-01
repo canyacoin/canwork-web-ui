@@ -23,7 +23,7 @@
             <div class="py-1 py-lg-2"></div>
 
             <div class="landing-hero-cta-buttons">
-              <div class="button-blue mr-sm-1" [routerLink]="['/auth']">
+              <div class="button-blue mr-sm-1" [routerLink]="['/search']">
                 Hire Pro Freelancers
               </div>
               <div
@@ -84,7 +84,7 @@
               <div class="mt-2 freelance-tile-desc">
                 <p class="">{{ type.desc }}</p>
               </div>
-              <div
+              <a
                 [routerLink]="['/search']"
                 [queryParams]="{
                   'refinementList[category][0]': type.name,
@@ -96,7 +96,7 @@
                   Browse {{ type.name }}
                   <img src="assets/img/arrow-right.svg" height="24px" />
                 </p>
-              </div>
+              </a>
             </div>
           </div>
         </div>
@@ -284,7 +284,9 @@
             <div class="py-3"></div>
 
             <div class="features-item-button">
-              <div class="button-white">Hire Top Freelancer</div>
+              <div class="button-white" [routerLink]="['/search']">
+                Hire Top Freelancer
+              </div>
             </div>
           </div>
         </div>
@@ -374,7 +376,9 @@
             <div class="py-3"></div>
 
             <div class="features-item-button">
-              <div class="button-white">Start Earning on CanWork</div>
+              <div class="button-white" [routerLink]="['/auth']">
+                Start Earning on CanWork
+              </div>
             </div>
           </div>
           <div class="features-item-pic col-6 d-none d-md-flex">RIGHT</div>
@@ -396,7 +400,12 @@
             job boards for free.
           </div>
           <div class="py-2"></div>
-          <div class="button-blue features-item-button">View Job Board</div>
+          <div
+            class="button-blue features-item-button"
+            [routerLink]="['/jobs']"
+          >
+            View Job Board
+          </div>
           <div class="py-3"></div>
         </div>
       </div>
@@ -559,6 +568,7 @@
             reach out to use for feedbacks, questions or reviews.
           </div>
           <div class="py-2"></div>
+          <!-- TODO: What support link do we want here? -->
           <div class="button-blue features-item-button">Contact Support</div>
           <div class="py-3"></div>
         </div>
@@ -584,7 +594,12 @@
 
       <div class="py-2"></div>
 
-      <div class="button-blue features-item-button mx-auto">Visit our blog</div>
+      <div
+        class="button-blue features-item-button mx-auto"
+        [routerLink]="['/blog']"
+      >
+        Visit our blog
+      </div>
     </section>
 
     <div class="py-3"></div>
@@ -603,11 +618,13 @@
           <div class="d-flex flex-wrap">
             <div
               class="button-blue features-item-button mx-auto my-1 ml-sm-auto mr-sm-1"
+              [routerLink]="['/search']"
             >
               Hire Pro Freelancers
             </div>
             <div
               class="button-white features-item-button mx-auto my-1 ml-sm-1 mr-sm-auto"
+              [routerLink]="['/auth']"
             >
               Start Earning Crypto
             </div>

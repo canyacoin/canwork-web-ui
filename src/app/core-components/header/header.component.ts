@@ -32,6 +32,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   bAddress: string
 
   hasUnreadMessages = false
+  unreadMsgCount = 0
   messagesSubscription: Subscription
   routerSub: Subscription
   authSub: Subscription
@@ -101,6 +102,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.messagesSubscription = unreadConversations.valueChanges().subscribe(
         x => {
           const hadUnread = this.hasUnreadMessages
+          this.unreadMsgCount = x.length
           this.hasUnreadMessages = x.length > 0
           if (!hadUnread && this.hasUnreadMessages) {
             // request permission to show desktop notifications
@@ -118,6 +120,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           // console.error('! unable to retrieve chat/channel data:', error)
         }
       )
+      console.log(this.messagesSubscription)
     }
   }
 

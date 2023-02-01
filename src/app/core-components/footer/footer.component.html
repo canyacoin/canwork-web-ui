@@ -15,7 +15,17 @@
             <div class="py-2"></div>
             <div class="">
               <ul class="footer-url-list pl-0">
-                <li><a href="">Content Creators</a></li>
+                <li>
+                  <a
+                    [routerLink]="['/search']"
+                    [queryParams]="{
+                      'refinementList[category][0]': 'Content Creators',
+                      category: 'contentCreator'
+                    }"
+                  >
+                    Content Creators
+                  </a>
+                </li>
                 <li><a href="">Software Developers</a></li>
                 <li><a href="">Designers & Developers</a></li>
                 <li><a href="">Financial Experts</a></li>
