@@ -15,22 +15,17 @@
             <div class="py-2"></div>
             <div class="">
               <ul class="footer-url-list pl-0">
-                <li>
+                <li *ngFor="let type of providerTypes">
                   <a
                     [routerLink]="['/search']"
                     [queryParams]="{
-                      'refinementList[category][0]': 'Content Creators',
-                      category: 'contentCreator'
+                      'refinementList[category][0]': 'type.name',
+                      category: 'type.id'
                     }"
                   >
-                    Content Creators
+                    {{ type.name }}
                   </a>
                 </li>
-                <li><a href="">Software Developers</a></li>
-                <li><a href="">Designers & Developers</a></li>
-                <li><a href="">Financial Experts</a></li>
-                <li><a href="">Marketing & SEO</a></li>
-                <li><a href="">Virtual Assistants</a></li>
               </ul>
             </div>
           </div>
@@ -39,13 +34,13 @@
             <div class="py-2"></div>
             <div class="">
               <ul class="footer-url-list pl-0">
-                <li><a href="">Register</a></li>
-                <li><a href="">Sign In</a></li>
-                <li><a href="">Home</a></li>
-                <li><a href="">Job Board</a></li>
-                <li><a href="">Dashboard</a></li>
-                <li><a href="">Blog</a></li>
-                <li><a href="">Search</a></li>
+                <!-- TODO: What links do we want here? And what order should they be in? -->
+                <li><a [routerLink]="['/auth']">Register</a></li>
+                <li><a [routerLink]="['/auth']">Sign In</a></li>
+                <li><a href="./">Home</a></li>
+                <li><a [routerLink]="['/jobs']">Job Board</a></li>
+                <li><a [routerLink]="['/blog']">Blog</a></li>
+                <li><a [routerLink]="['/search']">Search</a></li>
               </ul>
             </div>
           </div>
@@ -54,10 +49,11 @@
             <div class="py-2"></div>
             <div class="">
               <ul class="footer-url-list pl-0">
+                <!-- TODO: What links do we want here? -->
                 <li><a href="">Community</a></li>
                 <li><a href="">About Us</a></li>
                 <li><a href="">Careers</a></li>
-                <li><a href="">FAQs</a></li>
+                <li><a [routerLink]="['/faq']">FAQs</a></li>
                 <li><a href="">Contact Us</a></li>
                 <li><a href="">Help & Support</a></li>
               </ul>
@@ -67,36 +63,74 @@
             <div class="footer-url-title">Socials</div>
             <div class="py-2"></div>
             <div class="social-icons-container">
-              <img
-                src="/assets/img/socials/facebook.svg"
-                height="36px"
-                class=""
-              />
+              <a
+                href="https://www.facebook.com/CanWorkPlatform"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img
+                  src="/assets/img/socials/facebook.svg"
+                  height="36px"
+                  class=""
+                />
+              </a>
+              <!-- TODO: Add linkedin URL -->
+              <!-- <a
+                href=""
+                target="_blank"
+                rel="noreferrer"
+              > -->
               <img
                 src="/assets/img/socials/linkedin.svg"
                 height="36px"
-                class="m-2"
-              />
-              <img
-                src="/assets/img/socials/instagram.svg"
-                height="36px"
                 class=""
               />
-              <img
-                src="/assets/img/socials/telegram.svg"
-                height="36px"
-                class=""
-              />
-              <img
-                src="/assets/img/socials/github.svg"
-                height="36px"
-                class="m-2"
-              />
-              <img
-                src="/assets/img/socials/twitter.svg"
-                height="36px"
-                class=""
-              />
+              <!-- </a> -->
+              <a
+                href="https://www.instagram.com/canwork.io/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img
+                  src="/assets/img/socials/instagram.svg"
+                  height="36px"
+                  class=""
+                />
+              </a>
+              <a
+                href="https://t.me/joinchat/GI97FhDD1lf6dh-r9XRdvA"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img
+                  src="/assets/img/socials/telegram.svg"
+                  height="36px"
+                  class=""
+                />
+              </a>
+              <!-- TODO: Change to gitlab icon? or point to github mirror repo? -->
+              <a
+                href="https://gitlab.com/canyacoin/canwork"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img
+                  src="/assets/img/socials/github.svg"
+                  height="36px"
+                  class=""
+                />
+              </a>
+              <a
+                href="https://twitter.com/canwork_"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img
+                  src="/assets/img/socials/twitter.svg"
+                  height="36px"
+                  class=""
+                />
+              </a>
             </div>
           </div>
 
@@ -108,8 +142,11 @@
             <div class="col-12 col-lg-5 my-2">
               Copyright 2018 - 2022 CanWork.io
             </div>
+            <!-- TODO: Add terms page and link? Or remove it? -->
             <div class="col-6 col-md-4 col-lg-2 my-2">Terms</div>
+            <!-- TODO: Add Privacy page and link? Or remove it? -->
             <div class="col-6 col-md-4 col-lg-2 my-2">Privacy</div>
+            <!-- TODO: Add Accessibility page and link? Or remove it? -->
             <div class="d-none d-md-block col-4 col-lg-3 my-2">
               Accessibility
             </div>

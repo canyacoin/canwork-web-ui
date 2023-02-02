@@ -243,6 +243,15 @@
 .profile-category-item {
   display: flex;
   flex-direction: row;
+  cursor: pointer;
+}
+
+.profile-category-item:hover {
+  transform: scale(1.1);
+  -ms-transform: scale(1.1); /* IE 9 */
+  -moz-transform: scale(1.1); /* Firefox */
+  -webkit-transform: scale(1.1); /* Safari and Chrome */
+  -o-transform: scale(1.1); /* Opera */
 }
 
 .profile-category-icon {
@@ -263,6 +272,18 @@
   .profile-category-img {
     width: 56px;
   }
+}
+
+.selected-false {
+  filter: grayscale(100%);
+}
+
+.selected-false:hover {
+  filter: grayscale(50%);
+}
+
+.selected-false div {
+  color: rgb(134, 134, 134);
 }
 
 .profile-category-title {
@@ -295,6 +316,8 @@
   width: 100%;
   border-radius: 8px;
   height: 232px;
+  width: auto;
+  margin: 0 auto;
   overflow: hidden;
 }
 
@@ -334,6 +357,8 @@
 
 .profile-tags {
   margin-bottom: 20px;
+  min-height: 28px;
+  min-width: 28px;
 }
 
 .profile-button {
@@ -530,6 +555,8 @@
   justify-content: center;
   align-content: center;
   align-items: center;
+  max-width: 1200px;
+  margin: 10px auto;
   /* gap: 20px; */
 }
 

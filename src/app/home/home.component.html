@@ -125,7 +125,12 @@
             >
               <!-- TODO: Make categories selectable (like a tab) -->
               <!-- TODO: Style based on selected category -->
-              <div class="profile-category-item">
+              <div
+                class="profile-category-item selected-{{
+                  selectedProvType === type.id
+                }}"
+                (click)="onSelectProvType(type.id)"
+              >
                 <div class="profile-category-icon mt-2">
                   <img
                     src="assets/img/providers/new/{{ type.img }}"
@@ -145,16 +150,16 @@
           <!-- TODO: Filter this by slected category -->
           <div
             class="col-12 col-sm-6 col-md-4"
-            *ngFor="let dev of developers | slice: 0:3"
+            *ngFor="let profile of tempProviderArray | slice: 0:3"
           >
-            <div class="profile-item bg-white">
+            <div class="profile-item bg-white my-2">
               <div class="profile-img">
-                <img src="{{ dev.avatar.uri }}" />
+                <img src="{{ profile.avatar.uri }}" />
               </div>
               <div class="py-2"></div>
               <div class="profile-title">
-                {{ dev.name }}
-                <span *ngIf="!dev.verified">
+                {{ profile.name }}
+                <span *ngIf="!profile.verified">
                   <img
                     src="assets/img/icons/verified.svg"
                     height="24px"
@@ -163,24 +168,24 @@
                 </span>
               </div>
               <div class="profile-desc">
-                {{ dev.title }}
+                {{ profile.title }}
               </div>
               <div class="profile-rating">
                 <!-- TODO: Star rating -->
-                {{ dev.rating.average }} ({{ dev.rating.count }})
+                {{ profile.rating.average }} ({{ profile.rating.count }})
               </div>
-              <div class="profile-bio">{{ dev.bio }} BIO</div>
+              <div class="profile-bio">{{ profile.bio }} BIO</div>
               <div class="mt-2 profile-tags">
                 <!-- TODO: Skill tags as per design -->
                 <app-skill-tag
-                  *ngFor="let tag of dev.skillTags"
+                  *ngFor="let tag of profile.skillTags"
                   [skill]="tag"
                   [routerLink]="['/search']"
                   [queryParams]="{ query: tag }"
                 ></app-skill-tag>
               </div>
               <div class="profile-button button-blue">
-                View {{ dev.name }}'s Profile
+                View {{ profile.name }}'s Profile
               </div>
             </div>
           </div>
@@ -637,7 +642,7 @@
     <div class="py-3"></div>
     <div class="py-3"></div>
     <div class="py-3"></div>
-  </div>
 
-  <app-blog-posts></app-blog-posts>
+    <app-blog-posts></app-blog-posts>
+  </div>
 </section>

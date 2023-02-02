@@ -14,11 +14,7 @@
     <a class="topnav-link" [routerLink]="['/faq']">FAQ</a>
   </div>
   <div class="topnav-search-container">
-    <form
-      class="topnav-search-left"
-      method="post"
-      (ngSubmit)="onSubmit(inputSearch.value)"
-    >
+    <form class="topnav-search-left" method="post" (ngSubmit)="onSubmit()">
       <button type="submit" border-none>
         <img
           class="topnav-search-icon"
@@ -33,12 +29,19 @@
         id="topnav-search"
         name="topnav-search"
         placeholder="Search"
-        (focus)="onFocus(inputSearch.value)"
-        (blur)="onBlur(inputSearch.value)"
       />
     </form>
-    <div class="topnav-search-right">
-      <div class="topnav-search-select-text">Freelancers</div>
+    <div class="topnav-search-right" (click)="toggleDropdown()">
+      <div class="topnav-search-select-text">
+        {{ selectedProvType.name }}
+      </div>
+      <div class="topnav-search-dropdown" id="myDropdown">
+        <a
+          *ngFor="let item of providerCategories"
+          (click)="closeDropDown(item)"
+          >{{ item.name }}</a
+        >
+      </div>
       <!-- OTHER DROPDOWN SELECTION -->
       <!-- <div class="topnav-search-select-text">Jobs</div> -->
       <img
@@ -164,7 +167,7 @@
           <form
             class="topnav-search-left"
             method="post"
-            (ngSubmit)="onSubmit(inputSearch.value)"
+            (ngSubmit)="onSubmitFromModal()"
           >
             <button type="submit" border-none>
               <img
@@ -177,20 +180,28 @@
               #inputSearch
               class="topnav-search-input"
               type="text"
-              id="topnav-search"
+              id="topnav-search-mobile"
               name="topnav-search"
               placeholder="Search"
-              (focus)="onFocus(inputSearch.value)"
-              (blur)="onBlur(inputSearch.value)"
             />
           </form>
           <div class="topnav-search-right">
+            <!-- <img
+              class="topnav-search-select-icon"
+              src="assets/img/icons/arrow-down.svg"
+              alt="search-select"
+            /> -->
+          </div>
+          <!-- <div class="topnav-search-right" (click)="toggleDropdown()">
+            <div class="topnav-search-dropdown" id="myDropdown">
+              <a *ngFor="let item of providerCategories" (click)="closeDropDown(item)">{{ item.name }}</a>
+            </div>
             <img
               class="topnav-search-select-icon"
               src="assets/img/icons/arrow-down.svg"
               alt="search-select"
             />
-          </div>
+          </div> -->
         </div>
         <div
           class="topnav-link pointer"
