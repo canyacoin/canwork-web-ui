@@ -1,128 +1,140 @@
 <div class="topnav-container">
-  <a class="topnav-logo-container" [routerLink]="['/home']">
-    <img class="topnav-logo" src="assets/img/logo.svg" alt="logo" />
-  </a>
-  <div class="topnav-link-container">
-    <a class="topnav-link" [routerLink]="['/jobs']">Job Board</a>
-    <a class="topnav-link" *ngIf="currentUser" [routerLink]="['/inbox/chat']">
-      <div class="topnav-link-notif-badge">
-        {{ unreadMsgCount }}
-      </div>
-      <div>Inbox</div>
+  <div class="topnav-inner">
+    <a class="topnav-logo-container" [routerLink]="['/home']">
+      <img class="topnav-logo" src="assets/img/logo.svg" alt="logo" />
     </a>
-    <a class="topnav-link" [routerLink]="['/blog']">Blog</a>
-    <a class="topnav-link" [routerLink]="['/faq']">FAQ</a>
-  </div>
-  <div class="topnav-search-container">
-    <form class="topnav-search-left" method="post" (ngSubmit)="onSubmit()">
-      <button type="submit" border-none>
-        <img
-          class="topnav-search-icon"
-          src="assets/img/icons/search.svg"
-          alt="search"
-        />
-      </button>
-      <input
-        #inputSearch
-        class="topnav-search-input"
-        type="text"
-        id="topnav-search"
-        name="topnav-search"
-        placeholder="Search"
-      />
-    </form>
-    <div class="topnav-search-right" (click)="toggleDropdown()">
-      <div class="topnav-search-select-text">
-        {{ selectedProvType.name }}
-      </div>
-      <div class="topnav-search-dropdown" id="myDropdown">
-        <a
-          *ngFor="let item of providerCategories"
-          (click)="closeDropDown(item)"
-          >{{ item.name }}</a
-        >
-      </div>
-      <!-- OTHER DROPDOWN SELECTION -->
-      <!-- <div class="topnav-search-select-text">Jobs</div> -->
-      <img
-        class="topnav-search-select-icon"
-        src="assets/img/icons/arrow-down.svg"
-        alt="search-select"
-      />
-    </div>
-  </div>
-  <div class="topnav-button-container" *ngIf="!currentUser">
-    <div class="button-white" [routerLink]="['/auth']">Login</div>
-    <div class="button-blue" [routerLink]="['/auth']">Create Account</div>
-  </div>
-  <div class="topnav-button-container" *ngIf="currentUser">
-    <div
-      class="button-blue"
-      *ngIf="!bAddress; else showAddress"
-      [routerLink]="['/wallet-bnb']"
-    >
-      Connect Wallet
-    </div>
-    <ng-template #showAddress>
-      <div class="button-blue" [routerLink]="['/wallet-bnb/assets']">
-        {{ bAddress.slice(0, 6) }}...{{ bAddress.slice(-3) }}
-      </div>
-    </ng-template>
-    <div class="topnav-avatar">
-      <a
-        role="button"
-        id="dropdownMenuLink"
-        data-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >
-        <app-avatar [user]="currentUser" [customClass]="'avatar'"></app-avatar>
+    <div class="topnav-link-container">
+      <a class="topnav-link" [routerLink]="['/jobs']">Job Board</a>
+      <a class="topnav-link" *ngIf="currentUser" [routerLink]="['/inbox/chat']">
+        <div class="topnav-link-notif-badge">
+          {{ unreadMsgCount }}
+        </div>
+        <div>Inbox</div>
       </a>
-      <div
-        class="dropdown-menu dropdown-menu-right"
-        aria-labelledby="dropdownMenuLink"
-      >
-        <a
-          class="nav-link dropdown-item"
-          style="font-weight: 400 !important; text-transform: none"
-          href="#"
-          [routerLink]="['/profile']"
-          >Profile</a
-        >
-        <a
-          class="nav-link dropdown-item"
-          style="font-weight: 400 !important; text-transform: none"
-          href="#"
-          [routerLink]="['/profile']"
-          [queryParams]="{ editProfile: 1 }"
-          >Edit Profile</a
-        >
-        <div class="dropdown-divider"></div>
-        <a
-          class="nav-link dropdown-item"
-          style="font-weight: 400 !important; text-transform: none"
-          href="#"
-          [routerLink]="['/inbox/jobs']"
-          >Manage Jobs</a
-        >
-        <div class="dropdown-divider"></div>
-        <a
-          class="dropdown-item text-danger"
-          href="#"
-          data-toggle="modal"
-          data-target="#areYouSureLogoutModal"
-          >Logout</a
-        >
+      <a class="topnav-link" [routerLink]="['/blog']">Blog</a>
+      <a class="topnav-link" [routerLink]="['/faq']">FAQ</a>
+    </div>
+    <div class="topnav-search-container">
+      <form class="topnav-search-left" method="post" (ngSubmit)="onSubmit()">
+        <button type="submit" border-none>
+          <img
+            class="topnav-search-icon"
+            src="assets/img/icons/search.svg"
+            alt="search"
+          />
+        </button>
+        <input
+          #inputSearch
+          class="topnav-search-input"
+          type="text"
+          id="topnav-search"
+          name="topnav-search"
+          placeholder="Search"
+        />
+      </form>
+      <div class="topnav-search-right" (click)="toggleDropdown()">
+        <div class="topnav-search-select-text">
+          {{ selectedProvType.name }}
+        </div>
+        <div class="topnav-search-dropdown" id="myDropdown">
+          <a
+            *ngFor="let item of providerCategories"
+            (click)="closeDropDown(item)"
+            >{{ item.name }}</a
+          >
+        </div>
+        <!-- OTHER DROPDOWN SELECTION -->
+        <!-- <div class="topnav-search-select-text">Jobs</div> -->
+        <img
+          class="topnav-search-select-icon"
+          src="assets/img/icons/arrow-down.svg"
+          alt="search-select"
+        />
       </div>
     </div>
-  </div>
-  <div class="topnav-hamburger">
-    <a class="" href="#" data-toggle="modal" data-target="#mobileMenuModal"
-      ><img
-        class="topnav-hamburger-icon"
-        src="assets/img/icons/hamburger-menu.svg"
-        alt="mobile-menu"
-    /></a>
+    <div class="topnav-button-container" *ngIf="!currentUser">
+      <div class="button-white small-button" [routerLink]="['/auth']">
+        Login
+      </div>
+      <div class="button-blue small-button" [routerLink]="['/auth']">
+        Create Account
+      </div>
+    </div>
+    <div class="topnav-button-container" *ngIf="currentUser">
+      <div
+        class="button-blue small-button"
+        *ngIf="!bAddress; else showAddress"
+        [routerLink]="['/wallet-bnb']"
+      >
+        Connect Wallet
+      </div>
+      <ng-template #showAddress>
+        <div
+          class="button-blue small-button"
+          [routerLink]="['/wallet-bnb/assets']"
+        >
+          {{ bAddress.slice(0, 6) }}...{{ bAddress.slice(-3) }}
+        </div>
+      </ng-template>
+      <div class="topnav-avatar">
+        <a
+          role="button"
+          id="dropdownMenuLink"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <app-avatar
+            [user]="currentUser"
+            [customClass]="'avatar'"
+          ></app-avatar>
+        </a>
+        <div
+          class="dropdown-menu dropdown-menu-right"
+          aria-labelledby="dropdownMenuLink"
+        >
+          <a
+            class="nav-link dropdown-item"
+            style="font-weight: 400 !important; text-transform: none"
+            href="#"
+            [routerLink]="['/profile']"
+            >Profile</a
+          >
+          <a
+            class="nav-link dropdown-item"
+            style="font-weight: 400 !important; text-transform: none"
+            href="#"
+            [routerLink]="['/profile']"
+            [queryParams]="{ editProfile: 1 }"
+            >Edit Profile</a
+          >
+          <div class="dropdown-divider"></div>
+          <a
+            class="nav-link dropdown-item"
+            style="font-weight: 400 !important; text-transform: none"
+            href="#"
+            [routerLink]="['/inbox/jobs']"
+            >Manage Jobs</a
+          >
+          <div class="dropdown-divider"></div>
+          <a
+            class="dropdown-item text-danger"
+            href="#"
+            data-toggle="modal"
+            data-target="#areYouSureLogoutModal"
+            >Logout</a
+          >
+        </div>
+      </div>
+    </div>
+    <div class="topnav-hamburger">
+      <a class="" href="#" data-toggle="modal" data-target="#mobileMenuModal"
+        ><img
+          class="topnav-hamburger-icon"
+          src="assets/img/icons/hamburger-menu.svg"
+          alt="mobile-menu"
+      /></a>
+    </div>
   </div>
 </div>
 

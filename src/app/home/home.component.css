@@ -1,9 +1,32 @@
 /* HERO SECTION */
 
 .landing-hero-container {
+  background: url(/assets/img/hero-png-3.png), #ffffff5c;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position-y: bottom;
+  background-position-x: right;
+}
+
+@media (max-width: 1200px) {
+  .landing-hero-container {
+    background-blend-mode: overlay;
+  }
+}
+
+@media (max-width: 767px) {
+  .landing-hero-container {
+    background-position-x: center;
+  }
+}
+
+.landing-hero-inner {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .landing-hero-left {
@@ -63,10 +86,6 @@
   align-items: flex-end;
   padding: 40px 20px;
   min-height: 350px;
-  background: url('/assets/img/hero-png-3.png');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position-y: top;
 }
 
 @media (max-width: 767px) {
@@ -74,7 +93,6 @@
     padding: 20px;
     min-height: 100px;
     height: 62vw;
-    background-size: contain;
   }
 }
 
