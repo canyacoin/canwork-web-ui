@@ -95,12 +95,12 @@ export class HomeComponent implements OnInit {
   // }
 
   getProviders(searchQuery) {
-    const newArray = []
+    let newArray = []
     this.algoliaIndex
       .search({ query: searchQuery })
       .then(res => {
         const result = res.hits
-        for (let i = 1; i < 4; i++) {
+        for (let i = 0; i < result.length; i++) {
           // TODO: Add a dummy/placeholder if < 3 profiles found?
           if (result[i]) {
             const provider = {
@@ -119,6 +119,7 @@ export class HomeComponent implements OnInit {
             newArray.push(provider)
           }
         }
+        newArray.sort((a, b) => b.rating.count - a.rating.count)
       })
       .catch(err => {
         console.log(err)

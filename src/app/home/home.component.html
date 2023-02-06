@@ -56,7 +56,7 @@
       </div>
     </section>
 
-    <section id="freelance-categories">
+    <!-- <section id="freelance-categories">
       <div class="freelance-container p-1 p-md-3 bg-secondary-new">
         <h3 class="section-title text-center">
           Top Tier Freelance Talents
@@ -104,7 +104,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
 
     <section id="profiles">
       <div class="profiles-container">
@@ -126,8 +126,6 @@
               *ngFor="let type of providerTypes"
               class="col-6 col-md-4 col-lg-2"
             >
-              <!-- TODO: Make categories selectable (like a tab) -->
-              <!-- TODO: Style based on selected category -->
               <div
                 class="profile-category-item selected-{{
                   selectedProvType === type.id
@@ -150,7 +148,6 @@
         <div class="py-2"></div>
 
         <div class="profiles-tiles-container">
-          <!-- TODO: Filter this by slected category -->
           <div
             class="col-12 col-sm-6 col-md-4"
             *ngFor="let profile of tempProviderArray | slice: 0:3"
@@ -191,6 +188,21 @@
                 View {{ profile.name }}'s Profile
               </div>
             </div>
+          </div>
+        </div>
+
+        <div class="py-2"></div>
+
+        <div class="row">
+          <div class="col-6">
+            <div *ngFor="let type of providerTypes">
+              <div class="button-blue" *ngIf="type.id === selectedProvType">
+                View all {{ type.name }}
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="button-white">View All Freelancers</div>
           </div>
         </div>
       </div>
