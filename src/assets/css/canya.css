@@ -1,5 +1,6 @@
 @charset "UTF-8";
-@import url("https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,800");
+@import url("https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800");
+@import url("https://fonts.googleapis.com/css?family=Nunito:300,400,500,600,700,800");
 
 body {
   font-family: Montserrat, HelveticaNeueLight, HelveticaNeue-Light, "Helvetica Neue Light", HelveticaNeue, "Helvetica Neue", Helvetica, Tahoma, Geneva, Arial, sans-serif;
@@ -551,12 +552,12 @@ img {
 
 .avatar {
   border-radius: 10rem;
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   background-position: center center;
   background-size: cover;
   display: inline-block;
-
+  vertical-align: middle;
 }
 
 .avatar-xs {
@@ -5216,7 +5217,7 @@ ul.flexbox {
   width: 80%;
 }
 
-.topbar-toggler {
+/* .topbar-toggler {
   position: absolute;
   top: 0;
   right: 0;
@@ -5234,7 +5235,7 @@ ul.flexbox {
 
 .topbar-toggler:focus {
   outline: none;
-}
+} */
 
 .topbar-brand {
   float: none;
@@ -6635,6 +6636,18 @@ ul.flexbox {
 .bg-grey,
 .bg-gray {
   background-color: #f8f8f8;
+}
+
+.bg-main-new {
+  background-color: #FAFAFB;
+}
+
+.bg-secondary-new {
+  background-color: #F6F6F6;
+}
+
+.bg-dark-new {
+  background-color: #22262D;
 }
 
 .bg-pale-primary {

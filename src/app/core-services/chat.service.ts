@@ -186,8 +186,7 @@ export class ChatService {
         messageText = 'I have proposed a counter offer!'
         break
       case ActionType.acceptTerms:
-        messageText =
-          'I have accepted the terms of the job!  Please pay the agreed amount into escrow.'
+        messageText = 'I have accepted the terms of the job!'
         break
       case ActionType.enterEscrow:
         messageText =

@@ -1305,7 +1305,7 @@ exports.bep20TxMonitor = functions.pubsub
 exports.listenToChainUpdates = functions.https.onRequest(
   async (request, response) => {
     cors(request, response, async () => {
-      await listenToChainUpdates(request, response, db, env)
+      await listenToChainUpdates(request, response, db, env, serviceConfig)
     })
   }
 )

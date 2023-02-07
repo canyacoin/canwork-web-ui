@@ -191,23 +191,28 @@ export class JobService {
               })
             } else {
               let result = await this.bscService.releaseByProvider(job.id)
+              // todo update only job state locally and move to backend, if result ok
 
               if (!result.err) {
                 // add action log
-                parsedJob.actionLog.push(action)
-                parsedJob.state = JobState.cancelledByProvider // state is cancelled, like plain cancel, no more actions possible
-                // add transaction to job log
+                // parsedJob.actionLog.push(action) // moved to backend
+                parsedJob.state = JobState.cancelledByProvider // only local copy
+                // state is cancelled, like plain cancel, no more actions possible
+
+                // add transaction to job log (moved to backend)
+                /*
                 let tx = await this.transactionService.createTransaction(
                   `Cancel job early`,
                   result.transactionHash,
                   job.id
                 )
+                */
 
                 /* 
-                sync job to firestore and
-                handle notifications into chatService and jobNotificationService
+                sync job to firestore and handle notifications into chatService and jobNotificationService
+                (moved to backend)
                 */
-                await this.saveJobAndNotify(parsedJob, action)
+                //await this.saveJobAndNotify(parsedJob, action)
 
                 resolve(true)
               } else {
@@ -277,18 +282,22 @@ export class JobService {
             resolve(true)
             break
           case ActionType.enterEscrowBsc:
-            parsedJob.actionLog.push(action); // only local copy
-            parsedJob.state = JobState.inEscrow; // only local copy
-            parsedJob.bscEscrow = true; // save bscEscrow property into job to use it later when releasing job, only local copy
-            
-            // TODO move also the notify (chat and email) to backend ?
-            await this.jobNotify(parsedJob, action); // only notify, saving will be done from backend
+            // saving will be done from backend, this updates are only for ui
+            parsedJob.actionLog.push(action) // only local copy
+            parsedJob.state = JobState.inEscrow // only local copy
+            parsedJob.bscEscrow = true // save bscEscrow property into job to use it later when releasing job, only local copy
+
+            // moved (chat and email) to backend
+            // await this.jobNotify(parsedJob, action);
+
             resolve(true)
             break
           case ActionType.acceptFinish:
+            // todo update only job state locally and move to backend
             parsedJob.actionLog.push(action)
             parsedJob.state = JobState.complete
-            await this.saveJobAndNotify(parsedJob, action)
+            // moved to backend
+            //await this.saveJobAndNotify(parsedJob, action)
             resolve(true)
             break
           default:
@@ -306,12 +315,15 @@ export class JobService {
 
     await this.jobNotificationService.notify(action.type, job.id)
   }
-  
+
+  /*
+  // moved to backend
   async jobNotify(job: Job, action: IJobAction) {
-    await this.chatService.sendJobMessages(job, action)
+    await this.chatService.sendJobMessages(job, action) // moved to backend functions/src/chat-notifications.ts
 
     await this.jobNotificationService.notify(action.type, job.id)
-  }  
+  }
+  */
 
   async saveJobFirebase(job: Job): Promise<any> {
     const x = await this.parseJobToObject(job)

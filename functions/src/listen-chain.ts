@@ -2,13 +2,16 @@
 no dependency on web3 libs (this is segregated to an external chain monitor service)
 */
 
-
 import { GenerateGuid } from './generate.uid'
 
 import { bep20TxProcess } from './bep20-process'
 
-const SUPPORTED_METHODS = ['depositBEP20', 'depositBNB'];
-
+const SUPPORTED_METHODS = [
+  'depositBEP20',
+  'depositBNB',
+  'releaseAsClient',
+  'releaseByProvider',
+]
 
 /*
 how to test this function:
@@ -17,7 +20,13 @@ https://firebase.google.com/docs/functions/local-shell#invoke_https_functions
   listenToChainUpdates({method:'post',url:'/',headers:{authorization:env.chainmonitor.authkey}}).form( {method: '..', data: {}, .. })
  */
 
-export async function listenToChainUpdates(request, response, db, env) {
+export async function listenToChainUpdates(
+  request,
+  response,
+  db,
+  env,
+  serviceConfig
+) {
   /*
   expected method POST
   expected path /
@@ -41,7 +50,8 @@ export async function listenToChainUpdates(request, response, db, env) {
     }      
   }
   + headers.authorization
-  */  
+  */
+
   if (request.method !== 'POST') {
     return response
       .status(405)
@@ -61,84 +71,86 @@ export async function listenToChainUpdates(request, response, db, env) {
     request.headers.authorization !== env.chainmonitor.authkey
   ) {
     return response.status(403).send('Unauthorized')
-  }  
+  }
 
-  const body = request.body;
+  const body = request.body
   // check mandatory params
   if (
     !body.hasOwnProperty('hash') ||
     !body.hasOwnProperty('from') ||
     !body.hasOwnProperty('address') ||
     !body.hasOwnProperty('method') ||
-    !body.hasOwnProperty('data')      
+    !body.hasOwnProperty('data')
   ) {
-    console.log('Missing params');
-    console.log(body);
-  
+    console.log('Missing params')
+    console.log(body)
+
     return response.status(405).send('Invalid')
-    
   }
-  
-  const smartMethod = body.method;
-  
+
+  const smartMethod = body.method
+
   // now check parameter method specific and method
   if (SUPPORTED_METHODS.indexOf(smartMethod) === -1) {
-    console.log('Invalid method');
-    console.log(body);
-  
+    console.log('Invalid method')
+    console.log(body)
+
     return response.status(405).send('Not valid')
-    
   }
-  
+
   // now check method and handle specific mandatory params and actions
-  const smartData = body.data;
-  
+  const smartData = body.data
+
   if (smartMethod === 'depositBEP20') {
     // deposit to escrow from client
-  
+
     if (
       !smartData.hasOwnProperty('asset') ||
       !smartData.hasOwnProperty('provider') ||
       !smartData.hasOwnProperty('value') ||
       !smartData.hasOwnProperty('JOBID') ||
-      !smartData.hasOwnProperty('swapPath')      
+      !smartData.hasOwnProperty('swapPath')
     ) {
-      console.log('Missing smart contract data');
-      console.log(smartData);
-    
+      console.log('Missing smart contract data')
+      console.log(smartData)
+
       return response.status(405).send('Missing data')
-      
     }
 
-
     // evertyhing is good, create record
-    const monitorCollection = db.collection('bep20-txs');
-    
-    
-    // generate back uuid from bigint jobId (reverse generate.uid)
-    
-    const jobIdBigInt = smartData.JOBID;
-    
-    const jobIdHex = bigint2hexUuid(jobIdBigInt);
-    
-    // add back stripped minus    
-    const jobId = `${jobIdHex.substr(0,8)}-${jobIdHex.substr(8,4)}-${jobIdHex.substr(12,4)}-${jobIdHex.substr(16,4)}-${jobIdHex.substr(20,12)}`;
-    
-    const amount = smartData.value; // big int string
-    const escrowAddress = body.address; // the to of transaction (interacted address)
-    const tokenAddress = smartData.asset; // the asset sent to escrow
-    let token = 'token'; // safe default    
-    Object.keys(env.chainmonitor.bsctokens).forEach((tokenName) => {
-      const address = env.chainmonitor.bsctokens[tokenName]; 
-      if (address.toLowerCase() === tokenAddress.toLowerCase()) token = tokenName; // map address to token name
-    });
+    const monitorCollection = db.collection('bep20-txs')
 
-    const providerAddress = smartData.provider; // the provider address
-    const hash = body.hash; // transaction hash
-    const from = body.from;
-    const to = body.address; // transaction to
-    const action = 'deposit';
-    
+    // generate back uuid from bigint jobId (reverse generate.uid)
+
+    const jobIdBigInt = smartData.JOBID
+
+    const jobIdHex = bigint2hexUuid(jobIdBigInt)
+
+    // add back stripped minus
+    const jobId = `${jobIdHex.substr(0, 8)}-${jobIdHex.substr(
+      8,
+      4
+    )}-${jobIdHex.substr(12, 4)}-${jobIdHex.substr(16, 4)}-${jobIdHex.substr(
+      20,
+      12
+    )}`
+
+    const amount = smartData.value // big int string
+    const escrowAddress = body.address // the to of transaction (interacted address)
+    const tokenAddress = smartData.asset // the asset sent to escrow
+    let token = 'token' // safe default
+    Object.keys(env.chainmonitor.bsctokens).forEach(tokenName => {
+      const address = env.chainmonitor.bsctokens[tokenName]
+      if (address.toLowerCase() === tokenAddress.toLowerCase())
+        token = tokenName // map address to token name
+    })
+
+    const providerAddress = smartData.provider // the provider address
+    const hash = body.hash // transaction hash
+    const from = body.from
+    const to = body.address // transaction to
+    const action = 'deposit'
+
     const transaction = {
       id: GenerateGuid(),
       timestamp: Date.now(),
@@ -154,10 +166,10 @@ export async function listenToChainUpdates(request, response, db, env) {
       from,
       to,
       action,
-      status: 'created' // later it will become 'processed' or 'checked' (if already valid) or 'error'
+      status: 'created', // later it will become 'processed' or 'checked' (if already valid) or 'error'
       //backend will add processedTimestamp
-    }    
-    
+    }
+
     /* 
     only logged in userId can create this tx, this is security rule:
     
@@ -179,46 +191,48 @@ export async function listenToChainUpdates(request, response, db, env) {
     }
           
     */
-    await monitorCollection.doc(transaction.id).set(transaction);
-    
-    
+    await monitorCollection.doc(transaction.id).set(transaction)
+
     // invoke processing function (refactored from bep20-monitor and made
     // a shared function, to process it instantly
     // otherwise it will caught up from periodic schedule
-    await bep20TxProcess(db, transaction);
-    
-    console.log(`Created and processed tx ${transaction.id}, job ${jobId}`);          
-    
-    
+    await bep20TxProcess(db, transaction, env, serviceConfig)
+
+    console.log(`Created and processed tx ${transaction.id}, job ${jobId}`)
   } else if (smartMethod === 'depositBNB') {
     // deposit to escrow from client
-  
+
     if (
       !smartData.hasOwnProperty('provider') ||
       !smartData.hasOwnProperty('JOBID')
     ) {
-      console.log('Missing smart contract data');
-      console.log(smartData);
-    
-      return response.status(405).send('Missing data')
-      
-    } 
-    const monitorCollection = db.collection('bep20-txs');
+      console.log('Missing smart contract data')
+      console.log(smartData)
 
-    const jobIdBigInt = smartData.JOBID;
-    const jobIdHex = bigint2hexUuid(jobIdBigInt);
-    const jobId = `${jobIdHex.substr(0,8)}-${jobIdHex.substr(8,4)}-${jobIdHex.substr(12,4)}-${jobIdHex.substr(16,4)}-${jobIdHex.substr(20,12)}`;
-    
-    const amount = 0; // todo add to data passed into body from chain monitor, this is not mandatory
-    const escrowAddress = body.address; // the to of transaction (interacted address)
-    const tokenAddress = 'BNB'; // the asset sent to escrow
-    const token = 'BNB'; // static  
-    const providerAddress = smartData.provider; // the provider address
-    const hash = body.hash; // transaction hash
-    const from = body.from;
-    const to = body.address; // transaction to
-    const action = 'deposit';
-    
+      return response.status(405).send('Missing data')
+    }
+    const monitorCollection = db.collection('bep20-txs')
+
+    const jobIdBigInt = smartData.JOBID
+    const jobIdHex = bigint2hexUuid(jobIdBigInt)
+    const jobId = `${jobIdHex.substr(0, 8)}-${jobIdHex.substr(
+      8,
+      4
+    )}-${jobIdHex.substr(12, 4)}-${jobIdHex.substr(16, 4)}-${jobIdHex.substr(
+      20,
+      12
+    )}`
+
+    const amount = body.value || '0' // passed from chain monitor, useful for bnb methods
+    const escrowAddress = body.address // the to of transaction (interacted address)
+    const tokenAddress = 'BNB' // the asset sent to escrow
+    const token = 'BNB' // static
+    const providerAddress = smartData.provider // the provider address
+    const hash = body.hash // transaction hash
+    const from = body.from
+    const to = body.address // transaction to
+    const action = 'deposit'
+
     const transaction = {
       id: GenerateGuid(),
       timestamp: Date.now(),
@@ -234,22 +248,129 @@ export async function listenToChainUpdates(request, response, db, env) {
       from,
       to,
       action,
-      status: 'created' // later it will become 'processed' or 'checked' (if already valid) or 'error'
+      status: 'created', // later it will become 'processed' or 'checked' (if already valid) or 'error'
       //backend will add processedTimestamp
-    }    
-    
+    }
 
-    await monitorCollection.doc(transaction.id).set(transaction);
+    await monitorCollection.doc(transaction.id).set(transaction)
 
-    await bep20TxProcess(db, transaction);
-    
-    console.log(`Created and processed tx ${transaction.id}, job ${jobId}`);        
-  
+    await bep20TxProcess(db, transaction, env, serviceConfig)
+
+    console.log(`Created and processed tx ${transaction.id}, job ${jobId}`)
+  } else if (smartMethod === 'releaseAsClient') {
+    // this the acceptFinish job action, client confirms job is done and release funds
+
+    if (!smartData.hasOwnProperty('JOBID')) {
+      console.log('Missing smart contract data')
+      console.log(smartData)
+
+      return response.status(405).send('Missing data')
+    }
+    const monitorCollection = db.collection('bep20-txs')
+
+    const jobIdBigInt = smartData.JOBID
+    const jobIdHex = bigint2hexUuid(jobIdBigInt)
+    const jobId = `${jobIdHex.substr(0, 8)}-${jobIdHex.substr(
+      8,
+      4
+    )}-${jobIdHex.substr(12, 4)}-${jobIdHex.substr(16, 4)}-${jobIdHex.substr(
+      20,
+      12
+    )}`
+
+    const amount = body.value || '0' // not present
+    const escrowAddress = body.address // the to of transaction (interacted address)
+    const tokenAddress = '' // not present
+    const token = 'BUSD' // static
+    const providerAddress = '' // not present
+    const hash = body.hash // transaction hash
+    const from = body.from
+    const to = body.address // transaction to
+    const action = 'releaseAsClient'
+
+    const transaction = {
+      id: GenerateGuid(),
+      timestamp: Date.now(),
+      jobId,
+      // userId,  // (firestore id) this is not mandatory for bep20-monitor
+      // providerId, // (firestore id) this is not mandatory for bep20-monitor
+      amount,
+      escrowAddress,
+      token,
+      tokenAddress,
+      providerAddress,
+      hash,
+      from,
+      to,
+      action,
+      status: 'created', // later it will become 'processed' or 'checked' (if already valid) or 'error'
+      //backend will add processedTimestamp
+    }
+
+    await monitorCollection.doc(transaction.id).set(transaction)
+
+    await bep20TxProcess(db, transaction, env, serviceConfig)
+
+    console.log(`Created and processed tx ${transaction.id}, job ${jobId}`)
+  } else if (smartMethod === 'releaseByProvider') {
+    // this is the releaseByProvider job action, provider cancels job early and funds come back to client
+
+    if (!smartData.hasOwnProperty('JOBID')) {
+      console.log('Missing smart contract data')
+      console.log(smartData)
+
+      return response.status(405).send('Missing data')
+    }
+    const monitorCollection = db.collection('bep20-txs')
+
+    const jobIdBigInt = smartData.JOBID
+    const jobIdHex = bigint2hexUuid(jobIdBigInt)
+    const jobId = `${jobIdHex.substr(0, 8)}-${jobIdHex.substr(
+      8,
+      4
+    )}-${jobIdHex.substr(12, 4)}-${jobIdHex.substr(16, 4)}-${jobIdHex.substr(
+      20,
+      12
+    )}`
+
+    const amount = body.value || '0' // not present
+    const escrowAddress = body.address // the to of transaction (interacted address)
+    const tokenAddress = '' // not present
+    const token = 'BUSD' // static
+    const providerAddress = '' // not present
+    const hash = body.hash // transaction hash
+    const from = body.from
+    const to = body.address // transaction to
+    const action = 'releaseByProvider'
+
+    const transaction = {
+      id: GenerateGuid(),
+      timestamp: Date.now(),
+      jobId,
+      // userId,  // (firestore id) this is not mandatory for bep20-monitor
+      // providerId, // (firestore id) this is not mandatory for bep20-monitor
+      amount,
+      escrowAddress,
+      token,
+      tokenAddress,
+      providerAddress,
+      hash,
+      from,
+      to,
+      action,
+      status: 'created', // later it will become 'processed' or 'checked' (if already valid) or 'error'
+      //backend will add processedTimestamp
+    }
+
+    await monitorCollection.doc(transaction.id).set(transaction)
+
+    await bep20TxProcess(db, transaction, env, serviceConfig)
+
+    console.log(`Created and processed tx ${transaction.id}, job ${jobId}`)
   } else {
-    console.log('Method not implemented');
-    console.log(body);
+    console.log('Method not implemented')
+    console.log(body)
     return response.status(405).send('Not implemented')
-    
   }
 
   // final response
@@ -260,21 +381,22 @@ export async function listenToChainUpdates(request, response, db, env) {
 }
 
 /* helpers */
-function bigint2hexUuid(str){ // .toString(16) only works up to 2^53
-    const dec = str.toString().split('');
-    const sum = [];
-    const hex = [];
-    let i, s;
-    while(dec.length){
-        s = 1 * dec.shift()
-        for(i = 0; s || i < sum.length; i++){
-            s += (sum[i] || 0) * 10
-            sum[i] = s % 16
-            s = (s - sum[i]) / 16
-        }
+function bigint2hexUuid(str) {
+  // .toString(16) only works up to 2^53
+  const dec = str.toString().split('')
+  const sum = []
+  const hex = []
+  let i, s
+  while (dec.length) {
+    s = 1 * dec.shift()
+    for (i = 0; s || i < sum.length; i++) {
+      s += (sum[i] || 0) * 10
+      sum[i] = s % 16
+      s = (s - sum[i]) / 16
     }
-    while(sum.length){
-        hex.push(sum.pop().toString(16))
-    }
-    return hex.join('').padStart(32, '0')
+  }
+  while (sum.length) {
+    hex.push(sum.pop().toString(16))
+  }
+  return hex.join('').padStart(32, '0')
 }

@@ -1,3 +1,4 @@
+import { providerTypeArray } from './../../const/providerTypes'
 import { animate, style, transition, trigger } from '@angular/animations'
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
@@ -28,10 +29,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   currentUser: User
   @Input() allowFilters = false
   showFilters = false
+  filterString = ''
   hideSearchBar: boolean
   bAddress: string
 
   hasUnreadMessages = false
+  unreadMsgCount = 0
   messagesSubscription: Subscription
   routerSub: Subscription
   authSub: Subscription
@@ -39,13 +42,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   binanceSub: Subscription
   bscSub: Subscription
 
-  providerCategories = [
-    'Content Creators',
-    'Designers & Creatives',
-    'Marketing & SEO',
-    'Software developers',
-    'Virtual assistants',
-  ]
+  providerCategories = providerTypeArray
+  selectedProvType = providerTypeArray[0]
 
   constructor(
     private afs: AngularFirestore,
@@ -101,6 +99,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.messagesSubscription = unreadConversations.valueChanges().subscribe(
         x => {
           const hadUnread = this.hasUnreadMessages
+          this.unreadMsgCount = x.length
           this.hasUnreadMessages = x.length > 0
           if (!hadUnread && this.hasUnreadMessages) {
             // request permission to show desktop notifications
@@ -118,6 +117,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           // console.error('! unable to retrieve chat/channel data:', error)
         }
       )
+      console.log(this.messagesSubscription)
     }
   }
 
@@ -152,11 +152,34 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }, 50)
   }
 
-  onSubmit(event: any) {
+  onSubmit() {
+    let string = ''
+    const el = document.getElementById('topnav-search')
+    if (el) {
+      string = (el as HTMLInputElement).value
+    }
     // if ((<any>window).$('html, body')) {
     //   (<any>window).$('html, body').animate({ scrollTop: -10 }, 600);
     // }
-    this.router.navigate(['search'], { queryParams: { query: event } })
+    this.router.navigate(['search'], {
+      queryParams: {
+        'refinementList[category][0]': this.selectedProvType.name,
+        category: this.selectedProvType.id,
+        query: string,
+      },
+    })
+  }
+
+  onSubmitFromModal() {
+    let string = ''
+    const el = document.getElementById('topnav-search-mobile')
+    if (el) {
+      string = (el as HTMLInputElement).value
+    }
+    ;(<any>window).$('#mobileMenuModal').modal('hide') // Close mobile menu modal
+    this.router.navigate(['search'], {
+      queryParams: { query: string },
+    })
   }
 
   onCancel() {}
@@ -164,5 +187,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onLogout() {
     this.bscService.disconnect()
     this.authService.logout()
+  }
+
+  toggleDropdown() {
+    document
+      .getElementById('myDropdown')
+      .classList.toggle('search-dropdown-show')
+  }
+
+  closeDropDown(value: any) {
+    this.selectedProvType = value
+    var myDropdown = document.getElementById('myDropdown')
+    if (myDropdown.classList.contains('show')) {
+      myDropdown.classList.remove('show')
+    }
   }
 }

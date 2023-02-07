@@ -238,11 +238,14 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     if (!result.err) {
       // save tx immediately
       this.isReleasing = false
+
+      // moved to backend
+      /*
       let tx = await this.transactionService.createTransaction(
         `Release funds`,
         result.transactionHash,
         jobId
-      )
+      )*/
 
       const action = new IJobAction(ActionType.acceptFinish, UserType.client)
       this.job.state = JobState.complete

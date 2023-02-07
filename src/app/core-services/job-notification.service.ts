@@ -19,11 +19,11 @@ export class JobNotificationService {
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         const token = await user.getIdToken(true)
-        const headers = new HttpHeaders()
-        headers.append('Access-Control-Allow-Origin', '*')
-        headers.append('Content-Type', 'application/json')
-        headers.append('Authorization', `Bearer ${token}`)
-        const reqOptions = { headers }
+        let headers = new HttpHeaders()
+        headers = headers.append('Access-Control-Allow-Origin', '*')
+        headers = headers.append('Content-Type', 'application/json')
+        headers = headers.append('Authorization', `Bearer ${token}`)
+
         const reqBody = { jobAction: jobAction.toString(), jobId }
 
         let response
