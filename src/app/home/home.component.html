@@ -2,58 +2,61 @@
   <div class="py-20" id="section-main">
     <section id="landing-hero">
       <div class="landing-hero-container">
-        <div class="landing-hero-left col-12 col-md-6">
-          <div class="landing-hero-left-contain">
-            <h1 class="landing-hero-title">
-              <span class="hero-text-black">Access Global </span>
-              <span class="hero-text-blue">Freelance </span>
-              <span class="hero-text-black">Talent with </span>
-              <span class="hero-text-blue">Smart-Contract </span>
-              <span class="hero-text-black">Confidence</span>
-            </h1>
+        <div class="landing-hero-inner">
+          <div class="landing-hero-left col-12 col-md-6">
+            <div class="landing-hero-left-contain">
+              <h1 class="landing-hero-title">
+                <span class="hero-text-black">Access Global </span>
+                <span class="hero-text-blue">Freelance </span>
+                <span class="hero-text-black">Talent with </span>
+                <span class="hero-text-blue">Smart-Contract </span>
+                <span class="hero-text-black">Confidence</span>
+              </h1>
 
-            <div class="py-1 py-lg-2"></div>
+              <div class="py-1 py-lg-2"></div>
 
-            <p class="landing-hero-text">
-              CanWork is a digital freelance marketplace that connects top tier
-              freelancers with high value clients using BNB Smart Chain payments
-              and a secure smart-contract escrow system... and there's no fees!
-            </p>
+              <p class="landing-hero-text">
+                CanWork is a digital freelance marketplace that connects top
+                tier freelancers with high value clients using BNB Smart Chain
+                payments and a secure smart-contract escrow system... and
+                there's no fees!
+              </p>
 
-            <div class="py-1 py-lg-2"></div>
+              <div class="py-1 py-lg-2"></div>
 
-            <div class="landing-hero-cta-buttons">
-              <div class="button-blue mr-sm-1" [routerLink]="['/search']">
-                Hire Pro Freelancers
+              <div class="landing-hero-cta-buttons">
+                <div class="button-blue mr-sm-1" [routerLink]="['/search']">
+                  Hire Pro Freelancers
+                </div>
+                <div
+                  class="button-white ml-sm-1 mt-1 mt-sm-0"
+                  [routerLink]="['/auth']"
+                >
+                  Start Earning
+                </div>
               </div>
-              <div
-                class="button-white ml-sm-1 mt-1 mt-sm-0"
-                [routerLink]="['/auth']"
-              >
-                Start Earning
+
+              <div class="py-2 py-lg-3"></div>
+              <div class="py-2 py-lg-3"></div>
+
+              <div class="landing-hero-token-strip">
+                <img class="" src="assets/img/Tokens.svg" alt="Vector" />
               </div>
+
+              <div class="py-1 py-lg-2"></div>
             </div>
-
-            <div class="py-2 py-lg-3"></div>
-            <div class="py-2 py-lg-3"></div>
-
-            <div class="landing-hero-token-strip">
-              <img class="" src="assets/img/Tokens.svg" alt="Vector" />
-            </div>
-
-            <div class="py-1 py-lg-2"></div>
           </div>
-        </div>
 
-        <div
-          class="landing-hero-right col-12 col-md-6 justify-content-center justify-content-sm-end"
-        >
-          <img class="bnbchain-img" src="assets/img/built-bnb-chain.png" />
+          <div
+            class="landing-hero-right col-12 col-md-6 justify-content-center justify-content-sm-end"
+          >
+            <img class="bnbchain-img" src="assets/img/built-bnb-chain.png" />
+          </div>
         </div>
       </div>
     </section>
 
-    <section id="freelance-categories">
+    <!-- <section id="freelance-categories">
       <div class="freelance-container p-1 p-md-3 bg-secondary-new">
         <h3 class="section-title text-center">
           Top Tier Freelance Talents
@@ -101,7 +104,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
 
     <section id="profiles">
       <div class="profiles-container">
@@ -123,8 +126,6 @@
               *ngFor="let type of providerTypes"
               class="col-6 col-md-4 col-lg-2"
             >
-              <!-- TODO: Make categories selectable (like a tab) -->
-              <!-- TODO: Style based on selected category -->
               <div
                 class="profile-category-item selected-{{
                   selectedProvType === type.id
@@ -147,7 +148,6 @@
         <div class="py-2"></div>
 
         <div class="profiles-tiles-container">
-          <!-- TODO: Filter this by slected category -->
           <div
             class="col-12 col-sm-6 col-md-4"
             *ngFor="let profile of tempProviderArray | slice: 0:3"
@@ -188,6 +188,21 @@
                 View {{ profile.name }}'s Profile
               </div>
             </div>
+          </div>
+        </div>
+
+        <div class="py-2"></div>
+
+        <div class="row">
+          <div class="col-6">
+            <div *ngFor="let type of providerTypes">
+              <div class="button-blue" *ngIf="type.id === selectedProvType">
+                View all {{ type.name }}
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="button-white">View All Freelancers</div>
           </div>
         </div>
       </div>
