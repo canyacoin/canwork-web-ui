@@ -14,7 +14,7 @@ export const providerTypeArray = [
     id: 'softwareDev',
   },
   {
-    name: 'Design & Creatives',
+    name: 'Designers & Creatives',
     img: 'designers-creatives.svg',
     desc:
       'Find the right freelance designer for your next project. Battle tested and combat ready designers with great years of experience. Our creative professionals have a great range of skillsets, including UI/UX design, graphic design, brand identity and product design.',
