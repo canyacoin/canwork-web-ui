@@ -192,7 +192,7 @@
 
         <div class="py-2"></div>
 
-        <div class="row">
+        <div class="profiles-button-row">
           <div class="col-6">
             <div *ngFor="let type of providerTypes">
               <div class="button-blue" *ngIf="type.id === selectedProvType">
@@ -211,10 +211,10 @@
       <div class="features-container">
         <div class="py-3"></div>
 
-        <h3 class="section-title text-center">
+        <h3 class="section-title text-center px-2">
           Why freelance on CanWork ?
         </h3>
-        <div class="section-subtitle text-center">
+        <div class="section-subtitle text-center px-2">
           CanWork is the future of freelancing, we offer competitive features
           and exciting benefits for clients and freelancers
         </div>
@@ -610,18 +610,16 @@
     <section id="blog">
       <div class="py-3"></div>
 
-      <h3 class="section-title text-center">
+      <h3 class="section-title text-center px-2">
         Blog Posts
       </h3>
-      <div class="section-subtitle text-center">
+      <div class="section-subtitle text-center px-2">
         Read recent news & events within the ecosystem and find helpful guides.
       </div>
 
       <div class="py-3"></div>
 
       <app-blog-posts></app-blog-posts>
-
-      <div class="py-2"></div>
 
       <div
         class="button-blue features-item-button mx-auto"
@@ -662,10 +660,5 @@
         </div>
       </div>
     </section>
-
-    <div class="py-3"></div>
-    <div class="py-3"></div>
-
-    <app-blog-posts></app-blog-posts>
   </div>
 </section>

@@ -256,6 +256,9 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  max-width: 100vw;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .profile-category-item {
@@ -318,6 +321,9 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  max-width: 100vw;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .profile-item {
@@ -384,6 +390,12 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.profiles-button-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 /* FEATURES SECTION */
