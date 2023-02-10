@@ -30,6 +30,14 @@
                 </div>
                 <div
                   class="button-white ml-sm-1 mt-1 mt-sm-0"
+                  *ngIf="currentUser"
+                  [routerLink]="['/jobs']"
+                >
+                  Start Earning
+                </div>
+                <div
+                  class="button-white ml-sm-1 mt-1 mt-sm-0"
+                  *ngIf="!currentUser"
                   [routerLink]="['/auth']"
                 >
                   Start Earning
@@ -183,7 +191,10 @@
                   [queryParams]="{ query: tag }"
                 ></app-skill-tag>
               </div>
-              <div class="profile-button button-blue">
+              <div
+                class="profile-button button-blue"
+                [routerLink]="['/profile/', profile.slug]"
+              >
                 View {{ profile.name }}'s Profile
               </div>
             </div>
@@ -195,13 +206,23 @@
         <div class="profiles-button-row">
           <div class="col-6">
             <div *ngFor="let type of providerTypes">
-              <div class="button-blue" *ngIf="type.id === selectedProvType">
+              <div
+                class="button-blue"
+                *ngIf="type.id === selectedProvType"
+                [routerLink]="['/search']"
+                [queryParams]="{
+                  'refinementList[category][0]': type.name,
+                  category: type.id
+                }"
+              >
                 View all {{ type.name }}
               </div>
             </div>
           </div>
           <div class="col-6">
-            <div class="button-white">View All Freelancers</div>
+            <div class="button-white" [routerLink]="['/search']">
+              View All Freelancers
+            </div>
           </div>
         </div>
       </div>
@@ -223,9 +244,7 @@
         <div class="py-3"></div>
 
         <div class="features-item-container">
-          <div class="features-item-pic col-6 d-none d-md-flex">
-            <img src="assets/img/why-hire-placeholder.jpg" />
-          </div>
+          <div class="features-item-pic col-6 d-none d-md-flex"></div>
           <div class="col-12 col-md-6">
             <div class="features-item-green-text">For Client</div>
             <div class="py-1"></div>
@@ -397,14 +416,23 @@
             <div class="py-3"></div>
 
             <div class="features-item-button">
-              <div class="button-white" [routerLink]="['/auth']">
+              <div
+                class="button-white"
+                *ngIf="currentUser"
+                [routerLink]="['/jobs']"
+              >
+                Start Earning on CanWork
+              </div>
+              <div
+                class="button-white"
+                *ngIf="!currentUser"
+                [routerLink]="['/auth']"
+              >
                 Start Earning on CanWork
               </div>
             </div>
           </div>
-          <div class="features-item-pic col-6 d-none d-md-flex">
-            <img src="assets/img/why-freelance-placeholder.jpg" />
-          </div>
+          <div class="features-item-pic-2 col-6 d-none d-md-flex"></div>
         </div>
       </div>
     </section>
@@ -651,6 +679,14 @@
             </div>
             <div
               class="button-white features-item-button mx-auto my-1 ml-sm-1 mr-sm-auto"
+              *ngIf="currentUser"
+              [routerLink]="['/jobs']"
+            >
+              Start Earning Crypto
+            </div>
+            <div
+              class="button-white features-item-button mx-auto my-1 ml-sm-1 mr-sm-auto"
+              *ngIf="!currentUser"
               [routerLink]="['/auth']"
             >
               Start Earning Crypto

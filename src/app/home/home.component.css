@@ -246,6 +246,7 @@
 }
 
 .profiles-container {
+  display: relative;
   max-width: 1200px;
 }
 
@@ -410,12 +411,27 @@
   max-width: 1125px;
   margin-left: auto;
   margin-right: auto;
+  padding: 15px;
 }
 
 .features-item-pic {
-  background: #eceded;
+  background: url('/assets/img/why-hire-placeholder.jpg'), #eceded;
   border-radius: 16px;
   width: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position-x: center;
+  margin: 10px;
+}
+
+.features-item-pic-2 {
+  background: url('/assets/img/why-freelance-placeholder.jpg'), #eceded;
+  border-radius: 16px;
+  width: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position-x: center;
+  margin: 10px;
 }
 
 .features-item-green-text {
@@ -610,6 +626,7 @@
   margin: 5px auto;
   padding: 20px;
   height: 100%;
+  border-radius: 10px;
 }
 
 .step-img {
@@ -700,4 +717,8 @@
   font-size: 1.1rem;
   line-height: 1.6rem;
   color: #4c4f55;
+}
+
+#blog {
+  position: relative;
 }
