@@ -19,8 +19,8 @@
                   <a
                     [routerLink]="['/search']"
                     [queryParams]="{
-                      'refinementList[category][0]': 'type.name',
-                      category: 'type.id'
+                      'refinementList[category][0]': type.name,
+                      category: type.id
                     }"
                   >
                     {{ type.name }}
@@ -35,8 +35,12 @@
             <div class="">
               <ul class="footer-url-list pl-0">
                 <!-- TODO: What links do we want here? And what order should they be in? -->
-                <li><a [routerLink]="['/auth']">Register</a></li>
-                <li><a [routerLink]="['/auth']">Sign In</a></li>
+                <li>
+                  <a [routerLink]="['/auth']" *ngIf="!currentUser">Register</a>
+                </li>
+                <li>
+                  <a [routerLink]="['/auth']" *ngIf="!currentUser">Sign In</a>
+                </li>
                 <li><a href="./">Home</a></li>
                 <li><a [routerLink]="['/jobs']">Job Board</a></li>
                 <li><a [routerLink]="['/blog']">Blog</a></li>
@@ -75,7 +79,7 @@
                 <img
                   src="/assets/img/socials/facebook.svg"
                   height="36px"
-                  class=""
+                  class="mb-2"
                 />
               </a>
               <a
@@ -86,7 +90,7 @@
                 <img
                   src="/assets/img/socials/instagram.svg"
                   height="36px"
-                  class=""
+                  class="mb-2"
                 />
               </a>
               <a
@@ -97,7 +101,7 @@
                 <img
                   src="/assets/img/socials/telegram.svg"
                   height="36px"
-                  class=""
+                  class="mb-2"
                 />
               </a>
               <!-- TODO: Change to gitlab icon? or point to github mirror repo? -->
@@ -109,7 +113,7 @@
                 <img
                   src="/assets/img/socials/gitlab.svg"
                   height="36px"
-                  class=""
+                  class="mb-2"
                 />
               </a>
               <a
@@ -120,7 +124,7 @@
                 <img
                   src="/assets/img/socials/twitter.svg"
                   height="36px"
-                  class=""
+                  class="mb-2"
                 />
               </a>
             </div>
