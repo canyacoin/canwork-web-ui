@@ -238,7 +238,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     if (!result.err) {
       // save tx immediately
       this.isReleasing = false
-      
+
       // moved to backend
       /*
       let tx = await this.transactionService.createTransaction(

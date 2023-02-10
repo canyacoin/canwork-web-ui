@@ -1,125 +1,289 @@
-<nav class="topbar topbar-expand-md topbar-sticky" id="section-top">
-  <div class="container">
-    <!-- <div class="very-top-notification">
-      <p>CanWork is under maintenance. Some features maybe impacted.&nbsp;&nbsp;&nbsp;&nbsp;<small>
-      <a href = "https://t.me/joinchat/GI97FhDD1lf6dh-r9XRdvA">Need Help?</a></small></p>
-     </div> -->
-    <div class="topbar-left">
-      <a class="topbar-brand" [routerLink]="['/home']">
-        <img
-          class="logo-default"
-          src="assets/img/logo.svg"
-          width="auto"
-          height="36px"
-          alt="logo"
-        />
+<div class="topnav-container">
+  <div class="topnav-inner">
+    <a class="topnav-logo-container" [routerLink]="['/home']">
+      <img class="topnav-logo" src="assets/img/logo.svg" alt="logo" />
+    </a>
+    <div class="topnav-link-container">
+      <a class="topnav-link" [routerLink]="['/jobs']">Job Board</a>
+      <a class="topnav-link" *ngIf="currentUser" [routerLink]="['/inbox/chat']">
+        <div class="topnav-link-notif-badge">
+          {{ unreadMsgCount }}
+        </div>
+        <div>Inbox</div>
       </a>
-      <a class="logo-binance" href="https://www.bnbchain.org/en">
-        <img
-          src="assets/img/Built-On-BNBChain-Horizontal.svg"
-          width="auto"
-          height="100%"
-          alt="logo"
+      <a class="topnav-link" [routerLink]="['/blog']">Blog</a>
+      <a class="topnav-link" [routerLink]="['/faq']">FAQ</a>
+    </div>
+    <div class="topnav-search-container">
+      <form class="topnav-search-left" method="post" (ngSubmit)="onSubmit()">
+        <button type="submit" border-none>
+          <img
+            class="topnav-search-icon"
+            src="assets/img/icons/search.svg"
+            alt="search"
+          />
+        </button>
+        <input
+          #inputSearch
+          class="topnav-search-input"
+          type="text"
+          id="topnav-search"
+          name="topnav-search"
+          placeholder="Search"
         />
-      </a>
-      <div
-        *ngIf="!hideSearchBar"
-        class="search-container mx-40 hidden-sm-down animated"
-      >
-        <form
-          class="form-inline justify-content-center justify-content-lg-end"
-          method="post"
-          (ngSubmit)="onSubmit(inputSearch.value)"
-        >
-          <div class="input-group">
-            <input
-              #inputSearch
-              (focus)="onFocus(inputSearch.value)"
-              (blur)="onBlur(inputSearch.value)"
-              type="text"
-              size="20"
-              class="search-input"
-              placeholder="Find services..."
-            />
-            <span class="input-group-btn">
-              <button
-                class="btn btn-default btn-search"
-                type="submit"
-                border-none
-              >
-                <img
-                  src="assets/img/search-icon.svg"
-                  class="search-icon"
-                  border-5
-                />
-              </button>
-            </span>
-          </div>
-        </form>
+      </form>
+      <div class="topnav-search-right" (click)="toggleDropdown()">
+        <div class="topnav-search-select-text">
+          {{ selectedProvType.name }}
+        </div>
+        <div class="topnav-search-dropdown" id="myDropdown">
+          <a
+            *ngFor="let item of providerCategories"
+            (click)="closeDropDown(item)"
+            >{{ item.name }}</a
+          >
+        </div>
+        <!-- OTHER DROPDOWN SELECTION -->
+        <!-- <div class="topnav-search-select-text">Jobs</div> -->
+        <img
+          class="topnav-search-select-icon"
+          src="assets/img/icons/arrow-down.svg"
+          alt="search-select"
+        />
       </div>
     </div>
-    <div class="topbar-right">
-      <ul class="topbar-nav nav lh-2">
-        <li class="nav-item">
+    <div class="topnav-button-container" *ngIf="!currentUser">
+      <div class="button-white small-button" [routerLink]="['/auth']">
+        Login
+      </div>
+      <div class="button-blue small-button" [routerLink]="['/auth']">
+        Create Account
+      </div>
+    </div>
+    <div class="topnav-button-container" *ngIf="currentUser">
+      <div
+        class="button-blue small-button"
+        *ngIf="!bAddress; else showAddress"
+        [routerLink]="['/wallet-bnb']"
+      >
+        Connect Wallet
+      </div>
+      <ng-template #showAddress>
+        <div
+          class="button-blue small-button"
+          [routerLink]="['/wallet-bnb/assets']"
+        >
+          {{ bAddress.slice(0, 6) }}...{{ bAddress.slice(-3) }}
+        </div>
+      </ng-template>
+      <div class="topnav-avatar">
+        <a
+          role="button"
+          id="dropdownMenuLink"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <app-avatar
+            [user]="currentUser"
+            [customClass]="'avatar'"
+          ></app-avatar>
+        </a>
+        <div
+          class="dropdown-menu dropdown-menu-right"
+          aria-labelledby="dropdownMenuLink"
+        >
           <a
-            class="nav-link"
-            [routerLink]="['/jobs']"
-            data-scrollto="section-home"
-            >Jobs</a
+            class="nav-link dropdown-item"
+            style="font-weight: 400 !important; text-transform: none"
+            href="#"
+            [routerLink]="['/profile']"
+            >Profile</a
           >
-        </li>
-        <li class="nav-item mobile-only">
-          <a class="nav-link" [routerLink]="['/faq']">
-            FAQ
-          </a>
-        </li>
-        <li *ngIf="currentUser" class="nav-item">
-          <a class="nav-link" [routerLink]="['/inbox/chat']">
-            Inbox
-          </a>
-          <span
-            *ngIf="hasUnreadMessages"
-            class="badge badge-round badge-danger"
-          ></span>
-        </li>
-        <li *ngIf="currentUser" class="nav-item">
-          <a class="nav-link" [routerLink]="['/inbox/post']">
-            <button border-64 class="btn btn-sm btn-primary my-10">
-              POST A JOB
-            </button>
-          </a>
-        </li>
-        <li *ngIf="currentUser" class="nav-item">
           <a
-            *ngIf="!bAddress; else showAddress"
-            class="nav-link"
-            [routerLink]="['/wallet-bnb']"
+            class="nav-link dropdown-item"
+            style="font-weight: 400 !important; text-transform: none"
+            href="#"
+            [routerLink]="['/profile']"
+            [queryParams]="{ editProfile: 1 }"
+            >Edit Profile</a
           >
-            <button border-64 class="btn btn-sm btn-primary my-10">
-              CONNECT WALLET
-            </button>
-          </a>
-          <ng-template #showAddress>
-            <a class="nav-link" [routerLink]="['/wallet-bnb/assets']">
-              <button border-64 class="btn btn-sm btn-primary my-10">
-                {{ bAddress.slice(0, 6) }}...{{ bAddress.slice(-3) }}
-              </button>
-            </a>
-          </ng-template>
-        </li>
-        <li *ngIf="!currentUser" class="nav-item">
-          <a class="nav-link">
-            <a
-              class="btn btn-canya-tools canya-login btn-sm text-white"
-              [routerLink]="['/auth']"
-            >
-              Join&nbsp;/&nbsp;Sign&nbsp;in
-            </a>
-          </a>
-        </li>
-        <li *ngIf="currentUser" class="nav-item dropdown">
+          <div class="dropdown-divider"></div>
           <a
-            class="nav-link dropdown-toggle for-avatar"
+            class="nav-link dropdown-item"
+            style="font-weight: 400 !important; text-transform: none"
+            href="#"
+            [routerLink]="['/inbox/jobs']"
+            >Manage Jobs</a
+          >
+          <div class="dropdown-divider"></div>
+          <a
+            class="dropdown-item text-danger"
+            href="#"
+            data-toggle="modal"
+            data-target="#areYouSureLogoutModal"
+            >Logout</a
+          >
+        </div>
+      </div>
+    </div>
+    <div class="topnav-hamburger">
+      <a class="" href="#" data-toggle="modal" data-target="#mobileMenuModal"
+        ><img
+          class="topnav-hamburger-icon"
+          src="assets/img/icons/hamburger-menu.svg"
+          alt="mobile-menu"
+      /></a>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile menu Modal -->
+<div
+  class="modal fade"
+  id="mobileMenuModal"
+  tabindex="-1"
+  role="dialog"
+  data-keyboard="true"
+  data-backdrop="true"
+  aria-labelledby="mobileMenuLabel"
+>
+  <div class="modal-dialog mobile-menu-backdrop" role="document">
+    <div class="modal-content mobile-menu-container">
+      <div class="mobile-top">
+        <div
+          class="pointer"
+          [routerLink]="['/home']"
+          data-toggle="modal"
+          data-target="#mobileMenuModal"
+        >
+          <img class="topnav-logo" src="assets/img/logo.svg" alt="logo" />
+        </div>
+        <div>
+          <a
+            class=""
+            href="#"
+            data-toggle="modal"
+            data-target="#mobileMenuModal"
+          >
+            <img
+              class="topnav-hamburger-icon"
+              src="assets/img/icons/hamburger-menu.svg"
+              alt="mobile-menu"
+            />
+          </a>
+        </div>
+      </div>
+      <div class="mobile-middle">
+        <div class="mobile-search-container">
+          <form
+            class="topnav-search-left"
+            method="post"
+            (ngSubmit)="onSubmitFromModal()"
+          >
+            <button type="submit" border-none>
+              <img
+                class="topnav-search-icon"
+                src="assets/img/icons/search.svg"
+                alt="search"
+              />
+            </button>
+            <input
+              #inputSearch
+              class="topnav-search-input"
+              type="text"
+              id="topnav-search-mobile"
+              name="topnav-search"
+              placeholder="Search"
+            />
+          </form>
+          <div class="topnav-search-right">
+            <!-- <img
+              class="topnav-search-select-icon"
+              src="assets/img/icons/arrow-down.svg"
+              alt="search-select"
+            /> -->
+          </div>
+          <!-- <div class="topnav-search-right" (click)="toggleDropdown()">
+            <div class="topnav-search-dropdown" id="myDropdown">
+              <a *ngFor="let item of providerCategories" (click)="closeDropDown(item)">{{ item.name }}</a>
+            </div>
+            <img
+              class="topnav-search-select-icon"
+              src="assets/img/icons/arrow-down.svg"
+              alt="search-select"
+            />
+          </div> -->
+        </div>
+        <div
+          class="topnav-link pointer"
+          data-toggle="modal"
+          data-target="#mobileMenuModal"
+          [routerLink]="['/jobs']"
+        >
+          Job Board
+        </div>
+        <div
+          class="topnav-link pointer"
+          *ngIf="currentUser"
+          [routerLink]="['/inbox/chat']"
+          data-toggle="modal"
+          data-target="#mobileMenuModal"
+        >
+          <div class="topnav-link-notif-badge">
+            {{ unreadMsgCount }}
+          </div>
+          <div>Inbox</div>
+        </div>
+        <div
+          class="topnav-link pointer"
+          [routerLink]="['/blog']"
+          data-toggle="modal"
+          data-target="#mobileMenuModal"
+        >
+          Blog
+        </div>
+        <div
+          class="topnav-link pointer"
+          [routerLink]="['/faq']"
+          data-toggle="modal"
+          data-target="#mobileMenuModal"
+        >
+          FAQ
+        </div>
+      </div>
+      <div class="mobile-bottom" *ngIf="!currentUser">
+        <div
+          class="button-blue"
+          [routerLink]="['/auth']"
+          data-toggle="modal"
+          data-target="#mobileMenuModal"
+        >
+          Login / Create Account
+        </div>
+      </div>
+      <div class="mobile-bottom" *ngIf="currentUser">
+        <div
+          class="button-blue"
+          *ngIf="!bAddress; else showAddress"
+          [routerLink]="['/wallet-bnb']"
+          data-toggle="modal"
+          data-target="#mobileMenuModal"
+        >
+          Connect Wallet
+        </div>
+        <ng-template #showAddress>
+          <div
+            class="button-blue"
+            [routerLink]="['/wallet-bnb/assets']"
+            data-toggle="modal"
+            data-target="#mobileMenuModal"
+          >
+            {{ bAddress.slice(0, 6) }}...{{ bAddress.slice(-3) }}
+          </div>
+        </ng-template>
+        <div class="topnav-avatar">
+          <a
             role="button"
             id="dropdownMenuLink"
             data-toggle="dropdown"
@@ -132,67 +296,56 @@
             ></app-avatar>
           </a>
           <div
-            class="dropdown-menu dropdown-menu-right"
+            class="dropdown-menu dropdown-menu-mobile"
             aria-labelledby="dropdownMenuLink"
           >
-            <a
-              class=" nav-link dropdown-item"
+            <div
+              class="nav-link dropdown-item"
               style="font-weight: 400 !important; text-transform: none"
               href="#"
               [routerLink]="['/profile']"
-              >Profile</a
+              data-toggle="modal"
+              data-target="#mobileMenuModal"
             >
-            <a
-              class=" nav-link dropdown-item"
+              Profile
+            </div>
+            <div
+              class="nav-link dropdown-item"
               style="font-weight: 400 !important; text-transform: none"
               href="#"
               [routerLink]="['/profile']"
               [queryParams]="{ editProfile: 1 }"
-              >Edit Profile</a
+              data-toggle="modal"
+              data-target="#mobileMenuModal"
             >
+              Edit Profile
+            </div>
             <div class="dropdown-divider"></div>
-            <a
-              class=" nav-link dropdown-item"
+            <div
+              class="nav-link dropdown-item"
               style="font-weight: 400 !important; text-transform: none"
               href="#"
               [routerLink]="['/inbox/jobs']"
-              >Manage Jobs</a
+              data-toggle="modal"
+              data-target="#mobileMenuModal"
             >
+              Manage Jobs
+            </div>
             <div class="dropdown-divider"></div>
-            <a
+            <div
               class="dropdown-item text-danger"
               href="#"
               data-toggle="modal"
               data-target="#areYouSureLogoutModal"
-              >Logout</a
             >
+              Logout
+            </div>
           </div>
-        </li>
-      </ul>
-    </div>
-    <button _ngcontent-c1="" class="topbar-toggler">☰</button>
-  </div>
-</nav>
-
-<header class="header fadeout pt-90 pb-0 shadow-1" id="section-home">
-  <div
-    *ngIf="allowFilters && showFilters"
-    class="container w-full bt-1 hidden-lg-down"
-    style="margin-top: -10px;"
-    [@slideInOut]
-  >
-    <div class="container">
-      <div class="row py-10 text-center">
-        <app-search-filter-option
-          class="col-md-2"
-          *ngFor="let category of providerCategories"
-          [text]="category"
-          [link]="category"
-        ></app-search-filter-option>
+        </div>
       </div>
     </div>
   </div>
-</header>
+</div>
 
 <!-- Logout - Are you sure? -->
 <div
@@ -241,4 +394,6 @@
     </div>
   </div>
 </div>
-<ledger-modal></ledger-modal>
+
+<!-- COMMENTED OUT LEDGER MODAL AS THIS WAS A BEP2 FEATURE -->
+<!-- <ledger-modal></ledger-modal> -->

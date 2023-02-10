@@ -8,58 +8,67 @@ enum MessageType {
   offer = 'OFFER',
   jobAction = 'ACTION',
   checkout = 'CHECKOUT',
-  tip = 'TIP'
+  tip = 'TIP',
 }
 
 export async function sendJobMessages(db, job, action) {
-  const channelId = [job.clientId, job.providerId].sort().join('-');
-  const jobId = job.id;
+  const channelId = [job.clientId, job.providerId].sort().join('-')
+  const jobId = job.id
   //console.log('action executed by '+ action.executedBy); // debug
   //console.log('UserType.client '+ UserType.client); // debug
   //console.log('job.providerId '+ job.providerId); // debug
   //console.log('job.clientId '+ job.clientId); // debug
-  
-  const receiverId = ( action.executedBy === UserType.client ) ? job.providerId : job.clientId
+
+  const receiverId =
+    action.executedBy === UserType.client ? job.providerId : job.clientId
   // the opposite
-  const senderId = ( action.executedBy === UserType.client ) ? job.clientId : job.providerId
+  const senderId =
+    action.executedBy === UserType.client ? job.clientId : job.providerId
   //console.log('receiverId '+ receiverId); // debug
   //console.log('senderId '+ senderId); // debug
-  
-  let sender = null;
+
+  let sender = null
   // get sender from senderId
-  const senderRef = await db.collection('users').doc(senderId).get();
-  if (senderRef.exists) sender = senderRef.data();
-  
+  const senderRef = await db
+    .collection('users')
+    .doc(senderId)
+    .get()
+  if (senderRef.exists) sender = senderRef.data()
+
   if (!sender) {
-    console.log(`Error sending chat notification, job ${jobId}, sender not found: ${senderId}`);  
-    return false
-  }
-   
-  let messageText = '';
-  
-  switch (action.type) {
-    // deposit bnb and bep 20
-    case ActionType.enterEscrow:
-      messageText = 'I have deposited funds into the escrow system!  Please start the job.'
-      break
-    case ActionType.acceptFinish:
-      messageText = 'I have released the funds from Escrow!  Thankyou.'    
-      break
-    case ActionType.cancelJobEarly:
-      messageText = "I've just cancelled a job early.. sorry about that!" 
-      break
-    
-  }
-  
-  if (!messageText) {
-    console.log(`Error sending chat notification, job ${jobId}, unknown action: ${action.type}`);          
-    
+    console.log(
+      `Error sending chat notification, job ${jobId}, sender not found: ${senderId}`
+    )
     return false
   }
 
-  const user = sender;
-  const type = MessageType.jobAction;
-  
+  let messageText = ''
+
+  switch (action.type) {
+    // deposit bnb and bep 20
+    case ActionType.enterEscrow:
+      messageText =
+        'I have deposited funds into the escrow system!  Please start the job.'
+      break
+    case ActionType.acceptFinish:
+      messageText = 'I have released the funds from Escrow!  Thankyou.'
+      break
+    case ActionType.cancelJobEarly:
+      messageText = "I've just cancelled a job early.. sorry about that!"
+      break
+  }
+
+  if (!messageText) {
+    console.log(
+      `Error sending chat notification, job ${jobId}, unknown action: ${action.type}`
+    )
+
+    return false
+  }
+
+  const user = sender
+  const type = MessageType.jobAction
+
   // send message creating firestore record
   const message = {
     channel: channelId,
@@ -74,19 +83,16 @@ export async function sendJobMessages(db, job, action) {
     isPublic: false,
     timestamp: Date.now(),
   }
-  
-  
+
   try {
     // Save messages
-    db
-      .collection('chats')
+    db.collection('chats')
       .doc(senderId)
       .collection('channels')
       .doc(message.channel)
       .collection('messages')
       .add(Object.assign({}, message))
-    db
-      .collection('chats')
+    db.collection('chats')
       .doc(receiverId)
       .collection('channels')
       .doc(message.channel)
@@ -94,8 +100,7 @@ export async function sendJobMessages(db, job, action) {
       .add(Object.assign({}, message))
 
     // Update the channel
-    db
-      .collection('chats')
+    db.collection('chats')
       .doc(senderId)
       .collection('channels')
       .doc(message.channel)
@@ -104,8 +109,7 @@ export async function sendJobMessages(db, job, action) {
         timestamp: Date.now(),
         unreadMessages: false,
       })
-    db
-      .collection('chats')
+    db.collection('chats')
       .doc(receiverId)
       .collection('channels')
       .doc(message.channel)
@@ -116,13 +120,14 @@ export async function sendJobMessages(db, job, action) {
       })
 
     db.doc(`notifications/${receiverId}`).set({ chat: true })
-    
+
     return true
-    
   } catch (e) {
-    console.log(`Error sending chat notification, job ${jobId}: ${e.toString()}`);                
-    console.log(e);
-  }  
-  
+    console.log(
+      `Error sending chat notification, job ${jobId}: ${e.toString()}`
+    )
+    console.log(e)
+  }
+
   return false
 }

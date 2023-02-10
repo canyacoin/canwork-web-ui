@@ -17,7 +17,7 @@ export class FaqPageComponent implements OnInit {
       index: 'q-2',
       q: 'Why CanWork?',
       a:
-        'CanWork is the digital service marketplace on BNB Chain. CanWork only takes a 3% payment fee.',
+        'CanWork is the digital service marketplace on BNB Chain. CanWork only takes a 1% payment fee.',
     },
     {
       index: 'q-3',
@@ -82,7 +82,7 @@ export class FaqPageComponent implements OnInit {
       index: 'q-14',
       q: 'How much does CanWork cost?',
       a:
-        'CanWork costs nothing to use or browse.  There is a 3% service charge that happens once payment is released from escrow.',
+        'CanWork costs nothing to use or browse.  There is a 1% service charge that happens once payment is released from escrow.',
     },
     {
       index: 'q-15',
@@ -94,7 +94,7 @@ export class FaqPageComponent implements OnInit {
       index: 'q-16',
       q: 'What wallet should I use?',
       a:
-        'CanWork connects seemlessly with Metamask and WalletConnect. We recommend and use Trust Wallet https://trustwallet.com/.',
+        'CanWork connects seemlessly with Metamask and WalletConnect. We recommend and use Trust Wallet https://www.trustwallet.com.',
     },
     {
       index: 'q-17',

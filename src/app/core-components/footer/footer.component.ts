@@ -1,3 +1,4 @@
+import { providerTypeArray } from './../../const/providerTypes'
 import { Component, OnInit } from '@angular/core'
 
 declare var createCustomFooter: any
@@ -7,6 +8,7 @@ declare var createCustomFooter: any
   styleUrls: ['./footer.component.css'],
 })
 export class FooterComponent implements OnInit {
+  public providerTypes = providerTypeArray
   constructor() {}
   ngOnInit() {}
 }

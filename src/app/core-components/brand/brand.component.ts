@@ -6,7 +6,8 @@ import { Component, OnInit } from '@angular/core'
   styleUrls: ['./brand.component.css'],
 })
 export class BrandComponent implements OnInit {
-  styleGuideUrl = 'https://canstyle.io'
+  supportInboxUrl = 'mailto:support@canwork.io'
+  telegramChannelUrl = 'https://t.me/joinchat/GI97FhDD1lf6dh-r9XRdvA'
 
   constructor() {}
 

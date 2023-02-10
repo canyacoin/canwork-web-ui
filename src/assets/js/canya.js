@@ -455,7 +455,7 @@
     $(document).on('click', '.topbar-toggler', function(){
       //body.toggleClass('topbar-reveal').prepend('<div class="topbar-backdrop"></div>');
       body.toggleClass('topbar-reveal');
-      $(this).closest('.topbar').prepend('<div class="topbar-backdrop"></div>');
+      $(this).closest('.topnav-container').prepend('<div class="topbar-backdrop"></div>');
     });
 
     $(document).on('click', '.topbar-backdrop', function(){

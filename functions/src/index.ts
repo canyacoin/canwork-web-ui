@@ -372,11 +372,9 @@ exports.indexProviderData = functions.firestore
     const objectId = snap.id
 
     !data.slug &&
-      createSlugIfNotExist(
-        'users',
-        objectId,
-        joinString(data.name)
-      ).catch(err => console.error(err))
+      createSlugIfNotExist('users', objectId, joinString(data.name)).catch(
+        err => console.error(err)
+      )
 
     const workData = buildWorkData(objectId)
 
@@ -532,7 +530,7 @@ function notifyAdminOnNewUser(user) {
   console.log('+ sending a new provider email to admin...')
 
   const text = `
-  Link to profile: https://canwork.io/profile/${user.slug}
+  Link to profile: https://app.canwork.io/profile/${user.slug}
   <br>
   Email address: ${user.email}
   <br>
@@ -1144,11 +1142,9 @@ exports.initSlug = functions.https.onRequest(async (request, response) => {
   usersnaps.forEach(async doc => {
     const data = doc.data()
     !data.slug &&
-      createSlugIfNotExist(
-        'users',
-        doc.id,
-        joinString(doc.data().name)
-      ).catch(err => console.error(err))
+      createSlugIfNotExist('users', doc.id, joinString(doc.data().name)).catch(
+        err => console.error(err)
+      )
   })
   jobsnaps.forEach(async doc => {
     const data = doc.data()
@@ -1300,8 +1296,8 @@ exports.firestoreSelect = functions.https.onCall(firestoreSelect(db))
 // bep20 tx monitor
 exports.bep20TxMonitor = functions.pubsub
   .schedule('every 60 minutes')
-  .onRun(bep20TxMonitor(db, env, serviceConfig))
-  
+  .onRun(bep20TxMonitor(db))
+
 // listen to chain monitor updates and save into bep20 tx monitor table
 // and process instantly using same (todo refactor to common) functions from scheduled bep20 tx monitor
 // with some tweak (no token and no amount, we have to calculate it)

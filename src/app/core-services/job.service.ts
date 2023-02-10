@@ -190,18 +190,16 @@ export class JobService {
                 queryParams: { returnUrl: routerStateSnapshot.url },
               })
             } else {
-              
               let result = await this.bscService.releaseByProvider(job.id)
-                // todo update only job state locally and move to backend, if result ok
+              // todo update only job state locally and move to backend, if result ok
 
               if (!result.err) {
-                
                 // add action log
                 // parsedJob.actionLog.push(action) // moved to backend
                 parsedJob.state = JobState.cancelledByProvider // only local copy
                 // state is cancelled, like plain cancel, no more actions possible
-                
-                // add transaction to job log (moved to backend)                
+
+                // add transaction to job log (moved to backend)
                 /*
                 let tx = await this.transactionService.createTransaction(
                   `Cancel job early`,
@@ -285,13 +283,13 @@ export class JobService {
             break
           case ActionType.enterEscrowBsc:
             // saving will be done from backend, this updates are only for ui
-            parsedJob.actionLog.push(action); // only local copy
-            parsedJob.state = JobState.inEscrow; // only local copy
-            parsedJob.bscEscrow = true; // save bscEscrow property into job to use it later when releasing job, only local copy
-            
-            // moved (chat and email) to backend 
-            // await this.jobNotify(parsedJob, action); 
-            
+            parsedJob.actionLog.push(action) // only local copy
+            parsedJob.state = JobState.inEscrow // only local copy
+            parsedJob.bscEscrow = true // save bscEscrow property into job to use it later when releasing job, only local copy
+
+            // moved (chat and email) to backend
+            // await this.jobNotify(parsedJob, action);
+
             resolve(true)
             break
           case ActionType.acceptFinish:
@@ -317,7 +315,7 @@ export class JobService {
 
     await this.jobNotificationService.notify(action.type, job.id)
   }
-  
+
   /*
   // moved to backend
   async jobNotify(job: Job, action: IJobAction) {
