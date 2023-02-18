@@ -1,19 +1,15 @@
 .skill-tag {
-  display: inline-block;
-  padding: 0.5em;
+  font-family: 'Nunito';
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  color: #2988b3;
+  background-color: #ebf9ff;
+  border-radius: 16px;
+  padding: 4px 16px;
   margin-right: 5px;
-  font-size: 0.6rem;
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: 1.5px;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: baseline;
-  border-radius: 0.5rem;
-  color: #9b9b9b;
-  background-color: #eceeef;
-  text-transform: uppercase;
-  outline: none;
+  text-transform: capitalize;
+  display: inline-block;
   transition: 0.25s all ease-out;
 }
 

@@ -1,0 +1,13 @@
+<div class="star-rating-container">
+  <div *ngIf="stars > 0 && stars < 0.5" class="star-half"></div>
+  <div *ngIf="stars > 0.5" class="star-full"></div>
+  <div *ngIf="stars > 0.5 && stars < 1.5" class="star-half"></div>
+  <div *ngIf="stars > 1.5" class="star-full"></div>
+  <div *ngIf="stars > 1.5 && stars < 2.5" class="star-half"></div>
+  <div *ngIf="stars > 2.5" class="star-full"></div>
+  <div *ngIf="stars > 2.5 && stars < 3.5" class="star-half"></div>
+  <div *ngIf="stars > 3.5" class="star-full"></div>
+  <div *ngIf="stars > 3.5 && stars < 4.5" class="star-half"></div>
+  <div *ngIf="stars > 4.5" class="star-full"></div>
+  <div class="star-count">({{ count }})</div>
+</div>
