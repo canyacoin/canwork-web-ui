@@ -27,6 +27,7 @@ import { ProviderCardComponent } from './provider-card/provider-card.component'
 import { ScrollTopComponent } from './scroll-top/scroll-top.component'
 import { SkillTagComponent } from './skill-tag/skill-tag.component'
 import { SkillTagsSelectionComponent } from './skill-tags-selection/skill-tags-selection.component'
+import { StarRatingNativeComponent } from './star-rating-native/star-rating-native.component'
 import { TermsComponent } from './terms/terms.component'
 import { VStepperComponent } from './v-stepper/v-stepper.component'
 import { WindowScrollDirective } from './window-scroll.directive'
@@ -72,6 +73,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ScrollTopComponent,
     SkillTagComponent,
     SkillTagsSelectionComponent,
+    StarRatingNativeComponent,
     TermsComponent,
     BackButtonComponent,
     WindowScrollDirective,
@@ -98,6 +100,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ScrollTopComponent,
     SkillTagComponent,
     SkillTagsSelectionComponent,
+    StarRatingNativeComponent,
     VStepperComponent,
     ProviderCardComponent,
     WindowScrollDirective,
