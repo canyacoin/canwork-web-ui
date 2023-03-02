@@ -4,7 +4,7 @@
 }
 
 .topnav-container {
-  height: 60px;
+  height: 100px;
   background: #fafafb;
   border-bottom: 1px solid #e1e1e2;
 }
@@ -19,6 +19,7 @@
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
+  height: 100%;
 }
 
 .topnav-logo {
@@ -46,9 +47,9 @@
   align-items: center;
   font-family: 'Montserrat';
   font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 20px;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
   color: #22262d;
 }
 
@@ -75,10 +76,10 @@
   padding: 0px;
   background: #eceded;
   border-radius: 24px;
-  height: 32px;
+  height: 50px;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1150px) {
   .topnav-search-container {
     display: none;
   }
@@ -92,8 +93,8 @@
 }
 
 .topnav-search-icon {
-  width: 18px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   align-self: center;
 }
 
@@ -127,9 +128,9 @@
 .topnav-search-select-text {
   font-family: 'Montserrat';
   font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 20px;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
   color: #22262d;
 }
 
