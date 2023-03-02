@@ -1,5 +1,5 @@
 <section class="bg-main-new">
-  <div class="py-20" id="section-main">
+  <div class="pb-20" id="section-main">
     <section id="landing-hero">
       <div class="landing-hero-container">
         <div class="landing-hero-inner">
@@ -25,18 +25,18 @@
               <div class="py-1 py-lg-2"></div>
 
               <div class="landing-hero-cta-buttons">
-                <div class="button-blue mr-sm-1" [routerLink]="['/search']">
+                <div class="button-blue m-1" [routerLink]="['/search']">
                   Hire Pro Freelancers
                 </div>
                 <div
-                  class="button-white ml-sm-1 mt-1 mt-sm-0"
+                  class="button-white m-1"
                   *ngIf="currentUser"
                   [routerLink]="['/jobs']"
                 >
                   Start Earning
                 </div>
                 <div
-                  class="button-white ml-sm-1 mt-1 mt-sm-0"
+                  class="button-white m-1"
                   *ngIf="!currentUser"
                   [routerLink]="['/auth']"
                 >
@@ -56,7 +56,7 @@
           </div>
 
           <div
-            class="landing-hero-right col-12 col-md-6 justify-content-center justify-content-sm-end"
+            class="landing-hero-right col-12 col-md-6 justify-content-center justify-content-md-end"
           >
             <img class="bnbchain-img" src="assets/img/built-bnb-chain.png" />
           </div>

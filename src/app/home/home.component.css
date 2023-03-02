@@ -1,11 +1,16 @@
 /* HERO SECTION */
 
+#landing-hero {
+  height: calc(100vh - 100px);
+}
+
 .landing-hero-container {
-  background: url(/assets/img/hero-png-3.png), #ffffff5c;
+  background: url(/assets/img/hero-png-4.png), #ffffff5c;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: fill;
   background-position-y: bottom;
   background-position-x: right;
+  height: 100%;
 }
 
 @media (max-width: 1200px) {
@@ -27,10 +32,12 @@
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
+  height: 100%;
+  align-items: center;
 }
 
 .landing-hero-left {
-  padding: 40px 20px;
+  padding: 20px;
 }
 
 .landing-hero-left-contain {
@@ -71,11 +78,11 @@
   flex-wrap: wrap;
 }
 
-.landing-hero-cta-buttons > div {
-  max-width: 200px;
-}
+/* .landing-hero-cta-buttons > div {
+  max-width: 250px;
+} */
 
-@media (max-width: 575px) {
+@media (max-width: 871px) {
   .landing-hero-cta-buttons > div {
     width: 100%;
   }
@@ -84,11 +91,25 @@
 .landing-hero-right {
   display: flex;
   align-items: flex-end;
-  padding: 40px 20px;
-  min-height: 350px;
+  padding: 20px;
+  height: 560px;
+}
+
+@media (max-width: 1200px) {
+  .landing-hero-right {
+    height: 515px;
+  }
 }
 
 @media (max-width: 767px) {
+  .landing-hero-right {
+    padding: 20px;
+    min-height: 100px;
+    height: 45vw;
+  }
+}
+
+@media (max-width: 500px) {
   .landing-hero-right {
     padding: 20px;
     min-height: 100px;
