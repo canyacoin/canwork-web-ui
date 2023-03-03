@@ -179,9 +179,13 @@
               </div>
               <div class="profile-rating">
                 <!-- TODO: Star rating -->
-                {{ profile.rating.average }} ({{ profile.rating.count }})
+                <app-star-rating-native
+                  [stars]="profile.rating.average"
+                  [count]="profile.rating.count"
+                >
+                </app-star-rating-native>
               </div>
-              <div class="profile-bio">{{ profile.bio }} BIO</div>
+              <!--<div class="profile-bio">{{ profile.bio }} BIO</div>-->
               <div class="mt-2 profile-tags">
                 <!-- TODO: Skill tags as per design -->
                 <app-skill-tag
@@ -215,7 +219,7 @@
                   category: type.id
                 }"
               >
-                View all {{ type.name }}
+                View All {{ type.name }}
               </div>
             </div>
           </div>
