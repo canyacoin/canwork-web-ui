@@ -374,16 +374,20 @@
 }
 
 .profile-title {
-  color: #22262d;
   font-family: 'Montserrat';
   font-style: normal;
   font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  color: #22262d;
 }
 
 .profile-desc {
   font-family: 'Nunito';
   font-style: normal;
   font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
   color: #4c4f55;
 }
 
@@ -391,6 +395,8 @@
   font-family: 'Nunito';
   font-style: normal;
   font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
   color: #4c4f55;
 }
 
