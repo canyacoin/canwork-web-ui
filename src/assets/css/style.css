@@ -498,7 +498,7 @@ button {
 }
 
 .button-white:focus {
-  border: 1px solid #818488;
+  border-color: #818488;
 }
 
 .button-blue {
@@ -519,16 +519,19 @@ button {
 .button-blue:active {
   box-shadow: inset 0px 10px 20px #A7E4FF;
   filter: drop-shadow(0px 10px 25px rgba(0, 168, 243, 0.25));
+  color: #FFFFFF !important;
 }
 
 .button-blue:hover {
   background: #5BCCFF;
   box-shadow: inset 5px 10px 20px #D5F2FF;
   filter: drop-shadow(0px 10px 25px rgba(0, 168, 243, 0.25));
+  color: #FFFFFF !important;
 }
 
 .button-blue:focus {
   border: 2px solid #1264B4;
   box-shadow: inset 0px 10px 20px #A7E4FF;
   filter: drop-shadow(0px 10px 25px rgba(0, 168, 243, 0.25));
+  color: #FFFFFF !important;
 }
