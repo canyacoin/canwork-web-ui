@@ -248,8 +248,8 @@
         <div class="py-3"></div>
 
         <div class="features-item-container">
-          <div class="features-item-pic col-6 d-none d-md-flex"></div>
-          <div class="col-12 col-md-6">
+          <div class="features-item-pic col-4 col-xl-6 d-none d-lg-flex"></div>
+          <div class="col-12 col-lg-8 col-xl-6">
             <div class="features-item-green-text">For Client</div>
             <div class="py-1"></div>
             <div class="features-item-desc">
@@ -259,11 +259,11 @@
             <div class="py-3"></div>
 
             <div class="features-item-row">
-              <div class="col-auto pr-3 pl-1">
+              <div class="col-auto">
                 <img
                   src="assets/img/icons/award.svg"
-                  height="50px"
-                  width="50px"
+                  height="80px"
+                  width="80px"
                   class="award-dropshadow"
                 />
               </div>
@@ -271,7 +271,7 @@
                 <div class="features-item-row-title">
                   High quality freelancers
                 </div>
-                <div class="py-1"></div>
+                <div class="py-2"></div>
                 <div class="features-item-row-desc">
                   Work with only vetted top tier freelancers on CanWork.
                 </div>
@@ -281,11 +281,11 @@
             <div class="py-3"></div>
 
             <div class="features-item-row">
-              <div class="col-auto pr-3 pl-1">
+              <div class="col-auto">
                 <img
                   src="assets/img/icons/person-check.svg"
-                  height="50px"
-                  width="50px"
+                  height="80px"
+                  width="80px"
                   class="person-check-dropshadow"
                 />
               </div>
@@ -293,7 +293,7 @@
                 <div class="features-item-row-title">
                   Zero cost of hiring freelancers
                 </div>
-                <div class="py-1"></div>
+                <div class="py-2"></div>
                 <div class="features-item-row-desc">
                   Connect and hire top professional freelancers in the crypto
                   space at no cost. Simply post a job. (Negligible BNBChain
@@ -305,11 +305,11 @@
             <div class="py-3"></div>
 
             <div class="features-item-row">
-              <div class="col-auto pr-3 pl-1">
+              <div class="col-auto">
                 <img
                   src="assets/img/icons/binance.svg"
-                  height="50px"
-                  width="50px"
+                  height="80px"
+                  width="80px"
                   class="binance-dropshadow"
                 />
               </div>
@@ -317,7 +317,7 @@
                 <div class="features-item-row-title">
                   Multiple secure payment options
                 </div>
-                <div class="py-1"></div>
+                <div class="py-2"></div>
                 <div class="features-item-row-desc">
                   Pay with BNB and select BNB Chain tokens, all secured by the
                   CanWork smart-contract escrow system.
@@ -328,7 +328,7 @@
             <div class="py-3"></div>
 
             <div class="features-item-button">
-              <div class="button-white" [routerLink]="['/search']">
+              <div class="button-blue" [routerLink]="['/search']">
                 Hire Top Freelancer
               </div>
             </div>
@@ -350,11 +350,11 @@
             <div class="py-3"></div>
 
             <div class="features-item-row">
-              <div class="col-auto pr-3 pl-1">
+              <div class="col-auto">
                 <img
                   src="assets/img/icons/dollar.svg"
-                  height="50px"
-                  width="50px"
+                  height="80px"
+                  width="80px"
                   class="dollar-dropshadow"
                 />
               </div>
@@ -362,7 +362,7 @@
                 <div class="features-item-row-title">
                   Pay only 1% in Commission
                 </div>
-                <div class="py-1"></div>
+                <div class="py-2"></div>
                 <div class="features-item-row-desc">
                   Pay almost nothing in commission when you engage with a client
                   on CanWork, you get to keep more of your earnings.
@@ -373,11 +373,11 @@
             <div class="py-3"></div>
 
             <div class="features-item-row">
-              <div class="col-auto pr-3 pl-1">
+              <div class="col-auto">
                 <img
                   src="assets/img/icons/lightning.svg"
-                  height="50px"
-                  width="50px"
+                  height="80px"
+                  width="80px"
                   class="lightning-dropshadow"
                 />
               </div>
@@ -385,7 +385,7 @@
                 <div class="features-item-row-title">
                   Receive Instant Payment
                 </div>
-                <div class="py-1"></div>
+                <div class="py-2"></div>
                 <div class="features-item-row-desc">
                   Receive your payment in your compatible BNB Chain wallet
                   instantly, after job is completed.
@@ -396,11 +396,11 @@
             <div class="py-3"></div>
 
             <div class="features-item-row">
-              <div class="col-auto pr-3 pl-1">
+              <div class="col-auto">
                 <img
                   src="assets/img/icons/document.svg"
-                  height="50px"
-                  width="50px"
+                  height="80px"
+                  width="80px"
                   class="document-dropshadow"
                 />
               </div>
@@ -408,7 +408,7 @@
                 <div class="features-item-row-title">
                   Smart Contract and Escrow
                 </div>
-                <div class="py-1"></div>
+                <div class="py-2"></div>
                 <div class="features-item-row-desc">
                   CanWork Smart Contract and Escrow system assures freelancers
                   of payment by securing payment upfront protected from
@@ -421,14 +421,14 @@
 
             <div class="features-item-button">
               <div
-                class="button-white"
+                class="button-blue"
                 *ngIf="currentUser"
                 [routerLink]="['/jobs']"
               >
                 Start Earning on CanWork
               </div>
               <div
-                class="button-white"
+                class="button-blue"
                 *ngIf="!currentUser"
                 [routerLink]="['/auth']"
               >
