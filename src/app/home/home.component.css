@@ -625,10 +625,10 @@
   background-repeat: no-repeat;
   background-position-x: right;
   background-size: contain;
-  min-height: 280px;
+  padding: 40px;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 991px) {
   .cta-1 {
     background-blend-mode: overlay;
     background-size: cover;
@@ -636,24 +636,26 @@
 }
 
 .cta-container {
-  max-width: 320px;
+  max-width: 500px;
 }
 
 .cta-title {
+  max-width: 413px;
   font-family: 'Montserrat';
   font-style: normal;
   font-weight: 700;
-  font-size: 1.4rem;
-  line-height: 1.6rem;
+  font-size: 32px;
+  line-height: 40px;
   color: #ffffff;
 }
 
 .cta-subtitle {
+  max-width: 358px;
   font-family: 'Nunito';
   font-style: normal;
   font-weight: 400;
-  font-size: 1rem;
-  line-height: 1.2rem;
+  font-size: 16px;
+  line-height: 24px;
   color: #c5c6c8;
 }
 
@@ -736,9 +738,8 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .cta-2 {
@@ -746,10 +747,10 @@
   background-repeat: no-repeat;
   background-position-x: right;
   background-size: contain;
-  min-height: 280px;
+  padding: 40px;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 991px) {
   .cta-2 {
     background-blend-mode: overlay;
     background-size: cover;
