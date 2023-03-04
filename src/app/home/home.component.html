@@ -13,7 +13,7 @@
                 <span class="hero-text-black">Confidence</span>
               </h1>
 
-              <div class="py-1 py-lg-2"></div>
+              <div class="py-2"></div>
 
               <p class="landing-hero-text">
                 CanWork is a digital freelance marketplace that connects top
@@ -22,21 +22,22 @@
                 there's no fees!
               </p>
 
-              <div class="py-1 py-lg-2"></div>
+              <div class="py-2"></div>
+              <div class="py-3"></div>
 
               <div class="landing-hero-cta-buttons">
-                <div class="button-blue m-1" [routerLink]="['/search']">
+                <div class="button-blue mr-1 mb-1" [routerLink]="['/search']">
                   Hire Pro Freelancers
                 </div>
                 <div
-                  class="button-white m-1"
+                  class="button-white mr-1 mb-1"
                   *ngIf="currentUser"
                   [routerLink]="['/jobs']"
                 >
                   Start Earning
                 </div>
                 <div
-                  class="button-white m-1"
+                  class="button-white mr-1 mb-1"
                   *ngIf="!currentUser"
                   [routerLink]="['/auth']"
                 >
@@ -44,14 +45,13 @@
                 </div>
               </div>
 
-              <div class="py-2 py-lg-3"></div>
-              <div class="py-2 py-lg-3"></div>
+              <div class="py-3"></div>
+              <div class="py-3"></div>
+              <div class="py-3"></div>
 
               <div class="landing-hero-token-strip">
                 <img class="" src="assets/img/Tokens.svg" alt="Vector" />
               </div>
-
-              <div class="py-1 py-lg-2"></div>
             </div>
           </div>
 
