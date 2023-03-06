@@ -30,8 +30,10 @@ export class BlogPostsComponent implements OnInit {
         if (obj.category) articleUrl = '/' + obj.category + '/' + obj.slug
         else articleUrl = '/' + obj.slug
         this.mediumFeed.push({
-          title: obj.title,
           thumbnail: obj.imageUrl,
+          title: obj.title,
+          subtitle: obj.subTitle,
+          author: obj.author,
           link: 'https://canwork.io' + articleUrl,
         })
       })

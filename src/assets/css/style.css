@@ -475,15 +475,15 @@ button {
 }
 
 .button-white {
-  padding: 8px 16px;
+  padding: 12px 24px;
   background: #FAFAFB;
   border: 1px solid #C5C6C8;
   border-radius: 8px;
   font-family: 'Montserrat';
   font-style: normal;
   font-weight: 700;
-  font-size: 14px;
-  line-height: 22px;
+  font-size: 16px;
+  line-height: 24px;
   color: #22262D;
   cursor: pointer;
   text-align: center;
@@ -491,26 +491,26 @@ button {
 
 .button-white:hover {
   color: #FFFFFF;
-  border: 0px;
+  border-color: #ffffff00;
   background: #3AC2FF;
   box-shadow: inset 0px 10px 20px #A7E4FF;
   filter: drop-shadow(0px 10px 25px rgba(0, 168, 243, 0.25));
 }
 
 .button-white:focus {
-  border: 2px solid #818488;
+  border-color: #818488;
 }
 
 .button-blue {
-  padding: 9px 16px;
+  padding: 12px 24px;
   background: #3AC2FF;
   box-shadow: 0px 10px 25px rgba(0, 168, 243, 0.25), inset 0px 10px 20px #A7E4FF;
   border-radius: 8px;
   font-family: 'Montserrat';
   font-style: normal;
   font-weight: 700;
-  font-size: 14px;
-  line-height: 22px;
+  font-size: 16px;
+  line-height: 24px;
   color: #FFFFFF;
   cursor: pointer;
   text-align: center;
@@ -519,16 +519,19 @@ button {
 .button-blue:active {
   box-shadow: inset 0px 10px 20px #A7E4FF;
   filter: drop-shadow(0px 10px 25px rgba(0, 168, 243, 0.25));
+  color: #FFFFFF !important;
 }
 
 .button-blue:hover {
   background: #5BCCFF;
   box-shadow: inset 5px 10px 20px #D5F2FF;
   filter: drop-shadow(0px 10px 25px rgba(0, 168, 243, 0.25));
+  color: #FFFFFF !important;
 }
 
 .button-blue:focus {
   border: 2px solid #1264B4;
   box-shadow: inset 0px 10px 20px #A7E4FF;
   filter: drop-shadow(0px 10px 25px rgba(0, 168, 243, 0.25));
+  color: #FFFFFF !important;
 }

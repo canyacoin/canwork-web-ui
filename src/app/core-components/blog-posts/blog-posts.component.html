@@ -5,14 +5,28 @@
         class="col-lg-4 col-md-6 col-12 p-10"
         *ngFor="let fx of mediumFeed; let i = index"
       >
-        <div class="card card-bordered card-hover-shadow rounded">
-          <img class="card-img-top" src="{{ fx.thumbnail }}" />
-          <div class="card-block">
-            <div class="card-title">
-              <a href="{{ fx.link }}" target="_blank">{{ fx.title }}</a>
+        <div class="blog-card">
+          <div class="blog-card-inner">
+            <div class="blog-image">
+              <img class="blog-img-fill" src="{{ fx.thumbnail }}" />
             </div>
-            <a class="fw-500 fs-12" href="{{ fx.link }}" target="_blank">
-              See More
+            <div class="my-3"></div>
+            <div class="blog-title">
+              {{ fx.title }}
+            </div>
+            <div class="my-1"></div>
+            <div class="blog-subtitle">
+              {{ fx.subtitle }}
+            </div>
+            <div class="my-1"></div>
+            <div class="blog-author">
+              By
+              <div class="blog-author-bolder d-inline">{{ fx.author }}</div>
+            </div>
+            <div class="my-2"></div>
+            <a class="blog-cta-text" href="{{ fx.link }}" target="_blank">
+              Read Publication
+              <img src="assets/img/arrow-right.svg" height="24px" />
             </a>
           </div>
         </div>
