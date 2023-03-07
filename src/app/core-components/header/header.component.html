@@ -53,26 +53,23 @@
       </div>
     </div>
     <div class="topnav-button-container" *ngIf="!currentUser">
-      <div class="button-white small-button" [routerLink]="['/auth']">
+      <div class="button-white" [routerLink]="['/auth']">
         Login
       </div>
-      <div class="button-blue small-button" [routerLink]="['/auth']">
+      <div class="button-blue" [routerLink]="['/auth']">
         Create Account
       </div>
     </div>
     <div class="topnav-button-container" *ngIf="currentUser">
       <div
-        class="button-blue small-button"
+        class="button-blue"
         *ngIf="!bAddress; else showAddress"
         [routerLink]="['/wallet-bnb']"
       >
         Connect Wallet
       </div>
       <ng-template #showAddress>
-        <div
-          class="button-blue small-button"
-          [routerLink]="['/wallet-bnb/assets']"
-        >
+        <div class="button-blue" [routerLink]="['/wallet-bnb/assets']">
           {{ bAddress.slice(0, 6) }}...{{ bAddress.slice(-3) }}
         </div>
       </ng-template>

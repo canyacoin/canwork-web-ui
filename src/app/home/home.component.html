@@ -1,5 +1,5 @@
 <section class="bg-main-new">
-  <div class="py-20" id="section-main">
+  <div class="pb-20" id="section-main">
     <section id="landing-hero">
       <div class="landing-hero-container">
         <div class="landing-hero-inner">
@@ -13,7 +13,7 @@
                 <span class="hero-text-black">Confidence</span>
               </h1>
 
-              <div class="py-1 py-lg-2"></div>
+              <div class="py-2"></div>
 
               <p class="landing-hero-text">
                 CanWork is a digital freelance marketplace that connects top
@@ -22,21 +22,22 @@
                 there's no fees!
               </p>
 
-              <div class="py-1 py-lg-2"></div>
+              <div class="py-2"></div>
+              <div class="py-3"></div>
 
               <div class="landing-hero-cta-buttons">
-                <div class="button-blue mr-sm-1" [routerLink]="['/search']">
+                <div class="button-blue mr-1 mb-1" [routerLink]="['/search']">
                   Hire Pro Freelancers
                 </div>
                 <div
-                  class="button-white ml-sm-1 mt-1 mt-sm-0"
+                  class="button-white mr-1 mb-1"
                   *ngIf="currentUser"
                   [routerLink]="['/jobs']"
                 >
                   Start Earning
                 </div>
                 <div
-                  class="button-white ml-sm-1 mt-1 mt-sm-0"
+                  class="button-white mr-1 mb-1"
                   *ngIf="!currentUser"
                   [routerLink]="['/auth']"
                 >
@@ -44,19 +45,18 @@
                 </div>
               </div>
 
-              <div class="py-2 py-lg-3"></div>
-              <div class="py-2 py-lg-3"></div>
+              <div class="py-3"></div>
+              <div class="py-3"></div>
+              <div class="py-3"></div>
 
               <div class="landing-hero-token-strip">
                 <img class="" src="assets/img/Tokens.svg" alt="Vector" />
               </div>
-
-              <div class="py-1 py-lg-2"></div>
             </div>
           </div>
 
           <div
-            class="landing-hero-right col-12 col-md-6 justify-content-center justify-content-sm-end"
+            class="landing-hero-right col-12 col-md-6 justify-content-center justify-content-md-end"
           >
             <img class="bnbchain-img" src="assets/img/built-bnb-chain.png" />
           </div>
@@ -174,7 +174,7 @@
                   />
                 </span>
               </div>
-              <div class="profile-desc">
+              <div class="profile-desc mb-1">
                 {{ profile.title }}
               </div>
               <div class="profile-rating">
@@ -248,8 +248,8 @@
         <div class="py-3"></div>
 
         <div class="features-item-container">
-          <div class="features-item-pic col-6 d-none d-md-flex"></div>
-          <div class="col-12 col-md-6">
+          <div class="features-item-pic col-4 col-xl-6 d-none d-lg-flex"></div>
+          <div class="col-12 col-lg-8 col-xl-6">
             <div class="features-item-green-text">For Client</div>
             <div class="py-1"></div>
             <div class="features-item-desc">
@@ -259,11 +259,11 @@
             <div class="py-3"></div>
 
             <div class="features-item-row">
-              <div class="col-auto pr-3 pl-1">
+              <div class="col-auto">
                 <img
                   src="assets/img/icons/award.svg"
-                  height="50px"
-                  width="50px"
+                  height="80px"
+                  width="80px"
                   class="award-dropshadow"
                 />
               </div>
@@ -271,7 +271,7 @@
                 <div class="features-item-row-title">
                   High quality freelancers
                 </div>
-                <div class="py-1"></div>
+                <div class="py-2"></div>
                 <div class="features-item-row-desc">
                   Work with only vetted top tier freelancers on CanWork.
                 </div>
@@ -281,11 +281,11 @@
             <div class="py-3"></div>
 
             <div class="features-item-row">
-              <div class="col-auto pr-3 pl-1">
+              <div class="col-auto">
                 <img
                   src="assets/img/icons/person-check.svg"
-                  height="50px"
-                  width="50px"
+                  height="80px"
+                  width="80px"
                   class="person-check-dropshadow"
                 />
               </div>
@@ -293,7 +293,7 @@
                 <div class="features-item-row-title">
                   Zero cost of hiring freelancers
                 </div>
-                <div class="py-1"></div>
+                <div class="py-2"></div>
                 <div class="features-item-row-desc">
                   Connect and hire top professional freelancers in the crypto
                   space at no cost. Simply post a job. (Negligible BNBChain
@@ -305,11 +305,11 @@
             <div class="py-3"></div>
 
             <div class="features-item-row">
-              <div class="col-auto pr-3 pl-1">
+              <div class="col-auto">
                 <img
                   src="assets/img/icons/binance.svg"
-                  height="50px"
-                  width="50px"
+                  height="80px"
+                  width="80px"
                   class="binance-dropshadow"
                 />
               </div>
@@ -317,7 +317,7 @@
                 <div class="features-item-row-title">
                   Multiple secure payment options
                 </div>
-                <div class="py-1"></div>
+                <div class="py-2"></div>
                 <div class="features-item-row-desc">
                   Pay with BNB and select BNB Chain tokens, all secured by the
                   CanWork smart-contract escrow system.
@@ -328,7 +328,7 @@
             <div class="py-3"></div>
 
             <div class="features-item-button">
-              <div class="button-white" [routerLink]="['/search']">
+              <div class="button-blue" [routerLink]="['/search']">
                 Hire Top Freelancer
               </div>
             </div>
@@ -340,7 +340,7 @@
         <div class="py-3"></div>
 
         <div class="features-item-container">
-          <div class="col-12 col-md-6">
+          <div class="col-12 col-lg-8 col-xl-6">
             <div class="features-item-yellow-text">For Freelancers</div>
             <div class="py-1"></div>
             <div class="features-item-desc">
@@ -350,11 +350,11 @@
             <div class="py-3"></div>
 
             <div class="features-item-row">
-              <div class="col-auto pr-3 pl-1">
+              <div class="col-auto">
                 <img
                   src="assets/img/icons/dollar.svg"
-                  height="50px"
-                  width="50px"
+                  height="80px"
+                  width="80px"
                   class="dollar-dropshadow"
                 />
               </div>
@@ -362,7 +362,7 @@
                 <div class="features-item-row-title">
                   Pay only 1% in Commission
                 </div>
-                <div class="py-1"></div>
+                <div class="py-2"></div>
                 <div class="features-item-row-desc">
                   Pay almost nothing in commission when you engage with a client
                   on CanWork, you get to keep more of your earnings.
@@ -373,11 +373,11 @@
             <div class="py-3"></div>
 
             <div class="features-item-row">
-              <div class="col-auto pr-3 pl-1">
+              <div class="col-auto">
                 <img
                   src="assets/img/icons/lightning.svg"
-                  height="50px"
-                  width="50px"
+                  height="80px"
+                  width="80px"
                   class="lightning-dropshadow"
                 />
               </div>
@@ -385,7 +385,7 @@
                 <div class="features-item-row-title">
                   Receive Instant Payment
                 </div>
-                <div class="py-1"></div>
+                <div class="py-2"></div>
                 <div class="features-item-row-desc">
                   Receive your payment in your compatible BNB Chain wallet
                   instantly, after job is completed.
@@ -396,11 +396,11 @@
             <div class="py-3"></div>
 
             <div class="features-item-row">
-              <div class="col-auto pr-3 pl-1">
+              <div class="col-auto">
                 <img
                   src="assets/img/icons/document.svg"
-                  height="50px"
-                  width="50px"
+                  height="80px"
+                  width="80px"
                   class="document-dropshadow"
                 />
               </div>
@@ -408,7 +408,7 @@
                 <div class="features-item-row-title">
                   Smart Contract and Escrow
                 </div>
-                <div class="py-1"></div>
+                <div class="py-2"></div>
                 <div class="features-item-row-desc">
                   CanWork Smart Contract and Escrow system assures freelancers
                   of payment by securing payment upfront protected from
@@ -421,14 +421,14 @@
 
             <div class="features-item-button">
               <div
-                class="button-white"
+                class="button-blue"
                 *ngIf="currentUser"
                 [routerLink]="['/jobs']"
               >
                 Start Earning on CanWork
               </div>
               <div
-                class="button-white"
+                class="button-blue"
                 *ngIf="!currentUser"
                 [routerLink]="['/auth']"
               >
@@ -436,7 +436,9 @@
               </div>
             </div>
           </div>
-          <div class="features-item-pic-2 col-6 d-none d-md-flex"></div>
+          <div
+            class="features-item-pic-2 col-4 col-xl-6 d-none d-lg-flex"
+          ></div>
         </div>
       </div>
     </section>
@@ -447,7 +449,6 @@
     <section id="tile-collage">
       <div class="collage-container col-12 cta-1">
         <div class="cta-container ml-0 ml-sm-2 ml-md-3">
-          <div class="py-3"></div>
           <div class="cta-title">Explore listed tasks on CanWork Job Board</div>
           <div class="py-1"></div>
           <div class="cta-subtitle">
@@ -455,13 +456,13 @@
             job boards for free.
           </div>
           <div class="py-2"></div>
+          <div class="py-3"></div>
           <div
             class="button-blue features-item-button"
             [routerLink]="['/jobs']"
           >
             View Job Board
           </div>
-          <div class="py-3"></div>
         </div>
       </div>
 
@@ -615,8 +616,7 @@
     <section id="cta-contact">
       <div class="collage-container col-12 cta-2">
         <div class="cta-container ml-0 ml-sm-2 ml-md-3">
-          <div class="py-3"></div>
-          <div class="cta-title">We always love to hear feedback from you.</div>
+          <div class="cta-title">We always love to hear feedback from you</div>
           <div class="py-1"></div>
           <div class="cta-subtitle">
             We have client & freelancer support availabe and an active
@@ -624,6 +624,7 @@
             reviews.
           </div>
           <div class="py-2"></div>
+          <div class="py-3"></div>
           <!-- TODO: What support link do we want here? -->
           <div
             class="button-blue features-item-button"
@@ -631,7 +632,6 @@
           >
             Contact Support
           </div>
-          <div class="py-3"></div>
         </div>
       </div>
     </section>
