@@ -81,7 +81,7 @@
     "@types/ramda": "types/npm-ramda#dist",
     "codelyzer": "^4.0.1",
     "firebase-admin": "^11.5.0",
-    "husky": "^3.0.8",
+    "husky": "^8.0.3",
     "jasmine-core": "~2.8.0",
     "jasmine-spec-reporter": "~4.2.1",
     "jest": "^24.9.0",
