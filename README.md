@@ -50,6 +50,15 @@ cd web-ui
 git checkout -b "yourname"
 ```
 
+Setup (new)
+
+```
+nvm use
+npm install
+npx husky install
+npx husky set .husky/pre-commit "npx pretty-quick --staged"
+```
+
 Setup
 
 Prior to running `yarn` ensure your node version is in a range supported by this project using something like NVM
