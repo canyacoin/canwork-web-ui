@@ -53,7 +53,7 @@ import { ToastrModule } from 'ngx-toastr'
     AngularFirestoreModule,
     AngularFireStorageModule,
     AngularFireFunctionsModule,
-//    FirebaseUIModule.forRoot(firebaseUiAuthConfig),
+    //    FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     BrowserModule,
     BrowserAnimationsModule,
     CanpayModule,
