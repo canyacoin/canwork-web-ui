@@ -26,5 +26,9 @@
       "@env/*": ["environments/*"],
       "@extensions/*": ["./*.extensions.ts"]
     }
+  },
+  "angularCompilerOptions": {
+    "enableIvy": true,
+    "allowEmptyCodegenFiles": true
   }
 }
