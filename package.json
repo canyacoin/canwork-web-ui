@@ -37,7 +37,6 @@
     "@walletconnect/utils": "1.0.0-beta.32",
     "@walletconnect/web3-provider": "1.6.6",
     "angular-instantsearch": "^2.0.1",
-    "angular-star-rating": "^6.0.0",
     "angular2-qrcode": "^2.0.1",
     "angularfire2": "^5.2.0",
     "animate.css": "^3.6.1",
@@ -103,7 +102,7 @@
     "tslint": "~5.9.1",
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.0.1",
-    "typescript": "^3.9.10"
+    "typescript": "^3.5.3"
   },
   "resolutions": {
     "**/event-stream": "^4.0.1"
