@@ -27,17 +27,20 @@ import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.
       },
       {
         path: 'auth',
-        loadChildren: './auth/auth.module#AuthModule',
+        loadChildren: () =>
+          import('./auth/auth.module').then((m) => m.AuthModule),
         canActivate: [AuthGuard],
         data: { requiresLoggedOut: true },
       },
       {
         path: 'home',
-        loadChildren: './home/home.module#HomeModule',
+        loadChildren: () =>
+          import('./home/home.module').then((m) => m.HomeModule),
       },
       {
         path: 'search',
-        loadChildren: './search/search.module#SearchModule',
+        loadChildren: () =>
+          import('./search/search.module').then((m) => m.SearchModule),
       },
       {
         path: 'jobs',
@@ -61,11 +64,13 @@ import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.
       },
       {
         path: 'profile',
-        loadChildren: './profile/profile.module#ProfileModule',
+        loadChildren: () =>
+          import('./profile/profile.module').then((m) => m.ProfileModule),
       },
       {
         path: 'inbox',
-        loadChildren: './inbox/inbox.module#InboxModule',
+        loadChildren: () =>
+          import('./inbox/inbox.module').then((m) => m.InboxModule),
         canActivate: [AuthGuard, UserIsSetupGuard],
         data: { requiresLoggedIn: true },
       },
@@ -93,7 +98,8 @@ import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.
       },
       {
         path: '**',
-        loadChildren: './error/error.module#ErrorModule',
+        loadChildren: () =>
+          import('./error/error.module').then((m) => m.ErrorModule),
       },
     ]),
   ],
