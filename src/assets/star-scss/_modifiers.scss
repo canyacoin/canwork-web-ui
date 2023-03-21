@@ -21,7 +21,7 @@ Rating Component
 
         .star {
           @if $i <= 2 {
-            @extend .star.negative;
+            @extend .star, .negative;
           }
 
           @if $i == 3 {
@@ -42,7 +42,7 @@ Rating Component
 
       .star-container {
         .star:nth-child(-n+#{$i}) {
-          @extend .star.filled
+          @extend .star, .filled
         }
 
         .star {
@@ -80,7 +80,7 @@ Rating Component
 
           .star {
             @if $i <= 2 {
-              @extend .star.negative;
+              @extend .star, .negative;
             }
 
             @if $i == 3 {
@@ -188,9 +188,9 @@ Rating Component
     direction: rtl;
 
     .star-container {
-      @extend .star-container.direction-rtl;
+      @extend .star-container, .direction-rtl;
       .star {
-        @extend .star.direction-rtl;
+        @extend .star, .direction-rtl;
       }
     }
   }
@@ -201,44 +201,44 @@ Rating Component
   /* Star Type
   ====================================================*/
   &.star-icon {
-    @extend .star.icon;
+    @extend .star, .icon;
   }
   &.star-custom-icon {
-    @extend .star.custom-icon;
+    @extend .star, .custom-icon;
   }
   &.star-svg {
-    @extend .star.svg;
+    @extend .star, .svg;
   }
 
   /* Sizes
   ==========================================================*/
   &.small {
     .star {
-      @extend .star.small;
+      @extend .star, .small;
     }
 
     .label-value {
-      @extend .label-value.small;
+      @extend .label-value, .small;
     }
   }
 
   &.medium {
     .star {
-      @extend .star.medium;
+      @extend .star, .medium;
     }
 
     .label-value {
-      @extend .label-value.medium;
+      @extend .label-value, .medium;
     }
   }
 
   &.large {
     .star {
-      @extend .star.large;
+      @extend .star, .large;
     }
 
     .label-value {
-      @extend .label-value.large;
+      @extend .label-value, .large;
     }
   }
 
@@ -246,19 +246,19 @@ Rating Component
   ====================================================*/
   &.space-no {
     .star-container {
-      @extend .star-container.space-no;
+      @extend .star-container, .space-no;
     }
   }
 
   &.space-between {
     .star-container {
-      @extend .star-container.space-between;
+      @extend .star-container, .space-between;
     }
   }
 
   &.space-around {
     .star-container {
-      @extend .star-container.space-around;
+      @extend .star-container, .space-around;
     }
   }
 
@@ -320,11 +320,11 @@ Rating Component
   ====================================================*/
   &.disabled {
     .label-value {
-      @extend .label-value.disabled;
+      @extend .label-value, .disabled;
     }
     .star-container {
       .star {
-        @extend .star.disabled;
+        @extend .star, .disabled;
       }
     }
   }
