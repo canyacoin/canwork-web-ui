@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core'
+import { Component, OnInit, Input, Directive } from '@angular/core'
 import { User } from '@class/user'
 import { environment } from '@env/environment'
 
 declare let escape: any
 
+@Directive()
 @Component({
   selector: 'app-profile-social',
   templateUrl: './social.component.html',
@@ -63,7 +64,7 @@ export class SocialComponent implements OnInit {
     document.execCommand('copy')
     document.body.removeChild(selBox)
     document.getElementById('copied').style.display = 'block'
-    setTimeout(function() {
+    setTimeout(function () {
       document.getElementById('copied').style.display = 'none'
     }, 2000)
   }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, Directive } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Job, JobState } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
@@ -22,6 +22,7 @@ import {
   ActionDialogOptions,
 } from '../action-dialog/action-dialog.component'
 
+@Directive()
 @Component({
   selector: 'app-job-details',
   templateUrl: './job-details.component.html',
@@ -145,14 +146,15 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   get userCanReview(): boolean {
     return (
       this.reviews &&
-      this.reviews.findIndex(x => x.reviewerId === this.currentUser.address) ===
-        -1
+      this.reviews.findIndex(
+        (x) => x.reviewerId === this.currentUser.address
+      ) === -1
     )
   }
 
   get hasPendingTransactions(): boolean {
     if (this.transactions) {
-      return this.transactions.findIndex(x => !x.failure && !x.success) > -1
+      return this.transactions.findIndex((x) => !x.failure && !x.success) > -1
     }
     return false
   }
@@ -201,7 +203,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
           let getUrl: Subscription
           const filePath = attachment[0].filePath
           const fileRef = this.storage.ref(filePath)
-          getUrl = fileRef.getDownloadURL().subscribe(result => {
+          getUrl = fileRef.getDownloadURL().subscribe((result) => {
             this.job.information.attachments[0].url = result
           })
           console.log(attachment)
@@ -287,7 +289,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
               actionType: action,
             })
           )
-          .subscribe(success => {
+          .subscribe((success) => {
             if (!success) {
               console.log('Action cancelled')
             }
@@ -305,7 +307,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
               actionType: action,
             })
           )
-          .subscribe(success => {
+          .subscribe((success) => {
             if (!success) {
               console.log('Action cancelled')
             }
@@ -323,7 +325,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
               actionType: action,
             })
           )
-          .subscribe(success => {
+          .subscribe((success) => {
             if (!success) {
               console.log('Action cancelled')
             }

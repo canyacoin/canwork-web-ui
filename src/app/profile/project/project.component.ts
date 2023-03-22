@@ -1,5 +1,5 @@
 import { Location } from '@angular/common'
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, Directive } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AngularFirestore } from 'angularfire2/firestore'
@@ -9,6 +9,7 @@ import { Work } from '../../core-classes/portfolio'
 import { User } from '../../core-classes/user'
 import { AuthService } from '../../core-services/auth.service'
 
+@Directive()
 @Component({
   selector: 'app-project',
   templateUrl: './project.component.html',
@@ -69,7 +70,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         if (user && this.currentUser !== user) {
           this.currentUser = user
           this.activatedRoute.params.pipe(take(1)).subscribe(
-            params => {
+            (params) => {
               if (params['id']) {
                 this.projectId = params['id']
                 this.loadProject(this.projectId)
@@ -77,13 +78,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
                 this.projectLoaded = true
               }
             },
-            error => {
+            (error) => {
               console.error('unable to retrieve data:', error)
             }
           )
         }
       },
-      error => {
+      (error) => {
         console.error('unable to retrieve data:', error)
       }
     )
@@ -124,7 +125,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     try {
       const tags = this.projectForm.value.tags
         .split(',')
-        .map(item => item.trim())
+        .map((item) => item.trim())
       const tmpProject = {
         title: this.projectForm.value.title,
         description: this.projectForm.value.description,

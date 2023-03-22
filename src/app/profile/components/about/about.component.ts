@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core'
+import {
+  Component,
+  Input,
+  OnInit,
+  Output,
+  EventEmitter,
+  Directive,
+} from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { take } from 'rxjs/operators'
 import { User } from '@class/user'
@@ -7,6 +14,7 @@ import { AuthService } from '@service/auth.service'
 import { ChatService } from '@service/chat.service'
 import { PublicJobService } from '@service/public-job.service'
 
+@Directive()
 @Component({
   selector: 'app-profile-about',
   templateUrl: './about.component.html',
@@ -38,22 +46,23 @@ export class AboutComponent implements OnInit {
   async ngOnInit() {
     if (this.currentUser) {
       this.loadingJobs = true
-      this.currentUserJobs = await this.publicJobService.getOpenPublicJobsByUser(
-        this.currentUser.address
-      )
-      for (let i = 0; i < this.currentUserJobs.length; i++) {
-        this.currentUserJobs[
-          i
-        ].canInvite = await this.publicJobService.canInvite(
-          this.currentUserJobs[i].id,
-          this.userAddress
+      this.currentUserJobs =
+        await this.publicJobService.getOpenPublicJobsByUser(
+          this.currentUser.address
         )
+      for (let i = 0; i < this.currentUserJobs.length; i++) {
+        this.currentUserJobs[i].canInvite =
+          await this.publicJobService.canInvite(
+            this.currentUserJobs[i].id,
+            this.userAddress
+          )
       }
       this.loadingJobs = false
       this.lastPage =
         Math.ceil(this.currentUserJobs.length / this.pageLimit) - 1
-        
-      if (this.route.snapshot.queryParams['nextAction'] === 'chat') this.chatUser()
+
+      if (this.route.snapshot.queryParams['nextAction'] === 'chat')
+        this.chatUser()
     }
   }
 
@@ -101,7 +110,9 @@ export class AboutComponent implements OnInit {
       if (user) {
         this.chatService.createNewChannel(this.currentUser, this.userModel)
       } else {
-        this.router.navigate(['auth/login'], { queryParams: { returnUrl: this.router.url, nextAction: 'chat' } })
+        this.router.navigate(['auth/login'], {
+          queryParams: { returnUrl: this.router.url, nextAction: 'chat' },
+        })
       }
     })
   }

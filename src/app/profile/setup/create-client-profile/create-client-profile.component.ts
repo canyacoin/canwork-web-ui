@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnInit, Directive } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { User, UserState, UserType } from '@class/user'
@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs'
 
 import * as moment from 'moment-timezone'
 
+@Directive()
 @Component({
   selector: 'app-create-client-profile',
   templateUrl: './create-client-profile.component.html',
@@ -67,7 +68,10 @@ export class CreateClientProfileComponent implements OnInit {
     this.stepperSteps = Object.values(this.steps)
     this.currentStep = this.stepperSteps[0]
     this.returnUrl = '/'
-    if (this.route.snapshot.queryParams['returnUrl']) this.returnUrl = decodeURIComponent(this.route.snapshot.queryParams['returnUrl'])
+    if (this.route.snapshot.queryParams['returnUrl'])
+      this.returnUrl = decodeURIComponent(
+        this.route.snapshot.queryParams['returnUrl']
+      )
   }
 
   buildForm() {

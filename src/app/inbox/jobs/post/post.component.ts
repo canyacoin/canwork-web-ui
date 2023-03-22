@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, Directive } from '@angular/core'
 import {
   FormBuilder,
   FormGroup,
@@ -31,6 +31,7 @@ import * as _ from 'lodash'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
+@Directive()
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
@@ -214,7 +215,7 @@ export class PostComponent implements OnInit, OnDestroy {
       this.activatedRoute.snapshot.params['jobId'] !== ''
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       this.currentUser = user
-      this.activatedRoute.params.take(1).subscribe(params => {
+      this.activatedRoute.params.take(1).subscribe((params) => {
         if (
           params['address'] &&
           params['address'] !== this.currentUser.address
@@ -242,7 +243,7 @@ export class PostComponent implements OnInit, OnDestroy {
         this.jobId = this.activatedRoute.snapshot.params['jobId']
         this.jobSub = this.publicJobService
           .getPublicJob(this.activatedRoute.snapshot.params['jobId'])
-          .subscribe(result => {
+          .subscribe((result) => {
             if (result) {
               const canEdit = result.clientId === this.currentUser.address
               if (canEdit) {
@@ -336,11 +337,12 @@ export class PostComponent implements OnInit, OnDestroy {
           file.name,
           file.size
         )
-        const upload: Upload = await this.uploadService.uploadJobAttachmentToStorage(
-          this.jobId,
-          this.currentUpload,
-          file
-        )
+        const upload: Upload =
+          await this.uploadService.uploadJobAttachmentToStorage(
+            this.jobId,
+            this.currentUpload,
+            file
+          )
         if (upload) {
           this.uploadedFile = upload
         } else {
@@ -462,14 +464,14 @@ export class PostComponent implements OnInit, OnDestroy {
       tags =
         this.postForm.value.skills === ''
           ? []
-          : this.postForm.value.skills.split(',').map(item => item.trim())
+          : this.postForm.value.skills.split(',').map((item) => item.trim())
     } else {
       tags =
         this.shareableJobForm.value.skills === ''
           ? []
           : this.shareableJobForm.value.skills
               .split(',')
-              .map(item => item.trim())
+              .map((item) => item.trim())
     }
     if (tags.length > 6) {
       tags = tags.slice(0, 6)
@@ -589,7 +591,7 @@ export class PostComponent implements OnInit, OnDestroy {
           }
           this.isSending = false
         },
-        error => {
+        (error) => {
           let errorMsg = 'Network error'
           if (!!error && !!error.error && !!error.error.message)
             errorMsg = error.error.message
@@ -619,7 +621,7 @@ export class PostComponent implements OnInit, OnDestroy {
           ? []
           : this.shareableJobForm.value.skills
               .split(',')
-              .map(item => item.trim())
+              .map((item) => item.trim())
       if (tags.length > 6) {
         tags = tags.slice(0, 6)
       }

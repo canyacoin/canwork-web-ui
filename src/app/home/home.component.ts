@@ -1,5 +1,5 @@
 import { providerTypeArray } from './../const/providerTypes'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Directive } from '@angular/core'
 import { Router } from '@angular/router'
 import { environment } from '@env/environment'
 import { AuthService } from '@service/auth.service'
@@ -11,6 +11,7 @@ import { NavService } from '../core-services/nav.service'
 declare var require: any
 const algoliasearch = require('algoliasearch')
 
+@Directive()
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -48,9 +49,10 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     const ua = window.navigator.userAgent
-    this.isOnMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
-      ua
-    )
+    this.isOnMobile =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
+        ua
+      )
     this.nav.setHideSearchBar(true)
     this.authSub = this.auth.currentUser$.subscribe((user: User) => {
       if (this.currentUser !== user) {
@@ -98,7 +100,7 @@ export class HomeComponent implements OnInit {
     let newArray = []
     this.algoliaIndex
       .search({ query: searchQuery })
-      .then(res => {
+      .then((res) => {
         const result = res.hits
         for (let i = 0; i < result.length; i++) {
           // TODO: Add a dummy/placeholder if < 3 profiles found?
@@ -121,7 +123,7 @@ export class HomeComponent implements OnInit {
         }
         newArray.sort((a, b) => b.rating.count - a.rating.count)
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err)
       })
     this.tempProviderArray = newArray

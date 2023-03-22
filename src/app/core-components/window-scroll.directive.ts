@@ -2,6 +2,8 @@ import { Directive, Input, NgZone, OnDestroy, OnInit } from '@angular/core'
 
 import { NavService } from '../core-services/nav.service'
 
+@Directive()
+@Directive()
 @Directive({
   selector: '[appWindowScroll]',
 })
@@ -17,7 +19,7 @@ export class WindowScrollDirective implements OnInit, OnDestroy {
 
     try {
       const options = Object.defineProperty({}, 'passive', {
-        get: function() {
+        get: function () {
           passiveSupported = true
         },
       })

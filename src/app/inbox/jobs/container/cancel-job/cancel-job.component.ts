@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Directive } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { CanPay } from '@canpay-lib/lib'
 import { Job } from '@class/job'
@@ -6,6 +6,8 @@ import { JobService } from '@service/job.service'
 import 'rxjs/add/operator/take'
 
 import { environment } from '../../../../../environments/environment'
+
+@Directive()
 @Component({
   selector: 'app-cancel-job',
   templateUrl: './cancel-job.component.html',

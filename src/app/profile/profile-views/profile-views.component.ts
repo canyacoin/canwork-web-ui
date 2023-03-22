@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, Directive } from '@angular/core'
 import { Subscription } from 'rxjs'
 import * as moment from 'moment'
 import { User } from '../../core-classes/user'
@@ -7,6 +7,7 @@ import { AngularFireFunctions } from '@angular/fire/functions'
 import { assoc, pipe } from 'ramda'
 import { SelectParams } from '../../../../functions/src/firestore'
 
+@Directive()
 @Component({
   selector: 'app-profile-views',
   templateUrl: './profile-views.component.html',
@@ -38,7 +39,7 @@ export class ProfileViewsComponent implements OnInit, OnDestroy {
             .toPromise()
 
           this.loading = false
-          this.users = visitors.map(visitor =>
+          this.users = visitors.map((visitor) =>
             pipe(
               assoc('@type', 'Person'), // hack: see more functions/src/firestore.ts
               assoc('humanisedDate', moment(visitor.timestamp, 'x').fromNow())
@@ -46,7 +47,7 @@ export class ProfileViewsComponent implements OnInit, OnDestroy {
           )
         }
       },
-      error => {
+      (error) => {
         console.error('! unable to retrieve currentUser data:', error)
       }
     )

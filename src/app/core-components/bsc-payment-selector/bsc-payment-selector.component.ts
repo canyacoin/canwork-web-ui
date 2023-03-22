@@ -1,5 +1,12 @@
 import { Location } from '@angular/common'
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  Directive,
+} from '@angular/core'
 import { Router } from '@angular/router'
 
 import { BehaviorSubject } from 'rxjs'
@@ -14,13 +21,16 @@ import { bepAssetData } from '@canpay-lib/lib' // todo
 
 import { ToastrService } from 'ngx-toastr'
 
+@Directive()
 @Component({
   selector: 'app-bsc-payment-selector',
   templateUrl: './bsc-payment-selector.component.html',
   styleUrls: ['./bsc-payment-selector.component.css'],
 })
-export class BscPaymentSelectorComponent extends OnDestroyComponent
-  implements OnInit {
+export class BscPaymentSelectorComponent
+  extends OnDestroyComponent
+  implements OnInit
+{
   @Input() jobBudgetUsd = 0
   @Input() jobId = ''
   @Input() providerAddress = ''
@@ -45,7 +55,7 @@ export class BscPaymentSelectorComponent extends OnDestroyComponent
   ngOnInit() {
     this.bscService.events$
       .pipe(take(1)) // unsubscribe on destroy
-      .subscribe(async event => {
+      .subscribe(async (event) => {
         if (!event) {
           this.address = false
           return

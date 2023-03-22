@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnInit, Directive } from '@angular/core'
 import { AngularFirestore } from 'angularfire2/firestore'
 import { User } from '../../../core-classes/user'
 import { AngularFireFunctions } from '@angular/fire/functions'
 import { SelectParams } from '../../../../../functions/src/firestore'
 
+@Directive()
 @Component({
   selector: 'app-profile-visitors',
   templateUrl: './visitors.component.html',

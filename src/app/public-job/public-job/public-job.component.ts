@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Component, OnInit, OnDestroy, Directive } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { Bid, Job, JobState } from '@class/job'
@@ -12,6 +12,7 @@ import { take } from 'rxjs/operators'
 import { environment } from '@env/environment'
 declare var $: any
 
+@Directive()
 @Component({
   selector: 'app-public-job',
   templateUrl: './public-job.component.html',
@@ -66,11 +67,11 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.shareableLink = environment.shareBaseUrl
-    this.activatedRoute.params.pipe(take(1)).subscribe(params => {
+    this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
       if (params['jobId']) {
         this.jobSub = this.publicJobsService
           .getPublicJob(params['jobId'])
-          .subscribe(publicJob => {
+          .subscribe((publicJob) => {
             if (publicJob === undefined) {
               this.jobExists = false
               this.canSee = false
@@ -80,7 +81,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
               this.initJob(this.job)
               this.bidsSub = this.publicJobsService
                 .getPublicJobBids(params['jobId'])
-                .subscribe(result => {
+                .subscribe((result) => {
                   this.bids = result || []
                   if (this.bids.length > 3) {
                     this.recentBids = this.bids.slice(0, 3)
@@ -93,7 +94,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
       } else if (params['slug']) {
         this.jobSub = this.publicJobsService
           .getPublicJobBySlug(params['slug'])
-          .subscribe(publicJob => {
+          .subscribe((publicJob) => {
             //console.log(publicJob === null)
             if (publicJob === null) {
               this.jobExists = false
@@ -104,7 +105,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
               this.initJob(this.job)
               this.bidsSub = this.publicJobsService
                 .getPublicJobBids(publicJob.id)
-                .subscribe(result => {
+                .subscribe((result) => {
                   this.bids = result || []
                   if (this.bids.length > 3) {
                     this.recentBids = this.bids.slice(0, 3)
@@ -239,7 +240,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     document.execCommand('copy')
     document.body.removeChild(selBox)
     document.getElementById('copied').style.display = 'block'
-    setTimeout(function() {
+    setTimeout(function () {
       document.getElementById('copied').style.display = 'none'
     }, 2000)
   }
@@ -255,7 +256,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
           let getUrl: Subscription
           const filePath = attachment[0].filePath
           const fileRef = this.storage.ref(filePath)
-          getUrl = fileRef.getDownloadURL().subscribe(result => {
+          getUrl = fileRef.getDownloadURL().subscribe((result) => {
             this.job.information.attachments[0].url = result
           })
         }

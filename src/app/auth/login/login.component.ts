@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Directive } from '@angular/core'
 import { Headers } from '@angular/http'
 import { ActivatedRoute, Router } from '@angular/router'
 
@@ -8,6 +8,7 @@ import { User } from '../../core-classes/user'
 import { AuthService } from '../../core-services/auth.service'
 import { UserService } from '../../core-services/user.service'
 
+@Directive()
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -72,19 +73,22 @@ export class LoginComponent implements OnInit {
       firebase
         .auth()
         .currentUser.getIdToken(/* forceRefresh */ true)
-        .then(idToken => {
+        .then((idToken) => {
           window.sessionStorage.accessToken = idToken
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('! jwt token was not stored in session storage ', error)
           alert('Sorry, we encountered an unknown error')
         })
       this.authService.setUser(user)
-      
-      if (this.route.snapshot.queryParams['nextAction']) 
-        this.router.navigate([this.returnUrl], { queryParams: {nextAction: this.route.snapshot.queryParams['nextAction']}})
-      else
-        this.router.navigate([this.returnUrl])
+
+      if (this.route.snapshot.queryParams['nextAction'])
+        this.router.navigate([this.returnUrl], {
+          queryParams: {
+            nextAction: this.route.snapshot.queryParams['nextAction'],
+          },
+        })
+      else this.router.navigate([this.returnUrl])
     } else {
       //console.log('+ detected new user:', userDetails.email, userDetails)
       this.initialiseUserAndRedirect(userDetails)
@@ -94,11 +98,11 @@ export class LoginComponent implements OnInit {
   async initialiseUserAndRedirect(user: User) {
     //console.log(`initialise`)
     this.userService.saveUser(user).then(
-      res => {
+      (res) => {
         this.authService.setUser(user)
         this.router.navigate(['/profile/setup'])
       },
-      err => {
+      (err) => {
         console.log('onLogin - err', err)
       }
     )
