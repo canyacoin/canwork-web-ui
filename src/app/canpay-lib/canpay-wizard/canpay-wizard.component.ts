@@ -5,11 +5,13 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  Directive,
 } from '@angular/core'
 
 import { PaymentSummary } from '../interfaces'
 import { FormDataService } from '../services/formData.service'
 
+@Directive()
 @Component({
   selector: 'canpay-wizard',
   templateUrl: './canpay-wizard.component.html',

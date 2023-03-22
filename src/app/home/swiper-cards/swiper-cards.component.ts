@@ -1,8 +1,9 @@
-import { Component, AfterViewInit, OnDestroy } from '@angular/core'
+import { Component, AfterViewInit, OnDestroy, Directive } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 
 import { Subscription } from 'rxjs'
 
+@Directive()
 @Component({
   selector: 'app-swiper-cards',
   templateUrl: './swiper-cards.component.html',
@@ -14,7 +15,7 @@ export class SwiperCardsComponent implements AfterViewInit, OnDestroy {
   constructor(private activatedRoute: ActivatedRoute) {}
 
   ngAfterViewInit() {
-    this.routeSub = this.activatedRoute.url.subscribe(url => {
+    this.routeSub = this.activatedRoute.url.subscribe((url) => {
       this.loadSlides()
     })
   }

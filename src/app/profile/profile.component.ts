@@ -1,5 +1,5 @@
 import { Location } from '@angular/common'
-import { Component, Input, OnDestroy, OnInit } from '@angular/core'
+import { Component, Input, OnDestroy, OnInit, Directive } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
@@ -10,6 +10,7 @@ import { SeoService } from '@service/seo.service'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
+@Directive()
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -43,10 +44,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
       (user: User) => {
         if (user !== this.currentUser) {
           this.currentUser = user
-          this.activatedRoute.params.pipe(take(1)).subscribe(params => {
+          this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
             this.initUsers(this.currentUser, params)
           })
-          this.activatedRoute.queryParams.subscribe(params => {
+          this.activatedRoute.queryParams.subscribe((params) => {
             const redirected = this.redirectToUniqueUrlIfNecessary(params)
             if (!redirected) {
               this.notifyAddAddressIfNecessary()
@@ -55,7 +56,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           })
         }
       },
-      error => {
+      (error) => {
         console.error('! unable to retrieve currentUser data:', error)
       }
     )
@@ -87,7 +88,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     if (address && address !== 'setup') {
       this.loadUser(params)
     } else if (slug) {
-      this.userService.getUserBySlug(slug).then(user => {
+      this.userService.getUserBySlug(slug).then((user) => {
         if (user) {
           this.userModel = user
           this.seoService.updateAllSeoProperties(
@@ -116,7 +117,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.saveWhoViewProfile()
         this.addToViewedProfileList()
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('loadUser: error')
       })
   }

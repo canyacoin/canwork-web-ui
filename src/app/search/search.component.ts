@@ -6,6 +6,7 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
+  Directive,
 } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
@@ -27,6 +28,7 @@ import { AuthService } from '../core-services/auth.service'
 import { NavService } from '../core-services/nav.service'
 import { UserService } from '../core-services/user.service'
 
+@Directive()
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -78,7 +80,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     private auth: AuthService,
     private router: Router
   ) {
-    this.routeSub = this.activatedRoute.queryParams.subscribe(params => {
+    this.routeSub = this.activatedRoute.queryParams.subscribe((params) => {
       if (this.query === '') {
         this.query = params['query']
       }
@@ -244,13 +246,13 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onChooseCategory(categoryName) {
-    const isInArray = this.categoryFilters.find(function(element) {
+    const isInArray = this.categoryFilters.find(function (element) {
       return element === categoryName
     })
     if (typeof isInArray === 'undefined') {
       this.categoryFilters.push(categoryName)
     } else {
-      const index = this.categoryFilters.findIndex(function(element) {
+      const index = this.categoryFilters.findIndex(function (element) {
         return element === categoryName
       })
       this.categoryFilters.splice(index, 1)
@@ -307,9 +309,11 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getInputQuery() {
-    const value = (document.getElementsByClassName(
-      'ais-SearchBox-input'
-    )[0] as HTMLInputElement).value
+    const value = (
+      document.getElementsByClassName(
+        'ais-SearchBox-input'
+      )[0] as HTMLInputElement
+    ).value
     return value
   }
 

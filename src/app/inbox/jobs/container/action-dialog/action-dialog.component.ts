@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Directive } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Job, PaymentType } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
@@ -19,6 +19,7 @@ export class ActionDialogOptions {
   }
 }
 
+@Directive()
 @Component({
   selector: 'app-action-dialog',
   templateUrl: './action-dialog.component.html',
@@ -26,7 +27,8 @@ export class ActionDialogOptions {
 })
 export class ActionDialogComponent
   extends DialogComponent<ActionDialogOptions, boolean>
-  implements ActionDialogOptions, OnInit {
+  implements ActionDialogOptions, OnInit
+{
   actionType: ActionType
   userType: UserType
 

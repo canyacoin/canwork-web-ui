@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnInit, Directive } from '@angular/core'
 
 import { User } from '@class/user'
 
+@Directive()
 @Component({
   selector: 'app-profile-bio',
   templateUrl: './bio.component.html',

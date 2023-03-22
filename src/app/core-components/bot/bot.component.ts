@@ -7,13 +7,21 @@ import {
   transition,
   trigger,
 } from '@angular/animations'
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  Directive,
+} from '@angular/core'
 import { Router } from '@angular/router'
 import * as randomColor from 'randomcolor'
 
 import { Subject } from 'rxjs'
 import { take } from 'rxjs/operators'
 
+@Directive()
 @Component({
   selector: 'app-bot',
   templateUrl: './bot.component.html',
@@ -132,8 +140,8 @@ export class BotComponent implements OnInit {
     setTimeout(() => {
       if (
         (<any>window).$('html, body') &&
-        ((<any>window).$('#section-end') &&
-          (<any>window).$('#section-end').offset())
+        (<any>window).$('#section-end') &&
+        (<any>window).$('#section-end').offset()
       ) {
         ;(<any>window)
           .$('html, body')
@@ -146,7 +154,7 @@ export class BotComponent implements OnInit {
   }
 
   async addBotMessage(message: string) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const i =
         this.bot.push({ message: message, typing: true, from: 'bot' }) - 1
       setTimeout(() => {
@@ -159,7 +167,7 @@ export class BotComponent implements OnInit {
   }
 
   async addBotActions(object: any) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const tmpActions = {}
       tmpActions['field'] = object.field
       tmpActions['actions'] = object.actions
@@ -183,7 +191,7 @@ export class BotComponent implements OnInit {
   }
 
   async addBotInput(input: any) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const tmpInput = input
       tmpInput['typing'] = false
       tmpInput['input'] = true

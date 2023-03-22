@@ -5,12 +5,14 @@ import {
   Output,
   EventEmitter,
   OnDestroy,
+  Directive,
 } from '@angular/core'
 import { User } from '../../../core-classes/user'
 import { Subscription } from 'rxjs'
 import { AngularFirestore } from 'angularfire2/firestore'
 import { CertificationsService } from '../../../core-services/certifications.service'
 
+@Directive()
 @Component({
   selector: 'app-certifications',
   templateUrl: './certifications.component.html',

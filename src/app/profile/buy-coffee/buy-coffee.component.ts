@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnInit, Directive } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { CanPay } from '@canpay-lib/lib'
 import { User } from '@class/user'
@@ -6,6 +6,7 @@ import { AuthService } from '@service/auth.service'
 import { ChatService } from '@service/chat.service'
 import { UserService } from '@service/user.service'
 
+@Directive()
 @Component({
   selector: 'app-buy-coffee',
   templateUrl: './buy-coffee.component.html',

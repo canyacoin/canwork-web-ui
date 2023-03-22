@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core'
+import { Component, Input, OnDestroy, OnInit, Directive } from '@angular/core'
 import { Router } from '@angular/router'
 import { AngularFirestore } from 'angularfire2/firestore'
 import { Subscription } from 'rxjs'
@@ -7,6 +7,7 @@ import { User } from '../../../core-classes/user'
 import { AuthService } from '../../../core-services/auth.service'
 import { ChatService } from '../../../core-services/chat.service'
 
+@Directive()
 @Component({
   selector: 'app-profile-portfolio',
   templateUrl: './portfolio.component.html',
@@ -47,7 +48,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   setPortfolio(address: string) {
     const portfolioRecords = this.afs.collection(
       `portfolio/${address}/work`,
-      ref => ref.orderBy('timestamp', 'desc')
+      (ref) => ref.orderBy('timestamp', 'desc')
     )
     this.portfolioSubscription = portfolioRecords.valueChanges().subscribe(
       (data: any) => {
@@ -56,7 +57,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
           Math.ceil(this.allPortfolioItems.length / this.pageLimit) - 1
         this.loaded = true
       },
-      error => {
+      (error) => {
         console.error('! unable to retrieve portfolio data:', error)
       }
     )

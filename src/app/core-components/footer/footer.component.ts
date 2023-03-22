@@ -1,9 +1,11 @@
 import { AuthService } from './../../core-services/auth.service'
 import { User } from './../../core-classes/user'
 import { providerTypeArray } from './../../const/providerTypes'
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Directive } from '@angular/core'
 
 declare var createCustomFooter: any
+
+@Directive()
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',

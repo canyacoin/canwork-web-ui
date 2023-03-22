@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnInit, Directive } from '@angular/core'
 import { createPopper, Placement } from '@popperjs/core'
 
+@Directive()
 @Component({
   selector: 'app-popper',
   templateUrl: './popper.component.html',
@@ -56,11 +57,11 @@ export class PopperComponent implements OnInit {
       const showEvents = ['focus', 'mouseenter']
       const hideEvents = ['blur', 'mouseleave']
 
-      showEvents.forEach(event => {
+      showEvents.forEach((event) => {
         targetEl.addEventListener(event, show)
       })
 
-      hideEvents.forEach(event => {
+      hideEvents.forEach((event) => {
         targetEl.addEventListener(event, hide)
       })
     }
