@@ -61,7 +61,7 @@
     "ngx-markdown": "^10.1.1",
     "ngx-order-pipe": "^2.0.1",
     "ngx-pagination": "^3.2.1",
-    "ngx-toastr": "10.1.0",
+    "ngx-toastr": "^12.1.0",
     "observable-input": "^2.0.1",
     "ramda": "^0.26.1",
     "random-js": "^2.1.0",
