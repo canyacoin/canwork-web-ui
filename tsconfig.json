@@ -7,7 +7,6 @@
     "declaration": false,
     "module": "es2020",
     "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "skipLibCheck": true, // https://github.com/storybookjs/storybook/issues/9463
     "target": "es2015",
