@@ -54,6 +54,7 @@ Setup (new)
 
 ```
 nvm use
+npm install -g yarn@1.22.19
 npm install
 npx husky install
 npx husky set .husky/pre-commit "npx pretty-quick --staged"
