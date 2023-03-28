@@ -10,9 +10,10 @@
   >
     <img src="assets/img/loader.svg" height="36px" alt="Loader" />
   </div>
+
   <div class="container">
     <div class="row">
-      <div class="col-lg-6">
+      <div class="col-sm-6" *ngIf="stats.count > 0">
         <div class="canya-seach-bar mb-3" style="background-color:white;">
           <h6
             style="color:#535353;padding: 5px 10px;font-weight:500;margin-top:8px;margin-bottom:0px;"
@@ -21,8 +22,15 @@
           </h6>
         </div>
       </div>
+      <div class="d-none d-sm-flex col"></div>
+      <div class="col col-sm-auto">
+        <div class="button-blue ml-auto mb-3" [routerLink]="['/inbox/post']">
+          Post a Job
+        </div>
+      </div>
     </div>
   </div>
+
   <div
     class="container py-10"
     style="min-height: 75vh"
@@ -151,22 +159,28 @@
       </div>
     </div>
   </div>
-  <div class="container py-15" *ngIf="allJobs && allJobs.length === 0">
+
+  <div class="container" *ngIf="allJobs && allJobs.length === 0">
     <div class="row">
       <div class="col-12 p-15 card text-center">
         <h5>There are no public jobs</h5>
-        <p *ngIf="isProvider">Check back later!</p>
-        <div *ngIf="!isProvider">
-          <span>Want to get something done?</span>
-          <br />
-          <a [routerLink]="['/inbox/post']">
-            <button
-              border-64
-              class="btn btn-sm btn-primary my-10 hidden-md-down"
-            >
-              POST A JOB
-            </button>
-          </a>
+        <div class="row" *ngIf="currentUser">
+          <div class="col-12">Want to get something done?</div>
+          <div class="col-auto mx-auto px-3 pb-3">
+            <div class="button-blue m-3" [routerLink]="['/inbox/post']">
+              Post a Job
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="!currentUser">
+          <div class="col-12">
+            Check back later, or login to create a new job
+          </div>
+          <div class="col-auto mx-auto px-3 pb-3">
+            <div class="button-blue m-3" [routerLink]="['/inbox/post']">
+              Login / Create Account
+            </div>
+          </div>
         </div>
       </div>
     </div>
