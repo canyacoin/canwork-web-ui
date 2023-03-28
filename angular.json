@@ -17,6 +17,15 @@
             "tsConfig": "src/tsconfig.app.json",
             "showCircularDependencies": false,
             "polyfills": "src/polyfills.ts",
+            "allowedCommonJsDependencies": [
+              "stream",
+              "assert",
+              "os",
+              "crypto",
+              "util",
+              "http",
+              "https"
+            ],
             "stylePreprocessorOptions": {
               "includePaths": ["src/assets/sass"]
             },

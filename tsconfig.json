@@ -23,7 +23,14 @@
       "@component/*": ["app/core-components/*"],
       "@config/*": ["app/core-config/*"],
       "@env/*": ["environments/*"],
-      "@extensions/*": ["./*.extensions.ts"]
+      "@extensions/*": ["./*.extensions.ts"],
+      "stream": ["../node_modules/stream-browserify"],
+      "assert": ["../node_modules/assert"],
+      "os": ["../node_modules/os-browserify"],
+      "crypto": ["../node_modules/crypto-browserify"],
+      "util": ["../node_modules/util"],
+      "http": ["../node_modules/stream-http"],
+      "https": ["../node_modules/https-browserify"]
     }
   },
   "angularCompilerOptions": {
