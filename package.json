@@ -7,7 +7,7 @@
     "start": "node --max_old_space_size=10240 ./node_modules/@angular/cli/bin/ng serve",
     "build:staging": "ng build --configuration production --configuration=staging",
     "build:prod": "ng build --configuration production --configuration=prod",
-    "build:heap": "node --max_old_space_size=10240 ./node_modules/@angular/cli/bin/ng build",
+    "build:debug": "node --max_old_space_size=10240 ./node_modules/@angular/cli/bin/ng build",
     "test": "ng test",
     "test:firestore": "jest",
     "test:firestore:watch": "firebase serve --only firestore & sleep 3s && jest --watch",
