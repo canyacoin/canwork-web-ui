@@ -18,29 +18,20 @@
               <p class="landing-hero-text">
                 CanWork is a digital freelance marketplace that connects top
                 tier freelancers with high value clients using BNB Smart Chain
-                payments and a secure smart-contract escrow system... and
-                there's no fees!
+                payments and a secure smart-contract escrow system. Only 1% fee.
               </p>
 
               <div class="py-2"></div>
               <div class="py-3"></div>
 
               <div class="landing-hero-cta-buttons">
-                <div class="button-blue mr-1 mb-1" [routerLink]="['/search']">
-                  Hire Pro Freelancers
-                </div>
                 <div
-                  class="button-white mr-1 mb-1"
-                  *ngIf="currentUser"
-                  [routerLink]="['/jobs']"
+                  class="button-blue mr-1 mb-1"
+                  [routerLink]="['/inbox/post']"
                 >
-                  Start Earning
+                  Post a Job
                 </div>
-                <div
-                  class="button-white mr-1 mb-1"
-                  *ngIf="!currentUser"
-                  [routerLink]="['/auth']"
-                >
+                <div class="button-white mr-1 mb-1" [routerLink]="['/jobs']">
                   Start Earning
                 </div>
               </div>
@@ -297,7 +288,7 @@
                 <div class="features-item-row-desc">
                   Connect and hire top professional freelancers in the crypto
                   space at no cost. Simply post a job. (Negligible BNBChain
-                  transaction fee excluded),
+                  transaction fee excluded).
                 </div>
               </div>
             </div>
@@ -420,18 +411,7 @@
             <div class="py-3"></div>
 
             <div class="features-item-button">
-              <div
-                class="button-blue"
-                *ngIf="currentUser"
-                [routerLink]="['/jobs']"
-              >
-                Start Earning on CanWork
-              </div>
-              <div
-                class="button-blue"
-                *ngIf="!currentUser"
-                [routerLink]="['/auth']"
-              >
+              <div class="button-blue" [routerLink]="['/jobs']">
                 Start Earning on CanWork
               </div>
             </div>
@@ -674,24 +654,24 @@
             blockchain technology
           </div>
           <div class="py-2"></div>
-          <div class="d-flex flex-wrap">
+          <div class="d-flex flex-wrap justify-content-center">
             <div
               class="button-blue features-item-button mx-auto my-1 ml-sm-auto mr-sm-1"
+              *ngIf="currentUser"
+              [routerLink]="['/inbox/post']"
+            >
+              Post a Job
+            </div>
+            <div
+              class="button-blue features-item-button mx-auto my-1 ml-sm-auto mr-sm-1"
+              *ngIf="!currentUser"
               [routerLink]="['/search']"
             >
               Hire Pro Freelancers
             </div>
             <div
               class="button-white features-item-button mx-auto my-1 ml-sm-1 mr-sm-auto"
-              *ngIf="currentUser"
               [routerLink]="['/jobs']"
-            >
-              Start Earning Crypto
-            </div>
-            <div
-              class="button-white features-item-button mx-auto my-1 ml-sm-1 mr-sm-auto"
-              *ngIf="!currentUser"
-              [routerLink]="['/auth']"
             >
               Start Earning Crypto
             </div>

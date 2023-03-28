@@ -28,7 +28,7 @@ export const providerTypeArray = [
     id: 'financial',
   },
   {
-    name: 'Marketing & Seo',
+    name: 'Marketing & SEO',
     img: 'marketing-seo.svg',
     // TODO: Update the copy content for descriptions (the design didnt have unique content for this)
     desc:

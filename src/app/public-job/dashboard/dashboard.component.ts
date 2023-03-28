@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit {
       id: 'designer',
     },
     {
-      name: 'Marketing & Seo',
+      name: 'Marketing & SEO',
       img: 'marketing.svg',
       id: 'marketing',
     },

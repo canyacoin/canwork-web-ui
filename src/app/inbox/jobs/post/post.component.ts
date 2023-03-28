@@ -89,7 +89,7 @@ export class PostComponent implements OnInit, OnDestroy {
       id: 'designer',
     },
     {
-      name: 'Marketing & Seo',
+      name: 'Marketing & SEO',
       img: 'marketing.svg',
       id: 'marketing',
     },
