@@ -3,7 +3,6 @@ import { Observable, interval, Subscription } from 'rxjs'
 
 import { User, UserType } from '../../../core-classes/user'
 
-@Directive()
 @Component({
   selector: 'app-profile-timezone',
   templateUrl: './timezone.component.html',

@@ -9,7 +9,6 @@ import { AngularFirestore } from 'angularfire2/firestore'
 import { Subscription } from 'rxjs'
 import { BscService, EventTypeBsc } from '@service/bsc.service'
 
-@Directive()
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',

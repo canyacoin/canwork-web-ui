@@ -9,7 +9,6 @@ import { ToastrService } from 'ngx-toastr'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
-@Directive()
 @Component({
   selector: 'app-job-bids',
   templateUrl: './job-bids.component.html',

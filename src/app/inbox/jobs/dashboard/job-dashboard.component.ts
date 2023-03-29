@@ -30,7 +30,6 @@ import { UserService } from '@service/user.service'
 
 import { NgxPaginationModule } from 'ngx-pagination'
 
-@Directive()
 @Component({
   selector: 'app-job-dashboard',
   templateUrl: './job-dashboard.component.html',

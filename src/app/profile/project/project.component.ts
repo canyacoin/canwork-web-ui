@@ -9,7 +9,6 @@ import { Work } from '../../core-classes/portfolio'
 import { User } from '../../core-classes/user'
 import { AuthService } from '../../core-services/auth.service'
 
-@Directive()
 @Component({
   selector: 'app-project',
   templateUrl: './project.component.html',

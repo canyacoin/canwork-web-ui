@@ -6,7 +6,6 @@ import { AuthService } from '@service/auth.service'
 import { ChatService } from '@service/chat.service'
 import { UserService } from '@service/user.service'
 
-@Directive()
 @Component({
   selector: 'app-buy-coffee',
   templateUrl: './buy-coffee.component.html',

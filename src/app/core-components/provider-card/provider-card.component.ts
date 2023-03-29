@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Directive } from '@angular/core'
 import * as union from 'lodash/union'
 
-@Directive()
 @Component({
   selector: 'app-provider-card',
   templateUrl: './provider-card.component.html',

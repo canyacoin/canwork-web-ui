@@ -7,7 +7,6 @@ import { User } from '../../../core-classes/user'
 import { AuthService } from '../../../core-services/auth.service'
 import { ChatService } from '../../../core-services/chat.service'
 
-@Directive()
 @Component({
   selector: 'app-profile-portfolio',
   templateUrl: './portfolio.component.html',

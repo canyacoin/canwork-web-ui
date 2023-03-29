@@ -31,7 +31,6 @@ import * as _ from 'lodash'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
-@Directive()
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',

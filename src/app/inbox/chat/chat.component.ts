@@ -17,7 +17,6 @@ import {
 } from '@service/chat.service'
 import { UserService } from '@service/user.service'
 
-@Directive()
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',

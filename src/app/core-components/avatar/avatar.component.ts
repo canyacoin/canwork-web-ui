@@ -8,7 +8,6 @@ import {
 } from '@angular/core'
 import { Observable, from } from 'rxjs'
 
-@Directive()
 @Component({
   selector: 'app-avatar',
   templateUrl: './avatar.component.html',

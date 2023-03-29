@@ -1,6 +1,5 @@
 import { Component, OnInit, Directive } from '@angular/core'
 
-@Directive()
 @Component({
   selector: 'app-scroll-top',
   templateUrl: './scroll-top.component.html',

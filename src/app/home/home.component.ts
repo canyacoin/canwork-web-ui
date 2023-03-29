@@ -11,7 +11,6 @@ import { NavService } from '../core-services/nav.service'
 declare var require: any
 const algoliasearch = require('algoliasearch')
 
-@Directive()
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',

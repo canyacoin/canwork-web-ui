@@ -8,7 +8,6 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import { User } from '../../core-classes/user'
 import { Subscription } from 'rxjs/Subscription'
 
-@Directive()
 @Component({
   selector: 'app-certifications-form',
   templateUrl: './certifications-form.component.html',

@@ -3,7 +3,6 @@ import { ToastrService } from 'ngx-toastr'
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 
-@Directive()
 @Component({
   selector: 'ledger-modal',
   templateUrl: './ledger-modal.component.html',

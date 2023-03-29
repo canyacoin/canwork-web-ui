@@ -4,7 +4,6 @@ import { User } from '../../../core-classes/user'
 import { AngularFireFunctions } from '@angular/fire/functions'
 import { SelectParams } from '../../../../../functions/src/firestore'
 
-@Directive()
 @Component({
   selector: 'app-profile-visitors',
   templateUrl: './visitors.component.html',

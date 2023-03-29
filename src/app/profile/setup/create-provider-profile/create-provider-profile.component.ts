@@ -13,7 +13,6 @@ import { BscService } from '@service/bsc.service'
 
 import * as moment from 'moment-timezone'
 
-@Directive()
 @Component({
   selector: 'app-create-provider-profile',
   templateUrl: './create-provider-profile.component.html',

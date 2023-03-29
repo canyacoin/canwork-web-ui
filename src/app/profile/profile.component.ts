@@ -10,7 +10,6 @@ import { SeoService } from '@service/seo.service'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
-@Directive()
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',

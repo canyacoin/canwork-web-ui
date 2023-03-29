@@ -5,7 +5,6 @@ import { UserCategory } from '../core-classes/user'
 declare var require: any
 const algoliasearch = require('algoliasearch')
 
-@Directive()
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',

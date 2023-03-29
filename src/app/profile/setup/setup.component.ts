@@ -6,7 +6,6 @@ import { User, UserState, UserType } from '../../core-classes/user'
 import { AuthService } from '../../core-services/auth.service'
 import { UserService } from '../../core-services/user.service'
 
-@Directive()
 @Component({
   selector: 'app-setup',
   templateUrl: './setup.component.html',

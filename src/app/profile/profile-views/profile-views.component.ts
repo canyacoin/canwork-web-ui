@@ -7,7 +7,6 @@ import { AngularFireFunctions } from '@angular/fire/functions'
 import { assoc, pipe } from 'ramda'
 import { SelectParams } from '../../../../functions/src/firestore'
 
-@Directive()
 @Component({
   selector: 'app-profile-views',
   templateUrl: './profile-views.component.html',

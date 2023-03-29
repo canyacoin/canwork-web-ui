@@ -8,7 +8,6 @@ import { takeUntil } from 'rxjs/operators'
 import { OnDestroyComponent } from '@class/on-destroy'
 import { environment } from '@env/environment'
 
-@Directive()
 @Component({
   selector: 'app-wallet-bnb-assets',
   templateUrl: './wallet-bnb-assets.component.html',

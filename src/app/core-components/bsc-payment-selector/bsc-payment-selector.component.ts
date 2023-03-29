@@ -21,7 +21,6 @@ import { bepAssetData } from '@canpay-lib/lib' // todo
 
 import { ToastrService } from 'ngx-toastr'
 
-@Directive()
 @Component({
   selector: 'app-bsc-payment-selector',
   templateUrl: './bsc-payment-selector.component.html',

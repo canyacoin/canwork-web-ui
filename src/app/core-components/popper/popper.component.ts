@@ -1,7 +1,6 @@
 import { Component, Input, OnInit, Directive } from '@angular/core'
 import { createPopper, Placement } from '@popperjs/core'
 
-@Directive()
 @Component({
   selector: 'app-popper',
   templateUrl: './popper.component.html',

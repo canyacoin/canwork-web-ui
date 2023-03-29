@@ -7,7 +7,6 @@ import 'rxjs/add/operator/take'
 
 import { environment } from '../../../../../environments/environment'
 
-@Directive()
 @Component({
   selector: 'app-cancel-job',
   templateUrl: './cancel-job.component.html',

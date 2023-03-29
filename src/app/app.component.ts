@@ -3,7 +3,6 @@ import { NavigationEnd, Router } from '@angular/router'
 import { ToastrService } from 'ngx-toastr'
 import { AuthService } from '@service/auth.service'
 
-@Directive()
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

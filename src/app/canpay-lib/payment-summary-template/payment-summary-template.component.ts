@@ -8,7 +8,6 @@ import {
 } from '@angular/core'
 import { PaymentSummary } from '../interfaces'
 
-@Directive()
 @Component({
   selector: 'payment-summary-template',
   templateUrl: './payment-summary-template.component.html',

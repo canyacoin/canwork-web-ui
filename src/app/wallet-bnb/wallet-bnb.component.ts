@@ -11,7 +11,6 @@ import { ToastrService } from 'ngx-toastr'
 import { AuthService } from '@service/auth.service'
 import { WalletApp } from '@service/bsc.service'
 
-@Directive()
 @Component({
   selector: 'app-wallet-bnb',
   templateUrl: './wallet-bnb.component.html',

@@ -21,7 +21,6 @@ import * as randomColor from 'randomcolor'
 import { Subject } from 'rxjs'
 import { take } from 'rxjs/operators'
 
-@Directive()
 @Component({
   selector: 'app-bot',
   templateUrl: './bot.component.html',

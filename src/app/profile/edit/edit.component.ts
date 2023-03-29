@@ -20,7 +20,6 @@ import * as moment from 'moment-timezone'
 import { BscValidator } from '@validator/bsc.validator'
 import { BscService } from '@service/bsc.service'
 
-@Directive()
 @Component({
   selector: 'app-profile-edit',
   templateUrl: './edit.component.html',

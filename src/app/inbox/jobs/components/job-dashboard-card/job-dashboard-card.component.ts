@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, Directive } from '@angular/core'
 
-@Directive()
 @Component({
   selector: 'app-job-dashboard-card',
   templateUrl: './job-dashboard-card.component.html',

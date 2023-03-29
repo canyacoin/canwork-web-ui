@@ -12,7 +12,6 @@ import { take } from 'rxjs/operators'
 import { environment } from '@env/environment'
 declare var $: any
 
-@Directive()
 @Component({
   selector: 'app-public-job',
   templateUrl: './public-job.component.html',

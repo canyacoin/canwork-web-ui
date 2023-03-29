@@ -11,7 +11,6 @@ import {
 import { PaymentSummary } from '../interfaces'
 import { FormDataService } from '../services/formData.service'
 
-@Directive()
 @Component({
   selector: 'canpay-wizard',
   templateUrl: './canpay-wizard.component.html',

@@ -14,7 +14,6 @@ export class SkillTag {
   tag: string
 }
 
-@Directive()
 @Component({
   selector: 'app-skill-tags-selection',
   templateUrl: './skill-tags-selection.component.html',

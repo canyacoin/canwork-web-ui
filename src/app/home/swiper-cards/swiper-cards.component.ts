@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router'
 
 import { Subscription } from 'rxjs'
 
-@Directive()
 @Component({
   selector: 'app-swiper-cards',
   templateUrl: './swiper-cards.component.html',

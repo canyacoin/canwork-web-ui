@@ -28,7 +28,6 @@ import { AuthService } from '../core-services/auth.service'
 import { NavService } from '../core-services/nav.service'
 import { UserService } from '../core-services/user.service'
 
-@Directive()
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',

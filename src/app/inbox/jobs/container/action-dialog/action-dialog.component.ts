@@ -19,7 +19,6 @@ export class ActionDialogOptions {
   }
 }
 
-@Directive()
 @Component({
   selector: 'app-action-dialog',
   templateUrl: './action-dialog.component.html',

@@ -13,7 +13,6 @@ import { UserService } from '@service/user.service'
 import { BscService, BepChain } from '@service/bsc.service'
 import { TransactionService } from '@service/transaction.service'
 
-@Directive()
 @Component({
   selector: 'app-enter-escrow-bsc',
   templateUrl: './enter-escrow-bsc.component.html',

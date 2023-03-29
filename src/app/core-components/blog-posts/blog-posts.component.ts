@@ -4,7 +4,6 @@ import {
   AngularFirestoreCollection,
 } from 'angularfire2/firestore'
 
-@Directive()
 @Component({
   selector: 'app-blog-posts',
   templateUrl: './blog-posts.component.html',

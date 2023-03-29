@@ -10,7 +10,6 @@ import { ToastrService } from 'ngx-toastr'
 
 import { PaymentSummary } from '../interfaces'
 
-@Directive()
 @Component({
   selector: 'payment-summary',
   templateUrl: './payment-summary.component.html',

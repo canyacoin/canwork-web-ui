@@ -22,7 +22,6 @@ import {
   ActionDialogOptions,
 } from '../action-dialog/action-dialog.component'
 
-@Directive()
 @Component({
   selector: 'app-job-details',
   templateUrl: './job-details.component.html',

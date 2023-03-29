@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, Directive } from '@angular/core'
 
-@Directive()
 @Component({
   selector: 'app-v-stepper',
   templateUrl: './v-stepper.component.html',

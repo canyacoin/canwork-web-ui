@@ -14,7 +14,6 @@ import { AuthService } from '@service/auth.service'
 import { ChatService } from '@service/chat.service'
 import { PublicJobService } from '@service/public-job.service'
 
-@Directive()
 @Component({
   selector: 'app-profile-about',
   templateUrl: './about.component.html',

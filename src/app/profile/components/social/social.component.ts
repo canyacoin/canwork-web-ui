@@ -4,7 +4,6 @@ import { environment } from '@env/environment'
 
 declare let escape: any
 
-@Directive()
 @Component({
   selector: 'app-profile-social',
   templateUrl: './social.component.html',

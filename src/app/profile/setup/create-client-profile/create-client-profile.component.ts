@@ -10,7 +10,6 @@ import { Subscription } from 'rxjs'
 
 import * as moment from 'moment-timezone'
 
-@Directive()
 @Component({
   selector: 'app-create-client-profile',
   templateUrl: './create-client-profile.component.html',

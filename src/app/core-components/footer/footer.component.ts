@@ -5,7 +5,6 @@ import { Component, OnInit, Directive } from '@angular/core'
 
 declare var createCustomFooter: any
 
-@Directive()
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',

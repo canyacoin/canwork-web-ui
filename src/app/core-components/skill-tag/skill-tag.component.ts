@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, Directive } from '@angular/core'
 
-@Directive()
 @Component({
   selector: 'app-skill-tag',
   templateUrl: './skill-tag.component.html',

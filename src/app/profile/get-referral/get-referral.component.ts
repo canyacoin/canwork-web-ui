@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Directive } from '@angular/core'
 import { User } from '@class/user'
 import { environment } from '@env/environment'
 
-@Directive()
 @Component({
   selector: 'app-profile-get-referral',
   templateUrl: './get-referral.component.html',

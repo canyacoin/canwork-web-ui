@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Directive } from '@angular/core'
 
-@Directive()
 @Component({
   selector: 'app-search-filter-option',
   templateUrl: './search-filter-option.component.html',

@@ -13,7 +13,6 @@ export enum ImageState {
   Loaded,
 }
 
-@Directive()
 @Component({
   selector: 'app-dynamic-coin',
   templateUrl: './dynamic-coin.component.html',
