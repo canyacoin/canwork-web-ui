@@ -9,7 +9,6 @@ import { Subscription } from 'rxjs'
 import { User, UserType } from '@class/user'
 import { NgxPaginationModule } from 'ngx-pagination'
 
-@Directive()
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
