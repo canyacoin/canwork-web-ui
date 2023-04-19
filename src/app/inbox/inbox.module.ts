@@ -29,7 +29,6 @@ import { BscPaymentSelectorComponent } from '../core-components/bsc-payment-sele
 @NgModule({
   imports: [
     BootstrapModalModule,
-    CanpayModule,
     CommonModule,
     CoreComponentsModule,
     CoreServicesModule,

@@ -1,5 +1,10 @@
 import { Component, OnInit, Directive } from '@angular/core'
-import { Headers } from '@angular/http'
+/*
+https://angular.io/guide/deprecations
+*/
+//import { Headers } from '@angular/http'
+import { HttpHeaders } from '@angular/common/http'
+
 import { ActivatedRoute, Router } from '@angular/router'
 
 import * as firebase from 'firebase/app'
@@ -16,7 +21,7 @@ import { UserService } from '../../core-services/user.service'
 export class LoginComponent implements OnInit {
   loading = false
   returnUrl: string
-  httpHeaders = new Headers({
+  httpHeaders = new HttpHeaders({
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
   })

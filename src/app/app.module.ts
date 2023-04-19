@@ -56,7 +56,6 @@ import { ToastrModule } from 'ngx-toastr'
     //    FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     BrowserModule,
     BrowserAnimationsModule,
-    CanpayModule,
     CoreComponentsModule,
     CoreServicesModule,
     CoreUtilsModule,

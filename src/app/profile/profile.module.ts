@@ -34,7 +34,6 @@ import { GetReferralComponent } from './get-referral/get-referral.component'
 
 @NgModule({
   imports: [
-    CanpayModule,
     CommonModule,
     CoreComponentsModule,
     CoreServicesModule,
@@ -48,8 +47,8 @@ import { GetReferralComponent } from './get-referral/get-referral.component'
       markedOptions: {
         provide: MarkedOptions,
         useValue: {
-          sanitize: true
-        }
+          sanitize: true,
+        },
       },
     }),
   ],
