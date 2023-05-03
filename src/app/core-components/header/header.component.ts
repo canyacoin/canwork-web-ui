@@ -1,4 +1,4 @@
-import { providerTypeArray } from './../../const/providerTypes'
+// import { providerTypeArray } from './../../const/providerTypes'
 import { animate, style, transition, trigger } from '@angular/animations'
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
@@ -42,8 +42,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   binanceSub: Subscription
   bscSub: Subscription
 
-  providerCategories = providerTypeArray
-  selectedProvType = providerTypeArray[0]
+  // providerCategories = providerTypeArray
+  // selectedProvType = providerTypeArray[0]
 
   constructor(
     private afs: AngularFirestore,
@@ -163,8 +163,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // }
     this.router.navigate(['search'], {
       queryParams: {
-        'refinementList[category][0]': this.selectedProvType.name,
-        category: this.selectedProvType.id,
+        // 'refinementList[category][0]': this.selectedProvType.name,
+        // category: this.selectedProvType.id,
         query: string,
       },
     })
@@ -189,17 +189,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.authService.logout()
   }
 
-  toggleDropdown() {
-    document
-      .getElementById('myDropdown')
-      .classList.toggle('search-dropdown-show')
-  }
+  // toggleDropdown() {
+  //   document
+  //     .getElementById('myDropdown')
+  //     .classList.toggle('search-dropdown-show')
+  // }
 
-  closeDropDown(value: any) {
-    this.selectedProvType = value
-    var myDropdown = document.getElementById('myDropdown')
-    if (myDropdown.classList.contains('show')) {
-      myDropdown.classList.remove('show')
-    }
-  }
+  // closeDropDown(value: any) {
+  //   this.selectedProvType = value
+  //   var myDropdown = document.getElementById('myDropdown')
+  //   if (myDropdown.classList.contains('show')) {
+  //     myDropdown.classList.remove('show')
+  //   }
+  // }
 }
