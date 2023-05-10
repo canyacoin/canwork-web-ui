@@ -4,7 +4,10 @@ import { AngularFireAuth } from '@angular/fire/auth'
 import { AngularFirestore } from '@angular/fire/firestore'
 import { BehaviorSubject, Subscription } from 'rxjs'
 
-import * as firebase from 'firebase/app'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/firestore'
+
 import { User } from '../core-classes/user'
 
 @Injectable()
@@ -78,7 +81,8 @@ export class AuthService {
     console.log('logout', this.currentUser.value)
     localStorage.clear()
     this.currentUser.next(null)
-    this.afAuth.auth.signOut()
+    //this.afAuth.auth.signOut() // old
+    this.afAuth.signOut() // new: https://github.com/angular/angularfire/issues/2409#issuecomment-615993136
     this.router.navigate(['home']) // TODO: Change this to reload same route - and hit the auth guards again
   }
 }

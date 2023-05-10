@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core'
 import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http'
 
-import * as firebase from 'firebase/app'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/firestore'
+
 import { environment } from '@env/environment'
 import { ActionType } from '@class/job-action'
 import { AuthService } from './auth.service'
@@ -16,7 +19,7 @@ export class JobNotificationService {
 
   public async notify(jobAction: ActionType, jobId: string) {
     // TODO: move this into authService.getJwt() and solve async issues
-    firebase.auth().onAuthStateChanged(async user => {
+    firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
         const token = await user.getIdToken(true)
         let headers = new HttpHeaders()
@@ -36,10 +39,10 @@ export class JobNotificationService {
           )
         }
         response.subscribe(
-          data => {
+          (data) => {
             console.log('+ message sent OK')
           },
-          error => {
+          (error) => {
             console.log(`+ error: ${error.status} sending notification:`, error)
           }
         )

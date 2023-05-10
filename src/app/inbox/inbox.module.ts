@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { CanpayModule } from '@canpay-lib/lib'
+//import { CanpayModule } from '@canpay-lib/lib'
 import { StarRatingModule } from 'angular-star-rating'
 import { BootstrapModalModule } from 'ng2-bootstrap-modal'
 import { OrderModule } from 'ngx-order-pipe'

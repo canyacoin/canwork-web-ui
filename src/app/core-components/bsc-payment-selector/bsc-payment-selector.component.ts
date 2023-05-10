@@ -17,7 +17,7 @@ import { OnDestroyComponent } from '@class/on-destroy'
 import { BscService, EventTypeBsc, BepChain } from '@service/bsc.service'
 
 import { environment } from '@env/environment'
-import { bepAssetData } from '@canpay-lib/lib' // todo
+//import { bepAssetData } from '@canpay-lib/lib' // todo
 
 import { ToastrService } from 'ngx-toastr'
 
