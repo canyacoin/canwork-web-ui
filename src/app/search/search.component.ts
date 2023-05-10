@@ -14,7 +14,7 @@ import { createEmptyStateSnapshot } from '@angular/router/src/router_state'
 import {
   AngularFirestore,
   AngularFirestoreCollection,
-} from 'angularfire2/firestore'
+} from '@angular/fire/firestore'
 import * as findIndex from 'lodash/findIndex'
 import * as orderBy from 'lodash/orderBy'
 import * as union from 'lodash/union'

@@ -7,7 +7,7 @@ import {
   SimpleChanges,
   Directive,
 } from '@angular/core'
-import { AngularFirestore } from 'angularfire2/firestore'
+import { AngularFirestore } from '@angular/fire/firestore'
 import { take } from 'rxjs/operators'
 
 export class SkillTag {

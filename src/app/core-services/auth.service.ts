@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import { AngularFireAuth } from 'angularfire2/auth'
-import { AngularFirestore } from 'angularfire2/firestore'
+import { AngularFireAuth } from '@angular/fire/auth'
+import { AngularFirestore } from '@angular/fire/firestore'
 import { BehaviorSubject, Subscription } from 'rxjs'
 
 import * as firebase from 'firebase/app'
@@ -43,7 +43,7 @@ export class AuthService {
 
   async getJwt(): Promise<string> {
     return new Promise<string>(async (resolve, reject) => {
-      await firebase.auth().onAuthStateChanged(async user => {
+      await firebase.auth().onAuthStateChanged(async (user) => {
         if (user) {
           const token = await user.getIdToken(true)
           resolve(token)

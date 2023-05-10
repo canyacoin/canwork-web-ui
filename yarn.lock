@@ -346,10 +346,12 @@
   resolved "https://registry.yarnpkg.com/@angular/core/-/core-9.0.0.tgz#227dc53e1ac81824f998c6e76000b7efc522641e"
   integrity sha512-6Pxgsrf0qF9iFFqmIcWmjJGkkCaCm6V5QNnxMy2KloO3SDq6QuMVRbN9RtC8Urmo25LP+eZ6ZgYqFYpdD8Hd9w==
 
-"@angular/fire@5.4.2":
-  version "5.4.2"
-  resolved "https://registry.yarnpkg.com/@angular/fire/-/fire-5.4.2.tgz#fb2d54935de0d83789e940e5f57a6ffc0e1ef4eb"
-  integrity sha512-QzB5d1wtqr9jxfsVNv2+569MlfK4/QrrpNy0IngOHdxS4FBbXqMOcx37iv1m2mzJv9zlGUddUX44IZP5Xfb3cw==
+"@angular/fire@6.1.5":
+  version "6.1.5"
+  resolved "https://registry.yarnpkg.com/@angular/fire/-/fire-6.1.5.tgz#099600ceb5285fcd8d6469f7671ad09609ba84e3"
+  integrity sha512-jrstSStogpfJvhlrX8ajtsnbVzIzcrh/InYUGbMVzXyQoT6wHA0LODjR6eIzGhb9/YQ+myMuVelJ39PfU3e8Sg==
+  dependencies:
+    tslib "^2.0.0"
 
 "@angular/forms@12.2.17":
   version "12.2.17"
@@ -3955,13 +3957,6 @@ angular2-qrcode@^2.0.1:
   integrity sha512-blXNY7VGSuxxfyAg0aa7urWFkoIT2YrygMzyWNRhzPY7UN1ddM4MWAZSzCEFVTzIIu9x4bZcpYDKG7JnmM9IFg==
   dependencies:
     qrious "^4.0.2"
-
-angularfire2@^5.2.0:
-  version "5.4.2"
-  resolved "https://registry.yarnpkg.com/angularfire2/-/angularfire2-5.4.2.tgz#e6b7df3c070aaddba6f650abfdc4c89aec306f7a"
-  integrity sha512-7brktOHPObHgMnCN+QkakyCBr2mnxMxMSVLlEZ7OF70LjFIQz/RV3t5a7cH1SjystbY+kzR3qYvn/irlWs27/Q==
-  dependencies:
-    "@angular/fire" "5.4.2"
 
 animate.css@^3.6.1:
   version "3.7.2"
@@ -8022,17 +8017,17 @@ firebase@^8.10.1:
     "@firebase/storage" "0.7.1"
     "@firebase/util" "1.3.0"
 
-firebaseui-angular@^6.1.3:
-  version "6.1.3"
-  resolved "https://registry.yarnpkg.com/firebaseui-angular/-/firebaseui-angular-6.1.3.tgz#255020b3bc3dd9a0f8a169b0334b08e6e3674a73"
-  integrity sha512-FyqAK+dB+K2tlHt6Utf71fI+PerMd/uRU22IKLPA9Wn9C6DVVZLdaHldeN8zM9EAf+nSZMqHacGBa4UDfELLxA==
+firebaseui-angular@5.1.3:
+  version "5.1.3"
+  resolved "https://registry.yarnpkg.com/firebaseui-angular/-/firebaseui-angular-5.1.3.tgz#7515d1dd891e61e60e149534b8bfce02443b09b5"
+  integrity sha512-9o0oFNA/cEA6+zpoyz6QELBa1Efb2ouv7IHbwMAd04vGBi5H9cGy7EABb7c41MTUwaRQgnHt7Q5a46Y8bc4B0A==
   dependencies:
     tslib "^2.0.0"
 
-firebaseui@^6.0.2:
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/firebaseui/-/firebaseui-6.0.2.tgz#14411920e17a7986e2ae969cb4890dfbf94fbfc5"
-  integrity sha512-Jwwn2I657loKrvedeCrwED9UibLFl8Cm0uH2ntDBSCpruWzG4HXlIWb35WsDdXMILRPQjJ1PwVwuRsrnsxcaXA==
+firebaseui@4.8.0:
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/firebaseui/-/firebaseui-4.8.0.tgz#74c10a30db17f2cbfe020c91b97d5e3c6e8efbbc"
+  integrity sha512-DG8CD+969JHMailhOm8nKo+eJlumIHex0TH18eJeTo0Q2KEt5m/b61S1ky4bavK/nGmLJBRECJytq09/pwhZ0A==
   dependencies:
     dialog-polyfill "^0.4.7"
     material-design-lite "^1.2.0"

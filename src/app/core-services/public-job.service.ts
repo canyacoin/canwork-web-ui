@@ -8,7 +8,7 @@ import { ActionType, IJobAction } from '@class/job-action'
 import {
   AngularFirestore,
   AngularFirestoreCollection,
-} from 'angularfire2/firestore'
+} from '@angular/fire/firestore'
 import { AngularFireFunctions } from '@angular/fire/functions'
 import { Observable, of } from 'rxjs'
 import { map, take, switchMap, catchError } from 'rxjs/operators'
@@ -37,7 +37,7 @@ export class PublicJobService {
       .doc<Job>(`public-jobs/${jobId}`)
       .valueChanges()
       .pipe(
-        catchError(err => {
+        catchError((err) => {
           console.log('Error', err)
           throw err
         })
@@ -65,9 +65,9 @@ export class PublicJobService {
       .collection(`public-jobs/${jobId}/bids`)
       .snapshotChanges()
       .pipe(
-        map(docs => {
+        map((docs) => {
           const bids = []
-          docs.forEach(doc => {
+          docs.forEach((doc) => {
             bids.push(doc.payload.doc.data() as Bid)
           })
           return bids
@@ -77,7 +77,7 @@ export class PublicJobService {
 
   getAllOpenJobs(): Observable<Job[]> {
     return this.afs
-      .collection<Job>(`public-jobs`, ref =>
+      .collection<Job>(`public-jobs`, (ref) =>
         ref
           .where('visibility', '==', 'public')
           .where('state', '==', JobState.acceptingOffers)
@@ -90,7 +90,7 @@ export class PublicJobService {
     return this.fns
       .httpsCallable<{ slug: string }, string>('getPublicJobIdBySlug')({ slug })
       .pipe(
-        switchMap(jobId => {
+        switchMap((jobId) => {
           return jobId
             ? this.afs.doc<Job>(`public-jobs/${jobId}`).valueChanges()
             : of<null>(null)
@@ -100,7 +100,7 @@ export class PublicJobService {
 
   async getPublicJobByUrl(friendly) {
     const exist = await this.afs
-      .collection(`public-jobs`, ref => ref.where('slug', '==', friendly))
+      .collection(`public-jobs`, (ref) => ref.where('slug', '==', friendly))
       .valueChanges()
       .take(1)
       .toPromise()
@@ -118,13 +118,13 @@ export class PublicJobService {
 
   getPublicJobsByUser(userId: string): Observable<Job[]> {
     return this.afs
-      .collection<any>('public-jobs', ref =>
+      .collection<any>('public-jobs', (ref) =>
         ref.where('clientId', '==', userId)
       )
       .snapshotChanges()
       .pipe(
-        map(changes => {
-          return changes.map(a => {
+        map((changes) => {
+          return changes.map((a) => {
             const data = a.payload.doc.data() as Job
             data.id = a.payload.doc.id
             return data
@@ -135,12 +135,14 @@ export class PublicJobService {
 
   async getOpenPublicJobsByUser(userId: string) {
     const exist = (await this.afs
-      .collection(`public-jobs/`, ref => ref.where('clientId', '==', userId))
+      .collection(`public-jobs/`, (ref) => ref.where('clientId', '==', userId))
       .valueChanges()
       .pipe(take(1))
       .toPromise()) as Job[]
     let result: Job[]
-    result = exist.filter(job => job.state === 'Accepting Offers' && !job.draft)
+    result = exist.filter(
+      (job) => job.state === 'Accepting Offers' && !job.draft
+    )
     // sort from latest to oldest
     result.sort((a, b) => {
       if (a.actionLog[0].timestamp > b.actionLog[0].timestamp) {
@@ -214,7 +216,7 @@ export class PublicJobService {
   // checks if the provider exists in the job bid
   async canBid(providerId: string, job: Job) {
     const bid = await this.afs
-      .collection<any>(`public-jobs/${job.id}/bids/`, ref =>
+      .collection<any>(`public-jobs/${job.id}/bids/`, (ref) =>
         ref.where('providerId', '==', providerId)
       )
       .get()
@@ -229,10 +231,10 @@ export class PublicJobService {
       this.afs
         .doc(`public-jobs/${jobId}/bids/${bid.providerId}`)
         .set(bidToUpload)
-        .then(result => {
+        .then((result) => {
           resolve(true)
         })
-        .catch(e => {
+        .catch((e) => {
           reject(false)
         })
     })
@@ -392,7 +394,7 @@ export class PublicJobService {
   async inviteProvider(job: Job, client: User, provider: User) {
     const ref = this.afs.firestore.doc(`public-jobs/${job.id}`)
     try {
-      const invited = await this.afs.firestore.runTransaction(async tx => {
+      const invited = await this.afs.firestore.runTransaction(async (tx) => {
         const snap = await tx.get(ref)
         const invites = (snap.get('invites') as string[]) || []
         const userId = provider.address

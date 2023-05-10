@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, Directive } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AngularFirestore } from 'angularfire2/firestore'
+import { AngularFirestore } from '@angular/fire/firestore'
 import * as findIndex from 'lodash/findIndex'
 import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'

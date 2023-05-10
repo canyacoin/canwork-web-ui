@@ -23,11 +23,10 @@ import { BehaviorSubject } from 'rxjs'
 import { ToastrService } from 'ngx-toastr'
 import { GenerateGuid } from '@util/generate.uid'
 
-
 import {
   AngularFirestore,
   AngularFirestoreCollection,
-} from 'angularfire2/firestore'
+} from '@angular/fire/firestore'
 
 import { environment } from '@env/environment'
 
@@ -164,19 +163,15 @@ export class BscService {
   events$ = this.events.asObservable()
   private connectedWallet = null
   monitorCollection: AngularFirestoreCollection<any>
-  
 
   constructor(
     private userService: UserService,
     private authService: AuthService,
     private toastr: ToastrService,
     private afs: AngularFirestore
-  ) {      
-  
-    
+  ) {
     this.monitorCollection = this.afs.collection<any>('bep20-txs')
-    
-    
+
     // todo move this to a common reusable function and replace everywhere
     const connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
     if (connectedWallet) {
@@ -193,7 +188,6 @@ export class BscService {
   }
 
   async connect(app?: any): Promise<string> {
-        
     /*
     todo: when this is currently called without app, it tries to refresh provider and signer
     we have to handle it also in walletConnect scenario
@@ -246,7 +240,7 @@ export class BscService {
         if (network.chainId !== NETWORK_ID) return 'Wrong network'
       }
 
-      await new Promise(f => setTimeout(f, 100)) // sleep 100 ms
+      await new Promise((f) => setTimeout(f, 100)) // sleep 100 ms
 
       try {
         let accounts = await window.ethereum.request({
@@ -264,13 +258,13 @@ export class BscService {
         console.log(err)
         return 'Provider error'
       }
-      await new Promise(f => setTimeout(f, 100)) // sleep 100 ms
+      await new Promise((f) => setTimeout(f, 100)) // sleep 100 ms
 
       address = await this.signer.getAddress()
 
       // network and account change listen, safe way: if anything change, reload (address) or disconnect (network)
       if (!!window.ethereum)
-        window.ethereum.on('networkChanged', networkId => {
+        window.ethereum.on('networkChanged', (networkId) => {
           if (networkId != environment.bsc.netId) {
             this.disconnect()
             window.location.reload() // it's safer to refresh the page
@@ -278,7 +272,7 @@ export class BscService {
         })
 
       if (!!window.ethereum)
-        window.ethereum.on('accountsChanged', accounts => {
+        window.ethereum.on('accountsChanged', (accounts) => {
           if (accounts && accounts.length > 0) {
             const connectedWallet = JSON.parse(
               localStorage.getItem('connectedWallet')
@@ -371,7 +365,7 @@ export class BscService {
       if (network.chainId !== environment.bsc.mainNetId)
         return 'Please connect to BNB Chain network'
 
-      await new Promise(f => setTimeout(f, 100)) // sleep 100 ms
+      await new Promise((f) => setTimeout(f, 100)) // sleep 100 ms
 
       try {
         this.signer = await this.provider.getSigner()
@@ -379,13 +373,13 @@ export class BscService {
         console.log(err)
         return 'Provider error'
       }
-      await new Promise(f => setTimeout(f, 100)) // sleep 100 ms
+      await new Promise((f) => setTimeout(f, 100)) // sleep 100 ms
 
       address = await this.signer.getAddress()
 
       // attach events to listen for disconnect, net change or account change, safe way, disconnect
       // Subscribe to accounts change
-      walletConnectProvider.on('accountsChanged', accounts => {
+      walletConnectProvider.on('accountsChanged', (accounts) => {
         this.disconnect()
         console.log(
           'walletConnectProvider accountsChanged event: ' +
@@ -394,7 +388,7 @@ export class BscService {
       })
 
       // Subscribe to chainId change
-      walletConnectProvider.on('chainChanged', chainId => {
+      walletConnectProvider.on('chainChanged', (chainId) => {
         this.disconnect()
         console.log('walletConnectProvider chainChanged event: ' + chainId)
       })
@@ -666,7 +660,7 @@ export class BscService {
         }
       }
     // remove duplicates (i.e. binance-usd, that's always required)
-    let quoteList = quoteListRaw.filter(function(item, pos) {
+    let quoteList = quoteListRaw.filter(function (item, pos) {
       return quoteListRaw.indexOf(item) == pos
     })
 
@@ -970,7 +964,7 @@ export class BscService {
             "chainId": 56
         }      
       */
-      
+
       const receipt = await transaction.wait()
 
       /*
@@ -1042,8 +1036,7 @@ export class BscService {
       await this.checkSigner()
 
       let strippedJobId = jobId.replace(/-/g, '')
-      if (strippedJobId.length > 32)
-        strippedJobId = strippedJobId.substr(0, 32)
+      if (strippedJobId.length > 32) strippedJobId = strippedJobId.substr(0, 32)
 
       //const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
       const jobIdBigint = this.hexToBigint(strippedJobId) // this is already a string
@@ -1149,7 +1142,7 @@ export class BscService {
   async deposit(token, providerAddress, amount, jobId, providerId) {
     console.log('deposit', token, providerAddress, amount, jobId) // debug
     const user = await this.authService.getCurrentUser()
-    const userId = user.address;
+    const userId = user.address
 
     let depositResult = { err: '', transactionHash: '' }
 
@@ -1157,8 +1150,7 @@ export class BscService {
       await this.checkSigner()
 
       let strippedJobId = jobId.replace(/-/g, '')
-      if (strippedJobId.length > 32)
-        strippedJobId = strippedJobId.substr(0, 32)
+      if (strippedJobId.length > 32) strippedJobId = strippedJobId.substr(0, 32)
 
       let decimals = CURRENCY.decimals
       if (
@@ -1191,7 +1183,7 @@ export class BscService {
 
       if (token == 'BNB') {
         tokenAddress = 'BNB'
-        
+
         /*
         value is passed as an override    
         */
@@ -1253,7 +1245,7 @@ export class BscService {
       immediately save tx hash to bep20 pending txs table, so backend job can check it
       even if user closes browser now
       */
-      
+
       /*
       // DISABLED
       // WE DON'T NEED THIS ANYMORE CAUSE WE ARE MONITORING CHAIN ON BACKEND
@@ -1296,7 +1288,7 @@ export class BscService {
         
       }
       */
-      
+
       // wait for transaction confirm
       const receipt = await transaction.wait()
       depositResult.transactionHash = receipt.transactionHash
@@ -1313,7 +1305,7 @@ export class BscService {
 
     return depositResult
   }
-  
+
   /*
   save transaction into backend table, polled periodically by firestore function bep20TxMonitor
   moved to backend
@@ -1330,7 +1322,7 @@ export class BscService {
   }
         
   
-  */  
+  */
   /*async createMonitorTransaction(
     jobId,
     userId,
@@ -1368,7 +1360,7 @@ export class BscService {
     }
 
     return this.monitorCollection.doc(transaction.id).set(transaction)
-  } */ 
+  } */
 
   // releaseAsClient
   async release(jobId) {
@@ -1377,8 +1369,7 @@ export class BscService {
       await this.checkSigner()
 
       let strippedJobId = jobId.replace(/-/g, '')
-      if (strippedJobId.length > 32)
-        strippedJobId = strippedJobId.substr(0, 32)
+      if (strippedJobId.length > 32) strippedJobId = strippedJobId.substr(0, 32)
 
       //const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
       const jobIdBigint = this.hexToBigint(strippedJobId) // this is already a string
@@ -1421,8 +1412,7 @@ export class BscService {
       await this.checkSigner()
 
       let strippedJobId = jobId.replace(/-/g, '')
-      if (strippedJobId.length > 32)
-        strippedJobId = strippedJobId.substr(0, 32)
+      if (strippedJobId.length > 32) strippedJobId = strippedJobId.substr(0, 32)
 
       const jobIdBigint = this.hexToBigint(strippedJobId)
 
@@ -1602,7 +1592,7 @@ export class BscService {
     }
 
     let dec = '0'
-    s.split('').forEach(function(chr) {
+    s.split('').forEach(function (chr) {
       let n = parseInt(chr, 16)
       for (let t = 8; t; t >>= 1) {
         dec = add(dec, dec)
@@ -1614,6 +1604,6 @@ export class BscService {
 
   splitConfig(str) {
     // extract array from config properties and trim values to avoid ens error
-    return str.split(',').map(s => s.trim())
+    return str.split(',').map((s) => s.trim())
   }
 }

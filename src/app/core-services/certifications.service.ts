@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { AngularFirestore } from 'angularfire2/firestore'
+import { AngularFirestore } from '@angular/fire/firestore'
 import { Certification } from '../core-classes/certification'
 import { Subscription } from 'rxjs/Subscription'
 
@@ -28,7 +28,7 @@ export class CertificationsService {
     this.afs
       .doc(`users/${userID}/certifications/${tempCert.id}`)
       .set(tempCert)
-      .catch(error => {
+      .catch((error) => {
         alert('Something went wrong. Please try again later.')
         console.log(error)
       })
@@ -47,7 +47,7 @@ export class CertificationsService {
     this.afs
       .doc(`users/${userID}/certifications/${tempCert.id}`)
       .update(tempCert)
-      .catch(error => {
+      .catch((error) => {
         alert('Something went wrong. Please try again later.')
       })
   }
@@ -56,7 +56,7 @@ export class CertificationsService {
     this.afs
       .doc(`users/${userID}/certifications/${certification.id}`)
       .delete()
-      .catch(error => {
+      .catch((error) => {
         alert('Something went wrong. Please try again later.')
       })
   }

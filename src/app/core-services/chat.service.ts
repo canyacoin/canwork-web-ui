@@ -1,6 +1,6 @@
 import { Injectable, ContentChildren } from '@angular/core'
 import { Router } from '@angular/router'
-import { AngularFirestore } from 'angularfire2/firestore'
+import { AngularFirestore } from '@angular/fire/firestore'
 import { take } from 'rxjs/operators'
 
 import { Job } from '../core-classes/job'
@@ -102,7 +102,7 @@ export class ChatService {
           }
           resolve(true)
         })
-        .catch(e => {
+        .catch((e) => {
           resolve(false)
         })
     })
@@ -116,7 +116,7 @@ export class ChatService {
     this.afs.firestore
       .doc(path)
       .get()
-      .then(docSnapshot => {
+      .then((docSnapshot) => {
         if (docSnapshot.exists) {
           // if the channel exists, navigate the user to the chat page.
           this.router.navigateByUrl('inbox/chat?address=' + receiver.address)

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import {
   AngularFirestore,
   AngularFirestoreCollection,
-} from 'angularfire2/firestore'
+} from '@angular/fire/firestore'
 import { take } from 'rxjs/operators'
 
 import * as moment from 'moment-timezone'
@@ -64,13 +64,13 @@ export class UserService {
   async getViewedUsers(viewer: string) {
     const collection = this.afs.collection(
       `viewed-users/${viewer}/viewed`,
-      ref => ref.orderBy('timestamp', 'desc')
+      (ref) => ref.orderBy('timestamp', 'desc')
     )
     return new Promise<any>((resolve, reject) => {
       collection
         .valueChanges()
         .pipe(take(1))
-        .subscribe(result => {
+        .subscribe((result) => {
           if (result) {
             resolve(result)
           }

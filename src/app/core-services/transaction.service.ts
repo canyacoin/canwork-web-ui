@@ -6,7 +6,7 @@ import { GenerateGuid } from '@util/generate.uid'
 import {
   AngularFirestore,
   AngularFirestoreCollection,
-} from 'angularfire2/firestore'
+} from '@angular/fire/firestore'
 
 export interface Escrow {
   amount: number
@@ -85,11 +85,11 @@ export class TransactionService {
 
   getTransactionsByJob(jobId: string): Observable<Transaction[]> {
     return this.afs
-      .collection<any>('transactions', ref => ref.where('jobId', '==', jobId))
+      .collection<any>('transactions', (ref) => ref.where('jobId', '==', jobId))
       .snapshotChanges()
       .pipe(
-        map(changes => {
-          return changes.map(a => {
+        map((changes) => {
+          return changes.map((a) => {
             const data = a.payload.doc.data()
             data.id = a.payload.doc.id
             return data
