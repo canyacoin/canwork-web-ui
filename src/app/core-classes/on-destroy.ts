@@ -1,7 +1,9 @@
+import { Injectable } from '@angular/core'
+
 import { OnDestroy } from '@angular/core'
 import { Subject } from 'rxjs'
 
-// TODO: Add Angular decorator.
+@Injectable()
 export abstract class OnDestroyComponent implements OnDestroy {
   destroy$ = new Subject()
   ngOnDestroy() {

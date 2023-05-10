@@ -19,7 +19,7 @@ import {
 import { ActionType, IJobAction } from '@class/job-action'
 import { Upload } from '@class/upload'
 import { User, UserType } from '@class/user'
-import '@extensions/string'
+// import '@extensions/string' // removed
 import { AuthService } from '@service/auth.service'
 import { JobService } from '@service/job.service'
 import { ToastrService } from 'ngx-toastr'

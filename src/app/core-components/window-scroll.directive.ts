@@ -16,6 +16,8 @@ export class WindowScrollDirective implements OnInit, OnDestroy {
     let passiveSupported = false
 
     try {
+      /*
+      // todo check if this is needed, it is not typescript ready with new ts and ng versions
       const options = Object.defineProperty({}, 'passive', {
         get: function () {
           passiveSupported = true
@@ -23,7 +25,7 @@ export class WindowScrollDirective implements OnInit, OnDestroy {
       })
 
       window.addEventListener('test', options, options)
-      window.removeEventListener('test', options, options)
+      window.removeEventListener('test', options, options)*/
       return true
     } catch (err) {
       return false

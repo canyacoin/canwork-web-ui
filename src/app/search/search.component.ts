@@ -10,7 +10,7 @@ import {
 } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
-import { createEmptyStateSnapshot } from '@angular/router/src/router_state'
+// import { createEmptyStateSnapshot } from '@angular/router/src/router_state'
 import {
   AngularFirestore,
   AngularFirestoreCollection,
