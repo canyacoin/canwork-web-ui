@@ -257,14 +257,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     console.log('executeAction: ' + action)
     switch (action) {
       case ActionType.enterEscrow:
-        this.toastr.warning(
-          'Escrow payments halted while we upgrade the system.  Please check back soon',
-          '',
-          {
-            timeOut: 5000,
-          }
-        )
-        /*const chain = await this.checkConnectionAndDetectChain()
+        const chain = await this.checkConnectionAndDetectChain()
         if (chain === BepChain.Binance)
           this.router.navigate(['../enter-escrow'], {
             relativeTo: this.activatedRoute,
@@ -272,7 +265,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         else if (chain === BepChain.SmartChain)
           this.router.navigate(['../enter-bsc-escrow'], {
             relativeTo: this.activatedRoute,
-          })*/
+          })
 
         break
       case ActionType.acceptFinish:
