@@ -23,7 +23,6 @@ import { BehaviorSubject } from 'rxjs'
 import { ToastrService } from 'ngx-toastr'
 import { GenerateGuid } from '@util/generate.uid'
 
-
 import {
   AngularFirestore,
   AngularFirestoreCollection,
@@ -164,19 +163,15 @@ export class BscService {
   events$ = this.events.asObservable()
   private connectedWallet = null
   monitorCollection: AngularFirestoreCollection<any>
-  
 
   constructor(
     private userService: UserService,
     private authService: AuthService,
     private toastr: ToastrService,
     private afs: AngularFirestore
-  ) {      
-  
-    
+  ) {
     this.monitorCollection = this.afs.collection<any>('bep20-txs')
-    
-    
+
     // todo move this to a common reusable function and replace everywhere
     const connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
     if (connectedWallet) {
@@ -193,7 +188,6 @@ export class BscService {
   }
 
   async connect(app?: any): Promise<string> {
-        
     /*
     todo: when this is currently called without app, it tries to refresh provider and signer
     we have to handle it also in walletConnect scenario
@@ -525,36 +519,48 @@ export class BscService {
       free: await this.getBnbBalance(),
     })
 
-    for (let token in environment.bsc.assets) {
-      let tokenAddress = 'na'
-      try {
-        tokenAddress = environment.bsc.assets[token]
-        const contract = new ethers.Contract(
-          tokenAddress,
-          tokenAbi,
-          this.provider
-        )
-        const name = await contract.name()
-        const symbol = await contract.symbol()
-        let decimals = CURRENCY.decimals
-        if (
-          environment.bsc.assetsDecimals &&
-          environment.bsc.assetsDecimals[token]
-        )
-          decimals = environment.bsc.assetsDecimals[token]
+    // for (let token in environment.bsc.assets) {
+    //   let tokenAddress = 'na'
+    //   try {
+    //     tokenAddress = environment.bsc.assets[token]
+    //     const contract = new ethers.Contract(
+    //       tokenAddress,
+    //       tokenAbi,
+    //       this.provider
+    //     )
+    //     const name = await contract.name()
+    //     const symbol = await contract.symbol()
+    //     let decimals = CURRENCY.decimals
+    //     if (
+    //       environment.bsc.assetsDecimals &&
+    //       environment.bsc.assetsDecimals[token]
+    //     )
+    //       decimals = environment.bsc.assetsDecimals[token]
 
-        const balance = ethers.utils.formatUnits(
-          await contract.balanceOf(address),
-          decimals
-        )
-        // BEP20 (ERC20) doesn't have frozen tokens
-        balances.push({ address: tokenAddress, name, symbol, free: balance })
-      } catch (err) {
-        // make this function fail safe even if some contract is not correct or for another chain
-        console.log(`Invalid contract for ${token}: ${tokenAddress}`)
-        console.log(err)
-      }
+    //     const balance = ethers.utils.formatUnits(
+    //       await contract.balanceOf(address),
+    //       decimals
+    //     )
+    //     // BEP20 (ERC20) doesn't have frozen tokens
+    //     balances.push({ address: tokenAddress, name, symbol, free: balance })
+    //   } catch (err) {
+    //     // make this function fail safe even if some contract is not correct or for another chain
+    //     console.log(`Invalid contract for ${token}: ${tokenAddress}`)
+    //     console.log(err)
+    //   }
+    // }
+
+    let awaitArray = []
+
+    for (let token in environment.bsc.assets) {
+      awaitArray.push(this.getBalance(token))
     }
+    awaitArray = await Promise.all(awaitArray)
+
+    for (let i = 0; i < awaitArray.length; i++) {
+      balances.push(awaitArray[i])
+    }
+
     return balances
   }
 
@@ -970,7 +976,7 @@ export class BscService {
             "chainId": 56
         }      
       */
-      
+
       const receipt = await transaction.wait()
 
       /*
@@ -1042,8 +1048,7 @@ export class BscService {
       await this.checkSigner()
 
       let strippedJobId = jobId.replace(/-/g, '')
-      if (strippedJobId.length > 32)
-        strippedJobId = strippedJobId.substr(0, 32)
+      if (strippedJobId.length > 32) strippedJobId = strippedJobId.substr(0, 32)
 
       //const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
       const jobIdBigint = this.hexToBigint(strippedJobId) // this is already a string
@@ -1149,7 +1154,7 @@ export class BscService {
   async deposit(token, providerAddress, amount, jobId, providerId) {
     console.log('deposit', token, providerAddress, amount, jobId) // debug
     const user = await this.authService.getCurrentUser()
-    const userId = user.address;
+    const userId = user.address
 
     let depositResult = { err: '', transactionHash: '' }
 
@@ -1157,8 +1162,7 @@ export class BscService {
       await this.checkSigner()
 
       let strippedJobId = jobId.replace(/-/g, '')
-      if (strippedJobId.length > 32)
-        strippedJobId = strippedJobId.substr(0, 32)
+      if (strippedJobId.length > 32) strippedJobId = strippedJobId.substr(0, 32)
 
       let decimals = CURRENCY.decimals
       if (
@@ -1191,7 +1195,7 @@ export class BscService {
 
       if (token == 'BNB') {
         tokenAddress = 'BNB'
-        
+
         /*
         value is passed as an override    
         */
@@ -1253,7 +1257,7 @@ export class BscService {
       immediately save tx hash to bep20 pending txs table, so backend job can check it
       even if user closes browser now
       */
-      
+
       /*
       // DISABLED
       // WE DON'T NEED THIS ANYMORE CAUSE WE ARE MONITORING CHAIN ON BACKEND
@@ -1296,7 +1300,7 @@ export class BscService {
         
       }
       */
-      
+
       // wait for transaction confirm
       const receipt = await transaction.wait()
       depositResult.transactionHash = receipt.transactionHash
@@ -1313,7 +1317,7 @@ export class BscService {
 
     return depositResult
   }
-  
+
   /*
   save transaction into backend table, polled periodically by firestore function bep20TxMonitor
   moved to backend
@@ -1330,7 +1334,8 @@ export class BscService {
   }
         
   
-  */  
+  */
+
   /*async createMonitorTransaction(
     jobId,
     userId,
@@ -1368,7 +1373,7 @@ export class BscService {
     }
 
     return this.monitorCollection.doc(transaction.id).set(transaction)
-  } */ 
+  } */
 
   // releaseAsClient
   async release(jobId) {
@@ -1377,8 +1382,7 @@ export class BscService {
       await this.checkSigner()
 
       let strippedJobId = jobId.replace(/-/g, '')
-      if (strippedJobId.length > 32)
-        strippedJobId = strippedJobId.substr(0, 32)
+      if (strippedJobId.length > 32) strippedJobId = strippedJobId.substr(0, 32)
 
       //const jobIdBytes32 = ethers.utils.formatBytes32String(strippedJobId);
       const jobIdBigint = this.hexToBigint(strippedJobId) // this is already a string
@@ -1421,8 +1425,7 @@ export class BscService {
       await this.checkSigner()
 
       let strippedJobId = jobId.replace(/-/g, '')
-      if (strippedJobId.length > 32)
-        strippedJobId = strippedJobId.substr(0, 32)
+      if (strippedJobId.length > 32) strippedJobId = strippedJobId.substr(0, 32)
 
       const jobIdBigint = this.hexToBigint(strippedJobId)
 
