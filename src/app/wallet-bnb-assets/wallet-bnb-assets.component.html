@@ -32,10 +32,7 @@
               </div>
               <div *ngSwitchCase="false" class="text-center">
                 Please connect your wallet!
-                <a
-                  class="nav-link"
-                  [routerLink]="['/wallet-bnb']"
-                >
+                <a class="nav-link" [routerLink]="['/wallet-bnb']">
                   <button border-64 class="btn btn-sm btn-primary my-10">
                     UNLOCK WALLET
                   </button>
@@ -48,9 +45,9 @@
                       <tr>
                         <th scope="col">Icon</th>
                         <th scope="col">Symbol</th>
-                        <th scope="col">Free</th>
-                        <th scope="col">Frozen</th>
-                        <th scope="col">Locked</th>
+                        <th scope="col">Balance</th>
+                        <!-- <th scope="col">Frozen</th> -->
+                        <!-- <th scope="col">Locked</th> -->
                       </tr>
                     </thead>
                     <tbody>
@@ -63,9 +60,9 @@
                           ></app-dynamic-coin>
                         </td>
                         <td>{{ balance.symbol }}</td>
-                        <td>{{ balance.free | number: '1.3' }}</td>
-                        <td>{{ balance.frozen | number: '1.3' }}</td>
-                        <td>{{ balance.locked | number: '1.3' }}</td>
+                        <td>{{ balance.free | number: '1.0-4' }}</td>
+                        <!-- <td>{{ balance.frozen | number: '1.3' }}</td> -->
+                        <!-- <td>{{ balance.locked | number: '1.3' }}</td> -->
                       </tr>
                     </tbody>
                   </table>

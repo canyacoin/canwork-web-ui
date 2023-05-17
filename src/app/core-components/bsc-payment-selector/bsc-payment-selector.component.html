@@ -40,7 +40,7 @@
                       <tr>
                         <th scope="col"></th>
                         <th scope="col">Symbol</th>
-                        <th scope="col">Free</th>
+                        <th scope="col">Balance</th>
                         <th scope="col">Value (BUSD)</th>
                         <th scope="col"><!--Pay--></th>
                       </tr>
@@ -55,7 +55,7 @@
                           ></app-dynamic-coin>
                         </td>
                         <td>{{ assets[i].symbol }}</td>
-                        <td>{{ assets[i].free | number: '1.3-3' }}</td>
+                        <td>{{ assets[i].free | number: '1.0-4' }}</td>
                         <td *ngIf="assets[i].converting">
                           <img
                             src="assets/img/loader.svg"
@@ -70,7 +70,7 @@
                             assets[i].hasEnough && !assets[i].seemsNotEnough
                           "
                         >
-                          {{ assets[i].freeUsd }}
+                          ${{ assets[i].freeUsd | number: '1.2' }}
                         </td>
                         <td *ngIf="assets[i].converting" colspan="2"></td>
                         <td
