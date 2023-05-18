@@ -519,36 +519,48 @@ export class BscService {
       free: await this.getBnbBalance(),
     })
 
-    for (let token in environment.bsc.assets) {
-      let tokenAddress = 'na'
-      try {
-        tokenAddress = environment.bsc.assets[token]
-        const contract = new ethers.Contract(
-          tokenAddress,
-          tokenAbi,
-          this.provider
-        )
-        const name = await contract.name()
-        const symbol = await contract.symbol()
-        let decimals = CURRENCY.decimals
-        if (
-          environment.bsc.assetsDecimals &&
-          environment.bsc.assetsDecimals[token]
-        )
-          decimals = environment.bsc.assetsDecimals[token]
+    // for (let token in environment.bsc.assets) {
+    //   let tokenAddress = 'na'
+    //   try {
+    //     tokenAddress = environment.bsc.assets[token]
+    //     const contract = new ethers.Contract(
+    //       tokenAddress,
+    //       tokenAbi,
+    //       this.provider
+    //     )
+    //     const name = await contract.name()
+    //     const symbol = await contract.symbol()
+    //     let decimals = CURRENCY.decimals
+    //     if (
+    //       environment.bsc.assetsDecimals &&
+    //       environment.bsc.assetsDecimals[token]
+    //     )
+    //       decimals = environment.bsc.assetsDecimals[token]
 
-        const balance = ethers.utils.formatUnits(
-          await contract.balanceOf(address),
-          decimals
-        )
-        // BEP20 (ERC20) doesn't have frozen tokens
-        balances.push({ address: tokenAddress, name, symbol, free: balance })
-      } catch (err) {
-        // make this function fail safe even if some contract is not correct or for another chain
-        console.log(`Invalid contract for ${token}: ${tokenAddress}`)
-        console.log(err)
-      }
+    //     const balance = ethers.utils.formatUnits(
+    //       await contract.balanceOf(address),
+    //       decimals
+    //     )
+    //     // BEP20 (ERC20) doesn't have frozen tokens
+    //     balances.push({ address: tokenAddress, name, symbol, free: balance })
+    //   } catch (err) {
+    //     // make this function fail safe even if some contract is not correct or for another chain
+    //     console.log(`Invalid contract for ${token}: ${tokenAddress}`)
+    //     console.log(err)
+    //   }
+    // }
+
+    let awaitArray = []
+
+    for (let token in environment.bsc.assets) {
+      awaitArray.push(this.getBalance(token))
     }
+    awaitArray = await Promise.all(awaitArray)
+
+    for (let i = 0; i < awaitArray.length; i++) {
+      balances.push(awaitArray[i])
+    }
+
     return balances
   }
 
@@ -1323,6 +1335,7 @@ export class BscService {
         
   
   */
+
   /*async createMonitorTransaction(
     jobId,
     userId,

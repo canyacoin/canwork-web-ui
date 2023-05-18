@@ -82,28 +82,48 @@ export class BscPaymentSelectorComponent
               token: 'BNB',
             })
 
-            for (let token in environment.bsc.assets) {
-              try {
-                let b = await this.bscService.getBalance(token)
-                if (!b.err) {
-                  let asset = {
-                    converting: true,
-                    hasEnough: false,
-                    freeUsd: 0,
-                    ...b,
-                  }
-                  if (parseFloat(asset.free) == 0) asset.converting = false // no conversion with zero value
+            // for (let token in environment.bsc.assets) {
+            //   try {
+            //     let b = await this.bscService.getBalance(token)
+            //     if (!b.err) {
+            //       let asset = {
+            //         converting: true,
+            //         hasEnough: false,
+            //         freeUsd: 0,
+            //         ...b,
+            //       }
+            //       if (parseFloat(asset.free) == 0) asset.converting = false // no conversion with zero value
 
-                  this.assets.push(asset)
-                  this.firstLoaded = true // at least one loaded, show grid
-                }
-              } catch (err) {
-                // make this function fail safe even if some contract is not correct or for another chain
-                console.log(
-                  `Invalid contract for ${token}: ${environment.bsc.assets[token]}`
-                )
-                console.log(err)
+            //       this.assets.push(asset)
+            //       this.firstLoaded = true // at least one loaded, show grid
+            //     }
+            //   } catch (err) {
+            //     // make this function fail safe even if some contract is not correct or for another chain
+            //     console.log(
+            //       `Invalid contract for ${token}: ${environment.bsc.assets[token]}`
+            //     )
+            //     console.log(err)
+            //   }
+            // }
+
+            let awaitArray = []
+
+            for (let token in environment.bsc.assets) {
+              awaitArray.push(this.bscService.getBalance(token))
+            }
+            awaitArray = await Promise.all(awaitArray)
+
+            for (let i = 0; i < awaitArray.length; i++) {
+              let asset = {
+                converting: true,
+                hasEnough: false,
+                freeUsd: 0,
+                ...awaitArray[i],
               }
+              if (parseFloat(asset.free) == 0) asset.converting = false // no conversion with zero value
+
+              this.assets.push(asset)
+              this.firstLoaded = true // at least one loaded, show grid
             }
 
             this.loading = false // finish loading all
@@ -168,7 +188,7 @@ export class BscPaymentSelectorComponent
           this.assets[i].gasApprove = ''
           this.assets[i].gasDeposit = ''
           this.assets[i].busdValue = busdValue
-          this.assets[i].freeUsd = '$ ' + busdValue.toFixed(2)
+          this.assets[i].freeUsd = busdValue.toFixed(2)
 
           // calculate and save needed allowance
           /*let allowance = this.jobBudgetUsd * parseFloat(this.assets[i].free) / this.assets[i].busdValue; // how much we need
