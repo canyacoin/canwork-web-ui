@@ -6049,6 +6049,11 @@ css-selector-tokenizer@^0.7.1:
     cssesc "^3.0.0"
     fastparse "^1.1.2"
 
+css-star-rating@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/css-star-rating/-/css-star-rating-1.3.1.tgz#2c5124cff9b14450b7ed8700766c2c1c14d05a27"
+  integrity sha512-AVBuyoqdahg0+1tY5zAqD8eMLjHlKu7VEIn+76YoJL/UhOiNFllnLg8nI5rWC2OA7EyyaPj36D/rxW2N+ec6PA==
+
 css-tree@^1.1.2, css-tree@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/css-tree/-/css-tree-1.1.3.tgz#eb4870fb6fd7707327ec95c2ff2ab09b5e8db91d"
