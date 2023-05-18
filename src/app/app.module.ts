@@ -10,7 +10,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore'
 import { AngularFireStorageModule } from '@angular/fire/storage'
 import { Ng5SliderModule } from 'ng5-slider'
 import { NgxPaginationModule } from 'ngx-pagination'
-//import { FirebaseUIModule } from 'firebaseui-angular'
+import { FirebaseUIModule } from 'firebaseui-angular'
 import { environment } from '../environments/environment'
 import { AppComponent } from './app.component'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
@@ -53,7 +53,7 @@ import { ToastrModule } from 'ngx-toastr'
     AngularFirestoreModule,
     AngularFireStorageModule,
     AngularFireFunctionsModule,
-    //    FirebaseUIModule.forRoot(firebaseUiAuthConfig),
+    FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     BrowserModule,
     BrowserAnimationsModule,
     CoreComponentsModule,
