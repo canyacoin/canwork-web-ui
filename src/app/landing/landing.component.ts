@@ -54,7 +54,7 @@ export class LandingComponent implements OnInit {
   }
 
   getProviders(searchQuery, array) {
-    this.algoliaIndex.search({ query: searchQuery }).then((res) => {
+    this.algoliaIndex.search(searchQuery).then((res) => {
       const result = res.hits
       for (let i = 1; i < 4; i++) {
         const provider = {

@@ -1,4 +1,5 @@
 image: registry.gitlab.com/canyacoin/node-build-container:1.6
+# customize image on single jobs: https://docs.gitlab.com/ee/ci/yaml/#image
 
 variables:
   APP_PATH: /builds/$CI_PROJECT_PATH

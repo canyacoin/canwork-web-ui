@@ -98,7 +98,7 @@ export class HomeComponent implements OnInit {
   getProviders(searchQuery) {
     let newArray = []
     this.algoliaIndex
-      .search({ query: searchQuery })
+      .search(searchQuery)
       .then((res) => {
         const result = res.hits
         for (let i = 0; i < result.length; i++) {
