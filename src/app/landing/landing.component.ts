@@ -3,7 +3,7 @@ import { environment } from '@env/environment'
 import { Router } from '@angular/router'
 import { UserCategory } from '../core-classes/user'
 declare var require: any
-const algoliasearch = require('algoliasearch')
+import algoliasearch from 'algoliasearch/lite'
 
 @Component({
   selector: 'app-landing',

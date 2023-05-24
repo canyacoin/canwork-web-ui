@@ -20,7 +20,7 @@ import * as orderBy from 'lodash/orderBy'
 import * as union from 'lodash/union'
 import { LabelType, Options } from 'ng5-slider'
 import { Observable, Subscription } from 'rxjs'
-import algoliasearch from 'algoliasearch'
+import algoliasearch from 'algoliasearch/lite'
 import { UserType } from '../../../functions/src/user-type'
 import { environment } from '../../environments/environment'
 import { User, UserCategory } from '../core-classes/user'
@@ -86,6 +86,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
       if (this.categoryFilters.length < 1 && params['category'] !== '') {
         this.categoryFilters.push(params['category'])
       }
+
       if (!this.loading) {
         this.rendering = true
         setTimeout(() => {
@@ -103,10 +104,48 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
       environment.algolia.appId,
       environment.algolia.apiKey
     )
+    const self = this
     this.algoliaSearchConfig = {
       indexName: this.algoliaIndex,
       searchClient,
-      routing: true,
+      //routing: true,
+      routing: {
+        /*
+        https://www.algolia.com/doc/guides/building-search-ui/going-further/routing-urls/angular/
+        https://www.algolia.com/doc/api-reference/widgets/ui-state/js/
+        https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/angular/#routing
+        Even if you aren’t using multi-index search, the way in which UI state is stored has changed
+        */
+        stateMapping: {
+          stateToRoute(uiState: any) {
+            //console.log('stateToRoute');
+            //console.log(uiState);
+          },
+          routeToState(routeState: any) {
+            //console.log('routeToState');
+            //console.log(routeState);
+
+            const generatedQuery = {}
+            generatedQuery[self.algoliaIndex] = {}
+
+            // free text query
+            if (routeState.query)
+              generatedQuery[self.algoliaIndex].query = routeState.query
+
+            // category list
+            if (routeState.refinementList)
+              generatedQuery[self.algoliaIndex].refinementList =
+                routeState.refinementList
+
+            // rate range
+            if (routeState.range)
+              generatedQuery[self.algoliaIndex].range = routeState.range
+
+            console.log(generatedQuery)
+            return generatedQuery
+          },
+        },
+      },
     }
     this.authSub = this.auth.currentUser$.subscribe((user: User) => {
       if (this.currentUser !== user) {

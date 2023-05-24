@@ -1,5 +1,6 @@
 import { HttpClientModule } from '@angular/common/http'
 import { NgModule } from '@angular/core'
+import { NgAisModule } from 'angular-instantsearch'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 //import { CanpayModule } from '@canpay-lib/canpay.module'
@@ -54,6 +55,7 @@ import { ToastrModule } from 'ngx-toastr'
     AngularFireStorageModule,
     AngularFireFunctionsModule,
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
+    NgAisModule.forRoot(),
     BrowserModule,
     BrowserAnimationsModule,
     CoreComponentsModule,

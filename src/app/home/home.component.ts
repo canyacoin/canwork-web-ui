@@ -9,7 +9,7 @@ import { Rating, User, UserCategory } from '../core-classes/user'
 import { NavService } from '../core-services/nav.service'
 
 declare var require: any
-const algoliasearch = require('algoliasearch')
+import algoliasearch from 'algoliasearch/lite'
 
 @Component({
   selector: 'app-home',
