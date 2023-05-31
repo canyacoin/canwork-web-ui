@@ -12,6 +12,7 @@ stages:
   - deploy
 
 dist:staging:
+  image: node:14.21.3
   stage: build
   environment: staging
   only:
@@ -44,6 +45,7 @@ dist:production:
     - yarn run build:prod
 
 deploy:staging:
+  # this job keeps for now the old version of node and firebase tools
   stage: deploy
   environment: staging
   only:
