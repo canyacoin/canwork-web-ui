@@ -26,7 +26,7 @@ import { GenerateGuid } from '@util/generate.uid'
 import {
   AngularFirestore,
   AngularFirestoreCollection,
-} from 'angularfire2/firestore'
+} from '@angular/fire/firestore'
 
 import { environment } from '@env/environment'
 
@@ -240,7 +240,7 @@ export class BscService {
         if (network.chainId !== NETWORK_ID) return 'Wrong network'
       }
 
-      await new Promise(f => setTimeout(f, 100)) // sleep 100 ms
+      await new Promise((f) => setTimeout(f, 100)) // sleep 100 ms
 
       try {
         let accounts = await window.ethereum.request({
@@ -258,13 +258,13 @@ export class BscService {
         console.log(err)
         return 'Provider error'
       }
-      await new Promise(f => setTimeout(f, 100)) // sleep 100 ms
+      await new Promise((f) => setTimeout(f, 100)) // sleep 100 ms
 
       address = await this.signer.getAddress()
 
       // network and account change listen, safe way: if anything change, reload (address) or disconnect (network)
       if (!!window.ethereum)
-        window.ethereum.on('networkChanged', networkId => {
+        window.ethereum.on('networkChanged', (networkId) => {
           if (networkId != environment.bsc.netId) {
             this.disconnect()
             window.location.reload() // it's safer to refresh the page
@@ -272,7 +272,7 @@ export class BscService {
         })
 
       if (!!window.ethereum)
-        window.ethereum.on('accountsChanged', accounts => {
+        window.ethereum.on('accountsChanged', (accounts) => {
           if (accounts && accounts.length > 0) {
             const connectedWallet = JSON.parse(
               localStorage.getItem('connectedWallet')
@@ -365,7 +365,7 @@ export class BscService {
       if (network.chainId !== environment.bsc.mainNetId)
         return 'Please connect to BNB Chain network'
 
-      await new Promise(f => setTimeout(f, 100)) // sleep 100 ms
+      await new Promise((f) => setTimeout(f, 100)) // sleep 100 ms
 
       try {
         this.signer = await this.provider.getSigner()
@@ -373,13 +373,13 @@ export class BscService {
         console.log(err)
         return 'Provider error'
       }
-      await new Promise(f => setTimeout(f, 100)) // sleep 100 ms
+      await new Promise((f) => setTimeout(f, 100)) // sleep 100 ms
 
       address = await this.signer.getAddress()
 
       // attach events to listen for disconnect, net change or account change, safe way, disconnect
       // Subscribe to accounts change
-      walletConnectProvider.on('accountsChanged', accounts => {
+      walletConnectProvider.on('accountsChanged', (accounts) => {
         this.disconnect()
         console.log(
           'walletConnectProvider accountsChanged event: ' +
@@ -388,7 +388,7 @@ export class BscService {
       })
 
       // Subscribe to chainId change
-      walletConnectProvider.on('chainChanged', chainId => {
+      walletConnectProvider.on('chainChanged', (chainId) => {
         this.disconnect()
         console.log('walletConnectProvider chainChanged event: ' + chainId)
       })
@@ -672,7 +672,7 @@ export class BscService {
         }
       }
     // remove duplicates (i.e. binance-usd, that's always required)
-    let quoteList = quoteListRaw.filter(function(item, pos) {
+    let quoteList = quoteListRaw.filter(function (item, pos) {
       return quoteListRaw.indexOf(item) == pos
     })
 
@@ -1605,7 +1605,7 @@ export class BscService {
     }
 
     let dec = '0'
-    s.split('').forEach(function(chr) {
+    s.split('').forEach(function (chr) {
       let n = parseInt(chr, 16)
       for (let t = 8; t; t >>= 1) {
         dec = add(dec, dec)
@@ -1617,6 +1617,6 @@ export class BscService {
 
   splitConfig(str) {
     // extract array from config properties and trim values to avoid ens error
-    return str.split(',').map(s => s.trim())
+    return str.split(',').map((s) => s.trim())
   }
 }

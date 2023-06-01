@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core'
+import { Component, OnInit, Input, Directive } from '@angular/core'
 import { User } from '@class/user'
 import { environment } from '@env/environment'
 
@@ -31,7 +31,7 @@ export class GetReferralComponent implements OnInit {
     document.execCommand('copy')
     document.body.removeChild(selBox)
     document.getElementById('gotcode').style.display = 'block'
-    setTimeout(function() {
+    setTimeout(function () {
       document.getElementById('gotcode').style.display = 'none'
     }, 2000)
   }

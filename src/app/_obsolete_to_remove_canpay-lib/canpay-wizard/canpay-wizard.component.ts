@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  Directive,
 } from '@angular/core'
 
 import { PaymentSummary } from '../interfaces'

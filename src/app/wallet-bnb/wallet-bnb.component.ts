@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Component, OnInit, OnDestroy, Directive } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { BscService, EventTypeBsc } from '@service/bsc.service'
 import WalletConnect from './../core-classes/walletConnect'
@@ -59,7 +59,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
 
     this.bscService.events$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(async event => {
+      .subscribe(async (event) => {
         if (!event) {
           return
         }
@@ -111,7 +111,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
       this.walletconnectConnecting = false
 
       if (this.bscError) {
-        await new Promise(f => setTimeout(f, 2000)) // sleep 2000 ms
+        await new Promise((f) => setTimeout(f, 2000)) // sleep 2000 ms
         this.bscError = '' // clean up
       }
     }

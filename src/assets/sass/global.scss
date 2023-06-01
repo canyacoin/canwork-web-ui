@@ -1,3 +1,9 @@
+/* Override star rating colors by using scss variables */
+$color-ok-rating: #33ccff !default;
+
+/* Import star-rating styles */
+@import '~css-star-rating/scss/star-rating';
+
 @keyframes spin {
   from {transform:rotate(0deg);}
   to {transform:rotate(360deg);}

@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import { AngularFireAuth } from 'angularfire2/auth'
-import { AngularFirestore } from 'angularfire2/firestore'
+import { AngularFireAuth } from '@angular/fire/auth'
+import { AngularFirestore } from '@angular/fire/firestore'
 import { BehaviorSubject, Subscription } from 'rxjs'
 
-import * as firebase from 'firebase/app'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/firestore'
+
 import { User } from '../core-classes/user'
 
 @Injectable()
@@ -43,7 +46,7 @@ export class AuthService {
 
   async getJwt(): Promise<string> {
     return new Promise<string>(async (resolve, reject) => {
-      await firebase.auth().onAuthStateChanged(async user => {
+      await firebase.auth().onAuthStateChanged(async (user) => {
         if (user) {
           const token = await user.getIdToken(true)
           resolve(token)
@@ -78,7 +81,8 @@ export class AuthService {
     console.log('logout', this.currentUser.value)
     localStorage.clear()
     this.currentUser.next(null)
-    this.afAuth.auth.signOut()
+    //this.afAuth.auth.signOut() // old
+    this.afAuth.signOut() // new: https://github.com/angular/angularfire/issues/2409#issuecomment-615993136
     this.router.navigate(['home']) // TODO: Change this to reload same route - and hit the auth guards again
   }
 }

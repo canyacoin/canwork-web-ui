@@ -1,9 +1,8 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core'
+import { Component, OnInit, Input, OnDestroy, Directive } from '@angular/core'
 import { OnDestroyComponent } from '@class/on-destroy'
 import { Observable } from 'rxjs'
 import { ObservableInput } from 'observable-input'
 import { BepChain } from '@service/bsc.service'
-
 
 import hashbow from 'hashbow'
 import { takeUntil } from 'rxjs/operators'
@@ -13,13 +12,16 @@ export enum ImageState {
   Error,
   Loaded,
 }
+
 @Component({
   selector: 'app-dynamic-coin',
   templateUrl: './dynamic-coin.component.html',
   styleUrls: ['./dynamic-coin.component.css'],
 })
-export class DynamicCoinComponent extends OnDestroyComponent
-  implements OnInit, OnDestroy {
+export class DynamicCoinComponent
+  extends OnDestroyComponent
+  implements OnInit, OnDestroy
+{
   @Input()
   size: 'small' | 'normal' | 'big' = 'big'
 
@@ -43,29 +45,37 @@ export class DynamicCoinComponent extends OnDestroyComponent
   ngOnInit() {
     this.symbol
       .pipe(takeUntil(this.destroy$)) // unsubscribe on destroy
-      .subscribe(symbol => {
-
+      .subscribe((symbol) => {
         if (this.network === BepChain.Binance) {
-          if (symbol === "BNB") this.symbolUrl = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/'
-            else this.symbolUrl = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/assets/'+symbol
+          if (symbol === 'BNB')
+            this.symbolUrl =
+              'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/'
+          else
+            this.symbolUrl =
+              'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/assets/' +
+              symbol
           this.originalSymbol = symbol.split('-')[0]
           this.startCol = hashbow(symbol[0])
           this.stopCol = hashbow(symbol[1])
-          
-          return;
+
+          return
         }
-        
+
         if (this.network === BepChain.SmartChain) {
           this.originalSymbol = symbol
           this.startCol = hashbow(symbol)
           this.stopCol = hashbow(this.address)
           // case must match exactly the one on github path
-          if (symbol === "BNB") this.symbolUrl = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/smartchain/info/'          
-           else this.symbolUrl = 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/smartchain/assets/'+this.address
+          if (symbol === 'BNB')
+            this.symbolUrl =
+              'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/smartchain/info/'
+          else
+            this.symbolUrl =
+              'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/smartchain/assets/' +
+              this.address
 
-          return;
+          return
         }
-        
       })
   }
 }

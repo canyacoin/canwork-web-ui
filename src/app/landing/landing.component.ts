@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Directive } from '@angular/core'
 import { environment } from '@env/environment'
 import { Router } from '@angular/router'
 import { UserCategory } from '../core-classes/user'
 declare var require: any
-const algoliasearch = require('algoliasearch')
+import algoliasearch from 'algoliasearch/lite'
 
 @Component({
   selector: 'app-landing',
@@ -54,7 +54,7 @@ export class LandingComponent implements OnInit {
   }
 
   getProviders(searchQuery, array) {
-    this.algoliaIndex.search({ query: searchQuery }).then(res => {
+    this.algoliaIndex.search(searchQuery).then((res) => {
       const result = res.hits
       for (let i = 1; i < 4; i++) {
         const provider = {

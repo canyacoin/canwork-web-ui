@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  Directive,
 } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { User } from '@class/user'
@@ -171,7 +172,7 @@ export class EditComponent implements OnInit, OnDestroy {
     let tags: string[] =
       this.profileForm.value.skillTags === ''
         ? []
-        : this.profileForm.value.skillTags.split(',').map(item => item.trim())
+        : this.profileForm.value.skillTags.split(',').map((item) => item.trim())
     if (tags.length > 6) {
       tags = tags.slice(0, 6)
     }

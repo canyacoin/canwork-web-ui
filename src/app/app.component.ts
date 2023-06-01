@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Directive } from '@angular/core'
 import { NavigationEnd, Router } from '@angular/router'
 import { ToastrService } from 'ngx-toastr'
 import { AuthService } from '@service/auth.service'
@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.router.events.subscribe(evt => {
+    this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
         return
       }

@@ -1,25 +1,24 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 
-import { EnterEscrowBscComponent } from './enter-escrow-bsc.component';
+import { EnterEscrowBscComponent } from './enter-escrow-bsc.component'
 
 describe('EnterEscrowBscComponent', () => {
-  let component: EnterEscrowBscComponent;
-  let fixture: ComponentFixture<EnterEscrowBscComponent>;
+  let component: EnterEscrowBscComponent
+  let fixture: ComponentFixture<EnterEscrowBscComponent>
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ EnterEscrowBscComponent ]
-    })
-    .compileComponents();
-  }));
+      declarations: [EnterEscrowBscComponent],
+    }).compileComponents()
+  }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EnterEscrowBscComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(EnterEscrowBscComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

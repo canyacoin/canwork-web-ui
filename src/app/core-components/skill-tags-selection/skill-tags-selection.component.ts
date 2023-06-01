@@ -5,8 +5,9 @@ import {
   OnInit,
   Output,
   SimpleChanges,
+  Directive,
 } from '@angular/core'
-import { AngularFirestore } from 'angularfire2/firestore'
+import { AngularFirestore } from '@angular/fire/firestore'
 import { take } from 'rxjs/operators'
 
 export class SkillTag {
@@ -49,7 +50,7 @@ export class SkillTagsSelectionComponent implements OnInit {
       .valueChanges()
       .pipe(take(1))
       .subscribe((tags: SkillTag[]) => {
-        this.skillTagsList = tags.map(x => x.tag)
+        this.skillTagsList = tags.map((x) => x.tag)
         this.tagsLoaded.emit(this.skillTagsList)
       })
     this.acceptedTags = this.initialTags === undefined ? [] : this.initialTags
@@ -71,7 +72,7 @@ export class SkillTagsSelectionComponent implements OnInit {
       this.tagSelectionInvalid = true
       return false
     }
-    const duplicate = this.acceptedTags.findIndex(x => x === tag) > -1
+    const duplicate = this.acceptedTags.findIndex((x) => x === tag) > -1
     if (
       this.acceptedTags.length <= 5 &&
       !duplicate &&
@@ -92,8 +93,8 @@ export class SkillTagsSelectionComponent implements OnInit {
   onTagChange() {
     let tag = this.tagInput
     tag = tag.replace(',', '').trim()
-    const indexOfTag = this.skillTagsList.findIndex(x => x === tag)
-    const duplicate = this.acceptedTags.findIndex(x => x === tag) > -1
+    const indexOfTag = this.skillTagsList.findIndex((x) => x === tag)
+    const duplicate = this.acceptedTags.findIndex((x) => x === tag) > -1
     if (indexOfTag !== -1) {
       if (this.acceptedTags.length <= 5 && !duplicate) {
         this.acceptedTags.push(tag)

@@ -17,7 +17,7 @@
             ></ais-search-box>
             <div
               class="row mt-25 mb-15"
-              style="z-index: 150; position: relative;"
+              style="z-index: 150; position: relative"
             >
               <div class="col-9">
                 <div class="row">
@@ -58,12 +58,10 @@
                     <ais-toggle
                       *ngIf="currentUser && currentUser.timezone !== ''"
                       label="Only show providers within my timezone"
-                      style="margin-left:30px"
+                      style="margin-left: 30px"
                       attribute="timezone"
-                      [values]="{
-                        on: currentUser.timezone,
-                        off: ''
-                      }"
+                      [on]="currentUser.timezone"
+                      [off]=""
                     >
                     </ais-toggle>
                   </div>
@@ -148,7 +146,7 @@
                       >
                     </div>
                     <div class="col-6 text-right">
-                      <span class="set-text " (click)="onSetCategories()"
+                      <span class="set-text" (click)="onSetCategories()"
                         >APPLY</span
                       >
                     </div>
@@ -160,7 +158,7 @@
                       [(value)]="minValue"
                       [(highValue)]="maxValue"
                       [options]="options"
-                      style="width:300px; margin: 0 auto; margin-top: 35px;"
+                      style="width: 300px; margin: 0 auto; margin-top: 35px"
                     ></ng5-slider>
                   </div>
                   <div class="row px-20">
@@ -210,7 +208,7 @@
                     <div class="row no-padding" *ngIf="hits">
                       <div
                         *ngFor="let provider of hits"
-                        class="col-xl-4 col-lg-4 col-md-6 col-sm-12 no-padding my-5 "
+                        class="col-xl-4 col-lg-4 col-md-6 col-sm-12 no-padding my-5"
                       >
                         <app-provider-card
                           *ngIf="smallCards"

@@ -5,10 +5,11 @@ import {
   Output,
   EventEmitter,
   OnDestroy,
+  Directive,
 } from '@angular/core'
 import { User } from '../../../core-classes/user'
 import { Subscription } from 'rxjs'
-import { AngularFirestore } from 'angularfire2/firestore'
+import { AngularFirestore } from '@angular/fire/firestore'
 import { CertificationsService } from '../../../core-services/certifications.service'
 
 @Component({

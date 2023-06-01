@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Directive } from '@angular/core'
 import { BscService, EventTypeBsc, BepChain } from '@service/bsc.service'
 
 import { BehaviorSubject } from 'rxjs'
@@ -13,8 +13,10 @@ import { environment } from '@env/environment'
   templateUrl: './wallet-bnb-assets.component.html',
   styleUrls: ['./wallet-bnb-assets.component.css'],
 })
-export class WalletBnbAssetsComponent extends OnDestroyComponent
-  implements OnInit {
+export class WalletBnbAssetsComponent
+  extends OnDestroyComponent
+  implements OnInit
+{
   address: string | boolean = true
   private balances = new BehaviorSubject(null)
   explorer = ''
@@ -35,7 +37,7 @@ export class WalletBnbAssetsComponent extends OnDestroyComponent
   async ngOnInit() {
     this.bscService.events$
       .pipe(takeUntil(this.destroy$)) // unsubscribe on destroy
-      .subscribe(async event => {
+      .subscribe(async (event) => {
         if (!event) {
           if (!this.chain) this.address = false
           return

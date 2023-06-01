@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core'
+import { Component, OnInit, AfterViewInit, Directive } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Job, JobState } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
@@ -86,7 +86,7 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
       this.showBscAssetSelection = true
     }
 
-    const onSelection = async assetData => {
+    const onSelection = async (assetData) => {
       // keep this context
       this.showBscAssetSelection = false // Destroys the bscAssetSelector
       this.bscAssetData = assetData // Receives the selected asset data
@@ -211,7 +211,6 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
 
     console.log('Safety allowance (+10%): ' + safetyAllowance)
 
-
     let result = await this.bscService.approve(
       this.bscAssetData.token,
       safetyAllowance
@@ -224,8 +223,7 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
         `Approve ${this.bscAssetData.token}`,
         result.transactionHash,
         this.job.id
-      );
-      
+      )
     }
 
     this.isApproving = false
@@ -246,7 +244,6 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
       this.job.providerId
     )
 
-    
     // throw ('debug error'); // simulate the user close the browser
     /*
     backend will have to:
@@ -254,8 +251,7 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
     - send email and chat notifications (tbd step 2 todo optional, is it required)
     - update state
     */
-    
-    
+
     // check result and approve into controller state
     if (!result.err) {
       /*
@@ -269,14 +265,12 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
       );
       
       */
-      
-      
+
       const action = new IJobAction(ActionType.enterEscrowBsc, UserType.client)
       this.job.state = JobState.inEscrow
 
       let success = await this.jobService.handleJobAction(this.job, action)
-      
-      
+
       if (success) {
         this.showSuccess = true
         this.showBalance = false // not needed anymore and it will change

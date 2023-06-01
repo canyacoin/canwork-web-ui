@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing'
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 
 import { GetReferralComponent } from './get-referral.component'
 
@@ -6,7 +6,7 @@ describe('GetReferralComponent', () => {
   let component: GetReferralComponent
   let fixture: ComponentFixture<GetReferralComponent>
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [GetReferralComponent],
     }).compileComponents()

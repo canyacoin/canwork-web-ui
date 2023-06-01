@@ -4,6 +4,7 @@ import {
   OnChanges,
   Input,
   SimpleChanges,
+  Directive,
 } from '@angular/core'
 import { Observable, from } from 'rxjs'
 
@@ -58,7 +59,7 @@ export class AvatarComponent implements OnInit, OnChanges {
     if (this.user && this.user.name) {
       return this.user.name
         .split(' ')
-        .map(str => str[0])
+        .map((str) => str[0])
         .join('')
         .substring(0, 2)
         .toUpperCase()

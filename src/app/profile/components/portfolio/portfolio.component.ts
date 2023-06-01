@@ -1,6 +1,6 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core'
+import { Component, Input, OnDestroy, OnInit, Directive } from '@angular/core'
 import { Router } from '@angular/router'
-import { AngularFirestore } from 'angularfire2/firestore'
+import { AngularFirestore } from '@angular/fire/firestore'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 import { User } from '../../../core-classes/user'
@@ -47,7 +47,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   setPortfolio(address: string) {
     const portfolioRecords = this.afs.collection(
       `portfolio/${address}/work`,
-      ref => ref.orderBy('timestamp', 'desc')
+      (ref) => ref.orderBy('timestamp', 'desc')
     )
     this.portfolioSubscription = portfolioRecords.valueChanges().subscribe(
       (data: any) => {
@@ -56,7 +56,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
           Math.ceil(this.allPortfolioItems.length / this.pageLimit) - 1
         this.loaded = true
       },
-      error => {
+      (error) => {
         console.error('! unable to retrieve portfolio data:', error)
       }
     )

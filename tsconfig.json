@@ -5,19 +5,13 @@
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
-    "module": "es2015",
+    "module": "es2020",
     "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "skipLibCheck": true, // https://github.com/storybookjs/storybook/issues/9463
-    "target": "es5",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2018",
-      "dom"
-    ],
+    "target": "es2015",
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2018", "dom"],
     "paths": {
       "@abi/*": ["assets/abi/*"],
       "@contract/*": ["app/@contract/*"],
@@ -29,7 +23,18 @@
       "@component/*": ["app/core-components/*"],
       "@config/*": ["app/core-config/*"],
       "@env/*": ["environments/*"],
-      "@extensions/*": ["./*.extensions.ts"]
+      "@extensions/*": ["./*.extensions.ts"],
+      "stream": ["../node_modules/stream-browserify"],
+      "assert": ["../node_modules/assert"],
+      "os": ["../node_modules/os-browserify"],
+      "crypto": ["../node_modules/crypto-browserify"],
+      "util": ["../node_modules/util"],
+      "http": ["../node_modules/stream-http"],
+      "https": ["../node_modules/https-browserify"]
     }
+  },
+  "angularCompilerOptions": {
+    "enableIvy": true,
+    "allowEmptyCodegenFiles": true
   }
 }

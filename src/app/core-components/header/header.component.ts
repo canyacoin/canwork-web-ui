@@ -1,11 +1,11 @@
 // import { providerTypeArray } from './../../const/providerTypes'
 import { animate, style, transition, trigger } from '@angular/animations'
-import { Component, Input, OnDestroy, OnInit } from '@angular/core'
+import { Component, Input, OnDestroy, OnInit, Directive } from '@angular/core'
 import { Router } from '@angular/router'
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
 import { NavService } from '@service/nav.service'
-import { AngularFirestore } from 'angularfire2/firestore'
+import { AngularFirestore } from '@angular/fire/firestore'
 import { Subscription } from 'rxjs'
 import { BscService, EventTypeBsc } from '@service/bsc.service'
 
@@ -66,7 +66,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.hideSearchBar = hide
     })
 
-    this.bscSub = this.bscService.events$.subscribe(event => {
+    this.bscSub = this.bscService.events$.subscribe((event) => {
       if (!event) {
         this.bAddress = ''
         return
@@ -91,13 +91,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
       const unreadConversations = this.afs
         .collection('chats')
         .doc(this.currentUser.address)
-        .collection('channels', ref => ref.where('unreadMessages', '==', true))
+        .collection('channels', (ref) =>
+          ref.where('unreadMessages', '==', true)
+        )
 
       if (this.messagesSubscription) {
         this.messagesSubscription.unsubscribe()
       }
       this.messagesSubscription = unreadConversations.valueChanges().subscribe(
-        x => {
+        (x) => {
           const hadUnread = this.hasUnreadMessages
           this.unreadMsgCount = x.length
           this.hasUnreadMessages = x.length > 0
@@ -113,7 +115,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             }
           }
         },
-        error => {
+        (error) => {
           // console.error('! unable to retrieve chat/channel data:', error)
         }
       )

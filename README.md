@@ -10,13 +10,18 @@ This is an Angular Project, generated using [Angular CLI](https://github.com/ang
 
 [![pipeline status](https://gitlab.com/canyacoin/canwork/web-ui/badges/master/pipeline.svg)]
 
-_This project requires_
+_This project requires (update needed)_
 
 - NPM: 6.4.1
 - Node: 10.15.3
 - Angular-CLI: 7.0.2
 - Firebase-CLI: 5.5.7
 - Yarn: 1.15.2
+
+## Upgrading
+
+Please refer to this firebase/angular compatibility table:
+https://github.com/RaphaelJenni/firebaseui-angular#compatibility
 
 ## Setting Up
 
@@ -48,6 +53,16 @@ Git
 git clone git@gitlab.com:canyacoin/canwork/web-ui.git
 cd web-ui
 git checkout -b "yourname"
+```
+
+Setup (new)
+
+```
+nvm use
+npm install -g yarn@1.22.19
+npm install
+npx husky install
+npx husky set .husky/pre-commit "npx pretty-quick --staged"
 ```
 
 Setup

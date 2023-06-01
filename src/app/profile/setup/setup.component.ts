@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, Directive } from '@angular/core'
 import { Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 
@@ -26,7 +26,7 @@ export class SetupComponent implements OnInit, OnDestroy {
       (user: User) => {
         this.currentUser = user
       },
-      error => {
+      (error) => {
         console.error('! unable to retrieve currentUser data:', error)
       }
     )

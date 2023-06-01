@@ -3,8 +3,8 @@
     <div class="container text-center">
       <div class="card px-30 py-15 my-10">
         <h2>Choose your payment method</h2>
-        <p class="fw-500" style="font-size:0.875rem">
-          Job Value: $ {{ jobBudgetUsd | number: '1.2-2' }} USD
+        <p class="fw-500" style="font-size: 0.875rem">
+          Job Value: $ {{ jobBudgetUsd | number : '1.2-2' }} USD
         </p>
         <!--<div *ngIf="address" class="row">
           <div class="col text-center">
@@ -55,7 +55,7 @@
                           ></app-dynamic-coin>
                         </td>
                         <td>{{ assets[i].symbol }}</td>
-                        <td>{{ assets[i].free | number: '1.0-4' }}</td>
+                        <td>{{ assets[i].free | number : '1.0-4' }}</td>
                         <td *ngIf="assets[i].converting">
                           <img
                             src="assets/img/loader.svg"
@@ -70,14 +70,14 @@
                             assets[i].hasEnough && !assets[i].seemsNotEnough
                           "
                         >
-                          ${{ assets[i].freeUsd | number: '1.2' }}
+                          ${{ assets[i].freeUsd | number : '1.2' }}
                         </td>
                         <td *ngIf="assets[i].converting" colspan="2"></td>
                         <td
                           *ngIf="!assets[i].converting && assets[i].hasEnough"
                         >
                           <button
-                            class="btn btn-primary  my-1"
+                            class="btn btn-primary my-1"
                             (click)="paymentSelected(assets[i])"
                           >
                             Select

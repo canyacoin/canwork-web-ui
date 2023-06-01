@@ -3,8 +3,11 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
   AngularFirestoreDocument,
-} from 'angularfire2/firestore'
-import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage'
+} from '@angular/fire/firestore'
+import {
+  AngularFireStorage,
+  AngularFireUploadTask,
+} from '@angular/fire/storage'
 import { Observable } from 'rxjs'
 
 import { Upload } from '../core-classes/upload'
@@ -35,7 +38,7 @@ export class UploadService {
           `uploads/${UploadCategory.jobs}/${jobId}/${upload.createdBy}/${upload.id}/${upload.name}`
         )
         const uploadTask = storageRef.put(file)
-        uploadTask.snapshotChanges().subscribe(snap => {
+        uploadTask.snapshotChanges().subscribe((snap) => {
           upload.progress = Math.floor(
             (snap.bytesTransferred / snap.totalBytes) * 100
           )

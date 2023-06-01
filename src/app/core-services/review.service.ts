@@ -7,7 +7,7 @@ import { UserService } from '@service/user.service'
 import {
   AngularFirestore,
   AngularFirestoreCollection,
-} from 'angularfire2/firestore'
+} from '@angular/fire/firestore'
 import { Observable, Subscribable } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 
@@ -55,7 +55,7 @@ export class ReviewService {
     const reviews = await this.getUserReviews(userId)
     if (reviews) {
       let total = 0
-      reviews.forEach(review => {
+      reviews.forEach((review) => {
         total += review.rating
       })
       const average = total / reviews.length
@@ -76,18 +76,18 @@ export class ReviewService {
       if (reviews.empty) {
         resolve([])
       } else {
-        resolve(reviews.docs.map(a => a.data() as Review))
+        resolve(reviews.docs.map((a) => a.data() as Review))
       }
     })
   }
 
   getJobReviews(jobId: string): Observable<Review[]> {
-    const collection = this.afs.collection<any>('reviews', ref =>
+    const collection = this.afs.collection<any>('reviews', (ref) =>
       ref.where('jobId', '==', jobId)
     )
     return collection.snapshotChanges().pipe(
-      map(changes => {
-        return changes.map(a => {
+      map((changes) => {
+        return changes.map((a) => {
           return a.payload.doc.data() as Review
         })
       })

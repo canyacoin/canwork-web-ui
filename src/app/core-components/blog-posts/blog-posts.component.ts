@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Directive } from '@angular/core'
 import {
   AngularFirestore,
   AngularFirestoreCollection,
-} from 'angularfire2/firestore'
+} from '@angular/fire/firestore'
 
 @Component({
   selector: 'app-blog-posts',
@@ -24,7 +24,7 @@ export class BlogPostsComponent implements OnInit {
       .limit(3)
       .get()
     if (!articlesSnapshot.empty) {
-      articlesSnapshot.forEach(doc => {
+      articlesSnapshot.forEach((doc) => {
         let obj = doc.data()
         let articleUrl = ''
         if (obj.category) articleUrl = '/' + obj.category + '/' + obj.slug

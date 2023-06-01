@@ -14,7 +14,7 @@ import { UserService } from '@service/user.service'
 import {
   AngularFirestore,
   AngularFirestoreCollection,
-} from 'angularfire2/firestore'
+} from '@angular/fire/firestore'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 
@@ -48,7 +48,7 @@ export class JobService {
       .doc(`jobs/${jobId}`)
       .snapshotChanges()
       .pipe(
-        map(doc => {
+        map((doc) => {
           const job = doc.payload.data() as Job
           job.id = jobId
           return job
@@ -61,11 +61,13 @@ export class JobService {
     const propertyToCheck =
       userType === UserType.client ? 'clientId' : 'providerId'
     return this.afs
-      .collection<any>('jobs', ref => ref.where(propertyToCheck, '==', userId))
+      .collection<any>('jobs', (ref) =>
+        ref.where(propertyToCheck, '==', userId)
+      )
       .snapshotChanges()
       .pipe(
-        map(changes => {
-          return changes.map(a => {
+        map((changes) => {
+          return changes.map((a) => {
             const data = a.payload.doc.data() as Job
             data.id = a.payload.doc.id
             return data

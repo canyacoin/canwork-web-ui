@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnInit, Directive } from '@angular/core'
 import { Review } from '@class/review'
 import { User } from '@class/user'
 import { MomentService } from '@service/moment.service'

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Directive } from '@angular/core'
 import { FilterPipe } from 'ngx-filter-pipe'
 
 @Component({

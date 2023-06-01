@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Directive } from '@angular/core'
 import { JobState } from '@class/job'
 import { User } from '@class/user'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -38,11 +38,11 @@ export class JobBidsComponent implements OnInit {
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       this.currentUser = user
     })
-    this.activatedRoute.params.pipe(take(1)).subscribe(params => {
+    this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
       if (params['jobId']) {
         this.jobSub = this.publicJobsService
           .getPublicJob(params['jobId'])
-          .subscribe(publicJob => {
+          .subscribe((publicJob) => {
             if (this.currentUser.address === publicJob.clientId) {
               this.job = publicJob
               this.isOpen = this.job.state === JobState.acceptingOffers
@@ -50,7 +50,7 @@ export class JobBidsComponent implements OnInit {
               this.canSee = true
               this.bidsSub = this.publicJobsService
                 .getPublicJobBids(publicJob.id)
-                .subscribe(result => {
+                .subscribe((result) => {
                   this.bids = result
                 })
             } else {
@@ -60,7 +60,7 @@ export class JobBidsComponent implements OnInit {
       } else if (params['slug']) {
         this.jobSub = this.publicJobsService
           .getPublicJobBySlug(params['slug'])
-          .subscribe(publicJob => {
+          .subscribe((publicJob) => {
             console.log(publicJob === null)
             if (publicJob === null) {
               this.canSee = false
@@ -72,7 +72,7 @@ export class JobBidsComponent implements OnInit {
                 this.canSee = true
                 this.bidsSub = this.publicJobsService
                   .getPublicJobBids(publicJob.id)
-                  .subscribe(result => {
+                  .subscribe((result) => {
                     this.bids = result
                   })
               } else {

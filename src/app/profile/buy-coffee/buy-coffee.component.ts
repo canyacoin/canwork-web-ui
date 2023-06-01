@@ -1,6 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnInit, Directive } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { CanPay } from '@canpay-lib/lib'
+//import { CanPay } from '@canpay-lib/lib'
+import { CanPay } from '../../canpay-interfaces/interfaces'
+
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
 import { ChatService } from '@service/chat.service'

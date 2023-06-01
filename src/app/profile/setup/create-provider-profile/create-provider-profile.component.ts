@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core'
+import { Component, Input, OnDestroy, OnInit, Directive } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { User, UserCategory, UserState, UserType } from '@class/user'
 import { AuthService } from '@service/auth.service'
@@ -130,7 +130,7 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
         this.user.bscAddress || '',
         () => null,
         Validators.composeAsync([
-          bscAddress => Promise.resolve(Validators.required(bscAddress)),
+          (bscAddress) => Promise.resolve(Validators.required(bscAddress)),
           new BscValidator(this.bscService, this.userService)
             .isValidAddressField,
           new BscValidator(
@@ -169,7 +169,7 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
     let tags: string[] =
       this.profileForm.value.skillTags === ''
         ? []
-        : this.profileForm.value.skillTags.split(',').map(item => item.trim())
+        : this.profileForm.value.skillTags.split(',').map((item) => item.trim())
     if (tags.length > 6) {
       tags = tags.slice(0, 6)
     }

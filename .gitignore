@@ -54,6 +54,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+.husky
 
 # e2e
 /e2e/*.js
@@ -64,4 +65,4 @@ testem.log
 Thumbs.db
 src/environments/environment.ts.orig
 src/environments/*.ts
-nohup.out
+nohup*.out

@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, Directive } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AngularFirestore } from 'angularfire2/firestore'
+import { AngularFirestore } from '@angular/fire/firestore'
 import * as findIndex from 'lodash/findIndex'
 import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
@@ -99,7 +99,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       ],
     })
 
-    this.activatedRoute.queryParams.take(1).subscribe(params => {
+    this.activatedRoute.queryParams.take(1).subscribe((params) => {
       if (params['address']) {
         this.queryAddress = params['address']
       }
@@ -108,9 +108,10 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const ua = window.navigator.userAgent
-    this.isOnMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
-      ua
-    )
+    this.isOnMobile =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(
+        ua
+      )
     this.authService.currentUser$.pipe(take(1)).subscribe((user: User) => {
       if (user && user !== this.currentUser) {
         this.currentUser = user
@@ -223,11 +224,11 @@ export class ChatComponent implements OnInit, OnDestroy {
         .doc(this.currentUser.address)
         .collection('channels')
         .doc(this.selectedChannel.channel)
-        .collection('messages', ref =>
+        .collection('messages', (ref) =>
           ref.limit(50).orderBy('timestamp', 'desc')
         )
         .valueChanges()
-        .pipe(map(array => array.reverse()))
+        .pipe(map((array) => array.reverse()))
       collection.subscribe((data: any) => {
         this.isLoading = false
         this.messages = data
@@ -251,8 +252,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   scrollToBottom() {
     if (
       (<any>window).$('#section-messages') &&
-      ((<any>window).$('#section-messages-end') &&
-        (<any>window).$('#section-messages-end').offset())
+      (<any>window).$('#section-messages-end') &&
+      (<any>window).$('#section-messages-end').offset()
     ) {
       ;(<any>window).$('#section-messages').animate({ scrollTop: 100000 }, 300)
     }
@@ -274,12 +275,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   onSearch(query: string) {
     if (query !== '') {
       const tmpChannels: any = []
-      this.channels.map(item => {
-        if (
-          JSON.stringify(item)
-            .toLowerCase()
-            .includes(query.toLowerCase())
-        ) {
+      this.channels.map((item) => {
+        if (JSON.stringify(item).toLowerCase().includes(query.toLowerCase())) {
           tmpChannels.push(item)
         }
       })

@@ -6,6 +6,7 @@ import {
   Pipe,
   PipeTransform,
   HostBinding,
+  Directive,
 } from '@angular/core'
 import { Router } from '@angular/router'
 import { FilterPipe } from 'ngx-filter-pipe'
@@ -87,7 +88,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
         this.activeJobs = jobs
         this.loading = false
         this.jobs = this.activeJobs
-        this.jobs.forEach(async job => {
+        this.jobs.forEach(async (job) => {
           this.jobService.assignOtherPartyAsync(job, this.userType)
         })
       })
@@ -95,8 +96,10 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       .getPublicJobsByUser(userId)
       .subscribe(async (jobs: Job[]) => {
         // only show open jobs
-        const open = jobs.filter(job => job.state === JobState.acceptingOffers)
-        const draft = jobs.filter(job => job.state === JobState.draft)
+        const open = jobs.filter(
+          (job) => job.state === JobState.acceptingOffers
+        )
+        const draft = jobs.filter((job) => job.state === JobState.draft)
         this.publicJobs = open
         this.draftJobs = draft
       })
@@ -106,7 +109,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     this.jobType = jobType
     switch (jobType) {
       case 'public':
-        this.jobs = this.publicJobs.filter(job => job.draft === false)
+        this.jobs = this.publicJobs.filter((job) => job.draft === false)
         break
       case 'active':
         this.jobs = this.activeJobs
@@ -131,7 +134,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     console.log(this.filterByState.state !== '')
     if (this.filterByState.state !== '') {
       this.jobs = this.activeJobs.filter(
-        job => job.state === this.filterByState.state
+        (job) => job.state === this.filterByState.state
       )
     } else {
       this.jobs = this.activeJobs

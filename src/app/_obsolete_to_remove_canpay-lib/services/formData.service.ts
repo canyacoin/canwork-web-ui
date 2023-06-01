@@ -95,7 +95,10 @@ export class FormDataService {
     // Reset the workflow
     // Return the form data after all this.* members had been reset
     this.formData.clear()
-    this.isPersonalFormValid = this.isConfirmationFormValid = this.isAddressFormValid = false
+    this.isPersonalFormValid =
+      this.isConfirmationFormValid =
+      this.isAddressFormValid =
+        false
     return this.formData
   }
 

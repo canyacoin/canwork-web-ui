@@ -1,25 +1,24 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 
-import { BscPaymentSelectorComponent } from './bsc-payment-selector.component';
+import { BscPaymentSelectorComponent } from './bsc-payment-selector.component'
 
 describe('BscPaymentSelectorComponent', () => {
-  let component: BscPaymentSelectorComponent;
-  let fixture: ComponentFixture<BscPaymentSelectorComponent>;
+  let component: BscPaymentSelectorComponent
+  let fixture: ComponentFixture<BscPaymentSelectorComponent>
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ BscPaymentSelectorComponent ]
-    })
-    .compileComponents();
-  }));
+      declarations: [BscPaymentSelectorComponent],
+    }).compileComponents()
+  }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BscPaymentSelectorComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(BscPaymentSelectorComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

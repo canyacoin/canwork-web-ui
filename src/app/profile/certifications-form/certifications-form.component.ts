@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core'
+import { Component, OnInit, AfterViewInit, Directive } from '@angular/core'
 import { Certification } from '../../core-classes/certification'
 import { CertificationsService } from '../../core-services/certifications.service'
 import { AuthService } from '../../core-services/auth.service'
@@ -57,7 +57,7 @@ export class CertificationsFormComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.getJSON().subscribe(data => {
+    this.getJSON().subscribe((data) => {
       this.uniList = data
       this.uniList.sort()
     })
@@ -117,7 +117,7 @@ export class CertificationsFormComponent implements OnInit, AfterViewInit {
   searchUni() {
     const input = this.certificationForm.value.university.toLowerCase()
     this.uniFilteredList = this.uniList
-      .filter(uni => uni.toLowerCase().indexOf(input) !== -1)
+      .filter((uni) => uni.toLowerCase().indexOf(input) !== -1)
       .slice(0, 10)
   }
 }

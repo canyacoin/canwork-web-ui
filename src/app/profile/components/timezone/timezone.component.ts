@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core'
+import { Component, Input, OnDestroy, OnInit, Directive } from '@angular/core'
 import { Observable, interval, Subscription } from 'rxjs'
 
 import { User, UserType } from '../../../core-classes/user'
@@ -19,7 +19,7 @@ export class TimezoneComponent implements OnInit, OnDestroy {
   constructor() {}
 
   ngOnInit() {
-    this.timeSub = this.myInterval.subscribe(x => {
+    this.timeSub = this.myInterval.subscribe((x) => {
       this.localTime = new Date().toLocaleString('en-US', {
         timeZone: this.userModel.timezone || 'America/New_York',
       })

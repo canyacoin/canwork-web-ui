@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Directive } from '@angular/core'
 import { PublicJobService } from '@service/public-job.service'
 import { StatisticsService } from '@service/statistics.service'
 import { AuthService } from '@service/auth.service'
@@ -76,15 +76,15 @@ export class DashboardComponent implements OnInit {
         this.currentUser = user
       }
     })
-    this.publicJobService.getAllOpenJobs().subscribe(result => {
+    this.publicJobService.getAllOpenJobs().subscribe((result) => {
       this.allJobs = result
       this.queryJobs = this.allJobs
     })
 
     // retrieve and aggregate job stats
     let jobStats, publicJobStats: any
-    this.statisticsService.getStatistics().subscribe(result => {
-      result.forEach(obj => {
+    this.statisticsService.getStatistics().subscribe((result) => {
+      result.forEach((obj) => {
         if (obj.name === 'publicJobs') publicJobStats = obj
         if (obj.name === 'jobs') jobStats = obj
       })
@@ -108,12 +108,8 @@ export class DashboardComponent implements OnInit {
   onSearch(query: string) {
     if (query !== '') {
       const tmpJobs: any = []
-      this.allJobs.map(item => {
-        if (
-          JSON.stringify(item)
-            .toLowerCase()
-            .includes(query.toLowerCase())
-        ) {
+      this.allJobs.map((item) => {
+        if (JSON.stringify(item).toLowerCase().includes(query.toLowerCase())) {
           tmpJobs.push(item)
         }
       })
@@ -128,7 +124,7 @@ export class DashboardComponent implements OnInit {
     //console.log(this.filterByCategory)
     if (this.filterByCategory !== 'all') {
       this.queryJobs = this.allJobs.filter(
-        job => job.information.providerType === this.filterByCategory
+        (job) => job.information.providerType === this.filterByCategory
       )
     } else {
       this.queryJobs = this.allJobs
@@ -137,7 +133,7 @@ export class DashboardComponent implements OnInit {
 
   getImage(string) {
     let url = 'assets/img/providers/'
-    const type = this.providerTypes.find(prov => prov.id === string)
+    const type = this.providerTypes.find((prov) => prov.id === string)
     url = url + type.img
     return url
   }
