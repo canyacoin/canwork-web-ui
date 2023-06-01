@@ -29,6 +29,7 @@ dist:staging:
     - yarn run build:staging
 
 dist:production:
+  image: node:14.21.3
   stage: build
   environment: production
   only:
