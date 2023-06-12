@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, Directive } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { BscService, EventTypeBsc } from '@service/bsc.service'
-import WalletConnect from './../core-classes/walletConnect'
-import WalletConnectQRCodeModal from '@walletconnect/qrcode-modal'
+// import WalletConnect from './../core-classes/walletConnect' // obsolete, bep2
+// import WalletConnectQRCodeModal from '@walletconnect/qrcode-modal' // v1
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 import { crypto } from '@binance-chain/javascript-sdk'
@@ -117,6 +117,8 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
     }
   }
 
+  /*
+  obsolete, unused
   async walletConnect(connector: WalletConnect) {
     // Subscribe to connection events
     connector.on('connect', () => {
@@ -147,6 +149,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
       }
     }, 100)
   }
+  */
 
   showKeystoreError(error: string) {
     this.validKeystoreUploaded = false

@@ -1,4 +1,7 @@
-import WalletConnectProvider from '@walletconnect/web3-provider'
+//import WalletConnectProvider from '@walletconnect/web3-provider' // v1
+
+import { EthereumProvider } from '@walletconnect/ethereum-provider' // v2
+
 /*
 as seen into:
 https://github.com/pancakeswap/pancake-frontend/blob/develop/src/utils/web3React.ts
@@ -264,15 +267,15 @@ export class BscService {
 
       // network and account change listen, safe way: if anything change, reload (address) or disconnect (network)
       if (!!window.ethereum)
-        window.ethereum.on('networkChanged', (networkId) => {
+        window.ethereum.on('networkChanged', async (networkId) => {
           if (networkId != environment.bsc.netId) {
-            this.disconnect()
+            await this.disconnect()
             window.location.reload() // it's safer to refresh the page
           }
         })
 
       if (!!window.ethereum)
-        window.ethereum.on('accountsChanged', (accounts) => {
+        window.ethereum.on('accountsChanged', async (accounts) => {
           if (accounts && accounts.length > 0) {
             const connectedWallet = JSON.parse(
               localStorage.getItem('connectedWallet')
@@ -297,7 +300,7 @@ export class BscService {
               window.location.reload() // it's safer to refresh the page
             }
           } else {
-            this.disconnect()
+            await this.disconnect()
           }
         })
     } else if (app === WalletApp.WalletConnectBsc) {
@@ -318,7 +321,18 @@ export class BscService {
       walletConnectParams.rpc[environment.bsc.mainNetId] =
         environment.bsc.mainNetRpc
 
-      let walletConnectProvider = new WalletConnectProvider(walletConnectParams)
+      //let walletConnectProvider = new EthereumProvider(walletConnectParams) // v1
+
+      // todo refactor to common function
+      const rpcMap = {}
+      rpcMap[environment.bsc.mainNetId] = environment.bsc.mainNetRpc
+      let walletConnectProvider = await EthereumProvider.init({
+        projectId: environment.bsc.walletConnectProjectId,
+        chains: [environment.bsc.mainNetId],
+        showQrModal: true,
+        rpcMap,
+      }) // v2
+
       if (!walletConnectProvider) return 'No WalletConnect Provider'
       /*
         // disconnect (cleanup) before reconnecting
@@ -358,7 +372,7 @@ export class BscService {
         network = await this.provider.getNetwork()
       } catch (err) {
         console.log(err)
-        walletConnectProvider.disconnect()
+        await walletConnectProvider.disconnect()
         return 'Please connect to BNB Chain network'
       }
 
@@ -379,8 +393,8 @@ export class BscService {
 
       // attach events to listen for disconnect, net change or account change, safe way, disconnect
       // Subscribe to accounts change
-      walletConnectProvider.on('accountsChanged', (accounts) => {
-        this.disconnect()
+      walletConnectProvider.on('accountsChanged', async (accounts) => {
+        await this.disconnect()
         console.log(
           'walletConnectProvider accountsChanged event: ' +
             JSON.stringify(accounts)
@@ -388,17 +402,30 @@ export class BscService {
       })
 
       // Subscribe to chainId change
-      walletConnectProvider.on('chainChanged', (chainId) => {
-        this.disconnect()
+      walletConnectProvider.on('chainChanged', async (chainId) => {
+        await this.disconnect()
         console.log('walletConnectProvider chainChanged event: ' + chainId)
       })
 
       // Subscribe to session disconnection
+
+      /*
+      // v1
       walletConnectProvider.on('disconnect', (code, reason) => {
         this.disconnectState()
         console.log(
           `walletConnectProvider disconnect event, code (${code}), reason (${reason})`
         )
+      })
+      */
+
+      // v2
+      walletConnectProvider.on('disconnect', (args: any) => {
+        // args: ProviderRpcError
+        this.disconnectState()
+        console.log(`walletConnectProvider disconnect event`)
+        console.log(args)
+        window.location.reload() // it's safer to refresh the page
       })
     } else {
       console.log('Unknow bsc app: ' + app)
@@ -468,7 +495,7 @@ export class BscService {
     if (!this.provider) await this.connect()
     if (!this.provider) {
       // we weren't able to connect, invoke disconnect function to clean up to inform all components
-      this.disconnect()
+      await this.disconnect()
       return -1
     }
 
@@ -503,7 +530,7 @@ export class BscService {
 
     if (!this.provider) {
       // we weren't able to connect, invoke disconnect function to clean up to inform all components
-      this.disconnect()
+      await this.disconnect()
       return []
     }
 
@@ -616,7 +643,7 @@ export class BscService {
       if (!this.provider) await this.connect()
       if (!this.provider) {
         // we weren't able to connect, invoke disconnect function to clean up to inform all components
-        this.disconnect()
+        await this.disconnect()
         return -1
       }
 
@@ -1496,24 +1523,41 @@ export class BscService {
     return app
   }
 
-  disconnect() {
+  async disconnect() {
     let app = null
     if (localStorage.getItem('connectedWallet'))
       app = JSON.parse(localStorage.getItem('connectedWallet')).walletApp
     if (app === WalletApp.WalletConnectBsc) {
       try {
+        /*
         let walletConnectParams = {
           chainId: environment.bsc.mainNetId,
           rpc: {},
         }
         walletConnectParams.rpc[environment.bsc.mainNetId] =
           environment.bsc.mainNetRpc
-        let walletConnectProvider = new WalletConnectProvider(
-          walletConnectParams
-        )
+
+        
+        //let walletConnectProvider = new EthereumProvider(walletConnectParams) // v1
+        */
+
+        // v2
+        const rpcMap = {}
+        rpcMap[environment.bsc.mainNetId] = environment.bsc.mainNetRpc
+
+        let walletConnectProvider = await EthereumProvider.init({
+          projectId: environment.bsc.walletConnectProjectId,
+          chains: [environment.bsc.mainNetId],
+          showQrModal: true,
+          rpcMap,
+        })
         if (walletConnectProvider) {
           walletConnectProvider.disconnect()
           console.log('WalletConnectBsc disconnect ok')
+        } else {
+          console.log(
+            'WalletConnectBsc disconnect walletConnectProvider not found'
+          )
         }
       } catch (e) {
         console.log('cannot create walletConnectProvider instance')

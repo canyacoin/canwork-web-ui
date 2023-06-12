@@ -29,7 +29,7 @@ export class WalletBnbAssetsComponent
   async forget() {
     switch (this.chain) {
       case BepChain.SmartChain:
-        this.bscService.disconnect()
+        await this.bscService.disconnect()
         break
     }
   }
