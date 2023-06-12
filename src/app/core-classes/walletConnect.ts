@@ -1,3 +1,5 @@
+// obsolete
+/*
 import Connector from '@walletconnect/core';
 import { IWalletConnectOptions } from '@walletconnect/types';
 import * as cryptoLib from './webCrypto';
@@ -50,4 +52,4 @@ class WalletConnect extends Connector {
     }
 }
 
-export default WalletConnect;
+export default WalletConnect;*/
