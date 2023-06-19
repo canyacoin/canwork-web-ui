@@ -104,4 +104,4 @@ deploy:production:
     - firebase functions:config:set chainmonitor.authkey="$CHAINMONITOR_AUTHKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set chainmonitor.bsctokens="$CHAINMONITOR_BSCTOKENS" --token "$FIREBASE_CI_AUTH_TOKEN"
     - echo "Deploying"
-    - firebase deploy --token "$FIREBASE_CI_AUTH_TOKEN" -P $FIREBASE_PROJECT_ID --only hosting:canwork-webui
+    - firebase deploy --token "$FIREBASE_CI_AUTH_TOKEN" -P $FIREBASE_PROJECT_ID --only hosting:canwork-webui,functions:bep20TxMonitor
