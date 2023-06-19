@@ -15,7 +15,7 @@ _This project uses (new June 2023)_
 - Node.js: 14.21.3
 - Yarn: 1.22.19
 - Angular-CLI (@angular/core): 12.2.17
-- Firebase-CLI (firebase-tools): 10.9.2
+- Firebase-CLI (firebase-tools): 11.30.0
 - Typescript: 4.3.5
 - Walletconnect: 2.8.1
 
