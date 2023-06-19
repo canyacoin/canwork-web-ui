@@ -1,5 +1,4 @@
-image: registry.gitlab.com/canyacoin/node-build-container:1.6
-# customize image on single jobs: https://docs.gitlab.com/ee/ci/yaml/#image
+image: node:14.21.3
 
 variables:
   APP_PATH: /builds/$CI_PROJECT_PATH
@@ -12,7 +11,6 @@ stages:
   - deploy
 
 dist:staging:
-  image: node:14.21.3
   stage: build
   environment: staging
   only:
@@ -29,7 +27,6 @@ dist:staging:
     - yarn run build:staging
 
 dist:production:
-  image: node:14.21.3
   stage: build
   environment: production
   only:
@@ -56,7 +53,7 @@ deploy:staging:
   script:
     - cd $APP_PATH/functions
     - yarn
-    - yarn global add firebase-tools@7.16.2
+    - yarn global add firebase-tools@10.9.2
     - cd ..
     - firebase use staging --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set algolia.appid="$FIREBASE_ALGOLIA_APPID" --token "$FIREBASE_CI_AUTH_TOKEN"
@@ -74,7 +71,7 @@ deploy:staging:
     - firebase functions:config:set chainmonitor.authkey="$CHAINMONITOR_AUTHKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set chainmonitor.bsctokens="$CHAINMONITOR_BSCTOKENS" --token "$FIREBASE_CI_AUTH_TOKEN"
     - echo "Deploying"
-    - firebase deploy --token "$FIREBASE_CI_AUTH_TOKEN" -P $FIREBASE_PROJECT_ID_STAGING --only hosting:canwork-webui
+    - firebase deploy --token "$FIREBASE_CI_AUTH_TOKEN" -P $FIREBASE_PROJECT_ID_STAGING --only hosting:canwork-webui,functions:bep20TxMonitor
 
 deploy:production:
   stage: deploy
@@ -87,7 +84,7 @@ deploy:production:
   script:
     - cd $APP_PATH/functions
     - yarn
-    - yarn global add firebase-tools@7.16.2
+    - yarn global add firebase-tools@10.9.2
     - cd ..
     - firebase use prod --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set algolia.appid="$FIREBASE_ALGOLIA_APPID" --token "$FIREBASE_CI_AUTH_TOKEN"
