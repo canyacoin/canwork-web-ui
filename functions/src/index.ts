@@ -132,7 +132,8 @@ exports.sendEmail = functions.https.onRequest(async (request, response) => {
     !request.headers.authorization ||
     request.headers.authorization !== env.dev.authkey
   ) {
-    return response.status(403).send('Unauthorized')
+    response.status(403).send('Unauthorized')
+    return
   }
 
   console.log('+ serviceConfig', serviceConfig)
@@ -156,10 +157,8 @@ exports.sendEmail = functions.https.onRequest(async (request, response) => {
   }
   const r = await sgMail.send(msg)
 
-  return response
-    .status(201)
-    .type('application/json')
-    .send({ r })
+  response.status(201).type('application/json').send({ r })
+  return
 })
 
 /*
@@ -192,12 +191,9 @@ exports.jobStateEmailNotification = functions.https.onRequest(
           'Make sure you authorize your request by providing the following HTTP header:',
           'Authorization: Bearer <Firebase ID Token>'
         )
-        return response
-          .status(403)
-          .type('application/json')
-          .send({
-            message: 'Unauthorized, missing or incorrect authorization header',
-          })
+        return response.status(403).type('application/json').send({
+          message: 'Unauthorized, missing or incorrect authorization header',
+        })
       }
 
       const jobAction: string = request.body['jobAction']
@@ -205,13 +201,10 @@ exports.jobStateEmailNotification = functions.https.onRequest(
 
       if (!jobAction || !jobId) {
         console.error('! bad request body parameters', request.body)
-        return response
-          .status(422)
-          .type('application/json')
-          .send({
-            message:
-              'Unprocessable entity, missing or invalid parameters in request body',
-          })
+        return response.status(422).type('application/json').send({
+          message:
+            'Unprocessable entity, missing or invalid parameters in request body',
+        })
       }
       console.log(
         `+ notification request for jobId: ${jobId} with jobAction: ${jobAction}`
@@ -231,14 +224,11 @@ exports.jobStateEmailNotification = functions.https.onRequest(
         await app
           .auth()
           .verifyIdToken(bearerToken)
-          .catch(error => {
+          .catch((error) => {
             console.error('! unable to verify token: ', error)
-            return response
-              .status(403)
-              .type('application/json')
-              .send({
-                message: 'Forbidden, invalid or expired authorization header',
-              })
+            return response.status(403).type('application/json').send({
+              message: 'Forbidden, invalid or expired authorization header',
+            })
           })
       }
 
@@ -255,12 +245,9 @@ exports.jobStateEmailNotification = functions.https.onRequest(
 
         if (internalToken !== env.internal.authkey) {
           console.error('! unable to verify token')
-          return response
-            .status(403)
-            .type('application/json')
-            .send({
-              message: 'Forbidden, invalid or expired authorization header',
-            })
+          return response.status(403).type('application/json').send({
+            message: 'Forbidden, invalid or expired authorization header',
+          })
         }
       }
 
@@ -300,7 +287,7 @@ exports.jobStateEmailNotification = functions.https.onRequest(
  */
 exports.createSlugWhenJobCreated = functions.firestore
   .document('public-jobs/{jobId}')
-  .onCreate(async snap => {
+  .onCreate(async (snap) => {
     const data = snap.data()
     const jobId = snap.id
     const slug = data.slug
@@ -316,13 +303,13 @@ exports.createSlugWhenJobCreated = functions.firestore
         'public-jobs',
         jobId,
         joinString(data.information.title)
-      ).catch(err => console.error(err))
+      ).catch((err) => console.error(err))
   })
 
 // update updateAt
 exports.updatepublicJobTimeStamp = functions.firestore
   .document('public-jobs/{jobId}')
-  .onUpdate(async snap => {
+  .onUpdate(async (snap) => {
     const timestamp = Date.now()
     const beforeData = snap.before.data()
 
@@ -338,7 +325,7 @@ exports.updatepublicJobTimeStamp = functions.firestore
  */
 exports.createTimestampWhenJobCreated = functions.firestore
   .document('jobs/{jobId}')
-  .onCreate(async snap => {
+  .onCreate(async (snap) => {
     const timestamp = Date.now()
 
     await db.doc(`jobs/${snap.id}`).update({
@@ -352,7 +339,7 @@ exports.createTimestampWhenJobCreated = functions.firestore
  */
 exports.updateJobTimeStamp = functions.firestore
   .document('jobs/{jobId}')
-  .onUpdate(async snap => {
+  .onUpdate(async (snap) => {
     const timestamp = Date.now()
     const beforeData = snap.before.data()
 
@@ -373,7 +360,7 @@ exports.indexProviderData = functions.firestore
 
     !data.slug &&
       createSlugIfNotExist('users', objectId, joinString(data.name)).catch(
-        err => console.error(err)
+        (err) => console.error(err)
       )
 
     const workData = buildWorkData(objectId)
@@ -416,7 +403,7 @@ exports.updateIndexProviderData = functions.firestore
     const objectId = snap.after.id
 
     if (!beforeData.name && afterData.name) {
-      createSlugIfNotExist('users', objectId, afterData.name).catch(err =>
+      createSlugIfNotExist('users', objectId, afterData.name).catch((err) =>
         console.error(err)
       )
     }
@@ -553,7 +540,7 @@ function notifyAdminOnNewUser(user) {
       subject: `New Provider`,
       html: text,
     },
-    async error => {
+    async (error) => {
       if (error) {
         console.error('! error sending message:', error.response.body)
       }
@@ -572,7 +559,7 @@ exports.updateUserSkillsTagData = functions.firestore
     const workDataSnapshot = await db
       .collection(`portfolio/${context.params.userId}/work`)
       .get()
-    workDataSnapshot.forEach(doc => {
+    workDataSnapshot.forEach((doc) => {
       for (const tag of doc.data().tags) {
         skillsTagData.push(tag)
       }
@@ -616,7 +603,7 @@ function shouldSkipIndexing(user: any) {
 async function buildWorkData(userID: string) {
   const workData = []
   const workDataSnapshot = await db.collection(`portfolio/${userID}/work`).get()
-  workDataSnapshot.forEach(doc => {
+  workDataSnapshot.forEach((doc) => {
     workData.push({
       title: doc.data().title,
       desc: doc.data().description,
@@ -636,7 +623,8 @@ exports.deleteAllProviders = functions.https.onRequest(
       !request.headers.authorization ||
       request.headers.authorization !== env.dev.authkey
     ) {
-      return response.status(403).send('Unauthorized')
+      response.status(403).send('Unauthorized')
+      return
     }
 
     let deletedUsers = 0
@@ -644,7 +632,7 @@ exports.deleteAllProviders = functions.https.onRequest(
       .collection(`users`)
       .where('testUser', '==', true)
       .get()
-    userDataSnapshot.forEach(async doc => {
+    userDataSnapshot.forEach(async (doc) => {
       console.log('+ deleting user: ', doc.data().objectId)
       try {
         await admin.auth().deleteUser(doc.data().objectId)
@@ -652,28 +640,20 @@ exports.deleteAllProviders = functions.https.onRequest(
         console.log('+ unable to delete auth user', e)
       }
       try {
-        await db
-          .collection('portfolio')
-          .doc(doc.data().objectId)
-          .delete()
+        await db.collection('portfolio').doc(doc.data().objectId).delete()
       } catch (e) {
         console.log('+ unable to delete portfolio user', e)
       }
       try {
-        await db
-          .collection('users')
-          .doc(doc.data().objectId)
-          .delete()
+        await db.collection('users').doc(doc.data().objectId).delete()
       } catch (e) {
         console.log('+ unable to delete user', e)
       }
       deletedUsers++
     })
 
-    return response
-      .status(202)
-      .type('application/json')
-      .send({ deletedUsers })
+    response.status(202).type('application/json').send({ deletedUsers })
+    return
   }
 )
 
@@ -686,7 +666,8 @@ exports.seedProviders = functions.https.onRequest(async (request, response) => {
     !request.headers.authorization ||
     request.headers.authorization !== env.dev.authkey
   ) {
-    return response.status(403).send('Unauthorized')
+    response.status(403).send('Unauthorized')
+    return
   }
 
   const qty = request.query.qty || 1
@@ -740,13 +721,11 @@ exports.seedProviders = functions.https.onRequest(async (request, response) => {
         verified: false,
       }
       console.log('+ add user record: ', userRecord)
-      await db
-        .collection('users')
-        .doc(newUser.uid)
-        .set(userRecord)
+      await db.collection('users').doc(newUser.uid).set(userRecord)
     } catch (error) {
       console.error('! unable to create user record', error)
-      return response.status(500)
+      response.status(500)
+      return
     }
 
     // Insert into portfolio with work items
@@ -770,14 +749,13 @@ exports.seedProviders = functions.https.onRequest(async (request, response) => {
           .add(work)
       } catch (error) {
         console.error('! unable to create portfolio work records', error)
-        return response.status(500)
+        response.status(500)
+        return
       }
     }
   }
-  return response
-    .status(201)
-    .type('application/json')
-    .send(users)
+  response.status(201).type('application/json').send(users)
+  return
 })
 
 /*
@@ -790,7 +768,8 @@ exports.seedSkillTagsData = functions.https.onRequest(
       !request.headers.authorization ||
       request.headers.authorization !== env.dev.authkey
     ) {
-      return response.status(403).send('Unauthorized')
+      response.status(403).send('Unauthorized')
+      return
     }
 
     let tags: string[]
@@ -801,10 +780,11 @@ exports.seedSkillTagsData = functions.https.onRequest(
       await db.collection('skill-tags').add({ tag })
     }
 
-    return response
+    response
       .status(201)
       .type('application/json')
       .send({ 'loaded-tags': tags.length })
+    return
   }
 )
 
@@ -1126,10 +1106,7 @@ async function createSlugIfNotExist(
 }
 
 function joinString(str: string = ''): string {
-  return str
-    .toLocaleLowerCase()
-    .split(' ')
-    .join('-')
+  return str.toLocaleLowerCase().split(' ').join('-')
 }
 
 /*
@@ -1139,30 +1116,28 @@ exports.initSlug = functions.https.onRequest(async (request, response) => {
   const usersnaps = await db.collection('users').get()
   const jobsnaps = await db.collection('public-jobs').get()
 
-  usersnaps.forEach(async doc => {
+  usersnaps.forEach(async (doc) => {
     const data = doc.data()
     !data.slug &&
       createSlugIfNotExist('users', doc.id, joinString(doc.data().name)).catch(
-        err => console.error(err)
+        (err) => console.error(err)
       )
   })
-  jobsnaps.forEach(async doc => {
+  jobsnaps.forEach(async (doc) => {
     const data = doc.data()
     !data.slug &&
       createSlugIfNotExist(
         'public-jobs',
         doc.id,
         joinString(doc.data().information.title)
-      ).catch(err => console.error(err))
+      ).catch((err) => console.error(err))
   })
 
-  return response
-    .status(200)
-    .type('application/json')
-    .send({
-      status: 0,
-      msg: `init all slug succ!`,
-    })
+  response.status(200).type('application/json').send({
+    status: 0,
+    msg: `init all slug succ!`,
+  })
+  return
 })
 
 /*
@@ -1172,22 +1147,20 @@ exports.delSlug = functions.https.onRequest(async (request, response) => {
   const usersnaps = await db.collection('users').get()
   const jobsnaps = await db.collection('public-jobs').get()
 
-  usersnaps.forEach(async doc => {
+  usersnaps.forEach(async (doc) => {
     const data = doc.data()
     data.slug && (await db.doc(`users/${doc.id}`).update({ slug: '' }))
   })
-  jobsnaps.forEach(async doc => {
+  jobsnaps.forEach(async (doc) => {
     const data = doc.data()
     data.slug && (await db.doc(`public-jobs/${doc.id}`).update({ slug: '' }))
   })
 
-  return response
-    .status(200)
-    .type('application/json')
-    .send({
-      status: 0,
-      msg: `del all slug succ!`,
-    })
+  response.status(200).type('application/json').send({
+    status: 0,
+    msg: `del all slug succ!`,
+  })
+  return
 })
 
 /*
@@ -1198,15 +1171,11 @@ exports.initVerifiedUserField = functions.https.onRequest(
     const limit = 100
     let total = 0
     let last = null
-    let users = await db
-      .collection('users')
-      .orderBy('slug')
-      .limit(limit)
-      .get()
+    let users = await db.collection('users').orderBy('slug').limit(limit).get()
 
     while (users.docs.length > 0) {
       await Promise.all(
-        users.docs.map(async doc => {
+        users.docs.map(async (doc) => {
           const user = doc.data()
           !user.verified &&
             (await db.doc(`users/${doc.id}`).update({ verified: false }))
@@ -1222,13 +1191,14 @@ exports.initVerifiedUserField = functions.https.onRequest(
         .get()
     }
 
-    return response
+    response
       .status(200)
       .type('application/json')
       .send({
         status: 0,
         msg: `Created "verified" field for all ${total} users!`,
       })
+    return
   }
 )
 
@@ -1296,7 +1266,7 @@ exports.firestoreSelect = functions.https.onCall(firestoreSelect(db))
 // bep20 tx monitor
 exports.bep20TxMonitor = functions.pubsub
   .schedule('every 60 minutes')
-  .onRun(bep20TxMonitor(db))
+  .onRun(bep20TxMonitor(db, env, serviceConfig))
 
 // listen to chain monitor updates and save into bep20 tx monitor table
 // and process instantly using same (todo refactor to common) functions from scheduled bep20 tx monitor
