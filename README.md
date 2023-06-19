@@ -10,7 +10,16 @@ This is an Angular Project, generated using [Angular CLI](https://github.com/ang
 
 [![pipeline status](https://gitlab.com/canyacoin/canwork/web-ui/badges/master/pipeline.svg)]
 
-_This project requires (update needed)_
+_This project uses (new June 2023)_
+
+- Node.js: 14.21.3
+- Yarn: 1.22.19
+- Angular-CLI (@angular/core): 12.2.17
+- Firebase-CLI (firebase-tools): 10.9.2
+- Typescript: 4.3.5
+- Walletconnect: 2.8.1
+
+_This project requires (old version)_
 
 - NPM: 6.4.1
 - Node: 10.15.3

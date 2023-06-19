@@ -28,7 +28,8 @@ export function publicJobExists(db: firestore.Firestore) {
 export function moveInvitesToJob(db: firestore.Firestore) {
   return async (req: functions.Request, resp: functions.Response) => {
     if (req.method !== 'GET') {
-      return resp.status(405).send('Method Not Allowed')
+      resp.status(405).send('Method Not Allowed')
+      return
     }
 
     try {
@@ -37,25 +38,28 @@ export function moveInvitesToJob(db: firestore.Firestore) {
         .where('visibility', '==', 'invite')
         .get()
 
-      snap.forEach(async docSnap => {
+      snap.forEach(async (docSnap) => {
         if (docSnap.get('invites')) {
           return
         }
         const ref = docSnap.ref
-        await db.runTransaction(async tx => {
+        await db.runTransaction(async (tx) => {
           const jobSnap = await tx.get(ref)
           const invitesSnap = await db
             .collection(`public-jobs/${jobSnap.id}/invites`)
             .get()
 
-          const invites = invitesSnap.docs.map(inviteSnap => inviteSnap.id)
-          return await tx.update(ref, { invites })
+          const invites = invitesSnap.docs.map((inviteSnap) => inviteSnap.id)
+          await tx.update(ref, { invites })
+          return
         })
       })
     } catch (e) {
-      return resp.status(500).send(e)
+      resp.status(500).send(e)
+      return
     }
 
-    return resp.status(200).send('ok')
+    resp.status(200).send('ok')
+    return
   }
 }
