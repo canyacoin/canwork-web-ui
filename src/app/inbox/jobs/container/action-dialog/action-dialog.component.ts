@@ -6,7 +6,10 @@ import { User, UserType } from '@class/user'
 import { JobService } from '@service/job.service'
 import { getUsdToCan } from '@util/currency-conversion'
 import { RatingChangeEvent } from 'angular-star-rating'
-import { DialogComponent, DialogService } from 'ng2-bootstrap-modal'
+
+import { SimpleModalComponent } from 'ngx-simple-modal'
+
+//import { DialogComponent, DialogService } from 'ng2-bootstrap-modal'
 
 export class ActionDialogOptions {
   job: Job
@@ -25,7 +28,7 @@ export class ActionDialogOptions {
   styleUrls: ['./action-dialog.component.css'],
 })
 export class ActionDialogComponent
-  extends DialogComponent<ActionDialogOptions, boolean>
+  extends SimpleModalComponent<ActionDialogOptions, boolean>
   implements ActionDialogOptions, OnInit
 {
   actionType: ActionType
@@ -46,11 +49,10 @@ export class ActionDialogComponent
   form: FormGroup = null
 
   constructor(
-    dialogService: DialogService,
     private formBuilder: FormBuilder,
     private jobService: JobService
   ) {
-    super(dialogService)
+    super()
   }
 
   ngOnInit() {

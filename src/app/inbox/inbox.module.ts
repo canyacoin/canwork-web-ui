@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-//import { CanpayModule } from '@canpay-lib/lib'
+import { SimpleModalModule } from 'ngx-simple-modal'
 import { StarRatingModule } from 'angular-star-rating'
-//import { BootstrapModalModule } from 'ng2-bootstrap-modal'
 import { OrderModule } from 'ngx-order-pipe'
 import { NgxPaginationModule } from 'ngx-pagination'
 import { ClipboardModule } from 'ngx-clipboard'
@@ -28,8 +27,8 @@ import { BscPaymentSelectorComponent } from '../core-components/bsc-payment-sele
 
 @NgModule({
   imports: [
-    //BootstrapModalModule,
     CommonModule,
+    SimpleModalModule,
     CoreComponentsModule,
     CoreServicesModule,
     CoreUtilsModule,

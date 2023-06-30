@@ -12,7 +12,7 @@ import { Transaction, TransactionService } from '@service/transaction.service'
 import { BscService, BepChain } from '@service/bsc.service'
 import { ToastrService } from 'ngx-toastr'
 import { AngularFireStorage } from '@angular/fire/storage'
-import { DialogService } from 'ng2-bootstrap-modal'
+import { SimpleModalService } from 'ngx-simple-modal'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
@@ -54,7 +54,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     private transactionService: TransactionService,
     private reviewService: ReviewService,
     private activatedRoute: ActivatedRoute,
-    private dialogService: DialogService,
+    private simpleModalService: SimpleModalService,
     private storage: AngularFireStorage,
     private mobile: MobileService,
     private router: Router
@@ -279,8 +279,10 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         break
       case ActionType.cancelJobEarly:
         console.log('ActionType.cancelJobEarly')
-        this.dialogService
-          .addDialog(
+        //this.dialogService
+        //  .addDialog(
+        this.simpleModalService
+          .addModal(
             ActionDialogComponent,
             new ActionDialogOptions({
               job: this.job,
@@ -296,8 +298,10 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         break
       case ActionType.dispute:
         console.log('ActionType.dispute')
-        this.dialogService
-          .addDialog(
+        //this.dialogService
+        //  .addDialog(
+        this.simpleModalService
+          .addModal(
             ActionDialogComponent,
             new ActionDialogOptions({
               job: this.job,
@@ -314,8 +318,10 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         break
       default:
         console.log('default')
-        this.dialogService
-          .addDialog(
+        //this.dialogService
+        //  .addDialog(
+        this.simpleModalService
+          .addModal(
             ActionDialogComponent,
             new ActionDialogOptions({
               job: this.job,
