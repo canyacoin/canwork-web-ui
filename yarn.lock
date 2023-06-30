@@ -10424,10 +10424,6 @@ neo-async@^2.6.2:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
-"ng2-bootstrap-modal@https://github.com/ankosoftware/ng2-bootstrap-modal":
-  version "1.0.2"
-  resolved "https://github.com/ankosoftware/ng2-bootstrap-modal#c3bf70d1ed7ba9a0178d6ae2aac5770af2fa0606"
-
 ng5-slider@^1.1.3:
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/ng5-slider/-/ng5-slider-1.2.6.tgz#1d3d6ee6b456334754e21d65dc9c2baa7062db96"
@@ -10491,6 +10487,13 @@ ngx-pagination@^3.2.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/ngx-pagination/-/ngx-pagination-3.3.1.tgz#2dab7171c38c1b326571c4353a524d4614e28fa3"
   integrity sha512-ocDJrdxFiij1XVWhY4uwpiJevvgluvm4qe7xZRRVGHpzjkxQIJCQbSRkQXWYjXorV/Xre79dMDKmXKHvlxEqcA==
+
+ngx-simple-modal@^1.4.17:
+  version "1.4.17"
+  resolved "https://registry.yarnpkg.com/ngx-simple-modal/-/ngx-simple-modal-1.4.17.tgz#fc1a5bfdbce998fc21df28f2f8efe2644d2592a7"
+  integrity sha512-KhaJQ/oXv0XB31X3eXqew9NgVI3aAqd0qa7CTuO6sI8ZHXXnMbdIIXD+MYAafXZsuCGVZ9Z6lVS2NcegYqEo0w==
+  dependencies:
+    tslib "^1.9.0"
 
 ngx-toastr@14.3.0:
   version "14.3.0"
