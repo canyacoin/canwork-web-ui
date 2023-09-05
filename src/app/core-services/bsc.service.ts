@@ -123,13 +123,16 @@ const pancakeRouterAbi = [
 ]
 
 const escrowAbi = [
-  // "function deposit (address asset, uint value, bytes32 JOBID) nonpayable", // old contract
-  'function depositBEP20 (address asset, address provider, uint value, uint JOBID, address[] memory swapPath) nonpayable',
-  /*
-    function depositBEP20(address asset, address provider, uint value, uint JOBID, address[] memory swapPath)
+  /* 
+    old ones
+    'function deposit (address asset, uint value, bytes32 JOBID) nonpayable'
+    'function depositBEP20(address asset, address provider, uint value, uint JOBID, address[] memory swapPath)'
 
-*/
-  'function depositBNB(address provider, uint JOBID) external payable',
+    'function depositBEP20 (address asset, address provider, uint value, uint JOBID, address[] memory swapPath) nonpayable',
+    'function depositBNB(address provider, uint JOBID) external payable',
+  */
+  'function depositBEP20 (address asset, address provider, uint value, uint JOBID, bytes32 jobTitle, address[] memory swapPath) nonpayable',
+  'function depositBNB(address provider, uint JOBID, bytes32 jobTitle) external payable',
 
   // "function release (bytes32 JOBID) nonpayable" // old contract
   'function releaseAsClient (uint JOBID) nonpayable',
@@ -1062,7 +1065,14 @@ export class BscService {
   }
 
   //async estimateGasDeposit(token, amount, jobId, silent) {
-  async estimateGasDeposit(token, providerAddress, amount, jobId, silent) {
+  async estimateGasDeposit(
+    token,
+    providerAddress,
+    amount,
+    jobId,
+    jobTitle,
+    silent
+  ) {
     console.log(
       'estimateGasDeposit',
       token,
@@ -1098,6 +1108,8 @@ export class BscService {
       const amountUint = ethers.utils.parseUnits(truncatedAmount, decimals)
       const jobIdUint = ethers.utils.parseUnits(jobIdBigint, JOBID_DECIMALS)
 
+      const jobTitleBytes = this.toBytes32(jobTitle)
+
       let escrowAddress = environment.bsc.escrow.address
       if (this.getCurrentApp() === WalletApp.WalletConnectBsc)
         escrowAddress = environment.bsc.escrow.mainNetAddress
@@ -1119,6 +1131,7 @@ export class BscService {
         gasDeposit = await escrowContract.estimateGas.depositBNB(
           providerAddress,
           jobIdUint,
+          jobTitleBytes,
           { value: amountUint }
         )
         console.log(
@@ -1150,6 +1163,7 @@ export class BscService {
           providerAddress,
           amountUint,
           jobIdUint,
+          jobTitleBytes,
           path
         )
         console.log(
@@ -1178,7 +1192,7 @@ export class BscService {
     }
   }
 
-  async deposit(token, providerAddress, amount, jobId, providerId) {
+  async deposit(token, providerAddress, amount, jobId, jobTitle, providerId) {
     console.log('deposit', token, providerAddress, amount, jobId) // debug
     const user = await this.authService.getCurrentUser()
     const userId = user.address
@@ -1203,6 +1217,8 @@ export class BscService {
 
       //const jobIdUint = this.hexToBigint(strippedJobId);
       const jobIdUint = ethers.utils.parseUnits(jobIdBigint, JOBID_DECIMALS)
+
+      const jobTitleBytes = this.toBytes32(jobTitle)
 
       const truncatedAmount = amount.toFixed(decimals) // this is already a string
       const amountUint = ethers.utils.parseUnits(truncatedAmount, decimals)
@@ -1237,6 +1253,7 @@ export class BscService {
             await escrowContract.estimateGas.depositBNB(
               providerAddress,
               jobIdUint,
+              jobTitleBytes,
               { value: amountUint }
             ),
             0
@@ -1255,6 +1272,7 @@ export class BscService {
         transaction = await escrowContract.depositBNB(
           providerAddress,
           jobIdUint,
+          jobTitleBytes,
           { value: amountUint, gasLimit: suggestedGasDeposit }
         )
       } else {
@@ -1277,6 +1295,7 @@ export class BscService {
           providerAddress,
           amountUint,
           jobIdUint,
+          jobTitleBytes,
           path
         )
       }
@@ -1628,6 +1647,23 @@ export class BscService {
       this.provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
 
     if (!this.signer) this.signer = await this.provider.getSigner()
+  }
+
+  /* Convert Job Title to 32 character truncated bytes32 string */
+  toBytes32(input: string): string {
+    let bytes = ethers.utils.toUtf8Bytes(input)
+    // truncate
+    if (bytes.length > 32) {
+      bytes = bytes.slice(0, 31)
+    }
+    let str = ethers.utils.toUtf8String(bytes)
+    let bytes32 = ethers.utils.formatBytes32String(str)
+    return bytes32
+  }
+
+  /* Decode Job Title from hex string to ascii */
+  convertBytes32(input: string): string {
+    return ethers.utils.parseBytes32String(input)
   }
 
   /*
