@@ -116,8 +116,6 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
     // Calculate jobBudget in selected BEP asset
     //const jobBudgetAsset = this.jobBudgetUsd / this.bscAssetData.usdPrice
 
-    //let allowance = this.jobBudgetUsd * parseFloat(this.bscAssetData.free) / this.bscAssetData.busdValue; // how much we need
-
     // now calculate exact needed allowance using getAmountsIn
 
     let allowance = parseFloat(
@@ -131,7 +129,7 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
     let paymentSummary = {
       asset: this.bscAssetData,
       assetValue:
-        this.bscAssetData.busdValue / parseFloat(this.bscAssetData.free),
+        this.bscAssetData.usdtValue / parseFloat(this.bscAssetData.free),
       job: {
         name: this.job.information.title,
         usdValue: this.jobBudgetUsd,

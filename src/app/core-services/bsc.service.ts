@@ -688,9 +688,16 @@ export class BscService {
   }
 
   async getCoingeckoQuotes() {
-    let quoteListRaw = [
+    /* old, busd
+   let quoteListRaw = [
       'binancecoin',
       'binance-usd', // first two, always
+    ]*/
+
+    // new september 23, usdt
+    let quoteListRaw = [
+      'binancecoin',
+      'tether', // first two, always
     ]
 
     // retrieve other coins from env
@@ -701,7 +708,7 @@ export class BscService {
             quoteListRaw.push(environment.bsc.assetPaths[asset].coingecko)
         }
       }
-    // remove duplicates (i.e. binance-usd, that's always required)
+    // remove duplicates (i.e. tether, that's always required)
     let quoteList = quoteListRaw.filter(function (item, pos) {
       return quoteListRaw.indexOf(item) == pos
     })
@@ -714,23 +721,27 @@ export class BscService {
         throw new Error(coingeckoResponse.error)
 
       let result = {}
-      let busdValue = 1 // reference value, we'll convert result to this one
-      if (coingeckoResponse.hasOwnProperty('binance-usd'))
-        busdValue = coingeckoResponse['binance-usd'].usd
-      // usd value of binance usd
+      //let busdValue = 1 // reference value, we'll convert result to this one
+      let usdtValue = 1 // reference value, we'll convert result to this one (tether, new sept 23)
+      //if (coingeckoResponse.hasOwnProperty('binance-usd'))
+      //  busdValue = coingeckoResponse['binance-usd'].usd
+
+      if (coingeckoResponse.hasOwnProperty('tether'))
+        usdtValue = coingeckoResponse['tether'].usd
+      // usd value of tether
 
       // map back found values to an useful hash
       for (let quote in coingeckoResponse) {
         if (coingeckoResponse.hasOwnProperty(quote)) {
           if (quote == 'binancecoin') {
-            result['BNB'] = coingeckoResponse[quote].usd / busdValue
+            result['BNB'] = coingeckoResponse[quote].usd / usdtValue
           } else {
             // search bep20 token into env
             if (environment.bsc.hasOwnProperty('assetPaths'))
               for (let asset in environment.bsc.assetPaths) {
                 if (environment.bsc.assetPaths.hasOwnProperty(asset)) {
                   if (environment.bsc.assetPaths[asset].coingecko == quote) {
-                    result[asset] = coingeckoResponse[quote].usd / busdValue
+                    result[asset] = coingeckoResponse[quote].usd / usdtValue
                     break
                   }
                 }
@@ -739,7 +750,7 @@ export class BscService {
         }
       }
 
-      return result // hash of busd values
+      return result // hash of tether values
     } catch (err) {
       this.toastr.warning(this.errMsg(err), 'Error retrieving quotes list', {
         timeOut: 5000,
@@ -751,15 +762,16 @@ export class BscService {
     }
   }
 
-  // return needed token amount to get busdValue (opposite of getBusdValue)
-  async getTokenAmount(busdValue, token) {
+  // return needed token amount to get usdtValue (opposite of getUsdtValue)
+  async getTokenAmount(usdtValue, token) {
     try {
-      let busdAddress = environment.bsc.pancake.busd
+      let usdtAddress = environment.bsc.pancake.usdt
       let tokenAddress
 
       let pancakeRouterAddress = environment.bsc.pancake.router
       if (this.getCurrentApp() === WalletApp.WalletConnectBsc) {
-        busdAddress = environment.bsc.pancake.mainNetBusd
+        // only mainNet for walletConnect
+        usdtAddress = environment.bsc.pancake.mainNetUsdt
         pancakeRouterAddress = environment.bsc.pancake.mainNetRouter
       }
       const pancakeRouterContract = new ethers.Contract(
@@ -771,7 +783,7 @@ export class BscService {
 
       if (token == 'BNB') {
         /* 
-          let's consider as wBnb to permit busd conversion
+          let's consider as wBnb to permit usdt conversion
           we get official wbnb address from pancake router WETH function
         */
         const wBnbAddress = await pancakeRouterContract.WETH()
@@ -785,13 +797,13 @@ export class BscService {
           decimals = environment.bsc.assetsDecimals[token]
       }
 
-      if (tokenAddress.toLowerCase() == busdAddress.toLowerCase()) {
-        console.log('busd same token address')
+      if (tokenAddress.toLowerCase() == usdtAddress.toLowerCase()) {
+        console.log('usdt same token address')
 
-        return busdValue
+        return usdtValue
       }
       // retrieve path from config if mapped
-      let path = [tokenAddress, environment.bsc.pancake.busd] // default
+      let path = [tokenAddress, environment.bsc.pancake.usdt] // default
       if (
         environment.bsc.hasOwnProperty('assetPaths') &&
         environment.bsc.assetPaths.hasOwnProperty(token)
@@ -799,7 +811,7 @@ export class BscService {
         path = this.splitConfig(environment.bsc.assetPaths[token].pathAddresses)
       }
       const amountsIn = await pancakeRouterContract.getAmountsIn(
-        ethers.utils.parseUnits(busdValue.toString(), decimals),
+        ethers.utils.parseUnits(usdtValue.toString(), decimals),
         path
       )
       const amountIn = ethers.utils.formatUnits(
@@ -814,7 +826,7 @@ export class BscService {
     return -1
   }
 
-  async getBusdValue(amountIn, token) {
+  async getUsdtValue(amountIn, token) {
     /*
     Testnet faucet:
     https://testnet.binance.org/faucet-smart
@@ -828,18 +840,18 @@ export class BscService {
     (from here: https://www.reddit.com/r/pancakeswap/comments/nwykvn/pancakeswap_instances_for_the_bsc_testnet/)
     router: https://testnet.bscscan.com/address/0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3
       i.e. 1000000000000000000, [0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd, 0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee]
-      ([wbnb, busd]
+      //([wbnb, busd]
     ui: https://pancake.kiemtienonline360.com/#/swap
     */
 
     try {
-      let busdAddress = environment.bsc.pancake.busd
+      let usdtAddress = environment.bsc.pancake.usdt
 
       let tokenAddress
 
       let pancakeRouterAddress = environment.bsc.pancake.router
       if (this.getCurrentApp() === WalletApp.WalletConnectBsc) {
-        busdAddress = environment.bsc.pancake.mainNetBusd
+        usdtAddress = environment.bsc.pancake.mainNetUsdt
         pancakeRouterAddress = environment.bsc.pancake.mainNetRouter
       }
       const pancakeRouterContract = new ethers.Contract(
@@ -850,7 +862,7 @@ export class BscService {
       let decimals = CURRENCY.decimals
       if (token == 'BNB') {
         /* 
-          let's consider as wBnb to permit busd conversion
+          let's consider as wBnb to permit usdt conversion
           we get official wbnb address from pancake router WETH function
         */
         const wBnbAddress = await pancakeRouterContract.WETH()
@@ -864,8 +876,8 @@ export class BscService {
           decimals = environment.bsc.assetsDecimals[token]
       }
 
-      if (tokenAddress.toLowerCase() == busdAddress.toLowerCase()) {
-        console.log('busd same token address')
+      if (tokenAddress.toLowerCase() == usdtAddress.toLowerCase()) {
+        console.log('usdt same token address')
 
         return amountIn
       }
@@ -876,7 +888,7 @@ export class BscService {
       */
       const amountsOut = await pancakeRouterContract.getAmountsOut(
         ethers.utils.parseUnits(amountIn.toString(), decimals),
-        [tokenAddress, busdAddress]
+        [tokenAddress, usdtAddress]
       )
       const amountOut = ethers.utils.formatUnits(
         amountsOut[1],
@@ -884,7 +896,7 @@ export class BscService {
       )
       return amountOut
     } catch (e) {
-      console.log('Busd estimate error: ' + this.errMsg(e))
+      console.log('Usdt estimate error: ' + this.errMsg(e))
       return -1
     }
     return -1
@@ -1120,7 +1132,7 @@ export class BscService {
         this.signer
       )
 
-      let pathAssets = [token, 'BUSD'] // default
+      let pathAssets = [token, 'USDT'] // default
 
       let gasDeposit
       if (token == 'BNB') {
@@ -1140,9 +1152,9 @@ export class BscService {
       } else {
         const tokenAddress = environment.bsc.assets[token]
 
-        let path = [tokenAddress, environment.bsc.pancake.busd] // default
+        let path = [tokenAddress, environment.bsc.pancake.usdt] // default
         /* 
-        todo verify how to handle BUSD, cause path should be at least lenght 2
+        todo verify how to handle USDT, cause path should be at least lenght 2
         https://github.com/merlin-the-best/merlin-contract/blob/master/PancakeRouter.sol#L311      
         */
         // unless we have an explicit path mapped into config:
@@ -1279,7 +1291,7 @@ export class BscService {
         // BEP20
         tokenAddress = environment.bsc.assets[token]
 
-        let path = [tokenAddress, environment.bsc.pancake.busd] // default
+        let path = [tokenAddress, environment.bsc.pancake.usdt] // default
         // unless we have an explicit path mapped into config:
         if (
           environment.bsc.hasOwnProperty('assetPaths') &&

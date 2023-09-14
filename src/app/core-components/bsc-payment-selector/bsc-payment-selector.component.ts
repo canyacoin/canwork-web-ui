@@ -168,17 +168,15 @@ export class BscPaymentSelectorComponent
         this.assets[i].converting &&
         this.quotes.hasOwnProperty(this.assets[i].token)
       ) {
-        /*let busdEquivalent = await this.bscService.getBusdValue(
-          parseFloat(this.assets[i].free),
-          this.assets[i].token
-        );*/
-        let busdEquivalent =
+        // let busdEquivalent = parseFloat(this.assets[i].free) * this.quotes[this.assets[i].token]
+
+        // new sept 2023, tether
+        let usdtEquivalent =
           parseFloat(this.assets[i].free) * this.quotes[this.assets[i].token]
 
-        if (busdEquivalent > 0) {
-          let busdValue = parseFloat(busdEquivalent.toString())
-          // if (busdValue >= this.jobBudgetUsd) { // make this not blocking
-          if (busdValue < this.jobBudgetUsd)
+        if (usdtEquivalent > 0) {
+          let usdtValue = parseFloat(usdtEquivalent.toString())
+          if (usdtValue < this.jobBudgetUsd)
             this.assets[i].seemsNotEnough = true
           else this.assets[i].seemsNotEnough = false
 
@@ -186,28 +184,8 @@ export class BscPaymentSelectorComponent
           this.assets[i].isApproved = false // first step is approve
           this.assets[i].gasApprove = ''
           this.assets[i].gasDeposit = ''
-          this.assets[i].busdValue = busdValue
-          this.assets[i].freeUsd = busdValue.toFixed(2)
-
-          // calculate and save needed allowance
-          /*let allowance = this.jobBudgetUsd * parseFloat(this.assets[i].free) / this.assets[i].busdValue; // how much we need
-            this.assets[i].allowance = allowance;
-
-
-            if (this.assets[i].token == 'BNB') { // BNB doesn't need to be approved
-              this.assets[i].isApproved = true;
-            } else {
-              
-              // verify current allowance
-              let currentAllowance = await this.bscService.getEscrowAllowance(this.assets[i].token);
-              console.log(this.assets[i].token + ' currentAllowance ' + currentAllowance + ', needed ' +allowance);
-              this.assets[i].currentAllowance = currentAllowance;
-              
-              if (currentAllowance >= allowance) this.assets[i].isApproved = true;
-              
-            }*/
-
-          //}
+          this.assets[i].usdtValue = usdtValue
+          this.assets[i].freeUsd = usdtValue.toFixed(2)
         } else {
           this.assets[i].freeUsd = 'na'
         }

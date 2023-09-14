@@ -40,7 +40,7 @@ export class FaqPageComponent implements OnInit {
     {
       index: 'q-7',
       q: 'How do I pay?',
-      a: 'As a client you can pay into escrow using BNB & selected BEP20 tokens.  Providers will always be paid in BUSD.',
+      a: 'As a client you can pay into escrow using BNB & selected BEP20 tokens.  Providers will always be paid in USDT.',
     },
     {
       index: 'q-8',
@@ -65,7 +65,7 @@ export class FaqPageComponent implements OnInit {
     {
       index: 'q-12',
       q: 'What happens if crypto price changes?',
-      a: 'Our escrow service automatically liquidates tokens to the BUSD stablecoin at time of deposit, to protect against market volatility. Providers will be paid in BUSD when the job is complete.',
+      a: 'Our escrow service automatically liquidates tokens to the USDT stablecoin at time of deposit, to protect against market volatility. Providers will be paid in USDT when the job is complete.',
     },
     {
       index: 'q-14',
@@ -75,7 +75,7 @@ export class FaqPageComponent implements OnInit {
     {
       index: 'q-15',
       q: 'How do I get paid?',
-      a: 'You get paid in the Binance USD Stablecoin (BUSD)as soon as the job is completed and accepted by the Client.  When you accept or issue a contract, the money moves into escrow. While in the escrow account the amount can not be changed without consent from both parties. Once a job is completed and both parties are happy, the money will be release and sent to you.',
+      a: 'You get paid in the Tether Stablecoin (USDT)as soon as the job is completed and accepted by the Client.  When you accept or issue a contract, the money moves into escrow. While in the escrow account the amount can not be changed without consent from both parties. Once a job is completed and both parties are happy, the money will be release and sent to you.',
     },
     {
       index: 'q-16',
