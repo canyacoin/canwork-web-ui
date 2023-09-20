@@ -31,6 +31,7 @@ export class BscPaymentSelectorComponent
   implements OnInit
 {
   @Input() jobBudgetUsd = 0
+  @Input() jobTitle: string
   @Input() jobId = ''
   @Input() providerAddress = ''
   @Output() bscAsset: EventEmitter<any> = new EventEmitter()
@@ -134,8 +135,6 @@ export class BscPaymentSelectorComponent
 
             // one by one, not blocking ui
             await this.checkUsdBalances()
-            //await this.estimateGasApprove()
-            //await this.estimateGasDeposit()
 
             break
           case EventTypeBsc.Disconnect:
@@ -169,17 +168,15 @@ export class BscPaymentSelectorComponent
         this.assets[i].converting &&
         this.quotes.hasOwnProperty(this.assets[i].token)
       ) {
-        /*let busdEquivalent = await this.bscService.getBusdValue(
-          parseFloat(this.assets[i].free),
-          this.assets[i].token
-        );*/
-        let busdEquivalent =
+        // let busdEquivalent = parseFloat(this.assets[i].free) * this.quotes[this.assets[i].token]
+
+        // new sept 2023, tether
+        let usdtEquivalent =
           parseFloat(this.assets[i].free) * this.quotes[this.assets[i].token]
 
-        if (busdEquivalent > 0) {
-          let busdValue = parseFloat(busdEquivalent.toString())
-          // if (busdValue >= this.jobBudgetUsd) { // make this not blocking
-          if (busdValue < this.jobBudgetUsd)
+        if (usdtEquivalent > 0) {
+          let usdtValue = parseFloat(usdtEquivalent.toString())
+          if (usdtValue < this.jobBudgetUsd)
             this.assets[i].seemsNotEnough = true
           else this.assets[i].seemsNotEnough = false
 
@@ -187,28 +184,8 @@ export class BscPaymentSelectorComponent
           this.assets[i].isApproved = false // first step is approve
           this.assets[i].gasApprove = ''
           this.assets[i].gasDeposit = ''
-          this.assets[i].busdValue = busdValue
-          this.assets[i].freeUsd = busdValue.toFixed(2)
-
-          // calculate and save needed allowance
-          /*let allowance = this.jobBudgetUsd * parseFloat(this.assets[i].free) / this.assets[i].busdValue; // how much we need
-            this.assets[i].allowance = allowance;
-
-
-            if (this.assets[i].token == 'BNB') { // BNB doesn't need to be approved
-              this.assets[i].isApproved = true;
-            } else {
-              
-              // verify current allowance
-              let currentAllowance = await this.bscService.getEscrowAllowance(this.assets[i].token);
-              console.log(this.assets[i].token + ' currentAllowance ' + currentAllowance + ', needed ' +allowance);
-              this.assets[i].currentAllowance = currentAllowance;
-              
-              if (currentAllowance >= allowance) this.assets[i].isApproved = true;
-              
-            }*/
-
-          //}
+          this.assets[i].usdtValue = usdtValue
+          this.assets[i].freeUsd = usdtValue.toFixed(2)
         } else {
           this.assets[i].freeUsd = 'na'
         }
@@ -216,36 +193,6 @@ export class BscPaymentSelectorComponent
       }
     }
   }
-
-  /*async estimateGasApprove() {
-    for (let i=0; i<this.assets.length; i++) {
-      if (this.assets[i].token == 'BNB') { // BNB doesn't need to be approved
-        if (this.assets[i].hasEnough) this.assets[i].isApproved = true;
-      } else {
-        if (this.assets[i].hasEnough && (this.assets[i].gasApprove == '') && !this.assets[i].isApproved) {
-          // estimate only if not approved
-          let gasApprove = await this.bscService.estimateGasApprove(this.assets[i].token, this.assets[i].allowance);
-          if (parseFloat(gasApprove) >= 0) this.assets[i].gasApprove = `~${parseFloat(gasApprove).toFixed(4)}`;
-        }
-      }
-    }
-  }
-  
-  async estimateGasDeposit() {
-    // estimate silently for all, if it succeeds, it means asset is already approved
-    for (let i=0; i<this.assets.length; i++) {
-      if (this.assets[i].hasEnough && (this.assets[i].gasDeposit == '') && this.assets[i].isApproved) {
-        // estimate only if approved
-        
-        let estimateResult = await this.bscService.estimateGasDeposit(this.assets[i].token, this.providerAddress, this.assets[i].allowance, this.jobId, true);
-        //let estimateResult = await this.bscService.estimateGasDeposit(this.assets[i].token, this.providerAddress, allowance, this.jobId, false); // debug false
-        if (parseFloat(estimateResult.gasDeposit) >= 0) {
-          this.assets[i].gasDeposit = `~${parseFloat(estimateResult.gasDeposit).toFixed(4)}<br>${estimateResult.pathAssets.join("->")}`;
-        }
-        
-      }
-    }
-  }*/
 
   async approve(asset) {
     if (!asset.converting && asset.hasEnough && !asset.isApproved) {
@@ -265,6 +212,7 @@ export class BscPaymentSelectorComponent
           this.providerAddress,
           asset.allowance,
           this.jobId,
+          this.jobTitle,
           false
         )
         if (parseFloat(estimateResult.gasDeposit) >= 0)

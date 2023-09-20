@@ -24,6 +24,7 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
   walletConnected = false
   showBscAssetSelection = false
   jobBudgetUsd: number
+  jobTitle: string = 'Job Title' // default
   job: Job
   assetDataHandler: any
   bscAssetData: any
@@ -62,6 +63,8 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
         .subscribe(async (job: Job) => {
           this.jobBudgetUsd = await this.jobService.getJobBudgetUsd(job)
           this.job = job
+          if (this.job && this.job.information && this.job.information.title)
+            this.jobTitle = this.job.information.title
           if (this.job.state !== JobState.termsAcceptedAwaitingEscrow) {
             this.jobStateCheck = false
           } else {
@@ -113,8 +116,6 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
     // Calculate jobBudget in selected BEP asset
     //const jobBudgetAsset = this.jobBudgetUsd / this.bscAssetData.usdPrice
 
-    //let allowance = this.jobBudgetUsd * parseFloat(this.bscAssetData.free) / this.bscAssetData.busdValue; // how much we need
-
     // now calculate exact needed allowance using getAmountsIn
 
     let allowance = parseFloat(
@@ -128,7 +129,7 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
     let paymentSummary = {
       asset: this.bscAssetData,
       assetValue:
-        this.bscAssetData.busdValue / parseFloat(this.bscAssetData.free),
+        this.bscAssetData.usdtValue / parseFloat(this.bscAssetData.free),
       job: {
         name: this.job.information.title,
         usdValue: this.jobBudgetUsd,
@@ -241,6 +242,7 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
       this.providerAddress,
       this.bscPayOptions.paymentSummary.allowance,
       this.job.id,
+      this.jobTitle,
       this.job.providerId
     )
 
