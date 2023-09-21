@@ -1154,9 +1154,20 @@ export class BscService {
 
         let path = [tokenAddress, environment.bsc.pancake.usdt] // default
         /* 
-        todo verify how to handle USDT, cause path should be at least lenght 2
-        https://github.com/merlin-the-best/merlin-contract/blob/master/PancakeRouter.sol#L311      
+        path should be at least lenght 2
+        https://github.com/merlin-the-best/merlin-contract/blob/master/PancakeRouter.sol#L311
+
+        in case of USDT, the getAmountsOut function of pancake router is never called,
+        cause into depositBEP20 function of escrow we have this code:
+            if (asset == USDT) {
+                _finalUSD = value; // Skips the swap if BEP20 token is already === USDT
+            } else {
+                require(iBEP20(asset).approve(ROUTER, value), "!Aprv"); // Approve Pancake Router to spend the deposited token
+                _finalUSD = _pancakeSwapTokens(value, swapPath); // Call internal swap function
+            }        
+        
         */
+
         // unless we have an explicit path mapped into config:
         if (
           environment.bsc.hasOwnProperty('assetPaths') &&
