@@ -43,18 +43,62 @@
     />
     <meta property="og:url" content="https://app.canwork.io/" />
     <meta name="twitter:card" content="summary_large_image" />
-    <!-- Styles -->
-    <link href="assets/css/core.min.css" rel="stylesheet" />
-    <link href="assets/css/canya.css" rel="stylesheet" />
-    <link href="assets/css/style.css" rel="stylesheet" />
-    <link href="assets/css/animate.min.css" rel="stylesheet" />
-    <link href="assets/css/multirange.css" rel="stylesheet" />
+
+    <link rel="preload" as="image" href="/assets/img/hero-png-4.png" />
+
+    <!-- Styles async -->
+    <link
+      href="assets/css/core.min.css"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <link
+      href="assets/css/canya.css"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <link
+      href="assets/css/style.css"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <link
+      href="assets/css/animate.min.css"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <link
+      href="assets/css/multirange.css"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
     <link
       href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
       rel="stylesheet"
       integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
       crossorigin="anonymous"
+      media="print"
+      onload="this.media='all'"
     />
+    <!-- Styles fallback -->
+    <noscript>
+      <link href="assets/css/core.min.css" rel="stylesheet" />
+      <link href="assets/css/canya.css" rel="stylesheet" />
+      <link href="assets/css/style.css" rel="stylesheet" />
+      <link href="assets/css/animate.min.css" rel="stylesheet" />
+      <link href="assets/css/multirange.css" rel="stylesheet" />
+      <link
+        href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
+        rel="stylesheet"
+        integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
+        crossorigin="anonymous"
+      />
+    </noscript>
 
     <!-- Favicons -->
     <link rel="apple-touch-icon" href="assets/img/icon.svg" />
@@ -94,15 +138,21 @@
     gtag('config', 'G-R0WDS0Q57Y')
   </script>
   <body
-    style="position: relative; margin-right: 0px !important; padding-right: 0px !important; min-height:100vh "
+    style="
+      position: relative;
+      margin-right: 0px !important;
+      padding-right: 0px !important;
+      min-height: 100vh;
+    "
   >
     <app-root></app-root>
 
     <!-- Scripts -->
-    <script src="assets/js/core.min.js"></script>
+    <script src="assets/js/core.min.js" defer></script>
     <!-- <script src="assets/js/canya.min.js"></script> -->
-    <script src="assets/js/multirange.js"></script>
-    <script src="assets/js/canya.js"></script>
-    <script src="assets/js/bodymovin.min.js"></script>
+    <script src="assets/js/multirange.js" async></script>
+    <script src="assets/js/canya.js" defer></script>
+    <!-- depends on jquery inside core -->
+    <script src="assets/js/bodymovin.min.js" async></script>
   </body>
 </html>
