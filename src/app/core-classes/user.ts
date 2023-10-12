@@ -3,6 +3,7 @@ export class User {
   '@context': string
   address: string
   avatar: Avatar
+  compressedAvatarUrl: any
   bio: string
   category: UserCategory
   colors: string[] = []

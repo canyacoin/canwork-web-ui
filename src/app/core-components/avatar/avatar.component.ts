@@ -29,7 +29,9 @@ export class AvatarComponent implements OnInit, OnChanges {
     try {
       if (
         changes.user.currentValue.avatar.uri !==
-        changes.user.previousValue.avatar.uri
+          changes.user.previousValue.avatar.uri ||
+        changes.user.currentValue.compressedAvatarUrl !==
+          changes.user.previousValue.compressedAvatarUrl // handle changes also con compressedAvatarUrl
       ) {
         this.initAvatarUrl()
       }
@@ -39,7 +41,15 @@ export class AvatarComponent implements OnInit, OnChanges {
   }
 
   initAvatarUrl() {
-    const url = this.user && this.user.avatar && this.user.avatar.uri
+    let url = this.user && this.user.avatar && this.user.avatar.uri // current, retrocomp
+    if (
+      this.user &&
+      this.user.compressedAvatarUrl &&
+      this.user.compressedAvatarUrl != 'new'
+    ) {
+      url = this.user.compressedAvatarUrl
+      // use compressed thumb if exist and not a massive update (new)
+    }
     this.avatarUrl = from(
       new Promise<string>((resolve, reject) => {
         if (!url) {
