@@ -104,9 +104,22 @@ export class HomeComponent implements OnInit {
         for (let i = 0; i < result.length; i++) {
           // TODO: Add a dummy/placeholder if < 3 profiles found?
           if (result[i]) {
+            let avatar = result[i].avatar // current, retrocomp
+            console.log(result[i])
+            if (
+              result[i].compressedAvatarUrl &&
+              result[i].compressedAvatarUrl != 'new'
+            ) {
+              // keep same object structure
+              // use compress thumbed if exist and not a massive update (new)
+              avatar = {
+                uri: result[i].compressedAvatarUrl,
+              }
+            }
+
             const provider = {
               address: result[i].address,
-              avatar: result[i].avatar,
+              avatar, // new
               skillTags: result[i].skillTags || [],
               title: result[i].title,
               name: result[i].name,

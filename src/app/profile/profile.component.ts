@@ -95,7 +95,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.userModel.name,
             this.userModel.bio,
             this.userModel.slug,
-            this.userModel.avatar
+            this.userModel.avatar,
+            this.userModel.compressedAvatarUrl
           )
         }
       })
