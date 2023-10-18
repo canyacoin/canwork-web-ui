@@ -80,10 +80,14 @@ export class UserService {
   }
 
   async getUser(address: string): Promise<User> {
+    const startTime = Date.now() // debug profile
     const user = await this.firestoreGet({
       path: `users/${address}`,
     }).toPromise()
-
+    const endTime = Date.now() // debug profile
+    console.log(
+      `time spent by getUser by address ${address}: ${endTime - startTime} ms`
+    ) // debug profile
     if (user && user.timezone) {
       user.offset = moment.tz(user.timezone).format('Z')
     }
@@ -112,11 +116,19 @@ export class UserService {
   }
 
   async getUserBySlug(slug: string) {
+    const startTime = Date.now() // debug profile
+
     const users = await this.firestoreSelect({
       path: 'users',
       where: [['slug', '==', slug]],
       limit: 1,
     }).toPromise()
+
+    const endTime = Date.now() // debug profile
+
+    console.log(
+      `time spent by getUserBySlug ${slug}: ${endTime - startTime} ms`
+    ) // debug profile
 
     return users && users.length ? addType(users[0]) : null
   }
@@ -191,8 +203,8 @@ export class UserService {
   }
 
   private parseUserToObject(user: User): User {
-   /** User object must be re-assigned as firebase doesn't accept strong types */
-   const parsedRating = Object.assign({}, user.rating)
+    /** User object must be re-assigned as firebase doesn't accept strong types */
+    const parsedRating = Object.assign({}, user.rating)
     const parsedUser = Object.assign({}, user)
     parsedUser.rating = parsedRating
     return parsedUser
