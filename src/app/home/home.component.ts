@@ -105,7 +105,7 @@ export class HomeComponent implements OnInit {
           // TODO: Add a dummy/placeholder if < 3 profiles found?
           if (result[i]) {
             let avatar = result[i].avatar // current, retrocomp
-            console.log(result[i])
+            //console.log(result[i])
             if (
               result[i].compressedAvatarUrl &&
               result[i].compressedAvatarUrl != 'new'
