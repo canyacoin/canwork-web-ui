@@ -11,6 +11,8 @@ import { AngularFireFunctions } from '@angular/fire/functions'
 import { GetParams, SelectParams } from '../../../functions/src/firestore'
 import { Observable } from 'rxjs'
 import { assoc } from 'ramda'
+import { environment } from '@env/environment'
+import algoliasearch from 'algoliasearch/lite'
 
 // HACK: addType see functions/src/firestore.ts
 const addType = assoc('@type', 'Person')
@@ -21,6 +23,11 @@ export class UserService {
   viewedUsersRef: AngularFirestoreCollection<User>
   firestoreGet: (data: GetParams) => Observable<User>
   firestoreSelect: (data: SelectParams) => Observable<User[]>
+  private algoliaSearch
+  private algoliaIndex
+  algoIndex = environment.algolia.indexName
+  algoId = environment.algolia.appId
+  algoKey = environment.algolia.apiKey
 
   constructor(
     private afs: AngularFirestore,
@@ -31,6 +38,9 @@ export class UserService {
     // funcs
     this.firestoreGet = this.funcs.httpsCallable('firestoreGet')
     this.firestoreSelect = this.funcs.httpsCallable('firestoreSelect')
+
+    this.algoliaSearch = algoliasearch(this.algoId, this.algoKey)
+    this.algoliaIndex = this.algoliaSearch.initIndex(this.algoIndex)
   }
 
   saveProfileView(viewer: User, viewed: string) {
@@ -134,6 +144,47 @@ export class UserService {
     return null*/
   }
 
+  // new, algolia
+  async getUserById(address: string): Promise<User> {
+    const algoliaProfileStart = Date.now()
+    return new Promise<any>((resolve, reject) => {
+      const searchQuery = address
+      this.algoliaIndex.search(searchQuery).then((res) => {
+        let foundUser = null
+
+        if (res.hits)
+          for (let i = 0; i < res.hits.length; i++) {
+            if (res.hits[i].address == address) {
+              // check exact match
+              foundUser = res.hits[i]
+              break
+            }
+          }
+
+        console.log(
+          `time spent by algolia into getUserById ${address}: ${
+            Date.now() - algoliaProfileStart
+          } ms`
+        )
+        if (foundUser) {
+          // todo add colors to algoliaIndex
+          // for now add safe default
+          if (!foundUser.colors)
+            foundUser.colors = ['#00FFCC', '#33ccff', '#15EDD8']
+
+          // add a default rating if missing
+          if (!foundUser.rating)
+            foundUser.rating = {
+              average: 0,
+              count: 0,
+            }
+
+          resolve(addType(foundUser))
+        } else resolve(null)
+      })
+    })
+  }
+
   async getUser(address: string): Promise<User> {
     const startTime = Date.now() // debug profile
     const user = await this.firestoreGet({
@@ -173,7 +224,51 @@ export class UserService {
   }
   */
 
+  // new algolia based, Oct 23
   async getUserBySlug(slug: string) {
+    const algoliaProfileStart = Date.now()
+    return new Promise<any>((resolve, reject) => {
+      const searchQuery = slug
+      this.algoliaIndex.search(searchQuery).then((res) => {
+        let foundUser = null
+
+        if (res.hits)
+          for (let i = 0; i < res.hits.length; i++) {
+            if (res.hits[i].slug == slug) {
+              // check exact match
+              foundUser = res.hits[i]
+              break
+            }
+          }
+
+        console.log(
+          `time spent by algolia into getUserBySlug ${slug}: ${
+            Date.now() - algoliaProfileStart
+          } ms`
+        )
+        if (foundUser) {
+          // todo add colors to algoliaIndex
+          // for now add safe default
+          if (!foundUser.colors)
+            foundUser.colors = ['#00FFCC', '#33ccff', '#15EDD8']
+
+          // add a default rating if missing
+          if (!foundUser.rating)
+            foundUser.rating = {
+              average: 0,
+              count: 0,
+            }
+
+          resolve(addType(foundUser))
+        } else resolve(null)
+      })
+    })
+  }
+
+  /*
+  // old, firebase function, slow, cold start, Oct 23  
+  async getUserBySlug(slug: string) {
+
     const startTime = Date.now() // debug profile
 
     const users = await this.firestoreSelect({
@@ -190,6 +285,7 @@ export class UserService {
 
     return users && users.length ? addType(users[0]) : null
   }
+  */
 
   saveUser(credentials: User, type?: string): Promise<User> {
     return new Promise(async (resolve: any, reject: any) => {
