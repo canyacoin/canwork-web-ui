@@ -105,6 +105,8 @@ export class UserService {
     return users && users.length ? addType(users[0]) : null
   }
 
+  /*
+  // obsolete, Oct 23
   async getUserByEthAddress(address: string): Promise<User> {
     const users = await this.firestoreSelect({
       path: 'users',
@@ -114,6 +116,7 @@ export class UserService {
 
     return users && users.length ? addType(users[0]) : null
   }
+  */
 
   async getUserBySlug(slug: string) {
     const startTime = Date.now() // debug profile

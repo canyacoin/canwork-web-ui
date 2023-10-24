@@ -262,11 +262,13 @@ export class PublicJobComponent implements OnInit, OnDestroy {
       }
     }
   }
-
+  /*
+  // obsolete, Oct 23
   async getProviderData(id) {
     const provider = await this.userService.getUserByEthAddress(id)
     return provider
   }
+  */
 
   toLocaleDateString(timestamp) {
     const date = new Date(parseInt(timestamp, 10))

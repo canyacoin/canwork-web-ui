@@ -84,10 +84,13 @@ export class JobBidsComponent implements OnInit {
     })
   }
 
+  /*
+  // obsolete, Oct 23
   async getProviderData(id) {
     const provider = await this.userService.getUser(id)
     return provider
   }
+  */
 
   async chooseProvider(bidIndex) {
     const noAddress = await this.authService.isAuthenticatedAndNoAddress()
