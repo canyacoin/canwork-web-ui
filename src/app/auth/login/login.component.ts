@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit {
   async handleLogin(userDetails: User) {
     let user: User
     try {
-      user = await this.userService.getUser(userDetails.address)
+      user = await this.userService.getOwnUser(userDetails.address)
     } catch (error) {
       console.error(
         `! failed to query for user with address: [${userDetails.address}] error was: `,

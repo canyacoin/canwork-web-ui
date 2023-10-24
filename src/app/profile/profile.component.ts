@@ -84,6 +84,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   initUsers(user: User, params: any) {
     const { address, slug } = params
+    if (
+      (address && this.currentUser && this.currentUser.address === address) ||
+      (slug && this.currentUser && this.currentUser.slug === slug)
+    ) {
+      // optimize, use current user data if logged in
+      console.log('initUsers preload current')
+      this.userModel = this.currentUser
+      this.setUsersColors(this.userModel)
+      return
+    }
+
     if (address && address !== 'setup') {
       this.loadUser(params)
     } else if (slug) {

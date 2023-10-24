@@ -79,6 +79,61 @@ export class UserService {
     })
   }
 
+  async getOwnUser(address: string): Promise<User> {
+    const startTime = Date.now() // debug profile
+    return new Promise<any>((resolve, reject) => {
+      this.usersCollectionRef
+        .doc(address)
+        .snapshotChanges()
+        .pipe(take(1))
+        .subscribe((snap: any) => {
+          if (snap.payload.exists) {
+            const user = snap.payload.data() as User
+
+            if (user.timezone) {
+              user.offset = moment.tz(user.timezone).format('Z')
+            }
+            const endTime = Date.now() // debug profile
+            console.log(
+              `time spent by getOwnUser by address ${address}: ${
+                endTime - startTime
+              } ms`
+            ) // debug profile
+
+            resolve(addType(user))
+          }
+          reject()
+        })
+    })
+
+    /*const userPromise = await this.afs.collection<User>('user').doc(address).get().toPromise()
+    if (userPromise.exists) {
+      const user = userPromise.data();
+      
+      return user;
+    } else {
+      return null;
+    }*/
+    /*  
+    if (userPromise) {
+      const user = userPromise.payload.data() as User
+      if (user) {
+        if (user.timezone) {
+          user.offset = moment.tz(user.timezone).format('Z')
+        }
+        const endTime = Date.now() // debug profile
+        console.log(
+          `time spent by getOwnUser by address ${address}: ${endTime - startTime} ms`
+        ) // debug profile
+        
+        return addType(user)
+      } else {
+        return null
+      }
+    }
+    return null*/
+  }
+
   async getUser(address: string): Promise<User> {
     const startTime = Date.now() // debug profile
     const user = await this.firestoreGet({
