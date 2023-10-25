@@ -189,6 +189,7 @@
               <div
                 class="profile-button button-blue"
                 [routerLink]="['/profile/', profile.slug]"
+                [state]="{ id: profile.address }"
               >
                 View {{ profile.name }}'s Profile
               </div>

@@ -27,6 +27,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   displayEditComponent = false
   notifiedBnbOrBscAddress = false
 
+  navigationAddress = null
+
   constructor(
     private router: Router,
     private location: Location,
@@ -36,7 +38,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private publicJobService: PublicJobService,
     private toastr: ToastrService,
     private seoService: SeoService
-  ) {}
+  ) {
+    const navigation = this.router.getCurrentNavigation()
+    this.navigationAddress = navigation.extras.state
+      ? navigation.extras.state.id
+      : null
+  }
 
   ngOnInit() {
     this.authSub = this.authService.currentUser$.subscribe(
@@ -83,9 +90,25 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   initUsers(user: User, params: any) {
-    const { address, slug } = params
+    const { address: originalAddress, slug } = params
+    let address = originalAddress
+    // we have address, use it so we can retrieve object by id from algolia
+    if (!originalAddress && this.navigationAddress)
+      address = this.navigationAddress
+
+    if (
+      (address && this.currentUser && this.currentUser.address === address) ||
+      (slug && this.currentUser && this.currentUser.slug === slug)
+    ) {
+      // optimize, use current user data if logged in
+      console.log('initUsers preload current')
+      this.userModel = this.currentUser
+      this.setUsersColors(this.userModel)
+      return
+    }
+
     if (address && address !== 'setup') {
-      this.loadUser(params)
+      this.loadUser({ address })
     } else if (slug) {
       this.userService.getUserBySlug(slug).then((user) => {
         if (user) {
@@ -109,7 +132,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   loadUser(params: any) {
     const address = params['address']
     this.userService
-      .getUser(address)
+      .getUserById(address)
       .then((user: User) => {
         this.userModel = user
         this.redirectToUniqueUrlIfNecessary(params)
@@ -119,6 +142,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       })
       .catch((err) => {
         console.log('loadUser: error')
+        console.log(err)
       })
   }
 

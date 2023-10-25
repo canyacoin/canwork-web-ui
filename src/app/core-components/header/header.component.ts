@@ -119,7 +119,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           // console.error('! unable to retrieve chat/channel data:', error)
         }
       )
-      console.log(this.messagesSubscription)
+      // console.log(this.messagesSubscription)
     }
   }
 
