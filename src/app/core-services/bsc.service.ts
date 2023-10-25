@@ -1674,12 +1674,23 @@ export class BscService {
 
   /* Convert Job Title to 32 character truncated bytes32 string */
   toBytes32(input: string): string {
+    // this should be called to bytes 31, see below
     let bytes = ethers.utils.toUtf8Bytes(input)
-    // truncate
-    if (bytes.length > 32) {
+    // truncate bytes array, after uft8 conversion
+    if (bytes.length > 31) {
       bytes = bytes.slice(0, 31)
     }
     let str = ethers.utils.toUtf8String(bytes)
+
+    /*
+    https://docs.ethers.org/v4/api-utils.html#bytes32-strings
+    utils . formatBytes32String ( text )   =>   hex
+    Returns a hex string representation of text, exactly 32 bytes wide.
+    Strings must be 31 bytes or shorter, or an exception is thrown.
+    
+    NOTE: Keep in mind that UTF-8 characters outside the ASCII range can be multiple bytes long. 
+    SO we check length after uft8 conversion
+    */
     let bytes32 = ethers.utils.formatBytes32String(str)
     return bytes32
   }

@@ -167,8 +167,7 @@ export class UserService {
           } ms`
         )
         if (foundUser) {
-          // todo add colors to algoliaIndex
-          // for now add safe default
+          // add safe default
           if (!foundUser.colors)
             foundUser.colors = ['#00FFCC', '#33ccff', '#15EDD8']
 
@@ -247,8 +246,7 @@ export class UserService {
           } ms`
         )
         if (foundUser) {
-          // todo add colors to algoliaIndex
-          // for now add safe default
+          // add safe default
           if (!foundUser.colors)
             foundUser.colors = ['#00FFCC', '#33ccff', '#15EDD8']
 
