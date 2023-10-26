@@ -18,6 +18,7 @@ staging-deploy*.sh
 functions/node_modules
 functions/lib
 functions/.runtimeconfig.json
+utils/.runtimeconfig.json
 
 # latest firebase-tools now uses a dot directory
 .firebase/
