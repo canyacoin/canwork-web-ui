@@ -58,7 +58,7 @@ deploy:staging:
     - cd ..
     - firebase use staging --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set algolia.appid="$FIREBASE_ALGOLIA_APPID" --token "$FIREBASE_CI_AUTH_TOKEN"
-    - firebase functions:config:set algolia.apikey="$FIREBASE_ALGOLIA_APIKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
+    - firebase functions:config:set algolia.apikey="$FIREBASE_ALGOLIA_APIKEY_STAGING" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set algolia.providerindex="$FIREBASE_ALGOLIA_STAGINGINDEX" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set sendgrid.apikey="$FIREBASE_SENDGRID_APIKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set fbadmin.project_id="$FIREBASE_PROJECT_ID_STAGING" --token "$FIREBASE_CI_AUTH_TOKEN"
@@ -90,7 +90,7 @@ deploy:production:
     - cd ..
     - firebase use prod --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set algolia.appid="$FIREBASE_ALGOLIA_APPID" --token "$FIREBASE_CI_AUTH_TOKEN"
-    - firebase functions:config:set algolia.apikey="$FIREBASE_ALGOLIA_APIKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
+    - firebase functions:config:set algolia.apikey="$FIREBASE_ALGOLIA_APIKEY_PROD" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set algolia.providerindex="$FIREBASE_ALGOLIA_PROVIDERINDEX" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set sendgrid.apikey="$FIREBASE_SENDGRID_APIKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set fbadmin.project_id="$FIREBASE_PROJECT_ID" --token "$FIREBASE_CI_AUTH_TOKEN"
