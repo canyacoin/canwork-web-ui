@@ -68,7 +68,6 @@ export class CertificationsService {
       .valueChanges()
       .subscribe((data: any) => {
         result = data
-        console.log(result)
         return result
       })
   }

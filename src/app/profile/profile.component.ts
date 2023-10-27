@@ -50,14 +50,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
       (user: User) => {
         if (user !== this.currentUser) {
           this.currentUser = user
+
           this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
             this.initUsers(this.currentUser, params)
           })
           this.activatedRoute.queryParams.subscribe((params) => {
             const redirected = this.redirectToUniqueUrlIfNecessary(params)
             if (!redirected) {
-              this.notifyAddAddressIfNecessary()
+              this.notifyAddAddressIfNecessary(user)
             }
+
             this.displayEditComponent = params.editProfile ? true : false
           })
         }
@@ -77,13 +79,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  async notifyAddAddressIfNecessary() {
+  async notifyAddAddressIfNecessary(loggedInUser) {
+    if (!loggedInUser) return
     if (this.notifiedBnbOrBscAddress) {
       return
     }
-    const noAddress = await this.authService.isAuthenticatedAndNoAddress()
-    const user = await this.authService.getCurrentUser()
-    if (noAddress && user.type == 'Provider') {
+    const noAddress = !!loggedInUser && !loggedInUser.bscAddress
+    if (noAddress && loggedInUser.type == 'Provider') {
       this.toastr.warning('Add BNB Chain (BEP20) wallet to receive payments')
       this.notifiedBnbOrBscAddress = true
     }
@@ -113,6 +115,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.userService.getUserBySlug(slug).then((user) => {
         if (user) {
           this.userModel = user
+
           this.seoService.updateAllSeoProperties(
             'profile',
             this.userModel.name,
@@ -141,7 +144,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.addToViewedProfileList()
       })
       .catch((err) => {
-        console.log('loadUser: error')
+        console.log(`loadUser ${address} error: ${err.toString()}`)
         console.log(err)
       })
   }
@@ -167,7 +170,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   addToViewedProfileList() {
-    if (this.notMyProfile) {
+    if (this.notMyProfile() && this.currentUser) {
       this.userService.addToViewedUsers(
         this.currentUser.address,
         this.userModel

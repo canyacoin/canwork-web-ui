@@ -141,7 +141,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
             if (routeState.range)
               generatedQuery[self.algoliaIndex].range = routeState.range
 
-            console.log(generatedQuery)
+            //console.log(generatedQuery)
             return generatedQuery
           },
         },
