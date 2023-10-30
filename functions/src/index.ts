@@ -408,7 +408,7 @@ exports.updateIndexProviderData = functions.firestore
       )
     }
 
-    console.log('+ looking for admin privileges')
+    console.log(`+ processing user "${objectId}"`)
     if (afterData.isAdmin) {
       console.log(
         '+ setting user claim to admin for userId: ${objectId} and email: ' +
@@ -495,17 +495,27 @@ exports.updateIndexProviderData = functions.firestore
         .update({ welcomeEmailSent: true })
     }
 
-    if (shouldSkipIndexing(afterData)) return null
+    if (shouldSkipIndexing(afterData)) {
+      console.log(`- skip indexing for user "${objectId}"`)
 
-    console.log('+ remove index record for update operation...', objectId)
+      return null
+    }
+
+    console.log(
+      `+ remove index record for update operation for user "${objectId}"`
+    )
+
     await algoliaSearchIndex.deleteObject(objectId)
-    console.log('+ deleted...', objectId)
+    console.log(`+ delete index record for user "${objectId}"`)
 
     const workData = buildWorkData(objectId)
     // this makes sure that ALL hourly rate is treated as a float.
     const hourlyRateNumber = parseFloat(afterData.hourlyRate)
     afterData.hourlyRate = hourlyRateNumber
-    console.log(afterData)
+    // console.log(afterData)
+    console.log(
+      `+ adding index record for user "${objectId}": "${afterData.slug}"`
+    )
     return algoliaSearchIndex.addObject({
       objectID: objectId,
       ...afterData,
