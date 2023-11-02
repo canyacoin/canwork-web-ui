@@ -24,6 +24,7 @@ export class DashboardComponent implements OnInit {
   index = 1
   reverseOrder = true
   filterByCategory: any
+  publicJobSubscription: any
   paymentType = PaymentType
   providerTypes = [
     {
@@ -76,10 +77,12 @@ export class DashboardComponent implements OnInit {
         this.currentUser = user
       }
     })
-    this.publicJobService.getAllOpenJobs().subscribe((result) => {
-      this.allJobs = result
-      this.queryJobs = this.allJobs
-    })
+    this.publicJobSubscription = this.publicJobService
+      .getAllOpenJobs()
+      .subscribe((result) => {
+        this.allJobs = result
+        this.queryJobs = this.allJobs
+      })
 
     // retrieve and aggregate job stats
     let jobStats, publicJobStats: any
@@ -94,6 +97,11 @@ export class DashboardComponent implements OnInit {
       }
     })
   }
+
+  async ngOnDestroy() {
+    this.publicJobSubscription.unsubscribe()
+  }
+
   get isProvider(): boolean {
     return this.currentUser.type === UserType.provider
   }

@@ -61,7 +61,7 @@ export class JobBidsComponent implements OnInit {
         this.jobSub = this.publicJobsService
           .getPublicJobBySlug(params['slug'])
           .subscribe((publicJob) => {
-            console.log(publicJob === null)
+            // console.log(publicJob === null)
             if (publicJob === null) {
               this.canSee = false
             } else {

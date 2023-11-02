@@ -11,7 +11,7 @@ import {
 } from '@angular/fire/firestore'
 import { AngularFireFunctions } from '@angular/fire/functions'
 import { Observable, of } from 'rxjs'
-import { map, take, switchMap, catchError } from 'rxjs/operators'
+import { map, tap, take, switchMap, catchError } from 'rxjs/operators'
 import { ChatService } from '@service/chat.service'
 import slugify from 'slugify'
 import { Random } from 'random-js'
@@ -86,15 +86,68 @@ export class PublicJobService {
       .valueChanges()
   }
 
+  /*
+   this is old version
+   using a firebase backend function
+   that is affected by cold start performance issue
+  */
+  /*
   getPublicJobBySlug(slug: string): Observable<Job> {
+    const startTime = Date.now() // debug profile
     return this.fns
       .httpsCallable<{ slug: string }, string>('getPublicJobIdBySlug')({ slug })
       .pipe(
         switchMap((jobId) => {
+          const endTime = Date.now() // debug profile
+          console.log(
+            `time spent by getPublicJobBySlug ${slug}: ${
+              endTime - startTime
+            } ms`
+          ) // debug profile          
           return jobId
             ? this.afs.doc<Job>(`public-jobs/${jobId}`).valueChanges()
             : of<null>(null)
         })
+      )
+  }
+  */
+
+  // new, nov 23, direct db call, observable
+  getPublicJobBySlug(slug: string): Observable<Job> {
+    //const startTime = Date.now() // debug profile
+
+    return this.afs
+      .collection<Job>('public-jobs', (ref) =>
+        ref
+          .where('visibility', '==', 'public')
+          /* we need this to filter only jobs we can "actually" see
+             and avoid firebase permissions issues into browser logs */
+          .where('slug', '==', slug)
+      )
+      .valueChanges()
+      .pipe(
+        /*
+          this is how to observe a single doc
+          when the doc ID is not known beforehand
+          
+          we don't use here do take(1) here
+          cause it completes the observable
+          and then you will stop listening for changes
+          
+          the RxJS tap operator in RxJS is used to perform side effects
+          for each emitted value from an observable stream,
+          without modifying or transforming the values themselves          
+          */
+        tap((docs) => {
+          /*const endTime = Date.now() // debug profile
+            console.log(
+              `time spent by getPublicJobBySlug ${slug}: ${
+                endTime - startTime
+              } ms`
+            ) */
+          // debug profile
+        }),
+        map((val) => (val.length > 0 ? val[0] : null))
       )
   }
 

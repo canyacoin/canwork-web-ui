@@ -90,7 +90,7 @@ export class UserService {
   }
 
   async getOwnUser(address: string): Promise<User> {
-    const startTime = Date.now() // debug profile
+    //const startTime = Date.now() // debug profile
     return new Promise<any>((resolve, reject) => {
       this.usersCollectionRef
         .doc(address)
@@ -103,50 +103,23 @@ export class UserService {
             if (user.timezone) {
               user.offset = moment.tz(user.timezone).format('Z')
             }
-            const endTime = Date.now() // debug profile
-            console.log(
-              `time spent by getOwnUser by address ${address}: ${
-                endTime - startTime
-              } ms`
-            ) // debug profile
+            //const endTime = Date.now() // debug profile
+            //console.log(
+            // `time spent by getOwnUser by address ${address}: ${
+            //  endTime - startTime
+            // } ms`
+            //) // debug profile
 
             resolve(addType(user))
           }
           reject()
         })
     })
-
-    /*const userPromise = await this.afs.collection<User>('user').doc(address).get().toPromise()
-    if (userPromise.exists) {
-      const user = userPromise.data();
-      
-      return user;
-    } else {
-      return null;
-    }*/
-    /*  
-    if (userPromise) {
-      const user = userPromise.payload.data() as User
-      if (user) {
-        if (user.timezone) {
-          user.offset = moment.tz(user.timezone).format('Z')
-        }
-        const endTime = Date.now() // debug profile
-        console.log(
-          `time spent by getOwnUser by address ${address}: ${endTime - startTime} ms`
-        ) // debug profile
-        
-        return addType(user)
-      } else {
-        return null
-      }
-    }
-    return null*/
   }
 
   // new, algolia
   async getUserById(address: string): Promise<User> {
-    const algoliaProfileStart = Date.now()
+    // const algoliaProfileStart = Date.now() // debug
     return new Promise<any>((resolve, reject) => {
       const searchQuery = address
       this.algoliaIndex.search(searchQuery).then((res) => {
@@ -161,11 +134,11 @@ export class UserService {
             }
           }
 
-        console.log(
+        /*console.log(
           `time spent by algolia into getUserById ${address}: ${
             Date.now() - algoliaProfileStart
           } ms`
-        )
+        )*/
         if (foundUser) {
           // add safe default
           if (!foundUser.colors)
@@ -184,15 +157,16 @@ export class UserService {
     })
   }
 
+  // old version, still user somewhere, that uses firebase backend function (cold start)
   async getUser(address: string): Promise<User> {
-    const startTime = Date.now() // debug profile
+    //const startTime = Date.now() // debug profile
     const user = await this.firestoreGet({
       path: `users/${address}`,
     }).toPromise()
-    const endTime = Date.now() // debug profile
-    console.log(
-      `time spent by getUser by address ${address}: ${endTime - startTime} ms`
-    ) // debug profile
+    //const endTime = Date.now() // debug profile
+    //console.log(
+    //  `time spent by getUser by address ${address}: ${endTime - startTime} ms`
+    //) // debug profile
     if (user && user.timezone) {
       user.offset = moment.tz(user.timezone).format('Z')
     }
@@ -225,7 +199,7 @@ export class UserService {
 
   // new algolia based, Oct 23
   async getUserBySlug(slug: string) {
-    const algoliaProfileStart = Date.now()
+    //const algoliaProfileStart = Date.now() // debug
     return new Promise<any>((resolve, reject) => {
       const searchQuery = slug
       this.algoliaIndex.search(searchQuery).then((res) => {
@@ -240,11 +214,11 @@ export class UserService {
             }
           }
 
-        console.log(
+        /*console.log(
           `time spent by algolia into getUserBySlug ${slug}: ${
             Date.now() - algoliaProfileStart
           } ms`
-        )
+        )*/
         if (foundUser) {
           // add safe default
           if (!foundUser.colors)
