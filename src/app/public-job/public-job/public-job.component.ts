@@ -37,7 +37,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   link: string
   job: Job
   currentUser: User
-  jobPoster: User
+  jobPoster: User = null
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -132,7 +132,15 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   }
 
   async setClient(clientId) {
-    this.jobPoster = await this.userService.getUser(clientId)
+    /*
+    new one, retrieve user only once (if not already retrieved)
+    and use the new fastest Algolia getUserById service version
+    */
+    if (!this.jobPoster)
+      this.jobPoster = await this.userService.getUserById(clientId)
+
+    // old
+    // this.jobPoster = await this.userService.getUser(clientId)
   }
 
   async initJob(job: Job) {

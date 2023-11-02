@@ -114,7 +114,7 @@ export class PublicJobService {
 
   // new, nov 23, direct db call, observable
   getPublicJobBySlug(slug: string): Observable<Job> {
-    const startTime = Date.now() // debug profile
+    //const startTime = Date.now() // debug profile
 
     return this.afs
       .collection<Job>('public-jobs', (ref) =>
@@ -139,12 +139,13 @@ export class PublicJobService {
           without modifying or transforming the values themselves          
           */
         tap((docs) => {
-          const endTime = Date.now() // debug profile
-          console.log(
-            `time spent by getPublicJobBySlug ${slug}: ${
-              endTime - startTime
-            } ms`
-          ) // debug profile
+          /*const endTime = Date.now() // debug profile
+            console.log(
+              `time spent by getPublicJobBySlug ${slug}: ${
+                endTime - startTime
+              } ms`
+            ) */
+          // debug profile
         }),
         map((val) => (val.length > 0 ? val[0] : null))
       )
