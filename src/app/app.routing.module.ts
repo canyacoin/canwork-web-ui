@@ -67,6 +67,7 @@ import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.
           path: 'profile',
           loadChildren: () =>
             import('./profile/profile.module').then((m) => m.ProfileModule),
+          runGuardsAndResolvers: 'always',
         },
         {
           path: 'inbox',
@@ -74,6 +75,7 @@ import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.
             import('./inbox/inbox.module').then((m) => m.InboxModule),
           canActivate: [AuthGuard, UserIsSetupGuard],
           data: { requiresLoggedIn: true },
+          runGuardsAndResolvers: 'always',
         },
         {
           path: 'brand',
@@ -91,11 +93,13 @@ import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.
           path: 'wallet-bnb',
           component: WalletBnbComponent,
           pathMatch: 'full',
+          runGuardsAndResolvers: 'always',
         },
         {
           path: 'wallet-bnb/assets',
           component: WalletBnbAssetsComponent,
           pathMatch: 'full',
+          runGuardsAndResolvers: 'always',
         },
         {
           path: '**',

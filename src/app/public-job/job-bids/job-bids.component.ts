@@ -43,7 +43,10 @@ export class JobBidsComponent implements OnInit {
         this.jobSub = this.publicJobsService
           .getPublicJob(params['jobId'])
           .subscribe((publicJob) => {
-            if (this.currentUser.address === publicJob.clientId) {
+            if (
+              this.currentUser &&
+              this.currentUser.address === publicJob.clientId
+            ) {
               this.job = publicJob
               this.isOpen = this.job.state === JobState.acceptingOffers
               this.jobId = params['jobId']
@@ -55,6 +58,7 @@ export class JobBidsComponent implements OnInit {
                 })
             } else {
               this.canSee = false
+              this.bids = []
             }
           })
       } else if (params['slug']) {
@@ -64,6 +68,7 @@ export class JobBidsComponent implements OnInit {
             // console.log(publicJob === null)
             if (publicJob === null) {
               this.canSee = false
+              this.bids = []
             } else {
               if (this.currentUser.address === publicJob.clientId) {
                 this.job = publicJob
@@ -77,6 +82,7 @@ export class JobBidsComponent implements OnInit {
                   })
               } else {
                 this.canSee = false
+                this.bids = []
               }
             }
           })

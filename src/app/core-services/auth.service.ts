@@ -71,6 +71,7 @@ export class AuthService {
   }
 
   emitUser(user: User) {
+    // console.trace()
     if (user) {
       localStorage.setItem('credentials', JSON.stringify(user))
     }
@@ -78,11 +79,27 @@ export class AuthService {
   }
 
   logout() {
-    console.log('logout', this.currentUser.value)
+    /*
+    avoid propagation of user when logging out and emitUser again into orinal userSub
+    this was causing an issue:
+    the need to logout 2 times to actually logout for ui
+    */
+    if (this.userSub) this.userSub.unsubscribe()
+
     localStorage.clear()
+
     this.currentUser.next(null)
-    //this.afAuth.auth.signOut() // old
+
+    //this.afAuth.auth.signOut() // old angular version
     this.afAuth.signOut() // new: https://github.com/angular/angularfire/issues/2409#issuecomment-615993136
-    this.router.navigate(['home']) // TODO: Change this to reload same route - and hit the auth guards again
+
+    /* reload same route
+       and hit the auth guards again
+      (this is guaranteed by option runGuardsAndResolvers: 'always' on protected routes)
+    */
+    const currentUrl = this.router.url
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([currentUrl])
+    })
   }
 }
