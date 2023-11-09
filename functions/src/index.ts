@@ -595,6 +595,7 @@ exports.removeIndexProviderData = functions.firestore
   .document('users/{userId}')
   .onDelete((snap, context) => {
     const objectId = snap.id
+    console.log(`- Removing user "${objectId}" from Algolia`)
     return algoliaSearchIndex.deleteObject(objectId)
   })
 
