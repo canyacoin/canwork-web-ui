@@ -378,7 +378,12 @@ exports.indexProviderData = functions.firestore
         .update({ ethAddressLookup: data.ethAddress.toUpperCase() })
     }
 
-    if (shouldSkipIndexing(data)) return null
+    if (shouldSkipIndexing(data)) {
+      console.log(`- skip indexing for user "${objectId}"`)
+
+      return null
+    }
+    console.log(`- Creating user "${objectId}" on Algolia`)
 
     // this makes sure that ALL hourly rate is treated as a float.
     const hourlyRateNumber = parseFloat(data.hourlyRate)
@@ -597,6 +602,14 @@ exports.removeIndexProviderData = functions.firestore
  * Make sure this user record belongs to a provider
  */
 function shouldSkipIndexing(user: any) {
+  if (!user) {
+    console.log(`- shouldSkipIndexing no user provided`)
+  } else {
+    console.log(
+      `- shouldSkipIndexing called for "${user.address}", type ${user.type}, whitelisted ${user.whitelisted}, state ${user.state}`
+    )
+  }
+
   if (user && user.type) {
     return (
       user.type.toLowerCase() !== 'provider' ||

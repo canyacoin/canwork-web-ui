@@ -72,7 +72,7 @@ deploy:staging:
     - firebase functions:config:set chainmonitor.authkey="$CHAINMONITOR_AUTHKEY" --token "$FIREBASE_CI_AUTH_TOKEN"
     - firebase functions:config:set chainmonitor.bsctokens="$CHAINMONITOR_BSCTOKENS" --token "$FIREBASE_CI_AUTH_TOKEN"
     - echo "Deploying"
-    - firebase deploy --token "$FIREBASE_CI_AUTH_TOKEN" -P $FIREBASE_PROJECT_ID_STAGING --only hosting:canwork-webui,functions:updateIndexProviderData
+    - firebase deploy --token "$FIREBASE_CI_AUTH_TOKEN" -P $FIREBASE_PROJECT_ID_STAGING --only hosting:canwork-webui,functions:indexProviderData
 
 deploy:production:
   stage: deploy
