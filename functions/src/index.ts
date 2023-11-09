@@ -604,8 +604,7 @@ exports.removeIndexProviderData = functions.firestore
 function shouldSkipIndexing(user: any) {
   if (!user) {
     console.log(`- shouldSkipIndexing no user provided`)
-  }
-  {
+  } else {
     console.log(
       `- shouldSkipIndexing called for "${user.address}", type ${user.type}, whitelisted ${user.whitelisted}, state ${user.state}`
     )
