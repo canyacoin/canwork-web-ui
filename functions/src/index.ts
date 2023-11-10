@@ -436,7 +436,17 @@ exports.updateIndexProviderData = functions.firestore
     const userIsWhitelistedButEmailIsNotSent =
       afterData.whitelisted && !afterData.sentApprovedEmail
     if (userHasBeenWhitelisted) {
+      // this is called when user is whitelisted
       notifyAdminOnNewUser(afterData)
+    }
+    if (
+      !afterData.whitelisted && // user not yet whitelisted
+      !afterData.whitelistRejected && // user not yet rejected
+      !beforeData.whitelistSubmitted &&
+      afterData.whitelistSubmitted // white list request was submitted (proceed step into create-provider-profile.component.ts)
+    ) {
+      // we have to notify admin to review the whitelist request
+      notifyAdminOnNewUserToWhitelist(afterData)
     }
     if (userHasBeenWhitelisted || userIsWhitelistedButEmailIsNotSent) {
       console.log('+ sending a accepted provider email...')
@@ -472,6 +482,8 @@ exports.updateIndexProviderData = functions.firestore
       )
     }
 
+    // this is wrong or i can't understand it
+    // anyway this welcome email is never sent, it seems
     if (
       afterData.welcomeEmailSent &&
       afterData.welcomeEmailSent === false &&
@@ -528,8 +540,63 @@ exports.updateIndexProviderData = functions.firestore
     })
   })
 
+// this is called when user is created and a whitelist request is submitted
+// we send an email to admin with a link to profile on express app where he can approve the user
+function notifyAdminOnNewUserToWhitelist(user) {
+  console.log(
+    `+ sending a new provider to whitelist email to admin for user "${user.address}"`
+  )
+
+  const text = `
+  Link to profile: https://canwork.io/profile/${user.slug}
+  <br>
+  Email address: ${user.email}
+  <br>
+  Referred by: ${user.referredBy}
+  `
+  const sgMail = require('@sendgrid/mail')
+  sgMail.setApiKey(sendgridApiKey)
+  console.log('+ first chars: ', sendgridApiKey.substring(0, 5))
+  sgMail.setSubstitutionWrappers('{{', '}}')
+  const senderAddress = 'support@canwork.io'
+  const senderName = 'CanWork Support'
+
+  // support adding an additional email to receive admin comunication
+  let adminsList: any = 'support@canwork.io'
+  if (
+    env.internal.additionaladminemail &&
+    env.internal.additionaladminemail.length > 3
+  ) {
+    console.log(
+      `+ adding additional admin email recipient for user "${user.address}" to whitelist`
+    )
+
+    adminsList = ['support@canwork.io', env.internal.additionaladminemail]
+  }
+
+  sgMail.send(
+    {
+      to: adminsList,
+      from: {
+        name: senderName,
+        email: senderAddress,
+      },
+      subject: `New Provider to whitelist`,
+      html: text,
+    },
+    async (error) => {
+      if (error) {
+        console.error('! error sending message:', error.response.body)
+      }
+    }
+  )
+}
+
+// this is called when user is whitelisted
 function notifyAdminOnNewUser(user) {
-  console.log('+ sending a new provider email to admin...')
+  console.log(
+    `+ sending a new whitelisted provider email to admin for user "${user.address}"`
+  )
 
   const text = `
   Link to profile: https://app.canwork.io/profile/${user.slug}
@@ -545,14 +612,27 @@ function notifyAdminOnNewUser(user) {
   const senderAddress = 'support@canwork.io'
   const senderName = 'CanWork Support'
 
+  // support adding an additional email to receive admin comunication
+  let adminsList: any = 'support@canwork.io'
+  if (
+    env.internal.additionaladminemail &&
+    env.internal.additionaladminemail.length > 3
+  ) {
+    console.log(
+      `+ adding additional admin email recipient for user "${user.address}" whitelisted`
+    )
+
+    adminsList = ['support@canwork.io', env.internal.additionaladminemail]
+  }
+
   sgMail.send(
     {
-      to: 'support@canwork.io',
+      to: adminsList,
       from: {
         name: senderName,
         email: senderAddress,
       },
-      subject: `New Provider`,
+      subject: `New Provider whitelisted`,
       html: text,
     },
     async (error) => {
