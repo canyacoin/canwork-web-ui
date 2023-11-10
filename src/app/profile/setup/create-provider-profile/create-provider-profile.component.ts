@@ -211,7 +211,8 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
   proceed() {
     this.sending = true
     this.user.whitelistSubmitted = true
-    this.user.whitelisted = true
+    //this.user.whitelisted = true // old
+    this.user.whitelisted = false // new november 23, do not automatically whitelist users
     this.user.referredBy = this.profileForm.value.referredBy
     this.userService.saveUser(this.user)
   }
