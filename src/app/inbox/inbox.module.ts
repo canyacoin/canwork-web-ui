@@ -55,7 +55,6 @@ import { BscPaymentSelectorComponent } from '../core-components/bsc-payment-sele
     JobDashboardCardComponent,
     BscPaymentSelectorComponent,
   ],
-  entryComponents: [ActionDialogComponent],
   exports: [InboxRoutingModule],
 })
 export class InboxModule {}
