@@ -1,5 +1,9 @@
 import { Component, OnInit, Directive } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms'
 import { Job, PaymentType } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
 import { User, UserType } from '@class/user'
@@ -46,10 +50,10 @@ export class ActionDialogComponent
   paymentTypes = PaymentType
 
   usdToAtomicCan: number
-  form: FormGroup = null
+  form: UntypedFormGroup = null
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private jobService: JobService
   ) {
     super()

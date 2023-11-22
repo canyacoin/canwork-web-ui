@@ -1,5 +1,9 @@
 import { Component, Input, OnDestroy, OnInit, Directive } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms'
 import { User, UserCategory, UserState, UserType } from '@class/user'
 import { AuthService } from '@service/auth.service'
 import { UserService } from '@service/user.service'
@@ -47,12 +51,12 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
   currentStep: any
   sending = false
 
-  profileForm: FormGroup = null
+  profileForm: UntypedFormGroup = null
   termsChecked = false
 
   constructor(
     private userService: UserService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private authService: AuthService,
     private bscService: BscService
   ) {}

@@ -1,5 +1,9 @@
 import { Component, OnInit, OnDestroy, Directive } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { Bid, Job, JobState } from '@class/job'
 import { User } from '@class/user'
@@ -18,7 +22,7 @@ declare var $: any
   styleUrls: ['./public-job.component.css'],
 })
 export class PublicJobComponent implements OnInit, OnDestroy {
-  bidForm: FormGroup = null
+  bidForm: UntypedFormGroup = null
   bids: []
   recentBids: any
   authSub: Subscription
@@ -45,7 +49,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private publicJobsService: PublicJobService,
     private storage: AngularFireStorage,
-    private formBuilder: FormBuilder
+    private formBuilder: UntypedFormBuilder
   ) {
     this.bidForm = this.formBuilder.group({
       price: [

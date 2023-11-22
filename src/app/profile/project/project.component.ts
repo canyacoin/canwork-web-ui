@@ -1,6 +1,10 @@
 import { Location } from '@angular/common'
 import { Component, OnDestroy, OnInit, Directive } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AngularFirestore } from '@angular/fire/firestore'
 import { Subscription } from 'rxjs'
@@ -23,12 +27,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
   initialTags: string[] = []
   projectLoaded = false
 
-  projectForm: FormGroup = null
+  projectForm: UntypedFormGroup = null
 
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private location: Location,
     private authService: AuthService,
     private afs: AngularFirestore

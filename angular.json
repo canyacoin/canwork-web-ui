@@ -164,7 +164,6 @@
       }
     }
   },
-  "defaultProject": "can-work",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",

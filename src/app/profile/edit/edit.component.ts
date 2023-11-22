@@ -7,7 +7,11 @@ import {
   Output,
   Directive,
 } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms'
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
 import { UserService } from '@service/user.service'
@@ -36,7 +40,7 @@ export class EditComponent implements OnInit, OnDestroy {
   }
   filePath: string
 
-  profileForm: FormGroup = null
+  profileForm: UntypedFormGroup = null
   sending = false
 
   skillTagsList: string[] = []
@@ -48,7 +52,7 @@ export class EditComponent implements OnInit, OnDestroy {
   preview = false
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private userService: UserService,
     private bscService: BscService,
     private authService: AuthService

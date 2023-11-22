@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, Directive } from '@angular/core'
 import {
-  FormBuilder,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormGroup,
   Validators,
   AbstractControl,
 } from '@angular/forms'
@@ -37,8 +37,8 @@ import { take } from 'rxjs/operators'
   styleUrls: ['./post.component.css'],
 })
 export class PostComponent implements OnInit, OnDestroy {
-  postForm: FormGroup = null
-  shareableJobForm: FormGroup = null
+  postForm: UntypedFormGroup = null
+  shareableJobForm: UntypedFormGroup = null
   pageLoaded = false
   paymentType = PaymentType
   recipientAddress = ''
@@ -102,7 +102,7 @@ export class PostComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private userService: UserService,
     private authService: AuthService,
     private jobService: JobService,
