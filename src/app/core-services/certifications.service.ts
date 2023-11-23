@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { AngularFirestore } from '@angular/fire/firestore'
+import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { Certification } from '../core-classes/certification'
 import { Subscription } from 'rxjs/Subscription'
 

@@ -14,7 +14,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import {
   AngularFirestore,
   AngularFirestoreCollection,
-} from '@angular/fire/firestore'
+} from '@angular/fire/compat/firestore'
 import * as findIndex from 'lodash/findIndex'
 import * as orderBy from 'lodash/orderBy'
 import * as union from 'lodash/union'

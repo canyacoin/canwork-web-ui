@@ -5,7 +5,7 @@ import { Router } from '@angular/router'
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
 import { NavService } from '@service/nav.service'
-import { AngularFirestore } from '@angular/fire/firestore'
+import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { Subscription } from 'rxjs'
 import { BscService, EventTypeBsc } from '@service/bsc.service'
 

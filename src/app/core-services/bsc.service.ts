@@ -29,7 +29,7 @@ import { GenerateGuid } from '@util/generate.uid'
 import {
   AngularFirestore,
   AngularFirestoreCollection,
-} from '@angular/fire/firestore'
+} from '@angular/fire/compat/firestore'
 
 import { environment } from '@env/environment'
 

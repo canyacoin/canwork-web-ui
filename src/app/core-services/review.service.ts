@@ -7,7 +7,7 @@ import { UserService } from '@service/user.service'
 import {
   AngularFirestore,
   AngularFirestoreCollection,
-} from '@angular/fire/firestore'
+} from '@angular/fire/compat/firestore'
 import { Observable, Subscribable } from 'rxjs'
 import { map, take } from 'rxjs/operators'
 

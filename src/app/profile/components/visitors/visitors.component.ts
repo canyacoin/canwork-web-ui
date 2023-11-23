@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Directive } from '@angular/core'
-import { AngularFirestore } from '@angular/fire/firestore'
+import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { User } from '../../../core-classes/user'
-import { AngularFireFunctions } from '@angular/fire/functions'
+import { AngularFireFunctions } from '@angular/fire/compat/functions'
 import { SelectParams } from '../../../../../functions/src/firestore'
 
 @Component({

@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs'
 import * as moment from 'moment'
 import { User } from '../../core-classes/user'
 import { AuthService } from '../../core-services/auth.service'
-import { AngularFireFunctions } from '@angular/fire/functions'
+import { AngularFireFunctions } from '@angular/fire/compat/functions'
 import { assoc, pipe } from 'ramda'
 import { SelectParams } from '../../../../functions/src/firestore'
 

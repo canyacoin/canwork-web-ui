@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, Directive } from '@angular/core'
 import { Router } from '@angular/router'
-import { AngularFirestore } from '@angular/fire/firestore'
+import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 import { User } from '../../../core-classes/user'

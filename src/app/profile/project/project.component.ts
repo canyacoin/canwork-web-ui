@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AngularFirestore } from '@angular/fire/firestore'
+import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 import { Work } from '../../core-classes/portfolio'
