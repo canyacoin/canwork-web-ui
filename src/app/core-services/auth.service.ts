@@ -4,9 +4,16 @@ import { AngularFireAuth } from '@angular/fire/auth'
 import { AngularFirestore } from '@angular/fire/firestore'
 import { BehaviorSubject, Subscription } from 'rxjs'
 
+/*
+Before: version 8 or earlier
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
+*/
+// compat packages are API compatible with namespaced code
+import firebase from 'firebase/compat/app'
+import 'firebase/compat/auth'
+import 'firebase/compat/firestore'
 
 import { User } from '../core-classes/user'
 

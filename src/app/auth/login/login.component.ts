@@ -7,9 +7,18 @@ import { HttpHeaders } from '@angular/common/http'
 
 import { ActivatedRoute, Router } from '@angular/router'
 
+/*
+Before: version 8 or earlier
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
+*/
+
+// compat packages are API compatible with namespaced code
+import firebase from 'firebase/compat/app'
+import 'firebase/compat/auth'
+import 'firebase/compat/firestore'
+
 import { FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular'
 import { User } from '../../core-classes/user'
 import { AuthService } from '../../core-services/auth.service'
