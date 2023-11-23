@@ -8,9 +8,9 @@ import 'firebase/auth'
 import 'firebase/firestore'
 */
 // compat packages are API compatible with namespaced code
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/auth'
-import 'firebase/compat/firestore'
+
+//import firebase from '@angular/fire/compat'
+import { AngularFireAuth } from '@angular/fire/compat/auth'
 
 import { environment } from '@env/environment'
 import { ActionType } from '@class/job-action'
@@ -22,11 +22,16 @@ import { AuthService } from './auth.service'
 export class JobNotificationService {
   readonly endPoint: string = `${environment.backendURI}/jobStateEmailNotification`
 
-  constructor(private authService: AuthService, private http: HttpClient) {}
+  constructor(
+    private authService: AuthService,
+    private afAuth: AngularFireAuth,
+    private http: HttpClient
+  ) {}
 
   public async notify(jobAction: ActionType, jobId: string) {
     // TODO: move this into authService.getJwt() and solve async issues
-    firebase.auth().onAuthStateChanged(async (user) => {
+    this.afAuth.onAuthStateChanged(async (user) => {
+      //firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
         const token = await user.getIdToken(true)
         let headers = new HttpHeaders()

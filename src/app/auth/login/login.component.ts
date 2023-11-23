@@ -6,6 +6,7 @@ https://angular.io/guide/deprecations
 import { HttpHeaders } from '@angular/common/http'
 
 import { ActivatedRoute, Router } from '@angular/router'
+import { AngularFireAuth } from '@angular/fire/compat/auth'
 
 /*
 Before: version 8 or earlier
@@ -15,9 +16,10 @@ import 'firebase/firestore'
 */
 
 // compat packages are API compatible with namespaced code
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/auth'
-import 'firebase/compat/firestore'
+//import firebase from '@angular/fire/app'
+
+//import '@angular/fire/compat/auth'
+//import '@angular/fire/compat/firestore'
 
 import { FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular'
 import { User } from '../../core-classes/user'
@@ -40,6 +42,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private afAuth: AngularFireAuth,
     private authService: AuthService,
     private userService: UserService
   ) {}
@@ -85,9 +88,8 @@ export class LoginComponent implements OnInit {
 
     if (user && user.address) {
       //console.log('+ logging existing user in:', user.email)
-      firebase
-        .auth()
-        .currentUser.getIdToken(/* forceRefresh */ true)
+      ;(await this.afAuth.currentUser)
+        .getIdToken(/* forceRefresh */ true)
         .then((idToken) => {
           window.sessionStorage.accessToken = idToken
         })

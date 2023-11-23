@@ -11,9 +11,11 @@ import 'firebase/auth'
 import 'firebase/firestore'
 */
 // compat packages are API compatible with namespaced code
-import firebase from 'firebase/compat/app'
-import 'firebase/compat/auth'
-import 'firebase/compat/firestore'
+//import firebase from '@angular/fire/compat'
+//import { onAuthStateChanged } from "@angular/fire/compat/auth";
+
+//import '@angular/fire/compat/auth'
+//import '@angular/fire/compat/firestore'
 
 import { User } from '../core-classes/user'
 
@@ -53,7 +55,7 @@ export class AuthService {
 
   async getJwt(): Promise<string> {
     return new Promise<string>(async (resolve, reject) => {
-      await firebase.auth().onAuthStateChanged(async (user) => {
+      this.afAuth.onAuthStateChanged(async (user) => {
         if (user) {
           const token = await user.getIdToken(true)
           resolve(token)
