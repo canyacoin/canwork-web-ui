@@ -10,42 +10,30 @@ This is an Angular Project, generated using [Angular CLI](https://github.com/ang
 
 [![pipeline status](https://gitlab.com/canyacoin/canwork/web-ui/badges/master/pipeline.svg)]
 
-_This project uses (new June 2023)_
+_This project uses:_
 
 - Node.js: 14.21.3
 - Yarn: 1.22.19
-- Angular-CLI (@angular/core): 12.2.17
+- Angular (@angular/core): 14.3.0
+- firebaseui: 6.0.1
+- firebaseui-angular: 6.1.2
+- @angular/fire: 7.4.1
+- firebase: 9.8.0 (as a dependency of @angular/fire, not directly imported)
 - Firebase-CLI (firebase-tools): 11.30.0
-- Typescript: 4.3.5
+- Typescript: 4.6.4
 - Walletconnect: 2.8.1
 
-_This project requires (old version)_
-
-- NPM: 6.4.1
-- Node: 10.15.3
-- Angular-CLI: 7.0.2
-- Firebase-CLI: 5.5.7
-- Yarn: 1.15.2
-
-## Upgrading
-
-Please refer to this firebase/angular compatibility table:
+FirebaseUI/Angular compatibility table:
 https://github.com/RaphaelJenni/firebaseui-angular#compatibility
 
 ## Setting Up
 
 - [NPM](https://nodejs.org/en/)
 
-- [Angular](https://github.com/angular/angular-cli)
-
-```
-npm install --save-dev @angular/compiler-cli@7.0.2
-```
-
 - [Firebase CLI](https://www.npmjs.com/package/firebase)
 
 ```
-npm install -g @angular/cli@9.0.4 firebase-tools@7.16.2
+npm install -g firebase-tools@11.3.0
 ```
 
 - [YARN](https://yarnpkg.com/en/docs/install#mac-stable)
@@ -68,7 +56,7 @@ Setup (new)
 
 ```
 nvm use
-npm install -g yarn@1.22.19
+npm install -g yarn
 npm install
 npx husky install
 npx husky set .husky/pre-commit "npx pretty-quick --staged"
@@ -76,16 +64,13 @@ npx husky set .husky/pre-commit "npx pretty-quick --staged"
 
 Setup
 
-Prior to running `yarn` ensure your node version is in a range supported by this project using something like NVM
+Prior to running `yarn` ensure your node version is correct according to NVM.
 A `.nvmrc` file is included to make this easy if you already use NVM (just `cd` to this projects root folder _with admin privileges_ and run `nvm use` to activate the correct node version)
-Tested (working) node versions: `10.15.3 - 10.24.1`
 
-WINDOWS USERS: `.nvmrc` format file is not supported with windows NVM so you will have to manually include the version number like `nvm use 10.15.3` and if it says its not installed then first do this `nvm install 10.15.3`
+WINDOWS USERS: `.nvmrc` format file is not supported with windows NVM so you will have to manually include the version number like `nvm use 10.15.3` and if it says its not installed then first do this `nvm install xx.xx.x`
 
 ```
 yarn
-node patch.js   // Workaround for https://blog.lysender.com/2018/07/angular-6-cannot-resolve-crypto-fs-net-path-stream-when-building-angular/
-yarn link
 ```
 
 ### Credentials
