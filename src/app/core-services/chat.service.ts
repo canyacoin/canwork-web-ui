@@ -1,6 +1,6 @@
 import { Injectable, ContentChildren } from '@angular/core'
 import { Router } from '@angular/router'
-import { AngularFirestore } from '@angular/fire/firestore'
+import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { take } from 'rxjs/operators'
 
 import { Job } from '../core-classes/job'

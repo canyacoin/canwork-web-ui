@@ -4,7 +4,12 @@ import { CertificationsService } from '../../core-services/certifications.servic
 import { AuthService } from '../../core-services/auth.service'
 import { Observable } from 'rxjs/Observable'
 import { HttpClient } from '@angular/common/http'
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
+import {
+  UntypedFormBuilder,
+  FormGroup,
+  Validators,
+  FormControl,
+} from '@angular/forms'
 import { User } from '../../core-classes/user'
 import { Subscription } from 'rxjs/Subscription'
 
@@ -27,7 +32,7 @@ export class CertificationsFormComponent implements OnInit, AfterViewInit {
   constructor(
     private auth: AuthService,
     public certifications: CertificationsService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private http: HttpClient
   ) {}
 

@@ -9,7 +9,7 @@ import {
 } from '@angular/core'
 import { User } from '../../../core-classes/user'
 import { Subscription } from 'rxjs'
-import { AngularFirestore } from '@angular/fire/firestore'
+import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { CertificationsService } from '../../../core-services/certifications.service'
 
 @Component({

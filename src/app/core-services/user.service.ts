@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core'
 import {
   AngularFirestore,
   AngularFirestoreCollection,
-} from '@angular/fire/firestore'
+} from '@angular/fire/compat/firestore'
 import { take } from 'rxjs/operators'
 
 import * as moment from 'moment-timezone'
 import { User } from '../core-classes/user'
-import { AngularFireFunctions } from '@angular/fire/functions'
+import { AngularFireFunctions } from '@angular/fire/compat/functions'
 import { GetParams, SelectParams } from '../../../functions/src/firestore'
 import { Observable } from 'rxjs'
 import { assoc } from 'ramda'

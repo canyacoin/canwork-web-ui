@@ -5,7 +5,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core'
-import { AngularFireStorage } from '@angular/fire/storage'
+import { AngularFireStorage } from '@angular/fire/compat/storage'
 import {
   DropzoneComponent as Dropzone,
   DropzoneConfigInterface,
@@ -41,13 +41,13 @@ export class StorageDropzoneComponent {
     // isUploading
     this.isUploading = true
     task
-      .then(snap => {
-        snap.ref.getDownloadURL().then(url => {
+      .then((snap) => {
+        snap.ref.getDownloadURL().then((url) => {
           this.uploaded.emit(url)
         })
         this.isUploading = false
       })
-      .catch(err => {
+      .catch((err) => {
         this.errorMessage = err.message
         this.isUploading = false
       })

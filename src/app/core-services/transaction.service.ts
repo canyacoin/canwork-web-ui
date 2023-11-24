@@ -6,7 +6,7 @@ import { GenerateGuid } from '@util/generate.uid'
 import {
   AngularFirestore,
   AngularFirestoreCollection,
-} from '@angular/fire/firestore'
+} from '@angular/fire/compat/firestore'
 
 export interface Escrow {
   amount: number

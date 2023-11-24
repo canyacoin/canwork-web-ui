@@ -1,7 +1,11 @@
 import { Component, OnDestroy, OnInit, Directive } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AngularFirestore } from '@angular/fire/firestore'
+import { AngularFirestore } from '@angular/fire/compat/firestore'
 import * as findIndex from 'lodash/findIndex'
 import { Subscription } from 'rxjs'
 import { map, take } from 'rxjs/operators'
@@ -52,8 +56,8 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   channelSubscription: Subscription
   routeSub: Subscription
-  postForm: FormGroup = null
-  offerForm: FormGroup = null
+  postForm: UntypedFormGroup = null
+  offerForm: UntypedFormGroup = null
   queryAddress = ''
   isSending = false
   isLoading = true
@@ -63,7 +67,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private userService: UserService,
     private chatService: ChatService,
     private authService: AuthService,

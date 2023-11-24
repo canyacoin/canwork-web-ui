@@ -1,5 +1,9 @@
 import { Component, Input, OnInit, Directive } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { User, UserState, UserType } from '@class/user'
 import { AuthService } from '@service/auth.service'
@@ -46,13 +50,13 @@ export class CreateClientProfileComponent implements OnInit {
   currentStep: any
   sending = false
 
-  profileForm: FormGroup = null
+  profileForm: UntypedFormGroup = null
   termsChecked = false
 
   constructor(
     private userService: UserService,
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
     private authService: AuthService
   ) {}

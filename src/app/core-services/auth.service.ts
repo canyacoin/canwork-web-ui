@@ -1,12 +1,21 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import { AngularFireAuth } from '@angular/fire/auth'
-import { AngularFirestore } from '@angular/fire/firestore'
+import { AngularFireAuth } from '@angular/fire/compat/auth'
+import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { BehaviorSubject, Subscription } from 'rxjs'
 
+/*
+Before: version 8 or earlier
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
+*/
+// compat packages are API compatible with namespaced code
+//import firebase from '@angular/fire/compat'
+//import { onAuthStateChanged } from "@angular/fire/compat/auth";
+
+//import '@angular/fire/compat/auth'
+//import '@angular/fire/compat/firestore'
 
 import { User } from '../core-classes/user'
 
@@ -46,7 +55,7 @@ export class AuthService {
 
   async getJwt(): Promise<string> {
     return new Promise<string>(async (resolve, reject) => {
-      await firebase.auth().onAuthStateChanged(async (user) => {
+      this.afAuth.onAuthStateChanged(async (user) => {
         if (user) {
           const token = await user.getIdToken(true)
           resolve(token)

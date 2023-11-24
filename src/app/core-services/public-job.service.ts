@@ -8,8 +8,8 @@ import { ActionType, IJobAction } from '@class/job-action'
 import {
   AngularFirestore,
   AngularFirestoreCollection,
-} from '@angular/fire/firestore'
-import { AngularFireFunctions } from '@angular/fire/functions'
+} from '@angular/fire/compat/firestore'
+import { AngularFireFunctions } from '@angular/fire/compat/functions'
 import { Observable, of } from 'rxjs'
 import { map, tap, take, switchMap, catchError } from 'rxjs/operators'
 import { ChatService } from '@service/chat.service'

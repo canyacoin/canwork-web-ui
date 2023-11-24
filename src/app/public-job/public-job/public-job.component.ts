@@ -1,12 +1,18 @@
 import { Component, OnInit, OnDestroy, Directive } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { Bid, Job, JobState } from '@class/job'
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
 import { PublicJobService } from '@service/public-job.service'
 import { UserService } from '@service/user.service'
-import { AngularFireStorage } from '@angular/fire/storage'
+//import { AngularFireStorage } from '@angular/fire/storage'
+import { AngularFireStorage } from '@angular/fire/compat/storage'
+
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 import { environment } from '@env/environment'
@@ -18,7 +24,7 @@ declare var $: any
   styleUrls: ['./public-job.component.css'],
 })
 export class PublicJobComponent implements OnInit, OnDestroy {
-  bidForm: FormGroup = null
+  bidForm: UntypedFormGroup = null
   bids: []
   recentBids: any
   authSub: Subscription
@@ -45,7 +51,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private publicJobsService: PublicJobService,
     private storage: AngularFireStorage,
-    private formBuilder: FormBuilder
+    private formBuilder: UntypedFormBuilder
   ) {
     this.bidForm = this.formBuilder.group({
       price: [

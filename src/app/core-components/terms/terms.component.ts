@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core'
-import { FormGroup } from '@angular/forms'
+import { UntypedFormGroup } from '@angular/forms'
 
 @Component({
   selector: 'app-terms',
@@ -7,7 +7,7 @@ import { FormGroup } from '@angular/forms'
   styleUrls: ['./terms.component.css'],
 })
 export class TermsComponent {
-  @Input() form: FormGroup
+  @Input() form: UntypedFormGroup
 
   constructor() {}
 }
