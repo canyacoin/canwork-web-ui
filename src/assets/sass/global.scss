@@ -2,7 +2,7 @@
 $color-ok-rating: #33ccff !default;
 
 /* Import star-rating styles */
-@import '~css-star-rating/scss/star-rating';
+@import 'css-star-rating/scss/star-rating';
 
 @keyframes spin {
   from {transform:rotate(0deg);}
