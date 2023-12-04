@@ -107,7 +107,7 @@ import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.
             import('./error/error.module').then((m) => m.ErrorModule),
         },
       ],
-      { relativeLinkResolution: 'legacy' }
+      {}
     ),
   ],
   exports: [RouterModule],
