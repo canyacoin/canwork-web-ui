@@ -1,25 +1,9 @@
 import { Component, OnInit, Directive } from '@angular/core'
-/*
-https://angular.io/guide/deprecations
-*/
-//import { Headers } from '@angular/http'
+
 import { HttpHeaders } from '@angular/common/http'
 
 import { ActivatedRoute, Router } from '@angular/router'
 import { AngularFireAuth } from '@angular/fire/compat/auth'
-
-/*
-Before: version 8 or earlier
-import firebase from 'firebase/app'
-import 'firebase/auth'
-import 'firebase/firestore'
-*/
-
-// compat packages are API compatible with namespaced code
-//import firebase from '@angular/fire/app'
-
-//import '@angular/fire/compat/auth'
-//import '@angular/fire/compat/firestore'
 
 import { FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular'
 import { User } from '../../core-classes/user'

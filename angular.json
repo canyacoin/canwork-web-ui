@@ -28,21 +28,13 @@
             "stylePreprocessorOptions": {
               "includePaths": ["src/assets/sass"]
             },
-            "optimization": {
-              "scripts": true,
-              "styles": {
-                "minify": true,
-                "inlineCritical": false
-              },
-              "fonts": false
-            },
+            "optimization": true,
             "outputHashing": "all",
             "sourceMap": true,
-            "aot": true,
-            "namedChunks": true,
-            "extractLicenses": false,
-            "vendorChunk": true,
-            "buildOptimizer": false,
+            "namedChunks": false,
+            "extractLicenses": true,
+            "vendorChunk": false,
+            "buildOptimizer": true,
             "assets": ["src/assets", "src/favicon.ico"],
             "styles": [
               "node_modules/angular-instantsearch/bundles/instantsearch.min.css",

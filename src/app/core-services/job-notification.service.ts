@@ -1,15 +1,6 @@
 import { Injectable } from '@angular/core'
 import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http'
 
-/*
-Before: version 8 or earlier
-import firebase from 'firebase/app'
-import 'firebase/auth'
-import 'firebase/firestore'
-*/
-// compat packages are API compatible with namespaced code
-
-//import firebase from '@angular/fire/compat'
 import { AngularFireAuth } from '@angular/fire/compat/auth'
 
 import { environment } from '@env/environment'

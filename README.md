@@ -14,17 +14,20 @@ _This project uses:_
 
 - Node.js: 14.21.3
 - Yarn: 1.22.19
-- Angular (@angular/core): 14.3.0
-- firebaseui: 6.0.1
-- firebaseui-angular: 6.1.2
-- @angular/fire: 7.4.1
-- firebase: 9.8.0 (as a dependency of @angular/fire, not directly imported)
+- Angular (@angular/core): 15.2.10
+- firebaseui: 6.0.2
+- firebaseui-angular: 6.1.3
+- @angular/fire: 7.5.0
+- firebase: 9.23.0 (as a dependency of @angular/fire, not directly imported)
 - Firebase-CLI (firebase-tools): 11.30.0
-- Typescript: 4.6.4
+- Typescript: 4.8.4
 - Walletconnect: 2.8.1
 
 FirebaseUI/Angular compatibility table:
 https://github.com/RaphaelJenni/firebaseui-angular#compatibility
+
+Node.js/Angular compatibility table:
+https://angular.io/guide/versions
 
 ## Setting Up
 
