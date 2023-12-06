@@ -29,6 +29,9 @@ https://github.com/RaphaelJenni/firebaseui-angular#compatibility
 Node.js/Angular compatibility table:
 https://angular.io/guide/versions
 
+Angular build optimization configuration:
+https://angular.io/guide/workspace-config#optimization-configuration
+
 ## Setting Up
 
 - [NPM](https://nodejs.org/en/)
