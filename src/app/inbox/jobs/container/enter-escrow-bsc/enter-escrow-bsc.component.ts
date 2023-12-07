@@ -110,14 +110,6 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
       this.router.navigate(['/inbox/job', this.job.id])
     }
 
-    //const provider = await this.userService.getUser(this.job.providerId)
-    //const client = await this.userService.getUser(this.job.clientId)
-
-    // Calculate jobBudget in selected BEP asset
-    //const jobBudgetAsset = this.jobBudgetUsd / this.bscAssetData.usdPrice
-
-    // now calculate exact needed allowance using getAmountsIn
-
     let allowance = parseFloat(
       await this.bscService.getTokenAmount(
         this.jobBudgetUsd,
@@ -135,7 +127,6 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
         usdValue: this.jobBudgetUsd,
         jobId: this.job.id,
         providerAddress: this.providerAddress,
-        //providerAddress: provider.bscAddress,
       },
       allowance,
     }
@@ -187,7 +178,13 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
               allowance
           )
 
-          if (currentAllowance >= allowance) this.isApproved = true
+          // current allowance is returned as stringified bignumber if it returns correctly
+          if (
+            typeof currentAllowance === 'string' &&
+            parseFloat(currentAllowance) >= allowance
+          ) {
+            this.isApproved = true
+          }
         }
       }
     } else {
