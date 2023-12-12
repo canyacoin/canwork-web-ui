@@ -14,10 +14,10 @@ _This project uses:_
 
 - Node.js: 16.20.2
 - Yarn: 1.22.19
-- Angular (@angular/core): 15.2.10
-- firebaseui: 6.0.2
-- firebaseui-angular: 6.1.3
-- @angular/fire: 7.5.0
+- Angular (@angular/core): 16.2.12
+- firebaseui: 6.1.0
+- firebaseui-angular: 6.1.4
+- @angular/fire: 7.6.1
 - firebase: 9.23.0 (as a dependency of @angular/fire, not directly imported)
 - Firebase-CLI (firebase-tools): 11.30.0
 - Typescript: 4.9.3
