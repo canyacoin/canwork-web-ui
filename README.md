@@ -12,7 +12,7 @@ This is an Angular Project, generated using [Angular CLI](https://github.com/ang
 
 _This project uses:_
 
-- Node.js: 14.21.3
+- Node.js: 16.20.2
 - Yarn: 1.22.19
 - Angular (@angular/core): 15.2.10
 - firebaseui: 6.0.2
