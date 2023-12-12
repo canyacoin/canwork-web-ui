@@ -20,13 +20,13 @@ _This project uses:_
 - @angular/fire: 7.5.0
 - firebase: 9.23.0 (as a dependency of @angular/fire, not directly imported)
 - Firebase-CLI (firebase-tools): 11.30.0
-- Typescript: 4.8.4
+- Typescript: 4.9.3
 - Walletconnect: 2.8.1
 
 FirebaseUI/Angular compatibility table:
 https://github.com/RaphaelJenni/firebaseui-angular#compatibility
 
-Node.js/Angular compatibility table:
+Node.js/Typescript/Angular compatibility table:
 https://angular.io/guide/versions
 
 Angular build optimization configuration:
