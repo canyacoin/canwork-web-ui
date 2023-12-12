@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core'
 import {
   ActivatedRouteSnapshot,
-  CanActivate,
   Router,
   RouterStateSnapshot,
 } from '@angular/router'
@@ -10,7 +9,7 @@ import { Observable } from 'rxjs'
 import { AuthService } from '../core-services/auth.service'
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthGuard {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(
@@ -32,10 +31,11 @@ export class AuthGuard implements CanActivate {
       return false
     }
     if (route.queryParams['returnUrl']) {
-      if (route.queryParams['nextAction']) 
-        this.router.navigate([route.queryParams['returnUrl']], { queryParams: {nextAction: route.queryParams['nextAction']}})
-      else
-        this.router.navigate([route.queryParams['returnUrl']])      
+      if (route.queryParams['nextAction'])
+        this.router.navigate([route.queryParams['returnUrl']], {
+          queryParams: { nextAction: route.queryParams['nextAction'] },
+        })
+      else this.router.navigate([route.queryParams['returnUrl']])
     } else {
       this.router.navigate(['home'])
     }
