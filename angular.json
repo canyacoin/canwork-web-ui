@@ -47,10 +47,16 @@
               "node_modules/firebaseui/dist/firebaseui.css",
               "node_modules/animate.css/animate.css",
               "node_modules/ngx-toastr/toastr.css",
+              "src/assets/sass/global.scss",
               "src/styles.scss",
-              "src/assets/sass/global.scss"
+              "node_modules/ngx-spinner/animations/ball-clip-rotate-pulse.css",
+              "node_modules/slick-carousel/slick/slick.css",
+              "node_modules/slick-carousel/slick/slick-theme.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/slick-carousel/slick/slick.min.js"
+            ]
           },
           "configurations": {
             "staging": {

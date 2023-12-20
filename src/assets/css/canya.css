@@ -9865,8 +9865,6 @@ a.text-danger:focus {
 }
 
 #menu-overlay {
-  width: 100vw;
-  height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 0;
   position: fixed;
@@ -9874,6 +9872,8 @@ a.text-danger:focus {
 }
 
 .activate-menu {
+  width: 100vw !important;
+  height: 100vh !important;
   z-index: 100 !important;
   opacity: 100 !important;
   overflow: hidden;

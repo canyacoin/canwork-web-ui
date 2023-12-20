@@ -21,7 +21,6 @@ import { FaqPageComponent } from './faq-page/faq-page.component'
 import { FeedbackComponent } from './feedback/feedback.component'
 import { FooterComponent } from './footer/footer.component'
 import { HeaderComponent } from './header/header.component'
-import { SearchFilterOptionComponent } from './header/search-filter-option/search-filter-option.component'
 import { StorageDropzoneComponent } from './storage-dropzone/storage-dropzone.component'
 import { ProviderCardComponent } from './provider-card/provider-card.component'
 import { ScrollTopComponent } from './scroll-top/scroll-top.component'
@@ -37,6 +36,11 @@ import { DynamicCoinComponent } from './dynamic-coin/dynamic-coin.component'
 import { DynamicCoinWrapperComponent } from './dynamic-coin-wrapper/dynamic-coin-wrapper.component'
 import { LedgerModalComponent } from '../binance/ledger-modal/ledger-modal.component'
 import { PopperComponent } from './popper/popper.component'
+import { BasicButtonComponent } from './basic-button/basic-button.component'
+import { BasicTagComponent } from './basic-tag/basic-tag.component'
+import { CategoryCardComponent } from './category-card/category-card.component'
+import { LinkButtonComponent } from './link-button/link-button.component'
+import { ProfileCardComponent } from './profile-card/profile-card.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -69,7 +73,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     FeedbackComponent,
     FooterComponent,
     HeaderComponent,
-    SearchFilterOptionComponent,
     ScrollTopComponent,
     SkillTagComponent,
     SkillTagsSelectionComponent,
@@ -86,6 +89,11 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     DynamicCoinWrapperComponent,
     LedgerModalComponent,
     PopperComponent,
+    BasicButtonComponent,
+    BasicTagComponent,
+    CategoryCardComponent,
+    LinkButtonComponent,
+    ProfileCardComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -109,6 +117,11 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     VerifiedMarkComponent,
     DynamicCoinComponent,
     DynamicCoinWrapperComponent,
+    BasicButtonComponent,
+    BasicTagComponent,
+    CategoryCardComponent,
+    LinkButtonComponent,
+    ProfileCardComponent,
   ],
   providers: [
     {

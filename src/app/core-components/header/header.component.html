@@ -1,396 +1,120 @@
-<div class="topnav-container">
-  <div class="topnav-inner">
-    <a class="topnav-logo-container" [routerLink]="['/home']">
-      <img class="topnav-logo" src="assets/img/logo.svg" alt="logo" />
-    </a>
-    <div class="topnav-link-container">
-      <a class="topnav-link" [routerLink]="['/jobs']">Job Board</a>
-      <a class="topnav-link" *ngIf="currentUser" [routerLink]="['/inbox/chat']">
-        <div class="topnav-link-notif-badge">
-          {{ unreadMsgCount }}
-        </div>
-        <div>Inbox</div>
-      </a>
-      <a class="topnav-link" href="https://www.canwork.io/blog">Blog</a>
-      <a class="topnav-link" [routerLink]="['/faq']">FAQ</a>
-    </div>
-    <div class="topnav-search-container">
-      <form class="topnav-search-left" method="post" (ngSubmit)="onSubmit()">
-        <button type="submit" border-none>
-          <img
-            class="topnav-search-icon"
-            src="assets/img/icons/search.svg"
-            alt="search"
-          />
-        </button>
-        <input
-          #inputSearch
-          class="topnav-search-input"
-          type="text"
-          id="topnav-search"
-          name="topnav-search"
-          placeholder="Search providers..."
+<div>
+  <div
+    class="fixed bg-transparent w-full flex justify-center px-[16px] items-center h-[72px] md:h-[64px] top-0 z-40 transition-all duration-300"
+    [ngClass]="{ 'bg-white shadow-md': isScrolled }"
+  >
+    <div class="max-w-[1440px] w-full flex justify-between items-center">
+      <div [routerLink]="['/home']">
+        <img
+          src="{{
+            isScrolled ? headerSection.logoGraySrc : headerSection.logoSrc
+          }}"
+          class="w-[140px] h-[40px] select-none"
         />
-      </form>
-      <!-- <div class="topnav-search-right" (click)="toggleDropdown()"> -->
-      <!-- <div class="topnav-search-select-text">
-          {{ selectedProvType.name }}
-        </div> -->
-      <!-- <div class="topnav-search-dropdown" id="myDropdown">
-          <a
-            *ngFor="let item of providerCategories"
-            (click)="closeDropDown(item)"
-            >{{ item.name }}</a
-          >
-        </div> -->
-      <!-- OTHER DROPDOWN SELECTION -->
-      <!-- <div class="topnav-search-select-text">Jobs</div> -->
-      <!-- <img
-          class="topnav-search-select-icon"
-          src="assets/img/icons/arrow-down.svg"
-          alt="search-select"
-        /> -->
-      <!-- </div> -->
-    </div>
-    <div class="topnav-button-container" *ngIf="!currentUser">
-      <div class="button-white" [routerLink]="['/auth']">
-        Login
       </div>
-      <div class="button-blue" [routerLink]="['/auth']">
-        Create Account
-      </div>
-    </div>
-    <div class="topnav-button-container" *ngIf="currentUser">
-      <div
-        class="button-blue"
-        *ngIf="!bAddress; else showAddress"
-        [routerLink]="['/wallet-bnb']"
-      >
-        Connect Wallet
-      </div>
-      <ng-template #showAddress>
-        <div class="button-blue" [routerLink]="['/wallet-bnb/assets']">
-          {{ bAddress.slice(0, 6) }}...{{ bAddress.slice(-3) }}
-        </div>
-      </ng-template>
-      <div class="topnav-avatar">
-        <a
-          role="button"
-          id="dropdownMenuLink"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-        >
-          <app-avatar
-            [user]="currentUser"
-            [customClass]="'avatar'"
-          ></app-avatar>
-        </a>
-        <div
-          class="dropdown-menu dropdown-menu-right"
-          aria-labelledby="dropdownMenuLink"
-        >
-          <a
-            class="nav-link dropdown-item"
-            style="font-weight: 400 !important; text-transform: none"
-            href="#"
-            [routerLink]="['/profile']"
-            >Profile</a
-          >
-          <a
-            class="nav-link dropdown-item"
-            style="font-weight: 400 !important; text-transform: none"
-            href="#"
-            [routerLink]="['/profile']"
-            [queryParams]="{ editProfile: 1 }"
-            >Edit Profile</a
-          >
-          <div class="dropdown-divider"></div>
-          <a
-            class="nav-link dropdown-item"
-            style="font-weight: 400 !important; text-transform: none"
-            href="#"
-            [routerLink]="['/inbox/jobs']"
-            >Manage Jobs</a
-          >
-          <div class="dropdown-divider"></div>
-          <a
-            class="dropdown-item text-danger"
-            href="#"
-            data-toggle="modal"
-            data-target="#areYouSureLogoutModal"
-            >Logout</a
-          >
+      <div class="hidden lg:flex items-center gap-[40px]">
+        <div *ngFor="let item of headerSection.website" [routerLink]="item.url">
+          <link-button
+            [type]="isScrolled ? 2 : 1"
+            [title]="item.title"
+            size="small"
+          />
         </div>
       </div>
-    </div>
-    <div class="topnav-hamburger">
-      <a class="" href="#" data-toggle="modal" data-target="#mobileMenuModal"
-        ><img
-          class="topnav-hamburger-icon"
-          src="assets/img/icons/hamburger-menu.svg"
-          alt="mobile-menu"
-      /></a>
-    </div>
-  </div>
-</div>
 
-<!-- Mobile menu Modal -->
-<div
-  class="modal fade"
-  id="mobileMenuModal"
-  tabindex="-1"
-  role="dialog"
-  data-keyboard="true"
-  data-backdrop="true"
-  aria-labelledby="mobileMenuLabel"
->
-  <div class="modal-dialog mobile-menu-backdrop" role="document">
-    <div class="modal-content mobile-menu-container">
-      <div class="mobile-top">
+      <div class="flex items-center gap-[16px]">
         <div
-          class="pointer"
-          [routerLink]="['/home']"
-          data-toggle="modal"
-          data-target="#mobileMenuModal"
+          class="hidden lg:block w-max h-max"
+          *ngIf="!currentUser"
+          [routerLink]="['/atuh']"
         >
-          <img class="topnav-logo" src="assets/img/logo.svg" alt="logo" />
-        </div>
-        <div>
-          <a
-            class=""
-            href="#"
-            data-toggle="modal"
-            data-target="#mobileMenuModal"
-          >
-            <img
-              class="topnav-hamburger-icon"
-              src="assets/img/icons/hamburger-menu.svg"
-              alt="mobile-menu"
-            />
-          </a>
-        </div>
-      </div>
-      <div class="mobile-middle">
-        <div class="mobile-search-container">
-          <form
-            class="topnav-search-left"
-            method="post"
-            (ngSubmit)="onSubmitFromModal()"
-          >
-            <button type="submit" border-none>
-              <img
-                class="topnav-search-icon"
-                src="assets/img/icons/search.svg"
-                alt="search"
-              />
-            </button>
-            <input
-              #inputSearch
-              class="topnav-search-input"
-              type="text"
-              id="topnav-search-mobile"
-              name="topnav-search"
-              placeholder="Search"
-            />
-          </form>
-          <div class="topnav-search-right">
-            <!-- <img
-              class="topnav-search-select-icon"
-              src="assets/img/icons/arrow-down.svg"
-              alt="search-select"
-            /> -->
-          </div>
-          <!-- <div class="topnav-search-right" (click)="toggleDropdown()">
-            <div class="topnav-search-dropdown" id="myDropdown">
-              <a *ngFor="let item of providerCategories" (click)="closeDropDown(item)">{{ item.name }}</a>
-            </div>
-            <img
-              class="topnav-search-select-icon"
-              src="assets/img/icons/arrow-down.svg"
-              alt="search-select"
-            />
-          </div> -->
+          <link-button
+            [type]="isScrolled ? 2 : 1"
+            [title]="headerSection.buttonText1"
+            size="small"
+          />
         </div>
         <div
-          class="topnav-link pointer"
-          data-toggle="modal"
-          data-target="#mobileMenuModal"
-          [routerLink]="['/jobs']"
+          class="hidden md:block w-max h-max"
+          *ngIf="!currentUser"
+          [routerLink]="['/atuh']"
         >
-          Job Board
+          <basic-button
+            [type]="1"
+            [title]="headerSection.buttonText2"
+            size="small"
+          />
+        </div>
+        <div class="hidden md:block w-max h-max" [routerLink]="['/inbox/post']">
+          <basic-button
+            [type]="2"
+            [title]="headerSection.buttonText3"
+            size="small"
+          />
         </div>
         <div
-          class="topnav-link pointer"
-          *ngIf="currentUser"
-          [routerLink]="['/inbox/chat']"
-          data-toggle="modal"
-          data-target="#mobileMenuModal"
+          class="block md:hidden cursor-pointer"
+          (click)="onHamburguerClick()"
         >
-          <div class="topnav-link-notif-badge">
-            {{ unreadMsgCount }}
-          </div>
-          <div>Inbox</div>
-        </div>
-        <div
-          class="topnav-link pointer"
-          [routerLink]="['/blog']"
-          data-toggle="modal"
-          data-target="#mobileMenuModal"
-        >
-          Blog
-        </div>
-        <div
-          class="topnav-link pointer"
-          [routerLink]="['/faq']"
-          data-toggle="modal"
-          data-target="#mobileMenuModal"
-        >
-          FAQ
-        </div>
-      </div>
-      <div class="mobile-bottom" *ngIf="!currentUser">
-        <div
-          class="button-blue"
-          [routerLink]="['/auth']"
-          data-toggle="modal"
-          data-target="#mobileMenuModal"
-        >
-          Login / Create Account
-        </div>
-      </div>
-      <div class="mobile-bottom" *ngIf="currentUser">
-        <div
-          class="button-blue"
-          *ngIf="!bAddress; else showAddress"
-          [routerLink]="['/wallet-bnb']"
-          data-toggle="modal"
-          data-target="#mobileMenuModal"
-        >
-          Connect Wallet
-        </div>
-        <ng-template #showAddress>
           <div
-            class="button-blue"
-            [routerLink]="['/wallet-bnb/assets']"
-            data-toggle="modal"
-            data-target="#mobileMenuModal"
-          >
-            {{ bAddress.slice(0, 6) }}...{{ bAddress.slice(-3) }}
-          </div>
-        </ng-template>
-        <div class="topnav-avatar">
-          <a
-            role="button"
-            id="dropdownMenuLink"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            <app-avatar
-              [user]="currentUser"
-              [customClass]="'avatar'"
-            ></app-avatar>
-          </a>
+            class="w-[34px] h-[3px] rounded-full m-[5px]"
+            [ngClass]="{ 'bg-black': isScrolled, 'bg-white': !isScrolled }"
+            [@hamburguerX]="isHamburguer ? 'hamburguer' : 'topX'"
+          ></div>
           <div
-            class="dropdown-menu dropdown-menu-mobile"
-            aria-labelledby="dropdownMenuLink"
-          >
-            <div
-              class="nav-link dropdown-item"
-              style="font-weight: 400 !important; text-transform: none"
-              href="#"
-              [routerLink]="['/profile']"
-              data-toggle="modal"
-              data-target="#mobileMenuModal"
-            >
-              Profile
-            </div>
-            <div
-              class="nav-link dropdown-item"
-              style="font-weight: 400 !important; text-transform: none"
-              href="#"
-              [routerLink]="['/profile']"
-              [queryParams]="{ editProfile: 1 }"
-              data-toggle="modal"
-              data-target="#mobileMenuModal"
-            >
-              Edit Profile
-            </div>
-            <div class="dropdown-divider"></div>
-            <div
-              class="nav-link dropdown-item"
-              style="font-weight: 400 !important; text-transform: none"
-              href="#"
-              [routerLink]="['/inbox/jobs']"
-              data-toggle="modal"
-              data-target="#mobileMenuModal"
-            >
-              Manage Jobs
-            </div>
-            <div class="dropdown-divider"></div>
-            <div
-              class="dropdown-item text-danger"
-              href="#"
-              data-toggle="modal"
-              data-target="#areYouSureLogoutModal"
-            >
-              Logout
-            </div>
-          </div>
+            class="w-[34px] h-[3px] rounded-full m-[5px]"
+            [ngClass]="{ 'bg-black': isScrolled, 'bg-white': !isScrolled }"
+            [@hamburguerX]="isHamburguer ? 'hamburguer' : 'hide'"
+          ></div>
+          <div
+            class="w-[34px] h-[3px] rounded-full m-[5px]"
+            [ngClass]="{ 'bg-black': isScrolled, 'bg-white': !isScrolled }"
+            [@hamburguerX]="isHamburguer ? 'hamburguer' : 'bottomX'"
+          ></div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Logout - Are you sure? -->
-<div
-  class="modal fade"
-  id="areYouSureLogoutModal"
-  tabindex="-1"
-  role="dialog"
-  data-keyboard="true"
-  data-backdrop="true"
-  aria-labelledby="areYouSureLogoutLabel"
->
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Sign out</h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
+  <!-- hamburuger menu in mobile view -->
+
+  <div
+    class="opacity-0 fixed w-full h-screen top-0 bg-white block md:hidden"
+    [ngClass]="isHamburguer ? '-z-50' : 'z-50'"
+    [@hamburguerX]="isHamburguer ? 'hamburguer' : 'show'"
+  >
+    <div class="py-[30px] px-[20px] flex flex-col items-center gap-[40px]">
+      <img
+        src="{{ headerSection.logoGraySrc }}"
+        class="w-[140px] h-[40px] select-none"
+      />
+      <div class="flex flex-col items-center gap-[24px]">
+        <div *ngFor="let item of headerSection.website" [routerLink]="item.url">
+          <link-button [type]="2" [title]="item.title" />
+        </div>
+        <div class="w-max h-max" *ngIf="!currentUser" [routerLink]="['/atuh']">
+          <link-button [type]="2" [title]="headerSection.buttonText1" />
+        </div>
+        <div class="h-max w-full" *ngIf="!currentUser" [routerLink]="['/atuh']">
+          <basic-button
+            [type]="1"
+            [title]="headerSection.buttonText2"
+            [extraClass]="'max-md:min-w-full text-center'"
+          />
+        </div>
+        <div class="h-max" [routerLink]="['/inbox/post']">
+          <basic-button [type]="2" [title]="headerSection.buttonText3" />
+        </div>
       </div>
-      <div class="modal-body">
-        <p>Are you sure you want to sign out of your account?</p>
-      </div>
-      <div class="modal-footer">
-        <button
-          (click)="onLogout()"
-          type="button"
-          class="btn btn-danger"
-          data-dismiss="modal"
-        >
-          Yes
-        </button>
-        <button
-          (click)="onCancel()"
-          type="button"
-          class="btn btn-secondary"
-          data-dismiss="modal"
-        >
-          No
-        </button>
-      </div>
+    </div>
+    <div
+      class="absolute right-[24px] top-[17px] cursor-pointer"
+      (click)="onHamburguerClick()"
+    >
+      <img
+        src="{{ headerSection.hamburguerXSrc }}"
+        class="w-[40px] h-[40px] select-none"
+      />
     </div>
   </div>
 </div>
-
-<!-- COMMENTED OUT LEDGER MODAL AS THIS WAS A BEP2 FEATURE -->
-<!-- <ledger-modal></ledger-modal> -->

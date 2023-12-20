@@ -1,0 +1,48 @@
+<div class="w-full rounded-[12px] overflow-hidden relative">
+  <div class="w-full h-[110px] md:h-[85px]" [ngClass]="cssClasses"></div>
+  <div class="absolute top-[35px] w-full flex justify-center">
+    <div class="relative">
+      <div
+        class="w-[112px] md:w-[120px] h-[112px] md:h-[120px] rounded-full border-4 border-G100 overflow-hidden"
+        [routerLink]="['/profile/', slug]"
+      >
+        <img
+          src="{{ avatarUri }}"
+          class="w-full h-full object-cover cursor-pointer hover:brightness-50 transition-all duration-200"
+        />
+      </div>
+      <img
+        src="/assets/massimo/svg/verifiedTick.svg"
+        *ngIf="isVerified"
+        class="absolute bottom-0 right-0"
+      />
+    </div>
+  </div>
+  <div
+    class="bg-G100 pt-[50px] md:pt-[93px] md:pb-[32px] pb-[24px] px-[24px] flex flex-col gap-[24px]"
+  >
+    <div class="flex flex-col gap-[8px] text-center">
+      <div class="text-G800 text-h6 font-medium">{{ name }}</div>
+      <div class="text-G600 text-b2 font-medium">{{ title }}</div>
+    </div>
+    <div class="flex gap-[8px] items-center justify-around">
+      <div (click)="$event.preventDefault(); submitSearchQuery(skillTags[0])">
+        <basic-tag [type]="2" [title]="skillTags[0]" />
+      </div>
+      <div *ngIf="skillTags.length > 1">
+        <basic-tag [type]="2" title="+{{ skillTags.length - 1 }} Others" />
+      </div>
+    </div>
+    <div class="flex justify-between">
+      <div class="flex gap-[8px]">
+        <img src="/assets/massimo/svg/location.svg" class="select-none" />
+        <!-- <div class="text-g500 text-b1 font-medium">{{ address }}</div> -->
+        <div class="text-g500 text-b1 font-medium">Lagos, Nigeria</div>
+      </div>
+      <div class="flex gap-[8px]">
+        <img src="/assets/massimo/svg/bitcoin.svg" class="select-none" />
+        <div class="text-g500 text-b1 font-medium">${{ hourlyRate }}/hr</div>
+      </div>
+    </div>
+  </div>
+</div>

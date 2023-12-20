@@ -1,3 +1,7 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
 $color-ok-rating: #33ccff !default;
 
 @mixin circle-headshot {
@@ -7,12 +11,4 @@ $color-ok-rating: #33ccff !default;
     display: inline-block;
     background-repeat: no-repeat;
   }
-}
-
-.pointer {
-  cursor: pointer;
-}
-
-.cursor-auto {
-  cursor: auto !important;
 }
