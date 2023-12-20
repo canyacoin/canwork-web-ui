@@ -1,0 +1,54 @@
+<section class="flex justify-center">
+  <div class="max-w-[1440px] w-full md:px-[64px]">
+    <div
+      class="bg-hero-pattern bg-no-repeat bg-center bg-cover rounded-[20px] px-[24px] md:px-[64px] py-[80px] flex flex-col gap-[64px]"
+    >
+      <div
+        class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-[40px] px-[24px]"
+      >
+        <div class="flex flex-col gap-[8px] font-medium">
+          <div class="text-G200 text-b2">
+            {{ whoBehindSection.subTitle }}
+          </div>
+          <div class="text-white text-h2">
+            {{ whoBehindSection.title }}
+          </div>
+        </div>
+        <div class="flex flex-col gap-[24px]">
+          <div class="text-white text-b1 font-medium whitespace-pre-line">
+            {{ whoBehindSection.description }}
+          </div>
+          <div
+            class="flex flex-col xs:flex-row gap-[8px] md:gap-[16px] items-center"
+          >
+            <div [routerLink]="['/']">
+              <basic-button [type]="1" [title]="whoBehindSection.buttonText1" />
+            </div>
+            <div [routerLink]="['/']">
+              <basic-button [type]="2" [title]="whoBehindSection.buttonText2" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="overflow-x-scroll">
+        <div
+          class="grid grid-cols-5 grid-flow-row gap-[16px] min-w-[1200px] items-center overflow-x-hidden"
+        >
+          <div
+            *ngFor="let freelancer of whoBehindSection.freelancers"
+            class="w-[232px] h-[216px] rounded-[24px] overflow-hidden select-none relative cursor-pointer"
+          >
+            <img
+              src="{{ freelancer.imgSrc }}"
+              class="w-full h-full hover:brightness-50 transition-all duration-200"
+            />
+            <div class="absolute px-[16px] bottom-[32px] text-white">
+              <div class="font-semibold text-b2">{{ freelancer.title }}</div>
+              <div class="font-medium text-b3">{{ freelancer.subTitle }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -18,13 +18,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AppRoutingModule } from './app.routing.module'
 import { CoreComponentsModule } from './core-components/core-components.module'
 import { firebaseUiAuthConfig } from './core-config/app-auth-config'
-import { AuthService } from './core-services/auth.service'
-import { CertificationsService } from './core-services/certifications.service'
-import { CoreServicesModule } from './core-services/core-services.module'
-import { JobNotificationService } from './core-services/job-notification.service'
-import { MobileService } from './core-services/mobile.service'
-import { NavService } from './core-services/nav.service'
-import { PublicJobService } from './core-services/public-job.service'
 import { CoreUtilsModule } from './core-utils/core-utils.module'
 import { PublicJobComponent } from './public-job/public-job/public-job.component'
 import { DashboardComponent } from './public-job/dashboard/dashboard.component'
@@ -33,10 +26,20 @@ import { FilterPipeModule } from 'ngx-filter-pipe'
 import { OrderModule } from 'ngx-order-pipe'
 import { AngularFireFunctionsModule } from '@angular/fire/compat/functions'
 import { WalletBnbComponent } from './wallet-bnb/wallet-bnb.component'
-import { LedgerService } from '@service/ledger.service'
 import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.component'
 import { ClipboardModule } from 'ngx-clipboard'
 import { ToastrModule } from 'ngx-toastr'
+
+// Service Providers
+import { AuthService } from './core-services/auth.service'
+import { CertificationsService } from './core-services/certifications.service'
+import { CoreServicesModule } from './core-services/core-services.module'
+import { JobNotificationService } from './core-services/job-notification.service'
+import { MobileService } from './core-services/mobile.service'
+import { NavService } from './core-services/nav.service'
+import { PublicJobService } from './core-services/public-job.service'
+import { LedgerService } from '@service/ledger.service'
+import { WindowService } from './shared/services/window.service'
 
 @NgModule({
   declarations: [
@@ -83,6 +86,7 @@ import { ToastrModule } from 'ngx-toastr'
     CertificationsService,
     PublicJobService,
     LedgerService,
+    WindowService,
   ],
   bootstrap: [AppComponent],
 })
