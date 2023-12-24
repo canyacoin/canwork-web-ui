@@ -3,7 +3,7 @@ import { HowWorksService } from 'app/shared/constants/home'
 import { WindowService } from 'app/shared/services/window.service'
 
 @Component({
-  selector: 'how-works',
+  selector: 'home-how-works',
   templateUrl: './how-works.component.html',
 })
 export class HowWorksComponent {

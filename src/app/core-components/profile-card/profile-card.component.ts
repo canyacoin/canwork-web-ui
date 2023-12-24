@@ -6,6 +6,8 @@ import { Router } from '@angular/router'
   templateUrl: './profile-card.component.html',
 })
 export class ProfileCardComponent {
+  @Input() isGrid: boolean = true
+
   @Input() index!: number
   @Input() avatarUri!: string
   @Input() name!: string

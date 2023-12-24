@@ -16,6 +16,7 @@ import { TopPortfoliosComponent } from './top-portfolios/top-portfolios.componen
 import { BlogPostsComponent } from './blog-posts/blog-posts.component'
 import { WhoBehindComponent } from './who-behind/who-behind.component'
 import { JoinCommunityComponent } from './join-community/join-community.component'
+import { CarouselModule } from 'primeng/carousel'
 
 @NgModule({
   imports: [
@@ -23,7 +24,7 @@ import { JoinCommunityComponent } from './join-community/join-community.componen
     CoreComponentsModule,
     CoreServicesModule,
     HomeRoutingModule,
-    //NgAisModule,
+    CarouselModule,
   ],
   declarations: [
     HomeComponent,

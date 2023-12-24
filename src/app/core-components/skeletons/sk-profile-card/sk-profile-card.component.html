@@ -1,0 +1,44 @@
+<ng-container
+  *ngIf="isGrid === true; then gridView; else listView"
+></ng-container>
+
+<ng-template
+  #gridView
+  class="w-full rounded-[12px] overflow-hidden relative animate-pulse"
+>
+  <div class="w-full rounded-[12px] overflow-hidden relative animate-pulse">
+    <div class="w-full h-[110px] md:h-[85px] bg-G200"></div>
+    <div class="absolute top-[35px] w-full flex justify-center">
+      <div class="relative">
+        <div
+          class="w-[112px] md:w-[120px] h-[112px] md:h-[120px] bg-G100 rounded-full border-4 border-G100 overflow-hidden"
+        >
+          <svg
+            class="w-full h-full me-3"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="#E2E8F0"
+            viewBox="0 0 20 20"
+          >
+            <path
+              d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 13a8.949 8.949 0 0 1-4.951-1.488A3.987 3.987 0 0 1 9 13h2a3.987 3.987 0 0 1 3.951 3.512A8.949 8.949 0 0 1 10 18Z"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div
+      class="bg-G100 pt-[50px] md:pt-[93px] md:pb-[32px] pb-[24px] px-[24px] flex flex-col gap-[24px] items-center justify-center"
+    >
+      <div class="flex flex-col gap-[10px] items-center">
+        <div class="w-[128px] h-[27px] bg-G300 rounded-full"></div>
+        <div class="w-[194px] h-[27px] bg-G300 rounded-full"></div>
+        <div class="w-[170px] h-[13px] bg-G200 rounded-full"></div>
+        <div class="w-[112px] h-[13px] bg-G200 rounded-full"></div>
+      </div>
+      <div class="max-w-[248px] w-full h-[24px] bg-G150 rounded-full"></div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #listView> listview </ng-template>

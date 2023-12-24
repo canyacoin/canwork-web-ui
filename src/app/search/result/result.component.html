@@ -1,0 +1,28 @@
+<section>
+  <div class="flex justify-between items-center">
+    <div class="text-G700 text-h6 font-medium">
+      {{ numberOfFreelancers }} Freelancers
+    </div>
+    <switch-grid-list-button
+      [isGrid]="isGrid"
+      (gridChanged)="handleGridChange($event)"
+    />
+  </div>
+  <div
+    class="pt-[23px] grid gap-[20px]"
+    [ngClass]="{ 'sm:grid-cols-2 lg:grid-cols-3': isGrid }"
+  >
+    <ng-container *ngFor="let card of skCards" class="w-full max-w-[304px]">
+      <sk-profile-card [isGrid]="isGrid" />
+    </ng-container>
+  </div>
+  <div class="pt-[24px] flex justify-center">
+    <p-paginator
+      (onPageChange)="onPageChange($event)"
+      [first]="first"
+      [rows]="rows"
+      [totalRecords]="120"
+      [pageLinkSize]="8"
+    ></p-paginator>
+  </div>
+</section>

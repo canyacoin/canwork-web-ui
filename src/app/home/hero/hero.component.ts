@@ -3,7 +3,7 @@ import { Router } from '@angular/router'
 import { HeroService } from 'app/shared/constants/home'
 
 @Component({
-  selector: 'hero',
+  selector: 'home-hero',
   templateUrl: './hero.component.html',
 })
 export class HeroComponent {

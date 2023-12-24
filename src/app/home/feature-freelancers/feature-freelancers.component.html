@@ -1,7 +1,7 @@
 <section>
   <div class="flex justify-center">
     <div
-      class="max-w-[1440px] w-full pt-[56px] px-[24px] md:pt-[80px] md:px-[64px]"
+      class="max-w-[1440px] w-full pb-[56px] md:pb-[80px] pt-[56px] px-[24px] md:pt-[80px] md:px-[64px]"
     >
       <div class="flex flex-col gap-[48px]">
         <div
@@ -28,28 +28,56 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
+      <div class="pt-[48px]">
+        <div *ngIf="tempProviderArray.length === 0">
+          <p-carousel
+            [value]="skeletonProviderArray"
+            [numVisible]="3"
+            [numScroll]="3"
+            [circular]="false"
+            [showIndicators]="true"
+            [showNavigators]="false"
+            [responsiveOptions]="responsiveOptions"
+          >
+            <ng-template let-profile pTemplate="item">
+              <div class="m-auto w-full max-w-[304px]">
+                <sk-profile-card />
+              </div>
+            </ng-template>
+          </p-carousel>
+        </div>
 
-  <div class="carousel pt-[20px] pb-[80px]">
-    <div
-      *ngFor="let profile of tempProviderArray; let ii = index"
-      class="mx-[10px] max-w-[304px]"
-    >
-      <profile-card
-        [index]="ii"
-        [avatarUri]="profile.avatarUri"
-        [name]="profile.name"
-        [title]="profile.title"
-        [isVerified]="profile.verified"
-        [ratingAverage]="profile.ratingAverage"
-        [ratingCount]="profile.ratingCount"
-        [skillTags]="profile.skillTags"
-        [slug]="profile.slug"
-        [address]="profile.address"
-        [hourlyRate]="profile.hourlyRate"
-        [slug]="profile.slug"
-      />
+        <div *ngIf="tempProviderArray.length !== 0">
+          <p-carousel
+            [value]="tempProviderArray"
+            [numVisible]="3"
+            [numScroll]="3"
+            [circular]="false"
+            [showIndicators]="true"
+            [showNavigators]="false"
+            [responsiveOptions]="responsiveOptions"
+          >
+            <ng-template let-profile pTemplate="item">
+              <div class="m-auto w-full max-w-[304px]">
+                <profile-card
+                  [index]="profile.id"
+                  [avatarUri]="profile.avatarUri"
+                  [name]="profile.name"
+                  [title]="profile.title"
+                  [isVerified]="profile.verified"
+                  [ratingAverage]="profile.ratingAverage"
+                  [ratingCount]="profile.ratingCount"
+                  [skillTags]="profile.skillTags"
+                  [slug]="profile.slug"
+                  [address]="profile.address"
+                  [hourlyRate]="profile.hourlyRate"
+                  [slug]="profile.slug"
+                />
+              </div>
+            </ng-template>
+          </p-carousel>
+        </div>
+      </div>
     </div>
   </div>
 </section>

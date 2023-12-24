@@ -1,7 +1,7 @@
 /*
 todo rename all old ais or deep ais classes to new ones for new search
 */
-
+/*
 .title h2,
 h3,
 p {
@@ -216,6 +216,7 @@ p {
   background-color: #fff;
   max-width: 82%;
 }
+*/
 /*
 // obsolete
 ::ng-deep .ais-ToggleRefinement-count {
@@ -419,6 +420,7 @@ p {
 }
 
 /* new vanilla algolia ui classes, inherited from ais, migrate to new names, todo */
+/*
 .ais-SearchBox-form {
   display: block;
   position: relative;
@@ -445,3 +447,4 @@ p {
   box-sizing: border-box;
   cursor: pointer;
 }
+*/

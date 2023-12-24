@@ -3,7 +3,7 @@ import { WhyUseService } from 'app/shared/constants/home'
 import { WindowService } from 'app/shared/services/window.service'
 
 @Component({
-  selector: 'why-use',
+  selector: 'home-why-use',
   templateUrl: './why-use.component.html',
 })
 export class WhyUseComponent {

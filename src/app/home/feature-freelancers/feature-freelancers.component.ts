@@ -1,18 +1,21 @@
-import { Component, AfterViewInit } from '@angular/core'
+import {
+  ChangeDetectorRef,
+  Component,
+  ChangeDetectionStrategy,
+} from '@angular/core'
 import { FeatureFreelancersService } from 'app/shared/constants/home'
 import { WindowService } from 'app/shared/services/window.service'
 
 import algoliasearch from 'algoliasearch/lite'
 import { environment } from '@env/environment'
 
-import * as $ from 'jquery'
-
 // slider
 @Component({
-  selector: 'feature-freelancers',
+  selector: 'home-feature-freelancers',
   templateUrl: './feature-freelancers.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FeatureFreelancersComponent implements AfterViewInit {
+export class FeatureFreelancersComponent {
   featureSection = FeatureFreelancersService
   private windowWidth: number
 
@@ -23,18 +26,31 @@ export class FeatureFreelancersComponent implements AfterViewInit {
   algoId = environment.algolia.appId
   algoKey = environment.algolia.apiKey
   tempProviderArray = []
+  skeletonProviderArray = [{}, {}, {}]
 
-  constructor(private windowService: WindowService) {}
+  // carousel
+  responsiveOptions = [
+    // {
+    //   breakpoint: '1400px',
+    //   numVisible: 3,
+    //   numScroll: 3,
+    // },
+    {
+      breakpoint: '1128px',
+      numVisible: 2,
+      numScroll: 2,
+    },
+    {
+      breakpoint: '768px',
+      numVisible: 1,
+      numScroll: 1,
+    },
+  ]
 
-  ngAfterViewInit(): void {
-    // setTimeout(() => {
-    //   $('.carousel').slick({
-    //     slidesToShow: 2,
-    //     dots: true,
-    //     centerMode: true,
-    //   })
-    // }, 5000)
-  }
+  constructor(
+    private windowService: WindowService,
+    private cdr: ChangeDetectorRef // Inject ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     this.windowService.getWindowWidth().subscribe((width) => {
@@ -58,6 +74,7 @@ export class FeatureFreelancersComponent implements AfterViewInit {
       .search(searchQuery)
       .then((res) => {
         const result = res.hits
+        console.log(result)
         for (let i = 0; i < result.length; i++) {
           // TODO: Add a dummy/placeholder if < 3 profiles found?
           if (result[i]) {
@@ -75,6 +92,7 @@ export class FeatureFreelancersComponent implements AfterViewInit {
             }
 
             const provider = {
+              id: i,
               address: result[i].address,
               avatarUri: avatar.uri, // new
               skillTags: result[i].skillTags || [],
@@ -91,12 +109,13 @@ export class FeatureFreelancersComponent implements AfterViewInit {
             newArray.push(provider)
           }
         }
-        newArray.sort((a, b) => b.rating.count - a.rating.count)
+        newArray.sort((a, b) => b.ratingCount - a.ratingCount)
+        this.tempProviderArray = newArray
+        this.cdr.detectChanges()
       })
       .catch((err) => {
         console.log(err)
       })
-    this.tempProviderArray = newArray
     console.log(this.tempProviderArray)
   }
 }

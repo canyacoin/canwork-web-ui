@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { BrowseFreelancersService } from 'app/shared/constants/home';
 
 @Component({
-  selector: 'browse-freelancers',
+  selector: 'home-browse-freelancers',
   templateUrl: './browse-freelancers.component.html'
 })
 export class BrowseFreelancersComponent {
