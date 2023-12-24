@@ -1,37 +1,17 @@
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  Directive,
-} from '@angular/core'
-import { HttpClient } from '@angular/common/http'
-import { ActivatedRoute, Router, RouterModule } from '@angular/router'
-// import { createEmptyStateSnapshot } from '@angular/router/src/router_state'
-import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-} from '@angular/fire/compat/firestore'
-import * as findIndex from 'lodash/findIndex'
-import * as orderBy from 'lodash/orderBy'
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
 import * as union from 'lodash/union'
 import { LabelType, Options } from 'ng5-slider'
-import { Observable, Subscription } from 'rxjs'
+import { Subscription } from 'rxjs'
 import algoliasearch from 'algoliasearch/lite'
-import { UserType } from '../../../functions/src/user-type'
 import { environment } from '../../environments/environment'
 import { User, UserCategory } from '../core-classes/user'
 import { AuthService } from '../core-services/auth.service'
 import { NavService } from '../core-services/nav.service'
-import { UserService } from '../core-services/user.service'
 
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
-  styleUrls: ['./search.component.css'],
 })
 export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   allProviders: User[] = []
@@ -66,16 +46,12 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   rendering = false
   inMyTimezone = true
   algoliaSearchConfig: any
-  private authSub
-  currentUser
-  @ViewChild('search', { read: ElementRef }) search: ElementRef
+  authSub: any
+  currentUser: any
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private navService: NavService,
-    private afs: AngularFirestore,
-    private http: HttpClient,
-    private userService: UserService,
     private auth: AuthService,
     private router: Router
   ) {
@@ -108,23 +84,9 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     this.algoliaSearchConfig = {
       indexName: this.algoliaIndex,
       searchClient,
-      //routing: true,
       routing: {
-        /*
-        https://www.algolia.com/doc/guides/building-search-ui/going-further/routing-urls/angular/
-        https://www.algolia.com/doc/api-reference/widgets/ui-state/js/
-        https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/angular/#routing
-        Even if you aren’t using multi-index search, the way in which UI state is stored has changed
-        */
         stateMapping: {
-          stateToRoute(uiState: any) {
-            //console.log('stateToRoute');
-            //console.log(uiState);
-          },
           routeToState(routeState: any) {
-            //console.log('routeToState');
-            //console.log(routeState);
-
             const generatedQuery = {}
             generatedQuery[self.algoliaIndex] = {}
 

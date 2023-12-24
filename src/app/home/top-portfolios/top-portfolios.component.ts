@@ -2,7 +2,7 @@ import { Component } from '@angular/core'
 import { TopPortfoliosService } from 'app/shared/constants/home'
 
 @Component({
-  selector: 'top-portfolios',
+  selector: 'home-top-portfolios',
   templateUrl: './top-portfolios.component.html',
 })
 export class TopPortfoliosComponent {

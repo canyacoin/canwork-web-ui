@@ -36,11 +36,16 @@ import { DynamicCoinComponent } from './dynamic-coin/dynamic-coin.component'
 import { DynamicCoinWrapperComponent } from './dynamic-coin-wrapper/dynamic-coin-wrapper.component'
 import { LedgerModalComponent } from '../binance/ledger-modal/ledger-modal.component'
 import { PopperComponent } from './popper/popper.component'
-import { BasicButtonComponent } from './basic-button/basic-button.component'
-import { BasicTagComponent } from './basic-tag/basic-tag.component'
+import { BasicButtonComponent } from './buttons/basic-button/basic-button.component'
+import { BasicTagComponent } from './tag/basic-tag/basic-tag.component'
 import { CategoryCardComponent } from './category-card/category-card.component'
 import { LinkButtonComponent } from './link-button/link-button.component'
 import { ProfileCardComponent } from './profile-card/profile-card.component'
+import { SwitchGridListComponent } from './buttons/switch-grid-list/switch-grid-list.component'
+import { SkProfileCardComponent } from './skeletons/sk-profile-card/sk-profile-card.component'
+import { BadgeComponent } from './badge/badge.component';
+import { DelTagComponent } from './tag/del-tag/del-tag.component';
+import { StarRatingComponent } from './star-rating/star-rating.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -94,6 +99,11 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     CategoryCardComponent,
     LinkButtonComponent,
     ProfileCardComponent,
+    SwitchGridListComponent,
+    SkProfileCardComponent,
+    BadgeComponent,
+    DelTagComponent,
+    StarRatingComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -122,6 +132,10 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     CategoryCardComponent,
     LinkButtonComponent,
     ProfileCardComponent,
+    SwitchGridListComponent,
+    SkProfileCardComponent,
+    BadgeComponent,
+    DelTagComponent,
   ],
   providers: [
     {

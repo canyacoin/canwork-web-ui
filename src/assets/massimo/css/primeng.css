@@ -1,0 +1,106 @@
+/* p-carousel */
+
+.p-carousel-indicators {
+    padding-top: 48px;
+}
+
+.p-carousel-indicators li {
+    margin: 0 8px;
+}
+  
+.p-carousel-indicators li button {
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: #ced4da;
+    border-radius: 100%;
+}
+  
+.p-carousel-indicators li.p-highlight button {
+    background-color: #64748b;
+}
+
+@media (max-width: 768px) {
+    .p-carousel-indicators {
+        padding-top: 40px;
+    }
+}
+
+/* p-accordion */
+.p-accordion {
+    border: 1px solid #CBD5E1;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.p-accordion-header-link {
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 8px 16px;
+}
+.p-accordion-content {
+    border-top: 1px solid #CBD5E1;
+}
+
+/* p-paginator */
+.p-paginator {
+    padding: 0.5rem 1rem;
+}
+
+.p-paginator button {
+    padding: 8px;
+    color: #334155;
+    border-radius: 4px;
+    border: 1px solid #CBD5E1;
+    margin: 0 8px;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page {
+    width: 32px;
+    height: 32px;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+    background: #334155;
+    border-color: #334155;
+    color: #ffffff;
+}
+
+.p-hidden-accessible {
+    display: none;
+}
+
+/* p-checkbox */
+
+.p-checkbox {
+    width: 16px;
+    height: 16px;
+    margin-right: 16px;
+}
+
+.p-checkbox-box {
+    width: 100%;
+    border-radius: 3px;
+    border: 2px solid #64748B;
+    background-color: unset;
+}
+
+.p-checkbox-label {
+    user-select: none;
+}
+
+.p-checkbox-box.p-highlight {
+    border: 2px solid #3AC2FF;
+    background-color: #3AC2FF;
+}
+
+.p-checkbox-box.p-highlight svg {
+    width: 10px;
+}
+
+.p-checkbox-box.p-highlight svg path{
+    fill: #fff;
+}
+
+.p-checkbox-label.p-checkbox-label-active {
+    font-weight: 500;
+}

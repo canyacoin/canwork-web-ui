@@ -4,7 +4,7 @@
     [ngClass]="{ 'bg-white shadow-md': isScrolled }"
   >
     <div class="max-w-[1440px] w-full flex justify-between items-center">
-      <div [routerLink]="['/home']">
+      <div class="cursor-pointer" [routerLink]="['/home']">
         <img
           src="{{
             isScrolled ? headerSection.logoGraySrc : headerSection.logoSrc
