@@ -11450,6 +11450,13 @@ ngx-markdown@16.0.0:
     mermaid "^9.1.2"
     prismjs "^1.28.0"
 
+ngx-modalview@16.0.1:
+  version "16.0.1"
+  resolved "https://registry.yarnpkg.com/ngx-modalview/-/ngx-modalview-16.0.1.tgz#b287a0fffc72f5190e8984decafab5589a6681d6"
+  integrity sha512-jw0Zd/dOwnZDzqYWmpuLFssRRT5NQGkqIqwVO2ab6uy5LkiLZv/PGLyerv8wNg00QIM5WapMbomjhpL6845Oog==
+  dependencies:
+    tslib "^2.3.0"
+
 ngx-order-pipe@^2.0.1:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/ngx-order-pipe/-/ngx-order-pipe-2.2.0.tgz#14ab50dfe0a679e5216138ff9a0820a83173a4fe"
@@ -11461,13 +11468,6 @@ ngx-pagination@^3.2.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/ngx-pagination/-/ngx-pagination-3.3.1.tgz#2dab7171c38c1b326571c4353a524d4614e28fa3"
   integrity sha512-ocDJrdxFiij1XVWhY4uwpiJevvgluvm4qe7xZRRVGHpzjkxQIJCQbSRkQXWYjXorV/Xre79dMDKmXKHvlxEqcA==
-
-ngx-simple-modal@^1.4.17:
-  version "1.4.17"
-  resolved "https://registry.yarnpkg.com/ngx-simple-modal/-/ngx-simple-modal-1.4.17.tgz#fc1a5bfdbce998fc21df28f2f8efe2644d2592a7"
-  integrity sha512-KhaJQ/oXv0XB31X3eXqew9NgVI3aAqd0qa7CTuO6sI8ZHXXnMbdIIXD+MYAafXZsuCGVZ9Z6lVS2NcegYqEo0w==
-  dependencies:
-    tslib "^1.9.0"
 
 ngx-toastr@14.3.0:
   version "14.3.0"
