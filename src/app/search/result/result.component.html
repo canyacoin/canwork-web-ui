@@ -10,11 +10,65 @@
   </div>
   <div
     class="pt-[23px] grid gap-[20px]"
-    [ngClass]="{ 'sm:grid-cols-2 lg:grid-cols-3': isGrid }"
+    [ngClass]="{
+      'sm:grid-cols-2 lg:grid-cols-3': !(
+        !isLoading && profileCards.length === 0
+      )
+    }"
   >
-    <ng-container *ngFor="let card of skCards" class="w-full max-w-[304px]">
-      <sk-profile-card [isGrid]="isGrid" />
-    </ng-container>
+    <ng-container
+      *ngIf="isLoading === true; then loadingView; else resultView"
+    ></ng-container>
+    <ng-template #loadingView>
+      <ng-container *ngFor="let card of skCards" class="w-full">
+        <sk-profile-card [isGrid]="isGrid" />
+      </ng-container>
+    </ng-template>
+    <ng-template #resultView>
+      <ng-container
+        *ngIf="profileCards.length === 0; then emptyView; else profilesView"
+      ></ng-container>
+
+      <ng-template #emptyView>
+        <div class="w-full flex flex-col items-center gap-[24px]">
+          <img
+            src="/assets/massimo/images/noSearchResult.png"
+            alt="No Results Found"
+            draggable="false"
+            class="max-w-[500px] w-full"
+          />
+          <div class="flex flex-col gap-[] items-center justify-center">
+            <div class="text-h5 text-G800 font-medium">No Result Found</div>
+            <div class="text-b1 text-G700 text-center">
+              We are unable to find result matching your search input.<br />
+              See top freelancers to continue.
+            </div>
+          </div>
+          <div class="w-max">
+            <basic-button [type]="1" title="See top freelancers" />
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template #profilesView>
+        <ng-container *ngFor="let card of profileCards" class="w-full">
+          <profile-card
+            index="3"
+            avatarUri="https://firebasestorage.googleapis.com/v0/b/canwork-staging.appspot.com/o/uploads%2Favatars%2FuvLrkqtBa1QHC5q0Au1kno7a5x13_thumb?alt=media"
+            name="test name"
+            title="test title"
+            isVerified="true"
+            ratingAverage="4"
+            ratingCount="5"
+            [skillTags]="['Developer', 'Angular']"
+            slug="test slug"
+            address="United States"
+            hourlyRate="40"
+            [isGrid]="isGrid"
+          />
+        </ng-container>
+      </ng-template>
+    </ng-template>
   </div>
   <div class="pt-[24px] flex justify-center">
     <p-paginator

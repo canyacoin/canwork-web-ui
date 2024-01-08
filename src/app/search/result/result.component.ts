@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 
 interface PageEvent {
   first: number
@@ -11,10 +11,12 @@ interface PageEvent {
   selector: 'search-result',
   templateUrl: './result.component.html',
 })
-export class ResultComponent {
+export class ResultComponent implements OnInit {
   numberOfFreelancers = 3532
   skCards = new Array(12)
+  profileCards = new Array(0)
   isGrid: boolean = true
+  isLoading: boolean = true
 
   first: number = 0
 
@@ -27,5 +29,11 @@ export class ResultComponent {
 
   handleGridChange(isGridView: boolean) {
     this.isGrid = isGridView
+  }
+
+  ngOnInit() {
+    setTimeout(() => {
+      this.isLoading = false
+    }, 5000)
   }
 }
