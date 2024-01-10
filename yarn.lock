@@ -11339,12 +11339,12 @@ ngx-filter-pipe@^2.1.0:
   dependencies:
     tslib "^1.7.1"
 
-ngx-img-fallback@^1.3.3:
-  version "1.3.4"
-  resolved "https://registry.yarnpkg.com/ngx-img-fallback/-/ngx-img-fallback-1.3.4.tgz#727c4ff19ca7afb2a4ae450c52a6bd4449bf74eb"
-  integrity sha512-B0MjhSD8q4oDg2qLq5XS2MMzNLydRyBC8Se6WfqrDGxB8FanNHshWOKwlTafsywkU7qB1L/BzxrVu24ogPsI3g==
+ngx-img-fallback@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-img-fallback/-/ngx-img-fallback-2.0.0.tgz#2c36fa20650015158545a127610e7d314f4a623a"
+  integrity sha512-BdrZVcMOoZTVOeGJ35DVCQryskbLNGB2wbN+ppHGsrNBiQ9YsluzT9GKG2qoqXUy1oDRQFj1dJQAfORLeMtlCg==
   dependencies:
-    tslib "^1.9.0"
+    tslib "^2.3.0"
 
 ngx-markdown@16.0.0:
   version "16.0.0"
@@ -11373,10 +11373,12 @@ ngx-order-pipe@^2.0.1:
   dependencies:
     tslib "^2.0.0"
 
-ngx-pagination@^3.2.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/ngx-pagination/-/ngx-pagination-3.3.1.tgz#2dab7171c38c1b326571c4353a524d4614e28fa3"
-  integrity sha512-ocDJrdxFiij1XVWhY4uwpiJevvgluvm4qe7xZRRVGHpzjkxQIJCQbSRkQXWYjXorV/Xre79dMDKmXKHvlxEqcA==
+ngx-pagination@6.0.3:
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/ngx-pagination/-/ngx-pagination-6.0.3.tgz#083f77a5c9c3ebf5800fb57a280da71aacc10a18"
+  integrity sha512-lONjTQ7hFPh1SyhwDrRd5ZwM4NMGQ7bNR6vLrs6mrU0Z8Q1zCcWbf/pvyp4DOlGyd9uyZxRy2wUsSZLeIPjbAw==
+  dependencies:
+    tslib "^2.3.0"
 
 ngx-slider-v2@16.0.2:
   version "16.0.2"
