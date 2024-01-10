@@ -56,7 +56,7 @@
     "moment": "^2.20.1",
     "moment-timezone": "^0.5.14",
     "ngx-clipboard": "^16.0.0",
-    "ngx-dropzone-wrapper": "^10.0.1",
+    "ngx-dropzone-wrapper": "16.0.0",
     "ngx-img-fallback": "2.0.0",
     "ngx-markdown": "16.0.0",
     "ngx-modalview": "16.0.1",

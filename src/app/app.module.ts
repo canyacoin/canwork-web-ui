@@ -67,6 +67,7 @@ import { ToastrModule } from 'ngx-toastr'
     CoreUtilsModule,
     HttpClientModule,
     //FilterPipeModule,
+    NgArrayPipesModule,
     NgxSliderModule,
     FormsModule,
     ReactiveFormsModule,

@@ -7142,7 +7142,7 @@ dot-prop@^5.2.0:
   dependencies:
     is-obj "^2.0.0"
 
-dropzone@^5.7.0, dropzone@^5.9.3:
+dropzone@^5.9.0, dropzone@^5.9.3:
   version "5.9.3"
   resolved "https://registry.yarnpkg.com/dropzone/-/dropzone-5.9.3.tgz#b3070ae090fa48cbc04c17535635537ca72d70d6"
   integrity sha512-Azk8kD/2/nJIuVPK+zQ9sjKMRIpRvNyqn9XwbBHNq+iNuSccbJS6hwm1Woy0pMST0erSo0u4j+KJaodndDk4vA==
@@ -11324,13 +11324,13 @@ ngx-clipboard@^16.0.0:
     ngx-window-token ">=7.0.0"
     tslib "^2.0.0"
 
-ngx-dropzone-wrapper@^10.0.1:
-  version "10.0.1"
-  resolved "https://registry.yarnpkg.com/ngx-dropzone-wrapper/-/ngx-dropzone-wrapper-10.0.1.tgz#531bf73f701323bf317fe4f0a5d6485d5d10db13"
-  integrity sha512-O9jaj8GWIIRWhYS8ibzR1yN1voQ4UUGKhl0zH0X/DY9MTsWCGmFvuSfnuv8MuXKcEmukjyeMUQ1p9BerUshIug==
+ngx-dropzone-wrapper@16.0.0:
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-dropzone-wrapper/-/ngx-dropzone-wrapper-16.0.0.tgz#034663a6677d2fc256cc0d9719505fba06c9155d"
+  integrity sha512-URcormA4mgsgcqASnch2GQ2MK+l6JAaHMvODPJUaKwaHQHHNbSkBL+HejjG3iPzlghDOTKiswrnKbPAFqjQzAg==
   dependencies:
-    dropzone "^5.7.0"
-    tslib "^2.0.0"
+    dropzone "^5.9.0"
+    tslib "^2.3.0"
 
 ngx-img-fallback@2.0.0:
   version "2.0.0"

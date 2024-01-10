@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { NgArrayPipesModule } from 'ngx-pipes' // https://www.npmjs.com/package/ngx-pipes#array
 
 //import { SimpleModalModule } from 'ngx-simple-modal' // old module
 import { NgxModalView } from 'ngx-modalview'
@@ -34,6 +35,7 @@ import { BscPaymentSelectorComponent } from '../core-components/bsc-payment-sele
     //SimpleModalModule, // old
     NgxModalView, // new
     CoreComponentsModule,
+    NgArrayPipesModule,
     CoreServicesModule,
     CoreUtilsModule,
     InboxRoutingModule,

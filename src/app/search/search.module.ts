@@ -8,6 +8,7 @@ import { SearchComponent } from './search.component'
 import { SearchRoutingModule } from './search.routing.module'
 //import { Ng5SliderModule } from 'ng5-slider' // deprecated
 import { NgxSliderModule } from 'ngx-slider-v2'
+import { NgArrayPipesModule } from 'ngx-pipes' // https://www.npmjs.com/package/ngx-pipes#array
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { NgxSliderModule } from 'ngx-slider-v2'
     //NgAisModule,
     RouterModule,
     NgxSliderModule,
+    NgArrayPipesModule,
   ],
   declarations: [SearchComponent],
   exports: [SearchRoutingModule],

@@ -11,6 +11,9 @@ import {
 import { Router } from '@angular/router'
 //import { FilterPipe } from 'ngx-filter-pipe'
 //import { OrderPipe } from 'ngx-order-pipe'
+import { ReversePipe } from 'ngx-pipes'
+import { OrderByPipe } from 'ngx-pipes'
+
 import { Observable, Subscription } from 'rxjs'
 
 import {
@@ -34,6 +37,7 @@ import { NgxPaginationModule } from 'ngx-pagination'
   selector: 'app-job-dashboard',
   templateUrl: './job-dashboard.component.html',
   styleUrls: ['./job-dashboard.component.css'],
+  providers: [ReversePipe, OrderByPipe],
 })
 export class JobDashboardComponent implements OnInit, OnDestroy {
   currentUser: User
