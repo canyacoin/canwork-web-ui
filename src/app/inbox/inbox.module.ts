@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NgxModalView } from 'ngx-modalview'
 
 import { StarRatingModule } from 'angular-star-rating'
-import { OrderModule } from 'ngx-order-pipe'
+//import { OrderModule } from 'ngx-order-pipe'
 import { NgxPaginationModule } from 'ngx-pagination'
 import { ClipboardModule } from 'ngx-clipboard'
 
@@ -38,7 +38,7 @@ import { BscPaymentSelectorComponent } from '../core-components/bsc-payment-sele
     CoreUtilsModule,
     InboxRoutingModule,
     FormsModule,
-    OrderModule,
+    // OrderModule,
     ReactiveFormsModule,
     StarRatingModule.forChild(),
     NgxPaginationModule,

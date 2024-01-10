@@ -4,7 +4,7 @@ import { StatisticsService } from '@service/statistics.service'
 import { AuthService } from '@service/auth.service'
 import { NavService } from '@service/nav.service'
 import { Job, JobDescription, JobState, PaymentType } from '@class/job'
-import { OrderPipe } from 'ngx-order-pipe'
+// import { OrderPipe } from 'ngx-order-pipe'
 import { Subscription } from 'rxjs'
 import { User, UserType } from '@class/user'
 import { NgxPaginationModule } from 'ngx-pagination'
@@ -63,9 +63,9 @@ export class DashboardComponent implements OnInit {
     private publicJobService: PublicJobService,
     private statisticsService: StatisticsService,
     private authService: AuthService,
-    private navService: NavService,
-    private order: OrderPipe
-  ) {}
+    private navService: NavService
+  ) //    private order: OrderPipe
+  {}
 
   async ngOnInit() {
     this.stats = { count: '', usd: '' }

@@ -9,8 +9,8 @@ import {
   Directive,
 } from '@angular/core'
 import { Router } from '@angular/router'
-import { FilterPipe } from 'ngx-filter-pipe'
-import { OrderPipe } from 'ngx-order-pipe'
+//import { FilterPipe } from 'ngx-filter-pipe'
+//import { OrderPipe } from 'ngx-order-pipe'
 import { Observable, Subscription } from 'rxjs'
 
 import {
@@ -58,13 +58,13 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     public mobile: MobileService,
-    private orderPipe: OrderPipe,
+    //private orderPipe: OrderPipe,
     private jobService: JobService,
     private publicJobService: PublicJobService,
     private userService: UserService,
-    private router: Router,
-    public filterPipe: FilterPipe
-  ) {}
+    private router: Router
+  ) //public filterPipe: FilterPipe
+  {}
 
   async ngOnInit() {
     this.currentUser = await this.authService.getCurrentUser()

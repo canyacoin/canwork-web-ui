@@ -31,8 +31,10 @@ import { CoreUtilsModule } from './core-utils/core-utils.module'
 import { PublicJobComponent } from './public-job/public-job/public-job.component'
 import { DashboardComponent } from './public-job/dashboard/dashboard.component'
 import { JobBidsComponent } from './public-job/job-bids/job-bids.component'
-import { FilterPipeModule } from 'ngx-filter-pipe'
-import { OrderModule } from 'ngx-order-pipe'
+//import { FilterPipeModule } from 'ngx-filter-pipe' // obsolete
+//import { OrderModule } from 'ngx-order-pipe' // obsolete
+import { NgArrayPipesModule } from 'ngx-pipes' // https://www.npmjs.com/package/ngx-pipes#array
+
 import { AngularFireFunctionsModule } from '@angular/fire/compat/functions'
 import { WalletBnbComponent } from './wallet-bnb/wallet-bnb.component'
 import { LedgerService } from '@service/ledger.service'
@@ -64,11 +66,11 @@ import { ToastrModule } from 'ngx-toastr'
     CoreServicesModule,
     CoreUtilsModule,
     HttpClientModule,
-    FilterPipeModule,
+    //FilterPipeModule,
     NgxSliderModule,
     FormsModule,
     ReactiveFormsModule,
-    OrderModule,
+    //OrderModule,
     NgxPaginationModule,
     StarRatingModule.forRoot(),
     ClipboardModule,
@@ -76,7 +78,9 @@ import { ToastrModule } from 'ngx-toastr'
       positionClass: 'toast-top-center',
     }),
   ],
-  exports: [FilterPipeModule],
+  exports: [
+    /*FilterPipeModule*/
+  ],
   providers: [
     AuthService,
     MobileService,
