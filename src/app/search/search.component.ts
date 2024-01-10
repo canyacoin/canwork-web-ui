@@ -18,7 +18,7 @@ import {
 import * as findIndex from 'lodash/findIndex'
 import * as orderBy from 'lodash/orderBy'
 import * as union from 'lodash/union'
-import { LabelType, Options } from 'ng5-slider'
+import { LabelType, Options } from 'ngx-slider-v2'
 import { Observable, Subscription } from 'rxjs'
 import algoliasearch from 'algoliasearch/lite'
 import { UserType } from '../../../functions/src/user-type'
@@ -38,6 +38,16 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   filteredProviders: User[] = []
   categoryFilters = []
   chosenFilters = []
+  hits = [] // TODO
+  /*
+  invoke directly algolia search api
+  create input field and handle on change
+  on change invoke api and populate hits
+  re create paginating component
+  re create timezone flag
+  
+  reuse ais custom styling classes from css
+  */
   smallCards = true
   query: string
   categoryQuery = ''

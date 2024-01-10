@@ -166,7 +166,7 @@ p {
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
 }
 
-::ng-deep .ng5-slider .ng5-slider-pointer {
+::ng-deep .ngx-slider .ngx-slider-pointer {
   width: 8px;
   height: 16px;
   bottom: 0;

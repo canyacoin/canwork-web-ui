@@ -44,9 +44,6 @@
             "buildOptimizer": true,
             "assets": ["src/assets", "src/favicon.ico"],
             "styles": [
-              "node_modules/angular-instantsearch/bundles/instantsearch.min.css",
-              "node_modules/angular-instantsearch/bundles/instantsearch-theme-algolia.min.css",
-              "node_modules/nouislider/distribute/nouislider.min.css",
               "node_modules/firebaseui/dist/firebaseui.css",
               "node_modules/animate.css/animate.css",
               "node_modules/ngx-toastr/toastr.css",
@@ -141,9 +138,6 @@
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [],
             "styles": [
-              "node_modules/angular-instantsearch/bundles/instantsearch.min.css",
-              "node_modules/angular-instantsearch/bundles/instantsearch-theme-algolia.min.css",
-              "node_modules/nouislider/distribute/nouislider.min.css",
               "node_modules/firebaseui/dist/firebaseui.css",
               "node_modules/animate.css/animate.css",
               "node_modules/ngx-toastr/toastr.css",
