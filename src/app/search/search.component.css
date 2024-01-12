@@ -1,3 +1,7 @@
+/*
+todo rename all old ais or deep ais classes to new ones for new search
+*/
+
 .title h2,
 h3,
 p {
@@ -208,15 +212,16 @@ p {
 
 ::ng-deep .ais-ToggleRefinement {
   border-radius: 5px;
-  margin: 3px 0 8px 0;
+  margin: 3px 0px 8px 30px;
   background-color: #fff;
-  max-width: 90%;
+  max-width: 82%;
 }
-
+/*
+// obsolete
 ::ng-deep .ais-ToggleRefinement-count {
   display: none;
 }
-
+*/
 ::ng-deep .ais-RefinementList-label {
   font-weight: 500;
   font-size: 11px !important;
@@ -411,4 +416,32 @@ p {
 .stop-scrolling {
   height: 100%;
   overflow: hidden;
+}
+
+/* new vanilla algolia ui classes, inherited from ais, migrate to new names, todo */
+.ais-SearchBox-form {
+  display: block;
+  position: relative;
+}
+
+.ais-SearchBox-input {
+  appearance: none;
+  padding: 0.3rem 1.7rem;
+  width: 100%;
+  position: relative;
+  background-color: #fff;
+  border: 1px solid #fff;
+  border-radius: 5px;
+}
+
+.ais-SearchBox-submit {
+  left: 0.3rem;
+  appearance: none;
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  right: 0.3rem;
+  transform: translateY(-50%);
+  box-sizing: border-box;
+  cursor: pointer;
 }

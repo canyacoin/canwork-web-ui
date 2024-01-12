@@ -23,6 +23,8 @@ _This project uses:_
 - Typescript: 4.9.3
 - Walletconnect: 2.8.1
 
+TODO: update node engine and dependencies of functions folder to 16
+
 FirebaseUI/Angular compatibility table:
 https://github.com/RaphaelJenni/firebaseui-angular#compatibility
 
@@ -58,22 +60,23 @@ cd web-ui
 git checkout -b "yourname"
 ```
 
-Setup (new)
+Setup
+
+Prior to running `yarn` ensure your node version is correct according to NVM.
+Please install node dependencies with yarn (not npm) and do not generate a package-lock.json file.
 
 ```
 nvm use
 npm install -g yarn
-npm install
 npx husky install
 npx husky set .husky/pre-commit "npx pretty-quick --staged"
 ```
 
-Setup
-
-Prior to running `yarn` ensure your node version is correct according to NVM.
 A `.nvmrc` file is included to make this easy if you already use NVM (just `cd` to this projects root folder _with admin privileges_ and run `nvm use` to activate the correct node version)
 
 WINDOWS USERS: `.nvmrc` format file is not supported with windows NVM so you will have to manually include the version number like `nvm use 10.15.3` and if it says its not installed then first do this `nvm install xx.xx.x`
+
+Install node dependencies:
 
 ```
 yarn

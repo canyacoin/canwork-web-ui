@@ -15,11 +15,16 @@
               class="search-box"
               (change)="algoliaSearchChanged($event)"
             ></ais-search-box> -->
-          <input type="text" class="search-box ais-SearchBox" />
-          <!-- todo add logic -->
-          <button type="submit" class="ais-SearchBox-submit">
-            <!-- todo add logic and icon perhaps -->
-          </button>
+          <div class="search-box">
+            <div class="ais-SearchBox">
+              <form class="ais-SearchBox-form">
+                <input type="text" class="ais-SearchBox-input" />
+                <button type="submit" class="ais-SearchBox-submit"></button>
+
+                <!-- todo add logic -->
+              </form>
+            </div>
+          </div>
           <div class="row mt-25 mb-15" style="z-index: 150; position: relative">
             <div class="col-9">
               <div class="row">
@@ -57,17 +62,20 @@
                   CLOSE FILTERS
                 </button>
                 <div class="row">
-                  <!--
-                      // TODO
-                      <ais-toggle
-                      *ngIf="currentUser && currentUser.timezone !== ''"
-                      label="Only show providers within my timezone"
-                      style="margin-left: 30px"
-                      attribute="timezone"
-                      [on]="currentUser.timezone"
-                      [off]=""
-                    >
-                    </ais-toggle>-->
+                  <div
+                    class="ais-ToggleRefinement"
+                    *ngIf="currentUser && currentUser.timezone !== ''"
+                  >
+                    <label class="ais-ToggleRefinement-label">
+                      <input
+                        type="checkbox"
+                        class="ais-ToggleRefinement-checkbox"
+                        ng-model="currentUser.timezone"
+                      />
+                      <span> Only show providers within my timezone </span>
+                    </label>
+                    <!-- todo logic -->
+                  </div>
                 </div>
               </div>
               <div class="menu-options hide-menu" id="category-menu">
