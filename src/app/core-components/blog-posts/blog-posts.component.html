@@ -1,36 +1,41 @@
-<section class="section bg-gray py-1" *ngIf="mediumFeed.length > 0">
-  <div class="container pb-20">
-    <div class="row justify-center">
+<div *ngIf="mediumFeed.length > 0">
+  <div class="grid md:grid-cols-3 gap-[40px] md:gap-[32px]">
+    <div *ngFor="let blogData of mediumFeed" class="grid gap-[16px]">
       <div
-        class="col-lg-4 col-md-6 col-12 p-10"
-        *ngFor="let fx of mediumFeed; let i = index"
+        class="aspect-w-16 aspect-h-9 rounded-[12px] overflow-hidden select-none"
       >
-        <div class="blog-card">
-          <div class="blog-card-inner">
-            <div class="blog-image">
-              <img class="blog-img-fill" src="{{ fx.thumbnail }}" />
-            </div>
-            <div class="my-3"></div>
-            <div class="blog-title">
-              {{ fx.title }}
-            </div>
-            <div class="my-1"></div>
-            <div class="blog-subtitle">
-              {{ fx.subtitle }}
-            </div>
-            <div class="my-1"></div>
-            <div class="blog-author">
-              By
-              <div class="blog-author-bolder d-inline">{{ fx.author }}</div>
-            </div>
-            <div class="my-2"></div>
-            <a class="blog-cta-text" href="{{ fx.link }}" target="_blank">
-              Read Publication
-              <img src="assets/img/arrow-right.svg" height="24px" />
-            </a>
-          </div>
+        <img
+          src="{{ blogData.thumbnail }}"
+          class="w-full h-full object-cover"
+        />
+      </div>
+      <div class="flex flex-col gap-[8px]">
+        <a
+          class="text-G900 text-h6 md:text-h5 font-medium hover:underline line-clamp-2"
+          href="{{ blogData.link }}"
+          target="_blank"
+        >
+          {{ blogData.title }}
+        </a>
+        <div class="text-G700 text-b1 line-clamp-3 md:line-clamp-2">
+          {{ blogData.subTitle }}
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-[8px]">
+        <div *ngFor="let tag of blogData.tags">
+          <basic-tag [type]="1" [title]="tag" />
+        </div>
+      </div>
+      <div class="flex items-center gap-[24px]">
+        <img
+          src="{{ blogData.thumbnail }}"
+          class="w-[48px] h-[48px] rounded-full object-cover overflow-hidden select-none"
+        />
+        <div class="font-medium">
+          <div class="text-G700">{{ blogData.author }}</div>
+          <div class="text-G500">{{ blogData.datePosted }} • 5 min read</div>
         </div>
       </div>
     </div>
   </div>
-</section>
+</div>

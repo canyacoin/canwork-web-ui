@@ -1,0 +1,82 @@
+<section>
+  <div class="flex justify-center">
+    <div
+      class="max-w-[1440px] w-full pb-[56px] md:pb-[80px] pt-[56px] px-[24px] md:pt-[80px] md:px-[64px]"
+    >
+      <div class="flex flex-col gap-[48px]">
+        <div
+          class="flex flex-col md:flex-row md:justify-between gap-[8px] md:gap-[100px]"
+        >
+          <div class="md:max-w-[410px] grid gap-[8px]">
+            <div class="text-b2 text-G500">{{ featureSection.subTitle }}</div>
+            <div
+              class="text-h4 md:text-h3 text-G800 font-medium md:max-w-[410px]"
+            >
+              {{ featureSection.title }}
+            </div>
+          </div>
+          <div class="md:max-w-[430px] grid gap-[32px] md:gap-[16px]">
+            <div class="text-b1 text-G700">
+              {{ featureSection.description }}
+            </div>
+            <div class="w-max h-max" [routerLink]="['/inbox/post']">
+              <basic-button
+                [type]="isWindowWidthMd() ? 1 : 2"
+                [title]="featureSection.buttonText1"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pt-[48px]">
+        <div *ngIf="tempProviderArray.length === 0">
+          <p-carousel
+            [value]="skeletonProviderArray"
+            [numVisible]="3"
+            [numScroll]="3"
+            [circular]="false"
+            [showIndicators]="true"
+            [showNavigators]="false"
+            [responsiveOptions]="responsiveOptions"
+          >
+            <ng-template let-profile pTemplate="item">
+              <div class="m-auto w-full max-w-[304px]">
+                <sk-profile-card />
+              </div>
+            </ng-template>
+          </p-carousel>
+        </div>
+
+        <div *ngIf="tempProviderArray.length !== 0">
+          <p-carousel
+            [value]="tempProviderArray"
+            [numVisible]="3"
+            [numScroll]="3"
+            [circular]="false"
+            [showIndicators]="true"
+            [showNavigators]="false"
+            [responsiveOptions]="responsiveOptions"
+          >
+            <ng-template let-profile pTemplate="item">
+              <div class="m-auto w-full max-w-[304px]">
+                <profile-card
+                  [index]="profile.id"
+                  [avatarUri]="profile.avatarUri"
+                  [name]="profile.name"
+                  [title]="profile.title"
+                  [isVerified]="profile.verified"
+                  [ratingAverage]="profile.ratingAverage"
+                  [ratingCount]="profile.ratingCount"
+                  [skillTags]="profile.skillTags"
+                  [slug]="profile.slug"
+                  [address]="profile.address"
+                  [hourlyRate]="profile.hourlyRate"
+                />
+              </div>
+            </ng-template>
+          </p-carousel>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

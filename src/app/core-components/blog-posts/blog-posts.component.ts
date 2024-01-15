@@ -1,42 +1,47 @@
-import { Component, OnInit, Directive } from '@angular/core'
-import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-} from '@angular/fire/compat/firestore'
+import { Component, OnInit } from '@angular/core'
+import { AngularFirestore } from '@angular/fire/compat/firestore'
+import { Observable } from 'rxjs'
 
 @Component({
   selector: 'app-blog-posts',
   templateUrl: './blog-posts.component.html',
-  styleUrls: ['./blog-posts.component.css'],
 })
 export class BlogPostsComponent implements OnInit {
-  articlesCollection: AngularFirestoreCollection<any>
+  articles$: Observable<any[]>
   placeholder = 'assets/img/outandabout.png'
   mediumFeed = []
   canLook = false
+
   constructor(private afs: AngularFirestore) {
-    this.articlesCollection = this.afs.collection<any>('articles')
+    this.articles$ = this.afs
+      .collection<any>('articles', (ref) =>
+        ref.orderBy('datePosted', 'desc').limit(3)
+      )
+      .valueChanges()
   }
 
-  async ngOnInit() {
-    const articlesSnapshot = await this.articlesCollection.ref
-      .orderBy('datePosted', 'desc')
-      .limit(3)
-      .get()
-    if (!articlesSnapshot.empty) {
-      articlesSnapshot.forEach((doc) => {
-        let obj = doc.data()
-        let articleUrl = ''
-        if (obj.category) articleUrl = '/' + obj.category + '/' + obj.slug
-        else articleUrl = '/' + obj.slug
-        this.mediumFeed.push({
-          thumbnail: obj.imageUrl,
-          title: obj.title,
-          subtitle: obj.subTitle,
-          author: obj.author,
-          link: 'https://canwork.io' + articleUrl,
+  ngOnInit() {
+    this.articles$.subscribe((articles) => {
+      if (articles && articles.length > 0) {
+        articles.forEach((article) => {
+          let articleUrl = ''
+          if (article.category) {
+            articleUrl = `/${article.category}/${article.slug}`
+          } else {
+            articleUrl = `/${article.slug}`
+          }
+
+          this.mediumFeed.push({
+            thumbnail: article.imageUrl,
+            title: article.title,
+            subTitle: article.subTitle,
+            tags: article.tags,
+            datePosted: article.datePosted,
+            author: article.author,
+            link: `https://canwork.io${articleUrl}`,
+          })
         })
-      })
-    }
+      }
+    })
   }
 }

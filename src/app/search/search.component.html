@@ -1,27 +1,29 @@
+<!--
+<<<<<<< HEAD
 <main class="main-content" [appWindowScroll]>
   <section class="section bg-gray">
     <div class="container">
       <div class="row search-container">
         <div class="col-12">
-          <!-- <ais-instantsearch [config]="algoliaSearchConfig" *ngIf="!rendering"> TODO -->
+          <!- <ais-instantsearch [config]="algoliaSearchConfig" *ngIf="!rendering"> TODO ->
           <div class="row" id="shouldBeShown" *ngIf="minValue > 0"></div>
-          <!-- <ais-refinement-list
+          <!- <ais-refinement-list
               hidden
               attribute="category"
               operator="or"
-            ></ais-refinement-list> -->
-          <!-- TODO <ais-search-box
+            ></ais-refinement-list> ->
+          <!- TODO <ais-search-box
               #search
               class="search-box"
               (change)="algoliaSearchChanged($event)"
-            ></ais-search-box> -->
+            ></ais-search-box> ->
           <div class="search-box">
             <div class="ais-SearchBox">
               <form class="ais-SearchBox-form">
                 <input type="text" class="ais-SearchBox-input" />
                 <button type="submit" class="ais-SearchBox-submit"></button>
 
-                <!-- todo add logic -->
+                <!- todo add logic ->
               </form>
             </div>
           </div>
@@ -74,7 +76,7 @@
                       />
                       <span> Only show providers within my timezone </span>
                     </label>
-                    <!-- todo logic -->
+                    <!- todo logic ->
                   </div>
                 </div>
               </div>
@@ -204,7 +206,7 @@
           </div>
           <div class="row">
             <div class="col-md-12 min-70">
-              <!-- <ais-hits> TODO -->
+              <!- <ais-hits> TODO ->
               <ng-template let-hits="hits">
                 <div
                   *ngIf="hits.length <= 0 && !loading"
@@ -232,13 +234,13 @@
                   </div>
                 </div>
               </ng-template>
-              <!-- </ais-hits> -->
+              <!- </ais-hits> ->
             </div>
             <div class="col-md-12">
-              <!-- <ais-pagination></ais-pagination> TODO -->
+              <!- <ais-pagination></ais-pagination> TODO ->
             </div>
           </div>
-          <!--</ais-instantsearch>-->
+          <!-</ais-instantsearch>->
           <div
             *ngIf="loading || rendering"
             class="container d-flex h-100 flex-column justify-content-center"
@@ -249,7 +251,23 @@
       </div>
     </div>
   </section>
-  <app-blog-posts></app-blog-posts>
-  <app-feedback></app-feedback>
 </main>
-<app-scroll-top></app-scroll-top>
+=======
+
+>>>>>>> 2fa27ce0 (update)
+-->        
+<main class="font-sans">
+  <search-hero />
+  <section class="flex justify-center bg-white">
+    <div
+      class="max-w-[1440px] w-full py-[40px] px-[24px] md:py-[40px] md:px-[64px] flex flex-col-reverse xl:flex-row xl:justify-between gap-[30px]"
+    >
+      <div class="xl:max-w-[328px] w-full">
+        <search-filter />
+      </div>
+      <div class="w-full">
+        <search-result />
+      </div>
+    </div>
+  </section>
+</main>

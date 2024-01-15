@@ -1,0 +1,41 @@
+<section class="flex justify-center">
+  <div
+    class="max-w-[1440px] w-full py-[48px] px-[24px] md:py-[80px] md:px-[64px]"
+  >
+    <div class="flex flex-col xl:flex-row xl:justify-between gap-[40px]">
+      <div
+        class="flex flex-col gap-[16px] text-center md:text-left xl:max-w-[500px]"
+      >
+        <div class="text-G900 text-h4 md:text-h3 font-medium">
+          {{ joinSection.title }}
+        </div>
+        <div class="text-G700 text-b1">
+          {{ joinSection.subTitle }}
+        </div>
+      </div>
+      <div>
+        <div class="flex max-md:flex-wrap max-md:justify-center gap-[32px]">
+          <a
+            *ngFor="let community of joinSection.communities"
+            class="bg-G300 hover:bg-G200 click:bg-G300 w-full max-w-[332px] md:w-[332px] border border-G300 rounded-[12px] py-[32px] px-[48px] flex justify-between items-center gap-[16px] shadow-community cursor-pointer transition-all duration-200"
+            href="{{ community.url }}"
+            target="_blank"
+          >
+            <img
+              src="{{ community.imgSrc }}"
+              class="w-[64px] h-[64px] select-none"
+            />
+            <div class="flex flex-col gap-[8px]">
+              <div class="text-G700 text-b2 whitespace-nowrap">
+                {{ community.title }}
+              </div>
+              <div class="text-G900 text-b1 font-medium whitespace-nowrap">
+                {{ community.description }}
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

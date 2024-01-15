@@ -48,7 +48,8 @@
               "node_modules/animate.css/animate.css",
               "node_modules/ngx-toastr/toastr.css",
               "src/styles.scss",
-              "src/assets/sass/global.scss"
+              "src/assets/massimo/css/primeng.css",
+              "node_modules/ngx-spinner/animations/ball-clip-rotate-pulse.css"
             ],
             "scripts": []
           },
@@ -141,8 +142,8 @@
               "node_modules/firebaseui/dist/firebaseui.css",
               "node_modules/animate.css/animate.css",
               "node_modules/ngx-toastr/toastr.css",
-              "src/styles.scss",
-              "src/assets/sass/global.scss"
+              "src/assets/massimo/css/primeng.css",
+              "src/styles.scss"
             ],
             "assets": ["src/assets", "src/favicon.ico"]
           }

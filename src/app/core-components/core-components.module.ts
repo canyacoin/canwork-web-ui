@@ -21,7 +21,6 @@ import { FaqPageComponent } from './faq-page/faq-page.component'
 import { FeedbackComponent } from './feedback/feedback.component'
 import { FooterComponent } from './footer/footer.component'
 import { HeaderComponent } from './header/header.component'
-import { SearchFilterOptionComponent } from './header/search-filter-option/search-filter-option.component'
 import { StorageDropzoneComponent } from './storage-dropzone/storage-dropzone.component'
 import { ProviderCardComponent } from './provider-card/provider-card.component'
 import { ScrollTopComponent } from './scroll-top/scroll-top.component'
@@ -37,6 +36,16 @@ import { DynamicCoinComponent } from './dynamic-coin/dynamic-coin.component'
 import { DynamicCoinWrapperComponent } from './dynamic-coin-wrapper/dynamic-coin-wrapper.component'
 import { LedgerModalComponent } from '../binance/ledger-modal/ledger-modal.component'
 import { PopperComponent } from './popper/popper.component'
+import { BasicButtonComponent } from './buttons/basic-button/basic-button.component'
+import { BasicTagComponent } from './tag/basic-tag/basic-tag.component'
+import { CategoryCardComponent } from './category-card/category-card.component'
+import { LinkButtonComponent } from './link-button/link-button.component'
+import { ProfileCardComponent } from './profile-card/profile-card.component'
+import { SwitchGridListComponent } from './buttons/switch-grid-list/switch-grid-list.component'
+import { SkProfileCardComponent } from './skeletons/sk-profile-card/sk-profile-card.component'
+import { BadgeComponent } from './badge/badge.component';
+import { DelTagComponent } from './tag/del-tag/del-tag.component';
+import { StarRatingComponent } from './star-rating/star-rating.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -69,7 +78,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     FeedbackComponent,
     FooterComponent,
     HeaderComponent,
-    SearchFilterOptionComponent,
     ScrollTopComponent,
     SkillTagComponent,
     SkillTagsSelectionComponent,
@@ -86,6 +94,16 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     DynamicCoinWrapperComponent,
     LedgerModalComponent,
     PopperComponent,
+    BasicButtonComponent,
+    BasicTagComponent,
+    CategoryCardComponent,
+    LinkButtonComponent,
+    ProfileCardComponent,
+    SwitchGridListComponent,
+    SkProfileCardComponent,
+    BadgeComponent,
+    DelTagComponent,
+    StarRatingComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -109,6 +127,15 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     VerifiedMarkComponent,
     DynamicCoinComponent,
     DynamicCoinWrapperComponent,
+    BasicButtonComponent,
+    BasicTagComponent,
+    CategoryCardComponent,
+    LinkButtonComponent,
+    ProfileCardComponent,
+    SwitchGridListComponent,
+    SkProfileCardComponent,
+    BadgeComponent,
+    DelTagComponent,
   ],
   providers: [
     {

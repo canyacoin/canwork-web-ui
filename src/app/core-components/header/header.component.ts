@@ -1,36 +1,63 @@
-// import { providerTypeArray } from './../../const/providerTypes'
-import { animate, style, transition, trigger } from '@angular/animations'
-import { Component, Input, OnDestroy, OnInit, Directive } from '@angular/core'
-import { Router } from '@angular/router'
+import { animate, style, transition, trigger, state } from '@angular/animations'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
-import { NavService } from '@service/nav.service'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { Subscription } from 'rxjs'
 import { BscService, EventTypeBsc } from '@service/bsc.service'
+import { WindowService } from 'app/shared/services/window.service'
+import { HeaderService } from 'app/shared/constants/header'
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
   animations: [
-    trigger('slideInOut', [
-      transition(':enter', [
-        style({ transform: 'translateY(-100%)' }),
-        animate('100ms ease-in', style({ transform: 'translateY(0%)' })),
-      ]),
-      transition(':leave', [
-        animate('120ms ease-out', style({ transform: 'translateY(-100%)' })),
+    trigger('hamburguerX', [
+      state('hamburguer', style({})),
+      state(
+        'topX',
+        style({
+          transform: 'rotate(45deg)',
+          transformOrigin: 'left',
+          margin: '12px',
+        })
+      ),
+      state(
+        'hide',
+        style({
+          opacity: 0,
+        })
+      ),
+      state(
+        'bottomX',
+        style({
+          transform: 'rotate(-45deg)',
+          transformOrigin: 'left',
+          margin: '12px',
+        })
+      ),
+      state(
+        'show',
+        style({
+          opacity: 100,
+        })
+      ),
+      transition('* => *', [
+        animate('0.2s'), // controls animation speed
       ]),
     ]),
   ],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+  headerSection = HeaderService
+  // flag be consumed by the template
+  isHamburguer = true
+
+  onHamburguerClick() {
+    this.isHamburguer = !this.isHamburguer
+  }
+
   currentUser: User
-  @Input() allowFilters = false
-  showFilters = false
-  filterString = ''
-  hideSearchBar: boolean
   bAddress: string
 
   hasUnreadMessages = false
@@ -42,18 +69,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
   binanceSub: Subscription
   bscSub: Subscription
 
-  // providerCategories = providerTypeArray
-  // selectedProvType = providerTypeArray[0]
+  // for scroll effect only
+  isScrolled: boolean = false
 
   constructor(
     private afs: AngularFirestore,
-    private navService: NavService,
     private authService: AuthService,
-    private router: Router,
-    private bscService: BscService
+    private bscService: BscService,
+    private windowService: WindowService
   ) {}
 
   async ngOnInit() {
+    // scroll
+    this.windowService.getScrollY().subscribe((scrollY) => {
+      // Check if the scroll position is greater than 64px
+      this.isScrolled = scrollY > 64
+    })
+
     this.authSub = this.authService.currentUser$.subscribe(
       async (user: User) => {
         if (this.currentUser !== user) {
@@ -62,9 +94,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
       }
     )
-    this.navSub = this.navService.hideSearchBar$.subscribe((hide: boolean) => {
-      this.hideSearchBar = hide
-    })
 
     this.bscSub = this.bscService.events$.subscribe((event) => {
       if (!event) {
@@ -144,64 +173,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  onFocus(event: any) {
-    this.showFilters = true
-  }
-
-  onBlur(event: any) {
-    setTimeout(() => {
-      this.showFilters = false
-    }, 50)
-  }
-
-  onSubmit() {
-    let string = ''
-    const el = document.getElementById('topnav-search')
-    if (el) {
-      string = (el as HTMLInputElement).value
-    }
-    // if ((<any>window).$('html, body')) {
-    //   (<any>window).$('html, body').animate({ scrollTop: -10 }, 600);
-    // }
-    this.router.navigate(['search'], {
-      queryParams: {
-        // 'refinementList[category][0]': this.selectedProvType.name,
-        // category: this.selectedProvType.id,
-        query: string,
-      },
-    })
-  }
-
-  onSubmitFromModal() {
-    let string = ''
-    const el = document.getElementById('topnav-search-mobile')
-    if (el) {
-      string = (el as HTMLInputElement).value
-    }
-    ;(<any>window).$('#mobileMenuModal').modal('hide') // Close mobile menu modal
-    this.router.navigate(['search'], {
-      queryParams: { query: string },
-    })
-  }
-
-  onCancel() {}
-
   onLogout() {
     this.bscService.disconnect()
     this.authService.logout()
   }
-
-  // toggleDropdown() {
-  //   document
-  //     .getElementById('myDropdown')
-  //     .classList.toggle('search-dropdown-show')
-  // }
-
-  // closeDropDown(value: any) {
-  //   this.selectedProvType = value
-  //   var myDropdown = document.getElementById('myDropdown')
-  //   if (myDropdown.classList.contains('show')) {
-  //     myDropdown.classList.remove('show')
-  //   }
-  // }
 }

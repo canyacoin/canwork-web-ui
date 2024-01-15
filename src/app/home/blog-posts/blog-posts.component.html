@@ -1,0 +1,24 @@
+<section class="flex justify-center bg-G50">
+  <div
+    class="max-w-[1440px] w-full py-[56px] px-[24px] md:py-[80px] md:px-[64px]"
+  >
+    <div class="grid gap-[40px] md:gap-[64px]">
+      <div
+        class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-[40px]"
+      >
+        <div class="flex flex-col gap-[8px] font-medium">
+          <div class="text-G800 text-h4 md:text-h3">
+            {{ BlogPostsSection.title }}
+          </div>
+          <div class="text-G700 text-b1">
+            {{ BlogPostsSection.subTitle }}
+          </div>
+        </div>
+        <div [routerLink]="['/blog']" class="w-max">
+          <basic-button [type]="1" [title]="BlogPostsSection.buttonText1" />
+        </div>
+      </div>
+      <app-blog-posts />
+    </div>
+  </div>
+</section>

@@ -1,0 +1,41 @@
+<section
+  class="bg-hero-pattern bg-no-repeat bg-center bg-cover flex justify-center"
+>
+  <div
+    class="max-w-[1440px] w-full flex flex-col gap-[40px] md:gap-[24px] py-[56px] px-[24px] md:py-[80px] md:px-[64px]"
+  >
+    <div class="text-white text-h4 md:text-h3 text-center">
+      {{ homeWorksSection.title }}
+    </div>
+    <div *ngIf="isWindowWidthMd()" class="w-full relative">
+      <div
+        class="bg-white h-[2px] w-2/3 absolute left-[16.6%] bottom-[27px]"
+      ></div>
+      <div class="flex justify-around">
+        <div
+          *ngFor="let card of homeWorksSection.cards; let ii = index"
+          class="rounded-full w-[56px] h-[56px] flex justify-center items-center bg-white text-G800 text-h4 font-semibold z-10"
+        >
+          {{ ii + 1 }}
+        </div>
+      </div>
+    </div>
+    <div class="grid md:grid-cols-3 gap-[16px] md:gap-[32px]">
+      <div
+        *ngFor="let card of homeWorksSection.cards"
+        class="rounded-[12px] overflow-hidden bg-G100"
+      >
+        <img
+          src="{{ card.imgSrc }}"
+          class="select-none w-full md:min-h-[240px]"
+        />
+        <div class="py-[40px] px-[24px] grid gap-[16px]">
+          <div class="text-G900 text-h6 md:text-h5 font-medium">
+            {{ card.title }}
+          </div>
+          <div class="text-G700 text-b1">{{ card.description }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
