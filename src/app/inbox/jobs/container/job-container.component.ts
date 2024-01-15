@@ -1,5 +1,5 @@
 import { Component, OnInit, Directive } from '@angular/core'
-import { FilterPipe } from 'ngx-filter-pipe'
+//import { FilterPipe } from 'ngx-filter-pipe'
 
 @Component({
   selector: 'app-job-container',

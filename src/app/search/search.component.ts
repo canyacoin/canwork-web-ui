@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import * as union from 'lodash/union'
-import { LabelType, Options } from 'ng5-slider'
-import { Subscription } from 'rxjs'
+import { LabelType, Options } from 'ngx-slider-v2'
+import { Observable, Subscription } from 'rxjs'
 import algoliasearch from 'algoliasearch/lite'
 import { environment } from '../../environments/environment'
 import { User, UserCategory } from '../core-classes/user'
@@ -18,6 +18,16 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   filteredProviders: User[] = []
   categoryFilters = []
   chosenFilters = []
+  hits = [] // TODO
+  /*
+  invoke directly algolia search api
+  create input field and handle on change
+  on change invoke api and populate hits
+  re create paginating component
+  re create timezone flag
+  
+  reuse ais custom styling classes from css
+  */
   smallCards = true
   query: string
   categoryQuery = ''

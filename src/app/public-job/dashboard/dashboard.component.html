@@ -14,9 +14,15 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-6" *ngIf="stats.count > 0">
-        <div class="canya-seach-bar mb-3" style="background-color:white;">
+        <div class="canya-seach-bar mb-3" style="background-color: white">
           <h6
-            style="color:#535353;padding: 5px 10px;font-weight:500;margin-top:8px;margin-bottom:0px;"
+            style="
+              color: #535353;
+              padding: 5px 10px;
+              font-weight: 500;
+              margin-top: 8px;
+              margin-bottom: 0px;
+            "
           >
             <b>{{ stats.count }}</b> completed jobs <b>${{ stats.usd }} USD</b>
           </h6>
@@ -82,8 +88,9 @@
       class="card job-dashboard-card my-10 py-15 px-30"
       *ngFor="
         let job of queryJobs
-          | orderBy: 'actionLog[0].timestamp':true
-          | paginate: { itemsPerPage: 10, currentPage: index }
+          | orderBy : 'actionLog[0].timestamp'
+          | reverse
+          | paginate : { itemsPerPage: 10, currentPage: index }
       "
       [routerLink]="['/jobs/public', job.slug]"
     >

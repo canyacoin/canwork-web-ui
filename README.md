@@ -12,21 +12,23 @@ This is an Angular Project, generated using [Angular CLI](https://github.com/ang
 
 _This project uses:_
 
-- Node.js: 14.21.3
+- Node.js: 16.20.2
 - Yarn: 1.22.19
-- Angular (@angular/core): 15.2.10
-- firebaseui: 6.0.2
-- firebaseui-angular: 6.1.3
-- @angular/fire: 7.5.0
+- Angular (@angular/core): 16.2.12
+- firebaseui: 6.1.0
+- firebaseui-angular: 6.1.4
+- @angular/fire: 7.6.1
 - firebase: 9.23.0 (as a dependency of @angular/fire, not directly imported)
 - Firebase-CLI (firebase-tools): 11.30.0
-- Typescript: 4.8.4
+- Typescript: 4.9.3
 - Walletconnect: 2.8.1
+
+TODO: update node engine and dependencies of functions folder to 16
 
 FirebaseUI/Angular compatibility table:
 https://github.com/RaphaelJenni/firebaseui-angular#compatibility
 
-Node.js/Angular compatibility table:
+Node.js/Typescript/Angular compatibility table:
 https://angular.io/guide/versions
 
 Angular build optimization configuration:
@@ -58,22 +60,23 @@ cd web-ui
 git checkout -b "yourname"
 ```
 
-Setup (new)
+Setup
+
+Prior to running `yarn` ensure your node version is correct according to NVM.
+Please install node dependencies with yarn (not npm) and do not generate a package-lock.json file.
 
 ```
 nvm use
 npm install -g yarn
-npm install
 npx husky install
 npx husky set .husky/pre-commit "npx pretty-quick --staged"
 ```
 
-Setup
-
-Prior to running `yarn` ensure your node version is correct according to NVM.
 A `.nvmrc` file is included to make this easy if you already use NVM (just `cd` to this projects root folder _with admin privileges_ and run `nvm use` to activate the correct node version)
 
 WINDOWS USERS: `.nvmrc` format file is not supported with windows NVM so you will have to manually include the version number like `nvm use 10.15.3` and if it says its not installed then first do this `nvm install xx.xx.x`
+
+Install node dependencies:
 
 ```
 yarn

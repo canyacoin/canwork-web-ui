@@ -1,9 +1,13 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { SimpleModalModule } from 'ngx-simple-modal'
+import { NgArrayPipesModule } from 'ngx-pipes' // https://www.npmjs.com/package/ngx-pipes#array
+
+//import { SimpleModalModule } from 'ngx-simple-modal' // old module
+import { NgxModalView } from 'ngx-modalview'
+
 import { StarRatingModule } from 'angular-star-rating'
-import { OrderModule } from 'ngx-order-pipe'
+//import { OrderModule } from 'ngx-order-pipe'
 import { NgxPaginationModule } from 'ngx-pagination'
 import { ClipboardModule } from 'ngx-clipboard'
 
@@ -28,13 +32,15 @@ import { BscPaymentSelectorComponent } from '../core-components/bsc-payment-sele
 @NgModule({
   imports: [
     CommonModule,
-    SimpleModalModule,
+    //SimpleModalModule, // old
+    NgxModalView, // new
     CoreComponentsModule,
+    NgArrayPipesModule,
     CoreServicesModule,
     CoreUtilsModule,
     InboxRoutingModule,
     FormsModule,
-    OrderModule,
+    // OrderModule,
     ReactiveFormsModule,
     StarRatingModule.forChild(),
     NgxPaginationModule,

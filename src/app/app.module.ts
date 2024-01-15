@@ -1,6 +1,6 @@
 import { HttpClientModule } from '@angular/common/http'
 import { NgModule } from '@angular/core'
-import { NgAisModule } from 'angular-instantsearch'
+//import { NgAisModule } from 'angular-instantsearch'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 //import { CanpayModule } from '@canpay-lib/canpay.module'
@@ -9,7 +9,9 @@ import { AngularFireModule } from '@angular/fire/compat'
 import { AngularFireAuthModule } from '@angular/fire/compat/auth'
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore'
 import { AngularFireStorageModule } from '@angular/fire/compat/storage'
-import { Ng5SliderModule } from 'ng5-slider'
+// import { Ng5SliderModule } from 'ng5-slider' // deprecated
+import { NgxSliderModule } from 'ngx-slider-v2'
+
 import { NgxPaginationModule } from 'ngx-pagination'
 import { FirebaseUIModule } from 'firebaseui-angular'
 import { environment } from '../environments/environment'
@@ -22,8 +24,10 @@ import { CoreUtilsModule } from './core-utils/core-utils.module'
 import { PublicJobComponent } from './public-job/public-job/public-job.component'
 import { DashboardComponent } from './public-job/dashboard/dashboard.component'
 import { JobBidsComponent } from './public-job/job-bids/job-bids.component'
-import { FilterPipeModule } from 'ngx-filter-pipe'
-import { OrderModule } from 'ngx-order-pipe'
+//import { FilterPipeModule } from 'ngx-filter-pipe' // obsolete
+//import { OrderModule } from 'ngx-order-pipe' // obsolete
+import { NgArrayPipesModule } from 'ngx-pipes' // https://www.npmjs.com/package/ngx-pipes#array
+
 import { AngularFireFunctionsModule } from '@angular/fire/compat/functions'
 import { WalletBnbComponent } from './wallet-bnb/wallet-bnb.component'
 import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.component'
@@ -58,18 +62,19 @@ import { WindowService } from './shared/services/window.service'
     AngularFireStorageModule,
     AngularFireFunctionsModule,
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
-    NgAisModule.forRoot(),
+    // NgAisModule.forRoot(),
     BrowserModule,
     BrowserAnimationsModule,
     CoreComponentsModule,
     CoreServicesModule,
     CoreUtilsModule,
     HttpClientModule,
-    FilterPipeModule,
-    Ng5SliderModule,
+    //FilterPipeModule,
+    NgArrayPipesModule,
+    NgxSliderModule,
     FormsModule,
     ReactiveFormsModule,
-    OrderModule,
+    //OrderModule,
     NgxPaginationModule,
     StarRatingModule.forRoot(),
     ClipboardModule,
@@ -77,7 +82,9 @@ import { WindowService } from './shared/services/window.service'
       positionClass: 'toast-top-center',
     }),
   ],
-  exports: [FilterPipeModule],
+  exports: [
+    /*FilterPipeModule*/
+  ],
   providers: [
     AuthService,
     MobileService,

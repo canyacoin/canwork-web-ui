@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core'
 import {
   ActivatedRouteSnapshot,
-  CanActivate,
   Router,
   RouterStateSnapshot,
 } from '@angular/router'
@@ -11,7 +10,7 @@ import { User, UserState } from '../core-classes/user'
 import { AuthService } from '../core-services/auth.service'
 
 @Injectable()
-export class UserIsSetupGuard implements CanActivate {
+export class UserIsSetupGuard {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(
@@ -34,7 +33,7 @@ export class UserIsSetupGuard implements CanActivate {
           }
           resolve(false)
         })
-        .catch(err => {
+        .catch((err) => {
           resolve(false)
         })
     })
