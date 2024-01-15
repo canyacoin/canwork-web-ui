@@ -1,11 +1,10 @@
-import { Component, OnInit, Directive } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 
 @Component({
-  selector: 'app-faq-page',
-  templateUrl: './faq-page.component.html',
-  styleUrls: ['./faq-page.component.css'],
+  selector: 'app-faqs-page',
+  templateUrl: './faqs.component.html'
 })
-export class FaqPageComponent implements OnInit {
+export class FaqsComponent implements OnInit {
   faqs = [
     {
       index: 'q-1',

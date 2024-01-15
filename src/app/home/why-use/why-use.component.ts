@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { WhyUseService } from 'app/shared/constants/home'
+import { WhyUseService } from 'app/shared/constants/home-page'
 import { WindowService } from 'app/shared/services/window.service'
 
 @Component({

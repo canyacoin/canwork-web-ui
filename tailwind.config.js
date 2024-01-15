@@ -83,7 +83,6 @@ module.exports = {
         // Gray
         G50: '#F8FAFC',
         G100: '#F1F5F9',
-        G150: '#E2E8F0',
         G200: '#E2E8F0',
         G300: '#CBD5E1',
         G400: '#94A3B8',

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core'
 import { Router } from '@angular/router'
-import { HeroService } from 'app/shared/constants/home-page'
+import { HeroService } from 'app/shared/constants/faqs-page'
 
 @Component({
-  selector: 'home-hero',
+  selector: 'faqs-hero',
   templateUrl: './hero.component.html',
 })
 export class HeroComponent {

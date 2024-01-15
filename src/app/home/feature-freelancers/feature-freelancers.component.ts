@@ -3,7 +3,7 @@ import {
   Component,
   ChangeDetectionStrategy,
 } from '@angular/core'
-import { FeatureFreelancersService } from 'app/shared/constants/home'
+import { FeatureFreelancersService } from 'app/shared/constants/home-page'
 import { WindowService } from 'app/shared/services/window.service'
 
 import algoliasearch from 'algoliasearch/lite'

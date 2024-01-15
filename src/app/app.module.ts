@@ -1,6 +1,6 @@
 import { HttpClientModule } from '@angular/common/http'
 import { NgModule } from '@angular/core'
-//import { NgAisModule } from 'angular-instantsearch'
+// import { NgAisModule } from 'angular-instantsearch'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 //import { CanpayModule } from '@canpay-lib/canpay.module'
@@ -9,9 +9,7 @@ import { AngularFireModule } from '@angular/fire/compat'
 import { AngularFireAuthModule } from '@angular/fire/compat/auth'
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore'
 import { AngularFireStorageModule } from '@angular/fire/compat/storage'
-// import { Ng5SliderModule } from 'ng5-slider' // deprecated
 import { NgxSliderModule } from 'ngx-slider-v2'
-
 import { NgxPaginationModule } from 'ngx-pagination'
 import { FirebaseUIModule } from 'firebaseui-angular'
 import { environment } from '../environments/environment'

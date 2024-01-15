@@ -15,10 +15,7 @@ export const HeroService = {
 
 export const FilterService = {
   verification: [
-    'ID Verified',
-    'Gitcoin Passport',
-    'Galxe ID',
-    'Blockchain Verified',
+    'Verified'
   ],
   hourlyRate: ['$0 - $25', '$25 - $50', '$50 - $100', '$100>'],
   skills: [

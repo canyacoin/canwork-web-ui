@@ -10,7 +10,7 @@ import { AuthService } from '../core-services/auth.service'
 import { NavService } from '../core-services/nav.service'
 
 @Component({
-  selector: 'app-search',
+  selector: 'app-search-page',
   templateUrl: './search.component.html',
 })
 export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
