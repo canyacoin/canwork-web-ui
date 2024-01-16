@@ -58,6 +58,17 @@
             </p-accordion>
           </div>
         </div>
+        <div
+          *ngIf="queryFaqs.length === 0"
+          class="py-[40px] md:py-[64px] text-center text-G800 w-full grid gap-[16px]"
+        >
+          <div class="text-h5 md:text-h4 font-medium">
+            There are no results that match your search.
+          </div>
+          <div class="text-b1 md:text-h6">
+            Please try adjusting your search keywords or filters.
+          </div>
+        </div>
       </ng-template>
     </div>
   </div>

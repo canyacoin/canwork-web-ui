@@ -5,11 +5,9 @@ import { Component } from '@angular/core'
   templateUrl: './faqs.component.html',
 })
 export class FaqsComponent {
-  queryFaqs: string = '';
+  queryFaqs: string = ''
 
   handleSearchQuery(query: string) {
-    if (query) {
-      this.queryFaqs = query;
-    }
+    this.queryFaqs = query
   }
 }

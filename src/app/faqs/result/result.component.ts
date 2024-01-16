@@ -12,10 +12,8 @@ export class ResultComponent {
 
   @Input()
   set query(value: string) {
-    if (value) {
-      this.queryString = value
-      this.performSearch(value)
-    }
+    this.queryString = value
+    this.performSearch(value)
   }
 
   performSearch(query: string) {
