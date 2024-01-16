@@ -1,14 +1,32 @@
-import { Component, OnInit, Input } from '@angular/core'
+import { Component, Input } from '@angular/core'
 import { ResultService } from 'app/shared/constants/faqs-page'
 
 @Component({
   selector: 'faqs-result',
   templateUrl: './result.component.html',
 })
-export class ResultComponent implements OnInit {
-  @Input() query: string = ''
-
+export class ResultComponent {
   resultSection = ResultService
+  queryString: string = ''
+  queryFaqs = []
 
-  ngOnInit() {}
+  @Input()
+  set query(value: string) {
+    if (value) {
+      this.queryString = value
+      this.performSearch(value)
+    }
+  }
+
+  performSearch(query: string) {
+    const tmpFaq: any = []
+    this.resultSection.map((section) => {
+      section.items.map((item) => {
+        if (JSON.stringify(item).toLowerCase().includes(query.toLowerCase())) {
+          tmpFaq.push(item)
+        }
+      })
+    })
+    this.queryFaqs = tmpFaq
+  }
 }

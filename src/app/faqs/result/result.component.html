@@ -2,7 +2,7 @@
   <div class="bg-G50 px-[16px] py-[40px] md:py-[80px] flex justify-center">
     <div class="max-w-[800px] w-full">
       <ng-container
-        *ngIf="query === ''; then defaultView; else resultView"
+        *ngIf="queryString === ''; then defaultView; else resultView"
       ></ng-container>
 
       <ng-template #defaultView>
@@ -41,7 +41,24 @@
         </div>
       </ng-template>
 
-      <ng-template #resultView> </ng-template>
+      <ng-template #resultView>
+        <div class="flex flex-col gap-[16px]" id="faq-parent">
+          <div *ngFor="let item of queryFaqs">
+            <p-accordion class="w-full" id="faq-children">
+              <p-accordionTab>
+                <ng-template pTemplate="header">
+                  <div class="pr-[16px] text-G800 text-h6 leading-[1.4] w-full">
+                    {{ item.q }}
+                  </div>
+                </ng-template>
+                <div class="pt-[16px] text-G700 text-b1 leading-[1.5]">
+                  {{ item.a }}
+                </div>
+              </p-accordionTab>
+            </p-accordion>
+          </div>
+        </div>
+      </ng-template>
     </div>
   </div>
 </section>
