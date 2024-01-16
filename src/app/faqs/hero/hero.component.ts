@@ -1,5 +1,4 @@
-import { Component } from '@angular/core'
-import { Router } from '@angular/router'
+import { Component, EventEmitter, Output } from '@angular/core'
 import { HeroService } from 'app/shared/constants/faqs-page'
 
 @Component({
@@ -7,14 +6,12 @@ import { HeroService } from 'app/shared/constants/faqs-page'
   templateUrl: './hero.component.html',
 })
 export class HeroComponent {
+  @Output() searchQuerySubmitted: EventEmitter<string> = new EventEmitter();
   heroSection = HeroService
 
-  constructor(private router: Router) {}
-
   submitSearchQuery(value: string) {
-    if (value)
-      this.router.navigate(['search'], {
-        queryParams: { query: value },
-      })
+    if (value) {
+      this.searchQuerySubmitted.emit(value);
+    }
   }
 }

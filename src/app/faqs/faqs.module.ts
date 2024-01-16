@@ -10,6 +10,7 @@ import { FaqsRoutingModule } from './faqs.routing.module'
 import { HeroComponent } from './hero/hero.component'
 import { ResultComponent } from './result/result.component'
 import { CarouselModule } from 'primeng/carousel'
+import { AccordionModule } from 'primeng/accordion'
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { CarouselModule } from 'primeng/carousel'
     FaqsRoutingModule,
     // NgAisModule,
     CarouselModule,
+    AccordionModule,
   ],
   declarations: [FaqsComponent, HeroComponent, ResultComponent],
   exports: [FaqsRoutingModule],

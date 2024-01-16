@@ -26,19 +26,63 @@
 }
 
 /* p-accordion */
-.p-accordion {
+#search-filter .p-accordion {
     border: 1px solid #CBD5E1;
     border-radius: 12px;
     overflow: hidden;
 }
 
-.p-accordion-header-link {
+#search-filter .p-accordion-header-link {
     display: flex;
     flex-direction: row-reverse;
     padding: 8px 16px;
 }
-.p-accordion-content {
+
+#search-filter .p-accordion-content {
     border-top: 1px solid #CBD5E1;
+}
+
+#faq-parent .p-accordion-header-link {
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 12px 0px;
+    border-bottom: 1px solid #1E293B;
+}
+
+#faq-parent .p-icon-wrapper svg {
+    width: 24px;
+    height: 24px;
+    color: #1E293B;
+}
+
+/* same effect for faq-parent & faq-children   when the highlight, change the font-weight */
+#faq-parent .p-accordion-header.p-highlight {
+    font-weight: 500;
+}
+
+#faq-parent #faq-children .p-accordion-tab {
+    padding: 24px;
+    background-color: #F1F5F9;
+    border-radius: 12px;
+    transition: background-color 300ms ease; /* transition effect */
+}
+
+#faq-parent #faq-children .p-accordion-tab.p-accordion-tab-active {
+    background-color: #E2E8F0;
+}
+
+#faq-parent #faq-children .p-accordion-header-link {
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 0px;
+    border: none;
+}
+
+
+#faq-parent #faq-children .p-icon-wrapper svg {
+    width: 18px;
+    height: 18px;
+    color: #1E293B;
 }
 
 /* p-paginator */

@@ -1,2 +1,47 @@
 <section>
+  <div class="bg-G50 px-[16px] py-[40px] md:py-[80px] flex justify-center">
+    <div class="max-w-[800px] w-full">
+      <ng-container
+        *ngIf="query === ''; then defaultView; else resultView"
+      ></ng-container>
+
+      <ng-template #defaultView>
+        <div class="flex flex-col gap-[40px] md:gap-[64px]">
+          <div *ngFor="let section of resultSection">
+            <p-accordion class="w-full" id="faq-parent">
+              <p-accordionTab>
+                <ng-template pTemplate="header">
+                  <div
+                    class="pr-[16px] text-G800 text-h5 md:text-h4 leading-[1.2] w-full"
+                  >
+                    {{ section.title }}
+                  </div>
+                </ng-template>
+                <div class="pt-[24px] flex flex-col gap-[16px]">
+                  <div *ngFor="let item of section.items">
+                    <p-accordion class="w-full" id="faq-children">
+                      <p-accordionTab>
+                        <ng-template pTemplate="header">
+                          <div
+                            class="pr-[16px] text-G800 text-h6 leading-[1.4] w-full"
+                          >
+                            {{ item.q }}
+                          </div>
+                        </ng-template>
+                        <div class="pt-[16px] text-G700 text-b1 leading-[1.5]">
+                          {{ item.a }}
+                        </div>
+                      </p-accordionTab>
+                    </p-accordion>
+                  </div>
+                </div>
+              </p-accordionTab>
+            </p-accordion>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template #resultView> </ng-template>
+    </div>
+  </div>
 </section>

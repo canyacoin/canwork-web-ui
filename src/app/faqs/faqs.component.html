@@ -1,5 +1,5 @@
 <main class="font-sans" id="faq-content">
-  <faqs-hero />
+  <faqs-hero (searchQuerySubmitted)="handleSearchQuery($event)"></faqs-hero>
   <faqs-result />
   <post-job />
   <join-community />
