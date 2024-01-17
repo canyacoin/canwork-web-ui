@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { HowWorksService } from 'app/shared/constants/home'
+import { HowWorksService } from 'app/shared/constants/home-page'
 import { WindowService } from 'app/shared/services/window.service'
 
 @Component({

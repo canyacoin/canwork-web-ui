@@ -48,7 +48,7 @@ export const WhyUseService = {
 
 export const WhyFreelanceService = {
   question: 'Why use CanWork ?',
-  title: 'Reliable Web3 Freelance Experts',
+  title: 'Reliable Web3\n Freelance Experts',
   subTitle:
     'Filter out the noise and thoughtless proposals when you hire on CanWork. Dedicated expert freelancers at your fingertips. ',
   cards: [
@@ -226,61 +226,61 @@ export const WhoBehindService = {
   // hard coded staff for testing
   freelancers: [
     {
-      imgSrc: '/assets/massimo/images/randomImage.png',
+      imgSrc: '/assets/massimo/images/randomImage1.png',
       name: 'Noah Elijah',
       title: 'Product Designer and Illustrator',
       url: '',
     },
     {
-      imgSrc: '/assets/massimo/images/randomImage.png',
+      imgSrc: '/assets/massimo/images/randomImage2.png',
       name: 'Noah Elijah',
       title: 'Product Designer and Illustrator',
       url: '',
     },
     {
-      imgSrc: '/assets/massimo/images/randomImage.png',
+      imgSrc: '/assets/massimo/images/randomImage3.png',
       name: 'Noah Elijah',
       title: 'Product Designer and Illustrator',
       url: '',
     },
     {
-      imgSrc: '/assets/massimo/images/randomImage.png',
+      imgSrc: '/assets/massimo/images/randomImage4.png',
       name: 'Noah Elijah',
       title: 'Product Designer and Illustrator',
       url: '',
     },
     {
-      imgSrc: '/assets/massimo/images/randomImage.png',
+      imgSrc: '/assets/massimo/images/randomImage5.png',
       name: 'Noah Elijah',
       title: 'Product Designer and Illustrator',
       url: '',
     },
     {
-      imgSrc: '/assets/massimo/images/randomImage.png',
+      imgSrc: '/assets/massimo/images/randomImage5.png',
       name: 'Noah Elijah',
       title: 'Product Designer and Illustrator',
       url: '',
     },
     {
-      imgSrc: '/assets/massimo/images/randomImage.png',
+      imgSrc: '/assets/massimo/images/randomImage4.png',
       name: 'Noah Elijah',
       title: 'Product Designer and Illustrator',
       url: '',
     },
     {
-      imgSrc: '/assets/massimo/images/randomImage.png',
+      imgSrc: '/assets/massimo/images/randomImage1.png',
       name: 'Noah Elijah',
       title: 'Product Designer and Illustrator',
       url: '',
     },
     {
-      imgSrc: '/assets/massimo/images/randomImage.png',
+      imgSrc: '/assets/massimo/images/randomImage6.png',
       name: 'Noah Elijah',
       title: 'Product Designer and Illustrator',
       url: '',
     },
     {
-      imgSrc: '/assets/massimo/images/randomImage.png',
+      imgSrc: '/assets/massimo/images/randomImage2.png',
       name: 'Noah Elijah',
       title: 'Product Designer and Illustrator',
       url: '',
@@ -306,4 +306,11 @@ export const JoinCommunityService = {
       url: 'https://twitter.com/CanWork_io',
     },
   ],
+}
+
+export const PostJobService = {
+  title: 'Get the best freelancers for the job',
+  subTitle:
+    'Post your job request to start getting bids from top freelancers on CanWork.',
+  buttonText1: 'Post a Job Request',
 }

@@ -20,7 +20,7 @@ export const HeaderService = {
     },
     {
       title: 'FAQs',
-      url: '/faq',
+      url: '/faqs',
     },
   ],
 }

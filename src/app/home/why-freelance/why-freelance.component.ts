@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { WhyFreelanceService } from 'app/shared/constants/home'
+import { WhyFreelanceService } from 'app/shared/constants/home-page'
 
 @Component({
   selector: 'home-why-freelance',

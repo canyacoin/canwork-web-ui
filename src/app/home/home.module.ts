@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
-//import { NgAisModule } from 'angular-instantsearch'
+// import { NgAisModule } from 'angular-instantsearch'
 
 import { CoreComponentsModule } from '../core-components/core-components.module'
 import { CoreServicesModule } from '../core-services/core-services.module'
@@ -15,7 +15,6 @@ import { BrowseFreelancersComponent } from './browse-freelancers/browse-freelanc
 import { TopPortfoliosComponent } from './top-portfolios/top-portfolios.component'
 import { BlogPostsComponent } from './blog-posts/blog-posts.component'
 import { WhoBehindComponent } from './who-behind/who-behind.component'
-import { JoinCommunityComponent } from './join-community/join-community.component'
 import { CarouselModule } from 'primeng/carousel'
 
 @NgModule({
@@ -24,6 +23,7 @@ import { CarouselModule } from 'primeng/carousel'
     CoreComponentsModule,
     CoreServicesModule,
     HomeRoutingModule,
+    // NgAisModule,
     CarouselModule,
   ],
   declarations: [
@@ -37,7 +37,6 @@ import { CarouselModule } from 'primeng/carousel'
     TopPortfoliosComponent,
     BlogPostsComponent,
     WhoBehindComponent,
-    JoinCommunityComponent,
   ],
   exports: [HomeRoutingModule],
 })

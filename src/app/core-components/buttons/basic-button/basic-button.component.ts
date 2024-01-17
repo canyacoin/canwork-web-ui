@@ -20,7 +20,7 @@ export class BasicButtonComponent {
       style += ' bg-G900 hover:bg-C500 active:bg-C800 text-white border-none'
 
     if (this.size === 'medium') style += ' text-b1 px-[40px] py-[10px]'
-    else if (this.size === 'small') style += ' text-b2 px-[24px] py-[12px]'
+    else if (this.size === 'small') style += ' text-b2 px-[24px] py-[10px]'
 
     return style
   }

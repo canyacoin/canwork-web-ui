@@ -1,0 +1,28 @@
+<section>
+  <div class="bg-hero-pattern bg-no-repeat bg-center bg-cover py-[64px]">
+    <div class="flex justify-center">
+      <div
+        class="max-md:px-[24px] w-full flex flex-col items-center gap-[24px]"
+      >
+        <div class="flex flex-col gap-[8px]">
+          <div
+            class="text-white text-center text-h5 md:text-h3 font-medium leading-[1.2]"
+          >
+            {{ postSection.title }}
+          </div>
+          <div class="text-G200 text-center text-b1 md:text-h5">
+            {{ postSection.subTitle }}
+          </div>
+        </div>
+
+        <div class="w-max" [routerLink]="['/inbox/post']">
+          <basic-button
+            [type]="1"
+            [title]="postSection.buttonText1"
+            size="small"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

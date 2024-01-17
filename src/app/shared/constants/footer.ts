@@ -57,7 +57,7 @@ export const FooterService = {
     },
     {
       title: 'FAQs',
-      url: '/faq',
+      url: '/faqs',
     },
     {
       title: 'Help & Support',

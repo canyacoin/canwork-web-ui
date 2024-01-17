@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 
-import { FaqPageComponent } from './faq-page.component'
+import { FaqsComponent } from './faqs.component'
 
-describe('FaqPageComponent', () => {
-  let component: FaqPageComponent
-  let fixture: ComponentFixture<FaqPageComponent>
+describe('FaqsComponent', () => {
+  let component: FaqsComponent
+  let fixture: ComponentFixture<FaqsComponent>
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [FaqPageComponent],
+      declarations: [FaqsComponent],
     }).compileComponents()
   }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FaqPageComponent)
+    fixture = TestBed.createComponent(FaqsComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   })
