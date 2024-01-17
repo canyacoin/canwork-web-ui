@@ -16,6 +16,7 @@ import { TopPortfoliosComponent } from './top-portfolios/top-portfolios.componen
 import { BlogPostsComponent } from './blog-posts/blog-posts.component'
 import { WhoBehindComponent } from './who-behind/who-behind.component'
 import { CarouselModule } from 'primeng/carousel'
+import { FormsModule } from '@angular/forms'
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { CarouselModule } from 'primeng/carousel'
     HomeRoutingModule,
     // NgAisModule,
     CarouselModule,
+    FormsModule,
   ],
   declarations: [
     HomeComponent,

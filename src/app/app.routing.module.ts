@@ -5,7 +5,6 @@ import { PublicJobComponent } from './public-job/public-job/public-job.component
 import { JobBidsComponent } from './public-job/job-bids/job-bids.component'
 import { LandingComponent } from './landing/landing.component'
 import { BrandComponent } from './core-components/brand/brand.component'
-import { FaqsComponent } from './faqs/faqs.component'
 import { DashboardComponent } from './public-job/dashboard/dashboard.component'
 import { AuthGuard } from './core-utils/auth.guard'
 import { UserIsSetupGuard } from './core-utils/user-is-setup.guard'
@@ -46,6 +45,11 @@ import { NgxSpinnerModule } from 'ngx-spinner'
           path: 'search',
           loadChildren: () =>
             import('./search/search.module').then((m) => m.SearchModule),
+        },
+        {
+          path: 'blog',
+          loadChildren: () =>
+            import('./blog/blog.module').then((m) => m.BlogModule),
         },
         {
           path: 'jobs',
