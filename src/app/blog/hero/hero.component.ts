@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core'
 import { HeroService } from 'app/shared/constants/blog'
 
+
 @Component({
   selector: 'blog-hero',
   templateUrl: './hero.component.html',

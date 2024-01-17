@@ -9,8 +9,6 @@ import { BlogRoutingModule } from './blog.routing.module'
 import { HeroComponent } from './hero/hero.component'
 import { ResultComponent } from './result/result.component'
 import { PaginatorModule } from 'primeng/paginator'
-import { AccordionModule } from 'primeng/accordion'
-import { CheckboxModule } from 'primeng/checkbox'
 import { FormsModule } from '@angular/forms'
 
 @NgModule({
@@ -21,8 +19,6 @@ import { FormsModule } from '@angular/forms'
     // NgAisModule,
     RouterModule,
     PaginatorModule,
-    AccordionModule,
-    CheckboxModule,
     FormsModule,
   ],
   declarations: [BlogComponent, HeroComponent, ResultComponent],
