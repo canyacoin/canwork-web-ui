@@ -1,0 +1,19 @@
+<section>
+  <div class="w-full">
+    <div class="flex flex-col gap-[72px]">
+      <app-blog-posts />
+      <app-blog-posts />
+      <app-blog-posts />
+      <app-blog-posts />
+    </div>
+    <div class="pt-[24px] flex justify-center">
+      <p-paginator
+        (onPageChange)="onPageChange($event)"
+        [first]="first"
+        [rows]="rows"
+        [totalRecords]="120"
+        [pageLinkSize]="8"
+      ></p-paginator>
+    </div>
+  </div>
+</section>

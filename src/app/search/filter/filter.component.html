@@ -6,7 +6,7 @@
         <badge [value]="getNumberAllFilters()" />
       </div>
     </div>
-    <div class="cursor-pointer" (click)="$event.preventDefault(); allClear()">
+    <div class="cursor-pointer" (click)="allClear()">
       Clear All
     </div>
   </div>
@@ -23,7 +23,7 @@
             </div>
             <div
               class="font-medium pointer-events-auto"
-              (click)="$event.preventDefault(); verifyClear()"
+              (click)="verifyClear()"
             >
               Clear
             </div>
@@ -59,7 +59,7 @@
             </div>
             <div
               class="font-medium pointer-events-auto"
-              (click)="$event.preventDefault(); hourlyClear()"
+              (click)="hourlyClear()"
             >
               Clear
             </div>
@@ -88,7 +88,7 @@
             </div>
             <div
               class="font-medium pointer-events-auto"
-              (click)="$event.preventDefault(); hourlyClear()"
+              (click)="hourlyClear()"
             >
               Clear
             </div>
@@ -124,7 +124,7 @@
             </div>
             <div
               class="font-medium pointer-events-auto"
-              (click)="$event.preventDefault(); skillsClear()"
+              (click)="skillsClear()"
             >
               Clear
             </div>
@@ -144,7 +144,7 @@
             <div
               *ngIf="skillsForm.length < 10"
               class="cursor-pointer font-medium"
-              (click)="$event.preventDefault(); seeMoreClick()"
+              (click)="seeMoreClick()"
             >
               See More
             </div>
@@ -165,7 +165,7 @@
             </div>
             <div
               class="font-medium pointer-events-auto"
-              (click)="$event.preventDefault(); ratingClear()"
+              (click)="ratingClear()"
             >
               Clear
             </div>

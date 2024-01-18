@@ -19,7 +19,6 @@ export class ResultComponent implements OnInit {
   isLoading: boolean = true
 
   first: number = 0
-
   rows: number = 10
 
   onPageChange(event: PageEvent) {

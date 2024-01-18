@@ -8,10 +8,18 @@ import { HeroService } from 'app/shared/constants/home-page'
 })
 export class HeroComponent {
   heroSection = HeroService
+  searchInput: string = ''
 
   constructor(private router: Router) {}
 
-  submitSearchQuery(value: string) {
+  submitSearchQuery() {
+    if (this.searchInput)
+      this.router.navigate(['search'], {
+        queryParams: { query: this.searchInput },
+      })
+  }
+
+  submitSearchTag(value: string) {
     if (value)
       this.router.navigate(['search'], {
         queryParams: { query: value },

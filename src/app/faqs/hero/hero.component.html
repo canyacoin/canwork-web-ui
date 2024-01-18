@@ -21,17 +21,13 @@
             class="bg-transparent md:bg-white md:rounded-[12px] overflow-hidden flex flex-col gap-[16px] md:gap-[30px] md:flex-row md:justify-between"
           >
             <input
+              [(ngModel)]="searchInput"
               type="text"
               class="py-[10px] px-[10px] text-center md:text-left md:pl-[40px] rounded-[10px] placeholder:text-G500 placeholder:text-b1 outline-none w-full placeholder:line-clamp-1"
               placeholder="{{ heroSection.searchPlaceholder }}"
-              #searchInput
-              (keydown.enter)="submitSearchQuery(searchInput.value)"
+              (keydown.enter)="submitSearchQuery()"
             />
-            <div
-              (click)="
-                $event.preventDefault(); submitSearchQuery(searchInput.value)
-              "
-            >
+            <div (click)="submitSearchQuery()">
               <basic-button
                 [type]="2"
                 [title]="heroSection.buttonText1"

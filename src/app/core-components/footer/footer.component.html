@@ -28,7 +28,7 @@
                 <div
                   *ngFor="let category of section"
                   class="w-max text-b2 md:text-b1 text-G700 hover:underline underline-offset-2 cursor-pointer"
-                  (click)="$event.preventDefault(); submitSearchQuery(category)"
+                  (click)="submitSearchQuery(category)"
                 >
                   {{ category }}
                 </div>

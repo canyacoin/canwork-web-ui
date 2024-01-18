@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Output } from '@angular/core'
-import { HeroService } from 'app/shared/constants/faqs-page'
+import { HeroService } from 'app/shared/constants/blog'
+
 
 @Component({
-  selector: 'faqs-hero',
+  selector: 'blog-hero',
   templateUrl: './hero.component.html',
 })
 export class HeroComponent {
@@ -13,4 +14,13 @@ export class HeroComponent {
   submitSearchQuery() {
     this.searchQuerySubmitted.emit(this.searchInput)
   }
+
+  submitSearchTag(value: string) {
+    if (value) {
+      this.searchInput = value
+      this.searchQuerySubmitted.emit(value)
+    }
+  }
+
+  constructor() {}
 }
