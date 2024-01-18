@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Input } from '@angular/core'
 
 interface PageEvent {
   first: number
@@ -12,8 +12,9 @@ interface PageEvent {
   templateUrl: './result.component.html',
 })
 export class ResultComponent implements OnInit {
+  @Input() profileCards: any[]
+
   skCards = new Array(12)
-  profileCards = new Array(0)
   isGrid: boolean = true
   isLoading: boolean = true
 
@@ -32,9 +33,6 @@ export class ResultComponent implements OnInit {
   ngOnInit() {
     setTimeout(() => {
       this.isLoading = false
-      this.profileCards.push({
-        name: 'test',
-      })
     }, 500) // fake timeout
   }
 }
