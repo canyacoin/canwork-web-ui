@@ -1,7 +1,10 @@
 <section>
   <div class="flex justify-between items-center">
     <div class="text-G700 text-h6 font-medium">
-      {{ numberOfFreelancers }} Freelancers
+      {{ profileCards.length }} Freelancer<span
+        *ngIf="profileCards.length !== 1"
+        >s</span
+      >
     </div>
     <switch-grid-list-button
       [isGrid]="isGrid"

@@ -12,7 +12,6 @@ interface PageEvent {
   templateUrl: './result.component.html',
 })
 export class ResultComponent implements OnInit {
-  numberOfFreelancers = 3532
   skCards = new Array(12)
   profileCards = new Array(0)
   isGrid: boolean = true
@@ -33,6 +32,9 @@ export class ResultComponent implements OnInit {
   ngOnInit() {
     setTimeout(() => {
       this.isLoading = false
-    }, 5000)
+      this.profileCards.push({
+        name: 'test',
+      })
+    }, 500) // fake timeout
   }
 }
