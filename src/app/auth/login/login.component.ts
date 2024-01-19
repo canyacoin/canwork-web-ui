@@ -1,4 +1,4 @@
-import { Component, OnInit, Directive } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 
 import { HttpHeaders } from '@angular/common/http'
 
@@ -9,11 +9,12 @@ import { FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular'
 import { User } from '../../core-classes/user'
 import { AuthService } from '../../core-services/auth.service'
 import { UserService } from '../../core-services/user.service'
+// spinner
+import { NgxSpinnerService } from 'ngx-spinner'
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
   loading = false
@@ -28,15 +29,22 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private afAuth: AngularFireAuth,
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private spinner: NgxSpinnerService
   ) {}
 
   ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/'
+    this.spinner.show()
+    setTimeout(() => {
+      /** spinner ends after 2 seconds */
+      this.spinner.hide()
+    }, 2000)
   }
 
   onFirebaseLogin(signInSuccessData: FirebaseUISignInSuccessWithAuthResult) {
     this.loading = true
+    this.spinner.hide()
     const user = signInSuccessData.authResult.user
     const rnd = Math.floor(Math.random() * 109) + 1
     const parsedUser = new User({
