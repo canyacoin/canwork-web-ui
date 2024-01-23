@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment'
 import { User, UserCategory } from '../core-classes/user'
 import { AuthService } from '../core-services/auth.service'
 import { NavService } from '../core-services/nav.service'
+import { Location } from '@angular/common'
 
 @Component({
   selector: 'app-search-page',
@@ -28,6 +29,8 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   
   reuse ais custom styling classes from css
   */
+  searchInput: string = '' // the new search input text, this is the model on parent
+
   smallCards = true
   query: string
   categoryQuery = ''
@@ -63,12 +66,15 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private navService: NavService,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     this.routeSub = this.activatedRoute.queryParams.subscribe((params) => {
-      if (this.query === '') {
+      this.searchInput = params['query']
+      // for now this is only text, later this will be the full stringified algolia query
+      /*if (this.query === '') {
         this.query = params['query']
-      }
+      }*/
       if (this.categoryFilters.length < 1 && params['category'] !== '') {
         this.categoryFilters.push(params['category'])
       }
@@ -94,6 +100,9 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     this.algoliaSearchConfig = {
       indexName: this.algoliaIndex,
       searchClient,
+      /*
+      // needed only for instant search, not needed anymore
+      
       routing: {
         stateMapping: {
           routeToState(routeState: any) {
@@ -117,7 +126,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
             return generatedQuery
           },
         },
-      },
+      },*/
     }
     this.authSub = this.auth.currentUser$.subscribe((user: User) => {
       if (this.currentUser !== user) {
@@ -136,6 +145,19 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     setTimeout(() => {
       this.loading = false
     }, 400)
+  }
+
+  // two way binding, event from child (user input)
+  onSearchInputChange(searchInput: string) {
+    this.searchInput = searchInput
+    // keep in sync also address bar, without refreshing page
+    this.location.go('search', 'query=' + this.searchInput)
+
+    /*
+    todo refresh the algolia query, with a 500ms latency to avoid overloading
+    and a searchInProgress flag to avoid overalapping multiple calls
+    handle also the search on explicit button input for faster click users
+    */
   }
 
   ngOnDestroy() {

@@ -19,6 +19,7 @@
               class="py-[10px] px-[10px] md:pl-[40px] rounded-[10px] placeholder:text-G500 placeholder:text-b1 outline-none w-full placeholder:line-clamp-1"
               placeholder="{{ heroSection.searchPlaceholder }}"
               (keydown.enter)="submitSearchQuery()"
+              (input)="onSearchInputChange($event.target.value)"
             />
             <div (click)="submitSearchQuery()">
               <basic-button

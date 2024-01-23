@@ -1,5 +1,8 @@
 <main class="font-sans">
-  <search-hero />
+  <search-hero
+    [searchInput]="searchInput"
+    (searchInputChange)="onSearchInputChange($event)"
+  />
   <section class="flex justify-center bg-white">
     <div
       class="max-w-[1440px] w-full py-[40px] px-[24px] md:py-[40px] md:px-[64px] flex flex-col-reverse xl:flex-row xl:justify-between gap-[30px]"
