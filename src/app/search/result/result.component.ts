@@ -13,10 +13,10 @@ interface PageEvent {
 })
 export class ResultComponent implements OnInit {
   @Input() profileCards: any[]
+  @Input() isLoading: boolean = true
 
   skCards = new Array(12)
   isGrid: boolean = true
-  isLoading: boolean = true
 
   first: number = 0
   rows: number = 10
@@ -30,9 +30,5 @@ export class ResultComponent implements OnInit {
     this.isGrid = isGridView
   }
 
-  ngOnInit() {
-    setTimeout(() => {
-      this.isLoading = false
-    }, 500) // fake timeout
-  }
+  ngOnInit() {}
 }

@@ -22,9 +22,9 @@ export class AppComponent implements OnInit {
     this.spinner.show()
 
     setTimeout(() => {
-      /** spinner ends after 2 seconds */
+      /** spinner ends after 500ms */
       this.spinner.hide()
-    }, 2000)
+    }, 500)
 
     this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
@@ -32,6 +32,7 @@ export class AppComponent implements OnInit {
       }
       window.scrollTo(0, 0)
       /** spinner ends after NavigationEnd event */
+      this.spinner.hide()
     })
     this.notifyAddAddressIfNecessary()
   }

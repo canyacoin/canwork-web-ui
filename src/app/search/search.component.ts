@@ -134,17 +134,17 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     })
     this.navService.setHideSearchBar(true)
-
-    // debug test
-    this.hits.push({
-      name: 'test',
-    })
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.loading = false
-    }, 400)
+
+      // debug test
+      this.hits.push({
+        name: 'test',
+      })
+    }, 4000)
   }
 
   // two way binding, event from child (user input)
