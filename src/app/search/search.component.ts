@@ -30,6 +30,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   reuse ais custom styling classes from css
   */
   searchInput: string = '' // the new search input text, this is the model on parent
+  currentSearchInput: string = '' // the current searched on field, algolia results
 
   smallCards = true
   query: string
@@ -197,6 +198,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         // newArray.sort((a, b) => b.ratingCount - a.ratingCount)
         this.hits = newArray // update
         this.loading = false
+        this.currentSearchInput = this.searchInput // to avoid searching 2 times same string
       })
       .catch((err) => {
         this.loading = false
@@ -210,6 +212,11 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.searchInput = searchInput
     // keep in sync also address bar, without refreshing page
     this.location.go('search', 'query=' + this.searchInput)
+
+    if (this.currentSearchInput == this.searchInput) {
+      console.log('up to date') // debug, check this well better later when we add other search facets
+      return // already up to date
+    }
 
     /*
     todo refresh the algolia query, with a 500ms latency to avoid overloading

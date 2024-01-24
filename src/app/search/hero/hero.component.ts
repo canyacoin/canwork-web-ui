@@ -19,12 +19,10 @@ export class HeroComponent {
   }
 
   submitSearchQuery() {
-    /* move to parent
-    if (this.searchInput)
-      this.router.navigate(['search'], {
-        queryParams: { query: this.searchInput },
-      })
-    */
+    // explicit click the search button by user
+
+    // same behaviour of on change
+    this.searchInputChange.emit(this.searchInput) // notify parent and algolia handler
   }
 
   submitSearchTag(value: string) {
