@@ -116,6 +116,6 @@ export class FeatureFreelancersComponent {
       .catch((err) => {
         console.log(err)
       })
-    console.log(this.tempProviderArray)
+    //console.log(this.tempProviderArray)
   }
 }

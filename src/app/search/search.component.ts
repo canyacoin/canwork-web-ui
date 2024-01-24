@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import * as union from 'lodash/union'
 import { LabelType, Options } from 'ngx-slider-v2'
@@ -14,12 +14,12 @@ import { Location } from '@angular/common'
   selector: 'app-search-page',
   templateUrl: './search.component.html',
 })
-export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SearchComponent implements OnInit, OnDestroy {
   allProviders: User[] = []
   filteredProviders: User[] = []
   categoryFilters = []
   chosenFilters = []
-  hits = [] // TODO
+  hits = [] // the new hits array, injected into result component
   /*
   invoke directly algolia search api
   create input field and handle on change
@@ -55,12 +55,14 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   routeSub: Subscription
   providerSub: Subscription
   portfolioSub: Subscription
-  algoliaIndex = environment.algolia.indexName
-  rendering = false
+  //algoliaIndex = environment.algolia.indexName
+  // rendering = false // obsolete
   inMyTimezone = true
-  algoliaSearchConfig: any
+  //algoliaSearchConfig: any
   authSub: any
   currentUser: any
+  private algoliaSearch // new
+  private algoliaSearchClient // new
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -80,27 +82,30 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
       }
 
       if (!this.loading) {
-        this.rendering = true
-        setTimeout(() => {
-          this.rendering = false
-        })
+        //this.rendering = true
+        //setTimeout(() => {
+        //  this.rendering = false
+        //})
         if (this.containsClass('menu-overlay', 'activate-menu')) {
-          this.toggleMenuOverlay()
+          this.toggleMenuOverlay() // obsolete?
         }
       }
     })
   }
 
   async ngOnInit() {
-    const searchClient = algoliasearch(
+    this.algoliaSearch = algoliasearch(
       environment.algolia.appId,
       environment.algolia.apiKey
     )
-    const self = this
-    this.algoliaSearchConfig = {
+    this.algoliaSearchClient = this.algoliaSearch.initIndex(
+      environment.algolia.indexName
+    )
+
+    /*this.algoliaSearchConfig = {
       indexName: this.algoliaIndex,
       searchClient,
-      /*
+      
       // needed only for instant search, not needed anymore
       
       routing: {
@@ -126,25 +131,78 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
             return generatedQuery
           },
         },
-      },*/
-    }
+      },
+    }*/
     this.authSub = this.auth.currentUser$.subscribe((user: User) => {
       if (this.currentUser !== user) {
         this.currentUser = user
       }
     })
-    this.navService.setHideSearchBar(true)
+    this.navService.setHideSearchBar(true) // obsolete?
+
+    /*
+    now sync the search with algolia if we have a search query
+    if we don't have a search query we have to show a different message,
+    different from no results
+    */
+    this.algoliaQuery(true) // firstRun
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => {
+  algoliaQuery(firstRun) {
+    if (!this.searchInput) {
       this.loading = false
+      return
+    }
+    if (!firstRun && this.loading) return // avoid overlapping searches
+    this.loading = true
+    let newArray = []
+    this.algoliaSearchClient
+      .search(this.searchInput)
+      .then((res) => {
+        const result = res.hits
+        //console.log(result)
+        for (let i = 0; i < result.length; i++) {
+          if (result[i]) {
+            let avatar = result[i].avatar // current, retrocomp
+            //console.log(result[i])
+            if (
+              result[i].compressedAvatarUrl &&
+              result[i].compressedAvatarUrl != 'new'
+            ) {
+              // keep same object structure
+              // use compress thumbed if exist and not a massive update (new)
+              avatar = {
+                uri: result[i].compressedAvatarUrl,
+              }
+            }
 
-      // debug test
-      this.hits.push({
-        name: 'test',
+            const provider = {
+              id: i,
+              address: result[i].address,
+              avatarUri: avatar.uri, // new
+              skillTags: result[i].skillTags || [],
+              title: result[i].title,
+              name: result[i].name,
+              category: result[i].category,
+              timezone: result[i].timezone,
+              hourlyRate: result[i].hourlyRate || 0,
+              ratingAverage: result[i].rating?.average | 0,
+              ratingCount: result[i].rating?.count | 0,
+              slug: result[i].slug,
+              verified: result[i].verified,
+            }
+            newArray.push(provider)
+          }
+        }
+        // newArray.sort((a, b) => b.ratingCount - a.ratingCount)
+        this.hits = newArray // update
+        this.loading = false
       })
-    }, 4000)
+      .catch((err) => {
+        this.loading = false
+        console.log(err)
+      })
+    //console.log(this.tempProviderArray)
   }
 
   // two way binding, event from child (user input)
@@ -158,6 +216,9 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     and a searchInProgress flag to avoid overalapping multiple calls
     handle also the search on explicit button input for faster click users
     */
+    setTimeout(() => {
+      this.algoliaQuery(false) // if another is running this will end immediately
+    }, 500) // 500 ms latency
   }
 
   ngOnDestroy() {
@@ -169,11 +230,11 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
       this.portfolioSub.unsubscribe()
     }
   }
-
+  /* obsolete
   algoliaSearchChanged(query) {
     this.query = String(query)
   }
-
+  */
   isInArray(value, array: any[]) {
     if (array.indexOf(value) > -1) {
       return true
