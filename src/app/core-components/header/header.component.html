@@ -29,7 +29,7 @@
         <div
           class="hidden lg:block w-max h-max"
           *ngIf="!currentUser"
-          [routerLink]="['/atuh']"
+          [routerLink]="['/auth']"
         >
           <link-button
             [type]="isScrolled ? 2 : 1"
@@ -39,8 +39,15 @@
         </div>
         <div
           class="hidden md:block w-max h-max"
+          *ngIf="currentUser"
+          (click)="onLogout()"
+        >
+          <basic-button [type]="1" title="Log out" size="small" />
+        </div>
+        <div
+          class="hidden md:block w-max h-max"
           *ngIf="!currentUser"
-          [routerLink]="['/atuh']"
+          [routerLink]="['/auth']"
         >
           <basic-button
             [type]="1"
@@ -95,10 +102,10 @@
         <div *ngFor="let item of headerSection.website" [routerLink]="item.url">
           <link-button [type]="2" [title]="item.title" />
         </div>
-        <div class="w-max h-max" *ngIf="!currentUser" [routerLink]="['/atuh']">
+        <div class="w-max h-max" *ngIf="!currentUser" [routerLink]="['/auth']">
           <link-button [type]="2" [title]="headerSection.buttonText1" />
         </div>
-        <div class="h-max w-full" *ngIf="!currentUser" [routerLink]="['/atuh']">
+        <div class="h-max w-full" *ngIf="!currentUser" [routerLink]="['/auth']">
           <basic-button
             [type]="1"
             [title]="headerSection.buttonText2"

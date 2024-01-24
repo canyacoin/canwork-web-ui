@@ -1,21 +1,18 @@
-<main class="main-content bg-gray">
-  <section class="section bg-gray py-20">
-    <div
-      *ngIf="loading"
-      class="container d-flex h-100 flex-column justify-content-center"
-    >
-      <img src="assets/img/loader.svg" height="36px" alt="Loader" />
-    </div>
-    <div
-      *ngIf="!loading"
-      class="login-section container min-70 center-block text-center"
-    >
-      <div class="other-login text-center">
-        <h5 style="width: 100%;">Sign in to CanWork</h5>
+<section>
+  <ngx-spinner
+    bdColor="rgba(51,51,51,0.8)"
+    color="#3AC2FF"
+    type="ball-clip-rotate-pulse"
+    *ngIf="loading"
+  ></ngx-spinner>
+  <div class="h-dvh bg-G100 py-[80px] flex justify-center items-center">
+    <div *ngIf="!loading">
+      <div class="text-center">
+        <div class="text-h6 md:text-h5">Sign in to CanWork</div>
         <firebase-ui
           (signInSuccessWithAuthResult)="onFirebaseLogin($event)"
         ></firebase-ui>
       </div>
     </div>
-  </section>
-</main>
+  </div>
+</section>
