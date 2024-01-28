@@ -7,6 +7,10 @@ export const HeaderService = {
   buttonText3: 'Post a Job',
   website: [
     {
+      title: 'Inbox',
+      url: '/inbox/chat',
+    },
+    {
       title: 'Job Board',
       url: '/jobs',
     },

@@ -2,6 +2,9 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+@import 'primeng/resources/themes/lara-light-blue/theme.css';
+@import 'primeng/resources/primeng.css';
+
 $color-ok-rating: #33ccff !default;
 
 @mixin circle-headshot {
@@ -11,4 +14,31 @@ $color-ok-rating: #33ccff !default;
     display: inline-block;
     background-repeat: no-repeat;
   }
+}
+
+.p-menu.p-menu-overlay {
+  top: 70px !important;
+}
+
+/* Scrollbar */
+/* width */
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #5bccff;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #3ac2ff;
 }

@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http'
-import { NgModule } from '@angular/core'
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 // import { NgAisModule } from 'angular-instantsearch'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
@@ -43,7 +43,11 @@ import { PublicJobService } from './core-services/public-job.service'
 import { LedgerService } from '@service/ledger.service'
 import { WindowService } from './shared/services/window.service'
 
+import { ConfirmPopupModule } from 'primeng/confirmpopup'
+import { ToastModule } from 'primeng/toast'
+
 @NgModule({
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
     AppComponent,
     PublicJobComponent,
@@ -79,6 +83,8 @@ import { WindowService } from './shared/services/window.service'
     ToastrModule.forRoot({
       positionClass: 'toast-top-center',
     }),
+    ToastModule,
+    ConfirmPopupModule,
   ],
   exports: [
     /*FilterPipeModule*/

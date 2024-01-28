@@ -2,7 +2,7 @@
   <div
     class="fixed bg-transparent w-full flex justify-center items-center px-[16px] pb-[12px] top-0 z-40 transition-all duration-300"
     [ngClass]="{
-      'bg-white shadow-md pt-[12px]': isScrolled,
+      'bg-white shadow-md pt-[12px]': isScrolled || isTransfer,
       'pt-[24px]': !isScrolled
     }"
   >
@@ -10,7 +10,9 @@
       <div class="cursor-pointer" [routerLink]="['/home']">
         <img
           src="{{
-            isScrolled ? headerSection.logoGraySrc : headerSection.logoSrc
+            isScrolled || isTransfer
+              ? headerSection.logoGraySrc
+              : headerSection.logoSrc
           }}"
           class="w-[140px] h-[40px] select-none"
         />
@@ -18,10 +20,26 @@
       <div class="hidden lg:flex items-center gap-[40px]">
         <div *ngFor="let item of headerSection.website" [routerLink]="item.url">
           <link-button
-            [type]="isScrolled ? 2 : 1"
+            *ngIf="item.title !== 'Inbox'; else showinbox"
+            [type]="isScrolled || isTransfer ? 2 : 1"
             [title]="item.title"
             size="small"
           />
+          <ng-template #showinbox>
+            <div class="flex">
+              <link-button
+                [type]="isScrolled || isTransfer ? 2 : 1"
+                title="Inbox"
+                size="small"
+              />
+              <i
+                class="pi pi-bell text-2xl ml-2"
+                pBadge
+                severity="danger"
+                [value]="unreadMsgCount"
+              ></i>
+            </div>
+          </ng-template>
         </div>
       </div>
 
@@ -32,17 +50,25 @@
           [routerLink]="['/auth']"
         >
           <link-button
-            [type]="isScrolled ? 2 : 1"
+            [type]="isScrolled || isTransfer ? 2 : 1"
             [title]="headerSection.buttonText1"
             size="small"
           />
         </div>
-        <div
-          class="hidden md:block w-max h-max"
-          *ngIf="currentUser"
-          (click)="onLogout()"
-        >
-          <basic-button [type]="1" title="Log out" size="small" />
+        <div class="hidden md:flex w-max h-max" *ngIf="currentUser">
+          <!-- <basic-button [type]="1" title="Log out" size="small" /> -->
+          <div
+            *ngIf="!bAddress; else showAddress"
+            [routerLink]="['/wallet-bnb']"
+          >
+            <basic-button [type]="2" title="Connect Wallet" size="small" />
+          </div>
+
+          <ng-template #showAddress>
+            <div [routerLink]="['/wallet-bnb/assets']">
+              {{ bAddress.slice(0, 6) }}...{{ bAddress.slice(-3) }}
+            </div>
+          </ng-template>
         </div>
         <div
           class="hidden md:block w-max h-max"
@@ -62,23 +88,43 @@
             size="small"
           />
         </div>
+        <div class="card flex justify-content-center">
+          <p-toast></p-toast>
+          <p-menu #menu [model]="items" [popup]="true"></p-menu>
+          <div (click)="menu.toggle($event)" class="cursor-pointer">
+            <app-avatar
+              *ngIf="currentUser"
+              [user]="currentUser"
+              [customClass]="'avatar'"
+            ></app-avatar>
+          </div>
+        </div>
         <div
           class="block md:hidden cursor-pointer"
           (click)="onHamburguerClick()"
         >
           <div
             class="w-[34px] h-[3px] rounded-full m-[5px]"
-            [ngClass]="{ 'bg-black': isScrolled, 'bg-white': !isScrolled }"
+            [ngClass]="{
+              'bg-black': isScrolled || isTransfer,
+              'bg-white': !isScrolled || isTransfer
+            }"
             [@hamburguerX]="isHamburguer ? 'hamburguer' : 'topX'"
           ></div>
           <div
             class="w-[34px] h-[3px] rounded-full m-[5px]"
-            [ngClass]="{ 'bg-black': isScrolled, 'bg-white': !isScrolled }"
+            [ngClass]="{
+              'bg-black': isScrolled || isTransfer,
+              'bg-white': !isScrolled || isTransfer
+            }"
             [@hamburguerX]="isHamburguer ? 'hamburguer' : 'hide'"
           ></div>
           <div
             class="w-[34px] h-[3px] rounded-full m-[5px]"
-            [ngClass]="{ 'bg-black': isScrolled, 'bg-white': !isScrolled }"
+            [ngClass]="{
+              'bg-black': isScrolled || isTransfer,
+              'bg-white': !isScrolled || isTransfer
+            }"
             [@hamburguerX]="isHamburguer ? 'hamburguer' : 'bottomX'"
           ></div>
         </div>
