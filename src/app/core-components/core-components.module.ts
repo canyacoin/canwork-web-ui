@@ -45,8 +45,12 @@ import { SkProfileCardComponent } from './skeletons/sk-profile-card/sk-profile-c
 import { BadgeComponent } from './badge/badge.component'
 import { DelTagComponent } from './tag/del-tag/del-tag.component'
 import { StarRatingComponent } from './star-rating/star-rating.component'
-import { JoinCommunityComponent } from './join-community/join-community.component';
+import { JoinCommunityComponent } from './join-community/join-community.component'
 import { PostJobComponent } from './post-job/post-job.component'
+import { MenuModule } from 'primeng/menu'
+import { ToastModule } from 'primeng/toast'
+import { AvatarModule } from 'primeng/avatar'
+import { BadgeModule } from 'primeng/badge'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -67,6 +71,10 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     RouterModule,
     DropzoneModule,
     StarRatingModule.forChild(),
+    MenuModule,
+    ToastModule,
+    AvatarModule,
+    BadgeModule,
   ],
   declarations: [
     AttachmentComponent,

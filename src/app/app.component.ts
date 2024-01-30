@@ -4,17 +4,19 @@ import { ToastrService } from 'ngx-toastr'
 import { AuthService } from '@service/auth.service'
 // spinner
 import { NgxSpinnerService } from 'ngx-spinner'
-
+import { MessageService } from 'primeng/api'
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
+  providers: [MessageService],
 })
 export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private toastr: ToastrService,
     private authService: AuthService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
@@ -41,16 +43,12 @@ export class AppComponent implements OnInit {
     try {
       const noAddress = await this.authService.isAuthenticatedAndNoAddress()
       if (noAddress) {
-        this.toastr.info(
-          'Add BNB Chain (BEP20) wallet to make or receive payments on CanWork.',
-          undefined,
-          {
-            timeOut: 0,
-            extendedTimeOut: 0,
-            positionClass: 'toast-top-full-width',
-            closeButton: true,
-          }
-        )
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Info',
+          detail:
+            'Add BNB Chain (BEP20) wallet to make or receive payments on CanWork.',
+        })
       }
     } catch (error) {}
   }

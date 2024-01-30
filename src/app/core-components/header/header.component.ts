@@ -1,5 +1,8 @@
+import { NgModule } from '@angular/core'
+
 import { animate, style, transition, trigger, state } from '@angular/animations'
 import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Router, NavigationEnd } from '@angular/router'
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
@@ -7,6 +10,7 @@ import { Subscription } from 'rxjs'
 import { BscService, EventTypeBsc } from '@service/bsc.service'
 import { WindowService } from 'app/shared/services/window.service'
 import { HeaderService } from 'app/shared/constants/header'
+import { MessageService, MenuItem } from 'primeng/api'
 
 @Component({
   selector: 'app-header',
@@ -47,12 +51,13 @@ import { HeaderService } from 'app/shared/constants/header'
       ]),
     ]),
   ],
+  providers: [MessageService],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   headerSection = HeaderService
   // flag be consumed by the template
   isHamburguer = true
-
+  items: MenuItem[] | undefined
   onHamburguerClick() {
     this.isHamburguer = !this.isHamburguer
   }
@@ -60,7 +65,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   currentUser: User
   bAddress: string
 
-  hasUnreadMessages = false
+  hasUnreadMessages = true
   unreadMsgCount = 0
   messagesSubscription: Subscription
   routerSub: Subscription
@@ -71,15 +76,62 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   // for scroll effect only
   isScrolled: boolean = false
-
+  isTransfer: boolean
   constructor(
     private afs: AngularFirestore,
     private authService: AuthService,
     private bscService: BscService,
-    private windowService: WindowService
+    private windowService: WindowService,
+    private router: Router,
+    private messageService: MessageService
   ) {}
 
   async ngOnInit() {
+    // Check router
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        const currentRoute = event.url
+        if (
+          currentRoute.includes('/inbox') ||
+          currentRoute.includes('/profile') ||
+          currentRoute.includes('/jobs') ||
+          currentRoute.includes('/wallet-bnb') ||
+          currentRoute.includes('/auth')
+        ) {
+          this.isTransfer = true
+        } else {
+          this.isTransfer = false
+        }
+      }
+    })
+
+    this.items = [
+      {
+        items: [
+          {
+            label: 'Profile',
+            routerLink: '/profile',
+          },
+          {
+            label: 'Edit Profile',
+            routerLink: '/profile',
+            queryParams: { editProfile: 1 },
+          },
+          {
+            label: 'Manage Job',
+            routerLink: '/inbox/jobs',
+            styleClass: 'border-y-1 border',
+          },
+          {
+            label: 'LogOut',
+            styleClass: 'text-R300',
+            command: () => {
+              this.onLogout()
+            },
+          },
+        ],
+      },
+    ]
     // scroll
     this.windowService.getScrollY().subscribe((scrollY) => {
       // Check if the scroll position is greater than 64px
@@ -114,6 +166,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     })
   }
 
+  ToastshowInfo() {
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Info',
+      detail: 'You have unread chat messages on CanWork',
+    })
+  }
+
   async initUser() {
     if (this.currentUser && this.currentUser.address) {
       // console.log(`currentUser: ${this.currentUser.address}`)
@@ -133,15 +193,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.unreadMsgCount = x.length
           this.hasUnreadMessages = x.length > 0
           if (!hadUnread && this.hasUnreadMessages) {
-            // request permission to show desktop notifications
-            if (Notification.permission !== 'granted') {
-              Notification.requestPermission()
-            } else {
-              const notification = new Notification('CanWork', {
-                icon: 'https://app.canwork.io/assets/img/favicon.jpg',
-                body: 'You have unread chat messages on CanWork',
-              })
-            }
+            this.ToastshowInfo()
           }
         },
         (error) => {

@@ -48,8 +48,10 @@
               "node_modules/animate.css/animate.css",
               "node_modules/ngx-toastr/toastr.css",
               "src/styles.scss",
-              "src/assets/massimo/css/primeng.css",
-              "node_modules/ngx-spinner/animations/ball-clip-rotate-pulse.css"
+              "node_modules/ngx-spinner/animations/ball-clip-rotate-pulse.css",
+              "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
+              "node_modules/primeng/resources/primeng.min.css",
+              "src/assets/massimo/css/primeng.css"
             ],
             "scripts": []
           },

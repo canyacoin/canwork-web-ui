@@ -32,6 +32,14 @@
     overflow: hidden;
 }
 
+.p-accordion .p-accordion-content {
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    color: #495057 !important;
+    border-top: 0 !important; 
+    border-radius: 0 !important;
+}
 #search-filter .p-accordion-header-link {
     display: flex;
     flex-direction: row-reverse;
@@ -42,44 +50,72 @@
     border-top: 1px solid #CBD5E1;
 }
 
-#faq-parent .p-accordion-header-link {
+.faq-parent .p-accordion-header-link {
     display: flex;
     flex-direction: row-reverse;
     padding: 12px 0px;
-    border-bottom: 1px solid #1E293B;
+    border: none !important;
+    border-bottom: 1px solid #1E293B !important;
+    outline: none;
+    border-radius: 0;
+}
+.p-accordion .p-accordion-header:not(.p-highlight):not(.p-disabled):hover .p-accordion-header-link{
+    background: transparent !important;
+}
+.p-accordion .p-accordion-header:not(.p-disabled).p-highlight:hover .p-accordion-header-link {
+    background: transparent !important;
+}
+.p-accordion .p-accordion-header:not(.p-disabled) .p-accordion-header-link:focus {
+    box-shadow: none !important;
 }
 
-#faq-parent .p-icon-wrapper svg {
+.p-accordion .p-accordion-header .p-accordion-header-link {
+    background: transparent !important;
+}
+
+.p-accordion p-accordiontab .p-accordion-tab {
+    margin-bottom: 0 !important;
+}
+.faq-parent .p-icon-wrapper svg {
     width: 24px;
     height: 24px;
     color: #1E293B;
 }
 
 /* same effect for faq-parent & faq-children   when the highlight, change the font-weight */
-#faq-parent .p-accordion-header.p-highlight {
-    font-weight: 500;
+
+.faq-parent .p-accordion-header .p-accordion-header-link {
+    font-weight: 400 !important;
+    border-radius: 0px !important;
 }
 
-#faq-parent #faq-children .p-accordion-tab {
+
+.faq-parent .p-accordion-header.p-highlight .p-accordion-header-link {
+    font-weight: 500 !important;
+}
+
+.faq-parent .faq-children .p-accordion-tab {
     padding: 24px;
     background-color: #F1F5F9;
     border-radius: 12px;
     transition: background-color 300ms ease; /* transition effect */
 }
 
-#faq-parent #faq-children .p-accordion-tab.p-accordion-tab-active {
+.faq-parent .faq-children .p-accordion-tab.p-accordion-tab-active {
     background-color: #E2E8F0;
 }
 
-#faq-parent #faq-children .p-accordion-header-link {
+.faq-parent .faq-children .p-accordion-header-link {
     display: flex;
     flex-direction: row-reverse;
     padding: 0px;
     border: none;
+    background-color: transparent;
+    box-shadow: none;
 }
 
 
-#faq-parent #faq-children .p-icon-wrapper svg {
+.faq-parent .faq-children .p-icon-wrapper svg {
     width: 18px;
     height: 18px;
     color: #1E293B;
