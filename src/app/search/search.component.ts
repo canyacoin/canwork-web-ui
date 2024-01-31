@@ -9,6 +9,7 @@ import { User, UserCategory } from '../core-classes/user'
 import { AuthService } from '../core-services/auth.service'
 import { NavService } from '../core-services/nav.service'
 import { Location } from '@angular/common'
+import { providerTypeArray } from 'app/const/providerTypes'
 
 @Component({
   selector: 'app-search-page',
@@ -17,7 +18,6 @@ import { Location } from '@angular/common'
 export class SearchComponent implements OnInit, OnDestroy {
   allProviders: User[] = []
   filteredProviders: User[] = []
-  categoryFilters = []
   chosenFilters = []
   hits = [] // the new hits array, injected into result component
   /*
@@ -31,6 +31,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   */
   searchInput: string = '' // the new search input text, this is the model on parent
   currentSearchInput: string = '' // the current searched on field, algolia results
+  providerFilters = [] // the current active provider type filters (union)
+  currentProviderFilters = [] // the current searched on provider type filters (union)
 
   smallCards = true
   query: string
@@ -78,9 +80,10 @@ export class SearchComponent implements OnInit, OnDestroy {
       /*if (this.query === '') {
         this.query = params['query']
       }*/
-      if (this.categoryFilters.length < 1 && params['category'] !== '') {
-        this.categoryFilters.push(params['category'])
-      }
+
+      //if (this.categoryFilters.length < 1 && params['category'] !== '') {
+      //  this.categoryFilters.push(params['category'])
+      //}
 
       if (!this.loading) {
         //this.rendering = true
@@ -158,7 +161,19 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.loading = true
     let newArray = []
     this.algoliaSearchClient
-      .search(this.searchInput)
+      .search(this.searchInput, {
+        /* https://www.algolia.com/doc/api-reference/search-api-parameters/
+          hitsPerPage and so on
+        */
+        facetFilters: [
+          // test, debug
+          [
+            `category:${providerTypeArray[0].name}`,
+            `category:${providerTypeArray[1].name}`,
+          ], // OR
+        ],
+        // https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/
+      })
       .then((res) => {
         const result = res.hits
         //console.log(result)
@@ -205,6 +220,11 @@ export class SearchComponent implements OnInit, OnDestroy {
         console.log(err)
       })
     //console.log(this.tempProviderArray)
+  }
+
+  // two way binding, event from child (user input)
+  onProviderFiltersChange(providerTypes: any) {
+    // todo
   }
 
   // two way binding, event from child (user input)
@@ -344,12 +364,12 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.resetMenus()
       this.toggleMenuOverlay()
     }
-    this.onResetCategories()
-    this.onSetCategories()
+    //this.onResetCategories()
+    //this.onSetCategories()
     this.onResetHourlyRate()
     this.onSetHourlyRate()
   }
-
+  /*
   onChooseCategory(categoryName) {
     const isInArray = this.categoryFilters.find(function (element) {
       return element === categoryName
@@ -397,7 +417,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       )
     }
   }
-
+*/
   onSetHourlyRate() {
     if (!this.containsClass('hours-menu', 'hide-menu')) {
       this.toggleMenuOverlay()
@@ -421,7 +441,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     ).value
     return value
   }
-
+  /*
   onResetCategories() {
     if (this.categoryFilters.length > 0) {
       this.categoryFilters = []
@@ -433,7 +453,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       }
     }
   }
-
+*/
   onResetHourlyRate() {
     this.maxValue = 300
     this.minValue = 0

@@ -2,6 +2,8 @@
   <search-hero
     [searchInput]="searchInput"
     (searchInputChange)="onSearchInputChange($event)"
+    [providerFilters]="providerFilters"
+    (providerFiltersChange)="onProviderFiltersChange($event)"
   />
   <section class="flex justify-center bg-white">
     <div
