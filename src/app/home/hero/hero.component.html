@@ -35,10 +35,10 @@
           </div>
           <div class="flex flex-wrap justify-center items-center gap-[8px]">
             <div
-              *ngFor="let searchTag of heroSection.searchTags"
-              (click)="submitSearchTag(searchTag)"
+              *ngFor="let provider of providerTypes"
+              (click)="clickProviderTypeTag(provider.name)"
             >
-              <basic-tag [type]="1" [title]="searchTag" />
+              <basic-tag [type]="1" [title]="provider.name" />
             </div>
           </div>
         </div>

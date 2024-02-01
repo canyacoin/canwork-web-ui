@@ -18,7 +18,7 @@ export class BasicTagComponent {
       style +=
         'bg-blue-10 hover:bg-blue-50 active:bg-blue-500 text-C800 border-none'
     else if (this.type === 3)
-      style += 'bg-blue-50 hover:bg-blue-70 text-white border-white border-1'
+      style += 'bg-blue-50 hover:bg-blue-70 text-white border-none'
 
     return style
   }

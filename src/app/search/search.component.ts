@@ -9,7 +9,6 @@ import { User, UserCategory } from '../core-classes/user'
 import { AuthService } from '../core-services/auth.service'
 import { NavService } from '../core-services/nav.service'
 import { Location } from '@angular/common'
-import { providerTypeArray } from 'app/const/providerTypes'
 
 @Component({
   selector: 'app-search-page',
@@ -30,15 +29,16 @@ export class SearchComponent implements OnInit, OnDestroy {
   reuse ais custom styling classes from css
   */
   searchInput: string = '' // the new search input text, this is the model on parent
-  currentSearchInput: string = '' // the current searched on field, algolia results
   providerFilters = [] // the current active provider type filters (union)
-  currentProviderFilters = [] // the current searched on provider type filters (union)
+  currentQueryString: string = '' // the current search on query parameters combination
+  noSearchParams = false // there are no search params, we have to render this notice
+  // todo inject into results component
 
   smallCards = true
   query: string
   categoryQuery = ''
   hourlyQuery = ''
-  loading = true
+  loading = false
   minValue = 0
   maxValue = 300
   options: Options = {
@@ -75,8 +75,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     private location: Location
   ) {
     this.routeSub = this.activatedRoute.queryParams.subscribe((params) => {
-      this.searchInput = params['query']
-      // for now this is only text, later this will be the full stringified algolia query
+      this.searchInput = params['query'] || ''
+      this.providerFilters = JSON.parse(params['providers'] || '[]')
+      // this is the full stringified algolia query
       /*if (this.query === '') {
         this.query = params['query']
       }*/
@@ -149,31 +150,40 @@ export class SearchComponent implements OnInit, OnDestroy {
     if we don't have a search query we have to show a different message,
     different from no results
     */
-    this.algoliaQuery(true) // firstRun
+    // todo, get current query from url
+    let currentPath = this.location.path()
+    let splittedPath = currentPath.split('?')
+    let currentQuery = splittedPath[splittedPath.length - 1]
+    //console.log("currentQuery: "+currentQuery);
+
+    this.algoliaQuery(currentQuery)
   }
 
-  algoliaQuery(firstRun) {
-    if (!this.searchInput) {
+  algoliaQuery(newQuery) {
+    if (!this.searchInput && this.providerFilters.length == 0) {
       this.loading = false
+      this.noSearchParams = true
       return
     }
-    if (!firstRun && this.loading) return // avoid overlapping searches
+    this.noSearchParams = false
+    if (this.loading) return // avoid overlapping searches
     this.loading = true
     let newArray = []
+    let algoliaSearchObject = <any>{}
+    /* 
+      https://www.algolia.com/doc/api-reference/search-api-parameters/
+      hitsPerPage and so on
+    */
+    if (this.providerFilters.length > 0) {
+      // https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/
+      algoliaSearchObject.facetFilters = [[]]
+      this.providerFilters.forEach((providerName) => {
+        algoliaSearchObject.facetFilters[0].push(`category:${providerName}`)
+      }) // OR
+    }
+
     this.algoliaSearchClient
-      .search(this.searchInput, {
-        /* https://www.algolia.com/doc/api-reference/search-api-parameters/
-          hitsPerPage and so on
-        */
-        facetFilters: [
-          // test, debug
-          [
-            `category:${providerTypeArray[0].name}`,
-            `category:${providerTypeArray[1].name}`,
-          ], // OR
-        ],
-        // https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/
-      })
+      .search(this.searchInput, algoliaSearchObject)
       .then((res) => {
         const result = res.hits
         //console.log(result)
@@ -213,7 +223,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         // newArray.sort((a, b) => b.ratingCount - a.ratingCount)
         this.hits = newArray // update
         this.loading = false
-        this.currentSearchInput = this.searchInput // to avoid searching 2 times same string
+        this.currentQueryString = newQuery // to avoid searching 2 times same string
       })
       .catch((err) => {
         this.loading = false
@@ -222,30 +232,55 @@ export class SearchComponent implements OnInit, OnDestroy {
     //console.log(this.tempProviderArray)
   }
 
-  // two way binding, event from child (user input)
-  onProviderFiltersChange(providerTypes: any) {
-    // todo
+  syncAddressBar() {
+    let newQueryString = `query=${this.searchInput}&providers=${JSON.stringify(
+      this.providerFilters
+    )}`
+    this.location.go('search', newQueryString)
+    return newQueryString
+  }
+
+  refreshResultsIfNeeded(newQuery) {
+    // handle also the encode uri scenario when accessing directly the url
+    if (
+      this.currentQueryString != newQuery &&
+      this.currentQueryString != encodeURI(newQuery)
+    ) {
+      // cool, we have to refresh search
+
+      /*
+      refresh the algolia query, with a 400ms latency to avoid overloading
+      and a searchInProgress flag to avoid overalapping multiple calls
+      handle also the search on explicit button input for faster click users
+      */
+      setTimeout(() => {
+        this.algoliaQuery(newQuery) // not first invocation
+        // if another is running this will end immediately
+      }, 400) // 500 ms latency
+    } else {
+      console.log('up to date') // debug, check this well better later when we add other search facets
+    }
   }
 
   // two way binding, event from child (user input)
   onSearchInputChange(searchInput: string) {
     this.searchInput = searchInput
     // keep in sync also address bar, without refreshing page
-    this.location.go('search', 'query=' + this.searchInput)
+    const newQueryString = this.syncAddressBar()
 
-    if (this.currentSearchInput == this.searchInput) {
-      console.log('up to date') // debug, check this well better later when we add other search facets
-      return // already up to date
-    }
+    this.refreshResultsIfNeeded(newQueryString)
+  }
 
-    /*
-    todo refresh the algolia query, with a 500ms latency to avoid overloading
-    and a searchInProgress flag to avoid overalapping multiple calls
-    handle also the search on explicit button input for faster click users
-    */
-    setTimeout(() => {
-      this.algoliaQuery(false) // if another is running this will end immediately
-    }, 500) // 500 ms latency
+  // two way binding, event from child (user input)
+  onProviderFiltersChange(providerTypes: any) {
+    let sortedProviders = providerTypes
+    sortedProviders = providerTypes.sort() // sort to have a predictable string
+    this.providerFilters = sortedProviders
+
+    // keep in sync also address bar, without refreshing page
+    const newQueryString = this.syncAddressBar()
+
+    this.refreshResultsIfNeeded(newQueryString)
   }
 
   ngOnDestroy() {
