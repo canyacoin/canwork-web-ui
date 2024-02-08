@@ -12515,10 +12515,10 @@ pretty-quick@^3.1.3:
     mri "^1.1.5"
     multimatch "^4.0.0"
 
-primeng@^15.4.1:
-  version "15.4.1"
-  resolved "https://registry.yarnpkg.com/primeng/-/primeng-15.4.1.tgz#a2a3eae9b557ba43cdedd32e8ec71d018f543b4c"
-  integrity sha512-j2unOQZk6756l6SgkzcmlHF6JlawF0bIjKTgAPWwT+S5RYeWEjpCPg/ABV8TylwW7CTNQX2oCHbyqCAuhtr++w==
+primeng@16.9.1:
+  version "16.9.1"
+  resolved "https://registry.yarnpkg.com/primeng/-/primeng-16.9.1.tgz#50ee3ed304633c1c5a8ea155f6c0c8be9de7b85c"
+  integrity sha512-dCkvKoV62xDEyeGaEm8B0qncdKWNz4mDU/Camnr27AafaDNGV0lCA29imgJvZPEmJTmC2wDhtedg7Syfwz4UqA==
   dependencies:
     tslib "^2.3.0"
 

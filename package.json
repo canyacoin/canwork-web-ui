@@ -68,7 +68,7 @@
     "ngx-toastr": "14.3.0",
     "observable-input": "^2.0.1",
     "os-browserify": "^0.3.0",
-    "primeng": "^15.4.1",
+    "primeng": "16.9.1",
     "ramda": "^0.26.1",
     "random-js": "^2.1.0",
     "randomcolor": "^0.5.3",

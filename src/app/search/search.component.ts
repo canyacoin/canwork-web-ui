@@ -254,7 +254,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       handle also the search on explicit button input for faster click users
       */
       setTimeout(() => {
-        this.algoliaQuery(newQuery) // not first invocation
+        this.algoliaQuery(newQuery)
         // if another is running this will end immediately
       }, 400) // 500 ms latency
     } else {
