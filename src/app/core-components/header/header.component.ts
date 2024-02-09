@@ -118,7 +118,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             queryParams: { editProfile: 1 },
           },
           {
-            label: 'Manage Job',
+            label: 'Manage Jobs',
             routerLink: '/inbox/jobs',
             styleClass: 'border-y-1 border',
           },

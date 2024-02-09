@@ -9,7 +9,7 @@
       *ngIf="!pageLoaded"
       class="container d-flex h-100 flex-column justify-content-center"
     >
-      <img src="assets/img/loader.svg" height="36px" alt="Loader" />
+      <img src="assets/img/loader.svg" style="height: 36px" alt="Loader" />
     </div>
     <div id="direct-job" *ngIf="pageLoaded && !isShareable">
       <div *ngIf="!sent && recipient" class="section pt-0 bg-grey pb-30">
@@ -203,7 +203,7 @@
                       </div>
                     </div>
 
-                    <div class="form-group  canya-prefilled">
+                    <div class="form-group canya-prefilled">
                       <label>Type of work *</label>
                       <br />
                       <div class="row ml-0 mr-0">
@@ -213,7 +213,7 @@
                         >
                           <button
                             type="button"
-                            style="width:100%"
+                            style="width: 100%"
                             (click)="setWorkType(type)"
                             class="btn btn-primary"
                             [ngClass]="{
@@ -269,7 +269,7 @@
                             />
                             <div
                               class="input-group-append"
-                              style=" margin-top: 5px; margin-right: 10px;"
+                              style="margin-top: 5px; margin-right: 10px"
                             >
                               <span class="input-group-text" id="basic-addon2"
                                 >Total hours</span
@@ -388,7 +388,7 @@
                     <img
                       *ngIf="isSending"
                       src="assets/img/loader.svg"
-                      height="36px"
+                      style="height: 36px"
                       alt="CanYa Coin"
                     />
                     <button
@@ -461,7 +461,7 @@
             <h2 *ngIf="editing" class="fw-600">Edit a Job Post</h2>
           </header>
           <div class="row">
-            <div class="col-12 col-lg-12  bg-white">
+            <div class="col-12 col-lg-12 bg-white">
               <div class="align-self-center align-items-center my-10">
                 <form
                   [formGroup]="shareableJobForm"
@@ -739,7 +739,7 @@
                                 </div>
                                 <div
                                   class="col-lg-8 col-sm-10 col-12 text-left"
-                                  style="white-space: initial;"
+                                  style="white-space: initial"
                                 >
                                   <p>{{ type.name }}</p>
                                 </div>
@@ -813,9 +813,9 @@
                           *ngIf="
                             !shareableJobForm.controls.deadline.valid &&
                             shareableJobForm.controls.deadline.dirty &&
-                            (shareableJobForm.controls.deadline.errors &&
+                            shareableJobForm.controls.deadline.errors &&
                               !shareableJobForm.controls.deadline.errors
-                                .pastDueDate)
+                                .pastDueDate
                           "
                           class="text-primary text-wrap"
                           >Deadline is required.</small
@@ -1043,7 +1043,7 @@
                         <img
                           *ngIf="isSending"
                           src="assets/img/loader.svg"
-                          height="36px"
+                          style="height: 36px"
                           alt="CanYa Coin"
                         />
                       </div>

@@ -2,12 +2,12 @@
   *ngIf="!loaded"
   class="container d-flex h-100 flex-column justify-content-center"
 >
-  <img src="assets/img/loader.svg" height="36px" alt="Loader" />
+  <img src="assets/img/loader.svg" style="height: 36px" alt="Loader" />
 </div>
 <div *ngIf="loaded" [hidden]="!isMyProfile && allPortfolioItems.length < 1">
   <div
     class="card"
-    style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px;"
+    style="box-shadow: 0 2px 9px 0 rgba(0, 0, 0, 0.02); border-radius: 6px"
   >
     <div>
       <div class="card p-20">
@@ -20,7 +20,7 @@
             <a
               *ngIf="isMyProfile && allPortfolioItems.length > 0"
               [routerLink]="['/profile/project']"
-              style="color: #535353;"
+              style="color: #535353"
               data-toggle="tooltip"
               data-placement="top"
               title="Add Project"

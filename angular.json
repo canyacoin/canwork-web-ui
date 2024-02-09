@@ -51,7 +51,8 @@
               "node_modules/ngx-spinner/animations/ball-clip-rotate-pulse.css",
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
-              "src/assets/massimo/css/primeng.css"
+              "src/assets/massimo/css/primeng.css",
+              "src/assets/sass/global.scss"
             ],
             "scripts": []
           },
@@ -144,8 +145,12 @@
               "node_modules/firebaseui/dist/firebaseui.css",
               "node_modules/animate.css/animate.css",
               "node_modules/ngx-toastr/toastr.css",
+              "src/styles.scss",
+              "node_modules/ngx-spinner/animations/ball-clip-rotate-pulse.css",
+              "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
+              "node_modules/primeng/resources/primeng.min.css",
               "src/assets/massimo/css/primeng.css",
-              "src/styles.scss"
+              "src/assets/sass/global.scss"
             ],
             "assets": ["src/assets", "src/favicon.ico"]
           }
