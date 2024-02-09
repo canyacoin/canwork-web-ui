@@ -160,9 +160,13 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   algoliaQuery(newQuery) {
+    console.log('newQuery') // debug
     if (!this.searchInput && this.providerFilters.length == 0) {
+      console.log(this.searchInput) // debug
+      console.log(this.providerFilters.length) // debug
       this.loading = false
       this.noSearchParams = true
+      this.currentQueryString = newQuery // update internal state
       return
     }
     this.noSearchParams = false

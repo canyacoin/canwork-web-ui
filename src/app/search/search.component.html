@@ -13,7 +13,11 @@
         <search-filter />
       </div>
       <div class="w-full">
-        <search-result [profileCards]="hits" [isLoading]="loading" />
+        <search-result
+          [profileCards]="hits"
+          [isLoading]="loading"
+          [noSearchParams]="noSearchParams"
+        />
       </div>
     </div>
   </section>

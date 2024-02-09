@@ -1,6 +1,9 @@
 <section>
   <div class="flex justify-between items-center">
-    <div *ngIf="isLoading === false" class="text-G700 text-h6 font-medium">
+    <div
+      *ngIf="noSearchParams === false && isLoading === false"
+      class="text-G700 text-h6 font-medium"
+    >
       {{ profileCards.length }} freelancer<span
         *ngIf="profileCards.length !== 1"
         >s</span
@@ -8,6 +11,12 @@
     </div>
     <div *ngIf="isLoading === true" class="text-G700 text-h6 font-medium">
       Searching for freelancers
+    </div>
+    <div
+      *ngIf="noSearchParams === true && isLoading === false"
+      class="text-G700 text-h6 font-medium"
+    >
+      Please add some search param
     </div>
     <switch-grid-list-button
       [isGrid]="isGrid"
@@ -23,7 +32,11 @@
     }"
   >
     <ng-container
-      *ngIf="isLoading === true; then loadingView; else resultView"
+      *ngIf="
+        isLoading === true || noSearchParams === true;
+        then loadingView;
+        else resultView
+      "
     ></ng-container>
     <ng-template #loadingView>
       <ng-container *ngFor="let card of skCards" class="w-full">

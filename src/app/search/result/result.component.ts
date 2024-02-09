@@ -14,6 +14,7 @@ interface PageEvent {
 export class ResultComponent implements OnInit {
   @Input() profileCards: any[]
   @Input() isLoading: boolean = true
+  @Input() noSearchParams: boolean = true
 
   skCards = new Array(12)
   isGrid: boolean = true
