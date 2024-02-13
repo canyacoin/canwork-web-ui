@@ -9,8 +9,11 @@ import {
   Directive,
 } from '@angular/core'
 import { Router } from '@angular/router'
-import { FilterPipe } from 'ngx-filter-pipe'
-import { OrderPipe } from 'ngx-order-pipe'
+//import { FilterPipe } from 'ngx-filter-pipe'
+//import { OrderPipe } from 'ngx-order-pipe'
+import { ReversePipe } from 'ngx-pipes'
+import { OrderByPipe } from 'ngx-pipes'
+
 import { Observable, Subscription } from 'rxjs'
 
 import {
@@ -34,6 +37,7 @@ import { NgxPaginationModule } from 'ngx-pagination'
   selector: 'app-job-dashboard',
   templateUrl: './job-dashboard.component.html',
   styleUrls: ['./job-dashboard.component.css'],
+  providers: [ReversePipe, OrderByPipe],
 })
 export class JobDashboardComponent implements OnInit, OnDestroy {
   currentUser: User
@@ -58,13 +62,13 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     public mobile: MobileService,
-    private orderPipe: OrderPipe,
+    //private orderPipe: OrderPipe,
     private jobService: JobService,
     private publicJobService: PublicJobService,
     private userService: UserService,
-    private router: Router,
-    public filterPipe: FilterPipe
-  ) {}
+    private router: Router
+  ) //public filterPipe: FilterPipe
+  {}
 
   async ngOnInit() {
     this.currentUser = await this.authService.getCurrentUser()

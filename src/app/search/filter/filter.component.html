@@ -1,0 +1,192 @@
+<section class="bg-G100 rounded-[12px] border-none p-[16px] grid gap-[32px]" id="search-filter">
+  <div class="flex items-center justify-between text-G800 text-h6 font-medium">
+    <div class="flex items-center gap-[8px]">
+      <div>Filter</div>
+      <div *ngIf="getNumberAllFilters() > 0">
+        <badge [value]="getNumberAllFilters()" />
+      </div>
+    </div>
+    <div class="cursor-pointer" (click)="allClear()">
+      Clear All
+    </div>
+  </div>
+  <div class="flex flex-col gap-[16px]">
+    <p-accordion class="w-full">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
+            <div class="flex items-center gap-[8px]">
+              <span class="font-medium whitespace-nowrap">Verification</span>
+              <div *ngIf="verifyForm.length > 0">
+                <badge [value]="verifyForm.length" />
+              </div>
+            </div>
+            <div
+              class="font-medium pointer-events-auto"
+              (click)="verifyClear()"
+            >
+              Clear
+            </div>
+          </div>
+        </ng-template>
+        <div class="pt-[16px] pb-[24px] px-[24px]">
+          <div class="flex flex-col gap-[10px]">
+            <div
+              *ngFor="let item of filterSection.verification"
+              class="flex items-center"
+            >
+              <p-checkbox
+                [label]="item"
+                name="verifyForm"
+                [value]="item"
+                [(ngModel)]="verifyForm"
+              ></p-checkbox>
+            </div>
+          </div>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
+
+    <p-accordion class="w-full">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
+            <div class="flex items-center gap-[8px]">
+              <span class="font-medium whitespace-nowrap">Location</span>
+              <div *ngIf="locationForm.length > 0">
+                <badge [value]="locationForm.length" />
+              </div>
+            </div>
+            <div
+              class="font-medium pointer-events-auto"
+              (click)="hourlyClear()"
+            >
+              Clear
+            </div>
+          </div>
+        </ng-template>
+        <div class="pt-[16px] pb-[24px] px-[24px] flex flex-col gap-[8px]">
+          <input />
+          <div class="flex flex-wrap gap-[8px]">
+            <div *ngFor="let item of locationForm">
+              <del-tag [value]="item" (tagClick)="delLocation($event)" />
+            </div>
+          </div>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
+
+    <p-accordion class="w-full">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
+            <div class="flex items-center gap-[8px]">
+              <span class="font-medium whitespace-nowrap">Hourly Rate</span>
+              <div *ngIf="hourlyForm.length > 0">
+                <badge [value]="hourlyForm.length" />
+              </div>
+            </div>
+            <div
+              class="font-medium pointer-events-auto"
+              (click)="hourlyClear()"
+            >
+              Clear
+            </div>
+          </div>
+        </ng-template>
+        <div class="pt-[16px] pb-[24px] px-[24px]">
+          <div class="flex flex-col gap-[10px]">
+            <div
+              *ngFor="let item of filterSection.hourlyRate"
+              class="flex items-center"
+            >
+              <p-checkbox
+                [label]="item"
+                name="hourlyForm"
+                [value]="item"
+                [(ngModel)]="hourlyForm"
+              ></p-checkbox>
+            </div>
+          </div>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
+
+    <p-accordion class="w-full">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
+            <div class="flex items-center gap-[8px]">
+              <span class="font-medium whitespace-nowrap">Skills</span>
+              <div *ngIf="skillsForm.length > 0">
+                <badge [value]="skillsForm.length" />
+              </div>
+            </div>
+            <div
+              class="font-medium pointer-events-auto"
+              (click)="skillsClear()"
+            >
+              Clear
+            </div>
+          </div>
+        </ng-template>
+        <div class="pt-[16px] pb-[24px] px-[24px] flex flex-col gap-[10px]">
+          <input />
+          <div class="flex flex-col gap-[10px]">
+            <div *ngFor="let item of tempSkillsForm" class="flex items-center">
+              <p-checkbox
+                [label]="item"
+                name="skillsForm"
+                [value]="item"
+                [(ngModel)]="skillsForm"
+              ></p-checkbox>
+            </div>
+            <div
+              *ngIf="skillsForm.length < 10"
+              class="cursor-pointer font-medium"
+              (click)="seeMoreClick()"
+            >
+              See More
+            </div>
+          </div>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
+
+    <p-accordion class="w-full">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
+            <div class="flex items-center gap-[8px]">
+              <span class="font-medium whitespace-nowrap">Rating</span>
+              <div *ngIf="ratingForm.length > 0">
+                <badge [value]="ratingForm.length" />
+              </div>
+            </div>
+            <div
+              class="font-medium pointer-events-auto"
+              (click)="ratingClear()"
+            >
+              Clear
+            </div>
+          </div>
+        </ng-template>
+        <div class="pt-[16px] pb-[24px] px-[24px]">
+          <div class="flex flex-col gap-[10px]">
+            <div
+              *ngFor="let item of filterSection.rating"
+              class="flex items-center"
+            >
+              <p-checkbox
+                [label]="item"
+                name="ratingForm"
+                [value]="item"
+                [(ngModel)]="ratingForm"
+              ></p-checkbox>
+            </div>
+          </div>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
+  </div>
+</section>

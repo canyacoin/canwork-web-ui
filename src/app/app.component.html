@@ -1,6 +1,14 @@
-<div id="menu-overlay"></div>
-<app-header [allowFilters]="true"></app-header>
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  color="#3AC2FF"
+  type="ball-clip-rotate-pulse"
+></ngx-spinner>
 
-<router-outlet></router-outlet>
+<app-header />
+<p-toast></p-toast>
 
-<app-footer></app-footer>
+<div class="min-h-screen">
+  <router-outlet />
+</div>
+
+<app-footer />

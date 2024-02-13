@@ -1,4 +1,4 @@
-image: node:14.21.3
+image: node:16.20.2
 
 variables:
   APP_PATH: /builds/$CI_PROJECT_PATH

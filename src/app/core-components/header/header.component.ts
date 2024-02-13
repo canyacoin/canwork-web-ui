@@ -1,39 +1,71 @@
-// import { providerTypeArray } from './../../const/providerTypes'
-import { animate, style, transition, trigger } from '@angular/animations'
-import { Component, Input, OnDestroy, OnInit, Directive } from '@angular/core'
-import { Router } from '@angular/router'
+import { NgModule } from '@angular/core'
+
+import { animate, style, transition, trigger, state } from '@angular/animations'
+import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Router, NavigationEnd } from '@angular/router'
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
-import { NavService } from '@service/nav.service'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { Subscription } from 'rxjs'
 import { BscService, EventTypeBsc } from '@service/bsc.service'
+import { WindowService } from 'app/shared/services/window.service'
+import { HeaderService } from 'app/shared/constants/header'
+import { MessageService, MenuItem } from 'primeng/api'
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
   animations: [
-    trigger('slideInOut', [
-      transition(':enter', [
-        style({ transform: 'translateY(-100%)' }),
-        animate('100ms ease-in', style({ transform: 'translateY(0%)' })),
-      ]),
-      transition(':leave', [
-        animate('120ms ease-out', style({ transform: 'translateY(-100%)' })),
+    trigger('hamburguerX', [
+      state('hamburguer', style({})),
+      state(
+        'topX',
+        style({
+          transform: 'rotate(45deg)',
+          transformOrigin: 'left',
+          margin: '12px',
+        })
+      ),
+      state(
+        'hide',
+        style({
+          opacity: 0,
+        })
+      ),
+      state(
+        'bottomX',
+        style({
+          transform: 'rotate(-45deg)',
+          transformOrigin: 'left',
+          margin: '12px',
+        })
+      ),
+      state(
+        'show',
+        style({
+          opacity: 100,
+        })
+      ),
+      transition('* => *', [
+        animate('0.2s'), // controls animation speed
       ]),
     ]),
   ],
+  providers: [MessageService],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+  headerSection = HeaderService
+  // flag be consumed by the template
+  isHamburguer = true
+  items: MenuItem[] | undefined
+  onHamburguerClick() {
+    this.isHamburguer = !this.isHamburguer
+  }
+
   currentUser: User
-  @Input() allowFilters = false
-  showFilters = false
-  filterString = ''
-  hideSearchBar: boolean
   bAddress: string
 
-  hasUnreadMessages = false
+  hasUnreadMessages = true
   unreadMsgCount = 0
   messagesSubscription: Subscription
   routerSub: Subscription
@@ -42,18 +74,70 @@ export class HeaderComponent implements OnInit, OnDestroy {
   binanceSub: Subscription
   bscSub: Subscription
 
-  // providerCategories = providerTypeArray
-  // selectedProvType = providerTypeArray[0]
-
+  // for scroll effect only
+  isScrolled: boolean = false
+  isTransfer: boolean
   constructor(
     private afs: AngularFirestore,
-    private navService: NavService,
     private authService: AuthService,
+    private bscService: BscService,
+    private windowService: WindowService,
     private router: Router,
-    private bscService: BscService
+    private messageService: MessageService
   ) {}
 
   async ngOnInit() {
+    // Check router
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        const currentRoute = event.url
+        if (
+          currentRoute.includes('/inbox') ||
+          currentRoute.includes('/profile') ||
+          currentRoute.includes('/jobs') ||
+          currentRoute.includes('/wallet-bnb') ||
+          currentRoute.includes('/auth')
+        ) {
+          this.isTransfer = true
+        } else {
+          this.isTransfer = false
+        }
+      }
+    })
+
+    this.items = [
+      {
+        items: [
+          {
+            label: 'Profile',
+            routerLink: '/profile',
+          },
+          {
+            label: 'Edit Profile',
+            routerLink: '/profile',
+            queryParams: { editProfile: 1 },
+          },
+          {
+            label: 'Manage Jobs',
+            routerLink: '/inbox/jobs',
+            styleClass: 'border-y-1 border',
+          },
+          {
+            label: 'LogOut',
+            styleClass: 'text-R300',
+            command: () => {
+              this.onLogout()
+            },
+          },
+        ],
+      },
+    ]
+    // scroll
+    this.windowService.getScrollY().subscribe((scrollY) => {
+      // Check if the scroll position is greater than 64px
+      this.isScrolled = scrollY > 64
+    })
+
     this.authSub = this.authService.currentUser$.subscribe(
       async (user: User) => {
         if (this.currentUser !== user) {
@@ -62,9 +146,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
       }
     )
-    this.navSub = this.navService.hideSearchBar$.subscribe((hide: boolean) => {
-      this.hideSearchBar = hide
-    })
 
     this.bscSub = this.bscService.events$.subscribe((event) => {
       if (!event) {
@@ -82,6 +163,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.bAddress = ''
           break
       }
+    })
+  }
+
+  ToastshowInfo() {
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Info',
+      detail: 'You have unread chat messages on CanWork',
     })
   }
 
@@ -104,15 +193,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.unreadMsgCount = x.length
           this.hasUnreadMessages = x.length > 0
           if (!hadUnread && this.hasUnreadMessages) {
-            // request permission to show desktop notifications
-            if (Notification.permission !== 'granted') {
-              Notification.requestPermission()
-            } else {
-              const notification = new Notification('CanWork', {
-                icon: 'https://app.canwork.io/assets/img/favicon.jpg',
-                body: 'You have unread chat messages on CanWork',
-              })
-            }
+            this.ToastshowInfo()
           }
         },
         (error) => {
@@ -144,64 +225,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  onFocus(event: any) {
-    this.showFilters = true
-  }
-
-  onBlur(event: any) {
-    setTimeout(() => {
-      this.showFilters = false
-    }, 50)
-  }
-
-  onSubmit() {
-    let string = ''
-    const el = document.getElementById('topnav-search')
-    if (el) {
-      string = (el as HTMLInputElement).value
-    }
-    // if ((<any>window).$('html, body')) {
-    //   (<any>window).$('html, body').animate({ scrollTop: -10 }, 600);
-    // }
-    this.router.navigate(['search'], {
-      queryParams: {
-        // 'refinementList[category][0]': this.selectedProvType.name,
-        // category: this.selectedProvType.id,
-        query: string,
-      },
-    })
-  }
-
-  onSubmitFromModal() {
-    let string = ''
-    const el = document.getElementById('topnav-search-mobile')
-    if (el) {
-      string = (el as HTMLInputElement).value
-    }
-    ;(<any>window).$('#mobileMenuModal').modal('hide') // Close mobile menu modal
-    this.router.navigate(['search'], {
-      queryParams: { query: string },
-    })
-  }
-
-  onCancel() {}
-
   onLogout() {
     this.bscService.disconnect()
     this.authService.logout()
   }
-
-  // toggleDropdown() {
-  //   document
-  //     .getElementById('myDropdown')
-  //     .classList.toggle('search-dropdown-show')
-  // }
-
-  // closeDropDown(value: any) {
-  //   this.selectedProvType = value
-  //   var myDropdown = document.getElementById('myDropdown')
-  //   if (myDropdown.classList.contains('show')) {
-  //     myDropdown.classList.remove('show')
-  //   }
-  // }
 }

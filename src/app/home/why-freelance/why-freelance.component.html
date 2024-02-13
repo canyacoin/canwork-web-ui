@@ -1,0 +1,42 @@
+<section class="flex justify-center bg-G50">
+  <div
+    class="max-w-[1440px] w-full py-[56px] px-[24px] md:py-[80px] md:px-[64px] flex flex-col lg:flex-row lg:justify-between items-center gap-[30px]"
+  >
+    <img
+      src="{{ whyFreelanceSection.imgSrc }}"
+      class="sm:max-w-[500px] xl:max-w-[600px] select-none"
+    />
+    <div class="lg:max-w-[548px] flex flex-col gap-[32px]">
+      <div class="flex flex-col gap-[8px]">
+        <div
+          class="w-max border border-G300 rounded-[24px] py-[6px] px-[16px] text-G500 text-b2 font-medium"
+        >
+          {{ whyFreelanceSection.question }}
+        </div>
+        <div
+          class="text-G900 text-h4 md:text-h3 leading-[1.4] font-medium whitespace-pre-line"
+        >
+          {{ whyFreelanceSection.title }}
+        </div>
+        <div class="text-G700 text-b1">
+          {{ whyFreelanceSection.subTitle }}
+        </div>
+      </div>
+      <div class="grid gap-[24px]">
+        <div
+          *ngFor="let card of whyFreelanceSection.cards"
+          class="flex gap-[24px]"
+        >
+          <img src="{{ card.iconSrc }}" class="w-[48px] h-[48px] select-none" />
+          <div class="grid gap-[8px]">
+            <div class="text-G900 text-b1 font-medium">{{ card.title }}</div>
+            <div class="text-G700 text-b1">{{ card.description }}</div>
+          </div>
+        </div>
+      </div>
+      <div [routerLink]="['/']" class="w-max">
+        <basic-button [type]="1" [title]="whyFreelanceSection.buttonText1" />
+      </div>
+    </div>
+  </div>
+</section>

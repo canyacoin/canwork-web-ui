@@ -1,0 +1,22 @@
+<div class="flex gap-[16px]">
+  <div class="cursor-pointer" (click)="setGrid()">
+    <img
+      src="{{
+        isGrid
+          ? '/assets/massimo/svg/grid2.svg'
+          : '/assets/massimo/svg/grid1.svg'
+      }}"
+      class="w-[32px] h-[32px] select-none"
+    />
+  </div>
+  <div class="cursor-pointer" (click)="setList()">
+    <img
+      src="{{
+        isGrid
+          ? '/assets/massimo/svg/list1.svg'
+          : '/assets/massimo/svg/list2.svg'
+      }}"
+      class="w-[32px] h-[32px] select-none"
+    />
+  </div>
+</div>

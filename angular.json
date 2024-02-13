@@ -44,13 +44,14 @@
             "buildOptimizer": true,
             "assets": ["src/assets", "src/favicon.ico"],
             "styles": [
-              "node_modules/angular-instantsearch/bundles/instantsearch.min.css",
-              "node_modules/angular-instantsearch/bundles/instantsearch-theme-algolia.min.css",
-              "node_modules/nouislider/distribute/nouislider.min.css",
               "node_modules/firebaseui/dist/firebaseui.css",
               "node_modules/animate.css/animate.css",
               "node_modules/ngx-toastr/toastr.css",
               "src/styles.scss",
+              "node_modules/ngx-spinner/animations/ball-clip-rotate-pulse.css",
+              "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
+              "node_modules/primeng/resources/primeng.min.css",
+              "src/assets/massimo/css/primeng.css",
               "src/assets/sass/global.scss"
             ],
             "scripts": []
@@ -141,13 +142,14 @@
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [],
             "styles": [
-              "node_modules/angular-instantsearch/bundles/instantsearch.min.css",
-              "node_modules/angular-instantsearch/bundles/instantsearch-theme-algolia.min.css",
-              "node_modules/nouislider/distribute/nouislider.min.css",
               "node_modules/firebaseui/dist/firebaseui.css",
               "node_modules/animate.css/animate.css",
               "node_modules/ngx-toastr/toastr.css",
               "src/styles.scss",
+              "node_modules/ngx-spinner/animations/ball-clip-rotate-pulse.css",
+              "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
+              "node_modules/primeng/resources/primeng.min.css",
+              "src/assets/massimo/css/primeng.css",
               "src/assets/sass/global.scss"
             ],
             "assets": ["src/assets", "src/favicon.ico"]

@@ -1,48 +1,44 @@
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  Directive,
-} from '@angular/core'
-import { HttpClient } from '@angular/common/http'
-import { ActivatedRoute, Router, RouterModule } from '@angular/router'
-// import { createEmptyStateSnapshot } from '@angular/router/src/router_state'
-import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-} from '@angular/fire/compat/firestore'
-import * as findIndex from 'lodash/findIndex'
-import * as orderBy from 'lodash/orderBy'
+import { Component, OnDestroy, OnInit } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
 import * as union from 'lodash/union'
-import { LabelType, Options } from 'ng5-slider'
+import { LabelType, Options } from 'ngx-slider-v2'
 import { Observable, Subscription } from 'rxjs'
 import algoliasearch from 'algoliasearch/lite'
-import { UserType } from '../../../functions/src/user-type'
 import { environment } from '../../environments/environment'
 import { User, UserCategory } from '../core-classes/user'
 import { AuthService } from '../core-services/auth.service'
 import { NavService } from '../core-services/nav.service'
-import { UserService } from '../core-services/user.service'
+import { Location } from '@angular/common'
 
 @Component({
-  selector: 'app-search',
+  selector: 'app-search-page',
   templateUrl: './search.component.html',
-  styleUrls: ['./search.component.css'],
 })
-export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SearchComponent implements OnInit, OnDestroy {
   allProviders: User[] = []
   filteredProviders: User[] = []
-  categoryFilters = []
   chosenFilters = []
+  hits = [] // the new hits array, injected into result component
+  /*
+  invoke directly algolia search api
+  create input field and handle on change
+  on change invoke api and populate hits
+  re create paginating component
+  re create timezone flag
+  
+  reuse ais custom styling classes from css
+  */
+  searchInput: string = '' // the new search input text, this is the model on parent
+  providerFilters = [] // the current active provider type filters (union)
+  currentQueryString: string = '' // the current search on query parameters combination
+  noSearchParams = false // there are no search params, we have to render this notice
+  // todo inject into results component
+
   smallCards = true
   query: string
   categoryQuery = ''
   hourlyQuery = ''
-  loading = true
+  loading = false
   minValue = 0
   maxValue = 300
   options: Options = {
@@ -62,69 +58,64 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
   routeSub: Subscription
   providerSub: Subscription
   portfolioSub: Subscription
-  algoliaIndex = environment.algolia.indexName
-  rendering = false
+  //algoliaIndex = environment.algolia.indexName
+  // rendering = false // obsolete
   inMyTimezone = true
-  algoliaSearchConfig: any
-  private authSub
-  currentUser
-  @ViewChild('search', { read: ElementRef }) search: ElementRef
+  //algoliaSearchConfig: any
+  authSub: any
+  currentUser: any
+  private algoliaSearch // new
+  private algoliaSearchClient // new
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private navService: NavService,
-    private afs: AngularFirestore,
-    private http: HttpClient,
-    private userService: UserService,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     this.routeSub = this.activatedRoute.queryParams.subscribe((params) => {
-      if (this.query === '') {
+      this.searchInput = params['query'] || ''
+      this.providerFilters = JSON.parse(params['providers'] || '[]')
+      // this is the full stringified algolia query
+      /*if (this.query === '') {
         this.query = params['query']
-      }
-      if (this.categoryFilters.length < 1 && params['category'] !== '') {
-        this.categoryFilters.push(params['category'])
-      }
+      }*/
+
+      //if (this.categoryFilters.length < 1 && params['category'] !== '') {
+      //  this.categoryFilters.push(params['category'])
+      //}
 
       if (!this.loading) {
-        this.rendering = true
-        setTimeout(() => {
-          this.rendering = false
-        })
+        //this.rendering = true
+        //setTimeout(() => {
+        //  this.rendering = false
+        //})
         if (this.containsClass('menu-overlay', 'activate-menu')) {
-          this.toggleMenuOverlay()
+          this.toggleMenuOverlay() // obsolete?
         }
       }
     })
   }
 
   async ngOnInit() {
-    const searchClient = algoliasearch(
+    this.algoliaSearch = algoliasearch(
       environment.algolia.appId,
       environment.algolia.apiKey
     )
-    const self = this
-    this.algoliaSearchConfig = {
+    this.algoliaSearchClient = this.algoliaSearch.initIndex(
+      environment.algolia.indexName
+    )
+
+    /*this.algoliaSearchConfig = {
       indexName: this.algoliaIndex,
       searchClient,
-      //routing: true,
+      
+      // needed only for instant search, not needed anymore
+      
       routing: {
-        /*
-        https://www.algolia.com/doc/guides/building-search-ui/going-further/routing-urls/angular/
-        https://www.algolia.com/doc/api-reference/widgets/ui-state/js/
-        https://www.algolia.com/doc/guides/building-search-ui/upgrade-guides/angular/#routing
-        Even if you aren’t using multi-index search, the way in which UI state is stored has changed
-        */
         stateMapping: {
-          stateToRoute(uiState: any) {
-            //console.log('stateToRoute');
-            //console.log(uiState);
-          },
           routeToState(routeState: any) {
-            //console.log('routeToState');
-            //console.log(routeState);
-
             const generatedQuery = {}
             generatedQuery[self.algoliaIndex] = {}
 
@@ -146,19 +137,154 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
           },
         },
       },
-    }
+    }*/
     this.authSub = this.auth.currentUser$.subscribe((user: User) => {
       if (this.currentUser !== user) {
         this.currentUser = user
       }
     })
-    this.navService.setHideSearchBar(true)
+    this.navService.setHideSearchBar(true) // obsolete?
+
+    /*
+    now sync the search with algolia if we have a search query
+    if we don't have a search query we have to show a different message,
+    different from no results
+    */
+    // todo, get current query from url
+    let currentPath = this.location.path()
+    let splittedPath = currentPath.split('?')
+    let currentQuery = splittedPath[splittedPath.length - 1]
+    //console.log("currentQuery: "+currentQuery);
+
+    this.algoliaQuery(currentQuery)
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => {
+  algoliaQuery(newQuery) {
+    console.log('newQuery') // debug
+    if (!this.searchInput && this.providerFilters.length == 0) {
+      console.log(this.searchInput) // debug
+      console.log(this.providerFilters.length) // debug
       this.loading = false
-    }, 400)
+      this.noSearchParams = true
+      this.currentQueryString = newQuery // update internal state
+      return
+    }
+    this.noSearchParams = false
+    if (this.loading) return // avoid overlapping searches
+    this.loading = true
+    let newArray = []
+    let algoliaSearchObject = <any>{}
+    /* 
+      https://www.algolia.com/doc/api-reference/search-api-parameters/
+      hitsPerPage and so on
+    */
+    if (this.providerFilters.length > 0) {
+      // https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/
+      algoliaSearchObject.facetFilters = [[]]
+      this.providerFilters.forEach((providerName) => {
+        algoliaSearchObject.facetFilters[0].push(`category:${providerName}`)
+      }) // OR
+    }
+
+    this.algoliaSearchClient
+      .search(this.searchInput, algoliaSearchObject)
+      .then((res) => {
+        const result = res.hits
+        //console.log(result)
+        for (let i = 0; i < result.length; i++) {
+          if (result[i]) {
+            let avatar = result[i].avatar // current, retrocomp
+            //console.log(result[i])
+            if (
+              result[i].compressedAvatarUrl &&
+              result[i].compressedAvatarUrl != 'new'
+            ) {
+              // keep same object structure
+              // use compress thumbed if exist and not a massive update (new)
+              avatar = {
+                uri: result[i].compressedAvatarUrl,
+              }
+            }
+
+            const provider = {
+              id: i,
+              address: result[i].address,
+              avatarUri: avatar.uri, // new
+              skillTags: result[i].skillTags || [],
+              title: result[i].title,
+              name: result[i].name,
+              category: result[i].category,
+              timezone: result[i].timezone,
+              hourlyRate: result[i].hourlyRate || 0,
+              ratingAverage: result[i].rating?.average | 0,
+              ratingCount: result[i].rating?.count | 0,
+              slug: result[i].slug,
+              verified: result[i].verified,
+            }
+            newArray.push(provider)
+          }
+        }
+        // newArray.sort((a, b) => b.ratingCount - a.ratingCount)
+        this.hits = newArray // update
+        this.loading = false
+        this.currentQueryString = newQuery // to avoid searching 2 times same string
+      })
+      .catch((err) => {
+        this.loading = false
+        console.log(err)
+      })
+    //console.log(this.tempProviderArray)
+  }
+
+  syncAddressBar() {
+    let newQueryString = `query=${this.searchInput}&providers=${JSON.stringify(
+      this.providerFilters
+    )}`
+    this.location.go('search', newQueryString)
+    return newQueryString
+  }
+
+  refreshResultsIfNeeded(newQuery) {
+    // handle also the encode uri scenario when accessing directly the url
+    if (
+      this.currentQueryString != newQuery &&
+      this.currentQueryString != encodeURI(newQuery)
+    ) {
+      // cool, we have to refresh search
+
+      /*
+      refresh the algolia query, with a 400ms latency to avoid overloading
+      and a searchInProgress flag to avoid overalapping multiple calls
+      handle also the search on explicit button input for faster click users
+      */
+      setTimeout(() => {
+        this.algoliaQuery(newQuery)
+        // if another is running this will end immediately
+      }, 400) // 500 ms latency
+    } else {
+      console.log('up to date') // debug, check this well better later when we add other search facets
+    }
+  }
+
+  // two way binding, event from child (user input)
+  onSearchInputChange(searchInput: string) {
+    this.searchInput = searchInput
+    // keep in sync also address bar, without refreshing page
+    const newQueryString = this.syncAddressBar()
+
+    this.refreshResultsIfNeeded(newQueryString)
+  }
+
+  // two way binding, event from child (user input)
+  onProviderFiltersChange(providerTypes: any) {
+    let sortedProviders = providerTypes
+    sortedProviders = providerTypes.sort() // sort to have a predictable string
+    this.providerFilters = sortedProviders
+
+    // keep in sync also address bar, without refreshing page
+    const newQueryString = this.syncAddressBar()
+
+    this.refreshResultsIfNeeded(newQueryString)
   }
 
   ngOnDestroy() {
@@ -170,11 +296,11 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
       this.portfolioSub.unsubscribe()
     }
   }
-
+  /* obsolete
   algoliaSearchChanged(query) {
     this.query = String(query)
   }
-
+  */
   isInArray(value, array: any[]) {
     if (array.indexOf(value) > -1) {
       return true
@@ -277,12 +403,12 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
       this.resetMenus()
       this.toggleMenuOverlay()
     }
-    this.onResetCategories()
-    this.onSetCategories()
+    //this.onResetCategories()
+    //this.onSetCategories()
     this.onResetHourlyRate()
     this.onSetHourlyRate()
   }
-
+  /*
   onChooseCategory(categoryName) {
     const isInArray = this.categoryFilters.find(function (element) {
       return element === categoryName
@@ -330,7 +456,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
       )
     }
   }
-
+*/
   onSetHourlyRate() {
     if (!this.containsClass('hours-menu', 'hide-menu')) {
       this.toggleMenuOverlay()
@@ -354,7 +480,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
     ).value
     return value
   }
-
+  /*
   onResetCategories() {
     if (this.categoryFilters.length > 0) {
       this.categoryFilters = []
@@ -366,7 +492,7 @@ export class SearchComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
   }
-
+*/
   onResetHourlyRate() {
     this.maxValue = 300
     this.minValue = 0

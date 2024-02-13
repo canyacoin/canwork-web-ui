@@ -1,0 +1,186 @@
+/* p-carousel */
+
+.p-carousel-indicators {
+    padding-top: 48px;
+}
+
+.p-carousel-indicators li {
+    margin: 0 8px;
+}
+  
+.p-carousel-indicators li button {
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: #ced4da;
+    border-radius: 100%;
+}
+  
+.p-carousel-indicators li.p-highlight button {
+    background-color: #64748b;
+}
+
+@media (max-width: 768px) {
+    .p-carousel-indicators {
+        padding-top: 40px;
+    }
+}
+
+/* p-accordion */
+#search-filter .p-accordion {
+    border: 1px solid #CBD5E1;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.p-accordion .p-accordion-content {
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    color: #495057 !important;
+    border-top: 0 !important; 
+    border-radius: 0 !important;
+}
+#search-filter .p-accordion-header-link {
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 8px 16px;
+}
+
+#search-filter .p-accordion-content {
+    border-top: 1px solid #CBD5E1;
+}
+
+.faq-parent .p-accordion-header-link {
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 12px 0px;
+    border: none !important;
+    border-bottom: 1px solid #1E293B !important;
+    outline: none;
+    border-radius: 0;
+}
+.p-accordion .p-accordion-header:not(.p-highlight):not(.p-disabled):hover .p-accordion-header-link{
+    background: transparent !important;
+}
+.p-accordion .p-accordion-header:not(.p-disabled).p-highlight:hover .p-accordion-header-link {
+    background: transparent !important;
+}
+.p-accordion .p-accordion-header:not(.p-disabled) .p-accordion-header-link:focus {
+    box-shadow: none !important;
+}
+
+.p-accordion .p-accordion-header .p-accordion-header-link {
+    background: transparent !important;
+}
+
+.p-accordion p-accordiontab .p-accordion-tab {
+    margin-bottom: 0 !important;
+}
+.faq-parent .p-icon-wrapper svg {
+    width: 24px;
+    height: 24px;
+    color: #1E293B;
+}
+
+/* same effect for faq-parent & faq-children   when the highlight, change the font-weight */
+
+.faq-parent .p-accordion-header .p-accordion-header-link {
+    font-weight: 400 !important;
+    border-radius: 0px !important;
+}
+
+
+.faq-parent .p-accordion-header.p-highlight .p-accordion-header-link {
+    font-weight: 500 !important;
+}
+
+.faq-parent .faq-children .p-accordion-tab {
+    padding: 24px;
+    background-color: #F1F5F9;
+    border-radius: 12px;
+    transition: background-color 300ms ease; /* transition effect */
+}
+
+.faq-parent .faq-children .p-accordion-tab.p-accordion-tab-active {
+    background-color: #E2E8F0;
+}
+
+.faq-parent .faq-children .p-accordion-header-link {
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 0px;
+    border: none;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+
+.faq-parent .faq-children .p-icon-wrapper svg {
+    width: 18px;
+    height: 18px;
+    color: #1E293B;
+}
+
+/* p-paginator */
+.p-paginator {
+    padding: 0.5rem 1rem;
+}
+
+.p-paginator button {
+    padding: 8px;
+    color: #334155;
+    border-radius: 4px;
+    border: 1px solid #CBD5E1;
+    margin: 0 8px;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page {
+    width: 32px;
+    height: 32px;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+    background: #334155;
+    border-color: #334155;
+    color: #ffffff;
+}
+
+.p-hidden-accessible {
+    display: none;
+}
+
+/* p-checkbox */
+
+.p-checkbox {
+    width: 16px;
+    height: 16px;
+    margin-right: 16px;
+}
+
+.p-checkbox-box {
+    width: 100%;
+    border-radius: 3px;
+    border: 2px solid #64748B;
+    background-color: unset;
+}
+
+.p-checkbox-label {
+    user-select: none;
+}
+
+.p-checkbox-box.p-highlight {
+    border: 2px solid #3AC2FF;
+    background-color: #3AC2FF;
+}
+
+.p-checkbox-box.p-highlight svg {
+    width: 10px;
+}
+
+.p-checkbox-box.p-highlight svg path{
+    fill: #fff;
+}
+
+.p-checkbox-label.p-checkbox-label-active {
+    font-weight: 500;
+}

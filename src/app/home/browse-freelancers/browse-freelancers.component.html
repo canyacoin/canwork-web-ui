@@ -1,0 +1,60 @@
+<section class="flex justify-center bg-G50">
+  <div
+    class="max-w-[1440px] w-full py-[56px] px-[16px] md:py-[112px] md:px-[64px]"
+  >
+    <div class="flex flex-col gap-[16px] md:gap-[64px]">
+      <div
+        class="flex flex-col md:flex-row md:justify-between gap-[8px] md:gap-[100px]"
+      >
+        <div class="md:max-w-[410px] grid gap-[8px]">
+          <div class="text-b2 text-G500">
+            {{ browseFreelancersSection.subTitle }}
+          </div>
+          <div
+            class="text-h4 md:text-h3 text-G800 leading-[1.2] font-medium md:max-w-[410px]"
+          >
+            {{ browseFreelancersSection.title }}
+          </div>
+        </div>
+        <div class="md:max-w-[430px] grid gap-[32px] md:gap-[16px]">
+          <div class="text-b1 text-G700">
+            {{ browseFreelancersSection.description }}
+          </div>
+          <div [routerLink]="['/']" class="w-max">
+            <basic-button
+              [type]="1"
+              [title]="browseFreelancersSection.buttonText1"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-[16px] md:gap-[32px]">
+        <div
+          *ngFor="let card of browseFreelancersSection.cards"
+          [routerLink]="['/']"
+        >
+          <category-card
+            [iconSrc]="card.iconSrc"
+            [title]="card.title"
+            [description]="card.description"
+          />
+        </div>
+      </div>
+      <!-- <div class="overflow-x-scroll">
+        <div class="min-w-[1200px] flex justify-between">
+          <div
+            *ngFor="let section of browseFreelancersSection.sections"
+            class="grid gap-[8px]"
+          >
+            <div
+              *ngFor="let category of section"
+              class="w-max text-b1 text-G700 hover:underline underline-offset-2 cursor-pointer"
+            >
+              {{ category }}
+            </div>
+          </div>
+        </div>
+      </div> -->
+    </div>
+  </div>
+</section>

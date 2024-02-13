@@ -1,12 +1,12 @@
 <main class="main-content">
   <section class="section bg-gray px-10 py-30" id="section-profile">
     <div class="container">
-      <div class="row flex-row" *ngIf="!isOnMobile" style="border-radius: 5px;">
+      <div class="row flex-row" *ngIf="!isOnMobile" style="border-radius: 5px">
         <div *ngIf="currentUser" class="col-12 col-lg-4 col-sm-12 p-0 m-0">
           <div class="card card-bordered contact-div">
             <form
               class="card-header"
-              style="background: white; border-top-left-radius: 5px;"
+              style="background: white; border-top-left-radius: 5px"
             >
               <div class="search-container">
                 <form
@@ -23,7 +23,7 @@
                     class="search"
                     size="30"
                   />
-                  <button class="btn" style="display: none;" type="submit">
+                  <button class="btn" style="display: none" type="submit">
                     Go
                   </button>
                 </form>
@@ -31,7 +31,7 @@
             </form>
             <div
               class="list-group list-group-flush contact-list"
-              style="height: 80%; max-height:none;"
+              style="height: 80%; max-height: none"
             >
               <div *ngFor="let channel of queryChannels; let i = index">
                 <a
@@ -41,13 +41,13 @@
                   [ngClass]="{
                     active: selectedChannel.address === channel.address
                   }"
-                  style="cursor: pointer;"
+                  style="cursor: pointer"
                 >
                   <span
                     *ngIf="channel.unreadMessages"
                     class="badge-notification badge-danger"
                   ></span>
-                  <div class="media" style="width: 100%;">
+                  <div class="media" style="width: 100%">
                     <app-avatar
                       [user]="channel"
                       [customClass]="'avatar avatar-sm mt-8'"
@@ -65,7 +65,7 @@
                         &nbsp;&nbsp;&nbsp;
                         <div>
                           <small class="text-muted">{{
-                            channel.timestamp | date: 'dd MMM'
+                            channel.timestamp | date : 'dd MMM'
                           }}</small>
                         </div>
                       </div>
@@ -78,7 +78,7 @@
                         }"
                         >{{
                           channel.message.length > 30
-                            ? (channel.message | slice: 0:30) + '...'
+                            ? (channel.message | slice : 0 : 30) + '...'
                             : channel.message
                         }}</span
                       >
@@ -89,7 +89,7 @@
             </div>
             <div
               class="card-footer bg-white p-10 m-0"
-              style="border-bottom-right-radius: 5px;"
+              style="border-bottom-right-radius: 5px"
             ></div>
           </div>
         </div>
@@ -98,7 +98,12 @@
             <div
               *ngIf="selectedChannel"
               class="card-header d-flex justify-content-between align-items-center"
-              style="background: white; min-height: 61px; max-height: 61px; border-top-left-radius: 5px;"
+              style="
+                background: white;
+                min-height: 61px;
+                max-height: 61px;
+                border-top-left-radius: 5px;
+              "
             >
               <a [routerLink]="['/profile/alt', selectedChannel.address]">
                 <div class="media align-items-center">
@@ -169,7 +174,11 @@
                 </div>
               </div>
               <div class="loading-messages" *ngIf="isLoading">
-                <img src="assets/img/loader.svg" height="36px" alt="Loader" />
+                <img
+                  src="assets/img/loader.svg"
+                  style="height: 36px"
+                  alt="Loader"
+                />
                 <p>Loading messages...</p>
               </div>
               <p
@@ -211,7 +220,7 @@
                             ? '#3cf'
                             : '#e4e7ea'
                       }"
-                      style="border-radius:15px;"
+                      style="border-radius: 15px"
                     >
                       <div class="card-block p-2 card-message-block">
                         <span
@@ -232,7 +241,7 @@
                                 message.address !== currentUser.address
                             }"
                             >{{
-                              message.timestamp | date: 'EEEE, h:mm a'
+                              message.timestamp | date : 'EEEE, h:mm a'
                             }}</small
                           >
                         </div>
@@ -348,7 +357,7 @@
             </div>
             <div
               class="card-footer bg-white"
-              style="border: none; border-bottom-right-radius: 5px;"
+              style="border: none; border-bottom-right-radius: 5px"
             >
               <form #frm (ngSubmit)="onSend()" class="align-items-center">
                 <div class="input-group input-group-lg">
@@ -371,14 +380,19 @@
                       <button
                         [disabled]="isLoading || channels.length < 1"
                         class="btn btn-secondary btn-outline mt-7 dropdown-toggle-no-arrow"
-                        style="background: white; margin-top: 6px; margin-left: 6px; padding: 8px 10px 8px 10px;"
+                        style="
+                          background: white;
+                          margin-top: 6px;
+                          margin-left: 6px;
+                          padding: 8px 10px 8px 10px;
+                        "
                         type="button"
                         id="menu"
                         data-toggle="dropdown"
                         aria-haspopup="true"
                         aria-expanded="false"
                       >
-                        <i class="fas fa-bars" style="color: #919d9d;"></i>
+                        <i class="fas fa-bars" style="color: #919d9d"></i>
                       </button>
                       <div
                         class="dropdown-menu dropdown-menu-sm"
@@ -390,7 +404,7 @@
                           *ngFor="let macro of macros"
                           (click)="onMacro(macro.text)"
                           class="dropdown-item drop-action"
-                          style="cursor: pointer;"
+                          style="cursor: pointer"
                           >{{ macro.text }}</a
                         >
                       </div>
@@ -403,7 +417,7 @@
                   "
                   type="submit"
                   class="btn-container"
-                  style="border: none;"
+                  style="border: none"
                 >
                   <span class="btn send-btn-chat">SEND</span>
                 </button>
@@ -417,13 +431,13 @@
         class="row flex-row"
         *ngIf="isOnMobile"
         id="mobile-chat"
-        style="border-radius: 5px;"
+        style="border-radius: 5px"
       >
         <div *ngIf="currentUser" class="col-12 col-md-4 p-0 m-0">
           <div class="card card-bordered" id="contact-div">
             <form
               class="card-header"
-              style="background: white; border-top-left-radius: 5px;"
+              style="background: white; border-top-left-radius: 5px"
             >
               <div class="search-container">
                 <form
@@ -440,7 +454,7 @@
                     class="search"
                     size="30"
                   />
-                  <button class="btn" style="display: none;" type="submit">
+                  <button class="btn" style="display: none" type="submit">
                     Go
                   </button>
                 </form>
@@ -455,13 +469,13 @@
                   [ngClass]="{
                     active: selectedChannel.address === channel.address
                   }"
-                  style="cursor: pointer;"
+                  style="cursor: pointer"
                 >
                   <span
                     *ngIf="channel.unreadMessages"
                     class="badge-notification badge-danger"
                   ></span>
-                  <div class="media" style="width: 100%;">
+                  <div class="media" style="width: 100%">
                     <app-avatar
                       [user]="channel"
                       [customClass]="'avatar avatar-sm mt-8'"
@@ -479,7 +493,7 @@
                         &nbsp;&nbsp;&nbsp;
                         <div>
                           <small class="text-muted">{{
-                            channel.timestamp | date: 'dd MMM'
+                            channel.timestamp | date : 'dd MMM'
                           }}</small>
                         </div>
                       </div>
@@ -492,7 +506,7 @@
                         }"
                         >{{
                           channel.message.length > 30
-                            ? (channel.message | slice: 0:30) + '...'
+                            ? (channel.message | slice : 0 : 30) + '...'
                             : channel.message
                         }}</span
                       >
@@ -506,7 +520,11 @@
             <div
               *ngIf="selectedChannel"
               class="card-header d-flex justify-content-between align-items-center"
-              style="background: white; min-height:85px; border-top-left-radius: 5px;"
+              style="
+                background: white;
+                min-height: 85px;
+                border-top-left-radius: 5px;
+              "
             >
               <div class="col-2">
                 <button
@@ -585,14 +603,15 @@
                             ? '#3cf'
                             : '#e4e7ea'
                       }"
-                      style="border-radius:15px;"
+                      style="border-radius: 15px"
                     >
                       <div
                         class="card-block p-2 card-message-block"
                         [innerHTML]="
                           transformBreaks(
                             message.message
-                              | linkify: message.address !== currentUser.address
+                              | linkify
+                                : message.address !== currentUser.address
                           )
                         "
                       >
@@ -605,7 +624,7 @@
                                 message.address !== currentUser.address
                             }"
                             >{{
-                              message.timestamp | date: 'EEEE, h:mm a'
+                              message.timestamp | date : 'EEEE, h:mm a'
                             }}</small
                           >
                         </div>
@@ -713,7 +732,7 @@
             </div>
             <div
               class="card-footer bg-white"
-              style="border: none; border-bottom-right-radius: 5px;"
+              style="border: none; border-bottom-right-radius: 5px"
             >
               <form #frm (ngSubmit)="onSend()" class="align-items-center">
                 <div class="input-group input-group-lg">
@@ -736,14 +755,19 @@
                       <button
                         [disabled]="isLoading || channels.length < 1"
                         class="btn btn-secondary btn-outline mt-7 dropdown-toggle-no-arrow"
-                        style="background: white; margin-top: 6px; margin-left: 6px; padding: 8px 10px 8px 10px;"
+                        style="
+                          background: white;
+                          margin-top: 6px;
+                          margin-left: 6px;
+                          padding: 8px 10px 8px 10px;
+                        "
                         type="button"
                         id="menu"
                         data-toggle="dropdown"
                         aria-haspopup="true"
                         aria-expanded="false"
                       >
-                        <i class="fas fa-bars" style="color: #919d9d;"></i>
+                        <i class="fas fa-bars" style="color: #919d9d"></i>
                       </button>
                       <div
                         class="dropdown-menu dropdown-menu-sm"
@@ -755,7 +779,7 @@
                           *ngFor="let macro of macros"
                           (click)="onMacro(macro.text)"
                           class="dropdown-item drop-action"
-                          style="cursor: pointer;"
+                          style="cursor: pointer"
                           >{{ macro.text }}</a
                         >
                       </div>
@@ -768,7 +792,7 @@
                   "
                   type="submit"
                   class="btn-container"
-                  style="border: none;"
+                  style="border: none"
                 >
                   <span class="send-btn-chat">SEND</span>
                 </button>

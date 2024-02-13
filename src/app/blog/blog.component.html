@@ -1,0 +1,10 @@
+<main class="font-sans">
+  <blog-hero (searchQuerySubmitted)="handleSearchQuery($event)"></blog-hero>
+  <section class="w-full flex justify-center bg-white">
+    <div
+      class="max-w-[1440px] w-full py-[40px] px-[24px] md:py-[40px] md:px-[64px]"
+    >
+      <blog-result [query]="queryBlog" />
+    </div>
+  </section>
+</main>

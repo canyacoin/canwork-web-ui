@@ -44,9 +44,20 @@
     <meta property="og:url" content="https://app.canwork.io/" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <link rel="preload" as="image" href="/assets/img/hero-png-4.png" />
+    <!-- import font general sans  -->
+    <link
+      href="https://fonts.cdnfonts.com/css/general-sans"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
 
-    <!-- Styles async -->
+    <link
+      rel="preload"
+      as="image"
+      href="/assets/massimo/images/landing-top-bg.png"
+    />
+
     <link
       href="assets/css/core.min.css"
       rel="stylesheet"
@@ -59,32 +70,14 @@
       media="print"
       onload="this.media='all'"
     />
+
     <link
       href="assets/css/style.css"
       rel="stylesheet"
       media="print"
       onload="this.media='all'"
     />
-    <link
-      href="assets/css/animate.min.css"
-      rel="stylesheet"
-      media="print"
-      onload="this.media='all'"
-    />
-    <link
-      href="assets/css/multirange.css"
-      rel="stylesheet"
-      media="print"
-      onload="this.media='all'"
-    />
-    <link
-      href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
-      rel="stylesheet"
-      integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
-      crossorigin="anonymous"
-      media="print"
-      onload="this.media='all'"
-    />
+
     <!-- Styles fallback -->
     <noscript>
       <link href="assets/css/core.min.css" rel="stylesheet" />
@@ -146,13 +139,5 @@
     "
   >
     <app-root></app-root>
-
-    <!-- Scripts -->
-    <script src="assets/js/core.min.js" defer></script>
-    <!-- <script src="assets/js/canya.min.js"></script> -->
-    <script src="assets/js/multirange.js" async></script>
-    <script src="assets/js/canya.js" defer></script>
-    <!-- depends on jquery inside core -->
-    <script src="assets/js/bodymovin.min.js" async></script>
   </body>
 </html>

@@ -12,7 +12,10 @@ import { Transaction, TransactionService } from '@service/transaction.service'
 import { BscService, BepChain } from '@service/bsc.service'
 import { ToastrService } from 'ngx-toastr'
 import { AngularFireStorage } from '@angular/fire/compat/storage'
-import { SimpleModalService } from 'ngx-simple-modal'
+
+//import { SimpleModalService } from 'ngx-simple-modal' // old version
+import { NgxModalService } from 'ngx-modalview'
+
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
@@ -54,7 +57,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     private transactionService: TransactionService,
     private reviewService: ReviewService,
     private activatedRoute: ActivatedRoute,
-    private simpleModalService: SimpleModalService,
+    private ngxModalService: NgxModalService,
     private storage: AngularFireStorage,
     private mobile: MobileService,
     private router: Router
@@ -283,7 +286,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         console.log('ActionType.cancelJobEarly')
         //this.dialogService
         //  .addDialog(
-        this.simpleModalService
+        this.ngxModalService
           .addModal(
             ActionDialogComponent,
             new ActionDialogOptions({
@@ -302,7 +305,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         console.log('ActionType.dispute')
         //this.dialogService
         //  .addDialog(
-        this.simpleModalService
+        this.ngxModalService
           .addModal(
             ActionDialogComponent,
             new ActionDialogOptions({
@@ -322,7 +325,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         console.log('default')
         //this.dialogService
         //  .addDialog(
-        this.simpleModalService
+        this.ngxModalService
           .addModal(
             ActionDialogComponent,
             new ActionDialogOptions({

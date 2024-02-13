@@ -1,0 +1,42 @@
+<section>
+  <div
+    class="bg-hero-pattern bg-no-repeat bg-center bg-cover pt-[112px] pb-[40px] md:pt-[152px] md:pb-[80px]"
+  >
+    <div class="flex justify-center">
+      <div
+        class="max-md:px-[24px] w-full flex flex-col items-center gap-[24px] md:gap-[40px]"
+      >
+        <div class="flex flex-col gap-[8px]">
+          <div
+            class="text-white text-center text-h4 sm:text-h3 md:text-h2 font-medium leading-[1.2]"
+          >
+            {{ heroSection.title }}
+          </div>
+          <div class="text-G200 text-center text-b1 sm:text-h6 md:text-h5">
+            {{ heroSection.subTitle }}
+          </div>
+        </div>
+        <div class="max-w-[705px] w-full flex flex-col gap-[24px]">
+          <div
+            class="bg-transparent md:bg-white md:rounded-[12px] overflow-hidden flex flex-col gap-[16px] md:gap-[30px] md:flex-row md:justify-between"
+          >
+            <input
+              [(ngModel)]="searchInput"
+              type="text"
+              class="py-[10px] px-[10px] text-center md:text-left md:pl-[40px] rounded-[10px] placeholder:text-G500 placeholder:text-b1 outline-none w-full placeholder:line-clamp-1"
+              placeholder="{{ heroSection.searchPlaceholder }}"
+              (keydown.enter)="submitSearchQuery()"
+            />
+            <div (click)="submitSearchQuery()">
+              <basic-button
+                [type]="2"
+                [title]="heroSection.buttonText1"
+                [extraClass]="'max-md:min-w-full text-center'"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

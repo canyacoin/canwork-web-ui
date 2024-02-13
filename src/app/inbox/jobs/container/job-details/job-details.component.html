@@ -3,9 +3,9 @@
 <div
   *ngIf="!job"
   class="container d-flex h-100 flex-column justify-content-center"
-  style="min-height: 640px;"
+  style="min-height: 640px"
 >
-  <img src="assets/img/loader.svg" height="36px" alt="Loader" />
+  <img src="assets/img/loader.svg" style="height: 36px" alt="Loader" />
 </div>
 
 <div class="container job-detail-container" *ngIf="job">
@@ -147,7 +147,7 @@
           <img
             *ngIf="isReleasing"
             src="assets/img/loader.svg"
-            height="36px"
+            style="height: 36px"
             alt="Loader"
           />
           <b *ngIf="isReleasing" class="text-info text-wrap">
@@ -176,7 +176,9 @@
             <div class="col-12 my-10" *ngIf="!isOnMobile">
               <div
                 *ngFor="
-                  let action of job.parsedActionLog | orderBy: 'timestamp':true;
+                  let action of job.parsedActionLog
+                    | orderBy : 'timestamp'
+                    | reverse;
                   let actionIndex = index
                 "
                 class="my-10"
@@ -187,13 +189,13 @@
                     !action.private || action.executedBy == currentUserType
                   "
                 >
-                  <div class="col-lg-8 col-md-6  col-sm-6 col-6">
+                  <div class="col-lg-8 col-md-6 col-sm-6 col-6">
                     <p
                       [innerHTML]="action.getMessage(getActionExecutor(action))"
                     ></p>
                   </div>
-                  <div class="col-lg-4 col-md-6  col-sm-6 col-6 text-right">
-                    {{ action.timestamp | date: 'medium' }}
+                  <div class="col-lg-4 col-md-6 col-sm-6 col-6 text-right">
+                    {{ action.timestamp | date : 'medium' }}
                   </div>
                 </div>
               </div>
@@ -201,7 +203,9 @@
             <div class="col-12 my-10" *ngIf="isOnMobile">
               <div
                 *ngFor="
-                  let action of job.parsedActionLog | orderBy: 'timestamp':true;
+                  let action of job.parsedActionLog
+                    | orderBy : 'timestamp'
+                    | reverse;
                   let actionIndex = index
                 "
                 class="my-10"
@@ -218,7 +222,7 @@
                       [innerHTML]="action.getMessage(getActionExecutor(action))"
                     ></p>
                     <p class="text-grey">
-                      {{ action.timestamp | date: 'medium' }}
+                      {{ action.timestamp | date : 'medium' }}
                     </p>
                   </div>
                 </div>
@@ -238,7 +242,7 @@
         </div>
         <div *ngIf="transactions.length >= 1">
           <div
-            *ngFor="let tx of transactions | orderBy: 'timestamp':true"
+            *ngFor="let tx of transactions | orderBy : 'timestamp' | reverse"
             class="card mb-15 py-20 bg-transparent"
           >
             <div class="row">
@@ -247,7 +251,7 @@
                 {{ tx.actionType }}
               </div>
               <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 text-right">
-                {{ tx.timestamp | date: 'medium' }}
+                {{ tx.timestamp | date : 'medium' }}
               </div>
             </div>
             <div class="row">
@@ -266,12 +270,10 @@
     <div class="row">
       <span class="col-12 my-10 text-left">
         <h5>REVIEWS</h5>
-        <div *ngIf="reviews.length < 1">
-          No reviews have been left yet
-        </div>
+        <div *ngIf="reviews.length < 1">No reviews have been left yet</div>
         <div *ngIf="reviews.length >= 1">
           <div
-            *ngFor="let review of reviews | orderBy: 'createdAt':true"
+            *ngFor="let review of reviews | orderBy : 'createdAt' | reverse"
             class="card mb-15 py-20 bg-transparent"
           >
             <div class="row mt-3">

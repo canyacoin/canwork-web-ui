@@ -1,19 +1,22 @@
-import { from } from 'rxjs'
-import { NgModule } from '@angular/core'
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router'
 import { PublicJobComponent } from './public-job/public-job/public-job.component'
 import { JobBidsComponent } from './public-job/job-bids/job-bids.component'
 import { LandingComponent } from './landing/landing.component'
 import { BrandComponent } from './core-components/brand/brand.component'
-import { FaqPageComponent } from './core-components/faq-page/faq-page.component'
 import { DashboardComponent } from './public-job/dashboard/dashboard.component'
 import { AuthGuard } from './core-utils/auth.guard'
 import { UserIsSetupGuard } from './core-utils/user-is-setup.guard'
 import { WalletBnbComponent } from './wallet-bnb/wallet-bnb.component'
 import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.component'
+// Import library module for spinner
+import { NgxSpinnerModule } from 'ngx-spinner'
 
 @NgModule({
   imports: [
+    BrowserAnimationsModule,
+    NgxSpinnerModule,
     RouterModule.forRoot(
       [
         {
@@ -42,6 +45,11 @@ import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.
           path: 'search',
           loadChildren: () =>
             import('./search/search.module').then((m) => m.SearchModule),
+        },
+        {
+          path: 'blog',
+          loadChildren: () =>
+            import('./blog/blog.module').then((m) => m.BlogModule),
         },
         {
           path: 'jobs',
@@ -82,8 +90,9 @@ import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.
           component: BrandComponent,
         },
         {
-          path: 'faq',
-          component: FaqPageComponent,
+          path: 'faqs',
+          loadChildren: () =>
+            import('./faqs/faqs.module').then((m) => m.FaqsModule),
         },
         {
           path: 'landing',
@@ -110,6 +119,7 @@ import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.
       {}
     ),
   ],
-  exports: [RouterModule],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  exports: [RouterModule, NgxSpinnerModule],
 })
 export class AppRoutingModule {}

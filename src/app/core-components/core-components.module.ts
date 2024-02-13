@@ -17,11 +17,9 @@ import { BackButtonComponent } from './back-button/back-button.component'
 import { BlogPostsComponent } from './blog-posts/blog-posts.component'
 import { BotComponent } from './bot/bot.component'
 import { BrandComponent } from './brand/brand.component'
-import { FaqPageComponent } from './faq-page/faq-page.component'
 import { FeedbackComponent } from './feedback/feedback.component'
 import { FooterComponent } from './footer/footer.component'
 import { HeaderComponent } from './header/header.component'
-import { SearchFilterOptionComponent } from './header/search-filter-option/search-filter-option.component'
 import { StorageDropzoneComponent } from './storage-dropzone/storage-dropzone.component'
 import { ProviderCardComponent } from './provider-card/provider-card.component'
 import { ScrollTopComponent } from './scroll-top/scroll-top.component'
@@ -37,6 +35,22 @@ import { DynamicCoinComponent } from './dynamic-coin/dynamic-coin.component'
 import { DynamicCoinWrapperComponent } from './dynamic-coin-wrapper/dynamic-coin-wrapper.component'
 import { LedgerModalComponent } from '../binance/ledger-modal/ledger-modal.component'
 import { PopperComponent } from './popper/popper.component'
+import { BasicButtonComponent } from './buttons/basic-button/basic-button.component'
+import { BasicTagComponent } from './tag/basic-tag/basic-tag.component'
+import { CategoryCardComponent } from './category-card/category-card.component'
+import { LinkButtonComponent } from './link-button/link-button.component'
+import { ProfileCardComponent } from './profile-card/profile-card.component'
+import { SwitchGridListComponent } from './buttons/switch-grid-list/switch-grid-list.component'
+import { SkProfileCardComponent } from './skeletons/sk-profile-card/sk-profile-card.component'
+import { BadgeComponent } from './badge/badge.component'
+import { DelTagComponent } from './tag/del-tag/del-tag.component'
+import { StarRatingComponent } from './star-rating/star-rating.component'
+import { JoinCommunityComponent } from './join-community/join-community.component'
+import { PostJobComponent } from './post-job/post-job.component'
+import { MenuModule } from 'primeng/menu'
+import { ToastModule } from 'primeng/toast'
+import { AvatarModule } from 'primeng/avatar'
+import { BadgeModule } from 'primeng/badge'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -57,6 +71,10 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     RouterModule,
     DropzoneModule,
     StarRatingModule.forChild(),
+    MenuModule,
+    ToastModule,
+    AvatarModule,
+    BadgeModule,
   ],
   declarations: [
     AttachmentComponent,
@@ -64,12 +82,10 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     BotComponent,
     BlogPostsComponent,
     BrandComponent,
-    FaqPageComponent,
     LandingComponent,
     FeedbackComponent,
     FooterComponent,
     HeaderComponent,
-    SearchFilterOptionComponent,
     ScrollTopComponent,
     SkillTagComponent,
     SkillTagsSelectionComponent,
@@ -86,13 +102,24 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     DynamicCoinWrapperComponent,
     LedgerModalComponent,
     PopperComponent,
+    BasicButtonComponent,
+    BasicTagComponent,
+    CategoryCardComponent,
+    LinkButtonComponent,
+    ProfileCardComponent,
+    SwitchGridListComponent,
+    SkProfileCardComponent,
+    BadgeComponent,
+    DelTagComponent,
+    StarRatingComponent,
+    JoinCommunityComponent,
+    PostJobComponent,
   ],
   exports: [
     AttachmentComponent,
     BackButtonComponent,
     BotComponent,
     BlogPostsComponent,
-    FaqPageComponent,
     FeedbackComponent,
     FooterComponent,
     HeaderComponent,
@@ -109,6 +136,18 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     VerifiedMarkComponent,
     DynamicCoinComponent,
     DynamicCoinWrapperComponent,
+    BasicButtonComponent,
+    BasicTagComponent,
+    CategoryCardComponent,
+    LinkButtonComponent,
+    ProfileCardComponent,
+    SwitchGridListComponent,
+    SkProfileCardComponent,
+    BadgeComponent,
+    DelTagComponent,
+    StarRatingComponent,
+    JoinCommunityComponent,
+    PostJobComponent,
   ],
   providers: [
     {

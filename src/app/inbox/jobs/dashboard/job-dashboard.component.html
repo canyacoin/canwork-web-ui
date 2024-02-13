@@ -15,9 +15,9 @@
       <div
         *ngIf="loading"
         class="d-flex h-100 flex-column justify-content-center"
-        style="min-height: 640px;"
+        style="min-height: 640px"
       >
-        <img src="assets/img/loader.svg" height="36px" alt="Loader" />
+        <img src="assets/img/loader.svg" style="height: 36px" alt="Loader" />
       </div>
       <div *ngIf="!loading">
         <div class="row">
@@ -179,27 +179,51 @@
             </span>
           </div>
         </div>
-        <div *ngIf="!jobs || jobs.length == 0">
-          No jobs to show!
-        </div>
-        <div *ngIf="jobs && jobs.length > 0 && !isOnMobile">
+        <div *ngIf="!jobs || jobs.length == 0">No jobs to show!</div>
+        <div *ngIf="jobs && jobs.length > 0 && !isOnMobile && !reverseOrder">
           <app-job-dashboard-card
             *ngFor="
               let job of jobs
-                | orderBy: orderType:reverseOrder
-                | paginate: { itemsPerPage: 10, currentPage: index }
+                | orderBy : orderType
+                | paginate : { itemsPerPage: 10, currentPage: index }
             "
             [job]="job"
             [type]="'lg'"
             [isPublic]="jobType !== 'active'"
           ></app-job-dashboard-card>
         </div>
-        <div *ngIf="jobs && jobs.length > 0 && isOnMobile">
+        <div *ngIf="jobs && jobs.length > 0 && !isOnMobile && reverseOrder">
           <app-job-dashboard-card
             *ngFor="
               let job of jobs
-                | orderBy: orderType:reverseOrder
-                | paginate: { itemsPerPage: 10, currentPage: index }
+                | orderBy : orderType
+                | reverse
+                | paginate : { itemsPerPage: 10, currentPage: index }
+            "
+            [job]="job"
+            [type]="'lg'"
+            [isPublic]="jobType !== 'active'"
+          ></app-job-dashboard-card>
+        </div>
+        <div *ngIf="jobs && jobs.length > 0 && isOnMobile && !reverseOrder">
+          <app-job-dashboard-card
+            *ngFor="
+              let job of jobs
+                | orderBy : orderType
+                | paginate : { itemsPerPage: 10, currentPage: index }
+            "
+            [job]="job"
+            [type]="'sm'"
+            [isPublic]="false"
+          ></app-job-dashboard-card>
+        </div>
+        <div *ngIf="jobs && jobs.length > 0 && isOnMobile && reverseOrder">
+          <app-job-dashboard-card
+            *ngFor="
+              let job of jobs
+                | orderBy : orderType
+                | reverse
+                | paginate : { itemsPerPage: 10, currentPage: index }
             "
             [job]="job"
             [type]="'sm'"
