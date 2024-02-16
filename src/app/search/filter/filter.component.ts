@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Input, EventEmitter } from '@angular/core'
 import { FilterService } from 'app/shared/constants/search-page'
 @Component({
   selector: 'search-filter',
