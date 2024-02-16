@@ -1,4 +1,7 @@
-<section class="bg-G100 rounded-[12px] border-none p-[16px] grid gap-[32px]" id="search-filter">
+<section
+  class="bg-G100 rounded-[12px] border-none p-[16px] grid gap-[32px]"
+  id="search-filter"
+>
   <div class="flex items-center justify-between text-G800 text-h6 font-medium">
     <div class="flex items-center gap-[8px]">
       <div>Filter</div>
@@ -6,9 +9,7 @@
         <badge [value]="getNumberAllFilters()" />
       </div>
     </div>
-    <div class="cursor-pointer" (click)="allClear()">
-      Clear All
-    </div>
+    <div class="cursor-pointer" (click)="allClear()">Clear All</div>
   </div>
   <div class="flex flex-col gap-[16px]">
     <p-accordion class="w-full">
@@ -82,8 +83,8 @@
           <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
             <div class="flex items-center gap-[8px]">
               <span class="font-medium whitespace-nowrap">Hourly Rate</span>
-              <div *ngIf="hourlyForm.length > 0">
-                <badge [value]="hourlyForm.length" />
+              <div *ngIf="hourlyInput.length > 0">
+                <badge [value]="hourlyInput.length" />
               </div>
             </div>
             <div
@@ -102,9 +103,10 @@
             >
               <p-checkbox
                 [label]="item"
-                name="hourlyForm"
+                name="hourlyInput"
                 [value]="item"
-                [(ngModel)]="hourlyForm"
+                [(ngModel)]="hourlyInput"
+                (onChange)="hourlyClick($event)"
               ></p-checkbox>
             </div>
           </div>

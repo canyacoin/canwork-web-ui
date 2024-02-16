@@ -31,8 +31,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   searchInput: string = '' // the new search input text, this is the model on parent
   providerFilters = [] // the current active provider type filters (union)
   currentQueryString: string = '' // the current search on query parameters combination
+  hourlyFilters: string[] = [] // range filters on provider hourly rate
   noSearchParams = false // there are no search params, we have to render this notice
-  // todo inject into results component
+  // injected into results component
 
   smallCards = true
   query: string
@@ -160,10 +161,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   algoliaQuery(newQuery) {
-    console.log('newQuery') // debug
     if (!this.searchInput && this.providerFilters.length == 0) {
-      console.log(this.searchInput) // debug
-      console.log(this.providerFilters.length) // debug
       this.loading = false
       this.noSearchParams = true
       this.currentQueryString = newQuery // update internal state
@@ -185,6 +183,13 @@ export class SearchComponent implements OnInit, OnDestroy {
         algoliaSearchObject.facetFilters[0].push(`category:${providerName}`)
       }) // OR
     }
+
+    /*
+      https://www.algolia.com/doc/api-reference/api-parameters/filters/
+    */
+    // hourlyRate range query
+    // debug, poc, test filters are working
+    algoliaSearchObject.filters = `hourlyRate:0 TO 10 OR hourlyRate >= 50`
 
     this.algoliaSearchClient
       .search(this.searchInput, algoliaSearchObject)
@@ -264,6 +269,12 @@ export class SearchComponent implements OnInit, OnDestroy {
     } else {
       console.log('up to date') // debug, check this well better later when we add other search facets
     }
+  }
+
+  // two way binding, event from child (user input)
+  onHourlyInputChange(hourlyInput: string[]) {
+    console.log('hourly range filters changed:')
+    console.log(hourlyInput)
   }
 
   // two way binding, event from child (user input)

@@ -8,7 +8,9 @@ export class FilterComponent implements OnInit {
   filterSection = FilterService
   verifyForm: string[] = []
   locationForm: string[] = []
-  hourlyForm: string[] = []
+  @Input() hourlyInput: string[] = []
+  @Output() hourlyInputChange = new EventEmitter<string[]>() // two way binding to parent
+
   ratingForm: number[] = []
   // skills
   skillsForm: string[] = []
@@ -31,7 +33,7 @@ export class FilterComponent implements OnInit {
   getNumberAllFilters(): number {
     return (
       this.verifyForm.length +
-      this.hourlyForm.length +
+      this.hourlyInput.length +
       this.locationForm.length +
       this.skillsForm.length +
       this.ratingForm.length
@@ -40,7 +42,7 @@ export class FilterComponent implements OnInit {
 
   allClear() {
     this.verifyForm = []
-    this.hourlyForm = []
+    this.hourlyInput = []
     this.locationForm = []
     this.skillsForm = []
     this.ratingForm = []
@@ -58,8 +60,12 @@ export class FilterComponent implements OnInit {
     this.locationForm = []
   }
 
+  hourlyClick(e) {
+    this.hourlyInputChange.emit(this.hourlyInput) // notify parent and algolia handler
+  }
+
   hourlyClear() {
-    this.hourlyForm = []
+    this.hourlyInput = []
   }
 
   skillsClear() {
