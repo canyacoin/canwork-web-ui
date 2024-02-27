@@ -30,6 +30,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   */
   searchInput: string = '' // the new search input text, this is the model on parent
   providerFilters = [] // the current active provider type filters (union)
+  hourlyFilters = [] // the current active hourly rate range filters (union)
   currentQueryString: string = '' // the current search on query parameters combination
   hourlyFilters: string[] = [] // range filters on provider hourly rate
   noSearchParams = false // there are no search params, we have to render this notice
@@ -78,6 +79,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.routeSub = this.activatedRoute.queryParams.subscribe((params) => {
       this.searchInput = params['query'] || ''
       this.providerFilters = JSON.parse(params['providers'] || '[]')
+      this.hourlyFilters = JSON.parse(params['hourly'] || '[]')
+
       // this is the full stringified algolia query
       /*if (this.query === '') {
         this.query = params['query']
@@ -161,7 +164,11 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   algoliaQuery(newQuery) {
-    if (!this.searchInput && this.providerFilters.length == 0) {
+    if (
+      !this.searchInput &&
+      this.providerFilters.length == 0 &&
+      this.hourlyFilters.length == 0
+    ) {
       this.loading = false
       this.noSearchParams = true
       this.currentQueryString = newQuery // update internal state
@@ -188,8 +195,26 @@ export class SearchComponent implements OnInit, OnDestroy {
       https://www.algolia.com/doc/api-reference/api-parameters/filters/
     */
     // hourlyRate range query
-    // debug, poc, test filters are working
-    algoliaSearchObject.filters = `hourlyRate:0 TO 10 OR hourlyRate >= 50`
+    //algoliaSearchObject.filters = `hourlyRate:0 TO 10 OR hourlyRate >= 50`
+
+    // let's compose the algolia filter string
+    if (this.hourlyFilters.length > 0) {
+      let hourlyFilterString = ''
+
+      this.hourlyFilters.forEach((hourlyRange) => {
+        if (hourlyFilterString.length > 0) hourlyFilterString += ` OR `
+
+        // plain filter range
+        if (hourlyRange.indexOf('-') != -1)
+          hourlyFilterString += `hourlyRate:${hourlyRange.replace('-', ' TO ')}`
+
+        // filter greater then
+        if (hourlyRange.indexOf('>') != -1)
+          hourlyFilterString += `hourlyRate >= ${hourlyRange.replace('>', '')}`
+      }) // OR
+
+      algoliaSearchObject.filters = hourlyFilterString
+    }
 
     this.algoliaSearchClient
       .search(this.searchInput, algoliaSearchObject)
@@ -244,7 +269,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   syncAddressBar() {
     let newQueryString = `query=${this.searchInput}&providers=${JSON.stringify(
       this.providerFilters
-    )}`
+    )}&hourly=${JSON.stringify(this.hourlyFilters)}`
     this.location.go('search', newQueryString)
     return newQueryString
   }
@@ -273,8 +298,18 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   // two way binding, event from child (user input)
   onHourlyInputChange(hourlyInput: string[]) {
-    console.log('hourly range filters changed:')
-    console.log(hourlyInput)
+    let normalizedHourly = [] // clean up it a bit
+    hourlyInput.forEach((hourlyRange) => {
+      let cleanedRange = hourlyRange.replace('$', '').replace(' ', '')
+      normalizedHourly.push(cleanedRange)
+    })
+    // sort it to have a predictable string
+    normalizedHourly.sort()
+
+    // keep in sync also address bar, without refreshing page
+    const newQueryString = this.syncAddressBar()
+
+    this.refreshResultsIfNeeded(newQueryString)
   }
 
   // two way binding, event from child (user input)

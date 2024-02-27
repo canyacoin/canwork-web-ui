@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter } from '@angular/core'
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core'
 import { FilterService } from 'app/shared/constants/search-page'
 @Component({
   selector: 'search-filter',
@@ -66,6 +66,7 @@ export class FilterComponent implements OnInit {
 
   hourlyClear() {
     this.hourlyInput = []
+    this.hourlyInputChange.emit(this.hourlyInput) // notify parent and algolia handler
   }
 
   skillsClear() {
