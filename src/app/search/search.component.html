@@ -13,6 +13,8 @@
         <search-filter
           [hourlyInput]="hourlyFiltersInput"
           (hourlyInputChange)="onHourlyInputChange($event)"
+          [verifyForm]="verifyFilter"
+          (verifyFormChange)="onVerifyFormChange($event)"
         />
       </div>
       <div class="w-full">

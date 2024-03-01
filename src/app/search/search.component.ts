@@ -30,6 +30,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   */
   searchInput: string = '' // the new search input text, this is the model on parent
   providerFilters = [] // the current active provider type filters (union)
+
+  verifyFilter: string[] = [] // the current verified provider filter
+
   currentQueryString: string = '' // the current search on query parameters combination
   hourlyFilters: string[] = []
   // range filters on provider hourly rate, the current active hourly rate range filters (union)
@@ -83,8 +86,15 @@ export class SearchComponent implements OnInit, OnDestroy {
   ) {
     this.routeSub = this.activatedRoute.queryParams.subscribe((params) => {
       this.searchInput = params['query'] || ''
-      this.providerFilters = JSON.parse(params['providers'] || '[]')
-      this.hourlyFilters = JSON.parse(params['hourly'] || '[]')
+      this.providerFilters = JSON.parse(
+        decodeURIComponent(params['providers']) || '[]'
+      )
+      this.hourlyFilters = JSON.parse(
+        decodeURIComponent(params['hourly']) || '[]'
+      )
+      this.verifyFilter = JSON.parse(
+        decodeURIComponent(params['verify']) || '[]'
+      )
 
       // let's sync on load hourly filters injected into child controller, different format
       let injectedHourlyFilters = []
@@ -190,6 +200,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   algoliaQuery(newQuery) {
+    // verified filter is not enough, let's not enable search if there is only it
     if (
       !this.searchInput &&
       this.providerFilters.length == 0 &&
@@ -249,35 +260,46 @@ export class SearchComponent implements OnInit, OnDestroy {
         //console.log(result)
         for (let i = 0; i < result.length; i++) {
           if (result[i]) {
-            let avatar = result[i].avatar // current, retrocomp
-            //console.log(result[i])
+            // let's filter out not verified users if verified filter is enabled
+            let verifiedOk = true
             if (
-              result[i].compressedAvatarUrl &&
-              result[i].compressedAvatarUrl != 'new'
+              this.verifyFilter.length > 0 &&
+              this.verifyFilter[0] == 'Verified'
             ) {
-              // keep same object structure
-              // use compress thumbed if exist and not a massive update (new)
-              avatar = {
-                uri: result[i].compressedAvatarUrl,
+              verifiedOk = false
+              if (result[i].verified === true) verifiedOk = true
+            }
+            if (verifiedOk) {
+              let avatar = result[i].avatar // current, retrocomp
+              //console.log(result[i])
+              if (
+                result[i].compressedAvatarUrl &&
+                result[i].compressedAvatarUrl != 'new'
+              ) {
+                // keep same object structure
+                // use compress thumbed if exist and not a massive update (new)
+                avatar = {
+                  uri: result[i].compressedAvatarUrl,
+                }
               }
-            }
 
-            const provider = {
-              id: i,
-              address: result[i].address,
-              avatarUri: avatar.uri, // new
-              skillTags: result[i].skillTags || [],
-              title: result[i].title,
-              name: result[i].name,
-              category: result[i].category,
-              timezone: result[i].timezone,
-              hourlyRate: result[i].hourlyRate || 0,
-              ratingAverage: result[i].rating?.average | 0,
-              ratingCount: result[i].rating?.count | 0,
-              slug: result[i].slug,
-              verified: result[i].verified,
+              const provider = {
+                id: i,
+                address: result[i].address,
+                avatarUri: avatar.uri, // new
+                skillTags: result[i].skillTags || [],
+                title: result[i].title,
+                name: result[i].name,
+                category: result[i].category,
+                timezone: result[i].timezone,
+                hourlyRate: result[i].hourlyRate || 0,
+                ratingAverage: result[i].rating?.average | 0,
+                ratingCount: result[i].rating?.count | 0,
+                slug: result[i].slug,
+                verified: result[i].verified,
+              }
+              newArray.push(provider)
             }
-            newArray.push(provider)
           }
         }
         // newArray.sort((a, b) => b.ratingCount - a.ratingCount)
@@ -295,7 +317,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   syncAddressBar() {
     let newQueryString = `query=${this.searchInput}&providers=${JSON.stringify(
       this.providerFilters
-    )}&hourly=${JSON.stringify(this.hourlyFilters)}`
+    )}&hourly=${JSON.stringify(this.hourlyFilters)}&verify=${JSON.stringify(
+      this.verifyFilter
+    )}`
     this.location.go('search', newQueryString)
     return newQueryString
   }
@@ -320,6 +344,18 @@ export class SearchComponent implements OnInit, OnDestroy {
     } else {
       console.log('up to date') // debug, check this well better later when we add other search facets
     }
+  }
+
+  // two way binding, event from child (user input)
+  onVerifyFormChange(verifyInput: string[]) {
+    // we don't need to sort it, it's only one value
+
+    this.verifyFilter = verifyInput
+
+    // keep in sync also address bar, without refreshing page
+    const newQueryString = this.syncAddressBar()
+
+    this.refreshResultsIfNeeded(newQueryString)
   }
 
   // two way binding, event from child (user input)

@@ -6,10 +6,11 @@ import { FilterService } from 'app/shared/constants/search-page'
 })
 export class FilterComponent implements OnInit {
   filterSection = FilterService
-  verifyForm: string[] = []
   locationForm: string[] = []
   @Input() hourlyInput: string[] = []
   @Output() hourlyInputChange = new EventEmitter<string[]>() // two way binding to parent
+  @Input() verifyForm: string[] = []
+  @Output() verifyFormChange = new EventEmitter<string[]>() // two way binding to parent
 
   ratingForm: number[] = []
   // skills
@@ -46,10 +47,15 @@ export class FilterComponent implements OnInit {
     this.locationForm = []
     this.skillsForm = []
     this.ratingForm = []
+
+    this.hourlyInputChange.emit(this.hourlyInput) // notify parent and algolia handler
+    this.verifyFormChange.emit(this.verifyForm) // notify parent and algolia handler
+    // todo add the other filters later
   }
 
   verifyClear() {
     this.verifyForm = []
+    this.verifyFormChange.emit(this.verifyForm) // notify parent and algolia handler
   }
 
   delLocation(value: string) {
@@ -58,6 +64,12 @@ export class FilterComponent implements OnInit {
 
   LocationClear() {
     this.locationForm = []
+  }
+
+  verifyClick(e) {
+    //console.log(this.verifyForm);
+    //['Verified'] or []
+    this.verifyFormChange.emit(this.verifyForm) // notify parent and algolia handler
   }
 
   hourlyClick(e) {
