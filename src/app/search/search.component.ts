@@ -30,9 +30,14 @@ export class SearchComponent implements OnInit, OnDestroy {
   */
   searchInput: string = '' // the new search input text, this is the model on parent
   providerFilters = [] // the current active provider type filters (union)
-  hourlyFilters = [] // the current active hourly rate range filters (union)
   currentQueryString: string = '' // the current search on query parameters combination
-  hourlyFilters: string[] = [] // range filters on provider hourly rate
+  hourlyFilters: string[] = []
+  // range filters on provider hourly rate, the current active hourly rate range filters (union)
+
+  hourlyFiltersInput: string[] = []
+  // range filters on provider hourly rate, the input to send to child if we load from state route
+  // this is slight different cause we format range in a simplified way into state controller
+
   noSearchParams = false // there are no search params, we have to render this notice
   // injected into results component
 
@@ -81,6 +86,24 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.providerFilters = JSON.parse(params['providers'] || '[]')
       this.hourlyFilters = JSON.parse(params['hourly'] || '[]')
 
+      // let's sync on load hourly filters injected into child controller, different format
+      let injectedHourlyFilters = []
+      this.hourlyFilters.forEach((hourlyRange) => {
+        let hourlyFilterInputString = ''
+
+        // plain filter range
+        if (hourlyRange.indexOf('-') != -1)
+          hourlyFilterInputString = `$${hourlyRange.split('-').join(' - $')}`
+
+        // filter greater then
+        if (hourlyRange.indexOf('>') != -1)
+          hourlyFilterInputString = `$${hourlyRange}`
+
+        if (hourlyFilterInputString)
+          injectedHourlyFilters.push(hourlyFilterInputString)
+      })
+      this.hourlyFiltersInput = injectedHourlyFilters // send it
+
       // this is the full stringified algolia query
       /*if (this.query === '') {
         this.query = params['query']
@@ -90,6 +113,8 @@ export class SearchComponent implements OnInit, OnDestroy {
       //  this.categoryFilters.push(params['category'])
       //}
 
+      /*
+      // this should be obsolete
       if (!this.loading) {
         //this.rendering = true
         //setTimeout(() => {
@@ -99,6 +124,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           this.toggleMenuOverlay() // obsolete?
         }
       }
+      */
     })
   }
 
@@ -210,7 +236,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
         // filter greater then
         if (hourlyRange.indexOf('>') != -1)
-          hourlyFilterString += `hourlyRate >= ${hourlyRange.replace('>', '')}`
+          hourlyFilterString += `hourlyRate > ${hourlyRange.replace('>', '')}`
       }) // OR
 
       algoliaSearchObject.filters = hourlyFilterString
@@ -300,11 +326,13 @@ export class SearchComponent implements OnInit, OnDestroy {
   onHourlyInputChange(hourlyInput: string[]) {
     let normalizedHourly = [] // clean up it a bit
     hourlyInput.forEach((hourlyRange) => {
-      let cleanedRange = hourlyRange.replace('$', '').replace(' ', '')
+      let cleanedRange = hourlyRange.split('$').join('').split(' ').join('')
       normalizedHourly.push(cleanedRange)
     })
     // sort it to have a predictable string
     normalizedHourly.sort()
+
+    this.hourlyFilters = normalizedHourly
 
     // keep in sync also address bar, without refreshing page
     const newQueryString = this.syncAddressBar()
