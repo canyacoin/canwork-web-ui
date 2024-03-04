@@ -85,15 +85,15 @@ export class SearchComponent implements OnInit, OnDestroy {
     private location: Location
   ) {
     this.routeSub = this.activatedRoute.queryParams.subscribe((params) => {
-      this.searchInput = params['query'] || ''
+      this.searchInput = decodeURIComponent(params['query'] || '')
       this.providerFilters = JSON.parse(
-        decodeURIComponent(params['providers']) || '[]'
+        decodeURIComponent(params['providers'] || '[]')
       )
       this.hourlyFilters = JSON.parse(
-        decodeURIComponent(params['hourly']) || '[]'
+        decodeURIComponent(params['hourly'] || '[]')
       )
       this.verifyFilter = JSON.parse(
-        decodeURIComponent(params['verify']) || '[]'
+        decodeURIComponent(params['verify'] || '[]')
       )
 
       // let's sync on load hourly filters injected into child controller, different format
@@ -315,11 +315,13 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   syncAddressBar() {
-    let newQueryString = `query=${this.searchInput}&providers=${JSON.stringify(
-      this.providerFilters
-    )}&hourly=${JSON.stringify(this.hourlyFilters)}&verify=${JSON.stringify(
-      this.verifyFilter
-    )}`
+    let newQueryString = `query=${encodeURIComponent(
+      this.searchInput
+    )}&providers=${encodeURIComponent(
+      JSON.stringify(this.providerFilters)
+    )}&hourly=${encodeURIComponent(
+      JSON.stringify(this.hourlyFilters)
+    )}&verify=${encodeURIComponent(JSON.stringify(this.verifyFilter))}`
     this.location.go('search', newQueryString)
     return newQueryString
   }
