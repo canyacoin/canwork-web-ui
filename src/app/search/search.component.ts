@@ -220,12 +220,27 @@ export class SearchComponent implements OnInit, OnDestroy {
       https://www.algolia.com/doc/api-reference/search-api-parameters/
       hitsPerPage and so on
     */
-    if (this.providerFilters.length > 0) {
+    // facet filters
+    if (this.providerFilters.length > 0 || this.verifyFilter.length > 0) {
       // https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/
       algoliaSearchObject.facetFilters = [[]]
+
+      // provider type
       this.providerFilters.forEach((providerName) => {
         algoliaSearchObject.facetFilters[0].push(`category:${providerName}`)
       }) // OR
+
+      // verified
+      if (this.verifyFilter.length > 0 && this.verifyFilter[0] == 'Verified') {
+        if (algoliaSearchObject.facetFilters[0].length > 0) {
+          // there are also facet filter on provider type or list
+          // https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/#and-and-or-filter-combination
+          algoliaSearchObject.facetFilters.push(`verified:true`)
+        } else {
+          // there are only facet filters on verified property
+          algoliaSearchObject.facetFilters[0].push(`verified:true`)
+        }
+      }
     }
 
     /*
@@ -261,45 +276,45 @@ export class SearchComponent implements OnInit, OnDestroy {
         for (let i = 0; i < result.length; i++) {
           if (result[i]) {
             // let's filter out not verified users if verified filter is enabled
-            let verifiedOk = true
-            if (
+            // let verifiedOk = true
+            /*if (
               this.verifyFilter.length > 0 &&
               this.verifyFilter[0] == 'Verified'
             ) {
               verifiedOk = false
               if (result[i].verified === true) verifiedOk = true
-            }
-            if (verifiedOk) {
-              let avatar = result[i].avatar // current, retrocomp
-              //console.log(result[i])
-              if (
-                result[i].compressedAvatarUrl &&
-                result[i].compressedAvatarUrl != 'new'
-              ) {
-                // keep same object structure
-                // use compress thumbed if exist and not a massive update (new)
-                avatar = {
-                  uri: result[i].compressedAvatarUrl,
-                }
+            }*/
+            //if (verifiedOk) {
+            let avatar = result[i].avatar // current, retrocomp
+            //console.log(result[i])
+            if (
+              result[i].compressedAvatarUrl &&
+              result[i].compressedAvatarUrl != 'new'
+            ) {
+              // keep same object structure
+              // use compress thumbed if exist and not a massive update (new)
+              avatar = {
+                uri: result[i].compressedAvatarUrl,
               }
+            }
 
-              const provider = {
-                id: i,
-                address: result[i].address,
-                avatarUri: avatar.uri, // new
-                skillTags: result[i].skillTags || [],
-                title: result[i].title,
-                name: result[i].name,
-                category: result[i].category,
-                timezone: result[i].timezone,
-                hourlyRate: result[i].hourlyRate || 0,
-                ratingAverage: result[i].rating?.average | 0,
-                ratingCount: result[i].rating?.count | 0,
-                slug: result[i].slug,
-                verified: result[i].verified,
-              }
-              newArray.push(provider)
+            const provider = {
+              id: i,
+              address: result[i].address,
+              avatarUri: avatar.uri, // new
+              skillTags: result[i].skillTags || [],
+              title: result[i].title,
+              name: result[i].name,
+              category: result[i].category,
+              timezone: result[i].timezone,
+              hourlyRate: result[i].hourlyRate || 0,
+              ratingAverage: result[i].rating?.average | 0,
+              ratingCount: result[i].rating?.count | 0,
+              slug: result[i].slug,
+              verified: result[i].verified,
             }
+            newArray.push(provider)
+            //}
           }
         }
         // newArray.sort((a, b) => b.ratingCount - a.ratingCount)
