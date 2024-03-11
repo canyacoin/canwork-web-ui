@@ -18,6 +18,7 @@ export class ProfileCardComponent {
   @Input() skillTags!: string[]
   @Input() slug!: string
   @Input() address!: string
+  @Input() timezone!: string
   @Input() hourlyRate!: number
 
   constructor(private router: Router) {}

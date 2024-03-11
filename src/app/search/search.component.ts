@@ -9,6 +9,7 @@ import { User, UserCategory } from '../core-classes/user'
 import { AuthService } from '../core-services/auth.service'
 import { NavService } from '../core-services/nav.service'
 import { Location } from '@angular/common'
+import * as moment from 'moment-timezone'
 
 @Component({
   selector: 'app-search-page',
@@ -214,6 +215,11 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.noSearchParams = false
     if (this.loading) return // avoid overlapping searches
     this.loading = true
+    // debug
+    //console.log(moment.tz.zonesForCountry('US'));
+    console.log(moment.tz.zonesForCountry('IT'))
+    // console.log(moment.tz.zone(moment.tz.zonesForCountry('IT')[0]))
+
     let newArray = []
     let algoliaSearchObject = <any>{}
     /* 
@@ -221,26 +227,44 @@ export class SearchComponent implements OnInit, OnDestroy {
       hitsPerPage and so on
     */
     // facet filters
+    // https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/#and-and-or-filter-combination
+
     if (this.providerFilters.length > 0 || this.verifyFilter.length > 0) {
       // https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/
-      algoliaSearchObject.facetFilters = [[]]
+      algoliaSearchObject.facetFilters = []
 
-      // provider type
-      this.providerFilters.forEach((providerName) => {
-        algoliaSearchObject.facetFilters[0].push(`category:${providerName}`)
-      }) // OR
+      let currentFacetFiltersIndex = -1
 
-      // verified
-      if (this.verifyFilter.length > 0 && this.verifyFilter[0] == 'Verified') {
-        if (algoliaSearchObject.facetFilters[0].length > 0) {
-          // there are also facet filter on provider type or list
-          // https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/#and-and-or-filter-combination
-          algoliaSearchObject.facetFilters.push(`verified:true`)
-        } else {
-          // there are only facet filters on verified property
-          algoliaSearchObject.facetFilters[0].push(`verified:true`)
-        }
+      if (this.providerFilters.length > 0) {
+        algoliaSearchObject.facetFilters.push([])
+
+        currentFacetFiltersIndex = algoliaSearchObject.facetFilters.length - 1
+        // provider type
+        this.providerFilters.forEach((providerName) => {
+          algoliaSearchObject.facetFilters[currentFacetFiltersIndex].push(
+            `category:${providerName}`
+          )
+        }) // OR
       }
+
+      // verified (AND)
+      if (this.verifyFilter.length > 0 && this.verifyFilter[0] == 'Verified') {
+        algoliaSearchObject.facetFilters.push(`verified:true`) // this filter is a string, not an array
+      }
+
+      // test poc filter on timezones (AND)
+      // if timezones filter > 0 ..
+      algoliaSearchObject.facetFilters.push([])
+
+      currentFacetFiltersIndex = algoliaSearchObject.facetFilters.length - 1
+      // get possibile timezone list for a country
+      let timezones = moment.tz.zonesForCountry('IT') // todo union of all countries selected
+
+      timezones.forEach((timezone) => {
+        algoliaSearchObject.facetFilters[currentFacetFiltersIndex].push(
+          `timezone:${timezone}`
+        )
+      }) // OR
     }
 
     /*
