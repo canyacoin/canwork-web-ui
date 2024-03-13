@@ -6,7 +6,8 @@ import { FilterService } from 'app/shared/constants/search-page'
 })
 export class FilterComponent implements OnInit {
   filterSection = FilterService
-  locationForm: string[] = []
+  locationForm: any[] = []
+  locationFormSelected: string[] = []
   @Input() hourlyInput: string[] = []
   @Output() hourlyInputChange = new EventEmitter<string[]>() // two way binding to parent
   @Input() verifyForm: string[] = []
@@ -20,14 +21,14 @@ export class FilterComponent implements OnInit {
 
   ngOnInit() {
     this.locationForm = [
-      'Netherlands',
-      'Italy',
-      'Australia',
-      'Nigeria',
-      'France',
-      'Germany',
-      'United States',
-    ]
+      { full: 'Netherlands', abbr: 'NL' },
+      { full: 'Italy', abbr: 'IT' },
+      { full: 'Australia', abbr: 'AU' },
+      { full: 'Nigeria', abbr: 'NG' },
+      { full: 'France', abbr: 'FR' },
+      { full: 'Germany', abbr: 'DE' },
+      { full: 'United States', abbr: 'US' },
+    ] // possible choices
     this.tempSkillsForm = this.filterSection.skills.slice(0, 9)
   }
 
@@ -53,6 +54,25 @@ export class FilterComponent implements OnInit {
     // todo add the other filters later
   }
 
+  isLocationSelected(locationName: string) {
+    return this.locationFormSelected.includes(locationName)
+  }
+
+  clickLocationTag(locationAbbr: string) {
+    // update local state and ui
+    if (locationAbbr) {
+      if (!this.isLocationSelected(locationAbbr)) {
+        this.locationFormSelected.push(locationAbbr) // select it
+      } else {
+        const index = this.locationFormSelected.findIndex(function (element) {
+          return element === locationAbbr
+        })
+        this.locationFormSelected.splice(index, 1) // deselect id
+      }
+      // TODO this.locationFormChange.emit(this.locationFormSelected) // notify parent and algolia handler
+    }
+  }
+
   verifyClear() {
     this.verifyForm = []
     this.verifyFormChange.emit(this.verifyForm) // notify parent and algolia handler
@@ -62,8 +82,8 @@ export class FilterComponent implements OnInit {
     this.locationForm = this.locationForm.filter((item) => item !== value)
   }
 
-  LocationClear() {
-    this.locationForm = []
+  locationClear() {
+    this.locationFormSelected = []
   }
 
   verifyClick(e) {

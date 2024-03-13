@@ -55,23 +55,28 @@
           <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
             <div class="flex items-center gap-[8px]">
               <span class="font-medium whitespace-nowrap">Location</span>
-              <div *ngIf="locationForm.length > 0">
-                <badge [value]="locationForm.length" />
+              <div *ngIf="locationFormSelected.length > 0">
+                <badge [value]="locationFormSelected.length" />
               </div>
             </div>
             <div
               class="font-medium pointer-events-auto"
-              (click)="hourlyClear()"
+              (click)="locationClear()"
             >
               Clear
             </div>
           </div>
         </ng-template>
         <div class="pt-[16px] pb-[24px] px-[24px] flex flex-col gap-[8px]">
-          <input />
           <div class="flex flex-wrap gap-[8px]">
-            <div *ngFor="let item of locationForm">
-              <del-tag [value]="item" (tagClick)="delLocation($event)" />
+            <div
+              *ngFor="let item of locationForm"
+              (click)="clickLocationTag(item.abbr)"
+            >
+              <basic-tag
+                [title]="item.full"
+                [type]="isLocationSelected(item.abbr) ? 3 : 1"
+              />
             </div>
           </div>
         </div>
