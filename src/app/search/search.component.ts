@@ -222,7 +222,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.noSearchParams = false
     if (this.loading) return // avoid overlapping searches
     this.loading = true
-    console.log(moment.tz.zonesForCountry('IT'))
 
     let newArray = []
     let algoliaSearchObject = <any>{}
@@ -304,8 +303,21 @@ export class SearchComponent implements OnInit, OnDestroy {
       algoliaSearchObject.filters = hourlyFilterString
     }
 
+    /* 
+      we merge skills query with free text query
+      for maximum results with skills query on all provider profile
+      the skills query is in AND with free text and this is correct
+      also the skills will be in AND, we'll search all
+    */
+    let skillsQuery = 'html' // debug POC
+
+    let searchQuery = this.searchInput
+    if (skillsQuery) {
+      if (searchQuery) searchQuery = `${searchQuery} ${skillsQuery}`
+      else searchQuery = skillsQuery
+    }
     this.algoliaSearchClient
-      .search(this.searchInput, algoliaSearchObject)
+      .search(searchQuery, algoliaSearchObject)
       .then((res) => {
         const result = res.hits
         //console.log(result)
