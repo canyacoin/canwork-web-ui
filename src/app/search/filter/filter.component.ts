@@ -7,7 +7,8 @@ import { FilterService } from 'app/shared/constants/search-page'
 export class FilterComponent implements OnInit {
   filterSection = FilterService
   locationForm: any[] = []
-  locationFormSelected: string[] = []
+  @Input() locationFormSelected: string[] = []
+  @Output() locationChange = new EventEmitter<string[]>() // two way binding to parent
   @Input() hourlyInput: string[] = []
   @Output() hourlyInputChange = new EventEmitter<string[]>() // two way binding to parent
   @Input() verifyForm: string[] = []
@@ -36,7 +37,7 @@ export class FilterComponent implements OnInit {
     return (
       this.verifyForm.length +
       this.hourlyInput.length +
-      this.locationForm.length +
+      this.locationFormSelected.length +
       this.skillsForm.length +
       this.ratingForm.length
     )
@@ -45,12 +46,13 @@ export class FilterComponent implements OnInit {
   allClear() {
     this.verifyForm = []
     this.hourlyInput = []
-    this.locationForm = []
+    this.locationFormSelected = []
     this.skillsForm = []
     this.ratingForm = []
 
     this.hourlyInputChange.emit(this.hourlyInput) // notify parent and algolia handler
     this.verifyFormChange.emit(this.verifyForm) // notify parent and algolia handler
+    this.locationChange.emit(this.locationFormSelected) // notify parent and algolia handler
     // todo add the other filters later
   }
 
@@ -69,7 +71,7 @@ export class FilterComponent implements OnInit {
         })
         this.locationFormSelected.splice(index, 1) // deselect id
       }
-      // TODO this.locationFormChange.emit(this.locationFormSelected) // notify parent and algolia handler
+      this.locationChange.emit(this.locationFormSelected) // notify parent and algolia handler
     }
   }
 
@@ -78,12 +80,13 @@ export class FilterComponent implements OnInit {
     this.verifyFormChange.emit(this.verifyForm) // notify parent and algolia handler
   }
 
-  delLocation(value: string) {
+  /*delLocation(value: string) {
     this.locationForm = this.locationForm.filter((item) => item !== value)
-  }
+  }*/
 
   locationClear() {
     this.locationFormSelected = []
+    this.locationChange.emit(this.locationFormSelected) // notify parent and algolia handler
   }
 
   verifyClick(e) {

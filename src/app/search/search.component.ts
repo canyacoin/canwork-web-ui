@@ -34,6 +34,8 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   verifyFilter: string[] = [] // the current verified provider filter
 
+  locationFilter: string[] = [] // the current location list filter (or)
+
   currentQueryString: string = '' // the current search on query parameters combination
   hourlyFilters: string[] = []
   // range filters on provider hourly rate, the current active hourly rate range filters (union)
@@ -95,6 +97,10 @@ export class SearchComponent implements OnInit, OnDestroy {
       )
       this.verifyFilter = JSON.parse(
         decodeURIComponent(params['verify'] || '[]')
+      )
+
+      this.locationFilter = JSON.parse(
+        decodeURIComponent(params['location'] || '[]')
       )
 
       // let's sync on load hourly filters injected into child controller, different format
@@ -201,11 +207,12 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   algoliaQuery(newQuery) {
-    // verified filter is not enough, let's not enable search if there is only it
     if (
       !this.searchInput &&
       this.providerFilters.length == 0 &&
-      this.hourlyFilters.length == 0
+      this.hourlyFilters.length == 0 &&
+      this.verifyFilter.length == 0 &&
+      this.locationFilter.length == 0
     ) {
       this.loading = false
       this.noSearchParams = true
@@ -215,10 +222,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.noSearchParams = false
     if (this.loading) return // avoid overlapping searches
     this.loading = true
-    // debug
-    //console.log(moment.tz.zonesForCountry('US'));
     console.log(moment.tz.zonesForCountry('IT'))
-    // console.log(moment.tz.zone(moment.tz.zonesForCountry('IT')[0]))
 
     let newArray = []
     let algoliaSearchObject = <any>{}
@@ -229,7 +233,11 @@ export class SearchComponent implements OnInit, OnDestroy {
     // facet filters
     // https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/#and-and-or-filter-combination
 
-    if (this.providerFilters.length > 0 || this.verifyFilter.length > 0) {
+    if (
+      this.providerFilters.length > 0 ||
+      this.verifyFilter.length > 0 ||
+      this.locationFilter.length > 0
+    ) {
       // https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/
       algoliaSearchObject.facetFilters = []
 
@@ -252,19 +260,23 @@ export class SearchComponent implements OnInit, OnDestroy {
         algoliaSearchObject.facetFilters.push(`verified:true`) // this filter is a string, not an array
       }
 
-      // test poc filter on timezones (AND)
-      // if timezones filter > 0 ..
-      algoliaSearchObject.facetFilters.push([])
+      // filter on countries,timezones (AND)
+      if (this.locationFilter.length > 0) {
+        algoliaSearchObject.facetFilters.push([])
 
-      currentFacetFiltersIndex = algoliaSearchObject.facetFilters.length - 1
-      // get possibile timezone list for a country
-      let timezones = moment.tz.zonesForCountry('IT') // todo union of all countries selected
+        currentFacetFiltersIndex = algoliaSearchObject.facetFilters.length - 1
+        // get possibile timezone list for every selected country
+        this.locationFilter.forEach((countryCode) => {
+          let timezones = moment.tz.zonesForCountry(countryCode)
 
-      timezones.forEach((timezone) => {
-        algoliaSearchObject.facetFilters[currentFacetFiltersIndex].push(
-          `timezone:${timezone}`
-        )
-      }) // OR
+          // union of all countries selected
+          timezones.forEach((timezone) => {
+            algoliaSearchObject.facetFilters[currentFacetFiltersIndex].push(
+              `timezone:${timezone}`
+            )
+          }) // OR
+        })
+      }
     }
 
     /*
@@ -299,16 +311,6 @@ export class SearchComponent implements OnInit, OnDestroy {
         //console.log(result)
         for (let i = 0; i < result.length; i++) {
           if (result[i]) {
-            // let's filter out not verified users if verified filter is enabled
-            // let verifiedOk = true
-            /*if (
-              this.verifyFilter.length > 0 &&
-              this.verifyFilter[0] == 'Verified'
-            ) {
-              verifiedOk = false
-              if (result[i].verified === true) verifiedOk = true
-            }*/
-            //if (verifiedOk) {
             let avatar = result[i].avatar // current, retrocomp
             //console.log(result[i])
             if (
@@ -338,7 +340,6 @@ export class SearchComponent implements OnInit, OnDestroy {
               verified: result[i].verified,
             }
             newArray.push(provider)
-            //}
           }
         }
         // newArray.sort((a, b) => b.ratingCount - a.ratingCount)
@@ -354,12 +355,16 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   syncAddressBar() {
+    const sortedLocations = this.locationFilter.concat().sort() // sort to a copy, predictable string
+
     let newQueryString = `query=${encodeURIComponent(
       this.searchInput
     )}&providers=${encodeURIComponent(
       JSON.stringify(this.providerFilters)
     )}&hourly=${encodeURIComponent(
       JSON.stringify(this.hourlyFilters)
+    )}&location=${encodeURIComponent(
+      JSON.stringify(sortedLocations)
     )}&verify=${encodeURIComponent(JSON.stringify(this.verifyFilter))}`
     this.location.go('search', newQueryString)
     return newQueryString
@@ -385,6 +390,18 @@ export class SearchComponent implements OnInit, OnDestroy {
     } else {
       console.log('up to date') // debug, check this well better later when we add other search facets
     }
+  }
+
+  // two way binding, event from child (user input)
+  onLocationChange(locationInput: string[]) {
+    // we don't sort it to avoid ui changes, we'll sort it on the fly when composing status into address bar
+
+    this.locationFilter = locationInput
+
+    // keep in sync also address bar, without refreshing page
+    const newQueryString = this.syncAddressBar()
+
+    this.refreshResultsIfNeeded(newQueryString)
   }
 
   // two way binding, event from child (user input)
