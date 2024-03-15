@@ -14,11 +14,13 @@ export class FilterComponent implements OnInit {
   @Input() verifyForm: string[] = []
   @Output() verifyFormChange = new EventEmitter<string[]>() // two way binding to parent
 
-  ratingForm: number[] = []
   // skills
-  skillsForm: string[] = []
+  @Input() skillsForm: string[] = []
+  @Output() skillsFormChange = new EventEmitter<string[]>() // two way binding to parent
   tempSkillsForm: string[] = []
-  skillsLength: number = 9
+  skillsLength: number = 9 // how many skills to show at start
+
+  ratingForm: number[] = []
 
   ngOnInit() {
     this.locationForm = [
@@ -30,7 +32,7 @@ export class FilterComponent implements OnInit {
       { full: 'Germany', abbr: 'DE' },
       { full: 'United States', abbr: 'US' },
     ] // possible choices
-    this.tempSkillsForm = this.filterSection.skills.slice(0, 9)
+    this.tempSkillsForm = this.filterSection.skills.slice(0, this.skillsLength)
   }
 
   getNumberAllFilters(): number {
@@ -53,6 +55,7 @@ export class FilterComponent implements OnInit {
     this.hourlyInputChange.emit(this.hourlyInput) // notify parent and algolia handler
     this.verifyFormChange.emit(this.verifyForm) // notify parent and algolia handler
     this.locationChange.emit(this.locationFormSelected) // notify parent and algolia handler
+    this.skillsFormChange.emit(this.skillsForm) // notify parent and algolia handler
     // todo add the other filters later
   }
 
@@ -95,6 +98,10 @@ export class FilterComponent implements OnInit {
     this.verifyFormChange.emit(this.verifyForm) // notify parent and algolia handler
   }
 
+  skillClick(e) {
+    this.skillsFormChange.emit(this.skillsForm) // notify parent and algolia handler
+  }
+
   hourlyClick(e) {
     this.hourlyInputChange.emit(this.hourlyInput) // notify parent and algolia handler
   }
@@ -106,6 +113,7 @@ export class FilterComponent implements OnInit {
 
   skillsClear() {
     this.skillsForm = []
+    this.skillsFormChange.emit(this.skillsForm) // notify parent and algolia handler
   }
 
   ratingClear() {

@@ -14,31 +14,24 @@ export const HeroService = {
 }
 
 export const FilterService = {
-  verification: [
-    'Verified'
-  ],
+  verification: ['Verified'],
   hourlyRate: ['$0 - $25', '$25 - $50', '$50 - $100', '$100>'],
   skills: [
+    'Javascript',
+    'Html',
+    'React',
+    'Angular',
+    'NodeJs',
     'Web Design',
     'UI/UX Design',
     'User Research',
     'Journey Maps',
-    'Angular',
-    'NodeJs',
     'Content Writer',
     'Digital Marketing',
     'Power Point Presentation',
+    'Figma',
     'VueJs',
-    'Web Design1',
-    'UI/UX Design2',
-    'User Research3',
-    'Journey Maps4',
-    'Angular5',
-    'NodeJs6',
-    'Content Writer7',
-    'Digital Marketing8',
-    'Power Point Presentation9',
-    'VueJs0',
+    'Project Management',
   ],
   rating: [5, 4, 3, 2, 1],
 }

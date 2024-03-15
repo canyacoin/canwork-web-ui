@@ -40,6 +40,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   hourlyFilters: string[] = []
   // range filters on provider hourly rate, the current active hourly rate range filters (union)
 
+  skillsFilter: string[] = []
+  // skill filters on provider, intersection (AND)
+
   hourlyFiltersInput: string[] = []
   // range filters on provider hourly rate, the input to send to child if we load from state route
   // this is slight different cause we format range in a simplified way into state controller
@@ -103,6 +106,10 @@ export class SearchComponent implements OnInit, OnDestroy {
         decodeURIComponent(params['location'] || '[]')
       )
 
+      this.skillsFilter = JSON.parse(
+        decodeURIComponent(params['skills'] || '[]')
+      )
+
       // let's sync on load hourly filters injected into child controller, different format
       let injectedHourlyFilters = []
       this.hourlyFilters.forEach((hourlyRange) => {
@@ -119,29 +126,8 @@ export class SearchComponent implements OnInit, OnDestroy {
         if (hourlyFilterInputString)
           injectedHourlyFilters.push(hourlyFilterInputString)
       })
+
       this.hourlyFiltersInput = injectedHourlyFilters // send it
-
-      // this is the full stringified algolia query
-      /*if (this.query === '') {
-        this.query = params['query']
-      }*/
-
-      //if (this.categoryFilters.length < 1 && params['category'] !== '') {
-      //  this.categoryFilters.push(params['category'])
-      //}
-
-      /*
-      // this should be obsolete
-      if (!this.loading) {
-        //this.rendering = true
-        //setTimeout(() => {
-        //  this.rendering = false
-        //})
-        if (this.containsClass('menu-overlay', 'activate-menu')) {
-          this.toggleMenuOverlay() // obsolete?
-        }
-      }
-      */
     })
   }
 
@@ -154,37 +140,6 @@ export class SearchComponent implements OnInit, OnDestroy {
       environment.algolia.indexName
     )
 
-    /*this.algoliaSearchConfig = {
-      indexName: this.algoliaIndex,
-      searchClient,
-      
-      // needed only for instant search, not needed anymore
-      
-      routing: {
-        stateMapping: {
-          routeToState(routeState: any) {
-            const generatedQuery = {}
-            generatedQuery[self.algoliaIndex] = {}
-
-            // free text query
-            if (routeState.query)
-              generatedQuery[self.algoliaIndex].query = routeState.query
-
-            // category list
-            if (routeState.refinementList)
-              generatedQuery[self.algoliaIndex].refinementList =
-                routeState.refinementList
-
-            // rate range
-            if (routeState.range)
-              generatedQuery[self.algoliaIndex].range = routeState.range
-
-            //console.log(generatedQuery)
-            return generatedQuery
-          },
-        },
-      },
-    }*/
     this.authSub = this.auth.currentUser$.subscribe((user: User) => {
       if (this.currentUser !== user) {
         this.currentUser = user
@@ -212,6 +167,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.providerFilters.length == 0 &&
       this.hourlyFilters.length == 0 &&
       this.verifyFilter.length == 0 &&
+      this.skillsFilter.length == 0 &&
       this.locationFilter.length == 0
     ) {
       this.loading = false
@@ -307,11 +263,19 @@ export class SearchComponent implements OnInit, OnDestroy {
       we merge skills query with free text query
       for maximum results with skills query on all provider profile
       the skills query is in AND with free text and this is correct
-      also the skills will be in AND, we'll search all
+      also the skills will be in AND each other, we'll search all
     */
-    let skillsQuery = 'html' // debug POC
+    let skillsQuery = ''
+    if (this.skillsFilter.length > 0) {
+      this.skillsFilter.forEach((skill) => {
+        if (skillsQuery) skillsQuery += ' '
+        skillsQuery += skill
+      })
+    }
 
     let searchQuery = this.searchInput
+    // free text + skills
+
     if (skillsQuery) {
       if (searchQuery) searchQuery = `${searchQuery} ${skillsQuery}`
       else searchQuery = skillsQuery
@@ -367,7 +331,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   syncAddressBar() {
+    // do not affect injected status, let's do a copy
     const sortedLocations = this.locationFilter.concat().sort() // sort to a copy, predictable string
+    const sortedSkills = this.skillsFilter.concat().sort() // sort to a copy, predictable string
 
     let newQueryString = `query=${encodeURIComponent(
       this.searchInput
@@ -377,6 +343,8 @@ export class SearchComponent implements OnInit, OnDestroy {
       JSON.stringify(this.hourlyFilters)
     )}&location=${encodeURIComponent(
       JSON.stringify(sortedLocations)
+    )}&skills=${encodeURIComponent(
+      JSON.stringify(sortedSkills)
     )}&verify=${encodeURIComponent(JSON.stringify(this.verifyFilter))}`
     this.location.go('search', newQueryString)
     return newQueryString
@@ -439,6 +407,16 @@ export class SearchComponent implements OnInit, OnDestroy {
     normalizedHourly.sort()
 
     this.hourlyFilters = normalizedHourly
+
+    // keep in sync also address bar, without refreshing page
+    const newQueryString = this.syncAddressBar()
+
+    this.refreshResultsIfNeeded(newQueryString)
+  }
+
+  // two way binding, event from child (user input)
+  onSkillsFilterChange(skillInput: string[]) {
+    this.skillsFilter = skillInput
 
     // keep in sync also address bar, without refreshing page
     const newQueryString = this.syncAddressBar()
