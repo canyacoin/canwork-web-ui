@@ -28,10 +28,13 @@ import { JobDetailsComponent } from './jobs/container/job-details/job-details.co
 import { JobDashboardComponent } from './jobs/dashboard/job-dashboard.component'
 import { PostComponent } from './jobs/post/post.component'
 import { BscPaymentSelectorComponent } from '../core-components/bsc-payment-selector/bsc-payment-selector.component'
+import { ToastModule } from 'primeng/toast';
+
 
 @NgModule({
   imports: [
     CommonModule,
+    ToastModule,
     //SimpleModalModule, // old
     NgxModalView, // new
     CoreComponentsModule,

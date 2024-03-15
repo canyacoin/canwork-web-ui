@@ -31,10 +31,14 @@ import * as _ from 'lodash'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
+
+import { MessageService } from 'primeng/api'
+
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.css'],
+  providers: [MessageService],
 })
 export class PostComponent implements OnInit, OnDestroy {
   postForm: UntypedFormGroup = null
@@ -69,6 +73,9 @@ export class PostComponent implements OnInit, OnDestroy {
   fileTooBig = false
   uploadFailed = false
   deleteFailed = false
+
+
+
 
   // usdToAtomicCan: number // this is not used
   providerTypes = [
@@ -109,7 +116,8 @@ export class PostComponent implements OnInit, OnDestroy {
     private gitService: GitService,
     private publicJobService: PublicJobService,
     private uploadService: UploadService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private messageService: MessageService
   ) {
     this.postForm = formBuilder.group({
       url: [''],
@@ -303,7 +311,17 @@ export class PostComponent implements OnInit, OnDestroy {
     const noAddress = await this.authService.isAuthenticatedAndNoAddress()
     const user = await this.authService.getCurrentUser()
     if (noAddress && user.type == 'User') {
-      this.toastr.warning('Add BNB Chain (BEP20) wallet to create jobs')
+      console.log("test create a job posting address");
+      // issuse/................................
+      this.messageService.add(
+        {
+          key: 'tc',
+          severity: 'warn',
+          summary: 'Warn',
+          detail:
+            'Add BNB Chain (BEP20) wallet to create jobs',
+        }
+      )
     }
   }
 
@@ -469,8 +487,8 @@ export class PostComponent implements OnInit, OnDestroy {
         this.shareableJobForm.value.skills === ''
           ? []
           : this.shareableJobForm.value.skills
-              .split(',')
-              .map((item) => item.trim())
+            .split(',')
+            .map((item) => item.trim())
     }
     if (tags.length > 6) {
       tags = tags.slice(0, 6)
@@ -619,8 +637,8 @@ export class PostComponent implements OnInit, OnDestroy {
         this.shareableJobForm.value.skills === ''
           ? []
           : this.shareableJobForm.value.skills
-              .split(',')
-              .map((item) => item.trim())
+            .split(',')
+            .map((item) => item.trim())
       if (tags.length > 6) {
         tags = tags.slice(0, 6)
       }

@@ -1431,7 +1431,7 @@ button:focus {
 
 .btn-primary,
 .btn-primary:hover {
-  background-color: #33ccff;
+  background-color: #33ccff !important; 
   border: 0px solid transparent;
   color: #fff;
 }
@@ -1894,7 +1894,7 @@ button:focus {
 }
 
 .btn-outline.btn-primary {
-  color: #33ccff;
+  color: #1d5669;
   background-color: transparent;
   border-color: #33ccff;
 }
