@@ -299,7 +299,7 @@ export class SearchComponent implements OnInit, OnDestroy {
                 uri: result[i].compressedAvatarUrl,
               }
             }
-
+            console.log(result[i].slug)
             const provider = {
               id: i,
               address: result[i].address,
@@ -310,8 +310,7 @@ export class SearchComponent implements OnInit, OnDestroy {
               category: result[i].category,
               timezone: result[i].timezone,
               hourlyRate: result[i].hourlyRate || 0,
-              ratingAverage: result[i].rating?.average | 0,
-              ratingCount: result[i].rating?.count | 0,
+              rating: result[i].rating,
               slug: result[i].slug,
               verified: result[i].verified,
             }
