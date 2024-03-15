@@ -43,6 +43,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   skillsFilter: string[] = []
   // skill filters on provider, intersection (AND)
 
+  ratingFilter: number[] = []
+  // rating filters on provider, union (OR)
+
   hourlyFiltersInput: string[] = []
   // range filters on provider hourly rate, the input to send to child if we load from state route
   // this is slight different cause we format range in a simplified way into state controller
@@ -110,6 +113,10 @@ export class SearchComponent implements OnInit, OnDestroy {
         decodeURIComponent(params['skills'] || '[]')
       )
 
+      this.ratingFilter = JSON.parse(
+        decodeURIComponent(params['rating'] || '[]')
+      )
+
       // let's sync on load hourly filters injected into child controller, different format
       let injectedHourlyFilters = []
       this.hourlyFilters.forEach((hourlyRange) => {
@@ -168,6 +175,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.hourlyFilters.length == 0 &&
       this.verifyFilter.length == 0 &&
       this.skillsFilter.length == 0 &&
+      this.ratingFilter.length == 0 &&
       this.locationFilter.length == 0
     ) {
       this.loading = false
@@ -259,6 +267,32 @@ export class SearchComponent implements OnInit, OnDestroy {
       algoliaSearchObject.filters = hourlyFilterString
     }
 
+    // let's compose the algolia rating filter string
+    if (this.ratingFilter.length > 0) {
+      let ratingFilterString = ''
+
+      this.ratingFilter.forEach((rating) => {
+        if (ratingFilterString.length > 0) ratingFilterString += ` OR `
+
+        // rating range
+        ratingFilterString += `((rating.average >= ${rating}) AND (rating.average < ${
+          rating + 1
+        }))`
+      }) // OR
+
+      if (algoliaSearchObject.filters) {
+        // there are also hourly filters, we should and with it
+        if (this.ratingFilter.length == 1) {
+          // only one, no need of more ()
+          algoliaSearchObject.filters = `(${algoliaSearchObject.filters}) AND ${ratingFilterString}`
+        } else {
+          algoliaSearchObject.filters = `(${algoliaSearchObject.filters}) AND (${ratingFilterString})`
+        }
+      } else {
+        algoliaSearchObject.filters = ratingFilterString
+      }
+    }
+
     /* 
       we merge skills query with free text query
       for maximum results with skills query on all provider profile
@@ -299,7 +333,6 @@ export class SearchComponent implements OnInit, OnDestroy {
                 uri: result[i].compressedAvatarUrl,
               }
             }
-            console.log(result[i].slug)
             const provider = {
               id: i,
               address: result[i].address,
@@ -333,6 +366,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     // do not affect injected status, let's do a copy
     const sortedLocations = this.locationFilter.concat().sort() // sort to a copy, predictable string
     const sortedSkills = this.skillsFilter.concat().sort() // sort to a copy, predictable string
+    const sortedRating = this.ratingFilter.concat().sort() // sort to a copy, predictable string
 
     let newQueryString = `query=${encodeURIComponent(
       this.searchInput
@@ -344,6 +378,8 @@ export class SearchComponent implements OnInit, OnDestroy {
       JSON.stringify(sortedLocations)
     )}&skills=${encodeURIComponent(
       JSON.stringify(sortedSkills)
+    )}&rating=${encodeURIComponent(
+      JSON.stringify(sortedRating)
     )}&verify=${encodeURIComponent(JSON.stringify(this.verifyFilter))}`
     this.location.go('search', newQueryString)
     return newQueryString
@@ -416,6 +452,16 @@ export class SearchComponent implements OnInit, OnDestroy {
   // two way binding, event from child (user input)
   onSkillsFilterChange(skillInput: string[]) {
     this.skillsFilter = skillInput
+
+    // keep in sync also address bar, without refreshing page
+    const newQueryString = this.syncAddressBar()
+
+    this.refreshResultsIfNeeded(newQueryString)
+  }
+
+  // two way binding, event from child (user input)
+  onRatingChange(ratingInput: number[]) {
+    this.ratingFilter = ratingInput
 
     // keep in sync also address bar, without refreshing page
     const newQueryString = this.syncAddressBar()
