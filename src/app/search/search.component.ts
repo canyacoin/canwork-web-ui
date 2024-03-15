@@ -9,6 +9,7 @@ import { User, UserCategory } from '../core-classes/user'
 import { AuthService } from '../core-services/auth.service'
 import { NavService } from '../core-services/nav.service'
 import { Location } from '@angular/common'
+import * as moment from 'moment-timezone'
 
 @Component({
   selector: 'app-search-page',
@@ -30,9 +31,27 @@ export class SearchComponent implements OnInit, OnDestroy {
   */
   searchInput: string = '' // the new search input text, this is the model on parent
   providerFilters = [] // the current active provider type filters (union)
+
+  verifyFilter: string[] = [] // the current verified provider filter
+
+  locationFilter: string[] = [] // the current location list filter (or)
+
   currentQueryString: string = '' // the current search on query parameters combination
+  hourlyFilters: string[] = []
+  // range filters on provider hourly rate, the current active hourly rate range filters (union)
+
+  skillsFilter: string[] = []
+  // skill filters on provider, intersection (AND)
+
+  ratingFilter: number[] = []
+  // rating filters on provider, union (OR)
+
+  hourlyFiltersInput: string[] = []
+  // range filters on provider hourly rate, the input to send to child if we load from state route
+  // this is slight different cause we format range in a simplified way into state controller
+
   noSearchParams = false // there are no search params, we have to render this notice
-  // todo inject into results component
+  // injected into results component
 
   smallCards = true
   query: string
@@ -75,26 +94,47 @@ export class SearchComponent implements OnInit, OnDestroy {
     private location: Location
   ) {
     this.routeSub = this.activatedRoute.queryParams.subscribe((params) => {
-      this.searchInput = params['query'] || ''
-      this.providerFilters = JSON.parse(params['providers'] || '[]')
-      // this is the full stringified algolia query
-      /*if (this.query === '') {
-        this.query = params['query']
-      }*/
+      this.searchInput = decodeURIComponent(params['query'] || '')
+      this.providerFilters = JSON.parse(
+        decodeURIComponent(params['providers'] || '[]')
+      )
+      this.hourlyFilters = JSON.parse(
+        decodeURIComponent(params['hourly'] || '[]')
+      )
+      this.verifyFilter = JSON.parse(
+        decodeURIComponent(params['verify'] || '[]')
+      )
 
-      //if (this.categoryFilters.length < 1 && params['category'] !== '') {
-      //  this.categoryFilters.push(params['category'])
-      //}
+      this.locationFilter = JSON.parse(
+        decodeURIComponent(params['location'] || '[]')
+      )
 
-      if (!this.loading) {
-        //this.rendering = true
-        //setTimeout(() => {
-        //  this.rendering = false
-        //})
-        if (this.containsClass('menu-overlay', 'activate-menu')) {
-          this.toggleMenuOverlay() // obsolete?
-        }
-      }
+      this.skillsFilter = JSON.parse(
+        decodeURIComponent(params['skills'] || '[]')
+      )
+
+      this.ratingFilter = JSON.parse(
+        decodeURIComponent(params['rating'] || '[]')
+      )
+
+      // let's sync on load hourly filters injected into child controller, different format
+      let injectedHourlyFilters = []
+      this.hourlyFilters.forEach((hourlyRange) => {
+        let hourlyFilterInputString = ''
+
+        // plain filter range
+        if (hourlyRange.indexOf('-') != -1)
+          hourlyFilterInputString = `$${hourlyRange.split('-').join(' - $')}`
+
+        // filter greater then
+        if (hourlyRange.indexOf('>') != -1)
+          hourlyFilterInputString = `$${hourlyRange}`
+
+        if (hourlyFilterInputString)
+          injectedHourlyFilters.push(hourlyFilterInputString)
+      })
+
+      this.hourlyFiltersInput = injectedHourlyFilters // send it
     })
   }
 
@@ -107,37 +147,6 @@ export class SearchComponent implements OnInit, OnDestroy {
       environment.algolia.indexName
     )
 
-    /*this.algoliaSearchConfig = {
-      indexName: this.algoliaIndex,
-      searchClient,
-      
-      // needed only for instant search, not needed anymore
-      
-      routing: {
-        stateMapping: {
-          routeToState(routeState: any) {
-            const generatedQuery = {}
-            generatedQuery[self.algoliaIndex] = {}
-
-            // free text query
-            if (routeState.query)
-              generatedQuery[self.algoliaIndex].query = routeState.query
-
-            // category list
-            if (routeState.refinementList)
-              generatedQuery[self.algoliaIndex].refinementList =
-                routeState.refinementList
-
-            // rate range
-            if (routeState.range)
-              generatedQuery[self.algoliaIndex].range = routeState.range
-
-            //console.log(generatedQuery)
-            return generatedQuery
-          },
-        },
-      },
-    }*/
     this.authSub = this.auth.currentUser$.subscribe((user: User) => {
       if (this.currentUser !== user) {
         this.currentUser = user
@@ -160,10 +169,15 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   algoliaQuery(newQuery) {
-    console.log('newQuery') // debug
-    if (!this.searchInput && this.providerFilters.length == 0) {
-      console.log(this.searchInput) // debug
-      console.log(this.providerFilters.length) // debug
+    if (
+      !this.searchInput &&
+      this.providerFilters.length == 0 &&
+      this.hourlyFilters.length == 0 &&
+      this.verifyFilter.length == 0 &&
+      this.skillsFilter.length == 0 &&
+      this.ratingFilter.length == 0 &&
+      this.locationFilter.length == 0
+    ) {
       this.loading = false
       this.noSearchParams = true
       this.currentQueryString = newQuery // update internal state
@@ -172,22 +186,136 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.noSearchParams = false
     if (this.loading) return // avoid overlapping searches
     this.loading = true
+
     let newArray = []
     let algoliaSearchObject = <any>{}
     /* 
       https://www.algolia.com/doc/api-reference/search-api-parameters/
       hitsPerPage and so on
     */
-    if (this.providerFilters.length > 0) {
+    // facet filters
+    // https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/#and-and-or-filter-combination
+
+    if (
+      this.providerFilters.length > 0 ||
+      this.verifyFilter.length > 0 ||
+      this.locationFilter.length > 0
+    ) {
       // https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/
-      algoliaSearchObject.facetFilters = [[]]
-      this.providerFilters.forEach((providerName) => {
-        algoliaSearchObject.facetFilters[0].push(`category:${providerName}`)
-      }) // OR
+      algoliaSearchObject.facetFilters = []
+
+      let currentFacetFiltersIndex = -1
+
+      if (this.providerFilters.length > 0) {
+        algoliaSearchObject.facetFilters.push([])
+
+        currentFacetFiltersIndex = algoliaSearchObject.facetFilters.length - 1
+        // provider type
+        this.providerFilters.forEach((providerName) => {
+          algoliaSearchObject.facetFilters[currentFacetFiltersIndex].push(
+            `category:${providerName}`
+          )
+        }) // OR
+      }
+
+      // verified (AND)
+      if (this.verifyFilter.length > 0 && this.verifyFilter[0] == 'Verified') {
+        algoliaSearchObject.facetFilters.push(`verified:true`) // this filter is a string, not an array
+      }
+
+      // filter on countries,timezones (AND)
+      if (this.locationFilter.length > 0) {
+        algoliaSearchObject.facetFilters.push([])
+
+        currentFacetFiltersIndex = algoliaSearchObject.facetFilters.length - 1
+        // get possibile timezone list for every selected country
+        this.locationFilter.forEach((countryCode) => {
+          let timezones = moment.tz.zonesForCountry(countryCode)
+
+          // union of all countries selected
+          timezones.forEach((timezone) => {
+            algoliaSearchObject.facetFilters[currentFacetFiltersIndex].push(
+              `timezone:${timezone}`
+            )
+          }) // OR
+        })
+      }
     }
 
+    /*
+      https://www.algolia.com/doc/api-reference/api-parameters/filters/
+    */
+    // hourlyRate range query
+    //algoliaSearchObject.filters = `hourlyRate:0 TO 10 OR hourlyRate >= 50`
+
+    // let's compose the algolia filter string
+    if (this.hourlyFilters.length > 0) {
+      let hourlyFilterString = ''
+
+      this.hourlyFilters.forEach((hourlyRange) => {
+        if (hourlyFilterString.length > 0) hourlyFilterString += ` OR `
+
+        // plain filter range
+        if (hourlyRange.indexOf('-') != -1)
+          hourlyFilterString += `hourlyRate:${hourlyRange.replace('-', ' TO ')}`
+
+        // filter greater then
+        if (hourlyRange.indexOf('>') != -1)
+          hourlyFilterString += `hourlyRate > ${hourlyRange.replace('>', '')}`
+      }) // OR
+
+      algoliaSearchObject.filters = hourlyFilterString
+    }
+
+    // let's compose the algolia rating filter string
+    if (this.ratingFilter.length > 0) {
+      let ratingFilterString = ''
+
+      this.ratingFilter.forEach((rating) => {
+        if (ratingFilterString.length > 0) ratingFilterString += ` OR `
+
+        // rating range
+        ratingFilterString += `((rating.average >= ${rating}) AND (rating.average < ${
+          rating + 1
+        }))`
+      }) // OR
+
+      if (algoliaSearchObject.filters) {
+        // there are also hourly filters, we should and with it
+        if (this.ratingFilter.length == 1) {
+          // only one, no need of more ()
+          algoliaSearchObject.filters = `(${algoliaSearchObject.filters}) AND ${ratingFilterString}`
+        } else {
+          algoliaSearchObject.filters = `(${algoliaSearchObject.filters}) AND (${ratingFilterString})`
+        }
+      } else {
+        algoliaSearchObject.filters = ratingFilterString
+      }
+    }
+
+    /* 
+      we merge skills query with free text query
+      for maximum results with skills query on all provider profile
+      the skills query is in AND with free text and this is correct
+      also the skills will be in AND each other, we'll search all
+    */
+    let skillsQuery = ''
+    if (this.skillsFilter.length > 0) {
+      this.skillsFilter.forEach((skill) => {
+        if (skillsQuery) skillsQuery += ' '
+        skillsQuery += skill
+      })
+    }
+
+    let searchQuery = this.searchInput
+    // free text + skills
+
+    if (skillsQuery) {
+      if (searchQuery) searchQuery = `${searchQuery} ${skillsQuery}`
+      else searchQuery = skillsQuery
+    }
     this.algoliaSearchClient
-      .search(this.searchInput, algoliaSearchObject)
+      .search(searchQuery, algoliaSearchObject)
       .then((res) => {
         const result = res.hits
         //console.log(result)
@@ -205,7 +333,6 @@ export class SearchComponent implements OnInit, OnDestroy {
                 uri: result[i].compressedAvatarUrl,
               }
             }
-
             const provider = {
               id: i,
               address: result[i].address,
@@ -216,8 +343,7 @@ export class SearchComponent implements OnInit, OnDestroy {
               category: result[i].category,
               timezone: result[i].timezone,
               hourlyRate: result[i].hourlyRate || 0,
-              ratingAverage: result[i].rating?.average | 0,
-              ratingCount: result[i].rating?.count | 0,
+              rating: result[i].rating,
               slug: result[i].slug,
               verified: result[i].verified,
             }
@@ -237,9 +363,24 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   syncAddressBar() {
-    let newQueryString = `query=${this.searchInput}&providers=${JSON.stringify(
-      this.providerFilters
-    )}`
+    // do not affect injected status, let's do a copy
+    const sortedLocations = this.locationFilter.concat().sort() // sort to a copy, predictable string
+    const sortedSkills = this.skillsFilter.concat().sort() // sort to a copy, predictable string
+    const sortedRating = this.ratingFilter.concat().sort() // sort to a copy, predictable string
+
+    let newQueryString = `query=${encodeURIComponent(
+      this.searchInput
+    )}&providers=${encodeURIComponent(
+      JSON.stringify(this.providerFilters)
+    )}&hourly=${encodeURIComponent(
+      JSON.stringify(this.hourlyFilters)
+    )}&location=${encodeURIComponent(
+      JSON.stringify(sortedLocations)
+    )}&skills=${encodeURIComponent(
+      JSON.stringify(sortedSkills)
+    )}&rating=${encodeURIComponent(
+      JSON.stringify(sortedRating)
+    )}&verify=${encodeURIComponent(JSON.stringify(this.verifyFilter))}`
     this.location.go('search', newQueryString)
     return newQueryString
   }
@@ -264,6 +405,68 @@ export class SearchComponent implements OnInit, OnDestroy {
     } else {
       console.log('up to date') // debug, check this well better later when we add other search facets
     }
+  }
+
+  // two way binding, event from child (user input)
+  onLocationChange(locationInput: string[]) {
+    // we don't sort it to avoid ui changes, we'll sort it on the fly when composing status into address bar
+
+    this.locationFilter = locationInput
+
+    // keep in sync also address bar, without refreshing page
+    const newQueryString = this.syncAddressBar()
+
+    this.refreshResultsIfNeeded(newQueryString)
+  }
+
+  // two way binding, event from child (user input)
+  onVerifyFormChange(verifyInput: string[]) {
+    // we don't need to sort it, it's only one value
+
+    this.verifyFilter = verifyInput
+
+    // keep in sync also address bar, without refreshing page
+    const newQueryString = this.syncAddressBar()
+
+    this.refreshResultsIfNeeded(newQueryString)
+  }
+
+  // two way binding, event from child (user input)
+  onHourlyInputChange(hourlyInput: string[]) {
+    let normalizedHourly = [] // clean up it a bit
+    hourlyInput.forEach((hourlyRange) => {
+      let cleanedRange = hourlyRange.split('$').join('').split(' ').join('')
+      normalizedHourly.push(cleanedRange)
+    })
+    // sort it to have a predictable string
+    normalizedHourly.sort()
+
+    this.hourlyFilters = normalizedHourly
+
+    // keep in sync also address bar, without refreshing page
+    const newQueryString = this.syncAddressBar()
+
+    this.refreshResultsIfNeeded(newQueryString)
+  }
+
+  // two way binding, event from child (user input)
+  onSkillsFilterChange(skillInput: string[]) {
+    this.skillsFilter = skillInput
+
+    // keep in sync also address bar, without refreshing page
+    const newQueryString = this.syncAddressBar()
+
+    this.refreshResultsIfNeeded(newQueryString)
+  }
+
+  // two way binding, event from child (user input)
+  onRatingChange(ratingInput: number[]) {
+    this.ratingFilter = ratingInput
+
+    // keep in sync also address bar, without refreshing page
+    const newQueryString = this.syncAddressBar()
+
+    this.refreshResultsIfNeeded(newQueryString)
   }
 
   // two way binding, event from child (user input)

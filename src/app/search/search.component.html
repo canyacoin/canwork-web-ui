@@ -10,7 +10,18 @@
       class="max-w-[1440px] w-full py-[40px] px-[24px] md:py-[40px] md:px-[64px] flex flex-col-reverse xl:flex-row xl:justify-between gap-[30px]"
     >
       <div class="xl:max-w-[328px] w-full">
-        <search-filter />
+        <search-filter
+          [hourlyInput]="hourlyFiltersInput"
+          (hourlyInputChange)="onHourlyInputChange($event)"
+          [verifyForm]="verifyFilter"
+          (verifyFormChange)="onVerifyFormChange($event)"
+          [locationFormSelected]="locationFilter"
+          (locationChange)="onLocationChange($event)"
+          [skillsForm]="skillsFilter"
+          (skillsFormChange)="onSkillsFilterChange($event)"
+          [ratingForm]="ratingFilter"
+          (ratingChange)="onRatingChange($event)"
+        />
       </div>
       <div class="w-full">
         <search-result

@@ -7,7 +7,7 @@ import { Component, Input, OnInit, Directive } from '@angular/core'
 })
 export class StarRatingNativeComponent implements OnInit {
   @Input() stars: string
-  @Input() count: string
+  //@Input() count: string
 
   constructor() {}
 

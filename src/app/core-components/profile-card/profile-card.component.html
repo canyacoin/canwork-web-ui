@@ -32,10 +32,10 @@
         <div class="text-G600 text-b2 font-medium line-clamp-1">
           {{ title }}
         </div>
-        <div class="flex gap-[8px]">
-          <app-star-rating [stars]="ratingAverage" />
+        <div class="flex gap-[8px]" *ngIf="rating && rating.count > 0">
+          <app-star-rating-native [stars]="rating.average" />
           <div class="text-b2 font-medium text-G700">
-            ({{ ratingCount }} Jobs)
+            ({{ rating.count }} Jobs)
           </div>
         </div>
       </div>
@@ -53,7 +53,7 @@
           <!-- <div class="text-g500 text-b1 font-medium">{{ address }}</div> -->
           <!-- to do google address -->
           <div class="text-g500 text-b1 font-medium line-clamp-1">
-            New York, United States
+            {{ timezone }}
           </div>
         </div>
         <div class="flex gap-[8px]">
@@ -92,10 +92,10 @@
         <div class="grid gap-[8px]">
           <div class="text-G800 text-h6 font-medium">{{ name }}</div>
           <div class="text-G600 text-b2 font-medium">{{ title }}</div>
-          <div class="flex gap-[8px]">
-            <app-star-rating [stars]="ratingAverage" />
+          <div class="flex gap-[8px]" *ngIf="rating && rating.count > 0">
+            <app-star-rating [stars]="rating.average" />
             <div class="text-b2 font-medium text-G700">
-              ({{ ratingCount }} Jobs)
+              ({{ rating.count }} Jobs)
             </div>
           </div>
         </div>
