@@ -13,8 +13,7 @@ export class ProfileCardComponent {
   @Input() name!: string
   @Input() title!: string
   @Input() isVerified!: boolean
-  @Input() ratingAverage!: number
-  @Input() ratingCount!: number
+  @Input() rating!: any
   @Input() skillTags!: string[]
   @Input() slug!: string
   @Input() address!: string

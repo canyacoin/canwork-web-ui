@@ -190,6 +190,7 @@
                 name="ratingForm"
                 [value]="item"
                 [(ngModel)]="ratingForm"
+                (onChange)="ratingClick(item)"
               ></p-checkbox>
             </div>
           </div>

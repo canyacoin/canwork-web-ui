@@ -20,7 +20,8 @@ export class FilterComponent implements OnInit {
   tempSkillsForm: string[] = []
   skillsLength: number = 9 // how many skills to show at start
 
-  ratingForm: number[] = []
+  @Input() ratingForm: number[] = []
+  @Output() ratingChange = new EventEmitter<number[]>() // two way binding to parent
 
   ngOnInit() {
     this.locationForm = [
@@ -56,7 +57,7 @@ export class FilterComponent implements OnInit {
     this.verifyFormChange.emit(this.verifyForm) // notify parent and algolia handler
     this.locationChange.emit(this.locationFormSelected) // notify parent and algolia handler
     this.skillsFormChange.emit(this.skillsForm) // notify parent and algolia handler
-    // todo add the other filters later
+    this.ratingChange.emit(this.ratingForm) // notify parent and algolia handler
   }
 
   isLocationSelected(locationName: string) {
@@ -102,6 +103,17 @@ export class FilterComponent implements OnInit {
     this.skillsFormChange.emit(this.skillsForm) // notify parent and algolia handler
   }
 
+  ratingClick(item) {
+    if (this.ratingForm.length > 0) this.ratingForm = [item]
+    /*
+    force only max one rating at time for now, due to algolia limitations:
+    
+    filters: filter (X AND Y) OR Z is not allowed, only (X OR Y) AND Z is allowed
+    https://github.com/algolia/algoliasearch-client-php/issues/385
+    */
+    this.ratingChange.emit(this.ratingForm) // notify parent and algolia handler
+  }
+
   hourlyClick(e) {
     this.hourlyInputChange.emit(this.hourlyInput) // notify parent and algolia handler
   }
@@ -118,6 +130,7 @@ export class FilterComponent implements OnInit {
 
   ratingClear() {
     this.ratingForm = []
+    this.ratingChange.emit(this.ratingForm) // notify parent and algolia handler
   }
 
   seeMoreClick() {
