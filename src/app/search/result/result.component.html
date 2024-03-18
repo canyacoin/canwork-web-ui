@@ -26,9 +26,7 @@
   <div
     class="pt-[23px] grid gap-[20px]"
     [ngClass]="{
-      'sm:grid-cols-2 lg:grid-cols-3': !(
-        !isLoading && profileCards.length === 0
-      )
+      'sm:grid-cols-2 lg:grid-cols-3': isGrid
     }"
   >
     <ng-container
