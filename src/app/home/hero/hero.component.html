@@ -36,9 +36,9 @@
           <div class="flex flex-wrap justify-center items-center gap-[8px]">
             <div
               *ngFor="let provider of providerTypes"
-              (click)="clickProviderTypeTag(provider.name)"
+              (click)="clickProviderTypeTag(provider.title)"
             >
-              <basic-tag [type]="1" [title]="provider.name" />
+              <basic-tag [type]="1" [title]="provider.title" />
             </div>
           </div>
         </div>

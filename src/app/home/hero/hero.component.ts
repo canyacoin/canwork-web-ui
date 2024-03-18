@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 import { Router } from '@angular/router'
 import { HeroService } from 'app/shared/constants/home-page'
-import { providerTypeArray } from 'app/const/providerTypes'
+import { providerTypeArray } from 'app/shared/constants/providerTypes'
 
 @Component({
   selector: 'home-hero',

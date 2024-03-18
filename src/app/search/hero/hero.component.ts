@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core'
 import { Router } from '@angular/router'
 import { HeroService } from 'app/shared/constants/search-page'
-import { providerTypeArray } from 'app/const/providerTypes'
+import { providerTypeArray } from 'app/shared/constants/providerTypes'
 
 @Component({
   selector: 'search-hero',
