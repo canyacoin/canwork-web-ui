@@ -106,8 +106,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     })
 
     this.items = [
-      {
-        items: [
           {
             label: 'Profile',
             routerLink: '/profile',
@@ -129,8 +127,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
               this.onLogout()
             },
           },
-        ],
-      },
     ]
     // scroll
     this.windowService.getScrollY().subscribe((scrollY) => {

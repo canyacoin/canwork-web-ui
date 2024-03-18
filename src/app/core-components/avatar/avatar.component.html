@@ -1,7 +1,17 @@
 <div [ngClass]="['app-avatar', customClass || '']">
-  <p-avatar *ngIf="avatarUrl | async as aUrl; else initial" [image]="aUrl" styleClass="ml-3" [style]="{ 'width': '40px', 'height' : '40px' }"  shape="circle"></p-avatar>
+  <p-avatar
+    *ngIf="avatarUrl | async as aUrl; else initial"
+    [image]="aUrl"
+    styleClass=""
+    [style]="{ width: '40px', height: '40px' }"
+    shape="circle"
+  ></p-avatar>
   <ng-template #initial>
-  <p-avatar label={{ getInitials() }} styleClass="mr-2" [style]="{ 'background-color': '#9c27b0', color: '#ffffff' }"></p-avatar>
+    <p-avatar
+      label="{{ getInitials() }}"
+      styleClass=""
+      [style]="{ 'background-color': '#9c27b0', color: '#ffffff' }"
+    ></p-avatar>
     <!-- <div class="app-avatar-initials">
 
       <svg width="100%" height="100%" viewBox="0 0 100 100">
