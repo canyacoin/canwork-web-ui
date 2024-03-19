@@ -81,7 +81,7 @@
       </ng-template>
 
       <ng-template #profilesView>
-        <ng-container *ngFor="let profile of profileCards" class="w-full">
+        <ng-container *ngFor="let profile of showresult" class="w-full">
           <profile-card
             [index]="profile.id"
             [avatarUri]="profile.avatarUri"

@@ -20,11 +20,18 @@ export class ResultComponent implements OnInit {
   isGrid: boolean = true
 
   first: number = 0
-  rows: number = 10
+  rows: number = 3
+  showresult = []
 
   onPageChange(event: PageEvent) {
     this.first = event.first
     this.rows = event.rows
+    console.log('first', this.first)
+    this.showresult = this.profileCards.slice(
+      this.first,
+      this.first + this.rows
+    )
+    console.log('this.showresult', this.showresult)
   }
 
   handleGridChange(isGridView: boolean) {

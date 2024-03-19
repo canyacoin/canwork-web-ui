@@ -352,6 +352,8 @@ export class SearchComponent implements OnInit, OnDestroy {
         }
         // newArray.sort((a, b) => b.ratingCount - a.ratingCount)
         this.hits = newArray // update
+        console.log("this.hits", newArray);
+        
         this.loading = false
         this.currentQueryString = newQuery // to avoid searching 2 times same string
       })
