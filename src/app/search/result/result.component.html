@@ -40,9 +40,19 @@
       "
     ></ng-container>
     <ng-template #loadingView>
-      <ng-container *ngFor="let card of skCards" class="w-full">
-        <sk-profile-card [isGrid]="isGrid" />
-      </ng-container>
+      <ng-container
+        *ngIf="isGrid; then gridSkCardsView; else listSkCardsView"
+      ></ng-container>
+      <ng-template #gridSkCardsView>
+        <ng-container *ngFor="let card of skCards" class="w-full">
+          <sk-profile-card [isGrid]="isGrid" />
+        </ng-container>
+      </ng-template>
+      <ng-template #listSkCardsView>
+        <ng-container *ngFor="let card of skCards.slice(0, 4)" class="w-full">
+          <sk-profile-card [isGrid]="isGrid" />
+        </ng-container>
+      </ng-template>
     </ng-template>
     <ng-template #resultView>
       <ng-container
