@@ -162,10 +162,12 @@
     border-radius: 3px;
     border: 2px solid #64748B;
     background-color: unset;
+    height: 100%;
 }
 
 .p-checkbox-label {
     user-select: none;
+    margin: auto;
 }
 
 .p-checkbox-box.p-highlight {
