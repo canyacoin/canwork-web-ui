@@ -18,14 +18,13 @@ export class ResultComponent implements OnInit {
   @Input() totalRecords: number = 0
   @Input() rows: number = 10
   @Output() pageChange = new EventEmitter<number>() // two way binding to parent
+  @Input() first: number = 0
 
   /*
   https://www.primefaces.org/primeng-v14-lts/paginator
   */
   skCards = new Array(12)
   isGrid: boolean = true
-
-  first: number = 0
 
   onPageChange(e: PageEvent) {
     this.first = e.first

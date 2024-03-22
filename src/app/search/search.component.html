@@ -30,6 +30,7 @@
           [noSearchParams]="noSearchParams"
           [totalRecords]="numHits"
           [rows]="hitsPerPage"
+          [first]="currentPage * hitsPerPage"
           (pageChange)="onPageChange($event)"
         />
       </div>
