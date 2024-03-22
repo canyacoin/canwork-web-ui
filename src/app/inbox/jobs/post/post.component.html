@@ -4,7 +4,10 @@
     *ngIf="currentUser"
     class="section bg-grey pt-30"
   >
+    <p-toast></p-toast>
+
     <app-back-button></app-back-button>
+
     <div
       *ngIf="!pageLoaded"
       class="container d-flex h-100 flex-column justify-content-center"
@@ -814,8 +817,8 @@
                             !shareableJobForm.controls.deadline.valid &&
                             shareableJobForm.controls.deadline.dirty &&
                             shareableJobForm.controls.deadline.errors &&
-                              !shareableJobForm.controls.deadline.errors
-                                .pastDueDate
+                            !shareableJobForm.controls.deadline.errors
+                              .pastDueDate
                           "
                           class="text-primary text-wrap"
                           >Deadline is required.</small

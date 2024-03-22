@@ -107,29 +107,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.items = [
       {
-        items: [
-          {
-            label: 'Profile',
-            routerLink: '/profile',
-          },
-          {
-            label: 'Edit Profile',
-            routerLink: '/profile',
-            queryParams: { editProfile: 1 },
-          },
-          {
-            label: 'Manage Jobs',
-            routerLink: '/inbox/jobs',
-            styleClass: 'border-y-1 border',
-          },
-          {
-            label: 'LogOut',
-            styleClass: 'text-R300',
-            command: () => {
-              this.onLogout()
-            },
-          },
-        ],
+        label: 'Profile',
+        routerLink: '/profile',
+      },
+      {
+        label: 'Edit Profile',
+        routerLink: '/profile',
+        queryParams: { editProfile: 1 },
+      },
+      {
+        label: 'Manage Jobs',
+        routerLink: '/inbox/jobs',
+        styleClass: 'border-y-1 border',
+      },
+      {
+        label: 'LogOut',
+        styleClass: 'text-R300',
+        command: () => {
+          this.onLogout()
+        },
       },
     ]
     // scroll

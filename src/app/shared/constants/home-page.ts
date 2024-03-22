@@ -99,50 +99,6 @@ export const BrowseFreelancersService = {
   description:
     'Select your preferred choice from the wide range of freelance professionals on CanWork from various categories.',
   buttonText1: 'Browse All Categories',
-  cards: [
-    {
-      iconSrc: '/assets/massimo/svg/design.svg',
-      title: 'Design & Creative',
-      description:
-        'Find the right freelance designer for your next project. Battle tested and combat ready designers with great years of experience.',
-      url: '',
-    },
-    {
-      iconSrc: '/assets/massimo/svg/software.svg',
-      title: 'Software Developers',
-      description:
-        'Find the right freelance designer for your next project. Battle tested and combat ready designers with great years of experience.',
-      url: '',
-    },
-    {
-      iconSrc: '/assets/massimo/svg/content.svg',
-      title: 'Content Creators',
-      description:
-        'Find the right freelance designer for your next project. Battle tested and combat ready designers with great years of experience.',
-      url: '',
-    },
-    {
-      iconSrc: '/assets/massimo/svg/virtual.svg',
-      title: 'Virtual Assistants',
-      description:
-        'Find the right freelance designer for your next project. Battle tested and combat ready designers with great years of experience.',
-      url: '',
-    },
-    {
-      iconSrc: '/assets/massimo/svg/marketing.svg',
-      title: 'Marketing & SEO',
-      description:
-        'Find the right freelance designer for your next project. Battle tested and combat ready designers with great years of experience.',
-      url: '',
-    },
-    {
-      iconSrc: '/assets/massimo/svg/finance.svg',
-      title: 'Financial Experts',
-      description:
-        'Find the right freelance designer for your next project. Battle tested and combat ready designers with great years of experience.',
-      url: '',
-    },
-  ],
   // sections: [
   //   [
   //     'Website Design',
