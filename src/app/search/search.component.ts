@@ -10,6 +10,7 @@ import { AuthService } from '../core-services/auth.service'
 import { NavService } from '../core-services/nav.service'
 import { Location } from '@angular/common'
 import * as moment from 'moment-timezone'
+const HITS_PER_PAGE = 9
 
 @Component({
   selector: 'app-search-page',
@@ -49,6 +50,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   hourlyFiltersInput: string[] = []
   // range filters on provider hourly rate, the input to send to child if we load from state route
   // this is slight different cause we format range in a simplified way into state controller
+
+  currentPage: number = 0 // the current search page
+  numHits: number = 0 // the number of hits of current search
+  hitsPerPage: number = HITS_PER_PAGE // constant
 
   noSearchParams = false // there are no search params, we have to render this notice
   // injected into results component
@@ -117,6 +122,8 @@ export class SearchComponent implements OnInit, OnDestroy {
         decodeURIComponent(params['rating'] || '[]')
       )
 
+      this.currentPage = JSON.parse(decodeURIComponent(params['page'] || 0))
+
       // let's sync on load hourly filters injected into child controller, different format
       let injectedHourlyFilters = []
       this.hourlyFilters.forEach((hourlyRange) => {
@@ -159,7 +166,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     if we don't have a search query we have to show a different message,
     different from no results
     */
-    // todo, get current query from url
+    // get current query from url
     let currentPath = this.location.path()
     let splittedPath = currentPath.split('?')
     let currentQuery = splittedPath[splittedPath.length - 1]
@@ -181,6 +188,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.loading = false
       this.noSearchParams = true
       this.currentQueryString = newQuery // update internal state
+      this.numHits = 0 // reset
       return
     }
     this.noSearchParams = false
@@ -191,8 +199,11 @@ export class SearchComponent implements OnInit, OnDestroy {
     let algoliaSearchObject = <any>{}
     /* 
       https://www.algolia.com/doc/api-reference/search-api-parameters/
-      hitsPerPage and so on
+      hitsPerPage and page
     */
+    algoliaSearchObject.hitsPerPage = this.hitsPerPage // constant
+    algoliaSearchObject.page = this.currentPage
+
     // facet filters
     // https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/#and-and-or-filter-combination
 
@@ -352,6 +363,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         }
         // newArray.sort((a, b) => b.ratingCount - a.ratingCount)
         this.hits = newArray // update
+        this.numHits = res.nbHits
         this.loading = false
         this.currentQueryString = newQuery // to avoid searching 2 times same string
       })
@@ -380,6 +392,8 @@ export class SearchComponent implements OnInit, OnDestroy {
       JSON.stringify(sortedSkills)
     )}&rating=${encodeURIComponent(
       JSON.stringify(sortedRating)
+    )}&page=${encodeURIComponent(
+      JSON.stringify(this.currentPage)
     )}&verify=${encodeURIComponent(JSON.stringify(this.verifyFilter))}`
     this.location.go('search', newQueryString)
     return newQueryString
@@ -407,11 +421,23 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
   }
 
+  // two way binding, event from paging component (user input)
+  onPageChange(newPage: number) {
+    this.currentPage = newPage // set new page position
+
+    // keep in sync also address bar, without refreshing page
+    const newQueryString = this.syncAddressBar()
+
+    this.refreshResultsIfNeeded(newQueryString)
+  }
+
   // two way binding, event from child (user input)
   onLocationChange(locationInput: string[]) {
     // we don't sort it to avoid ui changes, we'll sort it on the fly when composing status into address bar
 
     this.locationFilter = locationInput
+
+    this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
 
     // keep in sync also address bar, without refreshing page
     const newQueryString = this.syncAddressBar()
@@ -424,6 +450,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     // we don't need to sort it, it's only one value
 
     this.verifyFilter = verifyInput
+
+    this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
 
     // keep in sync also address bar, without refreshing page
     const newQueryString = this.syncAddressBar()
@@ -443,6 +471,8 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     this.hourlyFilters = normalizedHourly
 
+    this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
+
     // keep in sync also address bar, without refreshing page
     const newQueryString = this.syncAddressBar()
 
@@ -452,6 +482,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   // two way binding, event from child (user input)
   onSkillsFilterChange(skillInput: string[]) {
     this.skillsFilter = skillInput
+
+    this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
 
     // keep in sync also address bar, without refreshing page
     const newQueryString = this.syncAddressBar()
@@ -463,6 +495,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   onRatingChange(ratingInput: number[]) {
     this.ratingFilter = ratingInput
 
+    this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
+
     // keep in sync also address bar, without refreshing page
     const newQueryString = this.syncAddressBar()
 
@@ -472,6 +506,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   // two way binding, event from child (user input)
   onSearchInputChange(searchInput: string) {
     this.searchInput = searchInput
+
+    this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
+
     // keep in sync also address bar, without refreshing page
     const newQueryString = this.syncAddressBar()
 
@@ -483,6 +520,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     let sortedProviders = providerTypes
     sortedProviders = providerTypes.sort() // sort to have a predictable string
     this.providerFilters = sortedProviders
+
+    this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
 
     // keep in sync also address bar, without refreshing page
     const newQueryString = this.syncAddressBar()

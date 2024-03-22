@@ -30,8 +30,8 @@
       </div>
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-[16px] md:gap-[32px]">
         <div
-          *ngFor="let card of browseFreelancersSection.cards"
-          [routerLink]="['/']"
+          *ngFor="let card of providerTypeArray"
+          (click)="clickProviderTypeTag(card.title)"
         >
           <category-card
             [iconSrc]="card.iconSrc"

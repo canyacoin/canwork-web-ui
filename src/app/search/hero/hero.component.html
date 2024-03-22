@@ -32,11 +32,11 @@
           <div class="flex flex-wrap justify-center items-center gap-[8px]">
             <div
               *ngFor="let provider of providerTypes"
-              (click)="clickProviderTypeTag(provider.name)"
+              (click)="clickProviderTypeTag(provider.title)"
             >
               <basic-tag
-                [type]="isProviderTypeSelected(provider.name) ? 3 : 1"
-                [title]="provider.name"
+                [type]="isProviderTypeSelected(provider.title) ? 3 : 1"
+                [title]="provider.title"
               />
             </div>
           </div>
