@@ -28,6 +28,9 @@
           [profileCards]="hits"
           [isLoading]="loading"
           [noSearchParams]="noSearchParams"
+          [totalRecords]="numHits"
+          [rows]="hitsPerPage"
+          (pageChange)="onPageChange($event)"
         />
       </div>
     </div>
