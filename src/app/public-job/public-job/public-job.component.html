@@ -1,321 +1,350 @@
-<main class="main-content">
-  <section class="section bg-gray pt-15 pb-20" style="min-height: 70vh">
-    <app-back-button></app-back-button>
-    <div *ngIf="!job && loading" class="container">
-      <div class="row">
-        <div class="col-12 job-detail-container text-center">
-          <div class="card p-30 job-detail-card">
-            <img
-              src="assets/img/loader.svg"
-              style="height: 36px"
-              alt="Loader"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container job-detail-container" *ngIf="job && canSee">
-      <div class="card p-30 job-detail-card">
-        <div class="container">
+<main class="font-sans">
+  <div class="flex justify-center bg-G50">
+    <div class="max-w-[1440px] w-full py-[56px] px-[24px] md:px-[64px]">
+      <section class="section bg-gray pt-15 pb-20" style="min-height: 70vh">
+        <app-back-button></app-back-button>
+        <div *ngIf="!job && loading" class="container">
           <div class="row">
-            <div class="col-lg-9 col-12">
-              <h5 class="fw-600 mb-0">JOB DETAILS</h5>
-              <h2>
-                {{ job.information.title }}
-              </h2>
-              <div class="" style="max-width: 65vw; min-height: 5rem">
-                <p
-                  style="white-space: pre-wrap"
-                  [innerHTML]="job.information.description | linkify"
-                ></p>
+            <div class="col-12 job-detail-container text-center">
+              <div class="card p-30 job-detail-card">
+                <img
+                  src="assets/img/loader.svg"
+                  style="height: 36px"
+                  alt="Loader"
+                />
               </div>
             </div>
-            <div class="col-lg-3 col-12 job-info">
-              <a
-                data-toggle="modal"
-                data-target="#shareModal"
-                *ngIf="!job.draft"
-                (click)="createLink()"
-                class="share-link"
-              >
-                <i class="fas fa-share-alt"></i> SHARE
-              </a>
-              <div class="info-details">
+          </div>
+        </div>
+        <div class="container job-detail-container" *ngIf="job && canSee">
+          <div class="card p-30 job-detail-card">
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-9 col-12">
+                  <h5 class="fw-600 mb-0">JOB DETAILS</h5>
+                  <h2>
+                    {{ job.information.title }}
+                  </h2>
+                  <div class="" style="max-width: 65vw; min-height: 5rem">
+                    <p
+                      style="white-space: pre-wrap"
+                      [innerHTML]="job.information.description | linkify"
+                    ></p>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-12 job-info">
+                  <a
+                    data-toggle="modal"
+                    data-target="#shareModal"
+                    *ngIf="!job.draft"
+                    (click)="createLink()"
+                    class="share-link"
+                  >
+                    <i class="fas fa-share-alt"></i> SHARE
+                  </a>
+                  <div class="info-details">
+                    <b
+                      >${{ job.budget
+                      }}<span *ngIf="job.paymentType !== 'Fixed price'"
+                        >/hr</span
+                      >
+                      USD</b
+                    >
+                    <p>{{ job.paymentType }}</p>
+                  </div>
+                  <div class="info-details">
+                    <b>{{ job.deadline }}</b>
+                    <p>Deadline</p>
+                  </div>
+                  <div
+                    class="info-details"
+                    *ngIf="job.information.weeklyCommitment > 0"
+                  >
+                    <b>{{ job.information.weeklyCommitment }} hrs</b>
+                    <p>Total hours</p>
+                  </div>
+                  <div class="info-details">
+                    <b>Attachments</b>
+                    <a
+                      href="{{ job.information.attachments[0].url }}"
+                      target="_blank"
+                      *ngIf="job.information.attachments.length > 0"
+                    >
+                      <p
+                        *ngIf="job.information.attachments[0].name.length > 10"
+                      >
+                        <i class="fas fa-paperclip"></i>
+                        {{
+                          job.information.attachments[0].name.substring(0, 10)
+                        }}...
+                      </p>
+                      <p
+                        *ngIf="job.information.attachments[0].name.length <= 10"
+                      >
+                        <i class="fas fa-paperclip"></i>
+                        {{ job.information.attachments[0].name }}...
+                      </p>
+                    </a>
+                    <p>
+                      <i *ngIf="job.information.attachments.length < 1"
+                        >No attachment provided</i
+                      >
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="row my-15">
+                <div class="col-md-9 col-sm-8">
+                  <app-skill-tag
+                    *ngFor="let skill of job.information.skills"
+                    [routerLink]="['/search/']"
+                    [queryParams]="{ query: skill }"
+                    [skill]="skill"
+                  ></app-skill-tag>
+                </div>
+                <div class="col-md-3 col-sm-4" *ngIf="myJob && !isClosed">
+                  <button
+                    class="btn btn-sm btn-primary mt-10 mr-10"
+                    [routerLink]="['/inbox/job/edit', job.id]"
+                  >
+                    EDIT JOB
+                  </button>
+                  <button
+                    class="btn btn-sm btn-danger mt-10"
+                    (click)="cancelJob()"
+                  >
+                    CANCEL JOB
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="container p-30 job-actions-card">
+            <div class="row">
+              <div class="col-sm-8">
+                <h5>PROPOSED TERMS</h5>
+              </div>
+              <div class="col-sm-4 text-right text-left-mobile">
+                <div
+                  class="status-div"
+                  *ngIf="job.state && isOpen && !job.draft"
+                >
+                  <span class="jobStatus">
+                    <i class="circle-success fas fa-circle"></i>&nbsp;
+                    {{ job.state }}
+                  </span>
+                </div>
+                <div
+                  class="status-div"
+                  *ngIf="job.state && !isOpen && !job.draft"
+                >
+                  <span class="jobStatus">
+                    <i class="circle-danger fas fa-circle"></i>&nbsp; Job closed
+                  </span>
+                </div>
+                <div class="status-div" *ngIf="job.draft">
+                  <span class="jobStatus">
+                    <i class="circle-danger fas fa-circle"></i>&nbsp; Draft
+                  </span>
+                </div>
+              </div>
+              <div class="col-12">
+                <div
+                  class="otherPartyName pointer"
+                  [routerLink]="['/profile/alt/', job.clientId]"
+                >
+                  <app-avatar
+                    [user]="jobPoster"
+                    [customClass]="'headshot-div'"
+                  ></app-avatar>
+                  <p style="font-style: 21px">
+                    {{ jobPoster?.name
+                    }}<app-verified-mark [user]="jobPoster"></app-verified-mark>
+                  </p>
+                </div>
                 <b
                   >${{ job.budget
                   }}<span *ngIf="job.paymentType !== 'Fixed price'">/hr</span>
                   USD</b
                 >
-                <p>{{ job.paymentType }}</p>
+                <p>
+                  This project is set at a {{ job.paymentType.toLowerCase()
+                  }}<br />
+                  <!--
+                  {{ job.information.weeklyCommitment }}
+                  hours per week, over
+                  {{ job.information.timelineExpectation }} period.
+                  -->
+                </p>
+                <hr
+                  *ngIf="
+                    currentUser &&
+                    currentUser.type === 'Provider' &&
+                    !myJob &&
+                    isOpen
+                  "
+                />
               </div>
-              <div class="info-details">
-                <b>{{ job.deadline }}</b>
-                <p>Deadline</p>
+              <div class="col-12" *ngIf="bids">
+                <p><b>Total Bid(s) : </b>{{ bids.length }}</p>
               </div>
               <div
-                class="info-details"
-                *ngIf="job.information.weeklyCommitment > 0"
+                class="col-12"
+                *ngIf="
+                  currentUser &&
+                  currentUser.type !== 'Provider' &&
+                  !myJob &&
+                  isOpen
+                "
               >
-                <b>{{ job.information.weeklyCommitment }} hrs</b>
-                <p>Total hours</p>
-              </div>
-              <div class="info-details">
-                <b>Attachments</b>
-                <a
-                  href="{{ job.information.attachments[0].url }}"
-                  target="_blank"
-                  *ngIf="job.information.attachments.length > 0"
+                <span
+                  >You must be a CanWork service provider to bid on this
+                  job.</span
                 >
-                  <p *ngIf="job.information.attachments[0].name.length > 10">
-                    <i class="fas fa-paperclip"></i>
-                    {{
-                      job.information.attachments[0].name.substring(0, 10)
-                    }}...
-                  </p>
-                  <p *ngIf="job.information.attachments[0].name.length <= 10">
-                    <i class="fas fa-paperclip"></i>
-                    {{ job.information.attachments[0].name }}...
-                  </p>
-                </a>
-                <p>
-                  <i *ngIf="job.information.attachments.length < 1"
-                    >No attachment provided</i
-                  >
-                </p>
               </div>
-            </div>
-          </div>
-          <div class="row my-15">
-            <div class="col-md-9 col-sm-8">
-              <app-skill-tag
-                *ngFor="let skill of job.information.skills"
-                [routerLink]="['/search/']"
-                [queryParams]="{ query: skill }"
-                [skill]="skill"
-              ></app-skill-tag>
-            </div>
-            <div class="col-md-3 col-sm-4" *ngIf="myJob && !isClosed">
-              <button
-                class="btn btn-sm btn-primary mt-10 mr-10"
-                [routerLink]="['/inbox/job/edit', job.id]"
+              <div class="col-12" *ngIf="!currentUser && !myJob && isOpen">
+                <span
+                  >Sign up to be a CanWork service provider to bid on this job.
+                  <a [routerLink]="['/auth']">Create one now.</a></span
+                >
+              </div>
+              <div
+                class="col-12"
+                *ngIf="
+                  currentUser &&
+                  currentUser.type === 'Provider' &&
+                  !myJob &&
+                  isOpen
+                "
               >
-                EDIT JOB
-              </button>
-              <button class="btn btn-sm btn-danger mt-10" (click)="cancelJob()">
-                CANCEL JOB
-              </button>
+                <button
+                  class="btn btn-primary mt-5 mr-5"
+                  [hidden]="!canBid"
+                  data-toggle="modal"
+                  data-target="#bidModal"
+                  [disabled]="!currentUser.bscAddress"
+                >
+                  PLACE BID
+                </button>
+                <i *ngIf="!canBid">You've posted your bid.</i>
+                <i *ngIf="!currentUser.bscAddress"
+                  >To make a bid fill the field "BNB Chain Address field" in the
+                  <a href="/profile?editProfile=1">profile</a></i
+                >
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="container p-30 job-actions-card">
-        <div class="row">
-          <div class="col-sm-8">
-            <h5>PROPOSED TERMS</h5>
-          </div>
-          <div class="col-sm-4 text-right text-left-mobile">
-            <div class="status-div" *ngIf="job.state && isOpen && !job.draft">
-              <span class="jobStatus">
-                <i class="circle-success fas fa-circle"></i>&nbsp;
-                {{ job.state }}
-              </span>
-            </div>
-            <div class="status-div" *ngIf="job.state && !isOpen && !job.draft">
-              <span class="jobStatus">
-                <i class="circle-danger fas fa-circle"></i>&nbsp; Job closed
-              </span>
-            </div>
-            <div class="status-div" *ngIf="job.draft">
-              <span class="jobStatus">
-                <i class="circle-danger fas fa-circle"></i>&nbsp; Draft
-              </span>
-            </div>
-          </div>
-          <div class="col-12">
-            <div
-              class="otherPartyName pointer"
-              [routerLink]="['/profile/alt/', job.clientId]"
-            >
-              <app-avatar
-                [user]="jobPoster"
-                [customClass]="'headshot-div'"
-              ></app-avatar>
-              <p style="font-style: 21px">
-                {{ jobPoster?.name
-                }}<app-verified-mark [user]="jobPoster"></app-verified-mark>
-              </p>
-            </div>
-            <b
-              >${{ job.budget
-              }}<span *ngIf="job.paymentType !== 'Fixed price'">/hr</span>
-              USD</b
-            >
-            <p>
-              This project is set at a {{ job.paymentType.toLowerCase() }}<br />
-              <!--
-              {{ job.information.weeklyCommitment }}
-              hours per week, over
-              {{ job.information.timelineExpectation }} period.
-              -->
-            </p>
-            <hr
-              *ngIf="
-                currentUser &&
-                currentUser.type === 'Provider' &&
-                !myJob &&
-                isOpen
-              "
-            />
-          </div>
-          <div class="col-12" *ngIf="bids">
-            <p><b>Total Bid(s) : </b>{{ bids.length }}</p>
-          </div>
-          <div
-            class="col-12"
-            *ngIf="
-              currentUser && currentUser.type !== 'Provider' && !myJob && isOpen
-            "
-          >
-            <span
-              >You must be a CanWork service provider to bid on this job.</span
-            >
-          </div>
-          <div class="col-12" *ngIf="!currentUser && !myJob && isOpen">
-            <span
-              >Sign up to be a CanWork service provider to bid on this job.
-              <a [routerLink]="['/auth']">Create one now.</a></span
-            >
-          </div>
-          <div
-            class="col-12"
-            *ngIf="
-              currentUser && currentUser.type === 'Provider' && !myJob && isOpen
-            "
-          >
-            <button
-              class="btn btn-primary mt-5 mr-5"
-              [hidden]="!canBid"
-              data-toggle="modal"
-              data-target="#bidModal"
-              [disabled]="!currentUser.bscAddress"
-            >
-              PLACE BID
-            </button>
-            <i *ngIf="!canBid">You've posted your bid.</i>
-            <i *ngIf="!currentUser.bscAddress"
-              >To make a bid fill the field "BNB Chain Address field" in the
-              <a href="/profile?editProfile=1">profile</a></i
-            >
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      class="container job-detail-container"
-      *ngIf="job && !canSee && !loading"
-    >
-      <div class="card p-30 job-detail-card">
-        <div class="container">
-          <div class="row">
-            <div class="col-12 text-center">
-              <h2>We can't find the job you were looking for</h2>
-              <p>Please check the link you provided</p>
-              <button class="btn btn-primary" [routerLink]="['/home']">
-                RETURN TO HOMEPAGE
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container job-detail-container" *ngIf="!job && !loading">
-      <div class="card p-30 job-detail-card">
-        <div class="container">
-          <div class="row">
-            <div class="col-12 text-center">
-              <h2>We can't find the job you were looking for</h2>
-              <p>Please check the link you provided</p>
-              <button class="btn btn-primary" [routerLink]="['/home']">
-                RETURN TO HOMEPAGE
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container job-detail-container" *ngIf="job && myJob">
-      <div class="card p-30 job-detail-card">
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-8 col-6">
-              <h5>BIDS</h5>
-            </div>
-            <div class="col-sm-4 col-6 text-right">
-              <button
-                class="btn btn-sm btn-primary"
-                *ngIf="bids && bids.length > 0"
-                [routerLink]="['bids']"
-              >
-                VIEW ALL
-              </button>
-            </div>
-          </div>
-          <div class="row" *ngIf="bids">
-            <div class="col-12" *ngIf="bids.length !== null">
-              <p><b>Total Bid(s) : </b>{{ bids.length }}</p>
-            </div>
-            <div class="col-12">
-              <h6 class="fw-600 ls-2">RECENT BIDS</h6>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12 text-center" *ngIf="!bids">
-              <img
-                src="assets/img/loader.svg"
-                style="height: 36px"
-                alt="Loader"
-              />
-            </div>
-            <div class="col-12" *ngIf="bids && bids.length > 0">
-              <div class="row my-10">
-                <div class="col-sm-3 col-6">
-                  <b>Provider</b>
-                </div>
-                <div class="col-sm-3 col-6">
-                  <b>Bid</b>
-                </div>
-                <div class="col-sm-6 hide-mobile">
-                  <b>Message</b>
+        <div
+          class="container job-detail-container"
+          *ngIf="job && !canSee && !loading"
+        >
+          <div class="card p-30 job-detail-card">
+            <div class="container">
+              <div class="row">
+                <div class="col-12 text-center">
+                  <h2>We can't find the job you were looking for</h2>
+                  <p>Please check the link you provided</p>
+                  <button class="btn btn-primary" [routerLink]="['/home']">
+                    RETURN TO HOMEPAGE
+                  </button>
                 </div>
               </div>
-              <div class="row" *ngFor="let bid of bids; let i = index">
-                <div class="col-sm-3 col-6">
-                  <p
-                    class="fs-16"
-                    [routerLink]="['/profile/alt/', bid.providerId]"
+            </div>
+          </div>
+        </div>
+        <div class="container job-detail-container" *ngIf="!job && !loading">
+          <div class="card p-30 job-detail-card">
+            <div class="container">
+              <div class="row">
+                <div class="col-12 text-center">
+                  <h2>We can't find the job you were looking for</h2>
+                  <p>Please check the link you provided</p>
+                  <button class="btn btn-primary" [routerLink]="['/home']">
+                    RETURN TO HOMEPAGE
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container job-detail-container" *ngIf="job && myJob">
+          <div class="card p-30 job-detail-card">
+            <div class="container">
+              <div class="row">
+                <div class="col-sm-8 col-6">
+                  <h5>BIDS</h5>
+                </div>
+                <div class="col-sm-4 col-6 text-right">
+                  <button
+                    class="btn btn-sm btn-primary"
+                    *ngIf="bids && bids.length > 0"
+                    [routerLink]="['bids']"
                   >
-                    {{ bid.providerInfo.name }}
-                  </p>
+                    VIEW ALL
+                  </button>
                 </div>
-                <div class="col-sm-3 col-6 mt-5">
-                  {{ bid.budget
-                  }}<span *ngIf="job.paymentType !== 'Fixed price'">/hr</span>
-                  USD
+              </div>
+              <div class="row" *ngIf="bids">
+                <div class="col-12" *ngIf="bids.length !== null">
+                  <p><b>Total Bid(s) : </b>{{ bids.length }}</p>
                 </div>
-                <div class="col-sm-6 mt-5 hide-mobile">
-                  {{ bid.message.substring(0, 50)
-                  }}<span *ngIf="bid.message.length > 50">...</span>
+                <div class="col-12">
+                  <h6 class="fw-600 ls-2">RECENT BIDS</h6>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 text-center" *ngIf="!bids">
+                  <img
+                    src="assets/img/loader.svg"
+                    style="height: 36px"
+                    alt="Loader"
+                  />
+                </div>
+                <div class="col-12" *ngIf="bids && bids.length > 0">
+                  <div class="row my-10">
+                    <div class="col-sm-3 col-6">
+                      <b>Provider</b>
+                    </div>
+                    <div class="col-sm-3 col-6">
+                      <b>Bid</b>
+                    </div>
+                    <div class="col-sm-6 hide-mobile">
+                      <b>Message</b>
+                    </div>
+                  </div>
+                  <div class="row" *ngFor="let bid of bids; let i = index">
+                    <div class="col-sm-3 col-6">
+                      <p
+                        class="fs-16"
+                        [routerLink]="['/profile/alt/', bid.providerId]"
+                      >
+                        {{ bid.providerInfo.name }}
+                      </p>
+                    </div>
+                    <div class="col-sm-3 col-6 mt-5">
+                      {{ bid.budget
+                      }}<span *ngIf="job.paymentType !== 'Fixed price'"
+                        >/hr</span
+                      >
+                      USD
+                    </div>
+                    <div class="col-sm-6 mt-5 hide-mobile">
+                      {{ bid.message.substring(0, 50)
+                      }}<span *ngIf="bid.message.length > 50">...</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12" *ngIf="bids && bids.length < 1">
+                  <p>No bids yet.</p>
                 </div>
               </div>
             </div>
-            <div class="col-12" *ngIf="bids && bids.length < 1">
-              <p>No bids yet.</p>
-            </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
-  </section>
+  </div>
 </main>
 <!-- Modals -->
 <div id="shareModal" class="modal fade" *ngIf="job && canSee" role="dialog">
