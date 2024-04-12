@@ -43,7 +43,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   link: string
   job: Job
   currentUser: User
-  jobPoster: User = null
+  jobPoster: any = null
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -142,9 +142,25 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     new one, retrieve user only once (if not already retrieved)
     and use the new fastest Algolia getUserById service version
     */
-    if (!this.jobPoster)
+    if (!this.jobPoster) {
       this.jobPoster = await this.userService.getUserById(clientId)
-
+      if (this.jobPoster) {
+        let avatar = this.jobPoster.avatar // current, retrocomp
+        //console.log(result[i])
+        if (
+          this.jobPoster.compressedAvatarUrl &&
+          this.jobPoster.compressedAvatarUrl != 'new'
+        ) {
+          // keep same object structure
+          // use compress thumbed if exist and not a massive update (new)
+          avatar = {
+            uri: this.jobPoster.compressedAvatarUrl,
+          }
+        }
+        console.log(avatar)
+        this.jobPoster.avatarUri = avatar.uri
+      }
+    }
     // old
     // this.jobPoster = await this.userService.getUser(clientId)
   }

@@ -3,6 +3,7 @@
     <!-- template start -->
     <div class="max-w-[1440px] w-full py-[56px] px-[24px] md:px-[64px]">
       <div
+        *ngIf="job"
         class="flex flex-col md:flex-row md:justify-between gap-[8px] md:gap-[24px] py-[56px]"
       >
         <div class="w-full rounded-[12px] bg-white border border-G200 p-11">
@@ -24,12 +25,14 @@
           <hr class="h-[1.5px] my-[20px] bg-gray-200 border-0" />
         </div>
         <div
-          class="w-[400px] rounded-[12px] bg-white border border-G200 px-7 py-[32px]"
+          class="md:w-[400px] rounded-[12px] bg-white border border-G200 px-7 py-[32px]"
         >
           <div
+            *ngIf="job.state && isOpen && !job.draft"
             class="text-b1 md:text-h6 text-G800 font-medium leading-[1.2] pl-[2px]"
           >
-            Accepting offers
+            <i class="circle-success fas fa-circle mr-[12px]"></i
+            >{{ job.state }}
           </div>
           <table
             class="table-auto text-b2 md:text-b1 w-full mt-3 border-separate border-spacing-x-[2px] border-spacing-y-[10px]"
@@ -61,6 +64,23 @@
           <hr class="h-[1.5px] my-[20px] bg-gray-200 border-0" />
           <div class="text-b3 md:text-b2 text-G800 leading-[1.2] mt-[12px]">
             About the Client
+          </div>
+          <div *ngIf="jobPoster" class="mt-[12px]">
+            <profile-card
+              [index]="0"
+              [avatarUri]="jobPoster.avatarUri"
+              [name]="jobPoster.name"
+              [title]="jobPoster.title"
+              [isVerified]="jobPoster.verified"
+              [rating]="jobPoster.rating"
+              [skillTags]="jobPoster.skillTags"
+              [slug]="jobPoster.slug"
+              [address]="jobPoster.address"
+              [timezone]="jobPoster.timezone"
+              [hourlyRate]="jobPoster.hourlyRate"
+              [isGrid]="false"
+              [isSmall]="true"
+            />
           </div>
         </div>
       </div>

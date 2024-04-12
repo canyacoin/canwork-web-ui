@@ -19,6 +19,7 @@ export class ProfileCardComponent {
   @Input() address!: string
   @Input() timezone!: string
   @Input() hourlyRate!: number
+  @Input() isSmall!: boolean
 
   constructor(private router: Router) {}
 
