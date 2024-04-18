@@ -6,7 +6,10 @@
         *ngIf="job"
         class="flex flex-col md:flex-row md:justify-between gap-[8px] md:gap-[24px] py-[56px]"
       >
-        <div class="w-full rounded-[12px] bg-white border border-G200 p-11">
+        <div
+          *ngIf="job && canSee"
+          class="w-full rounded-[12px] bg-white border border-G200 p-11"
+        >
           <div class="text-h6 md:text-h5 text-G800 font-medium leading-[1.2]">
             Job Details
           </div>
@@ -53,7 +56,7 @@
               </p>
               <p *ngIf="job.information.attachments[0].name.length <= 10">
                 <i class="fas fa-paperclip"></i>
-                {{ job.information.attachments[0].name }}...
+                {{ job.information.attachments[0].name }}
               </p>
             </a>
           </div>
@@ -62,11 +65,21 @@
           class="md:w-[400px] rounded-[12px] bg-white border border-G200 px-7 py-[32px]"
         >
           <div
-            *ngIf="job.state && isOpen && !job.draft"
             class="text-b1 md:text-h6 text-G800 font-medium leading-[1.2] pl-[2px]"
           >
-            <i class="circle-success fas fa-circle mr-[12px]"></i
-            >{{ job.state }}
+            <span *ngIf="job.state && isOpen && !job.draft">
+              <i class="circle-success fas fa-circle mr-[12px]"></i
+              >{{ job.state }}
+            </span>
+
+            <span *ngIf="job.state && !isOpen && !job.draft">
+              <i class="circle-danger fas fa-circle mr-[12px]"></i>Job closed
+            </span>
+
+            <span *ngIf="job.draft">
+              <i class="circle-danger fas fa-circle mr-[12px]"></i>Draft
+            </span>
+
             <a
               data-toggle="modal"
               data-target="#shareModal"
@@ -131,6 +144,23 @@
               [isSmall]="true"
             />
           </div>
+          <div
+            *ngIf="myJob && !isClosed"
+            class="text-b3 md:text-b2 text-G800 leading-[1.2] mt-[16px]"
+          >
+            <button
+              class="btn btn-sm btn-primary mt-10 mr-10 w-full text-[15px] py-[7px] normal-case"
+              [routerLink]="['/inbox/job/edit', job.id]"
+            >
+              Edit Job
+            </button>
+            <button
+              class="btn btn-sm btn-danger mt-10 w-full text-[15px] py-[7px] normal-case"
+              (click)="cancelJob()"
+            >
+              Cancel Job
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -141,7 +171,7 @@
   <div class="max-w-[1440px] w-full py-[56px] px-[24px] md:px-[64px] mt-100px">
     <section class="section bg-gray pt-15 pb-20" style="min-height: 70vh">
       <app-back-button></app-back-button>
-      <div *ngIf="!job && loading" class="container">
+      <!--<div *ngIf="!job && loading" class="container">
         <div class="row">
           <div class="col-12 job-detail-container text-center">
             <div class="card p-30 job-detail-card">
@@ -153,11 +183,11 @@
             </div>
           </div>
         </div>
-      </div>
+      </div>-->
       <div class="container job-detail-container" *ngIf="job && canSee">
-        <div class="card p-30 job-detail-card">
-          <div class="container">
-            <div class="row">
+        <!--<div class="card p-30 job-detail-card">
+          <div class="container">-->
+        <!--<div class="row">
               <div class="col-lg-9 col-12">
                 <h5 class="fw-600 mb-0">JOB DETAILS</h5>
                 <h2>
@@ -176,7 +206,7 @@
                   data-target="#shareModal"
                   *ngIf="!job.draft"
                   (click)="createLink()"
-                  class="share-link"
+                  class="share-link hover:cursor-pointer"
                 >
                   <i class="fas fa-share-alt"></i> SHARE
                 </a>
@@ -224,8 +254,9 @@
                   </p>
                 </div>
               </div>
-            </div>
-            <div class="row my-15">
+            </div>-->
+        <!--<div class="row my-15">-->
+        <!--
               <div class="col-md-9 col-sm-8">
                 <app-skill-tag
                   *ngFor="let skill of job.information.skills"
@@ -234,7 +265,8 @@
                   [skill]="skill"
                 ></app-skill-tag>
               </div>
-              <div class="col-md-3 col-sm-4" *ngIf="myJob && !isClosed">
+              -->
+        <!--<div class="col-md-3 col-sm-4" *ngIf="myJob && !isClosed">
                 <button
                   class="btn btn-sm btn-primary mt-10 mr-10"
                   [routerLink]="['/inbox/job/edit', job.id]"
@@ -247,13 +279,13 @@
                 >
                   CANCEL JOB
                 </button>
-              </div>
-            </div>
-          </div>
-        </div>
+              </div>-->
+        <!--</div>-->
+        <!-- </div>
+        </div>-->
         <div class="container p-30 job-actions-card">
           <div class="row">
-            <div class="col-sm-8">
+            <!--<div class="col-sm-8">
               <h5>PROPOSED TERMS</h5>
             </div>
             <div class="col-sm-4 text-right text-left-mobile">
@@ -276,8 +308,8 @@
                   <i class="circle-danger fas fa-circle"></i>&nbsp; Draft
                 </span>
               </div>
-            </div>
-            <div class="col-12">
+            </div>-->
+            <!--<div class="col-12">
               <div
                 class="otherPartyName pointer"
                 [routerLink]="['/profile/alt/', job.clientId]"
@@ -299,11 +331,9 @@
               <p>
                 This project is set at a {{ job.paymentType.toLowerCase()
                 }}<br />
-                <!--
                   {{ job.information.weeklyCommitment }}
                   hours per week, over
                   {{ job.information.timelineExpectation }} period.
-                  -->
               </p>
               <hr
                 *ngIf="
@@ -313,7 +343,7 @@
                   isOpen
                 "
               />
-            </div>
+            </div>-->
             <div class="col-12" *ngIf="bids">
               <p><b>Total Bid(s) : </b>{{ bids.length }}</p>
             </div>
