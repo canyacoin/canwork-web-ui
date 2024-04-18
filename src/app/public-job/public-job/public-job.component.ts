@@ -5,6 +5,9 @@ import {
   Validators,
 } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
+
+import * as moment from 'moment'
+
 import { Bid, Job, JobState } from '@class/job'
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
@@ -44,6 +47,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   job: Job
   currentUser: User
   jobPoster: any = null
+  jobFromNow: string = ''
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -167,6 +171,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
   async initJob(job: Job) {
     this.jobExists = true
+    this.jobFromNow = moment(job.createAt).fromNow()
     if (this.currentUser) {
       this.myJob = job.clientId === this.currentUser.address
       if (this.currentUser.type === 'Provider') {

@@ -16,13 +16,47 @@
             {{ job.information.title }}
           </div>
           <div class="text-b3 md:text-b2 text-G800 leading-[1.2] mt-[12px]">
-            Posted 20 minutes ago
+            Posted {{ jobFromNow }}
           </div>
           <div
             class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[15px]"
             [innerHTML]="job.information.description | linkify"
           ></div>
-          <hr class="h-[1.5px] my-[20px] bg-gray-200 border-0" />
+          <hr
+            *ngIf="job.information.skills.length > 0"
+            class="h-[1.5px] my-[20px] bg-gray-200 border-0"
+          />
+          <div
+            *ngIf="job.information.skills.length > 0"
+            class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[15px]"
+          >
+            <app-skill-tag
+              *ngFor="let skill of job.information.skills"
+              [routerLink]="['/search/']"
+              [queryParams]="{ query: skill }"
+              [skill]="skill"
+            ></app-skill-tag>
+          </div>
+          <hr
+            *ngIf="job.information.attachments.length > 0"
+            class="h-[1.5px] my-[20px] bg-gray-200 border-0"
+          />
+          <div
+            *ngIf="job.information.attachments.length > 0"
+            class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[15px]"
+          >
+            <p class="mb-[10px]">Attachments</p>
+            <a href="{{ job.information.attachments[0].url }}" target="_blank">
+              <p *ngIf="job.information.attachments[0].name.length > 10">
+                <i class="fas fa-paperclip"></i>
+                {{ job.information.attachments[0].name.substring(0, 10) }}...
+              </p>
+              <p *ngIf="job.information.attachments[0].name.length <= 10">
+                <i class="fas fa-paperclip"></i>
+                {{ job.information.attachments[0].name }}...
+              </p>
+            </a>
+          </div>
         </div>
         <div
           class="md:w-[400px] rounded-[12px] bg-white border border-G200 px-7 py-[32px]"
@@ -33,6 +67,15 @@
           >
             <i class="circle-success fas fa-circle mr-[12px]"></i
             >{{ job.state }}
+            <a
+              data-toggle="modal"
+              data-target="#shareModal"
+              *ngIf="!job.draft"
+              (click)="createLink()"
+              class="float-right"
+            >
+              <i class="fas fa-share-alt"></i>
+            </a>
           </div>
           <table
             class="table-auto text-b2 md:text-b1 w-full mt-3 border-separate border-spacing-x-[2px] border-spacing-y-[10px]"
@@ -44,17 +87,23 @@
                 }}<span *ngIf="job.paymentType !== 'Fixed price'">/hr</span> USD
               </td>
             </tr>
-            <tr>
+            <tr *ngIf="bids">
               <td class="text-G700">Proposals</td>
-              <td class="text-G900 text-right font-medium">20 Proposals</td>
+              <td class="text-G900 text-right font-medium">
+                {{ bids.length }} Proposals
+              </td>
             </tr>
             <tr>
               <td class="text-G700">Deadline</td>
-              <td class="text-G900 text-right font-medium">18/01/2024</td>
+              <td class="text-G900 text-right font-medium">
+                {{ job.deadline }}
+              </td>
             </tr>
-            <tr>
+            <tr *ngIf="job.information.weeklyCommitment > 0">
               <td class="text-G700">Estimated hours</td>
-              <td class="text-G900 text-right font-medium">40 hours</td>
+              <td class="text-G900 text-right font-medium">
+                {{ job.information.weeklyCommitment }} hours
+              </td>
             </tr>
             <tr>
               <td class="text-G700">Category</td>
