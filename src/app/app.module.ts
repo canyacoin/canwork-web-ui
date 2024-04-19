@@ -46,6 +46,8 @@ import { WindowService } from './shared/services/window.service'
 import { ConfirmPopupModule } from 'primeng/confirmpopup'
 import { ToastModule } from 'primeng/toast'
 
+import { NgxModalView } from 'ngx-modalview'
+
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
@@ -85,6 +87,7 @@ import { ToastModule } from 'primeng/toast'
     }),
     ToastModule,
     ConfirmPopupModule,
+    NgxModalView,
   ],
   exports: [
     /*FilterPipeModule*/

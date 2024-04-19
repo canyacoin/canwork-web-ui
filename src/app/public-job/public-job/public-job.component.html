@@ -4,7 +4,7 @@
     <div class="max-w-[1440px] w-full py-[56px] px-[24px] md:px-[64px]">
       <div
         *ngIf="job"
-        class="flex flex-col md:flex-row md:justify-between gap-[8px] md:gap-[24px] py-[56px]"
+        class="flex flex-col md:flex-row md:justify-between gap-[8px] md:gap-[24px] pt-[56px]"
       >
         <div
           *ngIf="job && canSee"
@@ -85,7 +85,7 @@
               data-target="#shareModal"
               *ngIf="!job.draft"
               (click)="createLink()"
-              class="float-right"
+              class="float-right hover:cursor-pointer"
             >
               <i class="fas fa-share-alt"></i>
             </a>
@@ -161,8 +161,110 @@
               Cancel Job
             </button>
           </div>
+
+          <div
+            class="text-b3 md:text-b2 text-G800 leading-[1.2] mt-[16px]"
+            *ngIf="
+              currentUser && currentUser.type === 'Provider' && !myJob && isOpen
+            "
+          >
+            <button
+              class="btn btn-sm btn-dark mt-10 mr-10 w-full text-[15px] py-[7px] normal-case"
+              [hidden]="!canBid"
+              data-toggle="modal"
+              data-target="#bidModal"
+              [disabled]="!currentUser.bscAddress"
+            >
+              Apply Now
+            </button>
+            <i *ngIf="!canBid">You've posted your bid.</i>
+            <i *ngIf="!currentUser.bscAddress"
+              >To make a bid fill the field "BNB Chain Address field" in the
+              <a href="/profile?editProfile=1">profile</a></i
+            >
+          </div>
         </div>
       </div>
+      <div
+        *ngIf="job && myJob"
+        class="flex flex-col md:flex-row md:justify-between gap-[8px] md:gap-[24px] pt-[32px]"
+      >
+        <!-- bids start -->
+
+        <div class="w-full rounded-[12px] bg-white border border-G200 p-11">
+          <!--<div class="card p-30 job-detail-card">-->
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-8 col-6">
+                <h5>BIDS</h5>
+              </div>
+              <div class="col-sm-4 col-6 text-right">
+                <button
+                  class="btn btn-sm btn-primary"
+                  *ngIf="bids && bids.length > 0"
+                  [routerLink]="['bids']"
+                >
+                  VIEW ALL
+                </button>
+              </div>
+            </div>
+            <div class="row" *ngIf="bids">
+              <div class="col-12" *ngIf="bids.length !== null">
+                <p><b>Total Bid(s) : </b>{{ bids.length }}</p>
+              </div>
+              <div class="col-12">
+                <h6 class="fw-600 ls-2">RECENT BIDS</h6>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 text-center" *ngIf="!bids">
+                <img
+                  src="assets/img/loader.svg"
+                  style="height: 36px"
+                  alt="Loader"
+                />
+              </div>
+              <div class="col-12" *ngIf="bids && bids.length > 0">
+                <div class="row my-10">
+                  <div class="col-sm-3 col-6">
+                    <b>Provider</b>
+                  </div>
+                  <div class="col-sm-3 col-6">
+                    <b>Bid</b>
+                  </div>
+                  <div class="col-sm-6 hide-mobile">
+                    <b>Message</b>
+                  </div>
+                </div>
+                <div class="row" *ngFor="let bid of bids; let i = index">
+                  <div class="col-sm-3 col-6">
+                    <p
+                      class="fs-16"
+                      [routerLink]="['/profile/alt/', bid.providerId]"
+                    >
+                      {{ bid.providerInfo.name }}
+                    </p>
+                  </div>
+                  <div class="col-sm-3 col-6 mt-5">
+                    {{ bid.budget
+                    }}<span *ngIf="job.paymentType !== 'Fixed price'">/hr</span>
+                    USD
+                  </div>
+                  <div class="col-sm-6 mt-5 hide-mobile">
+                    {{ bid.message.substring(0, 50)
+                    }}<span *ngIf="bid.message.length > 50">...</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12" *ngIf="bids && bids.length < 1">
+                <p>No bids yet.</p>
+              </div>
+            </div>
+          </div>
+          <!-- </div> -->
+        </div>
+      </div>
+      <!-- bids end -->
     </div>
   </div>
   <!-- template end -->
@@ -206,7 +308,7 @@
                   data-target="#shareModal"
                   *ngIf="!job.draft"
                   (click)="createLink()"
-                  class="share-link hover:cursor-pointer"
+                  class="share-link"
                 >
                   <i class="fas fa-share-alt"></i> SHARE
                 </a>
@@ -344,9 +446,9 @@
                 "
               />
             </div>-->
-            <div class="col-12" *ngIf="bids">
+            <!--<div class="col-12" *ngIf="bids">
               <p><b>Total Bid(s) : </b>{{ bids.length }}</p>
-            </div>
+            </div>-->
             <div
               class="col-12"
               *ngIf="
@@ -365,30 +467,6 @@
               <span
                 >Sign up to be a CanWork service provider to bid on this job.
                 <a [routerLink]="['/auth']">Create one now.</a></span
-              >
-            </div>
-            <div
-              class="col-12"
-              *ngIf="
-                currentUser &&
-                currentUser.type === 'Provider' &&
-                !myJob &&
-                isOpen
-              "
-            >
-              <button
-                class="btn btn-primary mt-5 mr-5"
-                [hidden]="!canBid"
-                data-toggle="modal"
-                data-target="#bidModal"
-                [disabled]="!currentUser.bscAddress"
-              >
-                PLACE BID
-              </button>
-              <i *ngIf="!canBid">You've posted your bid.</i>
-              <i *ngIf="!currentUser.bscAddress"
-                >To make a bid fill the field "BNB Chain Address field" in the
-                <a href="/profile?editProfile=1">profile</a></i
               >
             </div>
           </div>
@@ -427,87 +505,15 @@
           </div>
         </div>
       </div>
-      <div class="container job-detail-container" *ngIf="job && myJob">
-        <div class="card p-30 job-detail-card">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-8 col-6">
-                <h5>BIDS</h5>
-              </div>
-              <div class="col-sm-4 col-6 text-right">
-                <button
-                  class="btn btn-sm btn-primary"
-                  *ngIf="bids && bids.length > 0"
-                  [routerLink]="['bids']"
-                >
-                  VIEW ALL
-                </button>
-              </div>
-            </div>
-            <div class="row" *ngIf="bids">
-              <div class="col-12" *ngIf="bids.length !== null">
-                <p><b>Total Bid(s) : </b>{{ bids.length }}</p>
-              </div>
-              <div class="col-12">
-                <h6 class="fw-600 ls-2">RECENT BIDS</h6>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12 text-center" *ngIf="!bids">
-                <img
-                  src="assets/img/loader.svg"
-                  style="height: 36px"
-                  alt="Loader"
-                />
-              </div>
-              <div class="col-12" *ngIf="bids && bids.length > 0">
-                <div class="row my-10">
-                  <div class="col-sm-3 col-6">
-                    <b>Provider</b>
-                  </div>
-                  <div class="col-sm-3 col-6">
-                    <b>Bid</b>
-                  </div>
-                  <div class="col-sm-6 hide-mobile">
-                    <b>Message</b>
-                  </div>
-                </div>
-                <div class="row" *ngFor="let bid of bids; let i = index">
-                  <div class="col-sm-3 col-6">
-                    <p
-                      class="fs-16"
-                      [routerLink]="['/profile/alt/', bid.providerId]"
-                    >
-                      {{ bid.providerInfo.name }}
-                    </p>
-                  </div>
-                  <div class="col-sm-3 col-6 mt-5">
-                    {{ bid.budget
-                    }}<span *ngIf="job.paymentType !== 'Fixed price'">/hr</span>
-                    USD
-                  </div>
-                  <div class="col-sm-6 mt-5 hide-mobile">
-                    {{ bid.message.substring(0, 50)
-                    }}<span *ngIf="bid.message.length > 50">...</span>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12" *ngIf="bids && bids.length < 1">
-                <p>No bids yet.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </section>
   </div>
 </main>
 <!-- Modals -->
 <div id="shareModal" class="modal fade" *ngIf="job && canSee" role="dialog">
-  <div border-none class="modal-dialog">
+  <div class="modal-dialog border-none">
     <!-- Modal content-->
     <div class="modal-content">
-      <div border-none class="modal-header text-center">
+      <div class="modal-header text-center border-none">
         <div class="col-12">
           <h5 class="modal-title">SHARE THIS JOB AS A LINK</h5>
         </div>
@@ -520,7 +526,7 @@
           &times;
         </button>
       </div>
-      <div border-none class="modal-body">
+      <div class="modal-body border-none">
         <div class="container">
           <div class="row">
             <div class="col-12">
@@ -556,10 +562,10 @@
   class="modal fade"
   role="dialog"
 >
-  <div border-none class="modal-dialog">
+  <div class="modal-dialog border-none">
     <!-- Modal content-->
     <div class="modal-content">
-      <div border-none class="modal-header text-center">
+      <div class="modal-header text-center border-none">
         <div class="col-12">
           <h5 class="modal-title">PLACE YOUR BID</h5>
         </div>
@@ -573,7 +579,7 @@
           &times;
         </button>
       </div>
-      <div border-none class="modal-body">
+      <div class="modal-body border-none">
         <div class="container" *ngIf="canBid && !sent">
           <div class="row">
             <div class="col-12">
