@@ -8,7 +8,6 @@ import { ActivatedRoute } from '@angular/router'
 
 import * as moment from 'moment'
 
-import { NgxModalService } from 'ngx-modalview'
 import { Bid, Job, JobState } from '@class/job'
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
@@ -56,8 +55,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private publicJobsService: PublicJobService,
     private storage: AngularFireStorage,
-    private formBuilder: UntypedFormBuilder,
-    private ngxModalService: NgxModalService
+    private formBuilder: UntypedFormBuilder
   ) {
     this.bidForm = this.formBuilder.group({
       price: [
