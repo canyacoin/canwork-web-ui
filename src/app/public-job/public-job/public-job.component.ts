@@ -161,7 +161,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
             uri: this.jobPoster.compressedAvatarUrl,
           }
         }
-        console.log(avatar)
+        //console.log(avatar)
         this.jobPoster.avatarUri = avatar.uri
       }
     }
@@ -171,7 +171,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
   async initJob(job: Job) {
     this.jobExists = true
-    console.log('createAt', job.createAt) // debug
+    //console.log('createAt', job.createAt) // debug
     this.jobFromNow = moment(job.createAt).fromNow()
     if (this.currentUser) {
       this.myJob = job.clientId === this.currentUser.address
