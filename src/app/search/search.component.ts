@@ -352,6 +352,7 @@ export class SearchComponent implements OnInit, OnDestroy {
               title: result[i].title,
               name: result[i].name,
               category: result[i].category,
+              bio: result[i].bio,
               timezone: result[i].timezone,
               hourlyRate: result[i].hourlyRate || 0,
               rating: result[i].rating,

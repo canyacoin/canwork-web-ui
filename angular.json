@@ -51,6 +51,7 @@
               "node_modules/ngx-spinner/animations/ball-clip-rotate-pulse.css",
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
+              "node_modules/ngx-modalview/styles/ngx-modal.css",
               "src/assets/massimo/css/primeng.css",
               "src/assets/sass/global.scss"
             ],
@@ -149,6 +150,7 @@
               "node_modules/ngx-spinner/animations/ball-clip-rotate-pulse.css",
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
+              "node_modules/ngx-modalview/styles/ngx-modal.css",
               "src/assets/massimo/css/primeng.css",
               "src/assets/sass/global.scss"
             ],
