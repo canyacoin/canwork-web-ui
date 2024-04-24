@@ -535,3 +535,12 @@ button {
   filter: drop-shadow(0px 10px 25px rgba(0, 168, 243, 0.25));
   color: #FFFFFF !important;
 }
+
+/* overrides to make bootstrap modals work on new landing ui */
+.modal-open .modal {
+  margin-top: 56px;
+}
+
+.modal-backdrop.fade.show {
+  display: none;
+}
