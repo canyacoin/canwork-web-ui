@@ -77,10 +77,7 @@ export const FooterService = {
       title: 'Terms of Service',
       url: 'https://app.canwork.io/assets/docs/canwork-terms-and-conditions.pdf',
     },
-    {
-      title: 'Cookies Settings',
-      url: '',
-    },
+    
   ],
   social: [
     {
