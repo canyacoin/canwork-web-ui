@@ -1,7 +1,7 @@
 export const FooterService = {
   logoSrc: '/assets/massimo/images/logoGray.png',
   buttonText1: 'Post a job request',
-  legalText: '© 2023 CanWork.io. All rights reserved.',
+  legalText: '© 2024 CanWork.io. All rights reserved.',
   sections: [
     [
       'Website Design',
