@@ -14,10 +14,8 @@ export const HeaderService = {
       title: 'Job Board',
       url: '/jobs',
     },
-    {
-      title: 'Quick Escrow',
-      url: '/',
-    },
+    
+ 
     {
       title: 'Blog',
       url: '/blog',
