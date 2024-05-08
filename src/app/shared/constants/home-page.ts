@@ -247,18 +247,18 @@ export const WhoBehindService = {
 export const JoinCommunityService = {
   title: 'Join Our Community',
   subTitle:
-    "Join CanWork's growing community of freelancers and clients all over the world connecting beyond the limitations of fiat transactions",
+    "Join CanWork's growing community of freelancers and clients all over the world.",
   communities: [
     {
       imgSrc: '/assets/massimo/images/telegram.png',
       title: 'Join our telegram Channel',
-      description: '@CanYa Community',
+      description: '@CanWork Community',
       url: 'https://t.me/CanYaCommunity',
     },
     {
       imgSrc: '/assets/massimo/images/twitter.png',
       title: 'Follow us on twitter',
-      description: '@CanYa Community',
+      description: '@CanWork Community',
       url: 'https://twitter.com/CanWork_io',
     },
   ],
