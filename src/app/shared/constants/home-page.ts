@@ -48,21 +48,21 @@ export const WhyUseService = {
 
 export const WhyFreelanceService = {
   question: 'Why use CanWork ?',
-  title: 'Reliable Web3\n Freelance Experts',
+  title: 'Reliable Digital Experts',
   subTitle:
-    'Filter out the noise and thoughtless proposals when you hire on CanWork. Dedicated expert freelancers at your fingertips. ',
+    'Filter out the noise and thoughtless proposals when you hire on CanWork. Dedicated expert freelancers at your fingertips. Admin available for dispute resolution.',
   cards: [
-    {
-      iconSrc: '/assets/massimo/svg/feature3.svg',
-      title: 'Skilled Web3 Freelancers',
-      description:
-        'Work with professionals specifically in the Web3 sector. CanWork has a growing list of expert from all fields of work on the Web3 space. ',
-    },
     {
       iconSrc: '/assets/massimo/svg/feature4.svg',
       title: 'Zero Hiring Costs',
       description:
-        'We charge only 1% of the project fee compared to other platforms where you get to pay up to 5% every time you initiate a new project',
+        'Clients pay zero costs for posting jobs or hiring freelancers on CanWork.  Freelancers will pay 1% of the completed project fee.'
+    },
+    {
+      iconSrc: '/assets/massimo/svg/feature3.svg',
+      title: 'Skilled Freelancers',
+      description:
+        'CanWork has a growing list of experts from most fields of digital work. ',
     },
   ],
   buttonText1: 'Browse Top Freelancers',
