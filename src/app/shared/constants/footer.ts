@@ -29,10 +29,7 @@ export const FooterService = {
     ],
   ],
   website: [
-    {
-      title: 'Quick Escrow',
-      url: '/',
-    },
+    
     {
       title: 'Register',
       url: '/auth',
