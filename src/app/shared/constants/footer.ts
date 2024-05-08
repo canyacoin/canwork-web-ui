@@ -89,13 +89,6 @@ export const FooterService = {
       iconSrc: '/assets/massimo/svg/x.svg',
       url: 'https://twitter.com/CanWork_io',
     },
-    {
-      iconSrc: '/assets/massimo/svg/linkedIn.svg',
-      url: '',
-    },
-    {
-      iconSrc: '/assets/massimo/svg/youtube.svg',
-      url: '',
-    },
+
   ],
 }
