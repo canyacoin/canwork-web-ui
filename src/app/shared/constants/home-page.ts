@@ -32,13 +32,13 @@ export const WhyUseService = {
       iconSrc: '/assets/massimo/svg/feature1.svg',
       title: 'Safe and Secured Escrow Protection',
       description:
-        'Leverage on our advanced security and escrow protection. All payments are secured upfront into a smart-contract escrow.',
+        'Advanced security and escrow protection. All payments are secured upfront into a smart-contract escrow.',
     },
     {
       iconSrc: '/assets/massimo/svg/feature2.svg',
-      title: 'Popular BNB Chain token supported',
+      title: 'Popular BNB Chain tokens supported',
       description:
-        'Pay in BNB and popular BEP20 tokens. Value is locked in USDT Stablecoin until project is completed and fund released',
+        'Pay in BNB and popular BEP20 tokens. Value is locked in USDT Stablecoin until project is completed and funds released.',
     },
   ],
   buttonText1: 'Learn more about Our Payment System',
