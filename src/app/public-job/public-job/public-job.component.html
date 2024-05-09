@@ -85,11 +85,11 @@
           >
             <p class="mb-[10px]">Attachments</p>
             <a href="{{ job.information.attachments[0].url }}" target="_blank">
-              <p *ngIf="job.information.attachments[0].name.length > 10">
+              <p *ngIf="job.information.attachments[0].name.length > 20">
                 <i class="fas fa-paperclip"></i>
-                {{ job.information.attachments[0].name.substring(0, 10) }}...
+                {{ job.information.attachments[0].name.substring(0, 20) }}...
               </p>
-              <p *ngIf="job.information.attachments[0].name.length <= 10">
+              <p *ngIf="job.information.attachments[0].name.length <= 20">
                 <i class="fas fa-paperclip"></i>
                 {{ job.information.attachments[0].name }}
               </p>
