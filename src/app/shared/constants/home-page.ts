@@ -32,13 +32,13 @@ export const WhyUseService = {
       iconSrc: '/assets/massimo/svg/feature1.svg',
       title: 'Safe and Secured Escrow Protection',
       description:
-        'Leverage on our advanced security and escrow protection. All payments are secured upfront into a smart-contract escrow.',
+        'Advanced security and escrow protection. All payments are secured upfront into a smart-contract escrow.',
     },
     {
       iconSrc: '/assets/massimo/svg/feature2.svg',
-      title: 'Popular BNB Chain token supported',
+      title: 'Popular BNB Chain tokens supported',
       description:
-        'Pay in BNB and popular BEP20 tokens. Value is locked in USDT Stablecoin until project is completed and fund released',
+        'Pay in BNB and popular BEP20 tokens. Value is locked in USDT Stablecoin until project is completed and funds released.',
     },
   ],
   buttonText1: 'Learn more about Our Payment System',
@@ -48,21 +48,21 @@ export const WhyUseService = {
 
 export const WhyFreelanceService = {
   question: 'Why use CanWork ?',
-  title: 'Reliable Web3\n Freelance Experts',
+  title: 'Reliable Digital Experts',
   subTitle:
-    'Filter out the noise and thoughtless proposals when you hire on CanWork. Dedicated expert freelancers at your fingertips. ',
+    'Filter out the noise and thoughtless proposals when you hire on CanWork. Dedicated expert freelancers at your fingertips. Admin available for dispute resolution.',
   cards: [
-    {
-      iconSrc: '/assets/massimo/svg/feature3.svg',
-      title: 'Skilled Web3 Freelancers',
-      description:
-        'Work with professionals specifically in the Web3 sector. CanWork has a growing list of expert from all fields of work on the Web3 space. ',
-    },
     {
       iconSrc: '/assets/massimo/svg/feature4.svg',
       title: 'Zero Hiring Costs',
       description:
-        'We charge only 1% of the project fee compared to other platforms where you get to pay up to 5% every time you initiate a new project',
+        'Clients pay zero costs for posting jobs or hiring freelancers on CanWork.  Freelancers will pay 1% of the completed project fee.'
+    },
+    {
+      iconSrc: '/assets/massimo/svg/feature3.svg',
+      title: 'Skilled Freelancers',
+      description:
+        'CanWork has a growing list of experts from most fields of digital work. ',
     },
   ],
   buttonText1: 'Browse Top Freelancers',
@@ -247,18 +247,18 @@ export const WhoBehindService = {
 export const JoinCommunityService = {
   title: 'Join Our Community',
   subTitle:
-    "Join CanWork's growing community of freelancers and clients all over the world connecting beyond the limitations of fiat transactions",
+    "Join CanWork's growing community of freelancers and clients all over the world.",
   communities: [
     {
       imgSrc: '/assets/massimo/images/telegram.png',
       title: 'Join our telegram Channel',
-      description: '@CanYa Community',
+      description: '@CanWork Community',
       url: 'https://t.me/CanYaCommunity',
     },
     {
       imgSrc: '/assets/massimo/images/twitter.png',
       title: 'Follow us on twitter',
-      description: '@CanYa Community',
+      description: '@CanWork Community',
       url: 'https://twitter.com/CanWork_io',
     },
   ],

@@ -13,8 +13,8 @@
           {{ joinSection.subTitle }}
         </div>
       </div>
-      <div>
-        <div class="flex max-md:flex-wrap max-md:justify-center gap-[32px]">
+      <div class="flex justify-center w-full">
+        <div class="flex flex-wrap justify-center gap-[32px] max-w-full">
           <a
             *ngFor="let community of joinSection.communities"
             class="bg-G200 hover:bg-G300 click:bg-G300 w-full max-w-[332px] md:w-[332px] border border-G300 rounded-[12px] py-[32px] px-[48px] flex justify-between items-center gap-[16px] shadow-community cursor-pointer transition-all duration-200"

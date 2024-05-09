@@ -49,7 +49,7 @@ export class Job {
       case JobState.declined:
         return 'This job offer was turned down by the provider'
       case JobState.inDispute:
-        return 'The provider or the client has raised a dispute. This is being resolved by the CanYa DAO'
+        return 'The provider or the client has raised a dispute. This is being resolved by the CanWork Team'
       case JobState.providerCounterOffer:
         return "The provider has countered the client's offer"
       case JobState.clientCounterOffer:

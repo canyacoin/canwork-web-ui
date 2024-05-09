@@ -1,7 +1,7 @@
 export const FooterService = {
   logoSrc: '/assets/massimo/images/logoGray.png',
   buttonText1: 'Post a job request',
-  legalText: '© 2023 CanWork.io. All rights reserved.',
+  legalText: '© 2024 CanWork.io. All rights reserved.',
   sections: [
     [
       'Website Design',
@@ -29,10 +29,7 @@ export const FooterService = {
     ],
   ],
   website: [
-    {
-      title: 'Quick Escrow',
-      url: '/',
-    },
+    
     {
       title: 'Register',
       url: '/auth',
@@ -77,10 +74,7 @@ export const FooterService = {
       title: 'Terms of Service',
       url: 'https://app.canwork.io/assets/docs/canwork-terms-and-conditions.pdf',
     },
-    {
-      title: 'Cookies Settings',
-      url: '',
-    },
+    
   ],
   social: [
     {
@@ -95,13 +89,6 @@ export const FooterService = {
       iconSrc: '/assets/massimo/svg/x.svg',
       url: 'https://twitter.com/CanWork_io',
     },
-    {
-      iconSrc: '/assets/massimo/svg/linkedIn.svg',
-      url: '',
-    },
-    {
-      iconSrc: '/assets/massimo/svg/youtube.svg',
-      url: '',
-    },
+
   ],
 }
