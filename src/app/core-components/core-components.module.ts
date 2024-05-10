@@ -37,7 +37,6 @@ import { LedgerModalComponent } from '../binance/ledger-modal/ledger-modal.compo
 import { PopperComponent } from './popper/popper.component'
 import { BasicButtonComponent } from './buttons/basic-button/basic-button.component'
 import { BasicTagComponent } from './tag/basic-tag/basic-tag.component'
-import { CategoryCardComponent } from './category-card/category-card.component'
 import { LinkButtonComponent } from './link-button/link-button.component'
 import { ProfileCardComponent } from './profile-card/profile-card.component'
 import { SwitchGridListComponent } from './buttons/switch-grid-list/switch-grid-list.component'
@@ -104,7 +103,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     PopperComponent,
     BasicButtonComponent,
     BasicTagComponent,
-    CategoryCardComponent,
     LinkButtonComponent,
     ProfileCardComponent,
     SwitchGridListComponent,
@@ -138,7 +136,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     DynamicCoinWrapperComponent,
     BasicButtonComponent,
     BasicTagComponent,
-    CategoryCardComponent,
     LinkButtonComponent,
     ProfileCardComponent,
     SwitchGridListComponent,

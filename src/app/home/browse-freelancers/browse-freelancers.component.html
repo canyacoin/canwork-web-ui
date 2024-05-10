@@ -32,12 +32,13 @@
         <div
           *ngFor="let card of providerTypeArray"
           (click)="clickProviderTypeTag(card.title)"
+          class="h-full bg-white hover:bg-G100 active:bg-G200 border border-G200 grid p-[24px] md:p-[40px] transition-all duration-200 cursor-pointer rounded-[12px] select-none grid-rows-subgrid row-span-3 gap-y-[16px]"
         >
-          <category-card
-            [iconSrc]="card.iconSrc"
-            [title]="card.title"
-            [description]="card.description"
-          />
+          <img src="{{ card.iconSrc }}" class="w-[48px] h-[48px]" />
+          <div class="text-G900 text-h6 md:text-h5 font-medium">
+            {{ card.title }}
+          </div>
+          <div class="text-G500 text-b2 md:text-b1">{{ card.description }}</div>
         </div>
       </div>
       <!-- <div class="overflow-x-scroll">
