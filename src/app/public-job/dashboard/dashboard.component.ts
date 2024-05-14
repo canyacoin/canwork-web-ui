@@ -25,7 +25,6 @@ export class DashboardComponent implements OnInit {
   ratingFilter: number[] = []
   // rating filters on provider, union (OR)
 
-
   // two way binding, event from child (user input)
   onSearchInputChange(searchInput: string) {
     this.searchInput = searchInput
@@ -90,7 +89,8 @@ export class DashboardComponent implements OnInit {
     // this.refreshResultsIfNeeded(newQueryString)
   }
 
-
+  // bad-code
+  loading = false
 
   allJobs: any
   queryJobs: any
@@ -144,7 +144,7 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.stats = { count: '', usd: '' }
+    this.stats = { count: '0', usd: '0' }
     this.filterByCategory = 'all'
     this.orderType = 'information.title'
     this.navService.setHideSearchBar(true)
@@ -171,6 +171,8 @@ export class DashboardComponent implements OnInit {
         count: jobStats.count + publicJobStats.count,
         usd: Math.round(jobStats.usd + publicJobStats.usd),
       }
+      console.log('jobStats:', jobStats)
+      console.log('publicJobStats:', publicJobStats)
     })
   }
 

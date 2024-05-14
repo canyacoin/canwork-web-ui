@@ -186,3 +186,30 @@
 .p-checkbox-label.p-checkbox-label-active {
     font-weight: 500;
 }
+
+/* p-dropdown */
+.p-dropdown {
+    border-color: #E2E8F0 !important;
+    border-width: 1px !important;
+    border-radius: 8px !important;
+    width: 139px !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.p-dropdown:hover {
+    background-color: #F1F5F9 !important;
+}
+
+.p-dropdown:target {
+    background-color: #E2E8F0  !important;
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+    background: #ffffff00 !important;
+    color: #495057 !important;
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight:hover {
+    background: #F2F5F9 !important;
+}

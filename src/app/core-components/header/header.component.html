@@ -17,7 +17,7 @@
           class="w-[140px] h-[40px] select-none"
         />
       </div>
-      <div class="hidden lg:flex items-center gap-[40px]">
+      <div class="hidden lg:flex items-center gap-10">
         <div *ngFor="let item of headerSection.website" [routerLink]="item.url">
           <link-button
             *ngIf="item.title !== 'Inbox'; else showinbox"
@@ -43,7 +43,7 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-[16px]">
+      <div class="flex items-center gap-4">
         <div
           class="hidden lg:block w-max h-max"
           *ngIf="!currentUser"
@@ -139,12 +139,12 @@
     [ngClass]="isHamburguer ? '-z-50' : 'z-50'"
     [@hamburguerX]="isHamburguer ? 'hamburguer' : 'show'"
   >
-    <div class="py-[30px] px-[20px] flex flex-col items-center gap-[40px]">
+    <div class="py-[30px] px-[20px] flex flex-col items-center gap-10">
       <img
         src="{{ headerSection.logoGraySrc }}"
         class="w-[140px] h-[40px] select-none"
       />
-      <div class="flex flex-col items-center gap-[24px]">
+      <div class="flex flex-col items-center gap-6">
         <div *ngFor="let item of headerSection.website" [routerLink]="item.url">
           <link-button [type]="2" [title]="item.title" />
         </div>

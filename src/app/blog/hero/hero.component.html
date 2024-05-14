@@ -4,7 +4,7 @@
   >
     <div class="flex justify-center">
       <div
-        class="max-md:px-[16px] w-full max-w-[705px] flex flex-col gap-[40px]"
+        class="max-md:px-[16px] w-full max-w-[705px] flex flex-col gap-10"
       >
         <div class="text-white text-center text-h3 md:text-h1 font-medium">
           {{ heroSection.title }}
@@ -12,9 +12,9 @@
         <div class="px-[40px] text-center text-G200 text-b1 md:text-h5">
           {{ heroSection.subTitle }}
         </div>
-        <div class="flex flex-col gap-[24px]">
+        <div class="flex flex-col gap-6">
           <div
-            class="bg-transparent md:bg-white md:rounded-[12px] overflow-hidden flex flex-col gap-[16px] md:gap-[30px] md:flex-row md:justify-between"
+            class="bg-transparent md:bg-white md:rounded-[12px] overflow-hidden flex flex-col gap-4 md:gap-[30px] md:flex-row md:justify-between"
           >
             <input
               [(ngModel)]="searchInput"
@@ -31,7 +31,7 @@
               />
             </div>
           </div>
-          <div class="flex flex-wrap justify-center items-center gap-[8px]">
+          <div class="flex flex-wrap justify-center items-center gap-2">
             <div
               *ngFor="let searchTag of heroSection.searchTags"
               (click)="submitSearchTag(searchTag)"

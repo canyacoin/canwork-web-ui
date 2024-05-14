@@ -10,6 +10,8 @@ import { ResultComponent } from './result/result.component'
 import { PaginatorModule } from 'primeng/paginator'
 import { AccordionModule } from 'primeng/accordion'
 import { CheckboxModule } from 'primeng/checkbox'
+import { DropdownModule } from 'primeng/dropdown';
+import { FormsModule } from '@angular/forms';
 import { DashboardRoutingModule } from './dashboard.routing.module'
 
 @NgModule({
@@ -22,6 +24,8 @@ import { DashboardRoutingModule } from './dashboard.routing.module'
     PaginatorModule,
     AccordionModule,
     CheckboxModule,
+    DropdownModule,
+    FormsModule
   ],
   declarations: [
     DashboardComponent,

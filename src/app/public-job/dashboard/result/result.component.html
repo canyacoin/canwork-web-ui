@@ -1,88 +1,60 @@
 <section>
-  <div class="flex justify-between items-center gap-[8px]">
-    <div
-      *ngIf="noSearchParams === false && isLoading === false"
-      class="text-G700 text-b1 md:text-h6 font-medium"
-    >
-      {{ totalRecords }} freelancer<span *ngIf="totalRecords !== 1">s</span>
+  <div class="flex justify-between items-center gap-2">
+    <div class="flex items-center gap-2 text-G900 text-b1">
+      <div class="whitespace-nowrap">{{ stats.count }} Jobs Completed</div>
+      <div class="min-w-[8px] min-h-[8px] bg-G900 rounded-full"></div>
+      <div class="whitespace-nowrap">${{ stats.usd }} USD Payment</div>
     </div>
-    <div
-      *ngIf="isLoading === true"
-      class="text-G700 text-b1 md:text-h6 font-medium"
-    >
-      Searching for freelancers
+    <div class="flex items-center gap-5 text-G900 text-b1">
+      <div>Sort by</div>
+      <p-dropdown
+        [options]="sortingMethods"
+        [(ngModel)]="selectedSorting"
+        optionLabel="name"
+        placeholder="Select a method"
+      />
     </div>
-    <div
-      *ngIf="noSearchParams === true && isLoading === false"
-      class="text-G700 text-b1 md:text-h6 font-medium"
-    >
-      Please add some search paramaters
-    </div>
-    <switch-grid-list-button
-      [isGrid]="isGrid"
-      (gridChanged)="handleGridChange($event)"
-    />
   </div>
-  <div
-    class="pt-[23px] grid gap-[20px]"
-    [ngClass]="{
-      'sm:grid-cols-2 lg:grid-cols-3':
-        (isGrid && profileCards.length !== 0) ||
-        (isGrid && isLoading) ||
-        (isGrid && noSearchParams)
-    }"
-  >
+  <div class="pt-[60px] grid gap-5">
     <ng-container
-      *ngIf="
-        isLoading === true || noSearchParams === true;
-        then loadingView;
-        else resultView
-      "
+      *ngIf="isLoading === true; then loadingView; else resultView"
     ></ng-container>
     <ng-template #loadingView>
-      <ng-container
-        *ngIf="isGrid; then gridSkCardsView; else listSkCardsView"
-      ></ng-container>
-      <ng-template #gridSkCardsView>
-        <ng-container *ngFor="let card of skCards" class="w-full">
-          <sk-profile-card [isGrid]="isGrid" />
-        </ng-container>
-      </ng-template>
-      <ng-template #listSkCardsView>
-        <ng-container *ngFor="let card of skCards.slice(0, 4)" class="w-full">
-          <sk-profile-card [isGrid]="isGrid" />
-        </ng-container>
-      </ng-template>
+      <ng-container *ngFor="let card of skCards" class="w-full">
+        <!-- <sk-profile-card /> -->
+        <!-- replace by sk-job-card -->
+      </ng-container>
     </ng-template>
     <ng-template #resultView>
-      <ng-container
-        *ngIf="profileCards.length === 0; then emptyView; else profilesView"
-      ></ng-container>
+      <!-- <ng-container
+        *ngIf="profileCards.length === 0; then emptyView; else jobsView"
+      ></ng-container> -->
 
-      <ng-template #emptyView>
-        <div class="w-full flex flex-col items-center gap-[24px]">
-          <img
-            src="/assets/massimo/images/noSearchResult.png"
-            alt="No Results Found"
-            draggable="false"
-            class="max-w-[500px] w-full"
-          />
-          <div class="flex flex-col gap-[] items-center justify-center">
-            <div class="text-h5 text-G800 font-medium">No Result Found</div>
-            <div class="text-b1 text-G700 text-center">
-              We are unable to find result matching your search input.<br />
-              See top freelancers to continue.
-            </div>
+      <!-- <ng-template #emptyView> -->
+      <div class="w-full flex flex-col items-center gap-6">
+        <img
+          src="/assets/massimo/images/noJobResult.png"
+          alt="No Results Found"
+          draggable="false"
+          class="max-w-[400px] w-full"
+        />
+        <div class="flex flex-col gap-2 items-center justify-center">
+          <div class="text-h5 text-G800 font-medium">
+            There is no public job listed
           </div>
-          <div class="w-max">
-            <basic-button [type]="1" title="See top freelancers" />
+          <div class="text-b1 text-G700 text-center">
+            Need to get something done ?
           </div>
         </div>
-      </ng-template>
+        <div class="w-max" [routerLink]="['/inbox/post']">
+          <basic-button [type]="1" title="Post a Job" />
+        </div>
+      </div>
+      <!-- </ng-template> -->
 
-      <ng-template #profilesView>
-        <ng-container *ngFor="let profile of profileCards" class="w-full">
-          <profile-card
+      <ng-template #jobsView>
+        <ng-container *ngFor="let job of jobCards" class="w-full">
+          <!-- <profile-card
             [index]="profile.id"
             [avatarUri]="profile.avatarUri"
             [name]="profile.name"
@@ -95,13 +67,13 @@
             [address]="profile.address"
             [timezone]="profile.timezone"
             [hourlyRate]="profile.hourlyRate"
-            [isGrid]="isGrid"
-          />
+          /> -->
+          <!-- replace by job-card -->
         </ng-container>
       </ng-template>
     </ng-template>
   </div>
-  <div *ngIf="profileCards.length" class="pt-[24px] flex justify-center">
+  <!-- <div *ngIf="profileCards.length" class="pt-[24px] flex justify-center">
     <p-paginator
       (onPageChange)="onPageChange($event)"
       [first]="first"
@@ -109,5 +81,5 @@
       [totalRecords]="totalRecords"
       [pageLinkSize]="4"
     ></p-paginator>
-  </div>
+  </div> -->
 </section>

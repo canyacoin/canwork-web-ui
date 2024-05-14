@@ -4,9 +4,9 @@
       class="bg-hero-pattern bg-no-repeat bg-center bg-cover rounded-[20px] px-[24px] md:px-[44px] py-[80px] flex flex-col gap-[64px]"
     >
       <div
-        class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-[40px] px-[24px]"
+        class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-10 px-[24px]"
       >
-        <div class="flex flex-col gap-[8px] font-medium">
+        <div class="flex flex-col gap-2 font-medium">
           <div class="text-G200 text-b2">
             {{ whoBehindSection.subTitle }}
           </div>
@@ -14,12 +14,12 @@
             {{ whoBehindSection.title }}
           </div>
         </div>
-        <div class="flex flex-col gap-[24px]">
+        <div class="flex flex-col gap-6">
           <div class="text-white text-b1 font-medium whitespace-pre-line">
             {{ whoBehindSection.description }}
           </div>
           <div
-            class="flex flex-col xs:flex-row gap-[8px] md:gap-[16px] items-center"
+            class="flex flex-col xs:flex-row gap-2 md:gap-4 items-center"
           >
             <div [routerLink]="['/']">
               <basic-button [type]="1" [title]="whoBehindSection.buttonText1" />
@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="overflow-x-hidden">
-        <div class="grid grid-cols-5 gap-[16px] items-center min-w-[1200px]">
+        <div class="grid grid-cols-5 gap-4 items-center min-w-[1200px]">
           <div
             *ngFor="let freelancer of whoBehindSection.freelancers"
             class="w-[232px] h-[216px] rounded-[24px] overflow-hidden select-none relative cursor-pointer"
