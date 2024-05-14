@@ -1,7 +1,7 @@
 export const HeroService = {
-  title: 'Browse Top Freelancers',
+  title: 'Browse Job Board',
   searchPlaceholder:
-    'Search for freelancers, skills or categories e.g software developer',
+    'Search Job Board',
   buttonText1: 'Search',
 }
 
@@ -27,3 +27,30 @@ export const FilterService = {
   ],
   rating: [5, 4, 3, 2, 1],
 }
+
+export const providerJobTypeArray = [
+  {
+    title: 'Web design',
+    id: 'designer',
+  },
+  {
+    title: 'UI/UX Design',
+    id: 'designer',
+  },
+  {
+    title: 'Front End',
+    id: 'designer',
+  },
+  {
+    title: 'Copyrighting',
+    id: 'designer',
+  },
+  {
+    title: 'Angular',
+    id: 'designer',
+  },
+  {
+    title: 'Java Script',
+    id: 'designer',
+  },
+]

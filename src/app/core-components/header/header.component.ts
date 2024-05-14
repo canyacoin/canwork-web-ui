@@ -94,7 +94,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         if (
           currentRoute.includes('/inbox') ||
           currentRoute.includes('/profile') ||
-          currentRoute.includes('/jobs') ||
           currentRoute.includes('/wallet-bnb') ||
           currentRoute.includes('/auth')
         ) {

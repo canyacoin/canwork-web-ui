@@ -20,7 +20,6 @@ import { CoreComponentsModule } from './core-components/core-components.module'
 import { firebaseUiAuthConfig } from './core-config/app-auth-config'
 import { CoreUtilsModule } from './core-utils/core-utils.module'
 import { PublicJobComponent } from './public-job/public-job/public-job.component'
-import { DashboardComponent } from './public-job/dashboard/dashboard.component'
 import { JobBidsComponent } from './public-job/job-bids/job-bids.component'
 //import { FilterPipeModule } from 'ngx-filter-pipe' // obsolete
 //import { OrderModule } from 'ngx-order-pipe' // obsolete
@@ -54,7 +53,6 @@ import { NgxModalView } from 'ngx-modalview'
     AppComponent,
     PublicJobComponent,
     JobBidsComponent,
-    DashboardComponent,
     WalletBnbComponent,
     WalletBnbAssetsComponent,
   ],

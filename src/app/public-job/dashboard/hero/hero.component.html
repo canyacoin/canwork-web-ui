@@ -1,0 +1,47 @@
+<section>
+  <div
+    class="bg-hero-pattern bg-no-repeat bg-center bg-cover pt-[152px] pb-[80px] md:pt-[152px] md:pb-[80px]"
+  >
+    <div class="flex justify-center">
+      <div
+        class="max-md:px-[16px] w-full max-w-[705px] flex flex-col gap-[40px]"
+      >
+        <div class="text-white text-center text-h3 md:text-h1 font-medium">
+          {{ heroSection.title }}
+        </div>
+        <div class="flex flex-col gap-[24px]">
+          <div
+            class="bg-transparent md:bg-white md:rounded-[12px] overflow-hidden flex flex-col gap-[16px] md:gap-[30px] md:flex-row md:justify-between"
+          >
+            <input
+              [(ngModel)]="searchInput"
+              type="text"
+              class="py-[10px] px-[10px] md:pl-[40px] rounded-[10px] placeholder:text-G500 placeholder:text-b1 outline-none w-full placeholder:line-clamp-1"
+              placeholder="{{ heroSection.searchPlaceholder }}"
+              (keydown.enter)="submitSearchQuery()"
+              (input)="onSearchInputChange($event.target.value)"
+            />
+            <div (click)="submitSearchQuery()">
+              <basic-button
+                [type]="2"
+                [title]="heroSection.buttonText1"
+                [extraClass]="'max-md:min-w-full text-center'"
+              />
+            </div>
+          </div>
+          <div class="flex flex-wrap justify-center items-center gap-[8px]">
+            <div
+              *ngFor="let provider of providerTypes"
+              (click)="clickProviderTypeTag(provider.title)"
+            >
+              <basic-tag
+                [type]="isProviderTypeSelected(provider.title) ? 3 : 1"
+                [title]="provider.title"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

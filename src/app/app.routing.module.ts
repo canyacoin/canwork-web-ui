@@ -53,7 +53,8 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         },
         {
           path: 'jobs',
-          component: DashboardComponent,
+          loadChildren: () =>
+            import('./public-job/dashboard/dashboard.module').then((m) => m.DashboardModule),
         },
         {
           path: 'jobs/:jobId',

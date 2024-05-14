@@ -10,11 +10,88 @@ import { User, UserType } from '@class/user'
 import { NgxPaginationModule } from 'ngx-pagination'
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-dashboard-page',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
+  searchInput: string = '' // the new search input text, this is the model on parent
+  providerFilters = [] // the current active provider type filters (union)
+
+  verifyFilter: string[] = [] // the current verified provider filter
+
+  skillsFilter: string[] = []
+  // skill filters on provider, intersection (AND)
+
+  ratingFilter: number[] = []
+  // rating filters on provider, union (OR)
+
+
+  // two way binding, event from child (user input)
+  onSearchInputChange(searchInput: string) {
+    this.searchInput = searchInput
+
+    // this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
+
+    // // keep in sync also address bar, without refreshing page
+    // const newQueryString = this.syncAddressBar()
+
+    // this.refreshResultsIfNeeded(newQueryString)
+  }
+
+  // two way binding, event from child (user input)
+  onProviderFiltersChange(providerTypes: any) {
+    let sortedProviders = providerTypes
+    sortedProviders = providerTypes.sort() // sort to have a predictable string
+    this.providerFilters = sortedProviders
+
+    // this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
+
+    // // keep in sync also address bar, without refreshing page
+    // const newQueryString = this.syncAddressBar()
+
+    // this.refreshResultsIfNeeded(newQueryString)
+  }
+
+  // two way binding, event from child (user input)
+  onVerifyFormChange(verifyInput: string[]) {
+    // we don't need to sort it, it's only one value
+
+    this.verifyFilter = verifyInput
+
+    // this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
+
+    // // keep in sync also address bar, without refreshing page
+    // const newQueryString = this.syncAddressBar()
+
+    // this.refreshResultsIfNeeded(newQueryString)
+  }
+
+  // two way binding, event from child (user input)
+  onSkillsFilterChange(skillInput: string[]) {
+    this.skillsFilter = skillInput
+
+    // this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
+
+    // // keep in sync also address bar, without refreshing page
+    // const newQueryString = this.syncAddressBar()
+
+    // this.refreshResultsIfNeeded(newQueryString)
+  }
+
+  // two way binding, event from child (user input)
+  onRatingChange(ratingInput: number[]) {
+    this.ratingFilter = ratingInput
+
+    // this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
+
+    // // keep in sync also address bar, without refreshing page
+    // const newQueryString = this.syncAddressBar()
+
+    // this.refreshResultsIfNeeded(newQueryString)
+  }
+
+
+
   allJobs: any
   queryJobs: any
   stats: any
@@ -63,9 +140,8 @@ export class DashboardComponent implements OnInit {
     private publicJobService: PublicJobService,
     private statisticsService: StatisticsService,
     private authService: AuthService,
-    private navService: NavService
-  ) //    private order: OrderPipe
-  {}
+    private navService: NavService //    private order: OrderPipe
+  ) {}
 
   async ngOnInit() {
     this.stats = { count: '', usd: '' }
