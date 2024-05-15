@@ -39,9 +39,10 @@ import { BasicButtonComponent } from './buttons/basic-button/basic-button.compon
 import { BasicTagComponent } from './tag/basic-tag/basic-tag.component'
 import { CategoryCardComponent } from './category-card/category-card.component'
 import { LinkButtonComponent } from './link-button/link-button.component'
-import { ProfileCardComponent } from './profile-card/profile-card.component'
+import { ProfileCardComponent } from './cards/profile-card/profile-card.component'
 import { SwitchGridListComponent } from './buttons/switch-grid-list/switch-grid-list.component'
 import { SkProfileCardComponent } from './skeletons/sk-profile-card/sk-profile-card.component'
+import { SkJobCardComponent } from './skeletons/sk-job-card/sk-job-card.component'
 import { BadgeComponent } from './badge/badge.component'
 import { DelTagComponent } from './tag/del-tag/del-tag.component'
 import { StarRatingComponent } from './star-rating/star-rating.component'
@@ -51,6 +52,7 @@ import { MenuModule } from 'primeng/menu'
 import { ToastModule } from 'primeng/toast'
 import { AvatarModule } from 'primeng/avatar'
 import { BadgeModule } from 'primeng/badge'
+import { JobCardComponent } from './cards/job-card/job-card.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -109,11 +111,13 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ProfileCardComponent,
     SwitchGridListComponent,
     SkProfileCardComponent,
+    SkJobCardComponent,
     BadgeComponent,
     DelTagComponent,
     StarRatingComponent,
     JoinCommunityComponent,
     PostJobComponent,
+    JobCardComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -143,11 +147,13 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ProfileCardComponent,
     SwitchGridListComponent,
     SkProfileCardComponent,
+    SkJobCardComponent,
     BadgeComponent,
     DelTagComponent,
     StarRatingComponent,
     JoinCommunityComponent,
     PostJobComponent,
+    JobCardComponent,
   ],
   providers: [
     {

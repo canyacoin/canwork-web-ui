@@ -158,6 +158,8 @@ export class DashboardComponent implements OnInit {
       .subscribe((result) => {
         this.allJobs = result
         this.queryJobs = this.allJobs
+        console.log('this.allJobs', this.allJobs);
+        console.log('this.queryJobs', this.queryJobs);
       })
 
     // retrieve and aggregate job stats

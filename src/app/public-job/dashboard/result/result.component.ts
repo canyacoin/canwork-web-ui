@@ -33,7 +33,7 @@ export class ResultComponent implements OnInit {
   /*
   https://www.primefaces.org/primeng-v14-lts/paginator
   */
-  skCards = new Array(12)
+  skCards = new Array(5)
 
   onPageChange(e: PageEvent) {
     // this.first = e.first

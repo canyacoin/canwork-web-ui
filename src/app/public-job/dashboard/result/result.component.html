@@ -15,14 +15,13 @@
       />
     </div>
   </div>
-  <div class="pt-[60px] grid gap-5">
+  <div class="pt-[20px] grid gap-5">
     <ng-container
       *ngIf="isLoading === true; then loadingView; else resultView"
     ></ng-container>
     <ng-template #loadingView>
       <ng-container *ngFor="let card of skCards" class="w-full">
-        <!-- <sk-profile-card /> -->
-        <!-- replace by sk-job-card -->
+        <sk-job-card />
       </ng-container>
     </ng-template>
     <ng-template #resultView>
@@ -30,27 +29,29 @@
         *ngIf="profileCards.length === 0; then emptyView; else jobsView"
       ></ng-container> -->
 
-      <!-- <ng-template #emptyView> -->
-      <div class="w-full flex flex-col items-center gap-6">
-        <img
-          src="/assets/massimo/images/noJobResult.png"
-          alt="No Results Found"
-          draggable="false"
-          class="max-w-[400px] w-full"
-        />
-        <div class="flex flex-col gap-2 items-center justify-center">
-          <div class="text-h5 text-G800 font-medium">
-            There is no public job listed
+      <ng-template #emptyView>
+        <div class="w-full flex flex-col items-center gap-6">
+          <img
+            src="/assets/massimo/images/noJobResult.png"
+            alt="No Results Found"
+            draggable="false"
+            class="max-w-[400px] w-full"
+          />
+          <div class="flex flex-col gap-2 items-center justify-center">
+            <div class="text-h5 text-G800 font-medium">
+              There is no public job listed
+            </div>
+            <div class="text-b1 text-G700 text-center">
+              Need to get something done ?
+            </div>
           </div>
-          <div class="text-b1 text-G700 text-center">
-            Need to get something done ?
+          <div class="w-max" [routerLink]="['/inbox/post']">
+            <basic-button [type]="1" title="Post a Job" />
           </div>
         </div>
-        <div class="w-max" [routerLink]="['/inbox/post']">
-          <basic-button [type]="1" title="Post a Job" />
-        </div>
-      </div>
-      <!-- </ng-template> -->
+      </ng-template>
+
+      <job-card />
 
       <ng-template #jobsView>
         <ng-container *ngFor="let job of jobCards" class="w-full">

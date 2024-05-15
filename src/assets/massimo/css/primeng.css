@@ -189,10 +189,11 @@
 
 /* p-dropdown */
 .p-dropdown {
+    font-size: 14px !important;
     border-color: #E2E8F0 !important;
     border-width: 1px !important;
     border-radius: 8px !important;
-    width: 139px !important;
+    width: 145px !important;
     outline: none !important;
     box-shadow: none !important;
 }
