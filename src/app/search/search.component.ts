@@ -82,7 +82,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   routeSub: Subscription
   providerSub: Subscription
   portfolioSub: Subscription
-  //algoliaIndex = environment.algolia.indexName
+  //algoliaIndex = environment.algolia.indexUserName
   // rendering = false // obsolete
   inMyTimezone = true
   //algoliaSearchConfig: any
@@ -151,7 +151,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       environment.algolia.apiKey
     )
     this.algoliaSearchClient = this.algoliaSearch.initIndex(
-      environment.algolia.indexName
+      environment.algolia.indexUserName
     )
 
     this.authSub = this.auth.currentUser$.subscribe((user: User) => {

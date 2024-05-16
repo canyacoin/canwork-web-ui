@@ -22,7 +22,7 @@ export class FeatureFreelancersComponent {
   private algoliaSearch
   private algoliaIndex
 
-  algoIndex = environment.algolia.indexName
+  algoIndex = environment.algolia.indexUserName
   algoId = environment.algolia.appId
   algoKey = environment.algolia.apiKey
   tempProviderArray = []
