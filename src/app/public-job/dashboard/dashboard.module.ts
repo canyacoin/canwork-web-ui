@@ -9,7 +9,9 @@ import { FilterComponent } from './filter/filter.component'
 import { ResultComponent } from './result/result.component'
 import { PaginatorModule } from 'primeng/paginator'
 import { AccordionModule } from 'primeng/accordion'
-import { CheckboxModule } from 'primeng/checkbox'
+import { InputTextModule } from 'primeng/inputtext';
+import { CheckboxModule } from 'primeng/checkbox';
+import { RadioButtonModule } from 'primeng/radiobutton';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { DashboardRoutingModule } from './dashboard.routing.module'
@@ -24,6 +26,8 @@ import { DashboardRoutingModule } from './dashboard.routing.module'
     PaginatorModule,
     AccordionModule,
     CheckboxModule,
+    InputTextModule,
+    RadioButtonModule,
     DropdownModule,
     FormsModule
   ],

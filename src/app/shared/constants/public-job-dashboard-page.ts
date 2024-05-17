@@ -1,13 +1,18 @@
 export const HeroService = {
   title: 'Browse Job Board',
-  searchPlaceholder:
-    'Search Job Board',
+  searchPlaceholder: 'Search Job Board',
   buttonText1: 'Search',
 }
 
 export const FilterService = {
   verification: ['Verified'],
-  hourlyRate: ['$0 - $25', '$25 - $50', '$50 - $100', '$100>'],
+  fixedscope: [
+    { scope: '$0 - $500', id: 0 },
+    { scope: '$500 - $1000', id: 500 },
+    { scope: '$1000 - $5000', id: 1000 },
+    { scope: '$5000 - $10,000', id: 5000 },
+    { scope: '$10,000 >', id: 10000 }
+  ],
   skills: [
     'Javascript',
     'Html',
@@ -25,6 +30,7 @@ export const FilterService = {
     'VueJs',
     'Project Management',
   ],
+  experiencelevel: ['Entry Level', 'Intermediate', 'Expert Level'],
   rating: [5, 4, 3, 2, 1],
 }
 

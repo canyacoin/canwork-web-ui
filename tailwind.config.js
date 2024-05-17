@@ -81,6 +81,7 @@ module.exports = {
         Y400: '#a87104',
         Y500: '#926303',
         // Gray
+        G0: '#FFF',
         G50: '#F8FAFC',
         G100: '#F1F5F9',
         G200: '#E2E8F0',

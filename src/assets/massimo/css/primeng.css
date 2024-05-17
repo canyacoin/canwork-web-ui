@@ -31,7 +31,10 @@
     border-radius: 12px;
     overflow: hidden;
 }
-
+#job-search-filter .p-accordion {
+    border: 1px solid #CBD5E1;
+    overflow: hidden;
+}
 .p-accordion .p-accordion-content {
     padding: 0 !important;
     border: none !important;
@@ -40,13 +43,13 @@
     border-top: 0 !important; 
     border-radius: 0 !important;
 }
-#search-filter .p-accordion-header-link {
+#search-filter .p-accordion-header-link, #job-search-filter .p-accordion-header-link {
     display: flex;
     flex-direction: row-reverse;
     padding: 8px 16px;
 }
 
-#search-filter .p-accordion-content {
+#search-filter .p-accordion-content ,  #job-search-filter .p-accordion-content{
     border-top: 1px solid #CBD5E1;
 }
 
@@ -187,6 +190,10 @@
     font-weight: 500;
 }
 
+
+#job-search-filter label {
+    font-size: 14px !important;
+}
 /* p-dropdown */
 .p-dropdown {
     font-family: "General Sans", sans-serif;
@@ -222,4 +229,14 @@
 
 .p-dropdown .p-inputtext {
     padding: 0 !important;
+}
+
+
+/* Jobboard p-accordion-toggle-icon  */
+
+.filter-job .p-accordion-toggle-icon {
+    box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.10), 0px 4px 10px -2px rgba(0, 0, 0, 0.05);
+    border: 1px solid #CBD5E1;
+    border-radius: 8px;
+    padding: 6px;
 }

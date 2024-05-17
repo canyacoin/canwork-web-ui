@@ -1,7 +1,12 @@
 <div
-  class="w-[24px] h-[24px] bg-C500 rounded-full border-none select-none flex justify-center items-center"
+  class="w-[24px] rounded-full border-none select-none flex justify-center items-center "
+  [class]="
+    job_badge
+      ? 'bg-G200 text-G800 h-[16px] px-[6px] py-1'
+      : 'bg-C500 text-white h-[24px]'
+  "
 >
-  <div class="text-white text-b1">
+  <div class="text-b1">
     {{ value }}
   </div>
 </div>

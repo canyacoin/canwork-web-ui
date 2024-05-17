@@ -1,29 +1,35 @@
 <section
-  class="bg-G100 rounded-[12px] border-none p-[16px] grid gap-8"
-  id="search-filter"
+  class="bg-G0 rounded-[12px] border-none p-[16px] grid gap-8"
+  id="job-search-filter"
 >
   <div class="flex items-center justify-between text-G800 text-h6 font-medium">
     <div class="flex items-center gap-2">
       <div>Filter</div>
       <div *ngIf="getNumberAllFilters() > 0">
-        <badge [value]="getNumberAllFilters()" />
+        <div
+          class="bg-G500 px-[6px] py-1 text-white w-[24px] h-[16px] rounded-full border-none select-none flex justify-center items-center"
+        >
+          <div class="text-b1">
+            {{ getNumberAllFilters() }}
+          </div>
+        </div>
       </div>
     </div>
     <div class="cursor-pointer" (click)="allClear()">Clear All</div>
   </div>
-  <div class="flex flex-col gap-4">
-    <p-accordion class="w-full">
+  <div class="flex flex-col filter-job">
+    <!-- <p-accordion class="w-full">
       <p-accordionTab>
         <ng-template pTemplate="header">
           <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
             <div class="flex items-center gap-2">
-              <span class="font-medium whitespace-nowrap">Verification</span>
+              <span class="font-medium text-G800 whitespace-nowrap">Verification</span>
               <div *ngIf="verifyForm.length > 0">
-                <badge [value]="verifyForm.length" />
+                <badge [job_badge]="true" [value]="verifyForm.length" />
               </div>
             </div>
             <div
-              class="font-medium pointer-events-auto"
+              class="font-medium text-G800 pointer-events-auto"
               (click)="verifyClear()"
             >
               Clear
@@ -31,7 +37,7 @@
           </div>
         </ng-template>
         <div class="pt-[16px] pb-[24px] px-[24px]">
-          <div class="flex flex-col gap-[10px]">
+          <div class="flex flex-col gap-[8px]">
             <div
               *ngFor="let item of filterSection.verification"
               class="flex items-center"
@@ -47,28 +53,46 @@
           </div>
         </div>
       </p-accordionTab>
-    </p-accordion>
+    </p-accordion> -->
 
     <p-accordion class="w-full">
       <p-accordionTab>
         <ng-template pTemplate="header">
           <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
             <div class="flex items-center gap-2">
-              <span class="font-medium whitespace-nowrap">Skills</span>
+              <span class="font-medium text-G800 whitespace-nowrap"
+                >Categories</span
+              >
+
               <div *ngIf="skillsForm.length > 0">
-                <badge [value]="skillsForm.length" />
+                <badge [job_badge]="true" [value]="skillsForm.length" />
               </div>
             </div>
             <div
-              class="font-medium pointer-events-auto"
+              class="font-medium text-G800 pointer-events-auto"
               (click)="skillsClear()"
             >
               Clear
             </div>
           </div>
         </ng-template>
-        <div class="pt-[16px] pb-[24px] px-[24px] flex flex-col gap-[10px]">
-          <div class="flex flex-col gap-[10px]">
+        <div class="pt-[16px] pb-[24px] px-[24px] flex flex-col gap-[8px]">
+          <div class="flex flex-col gap-[8px] font-sans text-b1 font-normal">
+            <div
+              class="p-inputgroup flex items-center px-[16px] !py-3 border bg-G50 border-G200 rounded-xl"
+            >
+              <input
+                type="text"
+                pInputText
+                placeholder="Search categories"
+                class="!shadow-none bg-transparent"
+              />
+              <img
+                src="/assets/massimo/images/fi_search.png"
+                class="w-4 h-4"
+                alt="search"
+              />
+            </div>
             <div *ngFor="let item of tempSkillsForm" class="flex items-center">
               <p-checkbox
                 [label]="item"
@@ -80,7 +104,7 @@
             </div>
             <div
               *ngIf="skillsForm.length < 10"
-              class="cursor-pointer font-medium"
+              class="cursor-pointer font-medium text-G800"
               (click)="seeMoreClick()"
             >
               See More
@@ -95,13 +119,136 @@
         <ng-template pTemplate="header">
           <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
             <div class="flex items-center gap-2">
-              <span class="font-medium whitespace-nowrap">Rating</span>
-              <div *ngIf="ratingForm.length > 0">
-                <badge [value]="ratingForm.length" />
+              <span class="font-medium text-G800 whitespace-nowrap"
+                >Job Type</span
+              >
+
+              <div *ngIf="skillsForm.length > 0">
+                <badge [job_badge]="true" [value]="skillsForm.length" />
               </div>
             </div>
             <div
-              class="font-medium pointer-events-auto"
+              class="font-medium text-G800 pointer-events-auto"
+              (click)="skillsClear()"
+            >
+              Clear
+            </div>
+          </div>
+        </ng-template>
+
+        <div class="pt-[16px] px-[24px] flex flex-col gap-[8px]">
+          <div>
+            <p-checkbox
+              label="Hourly"
+              name="Hourly"
+              value="Hourly"
+              (onChange)="skillClick($event)"
+            ></p-checkbox>
+          </div>
+          <div class="px-6">
+            <div class="flex font-sans text-b1 font-normal">
+              <p-checkbox name="skillsForm" value="fixed"></p-checkbox>
+              <div class="flex gap-2">
+                <input
+                  type="text"
+                  pInputText
+                  placeholder="$ Min/hr"
+                  class="!shadow-none bg-transparent border rounded-[8px] max-w-[88px] py-[6px] pl-[16px]"
+                />
+                <input
+                  type="text"
+                  pInputText
+                  placeholder="$ Max/hr"
+                  class="!shadow-none bg-transparent border rounded-[8px]  max-w-[88px] py-[6px] pl-[16px]"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pb-[24px] px-[24px] flex flex-col gap-[8px]">
+          <div>
+            <p-checkbox
+              label="Fixed"
+              name="Fixed"
+              value="Fixed"
+              (onChange)="skillClick($event)"
+            ></p-checkbox>
+          </div>
+          <div class="px-6">
+            <div class="flex flex-col gap-[8px] font-sans text-b1 font-normal">
+              <div
+                *ngFor="let item of filterSection.fixedscope"
+                class="flex items-center"
+              >
+                <p-checkbox
+                  [label]="item.scope"
+                  name="skillsForm"
+                  [value]="item.id"
+                  [(ngModel)]="skillsForm"
+                  (onChange)="skillClick($event)"
+                ></p-checkbox>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
+
+    <p-accordion class="w-full">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
+            <div class="flex items-center gap-2">
+              <span class="font-medium text-G800 whitespace-nowrap"
+                >Experience Level</span
+              >
+
+              <div *ngIf="skillsForm.length > 0">
+                <badge [job_badge]="true" [value]="skillsForm.length" />
+              </div>
+            </div>
+            <div
+              class="font-medium text-G800 pointer-events-auto"
+              (click)="skillsClear()"
+            >
+              Clear
+            </div>
+          </div>
+        </ng-template>
+        <div class="pt-[16px] pb-[24px] px-[24px] flex flex-col gap-[8px]">
+          <div class="flex flex-col gap-[8px] font-sans text-b1 font-normal">
+            <div
+              *ngFor="let item of filterSection.experiencelevel"
+              class="flex items-center"
+            >
+              <p-checkbox
+                [label]="item"
+                name="skillsForm"
+                [value]="item"
+                [(ngModel)]="skillsForm"
+                (onChange)="skillClick($event)"
+              ></p-checkbox>
+            </div>
+          </div>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
+
+    <p-accordion class="w-full">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
+            <div class="flex items-center gap-2">
+              <span class="font-medium text-G800 whitespace-nowrap"
+                >Rating</span
+              >
+              <div *ngIf="ratingForm.length > 0">
+                <badge [job_badge]="true" [value]="ratingForm.length" />
+              </div>
+            </div>
+            <div
+              class="font-medium text-G800 pointer-events-auto"
               (click)="ratingClear()"
             >
               Clear
@@ -109,22 +256,74 @@
           </div>
         </ng-template>
         <div class="pt-[16px] pb-[24px] px-[24px]">
-          <div class="flex flex-col gap-[10px]">
+          <div class="flex flex-col gap-[8px]">
             <div
               *ngFor="let item of filterSection.rating"
               class="flex items-center"
             >
               <p-checkbox
-                [label]="item"
-                name="ratingForm"
+                name="item"
                 [value]="item"
                 [(ngModel)]="ratingForm"
                 (onChange)="ratingClick(item)"
               ></p-checkbox>
+              <div *ngFor="let j of [1, 2, 3, 4, 5]">
+                <img
+                  *ngIf="item >= j"
+                  src="/assets/massimo/svg/star.svg"
+                  alt="star"
+                />
+              </div>
             </div>
           </div>
         </div>
       </p-accordionTab>
     </p-accordion>
+
+
+    <p-accordion class="w-full">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
+            <div class="flex items-center gap-2">
+              <span class="font-medium text-G800 whitespace-nowrap"
+                >Location</span
+              >
+
+              <div *ngIf="skillsForm.length > 0">
+                <badge [job_badge]="true" [value]="skillsForm.length" />
+              </div>
+            </div>
+            <div
+              class="font-medium text-G800 pointer-events-auto"
+              (click)="skillsClear()"
+            >
+              Clear
+            </div>
+          </div>
+        </ng-template>
+        <div class="pt-[16px] pb-[24px] px-[24px] flex flex-col gap-[8px]">
+          <div class="flex flex-col gap-[8px] font-sans text-b1 font-normal">
+            <div
+              class="p-inputgroup flex items-center  px-[16px] !py-[12px] border bg-G50 border-G200 rounded-xl"
+            >
+              <input
+                type="text"
+                pInputText
+                placeholder="Search categories"
+                class="!shadow-none bg-transparent"
+              />
+              <img
+                src="/assets/massimo/images/fi_search.png"
+                class="w-4 h-4"
+                alt="search"
+              />
+            </div>
+          </div>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
+
+
   </div>
 </section>
