@@ -6,7 +6,7 @@
       <div class="whitespace-nowrap">${{ stats.usd }} USD Payment</div>
     </div>
     <div class="flex items-center gap-5 text-G900 text-b1">
-      <div>Sort by</div>
+      <div class="font-sans font-[500] text-b2">Sort by</div>
       <p-dropdown
         [options]="sortingMethods"
         [(ngModel)]="selectedSorting"
@@ -51,7 +51,13 @@
         </div>
       </ng-template>
 
-      <job-card />
+      <!-- bad code 5 items-center -->
+
+      <job-card [description]="descriptions" [projectType] = "1" [skills]="skills"/>
+      <job-card [description]="descriptions" [projectType] = "2" [skills]="skills"/>
+      <job-card [description]="descriptions" [projectType] = "3" [skills]="skills"/>
+      <job-card [description]="descriptions" [projectType] = "4" [skills]="skills"/>
+      <job-card [description]="descriptions" [projectType] = "5" [skills]="skills"/>
 
       <ng-template #jobsView>
         <ng-container *ngFor="let job of jobCards" class="w-full">

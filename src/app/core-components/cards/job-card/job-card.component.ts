@@ -18,6 +18,7 @@ export class JobCardComponent {
   @Input() createAt!: number
   @Input() Location!: string
   @Input() proposals!: number
+  @Input() projectType!: number // 1. design 2. finance 3. finance.svg , 4. marketing 5. writing etc...
 }
 
 // id: string

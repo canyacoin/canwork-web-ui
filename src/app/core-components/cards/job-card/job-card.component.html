@@ -4,7 +4,28 @@
   <div class="flex justify-between gap-5">
     <div class="w-full flex gap-6 items-center">
       <img
+        *ngIf="projectType === 1"
         src="/assets/massimo/images/creatives.png"
+        class="w-[48px] h-[48px]"
+      />
+      <img
+        *ngIf="projectType === 2"
+        src="/assets/massimo/images/dev.png"
+        class="w-[48px] h-[48px]"
+      />
+      <img
+        *ngIf="projectType === 3"
+        src="/assets/massimo/images/assistant.png"
+        class="w-[48px] h-[48px]"
+      />
+      <img
+        *ngIf="projectType === 4"
+        src="/assets/massimo/images/marketing.png"
+        class="w-[48px] h-[48px]"
+      />
+      <img
+        *ngIf="projectType === 5"
+        src="/assets/massimo/images/writer.png"
         class="w-[48px] h-[48px]"
       />
       <div class="grid gap-1">
@@ -19,25 +40,38 @@
     </div>
   </div>
   <div class="line-clamp-4">
-    Hello, looking for someone precise that can check a diecut on correctness,
-    since it has been most likely wrongly sized as seen in the attached image.
-    The diecut that we think is wrong and needs to be adjusted is the mailerbox
-    on the right side of the image. The left one is the sleeve that will go over
-    the mailerbox and sizing is correct in size.I need small re-adjustments The
-    left one is the sleeve that will go over the mailerbox and sizing is correct
-    in size.I need small re-adjustments The left one is the sleeve that will go
-    over the mailerbox and sizing is correct in size.I need small re-adjustments
-    The left one is the sleeve that will go over the mailerbox and sizing is
-    correct in size.I need small re-adjustments
+    {{ description }}
   </div>
-  <div class="flex gap-2 items-center">
-    <basic-tag [type]="2" title="Figma" />
-    <basic-tag [type]="2" title="UI/UX" />
-    <basic-tag [type]="2" title="Website" />
-    <basic-tag [type]="2" title="No Code" />
+  <!-- static code for responsive -->
+  <div class="flex items-center">
+    <div *ngFor="let item of skills; let i = index">
+      <basic-tag *ngIf="6 > i" [type]="2" [title]="item" class="max-xl:hidden"/>
+      <basic-tag *ngIf="4 > i" [type]="2" [title]="item" class="max-md:hidden xl:hidden"/>
+      <basic-tag *ngIf="2 > i" [type]="2" [title]="item" class="md:hidden"/>
+    </div>
+    <basic-tag
+      *ngIf="skills.length > 6"
+      [type]="2"
+      [title]="'+' + (skills.length - 6)"
+      class="max-xl:hidden"
+    ></basic-tag>
+    <basic-tag
+      *ngIf="skills.length > 4"
+      [type]="2"
+      [title]="'+' + (skills.length - 4)"
+      class="max-md:hidden xl:hidden"
+    ></basic-tag>
+    <basic-tag
+      *ngIf="skills.length > 2"
+      [type]="2"
+      [title]="'+' + (skills.length - 2)"
+      class="md:hidden"
+    ></basic-tag>
   </div>
 
-  <div class="flex gap-6 items-start">
+  <div
+    class="max-xl:grid max-sm:grid-cols-1 max-xl:grid-cols-2 flex gap-2 items-start text-nowrap"
+  >
     <div class="flex gap-2 items-center">
       <img src="/assets/massimo/svg/jobLocation.svg" class="select-none" />
       <div class="text-G500 text-b2">Location</div>

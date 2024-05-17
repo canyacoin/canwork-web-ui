@@ -30,6 +30,18 @@ export class ResultComponent implements OnInit {
 
   selectedSorting: SoringMethod | undefined
 
+  descriptions: string = `Hello, looking for someone precise that can check a diecut on correctness,
+  since it has been most likely wrongly sized as seen in the attached image.
+  The diecut that we think is wrong and needs to be adjusted is the mailerbox
+  on the right side of the image. The left one is the sleeve that will go over
+  the mailerbox and sizing is correct in size.I need small re-adjustments The
+  left one is the sleeve that will go over the mailerbox and sizing is correct
+  in size.I need small re-adjustments The left one is the sleeve that will go
+  over the mailerbox and sizing is correct in size.I need small re-adjustments
+  The left one is the sleeve that will go over the mailerbox and sizing is
+  correct in size.I need small re-adjustments`
+
+  skills:string[] =['Figma', 'UI/UX', 'website', 'web Development', 'No code', 'Shopify', 'hourly', 'expert', 'Figma', 'UI/UX', 'website', 'web Development']
   /*
   https://www.primefaces.org/primeng-v14-lts/paginator
   */

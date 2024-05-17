@@ -189,13 +189,18 @@
 
 /* p-dropdown */
 .p-dropdown {
+    font-family: "General Sans", sans-serif;
+    width: 141px !important;
+    color: #0F172A !important;
     font-size: 14px !important;
-    border-color: #E2E8F0 !important;
-    border-width: 1px !important;
-    border-radius: 8px !important;
+    font-weight: 500 !important;
     width: 145px !important;
     outline: none !important;
-    box-shadow: none !important;
+    border-radius: 8px !important;
+    padding: 6px 10px 6px 16px !important;
+    border: 1px solid #E2E8F0;
+    background: #FFF;
+    box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.10), 0px 2px 2px -1px rgba(0, 0, 0, 0.10), 0px 4px 10px -2px rgba(0, 0, 0, 0.05) !important;
 }
 
 .p-dropdown:hover {
@@ -213,4 +218,8 @@
 
 .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight:hover {
     background: #F2F5F9 !important;
+}
+
+.p-dropdown .p-inputtext {
+    padding: 0 !important;
 }
