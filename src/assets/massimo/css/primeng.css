@@ -237,7 +237,9 @@
 .p-element.p-dropdown-label.p-inputtext.ng-star-inserted {
     font-size: 14px !important;
 }
-
+.p-dropdown-items {
+    border-radius: 8px;
+}
 .p-dropdown-items-wrapper .p-element.ng-star-inserted li {
     font-size: 14px !important;
     padding: 6px 16px !important;
@@ -246,6 +248,14 @@
     border: 1px solid #E2E8F0 !important;
 }
 
+.p-dropdown-items-wrapper :first-child>li{
+    border-top-left-radius: 8px !important;
+    border-top-right-radius: 8px !important;
+}
+.p-dropdown-items-wrapper :last-child>li{
+    border-bottom-left-radius: 8px !important;
+    border-bottom-right-radius: 8px !important;
+}
 /* Jobboard p-accordion-toggle-icon  */
 
 .filter-job .p-accordion-toggle-icon {
