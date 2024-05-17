@@ -194,6 +194,7 @@
 #job-search-filter label {
     font-size: 14px !important;
 }
+
 /* p-dropdown */
 .p-dropdown {
     font-family: "General Sans", sans-serif;
@@ -233,6 +234,17 @@
     padding: 0 !important;
 }
 
+.p-element.p-dropdown-label.p-inputtext.ng-star-inserted {
+    font-size: 14px !important;
+}
+
+.p-dropdown-items-wrapper .p-element.ng-star-inserted li {
+    font-size: 14px !important;
+    padding: 6px 16px !important;
+}
+.p-dropdown-items.ng-star-inserted {
+    border: 1px solid #E2E8F0 !important;
+}
 
 /* Jobboard p-accordion-toggle-icon  */
 

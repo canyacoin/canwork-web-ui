@@ -3,31 +3,7 @@
 >
   <div class="flex justify-between gap-5">
     <div class="w-full flex gap-6 items-center">
-      <img
-        *ngIf="projectType === 1"
-        src="/assets/massimo/images/creatives.png"
-        class="w-[48px] h-[48px]"
-      />
-      <img
-        *ngIf="projectType === 2"
-        src="/assets/massimo/images/dev.png"
-        class="w-[48px] h-[48px]"
-      />
-      <img
-        *ngIf="projectType === 3"
-        src="/assets/massimo/images/assistant.png"
-        class="w-[48px] h-[48px]"
-      />
-      <img
-        *ngIf="projectType === 4"
-        src="/assets/massimo/images/marketing.png"
-        class="w-[48px] h-[48px]"
-      />
-      <img
-        *ngIf="projectType === 5"
-        src="/assets/massimo/images/writer.png"
-        class="w-[48px] h-[48px]"
-      />
+      <img src="{{ getImage(projectType) }}" class="w-[48px] h-[48px]" />
       <div class="grid gap-1">
         <div class="text-G900 text-h6 font-medium">Website Design Project</div>
         <div class="text-G500 text-b2">Posted 20 minutes ago</div>
@@ -43,11 +19,21 @@
     {{ description }}
   </div>
   <!-- static code for responsive -->
-  <div class="flex items-center">
+  <div class="flex items-center gap-2">
     <div *ngFor="let item of skills; let i = index">
-      <basic-tag *ngIf="6 > i" [type]="2" [title]="item" class="max-xl:hidden"/>
-      <basic-tag *ngIf="4 > i" [type]="2" [title]="item" class="max-md:hidden xl:hidden"/>
-      <basic-tag *ngIf="2 > i" [type]="2" [title]="item" class="md:hidden"/>
+      <basic-tag
+        *ngIf="6 > i"
+        [type]="2"
+        [title]="item"
+        class="max-xl:hidden"
+      />
+      <basic-tag
+        *ngIf="4 > i"
+        [type]="2"
+        [title]="item"
+        class="max-md:hidden xl:hidden"
+      />
+      <basic-tag *ngIf="2 > i" [type]="2" [title]="item" class="md:hidden" />
     </div>
     <basic-tag
       *ngIf="skills.length > 6"

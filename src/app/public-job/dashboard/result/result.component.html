@@ -11,7 +11,6 @@
         [options]="sortingMethods"
         [(ngModel)]="selectedSorting"
         optionLabel="name"
-        placeholder="Select a method"
       />
     </div>
   </div>
@@ -53,11 +52,31 @@
 
       <!-- bad code 5 items-center -->
 
-      <job-card [description]="descriptions" [projectType] = "1" [skills]="skills"/>
-      <job-card [description]="descriptions" [projectType] = "2" [skills]="skills"/>
-      <job-card [description]="descriptions" [projectType] = "3" [skills]="skills"/>
-      <job-card [description]="descriptions" [projectType] = "4" [skills]="skills"/>
-      <job-card [description]="descriptions" [projectType] = "5" [skills]="skills"/>
+      <job-card
+        [description]="descriptions"
+        projectType="contentCreator"
+        [skills]="skills"
+      />
+      <job-card
+        [description]="descriptions"
+        projectType="softwareDev"
+        [skills]="skills"
+      />
+      <job-card
+        [description]="descriptions"
+        projectType="designer"
+        [skills]="skills"
+      />
+      <job-card
+        [description]="descriptions"
+        projectType="marketing"
+        [skills]="skills"
+      />
+      <job-card
+        [description]="descriptions"
+        projectType="virtualAssistant"
+        [skills]="skills"
+      />
 
       <ng-template #jobsView>
         <ng-container *ngFor="let job of jobCards" class="w-full">

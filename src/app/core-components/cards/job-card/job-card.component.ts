@@ -18,7 +18,42 @@ export class JobCardComponent {
   @Input() createAt!: number
   @Input() Location!: string
   @Input() proposals!: number
-  @Input() projectType!: number // 1. design 2. finance 3. finance.svg , 4. marketing 5. writing etc...
+  @Input() projectType: string // 1. contentCreator 2. softwareDev 3. designer , 4. marketing 5. virtualAssistant ...
+
+  providerTypes = [
+    {
+      name: 'Content Creators',
+      img: 'writer.png',
+      id: 'contentCreator',
+    },
+    {
+      name: 'Software Developers',
+      img: 'dev.png',
+      id: 'softwareDev',
+    },
+    {
+      name: 'Designers & Creatives',
+      img: 'creatives.png',
+      id: 'designer',
+    },
+    {
+      name: 'Marketing & SEO',
+      img: 'marketing.png',
+      id: 'marketing',
+    },
+    {
+      name: 'Virtual Assistants',
+      img: 'assistant.png',
+      id: 'virtualAssistant',
+    },
+  ]
+
+  getImage(id: string) {
+    let url = '/assets/massimo/images/'
+    const type = this.providerTypes.find((prov) => prov.id === id)
+    url = url + type.img
+    return url
+  }
 }
 
 // id: string
