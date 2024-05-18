@@ -32,7 +32,7 @@
     overflow: hidden;
 }
 #job-search-filter .p-accordion {
-    border: 1px solid #CBD5E1;
+    border-top: 1px solid #CBD5E1;
     overflow: hidden;
 }
 .p-accordion .p-accordion-content {

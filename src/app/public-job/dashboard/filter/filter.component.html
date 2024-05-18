@@ -1,8 +1,8 @@
 <section
-  class="bg-G0 rounded-[12px] p-[16px] grid gap-8 border border-G200"
+  class="bg-G0 rounded-[12px] grid gap-8 border border-G200"
   id="job-search-filter"
 >
-  <div class="flex items-center justify-between text-G800 text-h6 font-medium">
+  <div class="flex items-center justify-between text-G800 text-h6 font-medium p-[16px]">
     <div class="flex items-center gap-2">
       <div>Filter</div>
       <div *ngIf="getNumberAllFilters() > 0">
@@ -273,6 +273,7 @@
                   *ngIf="item >= j"
                   src="/assets/massimo/svg/star.svg"
                   alt="star"
+                  class="p-[3px]"
                 />
               </div>
             </div>
@@ -311,7 +312,7 @@
               <input
                 type="text"
                 pInputText
-                placeholder="Search categories"
+                placeholder="Search preferred client location"
                 class="!shadow-none bg-transparent"
               />
               <img
