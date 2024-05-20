@@ -256,6 +256,10 @@
     border-bottom-left-radius: 8px !important;
     border-bottom-right-radius: 8px !important;
 }
+
+.p-dropdown .p-dropdown-trigger {
+    width: 1rem !important;
+}
 /* Jobboard p-accordion-toggle-icon  */
 
 .filter-job .p-accordion-toggle-icon {

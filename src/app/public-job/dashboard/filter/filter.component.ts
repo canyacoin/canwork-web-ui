@@ -18,6 +18,8 @@ export class FilterComponent implements OnInit {
   @Input() ratingForm: number[] = []
   @Output() ratingChange = new EventEmitter<number[]>() // two way binding to parent
 
+  @Input() experienceForm: number[] = []
+  @Output() experienceFormChange = new EventEmitter<number[]>() // two way binding to parent
   ngOnInit() {
     this.tempSkillsForm = this.filterSection.skills.slice(0, this.skillsLength)
   }
@@ -26,7 +28,8 @@ export class FilterComponent implements OnInit {
     return (
       this.verifyForm.length +
       this.skillsForm.length +
-      this.ratingForm.length
+      this.ratingForm.length +
+      this.experienceForm.length
     )
   }
 
@@ -34,10 +37,12 @@ export class FilterComponent implements OnInit {
     this.verifyForm = []
     this.skillsForm = []
     this.ratingForm = []
+    this.experienceForm = []
 
     this.verifyFormChange.emit(this.verifyForm) // notify parent and algolia handler
     this.skillsFormChange.emit(this.skillsForm) // notify parent and algolia handler
     this.ratingChange.emit(this.ratingForm) // notify parent and algolia handler
+    this.experienceFormChange.emit(this.experienceForm) // notify parent and algolia handler
   }
   verifyClear() {
     this.verifyForm = []
@@ -58,6 +63,9 @@ export class FilterComponent implements OnInit {
     this.skillsFormChange.emit(this.skillsForm) // notify parent and algolia handler
   }
 
+  experienceClick(e) {
+    this.experienceFormChange.emit(this.experienceForm) // notify parent and algolia handler
+  }
   ratingClick(item) {
     if (this.ratingForm.length > 0) this.ratingForm = [item]
     /*
@@ -79,6 +87,10 @@ export class FilterComponent implements OnInit {
     this.ratingChange.emit(this.ratingForm) // notify parent and algolia handler
   }
 
+  experienceClear() {
+    this.experienceForm = []
+    this.experienceFormChange.emit([]) // notify parent and algolia handler
+  }
   seeMoreClick() {
     if (this.skillsLength < this.filterSection.skills.length) {
       this.skillsLength = this.filterSection.skills.length

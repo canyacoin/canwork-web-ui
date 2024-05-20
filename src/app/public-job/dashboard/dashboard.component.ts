@@ -53,6 +53,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ratingFilter: number[] = []
   // rating filters on provider, union (OR)
 
+  experienceFilter: string[] = []
+  // experience filters on provider, intersection (AND)
+
   currentPage: number = 0 // the current search page
   numHits: number = 0 // the number of hits of current search
   hitsPerPage: number = HITS_PER_PAGE // constant
@@ -97,6 +100,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         decodeURIComponent(params['skills'] || '[]')
       )
 
+      this.experienceFilter = JSON.parse(
+        decodeURIComponent(params['experience'] || '[]')
+      )      
       this.ratingFilter = JSON.parse(
         decodeURIComponent(params['rating'] || '[]')
       )
@@ -163,7 +169,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.verifyFilter.length == 0 &&
       this.skillsFilter.length == 0 &&
       this.ratingFilter.length == 0 &&
-      this.locationFilter.length == 0
+      this.locationFilter.length == 0 &&
+      this.experienceFilter.length == 0
     ) {
       this.loading = false
       this.currentQueryString = newQuery // update internal state
@@ -188,7 +195,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (
       this.providerFilters.length > 0 ||
       this.verifyFilter.length > 0 ||
-      this.locationFilter.length > 0
+      this.locationFilter.length > 0 || 
+      this.experienceFilter.length > 0
     ) {
       // https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/
       algoliaSearchObject.facetFilters = []
@@ -278,6 +286,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
       if (searchQuery) searchQuery = `${searchQuery} ${skillsQuery}`
       else searchQuery = skillsQuery
     }
+
+    // experience  level
+    let experienceQuery = ''
+    
+    if (this.experienceFilter.length > 0) {
+      this.experienceFilter.forEach((skill) => {
+        if (experienceQuery) experienceQuery += ' '
+        experienceQuery += skill
+      })
+    }
+
+    algoliaSearchObject.experienceFilter = experienceQuery
+
+    //console.log('algoliaSearchObject: ', algoliaSearchObject)
+    
     this.algoliaSearchClient
       .search(searchQuery, algoliaSearchObject)
       .then((res) => {
@@ -333,7 +356,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const sortedLocations = this.locationFilter.concat().sort() // sort to a copy, predictable string
     const sortedSkills = this.skillsFilter.concat().sort() // sort to a copy, predictable string
     const sortedRating = this.ratingFilter.concat().sort() // sort to a copy, predictable string
-
+    const experienceLevel = this.experienceFilter.concat().sort() // sort to a copy, predictable string
+    
     let newQueryString = `query=${encodeURIComponent(
       this.searchInput
     )}&providers=${encodeURIComponent(
@@ -344,6 +368,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       JSON.stringify(sortedSkills)
     )}&rating=${encodeURIComponent(
       JSON.stringify(sortedRating)
+    )}&level=${encodeURIComponent(
+      JSON.stringify(experienceLevel)
     )}&page=${encodeURIComponent(
       JSON.stringify(this.currentPage)
     )}&verify=${encodeURIComponent(JSON.stringify(this.verifyFilter))}`
@@ -438,6 +464,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // keep in sync also address bar, without refreshing page
     const newQueryString = this.syncAddressBar()
 
+    this.refreshResultsIfNeeded(newQueryString)
+  }
+
+  onExperienceFormChange(experienceInput: string[]) {
+    this.experienceFilter = experienceInput;
+    this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
+    const newQueryString = this.syncAddressBar()
     this.refreshResultsIfNeeded(newQueryString)
   }
 

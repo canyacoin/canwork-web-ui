@@ -20,33 +20,13 @@
           <header class="section-header my-0 py-0">
             <h2 class="fw-600">Post a request</h2>
           </header>
-          <div class="row">
-            <div class="col-12 col-lg-12 bg-white">
+          <div class="grid gap-6">
+            <div class="bg-white">
               <div class="align-self-center align-items-center my-10">
                 <form [formGroup]="postForm" class="form validate" novalidate>
-                  <div class="col-12 col-lg-12">
+                  <div class="grid gap-6">
                     <div class="form-group">
-                      <label>GitHub or GitLab issue</label>
-                      <input
-                        class="form-control"
-                        #url
-                        formControlName="url"
-                        type="text"
-                        name="url"
-                        (blur)="onBFGit()"
-                        (focus)="onBFGit()"
-                        placeholder="Paste a GitHub or GitLab issue link here if you want to populate job fields from it"
-                        [class.invalid]="!!errorGitUrl"
-                        (paste)="onGitPaste($event)"
-                      />
-                      <small
-                        *ngIf="!!errorGitUrl"
-                        class="text-danger text-wrap"
-                        >{{ errorGitUrl }}</small
-                      >
-                    </div>
-                    <div class="form-group">
-                      <label>Title *</label>
+                      <label>Title <span>*</span></label>
                       <input
                         class="form-control"
                         #title
@@ -70,7 +50,28 @@
                       >
                     </div>
                     <div class="form-group">
-                      <label class="text-dark">Description *</label>
+                      <label>GitHub or GitLab issue</label>
+                      <input
+                        class="form-control"
+                        #url
+                        formControlName="url"
+                        type="text"
+                        name="url"
+                        (blur)="onBFGit()"
+                        (focus)="onBFGit()"
+                        placeholder="Paste a GitHub or GitLab issue link here if you want to populate job fields from it"
+                        [class.invalid]="!!errorGitUrl"
+                        (paste)="onGitPaste($event)"
+                      />
+                      <small
+                        *ngIf="!!errorGitUrl"
+                        class="text-danger text-wrap"
+                        >{{ errorGitUrl }}</small
+                      >
+                    </div>
+
+                    <div class="form-group">
+                      <label class="text-dark">Description <span>*</span></label>
                       <textarea
                         class="form-control"
                         #description
@@ -91,7 +92,7 @@
                       >
                     </div>
                     <div class="form-group canya-prefilled">
-                      <label>Project stage *</label>
+                      <label>Project stage <span>*</span></label>
                       <textarea
                         class="form-control"
                         #initialStage
@@ -108,7 +109,7 @@
                     </div>
 
                     <div class="form-group">
-                      <label>Key skills required *</label>
+                      <label>Key skills required <span>*</span></label>
                       <app-skill-tags-selection
                         (tagsUpdated)="skillTagsUpdated($event)"
                         (tagsLoaded)="skillTagsLoaded($event)"
@@ -207,7 +208,7 @@
                     </div>
 
                     <div class="form-group canya-prefilled">
-                      <label>Type of work *</label>
+                      <label>Type of work <span>*</span></label>
                       <br />
                       <div class="row ml-0 mr-0">
                         <div
@@ -233,7 +234,7 @@
                     <div class="form-group">
                       <div class="row">
                         <div class="col-sm-6 col-12 canya-prefilled">
-                          <label>Timeline Expectations *</label>
+                          <label>Timeline Expectations <span>*</span></label>
                           <br />
                           <div class="row ml-0 mr-0">
                             <select
@@ -292,7 +293,7 @@
                     </div>
 
                     <div class="form-group canya-prefilled">
-                      <label>Payment preference *</label>
+                      <label>Payment preference <span>*</span></label>
                       <br />
                       <div class="row ml-0 mr-0">
                         <div
@@ -329,14 +330,14 @@
                             postForm.controls.paymentType.value ==
                             paymentType.hourly
                           "
-                          >Budget per hour (USD) *</span
+                          >Budget per hour (USD) <span>*</span></span
                         >
                         <span
                           *ngIf="
                             postForm.controls.paymentType.value ==
                             paymentType.fixed
                           "
-                          >Total budget (USD) *</span
+                          >Total budget (USD) <span>*</span></span
                         >
                       </label>
                       <div class="row">
@@ -459,49 +460,29 @@
     <div id="shareable-job" *ngIf="!recipient && pageLoaded && isShareable">
       <div *ngIf="!sent" class="section bg-grey pt-15 pb-30">
         <div class="container bg-white p-30 brad-5px">
-          <header class="section-header my-0 py-15">
-            <h2 *ngIf="!editing" class="fw-600">Create a Job Post</h2>
-            <h2 *ngIf="editing" class="fw-600">Edit a Job Post</h2>
+          <header class="text-left text-G900 text-2xl font-[500] my-0  px-[40px]">
+            <h2 *ngIf="!editing" >Create a Job Post</h2>
+            <h2 *ngIf="editing" >Edit a Job Post</h2>
           </header>
           <div class="row">
-            <div class="col-12 col-lg-12 bg-white">
-              <div class="align-self-center align-items-center my-10">
+            <div class="px-4 bg-white w-full">
+              <div class="align-self-center align-items-center">
                 <form
                   [formGroup]="shareableJobForm"
                   class="form validate"
                   novalidate
                 >
-                  <div class="col-12 col-lg-12">
+                  <div class="px-[40px]">
                     <div class="form-group">
                       <div class="col-12">
-                        <label>GitHub or GitLab issue</label>
-                        <input
-                          class="form-control"
-                          #url
-                          formControlName="url"
-                          type="text"
-                          name="url"
-                          (blur)="onBFGit()"
-                          (focus)="onBFGit()"
-                          placeholder="Paste a GitHub or GitLab issue link here if you want to populate job fields from it"
-                          [class.invalid]="!!errorGitUrl"
-                          (paste)="onGitPaste($event)"
-                        />
-                        <small
-                          *ngIf="!!errorGitUrl"
-                          class="text-danger text-wrap"
-                          >{{ errorGitUrl }}</small
-                        >
-                      </div>
-                      <div class="col-12">
-                        <label>Title *</label>
+                        <label>Job Title <span>*</span></label>
                         <input
                           class="form-control"
                           #title
                           formControlName="title"
                           type="text"
                           name="title"
-                          placeholder="Enter Job Title"
+                          placeholder="Enter job title here"
                           (blur)="onBlurMethod($event.target.name)"
                           (focus)="onFocusMethod($event.target.name)"
                           maxlength="64"
@@ -520,10 +501,32 @@
                           64 characters</small
                         >
                       </div>
+
+                      <div class="col-12">
+                        <label>GitHub or GitLab issue</label>
+                        <input
+                          class="form-control"
+                          #url
+                          formControlName="url"
+                          type="text"
+                          name="url"
+                          (blur)="onBFGit()"
+                          (focus)="onBFGit()"
+                          placeholder="Paste link here"
+                          [class.invalid]="!!errorGitUrl"
+                          (paste)="onGitPaste($event)"
+                        />
+                        <div>Paste Github or Gitlab link here if you want to populate field from it</div>
+                        <small
+                          *ngIf="!!errorGitUrl"
+                          class="text-danger text-wrap"
+                          >{{ errorGitUrl }}</small
+                        >
+                      </div>
                     </div>
                     <div class="form-group">
                       <div class="col-12">
-                        <label class="text-dark">Description *</label>
+                        <label class="text-dark">Job Description <span>*</span></label>
                         <textarea
                           class="form-control"
                           #description
@@ -547,7 +550,7 @@
 
                     <div class="form-group canya-prefilled">
                       <div class="col-12">
-                        <label>Project stage *</label>
+                        <label>Project stage <span>*</span></label>
                         <textarea
                           class="form-control"
                           #initialStage
@@ -574,7 +577,7 @@
 
                     <div class="form-group" *ngIf="!editing">
                       <div class="col-12">
-                        <label>Key skills required *</label>
+                        <label>Key skills required <span>*</span></label>
                         <app-skill-tags-selection
                           (tagsUpdated)="skillTagsUpdated($event)"
                           (tagsLoaded)="skillTagsLoaded($event)"
@@ -702,7 +705,7 @@
 
                     <div class="form-group">
                       <div class="col-12">
-                        <label>Provider type *</label>
+                        <label>Provider type <span>*</span></label>
                         <br />
                         <div class="row ml-0 mr-0">
                           <div
@@ -754,7 +757,7 @@
                     </div>
                     <div class="form-group canya-prefilled">
                       <div class="col-12">
-                        <label>Type of work *</label>
+                        <label>Type of work <span>*</span></label>
                         <br />
                         <div class="row ml-0 mr-0">
                           <div
@@ -780,7 +783,7 @@
 
                     <div class="form-group row px-15">
                       <div class="col-sm-6 canya-prefilled">
-                        <label>Timeline Expectations *</label>
+                        <label>Timeline Expectations <span>*</span></label>
                         <br />
                         <select
                           #timelineExpectation
@@ -800,7 +803,7 @@
                         </select>
                       </div>
                       <div class="col-sm-6">
-                        <label>Deadline *</label>
+                        <label>Deadline <span>*</span></label>
                         <br />
                         <div class="row ml-0 mr-0">
                           <input
@@ -839,7 +842,7 @@
                     </div>
 
                     <div class="form-group px-10 canya-prefilled">
-                      <label class="px-5">Payment preference *</label>
+                      <label class="px-5">Payment preference <span>*</span></label>
                       <br />
                       <div class="row ml-0 mr-0">
                         <div
@@ -878,14 +881,14 @@
                               shareableJobForm.controls.paymentType.value ==
                               paymentType.hourly
                             "
-                            >Budget per hour (USD) *</span
+                            >Budget per hour (USD) <span>*</span></span
                           >
                           <span
                             *ngIf="
                               shareableJobForm.controls.paymentType.value ==
                               paymentType.fixed
                             "
-                            >Total budget (USD) *</span
+                            >Total budget (USD) <span>*</span></span
                           >
                         </label>
                         <div class="row">
@@ -966,7 +969,7 @@
                     </div>
                     <div class="form-group">
                       <div class="col-12">
-                        <label>Visibility *</label>
+                        <label>Visibility <span>*</span></label>
                         <br />
                         <div class="row ml-0 mr-0">
                           <div

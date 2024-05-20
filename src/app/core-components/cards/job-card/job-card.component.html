@@ -19,10 +19,10 @@
     {{ description }}
   </div>
   <!-- static code for responsive -->
-  <div class="flex items-center gap-2">
-    <div *ngFor="let item of skills; let i = index">
+  <div class="flex items-center gap-4">
+    <ng-container *ngFor="let item of skills; let i = index">
       <basic-tag
-        *ngIf="6 > i"
+        *ngIf="8 > i"
         [type]="2"
         [title]="item"
         class="max-xl:hidden"
@@ -34,11 +34,11 @@
         class="max-md:hidden xl:hidden"
       />
       <basic-tag *ngIf="2 > i" [type]="2" [title]="item" class="md:hidden" />
-    </div>
+    </ng-container>
     <basic-tag
-      *ngIf="skills.length > 6"
+      *ngIf="skills.length > 8"
       [type]="2"
-      [title]="'+' + (skills.length - 6)"
+      [title]="'+' + (skills.length - 8)"
       class="max-xl:hidden"
     ></basic-tag>
     <basic-tag
