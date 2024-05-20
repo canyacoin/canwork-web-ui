@@ -21,7 +21,7 @@
           (experienceFormChange)="onExperienceFormChange($event)"
         />
       </div>
-      <div class="w-full">
+      <div class="w-full px-[24px]">
         <!-- <dashboard-result
           [profileCards]="hits"
           [isLoading]="loading"
@@ -31,7 +31,7 @@
           [first]="currentPage * hitsPerPage"
           (pageChange)="onPageChange($event)"
         /> -->
-        <dashboard-result [stats]="stats" [isLoading]="loading"  [searchitems]="searchitems" (onRemoveItem)="onRemoveSearchItem($event)"/>
+        <dashboard-result [stats]="stats" [isLoading]="loading"  [searchitems]="searchitems" (onRemoveItem)="onRemoveSearchItem($event)" [searchParam]="searchInput"/>
       </div>
     </div>
   </section>

@@ -26,6 +26,7 @@ export class ResultComponent implements OnInit {
   // @Input() first: number = 0
   @Input() stats: any
   @Input() searchitems: string[] 
+  @Input() searchParam: string
   @Output() onRemoveItem = new EventEmitter<string>()
   sortingMethods: SoringMethod[] | undefined
 

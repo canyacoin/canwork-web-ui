@@ -1,6 +1,10 @@
 <section>
+ 
   <div class="flex justify-between items-center gap-2">
-    <div class="flex items-center gap-2 text-G900 text-b1">
+    <div *ngIf="searchParam" class="text-center text-h6 leading-5 text-G700 font-medium	">
+      {{ skCards.length }} Results for {{ searchParam }}
+    </div>
+    <div  *ngIf="!searchParam" class="flex items-center gap-2 text-G900 text-b1">
       <div class="whitespace-nowrap">{{ stats.count }} Jobs Completed</div>
       <div class="min-w-[8px] min-h-[8px] bg-G900 rounded-full"></div>
       <div class="whitespace-nowrap">${{ stats.usd }} USD Payment</div>
@@ -15,14 +19,14 @@
     </div>
   </div>
 
-  <div class="flex gap-2 flex-wrap">
+  <div class="flex gap-2 flex-wrap pt-[16px]">
     <div *ngFor="let item of searchitems">
       <div (click)="removeItemSubmit(item)">
         <search-button [content]="item"></search-button>
       </div>
     </div>
   </div>
-  <div class="pt-[20px] grid gap-5">
+  <div class="pt-[16px] grid gap-5">
     <ng-container
       *ngIf="isLoading === true; then loadingView; else resultView"
     ></ng-container>

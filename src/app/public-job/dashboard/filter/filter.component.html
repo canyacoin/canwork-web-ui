@@ -104,7 +104,6 @@
               ></p-checkbox>
             </div>
             <div
-              *ngIf="skillsForm.length < 10"
               class="cursor-pointer font-medium text-G800 flex items-center gap-3"
               (click)="seeMoreClick()"
             >
@@ -125,9 +124,9 @@
                 >Job Type</span
               >
 
-              <div *ngIf="skillsForm.length > 0">
+              <!-- <div *ngIf="skillsForm.length > 0">
                 <badge [job_badge]="true" [value]="skillsForm.length" />
-              </div>
+              </div> -->
             </div>
             <div
               class="font-medium text-G800 pointer-events-auto"
@@ -294,9 +293,9 @@
                 >Location</span
               >
 
-              <div *ngIf="skillsForm.length > 0">
+              <!-- <div *ngIf="skillsForm.length > 0">
                 <badge [job_badge]="true" [value]="skillsForm.length" />
-              </div>
+              </div> -->
             </div>
             <div
               class="font-medium text-G800 pointer-events-auto"
