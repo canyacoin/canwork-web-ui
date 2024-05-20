@@ -31,7 +31,7 @@
           [first]="currentPage * hitsPerPage"
           (pageChange)="onPageChange($event)"
         /> -->
-        <dashboard-result [stats]="stats" [isLoading]="loading" />
+        <dashboard-result [stats]="stats" [isLoading]="loading"  [searchitems]="searchitems" (onRemoveItem)="onRemoveSearchItem($event)"/>
       </div>
     </div>
   </section>

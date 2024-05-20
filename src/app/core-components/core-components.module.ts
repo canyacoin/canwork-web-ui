@@ -53,6 +53,7 @@ import { ToastModule } from 'primeng/toast'
 import { AvatarModule } from 'primeng/avatar'
 import { BadgeModule } from 'primeng/badge'
 import { JobCardComponent } from './cards/job-card/job-card.component'
+import { SearchButtonComponent } from './buttons/search-button/search-button.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -118,6 +119,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     JoinCommunityComponent,
     PostJobComponent,
     JobCardComponent,
+    SearchButtonComponent
   ],
   exports: [
     AttachmentComponent,
@@ -154,6 +156,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     JoinCommunityComponent,
     PostJobComponent,
     JobCardComponent,
+    SearchButtonComponent
   ],
   providers: [
     {

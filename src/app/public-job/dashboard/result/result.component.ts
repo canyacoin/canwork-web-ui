@@ -25,7 +25,8 @@ export class ResultComponent implements OnInit {
   // @Output() pageChange = new EventEmitter<number>() // two way binding to parent
   // @Input() first: number = 0
   @Input() stats: any
-
+  @Input() searchitems: string[] 
+  @Output() onRemoveItem = new EventEmitter<string>()
   sortingMethods: SoringMethod[] | undefined
 
   selectedSorting: SoringMethod | undefined
@@ -60,5 +61,9 @@ export class ResultComponent implements OnInit {
       { name: 'Budget Down', code: 'budgetdown' },
     ]
     this.selectedSorting = this.sortingMethods[0]
+  }
+
+  removeItemSubmit(item: string) {
+    this.onRemoveItem.emit(item)
   }
 }

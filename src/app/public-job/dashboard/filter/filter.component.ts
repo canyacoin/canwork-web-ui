@@ -1,10 +1,18 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core'
+import {
+  Component,
+  OnInit,
+  Input,
+  EventEmitter,
+  Output,
+  SimpleChanges,
+  OnChanges,
+} from '@angular/core'
 import { FilterService } from 'app/shared/constants/public-job-dashboard-page'
 @Component({
   selector: 'dashboard-filter',
   templateUrl: './filter.component.html',
 })
-export class FilterComponent implements OnInit {
+export class FilterComponent implements OnInit,OnChanges {
   filterSection = FilterService
   @Input() verifyForm: string[] = []
   @Output() verifyFormChange = new EventEmitter<string[]>() // two way binding to parent
@@ -24,6 +32,10 @@ export class FilterComponent implements OnInit {
     this.tempSkillsForm = this.filterSection.skills.slice(0, this.skillsLength)
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('skillsForm', this.skillsForm)
+  }
+ 
   getNumberAllFilters(): number {
     return (
       this.verifyForm.length +
@@ -53,6 +65,13 @@ export class FilterComponent implements OnInit {
     this.locationForm = this.locationForm.filter((item) => item !== value)
   }*/
 
+  checkedItem(value: string) {
+    if(this.skillsForm.includes(value)) {
+      return true
+    } else {
+      return false
+    }
+  }
   verifyClick(e) {
     //console.log(this.verifyForm);
     //['Verified'] or []
@@ -76,7 +95,7 @@ export class FilterComponent implements OnInit {
     */
     this.ratingChange.emit(this.ratingForm) // notify parent and algolia handler
   }
-  
+
   skillsClear() {
     this.skillsForm = []
     this.skillsFormChange.emit(this.skillsForm) // notify parent and algolia handler

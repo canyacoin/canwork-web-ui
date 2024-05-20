@@ -14,6 +14,14 @@
       />
     </div>
   </div>
+
+  <div class="flex gap-2 flex-wrap">
+    <div *ngFor="let item of searchitems">
+      <div (click)="removeItemSubmit(item)">
+        <search-button [content]="item"></search-button>
+      </div>
+    </div>
+  </div>
   <div class="pt-[20px] grid gap-5">
     <ng-container
       *ngIf="isLoading === true; then loadingView; else resultView"

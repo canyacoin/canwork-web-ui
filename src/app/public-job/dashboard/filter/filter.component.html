@@ -93,12 +93,13 @@
                 alt="search"
               />
             </div>
-            <div *ngFor="let item of tempSkillsForm" class="flex items-center">
+            <div *ngFor="let item of tempSkillsForm;" class="flex items-center">
               <p-checkbox
                 [label]="item"
                 name="skillsForm"
                 [value]="item"
                 [(ngModel)]="skillsForm"
+                [trueValue]="checkedItem(item)"
                 (onChange)="skillClick($event)"
               ></p-checkbox>
             </div>

@@ -71,6 +71,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private algoliaSearch // new
   private algoliaSearchClient // new
 
+  // Search parameters
+  searchitems: string[] = []
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private auth: AuthService,
@@ -102,11 +105,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
       this.experienceFilter = JSON.parse(
         decodeURIComponent(params['experience'] || '[]')
-      )      
+      )
       this.ratingFilter = JSON.parse(
         decodeURIComponent(params['rating'] || '[]')
       )
-
+      this.searchitems = this.skillsFilter
+      if (this.ratingFilter.length) {
+        this.searchitems.push('houly')
+      }
       this.currentPage = JSON.parse(decodeURIComponent(params['page'] || 0))
     })
   }
@@ -195,7 +201,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (
       this.providerFilters.length > 0 ||
       this.verifyFilter.length > 0 ||
-      this.locationFilter.length > 0 || 
+      this.locationFilter.length > 0 ||
       this.experienceFilter.length > 0
     ) {
       // https://www.algolia.com/doc/api-reference/api-parameters/facetFilters/
@@ -289,7 +295,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     // experience  level
     let experienceQuery = ''
-    
     if (this.experienceFilter.length > 0) {
       this.experienceFilter.forEach((skill) => {
         if (experienceQuery) experienceQuery += ' '
@@ -300,7 +305,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     algoliaSearchObject.experienceFilter = experienceQuery
 
     //console.log('algoliaSearchObject: ', algoliaSearchObject)
-    
     this.algoliaSearchClient
       .search(searchQuery, algoliaSearchObject)
       .then((res) => {
@@ -353,11 +357,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   syncAddressBar() {
     // do not affect injected status, let's do a copy
+
     const sortedLocations = this.locationFilter.concat().sort() // sort to a copy, predictable string
     const sortedSkills = this.skillsFilter.concat().sort() // sort to a copy, predictable string
     const sortedRating = this.ratingFilter.concat().sort() // sort to a copy, predictable string
     const experienceLevel = this.experienceFilter.concat().sort() // sort to a copy, predictable string
-    
     let newQueryString = `query=${encodeURIComponent(
       this.searchInput
     )}&providers=${encodeURIComponent(
@@ -457,6 +461,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   // two way binding, event from child (user input)
   onSkillsFilterChange(skillInput: string[]) {
+    // Set the search items with last time we checked
+
+    this.onChangeSearchItem(skillInput);
+
     this.skillsFilter = skillInput
 
     this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
@@ -467,8 +475,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.refreshResultsIfNeeded(newQueryString)
   }
 
+  // update the search items
+  
+
   onExperienceFormChange(experienceInput: string[]) {
-    this.experienceFilter = experienceInput;
+    this.experienceFilter = experienceInput
     this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
     const newQueryString = this.syncAddressBar()
     this.refreshResultsIfNeeded(newQueryString)
@@ -551,5 +562,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
   timestampToDate(timestamp) {
     const date = new Date(parseInt(timestamp, 10)).toLocaleDateString()
     return date
+  }
+
+  onChangeSearchItem(Input:any[]){
+    if (this.skillsFilter.length < Input.length)
+      this.searchitems.push(Input.slice(-1)[0])
+    else{
+      const uniqueSkills = this.skillsFilter.filter(skill => !Input.includes(skill));
+      this.searchitems.splice(this.searchitems.indexOf(uniqueSkills[0]), 1)
+    }
+  }
+
+  onRemoveSearchItem(removeItem: string) {
+    const uniqueitem = this.searchitems.indexOf(removeItem)
+    this.searchitems.splice(uniqueitem, 1)
+
+    this.skillsFilter.splice(uniqueitem, 1)
+
+    this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
+
+    // keep in sync also address bar, without refreshing page
+    const newQueryString = this.syncAddressBar()
+
+    this.refreshResultsIfNeeded(newQueryString)
   }
 }
