@@ -8,6 +8,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router'
 import { GitService } from '@service/git.service'
 import { DecoratedIssue } from '@class/git'
+
 import {
   Job,
   JobDescription,
@@ -31,7 +32,17 @@ import * as _ from 'lodash'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+
+
 import { MessageService } from 'primeng/api'
+
+
+interface SoringMethod {
+  name: string
+  code: string
+}
+
 
 @Component({
   selector: 'app-post',
@@ -73,7 +84,57 @@ export class PostComponent implements OnInit, OnDestroy {
   uploadFailed = false
   deleteFailed = false
 
+  editorConfig: AngularEditorConfig = {
+    editable: true,
+      spellcheck: true,
+      height: '200px',
+      minHeight: '0',
+      maxHeight: 'auto',
+      width: 'auto',
+      minWidth: '0',
+      translate: 'yes',
+      enableToolbar: true,
+      showToolbar: true,
+      placeholder: 'Give a detailed brief of the job with adequate requirements and expectations',
+      defaultParagraphSeparator: '',
+      defaultFontName: '',
+      defaultFontSize: '',
+      fonts: [
+        {class: 'arial', name: 'Arial'},
+        {class: 'times-new-roman', name: 'Times New Roman'},
+        {class: 'calibri', name: 'Calibri'},
+        {class: 'comic-sans-ms', name: 'Comic Sans MS'}
+      ],
+      customClasses: [
+      {
+        name: 'quote',
+        class: 'quote',
+      },
+      {
+        name: 'redText',
+        class: 'redText'
+      },
+      {
+        name: 'titleText',
+        class: 'titleText',
+        tag: 'h1',
+      },
+    ],
+    uploadUrl: 'v1/image',
+    uploadWithCredentials: false,
+    sanitize: true,
+    toolbarPosition: 'top',
+    toolbarHiddenButtons: [
+      ['undo', 'redo'],
+      ['subscript', 'superscript', 'strikeThrough'],
+      ['indent','outdent'],
+      ['unlink','insertImage','insertVideo','insertHorizontalRule','clearFormatting' ],
+      ['foregroundColorPicker','backgroundColorPicker' ]
+    ]
+};
+
   // usdToAtomicCan: number // this is not used
+
   providerTypes = [
     {
       name: 'Content Creators',
@@ -101,7 +162,14 @@ export class PostComponent implements OnInit, OnDestroy {
       id: 'virtualAssistant',
     },
   ]
+  sortingMethods_category: SoringMethod[] | undefined
 
+  selectedSortings_category: SoringMethod | undefined
+
+  sortingMethods_visibility: SoringMethod[] | undefined
+
+  selectedSortings_visibility: SoringMethod | undefined
+  
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -213,6 +281,21 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+
+    this.sortingMethods_category = [
+      { name: 'Design & Creative', code: 'design' },
+      { name: 'Software Developers', code: 'softwaredevelopers' },
+      { name: 'Content Creators', code: 'contentcreators' },
+      { name: 'Marketing & SEO', code: 'marketing' },
+      { name: 'Virtual Assistants', code: 'virtualassistants' },
+    ]
+    this.selectedSortings_category = this.sortingMethods_category[0]
+
+    this.sortingMethods_visibility = [
+      { name: 'invite Only', code: 'invite' },
+      { name: 'Public', code: 'public' }
+    ]
+    this.selectedSortings_visibility = this.sortingMethods_visibility[0]
     this.editing =
       this.activatedRoute.snapshot.params['jobId'] &&
       this.activatedRoute.snapshot.params['jobId'] !== ''

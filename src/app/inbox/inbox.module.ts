@@ -29,7 +29,11 @@ import { JobDashboardComponent } from './jobs/dashboard/job-dashboard.component'
 import { PostComponent } from './jobs/post/post.component'
 import { BscPaymentSelectorComponent } from '../core-components/bsc-payment-selector/bsc-payment-selector.component'
 import { ToastModule } from 'primeng/toast'
-
+import { EditorModule } from 'primeng/editor';
+import { HttpClientModule} from '@angular/common/http';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { DropdownModule } from 'primeng/dropdown';
+import { CalendarModule } from 'primeng/calendar';
 @NgModule({
   imports: [
     CommonModule,
@@ -47,6 +51,11 @@ import { ToastModule } from 'primeng/toast'
     StarRatingModule.forChild(),
     NgxPaginationModule,
     ClipboardModule,
+    EditorModule,
+    HttpClientModule,
+    AngularEditorModule,
+    DropdownModule,
+    CalendarModule
   ],
   declarations: [
     ActionDialogComponent,

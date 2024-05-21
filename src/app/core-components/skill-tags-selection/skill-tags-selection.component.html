@@ -3,7 +3,7 @@
   id="tagInputBox"
   list="tagsList"
   class="form-control"
-  placeholder="e.g. HTML, CSS..."
+  placeholder="Search skills e.g html, css, frontend"
   (blur)="onBlurMethod()"
   (focus)="onFocusMethod()"
   [class.invalid]="acceptedTags.length <= 0"
@@ -27,10 +27,6 @@
 
 <small class="text-primary text-wrap" *ngIf="tagSelectionInvalid"
   >You can only add 6 tags to a project (up to 14 characters long)
-</small>
-
-<small class="text-danger text-wrap" *ngIf="noValidTag">
-  Please choose at least one valid skill
 </small>
 
 <app-skill-tag

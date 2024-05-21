@@ -1,13 +1,16 @@
-input {
+input,
+textarea {
   border-radius: 12px;
+  background-color: #f8fafc !important;
+  width: 100%;
 }
 
 .form-control {
-  padding: 8px 16px !important; 
-  border: 1px solid var(--G200, #E2E8F0) !important;
-  color: var(--G500, #64748B);
+  padding: 8px 16px !important;
+  border: 1px solid var(--G200, #e2e8f0) !important;
+  color: var(--G500, #64748b);
   /* Regular 16px */
-  font-family: "General Sans", sans-serif !important;
+  font-family: 'General Sans', sans-serif !important;
   font-size: 16px !important;
   font-style: normal;
   font-weight: 400 !important;
@@ -15,9 +18,9 @@ input {
 }
 
 .form-group label {
-  color: var(--G900, #0F172A) !important;
+  color: var(--G900, #0f172a) !important;
   /* Regular 16px */
-  font-family: "General Sans";
+  font-family: 'General Sans';
   font-size: 16px !important;
   font-style: normal !important;
   font-weight: 400 !important;
@@ -67,6 +70,9 @@ input {
   }
 }
 
+span {
+  color: #d1242f;
+}
 .btn {
   min-width: 125px;
 }
