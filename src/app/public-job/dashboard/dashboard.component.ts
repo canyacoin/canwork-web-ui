@@ -528,8 +528,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.routeSub) {
       this.routeSub.unsubscribe()
     }
-
-    this.publicJobSubscription.unsubscribe()
+    // this.publicJobSubscription.unsubscribe()
   }
   /* obsolete
   algoliaSearchChanged(query) {
