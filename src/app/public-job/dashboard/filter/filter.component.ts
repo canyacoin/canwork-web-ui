@@ -72,6 +72,8 @@ export class FilterComponent implements OnInit {
     }
   }
   checkedItemFixed(value: number) {
+    console.log(this.fixedForm.includes(value));
+    
     if (this.fixedForm.includes(value)) {
       return true
     } else {
