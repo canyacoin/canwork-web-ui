@@ -1,21 +1,4 @@
 <!-- For mobile devices `autocapitalize` || `keyup.shift.enter` required to emulate 'enter' keypress -->
-<input
-  id="tagInputBox"
-  list="tagsList"
-  class="form-control"
-  placeholder="Search skills e.g html, css, frontend"
-  (blur)="onBlurMethod()"
-  (focus)="onFocusMethod()"
-  [class.invalid]="acceptedTags.length <= 0"
-  (keyup.enter)="onTagEnter()"
-  (keyup.,)="onTagEnter()"
-  (keyup)="onDropDownTT()"
-  [(ngModel)]="tagInput"
-  [ngModelOptions]="{ standalone: true }"
-  (change)="onTagChange()"
-  autocapitalize="none"
-  (keyup.shift.enter)="onTagEnter()"
-/>
 
 <app-popper
   tooltipText=""
@@ -25,17 +8,37 @@
   (click)="onTagEnter()"
 ></app-popper>
 
-<small class="text-primary text-wrap" *ngIf="tagSelectionInvalid"
+<div class="flex flex-wrap form-control rounded-xl">
+  <app-skill-tag
+    *ngFor="let tag of acceptedTags"
+    class="skill-tag mr-5 pointer"
+    (click)="removeTag(tag)"
+    [skill]="tag"
+  ></app-skill-tag>
+
+  <input
+    id="tagInputBox"
+    list="tagsList"
+    class="border-none outline-none w-1/2 bg-transparent"
+    [placeholder]="acceptedTags.length <= 0 ? 'Search skills e.g html, css, frontend' : ''"
+    (blur)="onBlurMethod()"
+    (focus)="onFocusMethod()"
+    [class.invalid]="acceptedTags.length <= 0"
+    (keyup.enter)="onTagEnter()"
+    (keyup.,)="onTagEnter()"
+    (keyup)="onDropDownTT()"
+    [(ngModel)]="tagInput"
+    [ngModelOptions]="{ standalone: true }"
+    (change)="onTagChange()"
+    autocapitalize="none"
+    (keyup.shift.enter)="onTagEnter()"
+  />
+</div>
+
+<small class="text-b2 text-wrap text-[#D1242F]" *ngIf="tagSelectionInvalid"
   >You can only add 6 tags to a project (up to 14 characters long)
 </small>
 
-<app-skill-tag
-  *ngFor="let tag of acceptedTags"
-  class="skill-tag mr-5 pointer"
-  (click)="removeTag(tag)"
-  [skill]="tag"
-></app-skill-tag>
-
 <datalist id="tagsList">
-  <option *ngFor="let tag of skillTagsList" value="{{ tag }}"> </option>
+  <option *ngFor="let tag of skillTagsList" value="{{ tag }}"></option>
 </datalist>

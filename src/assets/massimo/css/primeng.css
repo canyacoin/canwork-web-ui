@@ -309,5 +309,17 @@
     border-top-right-radius: 12px;
     border-top-left-radius:  12px;
     background-color: #F1F5F9 !important; 
+    padding: 6px 16px !important;
 }
 
+.angular-editor-toolbar .angular-editor-toolbar-set .angular-editor-button {
+    border: none !important;
+    margin-left: 1px !important;
+    margin-right: 1px !important;
+    background-color: transparent !important;
+}
+
+.angular-editor-toolbar .angular-editor-toolbar-set .angular-editor-button.active{
+    background-color: #3AC2FF !important;
+    border-radius: 4px !important;
+}

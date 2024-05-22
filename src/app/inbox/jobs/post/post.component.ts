@@ -292,7 +292,7 @@ export class PostComponent implements OnInit, OnDestroy {
     this.selectedSortings_category = this.sortingMethods_category[0]
 
     this.sortingMethods_visibility = [
-      { name: 'invite Only', code: 'invite' },
+      { name: 'Invite Only', code: 'invite' },
       { name: 'Public', code: 'public' }
     ]
     this.selectedSortings_visibility = this.sortingMethods_visibility[0]

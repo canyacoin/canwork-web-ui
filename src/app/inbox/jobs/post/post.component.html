@@ -112,20 +112,22 @@
 
                     <div class="form-group">
                       <label> Skill Tags (20 max) <span>*</span></label>
-                      <app-skill-tags-selection
-                        (tagsUpdated)="skillTagsUpdated($event)"
-                        (tagsLoaded)="skillTagsLoaded($event)"
-                        [updatedTags]="this.gitUpdatedTags"
-                        [minimumTags]="1"
-                      ></app-skill-tags-selection>
-                      <input
-                        hidden
-                        #skillTags
-                        class="form-control"
-                        formControlName="skills"
-                        type="text"
-                        name="skills"
-                      />
+                      <div class="form-control">
+                        <app-skill-tags-selection
+                          (tagsUpdated)="skillTagsUpdated($event)"
+                          (tagsLoaded)="skillTagsLoaded($event)"
+                          [updatedTags]="this.gitUpdatedTags"
+                          [minimumTags]="1"
+                        ></app-skill-tags-selection>
+                        <input
+                          hidden
+                          #skillTags
+                          class="form-control"
+                          formControlName="skills"
+                          type="text"
+                          name="skills"
+                        />
+                      </div>
                     </div>
 
                     <div class="form-group">
@@ -668,20 +670,20 @@
                     <div class="form-group" *ngIf="!editing">
                       <div class="col-12">
                         <label>Skill Tags (20 max) <span>*</span></label>
-                        <app-skill-tags-selection
-                          (tagsUpdated)="skillTagsUpdated($event)"
-                          (tagsLoaded)="skillTagsLoaded($event)"
-                          [updatedTags]="this.gitUpdatedTags"
-                          [minimumTags]="1"
-                        ></app-skill-tags-selection>
-                        <input
-                          hidden
-                          #skillTags
-                          class="form-control"
-                          formControlName="skills"
-                          type="text"
-                          name="skills"
-                        />
+                          <app-skill-tags-selection
+                            (tagsUpdated)="skillTagsUpdated($event)"
+                            (tagsLoaded)="skillTagsLoaded($event)"
+                            [updatedTags]="this.gitUpdatedTags"
+                            [minimumTags]="1"
+                          ></app-skill-tags-selection>
+                          <input
+                            hidden
+                            #skillTags
+                            class="form-control"
+                            formControlName="skills"
+                            type="text"
+                            name="skills"
+                          />
                         <small
                           *ngIf="
                             !shareableJobForm.controls.skills.valid &&
@@ -937,6 +939,7 @@
                           [options]="sortingMethods_category"
                           [(ngModel)]="selectedSortings_category"
                           optionLabel="name"
+                          appendTo="body"
                         />
                       </div>
                       <div class="grid gap-2">
@@ -945,6 +948,7 @@
                           <p-calendar
                             [(ngModel)]="date"
                             [showIcon]="true"
+                            appendTo="body"
                           ></p-calendar>
                         </div>
                       </div>
@@ -954,6 +958,7 @@
                           [options]="sortingMethods_visibility"
                           [(ngModel)]="selectedSortings_visibility"
                           optionLabel="name"
+                          appendTo="body"
                         />
                       </div>
                     </div>
@@ -1065,7 +1070,10 @@
                     </div>
                   </div>
                   <div class="col-12">
-                    <div *ngIf="!isSending" class="flex gap-4 justify-end flex-col md:flex-row">
+                    <div
+                      *ngIf="!isSending"
+                      class="flex gap-4 justify-end flex-col md:flex-row"
+                    >
                       <basic-button
                         extraClass="!border-none  text-G900 !shadow-none"
                         size="small"
