@@ -99,7 +99,7 @@
                 name="skillsForm"
                 [value]="item"
                 [(ngModel)]="skillsForm"
-                [trueValue]="checkedItem(item)"
+                [trueValue]="checkedItemskill(item)"
                 (onChange)="skillClick($event)"
               ></p-checkbox>
             </div>
@@ -172,8 +172,10 @@
             <p-checkbox
               label="Fixed"
               name="Fixed"
-              value="Fixed"
-              (onChange)="skillClick($event)"
+              value="-1"
+              [(ngModel)]="fixedForm"
+              (onChange)="fixedClick($event)"
+              [trueValue]="checkedItemFixed(-1)"
             ></p-checkbox>
           </div>
           <div class="px-6">
@@ -184,10 +186,11 @@
               >
                 <p-checkbox
                   [label]="item.scope"
-                  name="skillsForm"
+                  name="fixedForm"
                   [value]="item.id"
-                  [(ngModel)]="skillsForm"
-                  (onChange)="skillClick($event)"
+                  [(ngModel)]="fixedForm"
+                  [trueValue]="checkedItemFixed(item.id)"
+                  (onChange)="fixedClick($event)"
                 ></p-checkbox>
               </div>
             </div>
@@ -196,7 +199,7 @@
       </p-accordionTab>
     </p-accordion>
 
-    <p-accordion class="w-full">
+    <!-- <p-accordion class="w-full">
       <p-accordionTab>
         <ng-template pTemplate="header">
           <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
@@ -234,7 +237,7 @@
           </div>
         </div>
       </p-accordionTab>
-    </p-accordion>
+    </p-accordion> -->
 
     <p-accordion class="w-full">
       <p-accordionTab>

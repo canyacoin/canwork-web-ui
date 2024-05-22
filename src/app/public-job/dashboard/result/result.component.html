@@ -2,7 +2,7 @@
  
   <div class="flex justify-between items-center gap-2">
     <div *ngIf="searchParam" class="text-center text-h6 leading-5 text-G700 font-medium	">
-      {{ skCards.length }} Results for {{ searchParam }}
+      {{ totalRecords }} Results for {{ searchParam }}
     </div>
     <div  *ngIf="!searchParam" class="flex items-center gap-2 text-G900 text-b1">
       <div class="whitespace-nowrap">{{ stats.count }} Jobs Completed</div>
@@ -64,59 +64,21 @@
 
       <!-- bad code 5 items-center -->
 
-      <job-card
-        [description]="descriptions"
-        projectType="contentCreator"
-        [skills]="skills"
-        [routerLink]="['/jobs/public/test-job']"
+      <ng-container *ngFor="let item of jobs">
+        <job-card
+        [title]="item.information.title"
+        [description]="item.information.description"
+        [projectType]="item.information.providerType"
+        [skills]="item.information.skills"
+        [budget]="item.budget"
+        [deadline]="item.deadline"
+        [createAt]="item.createAt"
+        [routerLink]="['/jobs/public/', item.slug]"
       />
-      <job-card
-        [description]="descriptions"
-        projectType="softwareDev"
-        [skills]="skills"
-        [routerLink]="['/jobs/public/test-job']"
-      />
-      <job-card
-        [description]="descriptions"
-        projectType="designer"
-        [skills]="skills"
-        [routerLink]="['/jobs/public/test-job']"
-      />
-      <job-card
-        [description]="descriptions"
-        projectType="marketing"
-        [skills]="skills"
-        [routerLink]="['/jobs/public/test-job']"
-      />
-      <job-card
-        [description]="descriptions"
-        projectType="virtualAssistant"
-        [skills]="skills"
-        [routerLink]="['/jobs/public/test-job']"
-      />
-
-      <ng-template #jobsView>
-        <ng-container *ngFor="let job of jobCards" class="w-full">
-          <!-- <profile-card
-            [index]="profile.id"
-            [avatarUri]="profile.avatarUri"
-            [name]="profile.name"
-            [title]="profile.title"
-            [bio]="profile.bio"
-            [isVerified]="profile.verified"
-            [rating]="profile.rating"
-            [skillTags]="profile.skillTags"
-            [slug]="profile.slug"
-            [address]="profile.address"
-            [timezone]="profile.timezone"
-            [hourlyRate]="profile.hourlyRate"
-          /> -->
-          <!-- replace by job-card -->
-        </ng-container>
-      </ng-template>
+      </ng-container>
     </ng-template>
   </div>
-  <!-- <div *ngIf="profileCards.length" class="pt-[24px] flex justify-center">
+  <div *ngIf="jobs.length" class="pt-[24px] flex justify-center">
     <p-paginator
       (onPageChange)="onPageChange($event)"
       [first]="first"
@@ -124,5 +86,5 @@
       [totalRecords]="totalRecords"
       [pageLinkSize]="4"
     ></p-paginator>
-  </div> -->
+  </div>
 </section>

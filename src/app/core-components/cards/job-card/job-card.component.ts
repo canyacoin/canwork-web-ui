@@ -54,6 +54,53 @@ export class JobCardComponent {
     url = url + type.img
     return url
   }
+
+  timeAgo(createdAt: number): string {
+    const now = Date.now()
+    const diff = now - createdAt
+
+    const seconds = Math.floor(diff / 1000)
+    const minutes = Math.floor(seconds / 60)
+    const hours = Math.floor(minutes / 60)
+    const days = Math.floor(hours / 24)
+    const months = Math.floor(days / 30)
+
+    if (seconds < 60) {
+      return `Posted ${seconds} s ago`
+    } else if (minutes < 60) {
+      return `Posted ${minutes} mins ago`
+    } else if (hours < 24) {
+      return `Posted ${hours} hrs ago`
+    } else if (days < 30) {
+      return `Posted ${days} days ago`
+    } else {
+      return `Posted ${months} months ago`
+    }
+  }
+  formatDate(dateStr: string): string {
+    const date = new Date(dateStr)
+    const day = date.getDate()
+    const month = date.toLocaleString('default', { month: 'long' })
+    const year = date.getFullYear()
+
+    const daySuffix = this.getDaySuffix(day)
+
+    return `${day}${daySuffix} ${month} ${year}`
+  }
+
+  getDaySuffix(day: number): string {
+    if (day > 3 && day < 21) return 'th' // All days between 4 and 20 end with 'th'
+    switch (day % 10) {
+      case 1:
+        return 'st'
+      case 2:
+        return 'nd'
+      case 3:
+        return 'rd'
+      default:
+        return 'th'
+    }
+  }
 }
 
 // id: string

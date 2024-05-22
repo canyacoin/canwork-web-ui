@@ -5,8 +5,8 @@
     <div class="w-full flex gap-6 items-center">
       <img src="{{ getImage(projectType) }}" class="w-[48px] h-[48px]" />
       <div class="grid gap-1">
-        <div class="text-G900 text-h6 font-medium">Website Design Project</div>
-        <div class="text-G500 text-b2">Posted 20 minutes ago</div>
+        <div class="text-G900 text-h6 font-medium">{{ title }}</div>
+        <div class="text-G500 text-b2">{{ timeAgo(createAt)}}</div>
       </div>
     </div>
     <div
@@ -67,12 +67,12 @@
     <div class="flex gap-2 items-center">
       <img src="/assets/massimo/svg/jobBudget.svg" class="select-none" />
       <div class="text-G500 text-b2">Fixed Price:</div>
-      <div class="text-G700 text-b1 font-medium">$500 USD</div>
+      <div class="text-G700 text-b1 font-medium">${{ budget }}</div>
     </div>
     <div class="flex gap-2 items-center">
       <img src="/assets/massimo/svg/jobDeadline.svg" class="select-none" />
       <div class="text-G500 text-b2">Project Deadline</div>
-      <div class="text-G700 text-b1 font-medium">Tues 18 January</div>
+      <div class="text-G700 text-b1 font-medium">{{ formatDate(deadline) }}</div>
     </div>
     <div class="flex gap-2 items-center">
       <img src="/assets/massimo/svg/jobProposals.svg" class="select-none" />

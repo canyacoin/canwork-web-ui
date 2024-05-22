@@ -19,19 +19,22 @@
           (ratingChange)="onRatingChange($event)"
           [experienceForm]="experienceFilter"
           (experienceFormChange)="onExperienceFormChange($event)"
+          [fixedForm]="fixedFilter"
+          (fixedFormChange)="onFixedFormChange($event)"
         />
       </div>
       <div class="w-full">
-        <!-- <dashboard-result
-          [profileCards]="hits"
+        <dashboard-result
+          [jobs]="hits"
+          [stats]="stats"
           [isLoading]="loading"
-          [noSearchParams]="noSearchParams"
           [totalRecords]="numHits"
-          [rows]="hitsPerPage"
-          [first]="currentPage * hitsPerPage"
+          [searchitems]="searchitems"
+          (onRemoveItem)="onRemoveSearchItem($event)"
+          [searchParam]="searchInput"
           (pageChange)="onPageChange($event)"
-        /> -->
-        <dashboard-result [stats]="stats" [isLoading]="loading"  [searchitems]="searchitems" (onRemoveItem)="onRemoveSearchItem($event)" [searchParam]="searchInput"/>
+          [first]="currentPage * hitsPerPage"
+        />
       </div>
     </div>
   </section>
