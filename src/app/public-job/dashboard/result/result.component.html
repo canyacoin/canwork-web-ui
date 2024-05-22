@@ -1,6 +1,6 @@
 <section>
  
-  <div class="flex justify-between items-center gap-2">
+  <div class="flex max-md:flex-col max-md:items-start justify-between items-center  gap-2">
     <div *ngIf="searchParam" class="text-center text-h6 leading-5 text-G700 font-medium	">
       {{ totalRecords }} Results for {{ searchParam }}
     </div>
@@ -9,7 +9,7 @@
       <div class="min-w-[8px] min-h-[8px] bg-G900 rounded-full"></div>
       <div class="whitespace-nowrap">${{ stats.usd }} USD Payment</div>
     </div>
-    <div class="flex items-center gap-5 text-G900 text-b1">
+    <div class="flex  items-center gap-5 text-G900 text-b1">
       <div class="font-sans font-[500] text-b2">Sort by</div>
       <p-dropdown
         [options]="sortingMethods"

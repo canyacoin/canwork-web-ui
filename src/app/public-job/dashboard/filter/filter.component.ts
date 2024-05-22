@@ -72,8 +72,6 @@ export class FilterComponent implements OnInit {
     }
   }
   checkedItemFixed(value: number) {
-    console.log(this.fixedForm.includes(value));
-    
     if (this.fixedForm.includes(value)) {
       return true
     } else {
@@ -116,6 +114,12 @@ export class FilterComponent implements OnInit {
     this.ratingForm = []
     this.ratingChange.emit(this.ratingForm)
   }
+
+  PriceClear() {
+    this.fixedForm = []
+    this.fixedFormChange.emit([])
+  }
+
 
   experienceClear() {
     this.experienceForm = []

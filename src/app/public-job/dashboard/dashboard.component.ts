@@ -107,6 +107,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         this.hits = this.getHits()
         this.numHits = this.allProviders.length
+        console.log(this.hits);
+        
       })
 
     // retrieve and aggregate job stats
