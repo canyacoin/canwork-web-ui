@@ -97,7 +97,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     let currentPath = this.location.path()
     let splittedPath = currentPath.split('?')
     let currentQuery = splittedPath[splittedPath.length - 1]
-
+    
     this.stats = { count: '0', usd: '0' }
     this.publicJobSubscription = this.publicJobService
       .getAllOpenJobs()
@@ -107,7 +107,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         this.hits = this.getHits()
         this.numHits = this.allProviders.length
-        console.log(this.hits);
         
       })
 
@@ -126,6 +125,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   getHits() {
+    this.loading = true;
+    setTimeout(() => {
+      this.loading = false
+    }, 2000);
     return this.filteredProviders.slice(
       this.currentPage * this.hitsPerPage,
       this.currentPage * this.hitsPerPage + this.hitsPerPage
@@ -145,7 +148,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // Refresh the search results
   async refreshResultsSearch() {
     // search Category
-
+   
     this.filteredProviders = []
 
     if (this.skillsFilter.length > 0) {
