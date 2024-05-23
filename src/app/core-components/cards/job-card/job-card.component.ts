@@ -55,6 +55,17 @@ export class JobCardComponent {
     return url
   }
 
+  stripHtmlTags(html: string): string {
+    // Create a new DOM element to use the browser's parsing capabilities
+    const div = document.createElement('div');
+    
+    // Assign the HTML string to the innerHTML of the created element
+    div.innerHTML = html;
+  
+    // Use the textContent property to get the plain text without HTML tags
+    return div.textContent || div.innerText || '';
+  }
+
   timeAgo(createdAt: number): string {
     const now = Date.now()
     const diff = now - createdAt
