@@ -36,9 +36,9 @@
       </ng-container>
     </ng-template>
     <ng-template #resultView>
-      <!-- <ng-container
-        *ngIf="profileCards.length === 0; then emptyView; else jobsView"
-      ></ng-container> -->
+      <ng-container
+        *ngIf="jobs.length === 0; then emptyView; else jobsView"
+      ></ng-container>
 
       <ng-template #emptyView>
         <div class="w-full flex flex-col items-center gap-6">
