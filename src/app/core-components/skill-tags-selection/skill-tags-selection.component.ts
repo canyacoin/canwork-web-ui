@@ -26,6 +26,7 @@ export class SkillTagsSelectionComponent implements OnInit {
   @Output() tagsUpdated: EventEmitter<string> = new EventEmitter()
   @Output() tagsLoaded: EventEmitter<string[]> = new EventEmitter()
 
+  popularskillTags: string[] =[]
   ngOnChanges(changes: SimpleChanges) {
     if (!!changes.updatedTags) {
       this.acceptedTags =
@@ -45,6 +46,9 @@ export class SkillTagsSelectionComponent implements OnInit {
   constructor(private afs: AngularFirestore) {}
 
   ngOnInit() {
+    this.popularskillTags = [
+      'UI/UX','Website','Web Dev','Shopify', 'html', 'css'
+    ]
     this.afs
       .collection<SkillTag>('skill-tags')
       .valueChanges()
