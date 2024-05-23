@@ -32,17 +32,14 @@ import * as _ from 'lodash'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
-import { AngularEditorConfig } from '@kolkov/angular-editor';
-
+import { AngularEditorConfig } from '@kolkov/angular-editor'
 
 import { MessageService } from 'primeng/api'
-
 
 interface SoringMethod {
   name: string
   code: string
 }
-
 
 @Component({
   selector: 'app-post',
@@ -77,6 +74,10 @@ export class PostComponent implements OnInit, OnDestroy {
   jobToEdit: Job
   jobId: string
 
+  beforeuploadFiles: any[] = []
+  currentUploadNumber: number = 0
+  uploadedFiles: Upload[] = []
+
   currentUpload: Upload
   uploadedFile: Upload
   maxFileSizeBytes = 50000000 // 50mb
@@ -86,33 +87,34 @@ export class PostComponent implements OnInit, OnDestroy {
 
   editorConfig: AngularEditorConfig = {
     editable: true,
-      spellcheck: true,
-      height: '200px',
-      minHeight: '0',
-      maxHeight: 'auto',
-      width: 'auto',
-      minWidth: '0',
-      translate: 'yes',
-      enableToolbar: true,
-      showToolbar: true,
-      placeholder: 'Give a detailed brief of the job with adequate requirements and expectations',
-      defaultParagraphSeparator: '',
-      defaultFontName: '',
-      defaultFontSize: '',
-      fonts: [
-        {class: 'arial', name: 'Arial'},
-        {class: 'times-new-roman', name: 'Times New Roman'},
-        {class: 'calibri', name: 'Calibri'},
-        {class: 'comic-sans-ms', name: 'Comic Sans MS'}
-      ],
-      customClasses: [
+    spellcheck: true,
+    height: '200px',
+    minHeight: '0',
+    maxHeight: 'auto',
+    width: 'auto',
+    minWidth: '0',
+    translate: 'yes',
+    enableToolbar: true,
+    showToolbar: true,
+    placeholder:
+      'Give a detailed brief of the job with adequate requirements and expectations',
+    defaultParagraphSeparator: '',
+    defaultFontName: '',
+    defaultFontSize: '',
+    fonts: [
+      { class: 'arial', name: 'Arial' },
+      { class: 'times-new-roman', name: 'Times New Roman' },
+      { class: 'calibri', name: 'Calibri' },
+      { class: 'comic-sans-ms', name: 'Comic Sans MS' },
+    ],
+    customClasses: [
       {
         name: 'quote',
         class: 'quote',
       },
       {
         name: 'redText',
-        class: 'redText'
+        class: 'redText',
       },
       {
         name: 'titleText',
@@ -127,11 +129,17 @@ export class PostComponent implements OnInit, OnDestroy {
     toolbarHiddenButtons: [
       ['undo', 'redo'],
       ['subscript', 'superscript', 'strikeThrough'],
-      ['indent','outdent'],
-      ['unlink','insertImage','insertVideo','insertHorizontalRule','clearFormatting' ],
-      ['foregroundColorPicker','backgroundColorPicker' ]
-    ]
-};
+      ['indent', 'outdent'],
+      [
+        'unlink',
+        'insertImage',
+        'insertVideo',
+        'insertHorizontalRule',
+        'clearFormatting',
+      ],
+      ['foregroundColorPicker', 'backgroundColorPicker'],
+    ],
+  }
 
   // usdToAtomicCan: number // this is not used
 
@@ -169,7 +177,7 @@ export class PostComponent implements OnInit, OnDestroy {
   sortingMethods_visibility: SoringMethod[] | undefined
 
   selectedSortings_visibility: SoringMethod | undefined
-  
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -281,7 +289,6 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-
     this.sortingMethods_category = [
       { name: 'Design & Creative', code: 'design' },
       { name: 'Software Developers', code: 'softwaredevelopers' },
@@ -293,7 +300,7 @@ export class PostComponent implements OnInit, OnDestroy {
 
     this.sortingMethods_visibility = [
       { name: 'Invite Only', code: 'invite' },
-      { name: 'Public', code: 'public' }
+      { name: 'Public', code: 'public' },
     ]
     this.selectedSortings_visibility = this.sortingMethods_visibility[0]
     this.editing =
@@ -412,55 +419,80 @@ export class PostComponent implements OnInit, OnDestroy {
     return null
   }
 
-  detectFiles(event) {
-    const file = event.target.files.item(0)
-    this.uploadSingle(file)
-  }
-
-  async uploadSingle(file: File) {
-    this.currentUpload = null
+  async uploadFiles(files: FileList) {
     this.uploadFailed = false
     this.fileTooBig = false
-    if (file.size > this.maxFileSizeBytes) {
-      this.fileTooBig = true
-    } else {
+    this.currentUploadNumber = -1
+    
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i]
+      if (file.size > this.maxFileSizeBytes) {
+        this.fileTooBig = true
+        this.toastr.error(`File ${file.name} is too big.`)
+        this.beforeuploadFiles.slice(i, 1)
+        continue
+      }
+
       try {
-        this.currentUpload = new Upload(
+        const currentUpload = new Upload(
           this.currentUser.address,
           file.name,
           file.size
         )
+
+        this.currentUploadNumber++
+
         const upload: Upload =
           await this.uploadService.uploadJobAttachmentToStorage(
             this.jobId,
-            this.currentUpload,
+            currentUpload,
             file
           )
         if (upload) {
-          this.uploadedFile = upload
+          
+          this.uploadedFiles.unshift(upload)
         } else {
           this.uploadFailed = true
-          this.currentUpload = null
+          this.toastr.error(`Failed to upload file ${file.name}.`)
         }
       } catch (e) {
         this.uploadFailed = true
-        this.currentUpload = null
+        this.toastr.error(`Failed to upload file ${file.name}.`)
       }
     }
+
+    this.currentUploadNumber++
+    
+    this.beforeuploadFiles = []
+    this.beforeuploadFiles.push(...this.uploadedFiles)
   }
 
-  async removeUpload(upload: Upload) {
+  detectFiles(event: any) {
+    const files = event.target.files
+    if (this.beforeuploadFiles.length > 0) {
+      this.beforeuploadFiles.unshift(...files)
+    } else {
+      this.beforeuploadFiles = files;
+    }
+    console.log("this.beforeuploadFiles", this.uploadedFiles);
+    
+    this.uploadFiles(files)
+  }
+
+  async removeUpload(upload: Upload, index: number) {
     this.deleteFailed = false
     const deleted = await this.uploadService.cancelJobAttachmentUpload(
       this.jobId,
       upload
     )
     if (deleted) {
-      this.uploadedFile = null
-      this.currentUpload = null
+      this.uploadedFiles = this.uploadedFiles.filter((file) => file !== upload)
     } else {
       this.deleteFailed = true
     }
+
+    this.beforeuploadFiles = []
+    this.beforeuploadFiles.push(...this.uploadedFiles)
   }
 
   ngOnDestroy() {
@@ -581,7 +613,7 @@ export class PostComponent implements OnInit, OnDestroy {
             title: this.postForm.value.title,
             initialStage: this.postForm.value.initialStage,
             skills: tags,
-            attachments: this.uploadedFile ? [this.uploadedFile] : [],
+            attachments: this.uploadedFiles ? this.uploadedFiles : [],
             workType: this.postForm.value.workType,
             timelineExpectation: this.postForm.value.timelineExpectation,
             weeklyCommitment: this.postForm.value.weeklyCommitment,

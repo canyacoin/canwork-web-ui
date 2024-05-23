@@ -17,6 +17,11 @@ textarea {
   line-height: 24px !important;
 }
 
+.form-group label.file-upload {
+  color: #3ac2ff !important;
+  margin-bottom: 0px !important;
+}
+
 .form-group label {
   color: var(--G900, #0f172a) !important;
   /* Regular 16px */
@@ -27,6 +32,7 @@ textarea {
   line-height: 24px !important;
   margin-bottom: 8px !important;
 }
+
 .btn-providerType img {
   margin-top: 7.5px;
   margin-left: -15px;

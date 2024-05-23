@@ -593,7 +593,6 @@
                         >
                           <div class="w-full">
                             <div
-                              for="file-upload"
                               class="flex justify-center items-center"
                               [ngClass]="{
                                 disabled: currentUpload || uploadedFile
@@ -605,15 +604,19 @@
                                 class="pr-[8px]"
                               />
                               Drag or
-                              <div class="text-C500 underline px-[3px]">
+                              <label
+                                for="file-upload"
+                                class="!text-C500 file-upload underline px-[3px] cursor-pointer"
+                              >
                                 Upload
-                              </div>
+                              </label>
                               your files
                             </div>
                             <input
                               id="file-upload"
                               [disabled]="currentUpload || uploadedFile"
                               type="file"
+                              multiple
                               hidden
                               (change)="detectFiles($event)"
                             />
@@ -625,38 +628,83 @@
                           50 MB
                         </div>
 
-                        <div *ngIf="currentUpload">
-                          <div class="progress">
+                        <!-- <div *ngIf="currentUpload"> -->
+                        <!-- <div class="progress">
                             <div
                               class="progress-bar progress-bar-animated"
                               [ngStyle]="{
                                 width: currentUpload?.progress + '%'
                               }"
                             ></div>
-                          </div>
-                          <div *ngIf="!uploadedFile">
-                            Progress: {{ currentUpload?.name }} |
-                            {{ currentUpload?.progress }}% Complete
-                          </div>
-                        </div>
+                          </div> -->
+
+                        <!-- </div> -->
                         <div class="alert alert-danger" *ngIf="uploadFailed">
                           Oops, something went wrong uploading your file
                         </div>
 
-                        <div class="w-full px-10" *ngIf="uploadedFile">
-                          <br />
-                          Uploaded:
+                        <div class="w-full px-10">
                           <ul class="list-unstyled">
-                            <li>
-                              <p>
-                                {{ uploadedFile.name }}
-                                <span
-                                  class="pointer alert"
-                                  (click)="removeUpload(uploadedFile)"
-                                >
-                                  <i class="fa fa-times fs-14 pl-8"></i>
-                                </span>
-                              </p>
+                            <li
+                              class="flex flex-col gap-2 pt-[8px]"
+                              *ngFor="
+                                let file of beforeuploadFiles;
+                                let i = index
+                              "
+                            >
+                              <div
+                                class="flex gap-2 text-C600 text-b2 font-sans justify-start items-center h-[24px]"
+                              >
+                                <img
+                                  src="/assets/massimo/svg/ion_attach-outline.svg"
+                                  alt="ion_attach"
+                                  class="w-[24px] h-[24px]"
+                                />
+                                {{ file.name }}
+
+                                <div *ngIf="file?.progress === 100">
+                                  <span
+                                    class="cursor-pointer alert"
+                                    (click)="removeUpload(uploadedFiles[i], i)"
+                                  >
+                                    <img
+                                      src="/assets/massimo/svg/fi_x.svg"
+                                      alt="ion_attach"
+                                      class="w-[20px] h-[20px]"
+                                    />
+                                  </span>
+                                </div>
+                                <div *ngIf="file?.progress !== 100">
+                                  <div
+                                    class="uploadedFile"
+                                    *ngIf="i < currentUploadNumber"
+                                  >
+                                    <span
+                                      class="cursor-pointer alert"
+                                      (click)="
+                                        removeUpload(uploadedFiles[i], i)
+                                      "
+                                    >
+                                      <img
+                                        src="/assets/massimo/svg/fi_x.svg"
+                                        alt="ion_attach"
+                                        class="w-[20px] h-[20px]"
+                                      />
+                                    </span>
+                                  </div>
+
+                                  <div *ngIf="i == currentUploadNumber">
+                                    <div role="status">
+                                      <img
+                                        src="/assets/massimo/svg/spinner.svg"
+                                        alt="ion_attach"
+                                        class="w-[20px] h-[20px]"
+                                        class="animate-spin"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </li>
                           </ul>
                         </div>
@@ -670,20 +718,20 @@
                     <div class="form-group" *ngIf="!editing">
                       <div class="col-12">
                         <label>Skill Tags (20 max) <span>*</span></label>
-                          <app-skill-tags-selection
-                            (tagsUpdated)="skillTagsUpdated($event)"
-                            (tagsLoaded)="skillTagsLoaded($event)"
-                            [updatedTags]="this.gitUpdatedTags"
-                            [minimumTags]="1"
-                          ></app-skill-tags-selection>
-                          <input
-                            hidden
-                            #skillTags
-                            class="form-control"
-                            formControlName="skills"
-                            type="text"
-                            name="skills"
-                          />
+                        <app-skill-tags-selection
+                          (tagsUpdated)="skillTagsUpdated($event)"
+                          (tagsLoaded)="skillTagsLoaded($event)"
+                          [updatedTags]="this.gitUpdatedTags"
+                          [minimumTags]="1"
+                        ></app-skill-tags-selection>
+                        <input
+                          hidden
+                          #skillTags
+                          class="form-control"
+                          formControlName="skills"
+                          type="text"
+                          name="skills"
+                        />
                         <small
                           *ngIf="
                             !shareableJobForm.controls.skills.valid &&
