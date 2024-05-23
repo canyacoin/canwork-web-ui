@@ -16,7 +16,7 @@ export class LandingComponent implements OnInit {
   public developers = []
   public designers = []
   public contents = []
-  algoIndex = environment.algolia.indexUserName
+  algoIndex = environment.algolia.indexName
   algoId = environment.algolia.appId
   algoKey = environment.algolia.apiKey
 

@@ -25,7 +25,7 @@ export class UserService {
   firestoreSelect: (data: SelectParams) => Observable<User[]>
   private algoliaSearch
   private algoliaIndex
-  algoIndex = environment.algolia.indexUserName
+  algoIndex = environment.algolia.indexName
   algoId = environment.algolia.appId
   algoKey = environment.algolia.apiKey
 
