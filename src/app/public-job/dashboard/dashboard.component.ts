@@ -55,6 +55,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // experience filters on provider, intersection (AND)
   fixedFilter: number[] = []
 
+  hourlyFilter: number[] = []
+
   currentPage: number = 0 // the current search page
   numHits: number = 0 // the number of hits of current search
   hitsPerPage: number = HITS_PER_PAGE // constant
@@ -97,7 +99,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     let currentPath = this.location.path()
     let splittedPath = currentPath.split('?')
     let currentQuery = splittedPath[splittedPath.length - 1]
-    
+
     this.stats = { count: '0', usd: '0' }
     this.publicJobSubscription = this.publicJobService
       .getAllOpenJobs()
@@ -107,7 +109,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         this.hits = this.getHits()
         this.numHits = this.allProviders.length
-        
       })
 
     // retrieve and aggregate job stats
@@ -125,10 +126,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   getHits() {
-    this.loading = true;
+    this.loading = true
     setTimeout(() => {
       this.loading = false
-    }, 2000);
+    }, 2000)
     return this.filteredProviders.slice(
       this.currentPage * this.hitsPerPage,
       this.currentPage * this.hitsPerPage + this.hitsPerPage
@@ -148,7 +149,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // Refresh the search results
   async refreshResultsSearch() {
     // search Category
-   
+
     this.filteredProviders = []
 
     if (this.skillsFilter.length > 0) {
@@ -162,7 +163,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     // search Fixed
-    
+
     if (this.fixedFilter.length) {
       if (this.fixedFilter[0] == -1 && this.fixedFilter.length == 1) {
         this.allProviders.map((provider) => {
@@ -208,6 +209,29 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     }
 
+    // Search Hourly
+    if (this.hourlyFilter.length > 0) {
+      if (this.hourlyFilter[0] == 0 && this.hourlyFilter[1] === 0) {
+        this.allProviders.map((provider) => {
+          if (provider.paymentType == 'Hourly price') {
+            this.additemToFilteredProviders(provider)
+          }
+        })
+      } else {
+        this.minValue = Number.isNaN(this.hourlyFilter[0]) ? 0 : this.hourlyFilter[0]
+        this.maxValue = Number.isNaN(this.hourlyFilter[1]) ? 300 : this.hourlyFilter[1]
+
+        console.log(this.minValue, this.maxValue);
+        
+        this.allProviders.map((provider) => {
+          if (this.minValue <= provider.budget && this.maxValue >= provider.budget) {
+            if(provider.paymentType == 'Hourly price') {
+              this.additemToFilteredProviders(provider)
+            }
+          }
+        })
+      }
+    }
     this.currentPage = 0
     this.hits = this.getHits()
     this.numHits = this.filteredProviders.length
@@ -240,18 +264,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   // two way binding, event from child (user input)
-  onHourlyInputChange(hourlyInput: string[]) {
-    let normalizedHourly = [] // clean up it a bit
-    hourlyInput.forEach((hourlyRange) => {
-      let cleanedRange = hourlyRange.split('$').join('').split(' ').join('')
-      normalizedHourly.push(cleanedRange)
-    })
-    // sort it to have a predictable string
-    normalizedHourly.sort()
-
-    this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
-  }
-
   toLowerCaseArray(arr: string[]): string[] {
     return arr.map((str) => str.toLowerCase())
   }
@@ -285,6 +297,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.refreshResultsSearch()
   }
 
+  onHourlyInputChange(FilterInput: number[]) {
+    this.onChangeSearchItemHourly(FilterInput)
+    
+    this.hourlyFilter = FilterInput
+    this.currentPage = 0
+    this.refreshResultsSearch()
+  }
   // two way binding, event from child (user input)
   onRatingChange(ratingInput: number[]) {
     this.ratingFilter = ratingInput
@@ -371,6 +390,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
       )
     }
   }
+
+  onChangeSearchItemHourly(FilterInput: number[]) {
+    if (FilterInput.length) {
+      if (!this.searchitems.includes('hourly')) {
+        this.searchitems.push('hourly')
+      }
+    } else {
+      this.searchitems.splice(this.searchitems.indexOf('hourly'), 1)
+    }
+  }
+
   onChangeSearchItemskill(Input: any[]) {
     if (this.skillsFilter.length < Input.length)
       this.searchitems.push(Input.slice(-1)[0])
@@ -386,11 +416,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.searchitems.splice(this.searchitems.indexOf(removeItem), 1)
 
     this.skillsFilter.splice(this.skillsFilter.indexOf(removeItem), 1)
+    this.hourlyFilter = [];
     this.fixedFilter.splice(
       this.fixedFilter.indexOf(this.getIdByScope(removeItem)),
       1
     )
-    console.log(this.fixedFilter)
 
     this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
     this.refreshResultsSearch()

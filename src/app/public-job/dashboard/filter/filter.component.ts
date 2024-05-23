@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  EventEmitter,
-  Output,
-} from '@angular/core'
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core'
 import { FilterService } from 'app/shared/constants/public-job-dashboard-page'
 @Component({
   selector: 'dashboard-filter',
@@ -29,6 +23,16 @@ export class FilterComponent implements OnInit {
 
   @Input() fixedForm: number[] = []
   @Output() fixedFormChange = new EventEmitter<number[]>() // two way binding to parent
+
+  @Input() hourlyInput: number[] = []
+  @Output() hourlyInputChange = new EventEmitter<number[]>() // two way binding to parent
+
+  hourly: boolean = false
+  hourlymin_max: boolean = false
+  min: number // minimum
+  max: number // maximum
+
+  fixedflag: boolean[] = [false]
   ngOnInit() {
     this.tempSkillsForm = this.filterSection.skills.slice(0, this.skillsLength)
   }
@@ -48,12 +52,14 @@ export class FilterComponent implements OnInit {
     this.skillsForm = []
     this.ratingForm = []
     this.experienceForm = []
+    this.hourlyInput = []
 
     this.verifyFormChange.emit(this.verifyForm)
     this.skillsFormChange.emit(this.skillsForm)
     this.ratingChange.emit(this.ratingForm)
     this.experienceFormChange.emit(this.experienceForm)
     this.fixedFormChange.emit(this.fixedForm)
+    this.hourlyInputChange.emit(this.hourlyInput)
   }
   verifyClear() {
     this.verifyForm = []
@@ -89,8 +95,61 @@ export class FilterComponent implements OnInit {
   }
 
   fixedClick(e) {
+    if (!this.fixedForm.includes(-1)) {
+      this.fixedForm.push(-1)
+      if (!this.fixedflag.includes(true)) {
+        this.fixedflag.push(true)
+      }
+    } else if (this.fixedflag.length == 1 && this.fixedForm.includes(-1)) {
+      this.PriceClear()
+    }
     this.fixedFormChange.emit(this.fixedForm)
   }
+
+  hourlyTopClick(e) {
+    console.log(this.hourly);
+    
+    if (this.hourly) {
+      this.hourlyInput = [0, 300]
+    } else {
+      this.min = undefined
+      this.max = undefined
+      this.hourlyInput = []
+      this.hourlymin_max = false
+    }
+
+    this.hourlyInputChange.emit(this.hourlyInput)
+  }
+
+  hourlyBottomClick(e) {
+    console.log(this.hourlymin_max);
+
+    if (this.hourlymin_max) {
+      this.hourly = true
+      this.hourlyInput = [Number(this.min), Number(this.max)]
+    } else {
+      this.min = undefined
+      this.max = undefined
+      this.hourlyInput = [0, 300]
+    }
+    this.hourlyInputChange.emit(this.hourlyInput)
+  }
+  onSearchInputChange(type: number, value: number) {
+    if (type == 1) {
+      this.min = value
+    } else {
+      this.max = value
+    }
+    this.hourly = true
+    this.hourlymin_max = true
+    this.hourlyInput = [Number(this.min), Number(this.max)]
+
+    this.hourlyInputChange.emit(this.hourlyInput) // notify parent and algolia handler
+  }
+  checkedItemHourly(type: number) {
+    // 
+  }
+
   experienceClick(e) {
     this.experienceFormChange.emit(this.experienceForm)
   }
@@ -119,7 +178,6 @@ export class FilterComponent implements OnInit {
     this.fixedForm = []
     this.fixedFormChange.emit([])
   }
-
 
   experienceClear() {
     this.experienceForm = []

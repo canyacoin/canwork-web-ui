@@ -2,7 +2,9 @@
   class="bg-G0 rounded-[12px] grid border border-G200 xl:w-[350px]"
   id="job-search-filter"
 >
-  <div class="flex items-center justify-between text-G800 text-h6 font-medium p-[16px]">
+  <div
+    class="flex items-center justify-between text-G800 text-h6 font-medium p-[16px]"
+  >
     <div class="flex items-center gap-2">
       <div>Filters</div>
       <div *ngIf="getNumberAllFilters() > 0">
@@ -93,7 +95,7 @@
                 alt="search"
               />
             </div>
-            <div *ngFor="let item of tempSkillsForm;" class="flex items-center">
+            <div *ngFor="let item of tempSkillsForm" class="flex items-center">
               <p-checkbox
                 [label]="item"
                 name="skillsForm"
@@ -108,7 +110,7 @@
               (click)="seeMoreClick()"
             >
               See More
-              <img src="/assets/massimo/svg/V.svg" class="w-5 h-5" alt="V">
+              <img src="/assets/massimo/svg/V.svg" class="w-5 h-5" alt="V" />
             </div>
           </div>
         </div>
@@ -142,25 +144,36 @@
             <p-checkbox
               label="Hourly"
               name="Hourly"
-              value="Hourly"
-              (onChange)="skillClick($event)"
+              [value]="true"
+              [trueValue]="checkedItemHourly(1)"
+              (onChange)="hourlyTopClick($event)"
             ></p-checkbox>
           </div>
           <div class="px-6">
             <div class="flex font-sans text-b1 font-normal">
-              <p-checkbox name="skillsForm" value="fixed"></p-checkbox>
+              <p-checkbox
+                name="hourlymin_max"
+                [value]="true"
+                [(ngModel)]="hourlymin_max"
+                [trueValue]="checkedItemHourly(2)"
+                (onChange)="hourlyBottomClick($event)"
+              ></p-checkbox>
               <div class="flex gap-2">
                 <input
-                  type="text"
+                  type="number"
                   pInputText
+                  [(ngModel)]="min"
+                  (input)="onSearchInputChange(1, $event.target.value)"
                   placeholder="$Min/hr"
-                  class="!shadow-none bg-transparent border rounded-[8px] max-w-[88px] py-[6px] pl-[16px]"
+                  class="!shadow-none bg-transparent border rounded-[8px] w-[96px] py-[6px] pl-[16px]"
                 />
                 <input
-                  type="text"
+                  type="number"
                   pInputText
+                  [(ngModel)]="max"
+                  (input)="onSearchInputChange(2, $event.target.value)"
                   placeholder="$Max/hr"
-                  class="!shadow-none bg-transparent border rounded-[8px]  max-w-[88px] py-[6px] pl-[16px]"
+                  class="!shadow-none bg-transparent border rounded-[8px] w-[96px] py-[6px] pl-[16px]"
                 />
               </div>
             </div>
@@ -172,8 +185,8 @@
             <p-checkbox
               label="Fixed"
               name="Fixed"
-              [value]="-1"
-              [(ngModel)]="fixedForm"
+              [value]="true"
+              [(ngModel)]="fixedflag"
               (onChange)="fixedClick($event)"
               [trueValue]="checkedItemFixed(-1)"
             ></p-checkbox>
@@ -286,7 +299,6 @@
       </p-accordionTab>
     </p-accordion>
 
-
     <p-accordion class="w-full">
       <p-accordionTab>
         <ng-template pTemplate="header">
@@ -311,7 +323,7 @@
         <div class="pt-[16px] pb-[24px] px-[24px] flex flex-col gap-[8px]">
           <div class="flex flex-col gap-[8px] font-sans text-b1 font-normal">
             <div
-              class="p-inputgroup flex items-center  px-[16px] !py-[12px] border bg-G50 border-G200 rounded-xl"
+              class="p-inputgroup flex items-center px-[16px] !py-[12px] border bg-G50 border-G200 rounded-xl"
             >
               <input
                 type="text"
@@ -329,7 +341,5 @@
         </div>
       </p-accordionTab>
     </p-accordion>
-
-
   </div>
 </section>
