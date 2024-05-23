@@ -360,14 +360,19 @@
                               postForm.controls.budget.dirty
                             "
                           />
-                          <small
+                          <div
+                            class="flex justify-center items-center text-[#D1242F] text-b2 font-sans"
                             *ngIf="
                               !postForm.controls.budget.valid &&
                               postForm.controls.budget.dirty
                             "
-                            class="text-primary"
-                            >Must be $1 USD or more.</small
                           >
+                            <img
+                              src="/assets/massimo/svg/fi_alert-triangle.svg"
+                              alt=""
+                            />
+                            Must be $1 USD or more.
+                          </div>
                         </div>
                       </div>
                       <div class="row">
@@ -623,11 +628,6 @@
                           </div>
                         </div>
 
-                        <div class="alert alert-danger" *ngIf="fileTooBig">
-                          File is too large, please upload a file smaller than
-                          50 MB
-                        </div>
-
                         <!-- <div *ngIf="currentUpload"> -->
                         <!-- <div class="progress">
                             <div
@@ -709,7 +709,25 @@
                           </ul>
                         </div>
 
-                        <div class="alert alert-danger" *ngIf="deleteFailed">
+                        <div
+                          class="flex justify-center items-center text-[#D1242F] text-b2 font-sans"
+                          *ngIf="fileTooBig"
+                        >
+                          <img
+                            src="/assets/massimo/svg/fi_alert-triangle.svg"
+                            alt=""
+                          />
+                          You can only add 10 files with maximum of 25MB each
+                        </div>
+
+                        <div
+                          class="flex justify-center items-center text-[#D1242F] text-b2 font-sans"
+                          *ngIf="deleteFailed"
+                        >
+                          <img
+                            src="/assets/massimo/svg/fi_alert-triangle.svg"
+                            alt=""
+                          />
                           Oops, something went while wrong deleting your file.
                         </div>
                       </div>
@@ -764,59 +782,7 @@
                       </div>
                     </div>
 
-                    <!-- <div class="form-group">
-                      <div class="col-12">
-                        <label>Provider type <span>*</span></label>
-                        <br />
-                        <div class="row ml-0 mr-0">
-                          <div
-                            *ngFor="let type of providerTypes"
-                            class="px-5 col-lg-2 col-md-4 col-sm-6 col-12"
-                          >
-                            <button
-                              type="button text-left"
-                              (click)="setProviderType(type.id)"
-                              class="btn btn-primary w-full btn-providerType"
-                              [ngClass]="{
-                                'btn-outline':
-                                  shareableJobForm.controls.providerType
-                                    .value !== type.id
-                              }"
-                            >
-                              <div class="row">
-                                <div
-                                  class="col-lg-3 col-sm-2 col-0 text-center"
-                                >
-                                  <img
-                                    *ngIf="
-                                      shareableJobForm.controls.providerType
-                                        .value !== type.id
-                                    "
-                                    src="assets/img/providers/{{ type.img }}"
-                                  />
-                                  <img
-                                    *ngIf="
-                                      shareableJobForm.controls.providerType
-                                        .value === type.id
-                                    "
-                                    src="assets/img/providers/white/{{
-                                      type.img
-                                    }}"
-                                  />
-                                </div>
-                                <div
-                                  class="col-lg-8 col-sm-10 col-12 text-left"
-                                  style="white-space: initial"
-                                >
-                                  <p>{{ type.name }}</p>
-                                </div>
-                              </div>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div> -->
-
+               
                     <div class="form-group canya-prefilled">
                       <div class="col-12">
                         <label>Type of work <span>*</span></label>
@@ -911,14 +877,19 @@
                                 shareableJobForm.controls.budget.dirty
                               "
                             />
-                            <small
+                            <div
+                              class="flex justify-center items-center text-[#D1242F] text-b2 font-sans"
                               *ngIf="
                                 !shareableJobForm.controls.budget.valid &&
                                 shareableJobForm.controls.budget.dirty
                               "
-                              class="text-primary"
-                              >Must be $1 USD or more.</small
                             >
+                              <img
+                                src="/assets/massimo/svg/fi_alert-triangle.svg"
+                                alt=""
+                              />
+                              Must be $1 USD or more.
+                            </div>
                           </div>
                         </div>
                         <div class="row">
@@ -983,12 +954,44 @@
                     >
                       <div class="grid gap-2">
                         <label>Freelance Category<span>*</span></label>
+
                         <p-dropdown
                           [options]="sortingMethods_category"
                           [(ngModel)]="selectedSortings_category"
                           optionLabel="name"
                           appendTo="body"
-                        />
+                        >
+                          <ng-template pTemplate="selectedItem">
+                            <div
+                              class="flex align-items-center gap-2"
+                              *ngIf="selectedSortings_category"
+                            >
+                              <div class="flex align-items-center">
+                                <img
+                                  src="{{ '/assets/massimo/images/' + selectedSortings_category.img }}"
+                                  style="width: 20px"
+                                  class="mr-[16px]"
+                                />
+                                <span>{{
+                                  selectedSortings_category.name
+                                }}</span>
+                              </div>
+                            </div>
+                          </ng-template>
+                          <ng-template let-item pTemplate="item">
+                            <div
+                              class="flex align-items-center"
+                              (click)="setProviderType(item)"
+                            >
+                              <img
+                                src="{{ '/assets/massimo/images/' + item.img }}"
+                                style="width: 20px"
+                                class="mr-[16px]"
+                              />
+                              <span>{{ item.name }}</span>
+                            </div>
+                          </ng-template>
+                        </p-dropdown>
                       </div>
                       <div class="grid gap-2">
                         <label>Deadline<span>*</span></label>
@@ -996,122 +999,56 @@
                           <p-calendar
                             [(ngModel)]="date"
                             [showIcon]="true"
+                            formControlName="deadline"
                             appendTo="body"
+                            [minDate]="currentDate"
                           ></p-calendar>
                         </div>
                       </div>
                       <div class="grid gap-2">
                         <label>Visibility<span>*</span></label>
+
                         <p-dropdown
                           [options]="sortingMethods_visibility"
                           [(ngModel)]="selectedSortings_visibility"
                           optionLabel="name"
                           appendTo="body"
-                        />
+                        >
+                          <ng-template pTemplate="selectedItem">
+                            <div
+                              class="flex align-items-center gap-2"
+                              *ngIf="selectedSortings_visibility"
+                            >
+                              <div class="flex align-items-center">
+                                <img
+                                  src="{{ '/assets/massimo/svg/' + selectedSortings_visibility.img }}"
+                                  style="width: 20px"
+                                  class="mr-[16px]"
+                                />
+                                <span>{{
+                                  selectedSortings_visibility.name
+                                }}</span>
+                              </div>
+                            </div>
+                          </ng-template>
+                          <ng-template let-item pTemplate="item">
+                            <div
+                              class="flex align-items-center"
+                              (click)="setVisibility(item)"
+                            >
+                              <img
+                                src="{{ '/assets/massimo/svg/' + item.img }}"
+                                style="width: 20px"
+                                class="mr-[16px]"
+                              />
+                              <span>{{ item.name }}</span>
+                            </div>
+                          </ng-template>
+                        </p-dropdown>
                       </div>
                     </div>
 
-                    <!-- <div class="form-group">
-                      <div class="col-12">
-                        <label>Visibility <span>*</span></label>
-                        <br />
-                        <div class="row ml-0 mr-0">
-                          <div
-                            class="px-5 col-lg-3 col-md-4 col-sm-6 col-xs-12"
-                          >
-                            <button
-                              type="button"
-                              (click)="setVisibility('invite')"
-                              class="btn btn-primary w-full"
-                              [ngClass]="{
-                                'btn-outline':
-                                  shareableJobForm.controls.visibility.value !==
-                                  'invite'
-                              }"
-                            >
-                              Invite-only
-                            </button>
-                          </div>
-                          <div
-                            class="px-5 col-lg-3 col-md-4 col-sm-6 col-xs-12"
-                          >
-                            <button
-                              type="button "
-                              (click)="setVisibility('public')"
-                              class="btn btn-primary w-full"
-                              [ngClass]="{
-                                'btn-outline':
-                                  shareableJobForm.controls.visibility.value !==
-                                  'public'
-                              }"
-                            >
-                              Public
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="form-group row px-15">
-                      <div class="col-12 canya-prefilled">
-                        <label>Timeline Expectations <span>*</span></label>
-                        <br />
-                        <select
-                          #timelineExpectation
-                          class="form-control"
-                          formControlName="timelineExpectation"
-                        >
-                          <option value="">Choose...</option>
-                          <option
-                            *ngFor="let range of timeRanges()"
-                            [selected]="
-                              jobToEdit &&
-                              range == jobToEdit.information.timelineExpectation
-                            "
-                          >
-                            {{ range }}
-                          </option>
-                        </select>
-                      </div>
-                      <div class="col-12">
-                        <label>Deadline <span>*</span></label>
-                        <br />
-                        <div class="row ml-0 mr-0">
-                          <input
-                            #deadline
-                            formControlName="deadline"
-                            type="date"
-                            placeholder="dd.mm.yyyy"
-                            class="form-control"
-                            min="{{ currentDate }}"
-                          />
-                        </div>
-                        <small
-                          *ngIf="
-                            !shareableJobForm.controls.deadline.valid &&
-                            shareableJobForm.controls.deadline.dirty &&
-                            shareableJobForm.controls.deadline.errors &&
-                            !shareableJobForm.controls.deadline.errors
-                              .pastDueDate
-                          "
-                          class="text-primary text-wrap"
-                          >Deadline is required.</small
-                        >
-                        <small
-                          *ngIf="
-                            !shareableJobForm.controls.deadline.valid &&
-                            shareableJobForm.controls.deadline.dirty &&
-                            shareableJobForm.controls.deadline.errors &&
-                            shareableJobForm.controls.deadline.errors
-                              .pastDueDate
-                          "
-                          class="text-primary text-wrap"
-                        >
-                          Deadline in the past.</small
-                        >
-                      </div>
-                    </div> -->
-                    <div class="form-group">
+                   <div class="form-group">
                       <div class="col-12">
                         <app-terms [form]="shareableJobForm"></app-terms>
                       </div>

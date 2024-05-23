@@ -14,6 +14,7 @@
     class="skill-tag mr-5 pointer"
     (click)="removeTag(tag)"
     [skill]="tag"
+    [cancel] = "true"
   ></app-skill-tag>
 
   <input
@@ -35,9 +36,10 @@
   />
 </div>
 
-<small class="text-b2 text-wrap text-[#D1242F]" *ngIf="tagSelectionInvalid"
-  >You can only add 6 tags to a project (up to 14 characters long)
-</small>
+<div class="flex justify-start items-center text-[#D1242F] text-b2 font-sans" *ngIf="tagSelectionInvalid">
+  <img src="/assets/massimo/svg/fi_alert-triangle.svg" alt="">
+  You can only add 20 skill tags
+</div>
 
 <datalist id="tagsList">
   <option *ngFor="let tag of skillTagsList" value="{{ tag }}"></option>

@@ -260,6 +260,9 @@
 .p-dropdown .p-dropdown-trigger {
     width: 1rem !important;
 }
+
+
+
 /* Jobboard p-accordion-toggle-icon  */
 
 .filter-job .p-accordion-toggle-icon {
@@ -271,7 +274,7 @@
 
 /* p-calendar */
 .create-job-post .p-dropdown {
-    width: 210px !important;
+    width: 268px !important;
     height: 40px !important;
 }
 .create-job-post .p-calendar {

@@ -39,6 +39,7 @@ import { MessageService } from 'primeng/api'
 interface SoringMethod {
   name: string
   code: string
+  img: string
 }
 
 @Component({
@@ -59,7 +60,7 @@ export class PostComponent implements OnInit, OnDestroy {
   authSub: Subscription
   routeSub: Subscription
   jobSub: Subscription
-  currentDate = ''
+  currentDate: Date
   isShareable = false
   isSending = false
   sent = false
@@ -79,12 +80,14 @@ export class PostComponent implements OnInit, OnDestroy {
   uploadedFiles: Upload[] = []
 
   currentUpload: Upload
-  uploadedFile: Upload
   maxFileSizeBytes = 50000000 // 50mb
   fileTooBig = false
   uploadFailed = false
   deleteFailed = false
 
+  ///
+
+  minDate: Date
   editorConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -143,33 +146,6 @@ export class PostComponent implements OnInit, OnDestroy {
 
   // usdToAtomicCan: number // this is not used
 
-  providerTypes = [
-    {
-      name: 'Content Creators',
-      img: 'writer.svg',
-      id: 'contentCreator',
-    },
-    {
-      name: 'Software Developers',
-      img: 'dev.svg',
-      id: 'softwareDev',
-    },
-    {
-      name: 'Designers & Creatives',
-      img: 'creatives.svg',
-      id: 'designer',
-    },
-    {
-      name: 'Marketing & SEO',
-      img: 'marketing.svg',
-      id: 'marketing',
-    },
-    {
-      name: 'Virtual Assistants',
-      img: 'assistant.svg',
-      id: 'virtualAssistant',
-    },
-  ]
   sortingMethods_category: SoringMethod[] | undefined
 
   selectedSortings_category: SoringMethod | undefined
@@ -290,17 +266,37 @@ export class PostComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.sortingMethods_category = [
-      { name: 'Design & Creative', code: 'design' },
-      { name: 'Software Developers', code: 'softwaredevelopers' },
-      { name: 'Content Creators', code: 'contentcreators' },
-      { name: 'Marketing & SEO', code: 'marketing' },
-      { name: 'Virtual Assistants', code: 'virtualassistants' },
+      {
+        name: 'Content Creators',
+        img: 'writer.png',
+        code: 'contentCreator',
+      },
+      {
+        name: 'Software Developers',
+        img: 'dev.png',
+        code: 'softwareDev',
+      },
+      {
+        name: 'Designers & Creatives',
+        img: 'creatives.png',
+        code: 'designer',
+      },
+      {
+        name: 'Marketing & SEO',
+        img: 'marketing.png',
+        code: 'marketing',
+      },
+      {
+        name: 'Virtual Assistants',
+        img: 'assistant.png',
+        code: 'virtualAssistant',
+      },
     ]
     this.selectedSortings_category = this.sortingMethods_category[0]
 
     this.sortingMethods_visibility = [
-      { name: 'Invite Only', code: 'invite' },
-      { name: 'Public', code: 'public' },
+      { name: 'Invite Only', code: 'invite', img: 'fi_user-plus.svg' },
+      { name: 'Public', code: 'public', img: 'fi_users.svg' },
     ]
     this.selectedSortings_visibility = this.sortingMethods_visibility[0]
     this.editing =
@@ -379,7 +375,7 @@ export class PostComponent implements OnInit, OnDestroy {
                   this.jobToEdit.information.skills
                 )
                 if (this.jobToEdit.information.attachments.length > 0)
-                  this.uploadedFile = this.jobToEdit.information.attachments[0]
+                  this.uploadedFiles = this.jobToEdit.information.attachments
                 this.pageLoaded = true
               } else {
                 this.router.navigateByUrl('/not-found')
@@ -389,7 +385,7 @@ export class PostComponent implements OnInit, OnDestroy {
       }
     })
 
-    this.currentDate = new Date().toISOString().split('T')[0]
+    this.currentDate = new Date()
     this.notifyAddAddressIfNecessary()
   }
 
@@ -423,7 +419,7 @@ export class PostComponent implements OnInit, OnDestroy {
     this.uploadFailed = false
     this.fileTooBig = false
     this.currentUploadNumber = -1
-    
+
     for (let i = 0; i < files.length; i++) {
       const file = files[i]
       if (file.size > this.maxFileSizeBytes) {
@@ -449,7 +445,6 @@ export class PostComponent implements OnInit, OnDestroy {
             file
           )
         if (upload) {
-          
           this.uploadedFiles.unshift(upload)
         } else {
           this.uploadFailed = true
@@ -462,7 +457,7 @@ export class PostComponent implements OnInit, OnDestroy {
     }
 
     this.currentUploadNumber++
-    
+
     this.beforeuploadFiles = []
     this.beforeuploadFiles.push(...this.uploadedFiles)
   }
@@ -472,10 +467,10 @@ export class PostComponent implements OnInit, OnDestroy {
     if (this.beforeuploadFiles.length > 0) {
       this.beforeuploadFiles.unshift(...files)
     } else {
-      this.beforeuploadFiles = files;
+      this.beforeuploadFiles = files
     }
-    console.log("this.beforeuploadFiles", this.uploadedFiles);
-    
+    console.log('this.beforeuploadFiles', this.uploadedFiles)
+
     this.uploadFiles(files)
   }
 
@@ -548,12 +543,18 @@ export class PostComponent implements OnInit, OnDestroy {
     }
   }
 
-  setProviderType(type: string) {
-    this.shareableJobForm.controls.providerType.setValue(type)
+  setProviderType(item: SoringMethod) {
+    this.selectedSortings_category = item
+    this.shareableJobForm.controls.providerType.setValue(
+      this.selectedSortings_category.code
+    )
   }
 
-  setVisibility(type: string) {
-    this.shareableJobForm.controls.visibility.setValue(type)
+  setVisibility(item: SoringMethod) {
+    this.selectedSortings_visibility = item
+    this.shareableJobForm.controls.visibility.setValue(
+      this.selectedSortings_visibility.code
+    )
   }
 
   timeRanges(): Array<string> {
@@ -735,6 +736,16 @@ export class PostComponent implements OnInit, OnDestroy {
     this.errorGitUrl = ''
   }
 
+  getDate(date: Date): string {
+     
+    // Create a Date object from milliseconds
+    const year = date.getFullYear()
+    const month = (date.getMonth() + 1).toString().padStart(2, '0') // Months are zero-based
+    const day = date.getDate().toString().padStart(2, '0')
+
+    return `${year}-${month}-${day}`
+  }
+
   async submitShareableJob(isDraft: boolean) {
     this.isSending = true
     this.error = false
@@ -768,7 +779,7 @@ export class PostComponent implements OnInit, OnDestroy {
           title: this.shareableJobForm.value.title,
           initialStage: this.shareableJobForm.value.initialStage,
           skills: tags,
-          attachments: this.uploadedFile ? [this.uploadedFile] : [],
+          attachments: this.uploadedFiles ? this.uploadedFiles : [],
           workType: this.shareableJobForm.value.workType,
           timelineExpectation: this.shareableJobForm.value.timelineExpectation,
           weeklyCommitment: this.shareableJobForm.value.weeklyCommitment,
@@ -777,7 +788,7 @@ export class PostComponent implements OnInit, OnDestroy {
         visibility: this.shareableJobForm.value.visibility,
         paymentType: this.shareableJobForm.value.paymentType,
         budget: this.shareableJobForm.value.budget,
-        deadline: this.shareableJobForm.value.deadline,
+        deadline: this.getDate(this.shareableJobForm.value.deadline),
         draft: isDraft,
       })
       this.draft = isDraft
@@ -794,6 +805,7 @@ export class PostComponent implements OnInit, OnDestroy {
       } else {
         job.state = JobState.draft
       }
+
       this.sent = await this.publicJobService.handlePublicJob(job, action)
       this.isSending = false
     } catch (e) {
