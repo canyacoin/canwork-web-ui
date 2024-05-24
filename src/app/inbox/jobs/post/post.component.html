@@ -1189,15 +1189,15 @@
           Preview
         </div>
         <div
-          class="text-h4 md:text-h4 text-G800 font-medium leading-[1.2] mt-3 font-sans"
+          class="text-h4 md:text-h4 text-G800 font-medium leading-[1.2] mt-[8px] font-sans"
         >
           {{ jobForPreview.information.title }}
         </div>
-        <div class="text-b3 md:text-b2 text-G500 leading-[1.2] mt-[12px]">
+        <div class="text-b3 md:text-b2 text-G500 leading-[1.2]">
           {{ jobFromNow }}
         </div>
         <div
-          class="text-b2 md:text-b1 text-G900 leading-[1.2] mt-[15px]"
+          class="text-b2 md:text-b1 text-G900 leading-[1.2] mt-[24px]"
           [innerHTML]="jobForPreview.information.description | linkify"
         ></div>
 
@@ -1210,7 +1210,7 @@
           class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[15px]"
         >
           <p class="mb-[10px] text-b2 font-sans font-medium text-G900">
-            Attachments
+            Attachment
           </p>
           <ng-container
             *ngFor="let item of jobForPreview.information.attachments"
@@ -1251,13 +1251,13 @@
 
         <div class="flex justify-start pt-[48px]">
           <div
-            class="flex justify-center items-center text-b1 text-G900 leading-6 font-medium cursor-pointer p-[6px] hover:bg-B100 rounded-md"
+            class="group flex justify-center items-center text-b1 text-G900 leading-6 font-medium cursor-pointer p-[6px] rounded-md duration-500 transition-transform"
             [routerLink]="['/jobs']"
           >
             <img
               src="/assets/massimo/svg/Arrow-Left.svg"
               alt="Arrow-Left"
-              class="w-[20px] h-[20px] mr-[8px]"
+              class="w-[20px] h-[20px] mx-[8px] group-hover:-translate-x-[6px] duration-500 transition-all"
             />
             Back to Job Board
           </div>
@@ -1284,7 +1284,7 @@
           </div>
         </div>
         <table
-          class="table-auto text-b2 md:text-b1 mt-3 border-separate border-spacing-x-[2px] border-spacing-y-[10px] w-[302px]"
+          class="table-auto text-b2 w-full md:text-b1 mt-3 border-separate border-spacing-x-[2px] border-spacing-y-[10px] md:w-[302px]"
         >
           <tr>
             <td class="text-G700">{{ jobForPreview.paymentType }}</td>
