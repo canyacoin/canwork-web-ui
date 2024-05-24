@@ -1,21 +1,31 @@
 <section>
- 
-  <div class="flex max-md:flex-col max-md:items-start justify-between items-center  gap-2">
-    <div *ngIf="searchParam" class="text-center text-h6 leading-5 text-G700 font-medium	">
+  <div
+    class="flex max-md:flex-col max-md:items-start justify-between items-center gap-2"
+  >
+    <div
+      *ngIf="searchParam"
+      class="text-center text-h6 leading-5 text-G700 font-medium"
+    >
       {{ totalRecords }} Results for {{ searchParam }}
     </div>
-    <div  *ngIf="!searchParam" class="flex items-center gap-2 text-G900 text-b1">
+    <div *ngIf="!searchParam" class="flex items-center gap-2 text-G900 text-b1">
       <div class="whitespace-nowrap">{{ stats.count }} Jobs Completed</div>
       <div class="min-w-[8px] min-h-[8px] bg-G900 rounded-full"></div>
       <div class="whitespace-nowrap">${{ stats.usd }} USD Payment</div>
     </div>
-    <div class="flex  items-center gap-5 text-G900 text-b1">
+    <div class="flex items-center gap-5 text-G900 text-b1">
       <div class="font-sans font-[500] text-b2">Sort by</div>
       <p-dropdown
         [options]="sortingMethods"
         [(ngModel)]="selectedSorting"
         optionLabel="name"
-      />
+      >
+        <ng-template let-item pTemplate="item">
+          <div class="flex align-items-center" (click)="SortbyFilter(item)">
+            <span>{{ item.name }}</span>
+          </div>
+        </ng-template>
+      </p-dropdown>
     </div>
   </div>
 
@@ -66,15 +76,15 @@
 
       <ng-container *ngFor="let item of jobs">
         <job-card
-        [title]="item.information.title"
-        [description]="item.information.description"
-        [projectType]="item.information.providerType"
-        [skills]="item.information.skills"
-        [budget]="item.budget"
-        [deadline]="item.deadline"
-        [createAt]="item.createAt"
-        [routerLink]="['/jobs/public/', item.slug]"
-      />
+          [title]="item.information.title"
+          [description]="item.information.description"
+          [projectType]="item.information.providerType"
+          [skills]="item.information.skills"
+          [budget]="item.budget"
+          [deadline]="item.deadline"
+          [createAt]="item.createAt"
+          [routerLink]="['/jobs/public/', item.slug]"
+        />
       </ng-container>
     </ng-template>
   </div>

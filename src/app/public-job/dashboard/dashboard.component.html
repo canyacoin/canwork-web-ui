@@ -35,6 +35,7 @@
           (onRemoveItem)="onRemoveSearchItem($event)"
           [searchParam]="searchInput"
           (pageChange)="onPageChange($event)"
+          (sortby)="onChangeSoryby($event)"
           [first]="currentPage * hitsPerPage"
         />
       </div>

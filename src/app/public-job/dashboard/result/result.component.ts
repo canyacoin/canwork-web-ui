@@ -28,6 +28,7 @@ export class ResultComponent implements OnInit {
   @Input() rows: number = 5
   @Output() pageChange = new EventEmitter<number>() // two way binding to parent
   @Output() onRemoveItem = new EventEmitter<string>()
+  @Output() sortby = new EventEmitter<SoringMethod>()
   sortingMethods: SoringMethod[] | undefined
 
   selectedSorting: SoringMethod | undefined
@@ -39,19 +40,14 @@ export class ResultComponent implements OnInit {
 
   skCards = new Array(5)
   onPageChange(e: PageEvent) {
-    console.log(e);
     
     this.first = e.first
     this.rows = e.rows // this is injected from parent
     this.pageChange.emit(e.page) // notify parent and algolia handler
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-     console.log("this.selectedSorting", this.selectedSorting);
-     
-  }
-
   ngOnInit() {
+    
     this.sortingMethods = [
       { name: 'Newest', code: 'newest' },
       { name: 'Relevance', code: 'relevance' },
@@ -63,5 +59,9 @@ export class ResultComponent implements OnInit {
 
   removeItemSubmit(item: string) {
     this.onRemoveItem.emit(item)
+  }
+
+  SortbyFilter(item: SoringMethod) {
+    this.sortby.emit(item)
   }
 }

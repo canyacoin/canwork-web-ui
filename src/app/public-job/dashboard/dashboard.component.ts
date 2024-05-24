@@ -15,6 +15,11 @@ import { FilterService } from 'app/shared/constants/public-job-dashboard-page'
 
 const HITS_PER_PAGE = 5
 
+interface SoringMethod {
+  name: string
+  code: string
+}
+
 @Component({
   selector: 'app-dashboard-page',
   templateUrl: './dashboard.component.html',
@@ -22,6 +27,7 @@ const HITS_PER_PAGE = 5
 export class DashboardComponent implements OnInit, OnDestroy {
   hits = [] // the new hits array, injected into result component
 
+  sortby: SoringMethod
   // jobs
   stats: any
   currentUser: User
@@ -96,6 +102,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     different from no results
     */
     // get current query from url
+    this.loading = true
     let currentPath = this.location.path()
     let splittedPath = currentPath.split('?')
     let currentQuery = splittedPath[splittedPath.length - 1]
@@ -109,6 +116,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         this.hits = this.getHits()
         this.numHits = this.allProviders.length
+        this.hits = this.hits.sort(
+          (a, b) =>
+            new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+        )
       })
 
     // retrieve and aggregate job stats
@@ -123,13 +134,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
         usd: Math.round(jobStats.usd + publicJobStats.usd),
       }
     })
+
+    this.loading = false
   }
 
   getHits() {
     this.loading = true
     setTimeout(() => {
       this.loading = false
-    }, 2000)
+    }, 1000)
     return this.filteredProviders.slice(
       this.currentPage * this.hitsPerPage,
       this.currentPage * this.hitsPerPage + this.hitsPerPage
@@ -218,14 +231,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
           }
         })
       } else {
-        this.minValue = Number.isNaN(this.hourlyFilter[0]) ? 0 : this.hourlyFilter[0]
-        this.maxValue = Number.isNaN(this.hourlyFilter[1]) ? 300 : this.hourlyFilter[1]
+        this.minValue = Number.isNaN(this.hourlyFilter[0])
+          ? 0
+          : this.hourlyFilter[0]
+        this.maxValue = Number.isNaN(this.hourlyFilter[1])
+          ? 300
+          : this.hourlyFilter[1]
 
-        console.log(this.minValue, this.maxValue);
-        
         this.allProviders.map((provider) => {
-          if (this.minValue <= provider.budget && this.maxValue >= provider.budget) {
-            if(provider.paymentType == 'Hourly price') {
+          if (
+            this.minValue <= provider.budget &&
+            this.maxValue >= provider.budget
+          ) {
+            if (provider.paymentType == 'Hourly price') {
               this.additemToFilteredProviders(provider)
             }
           }
@@ -233,12 +251,30 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     }
     this.currentPage = 0
+
+    if (this.searchitems.length === 0) {
+      this.filteredProviders = this.allProviders;
+    }
+
+    this.SortbymethodHandler()
+
     this.hits = this.getHits()
     this.numHits = this.filteredProviders.length
 
-    if (this.searchitems.length === 0) {
-      this.hits = this.allProviders
-    }
+    
+  }
+
+  SortbymethodHandler() {
+      if (this.sortby.code === 'budgetup') {
+        this.filteredProviders.sort((a, b) => a.budget - b.budget)
+      } else if (this.sortby.code === 'budgetdown') {
+        this.filteredProviders.sort((a, b) => b.budget - a.budget)
+      } else if (this.sortby.code === 'newest') {
+        this.filteredProviders.sort(
+          (a, b) =>
+            new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+        )
+      }
   }
   // two way binding, event from paging component (user input)
   onPageChange(newPage: number) {
@@ -278,11 +314,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // Set the search items with last time we checked
     this.onChangeSearchItemskill(skillInput)
     this.skillsFilter = skillInput
+    console.log(this.hits)
 
     this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
     this.refreshResultsSearch()
   }
 
+  onChangeSoryby(sort: SoringMethod) {
+    this.sortby = sort
+    this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
+    this.refreshResultsSearch()
+  }
   // update the search items
 
   onExperienceFormChange(experienceInput: string[]) {
@@ -299,7 +341,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   onHourlyInputChange(FilterInput: number[]) {
     this.onChangeSearchItemHourly(FilterInput)
-    
+
     this.hourlyFilter = FilterInput
     this.currentPage = 0
     this.refreshResultsSearch()
@@ -416,7 +458,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.searchitems.splice(this.searchitems.indexOf(removeItem), 1)
 
     this.skillsFilter.splice(this.skillsFilter.indexOf(removeItem), 1)
-    this.hourlyFilter = [];
+    this.hourlyFilter = []
     this.fixedFilter.splice(
       this.fixedFilter.indexOf(this.getIdByScope(removeItem)),
       1
