@@ -599,7 +599,15 @@
                         >
 
                         <div
-                          class="w-full rounded-xl bg-G50 border border-G200 flex justify-center items-center py-[10px] px-[16px]"
+                          (dragover)="onDragOver($event)"
+                          (dragleave)="onDragLeave($event)"
+                          (drop)="onDrop($event)"
+                          [class]="
+                            hoveredFiles
+                              ? 'w-full rounded-xl bg-G500 border border-G200 flex justify-center items-center py-[10px] px-[16px]'
+                              : 'w-full rounded-xl bg-G50 border border-G200 flex justify-center items-center py-[10px] px-[16px]'
+                          "
+                          class=""
                         >
                           <div class="w-full">
                             <div

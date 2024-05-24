@@ -34,6 +34,7 @@ import { HttpClientModule} from '@angular/common/http';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
+import { FileUploadModule } from 'primeng/fileupload';
 @NgModule({
   imports: [
     CommonModule,
@@ -55,7 +56,8 @@ import { CalendarModule } from 'primeng/calendar';
     HttpClientModule,
     AngularEditorModule,
     DropdownModule,
-    CalendarModule
+    CalendarModule,
+    FileUploadModule
   ],
   declarations: [
     ActionDialogComponent,

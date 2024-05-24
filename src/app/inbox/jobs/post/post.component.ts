@@ -88,7 +88,8 @@ export class PostComponent implements OnInit, OnDestroy {
   uploadFailed = false
   deleteFailed = false
 
-  ///
+  /// css variables for file upload
+  hoveredFiles = false
 
   minDate: Date
   editorConfig: AngularEditorConfig = {
@@ -408,8 +409,12 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   ValidateCurrentDate(control: AbstractControl) {
-    if (!control.value.length) return null // this is validated from Validators.required
-
+    // this is validated from Validators.required
+    try {
+      if (!control.value.length) return null
+    } catch (error) {
+      return null
+    }
     let deadline = new Date(control.value)
     let today = new Date()
     today.setHours(0, 0, 0, 0)
@@ -465,6 +470,38 @@ export class PostComponent implements OnInit, OnDestroy {
     this.beforeuploadFiles.push(...this.uploadedFiles)
   }
 
+  onDragOver(event: DragEvent) {
+    event.preventDefault()
+    event.stopPropagation()
+    this.hoveredFiles = true
+    // Optionally add a CSS class to indicate the drag state
+  }
+
+  onDragLeave(event: DragEvent) {
+    event.preventDefault()
+    event.stopPropagation()
+    this.hoveredFiles = false
+  }
+
+  onDrop(event: DragEvent) {
+    event.preventDefault()
+    event.stopPropagation()
+    this.hoveredFiles = false
+    // if (event.dataTransfer && event.dataTransfer.files) {
+
+    if (event.dataTransfer && event.dataTransfer.files) {
+      for (let i = 0; i < event.dataTransfer.files.length; i++) {
+        if (this.beforeuploadFiles.length > 0) {
+          this.beforeuploadFiles.unshift(event.dataTransfer.files[i])
+        } else {
+          this.beforeuploadFiles.push(event.dataTransfer.files[i])
+        }
+      }
+    }
+    const files = event.dataTransfer.files
+    this.uploadFiles(files)
+  }
+
   detectFiles(event: any) {
     const files = event.target.files
     if (this.beforeuploadFiles.length > 0) {
@@ -472,7 +509,6 @@ export class PostComponent implements OnInit, OnDestroy {
     } else {
       this.beforeuploadFiles = files
     }
-    console.log('this.beforeuploadFiles', this.uploadedFiles)
 
     this.uploadFiles(files)
   }

@@ -253,28 +253,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.currentPage = 0
 
     if (this.searchitems.length === 0) {
-      this.filteredProviders = this.allProviders;
+      this.filteredProviders = this.allProviders
     }
 
     this.SortbymethodHandler()
 
     this.hits = this.getHits()
     this.numHits = this.filteredProviders.length
-
-    
   }
 
   SortbymethodHandler() {
-      if (this.sortby.code === 'budgetup') {
-        this.filteredProviders.sort((a, b) => a.budget - b.budget)
-      } else if (this.sortby.code === 'budgetdown') {
-        this.filteredProviders.sort((a, b) => b.budget - a.budget)
-      } else if (this.sortby.code === 'newest') {
-        this.filteredProviders.sort(
-          (a, b) =>
-            new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
-        )
-      }
+    if (this.sortby.code === 'budgetup') {
+      this.filteredProviders.sort((a, b) => a.budget - b.budget)
+    } else if (this.sortby.code === 'budgetdown') {
+      this.filteredProviders.sort((a, b) => b.budget - a.budget)
+    } else if (this.sortby.code === 'newest') {
+      this.filteredProviders.sort(
+        (a, b) =>
+          new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+      )
+    }
   }
   // two way binding, event from paging component (user input)
   onPageChange(newPage: number) {
