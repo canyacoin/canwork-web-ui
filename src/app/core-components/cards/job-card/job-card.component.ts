@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core'
-
+import * as moment from 'moment'
 @Component({
   selector: 'job-card',
   templateUrl: './job-card.component.html',
@@ -67,26 +67,7 @@ export class JobCardComponent {
   }
 
   timeAgo(createdAt: number): string {
-    const now = Date.now()
-    const diff = now - createdAt
-
-    const seconds = Math.floor(diff / 1000)
-    const minutes = Math.floor(seconds / 60)
-    const hours = Math.floor(minutes / 60)
-    const days = Math.floor(hours / 24)
-    const months = Math.floor(days / 30)
-
-    if (seconds < 60) {
-      return `Posted ${seconds} s ago`
-    } else if (minutes < 60) {
-      return `Posted ${minutes} mins ago`
-    } else if (hours < 24) {
-      return `Posted ${hours} hrs ago`
-    } else if (days < 30) {
-      return `Posted ${days} days ago`
-    } else {
-      return `Posted ${months} months ago`
-    }
+    return moment(createdAt).fromNow()
   }
   formatDate(dateStr: string): string {
     const date = new Date(dateStr)

@@ -95,6 +95,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           currentRoute.includes('/inbox') ||
           currentRoute.includes('/profile') ||
           currentRoute.includes('/wallet-bnb') ||
+          currentRoute.includes('/public') ||
           currentRoute.includes('/auth')
         ) {
           this.isTransfer = true

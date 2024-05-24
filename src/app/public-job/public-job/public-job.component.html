@@ -49,21 +49,55 @@
             Job Details
           </div>
           <div
-            class="text-h4 md:text-h3 text-G800 font-medium leading-[1.2] mt-3"
+            class="text-h4 md:text-h4 text-G800 font-medium leading-[1.2] mt-3"
           >
             {{ job.information.title }}
           </div>
-          <div class="text-b3 md:text-b2 text-G800 leading-[1.2] mt-[12px]">
+          <div class="text-b3 md:text-b2 text-G500 leading-[1.2] mt-[12px]">
             Posted {{ jobFromNow }}
           </div>
           <div
-            class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[15px]"
+            class="text-b2 md:text-b1 text-G900 leading-[1.2] mt-[15px]"
             [innerHTML]="job.information.description | linkify"
           ></div>
+
+          <hr
+            *ngIf="job.information.attachments.length > 0"
+            class="h-[1.5px] my-[20px] bg-gray-200 border-0"
+          />
+          <div
+            *ngIf="job.information.attachments.length > 0"
+            class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[15px]"
+          >
+            <p class="mb-[10px] text-b2 font-sans font-medium text-G900">
+              Attachments
+            </p>
+            <ng-container *ngFor="let item of job.information.attachments">
+              <div class="flex justify-start py-[6px]">
+                <a href="{{ item.url }}" target="_blank">
+                  <p class="flex justify-start items-center text-C600">
+                    <img
+                      src="/assets/massimo/svg/ion_attach-outline.svg"
+                      alt="ion_attach"
+                      class="w-[24px] h-[24px]"
+                    />
+                    {{ item.name }}
+                  </p>
+                </a>
+              </div>
+            </ng-container>
+          </div>
+
           <hr
             *ngIf="job.information.skills.length > 0"
             class="h-[1.5px] my-[20px] bg-gray-200 border-0"
           />
+          <p
+            *ngIf="job.information.skills.length > 0"
+            class="mb-[10px] text-b2 font-sans font-medium text-G900"
+          >
+            Skill Tags
+          </p>
           <div
             *ngIf="job.information.skills.length > 0"
             class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[15px]"
@@ -75,36 +109,27 @@
               [skill]="skill"
             ></app-skill-tag>
           </div>
-          <hr
-            *ngIf="job.information.attachments.length > 0"
-            class="h-[1.5px] my-[20px] bg-gray-200 border-0"
-          />
-          <div
-            *ngIf="job.information.attachments.length > 0"
-            class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[15px]"
-          >
-            <p class="mb-[10px]">Attachments</p>
-            <ng-container *ngFor="let item of job.information.attachments">
-              <div class="py-[10px]">
-                <a href="{{ item.url }}" target="_blank" >
-                  <p *ngIf="item.name.length > 20">
-                    <i class="fas fa-paperclip"></i>
-                    {{ item.name.substring(0, 20) }}...
-                  </p>
-                  <p *ngIf="item.name.length <= 20">
-                    <i class="fas fa-paperclip"></i>
-                    {{ item.name }}...
-                  </p>
-                </a>
-              </div>
-            </ng-container>
+
+          <div class="flex justify-start pt-[48px]">
+            <div
+              class="flex justify-center items-center text-b1 text-G900 leading-6 font-medium cursor-pointer p-[6px] hover:bg-B100 hover:text-white rounded-md"
+              [routerLink]="['/jobs']"
+            >
+              <img
+                src="/assets/massimo/svg/Arrow-Left.svg"
+                alt="Arrow-Left"
+                class="w-[20px] h-[20px] mr-[8px]"
+              />
+              Back to Job Board
+            </div>
           </div>
         </div>
+
         <div
           class="md:w-[400px] rounded-[12px] bg-white border border-G200 px-7 py-[32px]"
         >
           <div
-            class="text-b1 md:text-h6 text-G800 font-medium leading-[1.2] pl-[2px]"
+            class="text-b1 flex justify-between items-center md:text-h6 text-G800 font-medium leading-[1.2] pl-[2px]"
           >
             <span *ngIf="job.state && isOpen && !job.draft">
               <i class="circle-success fas fa-circle mr-[12px]"></i
@@ -128,6 +153,15 @@
             >
               <i class="fas fa-share-alt"></i>
             </a>
+            <div
+              class="border border-G300 shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer w-[32px] h-[32px] rounded-lg p-[6px]"
+            >
+              <img
+                src="/assets/massimo/svg/fi_share-2.svg"
+                alt=""
+                class="w-full h-full"
+              />
+            </div>
           </div>
           <table
             class="table-auto text-b2 md:text-b1 w-full mt-3 border-separate border-spacing-x-[2px] border-spacing-y-[10px]"
@@ -148,7 +182,7 @@
             <tr>
               <td class="text-G700">Deadline</td>
               <td class="text-G900 text-right font-medium">
-                {{ job.deadline }}
+                {{ formatDate(job.deadline) }}
               </td>
             </tr>
             <tr *ngIf="job.information.weeklyCommitment > 0">

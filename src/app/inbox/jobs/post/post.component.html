@@ -14,7 +14,7 @@
     >
       <img src="assets/img/loader.svg" style="height: 36px" alt="Loader" />
     </div>
-    <div id="direct-job" *ngIf="pageLoaded && !isShareable">
+    <div id="direct-job" *ngIf="pageLoaded && !isShareable && !isPreview">
       <div *ngIf="!sent && recipient" class="section pt-0 bg-grey pb-30">
         <div class="container bg-white p-30">
           <header class="section-header my-0 py-0">
@@ -212,25 +212,27 @@
                     </div>
 
                     <div class="form-group canya-prefilled">
-                      <label>Type of work <span>*</span></label>
-                      <br />
-                      <div class="row ml-0 mr-0">
-                        <div
-                          *ngFor="let type of workTypes()"
-                          class="px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12"
-                        >
-                          <button
-                            type="button"
-                            style="width: 100%"
-                            (click)="setWorkType(type)"
-                            class="btn btn-primary"
-                            [ngClass]="{
-                              'btn-outline':
-                                postForm.controls.workType.value !== type
-                            }"
+                      <div class="col-12">
+                        <label>Type of work <span>*</span></label>
+                        <br />
+                        <div class="row ml-0 mr-0">
+                          <div
+                            *ngFor="let type of workTypes()"
+                            class="px-5 col-lg-3 col-md-4 col-sm-4 col-12"
                           >
-                            {{ type }}
-                          </button>
+                            <button
+                              type="button"
+                              (click)="setWorkType(type)"
+                              class="btn btn-primary w-full"
+                              [ngClass]="{
+                                'btn-outline':
+                                  shareableJobForm.controls.workType.value !==
+                                  type
+                              }"
+                            >
+                              {{ type }}
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -466,7 +468,10 @@
         </div>
       </div>
     </div>
-    <div id="shareable-job" *ngIf="!recipient && pageLoaded && isShareable">
+    <div
+      id="shareable-job"
+      *ngIf="!recipient && pageLoaded && isShareable && !isPreview"
+    >
       <div *ngIf="!sent" class="section bg-grey pt-15 pb-30">
         <div class="container bg-white p-30 brad-5px">
           <header class="text-left text-G900 text-h5 font-[500] my-0 px-[40px]">
@@ -782,7 +787,6 @@
                       </div>
                     </div>
 
-               
                     <div class="form-group canya-prefilled">
                       <div class="col-12">
                         <label>Type of work <span>*</span></label>
@@ -968,7 +972,10 @@
                             >
                               <div class="flex align-items-center">
                                 <img
-                                  src="{{ '/assets/massimo/images/' + selectedSortings_category.img }}"
+                                  src="{{
+                                    '/assets/massimo/images/' +
+                                      selectedSortings_category.img
+                                  }}"
                                   style="width: 20px"
                                   class="mr-[16px]"
                                 />
@@ -1021,7 +1028,10 @@
                             >
                               <div class="flex align-items-center">
                                 <img
-                                  src="{{ '/assets/massimo/svg/' + selectedSortings_visibility.img }}"
+                                  src="{{
+                                    '/assets/massimo/svg/' +
+                                      selectedSortings_visibility.img
+                                  }}"
                                   style="width: 20px"
                                   class="mr-[16px]"
                                 />
@@ -1048,7 +1058,7 @@
                       </div>
                     </div>
 
-                   <div class="form-group">
+                    <div class="form-group">
                       <div class="col-12">
                         <app-terms [form]="shareableJobForm"></app-terms>
                       </div>
@@ -1064,24 +1074,25 @@
                         size="small"
                         type="1"
                         title="Save as Draft"
+                        (click)="submitShareableJob(0)"
                       />
                       <basic-button
                         type="1"
-                        (click)="submitShareableJob(true)"
+                        (click)="submitShareableJob(1)"
+                        title="See Preview"
+                        size="small"
                         [disabled]="
-                          !shareableJobForm.controls.title.valid ||
+                          !shareableJobForm.valid ||
                           isSending ||
                           (currentUpload && !uploadedFile)
                         "
-                        title="See Preview"
-                        size="small"
                         extraClass="border text-G900"
                       />
                       <basic-button
                         [type]="2"
                         title="Post Job Listing"
                         size="small"
-                        (click)="submitShareableJob(false)"
+                        (click)="submitShareableJob(2)"
                         [disabled]="
                           !shareableJobForm.valid ||
                           isSending ||
@@ -1162,6 +1173,209 @@
             >
             &nbsp;&nbsp;
           </p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="isPreview"
+      class="flex flex-col md:flex-row md:justify-center gap-2 md:gap-6 pt-[56px] container"
+    >
+      <div
+        *ngIf="jobForPreview"
+        class="w-full rounded-[12px] bg-white border border-G200 p-11"
+      >
+        <div class="text-b3 md:text-b2 text-G800 leading-[1.2] mt-[12px]">
+          Preview
+        </div>
+        <div
+          class="text-h4 md:text-h4 text-G800 font-medium leading-[1.2] mt-3 font-sans"
+        >
+          {{ jobForPreview.information.title }}
+        </div>
+        <div class="text-b3 md:text-b2 text-G500 leading-[1.2] mt-[12px]">
+          {{ jobFromNow }}
+        </div>
+        <div
+          class="text-b2 md:text-b1 text-G900 leading-[1.2] mt-[15px]"
+          [innerHTML]="jobForPreview.information.description | linkify"
+        ></div>
+
+        <hr
+          *ngIf="jobForPreview.information.attachments.length > 0"
+          class="h-[1.5px] my-[20px] bg-gray-200 border-0"
+        />
+        <div
+          *ngIf="jobForPreview.information.attachments.length > 0"
+          class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[15px]"
+        >
+          <p class="mb-[10px] text-b2 font-sans font-medium text-G900">
+            Attachments
+          </p>
+          <ng-container
+            *ngFor="let item of jobForPreview.information.attachments"
+          >
+            <div class="flex justify-start py-[6px]">
+              <a href="{{ item.url }}" target="_blank">
+                <p class="flex justify-start items-center text-C600">
+                  <img
+                    src="/assets/massimo/svg/ion_attach-outline.svg"
+                    alt="ion_attach"
+                    class="w-[24px] h-[24px]"
+                  />
+                  {{ item.name }}
+                </p>
+              </a>
+            </div>
+          </ng-container>
+        </div>
+        <hr
+          *ngIf="jobForPreview.information.skills.length > 0"
+          class="h-[1.5px] my-[20px] bg-gray-200 border-0"
+        />
+        <p class="mb-[10px] text-b2 font-sans font-medium text-G900">
+          Skill Tags
+        </p>
+
+        <div
+          *ngIf="jobForPreview.information.skills.length > 0"
+          class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[15px] flex flex-wrap"
+        >
+          <app-skill-tag
+            *ngFor="let skill of jobForPreview.information.skills"
+            [routerLink]="['/search/']"
+            [queryParams]="{ query: skill }"
+            [skill]="skill"
+          ></app-skill-tag>
+        </div>
+
+        <div class="flex justify-start pt-[48px]">
+          <div
+            class="flex justify-center items-center text-b1 text-G900 leading-6 font-medium cursor-pointer p-[6px] hover:bg-B100 rounded-md"
+            [routerLink]="['/jobs']"
+          >
+            <img
+              src="/assets/massimo/svg/Arrow-Left.svg"
+              alt="Arrow-Left"
+              class="w-[20px] h-[20px] mr-[8px]"
+            />
+            Back to Job Board
+          </div>
+        </div>
+      </div>
+      <div
+        class="md:w-[400px] rounded-[12px] bg-white border border-G200 px-[24px] py-[24px]"
+      >
+        <div
+          class="text-b1 flex justify-between items-center md:text-h6 text-G800 font-medium leading-[1.2] pl-[2px]"
+        >
+          <span *ngIf="jobForPreview?.state">
+            <i class="circle-success fas fa-circle mr-[12px]"></i
+            >{{ jobForPreview?.state }}
+          </span>
+          <div
+            class="border border-G300 shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer w-[32px] h-[32px] rounded-lg p-[6px]"
+          >
+            <img
+              src="/assets/massimo/svg/fi_share-2.svg"
+              alt=""
+              class="w-full h-full"
+            />
+          </div>
+        </div>
+        <table
+          class="table-auto text-b2 md:text-b1 mt-3 border-separate border-spacing-x-[2px] border-spacing-y-[10px] w-[302px]"
+        >
+          <tr>
+            <td class="text-G700">{{ jobForPreview.paymentType }}</td>
+            <td class="text-G900 text-right font-medium">
+              ${{ jobForPreview.budget
+              }}<span *ngIf="jobForPreview.paymentType !== 'Fixed price'"
+                >/hr</span
+              >
+              USD
+            </td>
+          </tr>
+          <tr *ngIf="bids">
+            <td class="text-G700">Proposals</td>
+            <td class="text-G900 text-right font-medium">
+              {{ bids.length }} Proposals
+            </td>
+          </tr>
+          <tr>
+            <td class="text-G700">Deadline</td>
+            <td class="text-G900 text-right font-medium">
+              {{ formatDate(jobForPreview.deadline) }}
+            </td>
+          </tr>
+          <tr *ngIf="jobForPreview.information.weeklyCommitment > 0">
+            <td class="text-G700">Estimated hours</td>
+            <td class="text-G900 text-right font-medium">
+              {{ jobForPreview.information.weeklyCommitment }} hours
+            </td>
+          </tr>
+          <tr>
+            <td class="text-G700">Category</td>
+            <td class="text-G900 text-right font-medium">
+              {{ jobForPreview.information.providerType }}
+            </td>
+          </tr>
+        </table>
+        <hr class="h-[1.5px] my-[20px] bg-gray-200 border-0" />
+        <div class="text-b3 md:text-b2 text-G800 leading-[1.2] mt-[12px]">
+          About the Client
+        </div>
+        <div class="mt-[12px]">
+          <profile-card
+            [index]="0"
+            [avatarUri]="currentUser.avatar['uri']"
+            [name]="currentUser.name"
+            [title]="currentUser.title"
+            [isVerified]="currentUser.verified"
+            [rating]="currentUser.rating"
+            [skillTags]="currentUser.skillTags"
+            [slug]="currentUser.slug"
+            [address]="currentUser.address"
+            [timezone]="currentUser.timezone"
+            [isGrid]="false"
+            [isSmall]="true"
+          />
+        </div>
+        <div
+          class="flex justify-between gap-4 text-b2 md:text-b1 leading-[1.2] mt-[16px]"
+        >
+          <button
+            *ngIf="!isSending"
+            class="flex justify-center items-center text-G900 font-medium"
+            (click)="BacktoEdit()"
+          >
+            <img
+              src="/assets/massimo/svg/fi_edit.svg"
+              alt=""
+              class="mr-[8px]"
+            />
+            Back to Editing
+          </button>
+
+          <basic-button
+            [type]="2"
+            title="Post Job"
+            size="small"
+            *ngIf="!isSending"
+            (click)="submitShareableJob(2)"
+            [disabled]="
+              !shareableJobForm.valid ||
+              isSending ||
+              (currentUpload && !uploadedFile)
+            "
+          />
+          <div *ngIf="isSending">
+            <img
+              src="assets/img/loader.svg"
+              style="height: 36px"
+              alt="CanYa Coin"
+            />
+          </div>
         </div>
       </div>
     </div>

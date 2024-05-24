@@ -131,6 +131,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
         this.currentUser = user
       }
     })
+
+    console.log('this.currentUser', this.currentUser)
   }
 
   ngOnDestroy() {
@@ -146,8 +148,9 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     new one, retrieve user only once (if not already retrieved)
     and use the new fastest Algolia getUserById service version
     */
+
     if (!this.jobPoster) {
-      this.jobPoster = await this.userService.getUserById(clientId)
+      this.jobPoster = await this.userService.getUser(clientId)
       if (this.jobPoster) {
         let avatar = this.jobPoster.avatar // current, retrocomp
         //console.log(result[i])
@@ -161,7 +164,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
             uri: this.jobPoster.compressedAvatarUrl,
           }
         }
-        //console.log(avatar)
         this.jobPoster.avatarUri = avatar.uri
       }
     }
@@ -200,6 +202,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     } else {
       this.canSee = true
     }
+    console.log('this.job.clientId', this.job.clientId)
+
     this.setClient(this.job.clientId)
     this.setAttachmentUrl()
   }
@@ -212,6 +216,32 @@ export class PublicJobComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  getDaySuffix(day: number): string {
+    if (day > 3 && day < 21) return 'th' // All days between 4 and 20 end with 'th'
+    switch (day % 10) {
+      case 1:
+        return 'st'
+      case 2:
+        return 'nd'
+      case 3:
+        return 'rd'
+      default:
+        return 'th'
+    }
+  }
+  
+  formatDate(dateStr: string): string {
+    const date = new Date(dateStr)
+    const day = date.getDate()
+    const month = date.toLocaleString('default', { month: 'long' })
+    const year = date.getFullYear()
+
+    const daySuffix = this.getDaySuffix(day)
+
+    return `${day}${daySuffix} ${month} ${year}`
+  }
+
 
   get isOpen() {
     return this.job.state === JobState.acceptingOffers

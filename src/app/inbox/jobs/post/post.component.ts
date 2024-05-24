@@ -8,7 +8,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router'
 import { GitService } from '@service/git.service'
 import { DecoratedIssue } from '@class/git'
-
+import * as moment from 'moment'
 import {
   Job,
   JobDescription,
@@ -56,6 +56,7 @@ export class PostComponent implements OnInit, OnDestroy {
   recipientAddress = ''
   recipient: User = null
   currentUser: User
+  jobPoster: any
   slug = ''
   authSub: Subscription
   routeSub: Subscription
@@ -63,6 +64,7 @@ export class PostComponent implements OnInit, OnDestroy {
   currentDate: Date
   isShareable = false
   isSending = false
+  isPreview = false
   sent = false
   draft = false
   editing = false
@@ -73,8 +75,9 @@ export class PostComponent implements OnInit, OnDestroy {
   gitUpdatedTags: string[] = []
 
   jobToEdit: Job
+  jobForPreview: Job
   jobId: string
-
+  jobFromNow: string
   beforeuploadFiles: any[] = []
   currentUploadNumber: number = 0
   uploadedFiles: Upload[] = []
@@ -737,7 +740,6 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   getDate(date: Date): string {
-     
     // Create a Date object from milliseconds
     const year = date.getFullYear()
     const month = (date.getMonth() + 1).toString().padStart(2, '0') // Months are zero-based
@@ -746,9 +748,39 @@ export class PostComponent implements OnInit, OnDestroy {
     return `${year}-${month}-${day}`
   }
 
-  async submitShareableJob(isDraft: boolean) {
+  getDaySuffix(day: number): string {
+    if (day > 3 && day < 21) return 'th' // All days between 4 and 20 end with 'th'
+    switch (day % 10) {
+      case 1:
+        return 'st'
+      case 2:
+        return 'nd'
+      case 3:
+        return 'rd'
+      default:
+        return 'th'
+    }
+  }
+
+  formatDate(dateStr: string): string {
+    const date = new Date(dateStr)
+    const day = date.getDate()
+    const month = date.toLocaleString('default', { month: 'long' })
+    const year = date.getFullYear()
+
+    const daySuffix = this.getDaySuffix(day)
+
+    return `${day}${daySuffix} ${month} ${year}`
+  }
+
+  async submitShareableJob(isDRP: number) {
+    // isDRP , 0 => draft, , 1=> Preview, 2 => Post
     this.isSending = true
     this.error = false
+
+    this.shareableJobForm.controls.providerType.setValue(
+      this.selectedSortings_category.code
+    )
 
     try {
       let tags: string[]
@@ -762,14 +794,18 @@ export class PostComponent implements OnInit, OnDestroy {
         tags = tags.slice(0, 6)
       }
 
-      if (this.editing) {
-        this.jobId = this.jobToEdit.id
-        this.slug = this.jobToEdit.slug
-      } else {
-        this.slug = await this.publicJobService.generateReadableId(
-          this.shareableJobForm.value.title
-        )
+      if (isDRP !== 1) {
+        // Preview  is false
+        if (this.editing) {
+          this.jobId = this.jobToEdit.id
+          this.slug = this.jobToEdit.slug
+        } else {
+          this.slug = await this.publicJobService.generateReadableId(
+            this.shareableJobForm.value.title
+          )
+        }
       }
+
       const job = new Job({
         id: this.jobId,
         clientId: this.currentUser.address,
@@ -789,30 +825,45 @@ export class PostComponent implements OnInit, OnDestroy {
         paymentType: this.shareableJobForm.value.paymentType,
         budget: this.shareableJobForm.value.budget,
         deadline: this.getDate(this.shareableJobForm.value.deadline),
-        draft: isDraft,
+        draft: isDRP ? true : false,
       })
-      this.draft = isDraft
-      const action = new IJobAction(ActionType.createJob, UserType.client)
-      action.setPaymentProperties(
-        job.budget,
-        this.shareableJobForm.value.timelineExpectation,
-        this.shareableJobForm.value.workType,
-        this.shareableJobForm.value.weeklyCommitment,
-        this.shareableJobForm.value.paymentType
-      )
-      if (!isDraft) {
+      this.draft = isDRP ? true : false
+
+      if (isDRP > 0) {
         job.state = JobState.acceptingOffers
       } else {
         job.state = JobState.draft
       }
+      if (isDRP == 1) {
+        this.jobFromNow = 'Posted 1 minutes ago'
+      } else {
+        this.isPreview = false
+      }
 
-      this.sent = await this.publicJobService.handlePublicJob(job, action)
+      if (isDRP !== 1) {
+        const action = new IJobAction(ActionType.createJob, UserType.client)
+        action.setPaymentProperties(
+          job.budget,
+          this.shareableJobForm.value.timelineExpectation,
+          this.shareableJobForm.value.workType,
+          this.shareableJobForm.value.weeklyCommitment,
+          this.shareableJobForm.value.paymentType
+        )
+        this.sent = await this.publicJobService.handlePublicJob(job, action)
+      } else {
+        this.jobForPreview = job
+        this.isPreview = true
+      }
       this.isSending = false
     } catch (e) {
       this.sent = false
       this.isSending = false
       this.error = true
     }
+  }
+
+  BacktoEdit() {
+    this.isPreview = false
   }
 
   async updateJob() {

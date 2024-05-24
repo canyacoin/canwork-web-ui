@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter,SimpleChanges } from '@angular/core'
 
 interface PageEvent {
   first: number
@@ -45,6 +45,12 @@ export class ResultComponent implements OnInit {
     this.rows = e.rows // this is injected from parent
     this.pageChange.emit(e.page) // notify parent and algolia handler
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+     console.log("this.selectedSorting", this.selectedSorting);
+     
+  }
+
   ngOnInit() {
     this.sortingMethods = [
       { name: 'Newest', code: 'newest' },
