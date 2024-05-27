@@ -472,9 +472,9 @@
       id="shareable-job"
       *ngIf="!recipient && pageLoaded && isShareable && !isPreview"
     >
-      <div *ngIf="!sent" class="section bg-grey pt-15 pb-30">
-        <div class="max-w-[1008px] p-[40px] m-auto bg-white brad-5px">
-          <header class="text-left text-G900 text-h5 font-[500] my-0 px-[40px]">
+      <div *ngIf="!sent" class="section bg-grey py-[30px]">
+        <div class="max-w-[1008px] p-[40px] m-auto bg-white rounded-xl">
+          <header class="text-left text-G900 text-h5 font-[500] my-0">
             <h2 *ngIf="!editing">Create a Job Post</h2>
             <h2 *ngIf="editing">Edit a Job Post</h2>
           </header>
@@ -1144,7 +1144,7 @@
       </div>
 
       <div *ngIf="sent">
-        <div class="max-w-[1008px] p-[40px] m-auto card">
+        <div class="max-w-[1008px] p-[40px] m-auto card rounded-xl">
           <div class="text-center mt-30">
             <img
               src="assets/img/CanYa_tick_green.svg"
@@ -1199,7 +1199,7 @@
 
     <div
       *ngIf="isPreview"
-      class="flex flex-col md:flex-row md:justify-center gap-2 md:gap-6 pt-[56px] max-w-[1008px] p-[40px] m-auto"
+      class="flex flex-col md:flex-row md:justify-center gap-2 md:gap-6  max-w-[1008px] p-[20px] md:p-[40px] m-auto rounded-xl"
     >
       <div
         *ngIf="jobForPreview"
