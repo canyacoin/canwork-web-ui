@@ -1,6 +1,7 @@
-<div [formGroup]="form">
-  <label class="!text-b1 font-sans"><input type="checkbox" formControlName="terms" /> I hereby accept the
-    CanWork
+<div [formGroup]="form" class="flex items-center">
+  <p-checkbox formControlName="terms" value="true"> </p-checkbox>
+  <label class="!text-b1 font-sans leading-6 !m-0">
+    I hereby accept the CanWork
     <a
       href="assets/docs/canwork-terms-and-conditions.pdf"
       download="CanWork terms and conditions"

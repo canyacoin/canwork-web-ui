@@ -26,7 +26,7 @@ export class SkillTagsSelectionComponent implements OnInit {
   @Output() tagsUpdated: EventEmitter<string> = new EventEmitter()
   @Output() tagsLoaded: EventEmitter<string[]> = new EventEmitter()
 
-  popularskillTags: string[] =[]
+  popularskillTags: string[] = []
   ngOnChanges(changes: SimpleChanges) {
     if (!!changes.updatedTags) {
       this.acceptedTags =
@@ -38,7 +38,7 @@ export class SkillTagsSelectionComponent implements OnInit {
   }
 
   skillTagsList: string[] = []
-  tagSelectionInvalid = false
+  tagSelectionInvalid: number // 0 =-= validation, 1 = validation error with length 20, 2 = validation error with input, 3 = when duplicate
   noValidTag = false
   acceptedTags: string[] = []
   tagInput = ''
@@ -47,7 +47,12 @@ export class SkillTagsSelectionComponent implements OnInit {
 
   ngOnInit() {
     this.popularskillTags = [
-      'UI/UX','Website','Web Dev','Shopify', 'html', 'css'
+      'UI/UX',
+      'Website',
+      'Web Dev',
+      'Shopify',
+      'html',
+      'css',
     ]
     this.afs
       .collection<SkillTag>('skill-tags')
@@ -68,29 +73,39 @@ export class SkillTagsSelectionComponent implements OnInit {
     this.noValidTag = false
   }
 
-  onTagEnter() {
+  onTagEnter(inputtag?: string) {
     this.noValidTag = false
-    let tag = this.tagInput
+    let tag
+
+    if (inputtag) {
+      // click on popular tags
+      tag = inputtag
+    } else {
+      tag = this.tagInput
+    }
+
     tag = tag.replace(',', '').trim()
     if (tag === '') {
-      this.tagSelectionInvalid = true
+      this.tagSelectionInvalid = 2
       return false
     }
     const duplicate = this.acceptedTags.findIndex((x) => x === tag) > -1
     if (
-      this.acceptedTags.length <= 5 &&
+      // this.acceptedTags.length <= 5 &&
       !duplicate &&
-      tag.length >= 2 &&
-      tag.length <= 14
+      // tag.length >= 2 &&
+      tag.length <= 20
     ) {
       this.acceptedTags.push(tag)
       this.tagsUpdated.emit(this.acceptedTags.join(','))
     } else {
-      this.tagSelectionInvalid = true
+      if (duplicate) {
+        this.tagSelectionInvalid = 3
+      } else this.tagSelectionInvalid = 1
       return false
     }
     this.tagInput = ''
-    this.tagSelectionInvalid = false
+    this.tagSelectionInvalid = 0
     this.onDropDownTT()
   }
 
@@ -109,7 +124,7 @@ export class SkillTagsSelectionComponent implements OnInit {
         this.tagInput = ''
       }
     }
-    this.tagSelectionInvalid = false
+    this.tagSelectionInvalid = 0
   }
 
   removeTag(tag: string) {

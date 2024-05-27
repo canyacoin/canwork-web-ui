@@ -54,6 +54,8 @@ import { AvatarModule } from 'primeng/avatar'
 import { BadgeModule } from 'primeng/badge'
 import { JobCardComponent } from './cards/job-card/job-card.component'
 import { SearchButtonComponent } from './buttons/search-button/search-button.component'
+import { CheckboxModule } from 'primeng/checkbox';
+
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -78,6 +80,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ToastModule,
     AvatarModule,
     BadgeModule,
+    CheckboxModule
   ],
   declarations: [
     AttachmentComponent,

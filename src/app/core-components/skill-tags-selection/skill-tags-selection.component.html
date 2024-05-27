@@ -39,16 +39,28 @@
 <div class="flex items-center my-[8px] gap-1 flex-wrap">
   <p>Popular skill tags:</p>
   <ng-container *ngFor="let item of popularskillTags">
-    <div class="py-[6px] px-[16px] border border-G200 bg-G0 rounded-2xl text-b2">
+    <div class="py-[6px] px-[16px] border border-G200 bg-G0 rounded-2xl text-b2 select-none cursor-pointer" (click)="onTagEnter(item)">
       {{item}}
     </div>
   </ng-container>
 </div>
 
-<div class="flex justify-start items-center text-[#D1242F] text-b2 font-sans" *ngIf="tagSelectionInvalid">
-  <img src="/assets/massimo/svg/fi_alert-triangle.svg" alt="">
+<div class="flex justify-start items-center text-[#D1242F] text-b2 font-sans gap-2" *ngIf="tagSelectionInvalid == 1">
+  <img src="/assets/massimo/svg/fi_alert-triangle.svg" alt="fi_alert-triangle">
   You can only add 20 skill tags
 </div>
+
+<div class="flex justify-start items-center text-[#D1242F] text-b2 font-sans gap-2" *ngIf="tagSelectionInvalid == 2">
+  <img src="/assets/massimo/svg/fi_alert-triangle.svg" alt="fi_alert-triangle">
+  Please input tag selection
+</div>
+
+
+<div class="flex justify-start items-center text-[#D1242F] text-b2 font-sans gap-2" *ngIf="tagSelectionInvalid == 3">
+  <img src="/assets/massimo/svg/fi_alert-triangle.svg" alt="fi_alert-triangle">
+  You already added this skill.
+</div>
+
 
 <datalist id="tagsList">
   <option *ngFor="let tag of skillTagsList" value="{{ tag }}"></option>

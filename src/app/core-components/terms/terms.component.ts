@@ -8,6 +8,5 @@ import { UntypedFormGroup } from '@angular/forms'
 })
 export class TermsComponent {
   @Input() form: UntypedFormGroup
-
   constructor() {}
 }
