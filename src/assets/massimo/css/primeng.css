@@ -149,6 +149,9 @@
     border-radius: 4px;
     border: 1px solid #CBD5E1;
     margin: 0 8px;
+    width: 32px;
+    height: 32px;
+    min-width: 32px !important;
 }
 
 .p-paginator .p-paginator-pages .p-paginator-page {
@@ -166,6 +169,13 @@
     display: none;
 }
 
+.p-paginator {
+    background-color: transparent !important;
+  }
+
+  .p-paginator .p-paginator-pages .p-paginator-page {
+    min-width: 32px !important;
+  }
 /* p-checkbox */
 
 .p-checkbox {
@@ -379,5 +389,3 @@
   #job-creation-form ::-webkit-scrollbar-thumb:hover {
     background: #94A3B8 !important;
   }
-
-  
