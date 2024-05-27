@@ -123,6 +123,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       })
 
     // retrieve and aggregate job stats
+
+    this.sortby = { name: 'Newest', code: 'newest' }
+
     let jobStats, publicJobStats: any
     this.statisticsService.getStatistics().subscribe((result) => {
       result.forEach((obj) => {
@@ -312,8 +315,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // Set the search items with last time we checked
     this.onChangeSearchItemskill(skillInput)
     this.skillsFilter = skillInput
-    console.log(this.hits)
-
     this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
     this.refreshResultsSearch()
   }
@@ -405,29 +406,38 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // get Fixed Scope and ID from...
   getScopeById(id: number): string | undefined {
     const scopeItem = FilterService.fixedscope.find((item) => item.id === id)
-    return scopeItem ? scopeItem.scope : 'Fixed'
+    return scopeItem !== undefined ? scopeItem.scope : 'Fixed'
   }
   getIdByScope(scope: string): number | undefined {
     const scopeItem = FilterService.fixedscope.find(
       (item) => item.scope === scope
     )
-    return scopeItem ? scopeItem.id : -1
+    return scopeItem !== undefined ? scopeItem.id : -1
   }
 
   // Search Item above jobs card
 
   onChangeSearchItemFixed(item: any[]) {
     let uniqueFixed
+    if (item.includes(-1) && !this.searchitems.includes('Fixed')) {
+      this.searchitems.push('Fixed')
+    }
+
     if (this.fixedFilter.length < item.length)
       this.searchitems.push(this.getScopeById(item.slice(-1)[0]))
     else {
       uniqueFixed = this.fixedFilter.filter(
-        (fixed) => !item.includes(this.getScopeById(fixed))
+        (fixed) => !item.includes(fixed)
       )
       this.searchitems.splice(
         this.searchitems.indexOf(this.getScopeById(uniqueFixed[0])),
         1
       )
+    }
+    if(item.length == 0) {
+      FilterService.fixedscope.map((item) => {
+        this.searchitems = this.searchitems.splice(this.searchitems.indexOf(item.scope), 1)
+      })
     }
   }
 
@@ -456,11 +466,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.searchitems.splice(this.searchitems.indexOf(removeItem), 1)
 
     this.skillsFilter.splice(this.skillsFilter.indexOf(removeItem), 1)
-    this.hourlyFilter = []
-    this.fixedFilter.splice(
-      this.fixedFilter.indexOf(this.getIdByScope(removeItem)),
-      1
-    )
+    if (removeItem == 'hourly') {
+      this.hourlyFilter = []
+    }
+    console.log("removeItem", removeItem);
+    
+    if (removeItem == 'Fixed') {
+      this.fixedFilter = []
+      FilterService.fixedscope.map((item) => {
+        this.searchitems = this.searchitems.splice(this.searchitems.indexOf(item.scope), 1)
+      })
+    } else {
+      this.fixedFilter.splice(
+        this.fixedFilter.indexOf(this.getIdByScope(removeItem)),
+        1
+      )
+    }
 
     this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
     this.refreshResultsSearch()

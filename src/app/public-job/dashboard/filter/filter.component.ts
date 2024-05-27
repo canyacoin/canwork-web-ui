@@ -1,10 +1,10 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core'
+import { Component, OnInit, Input, EventEmitter, Output,SimpleChanges, OnChanges } from '@angular/core'
 import { FilterService } from 'app/shared/constants/public-job-dashboard-page'
 @Component({
   selector: 'dashboard-filter',
   templateUrl: './filter.component.html',
 })
-export class FilterComponent implements OnInit {
+export class FilterComponent implements OnInit, OnChanges {
   filterSection = FilterService
   @Input() verifyForm: string[] = []
   @Output() verifyFormChange = new EventEmitter<string[]>() // two way binding to parent
@@ -27,8 +27,8 @@ export class FilterComponent implements OnInit {
   @Input() hourlyInput: number[] = []
   @Output() hourlyInputChange = new EventEmitter<number[]>() // two way binding to parent
 
-  hourly: boolean = false
-  hourlymin_max: boolean = false
+  hourly: boolean[] = [false]
+  hourlymin_max: boolean[] = [false]
   min: number // minimum
   max: number // maximum
 
@@ -36,7 +36,33 @@ export class FilterComponent implements OnInit {
   ngOnInit() {
     this.tempSkillsForm = this.filterSection.skills.slice(0, this.skillsLength)
   }
+  ngOnChanges(changes: SimpleChanges) {
+    // check Hourly
+    console.log(changes);
+    
+    try {
+      if(changes.hourlyInput.currentValue.length == 0) {
+        this.hourly = [false]
+        this.hourlymin_max = [false]
+        this.min = 0
+        this.max = 0
+      }
+    } catch (error) {
+      
+    }
 
+
+    // check Flag 
+    try {
+      if(changes.fixedForm.currentValue.length == 0) {
+        this.fixedflag = [false]
+      }
+    } catch (error) {
+      
+    }
+
+
+  }
   getNumberAllFilters(): number {
     return (
       this.verifyForm.length +
@@ -96,36 +122,34 @@ export class FilterComponent implements OnInit {
 
   fixedClick(e) {
     if (!this.fixedForm.includes(-1)) {
-      this.fixedForm.push(-1)
+      this.fixedForm.unshift(-1)
       if (!this.fixedflag.includes(true)) {
-        this.fixedflag.push(true)
+        this.fixedflag = [true]
       }
-    } else if (this.fixedflag.length == 1 && this.fixedForm.includes(-1)) {
+    } else if ((this.fixedflag.length == 0 || !this.fixedflag.includes(true))&& this.fixedForm.includes(-1)) {
       this.PriceClear()
     }
+    console.log("----", this.fixedForm);
+
     this.fixedFormChange.emit(this.fixedForm)
   }
 
   hourlyTopClick(e) {
-    console.log(this.hourly);
-    
-    if (this.hourly) {
+    if (this.hourly.length == 2) {
       this.hourlyInput = [0, 300]
     } else {
       this.min = undefined
       this.max = undefined
       this.hourlyInput = []
-      this.hourlymin_max = false
+      this.hourlymin_max = [false]
     }
 
     this.hourlyInputChange.emit(this.hourlyInput)
   }
 
   hourlyBottomClick(e) {
-    console.log(this.hourlymin_max);
-
-    if (this.hourlymin_max) {
-      this.hourly = true
+    if (this.hourlymin_max.length == 2) {
+      this.hourly = [true]
       this.hourlyInput = [Number(this.min), Number(this.max)]
     } else {
       this.min = undefined
@@ -134,20 +158,13 @@ export class FilterComponent implements OnInit {
     }
     this.hourlyInputChange.emit(this.hourlyInput)
   }
-  onSearchInputChange(type: number, value: number) {
-    if (type == 1) {
-      this.min = value
-    } else {
-      this.max = value
-    }
-    this.hourly = true
-    this.hourlymin_max = true
+  onSearchInputChange() {
+   
+    this.hourly = [true]
+    this.hourlymin_max = [true]
     this.hourlyInput = [Number(this.min), Number(this.max)]
 
     this.hourlyInputChange.emit(this.hourlyInput) // notify parent and algolia handler
-  }
-  checkedItemHourly(type: number) {
-    // 
   }
 
   experienceClick(e) {

@@ -145,7 +145,7 @@
               label="Hourly"
               name="Hourly"
               [value]="true"
-              [trueValue]="checkedItemHourly(1)"
+              [(ngModel)]="hourly"
               (onChange)="hourlyTopClick($event)"
             ></p-checkbox>
           </div>
@@ -155,7 +155,6 @@
                 name="hourlymin_max"
                 [value]="true"
                 [(ngModel)]="hourlymin_max"
-                [trueValue]="checkedItemHourly(2)"
                 (onChange)="hourlyBottomClick($event)"
               ></p-checkbox>
               <div class="flex gap-2">
@@ -163,7 +162,7 @@
                   type="number"
                   pInputText
                   [(ngModel)]="min"
-                  (input)="onSearchInputChange(1, $event.target.value)"
+                  (input)="onSearchInputChange()"
                   placeholder="$Min/hr"
                   class="!shadow-none bg-transparent border rounded-[8px] w-[96px] py-[6px] pl-[16px]"
                 />
@@ -171,7 +170,7 @@
                   type="number"
                   pInputText
                   [(ngModel)]="max"
-                  (input)="onSearchInputChange(2, $event.target.value)"
+                  (input)="onSearchInputChange()"
                   placeholder="$Max/hr"
                   class="!shadow-none bg-transparent border rounded-[8px] w-[96px] py-[6px] pl-[16px]"
                 />
