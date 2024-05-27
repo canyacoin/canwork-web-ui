@@ -85,6 +85,20 @@
     color: #1E293B;
 }
 
+
+#job-search-filter input::-webkit-outer-spin-button,
+#job-search-filter input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */ 
+
+#job-search-filter input[type=number] {
+  -moz-appearance: textfield !important;
+}
+
+
 /* same effect for faq-parent & faq-children   when the highlight, change the font-weight */
 
 .faq-parent .p-accordion-header .p-accordion-header-link {
@@ -158,12 +172,13 @@
     width: 16px;
     height: 16px;
     margin-right: 16px;
+
 }
 
 .p-checkbox-box {
     width: 100%;
     border-radius: 3px;
-    border: 2px solid #64748B;
+    border: 1px solid #64748B;
     background-color: unset;
     height: 100%;
 }

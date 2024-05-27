@@ -271,9 +271,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     } else if (this.sortby.code === 'budgetdown') {
       this.filteredProviders.sort((a, b) => b.budget - a.budget)
     } else if (this.sortby.code === 'newest') {
-      this.filteredProviders.sort(
-        (a, b) =>
-          new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+      this.filteredProviders = this.filteredProviders.sort(
+        (a, b) => {
+          return new Date(b.createAt).getTime() - new Date(a.createAt).getTime()
+        }
+          
       )
     }
   }

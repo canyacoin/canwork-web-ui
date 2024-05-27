@@ -29,8 +29,8 @@ export class FilterComponent implements OnInit, OnChanges {
 
   hourly: boolean[] = [false]
   hourlymin_max: boolean[] = [false]
-  min: number // minimum
-  max: number // maximum
+  min: number = undefined // minimum
+  max: number  = undefined// maximum
 
   fixedflag: boolean[] = [false]
   ngOnInit() {
@@ -38,14 +38,12 @@ export class FilterComponent implements OnInit, OnChanges {
   }
   ngOnChanges(changes: SimpleChanges) {
     // check Hourly
-    console.log(changes);
-    
     try {
       if(changes.hourlyInput.currentValue.length == 0) {
         this.hourly = [false]
         this.hourlymin_max = [false]
-        this.min = 0
-        this.max = 0
+        this.min = undefined
+        this.max = undefined
       }
     } catch (error) {
       
@@ -129,8 +127,6 @@ export class FilterComponent implements OnInit, OnChanges {
     } else if ((this.fixedflag.length == 0 || !this.fixedflag.includes(true))&& this.fixedForm.includes(-1)) {
       this.PriceClear()
     }
-    console.log("----", this.fixedForm);
-
     this.fixedFormChange.emit(this.fixedForm)
   }
 
@@ -171,7 +167,7 @@ export class FilterComponent implements OnInit, OnChanges {
     this.experienceFormChange.emit(this.experienceForm)
   }
   ratingClick(item) {
-    if (this.ratingForm.length > 0) this.ratingForm = [item]
+    // if (this.ratingForm.length > 0) this.ratingForm = [item]
     /*
     force only max one rating at time for now, due to algolia limitations:
     
@@ -194,6 +190,8 @@ export class FilterComponent implements OnInit, OnChanges {
   PriceClear() {
     this.fixedForm = []
     this.fixedFormChange.emit([])
+    this.hourly = []
+    this.hourlyInputChange.emit([])  
   }
 
   experienceClear() {

@@ -2,19 +2,19 @@
   <div
     class="flex max-md:flex-col max-md:items-start justify-between items-center gap-2"
   >
-    <div
+    <p
       *ngIf="searchParam"
-      class="text-center text-h6 leading-5 text-G700 font-medium"
+      class="text-left text-h6 leading-5 text-G700 font-medium line-clamp-1 pr-[20px]"
     >
       {{ totalRecords }} Results for {{ searchParam }}
-    </div>
+    </p>
     <div *ngIf="!searchParam" class="flex items-center gap-2 text-G900 text-b1">
       <div class="whitespace-nowrap">{{ stats.count }} Jobs Completed</div>
       <div class="min-w-[8px] min-h-[8px] bg-G900 rounded-full"></div>
       <div class="whitespace-nowrap">${{ stats.usd }} USD Payment</div>
     </div>
     <div class="flex items-center gap-5 text-G900 text-b1">
-      <div class="font-sans font-[500] text-b2">Sort by</div>
+      <div class="font-sans font-[500] text-b2 whitespace-nowrap">Sort by</div>
       <p-dropdown
         [options]="sortingMethods"
         [(ngModel)]="selectedSorting"
@@ -51,7 +51,7 @@
       ></ng-container>
 
       <ng-template #emptyView>
-        <div class="w-full flex flex-col items-center gap-6">
+        <div class="w-full flex flex-col items-center gap-6 lg:pt-[24px]">
           <img
             src="/assets/massimo/images/noJobResult.png"
             alt="No Results Found"
