@@ -71,7 +71,8 @@ export class FilterComponent implements OnInit, OnChanges {
       this.skillsForm.length +
       this.ratingForm.length +
       this.experienceForm.length +
-      this.fixedForm.length
+      this.fixedForm.length +
+      this.categoriesForm.length
     )
   }
 
@@ -81,6 +82,7 @@ export class FilterComponent implements OnInit, OnChanges {
     this.ratingForm = []
     this.experienceForm = []
     this.hourlyInput = []
+    this.categoriesForm = []
 
     this.verifyFormChange.emit(this.verifyForm)
     this.skillsFormChange.emit(this.skillsForm)
@@ -88,6 +90,7 @@ export class FilterComponent implements OnInit, OnChanges {
     this.experienceFormChange.emit(this.experienceForm)
     this.fixedFormChange.emit(this.fixedForm)
     this.hourlyInputChange.emit(this.hourlyInput)
+    this.categoriesFormChange.emit(this.categoriesForm)
   }
   verifyClear() {
     this.verifyForm = []

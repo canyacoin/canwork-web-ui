@@ -83,7 +83,7 @@
           [budget]="item.budget"
           [deadline]="item.deadline"
           [createAt]="item.createAt"
-          [routerLink]="['/jobs/public/', item.slug]"
+          [slug] = "item.slug"
         />
       </ng-container>
     </ng-template>

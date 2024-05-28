@@ -21,6 +21,12 @@ import { take } from 'rxjs/operators'
 import { environment } from '@env/environment'
 declare var $: any
 
+interface sharelinkstype {
+  name: string
+  img: string
+  code: string
+}
+
 @Component({
   selector: 'app-public-job',
   templateUrl: './public-job.component.html',
@@ -49,6 +55,9 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   jobPoster: any = null
   jobFromNow: string = ''
 
+  sharelinks: sharelinkstype[] | undefined
+  selectedsharelinks: sharelinkstype | undefined
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
@@ -75,6 +84,18 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.sharelinks = [
+      { name: 'Invite Freelancer', img: 'fi_user-plus.svg', code: '1' },
+      { name: 'Copy Link', img: 'u_link.svg', code: '2' },
+      { name: 'Twitter', img: 'x.svg', code: '3' },
+      { name: 'Facebook', img: 'logos_facebook.svg', code: '4' },
+      { name: 'Linkedin', img: 'devicon_linkedin.svg', code: '5' },
+    ]
+
+    this.selectedsharelinks = this.sharelinks[0]
+
+    console.log("teste");
+    
     this.shareableLink = environment.shareBaseUrl
     this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
       if (params['jobId']) {
@@ -230,7 +251,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
         return 'th'
     }
   }
-  
+
   formatDate(dateStr: string): string {
     const date = new Date(dateStr)
     const day = date.getDate()
@@ -241,7 +262,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
     return `${day}${daySuffix} ${month} ${year}`
   }
-
 
   get isOpen() {
     return this.job.state === JobState.acceptingOffers

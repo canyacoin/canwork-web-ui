@@ -46,7 +46,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup'
 import { ToastModule } from 'primeng/toast'
 
 import { NgxModalView } from 'ngx-modalview'
-
+import { DropdownModule } from 'primeng/dropdown';
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
@@ -86,6 +86,7 @@ import { NgxModalView } from 'ngx-modalview'
     ToastModule,
     ConfirmPopupModule,
     NgxModalView,
+    DropdownModule
   ],
   exports: [
     /*FilterPipeModule*/

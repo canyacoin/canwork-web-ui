@@ -1,16 +1,19 @@
 <div
   class="w-full rounded-[12px] overflow-hidden bg-white p-[32px] grid gap-4 border border-G200 hover:bg-G100 active:bg-G200 cursor-pointer"
+  (click)="movetojobdetail()"
 >
   <div class="flex justify-between gap-5">
     <div class="w-full flex gap-6 items-center">
       <img src="{{ getImage(projectType) }}" class="w-[48px] h-[48px]" />
       <div class="grid gap-1">
         <div class="text-G900 text-h6 font-medium">{{ title }}</div>
-        <div class="text-G500 text-b2">Posted {{ timeAgo(createAt)}}</div>
+        <div class="text-G500 text-b2">Posted {{ timeAgo(createAt) }}</div>
       </div>
     </div>
     <div
-      class="border rounded-md border-G300 w-[32px] h-[32px] flex items-center justify-center bg-white cursor-pointer hover:bg-G100 transition-all duration-150"
+      class="border rounded-md border-G300 w-[32px] h-[32px] flex items-center justify-center cursor-pointer transition-all duration-150"
+      [ngClass]="{ 'bg-white hover:bg-G100': !favourite, 'bg-start-g1 hover:bg-start-g8': favourite}"
+      (click)="Makefavorite($event)"
     >
       <img src="/assets/massimo/svg/bookmark.svg" class="select-none" />
     </div>
@@ -72,7 +75,9 @@
     <div class="flex gap-2 items-center">
       <img src="/assets/massimo/svg/jobDeadline.svg" class="select-none" />
       <div class="text-G500 text-b2">Project Deadline</div>
-      <div class="text-G700 text-b1 font-medium">{{ formatDate(deadline) }}</div>
+      <div class="text-G700 text-b1 font-medium">
+        {{ formatDate(deadline) }}
+      </div>
     </div>
     <div class="flex gap-2 items-center">
       <img src="/assets/massimo/svg/jobProposals.svg" class="select-none" />

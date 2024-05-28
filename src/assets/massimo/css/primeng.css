@@ -223,7 +223,6 @@
 /* p-dropdown */
 .p-dropdown {
     font-family: "General Sans", sans-serif;
-    width: 141px !important;
     color: #0F172A !important;
     font-size: 14px !important;
     font-weight: 500 !important;
@@ -235,6 +234,24 @@
     background: #FFF;
     box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.10), 0px 2px 2px -1px rgba(0, 0, 0, 0.10), 0px 4px 10px -2px rgba(0, 0, 0, 0.05) !important;
 }
+
+.detail-job .p-dropdown {
+    font-family: "General Sans", sans-serif;
+    width: 33px !important;
+    color: #0F172A !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    outline: none !important;
+    border-radius: 8px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: #FFF;
+    box-shadow: none !important;
+}
+.detail-job .p-dropdown .p-dropdown-trigger {
+    display: none !important;
+}
+
 .p-dropdown .p-dropdown-label {
     color: #0F172A !important;
 }

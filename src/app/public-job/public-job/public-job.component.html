@@ -112,7 +112,7 @@
 
           <div class="flex justify-start pt-[48px]">
             <div
-              class="group flex justify-center items-center text-b1 text-G900 leading-6 font-medium cursor-pointer p-[6px]  rounded-md "
+              class="group flex justify-center items-center text-b1 text-G900 leading-6 font-medium cursor-pointer p-[6px] rounded-md"
               [routerLink]="['/jobs']"
             >
               <img
@@ -141,7 +141,8 @@
             </span>
 
             <span *ngIf="job.draft">
-              <i class="circle-danger fas fa-circle mr-[12px]"></i>Draft
+              <i class="circle-danger fas fa-circle mr-[12px]"></i>
+              Draft
             </span>
 
             <a
@@ -153,14 +154,37 @@
             >
               <i class="fas fa-share-alt"></i>
             </a>
-            <div
-              class="border border-G300 shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer w-[32px] h-[32px] rounded-lg p-[6px]"
-            >
-              <img
-                src="/assets/massimo/svg/fi_share-2.svg"
-                alt=""
-                class="w-full h-full"
-              />
+
+            <div class="detail-job">
+              <p-dropdown
+                [options]="sharelinks"
+                [(ngModel)]="selectedsharelinks"
+                optionLabel="name"
+                appendTo="body"
+              >
+                <ng-template pTemplate="selectedItem">
+                  <div
+                    *ngIf="selectedsharelinks"
+                    class="border border-G300 shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer w-[32px] h-[32px] rounded-lg p-[6px]"
+                  >
+                    <img
+                      src="/assets/massimo/svg/fi_share-2.svg"
+                      alt=""
+                      class="w-full h-full"
+                    />
+                  </div>
+                </ng-template>
+                <ng-template let-item pTemplate="item">
+                  <div class="flex align-items-center">
+                    <img
+                      src="{{ '/assets/massimo/svg/' + item.img }}"
+                      style="width: 20px"
+                      class="mr-[16px]"
+                    />
+                    <span>{{ item.name }}</span>
+                  </div>
+                </ng-template>
+              </p-dropdown>
             </div>
           </div>
           <table
@@ -193,9 +217,9 @@
             </tr>
             <tr>
               <td class="text-G700">Category</td>
-             <td class="text-G900 text-right font-medium">
-              {{ job.information.providerType }}
-            </td>
+              <td class="text-G900 text-right font-medium">
+                {{ job.information.providerType }}
+              </td>
             </tr>
           </table>
           <hr class="h-[1.5px] my-[20px] bg-gray-200 border-0" />
