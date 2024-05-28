@@ -145,7 +145,7 @@
               Draft
             </span>
 
-            <a
+            <!-- <a
               data-toggle="modal"
               data-target="#shareModal"
               *ngIf="!job.draft"
@@ -153,9 +153,9 @@
               class="float-right hover:cursor-pointer"
             >
               <i class="fas fa-share-alt"></i>
-            </a>
+            </a> -->
 
-            <div class="detail-job">
+            <div class="detail-job" *ngIf="!job.draft">
               <p-dropdown
                 [options]="sharelinks"
                 [(ngModel)]="selectedsharelinks"

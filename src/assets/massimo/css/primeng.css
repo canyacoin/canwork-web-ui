@@ -252,6 +252,9 @@
     display: none !important;
 }
 
+.detail-job .p-dropdown-items-wrapper {
+    margin-top: 10px;
+}
 .p-dropdown .p-dropdown-label {
     color: #0F172A !important;
 }

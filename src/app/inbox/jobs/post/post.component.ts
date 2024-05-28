@@ -378,8 +378,11 @@ export class PostComponent implements OnInit, OnDestroy {
                 this.shareableJobForm.controls['skills'].patchValue(
                   this.jobToEdit.information.skills
                 )
-                if (this.jobToEdit.information.attachments.length > 0)
+                if (this.jobToEdit.information.attachments.length > 0) {
                   this.uploadedFiles = this.jobToEdit.information.attachments
+                  this.beforeuploadFiles =
+                    this.jobToEdit.information.attachments
+                }
                 this.pageLoaded = true
               } else {
                 this.router.navigateByUrl('/not-found')
