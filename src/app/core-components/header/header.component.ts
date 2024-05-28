@@ -23,7 +23,7 @@ import { MessageService, MenuItem } from 'primeng/api'
         style({
           transform: 'rotate(45deg)',
           transformOrigin: 'left',
-          margin: '12px',
+          margin: '9px',
         })
       ),
       state(
@@ -37,7 +37,7 @@ import { MessageService, MenuItem } from 'primeng/api'
         style({
           transform: 'rotate(-45deg)',
           transformOrigin: 'left',
-          margin: '12px',
+          margin: '10px',
         })
       ),
       state(
@@ -56,7 +56,7 @@ import { MessageService, MenuItem } from 'primeng/api'
 export class HeaderComponent implements OnInit, OnDestroy {
   headerSection = HeaderService
   // flag be consumed by the template
-  isHamburguer = true
+  isHamburguer = false
   items: MenuItem[] | undefined
   onHamburguerClick() {
     this.isHamburguer = !this.isHamburguer
@@ -91,6 +91,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         const currentRoute = event.url
+        
         if (
           currentRoute.includes('/inbox') ||
           currentRoute.includes('/profile') ||
