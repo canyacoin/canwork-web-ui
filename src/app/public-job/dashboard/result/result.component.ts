@@ -50,7 +50,7 @@ export class ResultComponent implements OnInit {
     
     this.sortingMethods = [
       { name: 'Newest', code: 'newest' },
-      { name: 'Relevance', code: 'relevance' },
+      // { name: 'Relevance', code: 'relevance' },
       { name: 'Budget Up', code: 'budgetup' },
       { name: 'Budget Down', code: 'budgetdown' },
     ]

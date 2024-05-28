@@ -7,11 +7,7 @@
     }"
   >
     <div class="max-w-[1440px] w-full flex justify-between items-center">
-      <div
-        class="cursor-pointer"
-        [routerLink]="['/home']"
-        
-      >
+      <div class="cursor-pointer" [routerLink]="['/home']">
         <img
           src="{{
             isScrolled || isTransfer
@@ -19,13 +15,17 @@
               : headerSection.logoSrc
           }}"
           [ngClass]="{
-            'hidden': !isScrolled 
+            hidden: !isScrolled
           }"
           class="w-[140px] h-[40px] select-none"
         />
       </div>
       <div class="hidden lg:flex items-center gap-10">
-        <div *ngFor="let item of headerSection.website" [routerLink]="item.url" (click)="onHamburguerClick()">
+        <div
+          *ngFor="let item of headerSection.website"
+          [routerLink]="item.url"
+          (click)="onHamburguerClick()"
+        >
           <link-button
             *ngIf="item.title !== 'Inbox'; else showinbox"
             [type]="isScrolled || isTransfer ? 2 : 1"
@@ -83,6 +83,7 @@
           class="hidden md:block w-max h-max"
           *ngIf="!currentUser"
           [routerLink]="['/auth']"
+          (click)="onHamburguerClick()"
         >
           <basic-button
             [type]="1"
@@ -90,7 +91,11 @@
             size="small"
           />
         </div>
-        <div class="hidden md:block w-max h-max" [routerLink]="['/inbox/post']">
+        <div
+          class="hidden md:block w-max h-max"
+          [routerLink]="['/inbox/post']"
+          (click)="onHamburguerClick()"
+        >
           <basic-button
             [type]="2"
             [title]="headerSection.buttonText3"
@@ -115,21 +120,24 @@
           <div
             class="w-[34px] h-[3px] rounded-full m-[5px] bg-black"
             [ngClass]="{
-              '!bg-white': (!isScrolled || !isTransfer) && isHamburguer
+              'bg-white': (!isScrolled || !isTransfer) && isHamburguer,
+              '!bg-black': isScrolled || isTransfer
             }"
             [@hamburguerX]="isHamburguer ? 'hamburguer' : 'topX'"
           ></div>
           <div
             class="w-[34px] h-[3px] rounded-full m-[5px] bg-black"
             [ngClass]="{
-              '!bg-white': (!isScrolled || !isTransfer) && isHamburguer
+              'bg-white': (!isScrolled || !isTransfer) && isHamburguer,
+              '!bg-black': isScrolled || isTransfer
             }"
             [@hamburguerX]="isHamburguer ? 'hamburguer' : 'hide'"
           ></div>
           <div
             class="w-[34px] h-[3px] rounded-full m-[5px] bg-black"
             [ngClass]="{
-              '!bg-white': (!isScrolled || !isTransfer) && isHamburguer
+              'bg-white': (!isScrolled || !isTransfer) && isHamburguer,
+              '!bg-black': isScrolled || isTransfer
             }"
             [@hamburguerX]="isHamburguer ? 'hamburguer' : 'bottomX'"
           ></div>
@@ -151,20 +159,38 @@
         class="w-[140px] h-[40px] select-none"
       />
       <div class="flex flex-col items-center gap-6">
-        <div *ngFor="let item of headerSection.website" [routerLink]="item.url" (click)="onHamburguerClick()">
+        <div
+          *ngFor="let item of headerSection.website"
+          [routerLink]="item.url"
+          (click)="onHamburguerClick()"
+        >
           <link-button [type]="2" [title]="item.title" />
         </div>
-        <div class="w-max h-max" *ngIf="!currentUser" [routerLink]="['/auth']" (click)="onHamburguerClick()">
+        <div
+          class="w-max h-max"
+          *ngIf="!currentUser"
+          [routerLink]="['/auth']"
+          (click)="onHamburguerClick()"
+        >
           <link-button [type]="2" [title]="headerSection.buttonText1" />
         </div>
-        <div class="h-max w-full" *ngIf="!currentUser" [routerLink]="['/auth']" (click)="onHamburguerClick()">
+        <div
+          class="h-max w-full"
+          *ngIf="!currentUser"
+          [routerLink]="['/auth']"
+          (click)="onHamburguerClick()"
+        >
           <basic-button
             [type]="1"
             [title]="headerSection.buttonText2"
             [extraClass]="'max-md:min-w-full text-center'"
           />
         </div>
-        <div class="h-max" [routerLink]="['/inbox/post']" (click)="onHamburguerClick()">
+        <div
+          class="h-max"
+          [routerLink]="['/inbox/post']"
+          (click)="onHamburguerClick()"
+        >
           <basic-button [type]="2" [title]="headerSection.buttonText3" />
         </div>
       </div>

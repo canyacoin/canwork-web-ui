@@ -56,7 +56,7 @@ import { MessageService, MenuItem } from 'primeng/api'
 export class HeaderComponent implements OnInit, OnDestroy {
   headerSection = HeaderService
   // flag be consumed by the template
-  isHamburguer = false
+  isHamburguer = true
   items: MenuItem[] | undefined
   onHamburguerClick() {
     this.isHamburguer = !this.isHamburguer

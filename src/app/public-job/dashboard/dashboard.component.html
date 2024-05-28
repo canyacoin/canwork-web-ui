@@ -23,6 +23,8 @@
           (fixedFormChange)="onFixedFormChange($event)"
           [hourlyInput]="hourlyFilter"
           (hourlyInputChange)="onHourlyInputChange($event)"
+          [categoriesForm] = "categoryFilter"
+          (categoriesFormChange) = "onCategoryFilterChange($event)"
         />
       </div>
       <div class="w-full">

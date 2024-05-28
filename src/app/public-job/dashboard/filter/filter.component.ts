@@ -15,6 +15,10 @@ export class FilterComponent implements OnInit, OnChanges {
   tempSkillsForm: string[] = []
   skillsLength: number = 9 // how many skills to show at start
 
+  // categories
+  @Input() categoriesForm: any[] = []
+  @Output() categoriesFormChange = new EventEmitter<any[]>() // two way binding to parent
+
   @Input() ratingForm: number[] = []
   @Output() ratingChange = new EventEmitter<number[]>() // two way binding to parent
 
@@ -101,6 +105,14 @@ export class FilterComponent implements OnInit, OnChanges {
       return false
     }
   }
+
+  checkedItemCategory(value: any) {
+    if (this.categoriesForm.includes(value)) {
+      return true
+    } else {
+      return false
+    }
+  }
   checkedItemFixed(value: number) {
     if (this.fixedForm.includes(value)) {
       return true
@@ -117,6 +129,11 @@ export class FilterComponent implements OnInit, OnChanges {
   skillClick(e) {
     this.skillsFormChange.emit(this.skillsForm)
   }
+
+  categoryClick(e) {
+    this.categoriesFormChange.emit(this.categoriesForm)
+  }
+
 
   fixedClick(e) {
     if (!this.fixedForm.includes(-1)) {
@@ -182,6 +199,10 @@ export class FilterComponent implements OnInit, OnChanges {
     this.skillsFormChange.emit(this.skillsForm)
   }
 
+  categoryClear() {
+    this.categoriesForm = []
+    this.categoriesFormChange.emit(this.categoriesForm)
+  }
   ratingClear() {
     this.ratingForm = []
     this.ratingChange.emit(this.ratingForm)

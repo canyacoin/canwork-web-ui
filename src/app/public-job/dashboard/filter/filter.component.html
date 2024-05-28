@@ -57,7 +57,9 @@
       </p-accordionTab>
     </p-accordion> -->
 
-    <p-accordion class="w-full">
+
+    <!-- skills tags -->
+    <!-- <p-accordion class="w-full">
       <p-accordionTab>
         <ng-template pTemplate="header">
           <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
@@ -115,7 +117,64 @@
           </div>
         </div>
       </p-accordionTab>
+    </p-accordion> -->
+
+
+
+    <p-accordion class="w-full">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
+            <div class="flex items-center gap-2">
+              <span class="font-medium text-G800 whitespace-nowrap"
+                >Categories</span
+              >
+
+              <div *ngIf="skillsForm.length > 0">
+                <badge [job_badge]="true" [value]="skillsForm.length" />
+              </div>
+            </div>
+            <div
+              class="font-medium text-G800 pointer-events-auto"
+              (click)="categoryClear()"
+            >
+              Clear
+            </div>
+          </div>
+        </ng-template>
+        <div class="pt-[16px] pb-[24px] px-[24px] flex flex-col gap-[8px]">
+          <div class="flex flex-col gap-[8px] font-sans text-b1 font-normal">
+            <div
+              class="p-inputgroup flex items-center px-[16px] !py-3 border bg-G50 border-G200 rounded-xl"
+            >
+              <input
+                type="text"
+                pInputText
+                placeholder="Search categories"
+                class="!shadow-none bg-transparent"
+              />
+              <img
+                src="/assets/massimo/images/fi_search.png"
+                class="w-4 h-4"
+                alt="search"
+              />
+            </div>
+            <div *ngFor="let item of filterSection.categories" class="flex items-center">
+              <p-checkbox
+                [label]="item.name"
+                name="skillsForm"
+                [value]="item.code"
+                [(ngModel)]="categoriesForm"
+                [trueValue]="checkedItemCategory(item)"
+                (onChange)="categoryClick($event)"
+              ></p-checkbox>
+            </div>
+          </div>
+        </div>
+      </p-accordionTab>
     </p-accordion>
+
+
 
     <p-accordion class="w-full">
       <p-accordionTab>

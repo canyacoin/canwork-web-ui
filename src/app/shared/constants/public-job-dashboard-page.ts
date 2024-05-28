@@ -30,6 +30,28 @@ export const FilterService = {
     'VueJs',
     'Project Management',
   ],
+  categories: [
+    {
+      name: 'Content Creators',
+      code: 'contentCreator',
+    },
+    {
+      name: 'Software Developers',
+      code: 'softwareDev',
+    },
+    {
+      name: 'Designers & Creatives',
+      code: 'designer',
+    },
+    {
+      name: 'Marketing & SEO',
+      code: 'marketing',
+    },
+    {
+      name: 'Virtual Assistants',
+      code: 'virtualAssistant',
+    },
+  ],
   experiencelevel: ['Entry Level', 'Intermediate', 'Expert Level'],
   rating: [5, 4, 3, 2, 1],
 }
