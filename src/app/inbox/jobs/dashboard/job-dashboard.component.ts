@@ -193,9 +193,6 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       this.currentPage * 5,
       this.currentPage * 5 + 5
     )
-    console.log('currentPage', this.currentPage)
-
-    console.log('this.filteredProviders', jobs)
   }
   changeUserType() {
     this.userType =

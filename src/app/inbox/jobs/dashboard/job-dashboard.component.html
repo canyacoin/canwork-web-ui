@@ -1,7 +1,7 @@
 <main class="main-content">
   <section class="section bg-gray pt-15" id="manage-jobs">
     <app-back-button></app-back-button>
-    <div class="container">
+    <div class="max-w-[1300px] px-[20px] md:px-[40px] m-auto">
       <div class="row">
         <span class="col-6 text-left">
           <h4 class="fw-500">MANAGE JOBS</h4>
@@ -24,14 +24,14 @@
           <p-tabMenu [model]="activejobTypes" [activeItem]="selectedjob">
             <ng-template pTemplate="item" let-item let-i="index">
               <div
-                class="bg-G200 border-t"
+                class="bg-G200 border-t flex items-center"
                 [ngClass]="{
                   'rounded-tl-xl border-l': i === 0,
                   'rounded-tr-xl border-r': i === 3
                 }"
               >
                 <div
-                  class="py-[8px] px-[40px] text-b1 font-medium leading-6 rounded-t-xl text-G500 cursor-pointer"
+                  class="py-[8px] px-[12px] md:px-[40px] text-b2 md:text-b1 text-center font-medium leading-6 rounded-t-xl text-G500 cursor-pointer"
                   (click)="changeJob(item.code)"
                   [ngClass]="{ 'bg-white': jobType === item.code }"
                 >
@@ -43,25 +43,25 @@
         </div>
 
         <div
-          class="border rounded-xl rounded-tl-none border-gradient-to-r from-transparent to-G200 bg-white py-[32px] px-[40px]"
+          class="border rounded-xl max-sm:rounded-tr-none rounded-tl-none border-gradient-to-r from-transparent to-G200 bg-white py-[32px] px-[20px] md:px-[40px]"
         >
           <div class="w-full">
-            <div class="flex justify-between items-center">
-              <div class="flex gap-[8px] items-center">
+            <div class="flex max-lg:flex-col gap-2 justify-between items-center">
+              <div class="flex gap-[8px] items-center justify-between max-lg:w-full">
                 <div class="font-sans font-[500] text-b2 whitespace-nowrap">
                   Search Jobs
                 </div>
                 <div
-                  class="flex flex-col gap-[8px] font-sans text-b1 font-normal"
+                  class="flex flex-col gap-[8px] font-sans text-b2 font-normal"
                 >
                   <div
-                    class="p-inputgroup flex items-center justify-between px-[16px] !py-[12px] border bg-G50 border-G200 rounded-xl md:min-w-[302px]"
+                    class="p-inputgroup flex items-center justify-between px-[16px] !py-[8px] border bg-G50 border-G200 rounded-xl md:min-w-[302px]"
                   >
                     <input
                       type="text"
                       pInputText
                       placeholder="Search preferred client location"
-                      class="!shadow-none bg-transparent h-[16px] w-full !outline-none"
+                      class="!shadow-none bg-transparent w-full !outline-none"
                     />
                     <img
                       src="/assets/massimo/images/fi_search.png"
@@ -72,7 +72,7 @@
                 </div>
               </div>
 
-              <div class="flex items-center gap-10">
+              <div class="flex max-md:flex-col items-center gap-4 md:gap-10">
                 <div
                   class="flex items-center gap-5 text-G900 text-b1"
                   *ngIf="jobType === 'active'"
