@@ -285,6 +285,9 @@
 .p-dropdown-items {
     border-radius: 8px;
 }
+.p-dropdown-items-wrapper {
+    max-height: 400px !important;
+}
 .p-dropdown-items-wrapper .p-element.ng-star-inserted li {
     font-size: 14px !important;
     padding: 6px 16px !important;
@@ -408,4 +411,9 @@
   /* Handle on hover */
   #job-creation-form ::-webkit-scrollbar-thumb:hover {
     background: #94A3B8 !important;
+  }
+
+
+  .p-tabmenu-nav {
+    background-color: transparent !important;
   }

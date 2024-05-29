@@ -35,6 +35,9 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { FileUploadModule } from 'primeng/fileupload';
+import { TabMenuModule } from 'primeng/tabmenu';
+import { PaginatorModule } from 'primeng/paginator';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -57,7 +60,9 @@ import { FileUploadModule } from 'primeng/fileupload';
     AngularEditorModule,
     DropdownModule,
     CalendarModule,
-    FileUploadModule
+    FileUploadModule,
+    TabMenuModule,
+    PaginatorModule
   ],
   declarations: [
     ActionDialogComponent,

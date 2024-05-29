@@ -36,7 +36,7 @@ import { AngularEditorConfig } from '@kolkov/angular-editor'
 
 import { MessageService } from 'primeng/api'
 
-interface SoringMethod {
+interface SortingMethod {
   name: string
   code: string
   img: string
@@ -150,13 +150,13 @@ export class PostComponent implements OnInit, OnDestroy {
 
   // usdToAtomicCan: number // this is not used
 
-  sortingMethods_category: SoringMethod[] | undefined
+  sortingMethods_category: SortingMethod[] | undefined
 
-  selectedSortings_category: SoringMethod | undefined
+  selectedSortings_category: SortingMethod | undefined
 
-  sortingMethods_visibility: SoringMethod[] | undefined
+  sortingMethods_visibility: SortingMethod[] | undefined
 
-  selectedSortings_visibility: SoringMethod | undefined
+  selectedSortings_visibility: SortingMethod | undefined
 
   constructor(
     private router: Router,
@@ -585,14 +585,14 @@ export class PostComponent implements OnInit, OnDestroy {
     }
   }
 
-  setProviderType(item: SoringMethod) {
+  setProviderType(item: SortingMethod) {
     this.selectedSortings_category = item
     this.shareableJobForm.controls.providerType.setValue(
       this.selectedSortings_category.code
     )
   }
 
-  setVisibility(item: SoringMethod) {
+  setVisibility(item: SortingMethod) {
     this.selectedSortings_visibility = item
     this.shareableJobForm.controls.visibility.setValue(
       this.selectedSortings_visibility.code
