@@ -24,14 +24,14 @@
           <p-tabMenu [model]="activejobTypes" [activeItem]="selectedjob">
             <ng-template pTemplate="item" let-item let-i="index">
               <div
-                class="bg-G200 border-t flex items-center"
+                class="bg-G200 border-t"
                 [ngClass]="{
                   'rounded-tl-xl border-l': i === 0,
                   'rounded-tr-xl border-r': i === 3
                 }"
               >
                 <div
-                  class="py-[8px] px-[12px] md:px-[40px] text-b2 md:text-b1 text-center font-medium leading-6 rounded-t-xl text-G500 cursor-pointer"
+                  class="flex items-center h-full py-[8px] px-[12px] md:px-[40px] text-b2 md:text-b1 text-center font-medium leading-6 rounded-t-xl text-G500 cursor-pointer"
                   (click)="changeJob(item.code)"
                   [ngClass]="{ 'bg-white': jobType === item.code }"
                 >
