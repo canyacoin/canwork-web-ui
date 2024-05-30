@@ -58,7 +58,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
 
 import { BaseDialogComponent } from './base-dialog/base-dialog.component';
-
+import { DropdownModule } from 'primeng/dropdown';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -84,7 +84,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     AvatarModule,
     BadgeModule,
     CheckboxModule,
-    DialogModule
+    DialogModule,
+    DropdownModule
   ],
   declarations: [
     AttachmentComponent,

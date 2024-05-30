@@ -235,22 +235,33 @@
     box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.10), 0px 2px 2px -1px rgba(0, 0, 0, 0.10), 0px 4px 10px -2px rgba(0, 0, 0, 0.05) !important;
 }
 
-.detail-job .p-dropdown {
-    font-family: "General Sans", sans-serif;
+.detail-job .p-dropdown, .header-avatar .p-dropdown {
     width: 33px !important;
     color: #0F172A !important;
-    font-size: 14px !important;
-    font-weight: 500 !important;
-    outline: none !important;
-    border-radius: 8px !important;
     padding: 0 !important;
     border: 0 !important;
-    background: #FFF;
+    background: #ffffff00;
     box-shadow: none !important;
 }
-.detail-job .p-dropdown .p-dropdown-trigger {
+
+.header-avatar .p-dropdown {
+    width: 40px !important;
+    color: #0F172A !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 12px !important;
+    background: #ffffff00 !important;
+    box-shadow: none !important;
+}
+.detail-job .p-dropdown .p-dropdown-trigger, .header-avatar .p-dropdown .p-dropdown-trigger {
     display: none !important;
 }
+.header-avatar .p-dropdown:hover {
+    background-color: #f1f5f900 !important;
+}
+
+
+
 
 .detail-job .p-dropdown-items-wrapper {
     margin-top: 10px;
@@ -283,7 +294,7 @@
     font-size: 14px !important;
 }
 .p-dropdown-items {
-    border-radius: 8px;
+    border-radius: 12px;
 }
 .p-dropdown-items-wrapper {
     max-height: 400px !important;
@@ -293,18 +304,22 @@
     padding: 6px 16px !important;
 }
 .p-dropdown-items.ng-star-inserted {
-    border: 1px solid #E2E8F0 !important;
+    border: 1px solid #CBD5E1;
+    box-shadow: 0px 8px 24px 0px rgba(66, 74, 83, 0.12), 0px 1px 3px 0px rgba(31, 35, 40, 0.12);
 }
 
 .p-dropdown-items-wrapper :first-child>li{
-    border-top-left-radius: 8px !important;
-    border-top-right-radius: 8px !important;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
 }
 .p-dropdown-items-wrapper :last-child>li{
-    border-bottom-left-radius: 8px !important;
-    border-bottom-right-radius: 8px !important;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px ;
 }
 
+.p-dropdown-panel {
+    border-radius: 12px;
+}
 .p-dropdown .p-dropdown-trigger {
     width: 1rem !important;
 }
@@ -429,4 +444,8 @@
 
   .p-dialog-header button svg {
     filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(312deg) brightness(105%) contrast(101%) !important;
+  }
+
+  .text-logout span {
+    color: #D1242F !important;
   }

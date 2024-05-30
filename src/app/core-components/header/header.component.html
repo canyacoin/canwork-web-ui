@@ -1,6 +1,6 @@
 <div>
   <div
-    class="fixed bg-transparent w-full flex justify-center items-center px-[16px] pb-[12px] top-0 z-[2000] transition-all duration-300"
+    class="fixed bg-transparent w-full flex justify-center items-center px-[16px] pb-[12px] top-0 z-[1000] transition-all duration-300"
     [ngClass]="{
       'bg-white shadow-md pt-[12px]': isScrolled || isTransfer,
       'pt-[24px]': !isScrolled
@@ -21,7 +21,6 @@
         />
       </div>
       <div class="hidden lg:flex items-center gap-10">
-        
         <div
           *ngFor="let item of headerSection.website"
           [routerLink]="item.url"
@@ -103,16 +102,48 @@
             size="small"
           />
         </div>
-        <div class="flex justify-content-center">
-          <p-toast></p-toast>
-          <p-menu #menu [model]="items" [popup]="true"></p-menu>
-          <div (click)="menu.toggle($event)" class="cursor-pointer">
-            <app-avatar
-              *ngIf="currentUser"
-              [user]="currentUser"
-              [customClass]="'avatar'"
-            ></app-avatar>
-          </div>
+        <div class="flex justify-content-center header-avatar">
+          <!-- <p-toast></p-toast> -->
+          <!-- <p-menu #menu [model]="items" [popup]="true"></p-menu> -->
+
+          <p-dropdown
+            [options]="items"
+            [(ngModel)]="selectedItem"
+            optionLabel="label"
+            appendTo="body"
+            class="header_menu"
+          >
+            <ng-template pTemplate="selectedItem">
+              <div
+                *ngIf="selectedItem"
+              >
+                <app-avatar
+                  *ngIf="currentUser"
+                  [user]="currentUser"
+                  [customClass]="'avatar'"
+                ></app-avatar>
+              </div>
+            </ng-template>
+            <ng-template let-item pTemplate="item">
+              <div class="flex align-items-center" *ngIf="item.routerLink" [routerLink]="item.routerLink" >
+                <img
+                  src="{{ '/assets/massimo/svg/header/' + item.icon }}"
+                  style="width: 20px"
+                  class="mr-[16px]"
+                />
+                <span class="font-medium leading-5 text-G900">{{ item.label }}</span>
+              </div>
+              
+              <div class="flex align-items-center" *ngIf="item.label == 'LogOut'" (click)="onLogout()">
+                <img
+                  src="{{ '/assets/massimo/svg/header/' + item.icon }}"
+                  style="width: 20px"
+                  class="mr-[16px]"
+                />
+                <span class="font-medium leading-5 text-[#D1242F]">{{ item.label }}</span>
+              </div>
+            </ng-template>
+          </p-dropdown>
         </div>
         <div
           class="block md:hidden cursor-pointer"
@@ -146,7 +177,6 @@
       </div>
     </div>
   </div>
-
 
   <!-- hamburuger menu in mobile view -->
 

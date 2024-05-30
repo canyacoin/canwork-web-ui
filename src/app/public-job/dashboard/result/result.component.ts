@@ -14,6 +14,7 @@ interface SoringMethod {
 
 @Component({
   selector: 'dashboard-result',
+  styleUrls: ['./result.component.css'],
   templateUrl: './result.component.html',
 })
 export class ResultComponent implements OnInit {
