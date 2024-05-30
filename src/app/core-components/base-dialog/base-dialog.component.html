@@ -1,0 +1,35 @@
+<p-dialog [(visible)]="visible" styleClass="w-[98%] md:w-[50%]"	 [draggable]="false" [resizable]="false"  [modal]="true">
+  <div class="flex justify-center items-center">
+    <div class="max-w-[352px] flex flex-col justify-center items-center">
+      <!-- <img src="" alt=""> -->
+      <div class="w-[322px] h-[200px] bg-G400 mb-[24px]"></div>
+      <div class="text-h6 text-center font-medium leading-7 pb-[8px]">
+        {{ title }}
+      </div>
+      <div class="text-b2 text-center font-normal leading-5 pb-[20px] md:pb-[32px]">
+        {{ content }}
+      </div>
+      <ng-container >
+        <div *ngIf="type == 'delete'" class="flex gap-4 justify-center items-center">
+            <div
+              class="py-[10px] px-[24px] text-[#D1242F] flex justify-center items-center gap-2 font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl"
+              (click)="DeleteJob($event)"
+            >
+              <img
+                src="/assets/massimo/svg/delete.svg"
+                class="select-none w-[16px] h-[16px]"
+              />
+              Delete Job
+            </div>
+            <basic-button
+              type="1"
+              (click)="Cancel($event)"
+              title="Cancel"
+              size="small"
+              extraClass="border text-G900"
+            />
+          </div>
+      </ng-container>
+    </div>
+  </div>
+</p-dialog>

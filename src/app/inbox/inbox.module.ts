@@ -37,6 +37,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { FileUploadModule } from 'primeng/fileupload';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { PaginatorModule } from 'primeng/paginator';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   imports: [
@@ -62,7 +63,8 @@ import { PaginatorModule } from 'primeng/paginator';
     CalendarModule,
     FileUploadModule,
     TabMenuModule,
-    PaginatorModule
+    PaginatorModule,
+    DialogModule
   ],
   declarations: [
     ActionDialogComponent,

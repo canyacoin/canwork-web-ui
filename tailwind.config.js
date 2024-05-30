@@ -17,8 +17,8 @@ module.exports = {
       xxs: '425px',
       xs: '500px',
       sm: '640px',
-      md: '768px',
       lg: '1024px',
+      md: '768px',
       xl: '1280px',
       '2xl': '1536px',
     },
@@ -65,6 +65,7 @@ module.exports = {
         B400: '#0147b3',
         B500: '#013e9c',
         // Red
+        
         R50: '#ffece8',
         R75: '#ffb09f',
         R100: '#ff9077',

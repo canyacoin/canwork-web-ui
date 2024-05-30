@@ -55,6 +55,9 @@ import { BadgeModule } from 'primeng/badge'
 import { JobCardComponent } from './cards/job-card/job-card.component'
 import { SearchButtonComponent } from './buttons/search-button/search-button.component'
 import { CheckboxModule } from 'primeng/checkbox';
+import { DialogModule } from 'primeng/dialog';
+
+import { BaseDialogComponent } from './base-dialog/base-dialog.component';
 
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -80,7 +83,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ToastModule,
     AvatarModule,
     BadgeModule,
-    CheckboxModule
+    CheckboxModule,
+    DialogModule
   ],
   declarations: [
     AttachmentComponent,
@@ -122,7 +126,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     JoinCommunityComponent,
     PostJobComponent,
     JobCardComponent,
-    SearchButtonComponent
+    SearchButtonComponent,
+    BaseDialogComponent
   ],
   exports: [
     AttachmentComponent,
@@ -159,7 +164,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     JoinCommunityComponent,
     PostJobComponent,
     JobCardComponent,
-    SearchButtonComponent
+    SearchButtonComponent,
+    BaseDialogComponent
   ],
   providers: [
     {

@@ -1,8 +1,9 @@
 import { Component, Input, OnInit, Directive } from '@angular/core'
+import { PublicJobService } from '@service/public-job.service'
+
 import { Router } from '@angular/router'
 
 import * as moment from 'moment'
-
 
 @Component({
   selector: 'app-job-dashboard-card',
@@ -13,8 +14,14 @@ export class JobDashboardCardComponent implements OnInit {
   @Input() job: any
   @Input() type: string
   @Input() isPublic: boolean
+  @Input() jobType: string
+  visible: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private publicJobsService: PublicJobService
+  ) {}
+
   favourite: boolean = false
 
   providerTypes = [
@@ -54,6 +61,26 @@ export class JobDashboardCardComponent implements OnInit {
     return url
   }
 
+  async cancelJob(event: Event) {
+    event.stopPropagation();
+    console.log(this.job.clientId);
+    
+    this.visible = !this.visible
+
+    if (this.job.clientId) {
+      const updated = await this.publicJobsService.cancelJob(this.job.id)
+      if (updated) {
+        this.job.state = 'Public job closed'
+      }
+    }
+  }
+
+  updateDialog(event: Event) {
+    event.stopPropagation();
+    this.visible = !this.visible
+    console.log("this.visible = " + this.visible);
+    
+  }
   stripHtmlTags(html: string): string {
     // Create a new DOM element to use the browser's parsing capabilities
     const div = document.createElement('div')
@@ -83,8 +110,8 @@ export class JobDashboardCardComponent implements OnInit {
     this.router.navigate(['/jobs/public/', this.job.slug])
   }
   Makefavorite(event: Event) {
-    event.stopPropagation();
-    this.favourite = !this.favourite;
+    event.stopPropagation()
+    this.favourite = !this.favourite
   }
   getDaySuffix(day: number): string {
     if (day > 3 && day < 21) return 'th' // All days between 4 and 20 end with 'th'
@@ -99,5 +126,4 @@ export class JobDashboardCardComponent implements OnInit {
         return 'th'
     }
   }
-  
 }

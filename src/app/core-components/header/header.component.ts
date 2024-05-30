@@ -110,19 +110,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
       {
         label: 'Profile',
         routerLink: '/profile',
+        icon: 'pi pi-user',
       },
       {
         label: 'Edit Profile',
+        icon: 'pi pi-user-edit',
         routerLink: '/profile',
         queryParams: { editProfile: 1 },
       },
       {
         label: 'Manage Jobs',
+        icon: 'pi-briefcase',
         routerLink: '/inbox/jobs',
         styleClass: 'border-y-1 border',
       },
       {
         label: 'LogOut',
+        icon : "pi-sign-out",
         styleClass: 'text-R300',
         command: () => {
           this.onLogout()

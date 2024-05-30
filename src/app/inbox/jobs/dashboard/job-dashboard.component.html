@@ -220,6 +220,7 @@
                 [job]="job"
                 [type]="'lg'"
                 [isPublic]="jobType !== 'active'"
+                [jobType] = "jobType"
               ></app-job-dashboard-card>
             </div>
             <div *ngIf="jobs && jobs.length > 0 && !isOnMobile && reverseOrder">
@@ -232,6 +233,7 @@
                 "
                 [job]="job"
                 [type]="'lg'"
+                [jobType] = "jobType"
                 [isPublic]="jobType !== 'active'"
               ></app-job-dashboard-card>
             </div>
@@ -245,6 +247,8 @@
                 [job]="job"
                 [type]="'sm'"
                 [isPublic]="false"
+                [jobType] = "jobType"
+
               ></app-job-dashboard-card>
             </div>
             <div *ngIf="jobs && jobs.length > 0 && isOnMobile && reverseOrder">
@@ -258,6 +262,7 @@
                 [job]="job"
                 [type]="'sm'"
                 [isPublic]="false"
+                [jobType] = "jobType"
               ></app-job-dashboard-card>
             </div>
           </div>
