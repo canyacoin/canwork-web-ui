@@ -59,6 +59,9 @@ import { DialogModule } from 'primeng/dialog';
 
 import { BaseDialogComponent } from './base-dialog/base-dialog.component';
 import { DropdownModule } from 'primeng/dropdown';
+import { JobDetailComponent } from './job-detail/job-detail.component';
+import { JobBidsComponent } from './job-bids/job-bids.component';
+
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -85,7 +88,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     BadgeModule,
     CheckboxModule,
     DialogModule,
-    DropdownModule
+    DropdownModule,
   ],
   declarations: [
     AttachmentComponent,
@@ -128,7 +131,9 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     PostJobComponent,
     JobCardComponent,
     SearchButtonComponent,
-    BaseDialogComponent
+    BaseDialogComponent,
+    JobDetailComponent,
+    JobBidsComponent
   ],
   exports: [
     AttachmentComponent,
@@ -166,7 +171,9 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     PostJobComponent,
     JobCardComponent,
     SearchButtonComponent,
-    BaseDialogComponent
+    BaseDialogComponent,
+    JobDetailComponent,
+    JobBidsComponent
   ],
   providers: [
     {

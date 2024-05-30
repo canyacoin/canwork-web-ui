@@ -57,7 +57,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
   sharelinks: sharelinkstype[] | undefined
   selectedsharelinks: sharelinkstype | undefined
-
+  activejobTypes: any[]
+  selectedjob: any
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
@@ -84,6 +85,12 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.activejobTypes = [
+      { label: 'Job Details', code: 'jobsdetail' },
+      { label: 'Proposals', code: 'proposals' },
+    ]
+    this.selectedjob = this.activejobTypes[0]
+
     this.sharelinks = [
       { name: 'Invite Freelancer', img: 'fi_user-plus.svg', code: '1' },
       { name: 'Copy Link', img: 'u_link.svg', code: '2' },
@@ -94,8 +101,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
     this.selectedsharelinks = this.sharelinks[0]
 
-    console.log("teste");
-    
     this.shareableLink = environment.shareBaseUrl
     this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
       if (params['jobId']) {
@@ -152,10 +157,11 @@ export class PublicJobComponent implements OnInit, OnDestroy {
         this.currentUser = user
       }
     })
-
-    console.log('this.currentUser', this.currentUser)
   }
 
+  changeJob(item: any) {
+    this.selectedjob = item
+  }
   ngOnDestroy() {
     if (this.bidsSub) {
       this.bidsSub.unsubscribe()
@@ -280,23 +286,25 @@ export class PublicJobComponent implements OnInit, OnDestroy {
       timezone: this.currentUser.timezone,
       avatar: this.currentUser.avatar,
     }
-    if (this.currentUser.whitelisted) {
-      const bidToSubmit = new Bid(
-        this.currentUser.address,
-        providerInfo,
-        this.bidForm.value.price,
-        this.bidForm.value.message,
-        Date.now()
-      )
-      this.sent = await this.publicJobsService.handlePublicBid(
-        bidToSubmit,
-        this.job
-      )
-      this.isBidding = false
-      this.canBid = false
-    } else {
-      alert('You have not been approved as a provider.')
-    }
+
+    // Test
+    // if (this.currentUser.whitelisted) {
+    const bidToSubmit = new Bid(
+      this.currentUser.address,
+      providerInfo,
+      this.bidForm.value.price,
+      this.bidForm.value.message,
+      Date.now()
+    )
+    this.sent = await this.publicJobsService.handlePublicBid(
+      bidToSubmit,
+      this.job
+    )
+    this.isBidding = false
+    this.canBid = false
+    // } else {
+    //   alert('You have not been approved as a provider.')
+    // }
     this.loading = false
   }
 

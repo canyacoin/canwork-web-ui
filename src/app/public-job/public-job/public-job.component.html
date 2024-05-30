@@ -41,88 +41,34 @@
         *ngIf="job"
         class="flex flex-col md:flex-row md:justify-between gap-2 md:gap-6 pt-[56px]"
       >
-        <div
-          *ngIf="job && canSee"
-          class="w-full rounded-[12px] bg-white border border-G200 p-11"
-        >
-          <div class="text-h6 md:text-h5 text-G800 font-medium leading-[1.2]">
-            Job Details
-          </div>
-          <div
-            class="text-h4 md:text-h4 text-G800 font-medium leading-[1.2] my-8"
-          >
-            {{ job.information.title }}
-          </div>
-          <div class="text-b3 md:text-b2 text-G500 leading-[1.2]">
-            Posted {{ jobFromNow }}
-          </div>
-          <div
-            class="text-b2 md:text-b1 text-G900 leading-[1.2] mt-[24px]"
-            [innerHTML]="job.information.description | linkify"
-          ></div>
-
-          <hr
-            *ngIf="job.information.attachments.length > 0"
-            class="h-[1.5px] my-[20px] bg-gray-200 border-0"
-          />
-          <div
-            *ngIf="job.information.attachments.length > 0"
-            class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[15px]"
-          >
-            <p class="mb-[10px] text-b2 font-sans font-medium text-G900">
-              Attachments
-            </p>
-            <ng-container *ngFor="let item of job.information.attachments">
-              <div class="flex justify-start py-[6px]">
-                <a href="{{ item.url }}" target="_blank">
-                  <p class="flex justify-start items-center text-C600">
-                    <img
-                      src="/assets/massimo/svg/ion_attach-outline.svg"
-                      alt="ion_attach"
-                      class="w-[24px] h-[24px]"
-                    />
-                    {{ item.name }}
-                  </p>
-                </a>
+        <div class="w-full">
+          <p-tabMenu [model]="activejobTypes" [activeItem]="selectedjob">
+            <ng-template pTemplate="item" let-item let-i="index">
+              <div
+                class="bg-G200 border-t"
+                [ngClass]="{
+                  'rounded-tl-xl border-l': i === 0,
+                  'rounded-tr-xl border-r': i === 1
+                }"
+              >
+                <div
+                  class="flex items-center h-full py-[8px] px-[12px] md:px-[40px] text-b2 md:text-b1 text-center font-medium leading-6 rounded-t-xl text-G500 cursor-pointer"
+                  (click)="changeJob(item)"
+                  [ngClass]="{ 'bg-white': selectedjob.code === item.code }"
+                >
+                  {{ item.label }}
+                </div>
               </div>
-            </ng-container>
-          </div>
+            </ng-template>
+          </p-tabMenu>
 
-          <hr
-            *ngIf="job.information.skills.length > 0"
-            class="h-[1.5px] my-[20px] bg-gray-200 border-0"
-          />
-          <p
-            *ngIf="job.information.skills.length > 0"
-            class="mb-[10px] text-b2 font-sans font-medium text-G900"
-          >
-            Skill Tags
-          </p>
-          <div
-            *ngIf="job.information.skills.length > 0"
-            class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[15px]"
-          >
-            <app-skill-tag
-              *ngFor="let skill of job.information.skills"
-              [routerLink]="['/search/']"
-              [queryParams]="{ query: skill }"
-              [skill]="skill"
-            ></app-skill-tag>
+          <div *ngIf="selectedjob.code == 'jobsdetail'" class="w-full">
+            <job-detail-panel [job] = "job" [jobFromNow]="jobFromNow" [canSee]="canSee"/>
           </div>
-
-          <div class="flex justify-start pt-[48px]">
-            <div
-              class="group flex justify-center items-center text-b1 text-G900 leading-6 font-medium cursor-pointer p-[6px] rounded-md"
-              [routerLink]="['/jobs']"
-            >
-              <img
-                src="/assets/massimo/svg/Arrow-Left.svg"
-                alt="Arrow-Left"
-                class="w-[20px] h-[20px] mx-[8px] group-hover:-translate-x-[6px] duration-500 transition-all"
-              />
-              Back to Job Board
-            </div>
+          <div *ngIf="selectedjob.code == 'proposals'" class="w-full">
+            <app-job-bids [job] = "job" [jobFromNow]="jobFromNow" [canSee]="canSee"/>
           </div>
+          
         </div>
 
         <div
@@ -312,9 +258,9 @@
       >
         <!-- bids start -->
 
-        <div class="w-full rounded-[12px] bg-white border border-G200 p-11">
+        <!-- <div class="w-full rounded-[12px] bg-white border border-G200 p-11"> -->
           <!--<div class="card p-30 job-detail-card">-->
-          <div class="container">
+          <!-- <div class="container">
             <div class="row">
               <div class="col-sm-8 col-6">
                 <h5>BIDS</h5>
@@ -381,9 +327,9 @@
                 <p>No bids yet.</p>
               </div>
             </div>
-          </div>
+          </div> -->
           <!-- </div> -->
-        </div>
+        <!-- </div> -->
       </div>
       <!-- bids end -->
     </div>

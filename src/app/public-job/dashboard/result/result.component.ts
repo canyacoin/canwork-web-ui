@@ -48,6 +48,7 @@ export class ResultComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log("this.jobs = " + this.jobs);
     
     this.sortingMethods = [
       { name: 'Newest', code: 'newest' },

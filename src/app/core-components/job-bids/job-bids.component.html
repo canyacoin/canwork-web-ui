@@ -1,0 +1,139 @@
+<section
+  class="w-full rounded-[12px] rounded-tl-none bg-white border border-G200 p-11"
+  style="min-height: 70vh"
+>
+  <app-back-button></app-back-button>
+  <div *ngIf="!bids" class="container">
+    <div class="row">
+      <div class="col-12 job-detail-container text-center">
+        <div class="card p-30 job-detail-card">
+          <img src="assets/img/loader.svg" style="height: 36px" alt="Loader" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="bids && !canSee" class="container">
+    <div class="flex justify-center items-center flex-col max-w-[340px] m-auto">
+      <img
+        src="/assets/massimo/images/Folder.png"
+        class="select-none max-xl:w-[240px] max-xl:h-[180px] mb-[24px]"
+      />
+
+      <div class="text-G900 text-h6 font-medium leading-7">No proposal submitted yet.</div>
+      <div class="text-G700 text-b2 font-normal text-center pb-[10px] md:pb-[32px]">
+        You have no proposal submitted yet, consider inviting freelancers to
+        your job listing and sharing on your social media.
+      </div>
+
+      <div class="flex gap-6 items-center">
+        <div class="flex gap-2">
+          <img src="/assets/massimo/svg/fi_share-2.svg" class="select-none text-G900 text-b1 font-medium leading-6 cursor-pointer" />
+          Share Job Listing
+        </div>
+        <basic-button
+          title="Invite Freelancers"
+          [type]="2"
+          size="small"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="container" *ngIf="canSee && bids">
+    <div class="row">
+      <div class="col-12">
+        <h4 class="mb-0">REVIEW OFFERS</h4>
+        <p class="my-10 pointer" [routerLink]="['/jobs/public/', job.slug]">
+          For Job: {{ job.information.title }}
+        </p>
+      </div>
+    </div>
+
+    <div
+      class="card mb-15 p-20 job-dashboard-card bid-card"
+      *ngFor="let bid of bids; let i = index"
+    >
+      <div
+        class="container provider-job-card jobs-info text-center-mobile"
+        *ngIf="bid.providerInfo"
+      >
+        <div class="row">
+          <div
+            class="col-lg-3 col-md-6 col-12 pointer"
+            [routerLink]="['/profile/alt/', bid.providerId]"
+          >
+            <app-avatar
+              [user]="bid.providerInfo"
+              [customClass]="'headshot-div hide-mobile'"
+            ></app-avatar>
+            <h4 class="ml-2r ml-0-mobile mb-0">
+              {{ bid.providerInfo.name
+              }}<app-verified-mark
+                [user]="bid.providerInfo"
+              ></app-verified-mark>
+            </h4>
+            <p class="ml-2r ml-0-mobile mb-0">{{ bid.providerInfo.title }}</p>
+          </div>
+          <div class="col-lg-9 col-md-6 hide-mobile">
+            <div class="info-details">
+              <p>
+                Bid<br /><b
+                  >${{ bid.budget
+                  }}<span *ngIf="job.paymentType !== 'Fixed price'">/hr</span>
+                  USD</b
+                >
+              </p>
+            </div>
+            <button
+              *ngIf="!bid.rejected"
+              [routerLink]="['/inbox/chat']"
+              [queryParams]="{ address: bid.providerId }"
+              class="btn btn-canya-chat btn-sm btn-primary"
+            >
+              CHAT
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3 col-md-6 col-12">
+            <small class="ml-2r ml-0-mobile"
+              ><i class="fas fa-map-marker-alt"></i>
+              {{ bid.providerInfo.timezone }}</small
+            >
+          </div>
+          <div class="col-lg-9 col-md-6 col-12">
+            <app-skill-tag
+              *ngFor="let tag of bid.providerInfo.skillTags"
+              [skill]="tag"
+              [routerLink]="['/search']"
+            ></app-skill-tag>
+          </div>
+        </div>
+        <div class="row mt-10">
+          <div class="col-md-8 col-sm-12">
+            <p class="ml-2r ml-0-mobile">
+              {{ bid.message }}
+            </p>
+          </div>
+          <div class="col-md-4 col-sm-12 text-right text-center-mobile">
+            <i *ngIf="bid.rejected && isOpen">Offer Declined</i>
+            <i *ngIf="!isOpen" class="mr-15">Job Closed</i>
+            <button
+              *ngIf="!bid.rejected && isOpen"
+              class="btn btn-sm btn-danger decline-btn"
+              (click)="declineProvider(i)"
+            >
+              DECLINE
+            </button>
+            <button
+              *ngIf="!bid.rejected && isOpen"
+              class="btn btn-sm btn-success accept-btn"
+              (click)="chooseProvider(i)"
+            >
+              ACCEPT
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

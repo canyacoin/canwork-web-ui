@@ -20,7 +20,6 @@ import { CoreComponentsModule } from './core-components/core-components.module'
 import { firebaseUiAuthConfig } from './core-config/app-auth-config'
 import { CoreUtilsModule } from './core-utils/core-utils.module'
 import { PublicJobComponent } from './public-job/public-job/public-job.component'
-import { JobBidsComponent } from './public-job/job-bids/job-bids.component'
 //import { FilterPipeModule } from 'ngx-filter-pipe' // obsolete
 //import { OrderModule } from 'ngx-order-pipe' // obsolete
 import { NgArrayPipesModule } from 'ngx-pipes' // https://www.npmjs.com/package/ngx-pipes#array
@@ -47,12 +46,12 @@ import { ToastModule } from 'primeng/toast'
 
 import { NgxModalView } from 'ngx-modalview'
 import { DropdownModule } from 'primeng/dropdown';
+import { TabMenuModule } from 'primeng/tabmenu';
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
     AppComponent,
     PublicJobComponent,
-    JobBidsComponent,
     WalletBnbComponent,
     WalletBnbAssetsComponent,
   ],
@@ -86,7 +85,8 @@ import { DropdownModule } from 'primeng/dropdown';
     ToastModule,
     ConfirmPopupModule,
     NgxModalView,
-    DropdownModule
+    DropdownModule,
+    TabMenuModule
   ],
   exports: [
     /*FilterPipeModule*/
