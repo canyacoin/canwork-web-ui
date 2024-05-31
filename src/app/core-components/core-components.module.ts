@@ -61,6 +61,7 @@ import { BaseDialogComponent } from './base-dialog/base-dialog.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { JobDetailComponent } from './job-detail/job-detail.component';
 import { JobBidsComponent } from './job-bids/job-bids.component';
+import { TableModule } from 'primeng/table';
 
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
@@ -89,6 +90,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     CheckboxModule,
     DialogModule,
     DropdownModule,
+    TableModule
   ],
   declarations: [
     AttachmentComponent,

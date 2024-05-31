@@ -39,7 +39,7 @@
 
       <div
         *ngIf="job"
-        class="flex flex-col md:flex-row md:justify-between gap-2 md:gap-6 pt-[56px]"
+        class="flex flex-col lg:flex-row md:justify-between gap-2 md:gap-6 pt-[56px]"
       >
         <div class="w-full">
           <p-tabMenu [model]="activejobTypes" [activeItem]="selectedjob">
@@ -63,12 +63,19 @@
           </p-tabMenu>
 
           <div *ngIf="selectedjob.code == 'jobsdetail'" class="w-full">
-            <job-detail-panel [job] = "job" [jobFromNow]="jobFromNow" [canSee]="canSee"/>
+            <job-detail-panel
+              [job]="job"
+              [jobFromNow]="jobFromNow"
+              [canSee]="canSee"
+            />
           </div>
           <div *ngIf="selectedjob.code == 'proposals'" class="w-full">
-            <app-job-bids [job] = "job" [jobFromNow]="jobFromNow" [canSee]="canSee"/>
+            <app-job-bids
+              [job]="job"
+              [jobFromNow]="jobFromNow"
+              [canSee]="canSee"
+            />
           </div>
-          
         </div>
 
         <div
@@ -193,18 +200,26 @@
             *ngIf="myJob && !isClosed"
             class="text-b3 md:text-b2 text-G800 leading-[1.2] mt-[16px]"
           >
-            <button
-              class="btn btn-sm btn-primary mt-10 mr-10 w-full text-[15px] py-[7px] normal-case"
-              [routerLink]="['/inbox/job/edit', job.id]"
-            >
-              Edit Job
-            </button>
-            <button
-              class="btn btn-sm btn-danger mt-10 w-full text-[15px] py-[7px] normal-case"
-              (click)="cancelJob()"
-            >
-              Cancel Job
-            </button>
+            <div class="flex gap-4 items-center">
+              <div
+                class="cursor-pointer py-[10px] px-[24px] text-[#D1242F] flex justify-center items-center gap-2 font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl"
+                (click)="cancelJob()"
+              >
+                <img
+                  src="/assets/massimo/svg/delete.svg"
+                  class="select-none w-[16px] h-[16px]"
+                />
+                Delete Job
+              </div>
+
+              <basic-button
+                type="1"
+                [routerLink]="['/inbox/job/edit', job.id]"
+                title="Edit Job"
+                size="small"
+                extraClass="border text-G900"
+              />
+            </div>
           </div>
 
           <div
@@ -259,8 +274,8 @@
         <!-- bids start -->
 
         <!-- <div class="w-full rounded-[12px] bg-white border border-G200 p-11"> -->
-          <!--<div class="card p-30 job-detail-card">-->
-          <!-- <div class="container">
+        <!--<div class="card p-30 job-detail-card">-->
+        <!-- <div class="container">
             <div class="row">
               <div class="col-sm-8 col-6">
                 <h5>BIDS</h5>
@@ -328,7 +343,7 @@
               </div>
             </div>
           </div> -->
-          <!-- </div> -->
+        <!-- </div> -->
         <!-- </div> -->
       </div>
       <!-- bids end -->

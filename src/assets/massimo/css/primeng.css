@@ -298,6 +298,7 @@
 }
 .p-dropdown-items-wrapper {
     max-height: 400px !important;
+    border-radius: 12px;
 }
 .p-dropdown-items-wrapper .p-element.ng-star-inserted li {
     font-size: 14px !important;
@@ -448,4 +449,17 @@
 
   .text-logout span {
     color: #D1242F !important;
+  }
+
+
+  /* p-datatable p-component */
+  .p-datatable-wrapper tr th{
+    background: #F1F5F9 !important;
+  }
+  .p-datatable { 
+    border-radius: 12px;
+    border: 1px solid #E2E8F0 !important;
+  }
+  .p-datatable-wrapper {
+    border-radius: 12px;
   }

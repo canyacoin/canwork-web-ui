@@ -9,6 +9,11 @@ import { ToastrService } from 'ngx-toastr'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
+interface SortingMethod {
+  name: string
+  code: string
+}
+
 @Component({
   selector: 'app-job-bids',
   templateUrl: './job-bids.component.html',
@@ -24,6 +29,12 @@ export class JobBidsComponent implements OnInit {
   isOpen: boolean
   jobSub: Subscription
   canSee = false
+  rating = 3
+
+  sortbylist: SortingMethod[] | undefined
+  selectedsortby: SortingMethod | undefined
+
+  ratinglist: number[] = [1,2,3,4,5]
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -35,6 +46,15 @@ export class JobBidsComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+
+    this.sortbylist = [
+      { name: 'Date Posted', code: 'actionLog[0].timestamp' },
+      { name: 'Project Name', code: 'information.title' },
+      { name: 'Budget', code: 'budget' },
+    ]
+
+    this.selectedsortby = this.sortbylist[0]
+
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       this.currentUser = user
     })
@@ -55,6 +75,8 @@ export class JobBidsComponent implements OnInit {
                 .getPublicJobBids(publicJob.id)
                 .subscribe((result) => {
                   this.bids = result
+                  console.log("this.bid", this.bids);
+                  
                 })
             } else {
               this.canSee = false
@@ -79,6 +101,7 @@ export class JobBidsComponent implements OnInit {
                   .getPublicJobBids(publicJob.id)
                   .subscribe((result) => {
                     this.bids = result
+                    
                   })
               } else {
                 this.canSee = false
@@ -136,4 +159,16 @@ export class JobBidsComponent implements OnInit {
       }
     }
   }
+
+  stripHtmlTags(html: string): string {
+    // Create a new DOM element to use the browser's parsing capabilities
+    const div = document.createElement('div')
+
+    // Assign the HTML string to the innerHTML of the created element
+    div.innerHTML = html
+
+    // Use the textContent property to get the plain text without HTML tags
+    return div.textContent || div.innerText || ''
+  }
+
 }
