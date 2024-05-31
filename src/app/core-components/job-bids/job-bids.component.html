@@ -55,11 +55,11 @@
           optionLabel="name"
           appendTo="body"
         >
-        <ng-template let-item pTemplate="item">
-          <div class="flex align-items-center" (click)="SortbyFilter(item)">
-            <span>{{ item.name }}</span>
-          </div>
-        </ng-template>
+          <ng-template let-item pTemplate="item">
+            <div class="flex align-items-center" (click)="SortbyFilter(item)">
+              <span>{{ item.name }}</span>
+            </div>
+          </ng-template>
         </p-dropdown>
       </div>
     </div>
@@ -154,7 +154,7 @@
     <!-- [paginator]="bids.length > 5 ? true : false" -->
     <p-table
       [value]="bids"
-      [paginator]="true"
+      [paginator]="bids.length > 5 ? true : false"
       [rows]="5"
       [rowsPerPageOptions]="[10, 25, 50]"
     >
@@ -167,7 +167,7 @@
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-bid let-columns="columns">
-        <tr class="hover:bg-G50 cursor-pointer">
+        <tr class="hover:bg-G50 cursor-pointer" (click)="ShowDialogDetail(bid)">
           <td>
             <div
               class="flex gap-4"
@@ -245,5 +245,123 @@
         </tr>
       </ng-template>
     </p-table>
+
+    <ng-container *ngIf="selectedBid">
+      <p-dialog
+        header="Proposal Details."
+        [(visible)]="visible"
+        styleClass="w-[98%] md:w-[50%]"
+        [draggable]="false"
+        [resizable]="false"
+        [modal]="true"
+      >
+        <div class="flex flex-col justify-start items-center">
+          <!-- <img src="" alt=""> -->
+
+          <div
+            class="flex justify-between items-center w-full border-y border-G200 px-[20px] py-[16px] md:px-[40px !font-sans]"
+          >
+            <div
+              class="flex gap-4"
+              [routerLink]="['/profile/alt/', selectedBid.providerId]"
+            >
+              <div>
+                <app-avatar
+                  size="48"
+                  [user]="selectedBid.providerInfo"
+                  [customClass]="' '"
+                ></app-avatar>
+              </div>
+              <div>
+                <h4
+                  class="line-clamp-1 text-b1 leading-6 font-medium text-G900"
+                >
+                  {{ selectedBid.providerInfo.name }}
+                  <app-verified-mark
+                    [user]="selectedBid.providerInfo"
+                  ></app-verified-mark>
+                </h4>
+                <p class="line-clamp-1 text-b2 text-G500">
+                  {{ selectedBid.providerInfo.title }}
+                </p>
+                <app-star-rating stars="3" />
+              </div>
+            </div>
+
+            <div>
+              <div>Bid</div>
+              <div class="text-b1 font-medium leading-6 text-G900">
+                ${{ selectedBid.budget }}
+              </div>
+            </div>
+
+            <div class="flex gap-4 justify-center items-center">
+              <div
+                class="flex gap-2 items-center py-[10px] px-[24px] hover:bg-G400 rounded-xl cursor-pointer select-none text-b1 font-medium leading-6 text-G900 duration-300 transition-all"
+                *ngIf="!selectedBid.rejected"
+                [routerLink]="['/inbox/chat']"
+                [queryParams]="{ address: selectedBid.providerId }"
+              >
+                <img
+                  src="/assets/massimo/svg/u_comment-message.svg"
+                  alt="u_comment-message"
+                  class="w-[20px] h-[20px]"
+                />
+                Chat
+              </div>
+              <basic-button
+                *ngIf="!selectedBid.rejected && isOpen"
+                [type]="1"
+                (click)="declineProvider(selectedBid)"
+                title="DECLINE"
+                size="small"
+                extraClass="border text-[#D1242F]"
+              />
+              <basic-button
+                *ngIf="!selectedBid.rejected && isOpen"
+                [type]="2"
+                title="ACCEPT"
+                size="small"
+                (click)="chooseProvider(selectedBid)"
+              />
+            </div>
+          </div>
+
+          <div class="px-[20px] py-[16px] md:px-[40px] text-left">
+            <h1 class="text-b1 font-medium leading-6 text-G900 pb-[16px] ">
+              Cover Letter
+            </h1>
+            <p class="text-b1 font-normal leading-6 text-G900">
+              <!-- {{ stripHtmlTags(selectedBid.description) }} -->
+              Happy New Year! I’m sure you are pumped and excited for the new
+              year. So am I. I can assure you I’m an expert at creating
+              Infographics. I have 5+ years of experience in graphics, web
+              design and illustrations. I help your law firm capture your
+              audience’s attention with creative, accurate infographics. I can
+              create custom icons, illustrations, graphics, and several types of
+              design within your desired timeframe at a reasonable budget.
+              Before you pass on an opportunity to work with an exceptional
+              designer, you should know my Upwork account is new and it doesn’t
+              reflect my proficiency. I have 6+ years of experience working as a
+              graphic designer for various brands in the capacity of a graphic
+              designer, illustrator, web designer and social media designer. I
+              have a wealth of experience to bring to B Corp Coffee, I’m
+              reliable, fast, and creative. I believe an opportunity to convince
+              you is all we need to get started. Let’s discuss more over a call.
+              Let’s discuss more about this task over a call. I’m sure we a re a
+              great match. Thank you
+            </p>
+          </div>
+
+          <div
+            class="border-t border-G200 w-full px-[20px] py-[16px] md:px-[40px]"
+          >
+            <h1 class="text-b1 text-left font-medium leading-6 text-G900">
+              Attachment
+            </h1>
+          </div>
+        </div>
+      </p-dialog>
+    </ng-container>
   </div>
 </section>

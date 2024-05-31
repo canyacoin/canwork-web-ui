@@ -36,6 +36,8 @@ export class JobBidsComponent implements OnInit {
 
   ratinglist: number[] = [1, 2, 3, 4, 5]
 
+  selectedBid: any
+  visible: boolean = false
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
@@ -118,7 +120,12 @@ export class JobBidsComponent implements OnInit {
     return provider
   }
   */
-
+ShowDialogDetail(bid:any) {
+  console.log("bid", bid);
+  
+  this.selectedBid = bid;
+  this.visible = true
+}
   SortbyFilter() {
     this.bids = this.bids.sort((a, b) => {
       if (this.selectedsortby.code === 'actionLog[0].timestamp') {
@@ -130,20 +137,23 @@ export class JobBidsComponent implements OnInit {
       }
     })
   }
-  async chooseProvider(bidIndex) {
+  async chooseProvider(selectedBid : any) {
     const noAddress = await this.authService.isAuthenticatedAndNoAddress()
     if (noAddress) {
       this.toastr.error('Add BNB Chain (BEP20) wallet to Accept Offer')
       return
     }
 
-    const bid = this.bids[bidIndex]
+    const bid = selectedBid
     const confirmed = confirm('Are you sure you want to choose this provider?')
     if (confirmed) {
       const chosen = await this.publicJobsService.closePublicJob(this.job, bid)
       if (chosen) {
         alert('Provider chosen!')
-        const losingBids = this.bids.splice(0, bidIndex)
+        const losingBids = this.bids.find(
+          (item) => item.providerId !== selectedBid.providerId
+        )
+
         const client = await this.userService.getUser(this.job.clientId)
         this.publicJobsService.notifyLosers(this.job, client, losingBids)
         this.router.navigate(['/inbox/job', this.job.id])
@@ -153,8 +163,8 @@ export class JobBidsComponent implements OnInit {
     }
   }
 
-  async declineProvider(bidIndex) {
-    const bid = this.bids[bidIndex]
+  async declineProvider(selectedBid:any) {
+    const bid = selectedBid
     const confirmed = confirm(
       "Are you sure you want to decline this provider's offer?"
     )
