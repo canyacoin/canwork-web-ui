@@ -55,6 +55,11 @@
           optionLabel="name"
           appendTo="body"
         >
+        <ng-template let-item pTemplate="item">
+          <div class="flex align-items-center" (click)="SortbyFilter(item)">
+            <span>{{ item.name }}</span>
+          </div>
+        </ng-template>
         </p-dropdown>
       </div>
     </div>

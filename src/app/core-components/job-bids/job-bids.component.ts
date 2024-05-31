@@ -47,7 +47,7 @@ export class JobBidsComponent implements OnInit {
 
   async ngOnInit() {
     this.sortbylist = [
-      { name: 'Date Posted', code: 'actionLog[0].timestamp' },
+      { name: 'Newest', code: 'actionLog[0].timestamp' },
       { name: 'Project Name', code: 'information.title' },
       { name: 'Budget', code: 'budget' },
     ]
@@ -119,6 +119,17 @@ export class JobBidsComponent implements OnInit {
   }
   */
 
+  SortbyFilter() {
+    this.bids = this.bids.sort((a, b) => {
+      if (this.selectedsortby.code === 'actionLog[0].timestamp') {
+        return b.actionLog[0].timestamp - a.actionLog[0].timestamp
+      } else if (this.selectedsortby.code === 'information.title') {
+        return a.information.title.localeCompare(b.information.title)
+      } else if (this.selectedsortby.code === 'budget') {
+        return b.budget - a.budget
+      }
+    })
+  }
   async chooseProvider(bidIndex) {
     const noAddress = await this.authService.isAuthenticatedAndNoAddress()
     if (noAddress) {
