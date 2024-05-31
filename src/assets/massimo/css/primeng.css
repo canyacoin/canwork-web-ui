@@ -463,3 +463,7 @@
   .p-datatable-wrapper {
     border-radius: 12px;
   }
+
+  .p-datatable .p-dropdown {
+    height: 32px !important;
+  }

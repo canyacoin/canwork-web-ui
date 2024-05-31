@@ -52,7 +52,7 @@
                 }"
               >
                 <div
-                  class="flex items-center h-full py-[8px] px-[12px] md:px-[40px] text-b2 md:text-b1 text-center font-medium leading-6 rounded-t-xl text-G500 cursor-pointer"
+                  class="select-none flex items-center h-full py-[8px] px-[12px] md:px-[40px] text-b2 md:text-b1 text-center font-medium leading-6 rounded-t-xl text-G500 cursor-pointer"
                   (click)="changeJob(item)"
                   [ngClass]="{ 'bg-white': selectedjob.code === item.code }"
                 >
@@ -146,8 +146,8 @@
             <tr>
               <td class="text-G700">{{ job.paymentType }}</td>
               <td class="text-G900 text-right font-medium">
-                ${{ job.budget
-                }}<span *ngIf="job.paymentType !== 'Fixed price'">/hr</span> USD
+                ${{ job.budget  }}
+                <span *ngIf="job.paymentType !== 'Fixed price'">/hr</span> USD
               </td>
             </tr>
             <tr *ngIf="bids">
@@ -179,9 +179,8 @@
           <div class="text-b3 md:text-b2 text-G800 leading-[1.2] mt-[12px]">
             About the Client
           </div>
-          <div *ngIf="jobPoster" class="mt-[12px]">
+          <ng-container *ngIf="jobPoster" class="mt-[12px]">
             <profile-card
-              [index]="0"
               [avatarUri]="jobPoster.avatarUri"
               [name]="jobPoster.name"
               [title]="jobPoster.title"
@@ -195,7 +194,7 @@
               [isGrid]="false"
               [isSmall]="true"
             />
-          </div>
+          </ng-container>
           <div
             *ngIf="myJob && !isClosed"
             class="text-b3 md:text-b2 text-G800 leading-[1.2] mt-[16px]"

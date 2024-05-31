@@ -12,7 +12,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="bids && !canSee" class="container">
+  <div *ngIf="bids.length == 0" class="container">
     <div class="flex justify-center items-center flex-col max-w-[380px] m-auto">
       <img
         src="/assets/massimo/images/Folder.png"
@@ -40,7 +40,7 @@
       </div>
     </div>
   </div>
-  <div class="container" *ngIf="canSee && bids">
+  <div class="container" *ngIf="canSee && bids.length > 0">
     <div class="flex max-md:flex-col justify-between pb-[24px]">
       <h4 class="mb-0 text-G900 font-medium text-h6 leading-7">Submissions</h4>
 
@@ -146,10 +146,10 @@
         </div>
       </div>
     </div> -->
-
+    <!-- [paginator]="bids.length > 5 ? true : false" -->
     <p-table
       [value]="bids"
-      [paginator]="bids.length > 5 ? true : false"
+      [paginator]="true"
       [rows]="5"
       [rowsPerPageOptions]="[10, 25, 50]"
     >

@@ -23,7 +23,7 @@ export class JobBidsComponent implements OnInit {
   authSub: Subscription
   bidsSub: Subscription
   currentUser: User
-  bids: any
+  bids: any[]= []
   jobId: any
   job: any
   isOpen: boolean
@@ -34,7 +34,7 @@ export class JobBidsComponent implements OnInit {
   sortbylist: SortingMethod[] | undefined
   selectedsortby: SortingMethod | undefined
 
-  ratinglist: number[] = [1,2,3,4,5]
+  ratinglist: number[] = [1, 2, 3, 4, 5]
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -46,7 +46,6 @@ export class JobBidsComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-
     this.sortbylist = [
       { name: 'Date Posted', code: 'actionLog[0].timestamp' },
       { name: 'Project Name', code: 'information.title' },
@@ -75,8 +74,7 @@ export class JobBidsComponent implements OnInit {
                 .getPublicJobBids(publicJob.id)
                 .subscribe((result) => {
                   this.bids = result
-                  console.log("this.bid", this.bids);
-                  
+                  console.log('this.bid', this.bids)
                 })
             } else {
               this.canSee = false
@@ -101,7 +99,7 @@ export class JobBidsComponent implements OnInit {
                   .getPublicJobBids(publicJob.id)
                   .subscribe((result) => {
                     this.bids = result
-                    
+                    console.log('this.bid', this.bids)
                   })
               } else {
                 this.canSee = false
@@ -170,5 +168,4 @@ export class JobBidsComponent implements OnInit {
     // Use the textContent property to get the plain text without HTML tags
     return div.textContent || div.innerText || ''
   }
-
 }

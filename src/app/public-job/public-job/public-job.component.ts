@@ -178,6 +178,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
     if (!this.jobPoster) {
       this.jobPoster = await this.userService.getUser(clientId)
+      console.log(this.jobPoster);
+      
       if (this.jobPoster) {
         let avatar = this.jobPoster.avatar // current, retrocomp
         //console.log(result[i])
@@ -204,6 +206,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     this.jobFromNow = moment(job.createAt).fromNow()
     if (this.currentUser) {
       this.myJob = job.clientId === this.currentUser.address
+    await this.setClient(this.job.clientId)
+      
       if (this.currentUser.type === 'Provider') {
         const check = await this.publicJobsService.canBid(
           this.currentUser.address,
@@ -229,9 +233,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     } else {
       this.canSee = true
     }
-    console.log('this.job.clientId', this.job.clientId)
-
-    this.setClient(this.job.clientId)
     this.setAttachmentUrl()
   }
 
