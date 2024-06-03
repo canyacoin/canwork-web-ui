@@ -1,8 +1,5 @@
-<div
-  *ngIf="job"
-  class="w-full rounded-[12px] rounded-tl-none  bg-white border border-G200 p-11"
->
-  <div class="text-h6 md:text-h5 text-G800 font-medium leading-[1.2]">
+<ng-container *ngIf="job">
+  <div class="text-h6 md:text-b1 text-G800 font-medium leading-[1.2]">
     Job Details
   </div>
   <div class="text-h4 md:text-h4 text-G800 font-medium leading-[1.2] my-8">
@@ -62,18 +59,4 @@
       [skill]="skill"
     ></app-skill-tag>
   </div>
-
-  <div class="flex justify-start pt-[48px]">
-    <div
-      class="group flex justify-center items-center text-b1 text-G900 leading-6 font-medium cursor-pointer p-[6px] rounded-md"
-      [routerLink]="['/jobs']"
-    >
-      <img
-        src="/assets/massimo/svg/Arrow-Left.svg"
-        alt="Arrow-Left"
-        class="w-[20px] h-[20px] mx-[8px] group-hover:-translate-x-[6px] duration-500 transition-all"
-      />
-      Back to Job Board
-    </div>
-  </div>
-</div>
+</ng-container>

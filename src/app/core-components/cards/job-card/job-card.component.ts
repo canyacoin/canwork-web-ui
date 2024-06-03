@@ -1,12 +1,15 @@
-import { Component, Input } from '@angular/core'
+import { Component, Input, OnInit, OnDestroy } from '@angular/core'
+import { PublicJobService } from '@service/public-job.service'
+import { UserService } from '@service/user.service'
 import { Router } from '@angular/router'
+import { Subscription } from 'rxjs'
 
 import * as moment from 'moment'
 @Component({
   selector: 'job-card',
   templateUrl: './job-card.component.html',
 })
-export class JobCardComponent {
+export class JobCardComponent implements OnInit, OnDestroy {
   @Input() id!: string
   @Input() clientId!: string
   @Input() providerId!: string
@@ -18,12 +21,21 @@ export class JobCardComponent {
   @Input() skills!: string[]
   @Input() title!: string
   @Input() createAt!: number
-  @Input() Location!: string
+ 
   @Input() proposals!: number
   @Input() projectType: string // 1. contentCreator 2. softwareDev 3. designer , 4. marketing 5. virtualAssistant ...
 
+  jobPoster: any 
+  bids: any[]
+  bidsSub: Subscription
+  Location: string = ''
+
   favourite: boolean = false
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private publicJobsService: PublicJobService,
+    private userService: UserService,
+  ) {}
   providerTypes = [
     {
       name: 'Content Creators',
@@ -52,6 +64,32 @@ export class JobCardComponent {
     },
   ]
 
+  async ngOnInit() {
+    console.log(this.clientId);
+    
+    this.jobPoster = await this.userService.getUser(this.clientId)
+    this.Location = this.jobPoster.timezone
+    console.log("location: ", this.Location);
+    
+    this.bidsSub = this.publicJobsService
+      .getPublicJobBids(this.id)
+      .subscribe((result) => {
+        this.bids = result || []
+      })
+  }
+
+  ngOnDestroy(): void {
+    this.bidsSub.unsubscribe()
+  }
+
+  getbidslengthById() {
+    if (this.bids) return this.bids.length
+    else {
+      return 0
+    }
+  }
+
+  
   getImage(id: string) {
     let url = '/assets/massimo/images/'
     const type = this.providerTypes.find((prov) => prov.id === id)
@@ -88,8 +126,8 @@ export class JobCardComponent {
     this.router.navigate(['/jobs/public/', this.slug])
   }
   Makefavorite(event: Event) {
-    event.stopPropagation();
-    this.favourite = !this.favourite;
+    event.stopPropagation()
+    this.favourite = !this.favourite
   }
   getDaySuffix(day: number): string {
     if (day > 3 && day < 21) return 'th' // All days between 4 and 20 end with 'th'

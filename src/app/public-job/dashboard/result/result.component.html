@@ -13,7 +13,7 @@
       <div class="min-w-[8px] min-h-[8px] bg-G900 rounded-full"></div>
       <div class="whitespace-nowrap">${{ stats.usd }} USD Payment</div>
     </div>
-    <div class="flex items-center gap-5 text-G900 text-b1">
+    <div class="flex items-center gap-4 text-G900 text-b1">
       <div class="font-sans font-[500] text-b2 whitespace-nowrap">Sort by</div>
       <p-dropdown
         [options]="sortingMethods"
@@ -76,6 +76,7 @@
 
       <ng-container *ngFor="let item of jobs">
         <job-card
+          [id]="item.id"
           [title]="item.information.title"
           [description]="item.information.description"
           [projectType]="item.information.providerType"
@@ -84,6 +85,7 @@
           [deadline]="item.deadline"
           [createAt]="item.createAt"
           [slug] = "item.slug"
+          [clientId]="item.clientId"
         />
       </ng-container>
     </ng-template>

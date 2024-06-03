@@ -1,5 +1,5 @@
 <section
-  class="w-full rounded-[12px] rounded-tl-none bg-white border border-G200 px-[24px] py-[32px]"
+  class="w-full rounded-[12px] rounded-tl-none bg-white border border-G200 px-[24px] py-[32px] flex"
   style="min-height: 70vh"
 >
   <!-- <app-back-button></app-back-button> -->
@@ -44,7 +44,7 @@
     <div class="flex max-md:flex-col justify-between pb-[24px]">
       <h4 class="mb-0 text-G900 font-medium text-h6 leading-7">Submissions</h4>
 
-      <div class="flex items-center gap-5 text-G900 text-b1">
+      <div class="flex items-center gap-4 text-G900 text-b1">
         <div class="font-sans font-[500] text-b2 whitespace-nowrap">
           Sort by
         </div>
@@ -250,7 +250,7 @@
       <p-dialog
         header="Proposal Details."
         [(visible)]="visible"
-        styleClass="w-[98%] md:w-[50%]"
+        styleClass="w-[98%] lg:w-[50%]"
         [draggable]="false"
         [resizable]="false"
         [modal]="true"
@@ -259,7 +259,7 @@
           <!-- <img src="" alt=""> -->
 
           <div
-            class="flex justify-between items-center w-full border-y border-G200 px-[20px] py-[16px] md:px-[40px !font-sans]"
+            class="flex max-md:flex-col justify-between items-center w-full border-y border-G200 px-[20px] py-[16px] md:px-[40px !font-sans]"
           >
             <div
               class="flex gap-4"

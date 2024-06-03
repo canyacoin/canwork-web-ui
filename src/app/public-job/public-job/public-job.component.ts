@@ -15,7 +15,7 @@ import { PublicJobService } from '@service/public-job.service'
 import { UserService } from '@service/user.service'
 //import { AngularFireStorage } from '@angular/fire/storage'
 import { AngularFireStorage } from '@angular/fire/compat/storage'
-
+import { AngularEditorConfig } from '@kolkov/angular-editor'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 import { environment } from '@env/environment'
@@ -59,6 +59,66 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   selectedsharelinks: sharelinkstype | undefined
   activejobTypes: any[]
   selectedjob: any
+
+  price_bid:number
+
+  coverletterConfig: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: '200px',
+    minHeight: '0',
+    maxHeight: 'auto',
+    width: 'auto',
+    minWidth: '0',
+    translate: 'yes',
+    enableToolbar: true,
+    showToolbar: true,
+    placeholder: "How do you intend to deliver on this job",
+    defaultParagraphSeparator: '',
+    defaultFontName: '',
+    defaultFontSize: '',
+    fonts: [
+      { class: 'arial', name: 'Arial' },
+      { class: 'times-new-roman', name: 'Times New Roman' },
+      { class: 'calibri', name: 'Calibri' },
+      { class: 'comic-sans-ms', name: 'Comic Sans MS' },
+    ],
+    customClasses: [
+      {
+        name: 'quote',
+        class: 'quote',
+      },
+      {
+        name: 'redText',
+        class: 'redText',
+      },
+      {
+        name: 'titleText',
+        class: 'titleText',
+        tag: 'h1',
+      },
+    ],
+    uploadUrl: 'v1/image',
+    uploadWithCredentials: false,
+    sanitize: true,
+    toolbarPosition: 'top',
+    toolbarHiddenButtons: [
+      ['undo', 'redo'],
+      ['subscript', 'superscript', 'strikeThrough'],
+      ['indent', 'outdent'],
+      [
+        'unlink',
+        'insertImage',
+        'insertVideo',
+        'insertHorizontalRule',
+        'clearFormatting',
+      ],
+      ['foregroundColorPicker', 'backgroundColorPicker'],
+    ],
+  }
+
+
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
@@ -103,6 +163,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
     this.shareableLink = environment.shareBaseUrl
     this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
+
       if (params['jobId']) {
         this.jobSub = this.publicJobsService
           .getPublicJob(params['jobId'])
@@ -114,6 +175,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
             } else {
               this.job = publicJob
               this.initJob(this.job)
+
               this.bidsSub = this.publicJobsService
                 .getPublicJobBids(params['jobId'])
                 .subscribe((result) => {
@@ -138,6 +200,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
             } else {
               this.job = publicJob as Job
               this.initJob(this.job)
+              
               this.bidsSub = this.publicJobsService
                 .getPublicJobBids(publicJob.id)
                 .subscribe((result) => {
@@ -178,8 +241,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
     if (!this.jobPoster) {
       this.jobPoster = await this.userService.getUser(clientId)
-      console.log(this.jobPoster);
-      
+      console.log(this.jobPoster)
+
       if (this.jobPoster) {
         let avatar = this.jobPoster.avatar // current, retrocomp
         //console.log(result[i])
@@ -206,8 +269,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     this.jobFromNow = moment(job.createAt).fromNow()
     if (this.currentUser) {
       this.myJob = job.clientId === this.currentUser.address
-    await this.setClient(this.job.clientId)
-      
+      await this.setClient(this.job.clientId)
+
       if (this.currentUser.type === 'Provider') {
         const check = await this.publicJobsService.canBid(
           this.currentUser.address,
@@ -372,5 +435,42 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
   toggleDescription() {
     this.hideDescription = !this.hideDescription
+  }
+
+
+
+
+  // Drag and Drop
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault()
+    event.stopPropagation()
+    // this.hoveredFiles = true
+    // Optionally add a CSS class to indicate the drag state
+  }
+
+  onDragLeave(event: DragEvent) {
+    event.preventDefault()
+    event.stopPropagation()
+    // this.hoveredFiles = false
+  }
+
+  onDrop(event: DragEvent) {
+    event.preventDefault()
+    event.stopPropagation()
+    // this.hoveredFiles = false
+    // if (event.dataTransfer && event.dataTransfer.files) {
+
+    // if (event.dataTransfer && event.dataTransfer.files) {
+    //   for (let i = 0; i < event.dataTransfer.files.length; i++) {
+    //     if (this.beforeuploadFiles.length > 0) {
+    //       this.beforeuploadFiles.unshift(event.dataTransfer.files[i])
+    //     } else {
+    //       this.beforeuploadFiles.push(event.dataTransfer.files[i])
+    //     }
+    //   }
+    // }
+    const files = event.dataTransfer.files
+    // this.uploadFiles(files)
   }
 }

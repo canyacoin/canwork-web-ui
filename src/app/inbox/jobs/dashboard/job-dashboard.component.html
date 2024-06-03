@@ -74,7 +74,7 @@
 
               <div class="flex max-md:flex-col items-center gap-4 md:gap-10">
                 <div
-                  class="flex items-center gap-5 text-G900 text-b1"
+                  class="flex items-center gap-4 text-G900 text-b1"
                   *ngIf="jobType === 'active'"
                 >
                   <div class="font-sans font-[500] text-b2 whitespace-nowrap">
@@ -97,7 +97,7 @@
                     </ng-template>
                   </p-dropdown>
                 </div>
-                <div class="flex items-center gap-5 text-G900 text-b1">
+                <div class="flex items-center gap-4 text-G900 text-b1">
                   <div class="font-sans font-[500] text-b2 whitespace-nowrap">
                     Sort by
                   </div>
@@ -248,7 +248,6 @@
                 [type]="'sm'"
                 [isPublic]="false"
                 [jobType] = "jobType"
-
               ></app-job-dashboard-card>
             </div>
             <div *ngIf="jobs && jobs.length > 0 && isOnMobile && reverseOrder">

@@ -3,7 +3,7 @@
   id="job-search-filter"
 >
   <div
-    class="flex items-center justify-between text-G800 text-h6 font-medium p-[16px]"
+    class="flex items-center justify-between text-G800 text-b1 font-medium p-[16px]"
   >
     <div class="flex items-center gap-2">
       <div>Filters</div>
@@ -124,7 +124,7 @@
     <p-accordion class="w-full">
       <p-accordionTab>
         <ng-template pTemplate="header">
-          <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
+          <div class="pr-[8px] flex items-center justify-between gap-2 w-full">
             <div class="flex items-center gap-2">
               <span class="font-medium text-G800 whitespace-nowrap"
                 >Categories</span
@@ -142,7 +142,7 @@
             </div>
           </div>
         </ng-template>
-        <div class="pt-[16px] pb-[24px] px-[24px] flex flex-col gap-[8px]">
+        <div class="pb-[24px] px-[24px] flex flex-col gap-[8px]">
           <div class="flex flex-col gap-[8px] font-sans text-b1 font-normal">
             <div
               class="p-inputgroup flex items-center px-[16px] !py-3 border bg-G50 border-G200 rounded-xl"
@@ -151,7 +151,7 @@
                 type="text"
                 pInputText
                 placeholder="Search categories"
-                class="!shadow-none bg-transparent"
+                class="!shadow-none bg-transparent !text-b2"
               />
               <img
                 src="/assets/massimo/images/fi_search.png"
@@ -179,7 +179,7 @@
     <p-accordion class="w-full">
       <p-accordionTab>
         <ng-template pTemplate="header">
-          <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
+          <div class="pr-[8px] flex items-center justify-between gap-2 w-full">
             <div class="flex items-center gap-2">
               <span class="font-medium text-G800 whitespace-nowrap"
                 >Job Type</span
@@ -198,7 +198,7 @@
           </div>
         </ng-template>
 
-        <div class="pt-[16px] px-[24px] flex flex-col gap-[8px]">
+        <div class="px-[24px] flex flex-col gap-[8px]">
           <div>
             <p-checkbox
               label="Hourly"
@@ -223,7 +223,7 @@
                   [(ngModel)]="min"
                   (input)="onSearchInputChange()"
                   placeholder="$Min/hr"
-                  class="!shadow-none bg-transparent border rounded-[8px] w-[96px] py-[6px] pl-[16px]"
+                  class="!shadow-none bg-transparent border rounded-[8px] w-[96px] py-[6px] pl-[16px] text-G900"
                 />
                 <input
                   type="number"
@@ -231,14 +231,14 @@
                   [(ngModel)]="max"
                   (input)="onSearchInputChange()"
                   placeholder="$Max/hr"
-                  class="!shadow-none bg-transparent border rounded-[8px] w-[96px] py-[6px] pl-[16px]"
+                  class="!shadow-none bg-transparent border rounded-[8px] w-[96px] py-[6px] pl-[16px] text-G900"
                 />
               </div>
             </div>
           </div>
         </div>
 
-        <div class="pb-[24px] px-[24px] flex flex-col gap-[8px]">
+        <div class="pb-[16px] px-[24px] flex flex-col gap-[8px]">
           <div>
             <p-checkbox
               label="Fixed"
@@ -313,7 +313,7 @@
     <p-accordion class="w-full">
       <p-accordionTab>
         <ng-template pTemplate="header">
-          <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
+          <div class="pr-[8px] flex items-center justify-between gap-2 w-full">
             <div class="flex items-center gap-2">
               <span class="font-medium text-G800 whitespace-nowrap"
                 >Rating</span
@@ -330,7 +330,7 @@
             </div>
           </div>
         </ng-template>
-        <div class="pt-[16px] pb-[24px] px-[24px]">
+        <div class="pb-[16px] px-[24px]">
           <div class="flex flex-col gap-[8px]">
             <div
               *ngFor="let item of filterSection.rating"
@@ -360,7 +360,7 @@
     <p-accordion class="w-full">
       <p-accordionTab>
         <ng-template pTemplate="header">
-          <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
+          <div class="pr-[8px] flex items-center justify-between gap-2 w-full">
             <div class="flex items-center gap-2">
               <span class="font-medium text-G800 whitespace-nowrap"
                 >Location</span
@@ -378,7 +378,7 @@
             </div>
           </div>
         </ng-template>
-        <div class="pt-[16px] pb-[24px] px-[24px] flex flex-col gap-[8px]">
+        <div class="pb-[16px] px-[24px] flex flex-col gap-[8px]">
           <div class="flex flex-col gap-[8px] font-sans text-b2 font-normal">
             <div
               class="p-inputgroup flex items-center px-[16px] !py-[8px] border bg-G50 border-G200 rounded-xl"
@@ -387,7 +387,7 @@
                 type="text"
                 pInputText
                 placeholder="Search preferred client location"
-                class="!shadow-none bg-transparent h-[10px]"
+                class="!shadow-none bg-transparent"
               />
               <img
                 src="/assets/massimo/images/fi_search.png"

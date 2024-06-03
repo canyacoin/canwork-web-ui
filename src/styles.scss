@@ -16,6 +16,29 @@ $color-ok-rating: #33ccff !default;
   }
 }
 
+h1, h2, h3, h4, h5, h6 {
+  font-family:  "General Sans" , sans-serif !important;
+}
+
+.text-b1-medium {
+  color: var(--G900, #0F172A);
+  /* Medium 16px */
+  font-family: "General Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+.text-b2-small {
+  color: var(--G500, #64748B);
+  /* Regular 14px */
+  font-family: "General Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px
+}
 .p-menu.p-menu-overlay {
   top: 70px !important;
 }

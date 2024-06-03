@@ -46,7 +46,7 @@
 #search-filter .p-accordion-header-link, #job-search-filter .p-accordion-header-link {
     display: flex;
     flex-direction: row-reverse;
-    padding: 8px 16px;
+    padding: 16px;
 }
 
 #search-filter .p-accordion-content ,  #job-search-filter .p-accordion-content{
@@ -181,7 +181,7 @@
 .p-checkbox {
     width: 16px;
     height: 16px;
-    margin-right: 16px;
+    margin-right: 8px;
 
 }
 
@@ -334,6 +334,7 @@
     border: 1px solid #CBD5E1;
     border-radius: 8px;
     padding: 6px;
+    margin: 0 !important;
 }
 
 /* p-calendar */

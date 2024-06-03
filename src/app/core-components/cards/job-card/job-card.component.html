@@ -12,7 +12,10 @@
     </div>
     <div
       class="border rounded-md border-G300 w-[32px] h-[32px] flex items-center justify-center cursor-pointer transition-all duration-150"
-      [ngClass]="{ 'bg-white hover:bg-G100': !favourite, 'bg-start-g1 hover:bg-start-g8': favourite}"
+      [ngClass]="{
+        'bg-white hover:bg-G100': !favourite,
+        'bg-start-g1 hover:bg-start-g8': favourite
+      }"
       (click)="Makefavorite($event)"
     >
       <img src="/assets/massimo/svg/bookmark.svg" class="select-none" />
@@ -65,7 +68,7 @@
       <img src="/assets/massimo/svg/jobLocation.svg" class="select-none" />
       <div class="text-G500 text-b2">Location</div>
       <!-- to do google address -->
-      <div class="text-G700 text-b1 font-medium">San Franciso</div>
+      <div class="text-G700 text-b1 font-medium">{{ Location }}</div>
     </div>
     <div class="flex gap-2 items-center">
       <img src="/assets/massimo/svg/jobBudget.svg" class="select-none" />
@@ -82,7 +85,9 @@
     <div class="flex gap-2 items-center">
       <img src="/assets/massimo/svg/jobProposals.svg" class="select-none" />
       <div class="text-G500 text-b2">Proposals:</div>
-      <div class="text-G700 text-b1 font-medium">20 proposals</div>
+      <div class="text-G700 text-b1 font-medium">
+        {{ getbidslengthById() }} proposals
+      </div>
     </div>
   </div>
 </div>

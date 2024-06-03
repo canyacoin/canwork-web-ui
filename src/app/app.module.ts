@@ -47,6 +47,8 @@ import { ToastModule } from 'primeng/toast'
 import { NgxModalView } from 'ngx-modalview'
 import { DropdownModule } from 'primeng/dropdown';
 import { TabMenuModule } from 'primeng/tabmenu';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
@@ -86,7 +88,8 @@ import { TabMenuModule } from 'primeng/tabmenu';
     ConfirmPopupModule,
     NgxModalView,
     DropdownModule,
-    TabMenuModule
+    TabMenuModule,
+    AngularEditorModule
   ],
   exports: [
     /*FilterPipeModule*/

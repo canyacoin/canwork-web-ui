@@ -37,7 +37,7 @@
 </div>
 
 <div class="flex items-center my-[8px] gap-1 flex-wrap">
-  <p>Popular skill tags:</p>
+  <p class="mr-[8px]">Popular skill tags:</p>
   <ng-container *ngFor="let item of popularskillTags">
     <div class="py-[6px] px-[16px] border border-G200 bg-G0 rounded-2xl text-b2 select-none cursor-pointer" (click)="onTagEnter(item)">
       {{item}}

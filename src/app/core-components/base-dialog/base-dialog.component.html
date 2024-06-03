@@ -1,5 +1,5 @@
 <p-dialog [(visible)]="visible" styleClass="w-[98%] md:w-[50%]"	 [draggable]="false" [resizable]="false"  [modal]="true">
-  <div class="flex justify-center items-center">
+  <div class="flex justify-center items-center h-[300px] md:h-[500px]">
     <div class="max-w-[352px] flex flex-col justify-center items-center">
       <!-- <img src="" alt=""> -->
       <div class="w-[322px] h-[200px] bg-G400 mb-[24px]"></div>
@@ -22,7 +22,7 @@
               Delete Job
             </div>
             <basic-button
-              type="1"
+              [type]="1"
               (click)="Cancel($event)"
               title="Cancel"
               size="small"
