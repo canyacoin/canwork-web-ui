@@ -93,12 +93,15 @@ export class Bid {
   message: string
   timestamp: number
   rejected: boolean
+  attachments: Array<Upload> = []
+
   constructor(
     providerId: string,
     providerInfo: Object,
     budget: number,
     message: string,
-    timestamp: number
+    timestamp: number,
+    attachments: Array<Upload> 
   ) {
     this.providerId = providerId
     this.providerInfo = providerInfo
@@ -106,6 +109,7 @@ export class Bid {
     this.message = message
     this.timestamp = timestamp
     this.rejected = false
+    this.attachments = attachments
   }
 }
 

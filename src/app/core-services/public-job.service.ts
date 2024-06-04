@@ -15,7 +15,7 @@ import { map, tap, take, switchMap, catchError } from 'rxjs/operators'
 import { ChatService } from '@service/chat.service'
 import slugify from 'slugify'
 import { Random } from 'random-js'
-
+import { Upload } from '@class/upload'
 @Injectable()
 export class PublicJobService {
   publicJobsCollection: AngularFirestoreCollection<any>
@@ -252,7 +252,10 @@ export class PublicJobService {
           const action = new IJobAction(ActionType.bid, UserType.provider)
           const client = await this.userService.getUser(job.clientId)
           const provider = await this.userService.getUser(bid.providerId)
+          
           await this.addBid(bid, job.id)
+          console.log("test");
+          
           await this.sendPublicJobMessage(job, action, client, provider)
           resolve(true)
         } else {
@@ -279,7 +282,11 @@ export class PublicJobService {
 
   // add new bid to collection
   private async addBid(bid: Bid, jobId: string): Promise<Boolean> {
+    console.log(bid);
+    
     const bidToUpload = this.parseBidToObject(bid)
+    console.log("bidToUpload", bidToUpload);
+    
     return new Promise<boolean>((resolve, reject) => {
       this.afs
         .doc(`public-jobs/${jobId}/bids/${bid.providerId}`)
@@ -402,9 +409,19 @@ export class PublicJobService {
     bidObject.providerInfo = bid.providerInfo
     bidObject.budget = bid.budget
     bidObject.timestamp = bid.timestamp
+
+    const parsedAttachments: Array<any> = []
+    bid.attachments.forEach((attachment: Upload) => {
+      parsedAttachments.push(this.parseUpload(attachment))
+    })
+    
+    bidObject.attachments = parsedAttachments
     return bidObject
   }
-
+  private parseUpload(upload: Upload): any {
+    const parsedUpload: any = Object.assign({}, upload)
+    return parsedUpload
+  }
   async sendPublicJobMessage(
     job: Job,
     action: IJobAction,

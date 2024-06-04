@@ -258,6 +258,92 @@
                           />
                         </div>
                       </div>
+
+                      <div class="w-full px-10">
+                        <ul class="list-unstyled">
+                          <li
+                            class="flex flex-col gap-2 pt-[8px]"
+                            *ngFor="
+                              let file of beforeuploadFiles;
+                              let i = index
+                            "
+                          >
+                            <div
+                              class="flex gap-2 text-C600 text-b2 font-sans justify-start items-center h-[24px]"
+                            >
+                              <img
+                                src="/assets/massimo/svg/ion_attach-outline.svg"
+                                alt="ion_attach"
+                                class="w-[24px] h-[24px]"
+                              />
+                              {{ file.name }}
+
+                              <div *ngIf="file?.progress === 100">
+                                <span
+                                  class="cursor-pointer alert"
+                                  (click)="removeUpload(uploadedFiles[i], i)"
+                                >
+                                  <img
+                                    src="/assets/massimo/svg/fi_x.svg"
+                                    alt="ion_attach"
+                                    class="w-[20px] h-[20px]"
+                                  />
+                                </span>
+                              </div>
+                              <div *ngIf="file?.progress !== 100">
+                                <div
+                                  class="uploadedFile"
+                                  *ngIf="i < currentUploadNumber"
+                                >
+                                  <span
+                                    class="cursor-pointer alert"
+                                    (click)="removeUpload(uploadedFiles[i], i)"
+                                  >
+                                    <img
+                                      src="/assets/massimo/svg/fi_x.svg"
+                                      alt="ion_attach"
+                                      class="w-[20px] h-[20px]"
+                                    />
+                                  </span>
+                                </div>
+
+                                <div *ngIf="i == currentUploadNumber">
+                                  <div role="status">
+                                    <img
+                                      src="/assets/massimo/svg/spinner.svg"
+                                      alt="ion_attach"
+                                      class="w-[20px] h-[20px]"
+                                      class="animate-spin"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div
+                        class="flex justify-center items-center text-[#D1242F] text-b2 font-sans"
+                        *ngIf="fileTooBig"
+                      >
+                        <img
+                          src="/assets/massimo/svg/fi_alert-triangle.svg"
+                          alt=""
+                        />
+                        You can only add 10 files with maximum of 25MB each
+                      </div>
+
+                      <div
+                        class="flex justify-center items-center text-[#D1242F] text-b2 font-sans"
+                        *ngIf="deleteFailed"
+                      >
+                        <img
+                          src="/assets/massimo/svg/fi_alert-triangle.svg"
+                          alt=""
+                        />
+                        Oops, something went while wrong deleting your file.
+                      </div>
                     </div>
                   </div>
 

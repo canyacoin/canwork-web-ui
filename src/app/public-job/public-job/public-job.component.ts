@@ -20,6 +20,9 @@ import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 import { environment } from '@env/environment'
 import { NgxSpinnerService } from 'ngx-spinner'
+import { Upload } from '@class/upload'
+import { ToastrService } from 'ngx-toastr'
+import { UploadService } from '@service/upload.service'
 
 declare var $: any
 
@@ -61,8 +64,20 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   activejobTypes: any[]
   selectedjob: any
 
-  price_bid:number
+  price_bid: number
+  hoveredFiles: boolean = false
 
+  // new feature files upload
+
+  beforeuploadFiles: any[] = []
+  currentUploadNumber: number = 0
+  uploadedFiles: Upload[] = []
+
+  currentUpload: Upload
+  maxFileSizeBytes = 50000000 // 50mb
+  fileTooBig = false
+  uploadFailed = false
+  deleteFailed = false
   coverletterConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -74,7 +89,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     translate: 'yes',
     enableToolbar: true,
     showToolbar: true,
-    placeholder: "How do you intend to deliver on this job",
+    placeholder: 'How do you intend to deliver on this job',
     defaultParagraphSeparator: '',
     defaultFontName: '',
     defaultFontSize: '',
@@ -118,8 +133,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     ],
   }
 
-
-
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
@@ -127,8 +140,9 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     private publicJobsService: PublicJobService,
     private storage: AngularFireStorage,
     private formBuilder: UntypedFormBuilder,
-    private spinner: NgxSpinnerService
-
+    private spinner: NgxSpinnerService,
+    private toastr: ToastrService,
+    private uploadService: UploadService
   ) {
     this.bidForm = this.formBuilder.group({
       price: [
@@ -171,7 +185,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
     this.shareableLink = environment.shareBaseUrl
     this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
-
       if (params['jobId']) {
         this.jobSub = this.publicJobsService
           .getPublicJob(params['jobId'])
@@ -208,7 +221,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
             } else {
               this.job = publicJob as Job
               this.initJob(this.job)
-              
+
               this.bidsSub = this.publicJobsService
                 .getPublicJobBids(publicJob.id)
                 .subscribe((result) => {
@@ -230,6 +243,52 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     })
   }
 
+  async uploadFiles(files: FileList) {
+    this.uploadFailed = false
+    this.fileTooBig = false
+    this.currentUploadNumber = -1
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i]
+      if (file.size > this.maxFileSizeBytes) {
+        this.fileTooBig = true
+        this.toastr.error(`File ${file.name} is too big.`)
+        this.beforeuploadFiles.slice(i, 1)
+        continue
+      }
+
+      try {
+        const currentUpload = new Upload(
+          this.currentUser.address,
+          file.name,
+          file.size
+        )
+
+        this.currentUploadNumber++
+
+        const upload: Upload =
+          await this.uploadService.uploadJobAttachmentToStorage(
+            this.job.id,
+            currentUpload,
+            file
+          )
+        if (upload) {
+          this.uploadedFiles.unshift(upload)
+        } else {
+          this.uploadFailed = true
+          this.toastr.error(`Failed to upload file ${file.name}.`)
+        }
+      } catch (e) {
+        this.uploadFailed = true
+        this.toastr.error(`Failed to upload file ${file.name}.`)
+      }
+    }
+
+    this.currentUploadNumber++
+
+    this.beforeuploadFiles = []
+    this.beforeuploadFiles.push(...this.uploadedFiles)
+  }
   changeJob(item: any) {
     this.selectedjob = item
   }
@@ -351,7 +410,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
   async submitBid() {
     this.spinner.show()
-   
+
     const providerInfo = {
       name: this.currentUser.name,
       skillTags: this.currentUser.skillTags,
@@ -367,7 +426,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
       providerInfo,
       this.bidForm.value.price,
       this.bidForm.value.message,
-      Date.now()
+      Date.now(),
+      this.uploadedFiles ? this.uploadedFiles : []
     )
     this.sent = await this.publicJobsService.handlePublicBid(
       bidToSubmit,
@@ -449,40 +509,47 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     this.hideDescription = !this.hideDescription
   }
 
-
-
-
   // Drag and Drop
 
   onDragOver(event: DragEvent) {
     event.preventDefault()
     event.stopPropagation()
-    // this.hoveredFiles = true
+    this.hoveredFiles = true
     // Optionally add a CSS class to indicate the drag state
   }
 
   onDragLeave(event: DragEvent) {
     event.preventDefault()
     event.stopPropagation()
-    // this.hoveredFiles = false
+    this.hoveredFiles = false
   }
 
   onDrop(event: DragEvent) {
     event.preventDefault()
     event.stopPropagation()
-    // this.hoveredFiles = false
-    // if (event.dataTransfer && event.dataTransfer.files) {
+    this.hoveredFiles = false
+    if (event.dataTransfer && event.dataTransfer.files) {
+      if (event.dataTransfer && event.dataTransfer.files) {
+        for (let i = 0; i < event.dataTransfer.files.length; i++) {
+          if (this.beforeuploadFiles.length > 0) {
+            this.beforeuploadFiles.unshift(event.dataTransfer.files[i])
+          } else {
+            this.beforeuploadFiles.push(event.dataTransfer.files[i])
+          }
+        }
+      }
+      const files = event.dataTransfer.files
+      this.uploadFiles(files)
+    }
+  }
+  detectFiles(event: any) {
+    const files = event.target.files
+    if (this.beforeuploadFiles.length > 0) {
+      this.beforeuploadFiles.unshift(...files)
+    } else {
+      this.beforeuploadFiles = files
+    }
 
-    // if (event.dataTransfer && event.dataTransfer.files) {
-    //   for (let i = 0; i < event.dataTransfer.files.length; i++) {
-    //     if (this.beforeuploadFiles.length > 0) {
-    //       this.beforeuploadFiles.unshift(event.dataTransfer.files[i])
-    //     } else {
-    //       this.beforeuploadFiles.push(event.dataTransfer.files[i])
-    //     }
-    //   }
-    // }
-    const files = event.dataTransfer.files
-    // this.uploadFiles(files)
+    this.uploadFiles(files)
   }
 }
