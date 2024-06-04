@@ -206,7 +206,7 @@
           </td>
           <td>
             <div class="line-clamp-2 max-w-[300px]">
-              {{ stripHtmlTags(description) }}
+              {{ stripHtmlTags(bid.message) }}
             </div>
           </td>
           <td class="flex gap-1">
@@ -310,21 +310,36 @@
             </div>
           </div>
 
-          <div class="px-[20px] py-[16px] md:px-[40px] text-left">
-            <h1 class="text-b1 font-medium leading-6 text-G900 pb-[16px] ">
+          <div class="w-full px-[20px] py-[16px] md:px-[40px] text-left">
+            <h1 class="text-b1 font-medium leading-6 text-G900 pb-[16px]">
               Cover Letter
             </h1>
             <p class="text-b1 font-normal leading-6 text-G900">
-              {{ stripHtmlTags(selectedBid.description) }}
+              {{ stripHtmlTags(selectedBid.message) }}
             </p>
           </div>
 
           <div
+            *ngIf="selectedBid.attachments.length > 0"
             class="border-t border-G200 w-full px-[20px] py-[16px] md:px-[40px]"
           >
             <h1 class="text-b1 text-left font-medium leading-6 text-G900">
               Attachment
             </h1>
+            <ng-container *ngFor="let item of selectedBid.attachments">
+              <div class="flex justify-start py-[6px]">
+                <a href="{{ item.url }}" target="_blank">
+                  <p class="flex justify-start items-center text-C600">
+                    <img
+                      src="/assets/massimo/svg/ion_attach-outline.svg"
+                      alt="ion_attach"
+                      class="w-[24px] h-[24px]"
+                    />
+                    {{ item.name }}
+                  </p>
+                </a>
+              </div>
+            </ng-container>
           </div>
         </div>
       </p-dialog>

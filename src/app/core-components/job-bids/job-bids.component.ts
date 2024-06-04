@@ -180,6 +180,7 @@ ShowDialogDetail(bid:any) {
   }
 
   stripHtmlTags(html: string): string {
+    
     // Create a new DOM element to use the browser's parsing capabilities
     const div = document.createElement('div')
 
