@@ -64,7 +64,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   activejobTypes: any[]
   selectedjob: any
 
-  price_bid: number
+  price_bid: number = 0
   hoveredFiles: boolean = false
 
   // new feature files upload
@@ -433,10 +433,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
       bidToSubmit,
       this.job
     )
-    setTimeout(() => {
-      /** spinner ends after 2 seconds */
-      this.spinner.hide()
-    }, 2000)
+    this.spinner.hide()
+
     this.canBid = false
     // } else {
     //   alert('You have not been approved as a provider.')

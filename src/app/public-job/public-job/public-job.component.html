@@ -8,9 +8,8 @@
   <div class="flex justify-center bg-G50">
     <!-- template start -->
     <div class="max-w-[1440px] w-full py-[56px] px-[24px] md:px-[64px]">
-
       <base-dialog
-        [visible]="job && !canSee && !loading"
+        [visible]="job && !canSee && !loading && sent"
         title="Proposal Successfully Submitted"
         content="Your proposal has been sent to the client. If approved, the client will be in touch via messages.Goodluck!"
         type="submit"
@@ -150,16 +149,9 @@
                       </div>
 
                       <div
-                        class="flex border rounded-xl border-G300 py-[10px] px-[16px] bg-G200 w-[240px]"
+                        class="flex justify-between border rounded-xl border-G300 py-[10px] px-[16px] bg-G200 w-[240px]"
                       >
-                        $
-                        <input
-                          formControlName="price"
-                          type="number"
-                          disabled
-                          [value]="price_bid / 10"
-                          class="!outline-none !border-none bg-G200 pl-[2px]"
-                        />
+                        <div>$ {{ price_bid / 100 }}</div>
                         USD
                       </div>
                     </div>
@@ -176,16 +168,9 @@
                       </div>
 
                       <div
-                        class="flex border rounded-xl border-G300 py-[10px] px-[16px] bg-G50 w-[240px]"
+                        class="flex justify-between border rounded-xl border-G300 py-[10px] px-[16px] bg-G50 w-[240px]"
                       >
-                        $
-                        <input
-                          formControlName="price"
-                          type="number"
-                          [value]="price_bid * 0.9"
-                          disabled
-                          class="!outline-none !border-none bg-G50 pl-[2px]"
-                        />
+                        <div>$ {{ price_bid * 0.99 }}</div>
                         USD
                       </div>
                     </div>
