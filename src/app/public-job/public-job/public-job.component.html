@@ -1,8 +1,14 @@
 <main class="font-sans">
+  <ngx-spinner
+    bdColor="rgba(51,51,51,0.8)"
+    color="#3AC2FF"
+    type="ball-clip-rotate-pulse"
+  ></ngx-spinner>
+
   <div class="flex justify-center bg-G50">
     <!-- template start -->
     <div class="max-w-[1440px] w-full py-[56px] px-[24px] md:px-[64px]">
-      <div
+      <!-- <div
         *ngIf="job && !canSee && !loading"
         class="flex flex-col md:flex-row md:justify-between gap-2 md:gap-6 pt-[56px]"
       >
@@ -18,7 +24,7 @@
             </button>
           </div>
         </div>
-      </div>
+      </div> -->
       <div
         *ngIf="!job && !loading"
         class="flex flex-col md:flex-row md:justify-between gap-2 md:gap-6 pt-[56px]"
@@ -73,7 +79,12 @@
               />
 
               <!-- bid start -->
-              <form [formGroup]="bidForm" class="form validate pt-[20px]" novalidate>
+              <form
+                [formGroup]="bidForm"
+                class="form validate pt-[20px]"
+                novalidate
+                *ngIf="canBid"
+              >
                 <div
                   class="flex flex-col gap-4 border-t border-G300"
                   *ngIf="job && currentUser && currentUser.type === 'Provider'"
@@ -132,7 +143,7 @@
                           type="number"
                           id="price"
                           [(ngModel)]="price_bid"
-                          class="!outline-none !border-none bg-G50"
+                          class="!outline-none !border-none bg-G50 pl-[2px]"
                         />
                         USD
                       </div>
@@ -156,7 +167,8 @@
                           formControlName="price"
                           type="number"
                           disabled
-                          class="!outline-none !border-none bg-G200"
+                          [value]="price_bid / 10"
+                          class="!outline-none !border-none bg-G200 pl-[2px]"
                         />
                         USD
                       </div>
@@ -180,13 +192,20 @@
                         <input
                           formControlName="price"
                           type="number"
+                          [value]="price_bid * 0.9"
                           disabled
-                          class="!outline-none !border-none bg-G50"
+                          class="!outline-none !border-none bg-G50 pl-[2px]"
                         />
                         USD
                       </div>
                     </div>
 
+                    <!-- message -->
+                    <app-warning-message
+                      *ngIf="price_bid > job.budget"
+                      message="Your bill is more than the client’s budget, consider adjusting for better chance of success"
+                      [type]="1"
+                    />
                     <div
                       class="border-t border-G300 py-[24px] flex flex-col gap-2"
                     >
@@ -242,7 +261,7 @@
                     </div>
                   </div>
 
-                  <div class="w-full">
+                  <div class="w-full" *ngIf="canBid && !sent">
                     <basic-button
                       [disabled]="!bidForm.valid || isBidding"
                       [type]="2"
@@ -453,7 +472,7 @@
               currentUser && currentUser.type === 'Provider' && !myJob && isOpen
             "
           >
-            <button
+            <!-- <button
               class="btn btn-sm btn-dark mt-10 mr-10 w-full text-[15px] py-[7px] normal-case"
               [hidden]="!canBid"
               data-toggle="modal"
@@ -461,7 +480,7 @@
               [disabled]="!currentUser.bscAddress"
             >
               Apply Now
-            </button>
+            </button> -->
             <i *ngIf="!canBid" class="mt-[12px]">You've posted your bid.</i>
             <i *ngIf="!currentUser.bscAddress" class="mt-[12px]"
               >To make a bid fill the field "BNB Chain Address field" in the
@@ -587,7 +606,7 @@
             </div>
           </div>
         </div>
-        <div class="container" *ngIf="!canBid && sent">
+        <div class="container" >
           <div class="row">
             <div class="col-12 text-center">
               <img

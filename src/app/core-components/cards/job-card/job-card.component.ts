@@ -79,7 +79,7 @@ export class JobCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.bidsSub.unsubscribe()
+    // this.bidsSub.unsubscribe()
   }
 
   getbidslengthById() {

@@ -19,6 +19,8 @@ import { AngularEditorConfig } from '@kolkov/angular-editor'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 import { environment } from '@env/environment'
+import { NgxSpinnerService } from 'ngx-spinner'
+
 declare var $: any
 
 interface sharelinkstype {
@@ -42,7 +44,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   jobSub: Subscription
   jobExists: boolean
   canBid: boolean
-  isBidding: boolean
   sent = false
   canSee = false
   hideDescription = false
@@ -125,7 +126,9 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private publicJobsService: PublicJobService,
     private storage: AngularFireStorage,
-    private formBuilder: UntypedFormBuilder
+    private formBuilder: UntypedFormBuilder,
+    private spinner: NgxSpinnerService
+
   ) {
     this.bidForm = this.formBuilder.group({
       price: [
@@ -145,6 +148,11 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.spinner.show()
+    setTimeout(() => {
+      /** spinner ends after 2 seconds */
+      this.spinner.hide()
+    }, 2000)
     this.activejobTypes = [
       { label: 'Job Details', code: 'jobsdetail' },
       { label: 'Proposals', code: 'proposals' },
@@ -342,7 +350,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   }
 
   async submitBid() {
-    this.isBidding = true
+    this.spinner.show()
+   
     const providerInfo = {
       name: this.currentUser.name,
       skillTags: this.currentUser.skillTags,
@@ -364,7 +373,10 @@ export class PublicJobComponent implements OnInit, OnDestroy {
       bidToSubmit,
       this.job
     )
-    this.isBidding = false
+    setTimeout(() => {
+      /** spinner ends after 2 seconds */
+      this.spinner.hide()
+    }, 2000)
     this.canBid = false
     // } else {
     //   alert('You have not been approved as a provider.')
