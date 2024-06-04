@@ -25,6 +25,13 @@
           </div>
         </div>
       </div> -->
+
+      <base-dialog
+        [visible]="true"
+        title="Proposal Successfully Submitted"
+        content="Your proposal has been sent to the client. If approved, the client will be in touch via messages.Goodluck!"
+        type="submit"
+      />
       <div
         *ngIf="!job && !loading"
         class="flex flex-col md:flex-row md:justify-between gap-2 md:gap-6 pt-[56px]"
@@ -632,96 +639,3 @@
     </div>
   </div>
 </div>
-
-<!-- <div
-  id="bidModal"
-
-  class="modal fade"
-  role="dialog"
->
-  <div class="modal-dialog border-none">
-    <div class="modal-content">
-      <div class="modal-header text-center border-none">
-        <div class="col-12">
-          <h5 class="modal-title">PLACE YOUR BID</h5>
-        </div>
-        <button
-          type="button"
-          class="close"
-          style="position: absolute; right: 15px"
-          id="close-bid"
-          data-dismiss="modal"
-        >
-          &times;
-        </button>
-      </div>
-      <div class="modal-body border-none">
-        <div class="container" *ngIf="canBid && !sent">
-          <div class="row">
-            <div class="col-12">
-              <form [formGroup]="bidForm" class="form validate" novalidate>
-                <label for="price">Price*</label>
-                <br />
-                <div class="input-group" style="border: none">
-                  <input
-                    type="number"
-                    formControlName="price"
-                    style="border: 1px solid #ebebeb"
-                    class="form-control"
-                    id="price"
-                    placeholder="Client budget : {{ job.budget }}"
-                  />
-                  <div class="input-group-append" style="padding: 5px">
-                    <span class="input-group-text">
-                      <span *ngIf="job.paymentType !== 'Fixed price'">/hr </span
-                      >USD</span
-                    >
-                  </div>
-                </div>
-                <label for="message">Message</label>
-                <br />
-                <textarea
-                  rows="2"
-                  class="form-control"
-                  placeholder="Deliver your pitch!"
-                  formControlName="message"
-                  id="message"
-                ></textarea>
-              </form>
-              <div class="row px-15"></div>
-            </div>
-          </div>
-        </div>
-        <div class="container" >
-          <div class="row">
-            <div class="col-12 text-center">
-              <img
-                src="assets/img/CanYa_tick_green.svg"
-                class="mb-30 fadeInShort"
-                width="100px"
-                height="100px"
-              />
-              <h6>Bid posted!</h6>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer text-right" *ngIf="canBid && !sent">
-        <img
-          src="assets/img/loader.svg"
-          style="height: 36px"
-          alt="Loader"
-          *ngIf="isBidding"
-        />
-        <button
-          type="button"
-          class="btn btn-primary"
-          [disabled]="!bidForm.valid || isBidding"
-          (click)="submitBid()"
-        >
-          PLACE BID
-        </button>
-      </div>
-    </div>
-  </div>
-</div> -->
