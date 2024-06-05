@@ -39,7 +39,7 @@ interface sharelinkstype {
 })
 export class PublicJobComponent implements OnInit, OnDestroy {
   bidForm: UntypedFormGroup = null
-  bids: []
+  bids: any[]
   recentBids: any
   authSub: Subscription
   routeSub: Subscription
@@ -78,6 +78,11 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   fileTooBig = false
   uploadFailed = false
   deleteFailed = false
+
+
+  // Your application
+
+  yourApplication:any
   coverletterConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -201,6 +206,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
                 .getPublicJobBids(params['jobId'])
                 .subscribe((result) => {
                   this.bids = result || []
+                  console.log("top: " ,result);
+
                   if (this.bids.length > 3) {
                     this.recentBids = this.bids.slice(0, 3)
                   } else {
@@ -213,7 +220,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
         this.jobSub = this.publicJobsService
           .getPublicJobBySlug(params['slug'])
           .subscribe((publicJob) => {
-            //console.log(publicJob === null)
             if (publicJob === null) {
               this.jobExists = false
               this.canSee = false
@@ -226,6 +232,13 @@ export class PublicJobComponent implements OnInit, OnDestroy {
                 .getPublicJobBids(publicJob.id)
                 .subscribe((result) => {
                   this.bids = result || []
+
+                  this.bids.map((bid) => {
+                    if(bid.providerId === this.currentUser.address) {
+                      this.yourApplication = bid
+                    }
+                  })
+                  
                   if (this.bids.length > 3) {
                     this.recentBids = this.bids.slice(0, 3)
                   } else {
