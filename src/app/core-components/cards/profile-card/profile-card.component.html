@@ -148,17 +148,19 @@
               src="{{ avatarUri }}"
               class="w-[64px] h-[64px] object-cover cursor-pointer hover:brightness-50 transition-all duration-200"
             />
-          </div>
-          <img
-            src="/assets/massimo/svg/verifiedTick.svg"
-            *ngIf="isVerified"
-            class="absolute bottom-0 right-0 w-[16px]"
-          />
+          </div> 
         </div>
       </div>
 
       <div class="flex flex-col">
+       <div class="flex justify-start items-center gap-2">
         <div class="text-G800 text-b1 font-medium">{{ name }}</div>
+        <img
+            src="/assets/massimo/svg/verifiedTick.svg"
+            *ngIf="isVerified"
+            class="absolute bottom-0 right-0 w-[16px]"
+          />
+       </div>
         <div class="text-b3 md:text-b2 text-G800">{{ title }}</div>
         <div class="text-b3 md:text-b2 text-G800">
           {{ timezone }}

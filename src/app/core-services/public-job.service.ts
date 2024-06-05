@@ -211,7 +211,6 @@ export class PublicJobService {
 
   // BASIC CRUDs
   async handlePublicJob(job, action: IJobAction): Promise<boolean> {
-    console.log('uploading job...')
     return new Promise<boolean>(async (resolve, reject) => {
       try {
         await this.saveJobFirebase(job, action)

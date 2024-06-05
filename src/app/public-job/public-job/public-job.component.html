@@ -37,7 +37,7 @@
         class="flex flex-col lg:flex-row md:justify-between gap-2 md:gap-6 pt-[56px]"
       >
         <div class="w-full">
-          <p-tabMenu [model]="activejobTypes" [activeItem]="selectedjob">
+          <p-tabMenu [model]="activejobTypes" [activeItem]="selectedjob" *ngIf="this.currentUser.type !== 'Provider'">
             <ng-template pTemplate="item" let-item let-i="index">
               <div
                 class="bg-G200 border-t"
@@ -59,7 +59,8 @@
 
           <div *ngIf="selectedjob.code == 'jobsdetail'" class="w-full">
             <div
-              class="w-full rounded-[12px] rounded-tl-none bg-white border border-G300 p-[40px]"
+              class="w-full rounded-[12px] bg-white border border-G300 p-[40px]"
+              [ngClass]="{'rounded-tl-none': this.currentUser.type !== 'Provider'}"
             >
               <job-detail-panel
                 [job]="job"
@@ -361,7 +362,7 @@
         </div>
 
         <div
-          class="lg:w-[350px] rounded-[12px] bg-white border border-G300 px-7 py-[32px]"
+          class="lg:w-[350px] rounded-[12px] bg-white border border-G300 px-7 py-[32px] h-full"
         >
           <div
             class="text-b2 flex justify-between items-center md:text-b1 text-G800 font-medium leading-[1.2] pl-[2px]"

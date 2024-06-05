@@ -308,7 +308,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
     if (!this.jobPoster) {
       this.jobPoster = await this.userService.getUser(clientId)
-      console.log(this.jobPoster)
 
       if (this.jobPoster) {
         let avatar = this.jobPoster.avatar // current, retrocomp

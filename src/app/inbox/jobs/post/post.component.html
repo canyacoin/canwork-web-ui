@@ -400,12 +400,12 @@
                   </div>
 
                   <div class="modal-footer">
-                    <img
+                    <!-- <img
                       *ngIf="isSending"
                       src="assets/img/loader.svg"
                       style="height: 36px"
                       alt="CanYa Coin"
-                    />
+                    /> -->
                     <button
                       type="button"
                       (click)="submitForm()"
@@ -911,6 +911,7 @@
                             >
                               <div
                                 *ngIf="!shareableJobForm.controls.budget.valid"
+                                class="w-full flex gap-2"
                               >
                                 <img
                                   src="/assets/massimo/svg/fi_alert-triangle.svg"
@@ -921,6 +922,7 @@
 
                               <div
                                 *ngIf="shareableJobForm.controls.budget.dirty"
+                                class="w-full flex gap-2"
                               >
                                 <img
                                   src="/assets/massimo/svg/fi_alert-triangle.svg"
@@ -1157,64 +1159,64 @@
           </div>
         </div>
       </div>
-
-      <div *ngIf="sent">
-        <div class="max-w-[1008px] p-[40px] m-auto card rounded-xl">
-          <div class="text-center mt-30">
-            <img
-              src="assets/img/CanYa_tick_green.svg"
-              class="mb-30 animated bounceInDown"
-              width="100px"
-              height="100px"
-            />
-            <div *ngIf="!draft && !editing">
-              <h2>Congrats! Your Job has been Created!</h2>
-              <p class="lead fw-400">
-                You can now invite providers to this job.
-              </p>
-            </div>
-            <div *ngIf="!draft && editing">
-              <h2>Your job has been saved!</h2>
-              <p class="lead fw-400">
-                You can now invite providers to this job.
-              </p>
-            </div>
-            <div *ngIf="draft">
-              <h2>Your job draft has been saved</h2>
-              <p class="lead fw-400 m-0">
-                You can finish the draft and share it later.
-              </p>
-            </div>
-          </div>
-          <br />
-          <p *ngIf="!draft" class="text-center">
-            <a class="btn btn-secondary" [routerLink]="['/jobs/public/', slug]"
-              >Go to job</a
-            >
-            &nbsp;&nbsp;
-            <a class="btn btn-primary text-white" [routerLink]="['/search']"
-              >Invite Providers</a
-            >
-          </p>
-          <p *ngIf="draft" class="text-center">
-            <a class="btn btn-secondary" [routerLink]="['/inbox/jobs/']"
-              >My Jobs</a
-            >
-            &nbsp;&nbsp;
-            <a
-              class="btn btn-primary text-white"
-              [routerLink]="['/jobs/public/', slug]"
-              >Go to job</a
-            >
-            &nbsp;&nbsp;
-          </p>
-        </div>
-      </div>
     </div>
 
+    <div *ngIf="sent">
+      <base-dialog
+        [visible]="true"
+        title="Job listing successful"
+        content="Your job has been successfully listed on CanWork’s job board. Consider inviting freelancers to your job listing and sharing on your social media."
+        type="success"
+      />
+      <div *ngIf="!draft && !editing">
+        <base-dialog
+          [visible]="!draft && !editing"
+          title="Job listing successful"
+          content="Your job has been successfully listed on CanWork’s job board. Consider inviting freelancers to your job listing and sharing on your social media."
+          type="success"
+        />
+      </div>
+      <!-- <div *ngIf="!draft && editing">
+            <h2>Your job has been saved!</h2>
+            <p class="lead fw-400">
+              You can now invite providers to this job.
+            </p>
+          </div> -->
+      <div *ngIf="draft">
+        <base-dialog
+          [visible]="!draft && editing"
+          title="Job listing saved to Draft"
+          content="Your job listing has been saved to your drafts, you can continue anytime to list your job on CanWork"
+          type="draft"
+          [slug]="slug"
+        />
+      </div>
+      <!-- <br />
+        <p *ngIf="!draft" class="text-center">
+          <a class="btn btn-secondary" [routerLink]="['/jobs/public/', slug]"
+            >Go to job</a
+          >
+          &nbsp;&nbsp;
+          <a class="btn btn-primary text-white" [routerLink]="['/search']"
+            >Invite Providers</a
+          >
+        </p>
+        <p *ngIf="draft" class="text-center">
+          <a class="btn btn-secondary" [routerLink]="['/inbox/jobs/']"
+            >My Jobs</a
+          >
+          &nbsp;&nbsp;
+          <a
+            class="btn btn-primary text-white"
+            [routerLink]="['/jobs/public/', slug]"
+            >Go to job</a
+          >
+          &nbsp;&nbsp;
+        </p> -->
+    </div>
     <div
       *ngIf="isPreview"
-      class="flex flex-col md:flex-row md:justify-center gap-2 md:gap-6 max-w-[1008px] p-[20px] md:p-[40px] m-auto rounded-xl"
+      class="flex flex-col md:flex-row md:justify-center gap-2 md:gap-6 max-w-[1440px] p-[20px] md:p-[40px] m-auto rounded-xl"
     >
       <div
         *ngIf="jobForPreview"
@@ -1264,24 +1266,22 @@
             </div>
           </ng-container>
         </div>
-        <hr
-          *ngIf="jobForPreview.information.skills.length > 0"
-          class="h-[1.5px] my-[20px] bg-gray-200 border-0"
-        />
-        <p class="mb-[10px] text-b2 font-sans font-medium text-G900">
-          Skill Tags
-        </p>
+        <div *ngIf="jobForPreview.information.skills.length > 0">
+          <hr class="h-[1.5px] my-[20px] bg-gray-200 border-0" />
+          <p class="mb-[10px] text-b2 font-sans font-medium text-G900">
+            Skill Tags
+          </p>
 
-        <div
-          *ngIf="jobForPreview.information.skills.length > 0"
-          class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[15px] flex flex-wrap"
-        >
-          <app-skill-tag
-            *ngFor="let skill of jobForPreview.information.skills"
-            [routerLink]="['/search/']"
-            [queryParams]="{ query: skill }"
-            [skill]="skill"
-          ></app-skill-tag>
+          <div
+            class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[15px] flex flex-wrap"
+          >
+            <app-skill-tag
+              *ngFor="let skill of jobForPreview.information.skills"
+              [routerLink]="['/search/']"
+              [queryParams]="{ query: skill }"
+              [skill]="skill"
+            ></app-skill-tag>
+          </div>
         </div>
 
         <div class="flex justify-start pt-[48px]">
@@ -1299,7 +1299,7 @@
         </div>
       </div>
       <div
-        class="md:w-[400px] rounded-[12px] bg-white border border-G200 px-[24px] py-[24px]"
+        class="md:w-[400px] rounded-[12px] bg-white border border-G200 px-[24px] py-[24px] detail-job"
       >
         <div
           class="text-b2 flex justify-between items-center md:text-b1 text-G800 font-medium leading-[1.2] pl-[2px]"
@@ -1308,15 +1308,35 @@
             <i class="circle-success fas fa-circle mr-[12px]"></i
             >{{ jobForPreview?.state }}
           </span>
-          <div
-            class="border border-G300 shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer w-[32px] h-[32px] rounded-lg p-[6px]"
+          <p-dropdown
+            [options]="sharelinks"
+            [(ngModel)]="selectedsharelinks"
+            optionLabel="name"
+            appendTo="body"
           >
-            <img
-              src="/assets/massimo/svg/fi_share-2.svg"
-              alt=""
-              class="w-full h-full"
-            />
-          </div>
+            <ng-template pTemplate="selectedItem">
+              <div
+                *ngIf="selectedsharelinks"
+                class="border border-G300 shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer w-[32px] h-[32px] rounded-lg p-[6px]"
+              >
+                <img
+                  src="/assets/massimo/svg/fi_share-2.svg"
+                  alt=""
+                  class="w-full h-full"
+                />
+              </div>
+            </ng-template>
+            <ng-template let-item pTemplate="item">
+              <div class="flex align-items-center">
+                <img
+                  src="{{ '/assets/massimo/svg/' + item.img }}"
+                  style="width: 20px"
+                  class="mr-[16px]"
+                />
+                <span>{{ item.name }}</span>
+              </div>
+            </ng-template>
+          </p-dropdown>
         </div>
         <table
           class="table-auto text-b2 w-full md:text-b1 mt-[24px] border-separate border-spacing-x-[2px] border-spacing-y-[10px] md:w-[302px]"

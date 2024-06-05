@@ -32,6 +32,8 @@ import * as _ from 'lodash'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
+import { NgxSpinnerService } from 'ngx-spinner'
+
 import { AngularEditorConfig } from '@kolkov/angular-editor'
 
 import { MessageService } from 'primeng/api'
@@ -87,6 +89,9 @@ export class PostComponent implements OnInit, OnDestroy {
   fileTooBig = false
   uploadFailed = false
   deleteFailed = false
+
+  sharelinks: SortingMethod[] | undefined
+  selectedsharelinks: SortingMethod | undefined
 
   /// css variables for file upload
   hoveredFiles = false
@@ -169,7 +174,8 @@ export class PostComponent implements OnInit, OnDestroy {
     private publicJobService: PublicJobService,
     private uploadService: UploadService,
     private toastr: ToastrService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private spinner: NgxSpinnerService
   ) {
     this.postForm = formBuilder.group({
       url: [''],
@@ -297,6 +303,16 @@ export class PostComponent implements OnInit, OnDestroy {
       },
     ]
     this.selectedSortings_category = this.sortingMethods_category[0]
+
+    this.sharelinks = [
+      { name: 'Invite Freelancer', img: 'fi_user-plus.svg', code: '1' },
+      { name: 'Copy Link', img: 'u_link.svg', code: '2' },
+      { name: 'Twitter', img: 'x.svg', code: '3' },
+      { name: 'Facebook', img: 'logos_facebook.svg', code: '4' },
+      { name: 'Linkedin', img: 'devicon_linkedin.svg', code: '5' },
+    ]
+
+    this.selectedsharelinks = this.sharelinks[0]
 
     this.sortingMethods_visibility = [
       { name: 'Invite Only', code: 'invite', img: 'fi_user-plus.svg' },
@@ -627,6 +643,8 @@ export class PostComponent implements OnInit, OnDestroy {
   async submitForm() {
     this.error = false
     this.isSending = true
+    this.spinner.show()
+
     let tags: string[]
     if (!this.isShareable) {
       tags =
@@ -675,6 +693,7 @@ export class PostComponent implements OnInit, OnDestroy {
         this.sent = await this.jobService.handleJobAction(job, action)
         this.isSending = false
         if (this.sent) {
+          this.isPreview = true
           this.jobService.createJobChat(
             job,
             action,
@@ -690,6 +709,7 @@ export class PostComponent implements OnInit, OnDestroy {
       this.error = true
       this.isSending = false
     }
+    this.spinner.hide()
   }
 
   handleGitError(msg) {
@@ -707,6 +727,8 @@ export class PostComponent implements OnInit, OnDestroy {
 
     this.errorGitUrl = ''
     this.isSending = true
+    this.spinner.show()
+
     formRef.controls['url'].patchValue(url)
     formRef.controls['url'].disable()
 
@@ -766,6 +788,7 @@ export class PostComponent implements OnInit, OnDestroy {
           this.handleGitError(errorMsg)
         }
       )
+    this.spinner.hide()
   }
 
   onGitPaste(event: ClipboardEvent) {
@@ -816,6 +839,7 @@ export class PostComponent implements OnInit, OnDestroy {
     // isDRP , 0 => draft, , 1=> Preview, 2 => Post
     this.isSending = true
     this.error = false
+    this.spinner.show()
 
     this.shareableJobForm.controls.providerType.setValue(
       this.selectedSortings_category.code
@@ -879,26 +903,29 @@ export class PostComponent implements OnInit, OnDestroy {
         this.isPreview = false
       }
 
-      if (isDRP !== 1) {
-        const action = new IJobAction(ActionType.createJob, UserType.client)
-        action.setPaymentProperties(
-          job.budget,
-          this.shareableJobForm.value.timelineExpectation,
-          this.shareableJobForm.value.workType,
-          this.shareableJobForm.value.weeklyCommitment,
-          this.shareableJobForm.value.paymentType
-        )
-        this.sent = await this.publicJobService.handlePublicJob(job, action)
-      } else {
-        this.jobForPreview = job
-        this.isPreview = true
-      }
+      const action = new IJobAction(ActionType.createJob, UserType.client)
+      action.setPaymentProperties(
+        job.budget,
+        this.shareableJobForm.value.timelineExpectation,
+        this.shareableJobForm.value.workType,
+        this.shareableJobForm.value.weeklyCommitment,
+        this.shareableJobForm.value.paymentType
+      )
+      this.sent = await this.publicJobService.handlePublicJob(job, action)
+      this.jobForPreview = job
+      this.isPreview = true
+
       this.isSending = false
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      })
     } catch (e) {
       this.sent = false
       this.isSending = false
       this.error = true
     }
+    this.spinner.hide()
   }
 
   BacktoEdit() {
