@@ -314,8 +314,9 @@
             <h1 class="text-b1 font-medium leading-6 text-G900 pb-[16px]">
               Cover Letter
             </h1>
-            <p class="text-b1 font-normal leading-6 text-G900">
-              {{ stripHtmlTags(selectedBid.message) }}
+            <p class="text-b1 font-normal leading-6 text-G900"
+            [innerHTML]="selectedBid.message | linkify"
+            >
             </p>
           </div>
 

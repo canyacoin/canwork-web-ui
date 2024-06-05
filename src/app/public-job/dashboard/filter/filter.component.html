@@ -141,7 +141,7 @@
         </ng-template>
         <div class="pb-[24px] px-[24px] flex flex-col gap-[8px]">
           <div class="flex flex-col gap-[8px] font-sans text-b1 font-normal">
-            <div
+            <!-- <div
               class="p-inputgroup flex items-center px-[16px] !py-3 border bg-G50 border-G200 rounded-xl"
             >
               <input
@@ -155,7 +155,7 @@
                 class="w-4 h-4"
                 alt="search"
               />
-            </div>
+            </div> -->
             <div
               *ngFor="let item of filterSection.categories"
               class="flex items-center"
@@ -221,7 +221,7 @@
                   [(ngModel)]="min"
                   (input)="onSearchInputChange()"
                   placeholder="$Min/hr"
-                  class="!shadow-none bg-transparent border rounded-[8px] w-[96px] py-[6px] pl-[16px] text-G900"
+                  class="!shadow-none !text-b2 bg-transparent border rounded-[8px] w-[96px] py-[6px] pl-[16px] text-G900"
                 />
                 <input
                   type="number"
@@ -229,7 +229,7 @@
                   [(ngModel)]="max"
                   (input)="onSearchInputChange()"
                   placeholder="$Max/hr"
-                  class="!shadow-none bg-transparent border rounded-[8px] w-[96px] py-[6px] pl-[16px] text-G900"
+                  class="!shadow-none !text-b2 bg-transparent border rounded-[8px] w-[96px] py-[6px] pl-[16px] text-G900"
                 />
               </div>
             </div>
@@ -401,12 +401,18 @@
               />
             </div>
 
-            <div class="flex justify-start items-center text-[#D1242F] text-b2 font-sans gap-2 animated fadeIn" *ngIf="tagSelectionInvalid == 3">
-              <img src="/assets/massimo/svg/fi_alert-triangle.svg" alt="fi_alert-triangle">
+            <div
+              class="flex justify-start items-center text-[#D1242F] text-b2 font-sans gap-2 animated fadeIn"
+              *ngIf="tagSelectionInvalid == 3"
+            >
+              <img
+                src="/assets/massimo/svg/fi_alert-triangle.svg"
+                alt="fi_alert-triangle"
+              />
               You already added this location.
             </div>
 
-            <div class="flex flex-wrap">
+            <div class="flex flex-wrap gap-1">
               <ng-container *ngFor="let item of locationInput">
                 <div (click)="removeTag(item)">
                   <search-button [content]="item"></search-button>
