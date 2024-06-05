@@ -1,4 +1,12 @@
-import { Component, OnInit, Input, EventEmitter, Output,SimpleChanges, OnChanges } from '@angular/core'
+import {
+  Component,
+  OnInit,
+  Input,
+  EventEmitter,
+  Output,
+  SimpleChanges,
+  OnChanges,
+} from '@angular/core'
 import { FilterService } from 'app/shared/constants/public-job-dashboard-page'
 @Component({
   selector: 'dashboard-filter',
@@ -34,36 +42,39 @@ export class FilterComponent implements OnInit, OnChanges {
   hourly: boolean[] = [false]
   hourlymin_max: boolean[] = [false]
   min: number = undefined // minimum
-  max: number  = undefined// maximum
+  max: number = undefined // maximum
 
   fixedflag: boolean[] = [false]
+
+  // search location
+
+  skillTagsList: string[] = []
+  tagSelectionInvalid: number // 0 =-= validation, 1 = validation error with length 20, 2 = validation error with input, 3 = when duplicate
+  noValidTag = false
+  tagInput = ''
+  @Input() locationInput: string[]
+  @Output() LocationInputChange = new EventEmitter<string[]>() // two way binding to parent
+
   ngOnInit() {
     this.tempSkillsForm = this.filterSection.skills.slice(0, this.skillsLength)
   }
   ngOnChanges(changes: SimpleChanges) {
     // check Hourly
     try {
-      if(changes.hourlyInput.currentValue.length == 0) {
+      if (changes.hourlyInput.currentValue.length == 0) {
         this.hourly = [false]
         this.hourlymin_max = [false]
         this.min = undefined
         this.max = undefined
       }
-    } catch (error) {
-      
-    }
+    } catch (error) {}
 
-
-    // check Flag 
+    // check Flag
     try {
-      if(changes.fixedForm.currentValue.length == 0) {
+      if (changes.fixedForm.currentValue.length == 0) {
         this.fixedflag = [false]
       }
-    } catch (error) {
-      
-    }
-
-
+    } catch (error) {}
   }
   getNumberAllFilters(): number {
     return (
@@ -137,14 +148,16 @@ export class FilterComponent implements OnInit, OnChanges {
     this.categoriesFormChange.emit(this.categoriesForm)
   }
 
-
   fixedClick(e) {
     if (!this.fixedForm.includes(-1)) {
       this.fixedForm.unshift(-1)
       if (!this.fixedflag.includes(true)) {
         this.fixedflag = [true]
       }
-    } else if ((this.fixedflag.length == 0 || !this.fixedflag.includes(true))&& this.fixedForm.includes(-1)) {
+    } else if (
+      (this.fixedflag.length == 0 || !this.fixedflag.includes(true)) &&
+      this.fixedForm.includes(-1)
+    ) {
       this.PriceClear()
     }
     this.fixedFormChange.emit(this.fixedForm)
@@ -175,7 +188,6 @@ export class FilterComponent implements OnInit, OnChanges {
     this.hourlyInputChange.emit(this.hourlyInput)
   }
   onSearchInputChange() {
-   
     this.hourly = [true]
     this.hourlymin_max = [true]
     this.hourlyInput = [Number(this.min), Number(this.max)]
@@ -215,7 +227,7 @@ export class FilterComponent implements OnInit, OnChanges {
     this.fixedForm = []
     this.fixedFormChange.emit([])
     this.hourly = []
-    this.hourlyInputChange.emit([])  
+    this.hourlyInputChange.emit([])
   }
 
   experienceClear() {
@@ -229,5 +241,85 @@ export class FilterComponent implements OnInit, OnChanges {
       this.skillsLength = 9
     }
     this.tempSkillsForm = this.filterSection.skills.slice(0, this.skillsLength)
+  }
+
+  // location search
+
+  onBlurMethod() {
+    if (this.locationInput.length == 0) this.noValidTag = true
+  }
+  onFocusMethod() {
+    this.noValidTag = false
+  }
+
+  onTagEnter(inputtag?: string) {
+    this.noValidTag = false
+    let tag
+
+    if (inputtag) {
+      // click on popular tags
+      tag = inputtag
+    } else {
+      tag = this.tagInput
+    }
+
+    tag = tag.replace(',', '').trim()
+    if (tag === '') {
+      this.tagSelectionInvalid = 2
+      return false
+    }
+    const duplicate = this.locationInput.findIndex((x) => x === tag) > -1
+    if (!duplicate) {
+      this.locationInput.push(tag)
+      this.LocationInputChange.emit(this.locationInput)
+    } else {
+      if (duplicate) {
+        this.tagSelectionInvalid = 3
+      } else this.tagSelectionInvalid = 1
+      return false
+    }
+    this.tagInput = ''
+    this.tagSelectionInvalid = 0
+    this.onDropDownTT()
+  }
+
+  onTagChange() {
+    let tag = this.tagInput
+    tag = tag.replace(',', '').trim()
+    const indexOfTag = this.skillTagsList.findIndex((x) => x === tag)
+    const duplicate = this.locationInput.findIndex((x) => x === tag) > -1
+    if (indexOfTag !== -1) {
+      if (!duplicate) {
+        this.locationInput.push(tag)
+        this.LocationInputChange.emit(this.locationInput)
+        this.tagInput = ''
+      }
+      if (duplicate) {
+        this.tagInput = ''
+      }
+    }
+    this.tagSelectionInvalid = 0
+  }
+
+  removeTag(tag: string) {
+    const index = this.locationInput.indexOf(tag)
+    this.locationInput.splice(index, 1)
+    this.LocationInputChange.emit(this.locationInput)
+  }
+
+  onDropDownTT() {
+    let tag = this.tagInput
+    tag = tag.replace(',', '').trim()
+
+    const tooltip = document.querySelector<any>('#tagInputTT')
+    if (tooltip) {
+      tooltip.innerText = 'Click to add: ' + tag
+
+      if (tag !== '') {
+        tooltip.setAttribute('data-show', '')
+      } else {
+        tooltip.removeAttribute('data-show')
+      }
+    }
   }
 }

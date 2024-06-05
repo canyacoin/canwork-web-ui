@@ -12,6 +12,7 @@ import * as union from 'lodash/union'
 import { Location } from '@angular/common'
 
 import { FilterService } from 'app/shared/constants/public-job-dashboard-page'
+import { UserService } from '@service/user.service'
 
 const HITS_PER_PAGE = 5
 
@@ -95,7 +96,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private statisticsService: StatisticsService,
     private authService: AuthService,
     private navService: NavService, //    private order: OrderPipe
-    private location: Location
+    private location: Location,
+    private userService: UserService
   ) {}
 
   async ngOnInit() {
@@ -147,6 +149,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   getHits() {
+    console.log(this.filteredProviders)
+
     this.loading = true
     setTimeout(() => {
       this.loading = false
@@ -157,26 +161,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
     )
   }
 
-
   removeDuplicates(arr: any[]) {
-    let uniqueItems = {};
-  
+    let uniqueItems = {}
+
     // Create an object with unique IDs as keys
     for (let item of arr) {
       if (!uniqueItems[item.id]) {
-        uniqueItems[item.id] = item;
+        uniqueItems[item.id] = item
       }
     }
-  
+
     // Convert the object back to an array
-    return Object.values(uniqueItems);
+    return Object.values(uniqueItems)
   }
 
-
   additemToFilteredProviders(provider: any) {
-      this.filteredProviders.push(provider);
-      this.filteredProviders = this.removeDuplicates(this.filteredProviders)
-      
+    this.filteredProviders.push(provider)
+    this.filteredProviders = this.removeDuplicates(this.filteredProviders)
   }
   // Refresh the search results
   async refreshResultsSearch() {
@@ -278,6 +279,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
         })
       }
     }
+
+    // Search Location
+
+    if (this.locationFilter.length > 0) {
+      this.loading = true
+      this.allProviders.map(async (provider) => {
+        const jobPoster = await this.userService.getUser(provider.clientId)
+        const location_client = jobPoster.timezone
+        console.log('test location')
+
+        this.locationFilter.map((item) => {
+          if (location_client.toLowerCase().includes(item.toLowerCase())) {
+            this.additemToFilteredProviders(provider)
+          }
+        })
+      })
+    }
     this.currentPage = 0
 
     if (this.searchitems.length === 0) {
@@ -286,8 +304,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.SortbymethodHandler()
 
-    this.hits = this.getHits()
-    this.numHits = this.filteredProviders.length
+    if (this.searchitems.includes('Location')) {
+      setTimeout(() => {
+        this.hits = this.getHits()
+        this.numHits = this.filteredProviders.length
+        this.loading = false
+      }, 3000)
+    } else {
+      this.hits = this.getHits()
+      this.numHits = this.filteredProviders.length
+      this.loading = false
+    }
   }
 
   SortbymethodHandler() {
@@ -307,12 +334,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.hits = this.getHits()
   }
 
-  onLocationChange(locationInput: string[]) {
+  onLocationInputChange(locationInput: string[]) {
     // we don't sort it to avoid ui changes, we'll sort it on the fly when composing status into address bar
-
+    if (locationInput.length == 0) {
+      this.searchitems.splice(this.searchitems.indexOf('Location'), 1)
+    }
+    if (locationInput.length > 0 && !this.searchitems.includes('Location')) {
+      this.searchitems.push('Location')
+    }
     this.locationFilter = locationInput
 
     this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
+    this.refreshResultsSearch()
   }
 
   // two way binding, event from child (user input)
@@ -346,8 +379,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   onCategoryFilterChange(categoryInput: any[]) {
     this.onChangeSearchItemCategory(categoryInput)
     this.categoryFilter = categoryInput
-    console.log('this.categoryFilter', this.categoryFilter)
-
     this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
     this.refreshResultsSearch()
   }
@@ -510,6 +541,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.searchitems.splice(this.searchitems.indexOf(removeItem), 1)
     this.categoryFilter.splice(this.categoryFilter.indexOf(removeItem), 1)
     this.skillsFilter.splice(this.skillsFilter.indexOf(removeItem), 1)
+
+    if (removeItem == 'Location') {
+      this.locationFilter = []
+    }
     if (removeItem == 'hourly') {
       this.hourlyFilter = []
     }

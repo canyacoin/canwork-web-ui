@@ -65,11 +65,9 @@ export class JobCardComponent implements OnInit, OnDestroy {
   ]
 
   async ngOnInit() {
-    console.log(this.clientId);
     
     this.jobPoster = await this.userService.getUser(this.clientId)
     this.Location = this.jobPoster.timezone
-    console.log("location: ", this.Location);
     
     this.bidsSub = this.publicJobsService
       .getPublicJobBids(this.id)

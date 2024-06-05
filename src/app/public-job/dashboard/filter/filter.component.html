@@ -57,7 +57,6 @@
       </p-accordionTab>
     </p-accordion> -->
 
-
     <!-- skills tags -->
     <!-- <p-accordion class="w-full">
       <p-accordionTab>
@@ -119,8 +118,6 @@
       </p-accordionTab>
     </p-accordion> -->
 
-
-
     <p-accordion class="w-full">
       <p-accordionTab>
         <ng-template pTemplate="header">
@@ -159,7 +156,10 @@
                 alt="search"
               />
             </div>
-            <div *ngFor="let item of filterSection.categories" class="flex items-center">
+            <div
+              *ngFor="let item of filterSection.categories"
+              class="flex items-center"
+            >
               <p-checkbox
                 [label]="item.name"
                 name="skillsForm"
@@ -173,8 +173,6 @@
         </div>
       </p-accordionTab>
     </p-accordion>
-
-
 
     <p-accordion class="w-full">
       <p-accordionTab>
@@ -388,12 +386,36 @@
                 pInputText
                 placeholder="Search preferred client location"
                 class="!shadow-none bg-transparent"
+                (blur)="onBlurMethod()"
+                (focus)="onFocusMethod()"
+                [class.invalid]="locationInput.length <= 0"
+                (keyup.enter)="onTagEnter()"
+                (keyup.,)="onTagEnter()"
+                (keyup)="onDropDownTT()"
+                [(ngModel)]="tagInput"
+                [ngModelOptions]="{ standalone: true }"
+                (change)="onTagChange()"
+                autocapitalize="none"
+                (keyup.shift.enter)="onTagEnter()"
               />
               <img
                 src="/assets/massimo/images/fi_search.png"
                 class="w-4 h-4"
                 alt="search"
               />
+            </div>
+
+            <div class="flex justify-start items-center text-[#D1242F] text-b2 font-sans gap-2 animated fadeIn" *ngIf="tagSelectionInvalid == 3">
+              <img src="/assets/massimo/svg/fi_alert-triangle.svg" alt="fi_alert-triangle">
+              You already added this location.
+            </div>
+
+            <div class="flex flex-wrap">
+              <ng-container *ngFor="let item of locationInput">
+                <div (click)="removeTag(item)">
+                  <search-button [content]="item"></search-button>
+                </div>
+              </ng-container>
             </div>
           </div>
         </div>

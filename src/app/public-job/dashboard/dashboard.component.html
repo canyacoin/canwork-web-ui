@@ -25,6 +25,8 @@
           (hourlyInputChange)="onHourlyInputChange($event)"
           [categoriesForm] = "categoryFilter"
           (categoriesFormChange) = "onCategoryFilterChange($event)"
+          [locationInput]="locationFilter"
+          (LocationInputChange) = "onLocationInputChange($event)"
         />
       </div>
       <div class="w-full">
