@@ -149,8 +149,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   getHits() {
-    console.log(this.filteredProviders)
-
     this.loading = true
     setTimeout(() => {
       this.loading = false
@@ -287,10 +285,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.allProviders.map(async (provider) => {
         const jobPoster = await this.userService.getUser(provider.clientId)
         const location_client = jobPoster.timezone
-        console.log('test location')
-
         this.locationFilter.map((item) => {
           if (location_client.toLowerCase().includes(item.toLowerCase())) {
+            this.additemToFilteredProviders(provider)
+          }
+        })
+      })
+    }
+
+    if ( this.ratingFilter.length > 0 ) {
+      this.loading = true
+      this.allProviders.map(async (provider) => {
+        const jobPoster = await this.userService.getUser(provider.clientId)
+        this.ratingFilter.map((item) => {
+          console.log("jobPoster.rating.average", jobPoster.rating.average);
+          
+          if (item === Math.trunc(jobPoster.rating.average)) {
             this.additemToFilteredProviders(provider)
           }
         })
@@ -304,7 +314,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.SortbymethodHandler()
 
-    if (this.searchitems.includes('Location')) {
+    if (this.searchitems.includes('Location') || this.searchitems.includes('Rating')) {
       setTimeout(() => {
         this.hits = this.getHits()
         this.numHits = this.filteredProviders.length
@@ -410,9 +420,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
   // two way binding, event from child (user input)
   onRatingChange(ratingInput: number[]) {
+    if (ratingInput.length == 0) {
+      this.searchitems.splice(this.searchitems.indexOf('Rating'), 1)
+    }
+    if (ratingInput.length > 0 && !this.searchitems.includes('Rating')) {
+      this.searchitems.push('Rating')
+    }
+    
     this.ratingFilter = ratingInput
 
     this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
+    this.refreshResultsSearch()
+
   }
 
   // two way binding, event from child (user input)
