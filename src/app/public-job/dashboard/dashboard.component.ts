@@ -120,8 +120,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.filteredProviders = result
 
         this.hits = this.getHits()
-        console.log('this.hits', this.hits)
-
         this.numHits = this.allProviders.length
         this.hits = this.hits.sort(
           (a, b) =>
@@ -158,61 +156,49 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.currentPage * this.hitsPerPage + this.hitsPerPage
     )
   }
-
-  removeDuplicates(arr: any[]) {
-    let uniqueItems = {}
-
-    // Create an object with unique IDs as keys
-    for (let item of arr) {
-      if (!uniqueItems[item.id]) {
-        uniqueItems[item.id] = item
-      }
-    }
-
-    // Convert the object back to an array
-    return Object.values(uniqueItems)
-  }
-
-  additemToFilteredProviders(provider: any) {
-    this.filteredProviders.push(provider)
-    this.filteredProviders = this.removeDuplicates(this.filteredProviders)
-  }
   // Refresh the search results
   async refreshResultsSearch() {
     this.filteredProviders = []
+
+    let SearchResultJobs = this.allProviders
     // search Category
     if (this.categoryFilter.length > 0) {
-      this.allProviders.map((provider) => {
+      SearchResultJobs.map((provider) => {
         this.categoryFilter.map((item) => {
           if (item === provider.information.providerType) {
-            this.additemToFilteredProviders(provider)
+            this.filteredProviders.push(provider)
           }
         })
       })
+      SearchResultJobs = this.filteredProviders
+      this.filteredProviders = []
     }
     // search skills
 
     if (this.skillsFilter.length > 0) {
-      this.allProviders.map((provider) => {
+      SearchResultJobs.map((provider) => {
         provider.information.skills.map((skill) => {
           if (this.compareWithArray(this.skillsFilter, skill)) {
             this.filteredProviders.push(provider)
           }
         })
       })
+
+      SearchResultJobs = this.filteredProviders
+      this.filteredProviders = []
     }
 
     // search Fixed
 
     if (this.fixedFilter.length) {
       if (this.fixedFilter[0] == -1 && this.fixedFilter.length == 1) {
-        this.allProviders.map((provider) => {
+        SearchResultJobs.map((provider) => {
           if (provider.paymentType == 'Fixed price') {
             this.filteredProviders.push(provider)
           }
         })
       } else {
-        this.allProviders.map((provider) => {
+        SearchResultJobs.map((provider) => {
           if (
             this.fixedFilter.length > 0 &&
             provider.paymentType == 'Fixed price'
@@ -220,41 +206,43 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.fixedFilter.map((item) => {
               if (item === 0) {
                 if (provider.budget > 0 && provider.budget < 500) {
-                  this.additemToFilteredProviders(provider)
+                  this.filteredProviders.push(provider)
                 }
               }
               if (item === 500) {
                 if (provider.budget > 500 && provider.budget < 1000) {
-                  this.additemToFilteredProviders(provider)
+                  this.filteredProviders.push(provider)
                 }
               }
               if (item === 1000) {
                 if (provider.budget > 1000 && provider.budget < 5000) {
-                  this.additemToFilteredProviders(provider)
+                  this.filteredProviders.push(provider)
                 }
               }
               if (item === 5000) {
                 if (provider.budget > 5000 && provider.budget < 10000) {
-                  this.additemToFilteredProviders(provider)
+                  this.filteredProviders.push(provider)
                 }
               }
               if (item === 10000) {
                 if (provider.budget > 10000) {
-                  this.additemToFilteredProviders(provider)
+                  this.filteredProviders.push(provider)
                 }
               }
             })
           }
         })
       }
+      SearchResultJobs = this.filteredProviders
+      this.filteredProviders = []
     }
 
     // Search Hourly
     if (this.hourlyFilter.length > 0) {
       if (this.hourlyFilter[0] == 0 && this.hourlyFilter[1] === 0) {
-        this.allProviders.map((provider) => {
+        SearchResultJobs.map((provider) => {
           if (provider.paymentType == 'Hourly price') {
-            this.additemToFilteredProviders(provider)
+            this.filteredProviders.push(provider)
           }
         })
       } else {
@@ -265,56 +253,64 @@ export class DashboardComponent implements OnInit, OnDestroy {
           ? 300
           : this.hourlyFilter[1]
 
-        this.allProviders.map((provider) => {
+        SearchResultJobs.map((provider) => {
           if (
             this.minValue <= provider.budget &&
             this.maxValue >= provider.budget
           ) {
             if (provider.paymentType == 'Hourly price') {
-              this.additemToFilteredProviders(provider)
+              this.filteredProviders.push(provider)
             }
           }
         })
       }
+      SearchResultJobs = this.filteredProviders
+      this.filteredProviders = []
     }
 
     // Search Location
 
     if (this.locationFilter.length > 0) {
       this.loading = true
-      this.allProviders.map(async (provider) => {
+      SearchResultJobs.map(async (provider) => {
         const jobPoster = await this.userService.getUser(provider.clientId)
         const location_client = jobPoster.timezone
         this.locationFilter.map((item) => {
           if (location_client.toLowerCase().includes(item.toLowerCase())) {
-            this.additemToFilteredProviders(provider)
+            this.filteredProviders.push(provider)
           }
         })
       })
+      SearchResultJobs = this.filteredProviders
+      this.filteredProviders = []
     }
 
-    if ( this.ratingFilter.length > 0 ) {
+    if (this.ratingFilter.length > 0) {
       this.loading = true
-      this.allProviders.map(async (provider) => {
+      SearchResultJobs.map(async (provider) => {
         const jobPoster = await this.userService.getUser(provider.clientId)
         this.ratingFilter.map((item) => {
-          console.log("jobPoster.rating.average", jobPoster.rating.average);
-          
+          console.log('jobPoster.rating.average', jobPoster.rating.average)
+
           if (item === Math.trunc(jobPoster.rating.average)) {
-            this.additemToFilteredProviders(provider)
+            this.filteredProviders.push(provider)
           }
         })
       })
+      SearchResultJobs = this.filteredProviders
+      this.filteredProviders = []
     }
     this.currentPage = 0
 
-    if (this.searchitems.length === 0) {
-      this.filteredProviders = this.allProviders
-    }
+    // array for filtering
+    this.filteredProviders = SearchResultJobs
 
     this.SortbymethodHandler()
 
-    if (this.searchitems.includes('Location') || this.searchitems.includes('Rating')) {
+    if (
+      this.searchitems.includes('Location') ||
+      this.searchitems.includes('Rating')
+    ) {
       setTimeout(() => {
         this.hits = this.getHits()
         this.numHits = this.filteredProviders.length
@@ -426,12 +422,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (ratingInput.length > 0 && !this.searchitems.includes('Rating')) {
       this.searchitems.push('Rating')
     }
-    
+
     this.ratingFilter = ratingInput
 
     this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
     this.refreshResultsSearch()
-
   }
 
   // two way binding, event from child (user input)

@@ -24,6 +24,8 @@ import { Upload } from '@class/upload'
 import { ToastrService } from 'ngx-toastr'
 import { UploadService } from '@service/upload.service'
 
+import { providerTypeArray } from 'app/shared/constants/providerTypes'
+
 declare var $: any
 
 interface sharelinkstype {
@@ -66,7 +68,9 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
   price_bid: number = 0
   hoveredFiles: boolean = false
+  IsProvider: boolean = false
 
+  providerTypeArray = providerTypeArray
   // new feature files upload
 
   beforeuploadFiles: any[] = []
@@ -79,10 +83,9 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   uploadFailed = false
   deleteFailed = false
 
-
   // Your application
 
-  yourApplication:any
+  yourApplication: any
   coverletterConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -206,7 +209,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
                 .getPublicJobBids(params['jobId'])
                 .subscribe((result) => {
                   this.bids = result || []
-                  console.log("top: " ,result);
+                  console.log('top: ', result)
 
                   if (this.bids.length > 3) {
                     this.recentBids = this.bids.slice(0, 3)
@@ -232,13 +235,14 @@ export class PublicJobComponent implements OnInit, OnDestroy {
                 .getPublicJobBids(publicJob.id)
                 .subscribe((result) => {
                   this.bids = result || []
+                  if (this.currentUser) {
+                    this.bids.map((bid) => {
+                      if (bid.providerId === this.currentUser.address) {
+                        this.yourApplication = bid
+                      }
+                    })
+                  }
 
-                  this.bids.map((bid) => {
-                    if(bid.providerId === this.currentUser.address) {
-                      this.yourApplication = bid
-                    }
-                  })
-                  
                   if (this.bids.length > 3) {
                     this.recentBids = this.bids.slice(0, 3)
                   } else {
@@ -344,13 +348,13 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
   async initJob(job: Job) {
     this.jobExists = true
-    //console.log('createAt', job.createAt) // debug
     this.jobFromNow = moment(job.createAt).fromNow()
     if (this.currentUser) {
       this.myJob = job.clientId === this.currentUser.address
       await this.setClient(this.job.clientId)
 
       if (this.currentUser.type === 'Provider') {
+        this.IsProvider = true
         const check = await this.publicJobsService.canBid(
           this.currentUser.address,
           this.job
@@ -367,6 +371,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
       )
         $('#bidModal').modal('show')
     } else {
+      this.IsProvider = false
       this.myJob = false
     }
     if (job.draft && !this.myJob) {
@@ -378,6 +383,10 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     this.setAttachmentUrl()
   }
 
+  getCategoryName(providerType: string) {
+    const category =  this.providerTypeArray.find((c) => c.id === providerType)
+    return category.title
+  }
   async cancelJob() {
     if (this.myJob) {
       const updated = await this.publicJobsService.cancelJob(this.job.id)

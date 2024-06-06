@@ -96,6 +96,7 @@ export class FilterComponent implements OnInit, OnChanges {
     this.hourlyInput = []
     this.categoriesForm = []
     this.locationInput = []
+    this.fixedForm = []
 
     this.verifyFormChange.emit(this.verifyForm)
     this.skillsFormChange.emit(this.skillsForm)

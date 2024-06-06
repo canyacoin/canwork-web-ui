@@ -37,35 +37,37 @@
         class="flex flex-col lg:flex-row md:justify-between gap-2 md:gap-6 pt-[56px]"
       >
         <div class="w-full">
-          <p-tabMenu
-            [model]="activejobTypes"
-            [activeItem]="selectedjob"
-            *ngIf="this.currentUser.type !== 'Provider'"
-          >
-            <ng-template pTemplate="item" let-item let-i="index">
-              <div
-                class="bg-G200 border-t"
-                [ngClass]="{
-                  'rounded-tl-xl border-l': i === 0,
-                  'rounded-tr-xl border-r': i === 1
-                }"
-              >
+          <ng-container *ngIf="this.currentUser">
+            <p-tabMenu
+              [model]="activejobTypes"
+              [activeItem]="selectedjob"
+              *ngIf="!IsProvider"
+            >
+              <ng-template pTemplate="item" let-item let-i="index">
                 <div
-                  class="select-none flex items-center h-full py-[8px] px-[12px] md:px-[40px] text-b2 md:text-b1 text-center font-medium leading-6 rounded-t-xl text-G500 cursor-pointer"
-                  (click)="changeJob(item)"
-                  [ngClass]="{ 'bg-white': selectedjob.code === item.code }"
+                  class="bg-G200 border-t"
+                  [ngClass]="{
+                    'rounded-tl-xl border-l': i === 0,
+                    'rounded-tr-xl border-r': i === 1
+                  }"
                 >
-                  {{ item.label }}
+                  <div
+                    class="select-none flex items-center h-full py-[8px] px-[12px] md:px-[40px] text-b2 md:text-b1 text-center font-medium leading-6 rounded-t-xl text-G500 cursor-pointer"
+                    (click)="changeJob(item)"
+                    [ngClass]="{ 'bg-white': selectedjob.code === item.code }"
+                  >
+                    {{ item.label }}
+                  </div>
                 </div>
-              </div>
-            </ng-template>
-          </p-tabMenu>
+              </ng-template>
+            </p-tabMenu>
+          </ng-container>
 
           <div *ngIf="selectedjob.code == 'jobsdetail'" class="w-full">
             <div
               class="w-full rounded-[12px] bg-white border border-G300 p-[40px]"
               [ngClass]="{
-                'rounded-tl-none': this.currentUser.type !== 'Provider'
+                'rounded-tl-none': IsProvider && !yourApplication
               }"
             >
               <job-detail-panel
@@ -83,7 +85,7 @@
               >
                 <div
                   class="flex flex-col gap-4 border-t border-G300"
-                  *ngIf="job && currentUser && currentUser.type === 'Provider'"
+                  *ngIf="job && currentUser && IsProvider && !myJob"
                 >
                   <h2
                     class="pt-[20px] md:pt-[32px] text-h6 md:text-h5 text-G900 font-medium leading-8"
@@ -369,7 +371,7 @@
           <div
             *ngIf="
               currentUser &&
-              currentUser.type === 'Provider' &&
+              IsProvider &&
               !myJob &&
               isOpen &&
               !canBid &&
@@ -514,7 +516,15 @@
               <i class="fas fa-share-alt"></i>
             </a> -->
 
-            <div class="detail-job" *ngIf="!job.draft">
+            <div class="detail-job flex" *ngIf="!job.draft">
+              <div
+                class="border rounded-md border-G300 w-[32px] h-[32px] flex items-center justify-center cursor-pointer transition-all duration-150 bg-white hover:bg-G100"
+              >
+                <img
+                  src="/assets/massimo/svg/bookmark.svg"
+                  class="select-none"
+                />
+              </div>
               <p-dropdown
                 [options]="sharelinks"
                 [(ngModel)]="selectedsharelinks"
@@ -577,7 +587,7 @@
             <tr>
               <td class="text-G700">Category</td>
               <td class="text-G900 text-right font-medium">
-                {{ job.information.providerType }}
+                {{ getCategoryName(job.information.providerType) }}
               </td>
             </tr>
           </table>
@@ -609,7 +619,7 @@
           >
             <div class="flex gap-4 justify-between items-center">
               <div
-                class="cursor-pointer py-[10px] px-[24px] text-[#D1242F] flex justify-center items-center gap-2 font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl"
+                class="cursor-pointer select-none py-[10px] px-[24px] text-[#D1242F] flex justify-center items-center gap-2 font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl"
                 (click)="cancelJob()"
               >
                 <img
@@ -653,9 +663,7 @@
 
           <div
             class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[16px]"
-            *ngIf="
-              currentUser && currentUser.type === 'Provider' && !myJob && isOpen
-            "
+            *ngIf="currentUser && IsProvider && !myJob && isOpen"
           >
             <!-- <button
               class="btn btn-sm btn-dark mt-10 mr-10 w-full text-[15px] py-[7px] normal-case"

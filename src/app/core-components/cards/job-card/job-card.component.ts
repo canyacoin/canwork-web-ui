@@ -3,6 +3,8 @@ import { PublicJobService } from '@service/public-job.service'
 import { UserService } from '@service/user.service'
 import { Router } from '@angular/router'
 import { Subscription } from 'rxjs'
+import { AuthService } from '@service/auth.service'
+import { User } from '@class/user'
 
 import * as moment from 'moment'
 @Component({
@@ -21,20 +23,24 @@ export class JobCardComponent implements OnInit, OnDestroy {
   @Input() skills!: string[]
   @Input() title!: string
   @Input() createAt!: number
- 
+
   @Input() proposals!: number
   @Input() projectType: string // 1. contentCreator 2. softwareDev 3. designer , 4. marketing 5. virtualAssistant ...
 
-  jobPoster: any 
+  jobPoster: any
   bids: any[]
   bidsSub: Subscription
+  authSub: Subscription
   Location: string = ''
 
+  currentUser: User
+  isApplied: boolean = false
   favourite: boolean = false
   constructor(
     private router: Router,
     private publicJobsService: PublicJobService,
     private userService: UserService,
+    private authService: AuthService
   ) {}
   providerTypes = [
     {
@@ -65,14 +71,25 @@ export class JobCardComponent implements OnInit, OnDestroy {
   ]
 
   async ngOnInit() {
-    
     this.jobPoster = await this.userService.getUser(this.clientId)
     this.Location = this.jobPoster.timezone
-    
-    this.bidsSub = this.publicJobsService
+
+    this.authSub = await this.authService.currentUser$.subscribe(
+      (user: User) => {
+        if (user) {
+          this.currentUser = user
+        }
+      }
+    )
+
+    this.bidsSub = await this.publicJobsService
       .getPublicJobBids(this.id)
       .subscribe((result) => {
         this.bids = result || []
+        if (this.currentUser)
+          this.isApplied = this.bids.find(
+            (b) => b.providerId === this.currentUser.address
+          )
       })
   }
 
@@ -80,14 +97,13 @@ export class JobCardComponent implements OnInit, OnDestroy {
     // this.bidsSub.unsubscribe()
   }
 
-  getbidslengthById() {
+  getbidslength() {
     if (this.bids) return this.bids.length
     else {
       return 0
     }
   }
 
-  
   getImage(id: string) {
     let url = '/assets/massimo/images/'
     const type = this.providerTypes.find((prov) => prov.id === id)
