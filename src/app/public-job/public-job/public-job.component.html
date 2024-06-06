@@ -9,7 +9,7 @@
     <!-- template start -->
     <div class="max-w-[1440px] w-full py-[56px] px-[24px] md:px-[64px]">
       <base-dialog
-        [visible]="job && !canSee && !loading && sent"
+        [visible]="sent"
         title="Proposal Successfully Submitted"
         content="Your proposal has been sent to the client. If approved, the client will be in touch via messages.Goodluck!"
         type="submit"
@@ -102,8 +102,17 @@
                       [config]="coverletterConfig"
                     ></angular-editor>
                     <div class="flex justify-end">
-                      <h1 class="text-right pt-[8px]">0/2500</h1>
+                      <h1 class="text-right pt-[8px]">
+                        {{
+                          stripHtmlTagslength(this.bidForm.value.message)
+                        }}/2500
+                      </h1>
                     </div>
+                    <app-warning-message
+                      *ngIf="bid_message_valiated"
+                      message="Your coverletter should be longger than 5 and shorter than 2500"
+                      [type]="1"
+                    />
                   </div>
 
                   <div
@@ -188,6 +197,12 @@
                     <app-warning-message
                       *ngIf="price_bid > job.budget"
                       message="Your bill is more than the client’s budget, consider adjusting for better chance of success"
+                      [type]="1"
+                    />
+
+                    <app-warning-message
+                      *ngIf="price_bid < 0 || price_validate"
+                      message="Your price should be bigger than zero"
                       [type]="1"
                     />
                     <div
@@ -307,27 +322,18 @@
                         </ul>
                       </div>
 
-                      <div
-                        class="flex justify-center items-center text-[#D1242F] text-b2 font-sans"
-                        *ngIf="fileTooBig"
-                      >
-                        <img
-                          src="/assets/massimo/svg/fi_alert-triangle.svg"
-                          alt=""
-                        />
-                        You can only add 10 files with maximum of 25MB each
-                      </div>
+                      <app-warning-message
+                        *ngIf="fileTooBig || uploadFailed"
+                        message="You can only add 10 files with maximum of 25MB each"
+                        [type]="1"
+                      />
 
-                      <div
-                        class="flex justify-center items-center text-[#D1242F] text-b2 font-sans"
+
+                      <app-warning-message
                         *ngIf="deleteFailed"
-                      >
-                        <img
-                          src="/assets/massimo/svg/fi_alert-triangle.svg"
-                          alt=""
-                        />
-                        Oops, something went while wrong deleting your file.
-                      </div>
+                        message="Oops, something went while wrong deleting your file."
+                        [type]="1"
+                      />
                     </div>
                   </div>
 

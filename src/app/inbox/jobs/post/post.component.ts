@@ -181,7 +181,7 @@ export class PostComponent implements OnInit, OnDestroy {
       url: [''],
       description: [
         '',
-        Validators.compose([Validators.required, Validators.maxLength(10000)]),
+        Validators.compose([Validators.required, Validators.min(30), Validators.maxLength(2500)]),
       ],
       title: [
         '',

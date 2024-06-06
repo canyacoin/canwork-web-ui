@@ -86,12 +86,16 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   // Your application
 
   yourApplication: any
+
+  bid_message_valiated: boolean = true
+  price_validate: boolean = false
+
   coverletterConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
     height: '200px',
-    minHeight: '0',
-    maxHeight: 'auto',
+    minHeight: '5',
+    maxHeight: '2500',
     width: 'auto',
     minWidth: '0',
     translate: 'yes',
@@ -164,7 +168,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
       ],
       message: [
         '',
-        Validators.compose([Validators.min(0), Validators.maxLength(10000)]),
+        Validators.compose([Validators.required, Validators.min(30), Validators.maxLength(10000)]),
       ],
     })
   }
@@ -263,8 +267,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   async uploadFiles(files: FileList) {
     this.uploadFailed = false
     this.fileTooBig = false
-    this.currentUploadNumber = -1
-
+   
     for (let i = 0; i < files.length; i++) {
       const file = files[i]
       if (file.size > this.maxFileSizeBytes) {
@@ -301,7 +304,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.currentUploadNumber++
 
     this.beforeuploadFiles = []
     this.beforeuploadFiles.push(...this.uploadedFiles)
@@ -430,8 +432,19 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   }
 
   async submitBid() {
+
+    if(this.bidForm.value.message.length < 5 && this.bidForm.value.message.length > 2500) {
+      this.bid_message_valiated = true;
+      return
+    }
+    if(this.bidForm.value.price <= 0) {
+      this.price_validate = true
+      return
+    }
+
     this.spinner.show()
 
+    
     const providerInfo = {
       name: this.currentUser.name,
       skillTags: this.currentUser.skillTags,
@@ -442,18 +455,18 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
     // Test
     // if (this.currentUser.whitelisted) {
-    const bidToSubmit = new Bid(
-      this.currentUser.address,
-      providerInfo,
-      this.bidForm.value.price,
-      this.bidForm.value.message,
-      Date.now(),
-      this.uploadedFiles ? this.uploadedFiles : []
-    )
-    this.sent = await this.publicJobsService.handlePublicBid(
-      bidToSubmit,
-      this.job
-    )
+    // const bidToSubmit = new Bid(
+    //   this.currentUser.address,
+    //   providerInfo,
+    //   this.bidForm.value.price,
+    //   this.bidForm.value.message,
+    //   Date.now(),
+    //   this.uploadedFiles ? this.uploadedFiles : []
+    // )
+    // this.sent = await this.publicJobsService.handlePublicBid(
+    //   bidToSubmit,
+    //   this.job
+    // )
     this.spinner.hide()
 
     this.canBid = false
@@ -548,6 +561,12 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     event.stopPropagation()
     this.hoveredFiles = false
     if (event.dataTransfer && event.dataTransfer.files) {
+
+      if(this.currentUploadNumber > 10 ||  event.dataTransfer.files.length > 10) {
+        this.uploadFailed = true
+        return
+      }
+
       if (event.dataTransfer && event.dataTransfer.files) {
         for (let i = 0; i < event.dataTransfer.files.length; i++) {
           if (this.beforeuploadFiles.length > 0) {
@@ -562,7 +581,12 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     }
   }
   detectFiles(event: any) {
+
     const files = event.target.files
+    if(this.currentUploadNumber > 10 || files.length > 10) {
+      this.uploadFailed = true
+      return
+    }
     if (this.beforeuploadFiles.length > 0) {
       this.beforeuploadFiles.unshift(...files)
     } else {
@@ -570,5 +594,18 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     }
 
     this.uploadFiles(files)
+  }
+
+
+  stripHtmlTagslength(html: string): number {
+
+    const div = document.createElement('div')
+    div.innerHTML = html
+    if(div.textContent.length > 5 && div.textContent.length < 2500) {
+      this.bid_message_valiated = false
+    } else {
+      this.bid_message_valiated = true
+    }
+    return div.textContent.length
   }
 }
