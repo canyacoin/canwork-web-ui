@@ -310,8 +310,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         let tempText = provider.information.title
         tempText += this.stripHtmlTags(provider.information.description)
         tempText += provider.information.skills.join(' ')
-
-        console.log("tempText", tempText);
         
         if (tempText.toLowerCase().includes(this.searchInput.toLowerCase())) {
           this.filteredProviders.push(provider)
