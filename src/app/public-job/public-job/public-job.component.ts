@@ -90,6 +90,9 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   bid_message_valiated: boolean = true
   price_validate: boolean = false
 
+
+  visible_delete_modal: boolean = false
+
   coverletterConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -389,7 +392,10 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     const category =  this.providerTypeArray.find((c) => c.id === providerType)
     return category.title
   }
-  async cancelJob() {
+   async cancelJob(event: Event) {
+    event.stopPropagation();
+    this.visible_delete_modal = !this.visible_delete_modal
+
     if (this.myJob) {
       const updated = await this.publicJobsService.cancelJob(this.job.id)
       if (updated) {
@@ -608,4 +614,11 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     }
     return div.textContent.length
   }
+
+
+  updateDialog(event: Event) {
+    event.stopPropagation();
+    this.visible_delete_modal = !this.visible_delete_modal
+  }
+
 }

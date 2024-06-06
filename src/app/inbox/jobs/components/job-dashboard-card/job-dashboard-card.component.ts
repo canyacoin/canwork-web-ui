@@ -63,8 +63,6 @@ export class JobDashboardCardComponent implements OnInit {
 
   async cancelJob(event: Event) {
     event.stopPropagation();
-    console.log(this.job.clientId);
-    
     this.visible = !this.visible
 
     if (this.job.clientId) {
@@ -78,8 +76,6 @@ export class JobDashboardCardComponent implements OnInit {
   updateDialog(event: Event) {
     event.stopPropagation();
     this.visible = !this.visible
-    console.log("this.visible = " + this.visible);
-    
   }
   stripHtmlTags(html: string): string {
     // Create a new DOM element to use the browser's parsing capabilities
