@@ -300,6 +300,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
       SearchResultJobs = this.filteredProviders
       this.filteredProviders = []
     }
+
+    // Search input on the top
+    if (this.searchInput.length > 0) {
+      this.loading = true
+
+      SearchResultJobs.map(async (provider) => {
+
+        let tempText = provider.information.title
+        tempText += this.stripHtmlTags(provider.information.description)
+        tempText += provider.information.skills.join(' ')
+
+        console.log("tempText", tempText);
+        
+        if (tempText.toLowerCase().includes(this.searchInput.toLowerCase())) {
+          this.filteredProviders.push(provider)
+        }
+      })
+      SearchResultJobs = this.filteredProviders
+      this.filteredProviders = []
+    }
     this.currentPage = 0
 
     // array for filtering
@@ -321,6 +341,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.numHits = this.filteredProviders.length
       this.loading = false
     }
+  }
+
+
+  stripHtmlTags(html: string): string {
+    // Create a new DOM element to use the browser's parsing capabilities
+    const div = document.createElement('div')
+
+    // Assign the HTML string to the innerHTML of the created element
+    div.innerHTML = html
+
+    // Use the textContent property to get the plain text without HTML tags
+    return div.textContent || div.innerText || ''
   }
 
   SortbymethodHandler() {
@@ -434,6 +466,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.searchInput = searchInput
 
     this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
+    this.refreshResultsSearch()
   }
 
   // two way binding, event from child (user input)

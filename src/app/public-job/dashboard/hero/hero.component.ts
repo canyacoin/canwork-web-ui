@@ -20,7 +20,7 @@ export class HeroComponent {
   constructor(private router: Router) {}
 
   onSearchInputChange(searchValue: string): void {
-    this.searchInputChange.emit(searchValue) // notify parent and algolia handler
+    // this.searchInputChange.emit(searchValue) // notify parent and algolia handler
   }
 
   submitSearchQuery() {
