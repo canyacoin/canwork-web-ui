@@ -765,7 +765,7 @@
   [resizable]="false"
   id="login_modal"
 >
-  <div class="grid grid-cols-2 justify-between md:w-[1160px]">
+  <div class="grid md:grid-cols-2 justify-between">
     <div class="absolute top-[32px] right-[43px]">
       <img
         src="/assets/massimo/images/x_button.png"
@@ -774,7 +774,7 @@
         (click)="updateVisibleloginModal()"
       />
     </div>
-    <div class="flex flex-col justify-center items-center gap-10">
+    <div class="flex flex-col justify-center items-center gap-10 max-md:my-[40px] max-md:mx-[20px]">
       <div>
         <img
           src="/assets/massimo/images/logoGray.png"
@@ -791,12 +791,14 @@
         </p>
       </div>
       <div class="grid gap-4">
-        <firebase-ui
-          (signInSuccessWithAuthResult)="onFirebaseLogin($event)"
-        ></firebase-ui>
+        <ng-container *ngIf="visible_login_modal">
+          <firebase-ui
+            (signInSuccessWithAuthResult)="onFirebaseLogin($event)"
+          ></firebase-ui>
+        </ng-container>
       </div>
     </div>
-    <div class="">
+    <div class="max-md:hidden">
       <img src="/assets/massimo/images/login.png" alt="" class="w-full" />
     </div>
   </div>

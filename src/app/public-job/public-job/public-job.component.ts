@@ -99,9 +99,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
   visible_delete_modal: boolean = false
   visible_login_modal: boolean = false
-
-
-
+  
   coverletterConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
