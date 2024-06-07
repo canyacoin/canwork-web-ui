@@ -33,7 +33,7 @@
                 <div
                   class="select-none flex items-center h-full py-[8px] px-[12px] md:px-[40px] text-b2 md:text-b1 text-center font-medium leading-6 rounded-t-xl text-G500 cursor-pointer"
                   (click)="changeJob(item.code)"
-                  [ngClass]="{ 'bg-white': jobType === item.code }"
+                  [ngClass]="{ 'bg-white': selectedjob.code === item.code }"
                 >
                   {{ item.label }}
                 </div>

@@ -8,7 +8,7 @@ import {
   HostBinding,
   Directive,
 } from '@angular/core'
-import { Router } from '@angular/router'
+import { Router, ActivatedRoute } from '@angular/router'
 //import { FilterPipe } from 'ngx-filter-pipe'
 //import { OrderPipe } from 'ngx-order-pipe'
 import { ReversePipe } from 'ngx-pipes'
@@ -64,6 +64,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   publicJobs: Job[]
   activeJobs: Job[]
   draftJobs: Job[]
+  completeJobs: Job[]
   jobsSubscription: Subscription
   publicJobsSubscription: Subscription
   authSub: Subscription
@@ -100,6 +101,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     private jobService: JobService,
     private publicJobService: PublicJobService,
     private userService: UserService,
+    private route: ActivatedRoute,
     private router: Router //public filterPipe: FilterPipe
   ) {}
 
@@ -110,6 +112,9 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       { label: 'Drafts', code: 'draft' },
       { label: 'Completed Jobs', code: 'completed' },
     ]
+   
+    
+
     this.filters = [
       { name: 'All Jobs', code: '' },
       { name: 'Jobs Awaiting Escrow', code: 'Awaiting Escrow' },
@@ -126,13 +131,24 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       { name: 'Budget', code: 'budget' },
     ]
 
-    this.selectedjob = this.activejobTypes[0]
     this.selectedfilter = this.filters[0]
     this.selectedsortby = this.sortbylist[0]
 
+
+    this.route.queryParams.subscribe((params) => {
+      if (params['tab'] == undefined) {
+        this.selectedjob = this.activejobTypes[0]
+        this.jobType = this.activejobTypes[0].code
+      } else {
+        this.selectedjob = this.activejobTypes[params['tab']]
+        this.jobType = this.selectedjob.code     
+      }
+    })
+
+
     this.currentUser = await this.authService.getCurrentUser()
     this.userType = this.currentUser.type
-    this.initialiseJobs(this.currentUser.address, this.userType)
+    await this.initialiseJobs(this.currentUser.address, this.userType)
     this.orderType = 'actionLog[0].timestamp'
     this.reverseOrder = true
     this.isOnMobile = this.mobile.isOnMobile
@@ -144,7 +160,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  private initialiseJobs(userId: string, userType: UserType) {
+  private async initialiseJobs(userId: string, userType: UserType) {
     this.jobsSubscription = this.jobService
       .getJobsByUser(userId, userType)
       .subscribe(async (jobs: Job[]) => {
@@ -164,30 +180,63 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
         const open = jobs.filter(
           (job) => job.state === JobState.acceptingOffers
         )
-        const draft = jobs.filter((job) => job.draft === true && job.state !== "Public job closed")
-        
+        const draft = jobs.filter(
+          (job) => job.draft === true && job.state !== 'Public job closed'
+        )
+        const completed_Job = jobs.filter((job) => job.state === 'Complete')
         this.publicJobs = open
         this.draftJobs = draft
+        this.completeJobs = completed_Job
+       
+        console.log(this.jobType);
+        
+
+        switch (this.jobType) {
+          case 'public':
+            this.jobs = this.publicJobs.filter((job) => job.draft === false)
+            break
+          case 'draft':
+            this.jobs = this.draftJobs
+            break
+          case 'completed':
+            this.jobs = this.completeJobs
+            break
+        }
+        console.log(this.jobs);
+        this.showFilteredJobs(this.jobs)
       })
+
+      
+     
   }
 
   changeJob(jobType) {
     this.jobType = jobType
+    let numberTab = 0
     switch (jobType) {
-      case 'public':
-        this.jobs = this.publicJobs.filter((job) => job.draft === false)
-        break
       case 'active':
         this.jobs = this.activeJobs
+        numberTab = 0
+        break
+      case 'public':
+        this.jobs = this.publicJobs.filter((job) => job.draft === false)
+        numberTab = 1
         break
       case 'draft':
         this.jobs = this.draftJobs
+        numberTab = 2
+        break
+      case 'completed':
+        this.jobs = this.completeJobs
+        numberTab = 3
+        break
     }
+    this.router.navigate(['/inbox/jobs'], { queryParams: { tab: numberTab } });
     this.showFilteredJobs(this.jobs)
   }
 
   CancelJob(id: string) {
-    this.jobs = this.jobs.filter((job) => job.id !== id);
+    this.jobs = this.jobs.filter((job) => job.id !== id)
     this.showFilteredJobs(this.jobs)
   }
 
