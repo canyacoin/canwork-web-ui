@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Directive } from '@angular/core'
+import { Component, Input, OnInit, Directive, Output, EventEmitter } from '@angular/core'
 import { PublicJobService } from '@service/public-job.service'
 
 import { Router } from '@angular/router'
@@ -17,6 +17,7 @@ export class JobDashboardCardComponent implements OnInit {
   @Input() jobType: string
   visible: boolean = false;
 
+  @Output() CancelJob = new EventEmitter<string>()
   constructor(
     private router: Router,
     private publicJobsService: PublicJobService
@@ -64,13 +65,13 @@ export class JobDashboardCardComponent implements OnInit {
   async cancelJob(event: Event) {
     event.stopPropagation();
     this.visible = !this.visible
-    console.log("this.job.id", this.job.id);
-    
     if (this.job.clientId) {
       const updated = await this.publicJobsService.cancelJob(this.job.id)
       if (updated) {
         this.job.state = 'Public job closed'
+        this.CancelJob.emit(this.job.id)
       }
+
     }
   }
 
@@ -110,6 +111,7 @@ export class JobDashboardCardComponent implements OnInit {
     event.stopPropagation()
     this.favourite = !this.favourite
   }
+  
   getDaySuffix(day: number): string {
     if (day > 3 && day < 21) return 'th' // All days between 4 and 20 end with 'th'
     switch (day % 10) {

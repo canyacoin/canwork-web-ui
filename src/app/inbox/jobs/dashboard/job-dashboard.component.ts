@@ -164,7 +164,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
         const open = jobs.filter(
           (job) => job.state === JobState.acceptingOffers
         )
-        const draft = jobs.filter((job) => job.draft === true || job.state !== "Public job closed")
+        const draft = jobs.filter((job) => job.draft === true && job.state !== "Public job closed")
         
         this.publicJobs = open
         this.draftJobs = draft
@@ -186,6 +186,11 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     this.showFilteredJobs(this.jobs)
   }
 
+  CancelJob(id: string) {
+    this.jobs = this.jobs.filter((job) => job.id !== id);
+    this.showFilteredJobs(this.jobs)
+  }
+
   showFilteredJobs(jobs: Job[]): void {
     this.totalRecords = jobs.length
 
@@ -195,6 +200,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       this.currentPage * 5 + 5
     )
   }
+
   changeUserType() {
     this.userType =
       this.userType === UserType.client ? UserType.provider : UserType.client

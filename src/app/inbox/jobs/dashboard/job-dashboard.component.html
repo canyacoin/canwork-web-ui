@@ -231,6 +231,7 @@
                     | reverse
                     | paginate : { itemsPerPage: 10, currentPage: currentPage }
                 "
+                (CancelJob) ="CancelJob($event)"
                 [job]="job"
                 [type]="'lg'"
                 [jobType] = "jobType"
