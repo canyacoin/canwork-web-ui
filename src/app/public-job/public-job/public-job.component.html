@@ -37,7 +37,7 @@
         class="flex flex-col lg:flex-row md:justify-between gap-2 md:gap-6 pt-[56px]"
       >
         <div class="w-full">
-          <ng-container *ngIf="this.currentUser">
+          <ng-container *ngIf="IsShownTab  || this.myJob ">
             <p-tabMenu
               [model]="activejobTypes"
               [activeItem]="selectedjob"
@@ -67,8 +67,7 @@
             <div
               class="w-full rounded-[12px] bg-white border border-G300 p-[40px]"
               [ngClass]="{
-                'rounded-tl-none': !IsProvider && !yourApplication,
-                '!rounded-tl': !this.currentUser,
+                '!rounded-tl-none': IsShownTab  || this.myJob  && !yourApplication
               }"
             >
               <job-detail-panel

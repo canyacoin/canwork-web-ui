@@ -65,8 +65,11 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   link: string
   job: Job
   currentUser: User
+  hasCurrentUser: boolean = false
   jobPoster: any = null
   jobFromNow: string = ''
+
+  IsShownTab: boolean = false
 
   sharelinks: sharelinkstype[] | undefined
   selectedsharelinks: sharelinkstype | undefined
@@ -232,7 +235,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
                 .getPublicJobBids(params['jobId'])
                 .subscribe((result) => {
                   this.bids = result || []
-                  console.log('top: ', result)
 
                   if (this.bids.length > 3) {
                     this.recentBids = this.bids.slice(0, 3)
@@ -279,8 +281,15 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       if (user) {
         this.currentUser = user
+       
       }
     })
+    console.log("this.IsProvider", this.IsProvider);
+    console.log("this.myJob", this.myJob);
+    
+    this.IsShownTab = (this.currentUser && this.IsProvider) || this.myJob 
+    console.log("this.myJob", this.IsShownTab);
+
   }
 
   async uploadFiles(files: FileList) {
