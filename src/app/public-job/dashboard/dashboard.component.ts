@@ -116,14 +116,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.publicJobSubscription = this.publicJobService
       .getAllOpenJobs()
       .subscribe((result) => {
-        this.allProviders = result.filter((job) => job.draft === false)
-        this.filteredProviders = result
+        let activeJobs = result.filter((job) => job.draft === false)
+        this.allProviders = activeJobs
+        this.filteredProviders = activeJobs
 
         this.hits = this.getHits()
         this.numHits = this.allProviders.length
         this.hits = this.hits.sort(
           (a, b) =>
-            new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+            new Date(b.updateAt).getTime() - new Date(a.updateAt).getTime()
         )
       })
 
@@ -306,11 +307,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.loading = true
 
       SearchResultJobs.map(async (provider) => {
-
         let tempText = provider.information.title
         tempText += this.stripHtmlTags(provider.information.description)
         tempText += provider.information.skills.join(' ')
-        
+
         if (tempText.toLowerCase().includes(this.searchInput.toLowerCase())) {
           this.filteredProviders.push(provider)
         }
@@ -340,7 +340,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.loading = false
     }
   }
-
 
   stripHtmlTags(html: string): string {
     // Create a new DOM element to use the browser's parsing capabilities
