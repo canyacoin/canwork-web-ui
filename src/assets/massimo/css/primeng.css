@@ -487,3 +487,8 @@
   #login_modal .p-dialog-content {
     border-radius: 24px !important;
   }
+
+  .p-component-overlay {
+    background: rgba(0, 0, 0, 0.80) !important;
+    backdrop-filter: blur(4px) !important;
+  }
