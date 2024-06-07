@@ -103,7 +103,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   visible_delete_modal: boolean = false
   visible_withdraw_modal: boolean = false
   visible_login_modal: boolean = false
-  
+  visible_listing_modal: boolean = false
+
   coverletterConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -643,6 +644,9 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   WithdrawJob(event: Event) {
     event.stopPropagation()
     this.visible_withdraw_modal = !this.visible_withdraw_modal
+    if(!this.visible_withdraw_modal){
+      this.visible_listing_modal = true
+    }
   }
 
   updatedDialogWithdrawJob(event: Event) {
