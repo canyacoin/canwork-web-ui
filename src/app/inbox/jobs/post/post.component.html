@@ -745,7 +745,6 @@
                           You can only add 10 files with maximum of 25MB each
                         </div>
 
-                        
                         <div
                           class="flex justify-start items-center text-[#D1242F] text-b2 font-sans"
                           *ngIf="currentUploadNumber >= 10"
@@ -1175,34 +1174,30 @@
 
     <div *ngIf="sent">
       <base-dialog
-        [visible]="true"
+        [visible]="sentDRP === 2"
         title="Job listing successful"
         content="Your job has been successfully listed on CanWork’s job board. Consider inviting freelancers to your job listing and sharing on your social media."
         type="success"
       />
-      <div *ngIf="!draft && !editing">
-        <base-dialog
-          [visible]="!draft && !editing"
-          title="Job listing successful"
-          content="Your job has been successfully listed on CanWork’s job board. Consider inviting freelancers to your job listing and sharing on your social media."
-          type="success"
-        />
-      </div>
+      <!-- <base-dialog
+        [visible]="sentDRP === 0"
+        title="Job listing saved to Draft"
+        content="Your job listing has been saved to your drafts, you can continue anytime to list your job on CanWork"
+        type="success"
+      /> -->
+      <base-dialog
+        [visible]="sentDRP === 0"
+        title="Job listing saved to Draft"
+        content="Your job listing has been saved to your drafts, you can continue anytime to list your job on CanWork"
+        type="draft"
+        [slug]="slug"
+      />
       <!-- <div *ngIf="!draft && editing">
             <h2>Your job has been saved!</h2>
             <p class="lead fw-400">
               You can now invite providers to this job.
             </p>
           </div> -->
-      <div *ngIf="draft">
-        <base-dialog
-          [visible]="!draft && editing"
-          title="Job listing saved to Draft"
-          content="Your job listing has been saved to your drafts, you can continue anytime to list your job on CanWork"
-          type="draft"
-          [slug]="slug"
-        />
-      </div>
       <!-- <br />
         <p *ngIf="!draft" class="text-center">
           <a class="btn btn-secondary" [routerLink]="['/jobs/public/', slug]"

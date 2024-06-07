@@ -188,9 +188,6 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
         this.draftJobs = draft
         this.completeJobs = completed_Job
        
-        console.log(this.jobType);
-        
-
         switch (this.jobType) {
           case 'public':
             this.jobs = this.publicJobs.filter((job) => job.draft === false)
@@ -202,7 +199,6 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
             this.jobs = this.completeJobs
             break
         }
-        console.log(this.jobs);
         this.showFilteredJobs(this.jobs)
       })
 

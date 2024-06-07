@@ -97,6 +97,7 @@ export class PostComponent implements OnInit, OnDestroy {
   hoveredFiles = false
 
   minDate: Date
+  sentDRP:number
   editorConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -877,7 +878,7 @@ export class PostComponent implements OnInit, OnDestroy {
     this.isSending = true
     this.error = false
     this.spinner.show()
-
+    this.sentDRP = isDRP
     this.shareableJobForm.controls.providerType.setValue(
       this.selectedSortings_category.code
     )
@@ -964,6 +965,8 @@ export class PostComponent implements OnInit, OnDestroy {
         top: 0,
         behavior: 'smooth',
       })
+
+
     } catch (e) {
       this.sent = false
       this.isSending = false
