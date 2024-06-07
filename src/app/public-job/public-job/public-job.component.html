@@ -41,7 +41,7 @@
             <p-tabMenu
               [model]="activejobTypes"
               [activeItem]="selectedjob"
-              *ngIf="!IsProvider"
+              *ngIf="!IsProvider || myJob"
             >
               <ng-template pTemplate="item" let-item let-i="index">
                 <div
@@ -67,7 +67,8 @@
             <div
               class="w-full rounded-[12px] bg-white border border-G300 p-[40px]"
               [ngClass]="{
-                'rounded-tl-none': IsProvider && !yourApplication
+                'rounded-tl-none': !IsProvider && !yourApplication,
+                '!rounded-tl': !this.currentUser,
               }"
             >
               <job-detail-panel
