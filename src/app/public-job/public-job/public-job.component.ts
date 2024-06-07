@@ -101,6 +101,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   price_validate: boolean = false
 
   visible_delete_modal: boolean = false
+  visible_withdraw_modal: boolean = false
   visible_login_modal: boolean = false
   
   coverletterConfig: AngularEditorConfig = {
@@ -284,12 +285,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
        
       }
     })
-    console.log("this.IsProvider", this.IsProvider);
-    console.log("this.myJob", this.myJob);
-    
-    this.IsShownTab = (this.currentUser && this.IsProvider) || this.myJob 
-    console.log("this.myJob", this.IsShownTab);
-
+    this.IsShownTab = (this.currentUser && this.IsProvider)
   }
 
   async uploadFiles(files: FileList) {
@@ -644,8 +640,15 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     this.visible_delete_modal = !this.visible_delete_modal
   }
 
-  
+  WithdrawJob(event: Event) {
+    event.stopPropagation()
+    this.visible_withdraw_modal = !this.visible_withdraw_modal
+  }
 
+  updatedDialogWithdrawJob(event: Event) {
+    event.stopPropagation()
+    this.visible_withdraw_modal = !this.visible_withdraw_modal
+  }
   // Login Part
 
 

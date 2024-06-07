@@ -486,6 +486,7 @@
                 title="Withdraw Your Application"
                 size="small"
                 extraClass="border text-G900"
+                (click)="updatedDialogWithdrawJob($event)"
               />
             </div>
           </div>
@@ -707,6 +708,15 @@
   (LeftbtnEvent)="cancelJob($event)"
   (RightbtnEvent)="updateDialog($event)"
   type="delete"
+/>
+
+<base-dialog
+  [visible]="visible_withdraw_modal"
+  title="Are you sure you want to withdraw your application?"
+  content="Your Application will be permanently deleted"
+  (LeftbtnEvent)="WithdrawJob($event)"
+  (RightbtnEvent)="updatedDialogWithdrawJob($event)"
+  type="withdraw"
 />
 <!-- Modals end -->
 
