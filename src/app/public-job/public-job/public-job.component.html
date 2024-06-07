@@ -328,7 +328,6 @@
                         [type]="1"
                       />
 
-
                       <app-warning-message
                         *ngIf="deleteFailed"
                         message="Oops, something went while wrong deleting your file."
@@ -651,7 +650,7 @@
           >
             Sign up to be a CanWork service provider to bid on this job.
             <button
-              [routerLink]="['/auth']"
+              (click)="updateVisibleloginModal()"
               class="btn btn-sm btn-dark mt-10 mr-10 w-full text-[15px] py-[7px] normal-case"
             >
               Sign Up Now
@@ -698,9 +697,7 @@
   <!-- template end -->
 </main>
 
-
 <!-- Modals start -->
-
 
 <base-dialog
   [visible]="visible_delete_modal"
@@ -711,7 +708,6 @@
   type="delete"
 />
 <!-- Modals end -->
-
 
 <!-- Modals -->
 <div id="shareModal" class="modal fade" *ngIf="job && canSee" role="dialog">
@@ -761,3 +757,47 @@
     </div>
   </div>
 </div>
+
+<p-dialog
+  [(visible)]="visible_login_modal"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  id="login_modal"
+>
+  <div class="grid grid-cols-2 justify-between md:w-[1160px]">
+    <div class="absolute top-[32px] right-[43px]">
+      <img
+        src="/assets/massimo/images/x_button.png"
+        alt=""
+        class="w-[40px] h-[40px] cursor-pointer"
+        (click)="updateVisibleloginModal()"
+      />
+    </div>
+    <div class="flex flex-col justify-center items-center gap-10">
+      <div>
+        <img
+          src="/assets/massimo/images/logoGray.png"
+          alt=""
+          class="w-[112px] h-[32px]"
+        />
+      </div>
+      <div>
+        <h2 class="text-G900 text-center text-h5 font-medium leading-8">
+          Sign in to CanWork
+        </h2>
+        <p class="text-G700 text-center text-b2 mt-[8px]">
+          Sign in with your preferred credentials to continue
+        </p>
+      </div>
+      <div class="grid gap-4">
+        <firebase-ui
+          (signInSuccessWithAuthResult)="onFirebaseLogin($event)"
+        ></firebase-ui>
+      </div>
+    </div>
+    <div class="">
+      <img src="/assets/massimo/images/login.png" alt="" class="w-full" />
+    </div>
+  </div>
+</p-dialog>

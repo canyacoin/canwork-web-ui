@@ -48,6 +48,9 @@ import { NgxModalView } from 'ngx-modalview'
 import { DropdownModule } from 'primeng/dropdown';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { DialogModule } from 'primeng/dialog';
+
+
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -64,6 +67,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     AngularFirestoreModule,
     AngularFireStorageModule,
     AngularFireFunctionsModule,
+    FirebaseUIModule,
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     // NgAisModule.forRoot(),
     BrowserModule,
@@ -89,7 +93,8 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     NgxModalView,
     DropdownModule,
     TabMenuModule,
-    AngularEditorModule
+    AngularEditorModule,
+    DialogModule
   ],
   exports: [
     /*FilterPipeModule*/

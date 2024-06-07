@@ -4,7 +4,7 @@ import {
   UntypedFormGroup,
   Validators,
 } from '@angular/forms'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 
 import * as moment from 'moment'
 
@@ -26,6 +26,12 @@ import { UploadService } from '@service/upload.service'
 
 import { providerTypeArray } from 'app/shared/constants/providerTypes'
 
+
+
+import { AngularFireAuth } from '@angular/fire/compat/auth'
+import { FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular'
+
+
 declare var $: any
 
 interface sharelinkstype {
@@ -40,6 +46,7 @@ interface sharelinkstype {
   styleUrls: ['./public-job.component.css'],
 })
 export class PublicJobComponent implements OnInit, OnDestroy {
+
   bidForm: UntypedFormGroup = null
   bids: any[]
   recentBids: any
@@ -90,8 +97,10 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   bid_message_valiated: boolean = true
   price_validate: boolean = false
 
-
   visible_delete_modal: boolean = false
+  visible_login_modal: boolean = false
+
+
 
   coverletterConfig: AngularEditorConfig = {
     editable: true,
@@ -157,7 +166,10 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     private formBuilder: UntypedFormBuilder,
     private spinner: NgxSpinnerService,
     private toastr: ToastrService,
-    private uploadService: UploadService
+    private uploadService: UploadService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private afAuth: AngularFireAuth,
   ) {
     this.bidForm = this.formBuilder.group({
       price: [
@@ -171,13 +183,19 @@ export class PublicJobComponent implements OnInit, OnDestroy {
       ],
       message: [
         '',
-        Validators.compose([Validators.required, Validators.min(30), Validators.maxLength(10000)]),
+        Validators.compose([
+          Validators.required,
+          Validators.min(30),
+          Validators.maxLength(10000),
+        ]),
       ],
     })
   }
 
   async ngOnInit() {
     this.spinner.show()
+
+    
     setTimeout(() => {
       /** spinner ends after 2 seconds */
       this.spinner.hide()
@@ -270,7 +288,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   async uploadFiles(files: FileList) {
     this.uploadFailed = false
     this.fileTooBig = false
-   
+
     for (let i = 0; i < files.length; i++) {
       const file = files[i]
       if (file.size > this.maxFileSizeBytes) {
@@ -306,7 +324,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
         this.toastr.error(`Failed to upload file ${file.name}.`)
       }
     }
-
 
     this.beforeuploadFiles = []
     this.beforeuploadFiles.push(...this.uploadedFiles)
@@ -389,11 +406,11 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   }
 
   getCategoryName(providerType: string) {
-    const category =  this.providerTypeArray.find((c) => c.id === providerType)
+    const category = this.providerTypeArray.find((c) => c.id === providerType)
     return category.title
   }
-   async cancelJob(event: Event) {
-    event.stopPropagation();
+  async cancelJob(event: Event) {
+    event.stopPropagation()
     this.visible_delete_modal = !this.visible_delete_modal
 
     if (this.myJob) {
@@ -438,19 +455,20 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   }
 
   async submitBid() {
-
-    if(this.bidForm.value.message.length < 5 && this.bidForm.value.message.length > 2500) {
-      this.bid_message_valiated = true;
+    if (
+      this.bidForm.value.message.length < 5 &&
+      this.bidForm.value.message.length > 2500
+    ) {
+      this.bid_message_valiated = true
       return
     }
-    if(this.bidForm.value.price <= 0) {
+    if (this.bidForm.value.price <= 0) {
       this.price_validate = true
       return
     }
 
     this.spinner.show()
 
-    
     const providerInfo = {
       name: this.currentUser.name,
       skillTags: this.currentUser.skillTags,
@@ -460,25 +478,25 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     }
 
     // Test
-    // if (this.currentUser.whitelisted) {
-    // const bidToSubmit = new Bid(
-    //   this.currentUser.address,
-    //   providerInfo,
-    //   this.bidForm.value.price,
-    //   this.bidForm.value.message,
-    //   Date.now(),
-    //   this.uploadedFiles ? this.uploadedFiles : []
-    // )
-    // this.sent = await this.publicJobsService.handlePublicBid(
-    //   bidToSubmit,
-    //   this.job
-    // )
-    this.spinner.hide()
-
-    this.canBid = false
-    // } else {
-    //   alert('You have not been approved as a provider.')
-    // }
+    if (this.currentUser.whitelisted) {
+      const bidToSubmit = new Bid(
+        this.currentUser.address,
+        providerInfo,
+        this.bidForm.value.price,
+        this.bidForm.value.message,
+        Date.now(),
+        this.uploadedFiles ? this.uploadedFiles : []
+      )
+      this.sent = await this.publicJobsService.handlePublicBid(
+        bidToSubmit,
+        this.job
+      )
+      this.spinner.hide()
+      this.canBid = false
+    } else {
+      this.spinner.hide()
+      alert('You have not been approved as a provider.')
+    }
     this.loading = false
   }
 
@@ -567,8 +585,10 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     event.stopPropagation()
     this.hoveredFiles = false
     if (event.dataTransfer && event.dataTransfer.files) {
-
-      if(this.currentUploadNumber > 10 ||  event.dataTransfer.files.length > 10) {
+      if (
+        this.currentUploadNumber > 10 ||
+        event.dataTransfer.files.length > 10
+      ) {
         this.uploadFailed = true
         return
       }
@@ -587,9 +607,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     }
   }
   detectFiles(event: any) {
-
     const files = event.target.files
-    if(this.currentUploadNumber > 10 || files.length > 10) {
+    if (this.currentUploadNumber > 10 || files.length > 10) {
       this.uploadFailed = true
       return
     }
@@ -602,12 +621,10 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     this.uploadFiles(files)
   }
 
-
   stripHtmlTagslength(html: string): number {
-
     const div = document.createElement('div')
     div.innerHTML = html
-    if(div.textContent.length > 5 && div.textContent.length < 2500) {
+    if (div.textContent.length > 5 && div.textContent.length < 2500) {
       this.bid_message_valiated = false
     } else {
       this.bid_message_valiated = true
@@ -615,10 +632,87 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     return div.textContent.length
   }
 
-
   updateDialog(event: Event) {
-    event.stopPropagation();
+    event.stopPropagation()
     this.visible_delete_modal = !this.visible_delete_modal
   }
 
+  
+
+  // Login Part
+
+
+  onFirebaseLogin(signInSuccessData: FirebaseUISignInSuccessWithAuthResult) {
+    this.loading = true
+    this.spinner.hide()
+    const user = signInSuccessData.authResult.user
+    const rnd = Math.floor(Math.random() * 109) + 1
+    const parsedUser = new User({
+      '@context': 'http://schema.org',
+      '@type': 'Person',
+      name: user['displayName'] || 'Empty',
+      address: user['uid'],
+      avatar: {
+        uri: user['photoURL'] || `assets/img/animals/${rnd}.png`,
+      },
+      email: user['email'] || 'Empty',
+      phone: user['phoneNumber'] || 'Empty',
+      state: user['state'] || 'Empty',
+      whitelisted: user['whitelisted'] || false,
+      whitelistRejected: user['whitelistRejected'] || false,
+      whitelistSubmitted: user['whitelistSubmitted'] || false,
+      verified: user['verified'] || false,
+    })
+
+    this.handleLogin(parsedUser)
+  }
+
+  async handleLogin(userDetails: User) {
+    let user: User
+    try {
+      user = await this.userService.getOwnUser(userDetails.address)
+    } catch (error) {
+      console.error(
+        `! failed to query for user with address: [${userDetails.address}] error was: `,
+        error
+      )
+    }
+
+    if (user && user.address) {
+      //console.log('+ logging existing user in:', user.email)
+      ;(await this.afAuth.currentUser)
+        .getIdToken(/* forceRefresh */ true)
+        .then((idToken) => {
+          window.sessionStorage.accessToken = idToken
+        })
+        .catch((error) => {
+          console.error('! jwt token was not stored in session storage ', error)
+          alert('Sorry, we encountered an unknown error')
+        })
+      this.authService.setUser(user)
+
+      if (this.route.snapshot.queryParams['nextAction'])
+        this.updateVisibleloginModal()
+      else this.updateVisibleloginModal()
+    } else {
+      this.initialiseUserAndRedirect(userDetails)
+    }
+  }
+
+  async initialiseUserAndRedirect(user: User) {
+    //console.log(`initialise`)
+    this.userService.saveUser(user).then(
+      (res) => {
+        this.authService.setUser(user)
+        this.router.navigate(['/profile/setup'])
+      },
+      (err) => {
+        console.log('onLogin - err', err)
+      }
+    )
+  }
+
+  updateVisibleloginModal () {
+    this.visible_login_modal =!this.visible_login_modal
+  }
 }

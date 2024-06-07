@@ -472,3 +472,18 @@
   .p-dialog .p-dialog-content {
     padding: 0 !important;
   }
+
+
+  #login_modal .p-dialog.p-component {
+    position: relative;
+    margin: 40px;
+  }
+  #login_modal .p-dialog-header-title {
+    z-index: 122222 !important;
+  }
+  #login_modal .p-dialog-header {
+    display: none;
+  }
+  #login_modal .p-dialog-content {
+    border-radius: 24px !important;
+  }

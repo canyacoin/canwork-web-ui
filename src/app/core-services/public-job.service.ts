@@ -82,7 +82,7 @@ export class PublicJobService {
           .where('visibility', '==', 'public')
           .where('state', '==', JobState.acceptingOffers)
           .where('deadline', '>', new Date().toISOString().slice(0, 10))
-          .where('draft', '==', false)
+          
       )
       .valueChanges()
   }
