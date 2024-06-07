@@ -598,6 +598,7 @@
           </table>
           <hr class="h-[1.5px] my-[20px] bg-gray-200 border-0" />
           <div
+            *ngIf="jobPoster"
             class="text-b3 md:text-b2 text-G800 leading-[1.2] mt-[12px] mb-[16px]"
           >
             About the Client
@@ -653,7 +654,7 @@
               (click)="updateVisibleloginModal()"
               class="btn btn-sm btn-dark mt-10 mr-10 w-full text-[15px] py-[7px] normal-case"
             >
-              Sign Up Now
+              Login to Apply Now
             </button>
           </div>
 
@@ -774,7 +775,9 @@
         (click)="updateVisibleloginModal()"
       />
     </div>
-    <div class="flex flex-col justify-center items-center gap-10 max-md:my-[40px] max-md:mx-[20px]">
+    <div
+      class="flex flex-col justify-center items-center gap-10 max-md:my-[40px] max-md:mx-[20px]"
+    >
       <div>
         <img
           src="/assets/massimo/images/logoGray.png"
