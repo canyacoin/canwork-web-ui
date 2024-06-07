@@ -64,7 +64,8 @@ export class JobDashboardCardComponent implements OnInit {
   async cancelJob(event: Event) {
     event.stopPropagation();
     this.visible = !this.visible
-
+    console.log("this.job.id", this.job.id);
+    
     if (this.job.clientId) {
       const updated = await this.publicJobsService.cancelJob(this.job.id)
       if (updated) {

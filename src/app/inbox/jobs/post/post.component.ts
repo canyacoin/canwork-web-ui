@@ -85,7 +85,7 @@ export class PostComponent implements OnInit, OnDestroy {
   uploadedFiles: Upload[] = []
 
   currentUpload: Upload
-  maxFileSizeBytes = 50000000 // 50mb
+  maxFileSizeBytes = 25000000 // 25mb
   fileTooBig = false
   uploadFailed = false
   deleteFailed = false
@@ -464,8 +464,8 @@ export class PostComponent implements OnInit, OnDestroy {
       }
       if (file.size > this.maxFileSizeBytes) {
         this.fileTooBig = true
+
         this.toastr.error(`File ${file.name} is too big.`)
-        this.beforeuploadFiles.slice(i, 1)
         continue
       }
 
@@ -549,14 +549,18 @@ export class PostComponent implements OnInit, OnDestroy {
       })
 
       if (this.dublicateFilename) {
-        files.forEach((item) => {
-          if (!this.dublicateFilename.includes(item.name)) {
+        files.forEach((item) => { 
+          if (!this.dublicateFilename.includes(item.name) || item.size >= this.maxFileSizeBytes) {
             this.beforeuploadFiles.unshift(item)
           }
         })
       }
     } else {
-      this.beforeuploadFiles = files
+      files.forEach((item) => { 
+        if (item.size >= this.maxFileSizeBytes) {
+          this.beforeuploadFiles.push(item)
+        }
+      })
     }
 
     this.uploadFiles(files)

@@ -107,7 +107,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     this.activejobTypes = [
       { label: 'Active Jobs', code: 'active' },
       { label: 'Public Jobs', code: 'public' },
-      { label: 'Draft', code: 'draft' },
+      { label: 'Drafts', code: 'draft' },
       { label: 'Completed Jobs', code: 'completed' },
     ]
     this.filters = [
@@ -164,7 +164,8 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
         const open = jobs.filter(
           (job) => job.state === JobState.acceptingOffers
         )
-        const draft = jobs.filter((job) => job.draft === true)
+        const draft = jobs.filter((job) => job.draft === true || job.state !== "Public job closed")
+        
         this.publicJobs = open
         this.draftJobs = draft
       })
