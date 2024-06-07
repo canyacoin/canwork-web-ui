@@ -745,6 +745,18 @@
                           You can only add 10 files with maximum of 25MB each
                         </div>
 
+                        
+                        <div
+                          class="flex justify-center items-center text-[#D1242F] text-b2 font-sans"
+                          *ngIf="currentUploadNumber >= 10"
+                        >
+                          <img
+                            src="/assets/massimo/svg/fi_alert-triangle.svg"
+                            alt=""
+                          />
+                          You can only add 10 files with maximum of 25MB each
+                        </div>
+
                         <div
                           class="flex justify-center items-center text-[#D1242F] text-b2 font-sans"
                           *ngIf="deleteFailed"

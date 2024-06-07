@@ -163,6 +163,7 @@ export class PostComponent implements OnInit, OnDestroy {
 
   selectedSortings_visibility: SortingMethod | undefined
 
+  dublicateFilename: string[] = []
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -181,7 +182,11 @@ export class PostComponent implements OnInit, OnDestroy {
       url: [''],
       description: [
         '',
-        Validators.compose([Validators.required, Validators.min(30), Validators.maxLength(2500)]),
+        Validators.compose([
+          Validators.required,
+          Validators.min(30),
+          Validators.maxLength(2500),
+        ]),
       ],
       title: [
         '',
@@ -353,6 +358,8 @@ export class PostComponent implements OnInit, OnDestroy {
         this.jobSub = this.publicJobService
           .getPublicJob(this.activatedRoute.snapshot.params['jobId'])
           .subscribe((result) => {
+            console.log('result', result)
+
             if (result) {
               const canEdit = result.clientId === this.currentUser.address
               if (canEdit) {
@@ -449,6 +456,12 @@ export class PostComponent implements OnInit, OnDestroy {
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i]
+      if (this.dublicateFilename) {
+        if (this.dublicateFilename.includes(file.name)) {
+          this.toastr.error(`File ${file.name} is already uploaded.`)
+          continue
+        }
+      }
       if (file.size > this.maxFileSizeBytes) {
         this.fileTooBig = true
         this.toastr.error(`File ${file.name} is too big.`)
@@ -464,7 +477,9 @@ export class PostComponent implements OnInit, OnDestroy {
         )
 
         this.currentUploadNumber++
-
+        if (this.currentUploadNumber > 10) {
+          return
+        }
         const upload: Upload =
           await this.uploadService.uploadJobAttachmentToStorage(
             this.jobId,
@@ -522,9 +537,24 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   detectFiles(event: any) {
-    const files = event.target.files
+    let files = event.target.files
+
     if (this.beforeuploadFiles.length > 0) {
-      this.beforeuploadFiles.unshift(...files)
+      this.beforeuploadFiles.forEach((file) => {
+        files.forEach((item) => {
+          if (item.name === file.name) {
+            this.dublicateFilename.push(file.name)
+          }
+        })
+      })
+
+      if (this.dublicateFilename) {
+        files.forEach((item) => {
+          if (!this.dublicateFilename.includes(item.name)) {
+            this.beforeuploadFiles.unshift(item)
+          }
+        })
+      }
     } else {
       this.beforeuploadFiles = files
     }
@@ -659,10 +689,13 @@ export class PostComponent implements OnInit, OnDestroy {
               .split(',')
               .map((item) => item.trim())
     }
-    if (tags.length > 6) {
-      tags = tags.slice(0, 6)
+    if (tags.length > 20) {
+      tags = tags.slice(0, 20)
     }
-
+    console.log('tags', tags)
+    if (!tags.length) {
+      tags = this.jobToEdit.information.skills
+    }
     try {
       if (!this.isShareable) {
         const job = new Job({
@@ -847,14 +880,21 @@ export class PostComponent implements OnInit, OnDestroy {
 
     try {
       let tags: string[]
-      tags =
-        this.shareableJobForm.value.skills === ''
-          ? []
-          : this.shareableJobForm.value.skills
-              .split(',')
-              .map((item) => item.trim())
-      if (tags.length > 6) {
-        tags = tags.slice(0, 6)
+      try {
+        tags =
+          this.shareableJobForm.value.skills === ''
+            ? []
+            : this.shareableJobForm.value.skills
+                .split(',')
+                .map((item) => item.trim())
+      } catch (error) {
+        if (!tags.length) {
+          tags = this.jobToEdit.information.skills
+        }
+      }
+
+      if (tags.length > 20) {
+        tags = tags.slice(0, 20)
       }
 
       if (isDRP !== 1) {
