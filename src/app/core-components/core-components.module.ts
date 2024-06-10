@@ -57,7 +57,7 @@ import { SearchButtonComponent } from './buttons/search-button/search-button.com
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
 
-import { BaseDialogComponent } from './base-dialog/base-dialog.component';
+import { BasicDialogComponent } from './basic-dialog/basic-dialog.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { JobDetailComponent } from './job-detail/job-detail.component';
 import { JobBidsComponent } from './job-bids/job-bids.component';
@@ -134,7 +134,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     PostJobComponent,
     JobCardComponent,
     SearchButtonComponent,
-    BaseDialogComponent,
+    BasicDialogComponent,
     JobDetailComponent,
     JobBidsComponent,
     WarningMessageComponent
@@ -175,7 +175,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     PostJobComponent,
     JobCardComponent,
     SearchButtonComponent,
-    BaseDialogComponent,
+    BasicDialogComponent,
     JobDetailComponent,
     JobBidsComponent,
     WarningMessageComponent

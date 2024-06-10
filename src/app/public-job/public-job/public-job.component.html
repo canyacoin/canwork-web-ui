@@ -8,7 +8,7 @@
   <div class="flex justify-center bg-G50">
     <!-- template start -->
     <div class="max-w-[1440px] w-full py-[56px] px-[24px] md:px-[64px]">
-      <base-dialog
+      <basic-dialog
         [visible]="sent"
         title="Proposal Successfully Submitted"
         content="Your proposal has been sent to the client. If approved, the client will be in touch via messages.Goodluck!"
@@ -701,7 +701,7 @@
 
 <!-- Modals start -->
 
-<base-dialog
+<basic-dialog
   [visible]="visible_delete_modal"
   title="Are you sure you want to delete ?"
   content="If you delete job post, you will no longer have access to it or receive bids from freelancers. You  can create a new job listing to receive bids."
@@ -710,7 +710,7 @@
   type="delete"
 />
 
-<base-dialog
+<basic-dialog
   [visible]="visible_withdraw_modal"
   title="Are you sure you want to withdraw your application?"
   content="Your Application will be permanently deleted"
@@ -719,7 +719,7 @@
   type="withdraw"
 />
 
-<base-dialog
+<basic-dialog
   [visible]="visible_listing_modal"
   title="Job Listing Deleted."
   content="You  can create a new job listing to receive bids."

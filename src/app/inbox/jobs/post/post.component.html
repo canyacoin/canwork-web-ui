@@ -1173,19 +1173,19 @@
     </div>
 
     <div *ngIf="sent">
-      <base-dialog
+      <basic-dialog
         [visible]="sentDRP === 2"
         title="Job listing successful"
         content="Your job has been successfully listed on CanWork’s job board. Consider inviting freelancers to your job listing and sharing on your social media."
         type="success"
       />
-      <!-- <base-dialog
+      <!-- <basic-dialog
         [visible]="sentDRP === 0"
         title="Job listing saved to Draft"
         content="Your job listing has been saved to your drafts, you can continue anytime to list your job on CanWork"
         type="success"
       /> -->
-      <base-dialog
+      <basic-dialog
         [visible]="sentDRP === 0"
         title="Job listing saved to Draft"
         content="Your job listing has been saved to your drafts, you can continue anytime to list your job on CanWork"
