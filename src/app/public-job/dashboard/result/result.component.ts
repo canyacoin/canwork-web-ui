@@ -47,9 +47,7 @@ export class ResultComponent implements OnInit {
     this.pageChange.emit(e.page) // notify parent and algolia handler
   }
 
-  ngOnInit() {
-    console.log("this.jobs = " + this.jobs);
-    
+  ngOnInit() {    
     this.sortingMethods = [
       { name: 'Newest', code: 'newest' },
       // { name: 'Relevance', code: 'relevance' },

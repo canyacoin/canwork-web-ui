@@ -67,12 +67,10 @@
             </div>
           </div>
           <div class="w-max" [routerLink]="['/inbox/post']">
-            <basic-button [type]="1" title="Post a Job" />
+            <basic-button [type]="1" title="Post a Job" size="small" />
           </div>
         </div>
       </ng-template>
-
-      <!-- bad code 5 items-center -->
 
       <ng-container *ngFor="let item of jobs">
         <job-card
@@ -84,13 +82,13 @@
           [budget]="item.budget"
           [deadline]="item.deadline"
           [createAt]="item.createAt"
-          [slug] = "item.slug"
+          [slug]="item.slug"
           [clientId]="item.clientId"
         />
       </ng-container>
     </ng-template>
   </div>
-  <div *ngIf="jobs.length" class="pt-[24px] flex justify-center">
+  <div *ngIf="jobs.length > 4" class="pt-[24px] flex justify-center">
     <p-paginator
       (onPageChange)="onPageChange($event)"
       [first]="first"

@@ -8,20 +8,24 @@
   (click)="onTagEnter()"
 ></app-popper>
 
-<div class="flex flex-wrap form-control rounded-xl">
+<div
+  class="flex flex-wrap py-[8px] px-[16px] border border-G200 text-G500 font-sans font-b1 bg-G50 rounded-xl"
+>
   <app-skill-tag
     *ngFor="let tag of acceptedTags"
     class="skill-tag mr-5 pointer"
     (click)="removeTag(tag)"
     [skill]="tag"
-    [cancel] = "true"
+    [cancel]="true"
   ></app-skill-tag>
 
   <input
     id="tagInputBox"
     list="tagsList"
-    class="border-none outline-none w-1/2 bg-transparent"
-    [placeholder]="acceptedTags.length <= 0 ? 'Search skills e.g html, css, frontend' : ''"
+    class="border-none outline-none bg-transparent placeholder:text-b1 font-sans"
+    [placeholder]="
+      acceptedTags.length <= 0 ? 'Search skills e.g html, css, frontend' : ''
+    "
     (blur)="onBlurMethod()"
     (focus)="onFocusMethod()"
     [class.invalid]="acceptedTags.length <= 0"
@@ -36,31 +40,50 @@
   />
 </div>
 
-<div class="flex items-center my-[8px] gap-1 flex-wrap">
-  <p class="mr-[8px]">Popular skill tags:</p>
+<div class="flex items-center mt-[10px] gap-1 flex-wrap">
+  <div class="mr-[8px]">Popular skill tags:</div>
   <ng-container *ngFor="let item of popularskillTags">
-    <div class="py-[6px] px-[16px] border border-G200 bg-G0 rounded-2xl text-b2 select-none cursor-pointer" (click)="onTagEnter(item)">
-      {{item}}
+    <div
+      class="py-[6px] px-[16px] border border-G200 bg-G0 rounded-2xl text-b2 select-none cursor-pointer"
+      (click)="onTagEnter(item)"
+    >
+      {{ item }}
     </div>
   </ng-container>
 </div>
 
-<div class="flex justify-start items-center text-[#D1242F] text-b2 font-sans gap-2" *ngIf="tagSelectionInvalid == 1">
-  <img src="/assets/massimo/svg/fi_alert-triangle.svg" alt="fi_alert-triangle">
+<div
+  class="flex justify-start items-center text-R900 text-b2 font-sans gap-[8px]"
+  *ngIf="tagSelectionInvalid == 1"
+>
+  <img
+    src="/assets/massimo/svg/fi_alert-triangle.svg"
+    alt="fi_alert-triangle"
+  />
   You can only add 20 skill tags
 </div>
 
-<div class="flex justify-start items-center text-[#D1242F] text-b2 font-sans gap-2" *ngIf="tagSelectionInvalid == 2">
-  <img src="/assets/massimo/svg/fi_alert-triangle.svg" alt="fi_alert-triangle">
+<div
+  class="flex justify-start items-center text-R900 text-b2 font-sans gap-[8px]"
+  *ngIf="tagSelectionInvalid == 2"
+>
+  <img
+    src="/assets/massimo/svg/fi_alert-triangle.svg"
+    alt="fi_alert-triangle"
+  />
   Please input tag selection
 </div>
 
-
-<div class="flex justify-start items-center text-[#D1242F] text-b2 font-sans gap-2" *ngIf="tagSelectionInvalid == 3">
-  <img src="/assets/massimo/svg/fi_alert-triangle.svg" alt="fi_alert-triangle">
+<div
+  class="flex justify-start items-center text-R900 text-b2 font-sans gap-[8px]"
+  *ngIf="tagSelectionInvalid == 3"
+>
+  <img
+    src="/assets/massimo/svg/fi_alert-triangle.svg"
+    alt="fi_alert-triangle"
+  />
   You already added this skill.
 </div>
-
 
 <datalist id="tagsList">
   <option *ngFor="let tag of skillTagsList" value="{{ tag }}"></option>

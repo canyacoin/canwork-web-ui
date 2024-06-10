@@ -17,7 +17,6 @@ export class SkillTag {
 @Component({
   selector: 'app-skill-tags-selection',
   templateUrl: './skill-tags-selection.component.html',
-  styleUrls: ['./skill-tags-selection.component.css'],
 })
 export class SkillTagsSelectionComponent implements OnInit {
   @Input() initialTags: string[]
@@ -38,7 +37,7 @@ export class SkillTagsSelectionComponent implements OnInit {
   }
 
   skillTagsList: string[] = []
-  tagSelectionInvalid: number // 0 =-= validation, 1 = validation error with length 20, 2 = validation error with input, 3 = when duplicate
+  tagSelectionInvalid: number // 0 = validation, 1 = validation error with length 20, 2 = validation error with input, 3 = when duplicate
   noValidTag = false
   acceptedTags: string[] = []
   tagInput = ''
@@ -51,8 +50,8 @@ export class SkillTagsSelectionComponent implements OnInit {
       'Website',
       'Web Dev',
       'Shopify',
-      'html',
-      'css',
+      'Html',
+      'Css',
     ]
     this.afs
       .collection<SkillTag>('skill-tags')

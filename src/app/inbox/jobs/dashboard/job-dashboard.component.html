@@ -1,7 +1,6 @@
-<main class="main-content">
-  <section class="section bg-gray pt-15" id="manage-jobs">
-    <app-back-button></app-back-button>
-    <div class="max-w-[1300px] px-[20px] md:px-[40px] m-auto">
+<main class="font-sans">
+  <section class="pt-[100px] bg-G50 px-[20px] md:px-[64px] pb-[24px]">
+    <div class="max-w-[1312px] m-auto">
       <!-- <div class="row">
         <span class="col-6 text-left">
           <h4 class="fw-500">MANAGE JOBS</h4>
@@ -12,42 +11,39 @@
           </button>
         </span>
       </div> -->
-      <div
-        *ngIf="loading"
-        class="d-flex h-100 flex-column justify-content-center"
-        style="min-height: 640px"
-      >
-        <img src="assets/img/loader.svg" style="height: 36px" alt="Loader" />
-      </div>
       <div *ngIf="!loading">
-        <div class="mt-[30px]">
-          <p-tabMenu [model]="activejobTypes" [activeItem]="selectedjob">
-            <ng-template pTemplate="item" let-item let-i="index">
+        <p-tabMenu [model]="jobTypes" [activeItem]="selectedjob">
+          <ng-template pTemplate="item" let-item let-i="index">
+            <div
+              class="bg-G200 border-none"
+              [ngClass]="{
+                'rounded-tl-xl': i === 0,
+                'rounded-tr-xl': i === 3
+              }"
+            >
               <div
-                class="bg-G200 border-t"
+                class="select-none flex items-center h-full py-[8px] px-[12px] md:px-[40px] text-b2 md:text-b1 text-center font-medium leading-6 rounded-t-xl text-G500 cursor-pointer"
+                (click)="changeJob(item.code)"
                 [ngClass]="{
-                  'rounded-tl-xl border-l': i === 0,
-                  'rounded-tr-xl border-r': i === 3
+                  'bg-white': selectedjob.code === item.code
                 }"
               >
-                <div
-                  class="select-none flex items-center h-full py-[8px] px-[12px] md:px-[40px] text-b2 md:text-b1 text-center font-medium leading-6 rounded-t-xl text-G500 cursor-pointer"
-                  (click)="changeJob(item.code)"
-                  [ngClass]="{ 'bg-white': selectedjob.code === item.code }"
-                >
-                  {{ item.label }}
-                </div>
+                {{ item.label }}
               </div>
-            </ng-template>
-          </p-tabMenu>
-        </div>
+            </div>
+          </ng-template>
+        </p-tabMenu>
 
         <div
-          class="border rounded-xl max-sm:rounded-tr-none rounded-tl-none border-gradient-to-r from-transparent to-G200 bg-white py-[32px] px-[20px] md:px-[40px]"
+          class="border rounded-xl max-sm:rounded-tr-none rounded-tl-none border-gradient-to-r from-transparent to-G200 bg-white py-[32px] px-[20px] md:px-[40px] min-h-[752px]"
         >
           <div class="w-full">
-            <div class="flex max-lg:flex-col gap-2 justify-between items-center">
-              <div class="flex gap-[8px] items-center justify-between max-lg:w-full">
+            <div
+              class="flex max-lg:flex-col gap-2 justify-between items-center"
+            >
+              <div
+                class="flex gap-[8px] items-center justify-between max-lg:w-full"
+              >
                 <div class="font-sans font-[500] text-b2 whitespace-nowrap">
                   Search Jobs
                 </div>
@@ -220,7 +216,7 @@
                 [job]="job"
                 [type]="'lg'"
                 [isPublic]="jobType !== 'active'"
-                [jobType] = "jobType"
+                [jobType]="jobType"
               ></app-job-dashboard-card>
             </div>
             <div *ngIf="jobs && jobs.length > 0 && !isOnMobile && reverseOrder">
@@ -231,10 +227,10 @@
                     | reverse
                     | paginate : { itemsPerPage: 10, currentPage: currentPage }
                 "
-                (CancelJob) ="CancelJob($event)"
+                (CancelJob)="CancelJob($event)"
                 [job]="job"
                 [type]="'lg'"
-                [jobType] = "jobType"
+                [jobType]="jobType"
                 [isPublic]="jobType !== 'active'"
               ></app-job-dashboard-card>
             </div>
@@ -248,7 +244,7 @@
                 [job]="job"
                 [type]="'sm'"
                 [isPublic]="false"
-                [jobType] = "jobType"
+                [jobType]="jobType"
               ></app-job-dashboard-card>
             </div>
             <div *ngIf="jobs && jobs.length > 0 && isOnMobile && reverseOrder">
@@ -262,11 +258,14 @@
                 [job]="job"
                 [type]="'sm'"
                 [isPublic]="false"
-                [jobType] = "jobType"
+                [jobType]="jobType"
               ></app-job-dashboard-card>
             </div>
           </div>
-          <div *ngIf="jobs.length && jobs.length > 5" class="pt-[24px] flex justify-center">
+          <div
+            *ngIf="jobs.length && jobs.length > 5"
+            class="pt-[24px] flex justify-center"
+          >
             <p-paginator
               (onPageChange)="onPageChange($event)"
               [first]="first"

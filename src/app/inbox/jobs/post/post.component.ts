@@ -47,13 +47,12 @@ interface SortingMethod {
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
-  styleUrls: ['./post.component.css'],
   providers: [MessageService],
 })
 export class PostComponent implements OnInit, OnDestroy {
   postForm: UntypedFormGroup = null
   shareableJobForm: UntypedFormGroup = null
-  pageLoaded = false
+  loading = false
   paymentType = PaymentType
   recipientAddress = ''
   recipient: User = null
@@ -97,7 +96,7 @@ export class PostComponent implements OnInit, OnDestroy {
   hoveredFiles = false
 
   minDate: Date
-  sentDRP:number
+  sentDRP: number
   editorConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -208,7 +207,15 @@ export class PostComponent implements OnInit, OnDestroy {
       attachments: [''],
       workType: ['', Validators.compose([Validators.required])],
       timelineExpectation: ['', Validators.compose([Validators.required])],
-      weeklyCommitment: [''],
+      weeklyCommitment: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.min(1),
+          Validators.max(10000000),
+          Validators.pattern('^[0-9]+$'),
+        ]),
+      ],
       paymentType: ['Fixed price', Validators.compose([Validators.required])], // Please remove 'Fixed price' once the 'hourly rate' workflow is ready!
       budget: [
         '',
@@ -272,10 +279,18 @@ export class PostComponent implements OnInit, OnDestroy {
           Validators.required,
           Validators.min(1),
           Validators.max(10000000),
-          Validators.pattern('^[0-9]*$'),
+          Validators.pattern('^[0-9]+(.[0-9]{1,2})?$'),
         ]),
       ],
-      weeklyCommitment: [''],
+      weeklyCommitment: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.min(1),
+          Validators.max(10000000),
+          Validators.pattern('^[0-9]+$'),
+        ]),
+      ],
       terms: [false, Validators.requiredTrue],
     })
   }
@@ -353,7 +368,7 @@ export class PostComponent implements OnInit, OnDestroy {
         this.postForm.controls['initialStage'].patchValue('Ready')
         this.postForm.controls['workType'].patchValue('One off')
         this.postForm.controls['timelineExpectation'].patchValue('Up to 1 Year')
-        if (!this.postToProvider) this.pageLoaded = true
+        if (!this.postToProvider) this.loading = true
       } else {
         this.jobId = this.activatedRoute.snapshot.params['jobId']
         this.jobSub = this.publicJobService
@@ -407,7 +422,7 @@ export class PostComponent implements OnInit, OnDestroy {
                   this.beforeuploadFiles =
                     this.jobToEdit.information.attachments
                 }
-                this.pageLoaded = true
+                this.loading = true
               } else {
                 this.router.navigateByUrl('/not-found')
               }
@@ -541,29 +556,35 @@ export class PostComponent implements OnInit, OnDestroy {
     let files = event.target.files
 
     if (this.beforeuploadFiles.length > 0) {
-      this.beforeuploadFiles.forEach((file) => {
-        files.forEach((item) => {
-          if (item.name === file.name) {
-            this.dublicateFilename.push(file.name)
-          }
-        })
+      // Check for duplicates and populate dublicateFilename array
+      files.forEach((item) => {
+        const duplicate = this.beforeuploadFiles.some(
+          (file) => file.name === item.name
+        )
+        if (duplicate) {
+          this.dublicateFilename.push(item.name)
+        }
       })
 
-      if (this.dublicateFilename) {
-        files.forEach((item) => { 
-          if (!this.dublicateFilename.includes(item.name) || item.size >= this.maxFileSizeBytes) {
-            this.beforeuploadFiles.unshift(item)
-          }
-        })
-      }
+      // Add new files to beforeuploadFiles if they are not duplicates and meet size criteria
+      files.forEach((item) => {
+        if (
+          !this.dublicateFilename.includes(item.name) &&
+          item.size < this.maxFileSizeBytes
+        ) {
+          this.beforeuploadFiles.unshift(item)
+        }
+      })
     } else {
-      files.forEach((item) => { 
-        if (item.size >= this.maxFileSizeBytes) {
+      // If beforeuploadFiles is empty, add files that meet size criteria
+      files.forEach((item) => {
+        if (item.size < this.maxFileSizeBytes) {
           this.beforeuploadFiles.push(item)
         }
       })
     }
 
+    // Call uploadFiles with the files array
     this.uploadFiles(files)
   }
 
@@ -591,14 +612,14 @@ export class PostComponent implements OnInit, OnDestroy {
 
   async loadUser(address: string) {
     this.recipient = await this.userService.getUser(address)
-    this.pageLoaded = true
+    this.loading = true
     /**
     this.userService.getUser(address).then((user: User) => {
       this.recipient = user;
     });
      */
   }
-
+  
   skillTagsLoaded(tagsList: string[]) {
     this.skillTagsList = tagsList
   }
@@ -933,9 +954,12 @@ export class PostComponent implements OnInit, OnDestroy {
         paymentType: this.shareableJobForm.value.paymentType,
         budget: this.shareableJobForm.value.budget,
         deadline: this.getDate(this.shareableJobForm.value.deadline),
-        draft: isDRP ? true : false,
+        draft: isDRP > 1 ? false : true,
       })
-      this.draft = isDRP ? true : false
+      this.draft = isDRP > 1 ? false : true
+
+      console.log('job:', job)
+      console.log('isDRP:', isDRP)
 
       if (isDRP > 0) {
         job.state = JobState.acceptingOffers
@@ -965,8 +989,6 @@ export class PostComponent implements OnInit, OnDestroy {
         top: 0,
         behavior: 'smooth',
       })
-
-
     } catch (e) {
       this.sent = false
       this.isSending = false

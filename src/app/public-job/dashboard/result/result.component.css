@@ -9,14 +9,14 @@
   padding: 6px 16px !important;
 }
 .p-dropdown-items.ng-star-inserted {
-  border: 1px solid #E2E8F0 !important;
+  border: 1px solid #e2e8f0 !important;
 }
 
-.p-dropdown-items-wrapper :first-child>li{
+.p-dropdown-items-wrapper :first-child > li {
   border-top-left-radius: 8px !important;
   border-top-right-radius: 8px !important;
 }
-.p-dropdown-items-wrapper :last-child>li{
+.p-dropdown-items-wrapper :last-child > li {
   border-bottom-left-radius: 8px !important;
   border-bottom-right-radius: 8px !important;
 }

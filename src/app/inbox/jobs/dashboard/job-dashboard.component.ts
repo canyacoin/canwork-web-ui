@@ -13,6 +13,7 @@ import { Router, ActivatedRoute } from '@angular/router'
 //import { OrderPipe } from 'ngx-order-pipe'
 import { ReversePipe } from 'ngx-pipes'
 import { OrderByPipe } from 'ngx-pipes'
+import { NgxSpinnerService } from 'ngx-spinner'
 
 import { Observable, Subscription } from 'rxjs'
 
@@ -53,7 +54,6 @@ interface SortingMethod {
 @Component({
   selector: 'app-job-dashboard',
   templateUrl: './job-dashboard.component.html',
-  styleUrls: ['./job-dashboard.component.css'],
   providers: [ReversePipe, OrderByPipe],
 })
 export class JobDashboardComponent implements OnInit, OnDestroy {
@@ -77,7 +77,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   searchQuery: string
   isOnMobile = false
 
-  activejobTypes: jobtypes[]
+  jobTypes: jobtypes[]
   selectedjob: jobtypes
 
   currentPage: number = 0
@@ -95,6 +95,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   filteredProviders: Job[] | undefined
 
   constructor(
+    private spinner: NgxSpinnerService,
     private authService: AuthService,
     public mobile: MobileService,
     //private orderPipe: OrderPipe,
@@ -106,14 +107,19 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   async ngOnInit() {
-    this.activejobTypes = [
+    this.spinner.show()
+
+    setTimeout(() => {
+      /** spinner ends after 2 seconds */
+      this.spinner.hide()
+    }, 2000)
+
+    this.jobTypes = [
       { label: 'Active Jobs', code: 'active' },
       { label: 'Public Jobs', code: 'public' },
       { label: 'Drafts', code: 'draft' },
       { label: 'Completed Jobs', code: 'completed' },
     ]
-   
-    
 
     this.filters = [
       { name: 'All Jobs', code: '' },
@@ -134,17 +140,15 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     this.selectedfilter = this.filters[0]
     this.selectedsortby = this.sortbylist[0]
 
-
     this.route.queryParams.subscribe((params) => {
       if (params['tab'] == undefined) {
-        this.selectedjob = this.activejobTypes[0]
-        this.jobType = this.activejobTypes[0].code
+        this.selectedjob = this.jobTypes[0]
+        this.jobType = this.jobTypes[0].code
       } else {
-        this.selectedjob = this.activejobTypes[params['tab']]
-        this.jobType = this.selectedjob.code     
+        this.selectedjob = this.jobTypes[params['tab']]
+        this.jobType = this.selectedjob.code
       }
     })
-
 
     this.currentUser = await this.authService.getCurrentUser()
     this.userType = this.currentUser.type
@@ -187,7 +191,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
         this.publicJobs = open
         this.draftJobs = draft
         this.completeJobs = completed_Job
-       
+
         switch (this.jobType) {
           case 'public':
             this.jobs = this.publicJobs.filter((job) => job.draft === false)
@@ -201,9 +205,6 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
         }
         this.showFilteredJobs(this.jobs)
       })
-
-      
-     
   }
 
   changeJob(jobType) {
@@ -227,7 +228,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
         numberTab = 3
         break
     }
-    this.router.navigate(['/inbox/jobs'], { queryParams: { tab: numberTab } });
+    this.router.navigate(['/inbox/jobs'], { queryParams: { tab: numberTab } })
     this.showFilteredJobs(this.jobs)
   }
 
