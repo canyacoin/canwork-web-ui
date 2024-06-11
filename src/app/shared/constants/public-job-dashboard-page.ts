@@ -11,7 +11,7 @@ export const FilterService = {
     { scope: '$500 - $1000', id: 500 },
     { scope: '$1000 - $5000', id: 1000 },
     { scope: '$5000 - $10,000', id: 5000 },
-    { scope: '$10,000 >', id: 10000 }
+    { scope: '$10,000 >', id: 10000 },
   ],
   skills: [
     'Javascript',
