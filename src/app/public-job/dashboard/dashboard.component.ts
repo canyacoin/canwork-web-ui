@@ -55,7 +55,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   skillsFilter: string[] = []
   // skill filters on provider, intersection (AND)
 
-  categoryFilter: any[] = []
+  categoryFilter: string[] = []
   // category filters on provider, intersection (AND)
 
   ratingFilter: number[] = []
@@ -83,7 +83,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private algoliaSearchClient // new
 
   // Search parameters
-  searchitems: string[] = []
+  searchItems: string[] = []
 
   allProviders: any[] = []
   filteredProviders: any[] = []
@@ -164,23 +164,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
   async refreshResultsSearch() {
     this.filteredProviders = []
 
-    let SearchResultJobs = this.allProviders
+    let searchResultJobs = this.allProviders
     // search Category
     if (this.categoryFilter.length > 0) {
-      SearchResultJobs.map((provider) => {
+      searchResultJobs.map((provider) => {
         this.categoryFilter.map((item) => {
           if (item === provider.information.providerType) {
             this.filteredProviders.push(provider)
           }
         })
       })
-      SearchResultJobs = this.filteredProviders
+      searchResultJobs = this.filteredProviders
       this.filteredProviders = []
     }
     // search skills
 
     if (this.skillsFilter.length > 0) {
-      SearchResultJobs.map((provider) => {
+      searchResultJobs.map((provider) => {
         provider.information.skills.map((skill) => {
           if (this.compareWithArray(this.skillsFilter, skill)) {
             this.filteredProviders.push(provider)
@@ -188,7 +188,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         })
       })
 
-      SearchResultJobs = this.filteredProviders
+      searchResultJobs = this.filteredProviders
       this.filteredProviders = []
     }
 
@@ -196,13 +196,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     if (this.fixedFilter.length) {
       if (this.fixedFilter[0] == -1 && this.fixedFilter.length == 1) {
-        SearchResultJobs.map((provider) => {
+        searchResultJobs.map((provider) => {
           if (provider.paymentType == 'Fixed price') {
             this.filteredProviders.push(provider)
           }
         })
       } else {
-        SearchResultJobs.map((provider) => {
+        searchResultJobs.map((provider) => {
           if (
             this.fixedFilter.length > 0 &&
             provider.paymentType == 'Fixed price'
@@ -237,14 +237,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
           }
         })
       }
-      SearchResultJobs = this.filteredProviders
+      searchResultJobs = this.filteredProviders
       this.filteredProviders = []
     }
 
     // Search Hourly
     if (this.hourlyFilter.length > 0) {
       if (this.hourlyFilter[0] == 0 && this.hourlyFilter[1] === 0) {
-        SearchResultJobs.map((provider) => {
+        searchResultJobs.map((provider) => {
           if (provider.paymentType == 'Hourly price') {
             this.filteredProviders.push(provider)
           }
@@ -257,7 +257,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           ? 300
           : this.hourlyFilter[1]
 
-        SearchResultJobs.map((provider) => {
+        searchResultJobs.map((provider) => {
           if (
             this.minValue <= provider.budget &&
             this.maxValue >= provider.budget
@@ -268,7 +268,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           }
         })
       }
-      SearchResultJobs = this.filteredProviders
+      searchResultJobs = this.filteredProviders
       this.filteredProviders = []
     }
 
@@ -276,7 +276,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     if (this.locationFilter.length > 0) {
       this.loading = true
-      SearchResultJobs.map(async (provider) => {
+      searchResultJobs.map(async (provider) => {
         const jobPoster = await this.userService.getUser(provider.clientId)
         const location_client = jobPoster.timezone
         this.locationFilter.map((item) => {
@@ -285,13 +285,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
           }
         })
       })
-      SearchResultJobs = this.filteredProviders
+      searchResultJobs = this.filteredProviders
       this.filteredProviders = []
     }
 
     if (this.ratingFilter.length > 0) {
       this.loading = true
-      SearchResultJobs.map(async (provider) => {
+      searchResultJobs.map(async (provider) => {
         const jobPoster = await this.userService.getUser(provider.clientId)
         this.ratingFilter.map((item) => {
           console.log('jobPoster.rating.average', jobPoster.rating.average)
@@ -301,7 +301,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           }
         })
       })
-      SearchResultJobs = this.filteredProviders
+      searchResultJobs = this.filteredProviders
       this.filteredProviders = []
     }
 
@@ -309,7 +309,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.searchInput.length > 0) {
       this.loading = true
 
-      SearchResultJobs.map(async (provider) => {
+      searchResultJobs.map(async (provider) => {
         let tempText = provider.information.title
         tempText += this.stripHtmlTags(provider.information.description)
         tempText += provider.information.skills.join(' ')
@@ -318,19 +318,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.filteredProviders.push(provider)
         }
       })
-      SearchResultJobs = this.filteredProviders
+      searchResultJobs = this.filteredProviders
       this.filteredProviders = []
     }
     this.currentPage = 0
 
     // array for filtering
-    this.filteredProviders = SearchResultJobs
+    this.filteredProviders = searchResultJobs
 
     this.SortbymethodHandler()
 
     if (
-      this.searchitems.includes('Location') ||
-      this.searchitems.includes('Rating')
+      this.searchItems.includes('location') ||
+      this.searchItems.includes('rating')
     ) {
       setTimeout(() => {
         this.hits = this.getHits()
@@ -375,10 +375,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   onLocationInputChange(locationInput: string[]) {
     // we don't sort it to avoid ui changes, we'll sort it on the fly when composing status into address bar
     if (locationInput.length == 0) {
-      this.searchitems.splice(this.searchitems.indexOf('Location'), 1)
+      this.searchItems.splice(this.searchItems.indexOf('location'), 1)
     }
-    if (locationInput.length > 0 && !this.searchitems.includes('Location')) {
-      this.searchitems.push('Location')
+    if (locationInput.length > 0 && !this.searchItems.includes('location')) {
+      this.searchItems.push('location')
     }
     this.locationFilter = locationInput
 
@@ -408,13 +408,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   onSkillsFilterChange(skillInput: string[]) {
     // Set the search items with last time we checked
-    this.onChangeSearchItemskill(skillInput)
+    this.onChangesearchItemskill(skillInput)
     this.skillsFilter = skillInput
     this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
     this.refreshResultsSearch()
   }
 
-  onCategoryFilterChange(categoryInput: any[]) {
+  onCategoryFilterChange(categoryInput: string[]) {
     this.onChangeSearchItemCategory(categoryInput)
     this.categoryFilter = categoryInput
     this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
@@ -439,20 +439,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.refreshResultsSearch()
   }
 
-  onHourlyInputChange(FilterInput: number[]) {
-    this.onChangeSearchItemHourly(FilterInput)
+  onHourlyInputChange(houlryFilterInput: number[]) {
+    this.onChangeSearchItemHourly(houlryFilterInput)
 
-    this.hourlyFilter = FilterInput
+    this.hourlyFilter = houlryFilterInput
     this.currentPage = 0
     this.refreshResultsSearch()
   }
   // two way binding, event from child (user input)
   onRatingChange(ratingInput: number[]) {
     if (ratingInput.length == 0) {
-      this.searchitems.splice(this.searchitems.indexOf('Rating'), 1)
+      this.searchItems.splice(this.searchItems.indexOf('rating'), 1)
     }
-    if (ratingInput.length > 0 && !this.searchitems.includes('Rating')) {
-      this.searchitems.push('Rating')
+    if (ratingInput.length > 0 && !this.searchItems.includes('rating')) {
+      this.searchItems.push('rating')
     }
 
     this.ratingFilter = ratingInput
@@ -527,95 +527,126 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   // Search Item above jobs card
 
-  onChangeSearchItemFixed(item: any[]) {
-    let uniqueFixed
-    if (item.includes(-1) && !this.searchitems.includes('Fixed')) {
-      this.searchitems.push('Fixed')
-    }
-
-    if (this.fixedFilter.length < item.length)
-      this.searchitems.push(this.getScopeById(item.slice(-1)[0]))
-    else {
-      uniqueFixed = this.fixedFilter.filter((fixed) => !item.includes(fixed))
-      this.searchitems.splice(
-        this.searchitems.indexOf(this.getScopeById(uniqueFixed[0])),
-        1
+  onChangeSearchItemFixed(items: number[]) {
+    if (items.length < this.fixedFilter.length) {
+      let changedItem = this.fixedFilter.filter(
+        (filterItem) => !items.includes(filterItem)
       )
-    }
-    if (item.length == 0) {
-      FilterService.fixedscope.map((item) => {
-        this.searchitems = this.searchitems.splice(
-          this.searchitems.indexOf(item.scope),
+      if (changedItem[0] === -1) {
+        // case of "Fixed"
+        // Clear all fixed scope items
+        FilterService.fixedscope.forEach((item) => {
+          this.searchItems.splice(this.searchItems.indexOf(item.scope), 1)
+        })
+        // delete "fixed" tag
+        this.searchItems.splice(this.searchItems.indexOf('Fixed'), 1)
+      } else
+        this.searchItems.splice(
+          this.searchItems.indexOf(this.getScopeById(changedItem[0])),
           1
         )
+    } else {
+      items.forEach((item) => {
+        if (item === -1) {
+          // this is case of "fixed"
+          if (!this.searchItems.includes('Fixed')) {
+            this.searchItems.push('Fixed')
+          }
+        } else {
+          const scope = this.getScopeById(item)
+          if (!this.searchItems.includes(scope)) this.searchItems.push(scope)
+        }
       })
     }
+
+    console.log('this.searchItems: ', this.searchItems)
   }
 
   onChangeSearchItemHourly(FilterInput: number[]) {
     if (FilterInput.length) {
-      if (!this.searchitems.includes('hourly')) {
-        this.searchitems.push('hourly')
+      if (!this.searchItems.includes('hourly')) {
+        this.searchItems.push('hourly')
       }
     } else {
-      this.searchitems.splice(this.searchitems.indexOf('hourly'), 1)
+      this.searchItems.splice(this.searchItems.indexOf('hourly'), 1)
     }
   }
 
-  onChangeSearchItemskill(Input: any[]) {
+  onChangesearchItemskill(Input: any[]) {
     if (this.skillsFilter.length < Input.length)
-      this.searchitems.push(Input.slice(-1)[0])
+      this.searchItems.push(Input.slice(-1)[0])
     else {
       const uniqueSkills = this.skillsFilter.filter(
         (skill) => !Input.includes(skill)
       )
-      this.searchitems.splice(this.searchitems.indexOf(uniqueSkills[0]), 1)
+      this.searchItems.splice(this.searchItems.indexOf(uniqueSkills[0]), 1)
     }
   }
 
-  onChangeSearchItemCategory(Input: any[]) {
-    console.log('this.categoryFilter.length:', this.categoryFilter.length)
-    console.log('Input.length:', Input.length)
-    if (this.categoryFilter.length < Input.length) {
-      this.searchitems.push(Input.slice(-1)[0])
-      console.log('this.searchitems:', this.searchitems)
-    } else {
-      const uniqueCategory = this.categoryFilter.filter(
-        (skill) => !Input.includes(skill)
+  onChangeSearchItemCategory(Input: string[]) {
+    if (Input.length < this.categoryFilter.length) {
+      let changedItem = this.categoryFilter.filter(
+        (filterItem) => !Input.includes(filterItem)
       )
-      this.searchitems.splice(this.searchitems.indexOf(uniqueCategory[0]), 1)
-      console.log('this.searchitems:', this.searchitems)
+
+      this.searchItems.splice(this.searchItems.indexOf(changedItem[0]), 1)
+    } else {
+      this.searchItems.push(Input.slice(-1)[0])
     }
   }
 
   onRemoveSearchItem(removeItem: string) {
-    console.log('removeItem: ', removeItem);
-    console.log('this.searchitems: ', this.searchitems);
-    this.searchitems.splice(this.searchitems.indexOf(removeItem), 1)
-    this.categoryFilter.splice(this.categoryFilter.indexOf(removeItem), 1)
-    this.skillsFilter.splice(this.skillsFilter.indexOf(removeItem), 1)
+    console.log('===========before============')
+    console.log('removeItem: ', removeItem)
+    console.log('this.searchItems: ', this.searchItems)
+    console.log('this.locationFilter: ', this.locationFilter)
+    console.log('this.categoryFilter: ', this.categoryFilter)
+    console.log('this.ratingFilter: ', this.ratingFilter)
+    console.log('this.hourlyFilter: ', this.hourlyFilter)
+    console.log('this.fixedFilter: ', this.fixedFilter)
+    console.log('===========before============')
 
-    if (removeItem == 'Location') {
+    this.searchItems.splice(this.searchItems.indexOf(removeItem), 1)
+    // this.skillsFilter.splice(this.skillsFilter.indexOf(removeItem), 1)
+    if (removeItem === 'location') {
       this.locationFilter = []
-    }
-    if (removeItem == 'hourly') {
+    } else if (removeItem === 'rating') {
+      this.ratingFilter = []
+    } else if (removeItem === 'hourly') {
       this.hourlyFilter = []
-    }
-    if (removeItem == 'Fixed') {
-      this.fixedFilter = []
-      FilterService.fixedscope.map((item) => {
-        this.searchitems = this.searchitems.splice(
-          this.searchitems.indexOf(item.scope),
+    } else if (
+      removeItem === 'contentCreator' ||
+      removeItem === 'softwareDev' ||
+      removeItem === 'designer' ||
+      removeItem === 'marketing' ||
+      removeItem === 'virtualAssistant'
+    ) {
+      this.categoryFilter.splice(this.categoryFilter.indexOf(removeItem), 1)
+    } else {
+      if (removeItem === 'Fixed') {
+        // delete all fixed tags
+        FilterService.fixedscope.forEach((item) => {
+          this.searchItems.splice(this.searchItems.indexOf(item.scope), 1)
+        })
+        // delete "fixed" tag
+        this.searchItems.splice(this.searchItems.indexOf('Fixed'), 1)
+        this.fixedFilter = []
+      } else {
+        this.fixedFilter.splice(
+          this.fixedFilter.indexOf(this.getIdByScope(removeItem)),
           1
         )
-      })
-      console.log('this.searchitems: ', this.searchitems);
-    } else {
-      this.fixedFilter.splice(
-        this.fixedFilter.indexOf(this.getIdByScope(removeItem)),
-        1
-      )
+      }
     }
+    console.log('===========after============')
+    console.log('removeItem: ', removeItem)
+    console.log('this.searchItems: ', this.searchItems)
+    console.log('this.locationFilter: ', this.locationFilter)
+    console.log('this.categoryFilter: ', this.categoryFilter)
+    console.log('this.ratingFilter: ', this.ratingFilter)
+    console.log('this.hourlyFilter: ', this.hourlyFilter)
+    console.log('this.fixedFilter: ', this.fixedFilter)
+    console.log('===========after============')
 
     this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
     this.refreshResultsSearch()

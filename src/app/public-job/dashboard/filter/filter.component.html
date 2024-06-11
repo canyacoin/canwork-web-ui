@@ -166,10 +166,10 @@
             >
               <p-checkbox
                 [label]="item.name"
-                name="skillsForm"
+                name="categoriesForm"
                 [value]="item.code"
                 [(ngModel)]="categoriesForm"
-                [trueValue]="checkedItemCategory(item)"
+                [trueValue]="checkedItemCategory(item.code)"
                 (onChange)="categoryClick($event)"
               ></p-checkbox>
             </div>
@@ -181,7 +181,9 @@
     <p-accordion class="w-full">
       <p-accordionTab>
         <ng-template pTemplate="header">
-          <div class="pr-[8px] flex items-center justify-between gap-2 w-full font-sans">
+          <div
+            class="pr-[8px] flex items-center justify-between gap-2 w-full font-sans"
+          >
             <div class="flex items-center gap-2">
               <span class="text-b2 font-medium text-G800 whitespace-nowrap"
                 >Job Type</span
@@ -205,8 +207,8 @@
             <p-checkbox
               label="Hourly"
               name="Hourly"
-              [value]="true"
-              [(ngModel)]="hourly"
+              [binary]="true"
+              [(ngModel)]="hourlyFlag"
               (onChange)="hourlyTopClick($event)"
             ></p-checkbox>
           </div>
@@ -214,7 +216,7 @@
             <div class="flex font-sans text-b1 font-normal">
               <p-checkbox
                 name="hourlymin_max"
-                [value]="true"
+                [binary]="true"
                 [(ngModel)]="hourlymin_max"
                 (onChange)="hourlyBottomClick($event)"
               ></p-checkbox>
@@ -225,6 +227,7 @@
                   [(ngModel)]="min"
                   (input)="onSearchInputChange()"
                   placeholder="$Min/hr"
+                  min="1"
                   class="!shadow-none !text-b2 bg-transparent border rounded-[8px] w-[96px] py-[6px] px-[16px] text-G900 placeholder:!text-b2"
                 />
                 <input
@@ -233,6 +236,7 @@
                   [(ngModel)]="max"
                   (input)="onSearchInputChange()"
                   placeholder="$Max/hr"
+                  min="1"
                   class="!shadow-none !text-b2 bg-transparent border rounded-[8px] w-[96px] py-[6px] px-[16px] text-G900 placeholder:!text-b2"
                 />
               </div>
@@ -245,10 +249,9 @@
             <p-checkbox
               label="Fixed"
               name="Fixed"
-              [value]="true"
-              [(ngModel)]="fixedflag"
+              [binary]="true"
+              [(ngModel)]="fixedFlag"
               (onChange)="fixedClick($event)"
-              [trueValue]="checkedItemFixed(-1)"
             ></p-checkbox>
           </div>
           <div class="px-6">
@@ -263,7 +266,7 @@
                   [value]="item.id"
                   [(ngModel)]="fixedForm"
                   [trueValue]="checkedItemFixed(item.id)"
-                  (onChange)="fixedClick($event)"
+                  (onChange)="fixedItemClick($event)"
                 ></p-checkbox>
               </div>
             </div>
@@ -315,7 +318,9 @@
     <p-accordion class="w-full">
       <p-accordionTab>
         <ng-template pTemplate="header">
-          <div class="pr-[8px] flex items-center justify-between gap-2 w-full font-sans">
+          <div
+            class="pr-[8px] flex items-center justify-between gap-2 w-full font-sans"
+          >
             <div class="flex items-center gap-2">
               <span class="text-b2 font-medium text-G800 whitespace-nowrap"
                 >Rating</span
@@ -343,7 +348,6 @@
                 [value]="item"
                 [(ngModel)]="ratingForm"
                 (onChange)="ratingClick(item)"
-                class="!p"
               ></p-checkbox>
               <div *ngFor="let j of [1, 2, 3, 4, 5]">
                 <img
@@ -362,7 +366,9 @@
     <p-accordion class="w-full">
       <p-accordionTab>
         <ng-template pTemplate="header">
-          <div class="pr-[8px] flex items-center justify-between gap-2 w-full font-sans">
+          <div
+            class="pr-[8px] flex items-center justify-between gap-2 w-full font-sans"
+          >
             <div class="flex items-center gap-2">
               <span class="text-b2 font-medium text-G800 whitespace-nowrap"
                 >Location</span

@@ -24,8 +24,8 @@ export class FilterComponent implements OnInit, OnChanges {
   skillsLength: number = 9 // how many skills to show at start
 
   // categories
-  @Input() categoriesForm: any[] = []
-  @Output() categoriesFormChange = new EventEmitter<any[]>() // two way binding to parent
+  @Input() categoriesForm: string[] = []
+  @Output() categoriesFormChange = new EventEmitter<string[]>() // two way binding to parent
 
   @Input() ratingForm: number[] = []
   @Output() ratingChange = new EventEmitter<number[]>() // two way binding to parent
@@ -39,12 +39,12 @@ export class FilterComponent implements OnInit, OnChanges {
   @Input() hourlyInput: number[] = []
   @Output() hourlyInputChange = new EventEmitter<number[]>() // two way binding to parent
 
-  hourly: boolean[] = [false]
-  hourlymin_max: boolean[] = [false]
+  hourlyFlag: boolean = false
+  hourlymin_max: boolean = false
   min: number = undefined // minimum
   max: number = undefined // maximum
 
-  fixedflag: boolean[] = [false]
+  fixedFlag: boolean = false
 
   // search location
 
@@ -55,26 +55,31 @@ export class FilterComponent implements OnInit, OnChanges {
   @Input() locationInput: string[]
   @Output() LocationInputChange = new EventEmitter<string[]>() // two way binding to parent
 
-  ngOnInit() {
-    this.tempSkillsForm = this.filterSection.skills.slice(0, this.skillsLength)
-  }
   ngOnChanges(changes: SimpleChanges) {
-    // check Hourly
-    try {
-      if (changes.hourlyInput.currentValue.length == 0) {
-        this.hourly = [false]
-        this.hourlymin_max = [false]
-        this.min = undefined
-        this.max = undefined
-      }
-    } catch (error) {}
+    // if (changes['hourlyInput']) {
+    //   console.log('====================this.hourlyInput:', this.hourlyInput)
+    //   if (this.hourlyInput.length === 0) {
+    //     this.hourlymin_max = false
+    //     this.min = undefined
+    //     this.max = undefined
+    //   }
+    // }
+    // if (changes['fixedForm']) {
+    //   console.log('=======================this.fixedForm:', this.fixedForm)
+    //   if (this.fixedForm.length === 0) {
+    //     this.fixedFlag = false
+    //   }
+    // }
+    // if (changes['ratingForm']) {
+    //   console.log('=======================this.ratingForm:', this.ratingForm)
+    //   if (this.ratingForm.length === 0) {
+    //     this.ratingForm = []
+    //   }
+    // }
+  }
 
-    // check Flag
-    try {
-      if (changes.fixedForm.currentValue.length == 0) {
-        this.fixedflag = [false]
-      }
-    } catch (error) {}
+  ngOnInit() {
+    // this.tempSkillsForm = this.filterSection.skills.slice(0, this.skillsLength)
   }
   getNumberAllFilters(): number {
     return (
@@ -97,6 +102,8 @@ export class FilterComponent implements OnInit, OnChanges {
     this.categoriesForm = []
     this.locationInput = []
     this.fixedForm = []
+    this.hourlyFlag = false
+    this.fixedFlag = false
 
     this.verifyFormChange.emit(this.verifyForm)
     this.skillsFormChange.emit(this.skillsForm)
@@ -117,27 +124,16 @@ export class FilterComponent implements OnInit, OnChanges {
   }*/
 
   checkedItemskill(value: string) {
-    if (this.skillsForm.includes(value)) {
-      return true
-    } else {
-      return false
-    }
+    return this.skillsForm.includes(value)
   }
 
-  checkedItemCategory(value: any) {
-    if (this.categoriesForm.includes(value)) {
-      return true
-    } else {
-      return false
-    }
+  checkedItemCategory(value: string) {
+    return this.categoriesForm.includes(value)
   }
   checkedItemFixed(value: number) {
-    if (this.fixedForm.includes(value)) {
-      return true
-    } else {
-      return false
-    }
+    return this.fixedForm.includes(value)
   }
+
   verifyClick(e) {
     //console.log(this.verifyForm);
     //['Verified'] or []
@@ -153,53 +149,68 @@ export class FilterComponent implements OnInit, OnChanges {
   }
 
   fixedClick(e) {
-    if (!this.fixedForm.includes(-1)) {
-      this.fixedForm.unshift(-1)
-      if (!this.fixedflag.includes(true)) {
-        this.fixedflag = [true]
-      }
-    } else if (
-      (this.fixedflag.length == 0 || !this.fixedflag.includes(true)) &&
-      this.fixedForm.includes(-1)
-    ) {
-      this.PriceClear()
+    if (this.fixedFlag) {
+      this.fixedForm = [-1]
+    } else {
+      this.fixedForm = []
     }
     this.fixedFormChange.emit(this.fixedForm)
   }
 
-  hourlyTopClick(e) {
-    if (this.hourly.length == 2) {
-      this.hourlyInput = [0, 300]
+  fixedItemClick(e) {
+    if (this.fixedForm.includes(-1)) {
+      if (this.fixedForm.length === 1) {
+        // there is no items but there is Fixed Flag, then we should set that flag as false
+        this.fixedForm = []
+        this.fixedFlag = false
+      }
     } else {
+      if (this.fixedForm.length > 0) {
+        // there is items but there isn't Fixed Flag, then we should set that flag as true
+        this.fixedFlag = true
+        this.fixedForm.unshift(-1)
+      }
+    }
+    console.log('this.fixedForm', this.fixedForm)
+    this.fixedFormChange.emit(this.fixedForm)
+  }
+
+  hourlyTopClick(e) {
+    console.log('hourly top click', this.hourlyFlag)
+    if (this.hourlyFlag) {
+      this.hourlyInput = [1, 300]
+    } else {
+      this.hourlymin_max = false
       this.min = undefined
       this.max = undefined
       this.hourlyInput = []
-      this.hourlymin_max = [false]
     }
-
     this.hourlyInputChange.emit(this.hourlyInput)
   }
 
   hourlyBottomClick(e) {
-    if (this.hourlymin_max.length == 2) {
-      this.hourly = [true]
-      this.hourlyInput = [Number(this.min), Number(this.max)]
+    if (this.hourlymin_max) {
+      this.hourlyFlag = true
+      this.min = 1
+      this.max = 300
+      this.hourlyInput = [1, 300]
     } else {
+      this.hourlyFlag = false
       this.min = undefined
       this.max = undefined
-      this.hourlyInput = [0, 300]
+      this.hourlyInput = []
     }
     this.hourlyInputChange.emit(this.hourlyInput)
   }
   onSearchInputChange() {
-    this.hourly = [true]
-    this.hourlymin_max = [true]
+    this.hourlyFlag = true
+    this.hourlymin_max = true
     this.hourlyInput = [Number(this.min), Number(this.max)]
 
     this.hourlyInputChange.emit(this.hourlyInput) // notify parent and algolia handler
   }
 
-  experienceClick(e) {
+  experienceClick() {
     this.experienceFormChange.emit(this.experienceForm)
   }
   ratingClick(item) {
@@ -215,7 +226,7 @@ export class FilterComponent implements OnInit, OnChanges {
 
   LocationClear() {
     this.locationInput = []
-    this.LocationInputChange.emit([]);
+    this.LocationInputChange.emit([])
   }
   skillsClear() {
     this.skillsForm = []
@@ -232,10 +243,12 @@ export class FilterComponent implements OnInit, OnChanges {
   }
 
   PriceClear() {
+    this.hourlyFlag = false
+    this.hourlyInputChange.emit([])
+
+    this.fixedFlag = false
     this.fixedForm = []
     this.fixedFormChange.emit([])
-    this.hourly = []
-    this.hourlyInputChange.emit([])
   }
 
   experienceClear() {

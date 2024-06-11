@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter,SimpleChanges } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 
 interface PageEvent {
   first: number
@@ -18,10 +18,9 @@ interface SoringMethod {
   templateUrl: './result.component.html',
 })
 export class ResultComponent implements OnInit {
-
   @Input() isLoading: boolean = true
   @Input() stats: any
-  @Input() searchitems: string[] 
+  @Input() searchItems: string[]
   @Input() searchParam: string
   @Input() jobs: any[]
   @Input() first: number = 0
@@ -34,20 +33,18 @@ export class ResultComponent implements OnInit {
 
   selectedSorting: SoringMethod | undefined
 
-
   /*
   https://www.primefaces.org/primeng-v14-lts/paginator
   */
 
   skCards = new Array(5)
   onPageChange(e: PageEvent) {
-    
     this.first = e.first
     this.rows = e.rows // this is injected from parent
     this.pageChange.emit(e.page) // notify parent and algolia handler
   }
 
-  ngOnInit() {    
+  ngOnInit() {
     this.sortingMethods = [
       { name: 'Newest', code: 'newest' },
       // { name: 'Relevance', code: 'relevance' },
