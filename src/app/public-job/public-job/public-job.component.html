@@ -31,7 +31,7 @@
         class="flex flex-col lg:flex-row md:justify-between gap-2 md:gap-6 pt-[56px]"
       >
         <div class="w-full">
-          <ng-container *ngIf="IsShownTab  || this.myJob ">
+          <ng-container *ngIf="IsShownTab || this.myJob">
             <p-tabMenu
               [model]="activejobTypes"
               [activeItem]="selectedjob"
@@ -61,7 +61,8 @@
             <div
               class="w-full rounded-[12px] bg-white border border-G300 p-[40px]"
               [ngClass]="{
-                '!rounded-tl-none': IsShownTab  || this.myJob  && !yourApplication
+                '!rounded-tl-none':
+                  IsShownTab || (this.myJob && !yourApplication)
               }"
             >
               <job-detail-panel
@@ -490,7 +491,7 @@
           class="lg:w-[350px] rounded-[12px] bg-white border border-G300 px-7 py-[32px] h-full"
         >
           <div
-            class="text-b2 flex justify-between items-center md:text-b1 text-G800 font-medium leading-[1.2] pl-[2px]"
+            class="text-b2 flex justify-between items-center md:text-b1 text-G800 font-medium pl-[2px]"
           >
             <span *ngIf="job.state && isOpen && !job.draft">
               <i class="circle-success fas fa-circle mr-[12px]"></i
@@ -594,7 +595,7 @@
           <hr class="h-[1.5px] my-[20px] bg-gray-200 border-0" />
           <div
             *ngIf="jobPoster"
-            class="text-b3 md:text-b2 text-G800 leading-[1.2] mt-[12px] mb-[16px]"
+            class="text-b3 md:text-b2 text-G800 mt-[12px] mb-[16px]"
           >
             About the Client
           </div>
@@ -616,7 +617,7 @@
           </ng-container>
           <div
             *ngIf="myJob && !isClosed"
-            class="text-b3 md:text-b2 text-G800 leading-[1.2] mt-[16px]"
+            class="text-b3 md:text-b2 text-G800 mt-[16px]"
           >
             <div class="flex gap-4 justify-between items-center">
               <div
@@ -641,20 +642,17 @@
           </div>
 
           <div
-            class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[16px] pt-[24px]"
+            class="text-b2 md:text-b1 text-G800 pt-[24px]"
             *ngIf="!currentUser && !myJob && isOpen"
           >
             Sign up to be a CanWork service provider to bid on this job.
-            <button
-              (click)="updateVisibleloginModal()"
-              class="btn btn-sm btn-dark mt-10 mr-10 w-full text-[15px] py-[7px] normal-case"
-            >
-              Login to Apply Now
-            </button>
+            <div class="mt-[24px]" (click)="updateVisibleloginModal()">
+              <basic-button [type]="2" title="Login to Apply Now" />
+            </div>
           </div>
 
           <div
-            class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[16px] pt-[24px]"
+            class="text-b2 md:text-b1 text-G800 mt-[16px] pt-[24px]"
             *ngIf="
               currentUser && currentUser.type !== 'Provider' && !myJob && isOpen
             "
@@ -663,7 +661,7 @@
           </div>
 
           <div
-            class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[16px]"
+            class="text-b2 md:text-b1 text-G800 mt-[16px]"
             *ngIf="currentUser && IsProvider && !myJob && isOpen"
           >
             <!-- <button
@@ -779,31 +777,29 @@
   id="login_modal"
 >
   <div class="grid md:grid-cols-2 justify-between">
-    <div class="absolute top-[32px] right-[43px]">
+    <div class="absolute top-[20px] right-[20px] md:top-[32px] md:right-[43px]">
       <img
         src="/assets/massimo/images/x_button.png"
-        alt=""
-        class="w-[40px] h-[40px] cursor-pointer"
+        alt="X"
+        class="w-[30px] h-[30px] md:w-[40px] md:h-[40px] cursor-pointer select-none"
         (click)="updateVisibleloginModal()"
       />
     </div>
     <div
-      class="flex flex-col justify-center items-center gap-10 max-md:my-[40px] max-md:mx-[20px]"
+      class="flex flex-col justify-center items-center gap-[20px] md:gap-[40px] max-md:my-[40px] max-md:mx-[20px]"
     >
-      <div>
-        <img
-          src="/assets/massimo/images/logoGray.png"
-          alt=""
-          class="w-[112px] h-[32px]"
-        />
-      </div>
-      <div>
-        <h2 class="text-G900 text-center text-h5 font-medium leading-8">
+      <img
+        src="/assets/massimo/images/logoGray.png"
+        alt="logo"
+        class="w-[112px] h-[32px] select-none"
+      />
+      <div class="font-sans flex flex-col gap-[8px]">
+        <div class="text-G900 text-center text-h6 md:text-h5 font-medium">
           Sign in to CanWork
-        </h2>
-        <p class="text-G700 text-center text-b2 mt-[8px]">
+        </div>
+        <div class="text-G700 text-center text-b2">
           Sign in with your preferred credentials to continue
-        </p>
+        </div>
       </div>
       <div class="grid gap-4">
         <ng-container *ngIf="visible_login_modal">
@@ -813,7 +809,7 @@
         </ng-container>
       </div>
     </div>
-    <div class="max-md:hidden">
+    <div class="max-md:hidden select-none">
       <img src="/assets/massimo/images/login.png" alt="" class="w-full" />
     </div>
   </div>
