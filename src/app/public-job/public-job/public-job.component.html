@@ -118,7 +118,7 @@
                     >
                       <h1 class="text-b1-medium">Your Payment</h1>
                       <h1 class="text-b1-medium">
-                        Client’s budget is ${{ job.budget }}
+                        Client's budget is ${{ job.budget }}
                         <span *ngIf="job.paymentType !== 'Fixed price'"
                           >/hr </span
                         >USD
@@ -176,7 +176,7 @@
                       <div>
                         <h1 class="text-b1-medium">Payout</h1>
                         <p class="text-b2-small">
-                          Amount you’ll receive after service fee charge
+                          Amount you'll receive after service fee charge
                         </p>
                       </div>
 
@@ -191,7 +191,7 @@
                     <!-- message -->
                     <app-warning-message
                       *ngIf="price_bid > job.budget"
-                      message="Your bill is more than the client’s budget, consider adjusting for better chance of success"
+                      message="Your bill is more than the client's budget, consider adjusting for better chance of success"
                       [type]="1"
                     />
 
@@ -445,7 +445,7 @@
                 <div>
                   <h1 class="text-b1-medium">Payout</h1>
                   <p class="text-b2-small">
-                    Amount you’ll receive after service fee charge
+                    Amount you'll receive after service fee charge
                   </p>
                 </div>
 

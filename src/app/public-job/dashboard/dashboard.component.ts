@@ -574,17 +574,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onChangeSearchItemCategory(Input: any[]) {
+    console.log('this.categoryFilter.length:', this.categoryFilter.length)
+    console.log('Input.length:', Input.length)
     if (this.categoryFilter.length < Input.length) {
       this.searchitems.push(Input.slice(-1)[0])
+      console.log('this.searchitems:', this.searchitems)
     } else {
       const uniqueCategory = this.categoryFilter.filter(
         (skill) => !Input.includes(skill)
       )
       this.searchitems.splice(this.searchitems.indexOf(uniqueCategory[0]), 1)
+      console.log('this.searchitems:', this.searchitems)
     }
   }
 
   onRemoveSearchItem(removeItem: string) {
+    console.log('removeItem: ', removeItem);
+    console.log('this.searchitems: ', this.searchitems);
     this.searchitems.splice(this.searchitems.indexOf(removeItem), 1)
     this.categoryFilter.splice(this.categoryFilter.indexOf(removeItem), 1)
     this.skillsFilter.splice(this.skillsFilter.indexOf(removeItem), 1)
@@ -603,6 +609,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           1
         )
       })
+      console.log('this.searchitems: ', this.searchitems);
     } else {
       this.fixedFilter.splice(
         this.fixedFilter.indexOf(this.getIdByScope(removeItem)),

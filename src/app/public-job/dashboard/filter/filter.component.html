@@ -3,10 +3,10 @@
   id="job-search-filter"
 >
   <div
-    class="flex items-center justify-between text-G800 text-b1 font-medium p-[16px]"
+    class="flex items-center justify-between font-medium py-[12px] px-[16px] select-none"
   >
     <div class="flex items-center gap-2">
-      <div class="text-b1 font-medium">Filters</div>
+      <div class="text-b1 text-G800">Filters</div>
       <div *ngIf="getNumberAllFilters() > 0">
         <div
           class="bg-G500 px-[6px] py-[4px] text-white w-[24px] h-[16px] rounded-full border-none select-none flex justify-center items-center"
@@ -17,7 +17,7 @@
         </div>
       </div>
     </div>
-    <div class="cursor-pointer text-b2 font-medium" (click)="allClear()">
+    <div class="cursor-pointer text-b2 text-G900" (click)="allClear()">
       Clear All
     </div>
   </div>
@@ -123,9 +123,11 @@
     <p-accordion class="w-full">
       <p-accordionTab>
         <ng-template pTemplate="header">
-          <div class="pr-[8px] flex items-center justify-between gap-2 w-full">
+          <div
+            class="pr-[8px] font-sans flex items-center justify-between gap-2 w-full"
+          >
             <div class="flex items-center gap-2">
-              <span class="font-medium text-G800 whitespace-nowrap"
+              <span class="font-medium text-b2 text-G800 whitespace-nowrap"
                 >Categories</span
               >
 
@@ -134,14 +136,14 @@
               </div>
             </div>
             <div
-              class="font-medium text-G800 pointer-events-auto"
+              class="font-medium text-b2 text-G900 pointer-events-auto"
               (click)="categoryClear()"
             >
               Clear
             </div>
           </div>
         </ng-template>
-        <div class="pb-[24px] px-[24px] flex flex-col gap-[8px]">
+        <div class="pb-[16px] px-[24px] flex flex-col gap-[8px]">
           <div class="flex flex-col gap-[8px] font-sans text-b1 font-normal">
             <!-- <div
               class="p-inputgroup flex items-center px-[16px] !py-3 border bg-G50 border-G200 rounded-xl"
@@ -179,9 +181,9 @@
     <p-accordion class="w-full">
       <p-accordionTab>
         <ng-template pTemplate="header">
-          <div class="pr-[8px] flex items-center justify-between gap-2 w-full">
+          <div class="pr-[8px] flex items-center justify-between gap-2 w-full font-sans">
             <div class="flex items-center gap-2">
-              <span class="font-medium text-G800 whitespace-nowrap"
+              <span class="text-b2 font-medium text-G800 whitespace-nowrap"
                 >Job Type</span
               >
 
@@ -190,7 +192,7 @@
               </div> -->
             </div>
             <div
-              class="font-medium text-G800 pointer-events-auto"
+              class="text-b2 font-medium text-G900 pointer-events-auto"
               (click)="PriceClear()"
             >
               Clear
@@ -223,7 +225,7 @@
                   [(ngModel)]="min"
                   (input)="onSearchInputChange()"
                   placeholder="$Min/hr"
-                  class="!shadow-none !text-b2 bg-transparent border rounded-[8px] w-[96px] py-[6px] pl-[16px] text-G900"
+                  class="!shadow-none !text-b2 bg-transparent border rounded-[8px] w-[96px] py-[6px] px-[16px] text-G900 placeholder:!text-b2"
                 />
                 <input
                   type="number"
@@ -231,7 +233,7 @@
                   [(ngModel)]="max"
                   (input)="onSearchInputChange()"
                   placeholder="$Max/hr"
-                  class="!shadow-none !text-b2 bg-transparent border rounded-[8px] w-[96px] py-[6px] pl-[16px] text-G900"
+                  class="!shadow-none !text-b2 bg-transparent border rounded-[8px] w-[96px] py-[6px] px-[16px] text-G900 placeholder:!text-b2"
                 />
               </div>
             </div>
@@ -313,9 +315,9 @@
     <p-accordion class="w-full">
       <p-accordionTab>
         <ng-template pTemplate="header">
-          <div class="pr-[8px] flex items-center justify-between gap-2 w-full">
+          <div class="pr-[8px] flex items-center justify-between gap-2 w-full font-sans">
             <div class="flex items-center gap-2">
-              <span class="font-medium text-G800 whitespace-nowrap"
+              <span class="text-b2 font-medium text-G800 whitespace-nowrap"
                 >Rating</span
               >
               <div *ngIf="ratingForm.length > 0">
@@ -323,7 +325,7 @@
               </div>
             </div>
             <div
-              class="font-medium text-G800 pointer-events-auto"
+              class="text-b2 font-medium text-G900 pointer-events-auto"
               (click)="ratingClear()"
             >
               Clear
@@ -360,14 +362,14 @@
     <p-accordion class="w-full">
       <p-accordionTab>
         <ng-template pTemplate="header">
-          <div class="pr-[8px] flex items-center justify-between gap-2 w-full">
+          <div class="pr-[8px] flex items-center justify-between gap-2 w-full font-sans">
             <div class="flex items-center gap-2">
-              <span class="font-medium text-G800 whitespace-nowrap"
+              <span class="text-b2 font-medium text-G800 whitespace-nowrap"
                 >Location</span
               >
             </div>
             <div
-              class="font-medium text-G800 pointer-events-auto"
+              class="text-b2 font-medium text-G900 pointer-events-auto"
               (click)="LocationClear()"
             >
               Clear
