@@ -6,7 +6,7 @@
     class="flex items-center justify-between text-G800 text-b1 font-medium p-[16px]"
   >
     <div class="flex items-center gap-2">
-      <div>Filters</div>
+      <div class="text-b1 font-medium">Filters</div>
       <div *ngIf="getNumberAllFilters() > 0">
         <div
           class="bg-G500 px-[6px] py-[4px] text-white w-[24px] h-[16px] rounded-full border-none select-none flex justify-center items-center"
@@ -17,7 +17,9 @@
         </div>
       </div>
     </div>
-    <div class="cursor-pointer" (click)="allClear()">Clear All</div>
+    <div class="cursor-pointer text-b2 font-medium" (click)="allClear()">
+      Clear All
+    </div>
   </div>
   <div class="flex flex-col filter-job">
     <!-- <p-accordion class="w-full">

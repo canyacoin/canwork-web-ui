@@ -116,9 +116,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.publicJobSubscription = this.publicJobService
       .getAllOpenJobs()
       .subscribe((result) => {
+        console.log('result: ', result)
         let activeJobs = result.filter((job) => job.draft === false)
         this.allProviders = activeJobs
         this.filteredProviders = activeJobs
+
+        console.log('activeJobs: ', activeJobs)
 
         this.hits = this.getHits()
         this.numHits = this.allProviders.length
