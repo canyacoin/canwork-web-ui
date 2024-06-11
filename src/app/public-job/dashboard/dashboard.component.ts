@@ -179,18 +179,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
     // search skills
 
-    if (this.skillsFilter.length > 0) {
-      searchResultJobs.map((provider) => {
-        provider.information.skills.map((skill) => {
-          if (this.compareWithArray(this.skillsFilter, skill)) {
-            this.filteredProviders.push(provider)
-          }
-        })
-      })
+    // if (this.skillsFilter.length > 0) {
+    //   searchResultJobs.map((provider) => {
+    //     provider.information.skills.map((skill) => {
+    //       if (this.compareWithArray(this.skillsFilter, skill)) {
+    //         this.filteredProviders.push(provider)
+    //       }
+    //     })
+    //   })
 
-      searchResultJobs = this.filteredProviders
-      this.filteredProviders = []
-    }
+    //   searchResultJobs = this.filteredProviders
+    //   this.filteredProviders = []
+    // }
 
     // search Fixed
 
@@ -268,7 +268,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
           }
         })
       }
-      searchResultJobs = this.filteredProviders
+      if (this.fixedFilter.length) {
+        if (this.filteredProviders.length > 0)
+          searchResultJobs.push(this.filteredProviders)
+      } else searchResultJobs = this.filteredProviders
       this.filteredProviders = []
     }
 
