@@ -14,10 +14,10 @@ export class BasicDialogComponent {
   @Output() LeftbtnEvent = new EventEmitter<Event>()
   @Output() RightbtnEvent = new EventEmitter<Event>()
 
-  DeleteJob(event: Event) {
+  LeftClick(event: Event) {
     this.LeftbtnEvent.emit(event)
   }
-  Cancel(event: Event) {
+  RightClick(event: Event) {
     this.RightbtnEvent.emit(event)
   }
 }

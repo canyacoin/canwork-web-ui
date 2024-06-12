@@ -14,7 +14,7 @@
     background-color: #ced4da;
     border-radius: 100%;
 }
-  
+
 .p-carousel-indicators li.p-highlight button {
     background-color: #64748b;
 }
@@ -259,7 +259,9 @@
 .header-avatar .p-dropdown:hover {
     background-color: #f1f5f900 !important;
 }
-
+.header-avatar .p-dropdown .p-element .p-overlay.p-component {
+    left: -120px !important;
+}
 
 
 

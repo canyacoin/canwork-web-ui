@@ -99,18 +99,15 @@
             size="small"
           />
         </div>
-        <div class="flex justify-content-center header-avatar">
+        <div class="flex justify-center header-avatar">
           <p-dropdown
             [options]="items"
             [(ngModel)]="selectedItem"
             optionLabel="label"
-            appendTo="body"
             class="header_menu"
           >
             <ng-template pTemplate="selectedItem">
-              <div
-                *ngIf="selectedItem"
-              >
+              <div *ngIf="selectedItem">
                 <app-avatar
                   *ngIf="currentUser"
                   [user]="currentUser"
@@ -119,22 +116,28 @@
               </div>
             </ng-template>
             <ng-template let-item pTemplate="item">
-              <div class="flex align-items-center" *ngIf="item.routerLink" [routerLink]="item.routerLink" >
+              <div
+                class="flex items-center"
+                *ngIf="item.routerLink"
+                [routerLink]="item.routerLink"
+              >
                 <img
                   src="{{ '/assets/massimo/svg/header/' + item.icon }}"
-                  style="width: 20px"
-                  class="mr-[16px]"
+                  class="mr-[16px] w-[20px]"
                 />
-                <span class="font-medium leading-5 text-G900">{{ item.label }}</span>
+                <span class="font-medium text-G900">{{ item.label }}</span>
               </div>
-              
-              <div class="flex align-items-center" *ngIf="item.label == 'LogOut'" (click)="onLogout()">
+
+              <div
+                class="flex items-center"
+                *ngIf="item.label == 'LogOut'"
+                (click)="onLogout()"
+              >
                 <img
                   src="{{ '/assets/massimo/svg/header/' + item.icon }}"
-                  style="width: 20px"
-                  class="mr-[16px]"
+                  class="mr-[16px] w-[20px]"
                 />
-                <span class="font-medium leading-5 text-R900">{{ item.label }}</span>
+                <span class="font-medium text-R900">{{ item.label }}</span>
               </div>
             </ng-template>
           </p-dropdown>

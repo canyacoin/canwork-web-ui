@@ -26,11 +26,8 @@ import { UploadService } from '@service/upload.service'
 
 import { providerTypeArray } from 'app/shared/constants/providerTypes'
 
-
-
 import { AngularFireAuth } from '@angular/fire/compat/auth'
 import { FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular'
-
 
 declare var $: any
 
@@ -43,10 +40,8 @@ interface sharelinkstype {
 @Component({
   selector: 'app-public-job',
   templateUrl: './public-job.component.html',
-  styleUrls: ['./public-job.component.css'],
 })
 export class PublicJobComponent implements OnInit, OnDestroy {
-
   bidForm: UntypedFormGroup = null
   bids: any[]
   recentBids: any
@@ -172,7 +167,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     private uploadService: UploadService,
     private route: ActivatedRoute,
     private router: Router,
-    private afAuth: AngularFireAuth,
+    private afAuth: AngularFireAuth
   ) {
     this.bidForm = this.formBuilder.group({
       price: [
@@ -198,7 +193,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.spinner.show()
 
-    
     setTimeout(() => {
       /** spinner ends after 2 seconds */
       this.spinner.hide()
@@ -283,10 +277,9 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       if (user) {
         this.currentUser = user
-       
       }
     })
-    this.IsShownTab = (this.currentUser && this.IsProvider)
+    this.IsShownTab = this.currentUser && this.IsProvider
   }
 
   async uploadFiles(files: FileList) {
@@ -644,7 +637,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   WithdrawJob(event: Event) {
     event.stopPropagation()
     this.visible_withdraw_modal = !this.visible_withdraw_modal
-    if(!this.visible_withdraw_modal){
+    if (!this.visible_withdraw_modal) {
       this.visible_listing_modal = true
     }
   }
@@ -654,7 +647,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     this.visible_withdraw_modal = !this.visible_withdraw_modal
   }
   // Login Part
-
 
   onFirebaseLogin(signInSuccessData: FirebaseUISignInSuccessWithAuthResult) {
     this.loading = true
@@ -726,7 +718,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     )
   }
 
-  updateVisibleloginModal () {
-    this.visible_login_modal =!this.visible_login_modal
+  updateVisibleloginModal() {
+    this.visible_login_modal = !this.visible_login_modal
   }
 }
