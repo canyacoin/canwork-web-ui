@@ -80,7 +80,7 @@ export class JobDashboardCardComponent implements OnInit {
     }
   }
 
-  updateDialog(event: Event) {
+  deleteJob(event: Event) {
     event.stopPropagation()
     this.visible = !this.visible
   }

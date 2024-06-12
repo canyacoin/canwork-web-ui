@@ -1,6 +1,10 @@
 <div [formGroup]="form" class="flex items-center py-[16px]">
-  <p-checkbox formControlName="terms" value="true"> </p-checkbox>
-  <label class="!text-b1 font-sans leading-6 pl-[8px] !m-0">
+  <p-checkbox formControlName="terms" inputId="termsCheckbox" value="true">
+  </p-checkbox>
+  <label
+    for="termsCheckbox"
+    class="!text-b1 font-sans pl-[8px] select-none !m-0"
+  >
     I hereby accept the CanWork
     <a
       href="assets/docs/canwork-terms-and-conditions.pdf"

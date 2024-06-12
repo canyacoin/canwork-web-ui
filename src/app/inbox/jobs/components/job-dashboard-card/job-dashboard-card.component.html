@@ -318,7 +318,7 @@
       <div class="flex gap-4 items-center">
         <div
           class="cursor-pointer py-[10px] px-[24px] text-R900 flex justify-center items-center gap-2 font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl"
-          (click)="updateDialog($event)"
+          (click)="deleteJob($event)"
         >
           <img
             src="/assets/massimo/svg/delete.svg"
@@ -416,6 +416,6 @@
   title="Are you sure you want to delete ?"
   content="If you delete job post, you will no longer have access to it or receive bids from freelancers. You  can create a new job listing to receive bids."
   (LeftbtnEvent)="cancelJob($event)"
-  (RightbtnEvent)="updateDialog($event)"
+  (RightbtnEvent)="deleteJob($event)"
   type="delete"
 />
