@@ -896,6 +896,7 @@ export class PostComponent implements OnInit, OnDestroy {
 
   async submitShareableJob(isDRP: number) {
     // isDRP , 0 => draft, , 1=> Preview, 2 => Post
+    console.log('isDRP:', isDRP);
     this.isSending = true
     this.error = false
     this.spinner.show()
@@ -914,6 +915,7 @@ export class PostComponent implements OnInit, OnDestroy {
                 .split(',')
                 .map((item) => item.trim())
       } catch (error) {
+        console.log('error with tags:', error)
         if (!tags.length) {
           tags = this.jobToEdit.information.skills
         }
@@ -984,6 +986,10 @@ export class PostComponent implements OnInit, OnDestroy {
       this.jobForPreview = job
       this.isPreview = true
 
+      console.log("this.jobForPreview", this.jobForPreview);
+      console.log("this.isPreview", this.isPreview);
+      console.log("=================== end =====================");
+
       this.isSending = false
       window.scrollTo({
         top: 0,
@@ -993,6 +999,7 @@ export class PostComponent implements OnInit, OnDestroy {
       this.sent = false
       this.isSending = false
       this.error = true
+      console.log("error with showing", e);
     }
     this.spinner.hide()
   }

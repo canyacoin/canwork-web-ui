@@ -90,9 +90,9 @@ export class SkillTagsSelectionComponent implements OnInit {
     }
     const duplicate = this.acceptedTags.findIndex((x) => x === tag) > -1
     if (
-      // this.acceptedTags.length <= 5 &&
+      this.acceptedTags.length <= 20 &&
       !duplicate &&
-      // tag.length >= 2 &&
+      tag.length >= 2 &&
       tag.length <= 20
     ) {
       this.acceptedTags.push(tag)
@@ -106,6 +106,7 @@ export class SkillTagsSelectionComponent implements OnInit {
     this.tagInput = ''
     this.tagSelectionInvalid = 0
     this.onDropDownTT()
+    console.log('this.tagSelectionInvalid', this.tagSelectionInvalid)
   }
 
   onTagChange() {
@@ -114,7 +115,7 @@ export class SkillTagsSelectionComponent implements OnInit {
     const indexOfTag = this.skillTagsList.findIndex((x) => x === tag)
     const duplicate = this.acceptedTags.findIndex((x) => x === tag) > -1
     if (indexOfTag !== -1) {
-      if (this.acceptedTags.length <= 5 && !duplicate) {
+      if (this.acceptedTags.length <= 20 && !duplicate) {
         this.acceptedTags.push(tag)
         this.tagsUpdated.emit(this.acceptedTags.join(','))
         this.tagInput = ''
