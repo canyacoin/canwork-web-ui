@@ -11,9 +11,10 @@ import { PublicJobService } from '@service/public-job.service'
 import { Router } from '@angular/router'
 
 import * as moment from 'moment'
+import { JobState } from '@class/job'
 
 @Component({
-  selector: 'app-job-dashboard-card',
+  selector: 'job-dashboard-card',
   templateUrl: './job-dashboard-card.component.html',
 })
 export class JobDashboardCardComponent implements OnInit {
@@ -69,18 +70,19 @@ export class JobDashboardCardComponent implements OnInit {
   }
 
   async cancelJob(event: Event) {
-    event.stopPropagation()
-    this.visible = !this.visible
     if (this.job.clientId) {
       const updated = await this.publicJobsService.cancelJob(this.job.id)
+      console.log('update:', updated)
       if (updated) {
-        this.job.state = 'Public job closed'
+        this.job.state = JobState.closed
         this.CancelJob.emit(this.job.id)
       }
     }
+    event.stopPropagation()
+    this.visible = !this.visible
   }
 
-  deleteJob(event: Event) {
+  updateDialog(event: Event) {
     event.stopPropagation()
     this.visible = !this.visible
   }
@@ -110,7 +112,8 @@ export class JobDashboardCardComponent implements OnInit {
   }
 
   movetojobdetail() {
-    this.router.navigate(['/jobs/public/', this.job.slug])
+    if (this.jobType === 'public')
+      this.router.navigate(['/jobs/public/', this.job.slug])
   }
   Makefavorite(event: Event) {
     event.stopPropagation()

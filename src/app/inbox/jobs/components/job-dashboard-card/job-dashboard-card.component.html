@@ -284,10 +284,14 @@
  -->
 
 <div
-  class="w-full rounded-[12px] overflow-hidden bg-white p-[32px] grid gap-4 border border-G200 hover:bg-G100 active:bg-G200 cursor-pointer my-[16px]"
+  class="w-full rounded-[12px] overflow-hidden bg-white p-[32px] grid gap-4 border border-G200 my-[16px]"
+  [ngClass]="{
+    'hover:bg-G100 active:bg-G200 cursor-pointer transition-all duration-200':
+      jobType === 'public'
+  }"
   (click)="movetojobdetail()"
 >
-  <div class="flex justify-between gap-5">
+  <div class="flex flex-col md:flex-row md:justify-between gap-5">
     <div class="w-full flex gap-6 items-center">
       <img
         *ngIf="job.information.providerType"
@@ -303,7 +307,7 @@
     </div>
 
     <div
-      *ngIf="jobType == 'public'"
+      *ngIf="jobType === 'public'"
       class="border rounded-md border-G300 w-[32px] h-[32px] flex items-center justify-center cursor-pointer transition-all duration-150"
       [ngClass]="{
         'bg-white hover:bg-G100': !favourite,
@@ -318,7 +322,7 @@
       <div class="flex gap-4 items-center">
         <div
           class="cursor-pointer py-[10px] px-[24px] text-R900 flex justify-center items-center gap-2 font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl"
-          (click)="deleteJob($event)"
+          (click)="updateDialog($event)"
         >
           <img
             src="/assets/massimo/svg/delete.svg"
@@ -416,6 +420,6 @@
   title="Are you sure you want to delete ?"
   content="If you delete job post, you will no longer have access to it or receive bids from freelancers. You  can create a new job listing to receive bids."
   (LeftbtnEvent)="cancelJob($event)"
-  (RightbtnEvent)="deleteJob($event)"
+  (RightbtnEvent)="updateDialog($event)"
   type="delete"
 />
