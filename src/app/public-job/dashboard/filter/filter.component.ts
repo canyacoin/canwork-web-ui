@@ -56,26 +56,19 @@ export class FilterComponent implements OnInit, OnChanges {
   @Output() LocationInputChange = new EventEmitter<string[]>() // two way binding to parent
 
   ngOnChanges(changes: SimpleChanges) {
-    // if (changes['hourlyInput']) {
-    //   console.log('====================this.hourlyInput:', this.hourlyInput)
-    //   if (this.hourlyInput.length === 0) {
-    //     this.hourlymin_max = false
-    //     this.min = undefined
-    //     this.max = undefined
-    //   }
-    // }
-    // if (changes['fixedForm']) {
-    //   console.log('=======================this.fixedForm:', this.fixedForm)
-    //   if (this.fixedForm.length === 0) {
-    //     this.fixedFlag = false
-    //   }
-    // }
-    // if (changes['ratingForm']) {
-    //   console.log('=======================this.ratingForm:', this.ratingForm)
-    //   if (this.ratingForm.length === 0) {
-    //     this.ratingForm = []
-    //   }
-    // }
+    if (changes['hourlyInput']) {
+      if (this.hourlyInput.length === 0) {
+        this.hourlyFlag = false
+        this.hourlymin_max = false
+        this.min = undefined
+        this.max = undefined
+      }
+    }
+    if (changes['fixedForm']) {
+      if (this.fixedForm.length === 0) {
+        this.fixedFlag = false
+      }
+    }
   }
 
   ngOnInit() {
