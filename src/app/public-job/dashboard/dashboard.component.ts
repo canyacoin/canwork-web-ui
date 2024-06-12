@@ -599,16 +599,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onRemoveSearchItem(removeItem: string) {
-    console.log('===========before============')
-    console.log('removeItem: ', removeItem)
-    console.log('this.searchItems: ', this.searchItems)
-    console.log('this.locationFilter: ', this.locationFilter)
-    console.log('this.categoryFilter: ', this.categoryFilter)
-    console.log('this.ratingFilter: ', this.ratingFilter)
-    console.log('this.hourlyFilter: ', this.hourlyFilter)
-    console.log('this.fixedFilter: ', this.fixedFilter)
-    console.log('===========before============')
-
     this.searchItems.splice(this.searchItems.indexOf(removeItem), 1)
     // this.skillsFilter.splice(this.skillsFilter.indexOf(removeItem), 1)
     if (removeItem === 'location') {
@@ -641,16 +631,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         )
       }
     }
-    console.log('===========after============')
-    console.log('removeItem: ', removeItem)
-    console.log('this.searchItems: ', this.searchItems)
-    console.log('this.locationFilter: ', this.locationFilter)
-    console.log('this.categoryFilter: ', this.categoryFilter)
-    console.log('this.ratingFilter: ', this.ratingFilter)
-    console.log('this.hourlyFilter: ', this.hourlyFilter)
-    console.log('this.fixedFilter: ', this.fixedFilter)
-    console.log('===========after============')
-
     this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
     this.refreshResultsSearch()
   }
