@@ -92,6 +92,8 @@ export class PostComponent implements OnInit, OnDestroy {
   sharelinks: SortingMethod[] | undefined
   selectedsharelinks: SortingMethod | undefined
 
+  date: Date // This property is bound to ngModel
+
   /// css variables for file upload
   hoveredFiles = false
 
@@ -370,6 +372,9 @@ export class PostComponent implements OnInit, OnDestroy {
         this.postForm.controls['timelineExpectation'].patchValue('Up to 1 Year')
         if (!this.postToProvider) this.loading = true
       } else {
+        console.log(
+          '=============================job editing============================================'
+        )
         this.jobId = this.activatedRoute.snapshot.params['jobId']
         this.jobSub = this.publicJobService
           .getPublicJob(this.activatedRoute.snapshot.params['jobId'])
@@ -407,12 +412,27 @@ export class PostComponent implements OnInit, OnDestroy {
                 this.shareableJobForm.controls['paymentType'].patchValue(
                   this.jobToEdit.paymentType
                 )
-                this.shareableJobForm.controls['deadline'].patchValue(
-                  this.jobToEdit.deadline
+                // this.shareableJobForm.controls['deadline'].patchValue(
+                //   this.jobToEdit.deadline
+                // )
+                this.date = new Date(this.jobToEdit.deadline)
+
+                console.log('this.jobToEdit.deadline', this.jobToEdit.deadline)
+
+                let visibility = this.jobToEdit.visibility
+                let visibilityIndex = this.sortingMethods_visibility.findIndex(
+                  (item) => item.code === visibility
                 )
-                this.shareableJobForm.controls['visibility'].patchValue(
-                  this.jobToEdit.visibility
+
+                this.selectedSortings_visibility =
+                  this.sortingMethods_visibility[visibilityIndex]
+
+                let providerType = this.jobToEdit.information.providerType
+                let categoryIndex = this.sortingMethods_category.findIndex(
+                  (item) => item.code === providerType
                 )
+                this.selectedSortings_category =
+                  this.sortingMethods_category[categoryIndex]
 
                 this.shareableJobForm.controls['skills'].patchValue(
                   this.jobToEdit.information.skills
@@ -619,7 +639,7 @@ export class PostComponent implements OnInit, OnDestroy {
     });
      */
   }
-  
+
   skillTagsLoaded(tagsList: string[]) {
     this.skillTagsList = tagsList
   }
@@ -896,7 +916,7 @@ export class PostComponent implements OnInit, OnDestroy {
 
   async submitShareableJob(isDRP: number) {
     // isDRP , 0 => draft, , 1=> Preview, 2 => Post
-    console.log('isDRP:', isDRP);
+    console.log('isDRP:', isDRP)
     this.isSending = true
     this.error = false
     this.spinner.show()
@@ -986,9 +1006,9 @@ export class PostComponent implements OnInit, OnDestroy {
       this.jobForPreview = job
       this.isPreview = true
 
-      console.log("this.jobForPreview", this.jobForPreview);
-      console.log("this.isPreview", this.isPreview);
-      console.log("=================== end =====================");
+      console.log('this.jobForPreview', this.jobForPreview)
+      console.log('this.isPreview', this.isPreview)
+      console.log('=================== end =====================')
 
       this.isSending = false
       window.scrollTo({
@@ -999,7 +1019,7 @@ export class PostComponent implements OnInit, OnDestroy {
       this.sent = false
       this.isSending = false
       this.error = true
-      console.log("error with showing", e);
+      console.log('error with showing', e)
     }
     this.spinner.hide()
   }
