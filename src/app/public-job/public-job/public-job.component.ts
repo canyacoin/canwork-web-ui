@@ -218,7 +218,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
     this.shareableLink = environment.shareBaseUrl
     this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
-      console.log('+===========================', params['jobId'])
       if (params['jobId']) {
         this.jobSub = this.publicJobsService
           .getPublicJob(params['jobId'])
@@ -246,7 +245,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
             }
           })
       } else if (params['slug']) {
-        console.log('+===========================', params['slug'])
         this.jobSub = this.publicJobsService
           .getPublicJobBySlug(params['slug'])
           .subscribe((publicJob) => {
@@ -413,15 +411,13 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   async initJob(job: Job) {
     this.jobExists = true
     this.jobFromNow = moment(job.createAt).fromNow()
-    console.log('job.createAt', job.createAt)
-    console.log('this.jobFromNow', this.jobFromNow)
     if (this.currentUser) {
       this.myJob = job.clientId === this.currentUser.address
       await this.setClient(this.job.clientId)
 
       if (this.currentUser.type === 'Provider') {
         this.IsProvider = true
-        const check:boolean = await this.publicJobsService.canBid(
+        const check: boolean = await this.publicJobsService.canBid(
           this.currentUser.address,
           this.job
         )
