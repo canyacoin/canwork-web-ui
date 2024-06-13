@@ -480,6 +480,7 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   async uploadFiles(files: FileList) {
+    this.messageService.clear();
     this.uploadFailed = false
     this.fileTooBig = false
     this.currentUploadNumber = 0
@@ -837,6 +838,7 @@ export class PostComponent implements OnInit, OnDestroy {
     } catch (e) {
       this.sent = false
       this.error = true
+      this.messageService.clear();
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -1071,6 +1073,7 @@ export class PostComponent implements OnInit, OnDestroy {
       this.sent = false
       this.isSending = false
       this.error = true
+      this.messageService.clear();
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
