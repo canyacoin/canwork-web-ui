@@ -638,15 +638,18 @@
                           </div> -->
 
                 <!-- </div> -->
-                <div class="alert alert-danger" *ngIf="uploadFailed">
+                <!-- <div class="alert alert-danger" *ngIf="uploadFailed">
                   Oops, something went wrong uploading your file
-                </div>
+                </div> -->
 
                 <div *ngIf="!!beforeUploadFiles.length" class="w-full">
                   <ul>
                     <li
                       class="flex flex-col gap-2 pt-[8px]"
-                      *ngFor="let file of beforeUploadFiles; let i = index"
+                      *ngFor="
+                        let file of beforeUploadFiles;
+                        let i = index
+                      "
                     >
                       <div
                         class="flex gap-2 text-C600 text-b2 font-sans justify-start items-center h-[24px]"
@@ -677,7 +680,7 @@
                           >
                             <span
                               class="cursor-pointer alert"
-                              (click)="removeUpload(uploadedFiles[i], i)"
+                              (click)="removeUpload(uploadedFiles[i])"
                             >
                               <img
                                 src="/assets/massimo/svg/fi_x.svg"
@@ -711,13 +714,13 @@
                   You can only add 10 files with maximum of 25MB each.
                 </div>
 
-                <div
+                <!-- <div
                   class="flex justify-start items-center text-R900 text-b2 font-sans mt-[8px] gap-[8px]"
                   *ngIf="deleteFailed"
                 >
                   <img src="/assets/massimo/svg/fi_alert-triangle.svg" alt="" />
                   Oops, something went while wrong deleting your file.
-                </div>
+                </div> -->
               </div>
 
               <div class="w-full" *ngIf="!editing">
@@ -1018,7 +1021,7 @@
               <div>
                 <div class="flex gap-4 justify-end flex-col md:flex-row">
                   <basic-button
-                    extraClass="!border-none  text-G900 !shadow-none"
+                    extraClass="!border-none text-G900 !shadow-none"
                     size="small"
                     [type]="1"
                     title="Save as Draft"

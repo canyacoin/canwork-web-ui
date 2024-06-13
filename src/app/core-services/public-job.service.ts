@@ -279,6 +279,22 @@ export class PublicJobService {
       .toPromise()
     return bid.empty
   }
+  
+  // async canBid(providerId: string, job: Job): Promise<boolean> {
+  //   try {
+  //     const bidSnapshot = await this.afs
+  //       .collection<any>(`public-jobs/${job.id}/bids`, ref => 
+  //         ref.where('providerId', '==', providerId)
+  //       )
+  //       .get()
+  //       .toPromise();
+  //     console.log("bidSnapshot: ", bidSnapshot)
+  //     return bidSnapshot.empty;
+  //   } catch (error) {
+  //     console.error('Error checking if provider can bid:', error);
+  //     return false;
+  //   }
+  // }
 
   // add new bid to collection
   private async addBid(bid: Bid, jobId: string): Promise<Boolean> {

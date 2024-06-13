@@ -163,7 +163,7 @@ export class PostComponent implements OnInit, OnDestroy {
 
   selectedSortings_visibility: SortingMethod | undefined
 
-  duplicateFileName: string[] = []
+  duplicateFileNames: string[] = []
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -480,7 +480,7 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   async uploadFiles(files: FileList) {
-    this.messageService.clear();
+    this.messageService.clear()
     this.uploadFailed = false
     this.fileTooBig = false
     this.currentUploadNumber = 0
@@ -489,8 +489,8 @@ export class PostComponent implements OnInit, OnDestroy {
     for (let i = 0; i < files.length; i++) {
       const file = files[i]
       if (
-        this.duplicateFileName &&
-        this.duplicateFileName.includes(file.name)
+        this.duplicateFileNames &&
+        this.duplicateFileNames.includes(file.name)
       ) {
         this.messageService.add({
           severity: 'error',
@@ -510,7 +510,7 @@ export class PostComponent implements OnInit, OnDestroy {
         continue
       }
 
-      if (this.uploadFiles.length >= 10) {
+      if (this.uploadedFiles.length >= 10) {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -555,9 +555,6 @@ export class PostComponent implements OnInit, OnDestroy {
       }
     }
     this.isCurrentUpload = false
-    console.log('this.isCurrentUpload:', this.isCurrentUpload)
-    console.log('this.isSending:', this.isSending)
-    console.log('this.shareableJobForm.valid:', this.shareableJobForm.valid)
 
     this.beforeUploadFiles = []
     this.beforeUploadFiles.push(...this.uploadedFiles)
@@ -584,20 +581,20 @@ export class PostComponent implements OnInit, OnDestroy {
       if (event.dataTransfer && event.dataTransfer.files) {
         let files = event.dataTransfer.files
         if (this.beforeUploadFiles.length > 0) {
-          // Check for duplicates and populate duplicateFileName array
+          // Check for duplicates and populate duplicateFileNames array
           for (let i = 0; i < files.length; i++) {
             const duplicate = this.beforeUploadFiles.some(
               (file) => file.name === files[i].name
             )
             if (duplicate) {
-              this.duplicateFileName.push(files[i].name)
+              this.duplicateFileNames.push(files[i].name)
             }
           }
 
           // Add new files to beforeUploadFiles if they are not duplicates and meet size criteria
           for (let i = 0; i < files.length; i++) {
             if (
-              !this.duplicateFileName.includes(files[i].name) &&
+              !this.duplicateFileNames.includes(files[i].name) &&
               files[i].size < this.maxFileSizeBytes &&
               this.beforeUploadFiles.length < 10
             ) {
@@ -624,20 +621,20 @@ export class PostComponent implements OnInit, OnDestroy {
     let files = event.target.files
 
     if (this.beforeUploadFiles.length > 0) {
-      // Check for duplicates and populate duplicateFileName array
+      // Check for duplicates and populate duplicateFileNames array
       files.forEach((item) => {
         const duplicate = this.beforeUploadFiles.some(
           (file) => file.name === item.name
         )
         if (duplicate) {
-          this.duplicateFileName.push(item.name)
+          this.duplicateFileNames.push(item.name)
         }
       })
 
       // Add new files to beforeUploadFiles if they are not duplicates and meet size criteria
       files.forEach((item) => {
         if (
-          !this.duplicateFileName.includes(item.name) &&
+          !this.duplicateFileNames.includes(item.name) &&
           item.size < this.maxFileSizeBytes &&
           this.beforeUploadFiles.length < 10
         ) {
@@ -667,9 +664,18 @@ export class PostComponent implements OnInit, OnDestroy {
       upload
     )
     if (deleted) {
+      this.duplicateFileNames = this.duplicateFileNames.filter(
+        (file) => file !== upload.name
+      )
       this.uploadedFiles = this.uploadedFiles.filter((file) => file !== upload)
     } else {
       this.deleteFailed = true
+      this.messageService.clear()
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: `Something went while wrong deleting your file.`,
+      })
     }
 
     this.beforeUploadFiles = []
@@ -838,7 +844,7 @@ export class PostComponent implements OnInit, OnDestroy {
     } catch (e) {
       this.sent = false
       this.error = true
-      this.messageService.clear();
+      this.messageService.clear()
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -1073,7 +1079,7 @@ export class PostComponent implements OnInit, OnDestroy {
       this.sent = false
       this.isSending = false
       this.error = true
-      this.messageService.clear();
+      this.messageService.clear()
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
