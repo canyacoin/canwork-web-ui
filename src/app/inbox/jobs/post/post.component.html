@@ -144,14 +144,14 @@
                         for="file-upload"
                         class="btn btn-outline btn-primary"
                         [ngClass]="{
-                          disabled: currentUpload || uploadedFile
+                          disabled: isCurrentUpload
                         }"
                       >
                         Add file
                       </div>
                       <input
                         id="file-upload"
-                        [disabled]="currentUpload || uploadedFile"
+                        [disabled]="isCurrentUpload"
                         type="file"
                         hidden
                         (change)="detectFiles($event)"
@@ -163,7 +163,7 @@
                     File is too large, please upload a file smaller than 50 MB
                   </div>
 
-                  <div *ngIf="currentUpload">
+                  <!-- <div *ngIf="currentUpload">
                     <div class="progress">
                       <div
                         class="progress-bar progress-bar-animated"
@@ -174,7 +174,7 @@
                       Progress: {{ currentUpload?.name }} |
                       {{ currentUpload?.progress }}% Complete
                     </div>
-                  </div>
+                  </div> -->
                   <div class="alert alert-danger" *ngIf="uploadFailed">
                     Oops, something went wrong uploading your file
                   </div>
@@ -408,11 +408,7 @@
                   type="button"
                   (click)="submitForm()"
                   class="btn btn-primary"
-                  [disabled]="
-                    !postForm.valid ||
-                    isSending ||
-                    (currentUpload && !uploadedFile)
-                  "
+                  [disabled]="!postForm.valid || isSending || isCurrentUpload"
                 >
                   POST
                 </button>
@@ -598,7 +594,7 @@
                     <div
                       class="flex justify-center items-center select-none"
                       [ngClass]="{
-                        disabled: currentUpload || uploadedFile
+                        'cursor-not-allowed': isCurrentUpload
                       }"
                     >
                       <img
@@ -611,6 +607,9 @@
                         class="text-b1 text-G900"
                         for="file-upload"
                         class="!text-C500 !text-b1 !font-sans !m-0 underline px-[3px] cursor-pointer"
+                        [ngClass]="{
+                          '!text-G500 cursor-not-allowed': isCurrentUpload
+                        }"
                       >
                         Upload
                       </label>
@@ -618,7 +617,7 @@
                     </div>
                     <input
                       id="file-upload"
-                      [disabled]="currentUpload || uploadedFile"
+                      [disabled]="isCurrentUpload"
                       type="file"
                       multiple
                       hidden
@@ -705,7 +704,7 @@
 
                 <div
                   class="flex justify-start items-center text-R900 text-b2 font-sans mt-[8px] gap-[8px]"
-                  *ngIf="currentUploadNumber >= 10 || fileTooBig"
+                  *ngIf="fileTooBig"
                 >
                   <img src="/assets/massimo/svg/fi_alert-triangle.svg" alt="" />
                   You can only add 10 files with maximum of 25MB each.
@@ -1033,9 +1032,7 @@
                     title="See Preview"
                     size="small"
                     [disabled]="
-                      !shareableJobForm.valid ||
-                      isSending ||
-                      (currentUpload && !uploadedFile)
+                      !shareableJobForm.valid || isSending || isCurrentUpload
                     "
                     extraClass="border text-G900"
                   />
@@ -1045,9 +1042,7 @@
                     size="small"
                     (click)="submitShareableJob(2)"
                     [disabled]="
-                      !shareableJobForm.valid ||
-                      isSending ||
-                      (currentUpload && !uploadedFile)
+                      !shareableJobForm.valid || isSending || isCurrentUpload
                     "
                   />
                 </div>
@@ -1320,11 +1315,7 @@
             size="small"
             *ngIf="!isSending"
             (click)="submitShareableJob(2)"
-            [disabled]="
-              !shareableJobForm.valid ||
-              isSending ||
-              (currentUpload && !uploadedFile)
-            "
+            [disabled]="!shareableJobForm.valid || isSending || isCurrentUpload"
           />
         </div>
       </div>

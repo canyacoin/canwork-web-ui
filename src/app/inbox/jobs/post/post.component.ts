@@ -81,7 +81,7 @@ export class PostComponent implements OnInit, OnDestroy {
   currentUploadNumber: number = 0
   uploadedFiles: Upload[] = []
 
-  currentUpload: Upload
+  isCurrentUpload: boolean = false
   maxFileSizeBytes = 25000000 // 25mb
   fileTooBig = false
   uploadFailed = false
@@ -486,6 +486,7 @@ export class PostComponent implements OnInit, OnDestroy {
     this.uploadFailed = false
     this.fileTooBig = false
     this.currentUploadNumber = 0
+    this.isCurrentUpload = true
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i]
@@ -556,7 +557,7 @@ export class PostComponent implements OnInit, OnDestroy {
         })
       }
     }
-
+    this.isCurrentUpload = false
     this.beforeUploadFiles = []
     this.beforeUploadFiles.push(...this.uploadedFiles)
   }
