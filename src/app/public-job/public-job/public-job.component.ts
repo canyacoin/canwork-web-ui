@@ -517,7 +517,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
       avatar: this.currentUser.avatar,
     }
 
-    if (!this.currentUser.whitelisted) {
+    if (this.currentUser.whitelisted) {
       const bidToSubmit = new Bid(
         this.currentUser.address,
         providerInfo,
