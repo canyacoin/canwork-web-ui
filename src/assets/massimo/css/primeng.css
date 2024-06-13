@@ -1,3 +1,20 @@
+/* p-toast */
+.p-toast .p-toast-message-content {
+    display: flex !important;
+    align-items: center !important;
+}
+.p-toast .p-toast-message-content .p-toast-message-icon .p-element.p-icon-wrapper {
+    display: flex !important;
+}
+.p-toast .p-toast-message-content .p-toast-message-text .p-toast-summary {
+    display: none !important;
+}
+.p-toast .p-toast-message-content .p-toast-message-text .p-toast-detail {
+    margin: 0px !important;
+    font-family: "General Sans", sans-serif !important;
+    font-size: 16px !important;
+}
+
 /* p-carousel */
 
 .p-carousel-indicators {
