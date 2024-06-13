@@ -423,15 +423,15 @@ export class PublicJobComponent implements OnInit, OnDestroy {
         )
         this.canBid = check
       }
-      if (
-        this.canBid &&
-        this.currentUser.bscAddress &&
-        this.currentUser.type === 'Provider' &&
-        !this.myJob &&
-        this.isOpen &&
-        this.activatedRoute.snapshot.queryParams['nextAction'] === 'bid'
-      )
-        $('#bidModal').modal('show')
+      // if (
+      //   this.canBid &&
+      //   this.currentUser.bscAddress &&
+      //   this.currentUser.type === 'Provider' &&
+      //   !this.myJob &&
+      //   this.isOpen &&
+      //   this.activatedRoute.snapshot.queryParams['nextAction'] === 'bid'
+      // )
+      //   $('#bidModal').modal('show')
     } else {
       this.IsProvider = false
       this.myJob = false
@@ -517,8 +517,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
       avatar: this.currentUser.avatar,
     }
 
-    // Test
-    if (this.currentUser.whitelisted) {
+    if (!this.currentUser.whitelisted) {
       const bidToSubmit = new Bid(
         this.currentUser.address,
         providerInfo,
@@ -531,12 +530,15 @@ export class PublicJobComponent implements OnInit, OnDestroy {
         bidToSubmit,
         this.job
       )
-      this.spinner.hide()
       this.canBid = false
     } else {
-      this.spinner.hide()
-      alert('You have not been approved as a provider.')
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: `You have not been approved as a provider.`,
+      })
     }
+    this.spinner.hide()
     this.loading = false
   }
 

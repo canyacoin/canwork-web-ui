@@ -543,6 +543,15 @@
                   formControlName="description"
                   [config]="editorConfig"
                 ></angular-editor>
+                <div class="flex justify-end">
+                  <div class="text-right text-b2 text-G700 pt-[8px]">
+                    {{
+                      stripHtmlTagslength(
+                        this.shareableJobForm.value.description
+                      )
+                    }}/5000
+                  </div>
+                </div>
               </div>
 
               <!-- <div class="text-b1 font-sans">
@@ -646,10 +655,7 @@
                   <ul>
                     <li
                       class="flex flex-col gap-2 pt-[8px]"
-                      *ngFor="
-                        let file of beforeUploadFiles;
-                        let i = index
-                      "
+                      *ngFor="let file of beforeUploadFiles; let i = index"
                     >
                       <div
                         class="flex gap-2 text-C600 text-b2 font-sans justify-start items-center h-[24px]"

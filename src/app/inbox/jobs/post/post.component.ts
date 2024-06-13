@@ -1093,4 +1093,15 @@ export class PostComponent implements OnInit, OnDestroy {
   BacktoEdit() {
     this.isPreview = false
   }
+
+  stripHtmlTagslength(html: string): number {
+    const div = document.createElement('div')
+    div.innerHTML = html
+    // if (div.textContent.length > 5 && div.textContent.length < 2500) {
+    //   this.bid_message_valiated = false
+    // } else {
+    //   this.bid_message_valiated = true
+    // }
+    return div.textContent.length
+  }
 }

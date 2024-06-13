@@ -97,11 +97,11 @@
                       [config]="coverletterConfig"
                     ></angular-editor>
                     <div class="flex justify-end">
-                      <h1 class="text-right pt-[8px]">
+                      <div class="text-right text-b2 text-G700 pt-[8px]">
                         {{
                           stripHtmlTagslength(this.bidForm.value.message)
                         }}/2500
-                      </h1>
+                      </div>
                     </div>
                     <app-warning-message
                       *ngIf="bid_message_valiated"
