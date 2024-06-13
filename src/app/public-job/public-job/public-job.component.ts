@@ -289,7 +289,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   async uploadFiles(files: FileList) {
     this.uploadFailed = false
     this.fileTooBig = false
-    this.currentUploadNumber = -1
 
     const uploadPromises = Array.from(files).map(async (file) => {
       if (

@@ -642,11 +642,11 @@
                   Oops, something went wrong uploading your file
                 </div>
 
-                <div *ngIf="!!beforeuploadFiles.length" class="w-full">
+                <div *ngIf="!!beforeUploadFiles.length" class="w-full">
                   <ul>
                     <li
                       class="flex flex-col gap-2 pt-[8px]"
-                      *ngFor="let file of beforeuploadFiles; let i = index"
+                      *ngFor="let file of beforeUploadFiles; let i = index"
                     >
                       <div
                         class="flex gap-2 text-C600 text-b2 font-sans justify-start items-center h-[24px]"
@@ -661,7 +661,7 @@
                         <div *ngIf="file?.progress === 100">
                           <span
                             class="cursor-pointer alert"
-                            (click)="removeUpload(uploadedFiles[i], i)"
+                            (click)="removeUpload(uploadedFiles[i])"
                           >
                             <img
                               src="/assets/massimo/svg/fi_x.svg"

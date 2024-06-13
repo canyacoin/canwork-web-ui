@@ -77,7 +77,7 @@ export class PostComponent implements OnInit, OnDestroy {
   jobForPreview: Job
   jobId: string
   jobFromNow: string
-  beforeuploadFiles: any[] = []
+  beforeUploadFiles: any[] = []
   currentUploadNumber: number = 0
   uploadedFiles: Upload[] = []
 
@@ -163,7 +163,7 @@ export class PostComponent implements OnInit, OnDestroy {
 
   selectedSortings_visibility: SortingMethod | undefined
 
-  dublicateFilename: string[] = []
+  duplicateFileName: string[] = []
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -436,7 +436,7 @@ export class PostComponent implements OnInit, OnDestroy {
                 )
                 if (this.jobToEdit.information.attachments.length > 0) {
                   this.uploadedFiles = this.jobToEdit.information.attachments
-                  this.beforeuploadFiles =
+                  this.beforeUploadFiles =
                     this.jobToEdit.information.attachments
                 }
                 this.loading = true
@@ -485,19 +485,20 @@ export class PostComponent implements OnInit, OnDestroy {
   async uploadFiles(files: FileList) {
     this.uploadFailed = false
     this.fileTooBig = false
-    this.currentUploadNumber = -1
+    this.currentUploadNumber = 0
 
-    const uploadPromises = Array.from(files).map(async (file) => {
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i]
       if (
-        this.dublicateFilename &&
-        this.dublicateFilename.includes(file.name)
+        this.duplicateFileName &&
+        this.duplicateFileName.includes(file.name)
       ) {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
           detail: `File ${file.name} is already uploaded.`,
         })
-        return
+        continue
       }
 
       if (file.size > this.maxFileSizeBytes) {
@@ -506,6 +507,15 @@ export class PostComponent implements OnInit, OnDestroy {
           severity: 'error',
           summary: 'Error',
           detail: `File ${file.name} is too big.`,
+        })
+        continue
+      }
+
+      if (this.uploadFiles.length >= 10) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: `You can only upload 10 files at a time.`,
         })
         return
       }
@@ -517,17 +527,15 @@ export class PostComponent implements OnInit, OnDestroy {
           file.size
         )
 
-        this.currentUploadNumber++
-        if (this.currentUploadNumber > 10) {
-          return
-        }
-
         const upload: Upload =
           await this.uploadService.uploadJobAttachmentToStorage(
             this.jobId,
             currentUpload,
             file
           )
+
+        this.currentUploadNumber++
+        console.log('this.currentUploadNumber: ', this.currentUploadNumber)
 
         if (upload) {
           this.uploadedFiles.unshift(upload)
@@ -547,13 +555,10 @@ export class PostComponent implements OnInit, OnDestroy {
           detail: `Failed to upload file ${file.name}.`,
         })
       }
-    })
+    }
 
-    await Promise.all(uploadPromises)
-
-    this.currentUploadNumber++
-    this.beforeuploadFiles = []
-    this.beforeuploadFiles.push(...this.uploadedFiles)
+    this.beforeUploadFiles = []
+    this.beforeUploadFiles.push(...this.uploadedFiles)
   }
 
   onDragOver(event: DragEvent) {
@@ -577,10 +582,10 @@ export class PostComponent implements OnInit, OnDestroy {
 
     if (event.dataTransfer && event.dataTransfer.files) {
       for (let i = 0; i < event.dataTransfer.files.length; i++) {
-        if (this.beforeuploadFiles.length > 0) {
-          this.beforeuploadFiles.unshift(event.dataTransfer.files[i])
+        if (this.beforeUploadFiles.length > 0) {
+          this.beforeUploadFiles.unshift(event.dataTransfer.files[i])
         } else {
-          this.beforeuploadFiles.push(event.dataTransfer.files[i])
+          this.beforeUploadFiles.push(event.dataTransfer.files[i])
         }
       }
     }
@@ -590,41 +595,61 @@ export class PostComponent implements OnInit, OnDestroy {
 
   detectFiles(event: any) {
     let files = event.target.files
+    console.log('====================detect files=============================')
+    console.log('files.length: ', files.length)
+    console.log(
+      'this.beforeUploadFiles.length: ',
+      this.beforeUploadFiles.length
+    )
+    console.log('this.duplicateFileName: ', this.duplicateFileName)
 
-    if (this.beforeuploadFiles.length > 0) {
-      // Check for duplicates and populate dublicateFilename array
+    if (this.beforeUploadFiles.length > 0) {
+      // Check for duplicates and populate duplicateFileName array
       files.forEach((item) => {
-        const duplicate = this.beforeuploadFiles.some(
+        const duplicate = this.beforeUploadFiles.some(
           (file) => file.name === item.name
         )
         if (duplicate) {
-          this.dublicateFilename.push(item.name)
+          this.duplicateFileName.push(item.name)
         }
       })
 
-      // Add new files to beforeuploadFiles if they are not duplicates and meet size criteria
+      // Add new files to beforeUploadFiles if they are not duplicates and meet size criteria
       files.forEach((item) => {
         if (
-          !this.dublicateFilename.includes(item.name) &&
-          item.size < this.maxFileSizeBytes
+          !this.duplicateFileName.includes(item.name) &&
+          item.size < this.maxFileSizeBytes &&
+          this.beforeUploadFiles.length < 10
         ) {
-          this.beforeuploadFiles.unshift(item)
+          this.beforeUploadFiles.unshift(item)
         }
       })
     } else {
-      // If beforeuploadFiles is empty, add files that meet size criteria
+      // If beforeUploadFiles is empty, add files that meet size criteria
       files.forEach((item) => {
-        if (item.size < this.maxFileSizeBytes) {
-          this.beforeuploadFiles.push(item)
+        if (
+          item.size < this.maxFileSizeBytes &&
+          this.beforeUploadFiles.length < 10
+        ) {
+          this.beforeUploadFiles.push(item)
         }
       })
     }
+    console.log(
+      '====================detect files after function============================='
+    )
+    console.log('files.length: ', files.length)
+    console.log(
+      'this.beforeUploadFiles.length: ',
+      this.beforeUploadFiles.length
+    )
+    console.log('this.duplicateFileName: ', this.duplicateFileName)
 
     // Call uploadFiles with the files array
     this.uploadFiles(files)
   }
 
-  async removeUpload(upload: Upload, index: number) {
+  async removeUpload(upload: Upload) {
     this.deleteFailed = false
     const deleted = await this.uploadService.cancelJobAttachmentUpload(
       this.jobId,
@@ -636,8 +661,8 @@ export class PostComponent implements OnInit, OnDestroy {
       this.deleteFailed = true
     }
 
-    this.beforeuploadFiles = []
-    this.beforeuploadFiles.push(...this.uploadedFiles)
+    this.beforeUploadFiles = []
+    this.beforeUploadFiles.push(...this.uploadedFiles)
   }
 
   ngOnDestroy() {
@@ -1022,10 +1047,6 @@ export class PostComponent implements OnInit, OnDestroy {
       this.jobForPreview = job
       this.isPreview = true
 
-      console.log('this.jobForPreview', this.jobForPreview)
-      console.log('this.isPreview', this.isPreview)
-      console.log('=================== end =====================')
-
       this.isSending = false
       window.scrollTo({
         top: 0,
@@ -1042,9 +1063,5 @@ export class PostComponent implements OnInit, OnDestroy {
 
   BacktoEdit() {
     this.isPreview = false
-  }
-
-  async updateJob() {
-    // uploads the job
   }
 }
