@@ -21,13 +21,13 @@ import { take } from 'rxjs/operators'
 import { environment } from '@env/environment'
 import { NgxSpinnerService } from 'ngx-spinner'
 import { Upload } from '@class/upload'
-import { ToastrService } from 'ngx-toastr'
 import { UploadService } from '@service/upload.service'
 
 import { providerTypeArray } from 'app/shared/constants/providerTypes'
 
 import { AngularFireAuth } from '@angular/fire/compat/auth'
 import { FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular'
+import { MessageService } from 'primeng/api'
 
 declare var $: any
 
@@ -100,6 +100,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   visible_login_modal: boolean = false
   visible_listing_modal: boolean = false
 
+  dublicateFilename: string[] = []
+
   coverletterConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -163,11 +165,11 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     private storage: AngularFireStorage,
     private formBuilder: UntypedFormBuilder,
     private spinner: NgxSpinnerService,
-    private toastr: ToastrService,
     private uploadService: UploadService,
     private route: ActivatedRoute,
     private router: Router,
-    private afAuth: AngularFireAuth
+    private afAuth: AngularFireAuth,
+    private messageService: MessageService
   ) {
     this.bidForm = this.formBuilder.group({
       price: [
@@ -215,6 +217,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
     this.shareableLink = environment.shareBaseUrl
     this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
+      console.log('+===========================', params['jobId'])
       if (params['jobId']) {
         this.jobSub = this.publicJobsService
           .getPublicJob(params['jobId'])
@@ -225,6 +228,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
               this.loading = false
             } else {
               this.job = publicJob
+              console.log('this.JOb', this.job)
               this.initJob(this.job)
 
               this.bidsSub = this.publicJobsService
@@ -285,13 +289,27 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   async uploadFiles(files: FileList) {
     this.uploadFailed = false
     this.fileTooBig = false
+    this.currentUploadNumber = -1
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i]
+      if (this.dublicateFilename) {
+        if (this.dublicateFilename.includes(file.name)) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'error',
+            detail: `File ${file.name} is already uploaded.`,
+          })
+          continue
+        }
+      }
       if (file.size > this.maxFileSizeBytes) {
         this.fileTooBig = true
-        this.toastr.error(`File ${file.name} is too big.`)
-        this.beforeuploadFiles.slice(i, 1)
+        this.messageService.add({
+          severity: 'error',
+          summary: 'error',
+          detail: `File ${file.name} is too big.`,
+        })
         continue
       }
 
@@ -303,10 +321,12 @@ export class PublicJobComponent implements OnInit, OnDestroy {
         )
 
         this.currentUploadNumber++
-
+        if (this.currentUploadNumber > 10) {
+          return
+        }
         const upload: Upload =
           await this.uploadService.uploadJobAttachmentToStorage(
-            this.job.id,
+            this.jobId,
             currentUpload,
             file
           )
@@ -314,13 +334,23 @@ export class PublicJobComponent implements OnInit, OnDestroy {
           this.uploadedFiles.unshift(upload)
         } else {
           this.uploadFailed = true
-          this.toastr.error(`Failed to upload file ${file.name}.`)
+          this.messageService.add({
+            severity: 'error',
+            summary: 'error',
+            detail: `Failed to upload file ${file.name}.`,
+          })
         }
       } catch (e) {
         this.uploadFailed = true
-        this.toastr.error(`Failed to upload file ${file.name}.`)
+        this.messageService.add({
+          severity: 'error',
+          summary: 'error',
+          detail: `Failed to upload file ${file.name}.`,
+        })
       }
     }
+
+    this.currentUploadNumber++
 
     this.beforeuploadFiles = []
     this.beforeuploadFiles.push(...this.uploadedFiles)
@@ -368,6 +398,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   async initJob(job: Job) {
     this.jobExists = true
     this.jobFromNow = moment(job.createAt).fromNow()
+    console.log('job.createAt', job.createAt)
+    console.log('this.jobFromNow', this.jobFromNow)
     if (this.currentUser) {
       this.myJob = job.clientId === this.currentUser.address
       await this.setClient(this.job.clientId)

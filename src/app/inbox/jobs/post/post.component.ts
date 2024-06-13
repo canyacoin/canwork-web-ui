@@ -23,7 +23,6 @@ import { User, UserType } from '@class/user'
 // import '@extensions/string' // removed
 import { AuthService } from '@service/auth.service'
 import { JobService } from '@service/job.service'
-import { ToastrService } from 'ngx-toastr'
 import { PublicJobService } from '@service/public-job.service'
 import { UploadService } from '@service/upload.service'
 import { UserService } from '@service/user.service'
@@ -47,7 +46,6 @@ interface SortingMethod {
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
-  providers: [MessageService],
 })
 export class PostComponent implements OnInit, OnDestroy {
   postForm: UntypedFormGroup = null
@@ -176,7 +174,6 @@ export class PostComponent implements OnInit, OnDestroy {
     private gitService: GitService,
     private publicJobService: PublicJobService,
     private uploadService: UploadService,
-    private toastr: ToastrService,
     private messageService: MessageService,
     private spinner: NgxSpinnerService
   ) {
@@ -494,14 +491,21 @@ export class PostComponent implements OnInit, OnDestroy {
       const file = files[i]
       if (this.dublicateFilename) {
         if (this.dublicateFilename.includes(file.name)) {
-          this.toastr.error(`File ${file.name} is already uploaded.`)
+          this.messageService.add({
+            severity: 'error',
+            summary: 'error',
+            detail: `File ${file.name} is already uploaded.`,
+          })
           continue
         }
       }
       if (file.size > this.maxFileSizeBytes) {
         this.fileTooBig = true
-
-        this.toastr.error(`File ${file.name} is too big.`)
+        this.messageService.add({
+          severity: 'error',
+          summary: 'error',
+          detail: `File ${file.name} is too big.`,
+        })
         continue
       }
 
@@ -526,11 +530,19 @@ export class PostComponent implements OnInit, OnDestroy {
           this.uploadedFiles.unshift(upload)
         } else {
           this.uploadFailed = true
-          this.toastr.error(`Failed to upload file ${file.name}.`)
+          this.messageService.add({
+            severity: 'error',
+            summary: 'error',
+            detail: `Failed to upload file ${file.name}.`,
+          })
         }
       } catch (e) {
         this.uploadFailed = true
-        this.toastr.error(`Failed to upload file ${file.name}.`)
+        this.messageService.add({
+          severity: 'error',
+          summary: 'error',
+          detail: `Failed to upload file ${file.name}.`,
+        })
       }
     }
 
