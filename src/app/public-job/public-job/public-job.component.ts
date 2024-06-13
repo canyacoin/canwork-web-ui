@@ -291,26 +291,27 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     this.fileTooBig = false
     this.currentUploadNumber = -1
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i]
-      if (this.dublicateFilename) {
-        if (this.dublicateFilename.includes(file.name)) {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'error',
-            detail: `File ${file.name} is already uploaded.`,
-          })
-          continue
-        }
+    const uploadPromises = Array.from(files).map(async (file) => {
+      if (
+        this.dublicateFilename &&
+        this.dublicateFilename.includes(file.name)
+      ) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: `File ${file.name} is already uploaded.`,
+        })
+        return
       }
+
       if (file.size > this.maxFileSizeBytes) {
         this.fileTooBig = true
         this.messageService.add({
           severity: 'error',
-          summary: 'error',
+          summary: 'Error',
           detail: `File ${file.name} is too big.`,
         })
-        continue
+        return
       }
 
       try {
@@ -324,19 +325,21 @@ export class PublicJobComponent implements OnInit, OnDestroy {
         if (this.currentUploadNumber > 10) {
           return
         }
+
         const upload: Upload =
           await this.uploadService.uploadJobAttachmentToStorage(
-            this.jobId,
+            this.job.id,
             currentUpload,
             file
           )
+
         if (upload) {
           this.uploadedFiles.unshift(upload)
         } else {
           this.uploadFailed = true
           this.messageService.add({
             severity: 'error',
-            summary: 'error',
+            summary: 'Error',
             detail: `Failed to upload file ${file.name}.`,
           })
         }
@@ -344,17 +347,19 @@ export class PublicJobComponent implements OnInit, OnDestroy {
         this.uploadFailed = true
         this.messageService.add({
           severity: 'error',
-          summary: 'error',
+          summary: 'Error',
           detail: `Failed to upload file ${file.name}.`,
         })
       }
-    }
+    })
+
+    await Promise.all(uploadPromises)
 
     this.currentUploadNumber++
-
     this.beforeuploadFiles = []
     this.beforeuploadFiles.push(...this.uploadedFiles)
   }
+
   changeJob(item: any) {
     this.selectedjob = item
   }
@@ -635,18 +640,40 @@ export class PublicJobComponent implements OnInit, OnDestroy {
       this.uploadFiles(files)
     }
   }
+
   detectFiles(event: any) {
-    const files = event.target.files
-    if (this.currentUploadNumber > 10 || files.length > 10) {
-      this.uploadFailed = true
-      return
-    }
+    let files = event.target.files
+
     if (this.beforeuploadFiles.length > 0) {
-      this.beforeuploadFiles.unshift(...files)
+      // Check for duplicates and populate dublicateFilename array
+      files.forEach((item) => {
+        const duplicate = this.beforeuploadFiles.some(
+          (file) => file.name === item.name
+        )
+        if (duplicate) {
+          this.dublicateFilename.push(item.name)
+        }
+      })
+
+      // Add new files to beforeuploadFiles if they are not duplicates and meet size criteria
+      files.forEach((item) => {
+        if (
+          !this.dublicateFilename.includes(item.name) &&
+          item.size < this.maxFileSizeBytes
+        ) {
+          this.beforeuploadFiles.unshift(item)
+        }
+      })
     } else {
-      this.beforeuploadFiles = files
+      // If beforeuploadFiles is empty, add files that meet size criteria
+      files.forEach((item) => {
+        if (item.size < this.maxFileSizeBytes) {
+          this.beforeuploadFiles.push(item)
+        }
+      })
     }
 
+    // Call uploadFiles with the files array
     this.uploadFiles(files)
   }
 

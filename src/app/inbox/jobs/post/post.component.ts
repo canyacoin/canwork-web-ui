@@ -487,26 +487,27 @@ export class PostComponent implements OnInit, OnDestroy {
     this.fileTooBig = false
     this.currentUploadNumber = -1
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i]
-      if (this.dublicateFilename) {
-        if (this.dublicateFilename.includes(file.name)) {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'error',
-            detail: `File ${file.name} is already uploaded.`,
-          })
-          continue
-        }
+    const uploadPromises = Array.from(files).map(async (file) => {
+      if (
+        this.dublicateFilename &&
+        this.dublicateFilename.includes(file.name)
+      ) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: `File ${file.name} is already uploaded.`,
+        })
+        return
       }
+
       if (file.size > this.maxFileSizeBytes) {
         this.fileTooBig = true
         this.messageService.add({
           severity: 'error',
-          summary: 'error',
+          summary: 'Error',
           detail: `File ${file.name} is too big.`,
         })
-        continue
+        return
       }
 
       try {
@@ -520,19 +521,21 @@ export class PostComponent implements OnInit, OnDestroy {
         if (this.currentUploadNumber > 10) {
           return
         }
+
         const upload: Upload =
           await this.uploadService.uploadJobAttachmentToStorage(
             this.jobId,
             currentUpload,
             file
           )
+
         if (upload) {
           this.uploadedFiles.unshift(upload)
         } else {
           this.uploadFailed = true
           this.messageService.add({
             severity: 'error',
-            summary: 'error',
+            summary: 'Error',
             detail: `Failed to upload file ${file.name}.`,
           })
         }
@@ -540,14 +543,15 @@ export class PostComponent implements OnInit, OnDestroy {
         this.uploadFailed = true
         this.messageService.add({
           severity: 'error',
-          summary: 'error',
+          summary: 'Error',
           detail: `Failed to upload file ${file.name}.`,
         })
       }
-    }
+    })
+
+    await Promise.all(uploadPromises)
 
     this.currentUploadNumber++
-
     this.beforeuploadFiles = []
     this.beforeuploadFiles.push(...this.uploadedFiles)
   }
