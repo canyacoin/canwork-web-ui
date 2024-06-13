@@ -412,13 +412,13 @@
                 >
                   POST
                 </button>
-                <span
+                <!-- <span
                   *ngIf="error"
                   class="fs-12 fw-400 mt-10"
                   style="color: #ff6666"
                 >
                   Something went wrong when posting this job..
-                </span>
+                </span> -->
               </div>
             </form>
           </div>
@@ -585,9 +585,9 @@
                   (dragleave)="onDragLeave($event)"
                   (drop)="onDrop($event)"
                   [class]="
-                    hoveredFiles
-                      ? 'w-full rounded-xl bg-G500 border border-G200 flex justify-center items-center py-[10px] px-[16px]'
-                      : 'w-full rounded-xl bg-G50 border border-G200 flex justify-center items-center py-[10px] px-[16px]'
+                    hoveredFiles && !isCurrentUpload
+                      ? 'w-full rounded-xl bg-G500 text-white border border-G200 flex justify-center items-center py-[10px] px-[16px]'
+                      : 'w-full rounded-xl bg-G50 text-G90 border border-G200 flex justify-center items-center py-[10px] px-[16px]'
                   "
                 >
                   <div class="w-full">
@@ -600,7 +600,7 @@
                       <img
                         src="/assets/massimo/svg/fi_plus-circle.svg"
                         alt="fi_info"
-                        class="pr-[8px]"
+                        class="pr-[8px] select-none"
                       />
                       Drag or
                       <label
@@ -608,7 +608,8 @@
                         for="file-upload"
                         class="!text-C500 !text-b1 !font-sans !m-0 underline px-[3px] cursor-pointer"
                         [ngClass]="{
-                          '!text-G500 cursor-not-allowed': isCurrentUpload
+                          '!text-G500 cursor-not-allowed': isCurrentUpload,
+                          '!text-white': hoveredFiles
                         }"
                       >
                         Upload
@@ -1015,15 +1016,13 @@
                 <app-terms [form]="shareableJobForm"></app-terms>
               </div>
               <div>
-                <div
-                  *ngIf="!isSending"
-                  class="flex gap-4 justify-end flex-col md:flex-row"
-                >
+                <div class="flex gap-4 justify-end flex-col md:flex-row">
                   <basic-button
                     extraClass="!border-none  text-G900 !shadow-none"
                     size="small"
                     [type]="1"
                     title="Save as Draft"
+                    [disabled]="isSending || isCurrentUpload"
                     (click)="submitShareableJob(0)"
                   />
                   <basic-button
@@ -1031,9 +1030,7 @@
                     (click)="submitShareableJob(1)"
                     title="See Preview"
                     size="small"
-                    [disabled]="
-                      !shareableJobForm.valid || isSending || isCurrentUpload
-                    "
+                    [disabled]="isSending || isCurrentUpload"
                     extraClass="border text-G900"
                   />
                   <basic-button
@@ -1041,18 +1038,16 @@
                     title="Post Job Listing"
                     size="small"
                     (click)="submitShareableJob(2)"
-                    [disabled]="
-                      !shareableJobForm.valid || isSending || isCurrentUpload
-                    "
+                    [disabled]="isSending || isCurrentUpload"
                   />
                 </div>
-                <span
+                <!-- <span
                   *ngIf="error"
                   class="fs-12 fw-400 mt-10"
                   style="color: #ff6666"
                 >
                   Something went wrong when posting this job..
-                </span>
+                </span> -->
               </div>
             </div>
           </form>
@@ -1315,7 +1310,7 @@
             size="small"
             *ngIf="!isSending"
             (click)="submitShareableJob(2)"
-            [disabled]="!shareableJobForm.valid || isSending || isCurrentUpload"
+            [disabled]="isSending || isCurrentUpload"
           />
         </div>
       </div>

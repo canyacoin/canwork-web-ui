@@ -231,7 +231,11 @@ export class PostComponent implements OnInit, OnDestroy {
       url: [''],
       description: [
         '',
-        Validators.compose([Validators.required, Validators.maxLength(10000)]),
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(10000),
+        ]),
       ],
       title: [
         '',
@@ -254,7 +258,7 @@ export class PostComponent implements OnInit, OnDestroy {
         Validators.compose([
           Validators.required,
           Validators.minLength(1),
-          Validators.maxLength(100),
+          Validators.maxLength(200),
         ]),
       ],
       attachments: [''],
@@ -369,15 +373,10 @@ export class PostComponent implements OnInit, OnDestroy {
         this.postForm.controls['timelineExpectation'].patchValue('Up to 1 Year')
         if (!this.postToProvider) this.loading = true
       } else {
-        console.log(
-          '=============================job editing============================================'
-        )
         this.jobId = this.activatedRoute.snapshot.params['jobId']
         this.jobSub = this.publicJobService
           .getPublicJob(this.activatedRoute.snapshot.params['jobId'])
           .subscribe((result) => {
-            console.log('result', result)
-
             if (result) {
               const canEdit = result.clientId === this.currentUser.address
               if (canEdit) {
@@ -413,8 +412,6 @@ export class PostComponent implements OnInit, OnDestroy {
                 //   this.jobToEdit.deadline
                 // )
                 this.date = new Date(this.jobToEdit.deadline)
-
-                console.log('this.jobToEdit.deadline', this.jobToEdit.deadline)
 
                 let visibility = this.jobToEdit.visibility
                 let visibilityIndex = this.sortingMethods_visibility.findIndex(
@@ -536,7 +533,6 @@ export class PostComponent implements OnInit, OnDestroy {
           )
 
         this.currentUploadNumber++
-        console.log('this.currentUploadNumber: ', this.currentUploadNumber)
 
         if (upload) {
           this.uploadedFiles.unshift(upload)
@@ -558,6 +554,10 @@ export class PostComponent implements OnInit, OnDestroy {
       }
     }
     this.isCurrentUpload = false
+    console.log('this.isCurrentUpload:', this.isCurrentUpload)
+    console.log('this.isSending:', this.isSending)
+    console.log('this.shareableJobForm.valid:', this.shareableJobForm.valid)
+
     this.beforeUploadFiles = []
     this.beforeUploadFiles.push(...this.uploadedFiles)
   }
@@ -579,30 +579,48 @@ export class PostComponent implements OnInit, OnDestroy {
     event.preventDefault()
     event.stopPropagation()
     this.hoveredFiles = false
-    // if (event.dataTransfer && event.dataTransfer.files) {
-
-    if (event.dataTransfer && event.dataTransfer.files) {
-      for (let i = 0; i < event.dataTransfer.files.length; i++) {
+    if (!this.isCurrentUpload) {
+      if (event.dataTransfer && event.dataTransfer.files) {
+        let files = event.dataTransfer.files
         if (this.beforeUploadFiles.length > 0) {
-          this.beforeUploadFiles.unshift(event.dataTransfer.files[i])
+          // Check for duplicates and populate duplicateFileName array
+          for (let i = 0; i < files.length; i++) {
+            const duplicate = this.beforeUploadFiles.some(
+              (file) => file.name === files[i].name
+            )
+            if (duplicate) {
+              this.duplicateFileName.push(files[i].name)
+            }
+          }
+
+          // Add new files to beforeUploadFiles if they are not duplicates and meet size criteria
+          for (let i = 0; i < files.length; i++) {
+            if (
+              !this.duplicateFileName.includes(files[i].name) &&
+              files[i].size < this.maxFileSizeBytes &&
+              this.beforeUploadFiles.length < 10
+            ) {
+              this.beforeUploadFiles.unshift(files[i])
+            }
+          }
         } else {
-          this.beforeUploadFiles.push(event.dataTransfer.files[i])
+          // If beforeUploadFiles is empty, add files that meet size criteria
+          for (let i = 0; i < files.length; i++) {
+            if (
+              files[i].size < this.maxFileSizeBytes &&
+              this.beforeUploadFiles.length < 10
+            ) {
+              this.beforeUploadFiles.push(files[i])
+            }
+          }
         }
+        this.uploadFiles(files)
       }
     }
-    const files = event.dataTransfer.files
-    this.uploadFiles(files)
   }
 
   detectFiles(event: any) {
     let files = event.target.files
-    console.log('====================detect files=============================')
-    console.log('files.length: ', files.length)
-    console.log(
-      'this.beforeUploadFiles.length: ',
-      this.beforeUploadFiles.length
-    )
-    console.log('this.duplicateFileName: ', this.duplicateFileName)
 
     if (this.beforeUploadFiles.length > 0) {
       // Check for duplicates and populate duplicateFileName array
@@ -636,15 +654,6 @@ export class PostComponent implements OnInit, OnDestroy {
         }
       })
     }
-    console.log(
-      '====================detect files after function============================='
-    )
-    console.log('files.length: ', files.length)
-    console.log(
-      'this.beforeUploadFiles.length: ',
-      this.beforeUploadFiles.length
-    )
-    console.log('this.duplicateFileName: ', this.duplicateFileName)
 
     // Call uploadFiles with the files array
     this.uploadFiles(files)
@@ -828,6 +837,11 @@ export class PostComponent implements OnInit, OnDestroy {
     } catch (e) {
       this.sent = false
       this.error = true
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: `Something went wrong when posting this job.`,
+      })
       this.isSending = false
     }
     this.spinner.hide()
@@ -1057,6 +1071,11 @@ export class PostComponent implements OnInit, OnDestroy {
       this.sent = false
       this.isSending = false
       this.error = true
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: `Something went wrong when posting this job.`,
+      })
       console.log('error with showing', e)
     }
     this.spinner.hide()
