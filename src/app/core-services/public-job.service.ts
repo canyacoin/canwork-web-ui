@@ -82,7 +82,6 @@ export class PublicJobService {
           .where('visibility', '==', 'public')
           .where('state', '==', JobState.acceptingOffers)
           .where('deadline', '>', new Date().toISOString().slice(0, 10))
-          
       )
       .valueChanges()
   }
@@ -252,10 +251,10 @@ export class PublicJobService {
           const action = new IJobAction(ActionType.bid, UserType.provider)
           const client = await this.userService.getUser(job.clientId)
           const provider = await this.userService.getUser(bid.providerId)
-          
+
           await this.addBid(bid, job.id)
-          console.log("test");
-          
+          console.log('test')
+
           await this.sendPublicJobMessage(job, action, client, provider)
           resolve(true)
         } else {
@@ -270,39 +269,47 @@ export class PublicJobService {
   }
 
   // checks if the provider exists in the job bid
-  async canBid(providerId: string, job: Job) {
-    const bid = await this.afs
-      .collection<any>(`public-jobs/${job.id}/bids/`, (ref) =>
-        ref.where('providerId', '==', providerId)
-      )
-      .get()
-      .toPromise()
-    return bid.empty
-  }
-  
-  // async canBid(providerId: string, job: Job): Promise<boolean> {
-  //   try {
-  //     const bidSnapshot = await this.afs
-  //       .collection<any>(`public-jobs/${job.id}/bids`, ref => 
-  //         ref.where('providerId', '==', providerId)
-  //       )
-  //       .get()
-  //       .toPromise();
-  //     console.log("bidSnapshot: ", bidSnapshot)
-  //     return bidSnapshot.empty;
-  //   } catch (error) {
-  //     console.error('Error checking if provider can bid:', error);
-  //     return false;
-  //   }
+  // async canBid(providerId: string, job: Job) {
+  //   const bid = await this.afs
+  //     .collection<any>(`public-jobs/${job.id}/bids/`, (ref) =>
+  //       ref.where('providerId', '==', providerId)
+  //     )
+  //     .get()
+  //     .toPromise()
+  //   return bid.empty
   // }
+
+  async canBid(providerId: string, job: Job): Promise<boolean> {
+    try {
+      const jobRef = this.afs.collection(`public-jobs`).doc(job.id)
+      const bidsCollectionRef: any = jobRef.collection('bids')
+      const bidsSnapshot = await bidsCollectionRef.get().toPromise()
+      
+      // Check if the bids collection exists
+      if (bidsSnapshot.empty) {
+        return true
+      }
+
+      // Now check if there is a bid with the given providerId
+      const bidQuerySnapshot = await bidsCollectionRef
+        .where('providerId', '==', providerId)
+        .get()
+        .toPromise()
+
+      return !bidQuerySnapshot.empty
+    } catch (error) {
+      console.error('Error checking if provider can bid:', error)
+      return false
+    }
+  }
 
   // add new bid to collection
   private async addBid(bid: Bid, jobId: string): Promise<Boolean> {
-    console.log(bid);
-    
+    console.log(bid)
+
     const bidToUpload = this.parseBidToObject(bid)
-    console.log("bidToUpload", bidToUpload);
-    
+    console.log('bidToUpload', bidToUpload)
+
     return new Promise<boolean>((resolve, reject) => {
       this.afs
         .doc(`public-jobs/${jobId}/bids/${bid.providerId}`)
@@ -430,7 +437,7 @@ export class PublicJobService {
     bid.attachments.forEach((attachment: Upload) => {
       parsedAttachments.push(this.parseUpload(attachment))
     })
-    
+
     bidObject.attachments = parsedAttachments
     return bidObject
   }
