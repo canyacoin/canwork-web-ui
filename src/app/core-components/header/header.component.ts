@@ -23,7 +23,7 @@ import { MessageService, MenuItem } from 'primeng/api'
         style({
           transform: 'rotate(45deg)',
           transformOrigin: 'left',
-          margin: '12px',
+          margin: '9px',
         })
       ),
       state(
@@ -37,7 +37,7 @@ import { MessageService, MenuItem } from 'primeng/api'
         style({
           transform: 'rotate(-45deg)',
           transformOrigin: 'left',
-          margin: '12px',
+          margin: '10px',
         })
       ),
       state(
@@ -57,7 +57,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   headerSection = HeaderService
   // flag be consumed by the template
   isHamburguer = true
-  items: MenuItem[] | undefined
+  items: any[] 
+  selectedItem: any | undefined
   onHamburguerClick() {
     this.isHamburguer = !this.isHamburguer
   }
@@ -91,11 +92,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         const currentRoute = event.url
+        
         if (
           currentRoute.includes('/inbox') ||
           currentRoute.includes('/profile') ||
-          currentRoute.includes('/jobs') ||
           currentRoute.includes('/wallet-bnb') ||
+          currentRoute.includes('/public') ||
           currentRoute.includes('/auth')
         ) {
           this.isTransfer = true
@@ -109,25 +111,43 @@ export class HeaderComponent implements OnInit, OnDestroy {
       {
         label: 'Profile',
         routerLink: '/profile',
+        icon: 'fi_user.svg',
       },
       {
         label: 'Edit Profile',
+        icon: 'fi_edit.svg',
         routerLink: '/profile',
         queryParams: { editProfile: 1 },
       },
       {
         label: 'Manage Jobs',
+        icon: 'fi_briefcase.svg',
         routerLink: '/inbox/jobs',
-        styleClass: 'border-y-1 border',
+      },
+      {
+        label: 'Web3 Wallet',
+        routerLink: '/inbox/jobs',
+        icon: 'u_wallet.svg',
+      },
+      {
+        label: 'Settings',
+        routerLink: '/inbox/jobs',
+        icon: 'fi_settings.svg',
+      },
+      {
+        label: 'Act as Client',
+        routerLink: '/inbox/jobs',
+        icon: "fi_user_swap.svg"
       },
       {
         label: 'LogOut',
-        styleClass: 'text-R300',
-        command: () => {
-          this.onLogout()
-        },
+        icon : "fi_log-out.svg",
+        styleClass: 'text-logout',
       },
     ]
+
+
+    this.selectedItem = this.items[0]
     // scroll
     this.windowService.getScrollY().subscribe((scrollY) => {
       // Check if the scroll position is greater than 64px

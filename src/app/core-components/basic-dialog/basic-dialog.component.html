@@ -1,0 +1,134 @@
+<p-dialog
+  [(visible)]="visible"
+  styleClass="w-[98%] md:w-[50%]"
+  [draggable]="false"
+  [resizable]="false"
+  [modal]="true"
+>
+  <div class="flex justify-center items-center h-[300px] md:h-[500px]">
+    <div class="max-w-[352px] flex flex-col justify-center items-center">
+      <ng-container *ngIf="type == 'submit'">
+        <img
+          src="/assets/massimo/images/submit.png"
+          alt="submit"
+          class="pb-[24px]"
+        />
+      </ng-container>
+      <div
+        *ngIf="type !== 'submit'"
+        class="w-[322px] h-[200px] bg-G400 mb-[24px]"
+      ></div>
+      <div class="text-h6 text-center font-medium leading-7 pb-[8px]">
+        {{ title }}
+      </div>
+      <div
+        class="text-b2 text-center font-normal leading-5 pb-[20px] md:pb-[32px]"
+      >
+        {{ content }}
+      </div>
+
+      <ng-container *ngIf="type == 'delete' || type == 'withdraw'">
+        <div class="flex gap-4 justify-center items-center">
+          <div
+            class="cursor-pointer py-[10px] px-[24px] flex justify-center items-center gap-2 hover:bg-G200 rounded-xl transition-all duration-200"
+            (click)="LeftClick($event)"
+          >
+            <img
+              src="/assets/massimo/svg/delete.svg"
+              class="select-none w-[16px] h-[16px]"
+            />
+            <h1 class="text-R900 font-medium text-nowrap text-b1" *ngIf="type == 'delete'">Delete Job</h1>
+            <h1 class="text-R900 font-medium text-nowrap text-b1" *ngIf="type == 'withdraw'">Withdraw your Application</h1>
+          </div>
+          <basic-button
+            [type]="1"
+            (click)="RightClick($event)"
+            title="Cancel"
+            size="small"
+            extraClass="border text-G900"
+          />
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="type == 'submit'">
+        <div class="flex gap-4 justify-center items-center">
+          <basic-button
+            [type]="1"
+            [routerLink]="['/']"
+            title="Go back bome"
+            size="small"
+            extraClass="border text-G900"
+          />
+          <basic-button
+            [type]="2"
+            [routerLink]="['/jobs']"
+            title="See similar jobs"
+            size="small"
+            extraClass="border"
+          />
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="type == 'success'">
+        <div class="flex gap-4 justify-center items-center">
+          <div
+            class="cursor-pointer py-[10px] px-[24px] text-G900 flex justify-center items-center gap-2 font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl"
+            (click)="LeftClick($event)"
+          >
+            <img
+              src="/assets/massimo/svg/fi_share-2.svg"
+              class="select-none w-[16px] h-[16px]"
+            />
+            Share Job Listing
+          </div>
+          <basic-button
+            [type]="2"
+            [routerLink]="['/search']"
+            title="Invite Freelancers"
+            size="small"
+            extraClass="border"
+          />
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="type == 'draft'">
+        <div class="flex gap-4 justify-center items-center">
+          <basic-button
+            [type]="1"
+            [routerLink]="['/']"
+            title="Go bome"
+            size="small"
+            extraClass="border text-G900"
+          />
+          <basic-button
+            [type]="2"
+            [routerLink]="['/jobs/public/', slug]"
+            title="See Drafts"
+            size="small"
+            extraClass="border"
+          />
+        </div>
+      </ng-container>
+
+      
+      <ng-container *ngIf="type == 'listing_deleted'">
+        <div class="flex gap-4 justify-center items-center">
+          <basic-button
+            [type]="1"
+            [routerLink]="['/']"
+            title="Return home"
+            size="small"
+            extraClass="border text-G900"
+          />
+          <basic-button
+            [type]="2"
+            [routerLink]="['/jobs']"
+            title="Create new job listing"
+            size="small"
+            extraClass="border"
+          />
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</p-dialog>

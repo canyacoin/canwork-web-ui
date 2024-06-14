@@ -4,9 +4,10 @@
   >
     <div class="grid divide-y divide-G300">
       <div
-        class="flex flex-col lg:flex-row lg:justify-between gap-[40px] pb-[16px] md:pb-[80px]"
+        class="flex flex-col lg:flex-row lg:justify-between gap-10 pb-[16px] md:pb-[80px]"
       >
-        <div class="flex flex-col gap-[24px]">
+        <div class="flex flex-col gap-6">
+          
           <img
             src="{{ footerSection.logoSrc }}"
             class="select-none w-[140px] h-[40px]"
@@ -15,15 +16,15 @@
             <basic-button [type]="1" [title]="footerSection.buttonText1" />
           </div>
         </div>
-        <div class="flex flex-col xl:flex-row gap-[48px]">
-          <div class="flex flex-col gap-[16px]">
+        <div class="flex flex-col xl:flex-row gap-12">
+          <div class="flex flex-col gap-4">
             <div class="text-G900 text-b1 font-medium">Categories</div>
             <div
-              class="grid grid-cols-2 xs:grid-cols-3 gap-[24px] xs:gap-[48px]"
+              class="grid grid-cols-2 xs:grid-cols-3 gap-6 xs:gap-12"
             >
               <div
                 *ngFor="let section of footerSection.sections"
-                class="grid gap-[8px]"
+                class="grid gap-2"
               >
                 <div
                   *ngFor="let category of section"
@@ -36,10 +37,10 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-2 xs:grid-cols-3 xl:flex gap-[40px]">
-            <div class="flex flex-col gap-[16px]">
+          <div class="grid grid-cols-2 xs:grid-cols-3 xl:flex gap-10">
+            <div class="flex flex-col gap-4">
               <div class="text-G900 text-b1 font-medium">Website</div>
-              <div class="grid gap-[8px]">
+              <div class="grid gap-2">
                 <div
                   *ngFor="let item of footerSection.website"
                   class="w-max text-b2 md:text-b1 text-G700 hover:underline underline-offset-2 cursor-pointer"
@@ -50,9 +51,9 @@
               </div>
             </div>
 
-            <div class="flex flex-col gap-[16px]">
+            <div class="flex flex-col gap-4">
               <div class="text-G900 text-b1 font-medium">Company</div>
-              <div class="grid gap-[8px]">
+              <div class="grid gap-2">
                 <div
                   *ngFor="let item of footerSection.company"
                   class="w-max text-b2 md:text-b1 text-G700 hover:underline underline-offset-2 cursor-pointer"
@@ -66,13 +67,13 @@
         </div>
       </div>
       <div
-        class="pt-[24px] md:pt-[32px] flex flex-col-reverse items-center lg:flex-row gap-[24px] lg:justify-between"
+        class="pt-[24px] md:pt-[32px] flex flex-col-reverse items-center lg:flex-row gap-6 lg:justify-between"
       >
-        <div class="flex flex-col lg:flex-row items-center gap-[24px]">
+        <div class="flex flex-col lg:flex-row items-center gap-6">
           <div class="text-G700 text-b2 text-center md:text-left">
             {{ footerSection.legalText }}
           </div>
-          <div class="flex gap-[24px]">
+          <div class="flex gap-6">
             <a
               *ngFor="let item of footerSection.legal"
               href="{{ item.url }}"
@@ -83,7 +84,7 @@
             </a>
           </div>
         </div>
-        <div class="flex gap-[12px]">
+        <div class="flex gap-3">
           <a
             *ngFor="let item of footerSection.social"
             href="{{ item.url }}"

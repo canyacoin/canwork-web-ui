@@ -16,7 +16,6 @@ export enum ImageState {
 @Component({
   selector: 'app-dynamic-coin',
   templateUrl: './dynamic-coin.component.html',
-  styleUrls: ['./dynamic-coin.component.css'],
 })
 export class DynamicCoinComponent
   extends OnDestroyComponent

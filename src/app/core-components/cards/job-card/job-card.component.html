@@ -1,0 +1,96 @@
+<div
+  class="w-full rounded-[12px] overflow-hidden bg-white p-[32px] grid gap-4 border border-G200 hover:bg-G100 active:bg-G200 cursor-pointer"
+  (click)="movetojobdetail()"
+>
+  <div class="flex justify-between gap-5">
+    <div class="w-full flex gap-4 items-start">
+      <img src="{{ getImage(projectType) }}" class="w-[48px] h-[48px]" />
+      <div class="grid gap-1">
+        <div class="text-G900 text-h6 font-medium">{{ title }}</div>
+        <div class="text-G500 text-b2">Posted {{ timeAgo(createAt) }}</div>
+      </div>
+      <div *ngIf="isApplied" class="text-G700 py-[2px] px-[10px] bg-G200 rounded-[45px] text-b2 leading-5">
+        Applied
+      </div>
+    </div>
+    <div
+      class="border rounded-md border-G300 w-[32px] h-[32px] flex items-center justify-center cursor-pointer transition-all duration-150"
+      [ngClass]="{
+        'bg-white hover:bg-G100': !favourite,
+        'bg-start-g1 hover:bg-start-g8': favourite
+      }"
+      (click)="Makefavorite($event)"
+    >
+      <img src="/assets/massimo/svg/bookmark.svg" class="select-none" />
+    </div>
+  </div>
+  <div class="line-clamp-4">
+    {{ stripHtmlTags(description) }}
+  </div>
+  <!-- static code for responsive -->
+  <div class="flex items-center gap-4">
+    <ng-container *ngFor="let item of skills; let i = index">
+      <basic-tag
+        *ngIf="8 > i"
+        [type]="2"
+        [title]="item"
+        class="max-xl:hidden"
+      />
+      <basic-tag
+        *ngIf="4 > i"
+        [type]="2"
+        [title]="item"
+        class="max-md:hidden xl:hidden"
+      />
+      <basic-tag *ngIf="2 > i" [type]="2" [title]="item" class="md:hidden" />
+    </ng-container>
+    <basic-tag
+      *ngIf="skills.length > 8"
+      [type]="2"
+      [title]="'+' + (skills.length - 8)"
+      class="max-xl:hidden"
+    ></basic-tag>
+    <basic-tag
+      *ngIf="skills.length > 4"
+      [type]="2"
+      [title]="'+' + (skills.length - 4)"
+      class="max-md:hidden xl:hidden"
+    ></basic-tag>
+    <basic-tag
+      *ngIf="skills.length > 2"
+      [type]="2"
+      [title]="'+' + (skills.length - 2)"
+      class="md:hidden"
+    ></basic-tag>
+  </div>
+
+  <div
+    class="max-xl:grid max-sm:grid-cols-1 max-xl:grid-cols-2 flex gap-2 items-start text-nowrap"
+  >
+    <div class="flex gap-2 items-center">
+      <img src="/assets/massimo/svg/jobLocation.svg" class="select-none" />
+      <div class="text-G500 text-b2">Location</div>
+      <!-- to do google address -->
+      <div class="text-G700 text-b1 font-medium">{{ Location }}</div>
+    </div>
+    <div class="flex gap-2 items-center">
+      <img src="/assets/massimo/svg/jobBudget.svg" class="select-none" />
+      <div class="text-G500 text-b2">Fixed Price:</div>
+      <div class="text-G700 text-b1 font-medium">${{ budget }}</div>
+    </div>
+    <div class="flex gap-2 items-center">
+      <img src="/assets/massimo/svg/jobDeadline.svg" class="select-none" />
+      <div class="text-G500 text-b2">Project Deadline</div>
+      <div class="text-G700 text-b1 font-medium">
+        {{ formatDate(deadline) }}
+      </div>
+    </div>
+    <div class="flex gap-2 items-center">
+      <img src="/assets/massimo/svg/jobProposals.svg" class="select-none" />
+      <div class="text-G500 text-b2">Proposals:</div>
+      <div class="text-G700 text-b1 font-medium">
+        {{ getbidslength() }} proposals
+      </div>
+    </div>
+  </div>
+</div>

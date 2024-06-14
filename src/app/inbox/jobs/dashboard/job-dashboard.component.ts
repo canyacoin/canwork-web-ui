@@ -8,11 +8,12 @@ import {
   HostBinding,
   Directive,
 } from '@angular/core'
-import { Router } from '@angular/router'
+import { Router, ActivatedRoute } from '@angular/router'
 //import { FilterPipe } from 'ngx-filter-pipe'
 //import { OrderPipe } from 'ngx-order-pipe'
 import { ReversePipe } from 'ngx-pipes'
 import { OrderByPipe } from 'ngx-pipes'
+import { NgxSpinnerService } from 'ngx-spinner'
 
 import { Observable, Subscription } from 'rxjs'
 
@@ -33,10 +34,26 @@ import { UserService } from '@service/user.service'
 
 import { NgxPaginationModule } from 'ngx-pagination'
 
+interface jobtypes {
+  label: string
+  code: string
+}
+
+interface PageEvent {
+  first: number
+  rows: number
+  page: number
+  pageCount: number
+}
+
+interface SortingMethod {
+  name: string
+  code: string
+}
+
 @Component({
   selector: 'app-job-dashboard',
   templateUrl: './job-dashboard.component.html',
-  styleUrls: ['./job-dashboard.component.css'],
   providers: [ReversePipe, OrderByPipe],
 })
 export class JobDashboardComponent implements OnInit, OnDestroy {
@@ -47,6 +64,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   publicJobs: Job[]
   activeJobs: Job[]
   draftJobs: Job[]
+  completeJobs: Job[]
   jobsSubscription: Subscription
   publicJobsSubscription: Subscription
   authSub: Subscription
@@ -59,21 +77,82 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   searchQuery: string
   isOnMobile = false
 
+  jobTypes: jobtypes[]
+  selectedjob: jobtypes
+
+  currentPage: number = 0
+  first: number = 0
+  totalRecords: number = 0
+  rows: number = 5
+
+  filters: SortingMethod[] | undefined
+
+  selectedfilter: SortingMethod | undefined
+
+  sortbylist: SortingMethod[] | undefined
+  selectedsortby: SortingMethod | undefined
+
+  filteredProviders: Job[] | undefined
+
   constructor(
+    private spinner: NgxSpinnerService,
     private authService: AuthService,
     public mobile: MobileService,
     //private orderPipe: OrderPipe,
     private jobService: JobService,
     private publicJobService: PublicJobService,
     private userService: UserService,
-    private router: Router
-  ) //public filterPipe: FilterPipe
-  {}
+    private route: ActivatedRoute,
+    private router: Router //public filterPipe: FilterPipe
+  ) {}
 
   async ngOnInit() {
+    this.spinner.show()
+
+    setTimeout(() => {
+      /** spinner ends after 2 seconds */
+      this.spinner.hide()
+    }, 2000)
+
+    this.jobTypes = [
+      { label: 'Active Jobs', code: 'active' },
+      { label: 'Public Jobs', code: 'public' },
+      { label: 'Drafts', code: 'draft' },
+      { label: 'Completed Jobs', code: 'completed' },
+    ]
+
+    this.filters = [
+      { name: 'All Jobs', code: '' },
+      { name: 'Jobs Awaiting Escrow', code: 'Awaiting Escrow' },
+      { name: 'Funds In Escrow', code: 'Funds In Escrow' },
+      { name: 'Jobs Pending completion', code: 'Pending completion' },
+      { name: 'Jobs in Disputed', code: 'Disputed' },
+      { name: 'Pending Jobs', code: 'Offer pending' },
+      { name: 'Cancelled', code: 'Cancelled' },
+      { name: 'Complete', code: 'Complete' },
+    ]
+    this.sortbylist = [
+      { name: 'Date Posted', code: 'actionLog[0].timestamp' },
+      { name: 'Project Name', code: 'information.title' },
+      { name: 'Budget', code: 'budget' },
+    ]
+
+    this.selectedfilter = this.filters[0]
+    this.selectedsortby = this.sortbylist[0]
+
+    this.route.queryParams.subscribe((params) => {
+      if (params['tab'] == undefined) {
+        this.selectedjob = this.jobTypes[0]
+        this.jobType = this.jobTypes[0].code
+      } else {
+        this.selectedjob = this.jobTypes[params['tab']]
+        this.jobType = this.selectedjob.code
+      }
+    })
+
     this.currentUser = await this.authService.getCurrentUser()
     this.userType = this.currentUser.type
-    this.initialiseJobs(this.currentUser.address, this.userType)
+    await this.initialiseJobs(this.currentUser.address, this.userType)
     this.orderType = 'actionLog[0].timestamp'
     this.reverseOrder = true
     this.isOnMobile = this.mobile.isOnMobile
@@ -85,7 +164,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  private initialiseJobs(userId: string, userType: UserType) {
+  private async initialiseJobs(userId: string, userType: UserType) {
     this.jobsSubscription = this.jobService
       .getJobsByUser(userId, userType)
       .subscribe(async (jobs: Job[]) => {
@@ -95,32 +174,77 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
         this.jobs.forEach(async (job) => {
           this.jobService.assignOtherPartyAsync(job, this.userType)
         })
+        this.showFilteredJobs(this.jobs)
       })
     this.publicJobsSubscription = this.publicJobService
       .getPublicJobsByUser(userId)
       .subscribe(async (jobs: Job[]) => {
         // only show open jobs
+
         const open = jobs.filter(
           (job) => job.state === JobState.acceptingOffers
         )
-        const draft = jobs.filter((job) => job.state === JobState.draft)
+        const draft = jobs.filter(
+          (job) => job.draft === true && job.state !== 'Public job closed'
+        )
+        const completed_Job = jobs.filter((job) => job.state === 'Complete')
         this.publicJobs = open
         this.draftJobs = draft
+        this.completeJobs = completed_Job
+
+        switch (this.jobType) {
+          case 'public':
+            this.jobs = this.publicJobs.filter((job) => job.draft === false)
+            break
+          case 'draft':
+            this.jobs = this.draftJobs
+            break
+          case 'completed':
+            this.jobs = this.completeJobs
+            break
+        }
+        this.showFilteredJobs(this.jobs)
       })
   }
 
   changeJob(jobType) {
     this.jobType = jobType
+    let numberTab = 0
     switch (jobType) {
-      case 'public':
-        this.jobs = this.publicJobs.filter((job) => job.draft === false)
-        break
       case 'active':
         this.jobs = this.activeJobs
+        numberTab = 0
+        break
+      case 'public':
+        this.jobs = this.publicJobs.filter((job) => job.draft === false)
+        numberTab = 1
         break
       case 'draft':
         this.jobs = this.draftJobs
+        numberTab = 2
+        break
+      case 'completed':
+        this.jobs = this.completeJobs
+        numberTab = 3
+        break
     }
+    this.router.navigate(['/inbox/jobs'], { queryParams: { tab: numberTab } })
+    this.showFilteredJobs(this.jobs)
+  }
+
+  CancelJob(id: string) {
+    this.jobs = this.jobs.filter((job) => job.id !== id)
+    this.showFilteredJobs(this.jobs)
+  }
+
+  showFilteredJobs(jobs: Job[]): void {
+    this.totalRecords = jobs.length
+
+    // 5 item each page
+    this.filteredProviders = jobs.slice(
+      this.currentPage * 5,
+      this.currentPage * 5 + 5
+    )
   }
 
   changeUserType() {
@@ -134,14 +258,19 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     this.router.navigate(['/inbox/job', jobId])
   }
 
-  filterJobsByState() {
-    console.log(this.filterByState.state !== '')
-    if (this.filterByState.state !== '') {
-      this.jobs = this.activeJobs.filter(
-        (job) => job.state === this.filterByState.state
-      )
+  filterJobsByState(state: string) {
+    if (this.selectedfilter.code !== '') {
+      this.jobs = this.activeJobs.filter((job) => job.state === state)
     } else {
       this.jobs = this.activeJobs
     }
+    this.showFilteredJobs(this.jobs)
+  }
+
+  onPageChange(e: PageEvent) {
+    this.first = e.first
+    this.rows = e.rows // this is injected from parent
+    this.currentPage = e.page // set new page position
+    this.showFilteredJobs(this.jobs)
   }
 }

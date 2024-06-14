@@ -338,14 +338,7 @@
           <button
             type="button"
             class="btn btn-primary btn-canya-gradient next-button"
-            [disabled]="
-              !profileForm.controls.firstName.valid ||
-              !profileForm.controls.lastName.valid ||
-              !profileForm.controls.title.valid ||
-              !profileForm.controls.bio.valid ||
-              !profileForm.controls.terms.valid ||
-              sending
-            "
+            
             (click)="submitForm()"
           >
             NEXT

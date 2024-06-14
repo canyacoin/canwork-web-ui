@@ -3,14 +3,6 @@ export const HeroService = {
   searchPlaceholder:
     'Search for freelancers, skills or categories e.g software developer',
   buttonText1: 'Search',
-  searchTags: [
-    'Web Design',
-    'UI/UX Design',
-    'Front End',
-    'Copywriting',
-    'Angular',
-    'JavaScript',
-  ],
 }
 
 export const FilterService = {

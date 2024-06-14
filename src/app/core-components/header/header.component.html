@@ -1,6 +1,6 @@
 <div>
   <div
-    class="fixed bg-transparent w-full flex justify-center items-center px-[16px] pb-[12px] top-0 z-40 transition-all duration-300"
+    class="fixed bg-transparent w-full flex justify-center items-center px-[16px] pb-[12px] top-0 z-[1000] transition-all duration-300"
     [ngClass]="{
       'bg-white shadow-md pt-[12px]': isScrolled || isTransfer,
       'pt-[24px]': !isScrolled
@@ -17,8 +17,12 @@
           class="w-[140px] h-[40px] select-none"
         />
       </div>
-      <div class="hidden lg:flex items-center gap-[40px]">
-        <div *ngFor="let item of headerSection.website" [routerLink]="item.url">
+      <div class="hidden lg:flex items-center gap-10">
+        <div
+          *ngFor="let item of headerSection.website"
+          [routerLink]="item.url"
+          (click)="onHamburguerClick()"
+        >
           <link-button
             *ngIf="item.title !== 'Inbox'; else showinbox"
             [type]="isScrolled || isTransfer ? 2 : 1"
@@ -43,11 +47,12 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-[16px]">
+      <div class="flex items-center gap-4">
         <div
           class="hidden lg:block w-max h-max"
           *ngIf="!currentUser"
           [routerLink]="['/auth']"
+          (click)="onHamburguerClick()"
         >
           <link-button
             [type]="isScrolled || isTransfer ? 2 : 1"
@@ -60,6 +65,7 @@
           <div
             *ngIf="!bAddress; else showAddress"
             [routerLink]="['/wallet-bnb']"
+            (click)="onHamburguerClick()"
           >
             <basic-button [type]="2" title="Connect Wallet" size="small" />
           </div>
@@ -74,6 +80,7 @@
           class="hidden md:block w-max h-max"
           *ngIf="!currentUser"
           [routerLink]="['/auth']"
+          (click)="onHamburguerClick()"
         >
           <basic-button
             [type]="1"
@@ -81,49 +88,85 @@
             size="small"
           />
         </div>
-        <div class="hidden md:block w-max h-max" [routerLink]="['/inbox/post']">
+        <div
+          class="hidden md:block w-max h-max"
+          [routerLink]="['/inbox/post']"
+          (click)="onHamburguerClick()"
+        >
           <basic-button
             [type]="2"
             [title]="headerSection.buttonText3"
             size="small"
           />
         </div>
-        <div class="flex justify-content-center">
-          <p-toast></p-toast>
-          <p-menu #menu [model]="items" [popup]="true"></p-menu>
-          <div (click)="menu.toggle($event)" class="cursor-pointer">
-            <app-avatar
-              *ngIf="currentUser"
-              [user]="currentUser"
-              [customClass]="'avatar'"
-            ></app-avatar>
-          </div>
+        <div class="flex justify-center header-avatar">
+          <p-dropdown
+            [options]="items"
+            [(ngModel)]="selectedItem"
+            optionLabel="label"
+            class="header_menu"
+          >
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedItem">
+                <app-avatar
+                  *ngIf="currentUser"
+                  [user]="currentUser"
+                  [customClass]="'avatar'"
+                ></app-avatar>
+              </div>
+            </ng-template>
+            <ng-template let-item pTemplate="item">
+              <div
+                class="flex items-center"
+                *ngIf="item.routerLink"
+                [routerLink]="item.routerLink"
+              >
+                <img
+                  src="{{ '/assets/massimo/svg/header/' + item.icon }}"
+                  class="mr-[16px] w-[20px]"
+                />
+                <span class="font-medium text-G900">{{ item.label }}</span>
+              </div>
+
+              <div
+                class="flex items-center"
+                *ngIf="item.label == 'LogOut'"
+                (click)="onLogout()"
+              >
+                <img
+                  src="{{ '/assets/massimo/svg/header/' + item.icon }}"
+                  class="mr-[16px] w-[20px]"
+                />
+                <span class="font-medium text-R900">{{ item.label }}</span>
+              </div>
+            </ng-template>
+          </p-dropdown>
         </div>
         <div
           class="block md:hidden cursor-pointer"
           (click)="onHamburguerClick()"
         >
           <div
-            class="w-[34px] h-[3px] rounded-full m-[5px]"
+            class="w-[34px] h-[3px] rounded-full m-[5px] bg-black"
             [ngClass]="{
-              'bg-black': isScrolled || isTransfer,
-              'bg-white': !isScrolled || isTransfer
+              'bg-white': (!isScrolled || !isTransfer) && isHamburguer,
+              '!bg-black': isScrolled || isTransfer
             }"
             [@hamburguerX]="isHamburguer ? 'hamburguer' : 'topX'"
           ></div>
           <div
-            class="w-[34px] h-[3px] rounded-full m-[5px]"
+            class="w-[34px] h-[3px] rounded-full m-[5px] bg-black"
             [ngClass]="{
-              'bg-black': isScrolled || isTransfer,
-              'bg-white': !isScrolled || isTransfer
+              'bg-white': (!isScrolled || !isTransfer) && isHamburguer,
+              '!bg-black': isScrolled || isTransfer
             }"
             [@hamburguerX]="isHamburguer ? 'hamburguer' : 'hide'"
           ></div>
           <div
-            class="w-[34px] h-[3px] rounded-full m-[5px]"
+            class="w-[34px] h-[3px] rounded-full m-[5px] bg-black"
             [ngClass]="{
-              'bg-black': isScrolled || isTransfer,
-              'bg-white': !isScrolled || isTransfer
+              'bg-white': (!isScrolled || !isTransfer) && isHamburguer,
+              '!bg-black': isScrolled || isTransfer
             }"
             [@hamburguerX]="isHamburguer ? 'hamburguer' : 'bottomX'"
           ></div>
@@ -139,31 +182,49 @@
     [ngClass]="isHamburguer ? '-z-50' : 'z-50'"
     [@hamburguerX]="isHamburguer ? 'hamburguer' : 'show'"
   >
-    <div class="py-[30px] px-[20px] flex flex-col items-center gap-[40px]">
+    <div class="py-[30px] px-[20px] flex flex-col items-center gap-10">
       <img
         src="{{ headerSection.logoGraySrc }}"
         class="w-[140px] h-[40px] select-none"
       />
-      <div class="flex flex-col items-center gap-[24px]">
-        <div *ngFor="let item of headerSection.website" [routerLink]="item.url">
+      <div class="flex flex-col items-center gap-6">
+        <div
+          *ngFor="let item of headerSection.website"
+          [routerLink]="item.url"
+          (click)="onHamburguerClick()"
+        >
           <link-button [type]="2" [title]="item.title" />
         </div>
-        <div class="w-max h-max" *ngIf="!currentUser" [routerLink]="['/auth']">
+        <div
+          class="w-max h-max"
+          *ngIf="!currentUser"
+          [routerLink]="['/auth']"
+          (click)="onHamburguerClick()"
+        >
           <link-button [type]="2" [title]="headerSection.buttonText1" />
         </div>
-        <div class="h-max w-full" *ngIf="!currentUser" [routerLink]="['/auth']">
+        <div
+          class="h-max w-full"
+          *ngIf="!currentUser"
+          [routerLink]="['/auth']"
+          (click)="onHamburguerClick()"
+        >
           <basic-button
             [type]="1"
             [title]="headerSection.buttonText2"
             [extraClass]="'max-md:min-w-full text-center'"
           />
         </div>
-        <div class="h-max" [routerLink]="['/inbox/post']">
+        <div
+          class="h-max"
+          [routerLink]="['/inbox/post']"
+          (click)="onHamburguerClick()"
+        >
           <basic-button [type]="2" [title]="headerSection.buttonText3" />
         </div>
       </div>
     </div>
-    <div
+    <!-- <div
       class="absolute right-[24px] top-[17px] cursor-pointer"
       (click)="onHamburguerClick()"
     >
@@ -171,6 +232,6 @@
         src="{{ headerSection.hamburguerXSrc }}"
         class="w-[40px] h-[40px] select-none"
       />
-    </div>
+    </div> -->
   </div>
 </div>

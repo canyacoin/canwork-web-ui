@@ -1,5 +1,5 @@
 <section>
-  <div class="flex justify-between items-center gap-[8px]">
+  <div class="flex justify-between items-center gap-2">
     <div
       *ngIf="noSearchParams === false && isLoading === false"
       class="text-G700 text-b1 md:text-h6 font-medium"
@@ -24,7 +24,7 @@
     />
   </div>
   <div
-    class="pt-[23px] grid gap-[20px]"
+    class="pt-[23px] grid gap-5"
     [ngClass]="{
       'sm:grid-cols-2 lg:grid-cols-3':
         (isGrid && profileCards.length !== 0) ||
@@ -60,14 +60,14 @@
       ></ng-container>
 
       <ng-template #emptyView>
-        <div class="w-full flex flex-col items-center gap-[24px]">
+        <div class="w-full flex flex-col items-center gap-6">
           <img
             src="/assets/massimo/images/noSearchResult.png"
             alt="No Results Found"
             draggable="false"
             class="max-w-[500px] w-full"
           />
-          <div class="flex flex-col gap-[] items-center justify-center">
+          <div class="flex flex-col gap-2 items-center justify-center">
             <div class="text-h5 text-G800 font-medium">No Result Found</div>
             <div class="text-b1 text-G700 text-center">
               We are unable to find result matching your search input.<br />
