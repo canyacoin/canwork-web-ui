@@ -15,6 +15,11 @@
     font-size: 16px !important;
 }
 
+/* p-badge */
+.p-badge.p-component.p-badge-danger {
+    font-family: "General Sans", sans-serif !important;
+}
+
 /* p-carousel */
 
 .p-carousel-indicators {
