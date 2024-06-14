@@ -7,8 +7,11 @@ import { Component, Input, OnInit, Directive } from '@angular/core'
 })
 export class SkillTagComponent implements OnInit {
   @Input() skill: string
+  @Input() cancel?: boolean
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+
+  }
 }

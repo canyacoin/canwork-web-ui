@@ -1,196 +1,48 @@
-<section id="public-job-dashboard" class="bg-gray">
-  <div class="max-w-[1440px] w-full py-[56px] px-[24px] md:px-[64px]">
+<main class="font-sans">
+  <dashboard-hero
+    [searchInput]="searchInput"
+    (searchInputChange)="onSearchInputChange($event)"
+    [providerFilters]="providerFilters"
+    (providerFiltersChange)="onProviderFiltersChange($event)"
+  />
+  <section class="flex justify-center bg-G50">
     <div
-      *ngIf="!allJobs"
-      class="container d-flex h-100 flex-column justify-content-center"
+      class="max-w-[1440px] w-full py-[24px] px-[24px] md:px-[64px] flex flex-col-reverse xl:flex-row xl:justify-between gap-[30px]"
     >
-      <img src="assets/img/loader.svg" style="height: 36px" alt="Loader" />
-    </div>
-
-    <div class="container mt-[48px]">
-      <div class="row">
-        <div class="col-sm-6" *ngIf="stats.count > 0">
-          <div class="canya-seach-bar mb-3" style="background-color: white">
-            <h6
-              style="
-                color: #535353;
-                padding: 5px 10px;
-                font-weight: 500;
-                margin-top: 8px;
-                margin-bottom: 0px;
-              "
-            >
-              <b>{{ stats.count }}</b> completed jobs
-              <b>${{ stats.usd }} USD</b>
-            </h6>
-          </div>
-        </div>
-        <div class="d-none d-sm-flex col"></div>
-        <div class="col col-sm-auto">
-          <div class="button-blue ml-auto mb-3" [routerLink]="['/inbox/post']">
-            Post a Job
-          </div>
-        </div>
+      <div class="w-full xl:w-[350px]">
+        <dashboard-filter
+          [verifyForm]="verifyFilter"
+          (verifyFormChange)="onVerifyFormChange($event)"
+          [skillsForm]="skillsFilter"
+          (skillsFormChange)="onSkillsFilterChange($event)"
+          [ratingForm]="ratingFilter"
+          (ratingChange)="onRatingChange($event)"
+          [experienceForm]="experienceFilter"
+          (experienceFormChange)="onExperienceFormChange($event)"
+          [fixedForm]="fixedFilter"
+          (fixedFormChange)="onFixedFormChange($event)"
+          [hourlyInput]="hourlyFilter"
+          (hourlyInputChange)="onHourlyInputChange($event)"
+          [categoriesForm] = "categoryFilter"
+          (categoriesFormChange) = "onCategoryFilterChange($event)"
+          [locationInput]="locationFilter"
+          (LocationInputChange) = "onLocationInputChange($event)"
+        />
+      </div>
+      <div class="w-full">
+        <dashboard-result
+          [jobs]="hits"
+          [stats]="stats"
+          [isLoading]="loading"
+          [totalRecords]="numHits"
+          [searchItems]="searchItems"
+          (onRemoveItem)="onRemoveSearchItem($event)"
+          [searchParam]="searchInput"
+          (pageChange)="onPageChange($event)"
+          (sortby)="onChangeSoryby($event)"
+          [first]="currentPage * hitsPerPage"
+        />
       </div>
     </div>
-
-    <div
-      class="container py-10"
-      style="min-height: 75vh"
-      *ngIf="allJobs && allJobs.length > 0"
-    >
-      <div class="row">
-        <div class="col-lg-8">
-          <form method="post" (ngSubmit)="onSearch(inputSearch.value)">
-            <div class="canya-seach-bar input-group mb-3">
-              <input
-                #inputSearch
-                type="text"
-                class="form-control canya-search-input"
-                placeholder="Search Jobs.."
-              />
-              <div class="input-group-append">
-                <button
-                  class="canya-search-input-btn btn btn-primary"
-                  type="submit"
-                >
-                  <img
-                    class="search-img"
-                    src="assets/img/search-icon-white.svg"
-                  />
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="col-lg-4">
-          <div class="form-inline">
-            <div class="form-group">
-              <label for="orderTypeSelect" class="mb-15">Category: </label>
-              <select
-                class="mb-10 mx-10"
-                #filterTypeSelect
-                [(ngModel)]="filterByCategory"
-                (change)="filterJobsByCategory()"
-              >
-                <option
-                  *ngFor="let type of providerTypes"
-                  value="{{ type.id }}"
-                >
-                  <span>{{ type.name }}</span>
-                </option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        class="card job-dashboard-card my-10 py-15 px-30"
-        *ngFor="
-          let job of queryJobs
-            | orderBy : 'actionLog[0].timestamp'
-            | reverse
-            | paginate : { itemsPerPage: 10, currentPage: index }
-        "
-        [routerLink]="['/jobs/public', job.slug]"
-      >
-        <div class="row">
-          <div class="col-lg-8 col-12">
-            <h5>
-              <img
-                class="provider-type-icon"
-                src="{{ getImage(job.information.providerType) }}"
-              />{{ job.information.title }}
-            </h5>
-          </div>
-          <div class="col-lg-4 col-12 text-right text-left-mobile">
-            <small
-              >Posted On :
-              {{ timestampToDate(job.actionLog[0].timestamp) }}</small
-            >
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12 public-job-card-desc">
-            <p
-              *ngIf="job.information.description.length >= 200"
-              [innerHTML]="
-                job.information.description.substring(0, 200) | linkify
-              "
-            >
-              ...
-            </p>
-            <p
-              *ngIf="job.information.description.length <= 200"
-              [innerHTML]="job.information.description | linkify"
-            ></p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-2 col-md-3 col-ms-4 col-6">
-            <b
-              >${{ job.budget }} USD
-              <span *ngIf="job.paymentType == paymentType.hourly">/hr</span></b
-            >
-            <p>{{ job.paymentType }}</p>
-          </div>
-          <div class="col-lg-2 col-md-3 col-ms-4 col-6">
-            <b>{{ job.deadline }}</b>
-            <p *ngIf="job.deadline">Project Deadline</p>
-          </div>
-          <div
-            class="col-lg-8 col-md-6 col-ms-4 col-12 text-right text-left-mobile"
-          >
-            <app-skill-tag
-              *ngFor="let skill of job.information.skills"
-              [skill]="skill"
-            ></app-skill-tag>
-          </div>
-        </div>
-      </div>
-      <div class="container text-center" *ngIf="queryJobs.length > 0">
-        <div class="row">
-          <div class="col-12">
-            <pagination-controls
-              (pageChange)="index = $event"
-              previousLabel="Prev"
-            ></pagination-controls>
-          </div>
-        </div>
-      </div>
-      <div class="container" *ngIf="queryJobs.length === 0">
-        <div class="row">
-          <div class="col-12">
-            <h6>Jobs not found!</h6>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="container" *ngIf="allJobs && allJobs.length === 0">
-      <div class="row">
-        <div class="col-12 p-15 card text-center">
-          <h5>There are no public jobs</h5>
-          <div class="row" *ngIf="currentUser">
-            <div class="col-12">Want to get something done?</div>
-            <div class="col-auto mx-auto px-3 pb-3">
-              <div class="button-blue m-3" [routerLink]="['/inbox/post']">
-                Post a Job
-              </div>
-            </div>
-          </div>
-          <div class="row" *ngIf="!currentUser">
-            <div class="col-12">
-              Check back later, or login to create a new job
-            </div>
-            <div class="col-auto mx-auto px-3 pb-3">
-              <div class="button-blue m-3" [routerLink]="['/inbox/post']">
-                Login / Create Account
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+  </section>
+</main>

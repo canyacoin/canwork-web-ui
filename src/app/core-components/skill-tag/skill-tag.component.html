@@ -1,3 +1,8 @@
-<span class="skill-tag pointer">
+<div  *ngIf="!cancel" class="skill-tag pointer">
   {{ skill }}
-</span>
+</div>
+
+<div *ngIf="cancel" class="cancel-skill-tag pointer !flex justify-center items-center">
+  <p>{{ skill }}</p>
+    <img src="/assets/massimo/svg/fi_x.svg" alt="fi_x">
+</div>

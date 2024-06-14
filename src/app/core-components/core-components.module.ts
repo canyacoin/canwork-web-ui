@@ -37,10 +37,12 @@ import { LedgerModalComponent } from '../binance/ledger-modal/ledger-modal.compo
 import { PopperComponent } from './popper/popper.component'
 import { BasicButtonComponent } from './buttons/basic-button/basic-button.component'
 import { BasicTagComponent } from './tag/basic-tag/basic-tag.component'
+import { CategoryCardComponent } from './cards/category-card/category-card.component'
 import { LinkButtonComponent } from './link-button/link-button.component'
-import { ProfileCardComponent } from './profile-card/profile-card.component'
+import { ProfileCardComponent } from './cards/profile-card/profile-card.component'
 import { SwitchGridListComponent } from './buttons/switch-grid-list/switch-grid-list.component'
 import { SkProfileCardComponent } from './skeletons/sk-profile-card/sk-profile-card.component'
+import { SkJobCardComponent } from './skeletons/sk-job-card/sk-job-card.component'
 import { BadgeComponent } from './badge/badge.component'
 import { DelTagComponent } from './tag/del-tag/del-tag.component'
 import { StarRatingComponent } from './star-rating/star-rating.component'
@@ -50,6 +52,18 @@ import { MenuModule } from 'primeng/menu'
 import { ToastModule } from 'primeng/toast'
 import { AvatarModule } from 'primeng/avatar'
 import { BadgeModule } from 'primeng/badge'
+import { JobCardComponent } from './cards/job-card/job-card.component'
+import { SearchButtonComponent } from './buttons/search-button/search-button.component'
+import { CheckboxModule } from 'primeng/checkbox';
+import { DialogModule } from 'primeng/dialog';
+
+import { BasicDialogComponent } from './basic-dialog/basic-dialog.component';
+import { DropdownModule } from 'primeng/dropdown';
+import { JobDetailComponent } from './job-detail/job-detail.component';
+import { JobBidsComponent } from './job-bids/job-bids.component';
+import { TableModule } from 'primeng/table';
+import { WarningMessageComponent } from './warning-message/warning-message.component';
+
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -74,6 +88,10 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ToastModule,
     AvatarModule,
     BadgeModule,
+    CheckboxModule,
+    DialogModule,
+    DropdownModule,
+    TableModule
   ],
   declarations: [
     AttachmentComponent,
@@ -103,15 +121,23 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     PopperComponent,
     BasicButtonComponent,
     BasicTagComponent,
+    CategoryCardComponent,
     LinkButtonComponent,
     ProfileCardComponent,
     SwitchGridListComponent,
     SkProfileCardComponent,
+    SkJobCardComponent,
     BadgeComponent,
     DelTagComponent,
     StarRatingComponent,
     JoinCommunityComponent,
     PostJobComponent,
+    JobCardComponent,
+    SearchButtonComponent,
+    BasicDialogComponent,
+    JobDetailComponent,
+    JobBidsComponent,
+    WarningMessageComponent
   ],
   exports: [
     AttachmentComponent,
@@ -136,15 +162,23 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     DynamicCoinWrapperComponent,
     BasicButtonComponent,
     BasicTagComponent,
+    CategoryCardComponent,
     LinkButtonComponent,
     ProfileCardComponent,
     SwitchGridListComponent,
     SkProfileCardComponent,
+    SkJobCardComponent,
     BadgeComponent,
     DelTagComponent,
     StarRatingComponent,
     JoinCommunityComponent,
     PostJobComponent,
+    JobCardComponent,
+    SearchButtonComponent,
+    BasicDialogComponent,
+    JobDetailComponent,
+    JobBidsComponent,
+    WarningMessageComponent
   ],
   providers: [
     {

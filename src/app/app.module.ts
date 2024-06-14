@@ -20,8 +20,6 @@ import { CoreComponentsModule } from './core-components/core-components.module'
 import { firebaseUiAuthConfig } from './core-config/app-auth-config'
 import { CoreUtilsModule } from './core-utils/core-utils.module'
 import { PublicJobComponent } from './public-job/public-job/public-job.component'
-import { DashboardComponent } from './public-job/dashboard/dashboard.component'
-import { JobBidsComponent } from './public-job/job-bids/job-bids.component'
 //import { FilterPipeModule } from 'ngx-filter-pipe' // obsolete
 //import { OrderModule } from 'ngx-order-pipe' // obsolete
 import { NgArrayPipesModule } from 'ngx-pipes' // https://www.npmjs.com/package/ngx-pipes#array
@@ -47,14 +45,18 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup'
 import { ToastModule } from 'primeng/toast'
 
 import { NgxModalView } from 'ngx-modalview'
+import { DropdownModule } from 'primeng/dropdown';
+import { TabMenuModule } from 'primeng/tabmenu';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { DialogModule } from 'primeng/dialog';
+
+
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
     AppComponent,
     PublicJobComponent,
-    JobBidsComponent,
-    DashboardComponent,
     WalletBnbComponent,
     WalletBnbAssetsComponent,
   ],
@@ -65,6 +67,7 @@ import { NgxModalView } from 'ngx-modalview'
     AngularFirestoreModule,
     AngularFireStorageModule,
     AngularFireFunctionsModule,
+    FirebaseUIModule,
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     // NgAisModule.forRoot(),
     BrowserModule,
@@ -88,6 +91,10 @@ import { NgxModalView } from 'ngx-modalview'
     ToastModule,
     ConfirmPopupModule,
     NgxModalView,
+    DropdownModule,
+    TabMenuModule,
+    AngularEditorModule,
+    DialogModule
   ],
   exports: [
     /*FilterPipeModule*/

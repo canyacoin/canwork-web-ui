@@ -1,6 +1,6 @@
 <div *ngIf="mediumFeed.length > 0">
-  <div class="grid md:grid-cols-3 gap-[40px] md:gap-[32px]">
-    <div *ngFor="let blogData of mediumFeed" class="grid gap-[16px]">
+  <div class="grid md:grid-cols-3 gap-10 md:gap-8">
+    <div *ngFor="let blogData of mediumFeed" class="grid gap-4">
       <div
         class="aspect-w-16 aspect-h-9 rounded-[12px] overflow-hidden select-none"
       >
@@ -9,7 +9,7 @@
           class="w-full h-full object-cover"
         />
       </div>
-      <div class="flex flex-col gap-[8px]">
+      <div class="flex flex-col gap-2">
         <a
           class="text-G900 text-h6 md:text-h5 font-medium hover:underline line-clamp-2"
           href="{{ blogData.link }}"
@@ -21,12 +21,12 @@
           {{ blogData.subTitle }}
         </div>
       </div>
-      <div class="flex flex-wrap gap-[8px]">
+      <div class="flex flex-wrap gap-2">
         <div *ngFor="let tag of blogData.tags">
           <basic-tag [type]="1" [title]="tag" />
         </div>
       </div>
-      <div class="flex items-center gap-[24px]">
+      <div class="flex items-center gap-6">
         <img
           src="{{ blogData.thumbnail }}"
           class="w-[48px] h-[48px] rounded-full object-cover overflow-hidden select-none"

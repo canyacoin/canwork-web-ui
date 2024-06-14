@@ -1,12 +1,17 @@
-<div [formGroup]="form">
+<div [formGroup]="form" class="flex items-center py-[16px]">
+  <p-checkbox formControlName="terms" inputId="termsCheckbox" value="true">
+  </p-checkbox>
   <label
-    ><input type="checkbox" formControlName="terms" /> I hereby accept the
-    CanWork
+    for="termsCheckbox"
+    class="!text-b1 font-sans pl-[8px] select-none !m-0"
+  >
+    I hereby accept the CanWork
     <a
       href="assets/docs/canwork-terms-and-conditions.pdf"
       download="CanWork terms and conditions"
       target="_blank"
-      >terms and conditions</a
+      class="text-C500"
+      >Terms and Conditions</a
     >
   </label>
 </div>

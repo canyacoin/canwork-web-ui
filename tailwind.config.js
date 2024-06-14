@@ -17,8 +17,8 @@ module.exports = {
       xxs: '425px',
       xs: '500px',
       sm: '640px',
-      md: '768px',
       lg: '1024px',
+      md: '768px',
       xl: '1280px',
       '2xl': '1536px',
     },
@@ -65,13 +65,15 @@ module.exports = {
         B400: '#0147b3',
         B500: '#013e9c',
         // Red
+        
         R50: '#ffece8',
         R75: '#ffb09f',
         R100: '#ff9077',
         R200: '#ff603c',
         R300: '#ff3f14',
         R400: '#b32c0e',
-        R500: '#9c260c ',
+        R500: '#9c260c',
+        R900: '#D1242F',
         // Yellow
         Y50: '#fef6e6',
         Y75: '#f9d999',
@@ -81,6 +83,7 @@ module.exports = {
         Y400: '#a87104',
         Y500: '#926303',
         // Gray
+        G0: '#FFF',
         G50: '#F8FAFC',
         G100: '#F1F5F9',
         G200: '#E2E8F0',

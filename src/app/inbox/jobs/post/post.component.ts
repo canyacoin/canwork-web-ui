@@ -8,6 +8,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router'
 import { GitService } from '@service/git.service'
 import { DecoratedIssue } from '@class/git'
+import * as moment from 'moment'
 import {
   Job,
   JobDescription,
@@ -22,7 +23,6 @@ import { User, UserType } from '@class/user'
 // import '@extensions/string' // removed
 import { AuthService } from '@service/auth.service'
 import { JobService } from '@service/job.service'
-import { ToastrService } from 'ngx-toastr'
 import { PublicJobService } from '@service/public-job.service'
 import { UploadService } from '@service/upload.service'
 import { UserService } from '@service/user.service'
@@ -31,29 +31,39 @@ import * as _ from 'lodash'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
+import { NgxSpinnerService } from 'ngx-spinner'
+
+import { AngularEditorConfig } from '@kolkov/angular-editor'
+
 import { MessageService } from 'primeng/api'
+
+interface SortingMethod {
+  name: string
+  code: string
+  img: string
+}
 
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
-  styleUrls: ['./post.component.css'],
-  providers: [MessageService],
 })
 export class PostComponent implements OnInit, OnDestroy {
   postForm: UntypedFormGroup = null
   shareableJobForm: UntypedFormGroup = null
-  pageLoaded = false
+  loading = false
   paymentType = PaymentType
   recipientAddress = ''
   recipient: User = null
   currentUser: User
+  jobPoster: any
   slug = ''
   authSub: Subscription
   routeSub: Subscription
   jobSub: Subscription
-  currentDate = ''
+  currentDate: Date
   isShareable = false
   isSending = false
+  isPreview = false
   sent = false
   draft = false
   editing = false
@@ -64,44 +74,96 @@ export class PostComponent implements OnInit, OnDestroy {
   gitUpdatedTags: string[] = []
 
   jobToEdit: Job
+  jobForPreview: Job
   jobId: string
+  jobFromNow: string
+  beforeUploadFiles: any[] = []
+  currentUploadNumber: number = 0
+  uploadedFiles: Upload[] = []
 
-  currentUpload: Upload
-  uploadedFile: Upload
-  maxFileSizeBytes = 50000000 // 50mb
+  isCurrentUpload: boolean = false
+  maxFileSizeBytes = 25000000 // 25mb
   fileTooBig = false
   uploadFailed = false
   deleteFailed = false
 
-  // usdToAtomicCan: number // this is not used
-  providerTypes = [
-    {
-      name: 'Content Creators',
-      img: 'writer.svg',
-      id: 'contentCreator',
-    },
-    {
-      name: 'Software Developers',
-      img: 'dev.svg',
-      id: 'softwareDev',
-    },
-    {
-      name: 'Designers & Creatives',
-      img: 'creatives.svg',
-      id: 'designer',
-    },
-    {
-      name: 'Marketing & SEO',
-      img: 'marketing.svg',
-      id: 'marketing',
-    },
-    {
-      name: 'Virtual Assistants',
-      img: 'assistant.svg',
-      id: 'virtualAssistant',
-    },
-  ]
+  sharelinks: SortingMethod[] | undefined
+  selectedsharelinks: SortingMethod | undefined
 
+  date: Date // This property is bound to ngModel
+
+  /// css variables for file upload
+  hoveredFiles = false
+
+  minDate: Date
+  sentDRP: number
+  editorConfig: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: '200px',
+    minHeight: '0',
+    maxHeight: 'auto',
+    width: 'auto',
+    minWidth: '0',
+    translate: 'yes',
+    enableToolbar: true,
+    showToolbar: true,
+    placeholder:
+      'Give a detailed brief of the job with adequate requirements and expectations',
+    defaultParagraphSeparator: '',
+    defaultFontName: '',
+    defaultFontSize: '',
+    fonts: [
+      { class: 'arial', name: 'Arial' },
+      { class: 'times-new-roman', name: 'Times New Roman' },
+      { class: 'calibri', name: 'Calibri' },
+      { class: 'comic-sans-ms', name: 'Comic Sans MS' },
+    ],
+    customClasses: [
+      {
+        name: 'quote',
+        class: 'quote',
+      },
+      {
+        name: 'redText',
+        class: 'redText',
+      },
+      {
+        name: 'titleText',
+        class: 'titleText',
+        tag: 'h1',
+      },
+    ],
+    uploadUrl: 'v1/image',
+    uploadWithCredentials: false,
+    sanitize: true,
+    toolbarPosition: 'top',
+    toolbarHiddenButtons: [
+      ['undo', 'redo'],
+      ['subscript', 'superscript', 'strikeThrough'],
+      ['indent', 'outdent'],
+      [
+        'unlink',
+        'insertImage',
+        'insertVideo',
+        'insertHorizontalRule',
+        'clearFormatting',
+      ],
+      ['foregroundColorPicker', 'backgroundColorPicker'],
+    ],
+  }
+
+  // usdToAtomicCan: number // this is not used
+
+  sortingMethods_category: SortingMethod[] | undefined
+
+  selectedSortings_category: SortingMethod | undefined
+
+  sortingMethods_visibility: SortingMethod[] | undefined
+
+  selectedSortings_visibility: SortingMethod | undefined
+
+  duplicateFileNames: string[] = []
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -112,14 +174,18 @@ export class PostComponent implements OnInit, OnDestroy {
     private gitService: GitService,
     private publicJobService: PublicJobService,
     private uploadService: UploadService,
-    private toastr: ToastrService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private spinner: NgxSpinnerService
   ) {
     this.postForm = formBuilder.group({
       url: [''],
       description: [
         '',
-        Validators.compose([Validators.required, Validators.maxLength(10000)]),
+        Validators.compose([
+          Validators.required,
+          Validators.min(30),
+          Validators.maxLength(2500),
+        ]),
       ],
       title: [
         '',
@@ -140,7 +206,15 @@ export class PostComponent implements OnInit, OnDestroy {
       attachments: [''],
       workType: ['', Validators.compose([Validators.required])],
       timelineExpectation: ['', Validators.compose([Validators.required])],
-      weeklyCommitment: [''],
+      weeklyCommitment: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.min(1),
+          Validators.max(10000000),
+          Validators.pattern('^[0-9]+$'),
+        ]),
+      ],
       paymentType: ['Fixed price', Validators.compose([Validators.required])], // Please remove 'Fixed price' once the 'hourly rate' workflow is ready!
       budget: [
         '',
@@ -157,7 +231,11 @@ export class PostComponent implements OnInit, OnDestroy {
       url: [''],
       description: [
         '',
-        Validators.compose([Validators.required, Validators.maxLength(10000)]),
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(10000),
+        ]),
       ],
       title: [
         '',
@@ -180,7 +258,7 @@ export class PostComponent implements OnInit, OnDestroy {
         Validators.compose([
           Validators.required,
           Validators.minLength(1),
-          Validators.maxLength(100),
+          Validators.maxLength(200),
         ]),
       ],
       attachments: [''],
@@ -204,15 +282,67 @@ export class PostComponent implements OnInit, OnDestroy {
           Validators.required,
           Validators.min(1),
           Validators.max(10000000),
-          Validators.pattern('^[0-9]*$'),
+          Validators.pattern('^[0-9]+(.[0-9]{1,2})?$'),
         ]),
       ],
-      weeklyCommitment: [''],
+      weeklyCommitment: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.min(1),
+          Validators.max(10000000),
+          Validators.pattern('^[0-9]+$'),
+        ]),
+      ],
       terms: [false, Validators.requiredTrue],
     })
   }
 
   async ngOnInit() {
+    this.sortingMethods_category = [
+      {
+        name: 'Content Creators',
+        img: 'writer.png',
+        code: 'contentCreator',
+      },
+      {
+        name: 'Software Developers',
+        img: 'dev.png',
+        code: 'softwareDev',
+      },
+      {
+        name: 'Designers & Creatives',
+        img: 'creatives.png',
+        code: 'designer',
+      },
+      {
+        name: 'Marketing & SEO',
+        img: 'marketing.png',
+        code: 'marketing',
+      },
+      {
+        name: 'Virtual Assistants',
+        img: 'assistant.png',
+        code: 'virtualAssistant',
+      },
+    ]
+    this.selectedSortings_category = this.sortingMethods_category[0]
+
+    this.sharelinks = [
+      { name: 'Invite Freelancer', img: 'fi_user-plus.svg', code: '1' },
+      { name: 'Copy Link', img: 'u_link.svg', code: '2' },
+      { name: 'Twitter', img: 'x.svg', code: '3' },
+      { name: 'Facebook', img: 'logos_facebook.svg', code: '4' },
+      { name: 'Linkedin', img: 'devicon_linkedin.svg', code: '5' },
+    ]
+
+    this.selectedsharelinks = this.sharelinks[0]
+
+    this.sortingMethods_visibility = [
+      { name: 'Invite Only', code: 'invite', img: 'fi_user-plus.svg' },
+      { name: 'Public', code: 'public', img: 'fi_users.svg' },
+    ]
+    this.selectedSortings_visibility = this.sortingMethods_visibility[0]
     this.editing =
       this.activatedRoute.snapshot.params['jobId'] &&
       this.activatedRoute.snapshot.params['jobId'] !== ''
@@ -241,7 +371,7 @@ export class PostComponent implements OnInit, OnDestroy {
         this.postForm.controls['initialStage'].patchValue('Ready')
         this.postForm.controls['workType'].patchValue('One off')
         this.postForm.controls['timelineExpectation'].patchValue('Up to 1 Year')
-        if (!this.postToProvider) this.pageLoaded = true
+        if (!this.postToProvider) this.loading = true
       } else {
         this.jobId = this.activatedRoute.snapshot.params['jobId']
         this.jobSub = this.publicJobService
@@ -278,19 +408,35 @@ export class PostComponent implements OnInit, OnDestroy {
                 this.shareableJobForm.controls['paymentType'].patchValue(
                   this.jobToEdit.paymentType
                 )
-                this.shareableJobForm.controls['deadline'].patchValue(
-                  this.jobToEdit.deadline
+                // this.shareableJobForm.controls['deadline'].patchValue(
+                //   this.jobToEdit.deadline
+                // )
+                this.date = new Date(this.jobToEdit.deadline)
+
+                let visibility = this.jobToEdit.visibility
+                let visibilityIndex = this.sortingMethods_visibility.findIndex(
+                  (item) => item.code === visibility
                 )
-                this.shareableJobForm.controls['visibility'].patchValue(
-                  this.jobToEdit.visibility
+
+                this.selectedSortings_visibility =
+                  this.sortingMethods_visibility[visibilityIndex]
+
+                let providerType = this.jobToEdit.information.providerType
+                let categoryIndex = this.sortingMethods_category.findIndex(
+                  (item) => item.code === providerType
                 )
+                this.selectedSortings_category =
+                  this.sortingMethods_category[categoryIndex]
 
                 this.shareableJobForm.controls['skills'].patchValue(
                   this.jobToEdit.information.skills
                 )
-                if (this.jobToEdit.information.attachments.length > 0)
-                  this.uploadedFile = this.jobToEdit.information.attachments[0]
-                this.pageLoaded = true
+                if (this.jobToEdit.information.attachments.length > 0) {
+                  this.uploadedFiles = this.jobToEdit.information.attachments
+                  this.beforeUploadFiles =
+                    this.jobToEdit.information.attachments
+                }
+                this.loading = true
               } else {
                 this.router.navigateByUrl('/not-found')
               }
@@ -299,7 +445,7 @@ export class PostComponent implements OnInit, OnDestroy {
       }
     })
 
-    this.currentDate = new Date().toISOString().split('T')[0]
+    this.currentDate = new Date()
     this.notifyAddAddressIfNecessary()
   }
 
@@ -319,8 +465,12 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   ValidateCurrentDate(control: AbstractControl) {
-    if (!control.value.length) return null // this is validated from Validators.required
-
+    // this is validated from Validators.required
+    try {
+      if (!control.value.length) return null
+    } catch (error) {
+      return null
+    }
     let deadline = new Date(control.value)
     let today = new Date()
     today.setHours(0, 0, 0, 0)
@@ -329,41 +479,182 @@ export class PostComponent implements OnInit, OnDestroy {
     return null
   }
 
-  detectFiles(event) {
-    const file = event.target.files.item(0)
-    this.uploadSingle(file)
-  }
-
-  async uploadSingle(file: File) {
-    this.currentUpload = null
+  async uploadFiles(files: FileList) {
+    this.messageService.clear()
     this.uploadFailed = false
     this.fileTooBig = false
-    if (file.size > this.maxFileSizeBytes) {
-      this.fileTooBig = true
-    } else {
+    this.currentUploadNumber = 0
+    this.isCurrentUpload = true
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i]
+      if (
+        this.duplicateFileNames &&
+        this.duplicateFileNames.includes(file.name)
+      ) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: `File ${file.name} is already uploaded.`,
+        })
+        continue
+      }
+
+      if (file.size > this.maxFileSizeBytes) {
+        this.fileTooBig = true
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: `File ${file.name} is too big.`,
+        })
+        continue
+      }
+
+      if (this.uploadedFiles.length >= 10) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: `You can only upload 10 files at a time.`,
+        })
+        return
+      }
+
       try {
-        this.currentUpload = new Upload(
+        const currentUpload = new Upload(
           this.currentUser.address,
           file.name,
           file.size
         )
+
         const upload: Upload =
           await this.uploadService.uploadJobAttachmentToStorage(
             this.jobId,
-            this.currentUpload,
+            currentUpload,
             file
           )
+
+        this.currentUploadNumber++
+
         if (upload) {
-          this.uploadedFile = upload
+          this.uploadedFiles.unshift(upload)
         } else {
           this.uploadFailed = true
-          this.currentUpload = null
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `Failed to upload file ${file.name}.`,
+          })
         }
       } catch (e) {
         this.uploadFailed = true
-        this.currentUpload = null
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: `Failed to upload file ${file.name}.`,
+        })
       }
     }
+    this.isCurrentUpload = false
+
+    this.beforeUploadFiles = []
+    this.beforeUploadFiles.push(...this.uploadedFiles)
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault()
+    event.stopPropagation()
+    this.hoveredFiles = true
+    // Optionally add a CSS class to indicate the drag state
+  }
+
+  onDragLeave(event: DragEvent) {
+    event.preventDefault()
+    event.stopPropagation()
+    this.hoveredFiles = false
+  }
+
+  onDrop(event: DragEvent) {
+    event.preventDefault()
+    event.stopPropagation()
+    this.hoveredFiles = false
+    if (!this.isCurrentUpload) {
+      if (event.dataTransfer && event.dataTransfer.files) {
+        let files = event.dataTransfer.files
+        if (this.beforeUploadFiles.length > 0) {
+          // Check for duplicates and populate duplicateFileNames array
+          for (let i = 0; i < files.length; i++) {
+            const duplicate = this.beforeUploadFiles.some(
+              (file) => file.name === files[i].name
+            )
+            if (duplicate) {
+              this.duplicateFileNames.push(files[i].name)
+            }
+          }
+
+          // Add new files to beforeUploadFiles if they are not duplicates and meet size criteria
+          for (let i = 0; i < files.length; i++) {
+            if (
+              !this.duplicateFileNames.includes(files[i].name) &&
+              files[i].size < this.maxFileSizeBytes &&
+              this.beforeUploadFiles.length < 10
+            ) {
+              this.beforeUploadFiles.unshift(files[i])
+            }
+          }
+        } else {
+          // If beforeUploadFiles is empty, add files that meet size criteria
+          for (let i = 0; i < files.length; i++) {
+            if (
+              files[i].size < this.maxFileSizeBytes &&
+              this.beforeUploadFiles.length < 10
+            ) {
+              this.beforeUploadFiles.push(files[i])
+            }
+          }
+        }
+        this.uploadFiles(files)
+      }
+    }
+  }
+
+  detectFiles(event: any) {
+    let files = event.target.files
+
+    if (this.beforeUploadFiles.length > 0) {
+      // Check for duplicates and populate duplicateFileNames array
+      files.forEach((item) => {
+        const duplicate = this.beforeUploadFiles.some(
+          (file) => file.name === item.name
+        )
+        if (duplicate) {
+          this.duplicateFileNames.push(item.name)
+        }
+      })
+
+      // Add new files to beforeUploadFiles if they are not duplicates and meet size criteria
+      files.forEach((item) => {
+        if (
+          !this.duplicateFileNames.includes(item.name) &&
+          item.size < this.maxFileSizeBytes &&
+          this.beforeUploadFiles.length < 10
+        ) {
+          this.beforeUploadFiles.unshift(item)
+        }
+      })
+    } else {
+      // If beforeUploadFiles is empty, add files that meet size criteria
+      files.forEach((item) => {
+        if (
+          item.size < this.maxFileSizeBytes &&
+          this.beforeUploadFiles.length < 10
+        ) {
+          this.beforeUploadFiles.push(item)
+        }
+      })
+    }
+
+    // Call uploadFiles with the files array
+    this.uploadFiles(files)
   }
 
   async removeUpload(upload: Upload) {
@@ -373,11 +664,22 @@ export class PostComponent implements OnInit, OnDestroy {
       upload
     )
     if (deleted) {
-      this.uploadedFile = null
-      this.currentUpload = null
+      this.duplicateFileNames = this.duplicateFileNames.filter(
+        (file) => file !== upload.name
+      )
+      this.uploadedFiles = this.uploadedFiles.filter((file) => file !== upload)
     } else {
       this.deleteFailed = true
+      this.messageService.clear()
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: `Something went while wrong deleting your file.`,
+      })
     }
+
+    this.beforeUploadFiles = []
+    this.beforeUploadFiles.push(...this.uploadedFiles)
   }
 
   ngOnDestroy() {
@@ -388,7 +690,7 @@ export class PostComponent implements OnInit, OnDestroy {
 
   async loadUser(address: string) {
     this.recipient = await this.userService.getUser(address)
-    this.pageLoaded = true
+    this.loading = true
     /**
     this.userService.getUser(address).then((user: User) => {
       this.recipient = user;
@@ -433,12 +735,18 @@ export class PostComponent implements OnInit, OnDestroy {
     }
   }
 
-  setProviderType(type: string) {
-    this.shareableJobForm.controls.providerType.setValue(type)
+  setProviderType(item: SortingMethod) {
+    this.selectedSortings_category = item
+    this.shareableJobForm.controls.providerType.setValue(
+      this.selectedSortings_category.code
+    )
   }
 
-  setVisibility(type: string) {
-    this.shareableJobForm.controls.visibility.setValue(type)
+  setVisibility(item: SortingMethod) {
+    this.selectedSortings_visibility = item
+    this.shareableJobForm.controls.visibility.setValue(
+      this.selectedSortings_visibility.code
+    )
   }
 
   timeRanges(): Array<string> {
@@ -469,6 +777,8 @@ export class PostComponent implements OnInit, OnDestroy {
   async submitForm() {
     this.error = false
     this.isSending = true
+    this.spinner.show()
+
     let tags: string[]
     if (!this.isShareable) {
       tags =
@@ -483,10 +793,13 @@ export class PostComponent implements OnInit, OnDestroy {
               .split(',')
               .map((item) => item.trim())
     }
-    if (tags.length > 6) {
-      tags = tags.slice(0, 6)
+    if (tags.length > 20) {
+      tags = tags.slice(0, 20)
     }
-
+    console.log('tags', tags)
+    if (!tags.length) {
+      tags = this.jobToEdit.information.skills
+    }
     try {
       if (!this.isShareable) {
         const job = new Job({
@@ -498,7 +811,7 @@ export class PostComponent implements OnInit, OnDestroy {
             title: this.postForm.value.title,
             initialStage: this.postForm.value.initialStage,
             skills: tags,
-            attachments: this.uploadedFile ? [this.uploadedFile] : [],
+            attachments: this.uploadedFiles ? this.uploadedFiles : [],
             workType: this.postForm.value.workType,
             timelineExpectation: this.postForm.value.timelineExpectation,
             weeklyCommitment: this.postForm.value.weeklyCommitment,
@@ -517,6 +830,7 @@ export class PostComponent implements OnInit, OnDestroy {
         this.sent = await this.jobService.handleJobAction(job, action)
         this.isSending = false
         if (this.sent) {
+          this.isPreview = true
           this.jobService.createJobChat(
             job,
             action,
@@ -530,8 +844,15 @@ export class PostComponent implements OnInit, OnDestroy {
     } catch (e) {
       this.sent = false
       this.error = true
+      this.messageService.clear()
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: `Something went wrong when posting this job.`,
+      })
       this.isSending = false
     }
+    this.spinner.hide()
   }
 
   handleGitError(msg) {
@@ -549,6 +870,8 @@ export class PostComponent implements OnInit, OnDestroy {
 
     this.errorGitUrl = ''
     this.isSending = true
+    this.spinner.show()
+
     formRef.controls['url'].patchValue(url)
     formRef.controls['url'].disable()
 
@@ -608,6 +931,7 @@ export class PostComponent implements OnInit, OnDestroy {
           this.handleGitError(errorMsg)
         }
       )
+    this.spinner.hide()
   }
 
   onGitPaste(event: ClipboardEvent) {
@@ -620,30 +944,83 @@ export class PostComponent implements OnInit, OnDestroy {
     this.errorGitUrl = ''
   }
 
-  async submitShareableJob(isDraft: boolean) {
+  getDate(date: Date): string {
+    // Create a Date object from milliseconds
+    const year = date.getFullYear()
+    const month = (date.getMonth() + 1).toString().padStart(2, '0') // Months are zero-based
+    const day = date.getDate().toString().padStart(2, '0')
+
+    return `${year}-${month}-${day}`
+  }
+
+  getDaySuffix(day: number): string {
+    if (day > 3 && day < 21) return 'th' // All days between 4 and 20 end with 'th'
+    switch (day % 10) {
+      case 1:
+        return 'st'
+      case 2:
+        return 'nd'
+      case 3:
+        return 'rd'
+      default:
+        return 'th'
+    }
+  }
+
+  formatDate(dateStr: string): string {
+    const date = new Date(dateStr)
+    const day = date.getDate()
+    const month = date.toLocaleString('default', { month: 'long' })
+    const year = date.getFullYear()
+
+    const daySuffix = this.getDaySuffix(day)
+
+    return `${day}${daySuffix} ${month} ${year}`
+  }
+
+  async submitShareableJob(isDRP: number) {
+    // isDRP , 0 => draft, , 1=> Preview, 2 => Post
+    console.log('isDRP:', isDRP)
     this.isSending = true
     this.error = false
+    this.spinner.show()
+    this.sentDRP = isDRP
+    this.shareableJobForm.controls.providerType.setValue(
+      this.selectedSortings_category.code
+    )
 
     try {
       let tags: string[]
-      tags =
-        this.shareableJobForm.value.skills === ''
-          ? []
-          : this.shareableJobForm.value.skills
-              .split(',')
-              .map((item) => item.trim())
-      if (tags.length > 6) {
-        tags = tags.slice(0, 6)
+      try {
+        tags =
+          this.shareableJobForm.value.skills === ''
+            ? []
+            : this.shareableJobForm.value.skills
+                .split(',')
+                .map((item) => item.trim())
+      } catch (error) {
+        console.log('error with tags:', error)
+        if (!tags.length) {
+          tags = this.jobToEdit.information.skills
+        }
       }
 
-      if (this.editing) {
-        this.jobId = this.jobToEdit.id
-        this.slug = this.jobToEdit.slug
-      } else {
-        this.slug = await this.publicJobService.generateReadableId(
-          this.shareableJobForm.value.title
-        )
+      if (tags.length > 20) {
+        tags = tags.slice(0, 20)
       }
+
+      if (isDRP !== 1) {
+        // Preview  is false
+        if (this.editing) {
+          this.jobId = this.jobToEdit.id
+          this.slug = this.jobToEdit.slug
+        } else {
+          this.slug = await this.publicJobService.generateReadableId(
+            this.shareableJobForm.value.title
+          )
+        }
+      }
+
       const job = new Job({
         id: this.jobId,
         clientId: this.currentUser.address,
@@ -653,7 +1030,7 @@ export class PostComponent implements OnInit, OnDestroy {
           title: this.shareableJobForm.value.title,
           initialStage: this.shareableJobForm.value.initialStage,
           skills: tags,
-          attachments: this.uploadedFile ? [this.uploadedFile] : [],
+          attachments: this.uploadedFiles ? this.uploadedFiles : [],
           workType: this.shareableJobForm.value.workType,
           timelineExpectation: this.shareableJobForm.value.timelineExpectation,
           weeklyCommitment: this.shareableJobForm.value.weeklyCommitment,
@@ -662,10 +1039,25 @@ export class PostComponent implements OnInit, OnDestroy {
         visibility: this.shareableJobForm.value.visibility,
         paymentType: this.shareableJobForm.value.paymentType,
         budget: this.shareableJobForm.value.budget,
-        deadline: this.shareableJobForm.value.deadline,
-        draft: isDraft,
+        deadline: this.getDate(this.shareableJobForm.value.deadline),
+        draft: isDRP > 1 ? false : true,
       })
-      this.draft = isDraft
+      this.draft = isDRP > 1 ? false : true
+
+      console.log('job:', job)
+      console.log('isDRP:', isDRP)
+
+      if (isDRP > 0) {
+        job.state = JobState.acceptingOffers
+      } else {
+        job.state = JobState.draft
+      }
+      if (isDRP == 1) {
+        this.jobFromNow = 'Posted 1 minutes ago'
+      } else {
+        this.isPreview = false
+      }
+
       const action = new IJobAction(ActionType.createJob, UserType.client)
       action.setPaymentProperties(
         job.budget,
@@ -674,21 +1066,42 @@ export class PostComponent implements OnInit, OnDestroy {
         this.shareableJobForm.value.weeklyCommitment,
         this.shareableJobForm.value.paymentType
       )
-      if (!isDraft) {
-        job.state = JobState.acceptingOffers
-      } else {
-        job.state = JobState.draft
-      }
       this.sent = await this.publicJobService.handlePublicJob(job, action)
+      this.jobForPreview = job
+      this.isPreview = true
+
       this.isSending = false
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      })
     } catch (e) {
       this.sent = false
       this.isSending = false
       this.error = true
+      this.messageService.clear()
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: `Something went wrong when posting this job.`,
+      })
+      console.log('error with showing', e)
     }
+    this.spinner.hide()
   }
 
-  async updateJob() {
-    // uploads the job
+  BacktoEdit() {
+    this.isPreview = false
+  }
+
+  stripHtmlTagslength(html: string): number {
+    const div = document.createElement('div')
+    div.innerHTML = html
+    // if (div.textContent.length > 5 && div.textContent.length < 2500) {
+    //   this.bid_message_valiated = false
+    // } else {
+    //   this.bid_message_valiated = true
+    // }
+    return div.textContent.length
   }
 }

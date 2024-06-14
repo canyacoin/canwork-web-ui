@@ -3,8 +3,7 @@ import * as union from 'lodash/union'
 
 @Component({
   selector: 'app-provider-card',
-  templateUrl: './provider-card.component.html',
-  styleUrls: ['./provider-card.component.css'],
+  templateUrl: './provider-card.component.html'
 })
 export class ProviderCardComponent implements OnInit {
   @Input() provider: any

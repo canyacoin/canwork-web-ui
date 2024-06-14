@@ -2,7 +2,6 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router'
 import { PublicJobComponent } from './public-job/public-job/public-job.component'
-import { JobBidsComponent } from './public-job/job-bids/job-bids.component'
 import { LandingComponent } from './landing/landing.component'
 import { BrandComponent } from './core-components/brand/brand.component'
 import { DashboardComponent } from './public-job/dashboard/dashboard.component'
@@ -53,7 +52,8 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         },
         {
           path: 'jobs',
-          component: DashboardComponent,
+          loadChildren: () =>
+            import('./public-job/dashboard/dashboard.module').then((m) => m.DashboardModule),
         },
         {
           path: 'jobs/:jobId',
@@ -62,14 +62,6 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         {
           path: 'jobs/public/:slug',
           component: PublicJobComponent,
-        },
-        {
-          path: 'jobs/:jobId/bids',
-          component: JobBidsComponent,
-        },
-        {
-          path: 'jobs/public/:slug/bids',
-          component: JobBidsComponent,
         },
         {
           path: 'profile',

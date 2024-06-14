@@ -1,0 +1,437 @@
+<section
+  class="bg-G0 rounded-[12px] grid border border-G200 xl:w-[350px]"
+  id="job-search-filter"
+>
+  <div
+    class="flex items-center justify-between font-medium py-[12px] px-[16px] select-none"
+  >
+    <div class="flex items-center gap-2">
+      <div class="text-b1 text-G800">Filters</div>
+      <div *ngIf="getNumberAllFilters() > 0">
+        <div
+          class="bg-G500 px-[6px] py-[4px] text-white w-[24px] h-[16px] rounded-full border-none select-none flex justify-center items-center"
+        >
+          <div class="text-b1">
+            {{ getNumberAllFilters() }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cursor-pointer text-b2 text-G900" (click)="allClear()">
+      Clear All
+    </div>
+  </div>
+  <div class="flex flex-col filter-job">
+    <!-- <p-accordion class="w-full">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
+            <div class="flex items-center gap-2">
+              <span class="font-medium text-G800 whitespace-nowrap">Verification</span>
+              <div *ngIf="verifyForm.length > 0">
+                <badge [job_badge]="true" [value]="verifyForm.length" />
+              </div>
+            </div>
+            <div
+              class="font-medium text-G800 pointer-events-auto"
+              (click)="verifyClear()"
+            >
+              Clear
+            </div>
+          </div>
+        </ng-template>
+        <div class="pt-[16px] pb-[24px] px-[24px]">
+          <div class="flex flex-col gap-[8px]">
+            <div
+              *ngFor="let item of filterSection.verification"
+              class="flex items-center"
+            >
+              <p-checkbox
+                [label]="item"
+                name="verifyForm"
+                [value]="item"
+                [(ngModel)]="verifyForm"
+                (onChange)="verifyClick($event)"
+              ></p-checkbox>
+            </div>
+          </div>
+        </div>
+      </p-accordionTab>
+    </p-accordion> -->
+
+    <!-- skills tags -->
+    <!-- <p-accordion class="w-full">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
+            <div class="flex items-center gap-2">
+              <span class="font-medium text-G800 whitespace-nowrap"
+                >Categories</span
+              >
+
+              <div *ngIf="skillsForm.length > 0">
+                <badge [job_badge]="true" [value]="skillsForm.length" />
+              </div>
+            </div>
+            <div
+              class="font-medium text-G800 pointer-events-auto"
+              (click)="skillsClear()"
+            >
+              Clear
+            </div>
+          </div>
+        </ng-template>
+        <div class="pt-[16px] pb-[24px] px-[24px] flex flex-col gap-[8px]">
+          <div class="flex flex-col gap-[8px] font-sans text-b1 font-normal">
+            <div
+              class="p-inputgroup flex items-center px-[16px] !py-3 border bg-G50 border-G200 rounded-xl"
+            >
+              <input
+                type="text"
+                pInputText
+                placeholder="Search categories"
+                class="!shadow-none bg-transparent"
+              />
+              <img
+                src="/assets/massimo/images/fi_search.png"
+                class="w-4 h-4"
+                alt="search"
+              />
+            </div>
+            <div *ngFor="let item of tempSkillsForm" class="flex items-center">
+              <p-checkbox
+                [label]="item"
+                name="skillsForm"
+                [value]="item"
+                [(ngModel)]="skillsForm"
+                [trueValue]="checkedItemskill(item)"
+                (onChange)="skillClick($event)"
+              ></p-checkbox>
+            </div>
+            <div
+              class="cursor-pointer font-medium text-G800 flex items-center gap-3"
+              (click)="seeMoreClick()"
+            >
+              See More
+              <img src="/assets/massimo/svg/V.svg" class="w-5 h-5" alt="V" />
+            </div>
+          </div>
+        </div>
+      </p-accordionTab>
+    </p-accordion> -->
+
+    <p-accordion class="w-full" [activeIndex]="0">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div
+            class="pr-[8px] font-sans flex items-center justify-between gap-2 w-full"
+          >
+            <div class="flex items-center gap-2">
+              <span class="font-medium text-b2 text-G800 whitespace-nowrap"
+                >Categories</span
+              >
+
+              <div *ngIf="skillsForm.length > 0">
+                <badge [job_badge]="true" [value]="skillsForm.length" />
+              </div>
+            </div>
+            <div
+              class="font-medium text-b2 text-G900 pointer-events-auto"
+              (click)="categoryClear()"
+            >
+              Clear
+            </div>
+          </div>
+        </ng-template>
+        <div class="pb-[16px] px-[24px] flex flex-col gap-[8px]">
+          <div class="flex flex-col gap-[8px] font-sans text-b1 font-normal">
+            <!-- <div
+              class="p-inputgroup flex items-center px-[16px] !py-3 border bg-G50 border-G200 rounded-xl"
+            >
+              <input
+                type="text"
+                pInputText
+                placeholder="Search categories"
+                class="!shadow-none bg-transparent !text-b2"
+              />
+              <img
+                src="/assets/massimo/images/fi_search.png"
+                class="w-4 h-4"
+                alt="search"
+              />
+            </div> -->
+            <div
+              *ngFor="let item of filterSection.categories"
+              class="flex items-center"
+            >
+              <p-checkbox
+                [label]="item.name"
+                name="categoriesForm"
+                [value]="item.code"
+                [(ngModel)]="categoriesForm"
+                [trueValue]="checkedItemCategory(item.code)"
+                (onChange)="categoryClick($event)"
+              ></p-checkbox>
+            </div>
+          </div>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
+
+    <p-accordion class="w-full" [activeIndex]="0">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div
+            class="pr-[8px] flex items-center justify-between gap-2 w-full font-sans"
+          >
+            <div class="flex items-center gap-2">
+              <span class="text-b2 font-medium text-G800 whitespace-nowrap"
+                >Job Type</span
+              >
+
+              <!-- <div *ngIf="skillsForm.length > 0">
+                <badge [job_badge]="true" [value]="skillsForm.length" />
+              </div> -->
+            </div>
+            <div
+              class="text-b2 font-medium text-G900 pointer-events-auto"
+              (click)="PriceClear()"
+            >
+              Clear
+            </div>
+          </div>
+        </ng-template>
+
+        <div class="px-[24px] flex flex-col gap-[8px]">
+          <div>
+            <p-checkbox
+              label="Hourly"
+              name="Hourly"
+              [binary]="true"
+              [(ngModel)]="hourlyFlag"
+              (onChange)="hourlyTopClick($event)"
+            ></p-checkbox>
+          </div>
+          <div class="px-6">
+            <div class="flex font-sans text-b1 font-normal">
+              <p-checkbox
+                name="hourlymin_max"
+                [binary]="true"
+                [(ngModel)]="hourlymin_max"
+                (onChange)="hourlyBottomClick($event)"
+              ></p-checkbox>
+              <div class="flex gap-2">
+                <input
+                  type="number"
+                  pInputText
+                  [(ngModel)]="min"
+                  (input)="onSearchInputChange()"
+                  placeholder="$Min/hr"
+                  min="1"
+                  class="!shadow-none !text-b2 bg-transparent border rounded-[8px] w-[96px] py-[6px] px-[16px] text-G900 placeholder:!text-b2"
+                />
+                <input
+                  type="number"
+                  pInputText
+                  [(ngModel)]="max"
+                  (input)="onSearchInputChange()"
+                  placeholder="$Max/hr"
+                  min="1"
+                  class="!shadow-none !text-b2 bg-transparent border rounded-[8px] w-[96px] py-[6px] px-[16px] text-G900 placeholder:!text-b2"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pb-[16px] px-[24px] flex flex-col gap-[8px]">
+          <div>
+            <p-checkbox
+              label="Fixed"
+              name="Fixed"
+              [binary]="true"
+              [(ngModel)]="fixedFlag"
+              (onChange)="fixedClick($event)"
+            ></p-checkbox>
+          </div>
+          <div class="px-6">
+            <div class="flex flex-col gap-[8px] font-sans text-b1 font-normal">
+              <div
+                *ngFor="let item of filterSection.fixedscope"
+                class="flex items-center"
+              >
+                <p-checkbox
+                  [label]="item.scope"
+                  name="fixedForm"
+                  [value]="item.id"
+                  [(ngModel)]="fixedForm"
+                  [trueValue]="checkedItemFixed(item.id)"
+                  (onChange)="fixedItemClick($event)"
+                ></p-checkbox>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
+
+    <!-- <p-accordion class="w-full">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="pr-[16px] flex items-center justify-between gap-2 w-full">
+            <div class="flex items-center gap-2">
+              <span class="font-medium text-G800 whitespace-nowrap"
+                >Experience Level</span
+              >
+
+              <div *ngIf="experienceForm.length > 0">
+                <badge [job_badge]="true" [value]="experienceForm.length" />
+              </div>
+            </div>
+            <div
+              class="font-medium text-G800 pointer-events-auto"
+              (click)="experienceClear()"
+            >
+              Clear
+            </div>
+          </div>
+        </ng-template>
+        <div class="pt-[16px] pb-[24px] px-[24px] flex flex-col gap-[8px]">
+          <div class="flex flex-col gap-[8px] font-sans text-b1 font-normal">
+            <div
+              *ngFor="let item of filterSection.experiencelevel"
+              class="flex items-center"
+            >
+              <p-checkbox
+                [label]="item"
+                name="experienceForm"
+                [value]="item"
+                [(ngModel)]="experienceForm"
+                (onChange)="experienceClick($event)"
+              ></p-checkbox>
+            </div>
+          </div>
+        </div>
+      </p-accordionTab>
+    </p-accordion> -->
+
+    <p-accordion class="w-full" [activeIndex]="0">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div
+            class="pr-[8px] flex items-center justify-between gap-2 w-full font-sans"
+          >
+            <div class="flex items-center gap-2">
+              <span class="text-b2 font-medium text-G800 whitespace-nowrap"
+                >Rating</span
+              >
+              <div *ngIf="ratingForm.length > 0">
+                <badge [job_badge]="true" [value]="ratingForm.length" />
+              </div>
+            </div>
+            <div
+              class="text-b2 font-medium text-G900 pointer-events-auto"
+              (click)="ratingClear()"
+            >
+              Clear
+            </div>
+          </div>
+        </ng-template>
+        <div class="pb-[16px] px-[24px]">
+          <div class="flex flex-col gap-[8px]">
+            <div
+              *ngFor="let item of filterSection.rating"
+              class="flex items-center"
+            >
+              <p-checkbox
+                name="item"
+                [value]="item"
+                [(ngModel)]="ratingForm"
+                (onChange)="ratingClick(item)"
+              ></p-checkbox>
+              <div *ngFor="let j of [1, 2, 3, 4, 5]">
+                <img
+                  *ngIf="item >= j"
+                  src="/assets/massimo/svg/star.svg"
+                  alt="star"
+                  class="pr-[6.67px]"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
+
+    <p-accordion class="w-full" [activeIndex]="0">
+      <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div
+            class="pr-[8px] flex items-center justify-between gap-2 w-full font-sans"
+          >
+            <div class="flex items-center gap-2">
+              <span class="text-b2 font-medium text-G800 whitespace-nowrap"
+                >Location</span
+              >
+            </div>
+            <div
+              class="text-b2 font-medium text-G900 pointer-events-auto"
+              (click)="LocationClear()"
+            >
+              Clear
+            </div>
+          </div>
+        </ng-template>
+        <div class="pb-[16px] px-[24px] flex flex-col gap-[8px]">
+          <div class="flex flex-col gap-[8px] font-sans text-b2 font-normal">
+            <div
+              class="p-inputgroup flex items-center px-[16px] !py-[8px] border bg-G50 border-G200 rounded-xl"
+            >
+              <input
+                type="text"
+                pInputText
+                placeholder="Search preferred client location"
+                class="!shadow-none bg-transparent"
+                (blur)="onBlurMethod()"
+                (focus)="onFocusMethod()"
+                [class.invalid]="locationInput.length <= 0"
+                (keyup.enter)="onTagEnter()"
+                (keyup.,)="onTagEnter()"
+                (keyup)="onDropDownTT()"
+                [(ngModel)]="tagInput"
+                [ngModelOptions]="{ standalone: true }"
+                (change)="onTagChange()"
+                autocapitalize="none"
+                (keyup.shift.enter)="onTagEnter()"
+              />
+              <img
+                src="/assets/massimo/images/fi_search.png"
+                class="w-4 h-4"
+                alt="search"
+              />
+            </div>
+
+            <div
+              class="flex justify-start items-center text-R900 text-b2 font-sans gap-2 animated fadeIn"
+              *ngIf="tagSelectionInvalid == 3"
+            >
+              <img
+                src="/assets/massimo/svg/fi_alert-triangle.svg"
+                alt="fi_alert-triangle"
+              />
+              You already added this location.
+            </div>
+
+            <div class="flex flex-wrap gap-1">
+              <ng-container *ngFor="let item of locationInput">
+                <div (click)="removeTag(item)">
+                  <search-button [content]="item"></search-button>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
+  </div>
+</section>

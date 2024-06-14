@@ -1,8 +1,9 @@
-<div
-  class="w-full shadow-basicButton font-medium duration-300 transition-all rounded-[12px] cursor-pointer select-none whitespace-nowrap text-center {{
+<button
+  class="w-full shadow-basicButton font-medium duration-300 transition-all rounded-[12px] select-none whitespace-nowrap text-center {{
     extraClass
   }}"
   [ngClass]="cssClasses"
+  [disabled]="disabled"
 >
   {{ title }}
-</div>
+</button>

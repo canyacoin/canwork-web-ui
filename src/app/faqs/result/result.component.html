@@ -6,7 +6,7 @@
       ></ng-container>
 
       <ng-template #defaultView>
-        <div class="flex flex-col gap-[40px] md:gap-[64px]">
+        <div class="flex flex-col gap-10 md:gap-[64px]">
           <div *ngFor="let section of resultSection">
             <p-accordion class="w-full faq-parent">
               <p-accordionTab>
@@ -17,7 +17,7 @@
                     {{ section.title }}
                   </div>
                 </ng-template>
-                <div class="pt-[24px] flex flex-col gap-[16px]">
+                <div class="pt-[24px] flex flex-col gap-4">
                   <div *ngFor="let item of section.items">
                     <p-accordion class="w-full faq-children">
                       <p-accordionTab>
@@ -42,7 +42,7 @@
       </ng-template>
 
       <ng-template #resultView>
-        <div class="flex flex-col gap-[16px] faq-parent">
+        <div class="flex flex-col gap-4 faq-parent">
           <div *ngFor="let item of queryFaqs">
             <p-accordion class="w-full faq-children">
               <p-accordionTab>
@@ -60,7 +60,7 @@
         </div>
         <div
           *ngIf="queryFaqs.length === 0"
-          class="py-[40px] md:py-[64px] text-center text-G800 w-full grid gap-[16px]"
+          class="py-[40px] md:py-[64px] text-center text-G800 w-full grid gap-4"
         >
           <div class="text-h5 md:text-h4 font-medium">
             There are no results that match your search.

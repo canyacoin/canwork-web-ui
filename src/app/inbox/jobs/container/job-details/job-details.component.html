@@ -78,16 +78,20 @@
             *ngIf="job.information.attachments.length > 0"
           >
             <b>Attachments</b>
-            <a href="{{ job.information.attachments[0].url }}" target="_blank">
-              <p *ngIf="job.information.attachments[0].name.length > 10">
-                <i class="fas fa-paperclip"></i>
-                {{ job.information.attachments[0].name.substring(0, 10) }}...
-              </p>
-              <p *ngIf="job.information.attachments[0].name.length <= 10">
-                <i class="fas fa-paperclip"></i>
-                {{ job.information.attachments[0].name }}...
-              </p>
-            </a>
+            <ng-container *ngFor="let item of job.information.attachments">
+             <div class="py-[10px]">
+              <a href="{{ item.url }}" target="_blank">
+                <p *ngIf="item.name.length > 10">
+                  <i class="fas fa-paperclip"></i>
+                  {{ item.name.substring(0, 10) }}...
+                </p>
+                <p *ngIf="item.name.length <= 10">
+                  <i class="fas fa-paperclip"></i>
+                  {{ item.name }}...
+                </p>
+              </a>
+             </div>
+            </ng-container>
           </div>
         </div>
       </div>

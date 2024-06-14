@@ -2,428 +2,432 @@
   <section
     id="job-creation-form"
     *ngIf="currentUser"
-    class="section bg-grey pt-30"
+    class="bg-G50 pt-[100px] pb-[24px] font-sans"
   >
-    <p-toast></p-toast>
-
-    <app-back-button></app-back-button>
-
-    <div
-      *ngIf="!pageLoaded"
-      class="container d-flex h-100 flex-column justify-content-center"
-    >
-      <img src="assets/img/loader.svg" style="height: 36px" alt="Loader" />
-    </div>
-    <div id="direct-job" *ngIf="pageLoaded && !isShareable">
-      <div *ngIf="!sent && recipient" class="section pt-0 bg-grey pb-30">
-        <div class="container bg-white p-30">
+    <div id="direct-job" *ngIf="loading && !isShareable && !isPreview">
+      <div *ngIf="!sent && recipient" class="pt-0 pb-[24px]">
+        <div class="container p-30">
           <header class="section-header my-0 py-0">
             <h2 class="fw-600">Post a request</h2>
           </header>
-          <div class="row">
-            <div class="col-12 col-lg-12 bg-white">
-              <div class="align-self-center align-items-center my-10">
-                <form [formGroup]="postForm" class="form validate" novalidate>
-                  <div class="col-12 col-lg-12">
-                    <div class="form-group">
-                      <label>GitHub or GitLab issue</label>
-                      <input
-                        class="form-control"
-                        #url
-                        formControlName="url"
-                        type="text"
-                        name="url"
-                        (blur)="onBFGit()"
-                        (focus)="onBFGit()"
-                        placeholder="Paste a GitHub or GitLab issue link here if you want to populate job fields from it"
-                        [class.invalid]="!!errorGitUrl"
-                        (paste)="onGitPaste($event)"
-                      />
-                      <small
-                        *ngIf="!!errorGitUrl"
-                        class="text-danger text-wrap"
-                        >{{ errorGitUrl }}</small
-                      >
-                    </div>
-                    <div class="form-group">
-                      <label>Title *</label>
-                      <input
-                        class="form-control"
-                        #title
-                        formControlName="title"
-                        type="text"
-                        name="title"
-                        placeholder="Enter Job Title"
-                        maxlength="64"
-                        [class.invalid]="
-                          !postForm.controls.title.valid &&
-                          postForm.controls.title.dirty
-                        "
-                      />
-                      <small
-                        *ngIf="
-                          !postForm.controls.title.valid &&
-                          postForm.controls.title.dirty
-                        "
-                        class="text-primary text-wrap"
-                        >Title must be 64 characters or less</small
-                      >
-                    </div>
-                    <div class="form-group">
-                      <label class="text-dark">Description *</label>
-                      <textarea
-                        class="form-control"
-                        #description
-                        formControlName="description"
-                        rows="4"
-                        name="description"
-                        placeholder="I'm looking for..."
-                        [class.invalid]="
-                          !postForm.controls.description.valid &&
-                          postForm.controls.description.dirty
-                        "
-                      ></textarea>
-                      <small
-                        *ngIf="!postForm.controls.description.valid"
-                        class="text-primary text-wrap"
-                        >e.g. 'Custom Logo' or 'Milestone 1 -
-                        Wireframes'.</small
-                      >
-                    </div>
-                    <div class="form-group canya-prefilled">
-                      <label>Project stage *</label>
-                      <textarea
-                        class="form-control"
-                        #initialStage
-                        formControlName="initialStage"
-                        type="text"
-                        name="initialStage"
-                        placeholder="e.g. 'Ideation phase' or 'I have started work already'"
-                        maxlength="3000"
-                        [class.invalid]="
-                          !postForm.controls.initialStage.valid &&
-                          postForm.controls.initialStage.dirty
-                        "
-                      ></textarea>
-                    </div>
+          <div class="align-self-center items-center my-10">
+            <form [formGroup]="postForm" class="form validate" novalidate>
+              <div class="flex flex-col gap-6">
+                <div class="text-b1 font-sans">
+                  <div class="text-b1 text-G900 mb-[8px]">
+                    Title <span class="text-R900">*</span>
+                  </div>
+                  <input
+                    class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                    #title
+                    formControlName="title"
+                    type="text"
+                    name="title"
+                    placeholder="Enter Job Title"
+                    maxlength="64"
+                    [class.invalid]="
+                      !postForm.controls.title.valid &&
+                      postForm.controls.title.dirty
+                    "
+                  />
+                  <small
+                    *ngIf="
+                      !postForm.controls.title.valid &&
+                      postForm.controls.title.dirty
+                    "
+                    class="text-primary text-wrap"
+                    >Title must be 64 characters or less</small
+                  >
+                </div>
+                <div class="text-b1 font-sans">
+                  <div class="text-b1 text-G900 mb-[8px]">
+                    GitHub or GitLab issue
+                  </div>
+                  <input
+                    class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                    #url
+                    formControlName="url"
+                    type="text"
+                    name="url"
+                    (blur)="onBFGit()"
+                    (focus)="onBFGit()"
+                    placeholder="Paste a GitHub or GitLab issue link here if you want to populate job fields from it"
+                    [class.invalid]="!!errorGitUrl"
+                    (paste)="onGitPaste($event)"
+                  />
+                  <small *ngIf="!!errorGitUrl" class="text-danger text-wrap">{{
+                    errorGitUrl
+                  }}</small>
+                </div>
 
-                    <div class="form-group">
-                      <label>Key skills required *</label>
-                      <app-skill-tags-selection
-                        (tagsUpdated)="skillTagsUpdated($event)"
-                        (tagsLoaded)="skillTagsLoaded($event)"
-                        [updatedTags]="this.gitUpdatedTags"
-                        [minimumTags]="1"
-                      ></app-skill-tags-selection>
+                <div class="text-b1 font-sans">
+                  <div class="text-b1 text-G900 mb-[8px]">
+                    Description <span class="text-R900">*</span>
+                  </div>
+                  <textarea
+                    class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                    #description
+                    formControlName="description"
+                    rows="4"
+                    name="description"
+                    placeholder="I'm looking for..."
+                    [class.invalid]="
+                      !postForm.controls.description.valid &&
+                      postForm.controls.description.dirty
+                    "
+                  ></textarea>
+                  <small
+                    *ngIf="!postForm.controls.description.valid"
+                    class="text-primary text-wrap"
+                    >e.g. 'Custom Logo' or 'Milestone 1 - Wireframes'.</small
+                  >
+                </div>
+                <div class="text-b1 font-sans canya-prefilled">
+                  <div class="text-b1 text-G900 mb-[8px]">
+                    Project stage <span class="text-R900">*</span>
+                  </div>
+                  <textarea
+                    class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                    #initialStage
+                    formControlName="initialStage"
+                    type="text"
+                    name="initialStage"
+                    placeholder="e.g. 'Ideation phase' or 'I have started work already'"
+                    maxlength="3000"
+                    [class.invalid]="
+                      !postForm.controls.initialStage.valid &&
+                      postForm.controls.initialStage.dirty
+                    "
+                  ></textarea>
+                </div>
+
+                <div class="text-b1 font-sans">
+                  <div class="text-b1 text-G900 mb-[8px]">
+                    Skill Tags (20 max) <span class="text-R900">*</span>
+                  </div>
+                  <div
+                    class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                  >
+                    <app-skill-tags-selection
+                      (tagsUpdated)="skillTagsUpdated($event)"
+                      (tagsLoaded)="skillTagsLoaded($event)"
+                      [updatedTags]="this.gitUpdatedTags"
+                      [minimumTags]="1"
+                    ></app-skill-tags-selection>
+                    <input
+                      hidden
+                      #skillTags
+                      class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                      formControlName="skills"
+                      type="text"
+                      name="skills"
+                    />
+                  </div>
+                </div>
+
+                <div class="text-b1 font-sans">
+                  <div class="text-b1 text-G900 mb-[8px]">
+                    Attach a file (max 50mb)
+                  </div>
+                  <br />
+                  <small class="text-primary text-wrap"
+                    >If you wish to upload more than one file we suggest you
+                    upload a zip folder</small
+                  >
+
+                  <div class="row ml-0 mr-0">
+                    <div
+                      class="mt-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12"
+                    >
+                      <div
+                        class="text-b1 text-G900"
+                        for="file-upload"
+                        class="btn btn-outline btn-primary"
+                        [ngClass]="{
+                          disabled: isCurrentUpload
+                        }"
+                      >
+                        Add file
+                      </div>
                       <input
+                        id="file-upload"
+                        [disabled]="isCurrentUpload"
+                        type="file"
                         hidden
-                        #skillTags
-                        class="form-control"
-                        formControlName="skills"
-                        type="text"
-                        name="skills"
+                        (change)="detectFiles($event)"
                       />
                     </div>
+                  </div>
 
-                    <div class="form-group">
-                      <label>Attach a file (max 50mb)</label>
-                      <br />
-                      <small class="text-primary text-wrap"
-                        >If you wish to upload more than one file we suggest you
-                        upload a zip folder</small
-                      >
+                  <div class="alert alert-danger" *ngIf="fileTooBig">
+                    File is too large, please upload a file smaller than 50 MB
+                  </div>
 
-                      <div class="row ml-0 mr-0">
-                        <div
-                          class="mt-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12"
-                        >
-                          <label
-                            for="file-upload"
-                            class="btn btn-outline btn-primary"
-                            [ngClass]="{
-                              disabled: currentUpload || uploadedFile
-                            }"
+                  <!-- <div *ngIf="currentUpload">
+                    <div class="progress">
+                      <div
+                        class="progress-bar progress-bar-animated"
+                        [ngStyle]="{ width: currentUpload?.progress + '%' }"
+                      ></div>
+                    </div>
+                    <div *ngIf="!uploadedFile">
+                      Progress: {{ currentUpload?.name }} |
+                      {{ currentUpload?.progress }}% Complete
+                    </div>
+                  </div> -->
+                  <div class="alert alert-danger" *ngIf="uploadFailed">
+                    Oops, something went wrong uploading your file
+                  </div>
+
+                  <div class="w-full px-10" *ngIf="uploadedFile">
+                    <br />
+                    Uploaded:
+                    <ul>
+                      <li>
+                        <p>
+                          {{ uploadedFile.name }}
+                          <span
+                            class="pointer alert"
+                            (click)="removeUpload(uploadedFile)"
                           >
-                            Add file
-                          </label>
-                          <input
-                            id="file-upload"
-                            [disabled]="currentUpload || uploadedFile"
-                            type="file"
-                            hidden
-                            (change)="detectFiles($event)"
-                          />
-                        </div>
-                      </div>
-
-                      <div class="alert alert-danger" *ngIf="fileTooBig">
-                        File is too large, please upload a file smaller than 50
-                        MB
-                      </div>
-
-                      <div *ngIf="currentUpload">
-                        <div class="progress">
-                          <div
-                            class="progress-bar progress-bar-animated"
-                            [ngStyle]="{ width: currentUpload?.progress + '%' }"
-                          ></div>
-                        </div>
-                        <div *ngIf="!uploadedFile">
-                          Progress: {{ currentUpload?.name }} |
-                          {{ currentUpload?.progress }}% Complete
-                        </div>
-                      </div>
-                      <div class="alert alert-danger" *ngIf="uploadFailed">
-                        Oops, something went wrong uploading your file
-                      </div>
-
-                      <div class="w-full px-10" *ngIf="uploadedFile">
-                        <br />
-                        Uploaded:
-                        <ul class="list-unstyled">
-                          <li>
-                            <p>
-                              {{ uploadedFile.name }}
-                              <span
-                                class="pointer alert"
-                                (click)="removeUpload(uploadedFile)"
-                              >
-                                <i class="fa fa-times fs-14 pl-8"></i>
-                              </span>
-                            </p>
-                          </li>
-                        </ul>
-                        <!--
-                        <span>
+                            <i class="fa fa-times fs-14 pl-8"></i>
+                          </span>
+                        </p>
+                      </li>
+                    </ul>
+                    <!--
+                        <span class="text-R900">
                           <app-attachment [name]="uploadedFile.name" [path]="uploadedFile.filePath" [url]="uploadedFile.url" [size]="uploadedFile.size"></app-attachment>
                           <span class="pointer alert" (click)="removeUpload(uploadedFile)">
                             <i class="fa fa-times fs-14 pl-8"></i>
                           </span>
                         </span>
-                      --></div>
-                      <div class="alert alert-danger" *ngIf="deleteFailed">
-                        Oops, something went wrong deleting your file
+                      -->
+                  </div>
+                  <div class="alert alert-danger" *ngIf="deleteFailed">
+                    Oops, something went wrong deleting your file
+                  </div>
+                </div>
+
+                <div class="text-b1 font-sans canya-prefilled">
+                  <div class="col-12">
+                    <div class="text-b1 text-G900 mb-[8px]">
+                      Type of work <span class="text-R900">*</span>
+                    </div>
+                    <br />
+                    <div class="row ml-0 mr-0">
+                      <div
+                        *ngFor="let type of workTypes()"
+                        class="px-5 col-lg-3 col-md-4 col-sm-4 col-12"
+                      >
+                        <button
+                          type="button"
+                          (click)="setWorkType(type)"
+                          class="btn btn-primary w-full"
+                          [ngClass]="{
+                            'btn-outline':
+                              shareableJobForm.controls.workType.value !== type
+                          }"
+                        >
+                          {{ type }}
+                        </button>
                       </div>
                     </div>
+                  </div>
+                </div>
 
-                    <div class="form-group canya-prefilled">
-                      <label>Type of work *</label>
+                <div class="text-b1 font-sans">
+                  <div class="row">
+                    <div class="col-sm-6 col-12 canya-prefilled">
+                      <div class="text-b1 text-G900 mb-[8px]">
+                        Timeline Expectations <span class="text-R900">*</span>
+                      </div>
                       <br />
                       <div class="row ml-0 mr-0">
-                        <div
-                          *ngFor="let type of workTypes()"
-                          class="px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12"
+                        <select
+                          #timelineExpectation
+                          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                          formControlName="timelineExpectation"
                         >
-                          <button
-                            type="button"
-                            style="width: 100%"
-                            (click)="setWorkType(type)"
-                            class="btn btn-primary"
-                            [ngClass]="{
-                              'btn-outline':
-                                postForm.controls.workType.value !== type
-                            }"
+                          <option>Choose...</option>
+                          <option
+                            *ngFor="let range of timeRanges()"
+                            [selected]="
+                              jobToEdit &&
+                              range == jobToEdit.information.timelineExpectation
+                            "
                           >
-                            {{ type }}
-                          </button>
-                        </div>
+                            {{ range }}
+                          </option>
+                        </select>
                       </div>
                     </div>
-
-                    <div class="form-group">
-                      <div class="row">
-                        <div class="col-sm-6 col-12 canya-prefilled">
-                          <label>Timeline Expectations *</label>
-                          <br />
-                          <div class="row ml-0 mr-0">
-                            <select
-                              #timelineExpectation
-                              class="form-control"
-                              formControlName="timelineExpectation"
-                            >
-                              <option>Choose...</option>
-                              <option
-                                *ngFor="let range of timeRanges()"
-                                [selected]="
-                                  jobToEdit &&
-                                  range ==
-                                    jobToEdit.information.timelineExpectation
-                                "
-                              >
-                                {{ range }}
-                              </option>
-                            </select>
-                          </div>
-                        </div>
-                        <div class="col-sm-6 col-12">
-                          <label>Estimated Hours</label>
-                          <div class="input-group" style="border-radius: 5px">
-                            <input
-                              #weeklyCommitment
-                              formControlName="weeklyCommitment"
-                              class="form-control"
-                              type="number"
-                              name="weeklyCommitment"
-                              placeholder="Enter hours/week..."
-                              [class.invalid]="
-                                !postForm.controls.weeklyCommitment.valid &&
-                                postForm.controls.weeklyCommitment.dirty
-                              "
-                            />
-                            <div
-                              class="input-group-append"
-                              style="margin-top: 5px; margin-right: 10px"
-                            >
-                              <span class="input-group-text" id="basic-addon2"
-                                >Total hours</span
-                              >
-                            </div>
-                          </div>
-                        </div>
-                        <small
-                          *ngIf="
+                    <div class="col-sm-6 col-12">
+                      <div class="text-b1 text-G900 mb-[8px]">
+                        Estimated Hours
+                      </div>
+                      <div class="input-group" style="border-radius: 5px">
+                        <input
+                          #weeklyCommitment
+                          formControlName="weeklyCommitment"
+                          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                          type="number"
+                          name="weeklyCommitment"
+                          placeholder="Enter hours/week..."
+                          [class.invalid]="
                             !postForm.controls.weeklyCommitment.valid &&
                             postForm.controls.weeklyCommitment.dirty
                           "
-                          class="text-primary"
-                          >Must be between 1 - 60 hours</small
-                        >
-                      </div>
-                    </div>
-
-                    <div class="form-group canya-prefilled">
-                      <label>Payment preference *</label>
-                      <br />
-                      <div class="row ml-0 mr-0">
+                        />
                         <div
-                          *ngFor="let type of paymentTypes()"
-                          class="px-5 col-lg-3 col-md-4 col-sm-4 col-12"
+                          class="input-group-append"
+                          style="margin-top: 5px; margin-right: 10px"
                         >
-                          <button
-                            type="button"
-                            (click)="setPaymentType(type)"
-                            [disabled]="type === 'Hourly rate'"
-                            class="btn btn-primary w-full"
-                            [ngClass]="{
-                              'btn-outline':
-                                postForm.controls.paymentType.value !== type
-                            }"
+                          <span class="input-group-text" id="basic-addon2"
+                            >Total hours</span
                           >
-                            {{ type }}
-                          </button>
                         </div>
-                        <br />
-                        <small class="col-12"
-                          ><i>Hourly rate payments coming soon</i></small
-                        >
                       </div>
                     </div>
-
-                    <div
-                      class="form-group"
-                      *ngIf="postForm.controls.paymentType.value"
+                    <small
+                      *ngIf="
+                        !postForm.controls.weeklyCommitment.valid &&
+                        postForm.controls.weeklyCommitment.dirty
+                      "
+                      class="text-primary"
+                      >Must be between 1 - 60 hours</small
                     >
-                      <label class="text-dark">
-                        <span
-                          *ngIf="
-                            postForm.controls.paymentType.value ==
-                            paymentType.hourly
-                          "
-                          >Budget per hour (USD) *</span
-                        >
-                        <span
-                          *ngIf="
-                            postForm.controls.paymentType.value ==
-                            paymentType.fixed
-                          "
-                          >Total budget (USD) *</span
-                        >
-                      </label>
-                      <div class="row">
-                        <div class="col-6">
-                          <input
-                            #budget
-                            formControlName="budget"
-                            class="form-control"
-                            type="number"
-                            min="0"
-                            name="budget"
-                            step="5"
-                            placeholder="$1 USD minimum"
-                            [class.invalid]="
-                              !postForm.controls.budget.valid &&
-                              postForm.controls.budget.dirty
-                            "
-                          />
-                          <small
-                            *ngIf="
-                              !postForm.controls.budget.valid &&
-                              postForm.controls.budget.dirty
-                            "
-                            class="text-primary"
-                            >Must be $1 USD or more.</small
-                          >
-                        </div>
+                  </div>
+                </div>
+
+                <div class="text-b1 font-sans canya-prefilled">
+                  <div class="text-b1 text-G900 mb-[8px]">
+                    Payment preference <span class="text-R900">*</span>
+                  </div>
+                  <br />
+                  <div class="row ml-0 mr-0">
+                    <div
+                      *ngFor="let type of paymentTypes()"
+                      class="px-5 col-lg-3 col-md-4 col-sm-4 col-12"
+                    >
+                      <button
+                        type="button"
+                        (click)="setPaymentType(type)"
+                        [disabled]="type === 'Hourly rate'"
+                        class="btn btn-primary w-full"
+                        [ngClass]="{
+                          'btn-outline':
+                            postForm.controls.paymentType.value !== type
+                        }"
+                      >
+                        {{ type }}
+                      </button>
+                    </div>
+                    <br />
+                    <small class="col-12"
+                      ><i>Hourly rate payments coming soon</i></small
+                    >
+                  </div>
+                </div>
+
+                <div
+                  class="text-b1 font-sans"
+                  *ngIf="postForm.controls.paymentType.value"
+                >
+                  <div class="text-b1 text-G900 mb-[8px]">
+                    <span
+                      *ngIf="
+                        postForm.controls.paymentType.value ==
+                        paymentType.hourly
+                      "
+                      >Budget per hour (USD)
+                      <span class="text-R900">*</span></span
+                    >
+                    <span
+                      *ngIf="
+                        postForm.controls.paymentType.value == paymentType.fixed
+                      "
+                      >Total budget (USD) <span class="text-R900">*</span></span
+                    >
+                  </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <input
+                        #budget
+                        formControlName="budget"
+                        class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                        type="number"
+                        min="0"
+                        name="budget"
+                        step="5"
+                        placeholder="$1 USD minimum"
+                        [class.invalid]="
+                          !postForm.controls.budget.valid &&
+                          postForm.controls.budget.dirty
+                        "
+                      />
+                      <div
+                        class="flex justify-center items-center text-R900 text-b2 font-sans mt-[8px] gap-[8px]"
+                        *ngIf="
+                          !postForm.controls.budget.valid &&
+                          postForm.controls.budget.dirty
+                        "
+                      >
+                        <img
+                          src="/assets/massimo/svg/fi_alert-triangle.svg"
+                          alt=""
+                        />
+                        Must be $1 USD or more.
                       </div>
-                      <div class="row">
-                        <!--<div
+                    </div>
+                  </div>
+                  <div class="row">
+                    <!--<div
                           *ngIf="
                             postForm.controls.budget.dirty && usdToAtomicCan
                           "
                           class="col-6 mt-5 text-right"
                         ></div>-->
 
-                        <div class="col-12">
-                          <small class="text-primary text-wrap">
-                            <b>Important</b>: All transactions on CanWork are
-                            made in BNB Chain (BEP20) tokens</small
-                          >
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="form-group">
-                      <app-terms [form]="postForm"></app-terms>
+                    <div class="col-12">
+                      <small class="text-primary text-wrap">
+                        <b>Important</b>: All transactions on CanWork are made
+                        in BNB Chain (BEP20) tokens</small
+                      >
                     </div>
                   </div>
+                </div>
 
-                  <div class="modal-footer">
-                    <img
-                      *ngIf="isSending"
-                      src="assets/img/loader.svg"
-                      style="height: 36px"
-                      alt="CanYa Coin"
-                    />
-                    <button
-                      type="button"
-                      (click)="submitForm()"
-                      class="btn btn-primary"
-                      [disabled]="
-                        !postForm.valid ||
-                        isSending ||
-                        (currentUpload && !uploadedFile)
-                      "
-                    >
-                      POST
-                    </button>
-                    <span
-                      *ngIf="error"
-                      class="fs-12 fw-400 mt-10"
-                      style="color: #ff6666"
-                    >
-                      Something went wrong when posting this job..
-                    </span>
-                  </div>
-                </form>
+                <div class="text-b1 font-sans">
+                  <app-terms [form]="postForm"></app-terms>
+                </div>
               </div>
-            </div>
+
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  (click)="submitForm()"
+                  class="btn btn-primary"
+                  [disabled]="!postForm.valid || isSending || isCurrentUpload"
+                >
+                  POST
+                </button>
+                <!-- <span
+                  *ngIf="error"
+                  class="fs-12 fw-400 mt-10"
+                  style="color: #ff6666"
+                >
+                  Something went wrong when posting this job..
+                </span> -->
+              </div>
+            </form>
           </div>
         </div>
       </div>
       <div *ngIf="!recipient">
         <h5>Provider not found.</h5>
       </div>
-      <div *ngIf="sent" class="section py-70">
+      <div *ngIf="sent" class="py-70">
         <div class="container">
           <div class="section-header">
             <img
@@ -456,670 +460,869 @@
         </div>
       </div>
     </div>
-    <div id="shareable-job" *ngIf="!recipient && pageLoaded && isShareable">
-      <div *ngIf="!sent" class="section bg-grey pt-15 pb-30">
-        <div class="container bg-white p-30 brad-5px">
-          <header class="section-header my-0 py-15">
-            <h2 *ngIf="!editing" class="fw-600">Create a Job Post</h2>
-            <h2 *ngIf="editing" class="fw-600">Edit a Job Post</h2>
-          </header>
-          <div class="row">
-            <div class="col-12 col-lg-12 bg-white">
-              <div class="align-self-center align-items-center my-10">
-                <form
-                  [formGroup]="shareableJobForm"
-                  class="form validate"
-                  novalidate
+    <div
+      id="shareable-job"
+      *ngIf="!recipient && loading && isShareable && !isPreview"
+    >
+      <div *ngIf="!sent" class="px-[20px]">
+        <div
+          class="max-w-[1008px] p-[20px] md:p-[40px] m-auto bg-white rounded-xl border border-G200"
+        >
+          <h2 class="text-left text-G900 text-h5 font-[500] font-sans">
+            {{ editing ? 'Edit a Job Post' : 'Create a Job Post' }}
+          </h2>
+          <form [formGroup]="shareableJobForm" class="pt-[24px]" novalidate>
+            <div class="flex flex-col gap-[24px] text-b1 font-sans">
+              <div class="w-full">
+                <div class="text-b1 text-G900 mb-[8px]">
+                  Job Title <span class="text-R900">*</span>
+                </div>
+                <input
+                  class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                  #title
+                  formControlName="title"
+                  type="text"
+                  name="title"
+                  placeholder="Enter job title here"
+                  (blur)="onBlurMethod($event.target.name)"
+                  (focus)="onFocusMethod($event.target.name)"
+                  maxlength="64"
+                  [class.invalid]="
+                    !shareableJobForm.controls.title.valid &&
+                    shareableJobForm.controls.title.dirty
+                  "
+                />
+                <small
+                  *ngIf="
+                    !shareableJobForm.controls.title.valid &&
+                    shareableJobForm.controls.title.dirty
+                  "
+                  class="text-danger text-wrap"
+                  >Title must be longer than 5 characters and less than 64
+                  characters</small
                 >
-                  <div class="col-12 col-lg-12">
-                    <div class="form-group">
-                      <div class="col-12">
-                        <label>GitHub or GitLab issue</label>
-                        <input
-                          class="form-control"
-                          #url
-                          formControlName="url"
-                          type="text"
-                          name="url"
-                          (blur)="onBFGit()"
-                          (focus)="onBFGit()"
-                          placeholder="Paste a GitHub or GitLab issue link here if you want to populate job fields from it"
-                          [class.invalid]="!!errorGitUrl"
-                          (paste)="onGitPaste($event)"
-                        />
-                        <small
-                          *ngIf="!!errorGitUrl"
-                          class="text-danger text-wrap"
-                          >{{ errorGitUrl }}</small
-                        >
-                      </div>
-                      <div class="col-12">
-                        <label>Title *</label>
-                        <input
-                          class="form-control"
-                          #title
-                          formControlName="title"
-                          type="text"
-                          name="title"
-                          placeholder="Enter Job Title"
-                          (blur)="onBlurMethod($event.target.name)"
-                          (focus)="onFocusMethod($event.target.name)"
-                          maxlength="64"
-                          [class.invalid]="
-                            !shareableJobForm.controls.title.valid &&
-                            shareableJobForm.controls.title.dirty
-                          "
-                        />
-                        <small
-                          *ngIf="
-                            !shareableJobForm.controls.title.valid &&
-                            shareableJobForm.controls.title.dirty
-                          "
-                          class="text-danger text-wrap"
-                          >Title must be longer than 5 characters and less than
-                          64 characters</small
-                        >
-                      </div>
+              </div>
+
+              <div class="w-full">
+                <div class="text-b1 text-G900 mb-[8px]">
+                  GitHub or GitLab issue
+                </div>
+                <input
+                  class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                  #url
+                  formControlName="url"
+                  type="text"
+                  name="url"
+                  (blur)="onBFGit()"
+                  (focus)="onBFGit()"
+                  placeholder="Paste link here"
+                  [class.invalid]="!!errorGitUrl"
+                  (paste)="onGitPaste($event)"
+                />
+                <div
+                  class="text-[#0065FF] text-b2 font-[400] leading-5 pt-[8px] flex"
+                >
+                  <img
+                    src="/assets/massimo/svg/fi_info.svg"
+                    alt="fi_info"
+                    class="pr-[8px]"
+                  />
+                  Paste Github or Gitlab link here if you want to populate field
+                  from it
+                </div>
+                <ng-container *ngIf="!!errorGitUrl">
+                  <small class="text-danger text-wrap">{{ errorGitUrl }}</small>
+                </ng-container>
+              </div>
+
+              <div class="w-full">
+                <div class="text-b1 text-G900 mb-[8px]">
+                  Job Description <span class="text-R900">*</span>
+                </div>
+                <angular-editor
+                  formControlName="description"
+                  [config]="editorConfig"
+                ></angular-editor>
+                <div class="flex justify-end">
+                  <div class="text-right text-b2 text-G700 pt-[8px]">
+                    {{
+                      stripHtmlTagslength(
+                        this.shareableJobForm.value.description
+                      )
+                    }}/5000
+                  </div>
+                </div>
+              </div>
+
+              <!-- <div class="text-b1 font-sans">
+                <div class="text-b1 text-G900 mb-[8px]"
+                  >Project stage <span class="text-R900">*</span>
+                </div>
+                <textarea
+                  class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                  #initialStage
+                  formControlName="initialStage"
+                  type="text"
+                  name="initialStage"
+                  placeholder="eg. 'Ideation phase' or 'I have started work already'"
+                  maxlength="3000"
+                  [class.invalid]="
+                    !shareableJobForm.controls.initialStage.valid &&
+                    shareableJobForm.controls.initialStage.dirty
+                  "
+                ></textarea>
+                <small
+                  *ngIf="
+                    !shareableJobForm.controls.initialStage.valid &&
+                    shareableJobForm.controls.initialStage.dirty
+                  "
+                  class="text-primary text-wrap"
+                  >Project stage is required</small
+                >
+              </div> -->
+
+              <div class="w-full flex flex-col gap-[8px]">
+                <div class="text-b1 text-G900">Attachments</div>
+                <small class="text-b2 text-G500 leading-5 text-wrap font-sans"
+                  >You may attach up to 10 files under the size of 25 MB each.
+                  Include work samples or other documents to support your
+                  application.</small
+                >
+
+                <div
+                  (dragover)="onDragOver($event)"
+                  (dragleave)="onDragLeave($event)"
+                  (drop)="onDrop($event)"
+                  [class]="
+                    hoveredFiles && !isCurrentUpload
+                      ? 'w-full rounded-xl bg-G500 text-white border border-G200 flex justify-center items-center py-[10px] px-[16px]'
+                      : 'w-full rounded-xl bg-G50 text-G90 border border-G200 flex justify-center items-center py-[10px] px-[16px]'
+                  "
+                >
+                  <div class="w-full">
+                    <div
+                      class="flex justify-center items-center select-none"
+                      [ngClass]="{
+                        'cursor-not-allowed': isCurrentUpload
+                      }"
+                    >
+                      <img
+                        src="/assets/massimo/svg/fi_plus-circle.svg"
+                        alt="fi_info"
+                        class="pr-[8px] select-none"
+                      />
+                      Drag or
+                      <label
+                        class="text-b1 text-G900"
+                        for="file-upload"
+                        class="!text-C500 !text-b1 !font-sans !m-0 underline px-[3px] cursor-pointer"
+                        [ngClass]="{
+                          '!text-G500 cursor-not-allowed': isCurrentUpload,
+                          '!text-white': hoveredFiles
+                        }"
+                      >
+                        Upload
+                      </label>
+                      your files
                     </div>
-                    <div class="form-group">
-                      <div class="col-12">
-                        <label class="text-dark">Description *</label>
-                        <textarea
-                          class="form-control"
-                          #description
-                          formControlName="description"
-                          rows="4"
-                          name="description"
-                          placeholder="I'm looking for..."
-                          [class.invalid]="
-                            !shareableJobForm.controls.description.valid &&
-                            shareableJobForm.controls.description.dirty
-                          "
-                        ></textarea>
-                        <small
-                          *ngIf="!shareableJobForm.controls.description.valid"
-                          class="text-primary text-wrap"
-                          >e.g. 'Custom Logo' or 'Milestone 1 -
-                          Wireframes'.</small
-                        >
-                      </div>
-                    </div>
+                    <input
+                      id="file-upload"
+                      [disabled]="isCurrentUpload"
+                      type="file"
+                      multiple
+                      hidden
+                      (change)="detectFiles($event)"
+                    />
+                  </div>
+                </div>
 
-                    <div class="form-group canya-prefilled">
-                      <div class="col-12">
-                        <label>Project stage *</label>
-                        <textarea
-                          class="form-control"
-                          #initialStage
-                          formControlName="initialStage"
-                          type="text"
-                          name="initialStage"
-                          placeholder="eg. 'Ideation phase' or 'I have started work already'"
-                          maxlength="3000"
-                          [class.invalid]="
-                            !shareableJobForm.controls.initialStage.valid &&
-                            shareableJobForm.controls.initialStage.dirty
-                          "
-                        ></textarea>
-                        <small
-                          *ngIf="
-                            !shareableJobForm.controls.initialStage.valid &&
-                            shareableJobForm.controls.initialStage.dirty
-                          "
-                          class="text-primary text-wrap"
-                          >Project stage is required</small
-                        >
-                      </div>
-                    </div>
-
-                    <div class="form-group" *ngIf="!editing">
-                      <div class="col-12">
-                        <label>Key skills required *</label>
-                        <app-skill-tags-selection
-                          (tagsUpdated)="skillTagsUpdated($event)"
-                          (tagsLoaded)="skillTagsLoaded($event)"
-                          [updatedTags]="this.gitUpdatedTags"
-                          [minimumTags]="1"
-                        ></app-skill-tags-selection>
-                        <input
-                          hidden
-                          #skillTags
-                          class="form-control"
-                          formControlName="skills"
-                          type="text"
-                          name="skills"
-                        />
-                        <small
-                          *ngIf="
-                            !shareableJobForm.controls.skills.valid &&
-                            shareableJobForm.controls.skills.dirty
-                          "
-                          class="text-primary text-wrap"
-                          >You must choose at least one skill</small
-                        >
-                      </div>
-                    </div>
-
-                    <div class="form-group" *ngIf="editing && this.jobToEdit">
-                      <div class="col-12">
-                        <label>Key skills required to edit</label>
-                        <app-skill-tags-selection
-                          (tagsUpdated)="skillTagsUpdated($event)"
-                          (tagsLoaded)="skillTagsLoaded($event)"
-                          [initialTags]="this.jobToEdit.information.skills"
-                          [updatedTags]="this.gitUpdatedTags"
-                          [minimumTags]="1"
-                        ></app-skill-tags-selection>
-                        <input
-                          hidden
-                          #skillTags
-                          class="form-control"
-                          formControlName="skills"
-                          type="text"
-                          name="skills"
-                        />
-                      </div>
-                    </div>
-
-                    <div class="form-group">
-                      <div class="col-12">
-                        <label>Attach a file (max 50mb)</label>
-                        <br />
-                        <small class="text-primary text-wrap"
-                          >If you wish to upload more than one file we suggest
-                          you upload a zip folder</small
-                        >
-
-                        <div class="row ml-0 mr-0">
-                          <div
-                            class="mt-10 px-5 col-lg-4 col-md-4 col-sm-6 col-xs-12"
-                          >
-                            <label
-                              for="file-upload"
-                              class="btn btn-outline btn-primary"
-                              [ngClass]="{
-                                disabled: currentUpload || uploadedFile
-                              }"
-                            >
-                              Add file
-                            </label>
-                            <input
-                              id="file-upload"
-                              [disabled]="currentUpload || uploadedFile"
-                              type="file"
-                              hidden
-                              (change)="detectFiles($event)"
-                            />
-                          </div>
-                        </div>
-
-                        <div class="alert alert-danger" *ngIf="fileTooBig">
-                          File is too large, please upload a file smaller than
-                          50 MB
-                        </div>
-
-                        <div *ngIf="currentUpload">
-                          <div class="progress">
+                <!-- <div *ngIf="currentUpload"> -->
+                <!-- <div class="progress">
                             <div
                               class="progress-bar progress-bar-animated"
                               [ngStyle]="{
                                 width: currentUpload?.progress + '%'
                               }"
                             ></div>
-                          </div>
-                          <div *ngIf="!uploadedFile">
-                            Progress: {{ currentUpload?.name }} |
-                            {{ currentUpload?.progress }}% Complete
-                          </div>
-                        </div>
-                        <div class="alert alert-danger" *ngIf="uploadFailed">
-                          Oops, something went wrong uploading your file
-                        </div>
+                          </div> -->
 
-                        <div class="w-full px-10" *ngIf="uploadedFile">
-                          <br />
-                          Uploaded:
-                          <ul class="list-unstyled">
-                            <li>
-                              <p>
-                                {{ uploadedFile.name }}
-                                <span
-                                  class="pointer alert"
-                                  (click)="removeUpload(uploadedFile)"
-                                >
-                                  <i class="fa fa-times fs-14 pl-8"></i>
-                                </span>
-                              </p>
-                            </li>
-                          </ul>
-                        </div>
+                <!-- </div> -->
+                <!-- <div class="alert alert-danger" *ngIf="uploadFailed">
+                  Oops, something went wrong uploading your file
+                </div> -->
 
-                        <div class="alert alert-danger" *ngIf="deleteFailed">
-                          Oops, something went while wrong deleting your file.
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="form-group">
-                      <div class="col-12">
-                        <label>Provider type *</label>
-                        <br />
-                        <div class="row ml-0 mr-0">
-                          <div
-                            *ngFor="let type of providerTypes"
-                            class="px-5 col-lg-2 col-md-4 col-sm-6 col-12"
-                          >
-                            <button
-                              type="button text-left"
-                              (click)="setProviderType(type.id)"
-                              class="btn btn-primary w-full btn-providerType"
-                              [ngClass]="{
-                                'btn-outline':
-                                  shareableJobForm.controls.providerType
-                                    .value !== type.id
-                              }"
-                            >
-                              <div class="row">
-                                <div
-                                  class="col-lg-3 col-sm-2 col-0 text-center"
-                                >
-                                  <img
-                                    *ngIf="
-                                      shareableJobForm.controls.providerType
-                                        .value !== type.id
-                                    "
-                                    src="assets/img/providers/{{ type.img }}"
-                                  />
-                                  <img
-                                    *ngIf="
-                                      shareableJobForm.controls.providerType
-                                        .value === type.id
-                                    "
-                                    src="assets/img/providers/white/{{
-                                      type.img
-                                    }}"
-                                  />
-                                </div>
-                                <div
-                                  class="col-lg-8 col-sm-10 col-12 text-left"
-                                  style="white-space: initial"
-                                >
-                                  <p>{{ type.name }}</p>
-                                </div>
-                              </div>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group canya-prefilled">
-                      <div class="col-12">
-                        <label>Type of work *</label>
-                        <br />
-                        <div class="row ml-0 mr-0">
-                          <div
-                            *ngFor="let type of workTypes()"
-                            class="px-5 col-lg-3 col-md-4 col-sm-4 col-12"
-                          >
-                            <button
-                              type="button"
-                              (click)="setWorkType(type)"
-                              class="btn btn-primary w-full"
-                              [ngClass]="{
-                                'btn-outline':
-                                  shareableJobForm.controls.workType.value !==
-                                  type
-                              }"
-                            >
-                              {{ type }}
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="form-group row px-15">
-                      <div class="col-sm-6 canya-prefilled">
-                        <label>Timeline Expectations *</label>
-                        <br />
-                        <select
-                          #timelineExpectation
-                          class="form-control"
-                          formControlName="timelineExpectation"
-                        >
-                          <option value="">Choose...</option>
-                          <option
-                            *ngFor="let range of timeRanges()"
-                            [selected]="
-                              jobToEdit &&
-                              range == jobToEdit.information.timelineExpectation
-                            "
-                          >
-                            {{ range }}
-                          </option>
-                        </select>
-                      </div>
-                      <div class="col-sm-6">
-                        <label>Deadline *</label>
-                        <br />
-                        <div class="row ml-0 mr-0">
-                          <input
-                            #deadline
-                            formControlName="deadline"
-                            type="date"
-                            placeholder="dd.mm.yyyy"
-                            class="form-control"
-                            min="{{ currentDate }}"
-                          />
-                        </div>
-                        <small
-                          *ngIf="
-                            !shareableJobForm.controls.deadline.valid &&
-                            shareableJobForm.controls.deadline.dirty &&
-                            shareableJobForm.controls.deadline.errors &&
-                            !shareableJobForm.controls.deadline.errors
-                              .pastDueDate
-                          "
-                          class="text-primary text-wrap"
-                          >Deadline is required.</small
-                        >
-                        <small
-                          *ngIf="
-                            !shareableJobForm.controls.deadline.valid &&
-                            shareableJobForm.controls.deadline.dirty &&
-                            shareableJobForm.controls.deadline.errors &&
-                            shareableJobForm.controls.deadline.errors
-                              .pastDueDate
-                          "
-                          class="text-primary text-wrap"
-                        >
-                          Deadline in the past.</small
-                        >
-                      </div>
-                    </div>
-
-                    <div class="form-group px-10 canya-prefilled">
-                      <label class="px-5">Payment preference *</label>
-                      <br />
-                      <div class="row ml-0 mr-0">
-                        <div
-                          *ngFor="let type of paymentTypes()"
-                          class="px-5 col-lg-3 col-md-4 col-sm-4 col-12"
-                        >
-                          <button
-                            type="button"
-                            (click)="setPaymentType(type)"
-                            [disabled]="type === 'Hourly rate'"
-                            class="btn btn-primary w-full"
-                            [ngClass]="{
-                              'btn-outline':
-                                shareableJobForm.controls.paymentType.value !==
-                                type
-                            }"
-                          >
-                            {{ type }}
-                          </button>
-                        </div>
-                        <br />
-                        <div class="col-12">
-                          <small><i>Hourly rate payments coming soon</i></small>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="form-group">
+                <div *ngIf="!!beforeUploadFiles.length" class="w-full">
+                  <ul>
+                    <li
+                      class="flex flex-col gap-2 pt-[8px]"
+                      *ngFor="let file of beforeUploadFiles; let i = index"
+                    >
                       <div
-                        class="col-12"
-                        *ngIf="shareableJobForm.controls.paymentType.value"
+                        class="flex gap-2 text-C600 text-b2 font-sans justify-start items-center h-[24px]"
                       >
-                        <label class="text-dark">
-                          <span
-                            *ngIf="
-                              shareableJobForm.controls.paymentType.value ==
-                              paymentType.hourly
-                            "
-                            >Budget per hour (USD) *</span
-                          >
-                          <span
-                            *ngIf="
-                              shareableJobForm.controls.paymentType.value ==
-                              paymentType.fixed
-                            "
-                            >Total budget (USD) *</span
-                          >
-                        </label>
-                        <div class="row">
-                          <div class="col-md-6 col-sm-12">
-                            <input
-                              #budget
-                              formControlName="budget"
-                              class="form-control"
-                              type="number"
-                              min="0"
-                              name="budget"
-                              step="5"
-                              placeholder="$1 USD minimum"
-                              [class.invalid]="
-                                !shareableJobForm.controls.budget.valid &&
-                                shareableJobForm.controls.budget.dirty
-                              "
-                            />
-                            <small
-                              *ngIf="
-                                !shareableJobForm.controls.budget.valid &&
-                                shareableJobForm.controls.budget.dirty
-                              "
-                              class="text-primary"
-                              >Must be $1 USD or more.</small
-                            >
-                          </div>
-                        </div>
-                        <div class="row">
-                          <!--<div
-                            *ngIf="
-                              shareableJobForm.controls.budget.dirty &&
-                              usdToAtomicCan
-                            "
-                            class="col-6 mt-5 text-right"
-                          ></div>-->
-                          <div class="col-12">
-                            <small class="text-primary text-wrap">
-                              <b>Important</b>: All transactions on CanWork are
-                              made in BNB Chain (BEP20) tokens</small
-                            >
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="form-group">
-                      <label class="px-15">Estimated Hours</label>
-                      <br />
-                      <div class="row px-30">
-                        <input
-                          #weeklyCommitment
-                          formControlName="weeklyCommitment"
-                          class="form-control col-6"
-                          type="number"
-                          name="weeklyCommitment"
-                          placeholder="10"
-                          [class.invalid]="
-                            !shareableJobForm.controls.weeklyCommitment.valid &&
-                            shareableJobForm.controls.weeklyCommitment.dirty
-                          "
-                        />
-                        <span class="col-3 mt-8">Total hours</span>
-                        <br />
-                        <small
-                          >Your estimate of the total hours required for the
-                          job</small
-                        >
-                      </div>
-                      <small
-                        *ngIf="
-                          !postForm.controls.weeklyCommitment.valid &&
-                          postForm.controls.weeklyCommitment.dirty
-                        "
-                        class="text-primary"
-                        >Must be between 1 - 60 hours</small
-                      >
-                    </div>
-                    <div class="form-group">
-                      <div class="col-12">
-                        <label>Visibility *</label>
-                        <br />
-                        <div class="row ml-0 mr-0">
-                          <div
-                            class="px-5 col-lg-3 col-md-4 col-sm-6 col-xs-12"
-                          >
-                            <button
-                              type="button"
-                              (click)="setVisibility('invite')"
-                              class="btn btn-primary w-full"
-                              [ngClass]="{
-                                'btn-outline':
-                                  shareableJobForm.controls.visibility.value !==
-                                  'invite'
-                              }"
-                            >
-                              Invite-only
-                            </button>
-                          </div>
-                          <div
-                            class="px-5 col-lg-3 col-md-4 col-sm-6 col-xs-12"
-                          >
-                            <button
-                              type="button "
-                              (click)="setVisibility('public')"
-                              class="btn btn-primary w-full"
-                              [ngClass]="{
-                                'btn-outline':
-                                  shareableJobForm.controls.visibility.value !==
-                                  'public'
-                              }"
-                            >
-                              Public
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <div class="col-12">
-                        <app-terms [form]="shareableJobForm"></app-terms>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <div class="col-12">
-                      <div *ngIf="!isSending" class="col-12 row">
-                        <div class="px-5 col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                          <button
-                            type="button"
-                            (click)="submitShareableJob(true)"
-                            [disabled]="
-                              !shareableJobForm.controls.title.valid ||
-                              isSending ||
-                              (currentUpload && !uploadedFile)
-                            "
-                            class="btn btn-secondary mx-5 w-full"
-                          >
-                            SAVE AS DRAFT
-                          </button>
-                        </div>
-                        <div class="px-5 col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                          <button
-                            type="button"
-                            (click)="submitShareableJob(false)"
-                            [disabled]="
-                              !shareableJobForm.valid ||
-                              isSending ||
-                              (currentUpload && !uploadedFile)
-                            "
-                            class="btn btn-primary mx-5 w-full"
-                          >
-                            POST JOB
-                          </button>
-                        </div>
-                      </div>
-                      <div *ngIf="isSending">
                         <img
-                          *ngIf="isSending"
-                          src="assets/img/loader.svg"
-                          style="height: 36px"
-                          alt="CanYa Coin"
+                          src="/assets/massimo/svg/ion_attach-outline.svg"
+                          alt="ion_attach"
+                          class="w-[24px] h-[24px]"
                         />
+                        {{ file.name }}
+
+                        <div *ngIf="file?.progress === 100">
+                          <span
+                            class="cursor-pointer alert"
+                            (click)="removeUpload(uploadedFiles[i])"
+                          >
+                            <img
+                              src="/assets/massimo/svg/fi_x.svg"
+                              alt="ion_attach"
+                              class="w-[20px] h-[20px]"
+                            />
+                          </span>
+                        </div>
+                        <div *ngIf="file?.progress !== 100">
+                          <div
+                            class="uploadedFile"
+                            *ngIf="i < currentUploadNumber"
+                          >
+                            <span
+                              class="cursor-pointer alert"
+                              (click)="removeUpload(uploadedFiles[i])"
+                            >
+                              <img
+                                src="/assets/massimo/svg/fi_x.svg"
+                                alt="ion_attach"
+                                class="w-[20px] h-[20px]"
+                              />
+                            </span>
+                          </div>
+
+                          <div *ngIf="i == currentUploadNumber">
+                            <div role="status">
+                              <img
+                                src="/assets/massimo/svg/spinner.svg"
+                                alt="ion_attach"
+                                class="w-[20px] h-[20px]"
+                                class="animate-spin"
+                              />
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <span
-                        *ngIf="error"
-                        class="fs-12 fw-400 mt-10"
-                        style="color: #ff6666"
-                      >
-                        Something went wrong when posting this job..
-                      </span>
-                    </div>
+                    </li>
+                  </ul>
+                </div>
+
+                <div
+                  class="flex justify-start items-center text-R900 text-b2 font-sans mt-[8px] gap-[8px]"
+                  *ngIf="fileTooBig"
+                >
+                  <img src="/assets/massimo/svg/fi_alert-triangle.svg" alt="" />
+                  You can only add 10 files with maximum of 25MB each.
+                </div>
+
+                <!-- <div
+                  class="flex justify-start items-center text-R900 text-b2 font-sans mt-[8px] gap-[8px]"
+                  *ngIf="deleteFailed"
+                >
+                  <img src="/assets/massimo/svg/fi_alert-triangle.svg" alt="" />
+                  Oops, something went while wrong deleting your file.
+                </div> -->
+              </div>
+
+              <div class="w-full" *ngIf="!editing">
+                <div class="text-b1 text-G900 mb-[8px]">
+                  Skill Tags (20 max) <span class="text-R900">*</span>
+                </div>
+                <app-skill-tags-selection
+                  (tagsUpdated)="skillTagsUpdated($event)"
+                  (tagsLoaded)="skillTagsLoaded($event)"
+                  [updatedTags]="this.gitUpdatedTags"
+                  [minimumTags]="1"
+                ></app-skill-tags-selection>
+                <input
+                  hidden
+                  #skillTags
+                  class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                  formControlName="skills"
+                  type="text"
+                  name="skills"
+                />
+                <small
+                  *ngIf="
+                    !shareableJobForm.controls.skills.valid &&
+                    shareableJobForm.controls.skills.dirty
+                  "
+                  class="text-primary text-wrap"
+                  >You must choose at least one skill</small
+                >
+              </div>
+
+              <div class="w-full" *ngIf="editing && this.jobToEdit">
+                <div class="text-b1 text-G900 mb-[8px]">
+                  Key skills required to edit
+                </div>
+                <app-skill-tags-selection
+                  (tagsUpdated)="skillTagsUpdated($event)"
+                  (tagsLoaded)="skillTagsLoaded($event)"
+                  [initialTags]="this.jobToEdit.information.skills"
+                  [updatedTags]="this.gitUpdatedTags"
+                  [minimumTags]="1"
+                ></app-skill-tags-selection>
+                <input
+                  hidden
+                  #skillTags
+                  class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                  formControlName="skills"
+                  type="text"
+                  name="skills"
+                />
+              </div>
+
+              <!-- <div class="w-full">
+                <div class="text-b1 text-G900 mb-[8px]">
+                  Type of work <span class="text-R900">*</span>
+                </div>
+                <div class="row ml-0 mr-0">
+                  <div
+                    *ngFor="let type of workTypes()"
+                    class="px-5 col-lg-3 col-md-4 col-sm-4 col-12"
+                  >
+                    <button
+                      type="button"
+                      (click)="setWorkType(type)"
+                      class="btn btn-primary w-full"
+                      [ngClass]="{
+                        'btn-outline':
+                          shareableJobForm.controls.workType.value !== type
+                      }"
+                    >
+                      {{ type }}
+                    </button>
                   </div>
-                </form>
+                </div>
+              </div> -->
+
+              <!-- <div class="w-full">
+                <div class="text-b1 text-G900 mb-[8px]" class="px-5">
+                  Payment preference <span class="text-R900">*</span>
+                </div>
+                <br />
+                <div class="row ml-0 mr-0">
+                  <div
+                    *ngFor="let type of paymentTypes()"
+                    class="px-5 col-lg-3 col-md-4 col-sm-4 col-12"
+                  >
+                    <button
+                      type="button"
+                      (click)="setPaymentType(type)"
+                      [disabled]="type === 'Hourly rate'"
+                      class="btn btn-primary w-full"
+                      [ngClass]="{
+                        'btn-outline':
+                          shareableJobForm.controls.paymentType.value !== type
+                      }"
+                    >
+                      {{ type }}
+                    </button>
+                  </div>
+                  <br />
+                  <div class="col-12">
+                    <small><i>Hourly rate payments coming soon</i></small>
+                  </div>
+                </div>
+              </div> -->
+
+              <div
+                class="w-full text-b1 font-sans flex flex-col gap-[8px]"
+                *ngIf="shareableJobForm.controls.paymentType.value"
+              >
+                <div class="text-G900">
+                  {{
+                    shareableJobForm.controls.paymentType.value ==
+                    paymentType.hourly
+                      ? 'Budget per hour (USD)'
+                      : 'Budget (USD)'
+                  }}
+                  <span class="text-R900">*</span>
+                </div>
+                <input
+                  #budget
+                  formControlName="budget"
+                  class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                  type="number"
+                  min="1"
+                  name="budget"
+                  step="5"
+                  placeholder="$0.00"
+                  [class.invalid]="
+                    !shareableJobForm.controls.budget.valid &&
+                    shareableJobForm.controls.budget.dirty
+                  "
+                />
+                <div
+                  class="w-full flex gap-2 text-R900 text-b2 font-sans mt-[8px]"
+                  *ngIf="
+                    !shareableJobForm.controls.budget.valid &&
+                    shareableJobForm.controls.budget.dirty
+                  "
+                >
+                  <img src="/assets/massimo/svg/fi_alert-triangle.svg" alt="" />
+                  Must be at least 1, less than 10, 000, 000, and a valid number
+                  with up to two decimal places.
+                </div>
+                <div class="text-[#0065FF] text-b2 font-[400] pt-[8px] flex">
+                  <img
+                    src="/assets/massimo/svg/fi_info.svg"
+                    alt="fi_info"
+                    class="pr-[8px]"
+                  />
+                  Important: All transactions on CanWork are made in BNB (BEP20)
+                  Chain Tokens
+                </div>
+              </div>
+
+              <div class="w-full text-b1 font-sans flex flex-col gap-[8px]">
+                <div class="text-G900">Estimated Hours</div>
+                <input
+                  #weeklyCommitment
+                  formControlName="weeklyCommitment"
+                  class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                  type="number"
+                  min="1"
+                  name="weeklyCommitment"
+                  placeholder="10"
+                  [class.invalid]="
+                    !shareableJobForm.controls.weeklyCommitment.valid &&
+                    shareableJobForm.controls.weeklyCommitment.dirty
+                  "
+                />
+                <small class="text-b2 text-G500 text-wrap font-sans"
+                  >Your estimate of the total hours required for the job.</small
+                >
+                <div
+                  *ngIf="
+                    !shareableJobForm.controls.weeklyCommitment.valid &&
+                    shareableJobForm.controls.weeklyCommitment.dirty
+                  "
+                  class="w-full flex gap-2 text-R900 font-sans text-b2"
+                >
+                  <img src="/assets/massimo/svg/fi_alert-triangle.svg" alt="" />
+                  Must be between 1 ~ 10, 000, 000 hours.
+                </div>
+              </div>
+
+              <div
+                class="w-full flex max-md:flex-col md:flex-wrap gap-[10px] md:gap-10 create-job-post text-b1 font-sans"
+              >
+                <div class="flex flex-col gap-2">
+                  <div class="text-b1 text-G900">
+                    Freelance Category <span class="text-R900">*</span>
+                  </div>
+                  <p-dropdown
+                    [options]="sortingMethods_category"
+                    [(ngModel)]="selectedSortings_category"
+                    optionLabel="name"
+                    appendTo="body"
+                  >
+                    <ng-template pTemplate="selectedItem">
+                      <div
+                        class="flex items-center gap-2"
+                        *ngIf="selectedSortings_category"
+                      >
+                        <div class="flex items-center gap-[16px]">
+                          <img
+                            src="{{
+                              '/assets/massimo/images/' +
+                                selectedSortings_category.img
+                            }}"
+                            class="w-[20px]"
+                          />
+                          <span class="text-G900 font-medium text-b1">{{
+                            selectedSortings_category.name
+                          }}</span>
+                        </div>
+                      </div>
+                    </ng-template>
+                    <ng-template let-item pTemplate="item">
+                      <div
+                        class="flex items-center gap-[16px]"
+                        (click)="setProviderType(item)"
+                      >
+                        <img
+                          src="{{ '/assets/massimo/images/' + item.img }}"
+                          class="w-[20px]"
+                        />
+                        <span class="text-G900 font-medium text-b1">{{
+                          item.name
+                        }}</span>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+                <div class="flex flex-col gap-2">
+                  <div class="text-b1 text-G900">
+                    Deadline <span class="text-R900">*</span>
+                  </div>
+                  <div>
+                    <p-calendar
+                      [(ngModel)]="date"
+                      [showIcon]="true"
+                      formControlName="deadline"
+                      appendTo="body"
+                      [minDate]="currentDate"
+                    ></p-calendar>
+                  </div>
+                </div>
+                <div class="flex flex-col gap-2">
+                  <div class="text-b1 text-G900">
+                    Visibility <span class="text-R900">*</span>
+                  </div>
+
+                  <p-dropdown
+                    [options]="sortingMethods_visibility"
+                    [(ngModel)]="selectedSortings_visibility"
+                    optionLabel="name"
+                    appendTo="body"
+                  >
+                    <ng-template pTemplate="selectedItem">
+                      <div
+                        class="flex items-center gap-2"
+                        *ngIf="selectedSortings_visibility"
+                      >
+                        <div class="flex items-center">
+                          <img
+                            src="{{
+                              '/assets/massimo/svg/' +
+                                selectedSortings_visibility.img
+                            }}"
+                            style="width: 20px"
+                            class="mr-[16px]"
+                          />
+                          <span class="text-G900 font-medium text-b1">{{
+                            selectedSortings_visibility.name
+                          }}</span>
+                        </div>
+                      </div>
+                    </ng-template>
+                    <ng-template let-item pTemplate="item">
+                      <div
+                        class="flex items-center"
+                        (click)="setVisibility(item)"
+                      >
+                        <img
+                          src="{{ '/assets/massimo/svg/' + item.img }}"
+                          style="width: 20px"
+                          class="mr-[16px]"
+                        />
+                        <span class="text-G900">{{ item.name }}</span>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                </div>
+              </div>
+
+              <div class="text-b1 font-sans">
+                <app-terms [form]="shareableJobForm"></app-terms>
+              </div>
+              <div>
+                <div class="flex gap-4 justify-end flex-col md:flex-row">
+                  <basic-button
+                    extraClass="!border-none text-G900 !shadow-none"
+                    size="small"
+                    [type]="1"
+                    title="Save as Draft"
+                    [disabled]="isSending || isCurrentUpload"
+                    (click)="submitShareableJob(0)"
+                  />
+                  <basic-button
+                    [type]="1"
+                    (click)="submitShareableJob(1)"
+                    title="See Preview"
+                    size="small"
+                    [disabled]="isSending || isCurrentUpload"
+                    extraClass="border text-G900"
+                  />
+                  <basic-button
+                    [type]="2"
+                    title="Post Job Listing"
+                    size="small"
+                    (click)="submitShareableJob(2)"
+                    [disabled]="isSending || isCurrentUpload"
+                  />
+                </div>
+                <!-- <span
+                  *ngIf="error"
+                  class="fs-12 fw-400 mt-10"
+                  style="color: #ff6666"
+                >
+                  Something went wrong when posting this job..
+                </span> -->
               </div>
             </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="sent">
+      <basic-dialog
+        [visible]="sentDRP === 2"
+        title="Job listing successful"
+        content="Your job has been successfully listed on CanWork's job board. Consider inviting freelancers to your job listing and sharing on your social media."
+        type="success"
+      />
+      <!-- <basic-dialog
+        [visible]="sentDRP === 0"
+        title="Job listing saved to Draft"
+        content="Your job listing has been saved to your drafts, you can continue anytime to list your job on CanWork"
+        type="success"
+      /> -->
+      <basic-dialog
+        [visible]="sentDRP === 0"
+        title="Job listing saved to Draft"
+        content="Your job listing has been saved to your drafts, you can continue anytime to list your job on CanWork"
+        type="draft"
+        [slug]="slug"
+      />
+      <!-- <div *ngIf="!draft && editing">
+            <h2>Your job has been saved!</h2>
+            <p class="lead fw-400">
+              You can now invite providers to this job.
+            </p>
+          </div> -->
+      <!-- <br />
+        <p *ngIf="!draft" class="text-center">
+          <a class="btn btn-secondary" [routerLink]="['/jobs/public/', slug]"
+            >Go to job</a
+          >
+          &nbsp;&nbsp;
+          <a class="btn btn-primary text-white" [routerLink]="['/search']"
+            >Invite Providers</a
+          >
+        </p>
+        <p *ngIf="draft" class="text-center">
+          <a class="btn btn-secondary" [routerLink]="['/inbox/jobs/']"
+            >My Jobs</a
+          >
+          &nbsp;&nbsp;
+          <a
+            class="btn btn-primary text-white"
+            [routerLink]="['/jobs/public/', slug]"
+            >Go to job</a
+          >
+          &nbsp;&nbsp;
+        </p> -->
+    </div>
+    <div
+      *ngIf="isPreview"
+      class="flex flex-col md:flex-row md:justify-center gap-2 md:gap-6 max-w-[1440px] p-[20px] md:p-[40px] m-auto rounded-xl"
+    >
+      <div
+        *ngIf="jobForPreview"
+        class="w-full rounded-[12px] bg-white border border-G200 p-11"
+      >
+        <div class="text-b3 md:text-b2 text-G800 leading-[1.2] mt-[12px]">
+          Preview
+        </div>
+        <div
+          class="text-h4 md:text-h4 text-G800 font-medium leading-[1.2] my-[8px] font-sans"
+        >
+          {{ jobForPreview.information.title }}
+        </div>
+        <div class="text-b3 md:text-b2 text-G500 leading-[1.2]">
+          {{ jobFromNow }}
+        </div>
+        <div
+          class="text-b2 md:text-b1 text-G900 leading-[1.2] mt-[24px]"
+          [innerHTML]="jobForPreview.information.description | linkify"
+        ></div>
+
+        <hr
+          *ngIf="jobForPreview.information.attachments.length > 0"
+          class="h-[1.5px] my-[20px] bg-gray-200 border-0"
+        />
+        <div
+          *ngIf="jobForPreview.information.attachments.length > 0"
+          class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[15px]"
+        >
+          <p class="mb-[10px] text-b2 font-sans font-medium text-G900">
+            Attachment
+          </p>
+          <ng-container
+            *ngFor="let item of jobForPreview.information.attachments"
+          >
+            <div class="flex justify-start py-[6px]">
+              <a href="{{ item.url }}" target="_blank">
+                <p class="flex justify-start items-center text-C600">
+                  <img
+                    src="/assets/massimo/svg/ion_attach-outline.svg"
+                    alt="ion_attach"
+                    class="w-[24px] h-[24px]"
+                  />
+                  {{ item.name }}
+                </p>
+              </a>
+            </div>
+          </ng-container>
+        </div>
+        <div *ngIf="jobForPreview.information.skills.length > 0">
+          <hr class="h-[1.5px] my-[20px] bg-gray-200 border-0" />
+          <p class="mb-[10px] text-b2 font-sans font-medium text-G900">
+            Skill Tags
+          </p>
+
+          <div
+            class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[15px] flex flex-wrap"
+          >
+            <app-skill-tag
+              *ngFor="let skill of jobForPreview.information.skills"
+              [routerLink]="['/search/']"
+              [queryParams]="{ query: skill }"
+              [skill]="skill"
+            ></app-skill-tag>
+          </div>
+        </div>
+
+        <div class="flex justify-start pt-[48px]">
+          <div
+            class="group flex justify-center items-center text-b1 text-G900 leading-6 font-medium cursor-pointer p-[6px] rounded-md duration-500 transition-transform"
+            [routerLink]="['/jobs']"
+          >
+            <img
+              src="/assets/massimo/svg/Arrow-Left.svg"
+              alt="Arrow-Left"
+              class="w-[20px] h-[20px] mx-[8px] group-hover:-translate-x-[6px] duration-500 transition-all"
+            />
+            Back to Job Board
           </div>
         </div>
       </div>
-
-      <div *ngIf="sent">
-        <div class="container card">
-          <div class="text-center mt-30">
+      <div
+        class="md:w-[400px] rounded-[12px] bg-white border border-G200 px-[24px] py-[24px] detail-job"
+      >
+        <div
+          class="text-b2 flex justify-between items-center md:text-b1 text-G800 font-medium leading-[1.2] pl-[2px]"
+        >
+          <span *ngIf="jobForPreview?.state">
+            <i class="circle-success fas fa-circle mr-[12px]"></i
+            >{{ jobForPreview?.state }}
+          </span>
+          <p-dropdown
+            [options]="sharelinks"
+            [(ngModel)]="selectedsharelinks"
+            optionLabel="name"
+            appendTo="body"
+          >
+            <ng-template pTemplate="selectedItem">
+              <div
+                *ngIf="selectedsharelinks"
+                class="border border-G300 shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer w-[32px] h-[32px] rounded-lg p-[6px]"
+              >
+                <img
+                  src="/assets/massimo/svg/fi_share-2.svg"
+                  alt=""
+                  class="w-full h-full"
+                />
+              </div>
+            </ng-template>
+            <ng-template let-item pTemplate="item">
+              <div class="flex items-center">
+                <img
+                  src="{{ '/assets/massimo/svg/' + item.img }}"
+                  style="width: 20px"
+                  class="mr-[16px]"
+                />
+                <span class="text-R900">{{ item.name }}</span>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+        <table
+          class="table-auto text-b2 w-full md:text-b1 mt-[24px] border-separate border-spacing-x-[2px] border-spacing-y-[10px] md:w-[302px]"
+        >
+          <tr>
+            <td class="text-G700">{{ jobForPreview.paymentType }}</td>
+            <td class="text-G900 text-right font-medium">
+              ${{ jobForPreview.budget
+              }}<span *ngIf="jobForPreview.paymentType !== 'Fixed price'"
+                >/hr</span
+              >
+              USD
+            </td>
+          </tr>
+          <tr *ngIf="bids">
+            <td class="text-G700">Proposals</td>
+            <td class="text-G900 text-right font-medium">
+              {{ bids.length }} Proposals
+            </td>
+          </tr>
+          <tr>
+            <td class="text-G700">Deadline</td>
+            <td class="text-G900 text-right font-medium">
+              {{ formatDate(jobForPreview.deadline) }}
+            </td>
+          </tr>
+          <tr *ngIf="jobForPreview.information.weeklyCommitment > 0">
+            <td class="text-G700">Estimated hours</td>
+            <td class="text-G900 text-right font-medium">
+              {{ jobForPreview.information.weeklyCommitment }} hours
+            </td>
+          </tr>
+          <tr>
+            <td class="text-G700">Category</td>
+            <td class="text-G900 text-right font-medium">
+              {{ jobForPreview.information.providerType }}
+            </td>
+          </tr>
+        </table>
+        <hr class="h-[1.5px] my-[20px] bg-gray-200 border-0" />
+        <div
+          class="text-b3 md:text-b2 text-G800 leading-[1.2] mt-[24px] mb-[16px]"
+        >
+          About the Client
+        </div>
+        <div class="mt-[12px]">
+          <profile-card
+            [index]="0"
+            [avatarUri]="currentUser.avatar['uri']"
+            [name]="currentUser.name"
+            [title]="currentUser.title"
+            [isVerified]="currentUser.verified"
+            [rating]="currentUser.rating"
+            [skillTags]="currentUser.skillTags"
+            [slug]="currentUser.slug"
+            [address]="currentUser.address"
+            [timezone]="currentUser.timezone"
+            [isSmall]="true"
+            [isGrid]="false"
+          />
+        </div>
+        <div
+          class="flex justify-between gap-4 text-b2 md:text-b1 leading-[1.2] mt-[24px]"
+        >
+          <button
+            *ngIf="!isSending"
+            class="flex justify-center items-center text-G900 font-medium"
+            (click)="BacktoEdit()"
+          >
             <img
-              src="assets/img/CanYa_tick_green.svg"
-              class="mb-30 animated bounceInDown"
-              width="100px"
-              height="100px"
+              src="/assets/massimo/svg/fi_edit.svg"
+              alt=""
+              class="mr-[8px]"
             />
-            <div *ngIf="!draft && !editing">
-              <h2>Congrats! Your Job has been Created!</h2>
-              <p class="lead fw-400">
-                You can now invite providers to this job.
-              </p>
-            </div>
-            <div *ngIf="!draft && editing">
-              <h2>Your job has been saved!</h2>
-              <p class="lead fw-400">
-                You can now invite providers to this job.
-              </p>
-            </div>
-            <div *ngIf="draft">
-              <h2>Your job draft has been saved</h2>
-              <p class="lead fw-400 m-0">
-                You can finish the draft and share it later.
-              </p>
-            </div>
-          </div>
-          <br />
-          <p *ngIf="!draft" class="text-center">
-            <a class="btn btn-secondary" [routerLink]="['/jobs/public/', slug]"
-              >Go to job</a
-            >
-            &nbsp;&nbsp;
-            <a class="btn btn-primary text-white" [routerLink]="['/search']"
-              >Invite Providers</a
-            >
-          </p>
-          <p *ngIf="draft" class="text-center">
-            <a class="btn btn-secondary" [routerLink]="['/inbox/jobs/']"
-              >My Jobs</a
-            >
-            &nbsp;&nbsp;
-            <a
-              class="btn btn-primary text-white"
-              [routerLink]="['/jobs/public/', slug]"
-              >Go to job</a
-            >
-            &nbsp;&nbsp;
-          </p>
+            Back to Editing
+          </button>
+
+          <basic-button
+            [type]="2"
+            title="Post Job"
+            size="small"
+            *ngIf="!isSending"
+            (click)="submitShareableJob(2)"
+            [disabled]="isSending || isCurrentUpload"
+          />
         </div>
       </div>
     </div>
   </section>
 </main>
-
-<app-scroll-top></app-scroll-top>
