@@ -401,7 +401,8 @@
               !myJob &&
               isOpen &&
               !canBid &&
-              yourApplication
+              yourApplication &&
+              !yourApplication.rejected
             "
             class="w-full flex flex-col rounded-[12px] bg-white border border-G300 p-[40px] gap-6 mt-[16px]"
           >
@@ -415,12 +416,12 @@
               <div class="flex items-center gap-4">
                 <div class="text-b2 font-normal text-G800">Status</div>
                 <div
-                  class="px-[16px] py-[6px] rounded-3xl bg-[#FFF8C5] text-G800"
+                  class="px-[16px] py-[6px] rounded-3xl bg-[#FFF8C5] text-G800 select-none"
                 >
                   Not viewed
                 </div>
                 <!-- <div
-                  class="px-[16px] py-[6px] rounded-3xl bg-[#DAFBE1] text-G800"
+                  class="px-[16px] py-[6px] rounded-3xl bg-[#DAFBE1] text-G800 select-none"
                 >
                   Viewed
                 </div> -->
@@ -516,7 +517,7 @@
 
         <div
           class="lg:w-[350px] rounded-[12px] bg-white border border-G300 px-7 py-[32px] h-full"
-          [ngClass]="{ 'mt-[40px]': !IsProvider || myJob }"
+          [ngClass]="{ 'md:mt-[40px]': IsProvider && myJob }"
         >
           <div
             class="text-b2 flex justify-between items-center md:text-b1 text-G800 font-medium pl-[2px]"
@@ -740,10 +741,10 @@
 />
 
 <basic-dialog
-  [visible]="visible_listing_modal"
-  title="Job Listing Deleted."
-  content="You  can create a new job listing to receive bids."
-  type="listing_deleted"
+  [visible]="visible_withdraw_success_modal"
+  title="Your Application Deleted."
+  content="You can find another jobs in jobs page."
+  type="withdraw_success"
 />
 
 <!-- Modals end -->

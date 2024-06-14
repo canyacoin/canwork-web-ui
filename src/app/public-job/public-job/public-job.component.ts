@@ -99,7 +99,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   visible_delete_modal: boolean = false
   visible_withdraw_modal: boolean = false
   visible_login_modal: boolean = false
-  visible_listing_modal: boolean = false
+  visible_withdraw_success_modal: boolean = false
 
   dublicateFilename: string[] = []
 
@@ -188,11 +188,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.spinner.show()
-
-    setTimeout(() => {
-      /** spinner ends after 2 seconds */
-      this.spinner.hide()
-    }, 2000)
     this.activejobTypes = [
       { label: 'Job Details', code: 'jobsdetail' },
       { label: 'Proposals', code: 'proposals' },
@@ -277,6 +272,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
       }
     })
     this.IsShownTab = this.currentUser && this.IsProvider
+    this.spinner.hide()
   }
 
   async uploadFiles(files: FileList) {
@@ -740,11 +736,23 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     this.visible_delete_modal = !this.visible_delete_modal
   }
 
-  WithdrawJob(event: Event) {
+  async WithdrawJob(event: Event) {
     event.stopPropagation()
     this.visible_withdraw_modal = !this.visible_withdraw_modal
     if (!this.visible_withdraw_modal) {
-      this.visible_listing_modal = true
+      const chosen = await this.publicJobsService.declineBid(
+        this.job,
+        this.yourApplication
+      )
+      if (chosen) {
+        this.visible_withdraw_success_modal = true
+      } else {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: `Something went wrong with withdrawing job application.`,
+        })
+      }
     }
   }
 

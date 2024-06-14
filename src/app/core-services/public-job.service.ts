@@ -284,7 +284,7 @@ export class PublicJobService {
       const jobRef = this.afs.collection(`public-jobs`).doc(job.id)
       const bidsCollectionRef: any = jobRef.collection('bids')
       const bidsSnapshot = await bidsCollectionRef.get().toPromise()
-      
+
       // Check if the bids collection exists
       if (bidsSnapshot.empty) {
         return true
