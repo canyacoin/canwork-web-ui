@@ -103,11 +103,13 @@
                         }}/2500
                       </div>
                     </div>
-                    <app-warning-message
-                      *ngIf="bid_message_valiated"
-                      message="Your coverletter should be longger than 5 and shorter than 2500"
-                      [type]="1"
-                    />
+                    <div class="pt-[16px]">
+                      <app-warning-message
+                        *ngIf="bid_message_valiated"
+                        message="Your coverletter should be longger than 5 and shorter than 2500"
+                        [type]="1"
+                      />
+                    </div>
                   </div>
 
                   <div
@@ -144,6 +146,7 @@
                           formControlName="price"
                           type="number"
                           id="price"
+                          min="1"
                           [(ngModel)]="price_bid"
                           class="!outline-none !border-none bg-G50 pl-[2px]"
                         />
@@ -171,7 +174,7 @@
 
                     <!-- Payout -->
                     <div
-                      class="flex max-md:flex-col justify-center md:justify-between pb-[24px] h-max gap-[8px]"
+                      class="flex max-md:flex-col justify-center md:justify-between h-max gap-[8px]"
                     >
                       <div>
                         <h1 class="text-b1-medium">Payout</h1>
@@ -201,7 +204,9 @@
                       [type]="1"
                     />
 
-                    <div class="w-full flex flex-col gap-[8px]">
+                    <div
+                      class="w-full flex flex-col gap-[8px] border-t border-G300 pt-[24px]"
+                    >
                       <div class="text-b1 text-G900">Attachments</div>
                       <small
                         class="text-b2 text-G500 leading-5 text-wrap font-sans"
@@ -326,10 +331,13 @@
                         class="flex justify-start items-center text-R900 text-b2 font-sans mt-[8px] gap-[8px]"
                         *ngIf="fileTooBig"
                       >
-                        <img src="/assets/massimo/svg/fi_alert-triangle.svg" alt="" />
+                        <img
+                          src="/assets/massimo/svg/fi_alert-triangle.svg"
+                          alt=""
+                        />
                         You can only add 10 files with maximum of 25MB each.
                       </div>
-      
+
                       <!-- <div
                         class="flex justify-start items-center text-R900 text-b2 font-sans mt-[8px] gap-[8px]"
                         *ngIf="deleteFailed"
