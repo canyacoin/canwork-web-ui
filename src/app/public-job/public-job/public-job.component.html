@@ -13,7 +13,7 @@
         class="flex flex-col md:flex-row md:justify-between gap-2 md:gap-6 pt-[56px]"
       >
         <div class="w-full rounded-[12px] bg-white border border-G300 p-11">
-          <div class="text-h6 md:text-h5 text-G800 font-medium leading-[1.2]">
+          <div class="text-h6 md:text-h5 text-G800 font-medium">
             We can't find the job you were looking for<br />
             Please check the link you provided<br />
             <button
@@ -46,7 +46,7 @@
                   }"
                 >
                   <div
-                    class="select-none flex items-center h-full py-[8px] px-[12px] md:px-[40px] text-b2 md:text-b1 text-center font-medium leading-6 rounded-t-xl text-G500 cursor-pointer"
+                    class="select-none flex items-center h-full py-[8px] px-[12px] md:px-[40px] text-b2 md:text-b1 text-center font-medium rounded-t-xl text-G500 cursor-pointer"
                     (click)="changeJob(item)"
                     [ngClass]="{ 'bg-white': selectedjob.code === item.code }"
                   >
@@ -83,14 +83,12 @@
                   *ngIf="job && currentUser && IsProvider && !myJob"
                 >
                   <h2
-                    class="pt-[20px] md:pt-[32px] text-h6 md:text-h5 text-G900 font-medium leading-8"
+                    class="pt-[20px] md:pt-[32px] text-h6 md:text-h5 text-G900 font-medium"
                   >
                     Submit your proposal
                   </h2>
 
-                  <h1 class="text-b1 font-medium leading-6 text-G900">
-                    Cover Letter
-                  </h1>
+                  <h1 class="text-b1 font-medium text-G900">Cover Letter</h1>
                   <div class="w-full">
                     <angular-editor
                       formControlName="message"
@@ -208,8 +206,7 @@
                       class="w-full flex flex-col gap-[8px] border-t border-G300 pt-[24px]"
                     >
                       <div class="text-b1 text-G900">Attachments</div>
-                      <small
-                        class="text-b2 text-G500 leading-5 text-wrap font-sans"
+                      <small class="text-b2 text-G500 text-wrap font-sans"
                         >You may attach up to 10 files under the size of 25 MB
                         each. Include work samples or other documents to support
                         your application.</small
@@ -376,7 +373,7 @@
 
               <div class="flex justify-start pt-[48px]">
                 <div
-                  class="group flex justify-center items-center text-b1 text-G900 leading-6 font-medium cursor-pointer p-[6px] rounded-md"
+                  class="group flex justify-center items-center text-b1 text-G900 font-medium cursor-pointer p-[6px] rounded-md"
                   [routerLink]="['/jobs']"
                 >
                   <img
@@ -410,28 +407,29 @@
           >
             <div class="flex max-md:flex-col justify-between items-center">
               <div>
-                <h2 class="text-h6 font-medium leading-7 pb-[8px]">
-                  Your Application
-                </h2>
-                <div class="max-md:text-center text-b2 text-G500 leading-5">
+                <h2 class="text-h6 font-medium pb-[8px]">Your Application</h2>
+                <div class="max-md:text-center text-b2 text-G500">
                   Applied: {{ formatDate(yourApplication.timestamp) }}
                 </div>
               </div>
               <div class="flex items-center gap-4">
-                <div class="text-b2 font-normal leading-5 text-G800">
-                  Status
-                </div>
+                <div class="text-b2 font-normal text-G800">Status</div>
                 <div
+                  class="px-[16px] py-[6px] rounded-3xl bg-[#FFF8C5] text-G800"
+                >
+                  Not viewed
+                </div>
+                <!-- <div
                   class="px-[16px] py-[6px] rounded-3xl bg-[#DAFBE1] text-G800"
                 >
                   Viewed
-                </div>
+                </div> -->
               </div>
             </div>
 
             <!-- cover letter -->
             <div class="text-G900">
-              <h2 class="text-b1 font-medium leading-6">Cover Letter</h2>
+              <h2 class="text-b1 font-medium">Cover Letter</h2>
               <div
                 class="text-b2 md:text-b1 py-[16px]"
                 [innerHTML]="yourApplication.message | linkify"
