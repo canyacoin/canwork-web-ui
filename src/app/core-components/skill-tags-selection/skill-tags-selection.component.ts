@@ -106,7 +106,7 @@ export class SkillTagsSelectionComponent implements OnInit {
     this.tagInput = ''
     this.tagSelectionInvalid = 0
     this.onDropDownTT()
-    console.log('this.tagSelectionInvalid', this.tagSelectionInvalid)
+    // console.log('this.tagSelectionInvalid', this.tagSelectionInvalid)
   }
 
   onTagChange() {

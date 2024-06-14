@@ -442,7 +442,7 @@ export class PostComponent implements OnInit, OnDestroy {
     const noAddress = await this.authService.isAuthenticatedAndNoAddress()
     const user = await this.authService.getCurrentUser()
     if (noAddress && user.type == 'User') {
-      console.log('test create a job posting address')
+      // console.log('test create a job posting address')
       // issuse/................................
       this.messageService.add({
         key: 'tc',
@@ -785,7 +785,7 @@ export class PostComponent implements OnInit, OnDestroy {
     if (tags.length > 20) {
       tags = tags.slice(0, 20)
     }
-    console.log('tags', tags)
+    // console.log('tags', tags)
     if (!tags.length) {
       tags = this.jobToEdit.information.skills
     }
@@ -969,7 +969,7 @@ export class PostComponent implements OnInit, OnDestroy {
 
   async submitShareableJob(isDRP: number) {
     // isDRP , 0 => draft, , 1=> Preview, 2 => Post
-    console.log('isDRP:', isDRP)
+    // console.log('isDRP:', isDRP)
     this.spinner.show()
     this.isSending = true
     this.error = false
@@ -988,7 +988,7 @@ export class PostComponent implements OnInit, OnDestroy {
                 .split(',')
                 .map((item) => item.trim())
       } catch (error) {
-        console.log('error with tags:', error)
+        // console.log('error with tags:', error)
         if (!tags.length) {
           tags = this.jobToEdit.information.skills
         }
@@ -1033,8 +1033,8 @@ export class PostComponent implements OnInit, OnDestroy {
       })
       this.draft = isDRP > 1 ? false : true
 
-      console.log('job:', job)
-      console.log('isDRP:', isDRP)
+      // console.log('job:', job)
+      // console.log('isDRP:', isDRP)
 
       if (isDRP > 0) {
         job.state = JobState.acceptingOffers

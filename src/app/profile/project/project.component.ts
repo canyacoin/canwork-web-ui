@@ -16,7 +16,6 @@ import { AuthService } from '../../core-services/auth.service'
 @Component({
   selector: 'app-project',
   templateUrl: './project.component.html',
-  styleUrls: ['./project.component.css'],
 })
 export class ProjectComponent implements OnInit, OnDestroy {
   currentUser: User

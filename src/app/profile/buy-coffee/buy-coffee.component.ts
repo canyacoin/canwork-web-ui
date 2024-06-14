@@ -11,7 +11,6 @@ import { UserService } from '@service/user.service'
 @Component({
   selector: 'app-buy-coffee',
   templateUrl: './buy-coffee.component.html',
-  styleUrls: ['./buy-coffee.component.css'],
 })
 export class BuyCoffeeComponent implements OnInit {
   userModel: User

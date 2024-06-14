@@ -57,22 +57,22 @@ export class StorageDropzoneComponent {
   }
 
   onDropzoneError(event) {
-    console.log('onDropzoneError', event)
+    // console.log('onDropzoneError', event)
     this.errorMessage = event[1]
   }
 
   onDropzoneAddedFile(file) {
     // the method will be called before `onDropzoneError`
     this.errorMessage = ''
-    console.log('onDropzoneAddedFile', file)
+    // console.log('onDropzoneAddedFile', file)
     // hack waiting file.accepted property
     setTimeout(() => {
-      console.log(file.accepted)
+      // console.log(file.accepted)
       if (file.accepted) {
-        console.log('file accepted')
+        // console.log('file accepted')
         this.uploadFile(file)
       } else {
-        console.log('file not accepted')
+        // console.log('file not accepted')
       }
     }, 0)
   }
