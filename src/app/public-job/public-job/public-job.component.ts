@@ -147,6 +147,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
         'insertVideo',
         'insertHorizontalRule',
         'removeFormat',
+        'toggleEditorMode',
       ],
     ],
   }

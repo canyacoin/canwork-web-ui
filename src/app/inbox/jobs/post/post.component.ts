@@ -140,6 +140,7 @@ export class PostComponent implements OnInit, OnDestroy {
         'insertVideo',
         'insertHorizontalRule',
         'removeFormat',
+        'toggleEditorMode',
       ],
     ],
   }
