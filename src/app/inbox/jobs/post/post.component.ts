@@ -851,13 +851,12 @@ export class PostComponent implements OnInit, OnDestroy {
     this.shareableJobForm.controls['url'].enable()
   }
 
-  gitApiInvoke(url) {
+  gitApiInvoke(url: string) {
     let formRef = this.shareableJobForm
     if (!this.isShareable) formRef = this.postForm
 
     this.errorGitUrl = ''
     this.isSending = true
-    this.spinner.show()
 
     formRef.controls['url'].patchValue(url)
     formRef.controls['url'].disable()
@@ -896,10 +895,11 @@ export class PostComponent implements OnInit, OnDestroy {
             ' : "' +
             issue.title +
             '"'
-          description += '\n'
+          description += '<div><br/></div>'
           description += '[' + url + ']'
-          description += '\n\n'
-          description += issue.description
+          description += '<div><br/></div>'
+          if (issue.description)
+            description += issue.description + '<div><br/></div>'
 
           formRef.controls['title'].patchValue(issue.title.substring(0, 64))
           formRef.controls['description'].patchValue(description)
@@ -918,12 +918,12 @@ export class PostComponent implements OnInit, OnDestroy {
           this.handleGitError(errorMsg)
         }
       )
-    this.spinner.hide()
   }
 
   onGitPaste(event: ClipboardEvent) {
     let clipboardData = event.clipboardData
     let pastedText = clipboardData.getData('text')
+    console.log('pasted text: ' + pastedText)
     this.gitApiInvoke(pastedText)
   }
 
