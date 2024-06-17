@@ -37,7 +37,7 @@ import { AngularEditorConfig } from '@kolkov/angular-editor'
 
 import { MessageService } from 'primeng/api'
 
-interface SortingMethod {
+interface DropdownItem {
   name: string
   code: string
   img: string
@@ -87,8 +87,8 @@ export class PostComponent implements OnInit, OnDestroy {
   uploadFailed = false
   deleteFailed = false
 
-  sharelinks: SortingMethod[] | undefined
-  selectedsharelinks: SortingMethod | undefined
+  sharelinks: DropdownItem[] | undefined
+  selectedsharelinks: DropdownItem | undefined
 
   date: Date // This property is bound to ngModel
 
@@ -111,57 +111,48 @@ export class PostComponent implements OnInit, OnDestroy {
     placeholder:
       'Give a detailed brief of the job with adequate requirements and expectations',
     defaultParagraphSeparator: '',
-    defaultFontName: '',
-    defaultFontSize: '',
-    fonts: [
-      { class: 'arial', name: 'Arial' },
-      { class: 'times-new-roman', name: 'Times New Roman' },
-      { class: 'calibri', name: 'Calibri' },
-      { class: 'comic-sans-ms', name: 'Comic Sans MS' },
-    ],
-    customClasses: [
-      {
-        name: 'quote',
-        class: 'quote',
-      },
-      {
-        name: 'redText',
-        class: 'redText',
-      },
-      {
-        name: 'titleText',
-        class: 'titleText',
-        tag: 'h1',
-      },
-    ],
+    defaultFontName: 'General Sans',
+    defaultFontSize: '3',
+    fonts: [{ class: 'font-sans', name: 'General Sans' }],
+    customClasses: [],
     uploadUrl: 'v1/image',
     uploadWithCredentials: false,
     sanitize: true,
     toolbarPosition: 'top',
     toolbarHiddenButtons: [
-      ['undo', 'redo'],
-      ['subscript', 'superscript', 'strikeThrough'],
-      ['indent', 'outdent'],
       [
+        'undo',
+        'redo',
+        'subscript',
+        'superscript',
+        'strikeThrough',
+        'indent',
+        'outdent',
+        'heading',
+        'fontName',
+      ],
+      [
+        'fontSize',
+        'textColor',
+        'backgroundColor',
+        'customClasses',
+        'link',
         'unlink',
         'insertImage',
         'insertVideo',
         'insertHorizontalRule',
-        'clearFormatting',
+        'removeFormat',
       ],
-      ['foregroundColorPicker', 'backgroundColorPicker'],
     ],
   }
 
   // usdToAtomicCan: number // this is not used
 
-  sortingMethods_category: SortingMethod[] | undefined
+  categories: DropdownItem[] | undefined
+  selectedCategory: DropdownItem | undefined
 
-  selectedSortings_category: SortingMethod | undefined
-
-  sortingMethods_visibility: SortingMethod[] | undefined
-
-  selectedSortings_visibility: SortingMethod | undefined
+  visibilities: DropdownItem[] | undefined
+  selectedVisibility: DropdownItem | undefined
 
   duplicateFileNames: string[] = []
   constructor(
@@ -299,7 +290,7 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.sortingMethods_category = [
+    this.categories = [
       {
         name: 'Content Creators',
         img: 'writer.png',
@@ -326,7 +317,7 @@ export class PostComponent implements OnInit, OnDestroy {
         code: 'virtualAssistant',
       },
     ]
-    this.selectedSortings_category = this.sortingMethods_category[0]
+    this.selectedCategory = this.categories[0]
 
     this.sharelinks = [
       { name: 'Invite Freelancer', img: 'fi_user-plus.svg', code: '1' },
@@ -338,11 +329,11 @@ export class PostComponent implements OnInit, OnDestroy {
 
     this.selectedsharelinks = this.sharelinks[0]
 
-    this.sortingMethods_visibility = [
+    this.visibilities = [
       { name: 'Invite Only', code: 'invite', img: 'fi_user-plus.svg' },
       { name: 'Public', code: 'public', img: 'fi_users.svg' },
     ]
-    this.selectedSortings_visibility = this.sortingMethods_visibility[0]
+    this.selectedVisibility = this.visibilities[0]
     this.editing =
       this.activatedRoute.snapshot.params['jobId'] &&
       this.activatedRoute.snapshot.params['jobId'] !== ''
@@ -414,19 +405,17 @@ export class PostComponent implements OnInit, OnDestroy {
                 this.date = new Date(this.jobToEdit.deadline)
 
                 let visibility = this.jobToEdit.visibility
-                let visibilityIndex = this.sortingMethods_visibility.findIndex(
+                let visibilityIndex = this.visibilities.findIndex(
                   (item) => item.code === visibility
                 )
 
-                this.selectedSortings_visibility =
-                  this.sortingMethods_visibility[visibilityIndex]
+                this.selectedVisibility = this.visibilities[visibilityIndex]
 
                 let providerType = this.jobToEdit.information.providerType
-                let categoryIndex = this.sortingMethods_category.findIndex(
+                let categoryIndex = this.categories.findIndex(
                   (item) => item.code === providerType
                 )
-                this.selectedSortings_category =
-                  this.sortingMethods_category[categoryIndex]
+                this.selectedCategory = this.categories[categoryIndex]
 
                 this.shareableJobForm.controls['skills'].patchValue(
                   this.jobToEdit.information.skills
@@ -453,7 +442,7 @@ export class PostComponent implements OnInit, OnDestroy {
     const noAddress = await this.authService.isAuthenticatedAndNoAddress()
     const user = await this.authService.getCurrentUser()
     if (noAddress && user.type == 'User') {
-      console.log('test create a job posting address')
+      // console.log('test create a job posting address')
       // issuse/................................
       this.messageService.add({
         key: 'tc',
@@ -735,17 +724,17 @@ export class PostComponent implements OnInit, OnDestroy {
     }
   }
 
-  setProviderType(item: SortingMethod) {
-    this.selectedSortings_category = item
+  setProviderType(item: DropdownItem) {
+    this.selectedCategory = item
     this.shareableJobForm.controls.providerType.setValue(
-      this.selectedSortings_category.code
+      this.selectedCategory.code
     )
   }
 
-  setVisibility(item: SortingMethod) {
-    this.selectedSortings_visibility = item
+  setVisibility(item: DropdownItem) {
+    this.selectedVisibility = item
     this.shareableJobForm.controls.visibility.setValue(
-      this.selectedSortings_visibility.code
+      this.selectedVisibility.code
     )
   }
 
@@ -796,7 +785,7 @@ export class PostComponent implements OnInit, OnDestroy {
     if (tags.length > 20) {
       tags = tags.slice(0, 20)
     }
-    console.log('tags', tags)
+    // console.log('tags', tags)
     if (!tags.length) {
       tags = this.jobToEdit.information.skills
     }
@@ -980,13 +969,13 @@ export class PostComponent implements OnInit, OnDestroy {
 
   async submitShareableJob(isDRP: number) {
     // isDRP , 0 => draft, , 1=> Preview, 2 => Post
-    console.log('isDRP:', isDRP)
+    // console.log('isDRP:', isDRP)
+    this.spinner.show()
     this.isSending = true
     this.error = false
-    this.spinner.show()
     this.sentDRP = isDRP
     this.shareableJobForm.controls.providerType.setValue(
-      this.selectedSortings_category.code
+      this.selectedCategory.code
     )
 
     try {
@@ -999,7 +988,7 @@ export class PostComponent implements OnInit, OnDestroy {
                 .split(',')
                 .map((item) => item.trim())
       } catch (error) {
-        console.log('error with tags:', error)
+        // console.log('error with tags:', error)
         if (!tags.length) {
           tags = this.jobToEdit.information.skills
         }
@@ -1044,8 +1033,8 @@ export class PostComponent implements OnInit, OnDestroy {
       })
       this.draft = isDRP > 1 ? false : true
 
-      console.log('job:', job)
-      console.log('isDRP:', isDRP)
+      // console.log('job:', job)
+      // console.log('isDRP:', isDRP)
 
       if (isDRP > 0) {
         job.state = JobState.acceptingOffers

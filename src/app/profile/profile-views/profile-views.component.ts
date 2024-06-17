@@ -10,7 +10,6 @@ import { SelectParams } from '../../../../functions/src/firestore'
 @Component({
   selector: 'app-profile-views',
   templateUrl: './profile-views.component.html',
-  styleUrls: ['./profile-views.component.css'],
 })
 export class ProfileViewsComponent implements OnInit, OnDestroy {
   currentUser: User

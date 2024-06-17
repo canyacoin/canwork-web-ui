@@ -99,7 +99,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   visible_delete_modal: boolean = false
   visible_withdraw_modal: boolean = false
   visible_login_modal: boolean = false
-  visible_listing_modal: boolean = false
+  visible_withdraw_success_modal: boolean = false
 
   dublicateFilename: string[] = []
 
@@ -107,8 +107,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     editable: true,
     spellcheck: true,
     height: '200px',
-    minHeight: '5',
-    maxHeight: '2500',
+    minHeight: '0',
+    maxHeight: 'auto',
     width: 'auto',
     minWidth: '0',
     translate: 'yes',
@@ -116,45 +116,38 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     showToolbar: true,
     placeholder: 'How do you intend to deliver on this job',
     defaultParagraphSeparator: '',
-    defaultFontName: '',
-    defaultFontSize: '',
-    fonts: [
-      { class: 'arial', name: 'Arial' },
-      { class: 'times-new-roman', name: 'Times New Roman' },
-      { class: 'calibri', name: 'Calibri' },
-      { class: 'comic-sans-ms', name: 'Comic Sans MS' },
-    ],
-    customClasses: [
-      {
-        name: 'quote',
-        class: 'quote',
-      },
-      {
-        name: 'redText',
-        class: 'redText',
-      },
-      {
-        name: 'titleText',
-        class: 'titleText',
-        tag: 'h1',
-      },
-    ],
+    defaultFontName: 'General Sans',
+    defaultFontSize: '3',
+    fonts: [{ class: 'font-sans', name: 'General Sans' }],
+    customClasses: [],
     uploadUrl: 'v1/image',
     uploadWithCredentials: false,
     sanitize: true,
     toolbarPosition: 'top',
     toolbarHiddenButtons: [
-      ['undo', 'redo'],
-      ['subscript', 'superscript', 'strikeThrough'],
-      ['indent', 'outdent'],
       [
+        'undo',
+        'redo',
+        'subscript',
+        'superscript',
+        'strikeThrough',
+        'indent',
+        'outdent',
+        'heading',
+        'fontName',
+      ],
+      [
+        'fontSize',
+        'textColor',
+        'backgroundColor',
+        'customClasses',
+        'link',
         'unlink',
         'insertImage',
         'insertVideo',
         'insertHorizontalRule',
-        'clearFormatting',
+        'removeFormat',
       ],
-      ['foregroundColorPicker', 'backgroundColorPicker'],
     ],
   }
 
@@ -195,11 +188,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.spinner.show()
-
-    setTimeout(() => {
-      /** spinner ends after 2 seconds */
-      this.spinner.hide()
-    }, 2000)
     this.activejobTypes = [
       { label: 'Job Details', code: 'jobsdetail' },
       { label: 'Proposals', code: 'proposals' },
@@ -284,6 +272,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
       }
     })
     this.IsShownTab = this.currentUser && this.IsProvider
+    this.spinner.hide()
   }
 
   async uploadFiles(files: FileList) {
@@ -747,11 +736,23 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     this.visible_delete_modal = !this.visible_delete_modal
   }
 
-  WithdrawJob(event: Event) {
+  async WithdrawJob(event: Event) {
     event.stopPropagation()
     this.visible_withdraw_modal = !this.visible_withdraw_modal
     if (!this.visible_withdraw_modal) {
-      this.visible_listing_modal = true
+      const chosen = await this.publicJobsService.declineBid(
+        this.job,
+        this.yourApplication
+      )
+      if (chosen) {
+        this.visible_withdraw_success_modal = true
+      } else {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: `Something went wrong with withdrawing job application.`,
+        })
+      }
     }
   }
 

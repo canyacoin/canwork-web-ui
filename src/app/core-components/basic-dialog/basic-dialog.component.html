@@ -55,7 +55,7 @@
           <basic-button
             [type]="1"
             [routerLink]="['/']"
-            title="Go back bome"
+            title="Go back home"
             size="small"
             extraClass="border text-G900"
           />
@@ -63,6 +63,25 @@
             [type]="2"
             [routerLink]="['/jobs']"
             title="See similar jobs"
+            size="small"
+            extraClass="border"
+          />
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="type == 'withdraw_success'">
+        <div class="flex gap-4 justify-center items-center">
+          <basic-button
+            [type]="1"
+            [routerLink]="['/']"
+            title="Go back home"
+            size="small"
+            extraClass="border text-G900"
+          />
+          <basic-button
+            [type]="2"
+            [routerLink]="['/jobs']"
+            title="See another jobs"
             size="small"
             extraClass="border"
           />

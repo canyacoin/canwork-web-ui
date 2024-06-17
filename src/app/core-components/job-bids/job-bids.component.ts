@@ -76,7 +76,7 @@ export class JobBidsComponent implements OnInit {
                 .getPublicJobBids(publicJob.id)
                 .subscribe((result) => {
                   this.bids = result
-                  console.log('this.bid', this.bids)
+                  // console.log('this.bid', this.bids)
                 })
             } else {
               this.canSee = false
@@ -101,7 +101,7 @@ export class JobBidsComponent implements OnInit {
                   .getPublicJobBids(publicJob.id)
                   .subscribe((result) => {
                     this.bids = result
-                    console.log('this.bid', this.bids)
+                    // console.log('this.bid', this.bids)
                   })
               } else {
                 this.canSee = false
@@ -121,7 +121,7 @@ export class JobBidsComponent implements OnInit {
   }
   */
 ShowDialogDetail(bid:any) {
-  console.log("bid", bid);
+  // console.log("bid", bid);
   
   this.selectedBid = bid;
   this.visible = true

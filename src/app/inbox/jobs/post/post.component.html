@@ -919,26 +919,24 @@
                     Freelance Category <span class="text-R900">*</span>
                   </div>
                   <p-dropdown
-                    [options]="sortingMethods_category"
-                    [(ngModel)]="selectedSortings_category"
-                    optionLabel="name"
+                    [options]="categories"
+                    [(ngModel)]="selectedCategory"
                     appendTo="body"
                   >
                     <ng-template pTemplate="selectedItem">
                       <div
                         class="flex items-center gap-2"
-                        *ngIf="selectedSortings_category"
+                        *ngIf="selectedCategory"
                       >
                         <div class="flex items-center gap-[16px]">
                           <img
                             src="{{
-                              '/assets/massimo/images/' +
-                                selectedSortings_category.img
+                              '/assets/massimo/images/' + selectedCategory.img
                             }}"
                             class="w-[20px]"
                           />
                           <span class="text-G900 font-medium text-b1">{{
-                            selectedSortings_category.name
+                            selectedCategory.name
                           }}</span>
                         </div>
                       </div>
@@ -979,42 +977,39 @@
                   </div>
 
                   <p-dropdown
-                    [options]="sortingMethods_visibility"
-                    [(ngModel)]="selectedSortings_visibility"
-                    optionLabel="name"
+                    [options]="visibilities"
+                    [(ngModel)]="selectedVisibility"
+                    optionLabel="visibilities"
                     appendTo="body"
                   >
                     <ng-template pTemplate="selectedItem">
                       <div
-                        class="flex items-center gap-2"
-                        *ngIf="selectedSortings_visibility"
+                        class="flex items-center gap-[16px]"
+                        *ngIf="selectedVisibility"
                       >
-                        <div class="flex items-center">
-                          <img
-                            src="{{
-                              '/assets/massimo/svg/' +
-                                selectedSortings_visibility.img
-                            }}"
-                            style="width: 20px"
-                            class="mr-[16px]"
-                          />
-                          <span class="text-G900 font-medium text-b1">{{
-                            selectedSortings_visibility.name
-                          }}</span>
+                        <img
+                          src="{{
+                            '/assets/massimo/svg/' + selectedVisibility.img
+                          }}"
+                          class="w-[20px]"
+                        />
+                        <div class="text-G900 font-medium text-b1">
+                          {{ selectedVisibility.name }}
                         </div>
                       </div>
                     </ng-template>
                     <ng-template let-item pTemplate="item">
                       <div
-                        class="flex items-center"
+                        class="flex items-center gap-[16px]"
                         (click)="setVisibility(item)"
                       >
                         <img
                           src="{{ '/assets/massimo/svg/' + item.img }}"
-                          style="width: 20px"
-                          class="mr-[16px]"
+                          class="w-[20px]"
                         />
-                        <span class="text-G900">{{ item.name }}</span>
+                        <div class="text-G900">
+                          {{ item.name }}
+                        </div>
                       </div>
                     </ng-template>
                   </p-dropdown>
@@ -1210,7 +1205,6 @@
           <p-dropdown
             [options]="sharelinks"
             [(ngModel)]="selectedsharelinks"
-            optionLabel="name"
             appendTo="body"
           >
             <ng-template pTemplate="selectedItem">
@@ -1226,11 +1220,10 @@
               </div>
             </ng-template>
             <ng-template let-item pTemplate="item">
-              <div class="flex items-center">
+              <div class="flex items-center gap-[16px]">
                 <img
                   src="{{ '/assets/massimo/svg/' + item.img }}"
-                  style="width: 20px"
-                  class="mr-[16px]"
+                  class="w-[20px]"
                 />
                 <span class="text-R900">{{ item.name }}</span>
               </div>
