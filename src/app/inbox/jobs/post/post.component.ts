@@ -32,9 +32,7 @@ import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
 import { NgxSpinnerService } from 'ngx-spinner'
-
 import { AngularEditorConfig } from '@kolkov/angular-editor'
-
 import { MessageService } from 'primeng/api'
 
 interface DropdownItem {
@@ -1092,5 +1090,11 @@ export class PostComponent implements OnInit, OnDestroy {
     //   this.bid_message_valiated = true
     // }
     return div.textContent.length
+  }
+
+  categoryFromProviderType(provider: string): string {
+    let result = this.categories.filter((item) => item.code === provider)
+    if (result.length >= 0) return result[0].name
+    return provider
   }
 }

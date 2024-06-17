@@ -1066,12 +1066,6 @@
         content="Your job has been successfully listed on CanWork's job board. Consider inviting freelancers to your job listing and sharing on your social media."
         type="success"
       />
-      <!-- <basic-dialog
-        [visible]="sentDRP === 0"
-        title="Job listing saved to Draft"
-        content="Your job listing has been saved to your drafts, you can continue anytime to list your job on CanWork"
-        type="success"
-      /> -->
       <basic-dialog
         [visible]="sentDRP === 0"
         title="Job listing saved to Draft"
@@ -1079,34 +1073,6 @@
         type="draft"
         [slug]="slug"
       />
-      <!-- <div *ngIf="!draft && editing">
-            <h2>Your job has been saved!</h2>
-            <p class="lead fw-400">
-              You can now invite providers to this job.
-            </p>
-          </div> -->
-      <!-- <br />
-        <p *ngIf="!draft" class="text-center">
-          <a class="btn btn-secondary" [routerLink]="['/jobs/public/', slug]"
-            >Go to job</a
-          >
-          &nbsp;&nbsp;
-          <a class="btn btn-primary text-white" [routerLink]="['/search']"
-            >Invite Providers</a
-          >
-        </p>
-        <p *ngIf="draft" class="text-center">
-          <a class="btn btn-secondary" [routerLink]="['/inbox/jobs/']"
-            >My Jobs</a
-          >
-          &nbsp;&nbsp;
-          <a
-            class="btn btn-primary text-white"
-            [routerLink]="['/jobs/public/', slug]"
-            >Go to job</a
-          >
-          &nbsp;&nbsp;
-        </p> -->
     </div>
     <div
       *ngIf="isPreview"
@@ -1264,7 +1230,9 @@
           <tr>
             <td class="text-G700">Category</td>
             <td class="text-G900 text-right font-medium">
-              {{ jobForPreview.information.providerType }}
+              {{
+                categoryFromProviderType(jobForPreview.information.providerType)
+              }}
             </td>
           </tr>
         </table>
