@@ -47,11 +47,11 @@
                 >Tag with relevant skills to help clients find you more
                 easily.</label
               >
-              <app-skill-tags-selection
+              <skill-tags-selection
                 (tagsUpdated)="skillTagsUpdated($event)"
                 [initialTags]="user.skillTags"
                 [minimumTags]="0"
-              ></app-skill-tags-selection>
+              ></skill-tags-selection>
               <input
                 hidden
                 #skillTags

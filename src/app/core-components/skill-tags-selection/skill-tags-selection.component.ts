@@ -15,7 +15,7 @@ export class SkillTag {
 }
 
 @Component({
-  selector: 'app-skill-tags-selection',
+  selector: 'skill-tags-selection',
   templateUrl: './skill-tags-selection.component.html',
 })
 export class SkillTagsSelectionComponent implements OnInit {

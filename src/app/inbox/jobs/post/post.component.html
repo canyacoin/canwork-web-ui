@@ -113,12 +113,12 @@
                   <div
                     class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
                   >
-                    <app-skill-tags-selection
+                    <skill-tags-selection
                       (tagsUpdated)="skillTagsUpdated($event)"
                       (tagsLoaded)="skillTagsLoaded($event)"
                       [updatedTags]="this.gitUpdatedTags"
                       [minimumTags]="1"
-                    ></app-skill-tags-selection>
+                    ></skill-tags-selection>
                     <input
                       hidden
                       #skillTags
@@ -740,12 +740,12 @@
                 <div class="text-b1 text-G900 mb-[8px]">
                   Skill Tags (20 max) <span class="text-R900">*</span>
                 </div>
-                <app-skill-tags-selection
+                <skill-tags-selection
                   (tagsUpdated)="skillTagsUpdated($event)"
                   (tagsLoaded)="skillTagsLoaded($event)"
                   [updatedTags]="this.gitUpdatedTags"
                   [minimumTags]="1"
-                ></app-skill-tags-selection>
+                ></skill-tags-selection>
                 <input
                   hidden
                   #skillTags
@@ -769,13 +769,13 @@
                 <div class="text-b1 text-G900 mb-[8px]">
                   Key skills required to edit
                 </div>
-                <app-skill-tags-selection
+                <skill-tags-selection
                   (tagsUpdated)="skillTagsUpdated($event)"
                   (tagsLoaded)="skillTagsLoaded($event)"
                   [initialTags]="this.jobToEdit.information.skills"
                   [updatedTags]="this.gitUpdatedTags"
                   [minimumTags]="1"
-                ></app-skill-tags-selection>
+                ></skill-tags-selection>
                 <input
                   hidden
                   #skillTags

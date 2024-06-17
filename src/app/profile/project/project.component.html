@@ -70,11 +70,11 @@
                 >Tag with relevant skills to help clients find you more
                 easily.</label
               >
-              <app-skill-tags-selection
+              <skill-tags-selection
                 *ngIf="projectLoaded"
                 (tagsUpdated)="skillTagsUpdated($event)"
                 [initialTags]="initialTags"
-              ></app-skill-tags-selection>
+              ></skill-tags-selection>
               <input
                 hidden
                 #tags
