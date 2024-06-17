@@ -30,21 +30,23 @@
                       postForm.controls.title.dirty
                     "
                   />
-                  <small
+                  <div
                     *ngIf="
                       !postForm.controls.title.valid &&
                       postForm.controls.title.dirty
                     "
-                    class="text-primary text-wrap"
-                    >Title must be 64 characters or less</small
+                    class="text-primary text-wrap text-b2"
                   >
+                    Title must be 64 characters or less
+                  </div>
                 </div>
                 <div class="text-b1 font-sans">
                   <div class="text-b1 text-G900 mb-[8px]">
                     GitHub or GitLab issue
                   </div>
                   <input
-                    class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                    class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans disabled:cursor-not-allowed transition-all duration-200"
+                    [class]="!!errorGitUrl && 'border-R900'"
                     #url
                     formControlName="url"
                     type="text"
@@ -52,12 +54,14 @@
                     (blur)="onBFGit()"
                     (focus)="onBFGit()"
                     placeholder="Paste a GitHub or GitLab issue link here if you want to populate job fields from it"
-                    [class.invalid]="!!errorGitUrl"
                     (paste)="onGitPaste($event)"
                   />
-                  <small *ngIf="!!errorGitUrl" class="text-danger text-wrap">{{
-                    errorGitUrl
-                  }}</small>
+                  <div
+                    *ngIf="!!errorGitUrl"
+                    class="text-R900 text-wrap text-b2"
+                  >
+                    {{ errorGitUrl }}
+                  </div>
                 </div>
 
                 <div class="text-b1 font-sans">
@@ -76,11 +80,12 @@
                       postForm.controls.description.dirty
                     "
                   ></textarea>
-                  <small
+                  <div
                     *ngIf="!postForm.controls.description.valid"
-                    class="text-primary text-wrap"
-                    >e.g. 'Custom Logo' or 'Milestone 1 - Wireframes'.</small
+                    class="text-primary text-wrap text-b2"
                   >
+                    e.g. 'Custom Logo' or 'Milestone 1 - Wireframes'.
+                  </div>
                 </div>
                 <div class="text-b1 font-sans canya-prefilled">
                   <div class="text-b1 text-G900 mb-[8px]">
@@ -130,10 +135,10 @@
                     Attach a file (max 50mb)
                   </div>
                   <br />
-                  <small class="text-primary text-wrap"
-                    >If you wish to upload more than one file we suggest you
-                    upload a zip folder</small
-                  >
+                  <div class="text-primary text-wrap text-b2">
+                    If you wish to upload more than one file we suggest you
+                    upload a zip folder
+                  </div>
 
                   <div class="row ml-0 mr-0">
                     <div
@@ -289,14 +294,15 @@
                         </div>
                       </div>
                     </div>
-                    <small
+                    <div
                       *ngIf="
                         !postForm.controls.weeklyCommitment.valid &&
                         postForm.controls.weeklyCommitment.dirty
                       "
-                      class="text-primary"
-                      >Must be between 1 - 60 hours</small
+                      class="text-primary text-b2"
                     >
+                      Must be between 1 - 60 hours
+                    </div>
                   </div>
                 </div>
 
@@ -324,9 +330,7 @@
                       </button>
                     </div>
                     <br />
-                    <small class="col-12"
-                      ><i>Hourly rate payments coming soon</i></small
-                    >
+                    <div>Hourly rate payments coming soon</div>
                   </div>
                 </div>
 
@@ -390,10 +394,10 @@
                         ></div>-->
 
                     <div class="col-12">
-                      <small class="text-primary text-wrap">
+                      <div class="text-primary text-wrap text-b2">
                         <b>Important</b>: All transactions on CanWork are made
-                        in BNB Chain (BEP20) tokens</small
-                      >
+                        in BNB Chain (BEP20) tokens
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -492,15 +496,16 @@
                     shareableJobForm.controls.title.dirty
                   "
                 />
-                <small
+                <div
                   *ngIf="
                     !shareableJobForm.controls.title.valid &&
                     shareableJobForm.controls.title.dirty
                   "
-                  class="text-danger text-wrap"
-                  >Title must be longer than 5 characters and less than 64
-                  characters</small
+                  class="text-R900 text-wrap text-b2"
                 >
+                  Title must be longer than 5 characters and less than 64
+                  characters
+                </div>
               </div>
 
               <div class="w-full">
@@ -508,7 +513,8 @@
                   GitHub or GitLab issue
                 </div>
                 <input
-                  class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                  class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans disabled:cursor-not-allowed transition-all duration-200"
+                  [class]="!!errorGitUrl && 'border-R900'"
                   #url
                   formControlName="url"
                   type="text"
@@ -516,7 +522,6 @@
                   (blur)="onBFGit()"
                   (focus)="onBFGit()"
                   placeholder="Paste link here"
-                  [class.invalid]="!!errorGitUrl"
                   (paste)="onGitPaste($event)"
                 />
                 <div
@@ -531,7 +536,9 @@
                   from it
                 </div>
                 <ng-container *ngIf="!!errorGitUrl">
-                  <small class="text-danger text-wrap">{{ errorGitUrl }}</small>
+                  <div class="text-R900 text-wrap text-b2">
+                    {{ errorGitUrl }}
+                  </div>
                 </ng-container>
               </div>
 
@@ -583,11 +590,11 @@
 
               <div class="w-full flex flex-col gap-[8px]">
                 <div class="text-b1 text-G900">Attachments</div>
-                <small class="text-b2 text-G500 leading-5 text-wrap font-sans"
-                  >You may attach up to 10 files under the size of 25 MB each.
+                <div class="text-b2 text-G500 leading-5 text-wrap font-sans">
+                  You may attach up to 10 files under the size of 25 MB each.
                   Include work samples or other documents to support your
-                  application.</small
-                >
+                  application.
+                </div>
 
                 <div
                   (dragover)="onDragOver($event)"
@@ -747,14 +754,15 @@
                   type="text"
                   name="skills"
                 />
-                <small
+                <div
                   *ngIf="
                     !shareableJobForm.controls.skills.valid &&
                     shareableJobForm.controls.skills.dirty
                   "
-                  class="text-primary text-wrap"
-                  >You must choose at least one skill</small
+                  class="text-primary text-wrap text-b2"
                 >
+                  You must choose at least one skill
+                </div>
               </div>
 
               <div class="w-full" *ngIf="editing && this.jobToEdit">
@@ -896,9 +904,9 @@
                     shareableJobForm.controls.weeklyCommitment.dirty
                   "
                 />
-                <small class="text-b2 text-G500 text-wrap font-sans"
-                  >Your estimate of the total hours required for the job.</small
-                >
+                <div class="text-b2 text-G500 text-wrap font-sans">
+                  Your estimate of the total hours required for the job.
+                </div>
                 <div
                   *ngIf="
                     !shareableJobForm.controls.weeklyCommitment.valid &&
