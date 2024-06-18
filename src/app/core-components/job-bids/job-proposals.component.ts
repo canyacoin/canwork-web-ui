@@ -15,15 +15,14 @@ interface SortingMethod {
 }
 
 @Component({
-  selector: 'app-job-bids',
-  templateUrl: './job-bids.component.html',
-  styleUrls: ['./job-bids.component.css'],
+  selector: 'job-proposals',
+  templateUrl: './job-proposals.component.html',
 })
-export class JobBidsComponent implements OnInit {
+export class JobProposalsComponent implements OnInit {
   authSub: Subscription
   bidsSub: Subscription
   currentUser: User
-  bids: any[]= []
+  bids: any[] = []
   jobId: any
   job: any
   isOpen: boolean
@@ -120,12 +119,12 @@ export class JobBidsComponent implements OnInit {
     return provider
   }
   */
-ShowDialogDetail(bid:any) {
-  // console.log("bid", bid);
-  
-  this.selectedBid = bid;
-  this.visible = true
-}
+  ShowDialogDetail(bid: any) {
+    // console.log("bid", bid);
+
+    this.selectedBid = bid
+    this.visible = true
+  }
   SortbyFilter() {
     this.bids = this.bids.sort((a, b) => {
       if (this.selectedsortby.code === 'actionLog[0].timestamp') {
@@ -137,7 +136,7 @@ ShowDialogDetail(bid:any) {
       }
     })
   }
-  async chooseProvider(selectedBid : any) {
+  async chooseProvider(selectedBid: any) {
     const noAddress = await this.authService.isAuthenticatedAndNoAddress()
     if (noAddress) {
       this.toastr.error('Add BNB Chain (BEP20) wallet to Accept Offer')
@@ -163,7 +162,7 @@ ShowDialogDetail(bid:any) {
     }
   }
 
-  async declineProvider(selectedBid:any) {
+  async declineProvider(selectedBid: any) {
     const bid = selectedBid
     const confirmed = confirm(
       "Are you sure you want to decline this provider's offer?"
@@ -180,7 +179,6 @@ ShowDialogDetail(bid:any) {
   }
 
   stripHtmlTags(html: string): string {
-    
     // Create a new DOM element to use the browser's parsing capabilities
     const div = document.createElement('div')
 

@@ -60,7 +60,7 @@ import { DialogModule } from 'primeng/dialog';
 import { BasicDialogComponent } from './basic-dialog/basic-dialog.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { JobDetailComponent } from './job-detail/job-detail.component';
-import { JobBidsComponent } from './job-bids/job-bids.component';
+import { JobProposalsComponent } from './job-bids/job-proposals.component';
 import { TableModule } from 'primeng/table';
 import { WarningMessageComponent } from './warning-message/warning-message.component';
 
@@ -136,7 +136,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     SearchButtonComponent,
     BasicDialogComponent,
     JobDetailComponent,
-    JobBidsComponent,
+    JobProposalsComponent,
     WarningMessageComponent
   ],
   exports: [
@@ -177,7 +177,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     SearchButtonComponent,
     BasicDialogComponent,
     JobDetailComponent,
-    JobBidsComponent,
+    JobProposalsComponent,
     WarningMessageComponent
   ],
   providers: [
