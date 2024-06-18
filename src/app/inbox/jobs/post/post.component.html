@@ -1071,7 +1071,7 @@
       <basic-dialog
         [visible]="sentDRP === 2"
         title="Job listing successful"
-        content="Your job has been successfully listed on CanWork's job board. Consider inviting freelancers to your job listing and sharing on your social media."
+        content="Your job has been successfully listed on CanWork's job board.\nConsider inviting freelancers to your job listing and sharing on your social media."
         type="success"
       />
       <basic-dialog
@@ -1152,18 +1152,8 @@
           </div>
         </div>
 
-        <div class="flex justify-start pt-[48px]">
-          <div
-            class="group flex justify-center items-center text-b1 text-G900 leading-6 font-medium cursor-pointer p-[6px] rounded-md duration-500 transition-transform"
-            [routerLink]="['/jobs']"
-          >
-            <img
-              src="/assets/massimo/svg/Arrow-Left.svg"
-              alt="Arrow-Left"
-              class="w-[20px] h-[20px] mx-[8px] group-hover:-translate-x-[6px] duration-500 transition-all"
-            />
-            Back to Job Board
-          </div>
+        <div class="pt-[48px]">
+          <back-to-job-board />
         </div>
       </div>
       <div
