@@ -102,6 +102,7 @@ module.exports = {
         orange: '#F74C53',
         violet: '#F18FD1',
         lightGreen: '#2CE8DA',
+        vibrantGreen: '#54F26D',
         // background colors
         'blue-10': 'rgba(58, 194, 255, 0.10)',
         'blue-50': 'rgba(58, 194, 255, 0.50)',
