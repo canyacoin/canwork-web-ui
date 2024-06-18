@@ -404,7 +404,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     this.jobExists = true
     this.jobFromNow = moment(job.createAt).fromNow()
     if (this.currentUser) {
-      this.myJob = job.clientId === this.currentUser.address
+      this.myJob =
+        job.clientId === this.currentUser.address && job.visibility === 'public'
       await this.setClient(this.job.clientId)
 
       if (this.currentUser.type === 'Provider') {
