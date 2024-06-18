@@ -54,6 +54,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   sent = false
   canSee = false
   hideDescription = false
+  isPublic = false
   myJob = false
   loading = true
   shareableLink: string
@@ -404,8 +405,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     this.jobExists = true
     this.jobFromNow = moment(job.createAt).fromNow()
     if (this.currentUser) {
-      this.myJob =
-        job.clientId === this.currentUser.address && job.visibility === 'public'
+      this.myJob = job.clientId === this.currentUser.address
+      this.isPublic = job.visibility === 'public'
       await this.setClient(this.job.clientId)
 
       if (this.currentUser.type === 'Provider') {
