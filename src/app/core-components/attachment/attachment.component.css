@@ -18,11 +18,3 @@
   white-space: nowrap;
   max-width: 150px;
 }
-
-.skill-tag:focus {
-  outline: none;
-}
-
-.pointer {
-  cursor: pointer;
-}
