@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-warning-message',
+  selector: 'warning-message',
   templateUrl: './warning-message.component.html',
 })
 export class WarningMessageComponent {
