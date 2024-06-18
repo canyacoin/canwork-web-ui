@@ -76,7 +76,7 @@
                 [formGroup]="bidForm"
                 class="pt-[20px]"
                 novalidate
-                *ngIf="canBid === true"
+                *ngIf="canBid"
               >
                 <div
                   class="flex flex-col gap-4 border-t border-G300"
@@ -486,8 +486,7 @@
         </div>
 
         <div
-          class="lg:w-[350px] rounded-[12px] bg-white border border-G300 px-7 py-[32px] h-full"
-          [ngClass]="{ 'md:mt-[40px]': IsProvider && myJob }"
+          class="lg:w-[350px] rounded-[12px] bg-white border border-G300 p-[24px] h-full"
         >
           <div
             class="text-b2 flex justify-between items-center md:text-b1 text-G800 font-medium pl-[2px]"

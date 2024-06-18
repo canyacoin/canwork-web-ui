@@ -1,5 +1,5 @@
 import { Component, OnInit, Directive } from '@angular/core'
-import { JobState } from '@class/job'
+import { Bid, Job, JobState } from '@class/job'
 import { User } from '@class/user'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService } from '@service/auth.service'
@@ -22,9 +22,9 @@ export class JobProposalsComponent implements OnInit {
   authSub: Subscription
   bidsSub: Subscription
   currentUser: User
-  bids: any[] = []
-  jobId: any
-  job: any
+  bids: Bid[] = []
+  jobId: string
+  job: Job
   isOpen: boolean
   jobSub: Subscription
   canSee = false
@@ -48,8 +48,7 @@ export class JobProposalsComponent implements OnInit {
 
   async ngOnInit() {
     this.sortbylist = [
-      { name: 'Newest', code: 'actionLog[0].timestamp' },
-      { name: 'Project Name', code: 'information.title' },
+      { name: 'Newest', code: 'newest' },
       { name: 'Budget', code: 'budget' },
     ]
 
@@ -127,10 +126,8 @@ export class JobProposalsComponent implements OnInit {
   }
   SortbyFilter() {
     this.bids = this.bids.sort((a, b) => {
-      if (this.selectedsortby.code === 'actionLog[0].timestamp') {
-        return b.actionLog[0].timestamp - a.actionLog[0].timestamp
-      } else if (this.selectedsortby.code === 'information.title') {
-        return a.information.title.localeCompare(b.information.title)
+      if (this.selectedsortby.code === 'newest') {
+        return b.timestamp - a.timestamp
       } else if (this.selectedsortby.code === 'budget') {
         return b.budget - a.budget
       }
