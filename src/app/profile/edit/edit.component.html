@@ -208,12 +208,12 @@
                       >Tag with relevant skills to help clients find you more
                       easily.</label
                     >
-                    <app-skill-tags-selection
+                    <skill-tags-selection
                       *ngIf="currentUser"
                       (tagsUpdated)="skillTagsUpdated($event)"
                       [initialTags]="currentUser.skillTags"
                       [minimumTags]="0"
-                    ></app-skill-tags-selection>
+                    ></skill-tags-selection>
                     <input
                       hidden
                       #skillTags

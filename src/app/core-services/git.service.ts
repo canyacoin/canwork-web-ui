@@ -1,17 +1,14 @@
 import { Injectable } from '@angular/core'
 import { Observable, of, zip } from 'rxjs'
-import { map } from 'rxjs/operators';
+import { map } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Issue, Repository, DecoratedIssue } from '@class/git'
 import { environment } from '@env/environment'
 
 @Injectable()
 export class GitService {
+  constructor(private http: HttpClient) {}
 
-  constructor(
-    private http: HttpClient,
-  ) { }
-  
   /** Get an issue decorated with repository language from GitHub or GitLab */
   getDecoratedIssue(issueUrl: string): Observable<DecoratedIssue> {
     let tokenLab = environment.gitlab.token
@@ -26,13 +23,12 @@ export class GitService {
     let repositoryApiUrl = ''
     if (!!splittedLab) repo = 'lab'
     if (!!splittedHub) repo = 'hub'
-    
-    if (repo == 'unknown') {
-      let result = {error: 'Wrong url format'} 
-      return of(result as DecoratedIssue)
 
-    }     
-    
+    if (repo == 'unknown') {
+      let result = { error: 'Wrong url format' }
+      return of(result as DecoratedIssue)
+    }
+
     // all good, go on
     if (repo == 'hub') {
       project = splittedHub[1]
@@ -41,13 +37,19 @@ export class GitService {
       repositoryApiUrl = `https://api.github.com/repos/${project}`
     } else if (repo == 'lab') {
       project = splittedLab[1]
-      issue = splittedLab[2]    
-      issueApiUrl = `https://gitlab.com/api/v4/projects/${encodeURIComponent(project)}/issues/${issue}?access_token=${tokenLab}`
-      repositoryApiUrl = `https://gitlab.com/api/v4/projects/${encodeURIComponent(project)}/languages?access_token=${tokenLab}`
+      issue = splittedLab[2]
+      issueApiUrl = `https://gitlab.com/api/v4/projects/${encodeURIComponent(
+        project
+      )}/issues/${issue}?access_token=${tokenLab}`
+      repositoryApiUrl = `https://gitlab.com/api/v4/projects/${encodeURIComponent(
+        project
+      )}/languages?access_token=${tokenLab}`
     }
-   
-    
-    return zip(this.http.get<Issue>(issueApiUrl), this.http.get<Repository>(repositoryApiUrl)).pipe(
+
+    return zip(
+      this.http.get<Issue>(issueApiUrl),
+      this.http.get<Repository>(repositoryApiUrl)
+    ).pipe(
       map(([issueResp, repositoryResp]) => {
         let result: DecoratedIssue
         result = <any>Object.assign({}, issueResp)
@@ -60,9 +62,9 @@ export class GitService {
           let langLab = ''
           let key = ''
           if (!!repositoryResp) {
-            for (let k in repositoryResp) { 
-                key = k; 
-                break; 
+            for (let k in repositoryResp) {
+              key = k
+              break
             }
             if (!!key) langLab = key
           }
@@ -75,11 +77,7 @@ export class GitService {
         }
         result.error = ''
         return result
-      }),
+      })
     )
-    
-
-  }  
-  
-  
+  }
 }

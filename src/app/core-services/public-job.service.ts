@@ -281,8 +281,9 @@ export class PublicJobService {
 
   async canBid(providerId: string, job: Job): Promise<boolean> {
     try {
-      const jobRef = this.afs.collection(`public-jobs`).doc(job.id)
-      const bidsCollectionRef: any = jobRef.collection('bids')
+      const bidsCollectionRef = this.afs.collection(
+        `public-jobs/${job.id}/bids`
+      )
       const bidsSnapshot = await bidsCollectionRef.get().toPromise()
 
       // Check if the bids collection exists
@@ -291,12 +292,11 @@ export class PublicJobService {
       }
 
       // Now check if there is a bid with the given providerId
-      const bidQuerySnapshot = await bidsCollectionRef
+      const bidQuerySnapshot = await bidsCollectionRef.ref
         .where('providerId', '==', providerId)
         .get()
-        .toPromise()
 
-      return !bidQuerySnapshot.empty
+      return bidQuerySnapshot.empty
     } catch (error) {
       console.error('Error checking if provider can bid:', error)
       return false

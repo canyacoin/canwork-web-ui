@@ -32,9 +32,7 @@ import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
 import { NgxSpinnerService } from 'ngx-spinner'
-
 import { AngularEditorConfig } from '@kolkov/angular-editor'
-
 import { MessageService } from 'primeng/api'
 
 interface DropdownItem {
@@ -142,6 +140,7 @@ export class PostComponent implements OnInit, OnDestroy {
         'insertVideo',
         'insertHorizontalRule',
         'removeFormat',
+        'toggleEditorMode',
       ],
     ],
   }
@@ -853,13 +852,12 @@ export class PostComponent implements OnInit, OnDestroy {
     this.shareableJobForm.controls['url'].enable()
   }
 
-  gitApiInvoke(url) {
+  gitApiInvoke(url: string) {
     let formRef = this.shareableJobForm
     if (!this.isShareable) formRef = this.postForm
 
     this.errorGitUrl = ''
     this.isSending = true
-    this.spinner.show()
 
     formRef.controls['url'].patchValue(url)
     formRef.controls['url'].disable()
@@ -898,10 +896,11 @@ export class PostComponent implements OnInit, OnDestroy {
             ' : "' +
             issue.title +
             '"'
-          description += '\n'
+          description += '<div><br/></div>'
           description += '[' + url + ']'
-          description += '\n\n'
-          description += issue.description
+          description += '<div><br/></div>'
+          if (issue.description)
+            description += issue.description + '<div><br/></div>'
 
           formRef.controls['title'].patchValue(issue.title.substring(0, 64))
           formRef.controls['description'].patchValue(description)
@@ -920,12 +919,12 @@ export class PostComponent implements OnInit, OnDestroy {
           this.handleGitError(errorMsg)
         }
       )
-    this.spinner.hide()
   }
 
   onGitPaste(event: ClipboardEvent) {
     let clipboardData = event.clipboardData
     let pastedText = clipboardData.getData('text')
+    console.log('pasted text: ' + pastedText)
     this.gitApiInvoke(pastedText)
   }
 
@@ -1092,5 +1091,11 @@ export class PostComponent implements OnInit, OnDestroy {
     //   this.bid_message_valiated = true
     // }
     return div.textContent.length
+  }
+
+  categoryFromProviderType(provider: string): string {
+    let result = this.categories.filter((item) => item.code === provider)
+    if (result.length >= 0) return result[0].name
+    return provider
   }
 }
