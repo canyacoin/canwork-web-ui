@@ -1,6 +1,5 @@
 <section
   class="w-full rounded-[12px] rounded-tl-none bg-white border border-G200 px-[24px] py-[32px] flex"
-  style="min-height: 70vh"
 >
   <!-- <app-back-button></app-back-button> -->
   <div *ngIf="!bids" class="container">
@@ -11,7 +10,7 @@
         </div>
       </div>
     </div>
-  </div> 
+  </div>
   <div *ngIf="bids.length == 0" class="container flex">
     <div class="flex justify-center items-center flex-col max-w-[380px] m-auto">
       <img
@@ -314,10 +313,10 @@
             <h1 class="text-b1 font-medium leading-6 text-G900 pb-[16px]">
               Cover Letter
             </h1>
-            <p class="text-b1 font-normal leading-6 text-G900"
-            [innerHTML]="selectedBid.message | linkify"
-            >
-            </p>
+            <p
+              class="text-b1 font-normal leading-6 text-G900"
+              [innerHTML]="selectedBid.message | linkify"
+            ></p>
           </div>
 
           <div
