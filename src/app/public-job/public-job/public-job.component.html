@@ -74,9 +74,9 @@
               <!-- bid start -->
               <form
                 [formGroup]="bidForm"
-                class="form validate pt-[20px]"
+                class="pt-[20px]"
                 novalidate
-                *ngIf="canBid"
+                *ngIf="canBid === true"
               >
                 <div
                   class="flex flex-col gap-4 border-t border-G300"
@@ -351,7 +351,7 @@
               </form>
               <!-- bid end -->
 
-              <div class="pt-[48px]">
+              <div class="pt-[20px] md:pt-[48px]">
                 <back-to-job-board />
               </div>
             </div>
