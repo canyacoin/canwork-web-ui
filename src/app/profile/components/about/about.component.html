@@ -30,7 +30,7 @@
       <div class="title">
         <h2 *ngIf="userModel.name">
           {{ userModel.name
-          }}<app-verified-mark [user]="userModel"></app-verified-mark>
+          }}<verified-mark [user]="userModel"></verified-mark>
         </h2>
         <h3 *ngIf="userModel.title">{{ userModel.title }}</h3>
         <p class="fw-400" *ngIf="userModel.bio">{{ userModel.bio }}</p>

@@ -54,7 +54,7 @@
           appendTo="body"
         >
           <ng-template let-item pTemplate="item">
-            <div class="flex align-items-center" (click)="SortbyFilter(item)">
+            <div class="flex align-items-center" (click)="SortbyFilter()">
               <span>{{ item.name }}</span>
             </div>
           </ng-template>
@@ -81,9 +81,9 @@
             ></app-avatar>
             <h4 class="ml-2r ml-0-mobile mb-0">
               {{ bid.providerInfo.name
-              }}<app-verified-mark
+              }}<verified-mark
                 [user]="bid.providerInfo"
-              ></app-verified-mark>
+              ></verified-mark>
             </h4>
             <p class="ml-2r ml-0-mobile mb-0">{{ bid.providerInfo.title }}</p>
           </div>
@@ -166,24 +166,21 @@
       <ng-template pTemplate="body" let-bid let-columns="columns">
         <tr class="hover:bg-G50 cursor-pointer" (click)="ShowDialogDetail(bid)">
           <td>
-            <div
-              class="flex gap-4"
-              [routerLink]="['/profile/alt/', bid.providerId]"
-            >
-              <div>
-                <app-avatar
-                  size="48"
-                  [user]="bid.providerInfo"
-                  [customClass]="' '"
-                ></app-avatar>
+            <div class="flex gap-4">
+              <div
+                class="cursor-pointer"
+                [routerLink]="['/profile/alt/', bid.providerId]"
+              >
+                <app-avatar size="48" [user]="bid.providerInfo"></app-avatar>
               </div>
               <div>
-                <h4 class="line-clamp-1 text-b1 font-medium text-G900">
+                <div
+                  class="line-clamp-1 text-b1 font-medium text-G900 cursor-pointer"
+                  [routerLink]="['/profile/alt/', bid.providerId]"
+                >
                   {{ bid.providerInfo.name }}
-                  <app-verified-mark
-                    [user]="bid.providerInfo"
-                  ></app-verified-mark>
-                </h4>
+                  <verified-mark [user]="bid.providerInfo"></verified-mark>
+                </div>
                 <p class="line-clamp-1 text-b2 text-G500">
                   {{ bid.providerInfo.title }}
                 </p>
@@ -241,11 +238,11 @@
           <div
             class="flex max-md:flex-col justify-between items-center w-full border-y border-G200 px-[20px] py-[16px] md:px-[40px !font-sans]"
           >
-            <div
-              class="flex gap-4"
-              [routerLink]="['/profile/alt/', selectedBid.providerId]"
-            >
-              <div>
+            <div class="flex gap-4">
+              <div
+                class="cursor-pointer"
+                [routerLink]="['/profile/alt/', selectedBid.providerId]"
+              >
                 <app-avatar
                   size="48"
                   [user]="selectedBid.providerInfo"
@@ -253,12 +250,15 @@
                 ></app-avatar>
               </div>
               <div>
-                <h4 class="line-clamp-1 text-b1 font-medium text-G900">
+                <div
+                  class="cursor-pointer line-clamp-1 text-b1 font-medium text-G900"
+                  [routerLink]="['/profile/alt/', selectedBid.providerId]"
+                >
                   {{ selectedBid.providerInfo.name }}
-                  <app-verified-mark
+                  <verified-mark
                     [user]="selectedBid.providerInfo"
-                  ></app-verified-mark>
-                </h4>
+                  ></verified-mark>
+                </div>
                 <p class="line-clamp-1 text-b2 text-G500">
                   {{ selectedBid.providerInfo.title }}
                 </p>

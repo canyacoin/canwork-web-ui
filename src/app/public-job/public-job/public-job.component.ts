@@ -217,7 +217,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
               this.loading = false
             } else {
               this.job = publicJob
-              console.log('this.JOb', this.job)
+              console.log('this.Job', this.job)
               this.initJob(this.job)
 
               this.bidsSub = this.publicJobsService
@@ -272,7 +272,9 @@ export class PublicJobComponent implements OnInit, OnDestroy {
         this.currentUser = user
       }
     })
-    this.IsShownTab = this.currentUser && this.IsProvider
+    // check visibility if it is a direct job or not. If the job is direct job, which means invite only, then can't show the tabs
+    this.IsShownTab =
+      this.currentUser && this.IsProvider && this.job.visibility !== 'invite'
     this.spinner.hide()
   }
 

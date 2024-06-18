@@ -8,10 +8,6 @@ const routes: Routes = [
     path: '',
     component: DashboardComponent,
   },
-  {
-    path: ':query',
-    component: DashboardComponent,
-  },
 ]
 @NgModule({
   imports: [RouterModule.forChild(routes)],

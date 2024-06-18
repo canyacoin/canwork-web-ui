@@ -27,7 +27,7 @@
         <h2>
           <span *ngIf="provider && provider.name"
             >{{ provider.name
-            }}<app-verified-mark [user]="provider"></app-verified-mark
+            }}<verified-mark [user]="provider"></verified-mark
           ></span>
         </h2>
         <h3>
@@ -83,7 +83,7 @@
       <div class="col-lg-9 col-md-12 col-sm-12 col-9 pl-20 pb-10">
         <h6 class="provider-name">
           {{ provider.name
-          }}<app-verified-mark [user]="provider"></app-verified-mark>
+          }}<verified-mark [user]="provider"></verified-mark>
         </h6>
         <p class="provider-title">{{ provider.title }}</p>
         <div class="row provider-stars">

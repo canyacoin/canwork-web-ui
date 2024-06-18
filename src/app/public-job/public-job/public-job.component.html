@@ -31,7 +31,7 @@
         class="flex flex-col lg:flex-row md:justify-between gap-2 md:gap-6 pt-[56px]"
       >
         <div class="w-full">
-          <ng-container *ngIf="IsShownTab || this.myJob">
+          <ng-container *ngIf="IsShownTab && this.myJob">
             <p-tabMenu
               [model]="activejobTypes"
               [activeItem]="selectedjob"
