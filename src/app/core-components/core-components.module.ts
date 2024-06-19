@@ -54,16 +54,16 @@ import { AvatarModule } from 'primeng/avatar'
 import { BadgeModule } from 'primeng/badge'
 import { JobCardComponent } from './cards/job-card/job-card.component'
 import { SearchButtonComponent } from './buttons/search-button/search-button.component'
-import { CheckboxModule } from 'primeng/checkbox';
-import { DialogModule } from 'primeng/dialog';
+import { CheckboxModule } from 'primeng/checkbox'
+import { DialogModule } from 'primeng/dialog'
 
-import { BasicDialogComponent } from './basic-dialog/basic-dialog.component';
-import { DropdownModule } from 'primeng/dropdown';
-import { JobDetailComponent } from './job-detail/job-detail.component';
-import { JobBidsComponent } from './job-bids/job-bids.component';
-import { TableModule } from 'primeng/table';
-import { WarningMessageComponent } from './warning-message/warning-message.component';
-
+import { BasicDialogComponent } from './basic-dialog/basic-dialog.component'
+import { DropdownModule } from 'primeng/dropdown'
+import { JobDetailComponent } from './job-detail/job-detail.component'
+import { JobProposalsComponent } from './job-bids/job-proposals.component'
+import { TableModule } from 'primeng/table'
+import { WarningMessageComponent } from './warning-message/warning-message.component'
+import { BackToJobBoardComponent } from './buttons/back-to-job-board/back-to-job-board.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -91,7 +91,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     CheckboxModule,
     DialogModule,
     DropdownModule,
-    TableModule
+    TableModule,
   ],
   declarations: [
     AttachmentComponent,
@@ -136,8 +136,9 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     SearchButtonComponent,
     BasicDialogComponent,
     JobDetailComponent,
-    JobBidsComponent,
-    WarningMessageComponent
+    JobProposalsComponent,
+    WarningMessageComponent,
+    BackToJobBoardComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -177,8 +178,9 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     SearchButtonComponent,
     BasicDialogComponent,
     JobDetailComponent,
-    JobBidsComponent,
-    WarningMessageComponent
+    JobProposalsComponent,
+    WarningMessageComponent,
+    BackToJobBoardComponent,
   ],
   providers: [
     {

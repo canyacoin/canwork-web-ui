@@ -5,7 +5,7 @@
       <basic-dialog
         [visible]="sent"
         title="Proposal Successfully Submitted"
-        content="Your proposal has been sent to the client. If approved, the client will be in touch via messages.Goodluck!"
+        content="Your proposal has been sent to the client.\nIf approved, the client will be in touch via messages.\nGoodluck!"
         type="submit"
       />
       <div
@@ -31,7 +31,7 @@
         class="flex flex-col lg:flex-row md:justify-between gap-2 md:gap-6 pt-[56px]"
       >
         <div class="w-full">
-          <ng-container *ngIf="IsShownTab || this.myJob">
+          <ng-container *ngIf="(IsShownTab || this.myJob) && isPublic">
             <p-tabMenu
               [model]="activejobTypes"
               [activeItem]="selectedjob"
@@ -57,7 +57,7 @@
             </p-tabMenu>
           </ng-container>
 
-          <div *ngIf="selectedjob.code == 'jobsdetail'" class="w-full">
+          <div *ngIf="selectedjob.code === 'jobsdetail'" class="w-full">
             <div
               class="w-full rounded-[12px] bg-white border border-G300 p-[40px]"
               [ngClass]="{
@@ -74,7 +74,7 @@
               <!-- bid start -->
               <form
                 [formGroup]="bidForm"
-                class="form validate pt-[20px]"
+                class="pt-[20px]"
                 novalidate
                 *ngIf="canBid"
               >
@@ -102,7 +102,7 @@
                       </div>
                     </div>
                     <div class="pt-[16px]">
-                      <app-warning-message
+                      <warning-message
                         *ngIf="bid_message_valiated"
                         message="Your coverletter should be longger than 5 and shorter than 2500"
                         [type]="1"
@@ -190,13 +190,13 @@
                     </div>
 
                     <!-- message -->
-                    <app-warning-message
+                    <warning-message
                       *ngIf="price_bid > job.budget"
                       message="Your bill is more than the client's budget, consider adjusting for better chance of success"
                       [type]="1"
                     />
 
-                    <app-warning-message
+                    <warning-message
                       *ngIf="price_bid < 0 || price_validate"
                       message="Your price should be bigger than zero"
                       [type]="1"
@@ -260,7 +260,7 @@
                         </div>
                       </div>
 
-                      <div *ngIf="!!beforeUploadFiles.length" class="w-full">
+                      <div *ngIf="!!beforeUploadFiles?.length" class="w-full">
                         <ul>
                           <li
                             class="flex flex-col gap-2 pt-[8px]"
@@ -334,26 +334,6 @@
                         />
                         You can only add 10 files with maximum of 25MB each.
                       </div>
-
-                      <!-- <div
-                        class="flex justify-start items-center text-R900 text-b2 font-sans mt-[8px] gap-[8px]"
-                        *ngIf="deleteFailed"
-                      >
-                        <img src="/assets/massimo/svg/fi_alert-triangle.svg" alt="" />
-                        Oops, something went while wrong deleting your file.
-                      </div> -->
-
-                      <!-- <app-warning-message
-                        *ngIf="fileTooBig || uploadFailed"
-                        message="You can only add 10 files with maximum of 25MB each"
-                        [type]="1"
-                      />
-
-                      <app-warning-message
-                        *ngIf="deleteFailed"
-                        message="Oops, something went while wrong deleting your file."
-                        [type]="1"
-                      /> -->
                     </div>
                   </div>
 
@@ -371,23 +351,13 @@
               </form>
               <!-- bid end -->
 
-              <div class="flex justify-start pt-[48px]">
-                <div
-                  class="group flex justify-center items-center text-b1 text-G900 font-medium cursor-pointer p-[6px] rounded-md"
-                  [routerLink]="['/jobs']"
-                >
-                  <img
-                    src="/assets/massimo/svg/Arrow-Left.svg"
-                    alt="Arrow-Left"
-                    class="w-[20px] h-[20px] mx-[8px] group-hover:-translate-x-[6px] duration-500 transition-all"
-                  />
-                  Back to Job Board
-                </div>
+              <div class="pt-[20px] md:pt-[48px]">
+                <back-to-job-board />
               </div>
             </div>
           </div>
-          <div *ngIf="selectedjob.code == 'proposals'" class="w-full">
-            <app-job-bids
+          <div *ngIf="selectedjob.code === 'proposals'" class="w-full">
+            <job-proposals
               [job]="job"
               [jobFromNow]="jobFromNow"
               [canSee]="canSee"
@@ -516,14 +486,13 @@
         </div>
 
         <div
-          class="lg:w-[350px] rounded-[12px] bg-white border border-G300 px-7 py-[32px] h-full"
-          [ngClass]="{ 'md:mt-[40px]': IsProvider && myJob }"
+          class="lg:w-[350px] rounded-[12px] bg-white border border-G300 p-[24px] h-full"
         >
           <div
             class="text-b2 flex justify-between items-center md:text-b1 text-G800 font-medium pl-[2px]"
           >
             <span *ngIf="job.state && isOpen && !job.draft">
-              <i class="circle-success fas fa-circle mr-[12px]"></i
+              <i class="text-vibrantGreen fas fa-circle mr-[12px]"></i
               >{{ job.state }}
             </span>
 
@@ -725,7 +694,7 @@
 <basic-dialog
   [visible]="visible_delete_modal"
   title="Are you sure you want to delete ?"
-  content="If you delete job post, you will no longer have access to it or receive bids from freelancers. You  can create a new job listing to receive bids."
+  content="If you delete job post, you will no longer have access to it or receive bids from freelancers.\nYou  can create a new job listing to receive bids."
   (LeftbtnEvent)="cancelJob($event)"
   (RightbtnEvent)="updateDialog($event)"
   type="delete"
@@ -734,7 +703,7 @@
 <basic-dialog
   [visible]="visible_withdraw_modal"
   title="Are you sure you want to withdraw your application?"
-  content="Your Application will be permanently deleted"
+  content="Your Application will be permanently deleted."
   (LeftbtnEvent)="WithdrawJob($event)"
   (RightbtnEvent)="updatedDialogWithdrawJob($event)"
   type="withdraw"

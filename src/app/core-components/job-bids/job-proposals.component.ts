@@ -1,13 +1,13 @@
 import { Component, OnInit, Directive } from '@angular/core'
-import { JobState } from '@class/job'
+import { Bid, Job, JobState } from '@class/job'
 import { User } from '@class/user'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService } from '@service/auth.service'
 import { PublicJobService } from '@service/public-job.service'
 import { UserService } from '@service/user.service'
-import { ToastrService } from 'ngx-toastr'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
+import { MessageService } from 'primeng/api'
 
 interface SortingMethod {
   name: string
@@ -15,17 +15,16 @@ interface SortingMethod {
 }
 
 @Component({
-  selector: 'app-job-bids',
-  templateUrl: './job-bids.component.html',
-  styleUrls: ['./job-bids.component.css'],
+  selector: 'job-proposals',
+  templateUrl: './job-proposals.component.html',
 })
-export class JobBidsComponent implements OnInit {
+export class JobProposalsComponent implements OnInit {
   authSub: Subscription
   bidsSub: Subscription
   currentUser: User
-  bids: any[]= []
-  jobId: any
-  job: any
+  bids: Bid[] = []
+  jobId: string
+  job: Job
   isOpen: boolean
   jobSub: Subscription
   canSee = false
@@ -36,7 +35,7 @@ export class JobBidsComponent implements OnInit {
 
   ratinglist: number[] = [1, 2, 3, 4, 5]
 
-  selectedBid: any
+  selectedBid: Bid
   visible: boolean = false
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -44,13 +43,12 @@ export class JobBidsComponent implements OnInit {
     private userService: UserService,
     private publicJobsService: PublicJobService,
     private router: Router,
-    private toastr: ToastrService
+    private messageService: MessageService
   ) {}
 
   async ngOnInit() {
     this.sortbylist = [
-      { name: 'Newest', code: 'actionLog[0].timestamp' },
-      { name: 'Project Name', code: 'information.title' },
+      { name: 'Newest', code: 'newest' },
       { name: 'Budget', code: 'budget' },
     ]
 
@@ -120,27 +118,29 @@ export class JobBidsComponent implements OnInit {
     return provider
   }
   */
-ShowDialogDetail(bid:any) {
-  // console.log("bid", bid);
-  
-  this.selectedBid = bid;
-  this.visible = true
-}
+  ShowDialogDetail(bid: Bid) {
+    // console.log("bid", bid);
+
+    this.selectedBid = bid
+    this.visible = true
+  }
   SortbyFilter() {
     this.bids = this.bids.sort((a, b) => {
-      if (this.selectedsortby.code === 'actionLog[0].timestamp') {
-        return b.actionLog[0].timestamp - a.actionLog[0].timestamp
-      } else if (this.selectedsortby.code === 'information.title') {
-        return a.information.title.localeCompare(b.information.title)
+      if (this.selectedsortby.code === 'newest') {
+        return b.timestamp - a.timestamp
       } else if (this.selectedsortby.code === 'budget') {
         return b.budget - a.budget
       }
     })
   }
-  async chooseProvider(selectedBid : any) {
+  async chooseProvider(selectedBid: any) {
     const noAddress = await this.authService.isAuthenticatedAndNoAddress()
     if (noAddress) {
-      this.toastr.error('Add BNB Chain (BEP20) wallet to Accept Offer')
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Add BNB Chain (BEP20) wallet to Accept Offer.',
+      })
       return
     }
 
@@ -158,12 +158,16 @@ ShowDialogDetail(bid:any) {
         this.publicJobsService.notifyLosers(this.job, client, losingBids)
         this.router.navigate(['/inbox/job', this.job.id])
       } else {
-        alert('Something went wrong. please try again later')
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Something went wrong. please try again later',
+        })
       }
     }
   }
 
-  async declineProvider(selectedBid:any) {
+  async declineProvider(selectedBid: any) {
     const bid = selectedBid
     const confirmed = confirm(
       "Are you sure you want to decline this provider's offer?"
@@ -180,7 +184,6 @@ ShowDialogDetail(bid:any) {
   }
 
   stripHtmlTags(html: string): string {
-    
     // Create a new DOM element to use the browser's parsing capabilities
     const div = document.createElement('div')
 

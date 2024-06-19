@@ -1,8 +1,6 @@
 <section
-  class="w-full rounded-[12px] rounded-tl-none bg-white border border-G200 px-[24px] py-[32px] flex"
-  style="min-height: 70vh"
+  class="w-full rounded-[12px] rounded-tl-none bg-white border border-G200 px-[24px] py-[32px] flex min-h-[70vh] font-sans"
 >
-  <!-- <app-back-button></app-back-button> -->
   <div *ngIf="!bids" class="container">
     <div class="row">
       <div class="col-12 job-detail-container text-center">
@@ -11,7 +9,7 @@
         </div>
       </div>
     </div>
-  </div> 
+  </div>
   <div *ngIf="bids.length == 0" class="container flex">
     <div class="flex justify-center items-center flex-col max-w-[380px] m-auto">
       <img
@@ -19,7 +17,7 @@
         class="select-none max-xl:w-[240px] max-xl:h-[180px] mb-[24px]"
       />
 
-      <div class="text-G900 text-h6 font-medium leading-7">
+      <div class="text-G900 text-h6 font-medium">
         No proposal submitted yet.
       </div>
       <div
@@ -31,7 +29,7 @@
 
       <div class="flex gap-6 items-center max-md:flex-col">
         <div
-          class="flex gap-2 text-G900 text-b1 font-semibold leading-6 cursor-pointer text-nowrap hover:bg-G400 rounded-xl px-[20px] py-[10px]"
+          class="flex gap-2 text-G900 text-b1 font-semibold cursor-pointer text-nowrap hover:bg-G400 rounded-xl px-[20px] py-[10px]"
         >
           <img src="/assets/massimo/svg/fi_share-2.svg" class="select-none" />
           Share Job Listing
@@ -42,7 +40,7 @@
   </div>
   <div class="container" *ngIf="canSee && bids.length > 0">
     <div class="flex max-md:flex-col justify-between pb-[24px]">
-      <h4 class="mb-0 text-G900 font-medium text-h6 leading-7">Submissions</h4>
+      <h4 class="mb-0 text-G900 font-medium text-h6">Submissions</h4>
 
       <div class="flex items-center gap-4 text-G900 text-b1">
         <div class="font-sans font-[500] text-b2 whitespace-nowrap">
@@ -56,7 +54,7 @@
           appendTo="body"
         >
           <ng-template let-item pTemplate="item">
-            <div class="flex align-items-center" (click)="SortbyFilter(item)">
+            <div class="flex align-items-center" (click)="SortbyFilter()">
               <span>{{ item.name }}</span>
             </div>
           </ng-template>
@@ -83,9 +81,9 @@
             ></app-avatar>
             <h4 class="ml-2r ml-0-mobile mb-0">
               {{ bid.providerInfo.name
-              }}<app-verified-mark
+              }}<verified-mark
                 [user]="bid.providerInfo"
-              ></app-verified-mark>
+              ></verified-mark>
             </h4>
             <p class="ml-2r ml-0-mobile mb-0">{{ bid.providerInfo.title }}</p>
           </div>
@@ -154,9 +152,8 @@
 
     <p-table
       [value]="bids"
-      [paginator]="bids.length > 5 ? true : false"
-      [rows]="5"
-      [rowsPerPageOptions]="[10, 25, 50]"
+      [paginator]="bids.length > 10 ? true : false"
+      [rows]="10"
     >
       <ng-template pTemplate="header" let-columns>
         <tr>
@@ -169,31 +166,28 @@
       <ng-template pTemplate="body" let-bid let-columns="columns">
         <tr class="hover:bg-G50 cursor-pointer" (click)="ShowDialogDetail(bid)">
           <td>
-            <div
-              class="flex gap-4"
-              [routerLink]="['/profile/alt/', bid.providerId]"
-            >
-              <div>
-                <app-avatar
-                  size="48"
-                  [user]="bid.providerInfo"
-                  [customClass]="' '"
-                ></app-avatar>
+            <div class="flex gap-4">
+              <div
+                class="cursor-pointer"
+                [routerLink]="['/profile/alt/', bid.providerId]"
+              >
+                <app-avatar size="48" [user]="bid.providerInfo"></app-avatar>
               </div>
               <div>
-                <h4 class="line-clamp-1 text-b1 font-medium text-G900">
+                <div
+                  class="line-clamp-1 text-b1 font-medium text-G900 cursor-pointer"
+                  [routerLink]="['/profile/alt/', bid.providerId]"
+                >
                   {{ bid.providerInfo.name }}
-                  <app-verified-mark
-                    [user]="bid.providerInfo"
-                  ></app-verified-mark>
-                </h4>
+                  <verified-mark [user]="bid.providerInfo"></verified-mark>
+                </div>
                 <p class="line-clamp-1 text-b2 text-G500">
                   {{ bid.providerInfo.title }}
                 </p>
               </div>
               <div class="flex items-center justify-center">
                 <div
-                  class="bg-[#0065FF] text-white rounded-[45px] px-[10px] py-[2px]"
+                  class="bg-B600 text-white rounded-[45px] px-[10px] py-[2px]"
                 >
                   New
                 </div>
@@ -244,11 +238,11 @@
           <div
             class="flex max-md:flex-col justify-between items-center w-full border-y border-G200 px-[20px] py-[16px] md:px-[40px !font-sans]"
           >
-            <div
-              class="flex gap-4"
-              [routerLink]="['/profile/alt/', selectedBid.providerId]"
-            >
-              <div>
+            <div class="flex gap-4">
+              <div
+                class="cursor-pointer"
+                [routerLink]="['/profile/alt/', selectedBid.providerId]"
+              >
                 <app-avatar
                   size="48"
                   [user]="selectedBid.providerInfo"
@@ -256,14 +250,15 @@
                 ></app-avatar>
               </div>
               <div>
-                <h4
-                  class="line-clamp-1 text-b1 leading-6 font-medium text-G900"
+                <div
+                  class="cursor-pointer line-clamp-1 text-b1 font-medium text-G900"
+                  [routerLink]="['/profile/alt/', selectedBid.providerId]"
                 >
                   {{ selectedBid.providerInfo.name }}
-                  <app-verified-mark
+                  <verified-mark
                     [user]="selectedBid.providerInfo"
-                  ></app-verified-mark>
-                </h4>
+                  ></verified-mark>
+                </div>
                 <p class="line-clamp-1 text-b2 text-G500">
                   {{ selectedBid.providerInfo.title }}
                 </p>
@@ -273,14 +268,14 @@
 
             <div>
               <div>Bid</div>
-              <div class="text-b1 font-medium leading-6 text-G900">
+              <div class="text-b1 font-medium text-G900">
                 ${{ selectedBid.budget }}
               </div>
             </div>
 
             <div class="flex gap-4 justify-center items-center">
               <div
-                class="flex gap-2 items-center py-[10px] px-[24px] hover:bg-G400 rounded-xl cursor-pointer select-none text-b1 font-medium leading-6 text-G900 duration-300 transition-all"
+                class="flex gap-2 items-center py-[10px] px-[24px] hover:bg-G400 rounded-xl cursor-pointer select-none text-b1 font-medium text-G900 duration-300 transition-all"
                 *ngIf="!selectedBid.rejected"
                 [routerLink]="['/inbox/chat']"
                 [queryParams]="{ address: selectedBid.providerId }"
@@ -311,22 +306,20 @@
           </div>
 
           <div class="w-full px-[20px] py-[16px] md:px-[40px] text-left">
-            <h1 class="text-b1 font-medium leading-6 text-G900 pb-[16px]">
+            <h1 class="text-b1 font-medium text-G900 pb-[16px]">
               Cover Letter
             </h1>
-            <p class="text-b1 font-normal leading-6 text-G900"
-            [innerHTML]="selectedBid.message | linkify"
-            >
-            </p>
+            <p
+              class="text-b1 font-normal text-G900"
+              [innerHTML]="selectedBid.message | linkify"
+            ></p>
           </div>
 
           <div
             *ngIf="selectedBid.attachments"
             class="border-t border-G200 w-full px-[20px] py-[16px] md:px-[40px]"
           >
-            <h1 class="text-b1 text-left font-medium leading-6 text-G900">
-              Attachment
-            </h1>
+            <h1 class="text-b1 text-left font-medium text-G900">Attachment</h1>
             <ng-container *ngFor="let item of selectedBid.attachments">
               <div class="flex justify-start py-[6px]">
                 <a href="{{ item.url }}" target="_blank">

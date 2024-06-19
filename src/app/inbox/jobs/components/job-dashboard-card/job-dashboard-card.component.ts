@@ -11,14 +11,14 @@ import { PublicJobService } from '@service/public-job.service'
 import { Router } from '@angular/router'
 
 import * as moment from 'moment'
-import { JobState } from '@class/job'
+import { Job, JobState } from '@class/job'
 
 @Component({
   selector: 'job-dashboard-card',
   templateUrl: './job-dashboard-card.component.html',
 })
 export class JobDashboardCardComponent implements OnInit {
-  @Input() job: any
+  @Input() job: Job
   @Input() type: string
   @Input() isPublic: boolean
   @Input() jobType: string
@@ -114,6 +114,7 @@ export class JobDashboardCardComponent implements OnInit {
   movetojobdetail() {
     if (this.jobType === 'public')
       this.router.navigate(['/jobs/public/', this.job.slug])
+    if (this.jobType === 'direct') this.router.navigate(['/jobs/', this.job.id])
   }
   Makefavorite(event: Event) {
     event.stopPropagation()

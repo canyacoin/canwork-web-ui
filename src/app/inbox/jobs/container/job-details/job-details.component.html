@@ -113,7 +113,7 @@
           ></app-avatar>
           <p>
             {{ job.otherParty?.name
-            }}<app-verified-mark [user]="job.otherParty"></app-verified-mark>
+            }}<verified-mark [user]="job.otherParty"></verified-mark>
           </p>
         </div>
         <div class="info-details" *ngIf="isOnMobile">

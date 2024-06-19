@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs'
 import { BscService, EventTypeBsc } from '@service/bsc.service'
 import { WindowService } from 'app/shared/services/window.service'
 import { HeaderService } from 'app/shared/constants/header'
-import { MessageService, MenuItem } from 'primeng/api'
+import { MessageService } from 'primeng/api'
 
 @Component({
   selector: 'app-header',
@@ -51,13 +51,12 @@ import { MessageService, MenuItem } from 'primeng/api'
       ]),
     ]),
   ],
-  providers: [MessageService],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   headerSection = HeaderService
   // flag be consumed by the template
   isHamburguer = true
-  items: any[] 
+  items: any[]
   selectedItem: any | undefined
   onHamburguerClick() {
     this.isHamburguer = !this.isHamburguer
@@ -92,13 +91,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         const currentRoute = event.url
-        
+
         if (
           currentRoute.includes('/inbox') ||
           currentRoute.includes('/profile') ||
           currentRoute.includes('/wallet-bnb') ||
           currentRoute.includes('/public') ||
-          currentRoute.includes('/auth')
+          currentRoute.includes('/auth') ||
+          currentRoute.includes('/jobs/')
         ) {
           this.isTransfer = true
         } else {
@@ -137,15 +137,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
       {
         label: 'Act as Client',
         routerLink: '/inbox/jobs',
-        icon: "fi_user_swap.svg"
+        icon: 'fi_user_swap.svg',
       },
       {
         label: 'LogOut',
-        icon : "fi_log-out.svg",
+        icon: 'fi_log-out.svg',
         styleClass: 'text-logout',
       },
     ]
-
 
     this.selectedItem = this.items[0]
     // scroll

@@ -1,5 +1,7 @@
 <main class="font-sans">
-  <section class="pt-[100px] bg-G50 px-[20px] md:px-[64px] pb-[24px]">
+  <section
+    class="pt-[100px] bg-G50 px-[20px] md:px-[64px] pb-[24px] min-h-full"
+  >
     <div class="max-w-[1312px] m-auto">
       <!-- <div class="row">
         <span class="col-6 text-left">
@@ -18,7 +20,7 @@
               class="bg-G200 border-none"
               [ngClass]="{
                 'rounded-tl-xl': i === 0,
-                'rounded-tr-xl': i === 3
+                'rounded-tr-xl': i === 4
               }"
             >
               <div
@@ -215,7 +217,7 @@
                 "
                 [job]="job"
                 [type]="'lg'"
-                [isPublic]="jobType !== 'active'"
+                [isPublic]="jobType === 'public'"
                 [jobType]="jobType"
               ></job-dashboard-card>
             </div>

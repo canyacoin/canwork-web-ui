@@ -22,7 +22,7 @@
         {{ title }}
       </div>
       <div
-        class="text-b2 text-center font-normal leading-5 pb-[20px] md:pb-[32px]"
+        class="text-b2 text-center font-normal leading-5 pb-[20px] md:pb-[32px] whitespace-pre-line"
       >
         {{ content }}
       </div>
@@ -37,8 +37,18 @@
               src="/assets/massimo/svg/delete.svg"
               class="select-none w-[16px] h-[16px]"
             />
-            <h1 class="text-R900 font-medium text-nowrap text-b1" *ngIf="type == 'delete'">Delete Job</h1>
-            <h1 class="text-R900 font-medium text-nowrap text-b1" *ngIf="type == 'withdraw'">Withdraw your Application</h1>
+            <h1
+              class="text-R900 font-medium text-nowrap text-b1"
+              *ngIf="type == 'delete'"
+            >
+              Delete Job
+            </h1>
+            <h1
+              class="text-R900 font-medium text-nowrap text-b1"
+              *ngIf="type == 'withdraw'"
+            >
+              Withdraw your Application
+            </h1>
           </div>
           <basic-button
             [type]="1"
@@ -129,7 +139,6 @@
         </div>
       </ng-container>
 
-      
       <ng-container *ngIf="type == 'listing_deleted'">
         <div class="flex gap-4 justify-center items-center">
           <basic-button

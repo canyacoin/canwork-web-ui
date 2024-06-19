@@ -25,9 +25,7 @@
     <div
       class="pt-[50px] md:pt-[93px] md:pb-[32px] pb-[24px] px-[24px] flex flex-col gap-6"
     >
-      <div
-        class="flex flex-col gap-2 text-center justify-center items-center"
-      >
+      <div class="flex flex-col gap-2 text-center justify-center items-center">
         <div class="text-G900 text-b1 font-medium line-clamp-1">{{ name }}</div>
         <div class="text-G600 text-b2 font-medium line-clamp-1">
           {{ title }}
@@ -148,19 +146,19 @@
               src="{{ avatarUri }}"
               class="w-[64px] h-[64px] object-cover cursor-pointer hover:brightness-50 transition-all duration-200"
             />
-          </div> 
+          </div>
         </div>
       </div>
 
       <div class="flex flex-col">
-       <div class="flex justify-start items-center gap-2">
-        <div class="text-G800 text-b1 font-medium">{{ name }}</div>
-        <img
+        <div class="flex justify-start items-center gap-2">
+          <div class="text-G800 text-b1 font-medium">{{ name }}</div>
+          <img
             src="/assets/massimo/svg/verifiedTick.svg"
             *ngIf="isVerified"
             class="w-[16px] h-[16px]"
           />
-       </div>
+        </div>
         <div class="text-b3 md:text-b2 text-G800">{{ title }}</div>
         <div class="text-b3 md:text-b2 text-G800">
           {{ timezone }}

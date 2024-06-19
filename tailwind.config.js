@@ -64,8 +64,8 @@ module.exports = {
         B300: '#0165ff',
         B400: '#0147b3',
         B500: '#013e9c',
+        B600: '#0065FF',
         // Red
-        
         R50: '#ffece8',
         R75: '#ffb09f',
         R100: '#ff9077',
@@ -102,6 +102,7 @@ module.exports = {
         orange: '#F74C53',
         violet: '#F18FD1',
         lightGreen: '#2CE8DA',
+        vibrantGreen: '#54F26D',
         // background colors
         'blue-10': 'rgba(58, 194, 255, 0.10)',
         'blue-50': 'rgba(58, 194, 255, 0.50)',
