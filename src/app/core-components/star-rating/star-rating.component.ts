@@ -6,8 +6,4 @@ import { Component, Input } from '@angular/core'
 })
 export class StarRatingComponent {
   @Input() stars!: number
-
-  get starFullCSS() {
-    return 'w-[20px]'
-  }
 }

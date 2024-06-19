@@ -1,14 +1,16 @@
-<div class="flex gap-[7px]">
-  <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
-    <!-- to do star rating ng if didn't work currently -->
-    <!-- <img
-      *ngIf="stars > i - 0.5"
-      src="/assets/massimo/svg/starFull.svg"
-      [ngClass]="starFullCSS"
-    /> -->
+<div class="flex gap-[7px] w-full">
+  <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
     <img
-      src="/assets/massimo/svg/starFull.svg"
-      [ngClass]="starFullCSS"
+      *ngIf="stars > star - 0.5"
+      src="/assets/massimo/svg/yellowStar.svg"
+      class="w-[20px]"
+      alt="yellowStar"
+    />
+    <img
+      *ngIf="star - 0.5 > stars"
+      src="/assets/massimo/svg/whiteStar.svg"
+      class="w-[20px]"
+      alt="whiteStar"
     />
   </ng-container>
 </div>
