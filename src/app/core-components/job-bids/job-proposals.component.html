@@ -54,7 +54,7 @@
           appendTo="body"
         >
           <ng-template let-item pTemplate="item">
-            <div class="flex align-items-center" (click)="SortbyFilter()">
+            <div class="flex items-center" (click)="SortbyFilter()">
               <span>{{ item.name }}</span>
             </div>
           </ng-template>
@@ -210,10 +210,11 @@
       </ng-template>
     </p-table>
 
+    <!-- Proposal Details Dialog start -->
     <ng-container *ngIf="selectedBid">
       <p-dialog
         header="Proposal Details"
-        [(visible)]="visible"
+        [(visible)]="visibleProposalDetails"
         styleClass="lg:max-w-[900px] w-full font-sans px-[20px]"
         [draggable]="false"
         [resizable]="false"
@@ -286,7 +287,7 @@
                 [type]="2"
                 title="ACCEPT"
                 size="small"
-                (click)="chooseProvider(selectedBid)"
+                (click)="updateDialogAcceptJob($event)"
               />
             </div>
           </div>
@@ -327,7 +328,17 @@
         </div>
       </p-dialog>
     </ng-container>
+    <!-- Proposal Details Dialog start -->
 
-    
+    <!-- Modals start -->
+    <basic-dialog
+      [visible]="visibleAcceptModal"
+      title="Do you want to accept this bid?"
+      [content]="selectedBidContent"
+      (LeftbtnEvent)="updateDialogAcceptJob($event)"
+      (RightbtnEvent)="chooseProvider(selectedBid)"
+      type="accept"
+    />
+    <!-- Modals end -->
   </div>
 </section>
