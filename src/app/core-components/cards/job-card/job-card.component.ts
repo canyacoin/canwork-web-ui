@@ -31,17 +31,12 @@ export class JobCardComponent implements OnInit, OnDestroy {
   bids: any[]
   bidsSub: Subscription
   authSub: Subscription
-  Location: string = ''
+  location: string = ''
 
   currentUser: User
   isApplied: boolean = false
   favourite: boolean = false
-  constructor(
-    private router: Router,
-    private publicJobsService: PublicJobService,
-    private userService: UserService,
-    private authService: AuthService
-  ) {}
+
   providerTypes = [
     {
       name: 'Content Creators',
@@ -70,9 +65,16 @@ export class JobCardComponent implements OnInit, OnDestroy {
     },
   ]
 
+  constructor(
+    private router: Router,
+    private publicJobsService: PublicJobService,
+    private userService: UserService,
+    private authService: AuthService
+  ) {}
+
   async ngOnInit() {
     this.jobPoster = await this.userService.getUser(this.clientId)
-    this.Location = this.jobPoster.timezone
+    this.location = this.jobPoster.timezone
 
     this.authSub = await this.authService.currentUser$.subscribe(
       (user: User) => {
