@@ -203,21 +203,8 @@
               {{ stripHtmlTags(bid.message) }}
             </div>
           </td>
-          <td class="flex gap-1">
-            <ng-container *ngFor="let item of ratinglist">
-              <div *ngIf="item <= 3">
-                <img
-                  src="/assets/massimo/svg/yellow_star.svg"
-                  alt="yellow_star"
-                />
-              </div>
-              <div *ngIf="item > 3">
-                <img
-                  src="/assets/massimo/svg/white_star.svg"
-                  alt="white_star"
-                />
-              </div>
-            </ng-container>
+          <td>
+            <app-star-rating stars="3" />
           </td>
         </tr>
       </ng-template>
@@ -225,20 +212,20 @@
 
     <ng-container *ngIf="selectedBid">
       <p-dialog
-        header="Proposal Details."
+        header="Proposal Details"
         [(visible)]="visible"
-        styleClass="w-[98%] lg:w-[50%]"
+        styleClass="lg:max-w-[900px] w-full font-sans px-[20px]"
         [draggable]="false"
         [resizable]="false"
         [modal]="true"
       >
-        <div class="flex flex-col justify-start items-center">
+        <div class="flex flex-col items-center">
           <!-- <img src="" alt=""> -->
 
           <div
-            class="flex max-md:flex-col justify-between items-center w-full border-y border-G200 px-[20px] py-[16px] md:px-[40px !font-sans]"
+            class="flex max-md:flex-col md:justify-between gap-[8px] md:items-center w-full border-y border-G200 px-[20px] py-[16px] md:px-[40px] !font-sans"
           >
-            <div class="flex gap-4">
+            <div class="flex gap-[16px]">
               <div
                 class="cursor-pointer"
                 [routerLink]="['/profile/alt/', selectedBid.providerId]"
@@ -246,10 +233,9 @@
                 <app-avatar
                   size="48"
                   [user]="selectedBid.providerInfo"
-                  [customClass]="' '"
                 ></app-avatar>
               </div>
-              <div>
+              <div class="flex flex-col gap-[4px]">
                 <div
                   class="cursor-pointer line-clamp-1 text-b1 font-medium text-G900"
                   [routerLink]="['/profile/alt/', selectedBid.providerId]"
@@ -259,30 +245,30 @@
                     [user]="selectedBid.providerInfo"
                   ></verified-mark>
                 </div>
-                <p class="line-clamp-1 text-b2 text-G500">
+                <div class="line-clamp-1 text-b2 text-G500">
                   {{ selectedBid.providerInfo.title }}
-                </p>
-                <app-star-rating stars="3" />
+                </div>
+                <app-star-rating stars="5" />
               </div>
             </div>
 
-            <div>
+            <div class="flex flex-col gap-[4px]">
               <div>Bid</div>
               <div class="text-b1 font-medium text-G900">
                 ${{ selectedBid.budget }}
               </div>
             </div>
 
-            <div class="flex gap-4 justify-center items-center">
+            <div class="flex flex-wrap gap-y-[8px] gap-x-[16px] items-center">
               <div
-                class="flex gap-2 items-center py-[10px] px-[24px] hover:bg-G400 rounded-xl cursor-pointer select-none text-b1 font-medium text-G900 duration-300 transition-all"
+                class="flex gap-[8px] items-center cursor-pointer select-none text-b1 font-medium text-G900 duration-300 transition-all"
                 *ngIf="!selectedBid.rejected"
                 [routerLink]="['/inbox/chat']"
                 [queryParams]="{ address: selectedBid.providerId }"
               >
                 <img
-                  src="/assets/massimo/svg/u_comment-message.svg"
-                  alt="u_comment-message"
+                  src="/assets/massimo/svg/commentMessage.svg"
+                  alt="commentMessage"
                   class="w-[20px] h-[20px]"
                 />
                 Chat
@@ -305,10 +291,10 @@
             </div>
           </div>
 
-          <div class="w-full px-[20px] py-[16px] md:px-[40px] text-left">
-            <h1 class="text-b1 font-medium text-G900 pb-[16px]">
-              Cover Letter
-            </h1>
+          <div
+            class="w-full px-[20px] pt-[16px] pb-[32px] md:px-[40px] text-left flex flex-col gap-[16px]"
+          >
+            <h1 class="text-b1 font-medium text-G900">Cover Letter</h1>
             <p
               class="text-b1 font-normal text-G900"
               [innerHTML]="selectedBid.message | linkify"
@@ -319,11 +305,14 @@
             *ngIf="selectedBid.attachments"
             class="border-t border-G200 w-full px-[20px] py-[16px] md:px-[40px]"
           >
-            <h1 class="text-b1 text-left font-medium text-G900">Attachment</h1>
-            <ng-container *ngFor="let item of selectedBid.attachments">
-              <div class="flex justify-start py-[6px]">
+            <h1 class="text-b1 font-medium text-G900">Attachment</h1>
+            <div
+              *ngIf="selectedBid.attachments.length > 0"
+              class="flex flex-col gap-[8px] pt-[16px]"
+            >
+              <ng-container *ngFor="let item of selectedBid.attachments">
                 <a href="{{ item.url }}" target="_blank">
-                  <p class="flex justify-start items-center text-C600">
+                  <p class="flex justify-start items-center text-C600 text-b2">
                     <img
                       src="/assets/massimo/svg/ion_attach-outline.svg"
                       alt="ion_attach"
@@ -332,11 +321,13 @@
                     {{ item.name }}
                   </p>
                 </a>
-              </div>
-            </ng-container>
+              </ng-container>
+            </div>
           </div>
         </div>
       </p-dialog>
     </ng-container>
+
+    
   </div>
 </section>

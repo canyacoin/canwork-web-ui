@@ -119,7 +119,7 @@ export class JobProposalsComponent implements OnInit {
   }
   */
   ShowDialogDetail(bid: Bid) {
-    // console.log("bid", bid);
+    console.log('this.selectedBid', bid)
 
     this.selectedBid = bid
     this.visible = true
