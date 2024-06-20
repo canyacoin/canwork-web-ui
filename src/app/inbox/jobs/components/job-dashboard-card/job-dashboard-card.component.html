@@ -97,13 +97,21 @@
     ></basic-tag>
   </div>
 
-  <div
-    class="max-xl:grid max-sm:grid-cols-1 max-xl:grid-cols-2 flex gap-2 items-start text-nowrap"
-  >
+  <div class="grid sm:grid-cols-2 xl:flex gap-2 items-center text-nowrap">
     <div *ngIf="jobType === 'active'" class="flex gap-2 items-center">
       <img src="/assets/massimo/svg/fi_user-check.svg" class="select-none" />
       <div class="text-G500 text-b2">Hired</div>
-      <!-- <div class="text-G700 text-b1 font-medium">{{ location }}</div> -->
+      <div
+        *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri"
+        class="cursor-pointer flex gap-[16px] font-sans items-center"
+        [routerLink]="['/profile/alt/', job.otherParty.id]"
+      >
+        <app-avatar [user]="job.otherParty" size="28"></app-avatar>
+        <div class="line-clamp-1 text-b1 font-medium text-G900">
+          {{ job.otherParty?.name }}
+          <!-- <verified-mark [user]="job.otherParty"></verified-mark> -->
+        </div>
+      </div>
     </div>
     <div *ngIf="jobType !== 'active'" class="flex gap-2 items-center">
       <img src="/assets/massimo/svg/jobLocation.svg" class="select-none" />
