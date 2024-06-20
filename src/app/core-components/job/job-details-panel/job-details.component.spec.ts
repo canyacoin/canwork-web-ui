@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { JobDetailsComponent } from './job-details.component'
+import { JobDetailsPanelComponent } from './job-details.component'
 
-describe('JobDetailsComponent', () => {
-  let component: JobDetailsComponent
-  let fixture: ComponentFixture<JobDetailsComponent>
+describe('JobDetailsPanelComponent', () => {
+  let component: JobDetailsPanelComponent
+  let fixture: ComponentFixture<JobDetailsPanelComponent>
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [JobDetailsComponent],
+      declarations: [JobDetailsPanelComponent],
     })
-    fixture = TestBed.createComponent(JobDetailsComponent)
+    fixture = TestBed.createComponent(JobDetailsPanelComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   })

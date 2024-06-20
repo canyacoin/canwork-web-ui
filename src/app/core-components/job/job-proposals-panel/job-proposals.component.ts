@@ -18,7 +18,7 @@ interface SortingMethod {
   selector: 'job-proposals',
   templateUrl: './job-proposals.component.html',
 })
-export class JobProposalsComponent implements OnInit {
+export class JobProposalsPanelComponent implements OnInit {
   authSub: Subscription
   bidsSub: Subscription
   currentUser: User

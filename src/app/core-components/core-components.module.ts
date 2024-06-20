@@ -59,11 +59,12 @@ import { DialogModule } from 'primeng/dialog'
 
 import { BasicDialogComponent } from './basic-dialog/basic-dialog.component'
 import { DropdownModule } from 'primeng/dropdown'
-import { JobDetailsComponent } from './job/job-details-panel/job-details.component'
-import { JobProposalsComponent } from './job/job-proposals-panel/job-proposals.component'
 import { TableModule } from 'primeng/table'
 import { WarningMessageComponent } from './warning-message/warning-message.component'
 import { BackToJobBoardComponent } from './buttons/back-to-job-board/back-to-job-board.component'
+import { JobDetailsPanelComponent } from './job/job-details-panel/job-details.component'
+import { JobProposalsPanelComponent } from './job/job-proposals-panel/job-proposals.component'
+import { JobStatusPanelComponent } from './job/job-status-panel/job-status-panel.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -135,10 +136,11 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     JobCardComponent,
     SearchButtonComponent,
     BasicDialogComponent,
-    JobDetailsComponent,
-    JobProposalsComponent,
     WarningMessageComponent,
     BackToJobBoardComponent,
+    JobDetailsPanelComponent,
+    JobProposalsPanelComponent,
+    JobStatusPanelComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -177,10 +179,11 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     JobCardComponent,
     SearchButtonComponent,
     BasicDialogComponent,
-    JobDetailsComponent,
-    JobProposalsComponent,
     WarningMessageComponent,
     BackToJobBoardComponent,
+    JobDetailsPanelComponent,
+    JobProposalsPanelComponent,
+    JobStatusPanelComponent,
   ],
   providers: [
     {

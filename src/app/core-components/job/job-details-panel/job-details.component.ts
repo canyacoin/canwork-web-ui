@@ -4,7 +4,7 @@ import { Component, Input } from '@angular/core'
   selector: 'job-details-panel',
   templateUrl: './job-details.component.html',
 })
-export class JobDetailsComponent {
+export class JobDetailsPanelComponent {
   @Input() job: any
   @Input() jobFromNow: string
   @Input() canSee: boolean
