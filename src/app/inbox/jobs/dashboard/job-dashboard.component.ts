@@ -184,7 +184,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
         )
 
         switch (this.jobType) {
-          case 'public':
+          case 'active':
             this.jobs = this.activeJobs
             break
           case 'public':
