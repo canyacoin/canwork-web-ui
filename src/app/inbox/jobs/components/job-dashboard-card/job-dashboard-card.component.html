@@ -106,7 +106,9 @@
         class="cursor-pointer flex gap-[16px] font-sans items-center"
         [routerLink]="['/profile/alt/', job.otherParty.id]"
       >
-        <app-avatar [user]="job.otherParty" size="28"></app-avatar>
+        <div class="!mb-[-6px]">
+          <app-avatar [user]="job.otherParty" size="28"></app-avatar>
+        </div>
         <div class="line-clamp-1 text-b1 font-medium text-G900">
           {{ job.otherParty?.name }}
           <!-- <verified-mark [user]="job.otherParty"></verified-mark> -->
