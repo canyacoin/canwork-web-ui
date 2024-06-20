@@ -4,7 +4,6 @@ import {
   OnChanges,
   Input,
   SimpleChanges,
-  Directive,
 } from '@angular/core'
 import { Observable, from } from 'rxjs'
 
