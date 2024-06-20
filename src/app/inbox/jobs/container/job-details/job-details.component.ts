@@ -12,6 +12,7 @@ import { Transaction, TransactionService } from '@service/transaction.service'
 import { BscService, BepChain } from '@service/bsc.service'
 import { ToastrService } from 'ngx-toastr'
 import { AngularFireStorage } from '@angular/fire/compat/storage'
+import { NgxSpinnerService } from 'ngx-spinner'
 
 //import { SimpleModalService } from 'ngx-simple-modal' // old version
 import { NgxModalService } from 'ngx-modalview'
@@ -28,7 +29,6 @@ import {
 @Component({
   selector: 'app-job-details',
   templateUrl: './job-details.component.html',
-  styleUrls: ['./job-details.component.scss'],
 })
 export class JobDetailsComponent implements OnInit, OnDestroy {
   jobState = JobState
@@ -60,10 +60,12 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     private ngxModalService: NgxModalService,
     private storage: AngularFireStorage,
     private mobile: MobileService,
-    private router: Router
+    private router: Router,
+    private spinner: NgxSpinnerService
   ) {}
 
   ngOnInit() {
+    this.spinner.show()
     this.authService.currentUser$.pipe(take(1)).subscribe((user: User) => {
       this.currentUser = user
       this.initialiseJob()
@@ -112,6 +114,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
           this.reviews = reviews
         })
     }
+    this.spinner.hide()
   }
 
   private transactionTypeService(jobId): any {

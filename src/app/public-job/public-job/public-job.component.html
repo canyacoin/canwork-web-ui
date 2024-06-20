@@ -65,7 +65,7 @@
                   IsShownTab || (this.myJob && !yourApplication)
               }"
             >
-              <job-detail-panel
+              <job-details-panel
                 [job]="job"
                 [jobFromNow]="jobFromNow"
                 [canSee]="canSee"
@@ -662,15 +662,6 @@
             class="text-b2 md:text-b1 text-G800 mt-[16px]"
             *ngIf="currentUser && IsProvider && !myJob && isOpen"
           >
-            <!-- <button
-              class="btn btn-sm btn-dark mt-10 mr-10 w-full text-[15px] py-[7px] normal-case"
-              [hidden]="!canBid"
-              data-toggle="modal"
-              data-target="#bidModal"
-              [disabled]="!currentUser.bscAddress"
-            >
-              Apply Now
-            </button> -->
             <i *ngIf="!canBid" class="mt-[12px]">You've posted your bid.</i>
             <i *ngIf="!currentUser.bscAddress" class="mt-[12px]"
               >To make a bid fill the field "BNB Chain Address field" in the

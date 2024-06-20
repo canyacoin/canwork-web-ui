@@ -38,7 +38,7 @@ import { PopperComponent } from './popper/popper.component'
 import { BasicButtonComponent } from './buttons/basic-button/basic-button.component'
 import { BasicTagComponent } from './tag/basic-tag/basic-tag.component'
 import { CategoryCardComponent } from './cards/category-card/category-card.component'
-import { LinkButtonComponent } from './link-button/link-button.component'
+import { LinkButtonComponent } from './buttons/link-button/link-button.component'
 import { ProfileCardComponent } from './cards/profile-card/profile-card.component'
 import { SwitchGridListComponent } from './buttons/switch-grid-list/switch-grid-list.component'
 import { SkProfileCardComponent } from './skeletons/sk-profile-card/sk-profile-card.component'
@@ -59,8 +59,8 @@ import { DialogModule } from 'primeng/dialog'
 
 import { BasicDialogComponent } from './basic-dialog/basic-dialog.component'
 import { DropdownModule } from 'primeng/dropdown'
-import { JobDetailComponent } from './job-detail/job-detail.component'
-import { JobProposalsComponent } from './job-bids/job-proposals.component'
+import { JobDetailsComponent } from './job/job-details-panel/job-details.component'
+import { JobProposalsComponent } from './job/job-proposals-panel/job-proposals.component'
 import { TableModule } from 'primeng/table'
 import { WarningMessageComponent } from './warning-message/warning-message.component'
 import { BackToJobBoardComponent } from './buttons/back-to-job-board/back-to-job-board.component'
@@ -135,7 +135,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     JobCardComponent,
     SearchButtonComponent,
     BasicDialogComponent,
-    JobDetailComponent,
+    JobDetailsComponent,
     JobProposalsComponent,
     WarningMessageComponent,
     BackToJobBoardComponent,
@@ -177,7 +177,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     JobCardComponent,
     SearchButtonComponent,
     BasicDialogComponent,
-    JobDetailComponent,
+    JobDetailsComponent,
     JobProposalsComponent,
     WarningMessageComponent,
     BackToJobBoardComponent,
