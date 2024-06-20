@@ -7,6 +7,7 @@ import {
   EventEmitter,
 } from '@angular/core'
 import { PublicJobService } from '@service/public-job.service'
+import { UserService } from '@service/user.service'
 
 import { Router } from '@angular/router'
 
@@ -19,16 +20,12 @@ import { Job, JobState } from '@class/job'
 })
 export class JobDashboardCardComponent implements OnInit {
   @Input() job: Job
-  @Input() type: string
-  @Input() isPublic: boolean
   @Input() jobType: string
+  @Output() CancelJob = new EventEmitter<string>()
   visible: boolean = false
 
-  @Output() CancelJob = new EventEmitter<string>()
-  constructor(
-    private router: Router,
-    private publicJobsService: PublicJobService
-  ) {}
+  location: string = '...'
+  proposals: number = 0
 
   favourite: boolean = false
 
@@ -60,7 +57,21 @@ export class JobDashboardCardComponent implements OnInit {
     },
   ]
 
-  ngOnInit() {}
+  constructor(
+    private router: Router,
+    private publicJobsService: PublicJobService,
+    private userService: UserService
+  ) {}
+
+  async ngOnInit() {
+    let jobPoster = await this.userService.getUser(this.job.clientId)
+    this.location = jobPoster.timezone
+
+    this.publicJobsService.getPublicJobBids(this.job.id).subscribe((result) => {
+      let bids = result || []
+      this.proposals = bids.length
+    })
+  }
 
   getImage(id: string) {
     let url = '/assets/massimo/images/'
@@ -112,9 +123,12 @@ export class JobDashboardCardComponent implements OnInit {
   }
 
   movetojobdetail() {
-    if (this.jobType === 'public')
+    if (this.jobType === 'active')
+      this.router.navigate(['/inbox/job/', this.job.id])
+    else if (this.jobType === 'public')
       this.router.navigate(['/jobs/public/', this.job.slug])
-    if (this.jobType === 'direct') this.router.navigate(['/jobs/', this.job.id])
+    else if (this.jobType === 'direct')
+      this.router.navigate(['/jobs/', this.job.id])
   }
   Makefavorite(event: Event) {
     event.stopPropagation()

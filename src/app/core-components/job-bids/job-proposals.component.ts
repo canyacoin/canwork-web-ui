@@ -33,10 +33,12 @@ export class JobProposalsComponent implements OnInit {
   sortbylist: SortingMethod[] | undefined
   selectedsortby: SortingMethod | undefined
 
-  ratinglist: number[] = [1, 2, 3, 4, 5]
-
   selectedBid: Bid
-  visible: boolean = false
+  visibleProposalDetails: boolean = false
+
+  visibleAcceptModal: boolean = false
+  selectedBidContent: string = ''
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
@@ -119,10 +121,10 @@ export class JobProposalsComponent implements OnInit {
   }
   */
   ShowDialogDetail(bid: Bid) {
-    // console.log("bid", bid);
+    console.log('this.selectedBid', bid)
 
     this.selectedBid = bid
-    this.visible = true
+    this.visibleProposalDetails = true
   }
   SortbyFilter() {
     this.bids = this.bids.sort((a, b) => {
@@ -132,39 +134,6 @@ export class JobProposalsComponent implements OnInit {
         return b.budget - a.budget
       }
     })
-  }
-  async chooseProvider(selectedBid: any) {
-    const noAddress = await this.authService.isAuthenticatedAndNoAddress()
-    if (noAddress) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Add BNB Chain (BEP20) wallet to Accept Offer.',
-      })
-      return
-    }
-
-    const bid = selectedBid
-    const confirmed = confirm('Are you sure you want to choose this provider?')
-    if (confirmed) {
-      const chosen = await this.publicJobsService.closePublicJob(this.job, bid)
-      if (chosen) {
-        alert('Provider chosen!')
-        const losingBids = this.bids.find(
-          (item) => item.providerId !== selectedBid.providerId
-        )
-
-        const client = await this.userService.getUser(this.job.clientId)
-        this.publicJobsService.notifyLosers(this.job, client, losingBids)
-        this.router.navigate(['/inbox/job', this.job.id])
-      } else {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Something went wrong. please try again later',
-        })
-      }
-    }
   }
 
   async declineProvider(selectedBid: any) {
@@ -192,5 +161,58 @@ export class JobProposalsComponent implements OnInit {
 
     // Use the textContent property to get the plain text without HTML tags
     return div.textContent || div.innerText || ''
+  }
+  async chooseProvider(selectedBid: any) {
+    const noAddress = await this.authService.isAuthenticatedAndNoAddress()
+    if (noAddress) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Add BNB Chain (BEP20) wallet to Accept Offer.',
+      })
+      return
+    }
+
+    const bid = selectedBid
+    const chosen = await this.publicJobsService.closePublicJob(this.job, bid)
+    if (chosen) {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Bid successfully accepted.',
+      })
+
+      const losingBids = this.bids.find(
+        (item) => item.providerId !== selectedBid.providerId
+      )
+
+      const client = await this.userService.getUser(this.job.clientId)
+      this.publicJobsService.notifyLosers(this.job, client, losingBids)
+      this.router.navigate(['/inbox/job', this.job.id])
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Something went wrong. please try again later',
+      })
+    }
+  }
+
+  capitalizeName(name: string): string {
+    return name
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ')
+  }
+
+  updateDialogAcceptJob(event: Event) {
+    event.stopPropagation()
+    this.visibleProposalDetails = false
+    this.selectedBidContent =
+      'Accept ' +
+      // @ts-ignore
+      (this.capitalizeName(this.selectedBid.providerInfo?.name) || '') +
+      "'s bid means you have decided to continue and hire him for your work."
+    this.visibleAcceptModal = !this.visibleAcceptModal
   }
 }

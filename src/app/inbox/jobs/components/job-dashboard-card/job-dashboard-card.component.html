@@ -1,293 +1,8 @@
-<!-- <div
-  class="card mb-15 p-20 pointer job-dashboard-card"
-  *ngIf="type === 'lg' && !isPublic"
->
-  <div class="container jobs-info job-info-lg">
-    <div class="row">
-      <div class="col-md-9 col-sm-8">
-        <div class="row job-desc">
-          <div class="col-12" [routerLink]="['/inbox/job', job.id]">
-            <h4>{{ job.information.title }}</h4>
-            <div class="hide-mobile">
-              <app-skill-tag
-                *ngFor="let skill of job.information.skills"
-                [skill]="skill"
-              ></app-skill-tag>
-            </div>
-            <p *ngIf="job.information.description.length < 160">
-              {{ job.information.description }}
-            </p>
-            <p *ngIf="job.information.description.length > 160">
-              {{ job.information.description.substring(0, 160) }}...
-            </p>
-          </div>
-          <div class="col-12">
-            <div
-              class="otherPartyName pointer"
-              *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri"
-              [routerLink]="['/profile/alt/', job.otherParty.id]"
-            >
-              <app-avatar
-                [user]="job.otherParty"
-                [customClass]="'headshot-div'"
-              ></app-avatar>
-              <p>
-                {{ job.otherParty?.name
-                }}<verified-mark
-                  [user]="job.otherParty"
-                ></verified-mark>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-4 job-details">
-        <div class="row info-row">
-          <div class="info-details col-sm-12 hide-mobile">
-            <p>Status</p>
-            <app-status-icon
-              [job]="job"
-              [currentUserType]="userType"
-            ></app-status-icon>
-          </div>
-          <div class="info-details col-sm-12 col-6">
-            <p>
-              {{ job.paymentType }}
-            </p>
-            <b>
-              <app-budget [job]="job"></app-budget>
-            </b>
-          </div>
-          <div class="info-details col-sm-12 col-6">
-            <p>Timeline</p>
-            <b>{{ job.information.timelineExpectation }}</b>
-          </div>
-        </div>
-        <div>
-          <button
-            [routerLink]="['/inbox/job', job.id]"
-            class="btn btn-primary btn-outline view-job-btn"
-          >
-            VIEW JOB
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div
-  class="card mb-15 p-20 pointer job-dashboard-card"
-  *ngIf="type === 'sm' && !isPublic"
->
-  <div class="container jobs-info job-info-sm">
-    <div class="row">
-      <div class="col-md-9 col-sm-8">
-        <div class="row job-desc">
-          <div class="col-12" [routerLink]="['/inbox/job', job.id]">
-            <h4>{{ job.information.title }}</h4>
-            <p *ngIf="job.information.description.length < 60">
-              {{ job.information.description }}
-            </p>
-            <p *ngIf="job.information.description.length > 60">
-              {{ job.information.description.substring(0, 60) }}
-            </p>
-          </div>
-          <div class="col-12">
-            <div
-              *ngIf="job.otherParty?.avatar && job.otherParty?.avatar?.uri"
-              class="otherPartyName pointer"
-              [routerLink]="['/profile/alt/', job.otherParty.id]"
-            >
-              <app-avatar
-                [user]="job.otherParty"
-                [customClass]="'headshot-div'"
-              ></app-avatar>
-              <p>
-                {{ job.otherParty?.name
-                }}<verified-mark
-                  [user]="job.otherParty"
-                ></verified-mark>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-4 job-details">
-        <div class="row info-row">
-          <div class="info-details col-sm-12 hide-mobile">
-            <p>Status</p>
-            <app-status-icon
-              [job]="job"
-              [currentUserType]="userType"
-            ></app-status-icon>
-          </div>
-          <div class="info-details col-sm-12 col-6">
-            <p>
-              {{ job.paymentType }}
-            </p>
-            <b>
-              <app-budget [job]="job"></app-budget>
-            </b>
-          </div>
-          <div class="info-details col-sm-12 col-6">
-            <p>Timeline</p>
-            <b>{{ job.information.timelineExpectation }}</b>
-          </div>
-          <button
-            [routerLink]="['/inbox/job', job.id]"
-            class="btn btn-primary btn-outline view-job-btn hide-mobile"
-          >
-            VIEW JOB
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
- -->
-<!-- 
-  This is for public job offers - e.g. client receiving provider offers,
-  hence the impossible job.workType ngIf above. this should save us some time...
-  uncomment this once the basic features has been implemented.
- -->
-<!-- 
-<div
-  class="card mb-15 p-20 pointer job-dashboard-card"
-  *ngIf="job.workType === 'public-job-type-prototype' && type === 'offer'"
->
-  <div class="container provider-job-card jobs-info">
-    <app-avatar
-      [user]="job.otherParty"
-      [customClass]="'headshot-div'"
-    ></app-avatar>
-    <div class="row">
-      <div
-        class="col-md-3 offset-md-1 col-sm-4 col-12"
-        [routerLink]="['/inbox/job', job.id]"
-      >
-        <h4>
-          {{ job.otherParty?.name
-          }}<verified-mark [user]="job.otherParty"></verified-mark>
-        </h4>
-      </div>
-      <div class="col-sm-2 hide-mobile">
-        <p>
-          {{ job.paymentType }}
-        </p>
-      </div>
-      <div class="col-sm-2 hide-mobile">
-        <p>Timeline</p>
-      </div>
-      <div class="col-sm-4 text-right">
-        <button class="btn btn-primary btn-canya-chat">
-          LET'S CHAT
-        </button>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-3 offset-md-1 col-sm-4 col-12">
-        <p>{{ job.information.title }}</p>
-      </div>
-      <div class="col-sm-2 col-6">
-        <p>
-          <b>
-            <app-budget [job]="job"></app-budget>
-          </b>
-        </p>
-      </div>
-      <div class="col-sm-2 col-6">
-        <b>{{ job.information.timelineExpectation }}</b>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-11 offset-md-1 col-12">
-        <app-skill-tag
-          *ngFor="let skill of job.information.skills"
-          [skill]="skill"
-        ></app-skill-tag>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-8 offset-sm-1 col-12">
-        <p>
-          {{ job.information.description }}
-        </p>
-      </div>
-      <div class="col-sm-3 col-12 text-right btn-div mobile-center">
-        <button class="btn btn-success">
-          ACCEPT
-        </button>
-        <button class="btn btn-secondary">
-          DECLINE
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-<div
-  class="card mb-15 p-20 pointer job-dashboard-card"
-  *ngIf="type === 'lg' && isPublic"
->
-  <div class="container jobs-info job-info-lg">
-    <div class="row">
-      <div class="col-md-9 col-sm-8">
-        <div class="row job-desc">
-          <div class="col-12" [routerLink]="['/jobs', job.id]">
-            <h4>{{ job.information.title }}</h4>
-            <app-skill-tag
-              *ngFor="let skill of job.information.skills"
-              [skill]="skill"
-            ></app-skill-tag>
-            <p *ngIf="job.information.description.length < 160">
-              {{ job.information.description }}
-            </p>
-            <p *ngIf="job.information.description.length > 160">
-              {{ job.information.description.substring(0, 160) }}...
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-4 job-details">
-        <div class="row info-row">
-          <div class="info-details col-sm-12 col-6">
-            <p>Status</p>
-            <app-status-icon
-              [job]="job"
-              [currentUserType]="userType"
-            ></app-status-icon>
-          </div>
-          <div class="info-details col-sm-12 col-6">
-            <p>
-              {{ job.paymentType }}
-            </p>
-            <b>
-              <app-budget [job]="job"></app-budget>
-            </b>
-          </div>
-          <div class="info-details col-sm-12 col-6">
-            <p>Deadline</p>
-            <b>{{ job.deadline }}</b>
-          </div>
-        </div>
-        <div>
-          <button
-            [routerLink]="['/jobs', job.id]"
-            class="btn btn-primary btn-outline view-job-btn"
-          >
-            VIEW JOB
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
- -->
-
 <div
   class="w-full rounded-[12px] overflow-hidden bg-white p-[32px] grid gap-4 border border-G200 my-[16px]"
   [ngClass]="{
     'hover:bg-G100 active:bg-G200 cursor-pointer transition-all duration-200':
-      jobType === 'public' || jobType === 'direct'
+      jobType === 'public' || jobType === 'direct' || jobType === 'active'
   }"
   (click)="movetojobdetail()"
 >
@@ -385,11 +100,15 @@
   <div
     class="max-xl:grid max-sm:grid-cols-1 max-xl:grid-cols-2 flex gap-2 items-start text-nowrap"
   >
-    <div class="flex gap-2 items-center">
+    <div *ngIf="jobType === 'active'" class="flex gap-2 items-center">
+      <img src="/assets/massimo/svg/fi_user-check.svg" class="select-none" />
+      <div class="text-G500 text-b2">Hired</div>
+      <!-- <div class="text-G700 text-b1 font-medium">{{ location }}</div> -->
+    </div>
+    <div *ngIf="jobType !== 'active'" class="flex gap-2 items-center">
       <img src="/assets/massimo/svg/jobLocation.svg" class="select-none" />
       <div class="text-G500 text-b2">Location</div>
-      <!-- to do google address -->
-      <div class="text-G700 text-b1 font-medium">San Franciso</div>
+      <div class="text-G700 text-b1 font-medium">{{ location }}</div>
     </div>
     <div class="flex gap-2 items-center">
       <img src="/assets/massimo/svg/jobBudget.svg" class="select-none" />
@@ -407,10 +126,10 @@
         {{ formatDate(job.deadline) }}
       </div>
     </div>
-    <div class="flex gap-2 items-center">
+    <div *ngIf="jobType !== 'active'" class="flex gap-2 items-center">
       <img src="/assets/massimo/svg/jobProposals.svg" class="select-none" />
       <div class="text-G500 text-b2">Proposals:</div>
-      <div class="text-G700 text-b1 font-medium">20 proposals</div>
+      <div class="text-G700 text-b1 font-medium">{{ proposals }} proposals</div>
     </div>
   </div>
 </div>

@@ -463,6 +463,12 @@
     border-radius: 24px !important;
   }
 
+  .p-dialog-title {
+    font-family: "General Sans", sans-serif !important;
+    font-size: 24px;
+    font-style: normal;
+  }
+
   .p-dialog-header button {
     background: rgba(0, 0, 0, 0.80) !important;
     backdrop-filter: blur(4px) !important;

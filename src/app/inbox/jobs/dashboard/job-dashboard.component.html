@@ -81,13 +81,13 @@
                   <p-dropdown
                     #filterTypeSelect
                     [options]="filters"
-                    [(ngModel)]="selectedfilter"
+                    [(ngModel)]="selectedFilter"
                     optionLabel="name"
                     appendTo="body"
                   >
                     <ng-template let-item pTemplate="item">
                       <div
-                        class="flex align-items-center"
+                        class="flex items-center"
                         (click)="filterJobsByState(item.code)"
                       >
                         <span>{{ item.name }}</span>
@@ -101,165 +101,30 @@
                   </div>
                   <p-dropdown
                     #orderTypeSelect
-                    [options]="sortbylist"
-                    [(ngModel)]="selectedsortby"
+                    [options]="sortByList"
+                    [(ngModel)]="selectedSortBy"
                     optionLabel="name"
                     appendTo="body"
                   >
+                    <ng-template let-item pTemplate="item">
+                      <div
+                        class="flex items-center"
+                        (click)="SortbyFilter(item.code)"
+                      >
+                        <span>{{ item.name }}</span>
+                      </div>
+                    </ng-template>
                   </p-dropdown>
                 </div>
               </div>
-
-              <!-- 
-                  <select
-                    class="mb-10 mx-10"
-                    #orderTypeSelect
-                    [(ngModel)]="orderType"
-                  >
-                    <option value="information.title">
-                      <span>Project Name</span>
-                    </option>
-                    <option value="budget">
-                      <span>Budget</span>
-                    </option>
-                    <option value="actionLog[0].timestamp">
-                      <span>Date Posted</span>
-                    </option>
-                  </select> -->
-              <!-- <div class="form-group">
-                  <div class="form-check mx-10">
-                    <span
-                      class="mb-10 pointer"
-                      (click)="reverseOrder = !reverseOrder"
-                    >
-                      <i *ngIf="reverseOrder" class="fas fa-sort-amount-up"></i>
-                      <i
-                        *ngIf="!reverseOrder"
-                        class="fas fa-sort-amount-down"
-                      ></i>
-                    </span>
-                  </div>
-                </div> -->
             </div>
           </div>
-          <!-- <div class="row" *ngIf="isOnMobile">
-            <div class="col-12">
-              <label for="orderTypeSelect" class="mb-15">Show Only: </label>
-              <select
-                class="mb-10 mx-10"
-                #filterTypeSelect
-                [(ngModel)]="filterByState.state"
-                (change)="filterJobsByState()"
-              >
-                <option value="">
-                  <span>All Jobs</span>
-                </option>
-                <option value="Awaiting Escrow">
-                  <span>Jobs Awaiting Escrow</span>
-                </option>
-                <option value="Funds In Escrow">
-                  <span>Funds in Escrow</span>
-                </option>
-                <option value="Pending completion">
-                  <span>Jobs Pending Completion</span>
-                </option>
-                <option value="Disputed">
-                  <span>Jobs In Dispute</span>
-                </option>
-                <option value="Offer pending">
-                  <span>Pending Jobs</span>
-                </option>
-                <option value="Cancelled">
-                  <span>Cancelled</span>
-                </option>
-                <option value="Complete">
-                  <span>Completed Jobs</span>
-                </option>
-              </select>
-              <br />
-            </div>
-            <div class="col-12">
-              <label for="orderTypeSelect" class="mb-15">Order By: </label>
-              <select
-                class="mb-10 mx-10"
-                #orderTypeSelect
-                [(ngModel)]="orderType"
-              >
-                <option value="information.title">
-                  <span>Project Name</span>
-                </option>
-                <option value="budget">
-                  <span>Budget</span>
-                </option>
-                <option value="actionLog[0].timestamp">
-                  <span>Date Posted</span>
-                </option>
-              </select>
-              <span
-                class="mb-10 pointer"
-                (click)="reverseOrder = !reverseOrder"
-              >
-                <i *ngIf="reverseOrder" class="fas fa-sort-amount-up"></i>
-                <i *ngIf="!reverseOrder" class="fas fa-sort-amount-down"></i>
-              </span>
-            </div>
-          </div> -->
           <div class="py-[28px]">
             <div *ngIf="!jobs || jobs.length == 0">No jobs to show!</div>
-            <div
-              *ngIf="jobs && jobs.length > 0 && !isOnMobile && !reverseOrder"
-            >
+            <div *ngIf="jobs && jobs.length > 0">
               <job-dashboard-card
-                *ngFor="
-                  let job of filteredProviders
-                    | orderBy : selectedsortby.code
-                    | paginate : { itemsPerPage: 10, currentPage: currentPage }
-                "
+                *ngFor="let job of filteredJobs"
                 [job]="job"
-                [type]="'lg'"
-                [isPublic]="jobType === 'public'"
-                [jobType]="jobType"
-              ></job-dashboard-card>
-            </div>
-            <div *ngIf="jobs && jobs.length > 0 && !isOnMobile && reverseOrder">
-              <job-dashboard-card
-                *ngFor="
-                  let job of filteredProviders
-                    | orderBy : selectedsortby.code
-                    | reverse
-                    | paginate : { itemsPerPage: 10, currentPage: currentPage }
-                "
-                (CancelJob)="CancelJob($event)"
-                [job]="job"
-                [type]="'lg'"
-                [jobType]="jobType"
-                [isPublic]="jobType !== 'active'"
-              ></job-dashboard-card>
-            </div>
-            <div *ngIf="jobs && jobs.length > 0 && isOnMobile && !reverseOrder">
-              <job-dashboard-card
-                *ngFor="
-                  let job of filteredProviders
-                    | orderBy : selectedsortby.code
-                    | paginate : { itemsPerPage: 10, currentPage: currentPage }
-                "
-                [job]="job"
-                [type]="'sm'"
-                [isPublic]="false"
-                [jobType]="jobType"
-              ></job-dashboard-card>
-            </div>
-            <div *ngIf="jobs && jobs.length > 0 && isOnMobile && reverseOrder">
-              <job-dashboard-card
-                *ngFor="
-                  let job of filteredProviders
-                    | orderBy : selectedsortby.code
-                    | reverse
-                    | paginate : { itemsPerPage: 10, currentPage: currentPage }
-                "
-                [job]="job"
-                [type]="'sm'"
-                [isPublic]="false"
                 [jobType]="jobType"
               ></job-dashboard-card>
             </div>

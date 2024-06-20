@@ -60,7 +60,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   currentUser: User
   userType: UserType
   paymentType = PaymentType
-  jobs: Job[]
+  jobs: Job[] = []
   publicJobs: Job[]
   activeJobs: Job[]
   draftJobs: Job[]
@@ -68,14 +68,10 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   jobsSubscription: Subscription
   publicJobsSubscription: Subscription
   authSub: Subscription
-  orderType: string
-  reverseOrder: boolean
   loading = true
   jobType = 'active'
-  filterByState: any = { state: '' }
   allJobs: Job[]
   searchQuery: string
-  isOnMobile = false
 
   jobTypes: jobType[]
   selectedjob: jobType
@@ -87,12 +83,12 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
 
   filters: SortingMethod[] | undefined
 
-  selectedfilter: SortingMethod | undefined
+  selectedFilter: SortingMethod | undefined
 
-  sortbylist: SortingMethod[] | undefined
-  selectedsortby: SortingMethod | undefined
+  sortByList: SortingMethod[] | undefined
+  selectedSortBy: SortingMethod | undefined
 
-  filteredProviders: Job[] | undefined
+  filteredJobs: Job[] | undefined
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -125,16 +121,15 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       { name: 'Jobs in Disputed', code: 'Disputed' },
       { name: 'Pending Jobs', code: 'Offer pending' },
       { name: 'Cancelled', code: 'Cancelled' },
-      { name: 'Complete', code: 'Complete' },
     ]
-    this.sortbylist = [
-      { name: 'Date Posted', code: 'actionLog[0].timestamp' },
-      { name: 'Project Name', code: 'information.title' },
+    this.sortByList = [
+      { name: 'Date Posted', code: 'newest' },
+      { name: 'Project Name', code: 'projectName' },
       { name: 'Budget', code: 'budget' },
     ]
 
-    this.selectedfilter = this.filters[0]
-    this.selectedsortby = this.sortbylist[0]
+    this.selectedFilter = this.filters[0]
+    this.selectedSortBy = this.sortByList[0]
 
     this.route.queryParams.subscribe((params) => {
       if (params['tab'] == undefined) {
@@ -147,11 +142,10 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     })
 
     this.currentUser = await this.authService.getCurrentUser()
-    this.userType = this.currentUser.type
+    // this.userType = this.currentUser.type
+    // we changed the logic here, we need client mode for getting active jobs.
+    this.userType = UserType.client
     await this.initialiseJobs(this.currentUser.address, this.userType)
-    this.orderType = 'actionLog[0].timestamp'
-    this.reverseOrder = true
-    this.isOnMobile = this.mobile.isOnMobile
 
     this.spinner.hide()
   }
@@ -168,7 +162,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       .subscribe(async (jobs: Job[]) => {
         this.activeJobs = jobs
         this.loading = false
-        this.jobs = this.activeJobs
+        this.jobs = jobs
         this.jobs.forEach(async (job) => {
           this.jobService.assignOtherPartyAsync(job, this.userType)
         })
@@ -179,20 +173,20 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       .subscribe(async (jobs: Job[]) => {
         // only show open jobs
 
-        const open = jobs.filter(
+        this.publicJobs = jobs.filter(
           (job) => job.state === JobState.acceptingOffers
         )
-        const draft = jobs.filter(
+        this.draftJobs = jobs.filter(
           (job) => job.draft === true && job.state !== JobState.closed
         )
-        const completed_Job = jobs.filter(
+        this.completeJobs = jobs.filter(
           (job) => job.state === JobState.complete
         )
-        this.publicJobs = open
-        this.draftJobs = draft
-        this.completeJobs = completed_Job
 
         switch (this.jobType) {
+          case 'public':
+            this.jobs = this.activeJobs
+            break
           case 'public':
             this.jobs = this.publicJobs.filter(
               (job) => job.visibility === 'public' && job.draft === false
@@ -220,6 +214,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     switch (code) {
       case 'active':
         this.jobs = this.activeJobs
+        this.selectedFilter = this.filters[0]
         numberTab = 0
         break
       case 'public':
@@ -247,26 +242,14 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     this.showFilteredJobs(this.jobs)
   }
 
-  CancelJob(id: string) {
-    this.jobs = this.jobs.filter((job) => job.id !== id)
-    this.showFilteredJobs(this.jobs)
-  }
-
   showFilteredJobs(jobs: Job[]): void {
     this.totalRecords = jobs.length
 
     // 5 item each page
-    this.filteredProviders = jobs.slice(
+    this.filteredJobs = jobs.slice(
       this.currentPage * 5,
       this.currentPage * 5 + 5
     )
-  }
-
-  changeUserType() {
-    this.userType =
-      this.userType === UserType.client ? UserType.provider : UserType.client
-    this.loading = true
-    this.initialiseJobs(this.currentUser.address, this.userType)
   }
 
   viewJobDetails(jobId: string): void {
@@ -274,7 +257,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   }
 
   filterJobsByState(state: string) {
-    if (this.selectedfilter.code !== '') {
+    if (state !== '') {
       this.jobs = this.activeJobs.filter((job) => job.state === state)
     } else {
       this.jobs = this.activeJobs
@@ -286,6 +269,20 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     this.first = e.first
     this.rows = e.rows // this is injected from parent
     this.currentPage = e.page // set new page position
+    this.showFilteredJobs(this.jobs)
+  }
+
+  SortbyFilter(filter: string) {
+    console.log('this.jobs:', this.jobs)
+    this.jobs = this.jobs.sort((a, b) => {
+      if (filter === 'newest') {
+        return b.actionLog[0].timestamp - a.actionLog[0].timestamp
+      } else if (filter === 'projectName') {
+        return a.information.title.localeCompare(b.information.title)
+      } else if (filter === 'budget') {
+        return b.budget - a.budget
+      }
+    })
     this.showFilteredJobs(this.jobs)
   }
 }

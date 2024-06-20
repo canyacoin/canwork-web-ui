@@ -7,7 +7,7 @@
 >
   <div class="flex justify-center items-center h-[300px] md:h-[500px]">
     <div class="max-w-[352px] flex flex-col justify-center items-center">
-      <ng-container *ngIf="type == 'submit'">
+      <ng-container *ngIf="type === 'submit'">
         <img
           src="/assets/massimo/images/submit.png"
           alt="submit"
@@ -27,7 +27,7 @@
         {{ content }}
       </div>
 
-      <ng-container *ngIf="type == 'delete' || type == 'withdraw'">
+      <ng-container *ngIf="type === 'delete' || type === 'withdraw'">
         <div class="flex gap-4 justify-center items-center">
           <div
             class="cursor-pointer py-[10px] px-[24px] flex justify-center items-center gap-2 hover:bg-G200 rounded-xl transition-all duration-200"
@@ -37,18 +37,18 @@
               src="/assets/massimo/svg/delete.svg"
               class="select-none w-[16px] h-[16px]"
             />
-            <h1
+            <div
               class="text-R900 font-medium text-nowrap text-b1"
-              *ngIf="type == 'delete'"
+              *ngIf="type === 'delete'"
             >
               Delete Job
-            </h1>
-            <h1
+            </div>
+            <div
               class="text-R900 font-medium text-nowrap text-b1"
-              *ngIf="type == 'withdraw'"
+              *ngIf="type === 'withdraw'"
             >
               Withdraw your Application
-            </h1>
+            </div>
           </div>
           <basic-button
             [type]="1"
@@ -60,7 +60,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="type == 'submit'">
+      <ng-container *ngIf="type === 'submit'">
         <div class="flex gap-4 justify-center items-center">
           <basic-button
             [type]="1"
@@ -79,7 +79,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="type == 'withdraw_success'">
+      <ng-container *ngIf="type === 'withdraw_success'">
         <div class="flex gap-4 justify-center items-center">
           <basic-button
             [type]="1"
@@ -98,7 +98,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="type == 'success'">
+      <ng-container *ngIf="type === 'success'">
         <div class="flex gap-4 justify-center items-center">
           <div
             class="cursor-pointer py-[10px] px-[24px] text-G900 flex justify-center items-center gap-2 font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl"
@@ -120,7 +120,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="type == 'draft'">
+      <ng-container *ngIf="type === 'draft'">
         <div class="flex gap-4 justify-center items-center">
           <basic-button
             [type]="1"
@@ -139,7 +139,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="type == 'listing_deleted'">
+      <ng-container *ngIf="type === 'listing_deleted'">
         <div class="flex gap-4 justify-center items-center">
           <basic-button
             [type]="1"
@@ -154,6 +154,24 @@
             title="Create new job listing"
             size="small"
             extraClass="border"
+          />
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="type === 'accept'">
+        <div class="flex gap-4 justify-center items-center">
+          <div
+            class="cursor-pointer py-[10px] px-[24px] hover:bg-G200 rounded-xl transition-all duration-200"
+            (click)="LeftClick($event)"
+          >
+            <div class="text-R900 font-medium text-nowrap text-b1">Cancel</div>
+          </div>
+          <basic-button
+            [type]="2"
+            (click)="RightClick($event)"
+            title="Accept"
+            size="small"
+            extraClass="border text-G900"
           />
         </div>
       </ng-container>
