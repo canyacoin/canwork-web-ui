@@ -185,7 +185,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.messageService.add({
       severity: 'info',
       summary: 'Info',
-      detail: 'You have unread chat messages on CanWork',
+      detail: 'You have unread chat messages.',
     })
   }
 
@@ -214,7 +214,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
           // console.error('! unable to retrieve chat/channel data:', error)
         }
       )
-      // console.log(this.messagesSubscription)
+      console.log(
+        'asfasdfasdfasfdasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasfasdf'
+      )
+      console.log('unreadConversations', unreadConversations)
+      console.log('this.messagesSubscription', this.messagesSubscription)
     }
   }
 

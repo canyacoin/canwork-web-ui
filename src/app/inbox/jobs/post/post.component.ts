@@ -32,7 +32,7 @@ import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
 import { NgxSpinnerService } from 'ngx-spinner'
-import { AngularEditorConfig } from '@kolkov/angular-editor'
+import { customAngularEditorConfig } from 'app/core-functions/angularEditorConfig'
 import { MessageService } from 'primeng/api'
 
 interface DropdownItem {
@@ -95,55 +95,7 @@ export class PostComponent implements OnInit, OnDestroy {
 
   minDate: Date
   sentDRP: number
-  editorConfig: AngularEditorConfig = {
-    editable: true,
-    spellcheck: true,
-    height: '200px',
-    minHeight: '0',
-    maxHeight: 'auto',
-    width: 'auto',
-    minWidth: '0',
-    translate: 'yes',
-    enableToolbar: true,
-    showToolbar: true,
-    placeholder:
-      'Give a detailed brief of the job with adequate requirements and expectations',
-    defaultParagraphSeparator: '',
-    defaultFontName: 'General Sans',
-    defaultFontSize: '3',
-    fonts: [{ class: 'font-sans', name: 'General Sans' }],
-    customClasses: [],
-    uploadUrl: 'v1/image',
-    uploadWithCredentials: false,
-    sanitize: true,
-    toolbarPosition: 'top',
-    toolbarHiddenButtons: [
-      [
-        'undo',
-        'redo',
-        'subscript',
-        'superscript',
-        'strikeThrough',
-        'indent',
-        'outdent',
-        'heading',
-        'fontName',
-      ],
-      [
-        'fontSize',
-        'textColor',
-        'backgroundColor',
-        'customClasses',
-        'link',
-        'unlink',
-        'insertImage',
-        'insertVideo',
-        'insertHorizontalRule',
-        'removeFormat',
-        'toggleEditorMode',
-      ],
-    ],
-  }
+  editorConfig = customAngularEditorConfig()
 
   // usdToAtomicCan: number // this is not used
 

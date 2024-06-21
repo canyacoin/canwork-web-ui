@@ -67,7 +67,7 @@
     <div class="flex gap-4 justify-between items-center">
       <div
         class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center gap-2 font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl"
-        (click)="LeftClick($event)"
+        (click)="leftClick($event)"
       >
         <img
           src="/assets/massimo/svg/delete.svg"
@@ -86,7 +86,7 @@
     </div>
   </div>
 
-  <div *ngIf="!currentUser && !isMyJob && isOpen" (click)="LeftClick($event)">
+  <div *ngIf="!currentUser && !isMyJob && isOpen" (click)="leftClick($event)">
     <basic-button [type]="2" title="Login to Apply Now" />
   </div>
 </div>

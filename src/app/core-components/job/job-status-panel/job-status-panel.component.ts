@@ -20,21 +20,25 @@ export class JobStatusPanelComponent {
   // core-functions
   formatDateFromString = formatDateFromString
 
-  jobPoster: any = null
+  jobPoster: User = null
   isMyJob: boolean = false
 
-  LeftClick(event: Event) {
+  leftClick(event: Event) {
     this.leftBtnEvent.emit(event)
   }
-  RightClick(event: Event) {
+  rightClick(event: Event) {
     this.rightBtnEvent.emit(event)
   }
 
   constructor(private userService: UserService) {}
 
   async ngOnInit() {
-    this.isMyJob = this.job.clientId === this.currentUser.address
-    await this.setClient(this.job.clientId)
+    console.log('starting ngONInit')
+    if (this.job) {
+      this.isMyJob = this.job.clientId === this.currentUser.address
+      console.log('this.job.clientId', this.job.clientId)
+      await this.setClient(this.job.clientId)
+    }
   }
 
   async setClient(clientId: string) {
@@ -42,9 +46,11 @@ export class JobStatusPanelComponent {
     new one, retrieve user only once (if not already retrieved)
     and use the new fastest Algolia getUserById service version
     */
+    console.log('this.jobPoster', this.jobPoster)
 
     if (!this.jobPoster) {
       this.jobPoster = await this.userService.getUser(clientId)
+      console.log('this.jobPoster', this.jobPoster)
 
       if (this.jobPoster) {
         let avatar = this.jobPoster.avatar // current, retrocomp

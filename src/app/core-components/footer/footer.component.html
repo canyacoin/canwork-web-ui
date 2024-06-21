@@ -7,7 +7,6 @@
         class="flex flex-col lg:flex-row lg:justify-between gap-10 pb-[16px] md:pb-[80px]"
       >
         <div class="flex flex-col gap-6">
-          
           <img
             src="{{ footerSection.logoSrc }}"
             class="select-none w-[140px] h-[40px]"
@@ -19,9 +18,7 @@
         <div class="flex flex-col xl:flex-row gap-12">
           <div class="flex flex-col gap-4">
             <div class="text-G900 text-b1 font-medium">Categories</div>
-            <div
-              class="grid grid-cols-2 xs:grid-cols-3 gap-6 xs:gap-12"
-            >
+            <div class="grid grid-cols-2 xs:grid-cols-3 gap-6 xs:gap-12">
               <div
                 *ngFor="let section of footerSection.sections"
                 class="grid gap-2"

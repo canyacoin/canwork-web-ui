@@ -57,7 +57,9 @@ import { SearchButtonComponent } from './buttons/search-button/search-button.com
 import { CheckboxModule } from 'primeng/checkbox'
 import { DialogModule } from 'primeng/dialog'
 
-import { BasicDialogComponent } from './basic-dialog/basic-dialog.component'
+import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.component'
+import { ProposalDetailsDialogComponent } from './dialogs/proposal-details-dialog/proposal-details-dialog.component'
+
 import { DropdownModule } from 'primeng/dropdown'
 import { TableModule } from 'primeng/table'
 import { WarningMessageComponent } from './warning-message/warning-message.component'
@@ -65,8 +67,10 @@ import { BackToJobBoardComponent } from './buttons/back-to-job-board/back-to-job
 import { JobDetailsPanelComponent } from './job/job-details-panel/job-details.component'
 import { JobProposalsPanelComponent } from './job/job-proposals-panel/job-proposals.component'
 import { JobStatusPanelComponent } from './job/job-status-panel/job-status-panel.component'
-import { BookmarkButtonComponent } from './buttons/bookmark-button/bookmark-button.component';
+import { BookmarkButtonComponent } from './buttons/bookmark-button/bookmark-button.component'
 import { ShareButtonComponent } from './buttons/share-button/share-button.component'
+import { JobApplicationPanelComponent } from './job/job-application-panel/job-application-panel.component'
+import { AttachmentButtonComponent } from './buttons/attachment-button/attachment-button.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -132,20 +136,24 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     JoinCommunityComponent,
     PostJobComponent,
     JobCardComponent,
-    BasicDialogComponent,
     WarningMessageComponent,
     BackToJobBoardComponent,
-    // panels
+    // Panels
     JobDetailsPanelComponent,
     JobProposalsPanelComponent,
     JobStatusPanelComponent,
-    // buttons
+    JobApplicationPanelComponent,
+    // Buttons
     BackButtonComponent,
     BasicButtonComponent,
     LinkButtonComponent,
     SearchButtonComponent,
     BookmarkButtonComponent,
     ShareButtonComponent,
+    AttachmentButtonComponent,
+    // Dialogs
+    BasicDialogComponent,
+    ProposalDetailsDialogComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -183,19 +191,24 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     PostJobComponent,
     JobCardComponent,
     SearchButtonComponent,
-    BasicDialogComponent,
     WarningMessageComponent,
     BackToJobBoardComponent,
-    // panels
+    // Panels
     JobDetailsPanelComponent,
     JobProposalsPanelComponent,
     JobStatusPanelComponent,
-    // buttons
+    JobApplicationPanelComponent,
+    // Buttons
     BackButtonComponent,
     BasicButtonComponent,
     LinkButtonComponent,
     SearchButtonComponent,
     BookmarkButtonComponent,
+    ShareButtonComponent,
+    AttachmentButtonComponent,
+    // Dialogs
+    BasicDialogComponent,
+    ProposalDetailsDialogComponent,
   ],
   providers: [
     {

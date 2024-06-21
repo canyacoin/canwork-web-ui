@@ -5,7 +5,18 @@ import { Component, Input, Output, EventEmitter } from '@angular/core'
   templateUrl: './basic-dialog.component.html',
 })
 export class BasicDialogComponent {
-  @Input() visible: boolean
+  // two way data binding
+  private _visible: boolean
+  @Input()
+  get visible(): boolean {
+    return this._visible
+  }
+  set visible(value: boolean) {
+    this._visible = value
+    this.visibleChange.emit(this._visible)
+  }
+  @Output() visibleChange = new EventEmitter<boolean>()
+
   @Input() title: string
   @Input() content: string
   @Input() type: string

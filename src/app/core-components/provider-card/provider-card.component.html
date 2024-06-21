@@ -4,7 +4,7 @@
     <app-provider-card></app-provider-card>
   </div>
 -->
-<div *ngIf="size == 'lg' && this.provider" style="padding:10px">
+<div *ngIf="size == 'lg' && this.provider" style="padding: 10px">
   <div
     class="card provider-card text-center pointer"
     [routerLink]="['/profile/', provider.slug]"
@@ -12,22 +12,32 @@
     <span
       *ngIf="provider && provider.badge"
       class="popular-tag"
-      style="background-color:transparent;color:#33ccff;float:right;font-weight: 600;letter-spacing: 1.5px;text-transform: uppercase;min-height: 35px;font-size: 12px;text-align: center;line-height: 35px;"
+      style="
+        background-color: transparent;
+        color: #33ccff;
+        float: right;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        min-height: 35px;
+        font-size: 12px;
+        text-align: center;
+        line-height: 35px;
+      "
     >
       {{ provider.badge }}
     </span>
     <span
       *ngIf="!(provider && provider.badge)"
       class="popular-tag"
-      style="float:right; min-height: 35px;"
+      style="float: right; min-height: 35px"
     ></span>
     <div class="profile">
       <app-avatar [user]="provider" [customClass]="'headshot'"></app-avatar>
       <div class="title">
         <h2>
           <span *ngIf="provider && provider.name"
-            >{{ provider.name
-            }}<verified-mark [user]="provider"></verified-mark
+            >{{ provider.name }}<verified-mark [user]="provider"></verified-mark
           ></span>
         </h2>
         <h3>
@@ -82,8 +92,7 @@
       </div>
       <div class="col-lg-9 col-md-12 col-sm-12 col-9 pl-20 pb-10">
         <h6 class="provider-name">
-          {{ provider.name
-          }}<verified-mark [user]="provider"></verified-mark>
+          {{ provider.name }}<verified-mark [user]="provider"></verified-mark>
         </h6>
         <p class="provider-title">{{ provider.title }}</p>
         <div class="row provider-stars">

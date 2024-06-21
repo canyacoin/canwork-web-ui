@@ -1,5 +1,5 @@
-import { Component, OnInit, Directive } from '@angular/core'
-import { Bid, Job, JobState } from '@class/job'
+import { Component, OnInit } from '@angular/core'
+import { Bid, Job } from '@class/job'
 import { User } from '@class/user'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService } from '@service/auth.service'
@@ -25,7 +25,6 @@ export class JobProposalsPanelComponent implements OnInit {
   bids: Bid[] = []
   jobId: string
   job: Job
-  isOpen: boolean
   jobSub: Subscription
   canSee = false
   rating = 3
@@ -69,7 +68,6 @@ export class JobProposalsPanelComponent implements OnInit {
               this.currentUser.address === publicJob.clientId
             ) {
               this.job = publicJob
-              this.isOpen = this.job.state === JobState.acceptingOffers
               this.jobId = params['jobId']
               this.canSee = true
               this.bidsSub = this.publicJobsService
@@ -94,7 +92,6 @@ export class JobProposalsPanelComponent implements OnInit {
             } else {
               if (this.currentUser.address === publicJob.clientId) {
                 this.job = publicJob
-                this.isOpen = this.job.state === JobState.acceptingOffers
                 this.jobId = params['jobId']
                 this.canSee = true
                 this.bidsSub = this.publicJobsService
@@ -162,7 +159,7 @@ export class JobProposalsPanelComponent implements OnInit {
     // Use the textContent property to get the plain text without HTML tags
     return div.textContent || div.innerText || ''
   }
-  async chooseProvider(selectedBid: any) {
+  async chooseProvider(selectedBid: Bid) {
     const noAddress = await this.authService.isAuthenticatedAndNoAddress()
     if (noAddress) {
       this.messageService.add({

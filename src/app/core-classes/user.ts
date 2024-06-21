@@ -3,6 +3,7 @@ export class User {
   '@context': string
   address: string
   avatar: Avatar
+  avatarUri: string
   compressedAvatarUrl: any
   bio: string
   category: UserCategory

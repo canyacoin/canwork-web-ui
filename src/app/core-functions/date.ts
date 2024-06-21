@@ -24,7 +24,7 @@ export function getDaySuffix(day: number): string {
  * @param {string} dateStr - The date string to format.
  * @returns {string} - The formatted date string.
  */
-export function formatDateFromString(dateStr: string): string {
+export function formatDateFromString(dateStr: any): string {
   const date = new Date(dateStr)
   const day = date.getDate()
   const month = date.toLocaleString('default', { month: 'long' })

@@ -1,11 +1,11 @@
 <p-dialog
   [(visible)]="visible"
-  styleClass="w-[98%] md:w-[50%]"
+  styleClass="w-[80%] md:w-[60%] !rounded-[24px] !bg-G50"
   [draggable]="false"
   [resizable]="false"
   [modal]="true"
 >
-  <div class="flex justify-center items-center h-[300px] md:h-[500px]">
+  <div class="flex justify-center items-center h-[400px] md:h-[500px]">
     <div class="max-w-[352px] flex flex-col justify-center items-center">
       <ng-container *ngIf="type === 'submit'">
         <img
@@ -16,13 +16,13 @@
       </ng-container>
       <div
         *ngIf="type !== 'submit'"
-        class="w-[322px] h-[200px] bg-G400 mb-[24px]"
+        class="max-w-[322px] w-full h-[200px] bg-G400 mb-[24px]"
       ></div>
-      <div class="text-h6 text-center font-medium leading-7 pb-[8px]">
+      <div class="text-h6 text-center font-medium pb-[8px]">
         {{ title }}
       </div>
       <div
-        class="text-b2 text-center font-normal leading-5 pb-[20px] md:pb-[32px] whitespace-pre-line"
+        class="text-b2 text-center font-normal pb-[20px] md:pb-[32px] whitespace-pre-line"
       >
         {{ content }}
       </div>

@@ -1,62 +1,53 @@
 <ng-container *ngIf="job">
-  <div class="text-h6 md:text-b1 text-G800 font-medium leading-[1.2]">
-    Job Details
-  </div>
-  <div class="text-h4 md:text-h4 text-G800 font-medium leading-[1.2] my-8">
-    {{ job.information.title }}
-  </div>
-  <div class="text-b3 md:text-b2 text-G500 leading-[1.2]">
-    Posted {{ jobFromNow }}
-  </div>
-  <div
-    class="text-b2 md:text-b1 text-G900 leading-[1.2] mt-[24px]"
-    [innerHTML]="job.information.description | linkify"
-  ></div>
-
-  <hr
-    *ngIf="job.information.attachments.length > 0"
-    class="h-[1.5px] my-[20px] bg-gray-200 border-0"
-  />
-  <div
-    *ngIf="job.information.attachments.length > 0"
-    class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[15px]"
-  >
-    <p class="mb-[10px] text-b2 font-sans font-medium text-G900">Attachments</p>
-    <ng-container *ngFor="let item of job.information.attachments">
-      <div class="flex justify-start py-[6px]">
-        <a href="{{ item.url }}" target="_blank">
-          <p class="flex justify-start items-center text-C600">
-            <img
-              src="/assets/massimo/svg/ion_attach-outline.svg"
-              alt="ion_attach"
-              class="w-[24px] h-[24px]"
-            />
-            {{ item.name }}
-          </p>
-        </a>
+  <div class="w-full flex flex-col gap-[24px]">
+    <div class="flex flex-col gap-[8px]">
+      <div *ngIf="!isJobDetailsShow" class="text-b1 text-G900 font-medium">
+        Job Details
       </div>
-    </ng-container>
-  </div>
+      <div class="text-h4 text-G900 font-medium">
+        {{ job.information.title }}
+      </div>
+      <div class="text-b3 md:text-b2 text-G500">Posted {{ jobFromNow }}</div>
+    </div>
+    <div
+      class="text-b1 text-G900"
+      [innerHTML]="job.information.description | linkify"
+    ></div>
 
-  <hr
-    *ngIf="job.information.skills.length > 0"
-    class="h-[1.5px] my-[20px] bg-gray-200 border-0"
-  />
-  <p
-    *ngIf="job.information.skills.length > 0"
-    class="mb-[10px] text-b2 font-sans font-medium text-G900"
-  >
-    Skill Tags
-  </p>
-  <div
-    *ngIf="job.information.skills.length > 0"
-    class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[15px]"
-  >
-    <app-skill-tag
-      *ngFor="let skill of job.information.skills"
-      [routerLink]="['/search/']"
-      [queryParams]="{ query: skill }"
-      [skill]="skill"
-    ></app-skill-tag>
+    <div
+      *ngIf="
+        job.information.attachments && job.information.attachments?.length > 0
+      "
+    >
+      <hr class="w-full h-[1px] bg-G300 border-none" />
+
+      <div class="pt-[16px] flex flex-col gap-[16px]">
+        <div class="text-G900 text-b1 font-medium">Attachment</div>
+
+        <div class="flex flex-col gap-[12px]">
+          <attachment-button
+            *ngFor="let item of job.information.attachments"
+            [url]="item.url"
+            [name]="item.name"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="job.information.skills && job.information.skills?.length > 0">
+      <hr class="w-full h-[1px] bg-G300 border-none" />
+
+      <div class="pt-[16px] flex flex-col gap-[16px]">
+        <div class="text-G900 text-b1 font-medium">Skill Tags</div>
+        <div class="w-full flex flex-wrap gap-[8px]">
+          <app-skill-tag
+            *ngFor="let skill of job.information.skills"
+            [routerLink]="['/search/']"
+            [queryParams]="{ query: skill }"
+            [skill]="skill"
+          ></app-skill-tag>
+        </div>
+      </div>
+    </div>
   </div>
 </ng-container>
