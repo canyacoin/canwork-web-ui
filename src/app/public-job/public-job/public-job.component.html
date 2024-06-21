@@ -369,7 +369,6 @@
               currentUser &&
               IsProvider &&
               !myJob &&
-              isOpen &&
               !canBid &&
               yourApplication &&
               !yourApplication.rejected
@@ -484,190 +483,13 @@
             </div>
           </div>
         </div>
-
-        <div
-          class="lg:w-[350px] rounded-[12px] bg-white border border-G300 p-[24px] h-full"
-        >
-          <div
-            class="text-b2 flex justify-between items-center md:text-b1 text-G800 font-medium pl-[2px]"
-          >
-            <span *ngIf="job.state && isOpen && !job.draft">
-              <i class="text-vibrantGreen fas fa-circle mr-[12px]"></i
-              >{{ job.state }}
-            </span>
-
-            <span *ngIf="job.state && !isOpen && !job.draft">
-              <i class="circle-danger fas fa-circle mr-[12px]"></i>Job closed
-            </span>
-
-            <span *ngIf="job.draft">
-              <i class="circle-danger fas fa-circle mr-[12px]"></i>
-              Draft
-            </span>
-
-            <!-- <a
-              data-toggle="modal"
-              data-target="#shareModal"
-              *ngIf="!job.draft"
-              (click)="createLink()"
-              class="float-right hover:cursor-pointer"
-            >
-              <i class="fas fa-share-alt"></i>
-            </a> -->
-
-            <div class="detail-job flex gap-2" *ngIf="!job.draft">
-              <div
-                class="border rounded-md border-G300 w-[32px] h-[32px] flex items-center justify-center cursor-pointer transition-all duration-150 bg-white hover:bg-G100"
-              >
-                <img
-                  src="/assets/massimo/svg/bookmark.svg"
-                  class="select-none"
-                />
-              </div>
-              <p-dropdown
-                [options]="sharelinks"
-                [(ngModel)]="selectedsharelinks"
-                optionLabel="name"
-                appendTo="body"
-              >
-                <ng-template pTemplate="selectedItem">
-                  <div
-                    *ngIf="selectedsharelinks"
-                    class="border border-G300 shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer w-[32px] h-[32px] rounded-lg p-[6px]"
-                  >
-                    <img
-                      src="/assets/massimo/svg/fi_share-2.svg"
-                      alt=""
-                      class="w-full h-full"
-                    />
-                  </div>
-                </ng-template>
-                <ng-template let-item pTemplate="item">
-                  <div class="flex align-items-center">
-                    <img
-                      src="{{ '/assets/massimo/svg/' + item.img }}"
-                      style="width: 20px"
-                      class="mr-[16px]"
-                    />
-                    <span>{{ item.name }}</span>
-                  </div>
-                </ng-template>
-              </p-dropdown>
-            </div>
-          </div>
-          <table
-            class="table-auto text-b2 md:text-b1 w-full md:w-[302px] mt-3 border-separate border-spacing-x-[2px] border-spacing-y-[10px]"
-          >
-            <tr>
-              <td class="text-G700">{{ job.paymentType }}</td>
-              <td class="text-G900 text-right font-medium">
-                ${{ job.budget }}
-                <span *ngIf="job.paymentType !== 'Fixed price'">/hr</span> USD
-              </td>
-            </tr>
-            <tr *ngIf="bids">
-              <td class="text-G700">Proposals</td>
-              <td class="text-G900 text-right font-medium">
-                {{ bids.length }} Proposals
-              </td>
-            </tr>
-            <tr>
-              <td class="text-G700">Deadline</td>
-              <td class="text-G900 text-right font-medium">
-                {{ formatDate(job.deadline) }}
-              </td>
-            </tr>
-            <tr *ngIf="job.information.weeklyCommitment > 0">
-              <td class="text-G700">Estimated hours</td>
-              <td class="text-G900 text-right font-medium">
-                {{ job.information.weeklyCommitment }} hours
-              </td>
-            </tr>
-            <tr>
-              <td class="text-G700">Category</td>
-              <td class="text-G900 text-right font-medium">
-                {{ getCategoryName(job.information.providerType) }}
-              </td>
-            </tr>
-          </table>
-          <hr class="h-[1.5px] my-[20px] bg-gray-200 border-0" />
-          <div
-            *ngIf="jobPoster"
-            class="text-b3 md:text-b2 text-G800 mt-[12px] mb-[16px]"
-          >
-            About the Client
-          </div>
-          <ng-container *ngIf="jobPoster" class="mt-[12px]">
-            <profile-card
-              [avatarUri]="jobPoster.avatarUri"
-              [name]="jobPoster.name"
-              [title]="jobPoster.title"
-              [isVerified]="jobPoster.verified"
-              [rating]="jobPoster.rating"
-              [skillTags]="jobPoster.skillTags"
-              [slug]="jobPoster.slug"
-              [address]="jobPoster.address"
-              [timezone]="jobPoster.timezone"
-              [hourlyRate]="jobPoster.hourlyRate"
-              [isGrid]="false"
-              [isSmall]="true"
-            />
-          </ng-container>
-          <div
-            *ngIf="myJob && !isClosed"
-            class="text-b3 md:text-b2 text-G800 mt-[16px]"
-          >
-            <div class="flex gap-4 justify-between items-center">
-              <div
-                class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center gap-2 font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl"
-                (click)="updateDialog($event)"
-              >
-                <img
-                  src="/assets/massimo/svg/delete.svg"
-                  class="select-none w-[16px] h-[16px]"
-                />
-                Delete Job
-              </div>
-
-              <basic-button
-                [type]="1"
-                [routerLink]="['/inbox/job/edit', job.id]"
-                title="Edit Job"
-                size="small"
-                extraClass="border text-G900"
-              />
-            </div>
-          </div>
-
-          <div
-            class="text-b2 md:text-b1 text-G800 pt-[24px]"
-            *ngIf="!currentUser && !myJob && isOpen"
-          >
-            Sign up to be a CanWork service provider to bid on this job.
-            <div class="mt-[24px]" (click)="updateVisibleloginModal()">
-              <basic-button [type]="2" title="Login to Apply Now" />
-            </div>
-          </div>
-
-          <div
-            class="text-b2 md:text-b1 text-G800 mt-[16px] pt-[24px]"
-            *ngIf="
-              currentUser && currentUser.type !== 'Provider' && !myJob && isOpen
-            "
-          >
-            You must be a CanWork service provider to bid on this job.
-          </div>
-
-          <div
-            class="text-b2 md:text-b1 text-G800 mt-[16px]"
-            *ngIf="currentUser && IsProvider && !myJob && isOpen"
-          >
-            <i *ngIf="!canBid" class="mt-[12px]">You've posted your bid.</i>
-            <i *ngIf="!currentUser.bscAddress" class="mt-[12px]"
-              >To make a bid fill the field "BNB Chain Address field" in the
-              <a href="/profile?editProfile=1">profile</a></i
-            >
-          </div>
+        <div class="lg:w-[350px]">
+          <job-status-panel
+            [job]="job"
+            [bids]="bids"
+            [currentUser]="currentUser"
+            (leftBtnEvent)="StatusLeftClick($event)"
+          />
         </div>
       </div>
       <div
@@ -683,11 +505,11 @@
 <!-- Modals start -->
 
 <basic-dialog
-  [visible]="visible_delete_modal"
+  [visible]="visibleDeleteModal"
   title="Are you sure you want to delete ?"
   content="If you delete job post, you will no longer have access to it or receive bids from freelancers.\nYou  can create a new job listing to receive bids."
   (LeftbtnEvent)="cancelJob($event)"
-  (RightbtnEvent)="updateDialog($event)"
+  (RightbtnEvent)="updateDialogDeleteJob($event)"
   type="delete"
 />
 
@@ -759,7 +581,7 @@
 </div>
 
 <p-dialog
-  [(visible)]="visible_login_modal"
+  [(visible)]="visibleLoginModal"
   [modal]="true"
   [draggable]="false"
   [resizable]="false"
@@ -791,7 +613,7 @@
         </div>
       </div>
       <div class="grid gap-4">
-        <ng-container *ngIf="visible_login_modal">
+        <ng-container *ngIf="visibleLoginModal">
           <firebase-ui
             (signInSuccessWithAuthResult)="onFirebaseLogin($event)"
           ></firebase-ui>

@@ -1,0 +1,25 @@
+<p-dropdown
+  [options]="shareLinks"
+  [(ngModel)]="selectedShareLinks"
+  optionLabel="share-button-dropdown"
+  appendTo="body"
+  class="share-button-style"
+>
+  <ng-template pTemplate="selectedItem">
+    <div
+      *ngIf="selectedShareLinks"
+      class="border border-G300 shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer w-[32px] h-[32px] rounded-lg p-[6px]"
+    >
+      <img src="/assets/massimo/svg/fi_share-2.svg" alt="" class="w-[20px]" />
+    </div>
+  </ng-template>
+  <ng-template let-item pTemplate="item">
+    <div class="flex items-center">
+      <img
+        src="{{ '/assets/massimo/svg/' + item.img }}"
+        class="w-[20px] mr-[16px]"
+      />
+      <span>{{ item.name }}</span>
+    </div>
+  </ng-template>
+</p-dropdown>

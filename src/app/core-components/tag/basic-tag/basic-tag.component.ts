@@ -8,7 +8,7 @@ export class BasicTagComponent {
   @Input() type!: number
   @Input() title!: string
 
-  get cssClasses() {
+  get ButtonStyle() {
     let style = ''
 
     if (this.type === 1)

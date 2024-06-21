@@ -23,28 +23,24 @@ import { NgxSpinnerService } from 'ngx-spinner'
 import { Upload } from '@class/upload'
 import { UploadService } from '@service/upload.service'
 
-import { providerTypeArray } from 'app/shared/constants/providerTypes'
-
 import { AngularFireAuth } from '@angular/fire/compat/auth'
 import { FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular'
 import { MessageService } from 'primeng/api'
 
-declare var $: any
+import { formatDateFromString } from 'app/core-functions/date'
 
-interface sharelinkstype {
-  name: string
-  img: string
-  code: string
-}
+declare var $: any
 
 @Component({
   selector: 'app-public-job',
   templateUrl: './public-job.component.html',
 })
 export class PublicJobComponent implements OnInit, OnDestroy {
+  // core-functions
+  formatDateFromString = formatDateFromString
+
   bidForm: UntypedFormGroup = null
   bids: any[]
-  recentBids: any
   authSub: Subscription
   routeSub: Subscription
   bidsSub: Subscription
@@ -67,8 +63,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
   IsShownTab: boolean = false
 
-  sharelinks: sharelinkstype[] | undefined
-  selectedsharelinks: sharelinkstype | undefined
   activejobTypes: any[]
   selectedjob: any
 
@@ -76,7 +70,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   hoveredFiles: boolean = false
   IsProvider: boolean = false
 
-  providerTypeArray = providerTypeArray
   // new feature files upload
 
   beforeUploadFiles: any[] = []
@@ -97,9 +90,9 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   bid_message_valiated: boolean = true
   price_validate: boolean = false
 
-  visible_delete_modal: boolean = false
+  visibleDeleteModal: boolean = false
   visible_withdraw_modal: boolean = false
-  visible_login_modal: boolean = false
+  visibleLoginModal: boolean = false
   visible_withdraw_success_modal: boolean = false
 
   dublicateFilename: string[] = []
@@ -196,16 +189,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     ]
     this.selectedjob = this.activejobTypes[0]
 
-    this.sharelinks = [
-      { name: 'Invite Freelancer', img: 'fi_user-plus.svg', code: '1' },
-      { name: 'Copy Link', img: 'u_link.svg', code: '2' },
-      { name: 'Twitter', img: 'x.svg', code: '3' },
-      { name: 'Facebook', img: 'logos_facebook.svg', code: '4' },
-      { name: 'Linkedin', img: 'devicon_linkedin.svg', code: '5' },
-    ]
-
-    this.selectedsharelinks = this.sharelinks[0]
-
     this.shareableLink = environment.shareBaseUrl
     this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
       if (params['jobId']) {
@@ -225,12 +208,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
                 .getPublicJobBids(params['jobId'])
                 .subscribe((result) => {
                   this.bids = result || []
-
-                  if (this.bids.length > 3) {
-                    this.recentBids = this.bids.slice(0, 3)
-                  } else {
-                    this.recentBids = this.bids
-                  }
                 })
             }
           })
@@ -256,12 +233,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
                         this.yourApplication = bid
                       }
                     })
-                  }
-
-                  if (this.bids.length > 3) {
-                    this.recentBids = this.bids.slice(0, 3)
-                  } else {
-                    this.recentBids = this.bids
                   }
                 })
             }
@@ -372,42 +343,13 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     this.authSub.unsubscribe()
   }
 
-  async setClient(clientId) {
-    /*
-    new one, retrieve user only once (if not already retrieved)
-    and use the new fastest Algolia getUserById service version
-    */
-
-    if (!this.jobPoster) {
-      this.jobPoster = await this.userService.getUser(clientId)
-
-      if (this.jobPoster) {
-        let avatar = this.jobPoster.avatar // current, retrocomp
-        //console.log(result[i])
-        if (
-          this.jobPoster.compressedAvatarUrl &&
-          this.jobPoster.compressedAvatarUrl != 'new'
-        ) {
-          // keep same object structure
-          // use compress thumbed if exist and not a massive update (new)
-          avatar = {
-            uri: this.jobPoster.compressedAvatarUrl,
-          }
-        }
-        this.jobPoster.avatarUri = avatar.uri
-      }
-    }
-    // old
-    // this.jobPoster = await this.userService.getUser(clientId)
-  }
-
   async initJob(job: Job) {
     this.jobExists = true
     this.jobFromNow = moment(job.createAt).fromNow()
     if (this.currentUser) {
       this.myJob = job.clientId === this.currentUser.address
       this.isPublic = job.visibility === 'public'
-      await this.setClient(this.job.clientId)
+      // await this.setClient(this.job.clientId)
 
       if (this.currentUser.type === 'Provider') {
         this.IsProvider = true
@@ -438,14 +380,9 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     }
     this.setAttachmentUrl()
   }
-
-  getCategoryName(providerType: string) {
-    const category = this.providerTypeArray.find((c) => c.id === providerType)
-    return category.title
-  }
   async cancelJob(event: Event) {
     event.stopPropagation()
-    this.visible_delete_modal = !this.visible_delete_modal
+    this.visibleDeleteModal = !this.visibleDeleteModal
 
     if (this.myJob) {
       const updated = await this.publicJobsService.cancelJob(this.job.id)
@@ -453,39 +390,6 @@ export class PublicJobComponent implements OnInit, OnDestroy {
         this.job.state = JobState.closed
       }
     }
-  }
-
-  getDaySuffix(day: number): string {
-    if (day > 3 && day < 21) return 'th' // All days between 4 and 20 end with 'th'
-    switch (day % 10) {
-      case 1:
-        return 'st'
-      case 2:
-        return 'nd'
-      case 3:
-        return 'rd'
-      default:
-        return 'th'
-    }
-  }
-
-  formatDate(dateStr: string): string {
-    const date = new Date(dateStr)
-    const day = date.getDate()
-    const month = date.toLocaleString('default', { month: 'long' })
-    const year = date.getFullYear()
-
-    const daySuffix = this.getDaySuffix(day)
-
-    return `${day}${daySuffix} ${month} ${year}`
-  }
-
-  get isOpen() {
-    return this.job.state === JobState.acceptingOffers
-  }
-
-  get isClosed() {
-    return this.job.state === JobState.closed
   }
 
   async submitBid() {
@@ -736,9 +640,9 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     return div.textContent.length
   }
 
-  updateDialog(event: Event) {
+  updateDialogDeleteJob(event: Event) {
     event.stopPropagation()
-    this.visible_delete_modal = !this.visible_delete_modal
+    this.visibleDeleteModal = !this.visibleDeleteModal
   }
 
   async WithdrawJob(event: Event) {
@@ -838,6 +742,15 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   }
 
   updateVisibleloginModal() {
-    this.visible_login_modal = !this.visible_login_modal
+    this.visibleLoginModal = !this.visibleLoginModal
+  }
+
+  StatusLeftClick(event: Event) {
+    event.stopPropagation()
+    if (this.currentUser) {
+      this.visibleDeleteModal = true
+    } else {
+      this.visibleLoginModal = true
+    }
   }
 }
