@@ -1,8 +1,8 @@
 <div
-  class="border border-[#d4a72c66] bg-[#FFF8C5] flex items-center justify-between py-[10px] px-[16px] rounded-xl animated fadeIn"
-  *ngIf="type == 1 && show"
+  *ngIf="show"
+  class="border border-[#d4a72c66] bg-[#FFF8C5] flex items-center justify-between gap-[16px] py-[10px] px-[16px] rounded-xl animated fadeIn"
 >
-  <div class="flex items-center gap-2">
+  <div *ngIf="type === 1" class="flex items-center gap-2">
     <img
       src="/assets/massimo/svg/alert.svg"
       alt="alert"
@@ -10,10 +10,37 @@
     />
     {{ message }}
   </div>
+  <div
+    *ngIf="type === 2"
+    class="w-full flex items-center justify-between gap-[16px]"
+  >
+    <div class="flex items-center gap-2">
+      <img
+        src="/assets/massimo/svg/alert.svg"
+        alt="alert"
+        class="w-[16px] h-[16px]"
+      />
+      <div class="text-b2 text-G900 inline-flex">
+        Send&nbsp;
+        <p class="font-medium">${{ budget | number : '1.0-0' }} USD</p>
+        &nbsp;to escrow to begin this project. CanWork accepts major BEP20
+        tokens on BNB Chain.&nbsp;
+        <p class="underline cursor-pointer select-none">
+          See approved tokens here
+        </p>
+      </div>
+    </div>
+    <div
+      class="text-b2 text-G900 underline cursor-pointer select-none"
+      (click)="handleClick($event)"
+    >
+      Pay Escrow
+    </div>
+  </div>
   <img
     src="/assets/massimo/svg/cancel_button.svg"
-    alt="alert"
-    class="w-[16px] h-[16px] cursor-pointer"
+    alt="cancel"
+    class="select-none w-[16px] h-[16px] cursor-pointer"
     (click)="changeViewOption()"
   />
 </div>
