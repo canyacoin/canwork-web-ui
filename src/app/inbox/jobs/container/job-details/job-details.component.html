@@ -1,4 +1,4 @@
-<div class="container job-detail-container" *ngIf="job">
+<!-- <div class="container job-detail-container" *ngIf="job">
   <div class="row" *ngIf="false">
     <span class="col-6 text-left">
       <h4 class="fw-500 mb-30">MANAGE JOB</h4>
@@ -299,4 +299,31 @@
       </span>
     </div>
   </div>
-</div>
+</div> -->
+
+<main class="w-full font-sans">
+  <!-- template start -->
+  <div *ngIf="job">
+    <div *ngIf="isAwaitingEscrow" class="pb-[8px]">
+      <warning-message
+        [type]="2"
+        [budget]="job.budget"
+        (buttonClick)="executeAction('Pay Escrow')"
+      />
+    </div>
+    <div class="flex flex-col lg:flex-row md:justify-between gap-6">
+      <div class="w-full">
+        <div class="w-full rounded-[12px] bg-white border border-G300 p-[40px]">
+          <job-details-panel [job]="job" />
+        </div>
+      </div>
+      <div class="lg:min-w-[350px] lg:max-w-[350px] w-full">
+        <job-status-panel
+          [job]="job"
+          [currentUser]="currentUser"
+          (leftBtnEvent)="statusLeftClick($event)"
+        />
+      </div>
+    </div>
+  </div>
+</main>

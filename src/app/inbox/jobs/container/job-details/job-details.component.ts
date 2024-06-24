@@ -84,11 +84,17 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
   initialiseJob() {
     const jobId = this.activatedRoute.snapshot.params['id'] || null
+    console.log('jobId', jobId)
     if (jobId) {
       this.jobSub = this.jobService.getJob(jobId).subscribe((job: Job) => {
+        if (job === null) {
+          console.log('We can not find the job.')
+          this.router.navigateByUrl('/not-found')
+        }
         this.isPartOfJob =
           this.currentUser.address === job.clientId ||
           this.currentUser.address === job.providerId
+        console.log('this.isPartOfJob', this.isPartOfJob)
         if (this.isPartOfJob) {
           this.job = new Job(job)
           this.transactionTypeService(jobId)
@@ -103,7 +109,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
             this.isInitialised = true
           }
         } else {
-          console.log('Thou never belong hither , aroint thee!')
+          console.log('We can not find the job.')
           this.router.navigateByUrl('/not-found')
         }
       })
@@ -146,6 +152,10 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
   get jobIsComplete(): boolean {
     return this.job.state === JobState.complete
+  }
+
+  get isAwaitingEscrow(): boolean {
+    return this.job.state === JobState.termsAcceptedAwaitingEscrow
   }
 
   get userCanReview(): boolean {
