@@ -16,10 +16,6 @@ import { CoreServicesModule } from '../core-services/core-services.module'
 import { CoreUtilsModule } from '../core-utils/core-utils.module'
 import { ChatComponent } from './chat/chat.component'
 import { InboxRoutingModule } from './inbox.routing.module'
-import { BudgetComponent } from './jobs/components/budget/budget.component'
-import { JobDashboardCardComponent } from './jobs/components/job-dashboard-card/job-dashboard-card.component'
-import { PropertyComponent } from './jobs/components/property/property.component'
-import { StatusIconComponent } from './jobs/components/status-icon/status-icon.component'
 import { ActionDialogComponent } from './jobs/container/action-dialog/action-dialog.component'
 import { CancelJobComponent } from './jobs/container/cancel-job/cancel-job.component'
 import { EnterEscrowBscComponent } from './jobs/container/enter-escrow-bsc/enter-escrow-bsc.component'
@@ -68,7 +64,6 @@ import { DialogModule } from 'primeng/dialog';
   ],
   declarations: [
     ActionDialogComponent,
-    BudgetComponent,
     ChatComponent,
     CancelJobComponent,
     EnterEscrowBscComponent,
@@ -76,9 +71,6 @@ import { DialogModule } from 'primeng/dialog';
     JobDashboardComponent,
     JobDetailsComponent,
     PostComponent,
-    PropertyComponent,
-    StatusIconComponent,
-    JobDashboardCardComponent,
     BscPaymentSelectorComponent,
   ],
   exports: [InboxRoutingModule],
