@@ -4,9 +4,9 @@
   <div class="flex justify-between items-center gap-[8px]">
     <div class="flex gap-[8px] items-center">
       <div [ngClass]="JobStateBackground"></div>
-      <div class="text-b1 font-medium">{{ job.state }}</div>
+      <div class="text-b1 font-medium text-G900">{{ job.state }}</div>
     </div>
-    <div class="flex gap-[8px]" *ngIf="!job.draft">
+    <div class="flex gap-[8px]" *ngIf="isAcceptingOffers">
       <bookmark-button />
       <share-button />
     </div>
@@ -15,15 +15,13 @@
     <div class="flex justify-between items-center">
       <div class="text-b2 text-G700 capitalize">{{ job.paymentType }}</div>
       <div class="text-b1 text-G900 font-medium">
-        ${{ job.budget }}
+        ${{ job.budget | number : '1.0-0' }}
         <span *ngIf="job.paymentType !== 'Fixed price'">/hr</span> USD
       </div>
     </div>
-    <div class="flex justify-between items-center">
+    <div *ngIf="isAcceptingOffers" class="flex justify-between items-center">
       <div class="text-b2 text-G700 capitalize">Proposals</div>
-      <div class="text-b1 text-G900 font-medium">
-        {{ bids.length }} Proposals
-      </div>
+      <div class="text-b1 text-G900 font-medium">{{ proposals }} Proposals</div>
     </div>
     <div class="flex justify-between items-center">
       <div class="text-b2 text-G700 capitalize">Deadline</div>
@@ -65,28 +63,49 @@
 
   <div *ngIf="currentUser && isMyJob && !isClosed">
     <div class="flex gap-4 justify-between items-center">
-      <div
-        class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center gap-2 font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl"
-        (click)="leftClick($event)"
-      >
-        <img
-          src="/assets/massimo/svg/delete.svg"
-          class="select-none w-[16px] h-[16px]"
-        />
-        Delete Job
-      </div>
+      <ng-container *ngIf="isAcceptingOffers">
+        <div
+          class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center gap-2 font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl"
+          (click)="leftClick($event)"
+        >
+          <img
+            src="/assets/massimo/svg/delete.svg"
+            class="select-none w-[16px] h-[16px]"
+          />
+          Delete Job
+        </div>
 
-      <div class="w-max">
-        <basic-button
-          [type]="1"
-          title="Edit Job"
-          [routerLink]="['/inbox/job/edit', job.id]"
-        />
-      </div>
+        <div class="w-max">
+          <basic-button
+            [type]="1"
+            title="Edit Job"
+            [routerLink]="['/inbox/job/edit', job.id]"
+          />
+        </div>
+      </ng-container>
+      <ng-container *ngIf="isAwaitingEscrow">
+        <div
+          class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center gap-2 font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl"
+          (click)="leftClick($event)"
+        >
+          Cancel Job
+        </div>
+
+        <div class="w-max">
+          <basic-button
+            [type]="2"
+            title="Pay Escrow"
+            [routerLink]="rightClick($event)"
+          />
+        </div>
+      </ng-container>
     </div>
   </div>
 
-  <div *ngIf="!currentUser && !isMyJob && isOpen" (click)="leftClick($event)">
+  <div
+    *ngIf="!currentUser && !isMyJob && isAcceptingOffers"
+    (click)="leftClick($event)"
+  >
     <basic-button [type]="2" title="Login to Apply Now" />
   </div>
 </div>

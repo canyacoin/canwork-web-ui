@@ -11,7 +11,7 @@ import { User } from '@class/user'
 })
 export class JobStatusPanelComponent {
   @Input() job!: Job
-  @Input() bids = []
+  @Input() proposals: number = 0 // current job's bids.length
   @Input() currentUser!: User
 
   @Output() leftBtnEvent = new EventEmitter<Event>()
@@ -34,6 +34,8 @@ export class JobStatusPanelComponent {
 
   async ngOnInit() {
     console.log('starting ngONInit')
+    console.log('this.job', this.job)
+    console.log('this.currentUser', this.currentUser)
     if (this.job) {
       this.isMyJob = this.job.clientId === this.currentUser.address
       console.log('this.job.clientId', this.job.clientId)
@@ -70,8 +72,12 @@ export class JobStatusPanelComponent {
     }
   }
 
-  get isOpen() {
+  get isAcceptingOffers(): boolean {
     return this.job.state === JobState.acceptingOffers
+  }
+
+  get isAwaitingEscrow(): boolean {
+    return this.job.state === JobState.termsAcceptedAwaitingEscrow
   }
 
   get isClosed() {

@@ -36,15 +36,13 @@ import { DynamicCoinWrapperComponent } from './dynamic-coin-wrapper/dynamic-coin
 import { LedgerModalComponent } from '../binance/ledger-modal/ledger-modal.component'
 import { PopperComponent } from './popper/popper.component'
 import { BasicButtonComponent } from './buttons/basic-button/basic-button.component'
-import { BasicTagComponent } from './tag/basic-tag/basic-tag.component'
-import { CategoryCardComponent } from './cards/category-card/category-card.component'
+import { BasicTagComponent } from './tags/basic-tag/basic-tag.component'
+import { DelTagComponent } from './tags/del-tag/del-tag.component'
 import { LinkButtonComponent } from './buttons/link-button/link-button.component'
-import { ProfileCardComponent } from './cards/profile-card/profile-card.component'
 import { SwitchGridListComponent } from './buttons/switch-grid-list/switch-grid-list.component'
 import { SkProfileCardComponent } from './skeletons/sk-profile-card/sk-profile-card.component'
 import { SkJobCardComponent } from './skeletons/sk-job-card/sk-job-card.component'
 import { BadgeComponent } from './badge/badge.component'
-import { DelTagComponent } from './tag/del-tag/del-tag.component'
 import { StarRatingComponent } from './star-rating/star-rating.component'
 import { JoinCommunityComponent } from './join-community/join-community.component'
 import { PostJobComponent } from './post-job/post-job.component'
@@ -52,7 +50,6 @@ import { MenuModule } from 'primeng/menu'
 import { ToastModule } from 'primeng/toast'
 import { AvatarModule } from 'primeng/avatar'
 import { BadgeModule } from 'primeng/badge'
-import { JobCardComponent } from './cards/job-card/job-card.component'
 import { SearchButtonComponent } from './buttons/search-button/search-button.component'
 import { CheckboxModule } from 'primeng/checkbox'
 import { DialogModule } from 'primeng/dialog'
@@ -71,6 +68,13 @@ import { BookmarkButtonComponent } from './buttons/bookmark-button/bookmark-butt
 import { ShareButtonComponent } from './buttons/share-button/share-button.component'
 import { JobApplicationPanelComponent } from './job/job-application-panel/job-application-panel.component'
 import { AttachmentButtonComponent } from './buttons/attachment-button/attachment-button.component'
+// Cards
+import { CategoryCardComponent } from './cards/category-card/category-card.component'
+import { JobCardComponent } from './cards/job-card/job-card.component'
+import { JobDashboardCardComponent } from './cards/job-dashboard-card/job-dashboard-card.component'
+import { ProfileCardComponent } from './cards/profile-card/profile-card.component'
+
+import { StatusIconComponent } from './status-icon/status-icon.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -110,8 +114,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     FooterComponent,
     HeaderComponent,
     ScrollTopComponent,
-    SkillTagComponent,
-    SkillTagsSelectionComponent,
     StarRatingNativeComponent,
     TermsComponent,
     WindowScrollDirective,
@@ -124,20 +126,25 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     DynamicCoinWrapperComponent,
     LedgerModalComponent,
     PopperComponent,
-    BasicTagComponent,
-    CategoryCardComponent,
-    ProfileCardComponent,
     SwitchGridListComponent,
     SkProfileCardComponent,
     SkJobCardComponent,
     BadgeComponent,
-    DelTagComponent,
     StarRatingComponent,
     JoinCommunityComponent,
     PostJobComponent,
-    JobCardComponent,
     WarningMessageComponent,
     BackToJobBoardComponent,
+    // Cards
+    CategoryCardComponent,
+    JobCardComponent,
+    JobDashboardCardComponent,
+    ProfileCardComponent,
+    // Tags
+    SkillTagComponent,
+    SkillTagsSelectionComponent,
+    BasicTagComponent,
+    DelTagComponent,
     // Panels
     JobDetailsPanelComponent,
     JobProposalsPanelComponent,
@@ -154,6 +161,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     // Dialogs
     BasicDialogComponent,
     ProposalDetailsDialogComponent,
+
+    StatusIconComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -165,8 +174,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     HeaderComponent,
     TermsComponent,
     ScrollTopComponent,
-    SkillTagComponent,
-    SkillTagsSelectionComponent,
     StarRatingNativeComponent,
     VStepperComponent,
     ProviderCardComponent,
@@ -177,22 +184,27 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     DynamicCoinComponent,
     DynamicCoinWrapperComponent,
     BasicButtonComponent,
-    BasicTagComponent,
-    CategoryCardComponent,
     LinkButtonComponent,
-    ProfileCardComponent,
     SwitchGridListComponent,
     SkProfileCardComponent,
     SkJobCardComponent,
     BadgeComponent,
-    DelTagComponent,
     StarRatingComponent,
     JoinCommunityComponent,
     PostJobComponent,
-    JobCardComponent,
     SearchButtonComponent,
     WarningMessageComponent,
     BackToJobBoardComponent,
+    // Cards
+    CategoryCardComponent,
+    JobCardComponent,
+    JobDashboardCardComponent,
+    ProfileCardComponent,
+    // Tags
+    SkillTagComponent,
+    SkillTagsSelectionComponent,
+    BasicTagComponent,
+    DelTagComponent,
     // Panels
     JobDetailsPanelComponent,
     JobProposalsPanelComponent,
@@ -209,6 +221,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     // Dialogs
     BasicDialogComponent,
     ProposalDetailsDialogComponent,
+
+    StatusIconComponent,
   ],
   providers: [
     {
