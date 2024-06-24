@@ -15,8 +15,8 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
 } from '@angular/fire/compat/firestore'
-import { Observable } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { of, Observable } from 'rxjs'
+import { catchError, map } from 'rxjs/operators'
 
 import { ReviewService } from './review.service'
 
@@ -49,9 +49,17 @@ export class JobService {
       .snapshotChanges()
       .pipe(
         map((doc) => {
+          if (!doc.payload.exists) {
+            throw new Error('Job not found')
+          }
           const job = doc.payload.data() as Job
           job.id = jobId
           return job
+        }),
+        catchError((error) => {
+          console.error('Error fetching job:', error.message)
+          // Handle the error by returning a null value or any other fallback value
+          return of(null)
         })
       )
   }
