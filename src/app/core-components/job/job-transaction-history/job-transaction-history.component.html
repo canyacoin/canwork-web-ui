@@ -1,0 +1,18 @@
+<div class="flex flex-col gap-[24px]">
+  <div *ngIf="isAwaitingEscrow" class="text-h6 text-G900 font-medium">
+    Transaction History
+  </div>
+  <div class="flex flex-col items-center gap-[16px]">
+    <div class="max-w-[400px] w-full h-[160px] bg-G500 rounded-[16px]"></div>
+    <div class="max-w-[400px] flex flex-col gap-[6px] text-center px-[30px]">
+      <div class="text-b1 text-G600 font-medium">No transactions yet</div>
+      <div class="text-b2 text-G500">
+        Make payment to escrow with approved BEP20 token on BNB chain to begin
+      </div>
+    </div>
+    <div class="flex flex-col sm:flex-row gap-[16px]">
+      <basic-button [type]="1" title="See approved tokens" size="small" />
+      <basic-button [type]="2" title="Pay Escrow" size="small" />
+    </div>
+  </div>
+</div>
