@@ -95,9 +95,19 @@ export class JobDescription {
   }
 }
 
+interface providerInfoType {
+  avatar: {
+    uri: string
+  }
+  skillTags: string[]
+  name: string
+  timezone: string
+  title: string
+}
+
 export class Bid {
   providerId: string
-  providerInfo: Object
+  providerInfo: providerInfoType
   budget: number
   message: string
   timestamp: number
@@ -106,7 +116,7 @@ export class Bid {
 
   constructor(
     providerId: string,
-    providerInfo: Object,
+    providerInfo: providerInfoType,
     budget: number,
     message: string,
     timestamp: number,

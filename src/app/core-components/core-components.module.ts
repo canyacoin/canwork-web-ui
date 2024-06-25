@@ -74,6 +74,9 @@ import { JobDashboardCardComponent } from './cards/job-dashboard-card/job-dashbo
 import { ProfileCardComponent } from './cards/profile-card/profile-card.component'
 
 import { StatusIconComponent } from './status-icon/status-icon.component'
+import { JobActionLogPanelComponent } from './job/job-action-log-panel/job-action-log-panel.component'
+import { JobTransactionHistoryComponent } from './job/job-transaction-history/job-transaction-history.component';
+import { JobFreelancerInformationPanelComponent } from './job/job-freelancer-information-panel/job-freelancer-information-panel.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -148,6 +151,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     JobProposalsPanelComponent,
     JobStatusPanelComponent,
     JobApplicationPanelComponent,
+    JobFreelancerInformationPanelComponent,
     // Buttons
     BackButtonComponent,
     BasicButtonComponent,
@@ -161,6 +165,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ProposalDetailsDialogComponent,
 
     StatusIconComponent,
+    JobActionLogPanelComponent,
+    JobTransactionHistoryComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -208,6 +214,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     JobProposalsPanelComponent,
     JobStatusPanelComponent,
     JobApplicationPanelComponent,
+    JobFreelancerInformationPanelComponent,
     // Buttons
     BackButtonComponent,
     BasicButtonComponent,
@@ -221,6 +228,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ProposalDetailsDialogComponent,
 
     StatusIconComponent,
+    JobActionLogPanelComponent,
+    JobTransactionHistoryComponent,
   ],
   providers: [
     {

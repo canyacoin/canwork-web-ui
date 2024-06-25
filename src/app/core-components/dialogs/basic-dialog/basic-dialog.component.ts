@@ -26,9 +26,11 @@ export class BasicDialogComponent {
   @Output() RightbtnEvent = new EventEmitter<Event>()
 
   LeftClick(event: Event) {
+    event.preventDefault()
     this.LeftbtnEvent.emit(event)
   }
   RightClick(event: Event) {
+    event.preventDefault()
     this.RightbtnEvent.emit(event)
   }
 }

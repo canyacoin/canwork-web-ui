@@ -1,3 +1,43 @@
+<main class="w-full font-sans">
+  <div *ngIf="job">
+    <div *ngIf="isAwaitingEscrow" class="pb-[8px]">
+      <warning-message
+        [type]="2"
+        [budget]="job.budget"
+        (buttonClick)="executeAction('Pay Escrow')"
+      />
+    </div>
+    <div class="flex flex-col lg:flex-row md:justify-between gap-6">
+      <div class="w-full flex flex-col gap-[16px]">
+        <div class="w-full rounded-[12px] bg-white border border-G300 p-[40px]">
+          <job-details-panel [job]="job" />
+        </div>
+        <div class="w-full rounded-[12px] bg-white border border-G300 p-[40px]">
+          <job-freelancer-information-panel [selectedBid]="selectedBid" />
+        </div>
+        <div class="w-full rounded-[12px] bg-white border border-G300 p-[40px]">
+          <job-action-log-panel
+            [job]="job"
+            [currentUser]="currentUser"
+            [isAwaitingEscrow]="isAwaitingEscrow"
+          />
+        </div>
+        <div class="w-full rounded-[12px] bg-white border border-G300 p-[40px]">
+          <job-transaction-history />
+        </div>
+      </div>
+      <div class="lg:min-w-[350px] lg:max-w-[350px] w-full">
+        <job-status-panel
+          [job]="job"
+          [currentUser]="currentUser"
+          (leftBtnEvent)="statusLeftClick($event)"
+          (rightBtnEvent)="statusRightClick($event)"
+        />
+      </div>
+    </div>
+  </div>
+</main>
+
 <!-- <div class="container job-detail-container" *ngIf="job">
   <div class="row" *ngIf="false">
     <span class="col-6 text-left">
@@ -48,40 +88,6 @@
                 </a>
               </div>
             </span>
-          </div>
-        </div>
-        <div class="col-sm-3 job-info">
-          <div class="info-details">
-            <p>
-              {{ job.paymentType }}
-            </p>
-            <b>
-              <app-budget [job]="job"></app-budget>
-            </b>
-          </div>
-          <div class="info-details">
-            <p>Timeline</p>
-            <b>{{ job.information.timelineExpectation }}</b>
-          </div>
-          <div
-            class="info-details"
-            *ngIf="job.information.attachments.length > 0"
-          >
-            <b>Attachments</b>
-            <ng-container *ngFor="let item of job.information.attachments">
-             <div class="py-[10px]">
-              <a href="{{ item.url }}" target="_blank">
-                <p *ngIf="item.name.length > 10">
-                  <i class="fas fa-paperclip"></i>
-                  {{ item.name.substring(0, 10) }}...
-                </p>
-                <p *ngIf="item.name.length <= 10">
-                  <i class="fas fa-paperclip"></i>
-                  {{ item.name }}...
-                </p>
-              </a>
-             </div>
-            </ng-container>
           </div>
         </div>
       </div>
@@ -300,30 +306,3 @@
     </div>
   </div>
 </div> -->
-
-<main class="w-full font-sans">
-  <!-- template start -->
-  <div *ngIf="job">
-    <div *ngIf="isAwaitingEscrow" class="pb-[8px]">
-      <warning-message
-        [type]="2"
-        [budget]="job.budget"
-        (buttonClick)="executeAction('Pay Escrow')"
-      />
-    </div>
-    <div class="flex flex-col lg:flex-row md:justify-between gap-6">
-      <div class="w-full">
-        <div class="w-full rounded-[12px] bg-white border border-G300 p-[40px]">
-          <job-details-panel [job]="job" />
-        </div>
-      </div>
-      <div class="lg:min-w-[350px] lg:max-w-[350px] w-full">
-        <job-status-panel
-          [job]="job"
-          [currentUser]="currentUser"
-          (leftBtnEvent)="statusLeftClick($event)"
-        />
-      </div>
-    </div>
-  </div>
-</main>

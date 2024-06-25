@@ -9,10 +9,6 @@ import {
   Directive,
 } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
-//import { FilterPipe } from 'ngx-filter-pipe'
-//import { OrderPipe } from 'ngx-order-pipe'
-import { ReversePipe } from 'ngx-pipes'
-import { OrderByPipe } from 'ngx-pipes'
 import { NgxSpinnerService } from 'ngx-spinner'
 
 import { Observable, Subscription } from 'rxjs'
@@ -31,8 +27,6 @@ import { JobService } from '@service/job.service'
 import { PublicJobService } from '@service/public-job.service'
 import { MobileService } from '@service/mobile.service'
 import { UserService } from '@service/user.service'
-
-import { NgxPaginationModule } from 'ngx-pagination'
 
 interface jobType {
   label: string
@@ -54,7 +48,6 @@ interface SortingMethod {
 @Component({
   selector: 'app-job-dashboard',
   templateUrl: './job-dashboard.component.html',
-  providers: [ReversePipe, OrderByPipe],
 })
 export class JobDashboardComponent implements OnInit, OnDestroy {
   currentUser: User
