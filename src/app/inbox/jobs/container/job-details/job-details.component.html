@@ -23,7 +23,12 @@
           />
         </div>
         <div class="w-full rounded-[12px] bg-white border border-G300 p-[40px]">
-          <job-transaction-history />
+          <!-- leftBtnEvent in process -->
+          <job-transaction-history
+            [isAwaitingEscrow]="isAwaitingEscrow"
+            
+            (rightBtnEvent)="statusRightClick($event)"
+          />
         </div>
       </div>
       <div class="lg:min-w-[350px] lg:max-w-[350px] w-full">

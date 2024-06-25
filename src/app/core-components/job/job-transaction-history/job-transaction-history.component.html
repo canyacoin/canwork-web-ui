@@ -11,8 +11,18 @@
       </div>
     </div>
     <div class="flex flex-col sm:flex-row gap-[16px]">
-      <basic-button [type]="1" title="See approved tokens" size="small" />
-      <basic-button [type]="2" title="Pay Escrow" size="small" />
+      <basic-button
+        [type]="1"
+        title="See approved tokens"
+        size="small"
+        (click)="leftClick($event)"
+      />
+      <basic-button
+        [type]="2"
+        title="Pay Escrow"
+        size="small"
+        (click)="rightClick($event)"
+      />
     </div>
   </div>
 </div>

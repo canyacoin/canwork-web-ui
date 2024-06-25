@@ -413,11 +413,17 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
   statusLeftClick(e: Event) {
     e.preventDefault()
+    if(this.isAwaitingEscrow) {
+      this.executeAction("Cancel job" as ActionType) // Cancel job`
+    }
     console.log('this.availableActions:', this.availableActions)
   }
 
   statusRightClick(e: Event) {
     e.preventDefault()
+    if(this.isAwaitingEscrow) {
+      this.executeAction("Pay Escrow" as ActionType) // Pay Escrow
+    }
     console.log('this.availableActions:', this.availableActions)
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'job-transaction-history',
@@ -6,4 +6,15 @@ import { Component, Input } from '@angular/core';
 })
 export class JobTransactionHistoryComponent {
   @Input() isAwaitingEscrow: boolean = false
+  @Output() leftBtnEvent = new EventEmitter<Event>()
+  @Output() rightBtnEvent = new EventEmitter<Event>()
+  
+  leftClick(event: Event) {
+    event.preventDefault()
+    this.leftBtnEvent.emit(event)
+  }
+  rightClick(event: Event) {
+    event.preventDefault()
+    this.rightBtnEvent.emit(event)
+  }
 }
