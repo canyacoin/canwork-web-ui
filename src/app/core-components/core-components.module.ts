@@ -11,7 +11,6 @@ import {
 import { ImgFallbackModule } from 'ngx-img-fallback'
 
 import { CoreUtilsModule } from '../core-utils/core-utils.module'
-import { LandingComponent } from '../landing/landing.component'
 import { AttachmentComponent } from './attachment/attachment.component'
 import { BackButtonComponent } from './back-button/back-button.component'
 import { BlogPostsComponent } from './blog-posts/blog-posts.component'
@@ -109,7 +108,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     BotComponent,
     BlogPostsComponent,
     BrandComponent,
-    LandingComponent,
     FeedbackComponent,
     FooterComponent,
     HeaderComponent,
