@@ -24,9 +24,11 @@ export class JobStatusPanelComponent {
   isMyJob: boolean = false
 
   leftClick(event: Event) {
+    event.preventDefault()
     this.leftBtnEvent.emit(event)
   }
   rightClick(event: Event) {
+    event.preventDefault()
     this.rightBtnEvent.emit(event)
   }
 
