@@ -13,6 +13,8 @@ import { UserService } from '@service/user.service'
 import { BscService, BepChain } from '@service/bsc.service'
 import { TransactionService } from '@service/transaction.service'
 
+import { NgxSpinnerService } from 'ngx-spinner'
+
 @Component({
   selector: 'app-enter-escrow-bsc',
   templateUrl: './enter-escrow-bsc.component.html',
@@ -50,10 +52,12 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
     private toastr: ToastrService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private spinner: NgxSpinnerService
   ) {}
 
   ngOnInit() {
+    this.spinner.show()
     const jobId = this.activatedRoute.parent.snapshot.params['id'] || null
     if (jobId) {
       console.log('Job ID: ' + jobId)
@@ -69,8 +73,10 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
             this.jobStateCheck = false
           } else {
             this.jobStateCheck = true
+            console.log('this.jobStateCheck: ', this.jobStateCheck)
             const provider = await this.userService.getUser(this.job.providerId)
             this.providerAddress = provider.bscAddress
+            console.log('this.providerAddress: ', this.providerAddress)
             if (!this.providerAddress) {
               this.noProviderAddress = true
               this.jobStateCheck = false // we can't go on if provider hasn't bscAddress
@@ -79,15 +85,18 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
 
           this.loading = false
           const chain = await this.checkWalletConnection()
+          console.log('chain:', chain)
           if (chain == BepChain.SmartChain) this.startBscAssetSelector()
         })
     }
+    this.spinner.hide()
   }
 
   startBscAssetSelector() {
     if (this.jobStateCheck && this.walletConnected) {
       this.showBscAssetSelection = true
     }
+    console.log('this.showBscAssetSelection:', this.showBscAssetSelection)
 
     const onSelection = async (assetData) => {
       // keep this context

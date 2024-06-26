@@ -1,12 +1,5 @@
-<div
-  *ngIf="loading"
-  class="container d-flex h-50 flex-column justify-content-center"
-  style="min-height: 640px"
->
-  <img src="assets/img/loader.svg" style="height: 36px" alt="Loader" />
-</div>
 <div *ngIf="!loading && !jobStateCheck">
-  <div class="col-sm-8 offset-sm-2 col-12 text-center createWallet">
+  <div class="text-center flex flex-col gap-2">
     <img
       src="/assets/img/CanYa_red_cross.svg"
       class="img-responsiveness mt-10 animated bounceInUp"
@@ -30,20 +23,20 @@
   </div>
 </div>
 
-<div *ngIf="!loading && showBscAssetSelection" class="container">
-  <app-bsc-payment-selector
+<div *ngIf="!loading && showBscAssetSelection">
+  <bsc-payment-selector
     [jobBudgetUsd]="jobBudgetUsd"
     [jobTitle]="jobTitle"
     [jobId]="job.id"
     [providerAddress]="providerAddress"
     (bscAsset)="assetDataHandler.asset($event)"
-  ></app-bsc-payment-selector>
+  ></bsc-payment-selector>
 </div>
 
 <div *ngIf="paymentMethod && !showBscAssetSelection">
   <div
     *ngIf="!bscPayOptions"
-    class="container d-flex h-100 flex-column justify-content-center"
+    class="flex h-100 flex-col justify-center"
     style="min-height: 640px"
   >
     <img src="assets/img/loader.svg" style="height: 36px" alt="Loader" />
@@ -134,11 +127,11 @@
             bscPayOptions.paymentSummary.allowance | number : '1.3-5'
           }}</span>
           <span title="{{ bscPayOptions.paymentSummary.asset.symbol }}">
-            <app-dynamic-coin
+            <dynamic-coin
               [symbol]="bscPayOptions.paymentSummary.asset.symbol"
               [network]="chain"
               [address]="bscPayOptions.paymentSummary.asset.address"
-            ></app-dynamic-coin>
+            ></dynamic-coin>
           </span>
         </div>
       </div>
