@@ -14,7 +14,7 @@ export enum ImageState {
 }
 
 @Component({
-  selector: 'app-dynamic-coin',
+  selector: 'dynamic-coin',
   templateUrl: './dynamic-coin.component.html',
 })
 export class DynamicCoinComponent

@@ -1,18 +1,12 @@
 <img
   *ngIf="imageState !== ImageState.Error; else error"
-  class="rounded-circle"
-  height="44"
-  width="44"
+  class="rounded-full w-[34px] h-[34px] md:w-[44px] md:h-[44px] select-none"
   src="{{ symbolUrl }}/logo.png"
   (error)="imageState = ImageState.Error"
   (load)="imageState = ImageState.Loaded"
 />
 <ng-template #error>
-  <app-dynamic-coin-wrapper
-    [size]="size"
-    [startCol]="startCol"
-    [stopCol]="stopCol"
-  >
+  <dynamic-coin-wrapper [size]="size" [startCol]="startCol" [stopCol]="stopCol">
     {{ originalSymbol.slice(0, 4) }}
-  </app-dynamic-coin-wrapper>
+  </dynamic-coin-wrapper>
 </ng-template>

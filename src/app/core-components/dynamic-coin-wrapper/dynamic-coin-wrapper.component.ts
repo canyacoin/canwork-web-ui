@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Directive } from '@angular/core'
 
 @Component({
-  selector: 'app-dynamic-coin-wrapper',
+  selector: 'dynamic-coin-wrapper',
   templateUrl: './dynamic-coin-wrapper.component.html',
   styleUrls: ['./dynamic-coin-wrapper.component.css'],
 })
