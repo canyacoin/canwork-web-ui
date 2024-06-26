@@ -22,7 +22,7 @@ import { environment } from '@env/environment'
 import { ToastrService } from 'ngx-toastr'
 
 @Component({
-  selector: 'app-bsc-payment-selector',
+  selector: 'bsc-payment-selector',
   templateUrl: './bsc-payment-selector.component.html',
   styleUrls: ['./bsc-payment-selector.component.css'],
 })

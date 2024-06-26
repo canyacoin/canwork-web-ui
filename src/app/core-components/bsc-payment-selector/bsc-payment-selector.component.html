@@ -48,11 +48,11 @@
                     <tbody *ngIf="assets.length > 0">
                       <tr *ngFor="let item of assets; let i = index">
                         <td>
-                          <app-dynamic-coin
+                          <dynamic-coin
                             [symbol]="assets[i].symbol"
                             [network]="chain"
                             [address]="assets[i].address"
-                          ></app-dynamic-coin>
+                          ></dynamic-coin>
                         </td>
                         <td>{{ assets[i].symbol }}</td>
                         <td>{{ assets[i].free | number : '1.0-4' }}</td>
