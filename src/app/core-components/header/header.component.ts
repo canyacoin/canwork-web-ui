@@ -126,7 +126,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       },
       {
         label: 'Web3 Wallet',
-        routerLink: '/inbox/jobs',
+        routerLink: '/wallet-bnb/assets',
         icon: 'u_wallet.svg',
       },
       {

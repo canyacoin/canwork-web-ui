@@ -17,7 +17,9 @@
         <div class="text-G900 text-h6 font-medium">
           {{ job.information.title }}
         </div>
-        <div class="text-G500 text-b2">Posted {{ timeAgo(job.createAt) }}</div>
+        <div class="text-G500 text-b2">
+          Posted {{ timeAgo(job.actionLog[0].timestamp) }}
+        </div>
       </div>
     </div>
 

@@ -152,7 +152,13 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   private async initialiseJobs(userId: string, userType: UserType) {
     this.jobsSubscription = this.jobService
       .getJobsByUser(userId, userType)
-      .subscribe(async (jobs: Job[]) => {
+      .subscribe(async (result: Job[]) => {
+        let jobs: Job[] = result
+
+        jobs = jobs.sort(
+          (a, b) => b.actionLog[0].timestamp - a.actionLog[0].timestamp
+        )
+
         this.activeJobs = jobs
         this.loading = false
         this.jobs = jobs
@@ -163,8 +169,13 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       })
     this.publicJobsSubscription = this.publicJobService
       .getPublicJobsByUser(userId)
-      .subscribe(async (jobs: Job[]) => {
+      .subscribe(async (result: Job[]) => {
         // only show open jobs
+        let jobs: Job[] = result
+
+        jobs = jobs.sort(
+          (a, b) => b.actionLog[0].timestamp - a.actionLog[0].timestamp
+        )
 
         this.publicJobs = jobs.filter(
           (job) => job.state === JobState.acceptingOffers

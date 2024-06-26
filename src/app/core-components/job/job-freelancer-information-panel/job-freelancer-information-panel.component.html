@@ -66,9 +66,12 @@
     ></p>
   </div>
 
-  <hr class="w-full h-[1px] bg-G300 border-none" />
+  <hr
+    *ngIf="selectedBid.attachments.length"
+    class="w-full h-[1px] bg-G300 border-none"
+  />
 
-  <div *ngIf="selectedBid.attachments" class="flex flex-col gap-[16px]">
+  <div *ngIf="selectedBid.attachments.length" class="flex flex-col gap-[16px]">
     <div class="text-b1 font-medium text-G900">Attachment</div>
     <div class="flex flex-col gap-[12px]">
       <attachment-button
