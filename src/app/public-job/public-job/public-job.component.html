@@ -110,7 +110,7 @@
                     >
                       <div class="text-b1 font-medium">Your Payment</div>
                       <div class="text-b1 font-medium">
-                        Client's budget is ${{ job.budget | number : '1.0-0' }}
+                        Client's budget is ${{ job.budget | number : '1.1-2' }}
                         <span *ngIf="job.paymentType !== 'Fixed price'"
                           >/hr </span
                         >USD
@@ -157,7 +157,7 @@
                       <div
                         class="flex justify-between border rounded-xl border-G300 py-[10px] px-[16px] bg-G200 w-[240px] h-max"
                       >
-                        <div>$ {{ price_bid / 100 | number : '1.0-0' }}</div>
+                        <div>$ {{ price_bid / 100 | number : '1.1-2' }}</div>
                         USD
                       </div>
                     </div>
@@ -176,7 +176,7 @@
                       <div
                         class="flex justify-between border rounded-xl border-G300 py-[10px] px-[16px] bg-G50 w-[240px] h-max"
                       >
-                        <div>$ {{ price_bid * 0.99 | number : '1.0-0' }}</div>
+                        <div>$ {{ price_bid * 0.99 | number : '1.1-2' }}</div>
                         USD
                       </div>
                     </div>

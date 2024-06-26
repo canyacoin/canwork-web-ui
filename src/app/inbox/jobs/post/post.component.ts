@@ -85,9 +85,6 @@ export class PostComponent implements OnInit, OnDestroy {
   uploadFailed = false
   deleteFailed = false
 
-  sharelinks: DropdownItem[] | undefined
-  selectedsharelinks: DropdownItem | undefined
-
   date: Date // This property is bound to ngModel
 
   /// css variables for file upload
@@ -269,16 +266,6 @@ export class PostComponent implements OnInit, OnDestroy {
       },
     ]
     this.selectedCategory = this.categories[0]
-
-    this.sharelinks = [
-      { name: 'Invite Freelancer', img: 'fi_user-plus.svg', code: '1' },
-      { name: 'Copy Link', img: 'u_link.svg', code: '2' },
-      { name: 'Twitter', img: 'x.svg', code: '3' },
-      { name: 'Facebook', img: 'logos_facebook.svg', code: '4' },
-      { name: 'Linkedin', img: 'devicon_linkedin.svg', code: '5' },
-    ]
-
-    this.selectedsharelinks = this.sharelinks[0]
 
     this.visibilities = [
       { name: 'Invite Only', code: 'invite', img: 'fi_user-plus.svg' },
