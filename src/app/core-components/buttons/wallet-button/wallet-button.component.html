@@ -1,0 +1,43 @@
+<div
+  class="bg-white hover:bg-G300 active:bg-white w-[104px] h-[104px] border border-g200 rounded-[16px] flex flex-col gap-[8px] justify-center items-center cursor-pointer px-[12px] py-[17px] select-none transition-all duration-300"
+>
+  <img
+    src="{{
+      type === 1
+        ? '/assets/massimo/images/walletConnect.png'
+        : type === 2
+        ? '/assets/massimo/images/metaMask.png'
+        : type === 3
+        ? '/assets/massimo/images/coinBase.png'
+        : type === 4
+        ? '/assets/massimo/images/trustWallet.png'
+        : type === 5
+        ? '/assets/massimo/images/xDefi.png'
+        : type === 6
+        ? '/assets/massimo/images/Ledger.png'
+        : type === 7
+        ? '/assets/massimo/images/binanceWallet.png'
+        : '/assets/massimo/images/keystore.png'
+    }}"
+    class="select-none w-[48px] h-[48px]"
+  />
+  <div class="text-[10px] font-medium text-N500">
+    {{
+      type === 1
+        ? 'Wallet Connect'
+        : type === 2
+        ? 'Meta Mask'
+        : type === 3
+        ? 'CoinBase'
+        : type === 4
+        ? 'TrustWallet'
+        : type === 5
+        ? 'XDefi'
+        : type === 6
+        ? 'Ledger'
+        : type === 7
+        ? 'Binance Wallet'
+        : 'Keystore'
+    }}
+  </div>
+</div>
