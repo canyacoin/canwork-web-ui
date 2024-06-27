@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy, Directive } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { BscService, EventTypeBsc } from 'app/shared/services/bsc.service'
+import { BscService, EventTypeBsc } from '@service/bsc.service'
 // import WalletConnect from './../core-classes/walletConnect' // obsolete, bep2
 // import WalletConnectQRCodeModal from '@walletconnect/qrcode-modal' // v1
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 import { crypto } from '@binance-chain/javascript-sdk'
 import { environment } from '@env/environment'
-import { AuthService } from 'app/shared/services/auth.service'
-import { WalletApp } from 'app/shared/services/bsc.service'
+import { AuthService } from '@service/auth.service'
+import { WalletApp } from '@service/bsc.service'
 import { MessageService } from 'primeng/api'
 
 @Component({
