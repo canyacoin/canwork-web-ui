@@ -528,6 +528,10 @@
     border-radius: 24px !important;
   }
 
+  #headless_modal .p-dialog-header {
+    display: none;
+  }
+
   .p-component-overlay {
     background: rgba(0, 0, 0, 0.80) !important;
     backdrop-filter: blur(4px) !important;
