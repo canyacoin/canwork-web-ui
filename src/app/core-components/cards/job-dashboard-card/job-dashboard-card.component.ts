@@ -122,7 +122,7 @@ export class JobDashboardCardComponent implements OnInit {
     return `${day}${daySuffix} ${month} ${year}`
   }
 
-  movetojobdetail() {
+  moveToJobDetails() {
     if (this.jobType === 'active')
       this.router.navigate(['/inbox/job/', this.job.id])
     else if (this.jobType === 'public')
@@ -130,7 +130,7 @@ export class JobDashboardCardComponent implements OnInit {
     else if (this.jobType === 'direct')
       this.router.navigate(['/jobs/', this.job.id])
   }
-  Makefavorite(event: Event) {
+  makefavorite(event: Event) {
     event.stopPropagation()
     this.favourite = !this.favourite
   }

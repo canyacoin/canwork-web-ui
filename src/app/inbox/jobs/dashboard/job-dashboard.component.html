@@ -1,146 +1,142 @@
 <main class="font-sans">
-  <section
-    class="pt-[100px] bg-G50 px-[20px] md:px-[64px] pb-[24px] min-h-full"
-  >
+  <section class="pt-[100px] bg-G50 px-[20px] md:px-[64px] pb-[24px]">
     <div class="max-w-[1312px] m-auto">
-      <!-- <div class="row">
-        <span class="col-6 text-left">
-          <h4 class="fw-500">MANAGE JOBS</h4>
-        </span>
-        <span class="col-6 text-right" *ngIf="currentUser?.type == 'Provider'">
-          <button class="btn btn-primary" (click)="changeUserType()">
-            {{ userType == 'Provider' ? 'Act as Client' : 'Act as Provider' }}
-          </button>
-        </span>
-      </div> -->
-      <div *ngIf="!loading">
-        <p-tabMenu [model]="jobTypes" [activeItem]="selectedjob">
-          <ng-template pTemplate="item" let-item let-i="index">
+      <p-tabMenu [model]="jobTypes" [activeItem]="selectedjob">
+        <ng-template pTemplate="item" let-item let-i="index">
+          <div
+            class="bg-G200 border-none"
+            [ngClass]="{
+              'rounded-tl-xl': i === 0,
+              'rounded-tr-xl': i === 4
+            }"
+          >
             <div
-              class="bg-G200 border-none"
+              class="select-none flex items-center h-full py-[8px] px-[12px] md:px-[40px] text-b2 md:text-b1 text-center font-medium leading-6 rounded-t-xl text-G500 cursor-pointer"
+              (click)="changeJob(item.code)"
               [ngClass]="{
-                'rounded-tl-xl': i === 0,
-                'rounded-tr-xl': i === 4
+                'bg-white': selectedjob.code === item.code
               }"
             >
+              {{ item.label }}
+            </div>
+          </div>
+        </ng-template>
+      </p-tabMenu>
+
+      <div
+        class="border rounded-xl max-sm:rounded-tr-none rounded-tl-none border-gradient-to-r from-transparent to-G200 bg-white py-[32px] px-[20px] md:px-[40px] min-h-[752px]"
+      >
+        <div class="w-full">
+          <div
+            class="flex max-lg:flex-col gap-2 justify-between lg:items-center"
+          >
+            <div
+              class="flex gap-[8px] items-center justify-between max-lg:w-full"
+            >
+              <div class="font-sans font-[500] text-b2 whitespace-nowrap">
+                Search Jobs
+              </div>
               <div
-                class="select-none flex items-center h-full py-[8px] px-[12px] md:px-[40px] text-b2 md:text-b1 text-center font-medium leading-6 rounded-t-xl text-G500 cursor-pointer"
-                (click)="changeJob(item.code)"
-                [ngClass]="{
-                  'bg-white': selectedjob.code === item.code
-                }"
+                class="flex flex-col gap-[8px] font-sans text-b2 font-normal"
               >
-                {{ item.label }}
+                <div
+                  class="p-inputgroup flex items-center justify-between px-[16px] !py-[8px] border bg-G50 border-G200 rounded-xl md:min-w-[302px]"
+                >
+                  <input
+                    type="text"
+                    pInputText
+                    placeholder="Search preferred client location"
+                    class="!shadow-none bg-transparent w-full !outline-none"
+                  />
+                  <img
+                    src="/assets/massimo/images/fi_search.png"
+                    class="w-4 h-4"
+                    alt="search"
+                  />
+                </div>
               </div>
             </div>
-          </ng-template>
-        </p-tabMenu>
 
-        <div
-          class="border rounded-xl max-sm:rounded-tr-none rounded-tl-none border-gradient-to-r from-transparent to-G200 bg-white py-[32px] px-[20px] md:px-[40px] min-h-[752px]"
-        >
-          <div class="w-full">
-            <div
-              class="flex max-lg:flex-col gap-2 justify-between lg:items-center"
-            >
+            <div class="flex flex-col md:flex-row gap-4 md:gap-10">
               <div
-                class="flex gap-[8px] items-center justify-between max-lg:w-full"
+                class="flex items-center gap-4 text-G900 text-b1"
+                *ngIf="jobType === 'active'"
               >
                 <div class="font-sans font-[500] text-b2 whitespace-nowrap">
-                  Search Jobs
+                  Filter by
                 </div>
-                <div
-                  class="flex flex-col gap-[8px] font-sans text-b2 font-normal"
+                <p-dropdown
+                  #filterTypeSelect
+                  [options]="filters"
+                  [(ngModel)]="selectedFilter"
+                  optionLabel="name"
+                  appendTo="body"
                 >
-                  <div
-                    class="p-inputgroup flex items-center justify-between px-[16px] !py-[8px] border bg-G50 border-G200 rounded-xl md:min-w-[302px]"
-                  >
-                    <input
-                      type="text"
-                      pInputText
-                      placeholder="Search preferred client location"
-                      class="!shadow-none bg-transparent w-full !outline-none"
-                    />
-                    <img
-                      src="/assets/massimo/images/fi_search.png"
-                      class="w-4 h-4"
-                      alt="search"
-                    />
-                  </div>
-                </div>
+                  <ng-template let-item pTemplate="item">
+                    <div
+                      class="flex items-center"
+                      (click)="filterJobsByState(item.code)"
+                    >
+                      <span>{{ item.name }}</span>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
               </div>
-
-              <div class="flex flex-col md:flex-row gap-4 md:gap-10">
-                <div
-                  class="flex items-center gap-4 text-G900 text-b1"
-                  *ngIf="jobType === 'active'"
+              <div class="flex items-center gap-4 text-G900 text-b1">
+                <div class="font-sans font-[500] text-b2 whitespace-nowrap">
+                  Sort by
+                </div>
+                <p-dropdown
+                  #orderTypeSelect
+                  [options]="sortByList"
+                  [(ngModel)]="selectedSortBy"
+                  optionLabel="name"
+                  appendTo="body"
                 >
-                  <div class="font-sans font-[500] text-b2 whitespace-nowrap">
-                    Filter by
-                  </div>
-                  <p-dropdown
-                    #filterTypeSelect
-                    [options]="filters"
-                    [(ngModel)]="selectedFilter"
-                    optionLabel="name"
-                    appendTo="body"
-                  >
-                    <ng-template let-item pTemplate="item">
-                      <div
-                        class="flex items-center"
-                        (click)="filterJobsByState(item.code)"
-                      >
-                        <span>{{ item.name }}</span>
-                      </div>
-                    </ng-template>
-                  </p-dropdown>
-                </div>
-                <div class="flex items-center gap-4 text-G900 text-b1">
-                  <div class="font-sans font-[500] text-b2 whitespace-nowrap">
-                    Sort by
-                  </div>
-                  <p-dropdown
-                    #orderTypeSelect
-                    [options]="sortByList"
-                    [(ngModel)]="selectedSortBy"
-                    optionLabel="name"
-                    appendTo="body"
-                  >
-                    <ng-template let-item pTemplate="item">
-                      <div
-                        class="flex items-center"
-                        (click)="SortbyFilter(item.code)"
-                      >
-                        <span>{{ item.name }}</span>
-                      </div>
-                    </ng-template>
-                  </p-dropdown>
-                </div>
+                  <ng-template let-item pTemplate="item">
+                    <div
+                      class="flex items-center"
+                      (click)="SortbyFilter(item.code)"
+                    >
+                      <span>{{ item.name }}</span>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
               </div>
             </div>
           </div>
-          <div class="py-[28px]">
-            <div *ngIf="!jobs || jobs.length == 0">No jobs to show!</div>
-            <div *ngIf="jobs && jobs.length > 0">
-              <job-dashboard-card
-                *ngFor="let job of filteredJobs"
-                [job]="job"
-                [jobType]="jobType"
-              ></job-dashboard-card>
-            </div>
-          </div>
+        </div>
+        <div *ngIf="loading" class="py-[24px] flex flex-col gap-[16px]">
+          <ng-container *ngFor="let skCard of [1, 2, 3, 4, 5]">
+            <sk-job-card />
+          </ng-container>
+        </div>
+        <div *ngIf="!loading" class="py-[24px]">
           <div
-            *ngIf="jobs.length && jobs.length > 5"
-            class="pt-[24px] flex justify-center"
+            *ngIf="!jobs || jobs.length == 0"
+            class="text-b1 text-G900 font-medium"
           >
-            <p-paginator
-              (onPageChange)="onPageChange($event)"
-              [first]="first"
-              [rows]="rows"
-              [totalRecords]="totalRecords"
-              [pageLinkSize]="4"
-            ></p-paginator>
+            No jobs to show!
           </div>
+          <div *ngIf="jobs && jobs.length > 0" class="flex flex-col gap-[16px]">
+            <job-dashboard-card
+              *ngFor="let job of filteredJobs"
+              [job]="job"
+              [jobType]="jobType"
+            ></job-dashboard-card>
+          </div>
+        </div>
+        <div
+          *ngIf="!loading && jobs.length && jobs.length > 5"
+          class="pt-[24px] flex justify-center"
+        >
+          <p-paginator
+            (onPageChange)="onPageChange($event)"
+            [first]="first"
+            [rows]="rows"
+            [totalRecords]="totalRecords"
+            [pageLinkSize]="4"
+          ></p-paginator>
         </div>
       </div>
     </div>
