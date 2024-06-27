@@ -1,6 +1,6 @@
 <div class="font-sans">
   <div
-    class="fixed bg-transparent w-full justify-center items-center pb-[12px] top-0 z-[1000] transition-all duration-300"
+    class="fixed bg-transparent w-full flex justify-center items-center pb-[12px] top-0 z-[1000] transition-all duration-300"
     [ngClass]="{
       'bg-white shadow-md pt-[12px]': isScrolled || isTransfer,
       'pt-[24px]': !isScrolled
@@ -72,7 +72,11 @@
           <ng-template #showAddress>
             <div
               [routerLink]="['/wallet-bnb/assets']"
-              class="select-none cursor-pointer"
+              class="select-none cursor-pointer font-medium text-b2 transition-all duration-300"
+              [ngClass]="{
+                'text-black': isScrolled || isTransfer,
+                'text-white': !isScrolled && !isTransfer
+              }"
             >
               {{ bAddress.slice(0, 6) }}...{{ bAddress.slice(-3) }}
             </div>
