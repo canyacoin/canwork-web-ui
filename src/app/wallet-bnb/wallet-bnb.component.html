@@ -23,7 +23,7 @@
           <div *ngSwitchCase="WalletApp.MetaMask">
             <div>
               Click to connect to MetaMask wallet.
-              <div class="mt-5 w-[120px]">
+              <div class="mt-[20px] w-[120px]">
                 <basic-button
                   (click)="connect(WalletApp.MetaMask)"
                   [type]="2"
@@ -43,7 +43,7 @@
                 Pay attention: you'll connect to BSC MainNet, cause testnet is
                 not supported
               </p>
-              <div class="mt-5 w-[120px]">
+              <div class="mt-[20px] w-[120px]">
                 <basic-button
                   *ngIf="!walletconnectConnecting"
                   (click)="connect(WalletApp.WalletConnectBsc)"
@@ -68,7 +68,7 @@
             <div *ngIf="!isTestnet(); else testnet">
               Click to scan a QR code and link your mobile wallet using
               WalletConnect.
-              <div class="mt-5 w-[120px]">
+              <div class="mt-[20px] w-[120px]">
                 <basic-button
                   *ngIf="!walletconnectConnecting"
                   (click)="connect(WalletApp.WalletConnectBsc)"

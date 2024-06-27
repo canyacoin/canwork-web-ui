@@ -1,15 +1,15 @@
 import { Component, OnInit, OnDestroy, Directive } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { BscService, EventTypeBsc } from '@service/bsc.service'
+import { BscService, EventTypeBsc } from 'app/shared/services/bsc.service'
 // import WalletConnect from './../core-classes/walletConnect' // obsolete, bep2
 // import WalletConnectQRCodeModal from '@walletconnect/qrcode-modal' // v1
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 import { crypto } from '@binance-chain/javascript-sdk'
 import { environment } from '@env/environment'
-import { ToastrService } from 'ngx-toastr'
-import { AuthService } from '@service/auth.service'
-import { WalletApp } from '@service/bsc.service'
+import { AuthService } from 'app/shared/services/auth.service'
+import { WalletApp } from 'app/shared/services/bsc.service'
+import { MessageService } from 'primeng/api'
 
 @Component({
   selector: 'app-wallet-bnb',
@@ -44,9 +44,9 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   constructor(
     private bscService: BscService,
     private router: Router,
-    private toastr: ToastrService,
     private authService: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
@@ -65,7 +65,11 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
         }
         switch (event.type) {
           case EventTypeBsc.ConnectSuccess:
-            this.toastr.success('Connected!')
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: `Wallet Connected successfully.`,
+            })
             this.router.navigate([this.returnUrl])
             break
           case EventTypeBsc.AddressFound:
@@ -76,7 +80,11 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
             }
             break
           case EventTypeBsc.ConnectFailure:
-            this.toastr.error('This address is already in use by another user')
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: `This address is already in use by another user`,
+            })
             break
           case EventTypeBsc.ConnectConfirmationRequired:
             console.log('wallet-bnb EventTypeBsc.ConnectConfirmationRequired')
@@ -206,7 +214,11 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
       // this.binanceService.initKeystore(keystore, address)
     } catch (e) {
       this.unlockingFailed = true
-      this.toastr.error('Incorrect Password')
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: `Incorrect Password`,
+      })
     }
   }
 
