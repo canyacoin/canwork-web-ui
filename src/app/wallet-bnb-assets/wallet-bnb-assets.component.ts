@@ -7,34 +7,39 @@ import { takeUntil } from 'rxjs/operators'
 
 import { OnDestroyComponent } from '@class/on-destroy'
 import { environment } from '@env/environment'
+import { MessageService } from 'primeng/api'
+
+// for sleep
+import { timer } from 'rxjs'
+import { take } from 'rxjs/operators'
 
 @Component({
   selector: 'app-wallet-bnb-assets',
   templateUrl: './wallet-bnb-assets.component.html',
-  styleUrls: ['./wallet-bnb-assets.component.css'],
 })
 export class WalletBnbAssetsComponent
   extends OnDestroyComponent
   implements OnInit
 {
-  address: string | boolean = true
+  address: string | boolean = false
   private balances = new BehaviorSubject(null)
   explorer = ''
   chain = null
 
-  constructor(private bscService: BscService) {
+  totalBudget: number = 0
+
+  constructor(
+    private bscService: BscService,
+    private messageService: MessageService
+  ) {
     super()
   }
 
-  async forget() {
-    switch (this.chain) {
-      case BepChain.SmartChain:
-        await this.bscService.disconnect()
-        break
-    }
+  async ngOnInit() {
+    await this.walletRefresh()
   }
 
-  async ngOnInit() {
+  async walletRefresh() {
     this.bscService.events$
       .pipe(takeUntil(this.destroy$)) // unsubscribe on destroy
       .subscribe(async (event) => {
@@ -74,5 +79,33 @@ export class WalletBnbAssetsComponent
             break
         }
       })
+  }
+
+  copy(event: Event) {
+    event.preventDefault()
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Successfully copied wallet address.',
+    })
+  }
+
+  sleepRx(ms: number) {
+    return timer(ms).pipe(take(1)).toPromise()
+  }
+
+  async refresh(event: Event) {
+    event.preventDefault()
+    this.balances = new BehaviorSubject(null)
+    await this.sleepRx(1000)
+    this.walletRefresh()
+  }
+
+  async forget() {
+    switch (this.chain) {
+      case BepChain.SmartChain:
+        await this.bscService.disconnect()
+        break
+    }
   }
 }

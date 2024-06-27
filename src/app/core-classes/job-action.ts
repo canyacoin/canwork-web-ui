@@ -94,7 +94,7 @@ export class IJobAction {
     }
   }
 
-  getMessage(executor?: string): string {
+  getMessage(executor?: string): string[] {
     switch (this.type) {
       case ActionType.createJob:
         if (this.weeklyCommitment > 1) {
@@ -102,33 +102,53 @@ export class IJobAction {
         } else {
           var hoursplural = 'hour'
         }
-        return `Job created by ${executor}.<br>
-            Proposed ${
-              this.amountUsd
-                ? `budget of $${this.amountUsd}${this.paymentTypeString} USD`
-                : ''
-            }
+        return [
+          `${executor} created this job listing.`,
+          `Proposed ${
+            this.amountUsd
+              ? `budget of $${this.amountUsd}${this.paymentTypeString} USD`
+              : ''
+          }
             for ${this.weeklyCommitment} ${hoursplural} per week
-            over a period of ${this.timelineExpectation.toLowerCase()}`
+            over a period of ${this.timelineExpectation.toLowerCase()}`,
+        ]
       case ActionType.counterOffer:
-        return `${executor} proposed a counter offer.<br>
-          Proposed budget at $${this.amountUsd}${this.paymentTypeString}) USD`
+        return [
+          `${executor} proposed a counter offer.`,
+          `Proposed budget at $${this.amountUsd}${this.paymentTypeString}) USD`,
+        ]
       case ActionType.acceptTerms:
-        return `${executor} accepted the terms of this job.`
+        return [
+          `${executor} accepted the terms of this job.`,
+          `${executor} accepted the terms of this job.`,
+        ]
       case ActionType.declineTerms:
-        return `${executor} declined the terms of this job.`
+        return [
+          `${executor} declined the terms of this job.`,
+          `${executor} declined the terms of this job.`,
+        ]
       case ActionType.addMessage:
-        return `${executor} left a message:<br>
-              <em>${this.message}</em>`
+        return [`${executor} left a message:`, `${this.message}`]
       case ActionType.declineTerms:
-        return `${executor} cancelled this job.`
+        return [
+          `${executor} cancelled this job.`,
+          `${executor} cancelled this job.`,
+        ]
       case ActionType.cancelJobEarly:
-        return `${executor} cancelled the job early.`
+        return [
+          `${executor} cancelled the job early.`,
+          `${executor} cancelled the job early.`,
+        ]
       case ActionType.enterEscrow:
-        return `${executor} sent tokens to CanWork escrow.<br>
-              When the job is succesfully delivered, ${executor} will release the funds to the Provider.`
+        return [
+          `${executor} sent tokens to CanWork escrow.`,
+          `When the job is succesfully delivered, ${executor} will release the funds to the Provider.`,
+        ]
       default:
-        return `Job action: ${this.type}, by ${executor}`
+        return [
+          `Job action: ${this.type}, by ${executor}`,
+          `Job action: ${this.type}, by ${executor}`,
+        ]
     }
   }
 }

@@ -1,92 +1,118 @@
-<main>
-  <section class="section bg-gray">
-    <div class="container text-center">
-      <div class="card px-30 py-15 my-10">
-        <h2>Assets</h2>
-        <div *ngIf="address" class="row">
-          <div class="col text-center">
-            <a
-              ngxClipboard
-              [cbContent]="address"
-              (click)="$event.preventDefault()"
-              href="#"
-              class="mx-10"
-            >
-              <i class="far fa-copy"></i>
-            </a>
-            {{ address }}
-            <a
-              target="_blank"
-              href="{{ explorer }}/address/{{ address }}"
-              class="mx-10"
-            >
-              <i class="fas fa-external-link-alt"></i>
-            </a>
+<main class="font-sans">
+  <section
+    class="w-full flex justify-center bg-G50 pt-[100px] pb-[24px] px-[24px] md:px-[64px]"
+  >
+    <div
+      class="max-w-[938px] w-full p-[24px] md:p-[40px] bg-white rounded-[12px] border border-G200 flex flex-col gap-[24px]"
+    >
+      <div class="flex gap-[8px] items-center">
+        <img
+          src="/assets/massimo/svg/wallet.svg"
+          alt="wallet"
+          class="w-[24px] h-[24px] select-none"
+        />
+        <div class="text-b1 text-G900 font-medium">Manage Wallet</div>
+      </div>
+      <div
+        class="flex gap-[8px] flex-col md:flex-row md:justify-between md:items-center"
+      >
+        <div class="flex flex-col gap-[4px]">
+          <div class="text-b2 text-G500">Total Balance</div>
+          <div class="text-h5 text-G900 font-medium">
+            $ {{ totalBudget | number : '1.2-2' }} USD
+          </div>
+          <div *ngIf="address" class="text-b1 text-G500">
+            {{ address.slice(0, 20) }}...{{ address.slice(-4) }}
           </div>
         </div>
-        <div class="row">
-          <div class="col text-left">
-            <div [ngSwitch]="address">
-              <div *ngSwitchCase="true" class="text-center">
-                Loading address...
-              </div>
-              <div *ngSwitchCase="false" class="text-center">
-                Please connect your wallet!
-                <a class="nav-link" [routerLink]="['/wallet-bnb']">
-                  <button border-64 class="btn btn-sm btn-primary my-10">
-                    UNLOCK WALLET
-                  </button>
-                </a>
-              </div>
-              <div *ngSwitchDefault>
-                <div *ngIf="balances | async as balances; else loading">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">Icon</th>
-                        <th scope="col">Symbol</th>
-                        <th scope="col">Balance</th>
-                        <!-- <th scope="col">Frozen</th> -->
-                        <!-- <th scope="col">Locked</th> -->
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let balance of balances">
-                        <td>
-                          <app-dynamic-coin
-                            [symbol]="balance.symbol"
-                            [address]="balance.address"
-                            [network]="chain"
-                          ></app-dynamic-coin>
-                        </td>
-                        <td>{{ balance.symbol }}</td>
-                        <td>{{ balance.free | number : '1.0-4' }}</td>
-                        <!-- <td>{{ balance.frozen | number: '1.3' }}</td> -->
-                        <!-- <td>{{ balance.locked | number: '1.3' }}</td> -->
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div class="text-right">
-                    <button
-                      (click)="forget()"
-                      border-64
-                      class="btn btn-sm btn-warning"
-                      style="
-                        border: 2px solid #ffbe00;
-                        background: #fff;
-                        color: #ffbe00;
-                      "
-                    >
-                      FORGET
-                    </button>
+        <div class="flex gap-[8px]">
+          <copy-button
+            *ngIf="address"
+            ngxClipboard
+            [cbContent]="address"
+            (click)="copy($event)"
+          />
+          <refresh-button (click)="refresh($event)" />
+          <a
+            *ngIf="address"
+            target="_blank"
+            href="{{ explorer }}/address/{{ address }}"
+          >
+            <external-link-button />
+          </a>
+        </div>
+      </div>
+
+      <div
+        [ngSwitch]="address"
+        class="min-h-[380px] flex justify-center items-center"
+      >
+        <div *ngSwitchCase="true" class="text-b1 text-G900">
+          Loading address...
+        </div>
+        <div *ngSwitchCase="false">
+          <div class="flex flex-col justify-center gap-[16px]">
+            <div class="text-h6 text-G900">Please connect your wallet!</div>
+            <basic-button
+              [type]="2"
+              [routerLink]="['/wallet-bnb']"
+              title="Connect Wallet"
+              size="small"
+            />
+          </div>
+        </div>
+        <div *ngSwitchDefault class="w-full">
+          <div
+            *ngIf="balances | async as balances; else loading"
+            class="space-y-[24px]"
+          >
+            <div class="flex flex-col gap-[16px]">
+              <div
+                *ngFor="let balance of balances"
+                class="flex flex-col gap-[16px]"
+              >
+                <hr class="w-full h-[1px] bg-G200 border-none" />
+                <div
+                  class="flex gap-[8px] xs:gap-[16px] flex-col xs:flex-row xs:justify-between xs:items-center"
+                >
+                  <div class="flex gap-[16px] items-center">
+                    <dynamic-coin
+                      [symbol]="balance.symbol"
+                      [address]="balance.address"
+                      [network]="chain"
+                    ></dynamic-coin>
+                    <div>
+                      <div class="text-b1 text-N800 font-medium">
+                        {{ balance.symbol }}
+                      </div>
+                      <div class="text-b2 text-G500">
+                        {{ balance.chain }}
+                      </div>
+                    </div>
                   </div>
+                  <div class="max-xs:pl-[50px] text-b2 xs:text-b1 text-G900 font-medium">
+                    {{ balance.free | number : '1.0-4' }}&nbsp;{{
+                      balance?.token ? balance.token : balance.symbol
+                    }}
+                  </div>
+                  <!-- <td>{{ balance.frozen | number: '1.3' }}</td> -->
+                  <!-- <td>{{ balance.locked | number: '1.3' }}</td> -->
                 </div>
-                <ng-template #loading>
-                  <div class="text-center">Loading...</div>
-                </ng-template>
               </div>
             </div>
+            <div class="float-right">
+              <basic-button
+                (click)="forget()"
+                [type]="1"
+                title="Disconnect Wallet"
+                size="small"
+                extraClass="text-R900 w-max"
+              />
+            </div>
           </div>
+          <ng-template #loading>
+            <div class="text-b1 text-G900 text-center">Loading...</div>
+          </ng-template>
         </div>
       </div>
     </div>

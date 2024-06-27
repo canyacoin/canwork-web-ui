@@ -1,13 +1,7 @@
-<main class="font-sans">
-  <div class="flex justify-center bg-G50">
+<main class="font-sans bg-G50">
+  <div class="flex justify-center">
     <!-- template start -->
     <div class="max-w-[1440px] w-full py-[56px] px-[24px] md:px-[64px]">
-      <basic-dialog
-        [visible]="sent"
-        title="Proposal Successfully Submitted"
-        content="Your proposal has been sent to the client.\nIf approved, the client will be in touch via messages.\nGoodluck!"
-        type="submit"
-      />
       <div
         *ngIf="!job && !loading"
         class="flex flex-col md:flex-row md:justify-between gap-2 md:gap-6 pt-[56px]"
@@ -28,14 +22,14 @@
 
       <div
         *ngIf="job"
-        class="flex flex-col lg:flex-row md:justify-between gap-2 md:gap-6 pt-[56px]"
+        class="flex flex-col lg:flex-row md:justify-between gap-6 pt-[56px]"
       >
         <div class="w-full">
-          <ng-container *ngIf="(IsShownTab || this.myJob) && isPublic">
+          <ng-container *ngIf="(isShownTab || isMyJob) && isPublic">
             <p-tabMenu
               [model]="activejobTypes"
-              [activeItem]="selectedjob"
-              *ngIf="!IsProvider || myJob"
+              [activeItem]="selectedJob"
+              *ngIf="!isProvider || isMyJob"
             >
               <ng-template pTemplate="item" let-item let-i="index">
                 <div
@@ -48,7 +42,7 @@
                   <div
                     class="select-none flex items-center h-full py-[8px] px-[12px] md:px-[40px] text-b2 md:text-b1 text-center font-medium rounded-t-xl text-G500 cursor-pointer"
                     (click)="changeJob(item)"
-                    [ngClass]="{ 'bg-white': selectedjob.code === item.code }"
+                    [ngClass]="{ 'bg-white': selectedJob.code === item.code }"
                   >
                     {{ item.label }}
                   </div>
@@ -57,18 +51,16 @@
             </p-tabMenu>
           </ng-container>
 
-          <div *ngIf="selectedjob.code === 'jobsdetail'" class="w-full">
+          <div *ngIf="selectedJob.code === 'jobsdetail'" class="w-full">
             <div
               class="w-full rounded-[12px] bg-white border border-G300 p-[40px]"
               [ngClass]="{
-                '!rounded-tl-none':
-                  IsShownTab || (this.myJob && !yourApplication)
+                '!rounded-tl-none': isShownTab || (isMyJob && !yourApplication)
               }"
             >
-              <job-detail-panel
+              <job-details-panel
                 [job]="job"
-                [jobFromNow]="jobFromNow"
-                [canSee]="canSee"
+                [isJobDetailsShow]="isShownTab || isMyJob"
               />
 
               <!-- bid start -->
@@ -80,19 +72,19 @@
               >
                 <div
                   class="flex flex-col gap-4 border-t border-G300"
-                  *ngIf="job && currentUser && IsProvider && !myJob"
+                  *ngIf="job && currentUser && isProvider && !isMyJob"
                 >
-                  <h2
+                  <div
                     class="pt-[20px] md:pt-[32px] text-h6 md:text-h5 text-G900 font-medium"
                   >
                     Submit your proposal
-                  </h2>
+                  </div>
 
-                  <h1 class="text-b1 font-medium text-G900">Cover Letter</h1>
+                  <div class="text-b1 font-medium text-G900">Cover Letter</div>
                   <div class="w-full">
                     <angular-editor
                       formControlName="message"
-                      [config]="coverletterConfig"
+                      [config]="coverLetterConfig"
                     ></angular-editor>
                     <div class="flex justify-end">
                       <div class="text-right text-b2 text-G700 pt-[8px]">
@@ -103,7 +95,7 @@
                     </div>
                     <div class="pt-[16px]">
                       <warning-message
-                        *ngIf="bid_message_valiated"
+                        *ngIf="bidMessageValidated"
                         message="Your coverletter should be longger than 5 and shorter than 2500"
                         [type]="1"
                       />
@@ -116,13 +108,13 @@
                     <div
                       class="flex max-md:flex-col justify-center md:justify-between gap-[8px]"
                     >
-                      <h1 class="text-b1-medium">Your Payment</h1>
-                      <h1 class="text-b1-medium">
-                        Client's budget is ${{ job.budget }}
+                      <div class="text-b1 font-medium">Your Payment</div>
+                      <div class="text-b1 font-medium">
+                        Client's budget is ${{ job.budget | number : '1.1-2' }}
                         <span *ngIf="job.paymentType !== 'Fixed price'"
                           >/hr </span
                         >USD
-                      </h1>
+                      </div>
                     </div>
 
                     <!-- Bid Price -->
@@ -130,8 +122,8 @@
                       class="flex max-md:flex-col justify-center md:justify-between gap-[8px]"
                     >
                       <div>
-                        <h1 class="text-b1-medium">Bid Price</h1>
-                        <p class="text-b2-small">
+                        <div class="text-b1 font-medium">Bid Price</div>
+                        <p class="text-b2 text-G500">
                           Total amount the client will see on your proposal
                         </p>
                       </div>
@@ -156,8 +148,8 @@
                       class="flex max-md:flex-col justify-center md:justify-between gap-[8px]"
                     >
                       <div>
-                        <h1 class="text-b1-medium">1% Service Fee</h1>
-                        <p class="text-b2-small">
+                        <div class="text-b1 font-medium">1% Service Fee</div>
+                        <p class="text-b2 text-G500">
                           CanWork charges 1% fees. The lowest fees ever.
                         </p>
                       </div>
@@ -165,7 +157,7 @@
                       <div
                         class="flex justify-between border rounded-xl border-G300 py-[10px] px-[16px] bg-G200 w-[240px] h-max"
                       >
-                        <div>$ {{ price_bid / 100 }}</div>
+                        <div>$ {{ price_bid / 100 | number : '1.1-2' }}</div>
                         USD
                       </div>
                     </div>
@@ -175,8 +167,8 @@
                       class="flex max-md:flex-col justify-center md:justify-between h-max gap-[8px]"
                     >
                       <div>
-                        <h1 class="text-b1-medium">Payout</h1>
-                        <p class="text-b2-small">
+                        <div class="text-b1 font-medium">Payout</div>
+                        <p class="text-b2 text-G500">
                           Amount you'll receive after service fee charge
                         </p>
                       </div>
@@ -184,7 +176,7 @@
                       <div
                         class="flex justify-between border rounded-xl border-G300 py-[10px] px-[16px] bg-G50 w-[240px] h-max"
                       >
-                        <div>$ {{ price_bid * 0.99 }}</div>
+                        <div>$ {{ price_bid * 0.99 | number : '1.1-2' }}</div>
                         USD
                       </div>
                     </div>
@@ -197,7 +189,7 @@
                     />
 
                     <warning-message
-                      *ngIf="price_bid < 0 || price_validate"
+                      *ngIf="price_bid < 0 || priceValidated"
                       message="Your price should be bigger than zero"
                       [type]="1"
                     />
@@ -205,12 +197,14 @@
                     <div
                       class="w-full flex flex-col gap-[8px] border-t border-G300 pt-[24px]"
                     >
-                      <div class="text-b1 text-G900">Attachments</div>
-                      <small class="text-b2 text-G500 text-wrap font-sans"
-                        >You may attach up to 10 files under the size of 25 MB
+                      <div class="text-b1 text-G900 font-medium">
+                        Attachments
+                      </div>
+                      <div class="text-b2 text-G500 text-wrap font-sans">
+                        You may attach up to 10 files under the size of 25 MB
                         each. Include work samples or other documents to support
-                        your application.</small
-                      >
+                        your application.
+                      </div>
 
                       <div
                         (dragover)="onDragOver($event)"
@@ -269,19 +263,19 @@
                               let i = index
                             "
                           >
-                            <div
-                              class="flex gap-2 text-C600 text-b2 font-sans justify-start items-center h-[24px]"
-                            >
+                            <div class="flex gap-[8px] items-center">
                               <img
                                 src="/assets/massimo/svg/ion_attach-outline.svg"
                                 alt="ion_attach"
                                 class="w-[24px] h-[24px]"
                               />
-                              {{ file.name }}
+                              <div class="text-C600 text-b2 font-sans">
+                                {{ file.name }}
+                              </div>
 
                               <div *ngIf="file?.progress === 100">
                                 <span
-                                  class="cursor-pointer alert"
+                                  class="cursor-pointer"
                                   (click)="removeUpload(uploadedFiles[i])"
                                 >
                                   <img
@@ -297,7 +291,7 @@
                                   *ngIf="i < currentUploadNumber"
                                 >
                                   <span
-                                    class="cursor-pointer alert"
+                                    class="cursor-pointer"
                                     (click)="removeUpload(uploadedFiles[i])"
                                   >
                                     <img
@@ -312,7 +306,7 @@
                                   <div role="status">
                                     <img
                                       src="/assets/massimo/svg/spinner.svg"
-                                      alt="ion_attach"
+                                      alt="spinner"
                                       class="w-[20px] h-[20px]"
                                       class="animate-spin"
                                     />
@@ -337,7 +331,7 @@
                     </div>
                   </div>
 
-                  <div class="w-full" *ngIf="canBid && !sent">
+                  <div class="w-full" *ngIf="canBid && !isSent">
                     <basic-button
                       [disabled]="!bidForm.valid || isBidding"
                       [type]="2"
@@ -356,407 +350,169 @@
               </div>
             </div>
           </div>
-          <div *ngIf="selectedjob.code === 'proposals'" class="w-full">
-            <job-proposals
-              [job]="job"
-              [jobFromNow]="jobFromNow"
-              [canSee]="canSee"
-            />
+          <div *ngIf="selectedJob.code === 'proposals'" class="w-full">
+            <job-proposals />
           </div>
 
           <div
             *ngIf="
               currentUser &&
-              IsProvider &&
-              !myJob &&
-              isOpen &&
+              isProvider &&
+              !isMyJob &&
               !canBid &&
               yourApplication &&
               !yourApplication.rejected
             "
-            class="w-full flex flex-col rounded-[12px] bg-white border border-G300 p-[40px] gap-6 mt-[16px]"
+            class="mt-[16px]"
           >
-            <div class="flex max-md:flex-col justify-between items-center">
-              <div>
-                <h2 class="text-h6 font-medium pb-[8px]">Your Application</h2>
-                <div class="max-md:text-center text-b2 text-G500">
-                  Applied: {{ formatDate(yourApplication.timestamp) }}
-                </div>
-              </div>
-              <div class="flex items-center gap-4">
-                <div class="text-b2 font-normal text-G800">Status</div>
-                <div
-                  class="px-[16px] py-[6px] rounded-3xl bg-[#FFF8C5] text-G800 select-none"
-                >
-                  Not viewed
-                </div>
-                <!-- <div
-                  class="px-[16px] py-[6px] rounded-3xl bg-[#DAFBE1] text-G800 select-none"
-                >
-                  Viewed
-                </div> -->
-              </div>
-            </div>
-
-            <!-- cover letter -->
-            <div class="text-G900">
-              <h2 class="text-b1 font-medium">Cover Letter</h2>
-              <div
-                class="text-b2 md:text-b1 py-[16px]"
-                [innerHTML]="yourApplication.message | linkify"
-              ></div>
-            </div>
-            <div class="flex flex-col gap-4 pt-[24px] border-t border-G300">
-              <h1 class="text-b1-medium w-full text-left">Your Payment</h1>
-
-              <!-- Bid Price -->
-              <div
-                class="flex max-md:flex-col justify-center md:justify-between gap-[8px]"
-              >
-                <div>
-                  <h1 class="text-b1-medium">Bid Price</h1>
-                  <p class="text-b2-small">
-                    Total amount the client will see on your proposal
-                  </p>
-                </div>
-
-                <div>${{ yourApplication.budget }} USD</div>
-              </div>
-              <!-- 1% Service Fee -->
-              <div
-                class="flex max-md:flex-col justify-center md:justify-between gap-[8px]"
-              >
-                <div>
-                  <h1 class="text-b1-medium">1% Service Fee</h1>
-                  <p class="text-b2-small">
-                    CanWork charges 1% fees. The lowest fees ever.
-                  </p>
-                </div>
-
-                <div>${{ yourApplication.budget / 100 }} USD</div>
-              </div>
-
-              <!-- Payout -->
-              <div
-                class="flex max-md:flex-col justify-center md:justify-between pb-[24px] gap-[8px]"
-              >
-                <div>
-                  <h1 class="text-b1-medium">Payout</h1>
-                  <p class="text-b2-small">
-                    Amount you'll receive after service fee charge
-                  </p>
-                </div>
-
-                <div>${{ yourApplication.budget * 0.99 }} USD</div>
-              </div>
-            </div>
-
-            <div
-              *ngIf="yourApplication.attachments"
-              class="flex flex-col gap-4 py-[16px] border-t border-G300"
-            >
-              <h1 class="text-b1-medium w-full text-left">Attachment</h1>
-
-              <ng-container *ngFor="let item of yourApplication.attachments">
-                <div class="flex justify-start py-[6px]">
-                  <a href="{{ item.url }}" target="_blank">
-                    <p class="flex justify-start items-center text-C600">
-                      <img
-                        src="/assets/massimo/svg/ion_attach-outline.svg"
-                        alt="ion_attach"
-                        class="w-[24px] h-[24px]"
-                      />
-                      {{ item.name }}
-                    </p>
-                  </a>
-                </div>
-              </ng-container>
-            </div>
-
-            <div class="flex">
-              <basic-button
-                [type]="1"
-                title="Withdraw Your Application"
-                size="small"
-                extraClass="border text-G900"
-                (click)="updatedDialogWithdrawJob($event)"
-              />
-            </div>
+            <job-application-panel
+              [yourApplication]="yourApplication"
+              (btnEvent)="updateDialogWithdrawProposal($event)"
+            />
           </div>
         </div>
 
-        <div
-          class="lg:w-[350px] rounded-[12px] bg-white border border-G300 p-[24px] h-full"
-        >
-          <div
-            class="text-b2 flex justify-between items-center md:text-b1 text-G800 font-medium pl-[2px]"
-          >
-            <span *ngIf="job.state && isOpen && !job.draft">
-              <i class="text-vibrantGreen fas fa-circle mr-[12px]"></i
-              >{{ job.state }}
-            </span>
-
-            <span *ngIf="job.state && !isOpen && !job.draft">
-              <i class="circle-danger fas fa-circle mr-[12px]"></i>Job closed
-            </span>
-
-            <span *ngIf="job.draft">
-              <i class="circle-danger fas fa-circle mr-[12px]"></i>
-              Draft
-            </span>
-
-            <!-- <a
-              data-toggle="modal"
-              data-target="#shareModal"
-              *ngIf="!job.draft"
-              (click)="createLink()"
-              class="float-right hover:cursor-pointer"
-            >
-              <i class="fas fa-share-alt"></i>
-            </a> -->
-
-            <div class="detail-job flex gap-2" *ngIf="!job.draft">
-              <div
-                class="border rounded-md border-G300 w-[32px] h-[32px] flex items-center justify-center cursor-pointer transition-all duration-150 bg-white hover:bg-G100"
-              >
-                <img
-                  src="/assets/massimo/svg/bookmark.svg"
-                  class="select-none"
-                />
-              </div>
-              <p-dropdown
-                [options]="sharelinks"
-                [(ngModel)]="selectedsharelinks"
-                optionLabel="name"
-                appendTo="body"
-              >
-                <ng-template pTemplate="selectedItem">
-                  <div
-                    *ngIf="selectedsharelinks"
-                    class="border border-G300 shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer w-[32px] h-[32px] rounded-lg p-[6px]"
-                  >
-                    <img
-                      src="/assets/massimo/svg/fi_share-2.svg"
-                      alt=""
-                      class="w-full h-full"
-                    />
-                  </div>
-                </ng-template>
-                <ng-template let-item pTemplate="item">
-                  <div class="flex align-items-center">
-                    <img
-                      src="{{ '/assets/massimo/svg/' + item.img }}"
-                      style="width: 20px"
-                      class="mr-[16px]"
-                    />
-                    <span>{{ item.name }}</span>
-                  </div>
-                </ng-template>
-              </p-dropdown>
-            </div>
-          </div>
-          <table
-            class="table-auto text-b2 md:text-b1 w-full md:w-[302px] mt-3 border-separate border-spacing-x-[2px] border-spacing-y-[10px]"
-          >
-            <tr>
-              <td class="text-G700">{{ job.paymentType }}</td>
-              <td class="text-G900 text-right font-medium">
-                ${{ job.budget }}
-                <span *ngIf="job.paymentType !== 'Fixed price'">/hr</span> USD
-              </td>
-            </tr>
-            <tr *ngIf="bids">
-              <td class="text-G700">Proposals</td>
-              <td class="text-G900 text-right font-medium">
-                {{ bids.length }} Proposals
-              </td>
-            </tr>
-            <tr>
-              <td class="text-G700">Deadline</td>
-              <td class="text-G900 text-right font-medium">
-                {{ formatDate(job.deadline) }}
-              </td>
-            </tr>
-            <tr *ngIf="job.information.weeklyCommitment > 0">
-              <td class="text-G700">Estimated hours</td>
-              <td class="text-G900 text-right font-medium">
-                {{ job.information.weeklyCommitment }} hours
-              </td>
-            </tr>
-            <tr>
-              <td class="text-G700">Category</td>
-              <td class="text-G900 text-right font-medium">
-                {{ getCategoryName(job.information.providerType) }}
-              </td>
-            </tr>
-          </table>
-          <hr class="h-[1.5px] my-[20px] bg-gray-200 border-0" />
-          <div
-            *ngIf="jobPoster"
-            class="text-b3 md:text-b2 text-G800 mt-[12px] mb-[16px]"
-          >
-            About the Client
-          </div>
-          <ng-container *ngIf="jobPoster" class="mt-[12px]">
-            <profile-card
-              [avatarUri]="jobPoster.avatarUri"
-              [name]="jobPoster.name"
-              [title]="jobPoster.title"
-              [isVerified]="jobPoster.verified"
-              [rating]="jobPoster.rating"
-              [skillTags]="jobPoster.skillTags"
-              [slug]="jobPoster.slug"
-              [address]="jobPoster.address"
-              [timezone]="jobPoster.timezone"
-              [hourlyRate]="jobPoster.hourlyRate"
-              [isGrid]="false"
-              [isSmall]="true"
-            />
-          </ng-container>
-          <div
-            *ngIf="myJob && !isClosed"
-            class="text-b3 md:text-b2 text-G800 mt-[16px]"
-          >
-            <div class="flex gap-4 justify-between items-center">
-              <div
-                class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center gap-2 font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl"
-                (click)="updateDialog($event)"
-              >
-                <img
-                  src="/assets/massimo/svg/delete.svg"
-                  class="select-none w-[16px] h-[16px]"
-                />
-                Delete Job
-              </div>
-
-              <basic-button
-                [type]="1"
-                [routerLink]="['/inbox/job/edit', job.id]"
-                title="Edit Job"
-                size="small"
-                extraClass="border text-G900"
-              />
-            </div>
-          </div>
-
-          <div
-            class="text-b2 md:text-b1 text-G800 pt-[24px]"
-            *ngIf="!currentUser && !myJob && isOpen"
-          >
-            Sign up to be a CanWork service provider to bid on this job.
-            <div class="mt-[24px]" (click)="updateVisibleloginModal()">
-              <basic-button [type]="2" title="Login to Apply Now" />
-            </div>
-          </div>
-
-          <div
-            class="text-b2 md:text-b1 text-G800 mt-[16px] pt-[24px]"
-            *ngIf="
-              currentUser && currentUser.type !== 'Provider' && !myJob && isOpen
-            "
-          >
-            You must be a CanWork service provider to bid on this job.
-          </div>
-
-          <div
-            class="text-b2 md:text-b1 text-G800 mt-[16px]"
-            *ngIf="currentUser && IsProvider && !myJob && isOpen"
-          >
-            <!-- <button
-              class="btn btn-sm btn-dark mt-10 mr-10 w-full text-[15px] py-[7px] normal-case"
-              [hidden]="!canBid"
-              data-toggle="modal"
-              data-target="#bidModal"
-              [disabled]="!currentUser.bscAddress"
-            >
-              Apply Now
-            </button> -->
-            <i *ngIf="!canBid" class="mt-[12px]">You've posted your bid.</i>
-            <i *ngIf="!currentUser.bscAddress" class="mt-[12px]"
-              >To make a bid fill the field "BNB Chain Address field" in the
-              <a href="/profile?editProfile=1">profile</a></i
-            >
-          </div>
+        <div class="lg:min-w-[350px] lg:max-w-[350px] w-full">
+          <job-status-panel
+            [job]="job"
+            [proposals]="bids?.length"
+            [currentUser]="currentUser"
+            (leftBtnEvent)="statusLeftClick($event)"
+          />
         </div>
       </div>
       <div
-        *ngIf="job && myJob"
+        *ngIf="job && isMyJob"
         class="flex flex-col md:flex-row md:justify-between gap-2 md:gap-6 pt-[32px]"
       ></div>
       <!-- bids end -->
     </div>
   </div>
-  <!-- template end -->
-</main>
 
-<!-- Modals start -->
+  <!-- Modals start -->
 
-<basic-dialog
-  [visible]="visible_delete_modal"
-  title="Are you sure you want to delete ?"
-  content="If you delete job post, you will no longer have access to it or receive bids from freelancers.\nYou  can create a new job listing to receive bids."
-  (LeftbtnEvent)="cancelJob($event)"
-  (RightbtnEvent)="updateDialog($event)"
-  type="delete"
-/>
+  <basic-dialog
+    [(visible)]="isSent"
+    title="Proposal Successfully Submitted"
+    content="Your proposal has been sent to the client.
+  If approved, the client will be in touch via messages.
+  Goodluck!"
+    type="submit"
+  />
 
-<basic-dialog
-  [visible]="visible_withdraw_modal"
-  title="Are you sure you want to withdraw your application?"
-  content="Your Application will be permanently deleted."
-  (LeftbtnEvent)="WithdrawJob($event)"
-  (RightbtnEvent)="updatedDialogWithdrawJob($event)"
-  type="withdraw"
-/>
+  <basic-dialog
+    [(visible)]="visibleDeleteModal"
+    title="Are you sure you want to delete?"
+    content="If you delete job post, you will no longer have access to it or receive bids from freelancers.
+  You can create a new job listing to receive bids."
+    (LeftbtnEvent)="cancelJob($event)"
+    (RightbtnEvent)="updateDialogDeleteJob($event)"
+    type="delete"
+  />
 
-<basic-dialog
-  [visible]="visible_withdraw_success_modal"
-  title="Your Application Deleted."
-  content="You can find another jobs in jobs page."
-  type="withdraw_success"
-/>
+  <basic-dialog
+    [(visible)]="visibleWithdrawModal"
+    title="Are you sure you want to withdraw your application?"
+    content="Your Application will be permanently deleted."
+    (LeftbtnEvent)="withdrawProposal($event)"
+    (RightbtnEvent)="updateDialogWithdrawProposal($event)"
+    type="withdraw"
+  />
 
-<!-- Modals end -->
+  <basic-dialog
+    [(visible)]="visibleWithdrawSuccessModal"
+    title="Your Application Deleted."
+    content="You can find another jobs in jobs page."
+    type="withdraw_success"
+  />
 
-<!-- Modals -->
-<div id="shareModal" class="modal fade" *ngIf="job && canSee" role="dialog">
-  <div class="modal-dialog border-none">
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header text-center border-none">
-        <div class="col-12">
-          <h5 class="modal-title">SHARE THIS JOB AS A LINK</h5>
-        </div>
-        <button
-          type="button"
-          class="close"
-          style="position: absolute; right: 15px"
-          data-dismiss="modal"
-        >
-          &times;
-        </button>
+  <p-dialog
+    [(visible)]="visibleLoginModal"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    id="login_modal"
+  >
+    <div class="grid md:grid-cols-2 justify-between">
+      <div
+        class="absolute top-[20px] right-[20px] md:top-[32px] md:right-[43px]"
+      >
+        <img
+          src="/assets/massimo/images/x_button.png"
+          alt="X"
+          class="w-[30px] h-[30px] md:w-[40px] md:h-[40px] cursor-pointer select-none"
+          (click)="updateVisibleLoginModal()"
+        />
       </div>
-      <div class="modal-body border-none">
-        <div class="container">
-          <div class="row">
-            <div class="col-12">
-              <div class="row px-15"></div>
-              <div class="row px-15">
-                <div class="col-12 text-center">
-                  <span>URL:</span>
-                  <br />
-                  <br />
-                  <p class="link-col p-10">
-                    {{ link }}
-                  </p>
-                  <button (click)="copyLink()" class="btn btn-primary mt-5">
-                    COPY LINK
-                  </button>
+      <div
+        class="flex flex-col justify-center items-center gap-[20px] md:gap-[40px] max-md:my-[40px] max-md:mx-[20px]"
+      >
+        <img
+          src="/assets/massimo/images/logoGray.png"
+          alt="logo"
+          class="w-[112px] h-[32px] select-none"
+        />
+        <div class="font-sans flex flex-col gap-[8px]">
+          <div class="text-G900 text-center text-h6 md:text-h5 font-medium">
+            Sign in to CanWork
+          </div>
+          <div class="text-G700 text-center text-b2">
+            Sign in with your preferred credentials to continue
+          </div>
+        </div>
+        <div class="grid gap-4">
+          <ng-container *ngIf="visibleLoginModal">
+            <firebase-ui
+              (signInSuccessWithAuthResult)="onFirebaseLogin($event)"
+            ></firebase-ui>
+          </ng-container>
+        </div>
+      </div>
+      <div class="max-md:hidden select-none">
+        <img src="/assets/massimo/images/login.png" alt="" class="w-full" />
+      </div>
+    </div>
+  </p-dialog>
+
+  <!-- Modals -->
+  <!-- <div id="shareModal" class="modal fade" *ngIf="job && canSee" role="dialog">
+    <div class="modal-dialog border-none">
+      <div class="modal-content">
+        <div class="modal-header text-center border-none">
+          <div class="col-12">
+            <h5 class="modal-title">SHARE THIS JOB AS A LINK</h5>
+          </div>
+          <button
+            type="button"
+            class="close"
+            style="position: absolute; right: 15px"
+            data-dismiss="modal"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="modal-body border-none">
+          <div class="container">
+            <div class="row">
+              <div class="col-12">
+                <div class="row px-15"></div>
+                <div class="row px-15">
+                  <div class="col-12 text-center">
+                    <span>URL:</span>
+                    <br />
+                    <br />
+                    <p class="link-col p-10">
+                      {{ link }}
+                    </p>
+                    <button (click)="copyLink()" class="btn btn-primary mt-5">
+                      COPY LINK
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="col-12 text-center">
-                  <small id="copied">Copied!</small>
+                <div class="row">
+                  <div class="col-12 text-center">
+                    <small id="copied">Copied!</small>
+                  </div>
                 </div>
               </div>
             </div>
@@ -764,51 +520,8 @@
         </div>
       </div>
     </div>
-  </div>
-</div>
+  </div> -->
 
-<p-dialog
-  [(visible)]="visible_login_modal"
-  [modal]="true"
-  [draggable]="false"
-  [resizable]="false"
-  id="login_modal"
->
-  <div class="grid md:grid-cols-2 justify-between">
-    <div class="absolute top-[20px] right-[20px] md:top-[32px] md:right-[43px]">
-      <img
-        src="/assets/massimo/images/x_button.png"
-        alt="X"
-        class="w-[30px] h-[30px] md:w-[40px] md:h-[40px] cursor-pointer select-none"
-        (click)="updateVisibleloginModal()"
-      />
-    </div>
-    <div
-      class="flex flex-col justify-center items-center gap-[20px] md:gap-[40px] max-md:my-[40px] max-md:mx-[20px]"
-    >
-      <img
-        src="/assets/massimo/images/logoGray.png"
-        alt="logo"
-        class="w-[112px] h-[32px] select-none"
-      />
-      <div class="font-sans flex flex-col gap-[8px]">
-        <div class="text-G900 text-center text-h6 md:text-h5 font-medium">
-          Sign in to CanWork
-        </div>
-        <div class="text-G700 text-center text-b2">
-          Sign in with your preferred credentials to continue
-        </div>
-      </div>
-      <div class="grid gap-4">
-        <ng-container *ngIf="visible_login_modal">
-          <firebase-ui
-            (signInSuccessWithAuthResult)="onFirebaseLogin($event)"
-          ></firebase-ui>
-        </ng-container>
-      </div>
-    </div>
-    <div class="max-md:hidden select-none">
-      <img src="/assets/massimo/images/login.png" alt="" class="w-full" />
-    </div>
-  </div>
-</p-dialog>
+  <!-- Modals end -->
+  <!-- template end -->
+</main>

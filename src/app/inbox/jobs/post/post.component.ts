@@ -32,7 +32,7 @@ import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
 import { NgxSpinnerService } from 'ngx-spinner'
-import { AngularEditorConfig } from '@kolkov/angular-editor'
+import { customAngularEditorConfig } from 'app/core-functions/angularEditorConfig'
 import { MessageService } from 'primeng/api'
 
 interface DropdownItem {
@@ -85,9 +85,6 @@ export class PostComponent implements OnInit, OnDestroy {
   uploadFailed = false
   deleteFailed = false
 
-  sharelinks: DropdownItem[] | undefined
-  selectedsharelinks: DropdownItem | undefined
-
   date: Date // This property is bound to ngModel
 
   /// css variables for file upload
@@ -95,55 +92,7 @@ export class PostComponent implements OnInit, OnDestroy {
 
   minDate: Date
   sentDRP: number
-  editorConfig: AngularEditorConfig = {
-    editable: true,
-    spellcheck: true,
-    height: '200px',
-    minHeight: '0',
-    maxHeight: 'auto',
-    width: 'auto',
-    minWidth: '0',
-    translate: 'yes',
-    enableToolbar: true,
-    showToolbar: true,
-    placeholder:
-      'Give a detailed brief of the job with adequate requirements and expectations',
-    defaultParagraphSeparator: '',
-    defaultFontName: 'General Sans',
-    defaultFontSize: '3',
-    fonts: [{ class: 'font-sans', name: 'General Sans' }],
-    customClasses: [],
-    uploadUrl: 'v1/image',
-    uploadWithCredentials: false,
-    sanitize: true,
-    toolbarPosition: 'top',
-    toolbarHiddenButtons: [
-      [
-        'undo',
-        'redo',
-        'subscript',
-        'superscript',
-        'strikeThrough',
-        'indent',
-        'outdent',
-        'heading',
-        'fontName',
-      ],
-      [
-        'fontSize',
-        'textColor',
-        'backgroundColor',
-        'customClasses',
-        'link',
-        'unlink',
-        'insertImage',
-        'insertVideo',
-        'insertHorizontalRule',
-        'removeFormat',
-        'toggleEditorMode',
-      ],
-    ],
-  }
+  editorConfig = customAngularEditorConfig()
 
   // usdToAtomicCan: number // this is not used
 
@@ -317,16 +266,6 @@ export class PostComponent implements OnInit, OnDestroy {
       },
     ]
     this.selectedCategory = this.categories[0]
-
-    this.sharelinks = [
-      { name: 'Invite Freelancer', img: 'fi_user-plus.svg', code: '1' },
-      { name: 'Copy Link', img: 'u_link.svg', code: '2' },
-      { name: 'Twitter', img: 'x.svg', code: '3' },
-      { name: 'Facebook', img: 'logos_facebook.svg', code: '4' },
-      { name: 'Linkedin', img: 'devicon_linkedin.svg', code: '5' },
-    ]
-
-    this.selectedsharelinks = this.sharelinks[0]
 
     this.visibilities = [
       { name: 'Invite Only', code: 'invite', img: 'fi_user-plus.svg' },

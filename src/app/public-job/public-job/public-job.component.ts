@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Directive } from '@angular/core'
+import { Component, OnInit, OnDestroy } from '@angular/core'
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -6,56 +6,45 @@ import {
 } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 
-import * as moment from 'moment'
-
-import { Bid, Job, JobState } from '@class/job'
 import { User } from '@class/user'
+import { Bid, Job, JobState } from '@class/job'
+import { Upload } from '@class/upload'
+// service
 import { AuthService } from '@service/auth.service'
 import { PublicJobService } from '@service/public-job.service'
 import { UserService } from '@service/user.service'
-//import { AngularFireStorage } from '@angular/fire/storage'
-import { AngularFireStorage } from '@angular/fire/compat/storage'
-import { AngularEditorConfig } from '@kolkov/angular-editor'
+import { UploadService } from '@service/upload.service'
+import { NgxSpinnerService } from 'ngx-spinner'
+import { MessageService } from 'primeng/api'
+
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 import { environment } from '@env/environment'
-import { NgxSpinnerService } from 'ngx-spinner'
-import { Upload } from '@class/upload'
-import { UploadService } from '@service/upload.service'
-
-import { providerTypeArray } from 'app/shared/constants/providerTypes'
+import { AngularFireStorage } from '@angular/fire/compat/storage'
 
 import { AngularFireAuth } from '@angular/fire/compat/auth'
 import { FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular'
-import { MessageService } from 'primeng/api'
 
-declare var $: any
-
-interface sharelinkstype {
-  name: string
-  img: string
-  code: string
-}
+import { customAngularEditorConfig } from 'app/core-functions/angularEditorConfig'
 
 @Component({
   selector: 'app-public-job',
   templateUrl: './public-job.component.html',
 })
 export class PublicJobComponent implements OnInit, OnDestroy {
+
   bidForm: UntypedFormGroup = null
   bids: any[]
-  recentBids: any
   authSub: Subscription
-  routeSub: Subscription
   bidsSub: Subscription
   jobSub: Subscription
-  jobExists: boolean
+
   canBid: boolean
-  sent = false
+  isSent: boolean = false
   canSee = false
   hideDescription = false
   isPublic = false
-  myJob = false
+  isMyJob = false
   loading = true
   shareableLink: string
   link: string
@@ -65,18 +54,15 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   jobPoster: any = null
   jobFromNow: string = ''
 
-  IsShownTab: boolean = false
+  isShownTab: boolean = false
 
-  sharelinks: sharelinkstype[] | undefined
-  selectedsharelinks: sharelinkstype | undefined
   activejobTypes: any[]
-  selectedjob: any
+  selectedJob: any
 
   price_bid: number = 0
   hoveredFiles: boolean = false
-  IsProvider: boolean = false
+  isProvider: boolean = false
 
-  providerTypeArray = providerTypeArray
   // new feature files upload
 
   beforeUploadFiles: any[] = []
@@ -91,67 +77,22 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   duplicateFileNames: string[] = []
 
   // Your application
+  yourApplication: Bid
 
-  yourApplication: any
+  // validators for your application
+  bidMessageValidated: boolean = false
+  priceValidated: boolean = false
 
-  bid_message_valiated: boolean = true
-  price_validate: boolean = false
-
-  visible_delete_modal: boolean = false
-  visible_withdraw_modal: boolean = false
-  visible_login_modal: boolean = false
-  visible_withdraw_success_modal: boolean = false
+  // modal handlers
+  visibleDeleteModal: boolean = false
+  visibleWithdrawModal: boolean = false
+  visibleLoginModal: boolean = false
+  visibleWithdrawSuccessModal: boolean = false
 
   dublicateFilename: string[] = []
 
-  coverletterConfig: AngularEditorConfig = {
-    editable: true,
-    spellcheck: true,
-    height: '200px',
-    minHeight: '0',
-    maxHeight: 'auto',
-    width: 'auto',
-    minWidth: '0',
-    translate: 'yes',
-    enableToolbar: true,
-    showToolbar: true,
-    placeholder: 'How do you intend to deliver on this job',
-    defaultParagraphSeparator: '',
-    defaultFontName: 'General Sans',
-    defaultFontSize: '3',
-    fonts: [{ class: 'font-sans', name: 'General Sans' }],
-    customClasses: [],
-    uploadUrl: 'v1/image',
-    uploadWithCredentials: false,
-    sanitize: true,
-    toolbarPosition: 'top',
-    toolbarHiddenButtons: [
-      [
-        'undo',
-        'redo',
-        'subscript',
-        'superscript',
-        'strikeThrough',
-        'indent',
-        'outdent',
-        'heading',
-        'fontName',
-      ],
-      [
-        'fontSize',
-        'textColor',
-        'backgroundColor',
-        'customClasses',
-        'link',
-        'unlink',
-        'insertImage',
-        'insertVideo',
-        'insertHorizontalRule',
-        'removeFormat',
-        'toggleEditorMode',
-      ],
-    ],
-  }
+  // Angular Editor Config
+  coverLetterConfig = customAngularEditorConfig()
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -194,26 +135,20 @@ export class PublicJobComponent implements OnInit, OnDestroy {
       { label: 'Job Details', code: 'jobsdetail' },
       { label: 'Proposals', code: 'proposals' },
     ]
-    this.selectedjob = this.activejobTypes[0]
-
-    this.sharelinks = [
-      { name: 'Invite Freelancer', img: 'fi_user-plus.svg', code: '1' },
-      { name: 'Copy Link', img: 'u_link.svg', code: '2' },
-      { name: 'Twitter', img: 'x.svg', code: '3' },
-      { name: 'Facebook', img: 'logos_facebook.svg', code: '4' },
-      { name: 'Linkedin', img: 'devicon_linkedin.svg', code: '5' },
-    ]
-
-    this.selectedsharelinks = this.sharelinks[0]
-
+    this.selectedJob = this.activejobTypes[0]
     this.shareableLink = environment.shareBaseUrl
+    
+    this.authSub = this.authService.currentUser$.subscribe((user: User) => {
+      if (user) {
+        this.currentUser = user
+      }
+    })
     this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
       if (params['jobId']) {
         this.jobSub = this.publicJobsService
           .getPublicJob(params['jobId'])
           .subscribe((publicJob) => {
             if (publicJob === undefined) {
-              this.jobExists = false
               this.canSee = false
               this.loading = false
             } else {
@@ -225,21 +160,15 @@ export class PublicJobComponent implements OnInit, OnDestroy {
                 .getPublicJobBids(params['jobId'])
                 .subscribe((result) => {
                   this.bids = result || []
-
-                  if (this.bids.length > 3) {
-                    this.recentBids = this.bids.slice(0, 3)
-                  } else {
-                    this.recentBids = this.bids
-                  }
                 })
             }
           })
       } else if (params['slug']) {
+        console.log('params slug:', params['slug'])
         this.jobSub = this.publicJobsService
           .getPublicJobBySlug(params['slug'])
           .subscribe((publicJob) => {
             if (publicJob === null) {
-              this.jobExists = false
               this.canSee = false
               this.loading = false
             } else {
@@ -250,32 +179,23 @@ export class PublicJobComponent implements OnInit, OnDestroy {
                 .getPublicJobBids(publicJob.id)
                 .subscribe((result) => {
                   this.bids = result || []
+                  console.log('this.bids: ', this.bids)
                   if (this.currentUser) {
                     this.bids.map((bid) => {
                       if (bid.providerId === this.currentUser.address) {
+                        console.log('this.yourApplication: ', bid)
                         this.yourApplication = bid
                       }
                     })
-                  }
-
-                  if (this.bids.length > 3) {
-                    this.recentBids = this.bids.slice(0, 3)
-                  } else {
-                    this.recentBids = this.bids
                   }
                 })
             }
           })
       }
     })
-    this.authSub = this.authService.currentUser$.subscribe((user: User) => {
-      if (user) {
-        this.currentUser = user
-      }
-    })
     // check visibility if it is a direct job or not. If the job is direct job, which means invite only, then can't show the tabs
-    this.IsShownTab =
-      this.currentUser && this.IsProvider && this.job.visibility !== 'invite'
+    this.isShownTab =
+      this.currentUser && this.isProvider && this.job.visibility !== 'invite'
     this.spinner.hide()
   }
 
@@ -362,7 +282,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   }
 
   changeJob(item: any) {
-    this.selectedjob = item
+    this.selectedJob = item
   }
   ngOnDestroy() {
     if (this.bidsSub) {
@@ -372,45 +292,14 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     this.authSub.unsubscribe()
   }
 
-  async setClient(clientId) {
-    /*
-    new one, retrieve user only once (if not already retrieved)
-    and use the new fastest Algolia getUserById service version
-    */
-
-    if (!this.jobPoster) {
-      this.jobPoster = await this.userService.getUser(clientId)
-
-      if (this.jobPoster) {
-        let avatar = this.jobPoster.avatar // current, retrocomp
-        //console.log(result[i])
-        if (
-          this.jobPoster.compressedAvatarUrl &&
-          this.jobPoster.compressedAvatarUrl != 'new'
-        ) {
-          // keep same object structure
-          // use compress thumbed if exist and not a massive update (new)
-          avatar = {
-            uri: this.jobPoster.compressedAvatarUrl,
-          }
-        }
-        this.jobPoster.avatarUri = avatar.uri
-      }
-    }
-    // old
-    // this.jobPoster = await this.userService.getUser(clientId)
-  }
-
   async initJob(job: Job) {
-    this.jobExists = true
-    this.jobFromNow = moment(job.createAt).fromNow()
     if (this.currentUser) {
-      this.myJob = job.clientId === this.currentUser.address
+      this.isMyJob = job.clientId === this.currentUser.address
       this.isPublic = job.visibility === 'public'
-      await this.setClient(this.job.clientId)
+      // await this.setClient(this.job.clientId)
 
       if (this.currentUser.type === 'Provider') {
-        this.IsProvider = true
+        this.isProvider = true
         const check: boolean = await this.publicJobsService.canBid(
           this.currentUser.address,
           this.job
@@ -421,16 +310,16 @@ export class PublicJobComponent implements OnInit, OnDestroy {
       //   this.canBid &&
       //   this.currentUser.bscAddress &&
       //   this.currentUser.type === 'Provider' &&
-      //   !this.myJob &&
+      //   !this.isMyJob &&
       //   this.isOpen &&
       //   this.activatedRoute.snapshot.queryParams['nextAction'] === 'bid'
       // )
       //   $('#bidModal').modal('show')
     } else {
-      this.IsProvider = false
-      this.myJob = false
+      this.isProvider = false
+      this.isMyJob = false
     }
-    if (job.draft && !this.myJob) {
+    if (job.draft && !this.isMyJob) {
       // only allow the job creator to see jobs in draft state
       this.canSee = false
     } else {
@@ -438,16 +327,11 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     }
     this.setAttachmentUrl()
   }
-
-  getCategoryName(providerType: string) {
-    const category = this.providerTypeArray.find((c) => c.id === providerType)
-    return category.title
-  }
   async cancelJob(event: Event) {
     event.stopPropagation()
-    this.visible_delete_modal = !this.visible_delete_modal
+    this.visibleDeleteModal = !this.visibleDeleteModal
 
-    if (this.myJob) {
+    if (this.isMyJob) {
       const updated = await this.publicJobsService.cancelJob(this.job.id)
       if (updated) {
         this.job.state = JobState.closed
@@ -455,49 +339,16 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     }
   }
 
-  getDaySuffix(day: number): string {
-    if (day > 3 && day < 21) return 'th' // All days between 4 and 20 end with 'th'
-    switch (day % 10) {
-      case 1:
-        return 'st'
-      case 2:
-        return 'nd'
-      case 3:
-        return 'rd'
-      default:
-        return 'th'
-    }
-  }
-
-  formatDate(dateStr: string): string {
-    const date = new Date(dateStr)
-    const day = date.getDate()
-    const month = date.toLocaleString('default', { month: 'long' })
-    const year = date.getFullYear()
-
-    const daySuffix = this.getDaySuffix(day)
-
-    return `${day}${daySuffix} ${month} ${year}`
-  }
-
-  get isOpen() {
-    return this.job.state === JobState.acceptingOffers
-  }
-
-  get isClosed() {
-    return this.job.state === JobState.closed
-  }
-
   async submitBid() {
     if (
       this.bidForm.value.message.length < 5 &&
       this.bidForm.value.message.length > 2500
     ) {
-      this.bid_message_valiated = true
+      this.bidMessageValidated = true
       return
     }
     if (this.bidForm.value.price <= 0) {
-      this.price_validate = true
+      this.priceValidated = true
       return
     }
 
@@ -520,7 +371,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
         Date.now(),
         this.uploadedFiles ? this.uploadedFiles : []
       )
-      this.sent = await this.publicJobsService.handlePublicBid(
+      this.isSent = await this.publicJobsService.handlePublicBid(
         bidToSubmit,
         this.job
       )
@@ -729,44 +580,44 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     const div = document.createElement('div')
     div.innerHTML = html
     if (div.textContent.length > 5 && div.textContent.length < 2500) {
-      this.bid_message_valiated = false
+      this.bidMessageValidated = false
     } else {
-      this.bid_message_valiated = true
+      this.bidMessageValidated = true
     }
     return div.textContent.length
   }
 
-  updateDialog(event: Event) {
+  updateDialogDeleteJob(event: Event) {
     event.stopPropagation()
-    this.visible_delete_modal = !this.visible_delete_modal
+    this.visibleDeleteModal = !this.visibleDeleteModal
   }
 
-  async WithdrawJob(event: Event) {
+  async withdrawProposal(event: Event) {
     event.stopPropagation()
-    this.visible_withdraw_modal = !this.visible_withdraw_modal
-    if (!this.visible_withdraw_modal) {
+    this.visibleWithdrawModal = !this.visibleWithdrawModal
+    if (!this.visibleWithdrawModal) {
       const chosen = await this.publicJobsService.declineBid(
         this.job,
         this.yourApplication
       )
       if (chosen) {
-        this.visible_withdraw_success_modal = true
+        this.visibleWithdrawSuccessModal = true
       } else {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: `Something went wrong with withdrawing job application.`,
+          detail: `Something went wrong with withdrawing your application.`,
         })
       }
     }
   }
 
-  updatedDialogWithdrawJob(event: Event) {
+  updateDialogWithdrawProposal(event: Event) {
     event.stopPropagation()
-    this.visible_withdraw_modal = !this.visible_withdraw_modal
+    this.visibleWithdrawModal = !this.visibleWithdrawModal
   }
-  // Login Part
 
+  // Login Part
   onFirebaseLogin(signInSuccessData: FirebaseUISignInSuccessWithAuthResult) {
     this.loading = true
     this.spinner.hide()
@@ -817,8 +668,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
       this.authService.setUser(user)
 
       if (this.route.snapshot.queryParams['nextAction'])
-        this.updateVisibleloginModal()
-      else this.updateVisibleloginModal()
+        this.updateVisibleLoginModal()
+      else this.updateVisibleLoginModal()
     } else {
       this.initialiseUserAndRedirect(userDetails)
     }
@@ -837,7 +688,17 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     )
   }
 
-  updateVisibleloginModal() {
-    this.visible_login_modal = !this.visible_login_modal
+  updateVisibleLoginModal() {
+    this.visibleLoginModal = !this.visibleLoginModal
+  }
+
+  // job-status-panel
+  statusLeftClick(event: Event) {
+    event.stopPropagation()
+    if (this.currentUser) {
+      this.visibleDeleteModal = !this.visibleDeleteModal
+    } else {
+      this.visibleLoginModal = !this.visibleLoginModal
+    }
   }
 }

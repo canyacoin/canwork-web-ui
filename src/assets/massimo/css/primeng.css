@@ -257,7 +257,7 @@
     box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.10), 0px 2px 2px -1px rgba(0, 0, 0, 0.10), 0px 4px 10px -2px rgba(0, 0, 0, 0.05) !important;
 }
 
-.detail-job .p-dropdown, .header-avatar .p-dropdown {
+.header-avatar .p-dropdown {
     width: 33px !important;
     color: #0F172A !important;
     padding: 0 !important;
@@ -275,7 +275,7 @@
     background: #ffffff00 !important;
     box-shadow: none !important;
 }
-.detail-job .p-dropdown .p-dropdown-trigger, .header-avatar .p-dropdown .p-dropdown-trigger {
+.header-avatar .p-dropdown .p-dropdown-trigger {
     display: none !important;
 }
 .header-avatar .p-dropdown:hover {
@@ -285,11 +285,6 @@
     left: -120px !important;
 }
 
-
-
-.detail-job .p-dropdown-items-wrapper {
-    margin-top: 10px;
-}
 .p-dropdown .p-dropdown-label {
     color: #0F172A !important;
 }
@@ -459,10 +454,6 @@
     background-color: transparent !important;
   }
 
-  .p-dialog {
-    border-radius: 24px !important;
-  }
-
   .p-dialog-title {
     font-family: "General Sans", sans-serif !important;
     font-size: 24px;
@@ -470,13 +461,27 @@
   }
 
   .p-dialog-header button {
-    background: rgba(0, 0, 0, 0.80) !important;
+    background: rgba(0, 0, 0, 0.40) !important;
     backdrop-filter: blur(4px) !important;
   }
 
   .p-dialog-header button svg {
     filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(312deg) brightness(105%) contrast(101%) !important;
   }
+
+@media (min-width: 1024px) {
+    .p-dialog-header {
+        padding: 32px !important;
+    }
+    .p-dialog-header button {
+        width: 40px !important;
+        height: 40px !important;
+    }
+    .p-dialog-header button svg {
+        width: 24px !important;
+        height: 24px !important;
+    }
+}
 
   .text-logout span {
     color: #D1242F !important;
@@ -522,3 +527,23 @@
     background: rgba(0, 0, 0, 0.80) !important;
     backdrop-filter: blur(4px) !important;
   }
+
+  /* share button */
+
+  .share-button-style .p-dropdown {
+    width: 33px !important;
+    color: #0f172a !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: #ffffff00;
+    box-shadow: none !important;
+  }
+  
+  .share-button-style .p-dropdown .p-dropdown-trigger {
+    display: none !important;
+  }
+  
+  .share-button-style .p-dropdown-items-wrapper {
+    margin-top: 10px;
+  }
+  

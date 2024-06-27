@@ -70,7 +70,10 @@
           </div>
 
           <ng-template #showAddress>
-            <div [routerLink]="['/wallet-bnb/assets']">
+            <div
+              [routerLink]="['/wallet-bnb/assets']"
+              class="select-none cursor-pointer"
+            >
               {{ bAddress.slice(0, 6) }}...{{ bAddress.slice(-3) }}
             </div>
           </ng-template>

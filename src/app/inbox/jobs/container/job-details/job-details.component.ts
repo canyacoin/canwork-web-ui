@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, Directive } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Job, JobState } from '@class/job'
+import { Bid, Job, JobState } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
 import { Review } from '@class/review'
 import { User, UserType } from '@class/user'
@@ -9,9 +9,11 @@ import { JobService } from '@service/job.service'
 import { MobileService } from '@service/mobile.service'
 import { ReviewService } from '@service/review.service'
 import { Transaction, TransactionService } from '@service/transaction.service'
+import { PublicJobService } from '@service/public-job.service'
 import { BscService, BepChain } from '@service/bsc.service'
 import { ToastrService } from 'ngx-toastr'
 import { AngularFireStorage } from '@angular/fire/compat/storage'
+import { NgxSpinnerService } from 'ngx-spinner'
 
 //import { SimpleModalService } from 'ngx-simple-modal' // old version
 import { NgxModalService } from 'ngx-modalview'
@@ -28,7 +30,6 @@ import {
 @Component({
   selector: 'app-job-details',
   templateUrl: './job-details.component.html',
-  styleUrls: ['./job-details.component.scss'],
 })
 export class JobDetailsComponent implements OnInit, OnDestroy {
   jobState = JobState
@@ -38,10 +39,12 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   // This allows providers to work as both client and provider
   currentUserType: UserType
   job: Job
+  selectedBid: Bid
   transactions: Transaction[] = []
   reviews: Review[] = new Array<Review>()
   isOnMobile = false
   isPartOfJob = false
+  bidsSub: Subscription
   jobSub: Subscription
   transactionsSub: Subscription
   reviewsSub: Subscription
@@ -60,10 +63,13 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     private ngxModalService: NgxModalService,
     private storage: AngularFireStorage,
     private mobile: MobileService,
-    private router: Router
+    private router: Router,
+    private spinner: NgxSpinnerService,
+    private publicJobsService: PublicJobService
   ) {}
 
   ngOnInit() {
+    this.spinner.show()
     this.authService.currentUser$.pipe(take(1)).subscribe((user: User) => {
       this.currentUser = user
       this.initialiseJob()
@@ -72,6 +78,9 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.bidsSub) {
+      this.bidsSub.unsubscribe()
+    }
     if (this.jobSub) {
       this.jobSub.unsubscribe()
     }
@@ -82,13 +91,28 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
   initialiseJob() {
     const jobId = this.activatedRoute.snapshot.params['id'] || null
+    console.log('jobId', jobId)
     if (jobId) {
       this.jobSub = this.jobService.getJob(jobId).subscribe((job: Job) => {
+        if (job === null) {
+          console.log('We can not find the job.')
+          this.router.navigateByUrl('/not-found')
+        }
         this.isPartOfJob =
           this.currentUser.address === job.clientId ||
           this.currentUser.address === job.providerId
+        console.log('this.isPartOfJob', this.isPartOfJob)
         if (this.isPartOfJob) {
           this.job = new Job(job)
+          this.bidsSub = this.publicJobsService
+            .getPublicJobBids(this.job.id)
+            .subscribe((result) => {
+              let bids = result || []
+              this.selectedBid = bids.find(
+                (bid: Bid) => bid.providerId === job.providerId
+              )
+            })
+
           this.transactionTypeService(jobId)
           this.currentUserType =
             this.currentUser.address === job.clientId
@@ -101,7 +125,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
             this.isInitialised = true
           }
         } else {
-          console.log('Thou never belong hither , aroint thee!')
+          console.log('We can not find the job.')
           this.router.navigateByUrl('/not-found')
         }
       })
@@ -112,6 +136,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
           this.reviews = reviews
         })
     }
+    this.spinner.hide()
   }
 
   private transactionTypeService(jobId): any {
@@ -119,6 +144,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       .getTransactionsByJob(jobId)
       .subscribe((transactions: Transaction[]) => {
         this.transactions = transactions
+        // console.log('===================================================')
+        // console.log('this.transactions = ', transactions)
       })
   }
   actionIsDisabled(action: ActionType): boolean {
@@ -145,6 +172,10 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     return this.job.state === JobState.complete
   }
 
+  get isAwaitingEscrow(): boolean {
+    return this.job.state === JobState.termsAcceptedAwaitingEscrow
+  }
+
   get userCanReview(): boolean {
     return (
       this.reviews &&
@@ -169,25 +200,25 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   }
 
   /** Helper method to get the colour associated with each action button */
-  getColour(type: ActionType): string {
-    switch (type) {
-      case ActionType.cancelJob:
-      case ActionType.dispute:
-      case ActionType.declineTerms:
-      case ActionType.cancelJobEarly:
-        return 'danger'
-      case ActionType.counterOffer:
-      case ActionType.addMessage:
-        return 'info'
-      case ActionType.acceptTerms:
-      case ActionType.enterEscrow:
-      case ActionType.finishedJob:
-      case ActionType.acceptFinish:
-        return 'success'
-      default:
-        return 'info'
-    }
-  }
+  // getColour(type: ActionType): string {
+  //   switch (type) {
+  //     case ActionType.cancelJob:
+  //     case ActionType.dispute:
+  //     case ActionType.declineTerms:
+  //     case ActionType.cancelJobEarly:
+  //       return 'danger'
+  //     case ActionType.counterOffer:
+  //     case ActionType.addMessage:
+  //       return 'info'
+  //     case ActionType.acceptTerms:
+  //     case ActionType.enterEscrow:
+  //     case ActionType.finishedJob:
+  //     case ActionType.acceptFinish:
+  //       return 'success'
+  //     default:
+  //       return 'info'
+  //   }
+  // }
 
   get currentUserIsClient() {
     return this.currentUserType === UserType.client
@@ -344,14 +375,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  getActionExecutor(action: IJobAction) {
-    return action.executedBy === this.currentUserType
-      ? 'You'
-      : this.job['otherParty']
-      ? this.job['otherParty'].name
-      : ''
-  }
-
   getTxLink(txHash: string) {
     return `${environment.bsc.blockExplorerUrls[0]}/tx/${txHash}`
   }
@@ -386,5 +409,21 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       return null
     }
     return connectedChain
+  }
+
+  statusLeftClick(e: Event) {
+    e.preventDefault()
+    if(this.isAwaitingEscrow) {
+      this.executeAction("Cancel job" as ActionType) // Cancel job`
+    }
+    console.log('this.availableActions:', this.availableActions)
+  }
+
+  statusRightClick(e: Event) {
+    e.preventDefault()
+    if(this.isAwaitingEscrow) {
+      this.executeAction("Pay Escrow" as ActionType) // Pay Escrow
+    }
+    console.log('this.availableActions:', this.availableActions)
   }
 }

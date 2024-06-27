@@ -1,37 +1,28 @@
-<ng-container *ngIf="size == 40">
-  <div [ngClass]="['app-avatar', customClass || '']">
+<div [ngClass]="customClass">
+  <p-avatar
+    *ngIf="avatarUrl | async as aUrl; else initial"
+    [image]="aUrl"
+    [styleClass]="
+      size === 48
+        ? '!w-[40px] !h-[40px]'
+        : size === 40
+        ? '!w-[40px] !h-[40px]'
+        : '!w-[28px] !h-[28px]'
+    "
+    shape="circle"
+  ></p-avatar>
+  <ng-template #initial>
     <p-avatar
-      *ngIf="avatarUrl | async as aUrl; else initial"
-      [image]="aUrl"
-      styleClass=""
-      [style]="{ width: '40px', height: '40px' }"
+      label="{{ getInitials() }}"
+      [styleClass]="
+        size === 48
+          ? '!w-[40px] !h-[40px]'
+          : size === 40
+          ? '!w-[40px] !h-[40px]'
+          : '!w-[28px] !h-[28px]'
+      "
+      [style]="{ 'background-color': '#3AC2FF', color: '#ffffff' }"
       shape="circle"
     ></p-avatar>
-    <ng-template #initial>
-      <p-avatar
-        label="{{ getInitials() }}"
-        styleClass=""
-        [style]="{ 'background-color': '#9c27b0', color: '#ffffff' }"
-      ></p-avatar>
-    </ng-template>
-  </div>
-</ng-container>
-
-<ng-container *ngIf="size == 48">
-  <div [ngClass]="['app-avatar', customClass || '']">
-    <p-avatar
-      *ngIf="avatarUrl | async as aUrl; else initial"
-      [image]="aUrl"
-      styleClass=""
-      [style]="{ width: '48px', height: '48px' }"
-      shape="circle"
-    ></p-avatar>
-    <ng-template #initial>
-      <p-avatar
-        label="{{ getInitials() }}"
-        styleClass=""
-        [style]="{ 'background-color': '#9c27b0', color: '#ffffff' }"
-      ></p-avatar>
-    </ng-template>
-  </div>
-</ng-container>
+  </ng-template>
+</div>

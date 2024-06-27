@@ -1,0 +1,53 @@
+<ng-container *ngIf="job">
+  <div class="w-full flex flex-col gap-[24px]">
+    <div class="flex flex-col gap-[8px]">
+      <div *ngIf="!isJobDetailsShow" class="text-b1 text-G900 font-medium">
+        Job Details
+      </div>
+      <div class="text-h4 text-G900 font-medium">
+        {{ job.information.title }}
+      </div>
+      <div class="text-b3 md:text-b2 text-G500">Posted {{ jobFromNow }}</div>
+    </div>
+    <div
+      class="text-b1 text-G900"
+      [innerHTML]="job.information.description | linkify"
+    ></div>
+
+    <div
+      *ngIf="
+        job.information.attachments && job.information.attachments?.length > 0
+      "
+    >
+      <hr class="w-full h-[1px] bg-G300 border-none" />
+
+      <div class="pt-[16px] flex flex-col gap-[16px]">
+        <div class="text-G900 text-b1 font-medium">Attachment</div>
+
+        <div class="flex flex-col gap-[12px]">
+          <attachment-button
+            *ngFor="let item of job.information.attachments"
+            [url]="item.url"
+            [name]="item.name"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="job.information.skills && job.information.skills?.length > 0">
+      <hr class="w-full h-[1px] bg-G300 border-none" />
+
+      <div class="pt-[16px] flex flex-col gap-[16px]">
+        <div class="text-G900 text-b1 font-medium">Skill Tags</div>
+        <div class="w-full flex flex-wrap gap-[8px]">
+          <app-skill-tag
+            *ngFor="let skill of job.information.skills"
+            [routerLink]="['/search/']"
+            [queryParams]="{ query: skill }"
+            [skill]="skill"
+          ></app-skill-tag>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

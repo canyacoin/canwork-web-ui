@@ -1,8 +1,8 @@
 <div
-  class="border border-[#d4a72c66] bg-[#FFF8C5] flex items-center justify-between py-[10px] px-[16px] rounded-xl animated fadeIn"
-  *ngIf="type == 1 && show"
+  *ngIf="show"
+  class="border border-[#d4a72c66] bg-[#FFF8C5] flex justify-between gap-[16px] py-[10px] px-[16px] rounded-xl animated fadeIn"
 >
-  <div class="flex items-center gap-2">
+  <div *ngIf="type === 1" class="flex items-center gap-2">
     <img
       src="/assets/massimo/svg/alert.svg"
       alt="alert"
@@ -10,10 +10,48 @@
     />
     {{ message }}
   </div>
+  <div
+    *ngIf="type === 2"
+    class="w-full flex flex-col xl:flex-row xl:items-center xl:justify-between gap-[8px] xl:gap-[16px]"
+  >
+    <div class="flex gap-2">
+      <img
+        src="/assets/massimo/svg/alert.svg"
+        alt="alert"
+        class="w-[16px] h-[16px] mt-[2px]"
+      />
+      <div class="text-b2 text-G900 xl:inline-flex">
+        Send&nbsp;
+        <span class="font-medium"> ${{ budget | number : '1.0-0' }} USD </span>
+        &nbsp;to escrow to begin this project. CanWork accepts major BEP20
+        tokens on BNB Chain.&nbsp;
+        <span
+          class="underline cursor-pointer select-none whitespace-nowrap hidden xl:block"
+        >
+          See approved tokens here
+        </span>
+      </div>
+    </div>
+    <div
+      class="flex flex-col xxs:flex-row xxs:items-center gap-[8px] xxs:gap-[16px] max-xl:pl-[24px]"
+    >
+      <div
+        class="text-b2 underline cursor-pointer select-none whitespace-nowrap block xl:hidden"
+      >
+        See approved tokens here
+      </div>
+      <div
+        class="text-b2 text-G900 underline cursor-pointer select-none whitespace-nowrap"
+        (click)="handleClick($event)"
+      >
+        Pay Escrow
+      </div>
+    </div>
+  </div>
   <img
     src="/assets/massimo/svg/cancel_button.svg"
-    alt="alert"
-    class="w-[16px] h-[16px] cursor-pointer"
+    alt="cancel"
+    class="select-none w-[16px] h-[16px] cursor-pointer mt-[3px]"
     (click)="changeViewOption()"
   />
 </div>

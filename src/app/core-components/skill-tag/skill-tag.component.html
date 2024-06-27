@@ -1,11 +1,10 @@
-<div *ngIf="!cancel" class="skill-tag pointer">
-  {{ skill }}
-</div>
-
 <div
-  *ngIf="cancel"
-  class="cancel-skill-tag pointer !flex justify-center items-center"
+  class="flex items-center gap-[5px] bg-[#3ac2ff19] hover:bg-[#33ccff] transition-all duration-300 cursor-pointer rounded-full px-[16px] py-[6px]"
 >
-  <p>{{ skill }}</p>
-  <img src="/assets/massimo/svg/fi_x.svg" alt="fi_x" />
+  <div class="font-sans text-b2 capitalize text-C800">
+    {{ skill }}
+  </div>
+  <div *ngIf="cancel">
+    <img src="/assets/massimo/svg/fi_x.svg" alt="fi_x" />
+  </div>
 </div>

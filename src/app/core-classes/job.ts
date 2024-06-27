@@ -22,12 +22,21 @@ export class Job {
   createAt: number
   updateAt: number
   invites: string[] = []
+  otherParty: {
+    avatar: {
+      uri: string
+    }
+    id: string
+    name: string
+    verified: boolean
+  }
+
   constructor(init?: Partial<Job>) {
     Object.assign(this, init)
   }
 
   get parsedActionLog() {
-    return this.actionLog.map(actionObj => {
+    return this.actionLog.map((actionObj) => {
       const action = new IJobAction(actionObj.type, actionObj.executedBy)
       return action.init(actionObj)
     })
@@ -86,9 +95,19 @@ export class JobDescription {
   }
 }
 
+interface providerInfoType {
+  avatar: {
+    uri: string
+  }
+  skillTags: string[]
+  name: string
+  timezone: string
+  title: string
+}
+
 export class Bid {
   providerId: string
-  providerInfo: Object
+  providerInfo: providerInfoType
   budget: number
   message: string
   timestamp: number
@@ -97,11 +116,11 @@ export class Bid {
 
   constructor(
     providerId: string,
-    providerInfo: Object,
+    providerInfo: providerInfoType,
     budget: number,
     message: string,
     timestamp: number,
-    attachments: Array<Upload> 
+    attachments: Array<Upload>
   ) {
     this.providerId = providerId
     this.providerInfo = providerInfo

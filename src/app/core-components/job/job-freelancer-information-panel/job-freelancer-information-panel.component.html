@@ -1,0 +1,84 @@
+<div *ngIf="selectedBid" class="flex flex-col font-sans gap-[16px]">
+  <div class="text-h6 text-G900 font-medium">Freelancer Information</div>
+  <div
+    class="flex max-md:flex-col md:justify-between gap-[8px] md:items-center w-full"
+  >
+    <div class="flex gap-[16px]">
+      <div
+        class="cursor-pointer"
+        [routerLink]="['/profile/alt/', selectedBid.providerId]"
+      >
+        <app-avatar [size]="48" [user]="selectedBid.providerInfo"></app-avatar>
+      </div>
+      <div class="flex flex-col gap-[4px]">
+        <div
+          class="cursor-pointer line-clamp-1 text-b1 font-medium text-G900"
+          [routerLink]="['/profile/alt/', selectedBid.providerId]"
+        >
+          {{ selectedBid.providerInfo.name }}
+          <verified-mark [user]="selectedBid.providerInfo"></verified-mark>
+        </div>
+        <div class="line-clamp-1 text-b2 text-G500">
+          {{ selectedBid.providerInfo.title }}
+        </div>
+        <app-star-rating stars="5" />
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-[4px]">
+      <div>Bid</div>
+      <div class="text-b1 font-medium text-G900">${{ selectedBid.budget }}</div>
+    </div>
+
+    <div
+      class="flex flex-wrap gap-y-[8px] gap-x-[16px] items-center"
+      *ngIf="!selectedBid.rejected"
+    >
+      <div
+        class="flex gap-[8px] items-center cursor-pointer select-none text-b1 font-medium text-G900 duration-300 transition-all"
+        [routerLink]="['/inbox/chat']"
+        [queryParams]="{ address: selectedBid.providerId }"
+      >
+        <img
+          src="/assets/massimo/svg/commentMessage.svg"
+          alt="commentMessage"
+          class="w-[20px] h-[20px]"
+        />
+        Chat
+      </div>
+      <basic-button
+        [type]="1"
+        title="View Profile"
+        size="small"
+        extraClass="border border-G200"
+        [routerLink]="['/profile/alt/', selectedBid.providerId]"
+      />
+    </div>
+  </div>
+
+  <hr class="w-full h-[1px] bg-G300 border-none" />
+
+  <div class="flex flex-col gap-[16px]">
+    <div class="text-b1 font-medium text-G900">Cover Letter</div>
+    <p
+      class="text-b1 text-G900"
+      [innerHTML]="selectedBid.message | linkify"
+    ></p>
+  </div>
+
+  <hr
+    *ngIf="selectedBid.attachments.length"
+    class="w-full h-[1px] bg-G300 border-none"
+  />
+
+  <div *ngIf="selectedBid.attachments.length" class="flex flex-col gap-[16px]">
+    <div class="text-b1 font-medium text-G900">Attachment</div>
+    <div class="flex flex-col gap-[12px]">
+      <attachment-button
+        *ngFor="let item of selectedBid.attachments"
+        [url]="item.url"
+        [name]="item.name"
+      />
+    </div>
+  </div>
+</div>

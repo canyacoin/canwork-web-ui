@@ -1071,7 +1071,8 @@
       <basic-dialog
         [visible]="sentDRP === 2"
         title="Job listing successful"
-        content="Your job has been successfully listed on CanWork's job board.\nConsider inviting freelancers to your job listing and sharing on your social media."
+        content="Your job has been successfully listed on CanWork's job board.
+        Consider inviting freelancers to your job listing and sharing on your social media."
         type="success"
       />
       <basic-dialog
@@ -1166,33 +1167,7 @@
             <i class="text-vibrantGreen fas fa-circle mr-[12px]"></i
             >{{ jobForPreview?.state }}
           </span>
-          <p-dropdown
-            [options]="sharelinks"
-            [(ngModel)]="selectedsharelinks"
-            appendTo="body"
-          >
-            <ng-template pTemplate="selectedItem">
-              <div
-                *ngIf="selectedsharelinks"
-                class="border border-G300 shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer w-[32px] h-[32px] rounded-lg p-[6px]"
-              >
-                <img
-                  src="/assets/massimo/svg/fi_share-2.svg"
-                  alt=""
-                  class="w-full h-full"
-                />
-              </div>
-            </ng-template>
-            <ng-template let-item pTemplate="item">
-              <div class="flex items-center gap-[16px]">
-                <img
-                  src="{{ '/assets/massimo/svg/' + item.img }}"
-                  class="w-[20px]"
-                />
-                <span class="text-R900">{{ item.name }}</span>
-              </div>
-            </ng-template>
-          </p-dropdown>
+          <share-button />
         </div>
         <table
           class="table-auto text-b2 w-full md:text-b1 mt-[24px] border-separate border-spacing-x-[2px] border-spacing-y-[10px] md:w-[302px]"

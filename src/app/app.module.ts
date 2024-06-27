@@ -45,12 +45,10 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup'
 import { ToastModule } from 'primeng/toast'
 
 import { NgxModalView } from 'ngx-modalview'
-import { DropdownModule } from 'primeng/dropdown';
-import { TabMenuModule } from 'primeng/tabmenu';
-import { AngularEditorModule } from '@kolkov/angular-editor';
-import { DialogModule } from 'primeng/dialog';
-
-
+import { DropdownModule } from 'primeng/dropdown'
+import { TabMenuModule } from 'primeng/tabmenu'
+import { AngularEditorModule } from '@kolkov/angular-editor'
+import { DialogModule } from 'primeng/dialog'
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -77,7 +75,7 @@ import { DialogModule } from 'primeng/dialog';
     CoreUtilsModule,
     HttpClientModule,
     //FilterPipeModule,
-    NgArrayPipesModule,
+    // NgArrayPipesModule,
     NgxSliderModule,
     FormsModule,
     ReactiveFormsModule,
@@ -94,7 +92,9 @@ import { DialogModule } from 'primeng/dialog';
     DropdownModule,
     TabMenuModule,
     AngularEditorModule,
-    DialogModule
+    DialogModule,
+    // NgPipesModule
+    NgArrayPipesModule,
   ],
   exports: [
     /*FilterPipeModule*/
