@@ -14,7 +14,6 @@ import { Observable, from } from 'rxjs'
 export class AvatarComponent implements OnInit, OnChanges {
   @Input() user: any
   @Input() size: number = 40
-  @Input() customClass: string = ''
 
   avatarUrl: Observable<string>
 

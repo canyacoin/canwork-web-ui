@@ -1,5 +1,3 @@
-import { NgModule } from '@angular/core'
-
 import { animate, style, transition, trigger, state } from '@angular/animations'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { Router, NavigationEnd } from '@angular/router'
@@ -58,8 +56,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isHamburguer = true
   items: any[]
   selectedItem: any | undefined
-  onHamburguerClick() {
+
+  onHamburguerClick(event: Event): void {
+    event.preventDefault()
     this.isHamburguer = !this.isHamburguer
+    this.toggleBodyScroll()
+  }
+
+  toggleBodyScroll() {
+    if (this.isHamburguer) {
+      document.body.style.overflow = 'auto'
+    } else {
+      document.body.style.overflow = 'hidden'
+    }
   }
 
   currentUser: User
@@ -211,7 +220,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           }
         },
         (error) => {
-          // console.error('! unable to retrieve chat/channel data:', error)
+          console.error('! unable to retrieve chat/channel data:', error)
         }
       )
     }
