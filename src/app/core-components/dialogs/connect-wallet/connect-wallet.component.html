@@ -1,0 +1,40 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  id="headless_modal"
+  styleClass="!rounded-[24px] !bg-G50 p-[20px] md:px-[40px] md:py-[32px] max-w-[544px] w-full mx-[20px]"
+>
+  <div class="absolute top-[20px] right-[20px] md:top-[32px] md:right-[43px]">
+    <img
+      src="/assets/massimo/images/x_button.png"
+      alt="X"
+      class="w-[30px] h-[30px] md:w-[40px] md:h-[40px] cursor-pointer select-none"
+      (click)="closeModal()"
+    />
+  </div>
+  <div class="flex flex-col gap-[24px] !bg-G50">
+    <div class="flex flex-col gap-[4px]">
+      <div class="text-h6 text-G900 font-medium">Connect Wallet</div>
+      <div class="text-b2 text-G500 pr-[50px]">
+        Select your BNB chain compatible wallet from the list below
+      </div>
+    </div>
+    <!-- <div class="grid grid-cols-4 gap-[16px]">
+      <wallet-button [type]="1" />
+      <wallet-button [type]="2" />
+      <wallet-button [type]="3" />
+      <wallet-button [type]="4" />
+      <wallet-button [type]="5" />
+      <wallet-button [type]="6" />
+      <wallet-button [type]="7" />
+      <wallet-button [type]="8" />
+    </div> -->
+    <div class="flex justify-center items-center gap-[16px]">
+      <wallet-button [type]="1" />
+      <wallet-button [type]="2" />
+    </div>
+    <div class="text-b2 text-G900 font-medium">What's a wallet ?</div>
+  </div>
+</p-dialog>
