@@ -1,12 +1,146 @@
-<main>
+<main class="font-sans">
+  <section class="w-full flex justify-center bg-G50 pt-[15px]">
+    <div
+      class="max-w-[938px] w-full p-[24px] md:p-[40px] bg-white rounded-[12px] border border-G200 flex flex-col gap-[24px]"
+    >
+      <div class="flex gap-[8px] items-center">
+        <img
+          src="/assets/massimo/svg/wallet.svg"
+          alt="wallet"
+          class="w-[24px] h-[24px] select-none"
+        />
+        <div class="text-b1 text-G900 font-medium">Select payment token</div>
+      </div>
+      <div
+        class="flex gap-[8px] flex-col md:flex-row md:justify-between md:items-center"
+      >
+        <div class="flex flex-col gap-[4px]">
+          <div class="text-b2 text-G500">Total Balance</div>
+          <div class="text-h5 text-G900 font-medium">
+            $ {{ totalBudget | number : '1.2-2' }} USD
+          </div>
+          <div *ngIf="address" class="text-b1 text-G500">
+            {{ address.slice(0, 20) }}...{{ address.slice(-4) }}
+          </div>
+        </div>
+        <div class="flex gap-[8px]">
+          <copy-button
+            *ngIf="address"
+            ngxClipboard
+            [cbContent]="address"
+            (click)="copy($event)"
+          />
+          <refresh-button (click)="refresh($event)" />
+          <a
+            *ngIf="address"
+            target="_blank"
+            href="{{ explorer }}/address/{{ address }}"
+          >
+            <external-link-button />
+          </a>
+        </div>
+      </div>
+
+      <div
+        [ngSwitch]="address"
+        class="min-h-[380px] flex justify-center items-center"
+      >
+        <div *ngSwitchCase="true" class="text-b1 text-G900">
+          Loading address...
+        </div>
+        <div *ngSwitchCase="false">
+          <div class="flex flex-col justify-center gap-[16px]">
+            <div class="text-h6 text-G900">Please connect your wallet!</div>
+            <basic-button
+              [type]="2"
+              [routerLink]="['/wallet-bnb']"
+              title="Connect Wallet"
+              size="small"
+            />
+          </div>
+        </div>
+        <div *ngSwitchDefault class="w-full">
+          <div *ngIf="assets.length > 0; else loading" class="space-y-[24px]">
+            <div class="flex flex-col">
+              <div
+                *ngFor="let asset of assets"
+                class="flex flex-col gap-[16px] pb-[16px]"
+                [ngClass]="{
+                  'hover:bg-G100 cursor-pointer':
+                    asset.hasEnough && !asset.seemsNotEnough
+                }"
+                (click)="paymentSelected(asset)"
+              >
+                <hr class="w-full h-[1px] bg-G200 border-none" />
+                <div
+                  class="flex gap-[8px] xs:gap-[16px] flex-col xs:flex-row xs:justify-between xs:items-center px-[16px]"
+                >
+                  <div
+                    class="flex gap-[16px] items-center"
+                    [ngClass]="{
+                      'opacity-30': !(asset.hasEnough && !asset.seemsNotEnough)
+                    }"
+                  >
+                    <dynamic-coin
+                      [symbol]="asset.symbol"
+                      [address]="asset.address"
+                      [network]="chain"
+                    ></dynamic-coin>
+                    <div>
+                      <div class="text-b1 text-N800 font-medium">
+                        {{ asset.symbol }}
+                      </div>
+                      <div class="text-b2 text-G500">
+                        {{ asset.chain }}
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="max-xs:pl-[50px] text-b2 xs:text-b1 text-G900 font-medium"
+                  >
+                    {{ asset.free | number : '1.0-4' }}&nbsp;{{
+                      asset?.token ? asset.token : asset.symbol
+                    }}
+                  </div>
+                  <!-- <td>{{ asset.frozen | number: '1.3' }}</td> -->
+                  <!-- <td>{{ asset.locked | number: '1.3' }}</td> -->
+                </div>
+              </div>
+            </div>
+            <div class="flex gap-[16px] items-center float-right">
+              <div
+                (click)="goBack()"
+                class="text-b1 text-G900 font-medium select-none cusror-pointer"
+              >
+                CANCEL
+              </div>
+              <basic-button
+                (click)="forget()"
+                [type]="1"
+                title="Disconnect Wallet"
+                size="small"
+                extraClass="text-R900 w-max border-G200"
+              />
+            </div>
+          </div>
+          <ng-template #loading>
+            <div class="text-b1 text-G900 text-center">Loading...</div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- <main>
   <section class="section bg-gray">
     <div class="container text-center">
       <div class="card px-30 py-15 my-10">
         <h2>Choose your payment method</h2>
         <p class="fw-500" style="font-size: 0.875rem">
           Job Value: $ {{ jobBudgetUsd | number : '1.2-2' }} USD
-        </p>
-        <!--<div *ngIf="address" class="row">
+        </p> -->
+<!--<div *ngIf="address" class="row">
           <div class="col text-center">
             <a
               ngxClipboard
@@ -27,7 +161,7 @@
             </a>
           </div>
         </div>-->
-        <div *ngIf="firstLoaded" class="row">
+<!-- <div *ngIf="firstLoaded" class="row">
           <div class="col text-left">
             <div [ngSwitch]="address">
               <div *ngSwitchCase="true" class="text-center">
@@ -42,7 +176,6 @@
                         <th scope="col">Symbol</th>
                         <th scope="col">Balance</th>
                         <th scope="col">Value (USDT)</th>
-                        <th scope="col"><!--Pay--></th>
                       </tr>
                     </thead>
                     <tbody *ngIf="assets.length > 0">
@@ -123,4 +256,4 @@
       </div>
     </div>
   </section>
-</main>
+</main> -->
