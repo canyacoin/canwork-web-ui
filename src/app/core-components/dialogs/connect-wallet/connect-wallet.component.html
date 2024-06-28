@@ -32,8 +32,16 @@
       <wallet-button [type]="8" />
     </div> -->
     <div class="flex justify-center items-center gap-[16px]">
-      <wallet-button [type]="1" />
-      <wallet-button [type]="2" />
+      <wallet-button
+        [type]="1"
+        [disabled]="isWalletConnecting"
+        (click)="connect(WalletApp.WalletConnectBsc)"
+      />
+      <wallet-button
+        [type]="2"
+        [disabled]="isWalletConnecting"
+        (click)="connect(WalletApp.MetaMask)"
+      />
     </div>
     <div class="text-b2 text-G900 font-medium">What's a wallet ?</div>
   </div>
