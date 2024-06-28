@@ -60,7 +60,7 @@
           </div>
         </div>
         <div *ngSwitchDefault class="w-full">
-          <div *ngIf="assets.length > 0; else loading" class="space-y-[24px]">
+          <div *ngIf="assets.length > 1; else loading" class="space-y-[24px]">
             <div class="flex flex-col">
               <div
                 *ngFor="let asset of assets"
