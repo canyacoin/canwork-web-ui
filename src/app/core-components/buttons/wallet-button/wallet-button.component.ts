@@ -6,4 +6,5 @@ import { Component, Input } from '@angular/core'
 })
 export class WalletButtonComponent {
   @Input() type!: number
+  @Input() disabled: boolean = false
 }

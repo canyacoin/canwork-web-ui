@@ -1,5 +1,6 @@
-<div
-  class="bg-white hover:bg-G300 active:bg-white w-[104px] h-[104px] border border-g200 rounded-[16px] flex flex-col gap-[8px] justify-center items-center cursor-pointer px-[12px] py-[17px] select-none transition-all duration-300"
+<button
+  class="bg-white hover:bg-G300 active:bg-white w-[104px] h-[104px] border border-G200 rounded-[16px] flex flex-col gap-[8px] justify-center items-center cursor-pointer px-[12px] py-[17px] select-none transition-all duration-300 disabled:bg-G300 disabled:text-G900 disabled:border-G200 disabled:cursor-not-allowed"
+  [disabled]="disabled"
 >
   <img
     src="{{
@@ -40,4 +41,4 @@
         : 'Keystore'
     }}
   </div>
-</div>
+</button>
