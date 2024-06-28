@@ -52,7 +52,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   isInitialised = false
   isReleasing = false
 
-  visibleLoginModal = false
+  visibleConnectWalletModal = false
 
   constructor(
     private authService: AuthService,
@@ -406,7 +406,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         detail: `Please connect your wallet before going on`,
       })
 
-      this.visibleLoginModal = true
+      this.visibleConnectWalletModal = true
 
       // const routerStateSnapshot = this.router.routerState.snapshot
       // this.router.navigate(['/wallet-bnb'], {
