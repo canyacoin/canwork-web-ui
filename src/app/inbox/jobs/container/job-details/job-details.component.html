@@ -1,5 +1,6 @@
 <main class="w-full font-sans">
   <div *ngIf="job">
+    <connect-wallet-dialog [(visible)]="visibleConnectWalletModal" />
     <div *ngIf="isAwaitingEscrow" class="pb-[8px]">
       <warning-message
         [type]="2"
@@ -26,7 +27,6 @@
           <!-- leftBtnEvent in process -->
           <job-transaction-history
             [isAwaitingEscrow]="isAwaitingEscrow"
-            
             (rightBtnEvent)="statusRightClick($event)"
           />
         </div>

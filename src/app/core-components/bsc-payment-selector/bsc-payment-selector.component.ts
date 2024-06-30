@@ -9,9 +9,6 @@ import {
 } from '@angular/core'
 import { Router } from '@angular/router'
 
-import { BehaviorSubject } from 'rxjs'
-import { sortBy, prop } from 'ramda'
-import { take } from 'rxjs/operators'
 import { OnDestroyComponent } from '@class/on-destroy'
 
 import { BscService, EventTypeBsc, BepChain } from '@service/bsc.service'
@@ -19,12 +16,15 @@ import { BscService, EventTypeBsc, BepChain } from '@service/bsc.service'
 import { environment } from '@env/environment'
 //import { bepAssetData } from '@canpay-lib/lib' // todo
 
-import { ToastrService } from 'ngx-toastr'
+// for sleep
+import { timer } from 'rxjs'
+import { take } from 'rxjs/operators'
+
+import { MessageService } from 'primeng/api'
 
 @Component({
   selector: 'bsc-payment-selector',
   templateUrl: './bsc-payment-selector.component.html',
-  styleUrls: ['./bsc-payment-selector.component.css'],
 })
 export class BscPaymentSelectorComponent
   extends OnDestroyComponent
@@ -43,16 +43,23 @@ export class BscPaymentSelectorComponent
   chain = BepChain.SmartChain
   quotes = {}
 
+  // added
+  totalBudget: number = 0
+
   constructor(
     private location: Location,
     private router: Router,
     private bscService: BscService,
-    private toastr: ToastrService
+    private messageService: MessageService
   ) {
     super()
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.walletRefresh()
+  }
+
+  async walletRefresh() {
     this.bscService.events$
       .pipe(take(1)) // unsubscribe on destroy
       .subscribe(async (event) => {
@@ -127,6 +134,7 @@ export class BscPaymentSelectorComponent
               this.firstLoaded = true // at least one loaded, show grid
             }
 
+            console.log('===========================', this.assets)
             this.loading = false // finish loading all
 
             // retrieve quotes
@@ -147,11 +155,11 @@ export class BscPaymentSelectorComponent
             )
             this.address = false
             const routerStateSnapshot = this.router.routerState.snapshot
-            this.toastr.warning(
-              'Please connect your wallet before going on',
-              '',
-              { timeOut: 2000 }
-            )
+            this.messageService.add({
+              severity: 'warn',
+              summary: 'Warn',
+              detail: 'Please connect your wallet before going on',
+            })
             this.router.navigate(['/wallet-bnb'], {
               queryParams: { returnUrl: routerStateSnapshot.url },
             })
@@ -226,7 +234,7 @@ export class BscPaymentSelectorComponent
   }
 
   async paymentSelected(asset) {
-    this.bscAsset.emit(asset)
+    if (!asset.converting && asset.hasEnough) this.bscAsset.emit(asset)
   }
 
   goBack() {
@@ -235,5 +243,16 @@ export class BscPaymentSelectorComponent
     } else {
       this.router.navigate(['/home'])
     }
+  }
+
+  sleepRx(ms: number) {
+    return timer(ms).pipe(take(1)).toPromise()
+  }
+
+  async refresh(event: Event) {
+    event.preventDefault()
+    this.assets = []
+    await this.sleepRx(1000)
+    this.walletRefresh()
   }
 }

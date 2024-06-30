@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Directive } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Bid, Job, JobState } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
@@ -11,9 +11,9 @@ import { ReviewService } from '@service/review.service'
 import { Transaction, TransactionService } from '@service/transaction.service'
 import { PublicJobService } from '@service/public-job.service'
 import { BscService, BepChain } from '@service/bsc.service'
-import { ToastrService } from 'ngx-toastr'
 import { AngularFireStorage } from '@angular/fire/compat/storage'
 import { NgxSpinnerService } from 'ngx-spinner'
+import { MessageService } from 'primeng/api'
 
 //import { SimpleModalService } from 'ngx-simple-modal' // old version
 import { NgxModalService } from 'ngx-modalview'
@@ -52,11 +52,12 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   isInitialised = false
   isReleasing = false
 
+  visibleConnectWalletModal = false
+
   constructor(
     private authService: AuthService,
     private jobService: JobService,
     private bscService: BscService,
-    private toastr: ToastrService,
     private transactionService: TransactionService,
     private reviewService: ReviewService,
     private activatedRoute: ActivatedRoute,
@@ -65,7 +66,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     private mobile: MobileService,
     private router: Router,
     private spinner: NgxSpinnerService,
-    private publicJobsService: PublicJobService
+    private publicJobsService: PublicJobService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
@@ -253,13 +255,12 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     // we check if bsc chain is connected and if not, suggest to connect to bsc chain explicitely (for now only metamask, not bep2 chain
     if (!(await this.bscService.isBscConnected())) {
       const routerStateSnapshot = this.router.routerState.snapshot
-      this.toastr.warning(
-        'Connect your BNBChain wallet to release the payment',
-        '',
-        {
-          timeOut: 4000,
-        }
-      )
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warn',
+        detail: `Connect your BNBChain wallet to release the payment`,
+      })
+
       this.router.navigate(['/wallet-bnb'], {
         queryParams: { returnUrl: routerStateSnapshot.url },
       })
@@ -399,13 +400,18 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     if (await this.bscService.isBscConnected())
       connectedChain = BepChain.SmartChain
     if (!connectedChain) {
-      const routerStateSnapshot = this.router.routerState.snapshot
-      this.toastr.warning('Please connect your wallet before going on', '', {
-        timeOut: 2000,
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warn',
+        detail: `Please connect your wallet before going on`,
       })
-      this.router.navigate(['/wallet-bnb'], {
-        queryParams: { returnUrl: routerStateSnapshot.url },
-      })
+
+      this.visibleConnectWalletModal = true
+
+      // const routerStateSnapshot = this.router.routerState.snapshot
+      // this.router.navigate(['/wallet-bnb'], {
+      //   queryParams: { returnUrl: routerStateSnapshot.url },
+      // })
       return null
     }
     return connectedChain
@@ -413,16 +419,16 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
   statusLeftClick(e: Event) {
     e.preventDefault()
-    if(this.isAwaitingEscrow) {
-      this.executeAction("Cancel job" as ActionType) // Cancel job`
+    if (this.isAwaitingEscrow) {
+      this.executeAction('Cancel job' as ActionType) // Cancel job`
     }
     console.log('this.availableActions:', this.availableActions)
   }
 
   statusRightClick(e: Event) {
     e.preventDefault()
-    if(this.isAwaitingEscrow) {
-      this.executeAction("Pay Escrow" as ActionType) // Pay Escrow
+    if (this.isAwaitingEscrow) {
+      this.executeAction('Pay Escrow' as ActionType) // Pay Escrow
     }
     console.log('this.availableActions:', this.availableActions)
   }

@@ -49,6 +49,7 @@ import { DropdownModule } from 'primeng/dropdown'
 import { TabMenuModule } from 'primeng/tabmenu'
 import { AngularEditorModule } from '@kolkov/angular-editor'
 import { DialogModule } from 'primeng/dialog'
+import { MessageService } from 'primeng/api'
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -108,6 +109,7 @@ import { DialogModule } from 'primeng/dialog'
     PublicJobService,
     LedgerService,
     WindowService,
+    MessageService,
   ],
   bootstrap: [AppComponent],
 })

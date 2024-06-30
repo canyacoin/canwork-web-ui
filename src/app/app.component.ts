@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core'
 import { NavigationEnd, Router } from '@angular/router'
-import { ToastrService } from 'ngx-toastr'
 import { AuthService } from '@service/auth.service'
 // spinner
 import { NgxSpinnerService } from 'ngx-spinner'
@@ -13,7 +12,6 @@ import { MessageService } from 'primeng/api'
 export class AppComponent implements OnInit {
   constructor(
     private router: Router,
-    private toastr: ToastrService,
     private authService: AuthService,
     private spinner: NgxSpinnerService,
     private messageService: MessageService

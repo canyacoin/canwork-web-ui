@@ -1,8 +1,12 @@
-import { Component, OnInit, OnDestroy, Directive } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Input,
+  Output,
+  EventEmitter,
+} from '@angular/core'
 import { BscService, EventTypeBsc } from '@service/bsc.service'
-// import WalletConnect from './../core-classes/walletConnect' // obsolete, bep2
-// import WalletConnectQRCodeModal from '@walletconnect/qrcode-modal' // v1
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 import { crypto } from '@binance-chain/javascript-sdk'
@@ -12,11 +16,27 @@ import { WalletApp } from '@service/bsc.service'
 import { MessageService } from 'primeng/api'
 
 @Component({
-  selector: 'app-wallet-bnb',
-  templateUrl: './wallet-bnb.component.html',
-  styleUrls: ['./wallet-bnb.component.css'],
+  selector: 'connect-wallet-dialog',
+  templateUrl: './connect-wallet.component.html',
 })
-export class WalletBnbComponent implements OnInit, OnDestroy {
+export class ConnectWalletDialogComponent implements OnInit, OnDestroy {
+  // two way data binding
+  private _visible: boolean
+  @Input()
+  get visible(): boolean {
+    return this._visible
+  }
+  set visible(value: boolean) {
+    this._visible = value
+    this.visibleChange.emit(this._visible)
+  }
+  @Output() visibleChange = new EventEmitter<boolean>()
+
+  closeModal(): void {
+    document.body.style.overflow = 'auto'
+    this.visible = false
+  }
+
   private destroy$ = new Subject()
   selected: WalletApp = WalletApp.MetaMask
   WalletApp = WalletApp
@@ -39,64 +59,61 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   }
   returnUrl: string
   isAnotherBscChain = false
-  walletconnectConnecting = false
+  isWalletConnecting = false
 
   constructor(
     private bscService: BscService,
-    private router: Router,
     private authService: AuthService,
-    private route: ActivatedRoute,
-    private messageService: MessageService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
-    if (environment.bsc.netId != environment.bsc.mainNetId)
-      this.isAnotherBscChain = true
+    if (this.visible) document.body.style.overflow = 'hidden'
+    else document.body.style.overflow = 'auto'
     // we are not on production env but wallect connect bsc will use main net, better to warn user
 
-    this.returnUrl =
-      this.route.snapshot.queryParams['returnUrl'] || '/wallet-bnb/assets'
-
-    this.bscService.events$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(async (event) => {
-        if (!event) {
-          return
-        }
-        switch (event.type) {
-          case EventTypeBsc.ConnectSuccess:
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Success',
-              detail: `Wallet Connected successfully.`,
-            })
-            this.router.navigate([this.returnUrl])
-            break
-          case EventTypeBsc.AddressFound:
-            if (!(await this.bscService.isBscConnected())) {
-              // address found but not connected, probably address is changed, force reconnect
-            } else {
-              this.router.navigate([this.returnUrl])
-            }
-            break
-          case EventTypeBsc.ConnectFailure:
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: `This address is already in use by another user`,
-            })
-            break
-          case EventTypeBsc.ConnectConfirmationRequired:
-            console.log('wallet-bnb EventTypeBsc.ConnectConfirmationRequired')
-            const user = await this.authService.getCurrentUser()
-            this.walletReplacementBsc = {
-              old: user.bscAddress,
-              new: event.details.address,
-            }
-            ;(window as any).$('#replaceWalletModalBsc').modal('show')
-            break
-        }
-      })
+    if (this.visible) {
+      this.bscService.events$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(async (event) => {
+          if (!event) {
+            return
+          }
+          switch (event.type) {
+            case EventTypeBsc.ConnectSuccess:
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: `Wallet Connected successfully.`,
+              })
+              this.closeModal()
+              break
+            case EventTypeBsc.AddressFound:
+              if (!(await this.bscService.isBscConnected())) {
+                // address found but not connected, probably address is changed, force reconnect
+              } else {
+                this.closeModal()
+              }
+              break
+            case EventTypeBsc.ConnectFailure:
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: `This address is already in use by another user`,
+              })
+              break
+            case EventTypeBsc.ConnectConfirmationRequired:
+              console.log('wallet-bnb EventTypeBsc.ConnectConfirmationRequired')
+              const user = await this.authService.getCurrentUser()
+              this.walletReplacementBsc = {
+                old: user.bscAddress,
+                new: event.details.address,
+              }
+              // ;(window as any).$('#replaceWalletModalBsc').modal('show')
+              break
+          }
+        })
+    }
   }
 
   ngOnDestroy() {
@@ -111,17 +128,13 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
   async connect(app: WalletApp) {
     // bsc connect methods
     if (app == WalletApp.MetaMask || app == WalletApp.WalletConnectBsc) {
-      this.walletconnectConnecting = true
+      this.closeModal()
+      this.isWalletConnecting = true
       this.bscError = ''
 
       // WalletApp.WalletConnectBsc (i.e. Trust, qr from desktop or direct from mobile intent or trust dapp browser)
       this.bscError = await this.bscService.connect(app)
-      this.walletconnectConnecting = false
-
-      if (this.bscError) {
-        await new Promise((f) => setTimeout(f, 2000)) // sleep 2000 ms
-        this.bscError = '' // clean up
-      }
+      this.isWalletConnecting = false
     }
   }
 

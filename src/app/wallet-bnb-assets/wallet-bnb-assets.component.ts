@@ -2,7 +2,6 @@ import { Component, OnInit, Directive } from '@angular/core'
 import { BscService, EventTypeBsc, BepChain } from '@service/bsc.service'
 
 import { BehaviorSubject } from 'rxjs'
-import { sortBy, prop } from 'ramda'
 import { takeUntil } from 'rxjs/operators'
 
 import { OnDestroyComponent } from '@class/on-destroy'
@@ -21,7 +20,7 @@ export class WalletBnbAssetsComponent
   extends OnDestroyComponent
   implements OnInit
 {
-  address: string | boolean = false
+  address: string | boolean = true
   private balances = new BehaviorSubject(null)
   explorer = ''
   chain = null

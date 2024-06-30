@@ -1,6 +1,9 @@
 //import WalletConnectProvider from '@walletconnect/web3-provider' // v1
 
 import { EthereumProvider } from '@walletconnect/ethereum-provider' // v2
+import { MessageService } from 'primeng/api'
+// spinner
+import { NgxSpinnerService } from 'ngx-spinner'
 
 /*
 as seen into:
@@ -23,7 +26,6 @@ import { BscValidator } from '@validator/bsc.validator'
 
 import { Injectable } from '@angular/core'
 import { BehaviorSubject } from 'rxjs'
-import { ToastrService } from 'ngx-toastr'
 import { GenerateGuid } from '@util/generate.uid'
 
 import {
@@ -173,8 +175,9 @@ export class BscService {
   constructor(
     private userService: UserService,
     private authService: AuthService,
-    private toastr: ToastrService,
-    private afs: AngularFirestore
+    private afs: AngularFirestore,
+    private messageService: MessageService,
+    private spinner: NgxSpinnerService
   ) {
     this.monitorCollection = this.afs.collection<any>('bep20-txs')
 
@@ -202,8 +205,12 @@ export class BscService {
       if (localStorage.getItem('connectedWallet'))
         app = JSON.parse(localStorage.getItem('connectedWallet')).walletApp
       console.log(app)
-      if (!app) return 'Invalid config'
+      if (!app) {
+        return 'Invalid config'
+      }
     }
+
+    this.spinner.show()
 
     // we have multiple apps, we have to save app
     let walletApp, address
@@ -211,11 +218,17 @@ export class BscService {
     if (app === WalletApp.MetaMask) {
       walletApp = WalletApp.MetaMask // to save in localStorage
 
-      if (!window.ethereum) return 'MetaMask not found'
+      if (!window.ethereum) {
+        this.spinner.hide()
+        return 'MetaMask not found'
+      }
 
       this.provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
 
-      if (!this.provider) return 'No Provider'
+      if (!this.provider) {
+        this.spinner.hide()
+        return 'No Provider'
+      }
 
       let network = await this.provider.getNetwork()
       console.log(network)
@@ -235,15 +248,21 @@ export class BscService {
             ],
           })
         } catch (err) {
-          this.toastr.warning(this.errMsg(err), 'Please check and retry', {
-            timeOut: 2000,
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Warn',
+            detail: `Please check and retry`,
           })
+          this.spinner.hide()
           return 'Check MetaMask'
         }
 
         // update
         network = await this.provider.getNetwork()
-        if (network.chainId !== NETWORK_ID) return 'Wrong network'
+        if (network.chainId !== NETWORK_ID) {
+          this.spinner.hide()
+          return 'Wrong network'
+        }
       }
 
       await new Promise((f) => setTimeout(f, 100)) // sleep 100 ms
@@ -253,15 +272,19 @@ export class BscService {
           method: 'eth_requestAccounts',
         })
       } catch (err) {
-        this.toastr.warning(this.errMsg(err), 'Please check and retry', {
-          timeOut: 2000,
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Warn',
+          detail: `Please check and retry`,
         })
+        this.spinner.hide()
         return 'Check MetaMask'
       }
       try {
         this.signer = await this.provider.getSigner()
       } catch (err) {
         console.log(err)
+
         return 'Provider error'
       }
       await new Promise((f) => setTimeout(f, 100)) // sleep 100 ms
@@ -306,12 +329,14 @@ export class BscService {
             await this.disconnect()
           }
         })
+      this.spinner.hide()
     } else if (app === WalletApp.WalletConnectBsc) {
       /*
       todo review new walletConnect v2 changes
       https://github.com/WalletConnect/walletconnect-monorepo/tree/v2.0/examples/react-app
       
       */
+
       walletApp = WalletApp.WalletConnectBsc // to save in localStorage
 
       // walletConnect Trust supports only mainNet
@@ -336,7 +361,11 @@ export class BscService {
         rpcMap,
       }) // v2
 
-      if (!walletConnectProvider) return 'No WalletConnect Provider'
+      if (!walletConnectProvider) {
+        return 'No WalletConnect Provider'
+      }
+
+      this.spinner.hide()
       /*
         // disconnect (cleanup) before reconnecting
         // this seems not needed
@@ -365,38 +394,63 @@ export class BscService {
         })
       } catch (err) {
         console.log(err)
+
         return err.message || 'Provider error'
       }
 
-      if (!this.provider) return 'No Provider'
+      if (!this.provider) {
+        return 'No Provider'
+      }
 
       let network
       try {
         network = await this.provider.getNetwork()
+        console.log(
+          '666666666666666666666666666666================================================================================='
+        )
       } catch (err) {
         console.log(err)
+        console.log(
+          '7777777777777777777777777================================================================================='
+        )
         await walletConnectProvider.disconnect()
+
         return 'Please connect to BNB Chain network'
       }
 
-      if (network.chainId !== environment.bsc.mainNetId)
+      if (network.chainId !== environment.bsc.mainNetId) {
+        console.log(
+          '8888888888888888888888888888888================================================================================='
+        )
+
         return 'Please connect to BNB Chain network'
+      }
 
       await new Promise((f) => setTimeout(f, 100)) // sleep 100 ms
 
       try {
         this.signer = await this.provider.getSigner()
+        console.log(
+          '99999999999999999999999999999999999999================================================================================='
+        )
       } catch (err) {
         console.log(err)
+
         return 'Provider error'
       }
       await new Promise((f) => setTimeout(f, 100)) // sleep 100 ms
 
+      console.log(
+        '10101010101010101010101010101010101010================================================================================='
+      )
       address = await this.signer.getAddress()
 
       // attach events to listen for disconnect, net change or account change, safe way, disconnect
       // Subscribe to accounts change
       walletConnectProvider.on('accountsChanged', async (accounts) => {
+        console.log(
+          '11-------------11111111111111111111111111111111111================================================================================='
+        )
         await this.disconnect()
         console.log(
           'walletConnectProvider accountsChanged event: ' +
@@ -404,6 +458,9 @@ export class BscService {
         )
       })
 
+      console.log(
+        '121212121212121212================================================================================='
+      )
       // Subscribe to chainId change
       walletConnectProvider.on('chainChanged', async (chainId) => {
         await this.disconnect()
@@ -422,6 +479,9 @@ export class BscService {
       })
       */
 
+      console.log(
+        '13131313131313131313131313131313131313================================================================================='
+      )
       // v2
       walletConnectProvider.on('disconnect', (args: any) => {
         // args: ProviderRpcError
@@ -434,6 +494,7 @@ export class BscService {
       console.log('Unknow bsc app: ' + app)
 
       // todo get app from saved storage to go on
+
       return 'Unknown application'
     }
 
@@ -456,6 +517,7 @@ export class BscService {
           walletApp,
           details,
         })
+
         return 'Verify address'
       }
     }
@@ -470,6 +532,7 @@ export class BscService {
         walletApp,
         details,
       })
+
       return 'Address in use'
     }
 
@@ -752,8 +815,10 @@ export class BscService {
 
       return result // hash of tether values
     } catch (err) {
-      this.toastr.warning(this.errMsg(err), 'Error retrieving quotes list', {
-        timeOut: 5000,
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warn',
+        detail: `Error retrieving quotes list`,
       })
       console.log(err)
       console.log(`Quotes list error: ${this.errMsg(err)}`)
@@ -940,11 +1005,11 @@ export class BscService {
 
       return ethers.utils.formatUnits(gasApprove, GAS.decimals)
     } catch (err) {
-      this.toastr.warning(
-        this.errMsg(err),
-        'Error estimating gas needed to approve ' + token,
-        { timeOut: 5000 }
-      )
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warn',
+        detail: `Error estimating gas needed to approve ${token}`,
+      })
       console.log(err)
       console.log(`estimateGasApprove ${token} error: ${this.errMsg(err)}`)
 
@@ -1066,8 +1131,10 @@ export class BscService {
       // success, add transactionHash result
     } catch (err) {
       console.log(err)
-      this.toastr.warning(this.errMsg(err), 'Error approving ' + token, {
-        timeOut: 5000,
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warn',
+        detail: `Error approving ${token}`,
       })
       approveResult.err = this.errMsg(err)
       console.log(`approve ${token} error: ${this.errMsg(err)}`)
@@ -1205,11 +1272,11 @@ export class BscService {
       console.log(`estimateGasDeposit ${token} error: ${this.errMsg(err)}`)
       if (!silent) {
         console.log(err)
-        this.toastr.warning(
-          this.errMsg(err),
-          'Error estimating gas needed to deposit ' + token,
-          { timeOut: 5000 }
-        )
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Warn',
+          detail: `Error estimating gas needed to deposit ${token}`,
+        })
       }
       return { gasDeposit: '-1' }
     }
@@ -1377,8 +1444,10 @@ export class BscService {
       // success, nothing to add to result
     } catch (err) {
       console.log(err)
-      this.toastr.warning(this.errMsg(err), 'Error into deposit ' + token, {
-        timeOut: 5000,
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warn',
+        detail: `Error into deposit ${token}`,
       })
       depositResult.err = this.errMsg(err)
       console.log(`deposit ${token} error: ${this.errMsg(err)}`)
@@ -1478,8 +1547,11 @@ export class BscService {
       // success, nothing to add to result
     } catch (err) {
       console.log(err)
-      this.toastr.warning(this.errMsg(err), 'Error into release ', {
-        timeOut: 5000,
+
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warn',
+        detail: 'Error into release',
       })
       releaseResult.err = this.errMsg(err)
       console.log(`release ${jobId} error: ${this.errMsg(err)}`)
@@ -1521,8 +1593,10 @@ export class BscService {
       // success, nothing to add to result
     } catch (err) {
       console.log(err)
-      this.toastr.warning(this.errMsg(err), 'Error into release ', {
-        timeOut: 5000,
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warn',
+        detail: 'Error into release',
       })
       releaseResult.err = this.errMsg(err)
       console.log(`releaseByProvider ${jobId} error: ${this.errMsg(err)}`)

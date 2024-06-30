@@ -1,7 +1,20 @@
-<div [ngClass]="customClass">
+<p-avatar
+  *ngIf="avatarUrl | async as aUrl; else initial"
+  [image]="aUrl"
+  class="flex items-center"
+  [styleClass]="
+    size === 48
+      ? '!w-[40px] !h-[40px]'
+      : size === 40
+      ? '!w-[40px] !h-[40px]'
+      : '!w-[28px] !h-[28px]'
+  "
+  shape="circle"
+></p-avatar>
+<ng-template #initial>
   <p-avatar
-    *ngIf="avatarUrl | async as aUrl; else initial"
-    [image]="aUrl"
+    label="{{ getInitials() }}"
+    class="flex items-center"
     [styleClass]="
       size === 48
         ? '!w-[40px] !h-[40px]'
@@ -9,20 +22,7 @@
         ? '!w-[40px] !h-[40px]'
         : '!w-[28px] !h-[28px]'
     "
+    [style]="{ 'background-color': '#3AC2FF', color: '#ffffff' }"
     shape="circle"
   ></p-avatar>
-  <ng-template #initial>
-    <p-avatar
-      label="{{ getInitials() }}"
-      [styleClass]="
-        size === 48
-          ? '!w-[40px] !h-[40px]'
-          : size === 40
-          ? '!w-[40px] !h-[40px]'
-          : '!w-[28px] !h-[28px]'
-      "
-      [style]="{ 'background-color': '#3AC2FF', color: '#ffffff' }"
-      shape="circle"
-    ></p-avatar>
-  </ng-template>
-</div>
+</ng-template>

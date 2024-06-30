@@ -14,8 +14,6 @@ export const HeaderService = {
       title: 'Job Board',
       url: '/jobs',
     },
-    
- 
     {
       title: 'Blog',
       url: '/blog',

@@ -75,11 +75,13 @@ import { ProfileCardComponent } from './cards/profile-card/profile-card.componen
 
 import { StatusIconComponent } from './status-icon/status-icon.component'
 import { JobActionLogPanelComponent } from './job/job-action-log-panel/job-action-log-panel.component'
-import { JobTransactionHistoryComponent } from './job/job-transaction-history/job-transaction-history.component';
-import { JobFreelancerInformationPanelComponent } from './job/job-freelancer-information-panel/job-freelancer-information-panel.component';
-import { CopyButtonComponent } from './buttons/copy-button/copy-button.component';
-import { RefreshButtonComponent } from './buttons/refresh-button/refresh-button.component';
+import { JobTransactionHistoryComponent } from './job/job-transaction-history/job-transaction-history.component'
+import { JobFreelancerInformationPanelComponent } from './job/job-freelancer-information-panel/job-freelancer-information-panel.component'
+import { CopyButtonComponent } from './buttons/copy-button/copy-button.component'
+import { RefreshButtonComponent } from './buttons/refresh-button/refresh-button.component'
 import { ExternalLinkButtonComponent } from './buttons/external-link-button/external-link-button.component'
+import { ConnectWalletDialogComponent } from './dialogs/connect-wallet/connect-wallet.component'
+import { WalletButtonComponent } from './buttons/wallet-button/wallet-button.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -166,13 +168,16 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     CopyButtonComponent,
     RefreshButtonComponent,
     ExternalLinkButtonComponent,
+    WalletButtonComponent,
     // Dialogs
     BasicDialogComponent,
     ProposalDetailsDialogComponent,
+    ConnectWalletDialogComponent,
 
     StatusIconComponent,
     JobActionLogPanelComponent,
     JobTransactionHistoryComponent,
+    WalletButtonComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -232,9 +237,11 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     CopyButtonComponent,
     RefreshButtonComponent,
     ExternalLinkButtonComponent,
+    WalletButtonComponent,
     // Dialogs
     BasicDialogComponent,
     ProposalDetailsDialogComponent,
+    ConnectWalletDialogComponent,
 
     StatusIconComponent,
     JobActionLogPanelComponent,
