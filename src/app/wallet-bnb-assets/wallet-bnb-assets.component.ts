@@ -21,9 +21,10 @@ export class WalletBnbAssetsComponent
   implements OnInit
 {
   address: string | boolean = true
-  private balances = new BehaviorSubject(null)
+  private assets = []
   explorer = ''
-  chain = null
+  chain = BepChain.SmartChain
+  quotes = {}
 
   totalBudget: number = 0
 
@@ -37,10 +38,9 @@ export class WalletBnbAssetsComponent
   async ngOnInit() {
     await this.walletRefresh()
   }
-
   async walletRefresh() {
     this.bscService.events$
-      .pipe(takeUntil(this.destroy$)) // unsubscribe on destroy
+      .pipe(take(1)) // unsubscribe on destroy
       .subscribe(async (event) => {
         if (!event) {
           if (!this.chain) this.address = false
@@ -49,22 +49,54 @@ export class WalletBnbAssetsComponent
         switch (event.type) {
           case EventTypeBsc.ConnectSuccess:
           case EventTypeBsc.AddressFound:
-            this.chain = BepChain.SmartChain
             this.address = event.details.address
             this.explorer = environment.bsc.blockExplorerUrls[0]
-            /*
-            // do not sort anymore to be coherent with payment selector
-            // env config ordering will be respected, so this can be choosen into config
-            this.balances.next(sortBy(prop('symbol'))(await this.bscService.getBalances()))
-            */
-            this.balances.next(await this.bscService.getBalances())
+
+            this.assets = []
+
+            // add BNB
+            let bnbBalance = await this.bscService.getBnbBalance()
+
+            this.assets.push({
+              converting: true,
+              freeUsd: 0,
+              name: 'BNB',
+              symbol: 'BNB',
+              address: '',
+              free: bnbBalance,
+              err: '',
+              token: 'BNB',
+            })
+
+            let awaitArray = []
+
+            for (let token in environment.bsc.assets) {
+              awaitArray.push(this.bscService.getBalance(token))
+            }
+            awaitArray = await Promise.all(awaitArray)
+
+            for (let i = 0; i < awaitArray.length; i++) {
+              let asset = {
+                converting: true,
+                freeUsd: 0,
+                ...awaitArray[i],
+              }
+              if (parseFloat(asset.free) === 0) asset.converting = false // no conversion with zero value
+
+              this.assets.push(asset)
+            }
+
+            // retrieve quotes
+            this.quotes = await this.bscService.getCoingeckoQuotes()
+            // we'll use it to calculate equivalent after balances are loaded
+
+            // one by one, not blocking ui
+            await this.checkUsdBalances()
 
             break
           case EventTypeBsc.Disconnect:
             console.log('disconnect event')
             this.address = false
-            this.balances.next([])
-            this.chain = null
             break
           case EventTypeBsc.ConnectConfirmationRequired:
             console.log(
@@ -72,12 +104,35 @@ export class WalletBnbAssetsComponent
             )
             // disconnect and reconnect, more safe
             this.address = false
-            this.balances.next([])
-            this.chain = null
 
             break
         }
       })
+  }
+
+  async checkUsdBalances() {
+    for (let i = 0; i < this.assets.length; i++) {
+      if (
+        this.assets[i].converting &&
+        this.quotes.hasOwnProperty(this.assets[i].token)
+      ) {
+        // let busdEquivalent = parseFloat(this.assets[i].free) * this.quotes[this.assets[i].token]
+
+        let usdtEquivalent =
+          parseFloat(this.assets[i].free) * this.quotes[this.assets[i].token]
+
+        if (usdtEquivalent > 0) {
+          this.totalBudget += usdtEquivalent
+          let usdtValue = parseFloat(usdtEquivalent.toString())
+
+          this.assets[i].usdtValue = usdtValue
+          this.assets[i].freeUsd = usdtValue.toFixed(2)
+        } else {
+          this.assets[i].freeUsd = 'na'
+        }
+        this.assets[i].converting = false
+      }
+    }
   }
 
   copy(event: Event) {
@@ -95,7 +150,8 @@ export class WalletBnbAssetsComponent
 
   async refresh(event: Event) {
     event.preventDefault()
-    this.balances = new BehaviorSubject(null)
+    this.totalBudget = 0
+    this.assets = []
     await this.sleepRx(1000)
     this.walletRefresh()
   }
