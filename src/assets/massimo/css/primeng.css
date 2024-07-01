@@ -459,10 +459,20 @@
     background-color: transparent !important;
   }
 
+
   .p-dialog-title {
     font-family: "General Sans", sans-serif !important;
     font-size: 24px;
     font-style: normal;
+  }
+
+  .p-dialog-header {
+    border-top-left-radius: 24px !important;
+    border-top-right-radius: 24px !important;
+  }
+  .p-dialog .p-dialog-content:last-of-type {
+    border-bottom-right-radius: 24px !important;
+    border-bottom-left-radius: 24px !important;
   }
 
   .p-dialog-header button {

@@ -23,7 +23,7 @@
     id="tagInputBox"
     list="tagsList"
     class="border-none outline-none bg-transparent placeholder:text-b1 font-sans"
-    [class]="acceptedTags.length === 0 && ' w-full'"
+    [class]="acceptedTags.length === 0 ? 'w-full' : ''"
     [placeholder]="
       acceptedTags.length === 0 ? 'Search skills e.g html, css, frontend' : ''
     "
@@ -43,7 +43,7 @@
 
 <div class="flex items-center mt-[10px] gap-1 flex-wrap">
   <div class="mr-[8px]">Popular skill tags:</div>
-  <ng-container *ngFor="let item of popularskillTags">
+  <ng-container *ngFor="let item of popularSkillTags">
     <div
       class="py-[6px] px-[16px] border border-G200 bg-G0 rounded-2xl text-b2 select-none cursor-pointer"
       (click)="onTagEnter(item)"
@@ -53,38 +53,18 @@
   </ng-container>
 </div>
 
-<div
-  class="flex justify-start items-center text-R900 text-b2 font-sans gap-[8px]"
+<error-message
   *ngIf="tagSelectionInvalid == 1"
->
-  <img
-    src="/assets/massimo/svg/fi_alert-triangle.svg"
-    alt="fi_alert-triangle"
-  />
-  You can only add 20 skill tags
-</div>
-
-<div
-  class="flex justify-start items-center text-R900 text-b2 font-sans gap-[8px]"
+  message="You can only add 20 skill tags"
+/>
+<error-message
   *ngIf="tagSelectionInvalid == 2"
->
-  <img
-    src="/assets/massimo/svg/fi_alert-triangle.svg"
-    alt="fi_alert-triangle"
-  />
-  Please input tag selection
-</div>
-
-<div
-  class="flex justify-start items-center text-R900 text-b2 font-sans gap-[8px]"
-  *ngIf="tagSelectionInvalid == 3"
->
-  <img
-    src="/assets/massimo/svg/fi_alert-triangle.svg"
-    alt="fi_alert-triangle"
-  />
-  You already added this skill.
-</div>
+  message="Please input tag selection"
+/>
+<error-message
+  *ngIf="tagSelectionInvalid === 3"
+  message="You already added this skill."
+/>
 
 <datalist id="tagsList">
   <option *ngFor="let tag of skillTagsList" value="{{ tag }}"></option>

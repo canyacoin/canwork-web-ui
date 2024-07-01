@@ -8,6 +8,7 @@ import {
 } from '@angular/core'
 import { PublicJobService } from '@service/public-job.service'
 import { UserService } from '@service/user.service'
+import { providerTypeArray } from 'app/shared/constants/providerTypes'
 
 import { Router } from '@angular/router'
 
@@ -29,34 +30,6 @@ export class JobDashboardCardComponent implements OnInit {
 
   favourite: boolean = false
 
-  providerTypes = [
-    {
-      name: 'Content Creators',
-      img: 'writer.png',
-      id: 'contentCreator',
-    },
-    {
-      name: 'Software Developers',
-      img: 'dev.png',
-      id: 'softwareDev',
-    },
-    {
-      name: 'Designers & Creatives',
-      img: 'creatives.png',
-      id: 'designer',
-    },
-    {
-      name: 'Marketing & SEO',
-      img: 'marketing.png',
-      id: 'marketing',
-    },
-    {
-      name: 'Virtual Assistants',
-      img: 'assistant.png',
-      id: 'virtualAssistant',
-    },
-  ]
-
   constructor(
     private router: Router,
     private publicJobsService: PublicJobService,
@@ -73,11 +46,9 @@ export class JobDashboardCardComponent implements OnInit {
     })
   }
 
-  getImage(id: string) {
-    let url = '/assets/massimo/images/'
-    const type = this.providerTypes.find((prov) => prov.id === id)
-    url = url + type.img
-    return url
+  getProviderImage(id: string) {
+    const category = providerTypeArray.find((prov) => prov.id === id)
+    return category.iconSrc
   }
 
   async cancelJob(event: Event) {

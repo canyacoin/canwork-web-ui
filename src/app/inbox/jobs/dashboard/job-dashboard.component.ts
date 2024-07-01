@@ -9,7 +9,6 @@ import {
   Directive,
 } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
-import { NgxSpinnerService } from 'ngx-spinner'
 
 import { Observable, Subscription } from 'rxjs'
 
@@ -84,7 +83,6 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   filteredJobs: Job[] | undefined
 
   constructor(
-    private spinner: NgxSpinnerService,
     private authService: AuthService,
     public mobile: MobileService,
     //private orderPipe: OrderPipe,
@@ -96,8 +94,6 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   async ngOnInit() {
-    this.spinner.show()
-
     this.jobTypes = [
       { label: 'Active Jobs', code: 'active' },
       { label: 'Public Jobs', code: 'public' },
@@ -139,8 +135,6 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     // we changed the logic here, we need client mode for getting active jobs.
     this.userType = UserType.client
     await this.initialiseJobs(this.currentUser.address, this.userType)
-
-    this.spinner.hide()
   }
 
   ngOnDestroy() {

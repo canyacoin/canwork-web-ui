@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs'
 import { AuthService } from '@service/auth.service'
 import { User } from '@class/user'
 
+import { providerTypeArray } from 'app/shared/constants/providerTypes'
 import * as moment from 'moment'
 @Component({
   selector: 'job-card',
@@ -36,34 +37,6 @@ export class JobCardComponent implements OnInit, OnDestroy {
   currentUser: User
   isApplied: boolean = false
   favourite: boolean = false
-
-  providerTypes = [
-    {
-      name: 'Content Creators',
-      img: 'writer.png',
-      id: 'contentCreator',
-    },
-    {
-      name: 'Software Developers',
-      img: 'dev.png',
-      id: 'softwareDev',
-    },
-    {
-      name: 'Designers & Creatives',
-      img: 'creatives.png',
-      id: 'designer',
-    },
-    {
-      name: 'Marketing & SEO',
-      img: 'marketing.png',
-      id: 'marketing',
-    },
-    {
-      name: 'Virtual Assistants',
-      img: 'assistant.png',
-      id: 'virtualAssistant',
-    },
-  ]
 
   constructor(
     private router: Router,
@@ -106,11 +79,9 @@ export class JobCardComponent implements OnInit, OnDestroy {
     }
   }
 
-  getImage(id: string) {
-    let url = '/assets/massimo/images/'
-    const type = this.providerTypes.find((prov) => prov.id === id)
-    url = url + type.img
-    return url
+  getProviderImage(id: string) {
+    const category = providerTypeArray.find((prov) => prov.id === id)
+    return category.iconSrc;
   }
 
   stripHtmlTags(html: string): string {

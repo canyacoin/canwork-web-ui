@@ -14,13 +14,16 @@ import { BscService, BepChain } from '@service/bsc.service'
 import { TransactionService } from '@service/transaction.service'
 
 import { NgxSpinnerService } from 'ngx-spinner'
+import { providerTypeArray } from 'app/shared/constants/providerTypes'
+import { formatDateFromString } from 'app/core-functions/date'
+import { MessageService } from 'primeng/api'
 
 @Component({
   selector: 'app-enter-escrow-bsc',
   templateUrl: './enter-escrow-bsc.component.html',
   styleUrls: ['./enter-escrow-bsc.component.css'],
 })
-export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
+export class EnterEscrowBscComponent implements OnInit {
   loading = true
   jobStateCheck = false
   walletConnected = false
@@ -44,6 +47,8 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
   isApproving = false
   balanceIssue = false
 
+  formatDateFromString = formatDateFromString
+
   constructor(
     private jobService: JobService,
     private userService: UserService,
@@ -53,7 +58,8 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private http: HttpClient,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
@@ -113,6 +119,7 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
   }
 
   async startBscpay() {
+    this.spinner.show()
     this.isEscrowLoading = true
 
     const onComplete = async () => {
@@ -203,6 +210,7 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
 
     console.log(this.bscPayOptions)
     this.isEscrowLoading = false
+    this.spinner.hide()
   }
 
   async approveAsset() {
@@ -317,5 +325,13 @@ export class EnterEscrowBscComponent implements OnInit, AfterViewInit {
     return connectedChain
   }
 
-  ngAfterViewInit() {}
+  getProviderImage(id: string) {
+    const category = providerTypeArray.find((prov) => prov.id === id)
+    return category.iconSrc
+  }
+
+  getProviderTitle(id: string) {
+    const category = providerTypeArray.find((prov) => prov.id === id)
+    return category.title
+  }
 }

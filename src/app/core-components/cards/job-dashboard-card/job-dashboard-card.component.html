@@ -10,7 +10,7 @@
     <div class="w-full flex gap-6 items-center">
       <img
         *ngIf="job.information.providerType"
-        src="{{ getImage(job.information.providerType) }}"
+        src="{{ getProviderImage(job.information.providerType) }}"
         class="w-[48px] h-[48px]"
       />
       <div class="grid gap-1">

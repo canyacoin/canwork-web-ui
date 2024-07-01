@@ -58,7 +58,11 @@ import { ProposalDetailsDialogComponent } from './dialogs/proposal-details-dialo
 
 import { DropdownModule } from 'primeng/dropdown'
 import { TableModule } from 'primeng/table'
-import { WarningMessageComponent } from './warning-message/warning-message.component'
+
+// messages
+import { WarningMessageComponent } from './messages/warning-message/warning-message.component'
+import { ErrorMessageComponent } from './messages/error-message/error-message.component'
+
 import { BackToJobBoardComponent } from './buttons/back-to-job-board/back-to-job-board.component'
 import { JobDetailsPanelComponent } from './job/job-details-panel/job-details.component'
 import { JobProposalsPanelComponent } from './job/job-proposals-panel/job-proposals.component'
@@ -139,8 +143,12 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     StarRatingComponent,
     JoinCommunityComponent,
     PostJobComponent,
-    WarningMessageComponent,
     BackToJobBoardComponent,
+
+    // Messages
+    WarningMessageComponent,
+    ErrorMessageComponent,
+
     // Cards
     CategoryCardComponent,
     JobCardComponent,
@@ -208,8 +216,12 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     JoinCommunityComponent,
     PostJobComponent,
     SearchButtonComponent,
-    WarningMessageComponent,
     BackToJobBoardComponent,
+
+    // Messages
+    WarningMessageComponent,
+    ErrorMessageComponent,
+
     // Cards
     CategoryCardComponent,
     JobCardComponent,

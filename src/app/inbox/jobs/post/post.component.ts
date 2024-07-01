@@ -912,7 +912,6 @@ export class PostComponent implements OnInit, OnDestroy {
     this.spinner.show()
     this.isSending = true
     this.error = false
-    this.sentDRP = isDRP
     this.shareableJobForm.controls.providerType.setValue(
       this.selectedCategory.code
     )
@@ -1016,6 +1015,7 @@ export class PostComponent implements OnInit, OnDestroy {
       console.log('error with showing', e)
     }
     this.spinner.hide()
+    this.sentDRP = isDRP
   }
 
   BacktoEdit() {

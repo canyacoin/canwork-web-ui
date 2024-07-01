@@ -1,23 +1,34 @@
 <p-dialog
   [(visible)]="visible"
-  styleClass="w-[80%] md:w-[60%] !rounded-[24px] !bg-G50"
+  styleClass="max-w-[906px] w-full !bg-G50"
   [draggable]="false"
   [resizable]="false"
   [modal]="true"
 >
   <div class="flex justify-center items-center h-[400px] md:h-[500px]">
     <div class="max-w-[352px] flex flex-col justify-center items-center">
-      <ng-container *ngIf="type === 'submit'">
+      <div [ngSwitch]="type" class="pb-[24px] select-none">
         <img
-          src="/assets/massimo/images/submit.png"
+          *ngSwitchCase="'submit'"
+          src="/assets/massimo/images/jobSubmit.png"
           alt="submit"
-          class="pb-[24px]"
         />
-      </ng-container>
-      <div
-        *ngIf="type !== 'submit'"
-        class="max-w-[322px] w-full h-[200px] bg-G400 mb-[24px]"
-      ></div>
+        <img
+          *ngSwitchCase="'success'"
+          src="/assets/massimo/images/jobSuccess.png"
+          alt="submit"
+        />
+        <img
+          *ngSwitchCase="'draft'"
+          src="/assets/massimo/images/jobDraft.png"
+          alt="submit"
+        />
+        <div
+          *ngSwitchDefault
+          class="max-w-[322px] w-full h-[200px] bg-G400"
+        ></div>
+      </div>
+
       <div class="text-h6 text-center font-medium pb-[8px]">
         {{ title }}
       </div>
