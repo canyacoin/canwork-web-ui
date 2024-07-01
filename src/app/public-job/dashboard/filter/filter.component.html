@@ -411,16 +411,10 @@
               />
             </div>
 
-            <div
-              class="flex justify-start items-center text-R900 text-b2 font-sans gap-2 animated fadeIn"
-              *ngIf="tagSelectionInvalid == 3"
-            >
-              <img
-                src="/assets/massimo/svg/fi_alert-triangle.svg"
-                alt="fi_alert-triangle"
-              />
-              You already added this location.
-            </div>
+            <error-message
+            *ngIf="tagSelectionInvalid === 3"
+              message="You already added this location."
+            />
 
             <div class="flex flex-wrap gap-1">
               <ng-container *ngFor="let item of locationInput">

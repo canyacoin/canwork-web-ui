@@ -317,17 +317,11 @@
                           </li>
                         </ul>
                       </div>
-
-                      <div
-                        class="flex justify-start items-center text-R900 text-b2 font-sans mt-[8px] gap-[8px]"
+                      <error-message
                         *ngIf="fileTooBig"
-                      >
-                        <img
-                          src="/assets/massimo/svg/fi_alert-triangle.svg"
-                          alt=""
-                        />
-                        You can only add 10 files with maximum of 25MB each.
-                      </div>
+                        message="You can only add 10 files with maximum of 25MB each."
+                        extraClass="mt-[8px]"
+                      />
                     </div>
                   </div>
 
