@@ -22,8 +22,8 @@ import { Job, JobState } from '@class/job'
 export class JobDashboardCardComponent implements OnInit {
   @Input() job: Job
   @Input() jobType: string
-  @Output() CancelJob = new EventEmitter<string>()
-  visible: boolean = false
+  @Output() jobCancelled = new EventEmitter<Event>()
+  visibleDeleteModal: boolean = false
 
   location: string = '...'
   proposals: number = 0
@@ -52,21 +52,21 @@ export class JobDashboardCardComponent implements OnInit {
   }
 
   async cancelJob(event: Event) {
+    event.stopPropagation()
+    this.visibleDeleteModal = false
     if (this.job.clientId) {
+      this.jobCancelled.emit(event)
       const updated = await this.publicJobsService.cancelJob(this.job.id)
       console.log('update:', updated)
       if (updated) {
         this.job.state = JobState.closed
-        this.CancelJob.emit(this.job.id)
       }
     }
-    event.stopPropagation()
-    this.visible = !this.visible
   }
 
   updateDialog(event: Event) {
     event.stopPropagation()
-    this.visible = !this.visible
+    this.visibleDeleteModal = !this.visibleDeleteModal
   }
   stripHtmlTags(html: string): string {
     // Create a new DOM element to use the browser's parsing capabilities

@@ -49,7 +49,7 @@
         </div>
 
         <basic-button
-          type="1"
+          [type]="1"
           [routerLink]="['/inbox/job/edit', job.id]"
           title="Edit Job"
           size="small"
@@ -145,7 +145,7 @@
 </div>
 
 <basic-dialog
-  [(visible)]="visible"
+  [(visible)]="visibleDeleteModal"
   title="Are you sure you want to delete ?"
   content="If you delete job post, you will no longer have access to it or receive bids from freelancers.
   You can create a new job listing to receive bids."
