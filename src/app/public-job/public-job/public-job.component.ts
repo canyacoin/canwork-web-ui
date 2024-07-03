@@ -32,7 +32,6 @@ import { customAngularEditorConfig } from 'app/core-functions/angularEditorConfi
   templateUrl: './public-job.component.html',
 })
 export class PublicJobComponent implements OnInit, OnDestroy {
-
   bidForm: UntypedFormGroup = null
   bids: any[]
   authSub: Subscription
@@ -88,6 +87,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   visibleWithdrawModal: boolean = false
   visibleLoginModal: boolean = false
   visibleWithdrawSuccessModal: boolean = false
+  visibleDeletedSuccessModal: boolean = false
 
   dublicateFilename: string[] = []
 
@@ -137,7 +137,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     ]
     this.selectedJob = this.activejobTypes[0]
     this.shareableLink = environment.shareBaseUrl
-    
+
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       if (user) {
         this.currentUser = user
@@ -329,12 +329,13 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   }
   async cancelJob(event: Event) {
     event.stopPropagation()
-    this.visibleDeleteModal = !this.visibleDeleteModal
+    this.visibleDeleteModal = false
 
     if (this.isMyJob) {
       const updated = await this.publicJobsService.cancelJob(this.job.id)
       if (updated) {
         this.job.state = JobState.closed
+        this.visibleDeletedSuccessModal = true
       }
     }
   }

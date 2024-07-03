@@ -420,6 +420,13 @@
     type="withdraw_success"
   />
 
+  <basic-dialog
+    [(visible)]="visibleDeletedSuccessModal"
+    title="Job Listing Deleted."
+    content="You can create a new job listing to receive bids."
+    type="jobListingDeleted"
+  />
+
   <p-dialog
     [(visible)]="visibleLoginModal"
     [modal]="true"
