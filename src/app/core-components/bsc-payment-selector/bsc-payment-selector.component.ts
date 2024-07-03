@@ -36,12 +36,15 @@ export class BscPaymentSelectorComponent
   @Input() providerAddress = ''
   @Output() bscAsset: EventEmitter<any> = new EventEmitter()
 
-  private assets = []
-  address: string | boolean = true
+  assets = []
+  loading: boolean = true
+  address: string = ''
   chain = BepChain.SmartChain
   quotes = {}
   totalBudget: number = 0
   explorer = ''
+
+  visibleConnectWalletModal = false
 
   constructor(
     private location: Location,
@@ -61,7 +64,7 @@ export class BscPaymentSelectorComponent
       .pipe(take(1)) // unsubscribe on destroy
       .subscribe(async (event) => {
         if (!event) {
-          this.address = false
+          this.loading = false
           return
         }
 
@@ -116,14 +119,12 @@ export class BscPaymentSelectorComponent
 
             break
           case EventTypeBsc.Disconnect:
-            this.address = false
             break
 
           case EventTypeBsc.ConnectConfirmationRequired:
             console.log(
               'bsc-payment-selector EventTypeBsc.ConnectConfirmationRequired'
             )
-            this.address = false
             const routerStateSnapshot = this.router.routerState.snapshot
             this.messageService.add({
               severity: 'warn',
@@ -137,6 +138,7 @@ export class BscPaymentSelectorComponent
             break
         }
       })
+    this.loading = false
   }
 
   async checkUsdBalances() {
@@ -220,7 +222,8 @@ export class BscPaymentSelectorComponent
   }
 
   async refresh(event: Event) {
-    event.preventDefault()
+    event?.preventDefault()
+    this.loading = true
     this.totalBudget = 0
     this.assets = []
     await this.sleepRx(1000)
@@ -234,5 +237,23 @@ export class BscPaymentSelectorComponent
       summary: 'Success',
       detail: 'Successfully copied wallet address.',
     })
+  }
+
+  async forget(event: Event) {
+    event.preventDefault()
+    this.loading = false
+    this.assets = []
+    this.totalBudget = 0
+    this.address = ''
+    switch (this.chain) {
+      case BepChain.SmartChain:
+        await this.bscService.disconnect()
+        break
+    }
+  }
+
+  connectWallet(event: Event) {
+    event.preventDefault()
+    this.visibleConnectWalletModal = true
   }
 }
