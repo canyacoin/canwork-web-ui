@@ -82,6 +82,8 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
 
   filteredJobs: Job[] | undefined
 
+  visibleDeletedSuccessModal: boolean = false
+
   constructor(
     private authService: AuthService,
     public mobile: MobileService,
@@ -272,7 +274,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     this.showFilteredJobs(this.jobs)
   }
 
-  SortbyFilter(filter: string) {
+  sortbyFilter(filter: string) {
     console.log('this.jobs:', this.jobs)
     this.jobs = this.jobs.sort((a, b) => {
       if (filter === 'newest') {
@@ -284,5 +286,10 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       }
     })
     this.showFilteredJobs(this.jobs)
+  }
+
+  showDeletedSuccessModal(event: Event) {
+    event.preventDefault()
+    this.visibleDeletedSuccessModal = true
   }
 }

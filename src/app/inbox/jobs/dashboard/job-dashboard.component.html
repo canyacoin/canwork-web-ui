@@ -94,7 +94,7 @@
                   <ng-template let-item pTemplate="item">
                     <div
                       class="flex items-center"
-                      (click)="SortbyFilter(item.code)"
+                      (click)="sortbyFilter(item.code)"
                     >
                       <span>{{ item.name }}</span>
                     </div>
@@ -121,6 +121,7 @@
               *ngFor="let job of filteredJobs"
               [job]="job"
               [jobType]="jobType"
+              (jobCancelled)="showDeletedSuccessModal($event)"
             ></job-dashboard-card>
           </div>
         </div>
@@ -138,5 +139,12 @@
         </div>
       </div>
     </div>
+
+    <basic-dialog
+      [(visible)]="visibleDeletedSuccessModal"
+      title="Job Listing Deleted."
+      content="You can create a new job listing to receive bids."
+      type="jobListingDeleted"
+    />
   </section>
 </main>
