@@ -1,6 +1,6 @@
 <p-dialog
   [(visible)]="visible"
-  styleClass="max-w-[906px] w-full !bg-G50"
+  styleClass="md:max-w-[600px] lg:max-w-[906px] w-full !bg-G50 mx-[20px]"
   [draggable]="false"
   [resizable]="false"
   [modal]="true"
@@ -16,12 +16,22 @@
         <img
           *ngSwitchCase="'success'"
           src="/assets/massimo/images/jobSuccess.png"
-          alt="submit"
+          alt="success"
         />
         <img
           *ngSwitchCase="'draft'"
           src="/assets/massimo/images/jobDraft.png"
-          alt="submit"
+          alt="draft"
+        />
+        <img
+          *ngSwitchCase="'delete'"
+          src="/assets/massimo/images/jobDelete.png"
+          alt="delete"
+        />
+        <img
+          *ngSwitchCase="'jobListingDeleted'"
+          src="/assets/massimo/images/jobDeleted.png"
+          alt="Job Listing Deleted"
         />
         <div
           *ngSwitchDefault
@@ -146,7 +156,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="type === 'listing_deleted'">
+      <ng-container *ngIf="type === 'jobListingDeleted'">
         <div class="flex gap-4 justify-center items-center">
           <basic-button
             [type]="1"
@@ -156,7 +166,7 @@
           />
           <basic-button
             [type]="2"
-            [routerLink]="['/jobs']"
+            [routerLink]="['/inbox/post']"
             title="Create new job listing"
             size="small"
             extraClass="border"
