@@ -241,13 +241,15 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   }
 
   showFilteredJobs(jobs: Job[]): void {
-    this.totalRecords = jobs.length
+    if (jobs) {
+      this.totalRecords = jobs.length
 
-    // 5 item each page
-    this.filteredJobs = jobs.slice(
-      this.currentPage * 5,
-      this.currentPage * 5 + 5
-    )
+      // 5 item each page
+      this.filteredJobs = jobs.slice(
+        this.currentPage * 5,
+        this.currentPage * 5 + 5
+      )
+    }
   }
 
   viewJobDetails(jobId: string): void {
