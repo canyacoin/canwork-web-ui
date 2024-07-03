@@ -1,4 +1,9 @@
-import { Component, OnInit, Directive } from '@angular/core'
+import {
+  Component,
+  OnInit,
+  Directive,
+  EnvironmentInjector,
+} from '@angular/core'
 import { BscService, EventTypeBsc, BepChain } from '@service/bsc.service'
 
 import { BehaviorSubject } from 'rxjs'
@@ -20,13 +25,16 @@ export class WalletBnbAssetsComponent
   extends OnDestroyComponent
   implements OnInit
 {
-  address: string | boolean = true
-  private assets = []
+  loading: boolean = true
+  address: string = ''
+  assets = []
   explorer = ''
   chain = BepChain.SmartChain
   quotes = {}
 
   totalBudget: number = 0
+
+  visibleConnectWalletModal = false
 
   constructor(
     private bscService: BscService,
@@ -43,7 +51,7 @@ export class WalletBnbAssetsComponent
       .pipe(take(1)) // unsubscribe on destroy
       .subscribe(async (event) => {
         if (!event) {
-          if (!this.chain) this.address = false
+          if (!this.chain) this.loading = false
           return
         }
         switch (event.type) {
@@ -96,18 +104,18 @@ export class WalletBnbAssetsComponent
             break
           case EventTypeBsc.Disconnect:
             console.log('disconnect event')
-            this.address = false
+
             break
           case EventTypeBsc.ConnectConfirmationRequired:
             console.log(
               'wallet-bnb-assets EventTypeBsc.ConnectConfirmationRequired'
             )
             // disconnect and reconnect, more safe
-            this.address = false
 
             break
         }
       })
+    this.loading = false
   }
 
   async checkUsdBalances() {
@@ -128,7 +136,8 @@ export class WalletBnbAssetsComponent
           this.assets[i].usdtValue = usdtValue
           this.assets[i].freeUsd = usdtValue.toFixed(2)
         } else {
-          this.assets[i].freeUsd = 'na'
+          // this.assets[i].freeUsd = 'na'
+          this.assets[i].freeUsd = 0
         }
         this.assets[i].converting = false
       }
@@ -149,18 +158,29 @@ export class WalletBnbAssetsComponent
   }
 
   async refresh(event: Event) {
-    event.preventDefault()
+    event?.preventDefault()
+    this.loading = true
     this.totalBudget = 0
     this.assets = []
     await this.sleepRx(1000)
     this.walletRefresh()
   }
 
-  async forget() {
+  async forget(event: Event) {
+    event.preventDefault()
+    this.loading = false
+    this.assets = []
+    this.totalBudget = 0
+    this.address = ''
     switch (this.chain) {
       case BepChain.SmartChain:
         await this.bscService.disconnect()
         break
     }
+  }
+
+  connectWallet(event: Event) {
+    event.preventDefault()
+    this.visibleConnectWalletModal = true
   }
 }

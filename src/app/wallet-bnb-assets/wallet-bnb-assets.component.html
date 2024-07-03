@@ -5,6 +5,10 @@
     <div
       class="max-w-[938px] w-full p-[24px] md:p-[40px] bg-white rounded-[12px] border border-G200 flex flex-col gap-[24px]"
     >
+      <connect-wallet-dialog
+        [(visible)]="visibleConnectWalletModal"
+        (modalClosed)="refresh($event)"
+      />
       <div class="flex gap-[8px] items-center">
         <img
           src="/assets/massimo/svg/wallet.svg"
@@ -21,20 +25,20 @@
           <div class="text-h5 text-G900 font-medium">
             $ {{ totalBudget | number : '1.2-2' }} USD
           </div>
-          <div *ngIf="address" class="text-b1 text-G500">
+          <div *ngIf="address.length > 0" class="text-b1 text-G500">
             {{ address.slice(0, 20) }}...{{ address.slice(-4) }}
           </div>
         </div>
         <div class="flex gap-[8px]">
           <copy-button
-            *ngIf="address"
+            *ngIf="address.length > 0"
             ngxClipboard
             [cbContent]="address"
             (click)="copy($event)"
           />
           <refresh-button (click)="refresh($event)" />
           <a
-            *ngIf="address"
+            *ngIf="address.length > 0"
             target="_blank"
             href="{{ explorer }}/address/{{ address }}"
           >
@@ -43,78 +47,71 @@
         </div>
       </div>
 
-      <div
-        [ngSwitch]="address"
-        class="min-h-[380px] flex justify-center items-center"
-      >
-        <div *ngSwitchCase="true" class="text-b1 text-G900">
-          Loading address...
-        </div>
-        <div *ngSwitchCase="false">
-          <div class="flex flex-col justify-center gap-[16px]">
-            <div class="text-h6 text-G900">Please connect your wallet!</div>
-            <basic-button
-              [type]="2"
-              [routerLink]="['/wallet-bnb']"
-              title="Connect Wallet"
-              size="small"
-            />
-          </div>
-        </div>
-        <div *ngSwitchDefault class="w-full">
-          <div *ngIf="assets.length > 1; else loading" class="space-y-[24px]">
-            <div class="flex flex-col gap-[16px]">
-              <div
-                *ngFor="let asset of assets"
-                class="flex flex-col gap-[16px]"
-              >
-                <hr class="w-full h-[1px] bg-G200 border-none" />
-                <div
-                  class="flex gap-[8px] xs:gap-[16px] flex-col xs:flex-row xs:justify-between xs:items-center"
-                >
-                  <div class="flex gap-[16px] items-center">
-                    <dynamic-coin
-                      [symbol]="asset.symbol"
-                      [address]="asset.address"
-                      [network]="chain"
-                    ></dynamic-coin>
-                    <div>
-                      <div class="text-b1 text-N800 font-medium">
-                        {{ asset.symbol }}
-                      </div>
-                      <div class="text-b2 text-G500">
-                        {{ asset.chain }}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="max-xs:pl-[50px] flex flex-col xs:items-end">
-                    <div class="text-b2 xs:text-b1 text-G900 font-medium">
-                      ${{ asset.freeUsd | number : '1.2-2' }}
-                    </div>
-                    <div class="text-b2 text-G500">
-                      {{ asset.free | number : '1.0-4' }}&nbsp;{{
-                        balance?.token ? asset.token : asset.symbol
-                      }}
-                    </div>
-                  </div>
-                  <!-- <td>{{ asset.frozen | number: '1.3' }}</td> -->
-                  <!-- <td>{{ asset.locked | number: '1.3' }}</td> -->
-                </div>
-              </div>
-            </div>
-            <div class="float-right">
+      <div class="w-full min-h-[380px] flex justify-center items-center">
+        <div *ngIf="assets.length === 0">
+          <div *ngIf="loading" class="text-b1 text-G900">Loading...</div>
+          <div *ngIf="!loading" class="w-full">
+            <div class="mx-auto w-max flex flex-col justify-center gap-[16px]">
+              <div class="text-h6 text-G900">Please connect your wallet!</div>
               <basic-button
-                (click)="forget()"
-                [type]="1"
-                title="Disconnect Wallet"
+                [type]="2"
+                (click)="connectWallet($event)"
+                title="Connect Wallet"
                 size="small"
-                extraClass="text-R900 w-max"
               />
             </div>
           </div>
-          <ng-template #loading>
-            <div class="text-b1 text-G900 text-center">Loading...</div>
-          </ng-template>
+        </div>
+        <div *ngIf="assets.length === 1" class="text-b1 text-G900">
+          Loading...
+        </div>
+
+        <div *ngIf="assets.length > 1" class="w-full space-y-[24px]">
+          <div class="flex flex-col gap-[16px]">
+            <div *ngFor="let asset of assets" class="flex flex-col gap-[16px]">
+              <hr class="w-full h-[1px] bg-G200 border-none" />
+              <div
+                class="flex gap-[8px] xs:gap-[16px] flex-col xs:flex-row xs:justify-between xs:items-center"
+              >
+                <div class="flex gap-[16px] items-center">
+                  <dynamic-coin
+                    [symbol]="asset.symbol"
+                    [address]="asset.address"
+                    [network]="chain"
+                  ></dynamic-coin>
+                  <div>
+                    <div class="text-b1 text-N800 font-medium">
+                      {{ asset.symbol }}
+                    </div>
+                    <div class="text-b2 text-G500">
+                      {{ asset.chain }}
+                    </div>
+                  </div>
+                </div>
+                <div class="max-xs:pl-[50px] flex flex-col xs:items-end">
+                  <div class="text-b2 xs:text-b1 text-G900 font-medium">
+                    ${{ asset.freeUsd | number : '1.2-2' }}
+                  </div>
+                  <div class="text-b2 text-G500">
+                    {{ asset.free | number : '1.0-4' }}&nbsp;{{
+                      balance?.token ? asset.token : asset.symbol
+                    }}
+                  </div>
+                </div>
+                <!-- <td>{{ asset.frozen | number: '1.3' }}</td> -->
+                <!-- <td>{{ asset.locked | number: '1.3' }}</td> -->
+              </div>
+            </div>
+          </div>
+          <div class="float-right">
+            <basic-button
+              (click)="forget($event)"
+              [type]="1"
+              title="Disconnect Wallet"
+              size="small"
+              extraClass="text-R900 w-max"
+            />
+          </div>
         </div>
       </div>
     </div>
