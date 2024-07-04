@@ -27,6 +27,7 @@
           <!-- leftBtnEvent in process -->
           <job-transaction-history
             [isAwaitingEscrow]="isAwaitingEscrow"
+            [transactions]="transactions"
             (rightBtnEvent)="statusRightClick($event)"
           />
         </div>

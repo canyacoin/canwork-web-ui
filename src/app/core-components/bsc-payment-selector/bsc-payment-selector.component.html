@@ -23,20 +23,20 @@
           <div class="text-h5 text-G900 font-medium">
             $ {{ totalBudget | number : '1.2-2' }} USD
           </div>
-          <div *ngIf="address" class="text-b1 text-G500">
+          <div *ngIf="address.length > 0" class="text-b1 text-G500">
             {{ address.slice(0, 20) }}...{{ address.slice(-4) }}
           </div>
         </div>
         <div class="flex gap-[8px]">
           <copy-button
-            *ngIf="address"
+            *ngIf="address.length > 0"
             ngxClipboard
             [cbContent]="address"
             (click)="copy($event)"
           />
           <refresh-button (click)="refresh($event)" />
           <a
-            *ngIf="address"
+            *ngIf="address.length > 0"
             target="_blank"
             href="{{ explorer }}/address/{{ address }}"
           >

@@ -21,7 +21,6 @@ import { NgxModalService } from 'ngx-modalview'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
-import { environment } from '../../../../../environments/environment'
 import {
   ActionDialogComponent,
   ActionDialogOptions,
@@ -145,9 +144,9 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     this.transactionsSub = this.transactionService
       .getTransactionsByJob(jobId)
       .subscribe((transactions: Transaction[]) => {
-        this.transactions = transactions
-        // console.log('===================================================')
-        // console.log('this.transactions = ', transactions)
+        this.transactions = transactions.sort((a, b) => {
+          return a.timestamp - b.timestamp
+        })
       })
   }
   actionIsDisabled(action: ActionType): boolean {
@@ -175,6 +174,10 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   }
 
   get isAwaitingEscrow(): boolean {
+    // console.log(
+    //   'isAwaitingEscorw',
+    //   this.job.state === JobState.termsAcceptedAwaitingEscrow
+    // )
     return this.job.state === JobState.termsAcceptedAwaitingEscrow
   }
 
@@ -376,18 +379,18 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  getTxLink(txHash: string) {
-    return `${environment.bsc.blockExplorerUrls[0]}/tx/${txHash}`
-  }
+  // getTxLink(txHash: string) {
+  //   return `${environment.bsc.blockExplorerUrls[0]}/tx/${txHash}`
+  // }
 
-  getTxColor(tx: Transaction) {
-    return 'success' // default
-    /* 
-    todo: there are failure scenarios that we should handle?
-    if so we have to handle into bsc service and handle tx timeout, cause receipt will not arrive
-    */
-    // return tx.success ? 'success' : tx.failure ? 'danger' : 'warning' // obsolete
-  }
+  // getTxColor(tx: Transaction) {
+  //   return 'success' // default
+  //   /*
+  //   todo: there are failure scenarios that we should handle?
+  //   if so we have to handle into bsc service and handle tx timeout, cause receipt will not arrive
+  //   */
+  //   // return tx.success ? 'success' : tx.failure ? 'danger' : 'warning' // obsolete
+  // }
 
   toggleDescription() {
     this.hideDescription = !this.hideDescription

@@ -3,14 +3,64 @@
     Transaction History
   </div>
   <div class="flex flex-col items-center gap-[16px]">
-    <div class="max-w-[400px] w-full h-[160px] bg-G500 rounded-[16px]"></div>
-    <div class="max-w-[400px] flex flex-col gap-[6px] text-center px-[30px]">
-      <div class="text-b1 text-G600 font-medium">No transactions yet</div>
-      <div class="text-b2 text-G500">
-        Make payment to escrow with approved BEP20 token on BNB chain to begin
+    <div
+      *ngIf="transactions.length === 0"
+      class="flex flex-col items-center gap-[16px]"
+    >
+      <img
+        src="/assets/massimo/images/noJobResult.png"
+        alt="No Transactions Found"
+        draggable="false"
+        class="max-w-[312px] w-full"
+      />
+      <div class="max-w-[400px] flex flex-col gap-[6px] text-center px-[30px]">
+        <div class="text-b1 text-G600 font-medium">No transactions yet</div>
+        <div class="text-b2 text-G500">
+          Make payment to escrow with approved BEP20 token on BNB chain to begin
+        </div>
       </div>
     </div>
-    <div class="flex flex-col sm:flex-row gap-[16px]">
+    <div *ngIf="transactions.length >= 1" class="w-full">
+      <div
+        *ngFor="let tx of transactions; let txIndex = index"
+        class="relative overflow-y-hidden"
+      >
+        <div
+          class="w-[2px] h-[400px] rounded-full bg-G200 absolute top-0 left-[11px]"
+          *ngIf="txIndex + 1 !== transactions.length"
+        ></div>
+        <div
+          class="w-[24px] h-[24px] rounded-full bg-G300 absolute top-0 left-0"
+        ></div>
+        <div class="pl-[35px] md:pl-[48px]">
+          <div
+            class="flex flex-col md:flex-row md:justify-between gap-[8px] md:gap-[16px]"
+          >
+            <div
+              class="flex flex-col gap-[4px]"
+              [ngClass]="{
+                'pb-[16px]': txIndex + 1 !== transactions.length
+              }"
+            >
+              <div class="text-b2 text-G700 font-medium">
+                {{ tx.actionType }}
+              </div>
+              <div class="text-b2 text-G500">
+                {{ tx.timestamp | customDate }}
+              </div>
+            </div>
+            <a
+              class="text-b2 text-G900 font-medium text-nowrap underline underline-offset-2 hover:underline"
+              href="{{ getTxLink(tx.hash) }}"
+              target="_blank"
+              >View on explorer</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="isAwaitingEscrow" class="flex flex-col sm:flex-row gap-[16px]">
       <!-- <basic-button
         [type]="1"
         title="See approved tokens"
