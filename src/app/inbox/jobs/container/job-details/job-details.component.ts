@@ -55,6 +55,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   visibleActionDialogModal = false
 
   action: ActionType
+  userTypes = UserType
 
   constructor(
     private authService: AuthService,
@@ -122,12 +123,14 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
             this.currentUser.address === job.clientId
               ? UserType.client
               : UserType.provider
+          console.log('currentUserType================>', this.currentUserType)
           this.jobService.assignOtherPartyAsync(this.job, this.currentUserType)
           this.setAttachmentUrl()
           if (!this.isInitialised) {
             this.jobService.updateJobState(this.job)
             this.isInitialised = true
           }
+          this.spinner.hide()
         } else {
           console.log('We can not find the job.')
           this.router.navigateByUrl('/not-found')
@@ -139,8 +142,9 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         .subscribe((reviews: Review[]) => {
           this.reviews = reviews
         })
+    } else {
+      this.spinner.hide()
     }
-    this.spinner.hide()
   }
 
   private transactionTypeService(jobId): any {
@@ -342,24 +346,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       case ActionType.dispute:
         this.action = ActionType.dispute
         this.visibleActionDialogModal = true
-        // console.log('ActionType.dispute')
-        // //this.dialogService
-        // //  .addDialog(
-        // this.ngxModalService
-        //   .addModal(
-        //     ActionDialogComponent,
-        //     new ActionDialogOptions({
-        //       job: this.job,
-        //       userType: this.currentUserType,
-        //       otherParty: this.job['otherParty']['name'] || 'the other party',
-        //       actionType: action,
-        //     })
-        //   )
-        //   .subscribe((success) => {
-        //     if (!success) {
-        //       console.log('Action cancelled')
-        //     }
-        //   })
         break
       case ActionType.addMessage:
         this.action = ActionType.addMessage

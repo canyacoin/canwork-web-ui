@@ -1,4 +1,4 @@
-<main class="w-full font-sans">
+<main class="w-full font-sans min-h-[400px]">
   <div *ngIf="job">
     <connect-wallet-dialog [(visible)]="visibleConnectWalletModal" />
     <action-dialog
@@ -25,24 +25,30 @@
         <div class="w-full rounded-[12px] bg-white border border-G300 p-[40px]">
           <job-details-panel [job]="job" />
         </div>
-        <div class="w-full rounded-[12px] bg-white border border-G300 p-[40px]">
+        <!-- which means client -->
+        <div
+          *ngIf="currentUserType === userTypes.client"
+          class="w-full rounded-[12px] bg-white border border-G300 p-[40px]"
+        >
           <job-freelancer-information-panel [selectedBid]="selectedBid" />
         </div>
-        <div class="w-full rounded-[12px] bg-white border border-G300 p-[40px]">
-          <job-action-log-panel
-            [job]="job"
-            [currentUser]="currentUser"
-            [isAwaitingEscrow]="isAwaitingEscrow"
-          />
-        </div>
-        <div class="w-full rounded-[12px] bg-white border border-G300 p-[40px]">
-          <!-- leftBtnEvent in process -->
-          <job-transaction-history
-            [isAwaitingEscrow]="isAwaitingEscrow"
-            [transactions]="transactions"
-            (rightBtnEvent)="statusRightClick($event)"
-          />
-        </div>
+        <!-- which means freelancer -->
+        <job-application-panel
+          *ngIf="currentUserType === userTypes.provider"
+          [yourApplication]="selectedBid"
+          [isHired]="true"
+        />
+
+        <job-switch-action-transaction-panel
+          [isTabMode]="!isAwaitingEscrow"
+          [job]="job"
+          [currentUser]="currentUser"
+          [isAwaitingEscrow]="isAwaitingEscrow"
+          [isAwaitingEscrow]="isAwaitingEscrow"
+          [transactions]="transactions"
+          [currentUserType]="currentUserType"
+          (rightBtnEvent)="statusRightClick($event)"
+        />
       </div>
       <div class="lg:min-w-[350px] lg:max-w-[350px] w-full">
         <job-status-panel
