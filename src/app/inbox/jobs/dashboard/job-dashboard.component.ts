@@ -26,11 +26,7 @@ import { JobService } from '@service/job.service'
 import { PublicJobService } from '@service/public-job.service'
 import { MobileService } from '@service/mobile.service'
 import { UserService } from '@service/user.service'
-
-interface jobType {
-  label: string
-  code: string
-}
+import { Tab } from '@class/tabs'
 
 interface PageEvent {
   first: number
@@ -65,8 +61,8 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   allJobs: Job[]
   searchQuery: string
 
-  jobTypes: jobType[]
-  selectedjob: jobType
+  jobTypes: Tab[]
+  selectedJob: Tab
 
   currentPage: number = 0
   first: number = 0
@@ -124,11 +120,11 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
 
     this.route.queryParams.subscribe((params) => {
       if (params['tab'] == undefined) {
-        this.selectedjob = this.jobTypes[0]
+        this.selectedJob = this.jobTypes[0]
         this.jobType = this.jobTypes[0].code
       } else {
-        this.selectedjob = this.jobTypes[params['tab']]
-        this.jobType = this.selectedjob.code
+        this.selectedJob = this.jobTypes[params['tab']]
+        this.jobType = this.selectedJob.code
       }
     })
 

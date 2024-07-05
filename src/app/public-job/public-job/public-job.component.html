@@ -27,7 +27,7 @@
         <div class="w-full">
           <ng-container *ngIf="(isShownTab || isMyJob) && isPublic">
             <p-tabMenu
-              [model]="activejobTypes"
+              [model]="activeJobTypes"
               [activeItem]="selectedJob"
               *ngIf="!isProvider || isMyJob"
             >
@@ -345,7 +345,7 @@
             </div>
           </div>
           <div *ngIf="selectedJob.code === 'proposals'" class="w-full">
-            <job-proposals />
+            <job-proposals-panel />
           </div>
 
           <div
