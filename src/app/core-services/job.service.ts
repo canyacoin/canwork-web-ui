@@ -254,6 +254,7 @@ export class JobService {
             resolve(true)
             break
           case ActionType.addMessage:
+            console.log('ActionType.addMessage in job.service.ts', action)
             parsedJob.actionLog.push(action)
             await this.saveJobAndNotify(parsedJob, action)
             resolve(true)

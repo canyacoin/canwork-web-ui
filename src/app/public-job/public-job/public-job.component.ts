@@ -26,6 +26,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth'
 import { FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular'
 
 import { customAngularEditorConfig } from 'app/core-functions/angularEditorConfig'
+import { Tab } from '@class/tabs'
 
 @Component({
   selector: 'app-public-job',
@@ -55,8 +56,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
   isShownTab: boolean = false
 
-  activejobTypes: any[]
-  selectedJob: any
+  activeJobTypes: Tab[]
+  selectedJob: Tab
 
   price_bid: number = 0
   hoveredFiles: boolean = false
@@ -131,11 +132,11 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.spinner.show()
-    this.activejobTypes = [
+    this.activeJobTypes = [
       { label: 'Job Details', code: 'jobsdetail' },
       { label: 'Proposals', code: 'proposals' },
     ]
-    this.selectedJob = this.activejobTypes[0]
+    this.selectedJob = this.activeJobTypes[0]
     this.shareableLink = environment.shareBaseUrl
 
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
@@ -281,7 +282,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     this.beforeUploadFiles.push(...this.uploadedFiles)
   }
 
-  changeJob(item: any) {
+  changeJob(item: Tab) {
     this.selectedJob = item
   }
   ngOnDestroy() {
