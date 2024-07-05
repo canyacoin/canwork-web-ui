@@ -10,6 +10,14 @@ import { WindowService } from 'app/shared/services/window.service'
 import { HeaderService } from 'app/shared/constants/header'
 import { MessageService } from 'primeng/api'
 
+interface itemType {
+  label: string
+  routerLink?: string
+  icon: string
+  queryParams?: {}
+  styleClass?: string
+}
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -54,7 +62,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   headerSection = HeaderService
   // flag be consumed by the template
   isHamburguer = true
-  items: any[]
+  items: itemType[]
   selectedItem: any | undefined
 
   onHamburguerClick(event: Event): void {
@@ -250,5 +258,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onLogout() {
     this.bscService.disconnect()
     this.authService.logout()
+  }
+
+  navigateWithParams(routerLink: string, queryParams: any) {
+    this.router.navigate([routerLink], { queryParams })
   }
 }

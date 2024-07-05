@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core'
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core'
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -8,12 +15,13 @@ import { Job, PaymentType } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
 import { UserType } from '@class/user'
 import { JobService } from '@service/job.service'
+import { getUsdToCan } from '@util/currency-conversion'
 
 @Component({
   selector: 'action-dialog',
   templateUrl: './action-dialog.component.html',
 })
-export class ActionDialogComponent implements OnInit {
+export class ActionDialogComponent implements OnChanges {
   // two way data binding
   private _visible: boolean
   @Input()
@@ -36,25 +44,23 @@ export class ActionDialogComponent implements OnInit {
 
   executing = false
 
-  actionTypes = ActionType
-  paymentTypes = PaymentType
-
   usdToAtomicCan: number
-  form: UntypedFormGroup = null
+  form: UntypedFormGroup = this.formBuilder.group({}) // Initialize with an empty form group
+
+  actionTypes = ActionType
 
   constructor(
     private formBuilder: UntypedFormBuilder,
     private jobService: JobService
   ) {}
 
-  ngOnInit() {
-    console.log('action-dialog: ')
-    console.log('job ', this.job)
-    console.log('userType ', this.job)
-    console.log('otherParty ', this.otherParty)
-    console.log('actionType ', this.actionType)
-    this.action = new IJobAction(this.actionType, this.userType)
-    console.log(this.action)
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.visible && changes.visible.currentValue === true) {
+      this.initializeForm()
+    }
+  }
+
+  initializeForm() {
     switch (this.actionType) {
       case ActionType.counterOffer:
         this.action.paymentType = this.job.paymentType
@@ -83,10 +89,16 @@ export class ActionDialogComponent implements OnInit {
               })
         break
       case ActionType.addMessage:
-      case ActionType.dispute:
         this.form = this.formBuilder.group({
+          // Add form initialization for this action type
           message: ['', Validators.required],
         })
+        console.log('this.form===================>', this.form)
+        break
+      case ActionType.dispute:
+        // this.form = this.formBuilder.group({
+        //   message: ['', Validators.required],
+        // })
         break
       case ActionType.review:
         this.form = this.formBuilder.group({
@@ -107,8 +119,14 @@ export class ActionDialogComponent implements OnInit {
     }
   }
 
-  async handleAction() {
-    console.log('handleAction: ' + this.actionType)
+  async handleAction(event: Event) {
+    event.preventDefault()
+    this.action = new IJobAction(this.actionType, this.userType)
+    console.log(
+      '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+    )
+    console.log('this.action: ', this.action)
+    console.log('this.action.message: ', this.action.message)
     this.executing = true
     try {
       switch (this.actionType) {
@@ -127,8 +145,9 @@ export class ActionDialogComponent implements OnInit {
           this.action.rating = this.form.value.rating
           break
         case ActionType.addMessage:
-        case ActionType.dispute:
           this.action.message = this.form.value.message
+          break
+        case ActionType.dispute:
           break
         case ActionType.acceptTerms:
         case ActionType.declineTerms:

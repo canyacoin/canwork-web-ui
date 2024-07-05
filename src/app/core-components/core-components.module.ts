@@ -52,6 +52,7 @@ import { BadgeModule } from 'primeng/badge'
 import { SearchButtonComponent } from './buttons/search-button/search-button.component'
 import { CheckboxModule } from 'primeng/checkbox'
 import { DialogModule } from 'primeng/dialog'
+import { TabMenuModule } from 'primeng/tabmenu'
 
 import { BasicDialogComponent } from './dialogs/basic-dialog/basic-dialog.component'
 import { ProposalDetailsDialogComponent } from './dialogs/proposal-details-dialog/proposal-details-dialog.component'
@@ -64,8 +65,8 @@ import { WarningMessageComponent } from './messages/warning-message/warning-mess
 import { ErrorMessageComponent } from './messages/error-message/error-message.component'
 
 import { BackToJobBoardComponent } from './buttons/back-to-job-board/back-to-job-board.component'
-import { JobDetailsPanelComponent } from './job/job-details-panel/job-details.component'
-import { JobProposalsPanelComponent } from './job/job-proposals-panel/job-proposals.component'
+import { JobDetailsPanelComponent } from './job/job-details-panel/job-details-panel.component'
+import { JobProposalsPanelComponent } from './job/job-proposals-panel/job-proposals-panel.component'
 import { JobStatusPanelComponent } from './job/job-status-panel/job-status-panel.component'
 import { BookmarkButtonComponent } from './buttons/bookmark-button/bookmark-button.component'
 import { ShareButtonComponent } from './buttons/share-button/share-button.component'
@@ -79,15 +80,17 @@ import { ProfileCardComponent } from './cards/profile-card/profile-card.componen
 
 import { StatusIconComponent } from './status-icon/status-icon.component'
 import { JobActionLogPanelComponent } from './job/job-action-log-panel/job-action-log-panel.component'
-import { JobTransactionHistoryComponent } from './job/job-transaction-history/job-transaction-history.component'
+import { JobTransactionHistoryPanelComponent } from './job/job-transaction-history-panel/job-transaction-history-panel.component'
 import { JobFreelancerInformationPanelComponent } from './job/job-freelancer-information-panel/job-freelancer-information-panel.component'
 import { CopyButtonComponent } from './buttons/copy-button/copy-button.component'
 import { RefreshButtonComponent } from './buttons/refresh-button/refresh-button.component'
 import { ExternalLinkButtonComponent } from './buttons/external-link-button/external-link-button.component'
 import { ConnectWalletDialogComponent } from './dialogs/connect-wallet/connect-wallet.component'
 import { WalletButtonComponent } from './buttons/wallet-button/wallet-button.component'
-import { RaiseDisputeButtonComponent } from './buttons/raise-dispute-button/raise-dispute-button.component';
+import { RaiseDisputeButtonComponent } from './buttons/raise-dispute-button/raise-dispute-button.component'
 import { ActionDialogComponent } from './dialogs/action-dialog/action-dialog.component'
+import { SeeMoreLessButtonComponent } from './buttons/see-more-less-button/see-more-less-button.component'
+import { JobSwitchActionTransactionPanelComponent } from './job/job-switch-action-transaction-panel/job-switch-action-transaction-panel.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -114,6 +117,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     BadgeModule,
     CheckboxModule,
     DialogModule,
+    TabMenuModule,
     DropdownModule,
     TableModule,
   ],
@@ -181,6 +185,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     WalletButtonComponent,
     RaiseDisputeButtonComponent,
     WalletButtonComponent,
+    SeeMoreLessButtonComponent,
     // Dialogs
     BasicDialogComponent,
     ProposalDetailsDialogComponent,
@@ -189,7 +194,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
 
     StatusIconComponent,
     JobActionLogPanelComponent,
-    JobTransactionHistoryComponent,
+    JobTransactionHistoryPanelComponent,
+    JobSwitchActionTransactionPanelComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -255,6 +261,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ExternalLinkButtonComponent,
     WalletButtonComponent,
     RaiseDisputeButtonComponent,
+    SeeMoreLessButtonComponent,
     // Dialogs
     BasicDialogComponent,
     ProposalDetailsDialogComponent,
@@ -263,7 +270,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
 
     StatusIconComponent,
     JobActionLogPanelComponent,
-    JobTransactionHistoryComponent,
+    JobTransactionHistoryPanelComponent,
+    JobSwitchActionTransactionPanelComponent,
   ],
   providers: [
     {
