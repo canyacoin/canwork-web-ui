@@ -86,6 +86,8 @@ import { RefreshButtonComponent } from './buttons/refresh-button/refresh-button.
 import { ExternalLinkButtonComponent } from './buttons/external-link-button/external-link-button.component'
 import { ConnectWalletDialogComponent } from './dialogs/connect-wallet/connect-wallet.component'
 import { WalletButtonComponent } from './buttons/wallet-button/wallet-button.component'
+import { RaiseDisputeButtonComponent } from './buttons/raise-dispute-button/raise-dispute-button.component';
+import { ActionDialogComponent } from './dialogs/action-dialog/action-dialog.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -177,15 +179,17 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     RefreshButtonComponent,
     ExternalLinkButtonComponent,
     WalletButtonComponent,
+    RaiseDisputeButtonComponent,
+    WalletButtonComponent,
     // Dialogs
     BasicDialogComponent,
     ProposalDetailsDialogComponent,
     ConnectWalletDialogComponent,
+    ActionDialogComponent,
 
     StatusIconComponent,
     JobActionLogPanelComponent,
     JobTransactionHistoryComponent,
-    WalletButtonComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -250,10 +254,12 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     RefreshButtonComponent,
     ExternalLinkButtonComponent,
     WalletButtonComponent,
+    RaiseDisputeButtonComponent,
     // Dialogs
     BasicDialogComponent,
     ProposalDetailsDialogComponent,
     ConnectWalletDialogComponent,
+    ActionDialogComponent,
 
     StatusIconComponent,
     JobActionLogPanelComponent,

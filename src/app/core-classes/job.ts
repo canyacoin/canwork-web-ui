@@ -151,7 +151,7 @@ export enum JobState {
   providerCounterOffer = 'Provider counter',
   clientCounterOffer = 'Client counter',
   termsAcceptedAwaitingEscrow = 'Awaiting Escrow',
-  inEscrow = 'Job started',
+  inEscrow = 'Funds in Escrow',
   workPendingCompletion = 'Pending completion',
   inDispute = 'Disputed',
   complete = 'Complete',

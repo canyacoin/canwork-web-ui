@@ -29,6 +29,11 @@
           alt="delete"
         />
         <img
+          *ngSwitchCase="'accept'"
+          src="/assets/massimo/images/jobAccept.png"
+          alt="accept"
+        />
+        <img
           *ngSwitchCase="'jobListingDeleted'"
           src="/assets/massimo/images/jobDeleted.png"
           alt="Job Listing Deleted"
