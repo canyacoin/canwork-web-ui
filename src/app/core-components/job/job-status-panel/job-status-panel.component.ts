@@ -82,6 +82,10 @@ export class JobStatusPanelComponent {
     return this.job.state === JobState.termsAcceptedAwaitingEscrow
   }
 
+  get isInEscrow(): boolean {
+    return this.job.state === JobState.inEscrow
+  }
+
   get isClosed() {
     return this.job.state === JobState.closed
   }
@@ -91,6 +95,9 @@ export class JobStatusPanelComponent {
     let style = 'w-[16px] h-[16px] rounded-full '
     switch (this.job.state) {
       case JobState.acceptingOffers:
+        style += 'bg-vibrantGreen'
+        break
+      case JobState.inEscrow:
         style += 'bg-vibrantGreen'
         break
       case JobState.closed:

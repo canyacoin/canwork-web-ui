@@ -88,7 +88,7 @@
       </ng-container>
       <ng-container *ngIf="isAwaitingEscrow">
         <div
-          class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center gap-2 font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl transition-all duration-300"
+          class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl transition-all duration-300"
           (click)="leftClick($event)"
         >
           Cancel Job
@@ -98,6 +98,17 @@
           <basic-button
             [type]="2"
             title="Pay Escrow"
+            (click)="rightClick($event)"
+          />
+        </div>
+      </ng-container>
+      <ng-container *ngIf="isInEscrow">
+        <raise-dispute-button (click)="leftClick($event)" />
+
+        <div class="w-max">
+          <basic-button
+            [type]="2"
+            title="Add Note"
             (click)="rightClick($event)"
           />
         </div>
