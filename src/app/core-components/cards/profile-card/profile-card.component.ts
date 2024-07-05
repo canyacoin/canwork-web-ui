@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core'
 import { Router } from '@angular/router'
+import { Rating } from '@class/user'
 
 @Component({
   selector: 'profile-card',
@@ -13,7 +14,7 @@ export class ProfileCardComponent {
   @Input() name!: string
   @Input() title!: string
   @Input() isVerified!: boolean
-  @Input() rating!: any
+  @Input() rating!: Rating
   @Input() skillTags!: string[]
   @Input() slug!: string
   @Input() address!: string
