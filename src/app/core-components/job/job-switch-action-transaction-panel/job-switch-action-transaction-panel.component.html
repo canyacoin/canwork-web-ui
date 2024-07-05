@@ -1,0 +1,59 @@
+<section *ngIf="isTabMode">
+  <p-tabMenu [model]="actionTabs" [activeItem]="selectedTab">
+    <ng-template pTemplate="item" let-item let-i="index">
+      <div
+        class="bg-G200 border-none"
+        [ngClass]="{
+          'rounded-tl-xl': i === 0,
+          'rounded-tr-xl': i === 1
+        }"
+      >
+        <div
+          class="select-none flex items-center h-full py-[8px] px-[12px] md:px-[40px] text-b2 md:text-b1 text-center font-medium leading-6 rounded-t-xl text-G500 cursor-pointer"
+          (click)="changeTab(item)"
+          [ngClass]="{
+            'bg-white': selectedTab.code === item.code
+          }"
+        >
+          {{ item.label }}
+        </div>
+      </div>
+    </ng-template>
+  </p-tabMenu>
+  <div
+    class="bg-white py-[32px] px-[20px] md:px-[40px] border rounded-xl max-sm:rounded-tr-none rounded-tl-none border-G200"
+  >
+    <job-action-log-panel
+      *ngIf="selectedTab.code === actionTabs[0].code"
+      [job]="job"
+      [currentUser]="currentUser"
+      [isTabMode]="isTabMode"
+    />
+    <!-- leftBtnEvent in process -->
+    <job-transaction-history-panel
+      *ngIf="selectedTab.code === actionTabs[1].code"
+      [isTabMode]="isAwaitingEscrow"
+      [transactions]="transactions"
+      [currentUserType]="currentUserType"
+      (rightBtnEvent)="rightClick($event)"
+    />
+  </div>
+</section>
+<section *ngIf="!isTabMode" class="flex flex-col gap-[16px]">
+  <div class="w-full rounded-[12px] bg-white border border-G300 p-[40px]">
+    <job-action-log-panel
+      [job]="job"
+      [currentUser]="currentUser"
+      [isAwaitingEscrow]="isAwaitingEscrow"
+    />
+  </div>
+  <div class="w-full rounded-[12px] bg-white border border-G300 p-[40px]">
+    <!-- leftBtnEvent in process -->
+    <job-transaction-history-panel
+      [isAwaitingEscrow]="isAwaitingEscrow"
+      [transactions]="transactions"
+      [currentUserType]="currentUserType"
+      (rightBtnEvent)="statusRightClick($event)"
+    />
+  </div>
+</section>
