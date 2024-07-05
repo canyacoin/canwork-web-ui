@@ -1,112 +1,118 @@
-<div
-  class="w-full flex flex-col gap-[24px] rounded-[12px] bg-white border border-G300 p-[40px]"
->
-  <div class="flex max-md:flex-col justify-between md:items-center">
-    <div class="flex flex-col gap-[8px]">
-      <div class="text-h6 font-medium text-G900">Your Application</div>
-      <div class="max-md:text-center text-b2 text-G500">
-        Applied:
-        {{ formatDateFromString(yourApplication.timestamp) }}
-      </div>
-    </div>
-    <div class="flex items-center gap-[16px]">
-      <div class="text-b2 font-normal text-G800">Status</div>
-      <div
-        class="px-[16px] py-[6px] rounded-3xl bg-[#FFF8C5] text-G800 select-none"
-      >
-        Not viewed
-      </div>
-      <!-- <div
-        class="px-[16px] py-[6px] rounded-3xl bg-[#DAFBE1] text-G800 select-none"
-      >
-        Viewed
-      </div> -->
-    </div>
-  </div>
-
-  <div class="flex flex-col gap-[16px]">
-    <div class="text-b1 font-medium text-G900">Cover Letter</div>
-    <div
-      class="text-b1 text-G900"
-      [innerHTML]="yourApplication.message | linkify"
-    ></div>
-  </div>
-
-  <div class="flex flex-col gap-[16px]">
-    <hr class="w-full h-[1px] bg-G300 border-none" />
-    <div class="text-b1 font-medium w-full text-left">Your Payment</div>
-
-    <div
-      class="flex flex-col md:flex-row justify-center md:justify-between md:items-center gap-[16px]"
-    >
-      <div class="flex flex-col gap-[8px]">
-        <div class="text-b1 font-medium text-G900">Bid Price</div>
-        <p class="text-b2 text-G500">
-          Total amount the client will see on your proposal
-        </p>
-      </div>
-
-      <div class="text-b1 font-medium text-G900">
-        ${{ yourApplication.budget }} USD
-      </div>
-    </div>
-
-    <div
-      class="flex flex-col md:flex-row justify-center md:justify-between md:items-center gap-[16px]"
-    >
-      <div class="flex flex-col gap-[8px]">
-        <div class="text-b1 font-medium text-G900">1% Service Fee</div>
-        <p class="text-b2 text-G500">
-          CanWork charges 1% fees. The lowest fees ever.
-        </p>
-      </div>
-
-      <div class="text-b1 font-medium text-G900">
-        ${{ yourApplication.budget / 100 }} USD
-      </div>
-    </div>
-
-    <div
-      class="flex flex-col md:flex-row justify-center md:justify-between md:items-center gap-[16px]"
-    >
-      <div class="flex flex-col gap-[8px]">
-        <div class="text-b1 font-medium text-G900">Payout</div>
-        <p class="text-b2 text-G500">
-          Amount you'll receive after service fee charge
-        </p>
-      </div>
-
-      <div class="text-b1 font-medium text-G900">
-        ${{ yourApplication.budget * 0.99 }} USD
-      </div>
-    </div>
-  </div>
-
+<ng-container *ngIf="yourApplication">
   <div
-    *ngIf="
-      yourApplication.attachments && yourApplication.attachments?.length !== 0
-    "
+    class="w-full flex flex-col gap-[24px] rounded-[12px] bg-white border border-G300 p-[40px]"
   >
-    <div class="flex flex-col gap-[16px]">
-      <hr class="w-full h-[1px] bg-G300 border-none" />
-      <div class="text-G900 text-b1 font-medium w-full">Attachment</div>
+    <div
+      #contentDiv
+      class="w-full flex flex-col gap-[24px]"
+      [@toggleHeight]="isSeeMore ? 'collapsed' : 'expanded'"
+    >
+      <div class="flex max-md:flex-col justify-between md:items-center">
+        <div class="flex flex-col gap-[8px]">
+          <div class="text-h6 font-medium text-G900">Your Application</div>
+          <div class="max-md:text-center text-b2 text-G500">
+            Applied:
+            {{ formatDateFromString(yourApplication.timestamp) }}
+          </div>
+        </div>
+        <div class="flex items-center gap-[16px]">
+          <div class="text-b2 font-normal text-G800">Status</div>
+          <div
+            class="px-[16px] py-[6px] rounded-3xl text-G800 select-none"
+            [ngClass]="{ 'bg-[#DAFBE1]': isHired, 'bg-[#FFF8C5]': !isHired }"
+          >
+            {{ isHired ? 'Viewed' : 'Not viewed' }}
+          </div>
+        </div>
+      </div>
 
-      <div class="flex flex-col gap-[12px]">
-        <attachment-button
-          *ngFor="let item of yourApplication.attachments"
-          [url]="item.url"
-          [name]="item.name"
+      <div class="flex flex-col gap-[16px]">
+        <div class="text-b1 font-medium text-G900">Cover Letter</div>
+        <div
+          class="text-b1 text-G900"
+          [innerHTML]="yourApplication.message | linkify"
+        ></div>
+      </div>
+
+      <div class="flex flex-col gap-[16px]">
+        <hr class="w-full h-[1px] bg-G300 border-none" />
+        <div class="text-b1 font-medium w-full text-left">Your Payment</div>
+
+        <div
+          class="flex flex-col md:flex-row justify-center md:justify-between md:items-center gap-[16px]"
+        >
+          <div class="flex flex-col gap-[8px]">
+            <div class="text-b1 font-medium text-G900">Bid Price</div>
+            <p class="text-b2 text-G500">
+              Total amount the client will see on your proposal
+            </p>
+          </div>
+
+          <div class="text-b1 font-medium text-G900">
+            ${{ yourApplication.budget }} USD
+          </div>
+        </div>
+
+        <div
+          class="flex flex-col md:flex-row justify-center md:justify-between md:items-center gap-[16px]"
+        >
+          <div class="flex flex-col gap-[8px]">
+            <div class="text-b1 font-medium text-G900">1% Service Fee</div>
+            <p class="text-b2 text-G500">
+              CanWork charges 1% fees. The lowest fees ever.
+            </p>
+          </div>
+
+          <div class="text-b1 font-medium text-G900">
+            ${{ yourApplication.budget / 100 }} USD
+          </div>
+        </div>
+
+        <div
+          class="flex flex-col md:flex-row justify-center md:justify-between md:items-center gap-[16px]"
+        >
+          <div class="flex flex-col gap-[8px]">
+            <div class="text-b1 font-medium text-G900">Payout</div>
+            <p class="text-b2 text-G500">
+              Amount you'll receive after service fee charge
+            </p>
+          </div>
+
+          <div class="text-b1 font-medium text-G900">
+            ${{ yourApplication.budget * 0.99 }} USD
+          </div>
+        </div>
+      </div>
+
+      <div
+        *ngIf="
+          yourApplication.attachments &&
+          yourApplication.attachments?.length !== 0
+        "
+      >
+        <div class="flex flex-col gap-[16px]">
+          <hr class="w-full h-[1px] bg-G300 border-none" />
+          <div class="text-G900 text-b1 font-medium w-full">Attachment</div>
+
+          <div class="flex flex-col gap-[12px]">
+            <attachment-button
+              *ngFor="let item of yourApplication.attachments"
+              [url]="item.url"
+              [name]="item.name"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!isHired" class="flex">
+        <basic-button
+          [type]="1"
+          title="Withdraw Your Application"
+          size="small"
+          (click)="withdrawButtonClick($event)"
         />
       </div>
     </div>
-
-    <div class="flex">
-      <basic-button
-        [type]="1"
-        title="Withdraw Your Application"
-        size="small"
-        (click)="withdrawButtonClick($event)"
-      />
-    </div>
+    <see-more-less-button *ngIf="isHired" [(visible)]="isSeeMore" />
   </div>
-</div>
+</ng-container>
