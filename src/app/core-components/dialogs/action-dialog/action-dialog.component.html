@@ -1,0 +1,89 @@
+<p-dialog
+  [(visible)]="visible"
+  styleClass="md:max-w-[600px] lg:max-w-[906px] w-full !bg-G50 mx-[20px]"
+  [draggable]="false"
+  [resizable]="false"
+  [modal]="true"
+>
+  <div class="flex justify-center h-[300px] md:h-[400px] p-[20px]">
+    <div
+      *ngIf="actionType === actionTypes.dispute"
+      class="flex flex-col gap-[70px] justify-center items-center"
+    >
+      <div class="text-h5 text-G900 font-medium">Raise Dispute</div>
+      <div class="flex flex-col gap-[24px]">
+        <div class="flex flex-col gap-[16px] text-center text-G700">
+          <div class="text-b1">
+            Please contact&nbsp;
+            <a href="mailto:support@canwork.io" class="text-cyan-500"
+              >support@canwork.io</a
+            >
+            &nbsp;for dispute resolution.
+          </div>
+          <div class="text-b2">
+            We're most active on the following social channels...
+          </div>
+        </div>
+        <div class="flex gap-[16px] mx-auto">
+          <a
+            href="https://t.me/CanYaCommunity"
+            class="cursor-pointer"
+            target="_blank"
+          >
+            <img
+              src="/assets/massimo/images/telegram.png"
+              class="w-[40px] h-[40px] md:w-[64px] md:h-[64px] select-none"
+            />
+          </a>
+          <a
+            href="https://twitter.com/CanWork_io"
+            class="cursor-pointer"
+            target="_blank"
+          >
+            <img
+              src="/assets/massimo/images/twitter.png"
+              class="w-[40px] h-[40px] md:w-[64px] md:h-[64px] select-none"
+            />
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="actionType === actionTypes.addMessage"
+      class="flex flex-col gap-[70px] justify-center items-center w-full"
+    >
+      <div class="text-h5 text-G900 font-medium">Add a note to this job</div>
+
+      <div class="flex flex-col items-center gap-[24px] w-full">
+        <form
+          [formGroup]="form"
+          class="flex flex-col gap-[16px] max-w-[300px] w-full text-center"
+        >
+          <div class="text-G900 text-b1">Add message</div>
+          <textarea
+            class="w-full outline-none h-[100px] border border-G500 rounded-md p-[5px]"
+            formControlName="message"
+            name="message"
+            placeholder="Enter your message here"
+          ></textarea>
+        </form>
+
+        <div class="flex gap-4">
+          <basic-button
+            [type]="2"
+            [title]="actionType"
+            size="small"
+            (click)="handleAction()"
+          />
+          <basic-button
+            [type]="2"
+            title="Cancel"
+            size="small"
+            (click)="handleCancelClick($event)"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>
