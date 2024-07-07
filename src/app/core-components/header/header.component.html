@@ -133,7 +133,8 @@
               <div
                 class="flex items-center"
                 *ngIf="item.label === 'Edit Profile'"
-                (click)="navigateWithParams(item.routerLink, item.queryParams)"
+                [routerLink]="item.routerLink"
+                [queryParams]="item.queryParams"
               >
                 <img
                   src="{{ '/assets/massimo/svg/header/' + item.icon }}"

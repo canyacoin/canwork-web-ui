@@ -115,7 +115,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
           currentRoute.includes('/wallet-bnb') ||
           currentRoute.includes('/public') ||
           currentRoute.includes('/auth') ||
-          currentRoute.includes('/jobs/')
+          currentRoute.includes('/jobs/') ||
+          currentRoute.includes('/not-found')
         ) {
           this.isTransfer = true
         } else {
@@ -260,7 +261,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.authService.logout()
   }
 
-  navigateWithParams(routerLink: string, queryParams: any) {
-    this.router.navigate([routerLink], { queryParams })
-  }
+  // navigateWithParams(routerLink: string, queryParams: any) {
+  //   this.router.navigate([routerLink], { queryParams })
+  // }
 }

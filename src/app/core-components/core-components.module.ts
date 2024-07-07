@@ -91,6 +91,7 @@ import { RaiseDisputeButtonComponent } from './buttons/raise-dispute-button/rais
 import { ActionDialogComponent } from './dialogs/action-dialog/action-dialog.component'
 import { SeeMoreLessButtonComponent } from './buttons/see-more-less-button/see-more-less-button.component'
 import { JobSwitchActionTransactionPanelComponent } from './job/job-switch-action-transaction-panel/job-switch-action-transaction-panel.component'
+import { ChatButtonComponent } from './buttons/chat-button/chat-button.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -186,6 +187,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     RaiseDisputeButtonComponent,
     WalletButtonComponent,
     SeeMoreLessButtonComponent,
+    ChatButtonComponent,
     // Dialogs
     BasicDialogComponent,
     ProposalDetailsDialogComponent,
@@ -262,6 +264,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     WalletButtonComponent,
     RaiseDisputeButtonComponent,
     SeeMoreLessButtonComponent,
+    ChatButtonComponent,
     // Dialogs
     BasicDialogComponent,
     ProposalDetailsDialogComponent,
