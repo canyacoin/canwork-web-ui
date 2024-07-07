@@ -8,7 +8,10 @@
       [otherParty]="job['otherParty']['name'] || 'the other party'"
       [actionType]="action"
     />
-    <div *ngIf="isAwaitingEscrow" class="pb-[8px]">
+    <div
+      *ngIf="isAwaitingEscrow && currentUserType === userTypes.client"
+      class="pb-[8px]"
+    >
       <warning-message
         [type]="2"
         [budget]="job.budget"
@@ -18,7 +21,7 @@
     <div
       class="flex flex-col lg:flex-row md:justify-between gap-6"
       [ngClass]="{
-        'pt-[16px]': !isAwaitingEscrow,
+        'pt-[16px]': !isAwaitingEscrow || currentUserType === userTypes.provider,
       }"
     >
       <div class="w-full flex flex-col gap-[16px]">
@@ -40,7 +43,9 @@
         />
 
         <job-switch-action-transaction-panel
-          [isTabMode]="!isAwaitingEscrow"
+          [isTabMode]="
+            !isAwaitingEscrow || currentUserType === userTypes.provider
+          "
           [job]="job"
           [currentUser]="currentUser"
           [isAwaitingEscrow]="isAwaitingEscrow"

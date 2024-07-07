@@ -23,7 +23,10 @@
             class="max-w-[400px] flex flex-col gap-[6px] text-center px-[30px]"
           >
             <div class="text-b1 text-G600 font-medium">No transactions yet</div>
-            <div class="text-b2 text-G500">
+            <div
+              *ngIf="currentUserType === userType.client"
+              class="text-b2 text-G500"
+            >
               Make payment to escrow with approved BEP20 token on BNB chain to
               begin
             </div>
@@ -83,7 +86,7 @@
         </div>
 
         <div
-          *ngIf="isAwaitingEscrow"
+          *ngIf="isAwaitingEscrow && currentUserType === userType.client"
           class="flex flex-col sm:flex-row gap-[16px]"
         >
           <!-- <basic-button

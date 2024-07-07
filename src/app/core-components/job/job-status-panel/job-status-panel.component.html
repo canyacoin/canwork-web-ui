@@ -1,5 +1,5 @@
 <div
-  class="rounded-[12px] bg-white border border-G300 p-[24px] h-max font-sans flex flex-col gap-[24px]"
+  class="rounded-[12px] bg-white border border-G300 p-[24px] h-max font-sans flex flex-col gap-[24px] sticky top-[75px]"
 >
   <div class="flex justify-between items-center gap-[8px]">
     <div class="flex gap-[8px] items-center">
@@ -59,12 +59,26 @@
       [isGrid]="false"
       [isSmall]="true"
     />
+    <!-- *ngIf="!selectedBid.rejected" -->
+    <div
+      *ngIf="!isMyJob && !isAcceptingOffers"
+      class="flex justify-end gap-[16px] items-center"
+    >
+      <chat-button
+        [routerLink]="['/inbox/chat']"
+        [queryParams]="{ address: jobPoster.address }"
+      />
+      <basic-button
+        [type]="1"
+        title="View Profile"
+        size="small"
+        extraClass="border border-G200"
+        [routerLink]="['/profile/', jobPoster.slug]"
+      />
+    </div>
   </div>
 
-  <div
-    *ngIf="currentUser && isMyJob && !isClosed"
-    class="flex justify-center items-center"
-  >
+  <div *ngIf="currentUser && isMyJob" class="flex justify-center items-center">
     <div class="flex flex-col sm:flex-row gap-4 items-center">
       <ng-container *ngIf="isAcceptingOffers">
         <div
@@ -105,6 +119,41 @@
       <ng-container *ngIf="isInEscrow">
         <raise-dispute-button (click)="leftClick($event)" />
 
+        <basic-button
+          [type]="2"
+          title="Add Note"
+          (click)="rightClick($event)"
+          extraClass="w-max"
+          size="small"
+        />
+      </ng-container>
+    </div>
+  </div>
+
+  <div
+    *ngIf="currentUser && !isMyJob && !isAcceptingOffers"
+    class="flex justify-center items-center"
+  >
+    <div class="flex flex-col sm:flex-row gap-4 items-center">
+      <ng-container *ngIf="isAwaitingEscrow">
+        <div
+          class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl transition-all duration-300"
+          (click)="leftClick($event)"
+        >
+          Cancel Job Early
+        </div>
+
+        <basic-button
+          [type]="2"
+          title="Add Note"
+          (click)="rightClick($event)"
+          extraClass="w-max"
+          size="small"
+        />
+      </ng-container>
+      <!-- <ng-container *ngIf="isInEscrow">
+        <raise-dispute-button (click)="leftClick($event)" />
+
         <div class="w-max">
           <basic-button
             [type]="2"
@@ -112,7 +161,7 @@
             (click)="rightClick($event)"
           />
         </div>
-      </ng-container>
+      </ng-container> -->
     </div>
   </div>
 

@@ -324,24 +324,30 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
           await this.releaseEscrowBsc()
         }
         break
+      case ActionType.cancelJob:
+        this.action = ActionType.cancelJob
+        this.visibleActionDialogModal = true
+        break
       case ActionType.cancelJobEarly:
         console.log('ActionType.cancelJobEarly')
         //this.dialogService
         //  .addDialog(
-        this.ngxModalService
-          .addModal(
-            ActionDialogComponent,
-            new ActionDialogOptions({
-              job: this.job,
-              userType: this.currentUserType,
-              actionType: action,
-            })
-          )
-          .subscribe((success) => {
-            if (!success) {
-              console.log('Action cancelled')
-            }
-          })
+        // this.ngxModalService
+        //   .addModal(
+        //     ActionDialogComponent,
+        //     new ActionDialogOptions({
+        //       job: this.job,
+        //       userType: this.currentUserType,
+        //       actionType: action,
+        //     })
+        //   )
+        //   .subscribe((success) => {
+        //     if (!success) {
+        //       console.log('Action cancelled')
+        //     }
+        //   })
+        this.action = ActionType.cancelJobEarly
+        this.visibleActionDialogModal = true
         break
       case ActionType.dispute:
         this.action = ActionType.dispute
@@ -404,19 +410,35 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
   statusLeftClick(e: Event) {
     e.preventDefault()
-    if (this.isAwaitingEscrow) {
-      this.executeAction(ActionType.cancelJob) // Cancel job
-    } else if (this.isInEscrow) {
-      this.executeAction(ActionType.dispute) // Raise dispute
+    if (this.currentUserType === UserType.client) {
+      if (this.isAwaitingEscrow) {
+        this.executeAction(ActionType.cancelJob) // Cancel job
+      } else if (this.isInEscrow) {
+        // this.executeAction(ActionType.dispute) // Raise dispute
+      }
+    } else if (this.currentUserType === UserType.provider) {
+      if (this.isAwaitingEscrow) {
+        this.executeAction(ActionType.cancelJobEarly) // Cancel job early
+      } else if (this.isInEscrow) {
+        // this.executeAction(ActionType.dispute) // Raise dispute
+      }
     }
   }
 
   statusRightClick(e: Event) {
     e.preventDefault()
-    if (this.isAwaitingEscrow) {
-      this.executeAction(ActionType.enterEscrow) // Pay Escrow
-    } else if (this.isInEscrow) {
-      this.executeAction(ActionType.addMessage) // Add Note
+    if (this.currentUserType === UserType.client) {
+      if (this.isAwaitingEscrow) {
+        this.executeAction(ActionType.enterEscrow) // Pay Escrow
+      } else if (this.isInEscrow) {
+        this.executeAction(ActionType.addMessage) // Add Note
+      }
+    } else if (this.currentUserType === UserType.provider) {
+      if (this.isAwaitingEscrow) {
+        this.executeAction(ActionType.addMessage) // Add Note
+      } else if (this.isInEscrow) {
+        // this.executeAction(ActionType.dispute) // Raise dispute
+      }
     }
   }
   seeConsole() {

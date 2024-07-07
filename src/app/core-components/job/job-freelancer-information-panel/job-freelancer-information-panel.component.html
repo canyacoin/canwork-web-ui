@@ -45,18 +45,10 @@
           class="flex flex-wrap gap-y-[8px] gap-x-[16px] items-center"
           *ngIf="!selectedBid.rejected"
         >
-          <div
-            class="flex gap-[8px] items-center cursor-pointer select-none text-b1 font-medium text-G900 duration-300 transition-all"
+          <chat-button
             [routerLink]="['/inbox/chat']"
             [queryParams]="{ address: selectedBid.providerId }"
-          >
-            <img
-              src="/assets/massimo/svg/commentMessage.svg"
-              alt="commentMessage"
-              class="w-[20px] h-[20px]"
-            />
-            Chat
-          </div>
+          />
           <basic-button
             [type]="1"
             title="View Profile"
