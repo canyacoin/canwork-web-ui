@@ -5,7 +5,7 @@
   [resizable]="false"
   [modal]="true"
 >
-  <div class="flex justify-center h-[300px] md:h-[400px] p-[20px]">
+  <div class="flex justify-center px-[20px] pb-[40px]">
     <div
       *ngIf="actionType === actionTypes.dispute"
       class="flex flex-col gap-[30px] md:gap-[70px] justify-center items-center"
@@ -46,6 +46,62 @@
             />
           </a>
         </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="actionType === actionTypes.cancelJob"
+      class="flex flex-col justify-center items-center gap-[24px]"
+    >
+      <img
+        class="w-[200px]"
+        src="/assets/massimo/images/jobDelete.png"
+        alt="delete"
+      />
+      <div class="text-h6 text-center font-medium">
+        Are you sure you wish to cancel this job?
+      </div>
+      <div class="flex gap-4">
+        <basic-button
+          [type]="1"
+          title="Yes"
+          size="small"
+          (click)="handleAction($event)"
+        />
+        <basic-button
+          [type]="2"
+          title="No"
+          size="small"
+          (click)="handleCancelClick($event)"
+        />
+      </div>
+    </div>
+
+    <div
+      *ngIf="actionType === actionTypes.cancelJobEarly"
+      class="flex flex-col justify-center items-center gap-[24px]"
+    >
+      <img
+        class="w-[200px]"
+        src="/assets/massimo/images/jobDelete.png"
+        alt="delete"
+      />
+      <div class="text-h6 text-center font-medium max-w-[400px]">
+        You are going to cancel this job. This cannot be undone. Are you sure?
+      </div>
+      <div class="flex gap-4">
+        <basic-button
+          [type]="1"
+          title="Yes"
+          size="small"
+          (click)="handleAction($event)"
+        />
+        <basic-button
+          [type]="2"
+          title="No"
+          size="small"
+          (click)="handleCancelClick($event)"
+        />
       </div>
     </div>
 
