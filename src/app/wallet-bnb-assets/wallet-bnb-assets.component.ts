@@ -5,6 +5,7 @@ import {
   EnvironmentInjector,
 } from '@angular/core'
 import { BscService, EventTypeBsc, BepChain } from '@service/bsc.service'
+import { ActivatedRoute, Router } from '@angular/router'
 
 import { BehaviorSubject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
@@ -36,14 +37,20 @@ export class WalletBnbAssetsComponent
 
   visibleConnectWalletModal = false
 
+  returnUrl: string
+
   constructor(
     private bscService: BscService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     super()
   }
 
   async ngOnInit() {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl']
+    // console.log('this.returnUrl:', this.returnUrl)
     await this.walletRefresh()
   }
   async walletRefresh() {
@@ -56,6 +63,10 @@ export class WalletBnbAssetsComponent
         }
         switch (event.type) {
           case EventTypeBsc.ConnectSuccess:
+            console.log(this.returnUrl)
+            if (this.returnUrl !== undefined) {
+              this.router.navigate([this.returnUrl])
+            }
           case EventTypeBsc.AddressFound:
             this.address = event.details.address
             this.explorer = environment.bsc.blockExplorerUrls[0]
