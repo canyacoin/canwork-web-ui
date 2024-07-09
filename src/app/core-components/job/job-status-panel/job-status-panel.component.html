@@ -136,12 +136,12 @@
   >
     <div class="flex flex-col sm:flex-row gap-4 items-center">
       <ng-container *ngIf="isAwaitingEscrow">
-        <div
+        <!-- <div
           class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl transition-all duration-300"
           (click)="leftClick($event)"
         >
           Cancel Job Early
-        </div>
+        </div> -->
 
         <basic-button
           [type]="2"
@@ -151,17 +151,21 @@
           size="small"
         />
       </ng-container>
-      <!-- <ng-container *ngIf="isInEscrow">
-        <raise-dispute-button (click)="leftClick($event)" />
-
-        <div class="w-max">
-          <basic-button
-            [type]="2"
-            title="Add Note"
-            (click)="rightClick($event)"
-          />
+      <ng-container *ngIf="isInEscrow">
+        <div
+          class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl transition-all duration-300"
+          (click)="leftClick($event)"
+        >
+          Cancel Job Early
         </div>
-      </ng-container> -->
+        <basic-button
+          [type]="2"
+          title="Mark as complete"
+          (click)="rightClick($event)"
+          extraClass="w-max"
+          size="small"
+        />
+      </ng-container>
     </div>
   </div>
 

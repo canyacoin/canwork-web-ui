@@ -106,6 +106,9 @@ export class JobStatusPanelComponent {
       case JobState.termsAcceptedAwaitingEscrow:
         style += 'bg-start-g1'
         break
+      case JobState.cancelled:
+        style += 'bg-G500'
+        break
     }
     return style
   }
