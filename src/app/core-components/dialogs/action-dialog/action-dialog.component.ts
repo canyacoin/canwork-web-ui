@@ -5,6 +5,7 @@ import {
   EventEmitter,
   OnChanges,
   SimpleChanges,
+  OnInit,
 } from '@angular/core'
 import {
   UntypedFormBuilder,
@@ -21,7 +22,7 @@ import { getUsdToCan } from '@util/currency-conversion'
   selector: 'action-dialog',
   templateUrl: './action-dialog.component.html',
 })
-export class ActionDialogComponent implements OnChanges {
+export class ActionDialogComponent implements OnInit, OnChanges {
   // two way data binding
   private _visible: boolean
   @Input()
@@ -37,9 +38,9 @@ export class ActionDialogComponent implements OnChanges {
   @Input() job: Job
   @Input() userType: UserType
 
-  @Input() otherParty: string
   @Input() actionType: ActionType
 
+  otherParty: string = ''
   action: IJobAction
 
   executing = false
@@ -53,6 +54,11 @@ export class ActionDialogComponent implements OnChanges {
     private formBuilder: UntypedFormBuilder,
     private jobService: JobService
   ) {}
+
+  ngOnInit(): void {
+    if (this.job)
+      this.otherParty = this.job['otherParty']['name'] || 'the other party'
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.visible && changes.visible.currentValue === true) {

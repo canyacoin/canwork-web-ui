@@ -8,7 +8,7 @@
   <div class="flex justify-center px-[20px] pb-[40px]">
     <div
       *ngIf="actionType === actionTypes.dispute"
-      class="flex flex-col gap-[30px] md:gap-[70px] justify-center items-center"
+      class="flex flex-col gap-[30px] md:gap-[24px] justify-center items-center"
     >
       <div class="text-h5 text-G900 font-medium">Raise Dispute</div>
       <div class="flex flex-col gap-[24px]">
@@ -61,7 +61,7 @@
       <div class="text-h6 text-center font-medium">
         Are you sure you wish to cancel this job?
       </div>
-      <div class="flex gap-4">
+      <div class="flex gap-4 items-center">
         <basic-button
           [type]="1"
           title="Yes"
@@ -89,7 +89,7 @@
       <div class="text-h6 text-center font-medium max-w-[400px]">
         You are going to cancel this job. This cannot be undone. Are you sure?
       </div>
-      <div class="flex gap-4">
+      <div class="flex gap-4 items-center">
         <basic-button
           [type]="1"
           title="Yes"
@@ -107,7 +107,7 @@
 
     <div
       *ngIf="actionType === actionTypes.addMessage"
-      class="flex flex-col gap-[70px] justify-center items-center w-full"
+      class="flex flex-col gap-[24px] justify-center items-center w-full"
     >
       <div class="text-h5 text-G900 font-medium">Add a note to this job</div>
 
