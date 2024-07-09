@@ -19,6 +19,7 @@ import { of, Observable } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
 
 import { ReviewService } from './review.service'
+import { MessageService } from 'primeng/api'
 
 @Injectable()
 export class JobService {
@@ -33,7 +34,8 @@ export class JobService {
     private transactionService: TransactionService,
     private jobNotificationService: JobNotificationService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private messageService: MessageService
   ) {
     this.jobsCollection = this.afs.collection<any>('jobs')
   }
@@ -193,10 +195,16 @@ export class JobService {
             if (!bscConnected) {
               reject('connect')
               const routerStateSnapshot = this.router.routerState.snapshot
-              this.toastr.warning('Please connect your wallet', '', {
-                timeOut: 2000,
+              // this.toastr.warning('Please connect your wallet', '', {
+              //   timeOut: 2000,
+              // })
+
+              this.messageService.add({
+                severity: 'warn',
+                summary: 'Warn',
+                detail: 'Please connect your wallet.',
               })
-              this.router.navigate(['/wallet-bnb'], {
+              this.router.navigate(['/wallet-bnb/assets'], {
                 queryParams: { returnUrl: routerStateSnapshot.url },
               })
             } else {
@@ -205,24 +213,22 @@ export class JobService {
 
               if (!result.err) {
                 // add action log
-                // parsedJob.actionLog.push(action) // moved to backend
+                parsedJob.actionLog.push(action) // moved to backend
                 parsedJob.state = JobState.cancelledByProvider // only local copy
                 // state is cancelled, like plain cancel, no more actions possible
 
                 // add transaction to job log (moved to backend)
-                /*
                 let tx = await this.transactionService.createTransaction(
                   `Cancel job early`,
                   result.transactionHash,
                   job.id
                 )
-                */
 
                 /* 
                 sync job to firestore and handle notifications into chatService and jobNotificationService
                 (moved to backend)
                 */
-                //await this.saveJobAndNotify(parsedJob, action)
+                await this.saveJobAndNotify(parsedJob, action)
 
                 resolve(true)
               } else {
@@ -297,6 +303,9 @@ export class JobService {
             parsedJob.actionLog.push(action) // only local copy
             parsedJob.state = JobState.inEscrow // only local copy
             parsedJob.bscEscrow = true // save bscEscrow property into job to use it later when releasing job, only local copy
+
+            console.log('==================================> EnterEscrowBSC <=========================')
+            console.log('parsedJob', parsedJob)
 
             // moved (chat and email) to backend
             // await this.jobNotify(parsedJob, action);
