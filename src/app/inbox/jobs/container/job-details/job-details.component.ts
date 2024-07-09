@@ -418,9 +418,9 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       }
     } else if (this.currentUserType === UserType.provider) {
       if (this.isAwaitingEscrow) {
-        this.executeAction(ActionType.cancelJobEarly) // Cancel job early
+        // this.executeAction(ActionType.cancelJobEarly) // Cancel job early
       } else if (this.isInEscrow) {
-        // this.executeAction(ActionType.dispute) // Raise dispute
+        this.executeAction(ActionType.cancelJobEarly) // Cancel job early
       }
     }
   }
@@ -437,7 +437,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       if (this.isAwaitingEscrow) {
         this.executeAction(ActionType.addMessage) // Add Note
       } else if (this.isInEscrow) {
-        // this.executeAction(ActionType.dispute) // Raise dispute
+        this.executeAction(ActionType.finishedJob) // Mark as complete
       }
     }
   }

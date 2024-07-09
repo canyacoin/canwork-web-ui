@@ -5,7 +5,6 @@
       [(visible)]="visibleActionDialogModal"
       [job]="job"
       [userType]="currentUserType"
-      [otherParty]="job['otherParty']['name'] || 'the other party'"
       [actionType]="action"
     />
     <div
@@ -62,7 +61,7 @@
           (leftBtnEvent)="statusLeftClick($event)"
           (rightBtnEvent)="statusRightClick($event)"
         />
-        <!-- <div class="bg-black w-[100px] h-[100px]" (click)="seeConsole()"></div> -->
+        <div class="bg-black w-[100px] h-[100px]" (click)="seeConsole()"></div>
       </div>
     </div>
   </div>
