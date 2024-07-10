@@ -143,6 +143,14 @@
       </div>
     </div>
   </section>
+  <basic-dialog
+    [(visible)]="showSuccess"
+    title="Confirm Transaction"
+    content="Confirm this transaction in your wallet."
+    (LeftbtnEvent)="backToJob($event)"
+    (RightbtnEvent)="cancelDialog($event)"
+    type="confirmTransaction"
+  />
 </main>
 
 <!-- <div *ngIf="paymentMethod && !showBscAssetSelection">

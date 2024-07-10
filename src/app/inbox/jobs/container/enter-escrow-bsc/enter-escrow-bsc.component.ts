@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Job, JobState } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
 import { UserType } from '@class/user'
-import { ToastrService } from 'ngx-toastr'
 import 'rxjs/add/operator/take'
 import { Observable } from 'rxjs/Observable'
 import { HttpClient } from '@angular/common/http'
@@ -21,7 +20,6 @@ import { MessageService } from 'primeng/api'
 @Component({
   selector: 'app-enter-escrow-bsc',
   templateUrl: './enter-escrow-bsc.component.html',
-  styleUrls: ['./enter-escrow-bsc.component.css'],
 })
 export class EnterEscrowBscComponent implements OnInit {
   loading = true
@@ -49,12 +47,13 @@ export class EnterEscrowBscComponent implements OnInit {
 
   formatDateFromString = formatDateFromString
 
+  visibleActionDialogModal = false
+
   constructor(
     private jobService: JobService,
     private userService: UserService,
     private bscService: BscService,
     private transactionService: TransactionService,
-    private toastr: ToastrService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private http: HttpClient,
@@ -110,7 +109,7 @@ export class EnterEscrowBscComponent implements OnInit {
       this.bscAssetData = assetData // Receives the selected asset data
       this.paymentMethod = this.bscAssetData.symbol
       // Initiates the Canpay Wizard
-      await this.startBscpay()
+      await this.startBscPay()
     }
     this.assetDataHandler = {
       // passed back from bscAssetSelector
@@ -118,7 +117,7 @@ export class EnterEscrowBscComponent implements OnInit {
     }
   }
 
-  async startBscpay() {
+  async startBscPay() {
     this.spinner.show()
     this.isEscrowLoading = true
 
@@ -289,6 +288,7 @@ export class EnterEscrowBscComponent implements OnInit {
 
       if (success) {
         this.showSuccess = true
+        this.visibleActionDialogModal = true
         this.showBalance = false // not needed anymore and it will change
         this.isEscrowLoading = false // done
       } else {
@@ -309,12 +309,12 @@ export class EnterEscrowBscComponent implements OnInit {
       connectedChain = BepChain.SmartChain
     if (!connectedChain) {
       const routerStateSnapshot = this.router.routerState.snapshot
-      this.toastr.warning(
-        'Connect your wallet to use this payment method',
-        '',
-        { timeOut: 2000 }
-      )
-      this.router.navigate(['/wallet-bnb'], {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warn',
+        detail: `Connect your wallet to use this payment method`,
+      })
+      this.router.navigate(['/wallet-bnb/assets'], {
         queryParams: { returnUrl: routerStateSnapshot.url },
       })
       return
@@ -333,5 +333,15 @@ export class EnterEscrowBscComponent implements OnInit {
   getProviderTitle(id: string) {
     const category = providerTypeArray.find((prov) => prov.id === id)
     return category.title
+  }
+
+  backToJob(event: Event) {
+    event.preventDefault()
+    this.router.navigate(['/inbox/job', this.job.id])
+  }
+
+  cancelDialog(event: Event) {
+    event.preventDefault()
+    this.visibleActionDialogModal = false
   }
 }
