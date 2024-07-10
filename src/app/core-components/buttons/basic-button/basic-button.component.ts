@@ -19,7 +19,7 @@ export class BasicButtonComponent {
         ' bg-white hover:bg-G900 active:bg-black text-G900 hover:text-white border border-G300 hover:border-G900 active:border-black disabled:bg-white disabled:text-G900 disabled:border-G300'
     else if (this.type === 2)
       style +=
-        ' bg-G900 hover:bg-C500 active:bg-C800 text-white border-none disabled:bg-G900 disabled:text-white'
+        ' bg-G900 hover:bg-C500 active:bg-C800 text-white border-none disabled:bg-G900 disabled:text-white disabled:opacity-50'
 
     if (this.size === 'medium') style += ' text-b1 px-[40px] py-[10px]'
     else if (this.size === 'small') style += ' text-b2 px-[24px] py-[10px]'
