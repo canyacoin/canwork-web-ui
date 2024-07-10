@@ -122,7 +122,6 @@
                     <input
                       hidden
                       #skillTags
-                      class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
                       formControlName="skills"
                       type="text"
                       name="skills"
@@ -664,7 +663,7 @@
                       >
                         <img
                           src="/assets/massimo/svg/ion_attach-outline.svg"
-                          alt="ion_attach"
+                          alt="attachment"
                           class="w-[24px] h-[24px]"
                         />
                         {{ file.name }}
@@ -676,7 +675,7 @@
                           >
                             <img
                               src="/assets/massimo/svg/fi_x.svg"
-                              alt="ion_attach"
+                              alt="x"
                               class="w-[20px] h-[20px]"
                             />
                           </span>
@@ -684,7 +683,7 @@
                         <div *ngIf="file?.progress !== 100">
                           <div
                             class="uploadedFile"
-                            *ngIf="i < currentUploadNumber"
+                            *ngIf="currentUploadNumber > i"
                           >
                             <span
                               class="cursor-pointer alert"
@@ -692,7 +691,7 @@
                             >
                               <img
                                 src="/assets/massimo/svg/fi_x.svg"
-                                alt="ion_attach"
+                                alt="x"
                                 class="w-[20px] h-[20px]"
                               />
                             </span>
@@ -702,7 +701,7 @@
                             <div role="status">
                               <img
                                 src="/assets/massimo/svg/spinner.svg"
-                                alt="ion_attach"
+                                alt="spinner"
                                 class="w-[20px] h-[20px]"
                                 class="animate-spin"
                               />
@@ -736,6 +735,9 @@
                   (tagsLoaded)="skillTagsLoaded($event)"
                   [updatedTags]="this.gitUpdatedTags"
                   [minimumTags]="1"
+                  [initialTags]="
+                    jobForPreview ? jobForPreview.information.skills : []
+                  "
                 ></skill-tags-selection>
                 <input
                   hidden
@@ -1015,26 +1017,26 @@
               <div>
                 <div class="flex gap-4 justify-end flex-col md:flex-row">
                   <basic-button
-                    extraClass="!border-none text-G900 !shadow-none"
-                    size="small"
                     [type]="1"
                     title="Save as Draft"
+                    size="small"
                     [disabled]="isSending || isCurrentUpload"
                     (click)="submitShareableJob(0)"
+                    extraClass="!border-none text-G900 !shadow-none"
                   />
                   <basic-button
                     [type]="1"
-                    (click)="submitShareableJob(1)"
                     title="See Preview"
                     size="small"
                     [disabled]="isSending || isCurrentUpload"
+                    (click)="submitShareableJob(1)"
                   />
                   <basic-button
                     [type]="2"
                     title="Post Job Listing"
                     size="small"
-                    (click)="submitShareableJob(2)"
                     [disabled]="isSending || isCurrentUpload"
+                    (click)="submitShareableJob(2)"
                   />
                 </div>
                 <!-- <span
@@ -1064,12 +1066,11 @@
         title="Job listing saved to Draft"
         content="Your job listing has been saved to your drafts, you can continue anytime to list your job on CanWork"
         type="draft"
-        [slug]="slug"
       />
     </div>
     <div
       *ngIf="isPreview"
-      class="flex flex-col md:flex-row md:justify-center gap-2 md:gap-6 max-w-[1440px] p-[20px] md:p-[40px] m-auto rounded-xl"
+      class="flex flex-col md:flex-row md:justify-center gap-[24px] md:gap-6 max-w-[1440px] px-[20px] md:px-[64px] m-auto rounded-xl"
     >
       <div
         *ngIf="jobForPreview"
@@ -1126,7 +1127,7 @@
           </p>
 
           <div
-            class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[15px] flex flex-wrap"
+            class="text-b2 md:text-b1 text-G800 leading-[1.2] mt-[15px] flex flex-wrap gap-[8px]"
           >
             <app-skill-tag
               *ngFor="let skill of jobForPreview.information.skills"
@@ -1141,105 +1142,16 @@
           <back-to-job-board />
         </div>
       </div>
-      <div
-        class="md:w-[400px] rounded-[12px] bg-white border border-G200 px-[24px] py-[24px] detail-job"
-      >
-        <div
-          class="text-b2 flex justify-between items-center md:text-b1 text-G800 font-medium leading-[1.2] pl-[2px]"
-        >
-          <span *ngIf="jobForPreview?.state">
-            <i class="text-vibrantGreen fas fa-circle mr-[12px]"></i
-            >{{ jobForPreview?.state }}
-          </span>
-          <share-button />
-        </div>
-        <table
-          class="table-auto text-b2 w-full md:text-b1 mt-[24px] border-separate border-spacing-x-[2px] border-spacing-y-[10px] md:w-[302px]"
-        >
-          <tr>
-            <td class="text-G700">{{ jobForPreview.paymentType }}</td>
-            <td class="text-G900 text-right font-medium">
-              ${{ jobForPreview.budget
-              }}<span *ngIf="jobForPreview.paymentType !== 'Fixed price'"
-                >/hr</span
-              >
-              USD
-            </td>
-          </tr>
-          <tr *ngIf="bids">
-            <td class="text-G700">Proposals</td>
-            <td class="text-G900 text-right font-medium">
-              {{ bids.length }} Proposals
-            </td>
-          </tr>
-          <tr>
-            <td class="text-G700">Deadline</td>
-            <td class="text-G900 text-right font-medium">
-              {{ formatDate(jobForPreview.deadline) }}
-            </td>
-          </tr>
-          <tr *ngIf="jobForPreview.information.weeklyCommitment > 0">
-            <td class="text-G700">Estimated hours</td>
-            <td class="text-G900 text-right font-medium">
-              {{ jobForPreview.information.weeklyCommitment }} hours
-            </td>
-          </tr>
-          <tr>
-            <td class="text-G700">Category</td>
-            <td class="text-G900 text-right font-medium">
-              {{
-                categoryFromProviderType(jobForPreview.information.providerType)
-              }}
-            </td>
-          </tr>
-        </table>
-        <hr class="h-[1.5px] my-[20px] bg-gray-200 border-0" />
-        <div
-          class="text-b3 md:text-b2 text-G800 leading-[1.2] mt-[24px] mb-[16px]"
-        >
-          About the Client
-        </div>
-        <div class="mt-[12px]">
-          <profile-card
-            [index]="0"
-            [avatarUri]="currentUser.avatar['uri']"
-            [name]="currentUser.name"
-            [title]="currentUser.title"
-            [isVerified]="currentUser.verified"
-            [rating]="currentUser.rating"
-            [skillTags]="currentUser.skillTags"
-            [slug]="currentUser.slug"
-            [address]="currentUser.address"
-            [timezone]="currentUser.timezone"
-            [isSmall]="true"
-            [isGrid]="false"
-          />
-        </div>
-        <div
-          class="flex justify-between gap-4 text-b2 md:text-b1 leading-[1.2] mt-[24px]"
-        >
-          <button
-            *ngIf="!isSending"
-            class="flex justify-center items-center text-G900 font-medium"
-            (click)="BacktoEdit()"
-          >
-            <img
-              src="/assets/massimo/svg/fi_edit.svg"
-              alt=""
-              class="mr-[8px]"
-            />
-            Back to Editing
-          </button>
 
-          <basic-button
-            [type]="2"
-            title="Post Job"
-            size="small"
-            *ngIf="!isSending"
-            (click)="submitShareableJob(2)"
-            [disabled]="isSending || isCurrentUpload"
-          />
-        </div>
+      <div class="lg:max-w-[350px] w-full">
+        <job-status-panel
+          [job]="jobForPreview"
+          [currentUser]="currentUser"
+          [isPostJobPage]="true"
+          [isPostButtonsShow]="sentDRP === 1"
+          (leftBtnEvent)="BacktoEdit($event)"
+          (rightBtnEvent)="submitShareableJob(2)"
+        />
       </div>
     </div>
   </section>
