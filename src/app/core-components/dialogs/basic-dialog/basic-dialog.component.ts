@@ -20,7 +20,6 @@ export class BasicDialogComponent {
   @Input() title: string
   @Input() content: string
   @Input() type: string
-  @Input() slug!: string
 
   @Output() LeftbtnEvent = new EventEmitter<Event>()
   @Output() RightbtnEvent = new EventEmitter<Event>()

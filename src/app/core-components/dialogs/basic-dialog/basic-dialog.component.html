@@ -38,6 +38,11 @@
           src="/assets/massimo/images/jobDeleted.png"
           alt="Job Listing Deleted"
         />
+        <img
+          *ngSwitchCase="'confirmTransaction'"
+          src="/assets/massimo/images/confirmTransaction.png"
+          alt="Confirm Transaction"
+        />
         <div
           *ngSwitchDefault
           class="max-w-[322px] w-full h-[200px] bg-G400"
@@ -153,7 +158,7 @@
           />
           <basic-button
             [type]="2"
-            [routerLink]="['/jobs/public/', slug]"
+            [routerLink]="['inbox/jobs?tab=3']"
             title="See Drafts"
             size="small"
             extraClass="border"
@@ -193,6 +198,22 @@
             title="Accept"
             size="small"
           />
+        </div>
+      </ng-container>
+      <ng-container *ngIf="type === 'confirmTransaction'">
+        <div class="flex gap-4 justify-center items-center">
+          <basic-button
+            [type]="2"
+            (click)="LeftClick($event)"
+            title="Back To Job"
+            size="small"
+          />
+          <div
+            class="cursor-pointer py-[10px] px-[24px] hover:bg-G200 rounded-xl transition-all duration-200"
+            (click)="RightClick($event)"
+          >
+            <div class="text-R900 font-medium text-nowrap text-b1">Cancel</div>
+          </div>
         </div>
       </ng-container>
     </div>

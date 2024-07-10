@@ -56,8 +56,7 @@ export class ActionDialogComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    if (this.job)
-      this.otherParty = this.job['otherParty']['name'] || 'the other party'
+    this.otherParty = this.job?.otherParty?.name || 'the other party'
   }
 
   ngOnChanges(changes: SimpleChanges) {

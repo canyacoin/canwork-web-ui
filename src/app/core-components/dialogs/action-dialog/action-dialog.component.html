@@ -106,6 +106,34 @@
     </div>
 
     <div
+      *ngIf="actionType === actionTypes.finishedJob"
+      class="flex flex-col justify-center items-center gap-[24px]"
+    >
+      <img
+        class="w-[200px]"
+        src="/assets/massimo/images/jobDelete.png"
+        alt="delete"
+      />
+      <div class="text-h6 text-center font-medium max-w-[400px]">
+        Are you sure you've finished your job?
+      </div>
+      <div class="flex gap-4 items-center">
+        <basic-button
+          [type]="1"
+          title="Yes"
+          size="small"
+          (click)="handleAction($event)"
+        />
+        <basic-button
+          [type]="2"
+          title="No"
+          size="small"
+          (click)="handleCancelClick($event)"
+        />
+      </div>
+    </div>
+
+    <div
       *ngIf="actionType === actionTypes.addMessage"
       class="flex flex-col gap-[24px] justify-center items-center w-full"
     >
