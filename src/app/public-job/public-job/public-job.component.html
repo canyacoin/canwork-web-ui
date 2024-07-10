@@ -137,7 +137,7 @@
                           type="number"
                           id="price"
                           min="1"
-                          [(ngModel)]="price_bid"
+                          [(ngModel)]="bidPrice"
                           class="!outline-none !border-none bg-G50 pl-[2px]"
                         />
                         USD
@@ -157,7 +157,7 @@
                       <div
                         class="flex justify-between border rounded-xl border-G300 py-[10px] px-[16px] bg-G200 w-[240px] h-max"
                       >
-                        <div>$ {{ price_bid / 100 | number : '1.1-2' }}</div>
+                        <div>$ {{ bidPrice / 100 | number : '1.1-2' }}</div>
                         USD
                       </div>
                     </div>
@@ -176,20 +176,20 @@
                       <div
                         class="flex justify-between border rounded-xl border-G300 py-[10px] px-[16px] bg-G50 w-[240px] h-max"
                       >
-                        <div>$ {{ price_bid * 0.99 | number : '1.1-2' }}</div>
+                        <div>$ {{ bidPrice * 0.99 | number : '1.1-2' }}</div>
                         USD
                       </div>
                     </div>
 
                     <!-- message -->
                     <warning-message
-                      *ngIf="price_bid > job.budget"
+                      *ngIf="bidPrice > job.budget"
                       message="Your bill is more than the client's budget, consider adjusting for better chance of success"
                       [type]="1"
                     />
 
                     <warning-message
-                      *ngIf="price_bid < 0 || priceValidated"
+                      *ngIf="1 > bidPrice || priceValidated"
                       message="Your price should be bigger than zero"
                       [type]="1"
                     />
@@ -327,7 +327,7 @@
 
                   <div class="w-full" *ngIf="canBid && !isSent">
                     <basic-button
-                      [disabled]="!bidForm.valid || isBidding"
+                      [disabled]="!bidForm.valid || isCurrentUpload"
                       [type]="2"
                       [title]="'Apply Now'"
                       size="medium"

@@ -59,7 +59,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   activeJobTypes: Tab[]
   selectedJob: Tab
 
-  price_bid: number = 0
+  bidPrice: number = 0
   hoveredFiles: boolean = false
   isProvider: boolean = false
 
@@ -116,7 +116,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
           Validators.required,
           Validators.min(1),
           Validators.max(10000000),
-          Validators.pattern('^[0-9]*$'),
+          // Validators.pattern('^[0-9]*$'),
         ]),
       ],
       message: [
