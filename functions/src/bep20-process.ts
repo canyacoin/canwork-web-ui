@@ -21,7 +21,7 @@ enum JobState {
   providerCounterOffer = 'Provider counter',
   clientCounterOffer = 'Client counter',
   termsAcceptedAwaitingEscrow = 'Awaiting Escrow',
-  inEscrow = 'Funds in Escrow',
+  inEscrow = 'Job started',
   workPendingCompletion = 'Pending completion',
   inDispute = 'Disputed',
   complete = 'Complete',

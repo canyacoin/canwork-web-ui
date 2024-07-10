@@ -19,7 +19,7 @@ import {
   TimeRange,
   WorkType,
   JobState,
-} from '../../../core-classes/job'
+} from '@class/job'
 import { User, UserType } from '../../../core-classes/user'
 import { AuthService } from '@service/auth.service'
 import { JobService } from '@service/job.service'
@@ -102,12 +102,15 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
 
     this.filters = [
       { name: 'All Jobs', code: '' },
-      { name: 'Jobs Awaiting Escrow', code: 'Awaiting Escrow' },
-      { name: 'Funds In Escrow', code: 'Funds In Escrow' },
-      { name: 'Jobs Pending completion', code: 'Pending completion' },
-      { name: 'Jobs in Disputed', code: 'Disputed' },
-      { name: 'Pending Jobs', code: 'Offer pending' },
-      { name: 'Cancelled', code: 'Cancelled' },
+      {
+        name: 'Jobs Awaiting Escrow',
+        code: JobState.termsAcceptedAwaitingEscrow,
+      },
+      { name: 'Funds In Escrow', code: JobState.inEscrow },
+      { name: 'Jobs Pending completion', code: JobState.workPendingCompletion },
+      { name: 'Jobs in Disputed', code: JobState.inDispute },
+      { name: 'Pending Jobs', code: JobState.offer },
+      { name: 'Cancelled', code: JobState.cancelled },
     ]
     this.sortByList = [
       { name: 'Date Posted', code: 'newest' },

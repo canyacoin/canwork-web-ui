@@ -349,6 +349,10 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.action = ActionType.cancelJobEarly
         this.visibleActionDialogModal = true
         break
+      case ActionType.finishedJob:
+        this.action = ActionType.finishedJob
+        this.visibleActionDialogModal = true
+        break
       case ActionType.dispute:
         this.action = ActionType.dispute
         this.visibleActionDialogModal = true
@@ -367,7 +371,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
             new ActionDialogOptions({
               job: this.job,
               userType: this.currentUserType,
-              otherParty: this.job['otherParty']['name'] || 'the other party',
+              otherParty: this.job?.otherParty?.name || 'the other party',
               actionType: action,
             })
           )

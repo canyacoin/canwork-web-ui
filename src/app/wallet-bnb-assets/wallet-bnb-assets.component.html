@@ -5,10 +5,6 @@
     <div
       class="max-w-[938px] w-full p-[24px] md:p-[40px] bg-white rounded-[12px] border border-G200 flex flex-col gap-[24px]"
     >
-      <connect-wallet-dialog
-        [(visible)]="visibleConnectWalletModal"
-        (modalClosed)="refresh($event)"
-      />
       <div class="flex gap-[8px] items-center">
         <img
           src="/assets/massimo/svg/wallet.svg"
@@ -116,4 +112,8 @@
       </div>
     </div>
   </section>
+  <connect-wallet-dialog
+    [(visible)]="visibleConnectWalletModal"
+    (modalClosed)="refresh($event)"
+  />
 </main>
