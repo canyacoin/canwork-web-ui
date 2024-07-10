@@ -11,6 +11,7 @@ import { JobService } from '@service/job.service'
 import { getUsdToCan } from '@util/currency-conversion'
 import { RatingChangeEvent } from 'angular-star-rating'
 
+
 //import { SimpleModalComponent } from 'ngx-simple-modal' // old
 import { NgxModalComponent } from 'ngx-modalview'
 

@@ -13,6 +13,9 @@ export class JobStatusPanelComponent {
   @Input() job!: Job
   @Input() proposals: number = 0 // current job's bids.length
   @Input() currentUser!: User
+  // from post job page
+  @Input() isPostJobPage: boolean = false
+  @Input() isPostButtonsShow: boolean = false
 
   @Output() leftBtnEvent = new EventEmitter<Event>()
   @Output() rightBtnEvent = new EventEmitter<Event>()
@@ -38,7 +41,8 @@ export class JobStatusPanelComponent {
     console.log('starting ngONInit')
     console.log('this.job', this.job)
     console.log('this.currentUser', this.currentUser)
-    if (this.job) {
+    // we don't need to call this function if isPostJobPage is true
+    if (this.job && !this.isPostJobPage) {
       this.isMyJob = this.job.clientId === this.currentUser.address
       console.log('this.job.clientId', this.job.clientId)
       await this.setClient(this.job.clientId)
@@ -82,25 +86,20 @@ export class JobStatusPanelComponent {
     return this.job.state === JobState.termsAcceptedAwaitingEscrow
   }
 
-  get isClosed() {
-    return this.job.state === JobState.closed
+  get isInEscrow(): boolean {
+    return this.job.state === JobState.inEscrow
   }
 
-  get JobStateBackground() {
-    // Need more cases
-    let style = 'w-[16px] h-[16px] rounded-full '
-    switch (this.job.state) {
-      case JobState.acceptingOffers:
-        style += 'bg-vibrantGreen'
-        break
-      case JobState.closed:
-        style += 'bg-G500'
-        break
-      case JobState.termsAcceptedAwaitingEscrow:
-        style += 'bg-start-g1'
-        break
-    }
-    return style
+  get isMarkedAsComplete(): boolean {
+    return this.job.state === JobState.workPendingCompletion
+  }
+
+  get isJobComplete(): boolean {
+    return this.job.state === JobState.complete
+  }
+
+  get isClosed() {
+    return this.job.state === JobState.closed
   }
 
   getCategoryName(providerType: string) {

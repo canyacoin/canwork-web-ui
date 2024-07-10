@@ -121,8 +121,20 @@
             <ng-template let-item pTemplate="item">
               <div
                 class="flex items-center"
-                *ngIf="item.routerLink"
+                *ngIf="item.routerLink && item.label !== 'Edit Profile'"
                 [routerLink]="item.routerLink"
+              >
+                <img
+                  src="{{ '/assets/massimo/svg/header/' + item.icon }}"
+                  class="mr-[16px] w-[20px]"
+                />
+                <span class="font-medium text-G900">{{ item.label }}</span>
+              </div>
+              <div
+                class="flex items-center"
+                *ngIf="item.label === 'Edit Profile'"
+                [routerLink]="item.routerLink"
+                [queryParams]="item.queryParams"
               >
                 <img
                   src="{{ '/assets/massimo/svg/header/' + item.icon }}"
@@ -133,7 +145,7 @@
 
               <div
                 class="flex items-center"
-                *ngIf="item.label == 'LogOut'"
+                *ngIf="item.label === 'LogOut'"
                 (click)="onLogout()"
               >
                 <img

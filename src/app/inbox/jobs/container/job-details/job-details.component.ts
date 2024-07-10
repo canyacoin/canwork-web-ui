@@ -21,7 +21,6 @@ import { NgxModalService } from 'ngx-modalview'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
-import { environment } from '../../../../../environments/environment'
 import {
   ActionDialogComponent,
   ActionDialogOptions,
@@ -53,6 +52,10 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   isReleasing = false
 
   visibleConnectWalletModal = false
+  visibleActionDialogModal = false
+
+  action: ActionType
+  userTypes = UserType
 
   constructor(
     private authService: AuthService,
@@ -120,12 +123,14 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
             this.currentUser.address === job.clientId
               ? UserType.client
               : UserType.provider
+          console.log('currentUserType================>', this.currentUserType)
           this.jobService.assignOtherPartyAsync(this.job, this.currentUserType)
           this.setAttachmentUrl()
           if (!this.isInitialised) {
             this.jobService.updateJobState(this.job)
             this.isInitialised = true
           }
+          this.spinner.hide()
         } else {
           console.log('We can not find the job.')
           this.router.navigateByUrl('/not-found')
@@ -137,17 +142,18 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         .subscribe((reviews: Review[]) => {
           this.reviews = reviews
         })
+    } else {
+      this.spinner.hide()
     }
-    this.spinner.hide()
   }
 
   private transactionTypeService(jobId): any {
     this.transactionsSub = this.transactionService
       .getTransactionsByJob(jobId)
       .subscribe((transactions: Transaction[]) => {
-        this.transactions = transactions
-        // console.log('===================================================')
-        // console.log('this.transactions = ', transactions)
+        this.transactions = transactions.sort((a, b) => {
+          return a.timestamp - b.timestamp
+        })
       })
   }
   actionIsDisabled(action: ActionType): boolean {
@@ -170,12 +176,20 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  get jobIsComplete(): boolean {
+  get isJobComplete(): boolean {
     return this.job.state === JobState.complete
   }
 
   get isAwaitingEscrow(): boolean {
     return this.job.state === JobState.termsAcceptedAwaitingEscrow
+  }
+
+  get isInEscrow(): boolean {
+    return this.job.state === JobState.inEscrow
+  }
+
+  get isMarkedAsComplete(): boolean {
+    return this.job.state === JobState.workPendingCompletion
   }
 
   get userCanReview(): boolean {
@@ -314,44 +328,46 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
           await this.releaseEscrowBsc()
         }
         break
+      case ActionType.cancelJob:
+        this.action = ActionType.cancelJob
+        this.visibleActionDialogModal = true
+        break
       case ActionType.cancelJobEarly:
         console.log('ActionType.cancelJobEarly')
         //this.dialogService
         //  .addDialog(
-        this.ngxModalService
-          .addModal(
-            ActionDialogComponent,
-            new ActionDialogOptions({
-              job: this.job,
-              userType: this.currentUserType,
-              actionType: action,
-            })
-          )
-          .subscribe((success) => {
-            if (!success) {
-              console.log('Action cancelled')
-            }
-          })
+        // this.ngxModalService
+        //   .addModal(
+        //     ActionDialogComponent,
+        //     new ActionDialogOptions({
+        //       job: this.job,
+        //       userType: this.currentUserType,
+        //       actionType: action,
+        //     })
+        //   )
+        //   .subscribe((success) => {
+        //     if (!success) {
+        //       console.log('Action cancelled')
+        //     }
+        //   })
+        this.action = ActionType.cancelJobEarly
+        this.visibleActionDialogModal = true
+        break
+      case ActionType.finishedJob:
+        this.action = ActionType.finishedJob
+        this.visibleActionDialogModal = true
         break
       case ActionType.dispute:
-        console.log('ActionType.dispute')
-        //this.dialogService
-        //  .addDialog(
-        this.ngxModalService
-          .addModal(
-            ActionDialogComponent,
-            new ActionDialogOptions({
-              job: this.job,
-              userType: this.currentUserType,
-              otherParty: this.job['otherParty']['name'] || 'the other party',
-              actionType: action,
-            })
-          )
-          .subscribe((success) => {
-            if (!success) {
-              console.log('Action cancelled')
-            }
-          })
+        this.action = ActionType.dispute
+        this.visibleActionDialogModal = true
+        break
+      case ActionType.addMessage:
+        this.action = ActionType.addMessage
+        this.visibleActionDialogModal = true
+        break
+      case ActionType.acceptFinish:
+        this.action = ActionType.acceptFinish
+        this.visibleActionDialogModal = true
         break
       default:
         console.log('default')
@@ -363,7 +379,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
             new ActionDialogOptions({
               job: this.job,
               userType: this.currentUserType,
-              otherParty: this.job['otherParty']['name'] || 'the other party',
+              otherParty: this.job?.otherParty?.name || 'the other party',
               actionType: action,
             })
           )
@@ -374,19 +390,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
           })
         break
     }
-  }
-
-  getTxLink(txHash: string) {
-    return `${environment.bsc.blockExplorerUrls[0]}/tx/${txHash}`
-  }
-
-  getTxColor(tx: Transaction) {
-    return 'success' // default
-    /* 
-    todo: there are failure scenarios that we should handle?
-    if so we have to handle into bsc service and handle tx timeout, cause receipt will not arrive
-    */
-    // return tx.success ? 'success' : tx.failure ? 'danger' : 'warning' // obsolete
   }
 
   toggleDescription() {
@@ -419,17 +422,49 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
   statusLeftClick(e: Event) {
     e.preventDefault()
-    if (this.isAwaitingEscrow) {
-      this.executeAction('Cancel job' as ActionType) // Cancel job`
+    if (this.currentUserType === UserType.client) {
+      if (this.isAwaitingEscrow) {
+        this.executeAction(ActionType.cancelJob) // Cancel job
+      } else if (this.isInEscrow) {
+        // this.executeAction(ActionType.dispute) // Raise dispute
+      } else if (this.isMarkedAsComplete) {
+        this.executeAction(ActionType.dispute) // Raise dispute
+      } else if (this.isJobComplete) {
+        this.executeAction(ActionType.review) // Leave a review to freelancer
+      }
+    } else if (this.currentUserType === UserType.provider) {
+      if (this.isAwaitingEscrow) {
+        // this.executeAction(ActionType.cancelJobEarly) // Cancel job early
+      } else if (this.isInEscrow) {
+        this.executeAction(ActionType.cancelJobEarly) // Cancel job early
+      } else if (this.isMarkedAsComplete) {
+        this.executeAction(ActionType.dispute) // Raise dispute
+      } else if (this.isJobComplete) {
+        this.executeAction(ActionType.review) // Leave a review to client
+      }
     }
-    console.log('this.availableActions:', this.availableActions)
   }
 
   statusRightClick(e: Event) {
     e.preventDefault()
-    if (this.isAwaitingEscrow) {
-      this.executeAction('Pay Escrow' as ActionType) // Pay Escrow
+    if (this.currentUserType === UserType.client) {
+      if (this.isAwaitingEscrow) {
+        this.executeAction(ActionType.enterEscrow) // Pay Escrow
+      } else if (this.isInEscrow) {
+        this.executeAction(ActionType.addMessage) // Add Note
+      } else if (this.isMarkedAsComplete) {
+        this.executeAction(ActionType.acceptFinish) // Raise dispute
+      }
+    } else if (this.currentUserType === UserType.provider) {
+      if (this.isAwaitingEscrow) {
+        this.executeAction(ActionType.addMessage) // Add Note
+      } else if (this.isInEscrow) {
+        this.executeAction(ActionType.finishedJob) // Mark as complete
+      }
     }
+  }
+  seeConsole() {
     console.log('this.availableActions:', this.availableActions)
+    console.log('this.job', this.job)
   }
 }

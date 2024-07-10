@@ -4,17 +4,17 @@
   [draggable]="false"
   [resizable]="false"
   id="headless_modal"
-  styleClass="!rounded-[24px] !bg-G50 p-[20px] md:px-[40px] md:py-[32px] max-w-[544px] w-full mx-[20px]"
+  styleClass="!rounded-[24px] !bg-G50 max-w-[544px] w-full mx-[20px] overflow-hidden"
 >
   <div class="absolute top-[20px] right-[20px] md:top-[32px] md:right-[43px]">
     <img
       src="/assets/massimo/images/x_button.png"
       alt="X"
       class="w-[30px] h-[30px] md:w-[40px] md:h-[40px] cursor-pointer select-none"
-      (click)="closeModal()"
+      (click)="closeModal($event)"
     />
   </div>
-  <div class="flex flex-col gap-[24px] !bg-G50">
+  <div class="flex flex-col gap-[24px] p-[20px] md:px-[40px] md:py-[32px]">
     <div class="flex flex-col gap-[4px]">
       <div class="text-h6 text-G900 font-medium">Connect Wallet</div>
       <div class="text-b2 text-G500 pr-[50px]">

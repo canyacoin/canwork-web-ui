@@ -31,10 +31,13 @@ export class ConnectWalletDialogComponent implements OnInit, OnDestroy {
     this.visibleChange.emit(this._visible)
   }
   @Output() visibleChange = new EventEmitter<boolean>()
+  @Output() modalClosed = new EventEmitter()
 
-  closeModal(): void {
+  closeModal(event?: Event): void {
+    event?.preventDefault()
     document.body.style.overflow = 'auto'
     this.visible = false
+    this.modalClosed.emit()
   }
 
   private destroy$ = new Subject()
@@ -69,7 +72,6 @@ export class ConnectWalletDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.visible) document.body.style.overflow = 'hidden'
-    else document.body.style.overflow = 'auto'
     // we are not on production env but wallect connect bsc will use main net, better to warn user
 
     if (this.visible) {

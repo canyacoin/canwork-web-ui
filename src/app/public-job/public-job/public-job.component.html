@@ -27,7 +27,7 @@
         <div class="w-full">
           <ng-container *ngIf="(isShownTab || isMyJob) && isPublic">
             <p-tabMenu
-              [model]="activejobTypes"
+              [model]="activeJobTypes"
               [activeItem]="selectedJob"
               *ngIf="!isProvider || isMyJob"
             >
@@ -137,7 +137,7 @@
                           type="number"
                           id="price"
                           min="1"
-                          [(ngModel)]="price_bid"
+                          [(ngModel)]="bidPrice"
                           class="!outline-none !border-none bg-G50 pl-[2px]"
                         />
                         USD
@@ -157,7 +157,7 @@
                       <div
                         class="flex justify-between border rounded-xl border-G300 py-[10px] px-[16px] bg-G200 w-[240px] h-max"
                       >
-                        <div>$ {{ price_bid / 100 | number : '1.1-2' }}</div>
+                        <div>$ {{ bidPrice / 100 | number : '1.1-2' }}</div>
                         USD
                       </div>
                     </div>
@@ -176,20 +176,20 @@
                       <div
                         class="flex justify-between border rounded-xl border-G300 py-[10px] px-[16px] bg-G50 w-[240px] h-max"
                       >
-                        <div>$ {{ price_bid * 0.99 | number : '1.1-2' }}</div>
+                        <div>$ {{ bidPrice * 0.99 | number : '1.1-2' }}</div>
                         USD
                       </div>
                     </div>
 
                     <!-- message -->
                     <warning-message
-                      *ngIf="price_bid > job.budget"
+                      *ngIf="bidPrice > job.budget"
                       message="Your bill is more than the client's budget, consider adjusting for better chance of success"
                       [type]="1"
                     />
 
                     <warning-message
-                      *ngIf="price_bid < 0 || priceValidated"
+                      *ngIf="1 > bidPrice || priceValidated"
                       message="Your price should be bigger than zero"
                       [type]="1"
                     />
@@ -317,23 +317,17 @@
                           </li>
                         </ul>
                       </div>
-
-                      <div
-                        class="flex justify-start items-center text-R900 text-b2 font-sans mt-[8px] gap-[8px]"
+                      <error-message
                         *ngIf="fileTooBig"
-                      >
-                        <img
-                          src="/assets/massimo/svg/fi_alert-triangle.svg"
-                          alt=""
-                        />
-                        You can only add 10 files with maximum of 25MB each.
-                      </div>
+                        message="You can only add 10 files with maximum of 25MB each."
+                        extraClass="mt-[8px]"
+                      />
                     </div>
                   </div>
 
                   <div class="w-full" *ngIf="canBid && !isSent">
                     <basic-button
-                      [disabled]="!bidForm.valid || isBidding"
+                      [disabled]="!bidForm.valid || isCurrentUpload"
                       [type]="2"
                       [title]="'Apply Now'"
                       size="medium"
@@ -351,7 +345,7 @@
             </div>
           </div>
           <div *ngIf="selectedJob.code === 'proposals'" class="w-full">
-            <job-proposals />
+            <job-proposals-panel />
           </div>
 
           <div
@@ -372,7 +366,7 @@
           </div>
         </div>
 
-        <div class="lg:min-w-[350px] lg:max-w-[350px] w-full">
+        <div class="lg:max-w-[350px] w-full">
           <job-status-panel
             [job]="job"
             [proposals]="bids?.length"
@@ -424,6 +418,13 @@
     title="Your Application Deleted."
     content="You can find another jobs in jobs page."
     type="withdraw_success"
+  />
+
+  <basic-dialog
+    [(visible)]="visibleDeletedSuccessModal"
+    title="Job Listing Deleted."
+    content="You can create a new job listing to receive bids."
+    type="jobListingDeleted"
   />
 
   <p-dialog

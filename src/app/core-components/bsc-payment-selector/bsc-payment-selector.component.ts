@@ -36,15 +36,15 @@ export class BscPaymentSelectorComponent
   @Input() providerAddress = ''
   @Output() bscAsset: EventEmitter<any> = new EventEmitter()
 
-  private assets = []
-  address: string | boolean = true
-  loading = true
-  firstLoaded = false
+  assets = []
+  loading: boolean = true
+  address: string = ''
   chain = BepChain.SmartChain
   quotes = {}
-
-  // added
   totalBudget: number = 0
+  explorer = ''
+
+  visibleConnectWalletModal = false
 
   constructor(
     private location: Location,
@@ -64,7 +64,7 @@ export class BscPaymentSelectorComponent
       .pipe(take(1)) // unsubscribe on destroy
       .subscribe(async (event) => {
         if (!event) {
-          this.address = false
+          this.loading = false
           return
         }
 
@@ -72,6 +72,7 @@ export class BscPaymentSelectorComponent
           case EventTypeBsc.ConnectSuccess:
           case EventTypeBsc.AddressFound:
             this.address = event.details.address
+            this.explorer = environment.bsc.blockExplorerUrls[0]
 
             this.assets = []
 
@@ -90,30 +91,6 @@ export class BscPaymentSelectorComponent
               token: 'BNB',
             })
 
-            // for (let token in environment.bsc.assets) {
-            //   try {
-            //     let b = await this.bscService.getBalance(token)
-            //     if (!b.err) {
-            //       let asset = {
-            //         converting: true,
-            //         hasEnough: false,
-            //         freeUsd: 0,
-            //         ...b,
-            //       }
-            //       if (parseFloat(asset.free) == 0) asset.converting = false // no conversion with zero value
-
-            //       this.assets.push(asset)
-            //       this.firstLoaded = true // at least one loaded, show grid
-            //     }
-            //   } catch (err) {
-            //     // make this function fail safe even if some contract is not correct or for another chain
-            //     console.log(
-            //       `Invalid contract for ${token}: ${environment.bsc.assets[token]}`
-            //     )
-            //     console.log(err)
-            //   }
-            // }
-
             let awaitArray = []
 
             for (let token in environment.bsc.assets) {
@@ -131,11 +108,7 @@ export class BscPaymentSelectorComponent
               if (parseFloat(asset.free) == 0) asset.converting = false // no conversion with zero value
 
               this.assets.push(asset)
-              this.firstLoaded = true // at least one loaded, show grid
             }
-
-            console.log('===========================', this.assets)
-            this.loading = false // finish loading all
 
             // retrieve quotes
             this.quotes = await this.bscService.getCoingeckoQuotes()
@@ -146,14 +119,12 @@ export class BscPaymentSelectorComponent
 
             break
           case EventTypeBsc.Disconnect:
-            this.address = false
             break
 
           case EventTypeBsc.ConnectConfirmationRequired:
             console.log(
               'bsc-payment-selector EventTypeBsc.ConnectConfirmationRequired'
             )
-            this.address = false
             const routerStateSnapshot = this.router.routerState.snapshot
             this.messageService.add({
               severity: 'warn',
@@ -167,10 +138,10 @@ export class BscPaymentSelectorComponent
             break
         }
       })
+    this.loading = false
   }
 
   async checkUsdBalances() {
-    console.log(this.quotes)
     for (let i = 0; i < this.assets.length; i++) {
       if (
         this.assets[i].converting &&
@@ -183,6 +154,7 @@ export class BscPaymentSelectorComponent
           parseFloat(this.assets[i].free) * this.quotes[this.assets[i].token]
 
         if (usdtEquivalent > 0) {
+          this.totalBudget += usdtEquivalent
           let usdtValue = parseFloat(usdtEquivalent.toString())
           if (usdtValue < this.jobBudgetUsd)
             this.assets[i].seemsNotEnough = true
@@ -250,9 +222,38 @@ export class BscPaymentSelectorComponent
   }
 
   async refresh(event: Event) {
-    event.preventDefault()
+    event?.preventDefault()
+    this.loading = true
+    this.totalBudget = 0
     this.assets = []
     await this.sleepRx(1000)
     this.walletRefresh()
+  }
+
+  copy(event: Event) {
+    event.preventDefault()
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Successfully copied wallet address.',
+    })
+  }
+
+  async forget(event: Event) {
+    event.preventDefault()
+    this.loading = false
+    this.assets = []
+    this.totalBudget = 0
+    this.address = ''
+    switch (this.chain) {
+      case BepChain.SmartChain:
+        await this.bscService.disconnect()
+        break
+    }
+  }
+
+  connectWallet(event: Event) {
+    event.preventDefault()
+    this.visibleConnectWalletModal = true
   }
 }

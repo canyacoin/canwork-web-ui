@@ -8,6 +8,7 @@ import {
 } from '@angular/core'
 import { PublicJobService } from '@service/public-job.service'
 import { UserService } from '@service/user.service'
+import { providerTypeArray } from 'app/shared/constants/providerTypes'
 
 import { Router } from '@angular/router'
 
@@ -21,41 +22,13 @@ import { Job, JobState } from '@class/job'
 export class JobDashboardCardComponent implements OnInit {
   @Input() job: Job
   @Input() jobType: string
-  @Output() CancelJob = new EventEmitter<string>()
-  visible: boolean = false
+  @Output() jobCancelled = new EventEmitter<Event>()
+  visibleDeleteModal: boolean = false
 
   location: string = '...'
   proposals: number = 0
 
   favourite: boolean = false
-
-  providerTypes = [
-    {
-      name: 'Content Creators',
-      img: 'writer.png',
-      id: 'contentCreator',
-    },
-    {
-      name: 'Software Developers',
-      img: 'dev.png',
-      id: 'softwareDev',
-    },
-    {
-      name: 'Designers & Creatives',
-      img: 'creatives.png',
-      id: 'designer',
-    },
-    {
-      name: 'Marketing & SEO',
-      img: 'marketing.png',
-      id: 'marketing',
-    },
-    {
-      name: 'Virtual Assistants',
-      img: 'assistant.png',
-      id: 'virtualAssistant',
-    },
-  ]
 
   constructor(
     private router: Router,
@@ -73,29 +46,27 @@ export class JobDashboardCardComponent implements OnInit {
     })
   }
 
-  getImage(id: string) {
-    let url = '/assets/massimo/images/'
-    const type = this.providerTypes.find((prov) => prov.id === id)
-    url = url + type.img
-    return url
+  getProviderImage(id: string) {
+    const category = providerTypeArray.find((prov) => prov.id === id)
+    return category.iconSrc
   }
 
   async cancelJob(event: Event) {
+    event.stopPropagation()
+    this.visibleDeleteModal = false
     if (this.job.clientId) {
+      this.jobCancelled.emit(event)
       const updated = await this.publicJobsService.cancelJob(this.job.id)
       console.log('update:', updated)
       if (updated) {
         this.job.state = JobState.closed
-        this.CancelJob.emit(this.job.id)
       }
     }
-    event.stopPropagation()
-    this.visible = !this.visible
   }
 
   updateDialog(event: Event) {
     event.stopPropagation()
-    this.visible = !this.visible
+    this.visibleDeleteModal = !this.visibleDeleteModal
   }
   stripHtmlTags(html: string): string {
     // Create a new DOM element to use the browser's parsing capabilities

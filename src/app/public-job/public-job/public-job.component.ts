@@ -26,13 +26,13 @@ import { AngularFireAuth } from '@angular/fire/compat/auth'
 import { FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular'
 
 import { customAngularEditorConfig } from 'app/core-functions/angularEditorConfig'
+import { Tab } from '@class/tabs'
 
 @Component({
   selector: 'app-public-job',
   templateUrl: './public-job.component.html',
 })
 export class PublicJobComponent implements OnInit, OnDestroy {
-
   bidForm: UntypedFormGroup = null
   bids: any[]
   authSub: Subscription
@@ -56,10 +56,10 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
   isShownTab: boolean = false
 
-  activejobTypes: any[]
-  selectedJob: any
+  activeJobTypes: Tab[]
+  selectedJob: Tab
 
-  price_bid: number = 0
+  bidPrice: number = 0
   hoveredFiles: boolean = false
   isProvider: boolean = false
 
@@ -88,6 +88,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   visibleWithdrawModal: boolean = false
   visibleLoginModal: boolean = false
   visibleWithdrawSuccessModal: boolean = false
+  visibleDeletedSuccessModal: boolean = false
 
   dublicateFilename: string[] = []
 
@@ -115,7 +116,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
           Validators.required,
           Validators.min(1),
           Validators.max(10000000),
-          Validators.pattern('^[0-9]*$'),
+          // Validators.pattern('^[0-9]*$'),
         ]),
       ],
       message: [
@@ -131,13 +132,13 @@ export class PublicJobComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.spinner.show()
-    this.activejobTypes = [
+    this.activeJobTypes = [
       { label: 'Job Details', code: 'jobsdetail' },
       { label: 'Proposals', code: 'proposals' },
     ]
-    this.selectedJob = this.activejobTypes[0]
+    this.selectedJob = this.activeJobTypes[0]
     this.shareableLink = environment.shareBaseUrl
-    
+
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       if (user) {
         this.currentUser = user
@@ -281,7 +282,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     this.beforeUploadFiles.push(...this.uploadedFiles)
   }
 
-  changeJob(item: any) {
+  changeJob(item: Tab) {
     this.selectedJob = item
   }
   ngOnDestroy() {
@@ -329,12 +330,13 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   }
   async cancelJob(event: Event) {
     event.stopPropagation()
-    this.visibleDeleteModal = !this.visibleDeleteModal
+    this.visibleDeleteModal = false
 
     if (this.isMyJob) {
       const updated = await this.publicJobsService.cancelJob(this.job.id)
       if (updated) {
         this.job.state = JobState.closed
+        this.visibleDeletedSuccessModal = true
       }
     }
   }

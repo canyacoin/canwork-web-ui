@@ -15,8 +15,8 @@ interface SortingMethod {
 }
 
 @Component({
-  selector: 'job-proposals',
-  templateUrl: './job-proposals.component.html',
+  selector: 'job-proposals-panel',
+  templateUrl: './job-proposals-panel.component.html',
 })
 export class JobProposalsPanelComponent implements OnInit {
   authSub: Subscription

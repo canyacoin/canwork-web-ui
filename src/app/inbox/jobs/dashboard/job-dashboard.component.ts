@@ -9,7 +9,6 @@ import {
   Directive,
 } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
-import { NgxSpinnerService } from 'ngx-spinner'
 
 import { Observable, Subscription } from 'rxjs'
 
@@ -20,18 +19,14 @@ import {
   TimeRange,
   WorkType,
   JobState,
-} from '../../../core-classes/job'
+} from '@class/job'
 import { User, UserType } from '../../../core-classes/user'
 import { AuthService } from '@service/auth.service'
 import { JobService } from '@service/job.service'
 import { PublicJobService } from '@service/public-job.service'
 import { MobileService } from '@service/mobile.service'
 import { UserService } from '@service/user.service'
-
-interface jobType {
-  label: string
-  code: string
-}
+import { Tab } from '@class/tabs'
 
 interface PageEvent {
   first: number
@@ -66,8 +61,8 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   allJobs: Job[]
   searchQuery: string
 
-  jobTypes: jobType[]
-  selectedjob: jobType
+  jobTypes: Tab[]
+  selectedJob: Tab
 
   currentPage: number = 0
   first: number = 0
@@ -83,8 +78,9 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
 
   filteredJobs: Job[] | undefined
 
+  visibleDeletedSuccessModal: boolean = false
+
   constructor(
-    private spinner: NgxSpinnerService,
     private authService: AuthService,
     public mobile: MobileService,
     //private orderPipe: OrderPipe,
@@ -96,8 +92,6 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   async ngOnInit() {
-    this.spinner.show()
-
     this.jobTypes = [
       { label: 'Active Jobs', code: 'active' },
       { label: 'Public Jobs', code: 'public' },
@@ -108,12 +102,15 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
 
     this.filters = [
       { name: 'All Jobs', code: '' },
-      { name: 'Jobs Awaiting Escrow', code: 'Awaiting Escrow' },
-      { name: 'Funds In Escrow', code: 'Funds In Escrow' },
-      { name: 'Jobs Pending completion', code: 'Pending completion' },
-      { name: 'Jobs in Disputed', code: 'Disputed' },
-      { name: 'Pending Jobs', code: 'Offer pending' },
-      { name: 'Cancelled', code: 'Cancelled' },
+      {
+        name: 'Jobs Awaiting Escrow',
+        code: JobState.termsAcceptedAwaitingEscrow,
+      },
+      { name: 'Funds In Escrow', code: JobState.inEscrow },
+      { name: 'Jobs Pending completion', code: JobState.workPendingCompletion },
+      { name: 'Jobs in Disputed', code: JobState.inDispute },
+      { name: 'Pending Jobs', code: JobState.offer },
+      { name: 'Cancelled', code: JobState.cancelled },
     ]
     this.sortByList = [
       { name: 'Date Posted', code: 'newest' },
@@ -126,11 +123,11 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
 
     this.route.queryParams.subscribe((params) => {
       if (params['tab'] == undefined) {
-        this.selectedjob = this.jobTypes[0]
+        this.selectedJob = this.jobTypes[0]
         this.jobType = this.jobTypes[0].code
       } else {
-        this.selectedjob = this.jobTypes[params['tab']]
-        this.jobType = this.selectedjob.code
+        this.selectedJob = this.jobTypes[params['tab']]
+        this.jobType = this.selectedJob.code
       }
     })
 
@@ -139,8 +136,6 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     // we changed the logic here, we need client mode for getting active jobs.
     this.userType = UserType.client
     await this.initialiseJobs(this.currentUser.address, this.userType)
-
-    this.spinner.hide()
   }
 
   ngOnDestroy() {
@@ -247,13 +242,15 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   }
 
   showFilteredJobs(jobs: Job[]): void {
-    this.totalRecords = jobs.length
+    if (jobs) {
+      this.totalRecords = jobs.length
 
-    // 5 item each page
-    this.filteredJobs = jobs.slice(
-      this.currentPage * 5,
-      this.currentPage * 5 + 5
-    )
+      // 5 item each page
+      this.filteredJobs = jobs.slice(
+        this.currentPage * 5,
+        this.currentPage * 5 + 5
+      )
+    }
   }
 
   viewJobDetails(jobId: string): void {
@@ -276,7 +273,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     this.showFilteredJobs(this.jobs)
   }
 
-  SortbyFilter(filter: string) {
+  sortbyFilter(filter: string) {
     console.log('this.jobs:', this.jobs)
     this.jobs = this.jobs.sort((a, b) => {
       if (filter === 'newest') {
@@ -288,5 +285,10 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
       }
     })
     this.showFilteredJobs(this.jobs)
+  }
+
+  showDeletedSuccessModal(event: Event) {
+    event.preventDefault()
+    this.visibleDeletedSuccessModal = true
   }
 }

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { JobDetailsPanelComponent } from './job-details.component'
+import { JobDetailsPanelComponent } from './job-details-panel.component'
 
 describe('JobDetailsPanelComponent', () => {
   let component: JobDetailsPanelComponent

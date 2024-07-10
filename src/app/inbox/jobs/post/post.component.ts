@@ -895,24 +895,12 @@ export class PostComponent implements OnInit, OnDestroy {
     }
   }
 
-  formatDate(dateStr: string): string {
-    const date = new Date(dateStr)
-    const day = date.getDate()
-    const month = date.toLocaleString('default', { month: 'long' })
-    const year = date.getFullYear()
-
-    const daySuffix = this.getDaySuffix(day)
-
-    return `${day}${daySuffix} ${month} ${year}`
-  }
-
   async submitShareableJob(isDRP: number) {
     // isDRP , 0 => draft, , 1=> Preview, 2 => Post
     // console.log('isDRP:', isDRP)
     this.spinner.show()
     this.isSending = true
     this.error = false
-    this.sentDRP = isDRP
     this.shareableJobForm.controls.providerType.setValue(
       this.selectedCategory.code
     )
@@ -980,21 +968,22 @@ export class PostComponent implements OnInit, OnDestroy {
       } else {
         job.state = JobState.draft
       }
-      if (isDRP == 1) {
+      if (isDRP === 1) {
         this.jobFromNow = 'Posted 1 minutes ago'
-      } else {
-        this.isPreview = false
       }
 
-      const action = new IJobAction(ActionType.createJob, UserType.client)
-      action.setPaymentProperties(
-        job.budget,
-        this.shareableJobForm.value.timelineExpectation,
-        this.shareableJobForm.value.workType,
-        this.shareableJobForm.value.weeklyCommitment,
-        this.shareableJobForm.value.paymentType
-      )
-      this.sent = await this.publicJobService.handlePublicJob(job, action)
+      // if it isn't "preview" case
+      if (isDRP !== 1) {
+        const action = new IJobAction(ActionType.createJob, UserType.client)
+        action.setPaymentProperties(
+          job.budget,
+          this.shareableJobForm.value.timelineExpectation,
+          this.shareableJobForm.value.workType,
+          this.shareableJobForm.value.weeklyCommitment,
+          this.shareableJobForm.value.paymentType
+        )
+        this.sent = await this.publicJobService.handlePublicJob(job, action)
+      }
       this.jobForPreview = job
       this.isPreview = true
 
@@ -1016,9 +1005,11 @@ export class PostComponent implements OnInit, OnDestroy {
       console.log('error with showing', e)
     }
     this.spinner.hide()
+    this.sentDRP = isDRP
   }
 
-  BacktoEdit() {
+  BacktoEdit(event: Event) {
+    event.preventDefault()
     this.isPreview = false
   }
 
@@ -1031,11 +1022,5 @@ export class PostComponent implements OnInit, OnDestroy {
     //   this.bid_message_valiated = true
     // }
     return div.textContent.length
-  }
-
-  categoryFromProviderType(provider: string): string {
-    let result = this.categories.filter((item) => item.code === provider)
-    if (result.length >= 0) return result[0].name
-    return provider
   }
 }

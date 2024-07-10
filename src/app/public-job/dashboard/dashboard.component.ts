@@ -209,22 +209,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
           ) {
             this.fixedFilter.map((item) => {
               if (item === 0) {
-                if (provider.budget > 0 && provider.budget < 500) {
+                if (provider.budget > 0 && provider.budget < 501) {
                   this.filteredProviders.push(provider)
                 }
               }
               if (item === 500) {
-                if (provider.budget > 500 && provider.budget < 1000) {
+                if (provider.budget > 500 && provider.budget < 1001) {
                   this.filteredProviders.push(provider)
                 }
               }
               if (item === 1000) {
-                if (provider.budget > 1000 && provider.budget < 5000) {
+                if (provider.budget > 1000 && provider.budget < 5001) {
                   this.filteredProviders.push(provider)
                 }
               }
               if (item === 5000) {
-                if (provider.budget > 5000 && provider.budget < 10000) {
+                if (provider.budget > 5000 && provider.budget < 10001) {
                   this.filteredProviders.push(provider)
                 }
               }

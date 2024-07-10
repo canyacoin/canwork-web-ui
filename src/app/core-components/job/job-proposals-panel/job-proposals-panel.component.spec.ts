@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 
-import { JobProposalsPanelComponent } from './job-proposals.component'
+import { JobProposalsPanelComponent } from './job-proposals-panel.component'
 
 describe('JobProposalsPanelComponent', () => {
   let component: JobProposalsPanelComponent
