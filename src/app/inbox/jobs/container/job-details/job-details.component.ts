@@ -176,7 +176,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  get jobIsComplete(): boolean {
+  get isJobComplete(): boolean {
     return this.job.state === JobState.complete
   }
 
@@ -186,6 +186,10 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
   get isInEscrow(): boolean {
     return this.job.state === JobState.inEscrow
+  }
+
+  get isMarkedAsComplete(): boolean {
+    return this.job.state === JobState.workPendingCompletion
   }
 
   get userCanReview(): boolean {
@@ -361,6 +365,10 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.action = ActionType.addMessage
         this.visibleActionDialogModal = true
         break
+      case ActionType.acceptFinish:
+        this.action = ActionType.acceptFinish
+        this.visibleActionDialogModal = true
+        break
       default:
         console.log('default')
         //this.dialogService
@@ -419,12 +427,20 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.executeAction(ActionType.cancelJob) // Cancel job
       } else if (this.isInEscrow) {
         // this.executeAction(ActionType.dispute) // Raise dispute
+      } else if (this.isMarkedAsComplete) {
+        this.executeAction(ActionType.dispute) // Raise dispute
+      } else if (this.isJobComplete) {
+        this.executeAction(ActionType.review) // Leave a review to freelancer
       }
     } else if (this.currentUserType === UserType.provider) {
       if (this.isAwaitingEscrow) {
         // this.executeAction(ActionType.cancelJobEarly) // Cancel job early
       } else if (this.isInEscrow) {
         this.executeAction(ActionType.cancelJobEarly) // Cancel job early
+      } else if (this.isMarkedAsComplete) {
+        this.executeAction(ActionType.dispute) // Raise dispute
+      } else if (this.isJobComplete) {
+        this.executeAction(ActionType.review) // Leave a review to client
       }
     }
   }
@@ -436,6 +452,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.executeAction(ActionType.enterEscrow) // Pay Escrow
       } else if (this.isInEscrow) {
         this.executeAction(ActionType.addMessage) // Add Note
+      } else if (this.isMarkedAsComplete) {
+        this.executeAction(ActionType.acceptFinish) // Raise dispute
       }
     } else if (this.currentUserType === UserType.provider) {
       if (this.isAwaitingEscrow) {
