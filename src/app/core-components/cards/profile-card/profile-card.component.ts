@@ -9,7 +9,7 @@ import { Rating } from '@class/user'
 export class ProfileCardComponent {
   @Input() isGrid: boolean = true
 
-  @Input() index!: number
+  @Input() index: number = 0
   @Input() avatarUri!: string
   @Input() name!: string
   @Input() title!: string
