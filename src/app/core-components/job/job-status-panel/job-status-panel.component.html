@@ -116,12 +116,9 @@
   </ng-container>
 
   <ng-container *ngIf="!isPostJobPage">
-    <div
-      *ngIf="currentUser && isMyJob"
-      class="flex justify-center items-center"
-    >
-      <div class="flex flex-col sm:flex-row gap-4 items-center">
-        <ng-container *ngIf="isAcceptingOffers">
+    <ng-container *ngIf="currentUser && isMyJob">
+      <ng-container *ngIf="isAcceptingOffers">
+        <div class="flex flex-col sm:flex-row gap-4 items-center">
           <div
             class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center gap-2 font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl transition-all duration-300"
             (click)="leftClick($event)"
@@ -140,8 +137,10 @@
               [routerLink]="['/inbox/job/edit', job.id]"
             />
           </div>
-        </ng-container>
-        <ng-container *ngIf="isAwaitingEscrow">
+        </div>
+      </ng-container>
+      <ng-container *ngIf="isAwaitingEscrow">
+        <div class="flex flex-col sm:flex-row gap-4 items-center">
           <div
             class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl transition-all duration-300"
             (click)="leftClick($event)"
@@ -156,8 +155,10 @@
               (click)="rightClick($event)"
             />
           </div>
-        </ng-container>
-        <ng-container *ngIf="isInEscrow">
+        </div>
+      </ng-container>
+      <ng-container *ngIf="isInEscrow">
+        <div class="flex flex-col sm:flex-row gap-4 items-center">
           <raise-dispute-button (click)="leftClick($event)" />
 
           <basic-button
@@ -167,16 +168,37 @@
             extraClass="w-max"
             size="small"
           />
-        </ng-container>
-      </div>
-    </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="isMarkedAsComplete">
+        <div class="flex flex-col gap-4 items-center">
+          <raise-dispute-button (click)="leftClick($event)" />
+          <basic-button
+            [type]="2"
+            title="Release Payment"
+            extraClass="w-max"
+            size="small"
+            (click)="rightClick($event)"
+          />
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="isJobComplete">
+        <div class="flex justify-center">
+          <basic-button
+            [type]="2"
+            title="Leave a review"
+            extraClass="w-max"
+            size="small"
+            (click)="leftClick($event)"
+          />
+        </div>
+      </ng-container>
+    </ng-container>
     <!-- *ngIf="currentUser && !isMyJob && (isAwaitingEscrow || isInEscrow)" -->
-    <div
-      *ngIf="currentUser && !isMyJob && isInEscrow"
-      class="flex justify-center items-center"
-    >
-      <div class="flex flex-col gap-4 items-center">
-        <!-- <ng-container *ngIf="isAwaitingEscrow">
+    <ng-container *ngIf="currentUser && !isMyJob">
+      <!-- <ng-container *ngIf="isAwaitingEscrow">
           <div
             class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl transition-all duration-300"
             (click)="leftClick($event)"
@@ -192,7 +214,8 @@
             size="small"
           />
         </ng-container> -->
-        <ng-container *ngIf="isInEscrow">
+      <ng-container *ngIf="isInEscrow">
+        <div class="flex flex-col gap-4 items-center">
           <div
             class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl transition-all duration-300"
             (click)="leftClick($event)"
@@ -206,13 +229,37 @@
             extraClass="w-max"
             size="small"
           />
-        </ng-container>
-      </div>
-    </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="isMarkedAsComplete">
+        <div class="flex flex-col gap-4 items-center">
+          <raise-dispute-button (click)="leftClick($event)" />
+          <basic-button
+            [type]="2"
+            title="Mark as complete"
+            extraClass="w-max"
+            size="small"
+            [disabled]="true"
+          />
+        </div>
+      </ng-container>
+      <ng-container *ngIf="isJobComplete">
+        <div class="flex justify-center">
+          <basic-button
+            [type]="2"
+            title="Leave a review"
+            extraClass="w-max"
+            size="small"
+            (click)="leftClick($event)"
+          />
+        </div>
+      </ng-container>
+    </ng-container>
 
     <div
       *ngIf="!currentUser && !isMyJob && isAcceptingOffers"
       (click)="leftClick($event)"
+      class="flex justify-center items-center"
     >
       <basic-button [type]="2" title="Login to Apply Now" />
     </div>

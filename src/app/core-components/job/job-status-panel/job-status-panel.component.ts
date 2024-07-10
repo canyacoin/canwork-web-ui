@@ -90,6 +90,14 @@ export class JobStatusPanelComponent {
     return this.job.state === JobState.inEscrow
   }
 
+  get isMarkedAsComplete(): boolean {
+    return this.job.state === JobState.workPendingCompletion
+  }
+
+  get isJobComplete(): boolean {
+    return this.job.state === JobState.complete
+  }
+
   get isClosed() {
     return this.job.state === JobState.closed
   }
