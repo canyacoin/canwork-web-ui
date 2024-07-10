@@ -1,43 +1,48 @@
 import { Component, Input } from '@angular/core'
 import { Job, JobState } from '@class/job'
-import { UserType } from '@class/user'
+// import { UserType } from '@class/user'
 
 @Component({
-  selector: 'app-status-icon',
+  selector: 'status-icon',
   templateUrl: './status-icon.component.html',
 })
 export class StatusIconComponent {
   @Input() job: Job
-  @Input() currentUserType: UserType
+  // @Input() currentUserType: UserType
 
   constructor() {}
+
   get stateColour(): string {
     switch (this.job.state) {
       case JobState.offer:
       case JobState.workPendingCompletion:
-        return 'info'
       case JobState.cancelled:
+        return 'bg-R500'
       case JobState.cancelledByProvider:
+        return 'bg-R500'
       case JobState.declined:
       case JobState.inDispute:
       case JobState.draft:
       case JobState.closed:
-        return 'danger'
+        return 'bg-G500'
       case JobState.providerCounterOffer:
       case JobState.clientCounterOffer:
       case JobState.termsAcceptedAwaitingEscrow:
+        return 'bg-start-g1'
       case JobState.finishingJob:
       case JobState.processingEscrow:
         return 'warning'
       case JobState.complete:
       case JobState.inEscrow:
+        return 'bg-vibrantGreen'
       case JobState.reviewed:
       case JobState.acceptingOffers:
-        return 'success'
+        return 'bg-vibrantGreen'
       default:
-        return 'primary'
+        return 'bg-G500'
     }
   }
+
   /* Customizeable messages for each job status. */
   get stateStatus(): string {
     switch (this.job.state) {
@@ -58,9 +63,9 @@ export class StatusIconComponent {
       case JobState.clientCounterOffer:
         return 'Offer countered by client'
       case JobState.termsAcceptedAwaitingEscrow:
-        return 'Awaiting payment to escrow'
+        return 'Awaiting escrow payment'
       case JobState.inEscrow:
-        return 'Funds in escrow'
+        return 'Funds in Escrow'
       case JobState.complete:
         return 'Completed'
       case JobState.reviewed:
