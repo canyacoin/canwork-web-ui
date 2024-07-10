@@ -53,8 +53,10 @@ export class JobApplicationPanelComponent implements AfterViewInit {
   }
 
   checkHeight() {
-    const height = this.contentDiv.nativeElement.offsetHeight
-    this.isHeightMoreThan259px = height > 259
+    if (this.contentDiv) {
+      const height = this.contentDiv.nativeElement.offsetHeight
+      this.isHeightMoreThan259px = height > 259
+    }
   }
 
   withdrawButtonClick(event: Event) {
