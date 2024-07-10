@@ -134,6 +134,42 @@
     </div>
 
     <div
+      *ngIf="actionType === actionTypes.acceptFinish"
+      class="flex flex-col justify-center items-center gap-[36px]"
+    >
+      <img
+        class="w-[200px]"
+        src="/assets/massimo/images/jobRelease.png"
+        alt="release"
+      />
+      <div class="flex flex-col gap-[16px]">
+        <div class="flex flex-col gap-[8px] max-w-[320px]">
+          <div class="text-h6 text-G900 text-center font-medium">
+            Release payment
+          </div>
+          <div class="text-b2 text-G700 text-center">
+            Are you sure you want to release payment to freelancer and close
+            this job ?
+          </div>
+        </div>
+        <div class="flex gap-4 items-center">
+          <div
+            (click)="handleCancelClick($event)"
+            class="text-R900 font-medium text-nowrap text-b1 w-max cursor-pointer"
+          >
+            Cancel
+          </div>
+          <basic-button
+            [type]="2"
+            title="Release payment"
+            size="small"
+            (click)="handleAction($event)"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div
       *ngIf="actionType === actionTypes.addMessage"
       class="flex flex-col gap-[24px] justify-center items-center w-full"
     >

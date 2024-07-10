@@ -317,7 +317,7 @@ export class JobService {
             parsedJob.actionLog.push(action)
             parsedJob.state = JobState.complete
             // moved to backend
-            //await this.saveJobAndNotify(parsedJob, action)
+            // await this.saveJobAndNotify(parsedJob, action)
             resolve(true)
             break
           default:
