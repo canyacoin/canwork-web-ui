@@ -74,7 +74,7 @@ export class JobProposalsPanelComponent implements OnInit {
                 .getPublicJobBids(publicJob.id)
                 .subscribe((result) => {
                   this.bids = result
-                  // console.log('this.bid', this.bids)
+                  console.log('this.bid', this.bids)
                 })
             } else {
               this.canSee = false

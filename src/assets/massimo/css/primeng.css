@@ -542,6 +542,10 @@
     display: none;
   }
 
+  #headless_modal .p-dialog-mask .p-element .p-dialog-content {
+    border-radius: 24px;
+  }
+
   .p-component-overlay {
     background: rgba(0, 0, 0, 0.80) !important;
     backdrop-filter: blur(4px) !important;
