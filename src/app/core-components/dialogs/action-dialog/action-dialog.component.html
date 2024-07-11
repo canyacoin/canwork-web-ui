@@ -1,11 +1,124 @@
 <p-dialog
   [(visible)]="visible"
-  styleClass="md:max-w-[600px] lg:max-w-[906px] w-full !bg-G50 mx-[20px]"
+  styleClass="!rounded-[24px] md:max-w-[600px] lg:max-w-[906px] w-full !bg-G50 mx-[20px]"
   [draggable]="false"
   [resizable]="false"
   [modal]="true"
+  id="headless_modal"
 >
-  <div class="flex justify-center px-[20px] pb-[40px]">
+  <div class="absolute top-[24px] right-[24px]">
+    <x-button (click)="handleCancelClick($event)" />
+  </div>
+
+  <div *ngIf="actionType === actionTypes.review">
+    <div class="py-[24px] px-[20px] md:px-[40px] text-h5 text-G900 font-medium">
+      Review
+    </div>
+    <hr class="w-full h-[1px] bg-G200 border-none" />
+    <div
+      class="px-[20px] md:px-[40px] flex flex-col gap-[24px] pt-[24px] pb-[32px]"
+    >
+      <div class="flex justify-between gap-2">
+        <div *ngIf="isClient && selectedBid">
+          <div class="flex gap-[16px] items-center">
+            <app-avatar
+              [size]="48"
+              [user]="selectedBid.providerInfo"
+            ></app-avatar>
+            <div class="flex flex-col gap-[8px]">
+              <div class="line-clamp-1 text-b1 font-medium text-G900">
+                {{ selectedBid.providerInfo.name }}
+                <verified-mark
+                  [user]="selectedBid.providerInfo"
+                ></verified-mark>
+              </div>
+              <div class="line-clamp-1 text-b2 text-G700">
+                {{ selectedBid.providerInfo.title }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!isClient && jobPoster">
+          <div class="flex gap-[16px] items-center">
+            <app-avatar [size]="48" [user]="jobPoster"></app-avatar>
+            <div class="flex flex-col gap-[8px]">
+              <div class="line-clamp-1 text-b1 font-medium text-G900">
+                {{ jobPoster.name }}
+                <verified-mark
+                  [user]="selectedBid.providerInfo"
+                ></verified-mark>
+              </div>
+              <div class="line-clamp-1 text-b2 text-G700">
+                {{ jobPoster.title }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <star-rating-select
+          [(stars)]="numberOfStars"
+          (starChange)="setStars($event)"
+        />
+      </div>
+      <div class="w-full flex flex-col gap-[16px]">
+        <div class="text-b1 text-G900 font-medium">Leave a Review</div>
+
+        <textarea
+          class="w-full outline-none h-[240px] border border-G200 bg-G50 rounded-xl p-[16px] text-b1 font-sans placeholder:text-G500"
+          [(ngModel)]="commentText"
+          name="message"
+          [placeholder]="
+            isClient
+              ? 'How was your experience working with ' + otherParty + ' ?'
+              : 'How was your experience working with ' + jobPoster.name + ' ?'
+          "
+        ></textarea>
+        <div class="flex justify-end">{{ commentText.length }}/350</div>
+      </div>
+      <div class="flex gap-[16px] items-center justify-end">
+        <div
+          (click)="handleCancelClick($event)"
+          class="text-b1 text-G900 font-medium select-none cursor-pointer"
+        >
+          CANCEL
+        </div>
+        <basic-button
+          (click)="handleAction($event)"
+          [type]="2"
+          title="Submit"
+          size="small"
+          [disabled]="!(numberOfStars > 0 && 351 > commentText.length)"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- <div *ngIf="form && actionType == actionTypes.review" class="mx-40">
+  <form [formGroup]="form" class="form-group">
+    <fieldset class="form-group">
+      <label>How would you rate {{ otherParty }}?</label><br />
+      <star-rating
+        [starType]="'svg'"
+        [showHalfStars]="true"
+        [staticColor]="10"
+        [hoverEnabled]="true"
+        (ratingChange)="onRatingChange($event)"
+      ></star-rating>
+    </fieldset>
+    <fieldset class="form-group">
+      <label>Add a public review (optional)</label>
+      <textarea
+        class="form-control"
+        formControlName="message"
+        name="message"
+        placeholder="enter your review here"
+      ></textarea>
+    </fieldset>
+  </form>
+</div> -->
+  <div
+    *ngIf="actionType !== actionTypes.review"
+    class="flex justify-center px-[20px] pt-[50px] md:pt-[100px] pb-[40px]"
+  >
     <div
       *ngIf="actionType === actionTypes.dispute"
       class="flex flex-col gap-[30px] md:gap-[24px] justify-center items-center"
@@ -110,8 +223,8 @@
       class="flex flex-col justify-center items-center gap-[24px]"
     >
       <img
-        class="w-[200px]"
-        src="/assets/massimo/images/jobDelete.png"
+        class="w-[300px]"
+        src="/assets/massimo/images/confirmTransaction.png"
         alt="delete"
       />
       <div class="text-h6 text-center font-medium max-w-[400px]">
@@ -142,7 +255,7 @@
         src="/assets/massimo/images/jobRelease.png"
         alt="release"
       />
-      <div class="flex flex-col gap-[16px]">
+      <div class="flex flex-col gap-[16px] items-center">
         <div class="flex flex-col gap-[8px] max-w-[320px]">
           <div class="text-h6 text-G900 text-center font-medium">
             Release payment
@@ -163,7 +276,8 @@
             [type]="2"
             title="Release payment"
             size="small"
-            (click)="handleAction($event)"
+            (click)="releaseBtnClick($event)"
+            [disabled]="isReleasing"
           />
         </div>
       </div>
@@ -182,7 +296,7 @@
         >
           <div class="text-G900 text-b1">Add message</div>
           <textarea
-            class="w-full outline-none h-[100px] border border-G500 rounded-md p-[5px]"
+            class="w-full outline-none h-[100px] border border-G500 rounded-md p-[16px]"
             formControlName="message"
             name="message"
             placeholder="Enter your message here"
