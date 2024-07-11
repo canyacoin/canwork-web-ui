@@ -92,7 +92,9 @@ import { ActionDialogComponent } from './dialogs/action-dialog/action-dialog.com
 import { SeeMoreLessButtonComponent } from './buttons/see-more-less-button/see-more-less-button.component'
 import { JobSwitchActionTransactionPanelComponent } from './job/job-switch-action-transaction-panel/job-switch-action-transaction-panel.component'
 import { ChatButtonComponent } from './buttons/chat-button/chat-button.component';
-import { BackToEditButtonComponent } from './buttons/back-to-edit-button/back-to-edit-button.component'
+import { BackToEditButtonComponent } from './buttons/back-to-edit-button/back-to-edit-button.component';
+import { XButtonComponent } from './buttons/x-button/x-button.component';
+import { StarRatingSelectComponent } from './star-rating-select/star-rating-select.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -190,6 +192,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     SeeMoreLessButtonComponent,
     ChatButtonComponent,
     BackToEditButtonComponent,
+    XButtonComponent,
     // Dialogs
     BasicDialogComponent,
     ProposalDetailsDialogComponent,
@@ -200,6 +203,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     JobActionLogPanelComponent,
     JobTransactionHistoryPanelComponent,
     JobSwitchActionTransactionPanelComponent,
+    StarRatingSelectComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -268,6 +272,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     SeeMoreLessButtonComponent,
     ChatButtonComponent,
     BackToEditButtonComponent,
+    XButtonComponent,
     // Dialogs
     BasicDialogComponent,
     ProposalDetailsDialogComponent,
@@ -278,6 +283,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     JobActionLogPanelComponent,
     JobTransactionHistoryPanelComponent,
     JobSwitchActionTransactionPanelComponent,
+    StarRatingSelectComponent,
   ],
   providers: [
     {

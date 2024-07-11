@@ -16,6 +16,7 @@ export class JobStatusPanelComponent {
   // from post job page
   @Input() isPostJobPage: boolean = false
   @Input() isPostButtonsShow: boolean = false
+  @Input() userCanReview: boolean = false
 
   @Output() leftBtnEvent = new EventEmitter<Event>()
   @Output() rightBtnEvent = new EventEmitter<Event>()

@@ -192,6 +192,7 @@
             extraClass="w-max"
             size="small"
             (click)="leftClick($event)"
+            [disabled]="!userCanReview"
           />
         </div>
       </ng-container>
@@ -216,12 +217,13 @@
         </ng-container> -->
       <ng-container *ngIf="isInEscrow">
         <div class="flex flex-col gap-4 items-center">
-          <div
+          <button
             class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl transition-all duration-300"
             (click)="leftClick($event)"
+            [disabled]="!job.bscEscrow"
           >
             Cancel Job Early
-          </div>
+          </button>
           <basic-button
             [type]="2"
             title="Mark as complete"
@@ -251,6 +253,7 @@
             extraClass="w-max"
             size="small"
             (click)="leftClick($event)"
+            [disabled]="!userCanReview"
           />
         </div>
       </ng-container>
