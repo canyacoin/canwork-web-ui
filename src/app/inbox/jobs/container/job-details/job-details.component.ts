@@ -6,7 +6,6 @@ import { Review } from '@class/review'
 import { User, UserType } from '@class/user'
 import { AuthService } from '@service/auth.service'
 import { JobService } from '@service/job.service'
-import { MobileService } from '@service/mobile.service'
 import { ReviewService } from '@service/review.service'
 import { Transaction, TransactionService } from '@service/transaction.service'
 import { PublicJobService } from '@service/public-job.service'
@@ -41,7 +40,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   selectedBid: Bid
   transactions: Transaction[] = []
   reviews: Review[] = new Array<Review>()
-  isOnMobile = false
   isPartOfJob = false
   bidsSub: Subscription
   jobSub: Subscription
@@ -49,7 +47,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   reviewsSub: Subscription
   hideDescription = true
   isInitialised = false
-  isReleasing = false
 
   visibleConnectWalletModal = false
   visibleActionDialogModal = false
@@ -66,7 +63,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private ngxModalService: NgxModalService,
     private storage: AngularFireStorage,
-    private mobile: MobileService,
     private router: Router,
     private spinner: NgxSpinnerService,
     private publicJobsService: PublicJobService,
@@ -79,7 +75,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
       this.currentUser = user
       this.initialiseJob()
     })
-    this.isOnMobile = this.mobile.isOnMobile
   }
 
   ngOnDestroy() {
@@ -156,25 +151,25 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         })
       })
   }
-  actionIsDisabled(action: ActionType): boolean {
-    switch (action) {
-      case ActionType.cancelJobEarly:
-        return !(this.job.bscEscrow === true) // enable only if it's a bsc job, we implemented only for it
-      case ActionType.review:
-        return !this.userCanReview
-      default:
-        return false
-    }
-  }
+  // actionIsDisabled(action: ActionType): boolean {
+  //   switch (action) {
+  //     case ActionType.cancelJobEarly:
+  //       return !(this.job.bscEscrow === true) // enable only if it's a bsc job, we implemented only for it
+  //     case ActionType.review:
+  //       return !this.userCanReview
+  //     default:
+  //       return false
+  //   }
+  // }
 
-  actionIsHidden(action: ActionType): boolean {
-    switch (action) {
-      case ActionType.review:
-        return !this.userCanReview
-      default:
-        return false
-    }
-  }
+  // actionIsHidden(action: ActionType): boolean {
+  //   switch (action) {
+  //     case ActionType.review:
+  //       return !this.userCanReview
+  //     default:
+  //       return false
+  //   }
+  // }
 
   get isJobComplete(): boolean {
     return this.job.state === JobState.complete
@@ -215,27 +210,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     )
   }
 
-  /** Helper method to get the colour associated with each action button */
-  // getColour(type: ActionType): string {
-  //   switch (type) {
-  //     case ActionType.cancelJob:
-  //     case ActionType.dispute:
-  //     case ActionType.declineTerms:
-  //     case ActionType.cancelJobEarly:
-  //       return 'danger'
-  //     case ActionType.counterOffer:
-  //     case ActionType.addMessage:
-  //       return 'info'
-  //     case ActionType.acceptTerms:
-  //     case ActionType.enterEscrow:
-  //     case ActionType.finishedJob:
-  //     case ActionType.acceptFinish:
-  //       return 'success'
-  //     default:
-  //       return 'info'
-  //   }
-  // }
-
   get currentUserIsClient() {
     return this.currentUserType === UserType.client
   }
@@ -264,45 +238,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private async releaseEscrowBsc() {
-    console.log('release Escrow BSC')
-    // we check if bsc chain is connected and if not, suggest to connect to bsc chain explicitely (for now only metamask, not bep2 chain
-    if (!(await this.bscService.isBscConnected())) {
-      const routerStateSnapshot = this.router.routerState.snapshot
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Warn',
-        detail: `Connect your BNBChain wallet to release the payment`,
-      })
-
-      this.router.navigate(['/wallet-bnb'], {
-        queryParams: { returnUrl: routerStateSnapshot.url },
-      })
-      return
-    }
-
-    // we are bsc connected, go on
-    const jobId = this.job.id
-    console.log('releasing jobId ' + jobId)
-    let result = await this.bscService.release(jobId)
-    if (!result.err) {
-      // save tx immediately
-      this.isReleasing = false
-
-      // moved to backend
-      /*
-      let tx = await this.transactionService.createTransaction(
-        `Release funds`,
-        result.transactionHash,
-        jobId
-      )*/
-
-      const action = new IJobAction(ActionType.acceptFinish, UserType.client)
-      this.job.state = JobState.complete
-      await this.jobService.handleJobAction(this.job, action)
-    }
-  }
-
   async executeAction(action: ActionType) {
     console.log('executeAction: ' + action)
     switch (action) {
@@ -321,35 +256,15 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         }
         break
       case ActionType.acceptFinish:
-        this.isReleasing = true
         console.log('bscEscrow = ', this.job.bscEscrow)
-        if (this.job.bscEscrow === true) {
-          console.log('ActionType.acceptFinish BEP20')
-          await this.releaseEscrowBsc()
-        }
+        this.action = ActionType.acceptFinish
+        this.visibleActionDialogModal = true
         break
       case ActionType.cancelJob:
         this.action = ActionType.cancelJob
         this.visibleActionDialogModal = true
         break
       case ActionType.cancelJobEarly:
-        console.log('ActionType.cancelJobEarly')
-        //this.dialogService
-        //  .addDialog(
-        // this.ngxModalService
-        //   .addModal(
-        //     ActionDialogComponent,
-        //     new ActionDialogOptions({
-        //       job: this.job,
-        //       userType: this.currentUserType,
-        //       actionType: action,
-        //     })
-        //   )
-        //   .subscribe((success) => {
-        //     if (!success) {
-        //       console.log('Action cancelled')
-        //     }
-        //   })
         this.action = ActionType.cancelJobEarly
         this.visibleActionDialogModal = true
         break
@@ -365,8 +280,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.action = ActionType.addMessage
         this.visibleActionDialogModal = true
         break
-      case ActionType.acceptFinish:
-        this.action = ActionType.acceptFinish
+      case ActionType.review:
+        this.action = ActionType.review
         this.visibleActionDialogModal = true
         break
       default:
@@ -462,9 +377,5 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.executeAction(ActionType.finishedJob) // Mark as complete
       }
     }
-  }
-  seeConsole() {
-    console.log('this.availableActions:', this.availableActions)
-    console.log('this.job', this.job)
   }
 }

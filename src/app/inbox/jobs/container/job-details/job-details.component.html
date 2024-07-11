@@ -6,6 +6,7 @@
       [job]="job"
       [userType]="currentUserType"
       [actionType]="action"
+      [selectedBid]="selectedBid"
     />
     <div
       *ngIf="isAwaitingEscrow && currentUserType === userTypes.client"
@@ -60,8 +61,8 @@
           [currentUser]="currentUser"
           (leftBtnEvent)="statusLeftClick($event)"
           (rightBtnEvent)="statusRightClick($event)"
+          [userCanReview]="userCanReview"
         />
-        <!-- <div class="bg-black w-[100px] h-[100px]" (click)="seeConsole()"></div> -->
       </div>
     </div>
   </div>
