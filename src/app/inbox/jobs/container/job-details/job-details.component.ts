@@ -14,16 +14,8 @@ import { AngularFireStorage } from '@angular/fire/compat/storage'
 import { NgxSpinnerService } from 'ngx-spinner'
 import { MessageService } from 'primeng/api'
 
-//import { SimpleModalService } from 'ngx-simple-modal' // old version
-import { NgxModalService } from 'ngx-modalview'
-
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
-
-import {
-  ActionDialogComponent,
-  ActionDialogOptions,
-} from '../action-dialog/action-dialog.component'
 
 @Component({
   selector: 'app-job-details',
@@ -39,7 +31,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   job: Job
   selectedBid: Bid
   transactions: Transaction[] = []
-  reviews: Review[] = new Array<Review>()
+  reviews: Review[] = []
   isPartOfJob = false
   bidsSub: Subscription
   jobSub: Subscription
@@ -61,7 +53,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     private transactionService: TransactionService,
     private reviewService: ReviewService,
     private activatedRoute: ActivatedRoute,
-    private ngxModalService: NgxModalService,
     private storage: AngularFireStorage,
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -134,8 +125,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
       this.reviewsSub = this.reviewService
         .getJobReviews(jobId)
-        .subscribe((reviews: Review[]) => {
-          this.reviews = reviews
+        .subscribe((result: Review[]) => {
+          this.reviews = result
         })
     } else {
       this.spinner.hide()
@@ -286,23 +277,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         break
       default:
         console.log('default')
-        //this.dialogService
-        //  .addDialog(
-        this.ngxModalService
-          .addModal(
-            ActionDialogComponent,
-            new ActionDialogOptions({
-              job: this.job,
-              userType: this.currentUserType,
-              otherParty: this.job?.otherParty?.name || 'the other party',
-              actionType: action,
-            })
-          )
-          .subscribe((success) => {
-            if (!success) {
-              console.log('Action cancelled')
-            }
-          })
+        this.action = action
+        this.visibleActionDialogModal = true
         break
     }
   }
