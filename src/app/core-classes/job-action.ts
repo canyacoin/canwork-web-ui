@@ -108,9 +108,7 @@ export class IJobAction {
             this.amountUsd
               ? `budget of $${this.amountUsd}${this.paymentTypeString} USD`
               : ''
-          }
-            for ${this.weeklyCommitment} ${hoursplural} per week
-            over a period of ${this.timelineExpectation.toLowerCase()}`,
+          }.}`,
         ]
       case ActionType.counterOffer:
         return [
