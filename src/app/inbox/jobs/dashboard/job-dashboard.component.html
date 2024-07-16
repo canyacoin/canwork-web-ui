@@ -7,7 +7,9 @@
             class="bg-G200 border-none"
             [ngClass]="{
               'rounded-tl-xl': i === 0,
-              'rounded-tr-xl': i === 4
+              'rounded-tr-xl':
+                (i === 4 && userType === 'User') ||
+                (i === 1 && userType === 'Provider')
             }"
           >
             <div
@@ -30,21 +32,22 @@
           <div
             class="w-full flex max-xl:flex-col gap-2 justify-between xl:items-center"
           >
-            <div class="flex gap-[8px] items-center">
+            <div class="flex flex-col sm:flex-row gap-[8px] sm:items-center">
               <div class="font-sans font-[500] text-b2 whitespace-nowrap">
                 Search Jobs
               </div>
               <div
-                class="flex flex-col gap-[8px] font-sans text-b2 font-normal"
+                class="w-full flex flex-col gap-[8px] font-sans text-b2 font-normal max-w-[340px] md:min-w-[340px]"
               >
                 <div
-                  class="p-inputgroup flex items-center justify-between px-[16px] !py-[8px] border bg-G50 border-G200 rounded-xl md:min-w-[302px]"
+                  class="flex items-center justify-between px-[16px] py-[8px] border bg-G50 border-G200 rounded-xl"
                 >
                   <input
+                    [(ngModel)]="searchInput"
+                    (ngModelChange)="onSearchInputChange($event)"
                     type="text"
-                    pInputText
-                    placeholder="Search preferred client location"
                     class="!shadow-none bg-transparent w-full !outline-none pr-1"
+                    placeholder="Search by contract, client, or company name"
                   />
                   <img
                     src="/assets/massimo/images/fi_search.png"
@@ -110,19 +113,36 @@
           </ng-container>
         </div>
         <div *ngIf="!loading" class="py-[24px]">
-          <div
-            *ngIf="!jobs || jobs.length == 0"
-            class="text-b1 text-G900 font-medium"
-          >
+          <div *ngIf="jobs.length === 0" class="text-b1 text-G900 font-medium">
             No jobs to show!
           </div>
           <div *ngIf="jobs && jobs.length > 0" class="flex flex-col gap-[16px]">
-            <job-dashboard-card
-              *ngFor="let job of filteredJobs"
-              [job]="job"
-              [jobType]="jobType"
-              (jobCancelled)="showDeletedSuccessModal($event)"
-            ></job-dashboard-card>
+            <ng-container *ngIf="totalRecords !== 0">
+              <job-dashboard-card
+                *ngFor="let job of filteredJobs"
+                [job]="job"
+                [jobType]="jobType"
+                (jobCancelled)="showDeletedSuccessModal($event)"
+              ></job-dashboard-card>
+            </ng-container>
+            <div
+              *ngIf="totalRecords === 0"
+              class="flex flex-col gap-6 items-center p-[20px] mt-[100px]"
+            >
+              <img
+                src="/assets/massimo/images/noJobResult.png"
+                alt="No Results Found"
+                draggable="false"
+                class="max-w-[300px] w-full"
+              />
+              <div class="flex flex-col gap-2 items-center justify-center">
+                <div class="text-h5 text-G800 font-medium">No Result Found</div>
+                <div class="text-b1 text-G700 text-center">
+                  We couldn't find any contracts that match your search
+                  criteria. Please try again.
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div
