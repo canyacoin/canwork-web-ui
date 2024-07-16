@@ -122,6 +122,7 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   }
 
   private async initialiseJobs(userId: string, userType: UserType) {
+    this.jobs = []
     if (userType === UserType.client) {
       this.jobTypes = [
         { label: 'Active Jobs', code: 'active' },
