@@ -96,7 +96,7 @@ export class JobDashboardCardComponent implements OnInit {
   moveToJobDetails() {
     if (this.jobType === 'active')
       this.router.navigate(['/inbox/job/', this.job.id])
-    else if (this.jobType === 'public')
+    else if (this.jobType === 'public' || this.jobType === 'submitted')
       this.router.navigate(['/jobs/public/', this.job.slug])
     else if (this.jobType === 'direct')
       this.router.navigate(['/jobs/', this.job.id])
