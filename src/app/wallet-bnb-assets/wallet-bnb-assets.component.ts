@@ -54,6 +54,9 @@ export class WalletBnbAssetsComponent
     await this.walletRefresh()
   }
   async walletRefresh() {
+    this.totalBudget = 0
+    this.assets = []
+
     this.bscService.events$
       .pipe(take(1)) // unsubscribe on destroy
       .subscribe(async (event) => {
@@ -70,8 +73,6 @@ export class WalletBnbAssetsComponent
           case EventTypeBsc.AddressFound:
             this.address = event.details.address
             this.explorer = environment.bsc.blockExplorerUrls[0]
-
-            this.assets = []
 
             // add BNB
             let bnbBalance = await this.bscService.getBnbBalance()
@@ -171,9 +172,7 @@ export class WalletBnbAssetsComponent
   async refresh(event: Event) {
     event?.preventDefault()
     this.loading = true
-    this.totalBudget = 0
-    this.assets = []
-    await this.sleepRx(1000)
+    // await this.sleepRx(1000)
     this.walletRefresh()
   }
 

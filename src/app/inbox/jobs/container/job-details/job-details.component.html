@@ -6,6 +6,7 @@
       [job]="job"
       [userType]="currentUserType"
       [actionType]="action"
+      [selectedBid]="selectedBid"
     />
     <div
       *ngIf="isAwaitingEscrow && currentUserType === userTypes.client"
@@ -53,6 +54,14 @@
           [currentUserType]="currentUserType"
           (rightBtnEvent)="statusRightClick($event)"
         />
+
+        <job-review-panel
+          *ngIf="isJobComplete"
+          [reviews]="[]"
+          [currentUserType]="currentUserType"
+          (reviewBtnEvent)="statusLeftClick($event)"
+          [userCanReview]="userCanReview"
+        />
       </div>
       <div class="lg:max-w-[350px] w-full">
         <job-status-panel
@@ -60,8 +69,8 @@
           [currentUser]="currentUser"
           (leftBtnEvent)="statusLeftClick($event)"
           (rightBtnEvent)="statusRightClick($event)"
+          [userCanReview]="userCanReview"
         />
-        <!-- <div class="bg-black w-[100px] h-[100px]" (click)="seeConsole()"></div> -->
       </div>
     </div>
   </div>

@@ -347,7 +347,11 @@ export class PostComponent implements OnInit, OnDestroy {
                 let visibilityIndex = this.visibilities.findIndex(
                   (item) => item.code === visibility
                 )
-
+                console.log(
+                  'this.jobToEdit.visibility',
+                  this.jobToEdit.visibility
+                )
+                console.log('visibilityIndex', visibilityIndex)
                 this.selectedVisibility = this.visibilities[visibilityIndex]
 
                 let providerType = this.jobToEdit.information.providerType
@@ -898,6 +902,10 @@ export class PostComponent implements OnInit, OnDestroy {
   async submitShareableJob(isDRP: number) {
     // isDRP , 0 => draft, , 1=> Preview, 2 => Post
     // console.log('isDRP:', isDRP)
+    console.log(
+      '<=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-==-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=>'
+    )
+    console.log('this.shareableJobForm:', this.shareableJobForm)
     this.spinner.show()
     this.isSending = true
     this.error = false
@@ -906,7 +914,7 @@ export class PostComponent implements OnInit, OnDestroy {
     )
 
     try {
-      let tags: string[]
+      let tags: string[] = []
       try {
         tags =
           this.shareableJobForm.value.skills === ''

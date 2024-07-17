@@ -2,13 +2,18 @@ import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { AngularFireAuth } from '@angular/fire/compat/auth'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
-import { BehaviorSubject, Subscription } from 'rxjs'
+import { BehaviorSubject, Subscription, Observable } from 'rxjs'
+import { UserType } from '../core-classes/user'
 
 import { User } from '../core-classes/user'
 
 @Injectable()
 export class AuthService {
   userSub: Subscription
+
+  private userTypeSubject: BehaviorSubject<UserType> =
+    new BehaviorSubject<UserType>(UserType.client) // default value
+  public userType$: Observable<UserType> = this.userTypeSubject.asObservable()
 
   public currentUser = new BehaviorSubject<User>(null)
   public currentUser$ = this.currentUser.asObservable()
@@ -22,11 +27,27 @@ export class AuthService {
     if (savedUser) {
       this.setUser(savedUser)
     }
+    const userType = localStorage.getItem('userType') as UserType
+    if (userType) {
+      this.setUserType(userType)
+    }
+  }
+
+  setUserType(userType: UserType): void {
+    localStorage.setItem('userType', userType)
+    this.userTypeSubject.next(userType)
   }
 
   getCurrentUser(): Promise<User> {
     if (this.currentUser.value) {
       return Promise.resolve(this.currentUser.value)
+    }
+    return Promise.reject(null)
+  }
+
+  getCurrentUserType(): Promise<UserType> {
+    if (this.userTypeSubject.value) {
+      return Promise.resolve(this.userTypeSubject.value)
     }
     return Promise.reject(null)
   }

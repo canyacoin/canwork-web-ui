@@ -9,6 +9,7 @@ import { BscService, EventTypeBsc } from '@service/bsc.service'
 import { WindowService } from 'app/shared/services/window.service'
 import { HeaderService } from 'app/shared/constants/header'
 import { MessageService } from 'primeng/api'
+import { UserType } from '@class/user'
 
 interface itemType {
   label: string
@@ -80,6 +81,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   currentUser: User
+  userType: UserType
   bAddress: string
 
   hasUnreadMessages = true
@@ -153,7 +155,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         icon: 'fi_settings.svg',
       },
       {
-        label: 'Act as Client',
+        label: 'Acting',
         routerLink: '/inbox/jobs',
         icon: 'fi_user_swap.svg',
       },
@@ -179,6 +181,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
       }
     )
+
+    this.authService.userType$.subscribe((userType) => {
+      this.userType = userType
+    })
 
     this.bscSub = this.bscService.events$.subscribe((event) => {
       if (!event) {
@@ -259,6 +265,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onLogout() {
     this.bscService.disconnect()
     this.authService.logout()
+  }
+
+  onActingUserType(event: Event): void {
+    event.preventDefault()
+    if (this.userType === UserType.client)
+      this.authService.setUserType(UserType.provider)
+    else this.authService.setUserType(UserType.client)
   }
 
   // navigateWithParams(routerLink: string, queryParams: any) {

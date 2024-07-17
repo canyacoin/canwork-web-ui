@@ -2,7 +2,7 @@
   class="w-full rounded-[12px] overflow-hidden bg-white p-[32px] grid gap-4 border border-G200"
   [ngClass]="{
     'hover:bg-G100 active:bg-G200 cursor-pointer transition-all duration-200':
-      jobType === 'public' || jobType === 'direct' || jobType === 'active'
+      jobType === 'public' || jobType === 'direct' || jobType === 'active' || jobType === 'submitted'
   }"
   (click)="moveToJobDetails()"
 >

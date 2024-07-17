@@ -121,7 +121,11 @@
             <ng-template let-item pTemplate="item">
               <div
                 class="flex items-center"
-                *ngIf="item.routerLink && item.label !== 'Edit Profile'"
+                *ngIf="
+                  item.routerLink &&
+                  item.label !== 'Edit Profile' &&
+                  item.label !== 'Acting'
+                "
                 [routerLink]="item.routerLink"
               >
                 <img
@@ -141,6 +145,19 @@
                   class="mr-[16px] w-[20px]"
                 />
                 <span class="font-medium text-G900">{{ item.label }}</span>
+              </div>
+              <div
+                class="flex items-center"
+                *ngIf="item.label === 'Acting'"
+                (click)="onActingUserType($event)"
+              >
+                <img
+                  src="{{ '/assets/massimo/svg/header/' + item.icon }}"
+                  class="mr-[16px] w-[20px]"
+                />
+                <span class="font-medium text-G900">{{
+                  userType === 'Provider' ? 'Act as Client' : 'Act as Provider'
+                }}</span>
               </div>
 
               <div

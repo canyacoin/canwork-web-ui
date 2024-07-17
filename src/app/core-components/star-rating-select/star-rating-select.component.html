@@ -1,0 +1,18 @@
+<div class="flex gap-[16px] w-max">
+  <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+    <div (click)="setStar(star)" class="cursor-pointer">
+      <img
+        *ngIf="stars > star - 0.5"
+        src="/assets/massimo/svg/yellowStar.svg"
+        class="w-[20px] md:w-[32px]"
+        alt="yellowStar"
+      />
+      <img
+        *ngIf="star - 0.5 > stars"
+        src="/assets/massimo/svg/whiteStar.svg"
+        class="w-[20px] md:w-[32px]"
+        alt="whiteStar"
+      />
+    </div>
+  </ng-container>
+</div>
