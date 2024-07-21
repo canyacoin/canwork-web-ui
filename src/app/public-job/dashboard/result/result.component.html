@@ -8,24 +8,32 @@
     >
       {{ totalRecords }} Results for {{ searchParam }}
     </p>
-    <div *ngIf="!searchParam" class="flex items-center gap-2 text-G900 text-b1">
+    <div
+      *ngIf="!searchParam"
+      class="flex items-center gap-2 text-G900 text-b1 max-md:font-medium"
+    >
       <div class="whitespace-nowrap">{{ stats.count }} Jobs Completed</div>
       <div class="min-w-[8px] min-h-[8px] bg-G900 rounded-full"></div>
       <div class="whitespace-nowrap">${{ stats.usd }} USD Payment</div>
     </div>
-    <div class="flex items-center gap-4 text-G900 text-b1">
-      <div class="font-sans font-[500] text-b2 whitespace-nowrap">Sort by</div>
+    <div class="flex items-center gap-2 sm:gap-4 text-G900 text-b1">
+      <div class="max-sm:hidden font-sans font-[500] text-b2 whitespace-nowrap">
+        Sort by
+      </div>
       <p-dropdown
         [options]="sortingMethods"
         [(ngModel)]="selectedSorting"
         optionLabel="name"
       >
         <ng-template let-item pTemplate="item">
-          <div class="flex align-items-center" (click)="SortbyFilter(item)">
+          <div class="flex align-items-center" (click)="sortbyFilter(item)">
             <span>{{ item.name }}</span>
           </div>
         </ng-template>
       </p-dropdown>
+      <div class="sm:hidden flex items-center" (click)="onFilterClick($event)">
+        <filter-button [searchItemsCount]="searchItems.length" />
+      </div>
     </div>
   </div>
 
@@ -51,18 +59,20 @@
       ></ng-container>
 
       <ng-template #emptyView>
-        <div class="w-full flex flex-col items-center gap-6 lg:pt-[24px]">
+        <div
+          class="w-full flex flex-col items-center gap-4 md:gap-6 pt-[40px] pb-[40px] md:pb-0 md:pt-[48px]"
+        >
           <img
             src="/assets/massimo/images/noJobResult.png"
             alt="No Results Found"
             draggable="false"
-            class="max-w-[400px] w-full"
+            class="max-w-[280px] sm:max-w-[400px] w-full"
           />
           <div class="flex flex-col gap-2 items-center justify-center">
-            <div class="text-h5 text-G800 font-medium">
+            <div class="text-h6 md:text-h5 text-G900 font-medium">
               There is no public job listed
             </div>
-            <div class="text-b1 text-G700 text-center">
+            <div class="text-b2 md:text-b1 text-G700 text-center">
               Need to get something done ?
             </div>
           </div>

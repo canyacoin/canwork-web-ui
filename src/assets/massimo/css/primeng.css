@@ -256,11 +256,18 @@
     width: 145px !important;
     outline: none !important;
     border-radius: 8px !important;
-    padding: 6px 10px 6px 16px !important;
+    padding: 8px 10px 8px 16px !important;
     border: 1px solid #E2E8F0;
     background: #FFF;
     box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.10), 0px 2px 2px -1px rgba(0, 0, 0, 0.10), 0px 4px 10px -2px rgba(0, 0, 0, 0.05) !important;
 }
+
+
+/* @media (max-width: 640px) {
+    .p-dropdown {
+        padding: 4px 10px 4px 16px !important;
+    }
+  } */
 
 .header-avatar .p-dropdown {
     width: 33px !important;
@@ -326,7 +333,7 @@
 }
 .p-dropdown-items-wrapper .p-element.ng-star-inserted li {
     font-size: 14px !important;
-    padding: 6px 16px !important;
+    padding: 8px 16px !important;
 }
 .p-dropdown-items.ng-star-inserted {
     border: 1px solid #CBD5E1;
@@ -433,6 +440,28 @@
 
 /* Scrollbar */
 /* width */
+
+  .p-dialog ::-webkit-scrollbar {
+    width: 6px !important;
+  }
+  
+  /* Track */
+  .p-dialog  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px #E2E8F0 !important;
+    border-radius: 9px !important;
+  }
+  
+  /* Handle */
+  .p-dialog ::-webkit-scrollbar-thumb {
+    background: #94A3B8 !important;
+    border-radius: 9px !important;
+  }
+  
+  /* Handle on hover */
+  .p-dialog ::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8 !important;
+  }
+  
 #job-creation-form ::-webkit-scrollbar {
     width: 6px !important;
   }
@@ -462,18 +491,37 @@
 
   .p-dialog-title {
     font-family: "General Sans", sans-serif !important;
-    font-size: 24px;
-    font-style: normal;
+    font-size: 24px !important;
+    font-weight: 400 !important;
   }
 
   .p-dialog-header {
     border-top-left-radius: 24px !important;
     border-top-right-radius: 24px !important;
+    padding: 16px !important;
   }
   .p-dialog .p-dialog-content:last-of-type {
     border-bottom-right-radius: 24px !important;
     border-bottom-left-radius: 24px !important;
   }
+
+  @media (max-width: 640px) {
+    #filter_modal .p-dialog-title {
+      font-family: "General Sans", sans-serif !important;
+      font-size: 16px !important;
+      font-weight: 500 !important;
+    }
+
+    #filter_modal .p-dialog .p-dialog-content:last-of-type {
+        border-bottom-right-radius: 0px !important;
+        border-bottom-left-radius: 0px !important;
+    }
+
+    #filter_modal .p-dialog-header {
+        border-bottom: solid 1px #e5e7eb;
+    }
+  }
+
 
   .p-dialog-header button {
     background: rgba(0, 0, 0, 0.40) !important;
@@ -570,3 +618,20 @@
     margin-top: 10px;
   }
   
+
+  .post-button-style .p-dropdown {
+    width: 45px !important;
+    color: #0f172a !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: #ffffff00;
+    box-shadow: none !important;
+  }
+  
+  .post-button-style .p-dropdown .p-dropdown-trigger {
+    display: none !important;
+  }
+  
+  .post-button-style .p-overlay.p-component {
+    padding-top: 10px !important;
+  }

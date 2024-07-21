@@ -1,0 +1,15 @@
+<div
+  class="shadow-basicButton w-[28px] h-[28px] bg-white border border-G300 rounded-[8px] p-[6px] select-none cursor-pointer hover:bg-G100 transition-all duration-300 relative"
+>
+  <img
+    src="/assets/massimo/svg/filter.svg"
+    alt="filter"
+    class="w-[16px] h-[16px] select-none"
+  />
+  <div
+    *ngIf="searchItemsCount > 0"
+    class="absolute -right-[6px] -top-[6px] w-[16px] h-[16px] bg-G500 rounded-[24px] text-white text-b3 font-medium flex justify-center items-center"
+  >
+    {{ searchItemsCount }}
+  </div>
+</div>

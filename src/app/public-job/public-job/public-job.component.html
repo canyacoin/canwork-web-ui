@@ -1,7 +1,9 @@
 <main class="font-sans bg-G50">
   <div class="flex justify-center">
     <!-- template start -->
-    <div class="max-w-[1440px] w-full py-[56px] px-[24px] md:px-[64px]">
+    <div
+      class="max-w-[1440px] w-full pb-[16px] pt-[56px] sm:py-[56px] px-[24px] md:px-[64px]"
+    >
       <div
         *ngIf="!job && !loading"
         class="flex flex-col md:flex-row md:justify-between gap-2 md:gap-6 pt-[56px]"
@@ -22,38 +24,59 @@
 
       <div
         *ngIf="job"
-        class="flex flex-col lg:flex-row md:justify-between gap-6 pt-[56px]"
+        class="flex flex-col lg:flex-row md:justify-between gap-[16px] md:gap-[24px] mt-[36px] sm:mt-[56px]"
       >
         <div class="w-full">
           <ng-container *ngIf="(isShownTab || isMyJob) && isPublic">
-            <p-tabMenu
-              [model]="activeJobTypes"
-              [activeItem]="selectedJob"
-              *ngIf="!isProvider || isMyJob"
+            <div
+              class="max-sm:flex items-center justify-center max-sm:mb-[16px]"
             >
-              <ng-template pTemplate="item" let-item let-i="index">
-                <div
-                  class="bg-G200 border-t"
-                  [ngClass]="{
-                    'rounded-tl-xl border-l': i === 0,
-                    'rounded-tr-xl border-r': i === 1
-                  }"
-                >
+              <p-tabMenu
+                [model]="activeJobTypes"
+                [activeItem]="selectedJob"
+                *ngIf="!isProvider || isMyJob"
+              >
+                <ng-template pTemplate="item" let-item let-i="index">
                   <div
-                    class="select-none flex items-center h-full py-[8px] px-[12px] md:px-[40px] text-b2 md:text-b1 text-center font-medium rounded-t-xl text-G500 cursor-pointer"
-                    (click)="changeJob(item)"
-                    [ngClass]="{ 'bg-white': selectedJob.code === item.code }"
+                    class="bg-G200 border-t hidden sm:block"
+                    [ngClass]="{
+                      'rounded-tl-xl border-l': i === 0,
+                      'rounded-tr-xl border-r': i === 1
+                    }"
                   >
-                    {{ item.label }}
+                    <div
+                      class="select-none flex items-center h-full py-[8px] px-[12px] md:px-[40px] text-b2 md:text-b1 text-center font-medium rounded-t-xl text-G500 cursor-pointer transition-colors duration-200"
+                      (click)="changeJob(item)"
+                      [ngClass]="{ 'bg-white': selectedJob.code === item.code }"
+                    >
+                      {{ item.label }}
+                    </div>
                   </div>
-                </div>
-              </ng-template>
-            </p-tabMenu>
+                  <div
+                    class="bg-G200 p-[4px] block sm:hidden"
+                    [ngClass]="{
+                      'rounded-tl-xl rounded-bl-xl border-l': i === 0,
+                      'rounded-tr-xl rounded-br-xl border-r': i === 1
+                    }"
+                  >
+                    <div
+                      class="select-none flex items-center h-full text-b2 text-G500 font-medium cursor-pointer py-[8px] px-[24px] transition-colors duration-200 rounded-[12px]"
+                      (click)="changeJob(item)"
+                      [ngClass]="{
+                        'bg-white': selectedJob.code === item.code
+                      }"
+                    >
+                      {{ item.label }}
+                    </div>
+                  </div>
+                </ng-template>
+              </p-tabMenu>
+            </div>
           </ng-container>
 
           <div *ngIf="selectedJob.code === 'jobsdetail'" class="w-full">
             <div
-              class="w-full rounded-[12px] bg-white border border-G300 p-[40px]"
+              class="w-full sm:rounded-[12px] sm:bg-white sm:border sm:border-G300 sm:p-[40px]"
               [ngClass]="{
                 '!rounded-tl-none': isShownTab || (isMyJob && !yourApplication)
               }"
@@ -64,232 +87,219 @@
               />
 
               <!-- bid start -->
-              <form
-                [formGroup]="bidForm"
-                class="pt-[20px]"
-                novalidate
-                *ngIf="canBid"
-              >
-                <div
-                  class="flex flex-col gap-4 border-t border-G300"
-                  *ngIf="job && currentUser && isProvider && !isMyJob"
-                >
+              <ng-container *ngIf="canBid">
+                <form [formGroup]="bidForm" class="mt-[40px]" novalidate>
                   <div
-                    class="pt-[20px] md:pt-[32px] text-h6 md:text-h5 text-G900 font-medium"
+                    class="flex flex-col gap-4 border-t border-G300"
+                    *ngIf="job && currentUser && isProvider && !isMyJob"
                   >
-                    Submit your proposal
-                  </div>
+                    <div
+                      class="mt-[40px] md:mt-[32px] text-h6 md:text-h5 text-G900 font-medium"
+                    >
+                      Submit your proposal
+                    </div>
 
-                  <div class="text-b1 font-medium text-G900">Cover Letter</div>
-                  <div class="w-full">
-                    <angular-editor
-                      formControlName="message"
-                      [config]="coverLetterConfig"
-                    ></angular-editor>
-                    <div class="flex justify-end">
-                      <div class="text-right text-b2 text-G700 pt-[8px]">
-                        {{
-                          stripHtmlTagslength(this.bidForm.value.message)
-                        }}/2500
+                    <div class="flex flex-col gap-[8px]">
+                      <div class="text-b1 font-medium text-G900">
+                        Cover Letter
+                      </div>
+                      <div class="w-full">
+                        <angular-editor
+                          formControlName="message"
+                          [config]="coverLetterConfig"
+                        ></angular-editor>
+                        <div class="flex justify-end">
+                          <div class="text-right text-b2 text-G700">
+                            {{
+                              stripHtmlTagslength(this.bidForm.value.message)
+                            }}/2500
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div class="pt-[16px]">
+                    <div *ngIf="bidMessageValidated">
                       <warning-message
-                        *ngIf="bidMessageValidated"
                         message="Your coverletter should be longger than 5 and shorter than 2500"
                         [type]="1"
                       />
                     </div>
-                  </div>
 
-                  <div
-                    class="flex flex-col gap-4 pt-[24px] border-t border-G300"
-                  >
                     <div
-                      class="flex max-md:flex-col justify-center md:justify-between gap-[8px]"
+                      class="flex flex-col gap-4 pt-[16px] sm:pt-[24px] border-t border-G300"
                     >
-                      <div class="text-b1 font-medium">Your Payment</div>
-                      <div class="text-b1 font-medium">
-                        Client's budget is ${{ job.budget | number : '1.1-2' }}
-                        <span *ngIf="job.paymentType !== 'Fixed price'"
-                          >/hr </span
-                        >USD
-                      </div>
-                    </div>
-
-                    <!-- Bid Price -->
-                    <div
-                      class="flex max-md:flex-col justify-center md:justify-between gap-[8px]"
-                    >
-                      <div>
-                        <div class="text-b1 font-medium">Bid Price</div>
-                        <p class="text-b2 text-G500">
-                          Total amount the client will see on your proposal
-                        </p>
-                      </div>
-
                       <div
-                        class="flex justify-between border rounded-xl border-G300 py-[10px] px-[16px] bg-G50 w-[240px] h-max"
+                        class="flex max-md:flex-col justify-center md:justify-between gap-[8px]"
                       >
-                        $
-                        <input
-                          formControlName="price"
-                          type="number"
-                          id="price"
-                          min="1"
-                          [(ngModel)]="bidPrice"
-                          class="!outline-none !border-none bg-G50 pl-[2px]"
-                        />
-                        USD
-                      </div>
-                    </div>
-                    <!-- 1% Service Fee -->
-                    <div
-                      class="flex max-md:flex-col justify-center md:justify-between gap-[8px]"
-                    >
-                      <div>
-                        <div class="text-b1 font-medium">1% Service Fee</div>
-                        <p class="text-b2 text-G500">
-                          CanWork charges 1% fees. The lowest fees ever.
-                        </p>
-                      </div>
-
-                      <div
-                        class="flex justify-between border rounded-xl border-G300 py-[10px] px-[16px] bg-G200 w-[240px] h-max"
-                      >
-                        <div>$ {{ bidPrice / 100 | number : '1.1-2' }}</div>
-                        USD
-                      </div>
-                    </div>
-
-                    <!-- Payout -->
-                    <div
-                      class="flex max-md:flex-col justify-center md:justify-between h-max gap-[8px]"
-                    >
-                      <div>
-                        <div class="text-b1 font-medium">Payout</div>
-                        <p class="text-b2 text-G500">
-                          Amount you'll receive after service fee charge
-                        </p>
-                      </div>
-
-                      <div
-                        class="flex justify-between border rounded-xl border-G300 py-[10px] px-[16px] bg-G50 w-[240px] h-max"
-                      >
-                        <div>$ {{ bidPrice * 0.99 | number : '1.1-2' }}</div>
-                        USD
-                      </div>
-                    </div>
-
-                    <!-- message -->
-                    <warning-message
-                      *ngIf="bidPrice > job.budget"
-                      message="Your bill is more than the client's budget, consider adjusting for better chance of success"
-                      [type]="1"
-                    />
-
-                    <warning-message
-                      *ngIf="1 > bidPrice || priceValidated"
-                      message="Your price should be bigger than zero"
-                      [type]="1"
-                    />
-
-                    <div
-                      class="w-full flex flex-col gap-[8px] border-t border-G300 pt-[24px]"
-                    >
-                      <div class="text-b1 text-G900 font-medium">
-                        Attachments
-                      </div>
-                      <div class="text-b2 text-G500 text-wrap font-sans">
-                        You may attach up to 10 files under the size of 25 MB
-                        each. Include work samples or other documents to support
-                        your application.
-                      </div>
-
-                      <div
-                        (dragover)="onDragOver($event)"
-                        (dragleave)="onDragLeave($event)"
-                        (drop)="onDrop($event)"
-                        [class]="
-                          hoveredFiles && !isCurrentUpload
-                            ? 'w-full rounded-xl bg-G500 text-white border border-G200 flex justify-center items-center py-[10px] px-[16px]'
-                            : 'w-full rounded-xl bg-G50 text-G90 border border-G200 flex justify-center items-center py-[10px] px-[16px]'
-                        "
-                      >
-                        <div class="w-full">
-                          <div
-                            class="flex justify-center items-center select-none"
-                            [ngClass]="{
-                              'cursor-not-allowed': isCurrentUpload
-                            }"
-                          >
-                            <img
-                              src="/assets/massimo/svg/fi_plus-circle.svg"
-                              alt="fi_info"
-                              class="pr-[8px] select-none"
-                            />
-                            Drag or
-                            <label
-                              class="text-b1 text-G900"
-                              for="file-upload"
-                              class="!text-C500 !text-b1 !font-sans !m-0 underline px-[3px] cursor-pointer"
-                              [ngClass]="{
-                                '!text-G500 cursor-not-allowed':
-                                  isCurrentUpload,
-                                '!text-white': hoveredFiles
-                              }"
-                            >
-                              Upload
-                            </label>
-                            your files
-                          </div>
-                          <input
-                            id="file-upload"
-                            [disabled]="isCurrentUpload"
-                            type="file"
-                            multiple
-                            hidden
-                            (change)="detectFiles($event)"
-                          />
+                        <div class="text-b1 font-medium">Your Payment</div>
+                        <div class="text-b1 font-medium">
+                          Client's budget is ${{
+                            job.budget | number : '1.1-2'
+                          }}
+                          <span *ngIf="job.paymentType !== 'Fixed price'"
+                            >/hr </span
+                          >USD
                         </div>
                       </div>
 
-                      <div *ngIf="!!beforeUploadFiles?.length" class="w-full">
-                        <ul>
-                          <li
-                            class="flex flex-col gap-2 pt-[8px]"
-                            *ngFor="
-                              let file of beforeUploadFiles;
-                              let i = index
-                            "
-                          >
-                            <div class="flex gap-[8px] items-center">
-                              <img
-                                src="/assets/massimo/svg/ion_attach-outline.svg"
-                                alt="ion_attach"
-                                class="w-[24px] h-[24px]"
-                              />
-                              <div class="text-C600 text-b2 font-sans">
-                                {{ file.name }}
-                              </div>
+                      <!-- Bid Price -->
+                      <div
+                        class="flex max-md:flex-col justify-center md:justify-between gap-[8px]"
+                      >
+                        <div>
+                          <div class="text-b1 font-medium">Bid Price</div>
+                          <p class="text-b2 text-G500">
+                            Total amount the client will see on your proposal
+                          </p>
+                        </div>
 
-                              <div *ngIf="file?.progress === 100">
-                                <span
-                                  class="cursor-pointer"
-                                  (click)="removeUpload(uploadedFiles[i])"
-                                >
-                                  <img
-                                    src="/assets/massimo/svg/fi_x.svg"
-                                    alt="ion_attach"
-                                    class="w-[20px] h-[20px]"
-                                  />
-                                </span>
-                              </div>
-                              <div *ngIf="file?.progress !== 100">
-                                <div
-                                  class="uploadedFile"
-                                  *ngIf="i < currentUploadNumber"
-                                >
+                        <div
+                          class="flex justify-between border rounded-xl border-G300 py-[10px] px-[16px] bg-G50 w-full md:w-[240px] h-max"
+                        >
+                          <div>
+                            $
+                            <input
+                              formControlName="price"
+                              type="number"
+                              id="price"
+                              min="1"
+                              [(ngModel)]="bidPrice"
+                              class="!outline-none !border-none bg-G50 pl-[2px]"
+                            />
+                          </div>
+                          USD
+                        </div>
+                      </div>
+                      <!-- 1% Service Fee -->
+                      <div
+                        class="flex max-md:flex-col justify-center md:justify-between gap-[8px]"
+                      >
+                        <div>
+                          <div class="text-b1 font-medium">1% Service Fee</div>
+                          <p class="text-b2 text-G500">
+                            CanWork charges 1% fees. The lowest fees ever.
+                          </p>
+                        </div>
+
+                        <div
+                          class="flex justify-between border rounded-xl border-G300 py-[10px] px-[16px] bg-G200 w-full md:w-[240px] h-max"
+                        >
+                          <div>$ {{ bidPrice / 100 | number : '1.1-2' }}</div>
+                          USD
+                        </div>
+                      </div>
+
+                      <!-- Payout -->
+                      <div
+                        class="flex max-md:flex-col justify-center md:justify-between h-max gap-[8px]"
+                      >
+                        <div>
+                          <div class="text-b1 font-medium">Payout</div>
+                          <p class="text-b2 text-G500">
+                            Amount you'll receive after service fee charge
+                          </p>
+                        </div>
+
+                        <div
+                          class="flex justify-between border rounded-xl border-G300 py-[10px] px-[16px] bg-G50 w-full md:w-[240px] h-max"
+                        >
+                          <div>$ {{ bidPrice * 0.99 | number : '1.1-2' }}</div>
+                          USD
+                        </div>
+                      </div>
+
+                      <!-- message -->
+                      <warning-message
+                        *ngIf="bidPrice > job.budget"
+                        message="Your bill is more than the client's budget, consider adjusting for better chance of success"
+                        [type]="1"
+                      />
+
+                      <warning-message
+                        *ngIf="1 > bidPrice || priceValidated"
+                        message="Your price should be bigger than zero"
+                        [type]="1"
+                      />
+
+                      <div
+                        class="w-full flex flex-col gap-[8px] border-t border-G300 mt-[16px] sm:mt-[24px]"
+                      >
+                        <div class="text-b1 text-G900 font-medium">
+                          Attachments
+                        </div>
+                        <div class="text-b2 text-G500 text-wrap font-sans">
+                          You may attach up to 10 files under the size of 25 MB
+                          each. Include work samples or other documents to
+                          support your application.
+                        </div>
+
+                        <div
+                          (dragover)="onDragOver($event)"
+                          (dragleave)="onDragLeave($event)"
+                          (drop)="onDrop($event)"
+                          [class]="
+                            hoveredFiles && !isCurrentUpload
+                              ? 'w-full rounded-xl bg-G500 text-white border border-G200 flex justify-center items-center py-[10px] px-[16px]'
+                              : 'w-full rounded-xl bg-G50 text-G90 border border-G200 flex justify-center items-center py-[10px] px-[16px]'
+                          "
+                        >
+                          <div class="w-full">
+                            <div
+                              class="flex justify-center items-center select-none"
+                              [ngClass]="{
+                                'cursor-not-allowed': isCurrentUpload
+                              }"
+                            >
+                              <img
+                                src="/assets/massimo/svg/fi_plus-circle.svg"
+                                alt="fi_info"
+                                class="pr-[8px] select-none"
+                              />
+                              Drag or
+                              <label
+                                class="text-b1 text-G900"
+                                for="file-upload"
+                                class="!text-C500 !text-b1 !font-sans !m-0 underline px-[3px] cursor-pointer"
+                                [ngClass]="{
+                                  '!text-G500 cursor-not-allowed':
+                                    isCurrentUpload,
+                                  '!text-white': hoveredFiles
+                                }"
+                              >
+                                Upload
+                              </label>
+                              your files
+                            </div>
+                            <input
+                              id="file-upload"
+                              [disabled]="isCurrentUpload"
+                              type="file"
+                              multiple
+                              hidden
+                              (change)="detectFiles($event)"
+                            />
+                          </div>
+                        </div>
+
+                        <div *ngIf="!!beforeUploadFiles?.length" class="w-full">
+                          <ul>
+                            <li
+                              class="flex flex-col gap-2 pt-[8px]"
+                              *ngFor="
+                                let file of beforeUploadFiles;
+                                let i = index
+                              "
+                            >
+                              <div class="flex gap-[8px] items-center">
+                                <img
+                                  src="/assets/massimo/svg/ion_attach-outline.svg"
+                                  alt="ion_attach"
+                                  class="w-[24px] h-[24px]"
+                                />
+                                <div class="text-C600 text-b2 font-sans">
+                                  {{ file.name }}
+                                </div>
+
+                                <div *ngIf="file?.progress === 100">
                                   <span
                                     class="cursor-pointer"
                                     (click)="removeUpload(uploadedFiles[i])"
@@ -301,45 +311,62 @@
                                     />
                                   </span>
                                 </div>
+                                <div *ngIf="file?.progress !== 100">
+                                  <div
+                                    class="uploadedFile"
+                                    *ngIf="currentUploadNumber > i"
+                                  >
+                                    <span
+                                      class="cursor-pointer"
+                                      (click)="removeUpload(uploadedFiles[i])"
+                                    >
+                                      <img
+                                        src="/assets/massimo/svg/fi_x.svg"
+                                        alt="ion_attach"
+                                        class="w-[20px] h-[20px]"
+                                      />
+                                    </span>
+                                  </div>
 
-                                <div *ngIf="i == currentUploadNumber">
-                                  <div role="status">
-                                    <img
-                                      src="/assets/massimo/svg/spinner.svg"
-                                      alt="spinner"
-                                      class="w-[20px] h-[20px]"
-                                      class="animate-spin"
-                                    />
+                                  <div *ngIf="i == currentUploadNumber">
+                                    <div role="status">
+                                      <img
+                                        src="/assets/massimo/svg/spinner.svg"
+                                        alt="spinner"
+                                        class="w-[20px] h-[20px]"
+                                        class="animate-spin"
+                                      />
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          </li>
-                        </ul>
+                            </li>
+                          </ul>
+                        </div>
+                        <error-message
+                          *ngIf="fileTooBig"
+                          message="You can only add 10 files with maximum of 25MB each."
+                          extraClass="mt-[8px]"
+                        />
                       </div>
-                      <error-message
-                        *ngIf="fileTooBig"
-                        message="You can only add 10 files with maximum of 25MB each."
-                        extraClass="mt-[8px]"
+                    </div>
+
+                    <div class="w-full" *ngIf="canBid && !isSent">
+                      <basic-button
+                        [disabled]="!bidForm.valid || isCurrentUpload"
+                        [type]="2"
+                        title="Submit Application"
+                        size="medium"
+                        extraClass="!w-full"
+                        (click)="submitBid()"
                       />
                     </div>
                   </div>
-
-                  <div class="w-full" *ngIf="canBid && !isSent">
-                    <basic-button
-                      [disabled]="!bidForm.valid || isCurrentUpload"
-                      [type]="2"
-                      [title]="'Apply Now'"
-                      size="medium"
-                      extraClass="!w-full"
-                      (click)="submitBid()"
-                    />
-                  </div>
-                </div>
-              </form>
+                </form>
+              </ng-container>
               <!-- bid end -->
 
-              <div class="pt-[20px] md:pt-[48px]">
+              <div class="hidden sm:block sm:mt-[48px]">
                 <back-to-job-board />
               </div>
             </div>
@@ -375,11 +402,14 @@
           />
         </div>
       </div>
-      <div
+
+      <div class="max-sm:mt-[16px] sm:hidden">
+        <back-to-job-board />
+      </div>
+      <!-- <div
         *ngIf="job && isMyJob"
         class="flex flex-col md:flex-row md:justify-between gap-2 md:gap-6 pt-[32px]"
-      ></div>
-      <!-- bids end -->
+      ></div> -->
     </div>
   </div>
 

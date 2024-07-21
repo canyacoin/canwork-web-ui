@@ -32,4 +32,9 @@ export class BasicDialogComponent {
     event.preventDefault()
     this.RightbtnEvent.emit(event)
   }
+
+  handleCancelClick(event: Event): void {
+    event.preventDefault()
+    this.visible = false
+  }
 }

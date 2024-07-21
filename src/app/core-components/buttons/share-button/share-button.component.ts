@@ -14,7 +14,7 @@ export class ShareButtonComponent {
   shareLinks: ItemType[] | undefined
   selectedShareLinks: ItemType | undefined
 
-  async ngOnInit() {
+  ngOnInit() {
     this.shareLinks = [
       { name: 'Invite Freelancer', img: 'fi_user-plus.svg', code: '0' },
       { name: 'Copy Link', img: 'u_link.svg', code: '1' },

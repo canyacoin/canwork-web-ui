@@ -7,9 +7,9 @@
   />
   <section class="flex justify-center bg-G50">
     <div
-      class="max-w-[1440px] w-full py-[24px] px-[24px] md:px-[64px] flex flex-col-reverse xl:flex-row xl:justify-between gap-[30px]"
+      class="max-w-[1440px] w-full p-[16px] md:py-[24px] md:px-[64px] flex flex-col-reverse xl:flex-row xl:justify-between gap-[30px]"
     >
-      <div class="w-full xl:w-[350px]">
+      <div class="max-sm:hidden w-full xl:w-[350px]">
         <dashboard-filter
           [verifyForm]="verifyFilter"
           (verifyFormChange)="onVerifyFormChange($event)"
@@ -23,10 +23,10 @@
           (fixedFormChange)="onFixedFormChange($event)"
           [hourlyInput]="hourlyFilter"
           (hourlyInputChange)="onHourlyInputChange($event)"
-          [categoriesForm] = "categoryFilter"
-          (categoriesFormChange) = "onCategoryFilterChange($event)"
+          [categoriesForm]="categoryFilter"
+          (categoriesFormChange)="onCategoryFilterChange($event)"
           [locationInput]="locationFilter"
-          (LocationInputChange) = "onLocationInputChange($event)"
+          (LocationInputChange)="onLocationInputChange($event)"
         />
       </div>
       <div class="w-full">
@@ -40,9 +40,41 @@
           [searchParam]="searchInput"
           (pageChange)="onPageChange($event)"
           (sortby)="onChangeSoryby($event)"
+          (filterVisibleChange)="updateVisibleFilterModal($event)"
           [first]="currentPage * hitsPerPage"
         />
       </div>
     </div>
   </section>
+
+  <p-dialog
+    header="Filters"
+    [(visible)]="visibleFilterModal"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    styleClass="sm:hidden !pt-[127px] absolute left-0 bottom-0 w-full"
+    id="filter_modal"
+  >
+    <div class="">
+      <dashboard-filter
+        [verifyForm]="verifyFilter"
+        (verifyFormChange)="onVerifyFormChange($event)"
+        [skillsForm]="skillsFilter"
+        (skillsFormChange)="onSkillsFilterChange($event)"
+        [ratingForm]="ratingFilter"
+        (ratingChange)="onRatingChange($event)"
+        [experienceForm]="experienceFilter"
+        (experienceFormChange)="onExperienceFormChange($event)"
+        [fixedForm]="fixedFilter"
+        (fixedFormChange)="onFixedFormChange($event)"
+        [hourlyInput]="hourlyFilter"
+        (hourlyInputChange)="onHourlyInputChange($event)"
+        [categoriesForm]="categoryFilter"
+        (categoriesFormChange)="onCategoryFilterChange($event)"
+        [locationInput]="locationFilter"
+        (LocationInputChange)="onLocationInputChange($event)"
+      />
+    </div>
+  </p-dialog>
 </main>

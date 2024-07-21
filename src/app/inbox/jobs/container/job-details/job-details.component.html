@@ -25,7 +25,9 @@
       }"
     >
       <div class="w-full flex flex-col gap-[16px]">
-        <div class="w-full rounded-[12px] bg-white border border-G300 p-[40px]">
+        <div
+          class="w-full sm:rounded-[12px] sm:bg-white sm:border sm:border-G300 sm:p-[40px]"
+        >
           <job-details-panel [job]="job" />
         </div>
         <!-- which means client -->
@@ -57,7 +59,7 @@
 
         <job-review-panel
           *ngIf="isJobComplete"
-          [reviews]="[]"
+          [reviews]="reviews"
           [currentUserType]="currentUserType"
           (reviewBtnEvent)="statusLeftClick($event)"
           [userCanReview]="userCanReview"

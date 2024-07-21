@@ -2,7 +2,7 @@
   <section
     id="job-creation-form"
     *ngIf="currentUser"
-    class="bg-G50 pt-[100px] pb-[24px] font-sans"
+    class="bg-white sm:bg-G50 pt-[100px] pb-[24px] font-sans"
   >
     <div id="direct-job" *ngIf="loading && !isShareable && !isPreview">
       <div *ngIf="!sent && recipient" class="pt-0 pb-[24px]">
@@ -464,13 +464,19 @@
     >
       <div *ngIf="!sent" class="px-[20px]">
         <div
-          class="max-w-[1008px] p-[20px] md:p-[40px] m-auto bg-white rounded-xl border border-G200"
+          class="max-w-[1008px] sm:p-[20px] md:p-[40px] m-auto sm:bg-white sm:rounded-xl sm:border sm:border-G200"
         >
           <h2 class="text-left text-G900 text-h5 font-[500] font-sans">
             {{ editing ? 'Edit a Job Post' : 'Create a Job Post' }}
           </h2>
-          <form [formGroup]="shareableJobForm" class="pt-[24px]" novalidate>
-            <div class="flex flex-col gap-[24px] text-b1 font-sans">
+          <form
+            [formGroup]="shareableJobForm"
+            class="mt-[16px] sm:mt-[24px]"
+            novalidate
+          >
+            <div
+              class="flex flex-col gap-[16px] sm:gap-[24px] text-b1 font-sans"
+            >
               <div class="w-full">
                 <div class="text-b1 text-G900 mb-[8px]">
                   Job Title <span class="text-R900">*</span>
@@ -907,7 +913,7 @@
               </div>
 
               <div
-                class="w-full flex max-md:flex-col md:flex-wrap gap-[10px] md:gap-10 create-job-post text-b1 font-sans"
+                class="w-full flex max-md:flex-col md:flex-wrap gap-[16px] md:gap-10 create-job-post text-b1 font-sans"
               >
                 <div class="flex flex-col gap-2">
                   <div class="text-b1 text-G900">
@@ -1015,7 +1021,7 @@
                 <app-terms [form]="shareableJobForm"></app-terms>
               </div>
               <div>
-                <div class="flex gap-4 justify-end flex-col md:flex-row">
+                <div class="hidden sm:flex gap-4 justify-end flex-row">
                   <basic-button
                     [type]="1"
                     title="Save as Draft"
@@ -1039,13 +1045,27 @@
                     (click)="submitShareableJob(2)"
                   />
                 </div>
-                <!-- <span
-                  *ngIf="error"
-                  class="fs-12 fw-400 mt-10"
-                  style="color: #ff6666"
-                >
-                  Something went wrong when posting this job..
-                </span> -->
+                <div class="w-full flex items-center gap-[16px] sm:hidden">
+                  <!-- <button
+                    class="w-full shadow-basicButton font-medium duration-300 transition-all rounded-[12px] select-none whitespace-nowrap text-center bg-G900 hover:bg-C500 active:bg-C800 text-white border-none disabled:bg-G900 disabled:text-white disabled:opacity-50"
+                    [ngClass]="cssClasses"
+                    [disabled]="isSending || isCurrentUpload"
+                    (click)="submitShareableJob(2)"
+                  >
+                    Post Job Listing
+                  </button> -->
+                  <basic-button
+                    [type]="2"
+                    title="Post Job Listing"
+                    size="small"
+                    [disabled]="isSending || isCurrentUpload"
+                    (click)="submitShareableJob(2)"
+                    class="w-full"
+                  />
+                  <post-job-more-button
+                    (btnClick)="submitShareableJob($event)"
+                  />
+                </div>
               </div>
             </div>
           </form>
@@ -1066,6 +1086,14 @@
         title="Job listing saved to Draft"
         content="Your job listing has been saved to your drafts, you can continue anytime to list your job on CanWork"
         type="draft"
+      />
+    </div>
+    <div *ngIf="!sent && error">
+      <basic-dialog
+        [visible]="sentDRP === 2"
+        title="Error! Unable to list job"
+        content="Job listing was unsuccessful, please try again."
+        type="failed"
       />
     </div>
     <div

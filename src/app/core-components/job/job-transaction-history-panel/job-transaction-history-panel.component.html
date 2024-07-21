@@ -2,7 +2,7 @@
   <div class="w-full flex flex-col gap-[24px]">
     <div
       #contentDiv
-      class="flex flex-col gap-[24px]"
+      class="flex flex-col gap-[16px] md:gap-[24px]"
       [@toggleHeight]="isSeeMore ? 'collapsed' : 'expanded'"
     >
       <div *ngIf="isAwaitingEscrow" class="text-h6 text-G900 font-medium">

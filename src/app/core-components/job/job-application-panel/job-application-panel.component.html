@@ -1,16 +1,16 @@
 <ng-container *ngIf="yourApplication">
   <div
-    class="w-full flex flex-col gap-[24px] rounded-[12px] bg-white border border-G300 p-[40px]"
+    class="w-full flex flex-col gap-[16px] md:gap-[24px] rounded-[12px] bg-white border border-G300 p-[40px]"
   >
     <div
       #contentDiv
       class="w-full flex flex-col gap-[24px]"
       [@toggleHeight]="isSeeMore ? 'collapsed' : 'expanded'"
     >
-      <div class="flex max-md:flex-col justify-between md:items-center">
+      <div class="flex max-md:flex-col justify-between md:items-center gap-2">
         <div class="flex flex-col gap-[8px]">
           <div class="text-h6 font-medium text-G900">Your Application</div>
-          <div class="max-md:text-center text-b2 text-G500">
+          <div class="text-b2 text-G500">
             Applied:
             {{ formatDateFromString(yourApplication.timestamp) }}
           </div>
@@ -19,9 +19,9 @@
           <div class="text-b2 font-normal text-G800">Status</div>
           <div
             class="px-[16px] py-[6px] rounded-3xl text-G800 select-none"
-            [ngClass]="{ 'bg-[#DAFBE1]': isHired, 'bg-[#FFF8C5]': !isHired }"
+            [ngClass]="{ 'bg-B75': isHired, 'bg-[#FFF8C5]': !isHired }"
           >
-            {{ isHired ? 'Viewed' : 'Not viewed' }}
+            {{ isHired ? 'Accepted' : 'Not viewed' }}
           </div>
         </div>
       </div>

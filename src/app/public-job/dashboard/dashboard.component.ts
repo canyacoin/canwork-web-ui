@@ -26,6 +26,8 @@ interface SoringMethod {
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  screenWidth: number
+
   hits = [] // the new hits array, injected into result component
 
   sortby: SoringMethod
@@ -34,6 +36,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   currentUser: User
   authSub: Subscription
   publicJobSubscription: Subscription
+  visibleFilterModal: boolean = false
   /*
   invoke directly algolia search api
   create input field and handle on change
@@ -98,9 +101,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private navService: NavService, //    private order: OrderPipe
     private location: Location,
     private userService: UserService
-  ) {}
+  ) {
+    this.screenWidth = window.innerWidth
+  }
 
   async ngOnInit() {
+    window.addEventListener('resize', this.updateScreenWidth.bind(this))
     /*
     now sync the search with algolia if we have a search query
     if we don't have a search query we have to show a different message,
@@ -148,6 +154,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     })
 
     this.loading = false
+  }
+
+  updateScreenWidth(): void {
+    this.screenWidth = window.innerWidth
+    if (this.screenWidth > 640) {
+      this.visibleFilterModal = false
+    }
   }
 
   getHits() {
@@ -428,6 +441,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.currentPage = 0 // every time changes a parameter that isn't the page we have to reset page position
     this.refreshResultsSearch()
   }
+
+  updateVisibleFilterModal(event: Event) {
+    event.preventDefault()
+    this.visibleFilterModal = !this.visibleFilterModal
+  }
   // update the search items
 
   onExperienceFormChange(experienceInput: string[]) {
@@ -486,6 +504,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.routeSub) {
       this.routeSub.unsubscribe()
     }
+    window.removeEventListener('resize', this.updateScreenWidth.bind(this))
   }
 
   isInArray(value, array: any[]) {

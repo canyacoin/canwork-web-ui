@@ -1,5 +1,5 @@
 <div
-  class="rounded-[12px] bg-white border border-G200 p-[24px] h-max font-sans flex flex-col gap-[24px] sticky top-[75px]"
+  class="sm:rounded-[12px] sm:bg-white border-t sm:border border-t-G200 sm:border-G200 py-[16px] sm:p-[24px] h-max font-sans flex flex-col gap-[16px] sm:gap-[24px] sticky top-[75px]"
 >
   <div class="flex justify-between items-center gap-[8px]">
     <status-icon [job]="job" />
@@ -118,7 +118,7 @@
   <ng-container *ngIf="!isPostJobPage">
     <ng-container *ngIf="currentUser && isMyJob">
       <ng-container *ngIf="isAcceptingOffers">
-        <div class="flex flex-col sm:flex-row gap-4 items-center">
+        <div class="flex flex-row gap-4 items-center">
           <div
             class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center gap-2 font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl transition-all duration-300"
             (click)="leftClick($event)"

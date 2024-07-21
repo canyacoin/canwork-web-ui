@@ -94,6 +94,9 @@ import { JobSwitchActionTransactionPanelComponent } from './job/job-switch-actio
 import { ChatButtonComponent } from './buttons/chat-button/chat-button.component'
 import { BackToEditButtonComponent } from './buttons/back-to-edit-button/back-to-edit-button.component'
 import { XButtonComponent } from './buttons/x-button/x-button.component'
+import { FilterButtonComponent } from './buttons/filter-button/filter-button.component'
+import { PostJobMoreButtonComponent } from './buttons/post-job-more-button/post-job-more-button.component'
+
 import { StarRatingSelectComponent } from './star-rating-select/star-rating-select.component'
 import { JobReviewPanelComponent } from './job/job-review-panel/job-review-panel.component'
 
@@ -195,6 +198,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ChatButtonComponent,
     BackToEditButtonComponent,
     XButtonComponent,
+    FilterButtonComponent,
+    PostJobMoreButtonComponent,
     // Dialogs
     BasicDialogComponent,
     ProposalDetailsDialogComponent,
@@ -276,6 +281,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ChatButtonComponent,
     BackToEditButtonComponent,
     XButtonComponent,
+    FilterButtonComponent,
+    PostJobMoreButtonComponent,
     // Dialogs
     BasicDialogComponent,
     ProposalDetailsDialogComponent,

@@ -31,7 +31,7 @@ export class StatusIconComponent {
         return 'bg-start-g1'
       case JobState.finishingJob:
       case JobState.processingEscrow:
-        return 'warning'
+        return 'bg-start-g1'
       case JobState.complete:
       case JobState.inEscrow:
         return 'bg-vibrantGreen'
