@@ -461,8 +461,33 @@
   .p-dialog ::-webkit-scrollbar-thumb:hover {
     background: #94A3B8 !important;
   }
+
+
   
-#job-creation-form ::-webkit-scrollbar {
+  .p-datatable ::-webkit-scrollbar {
+    width: 2px !important;
+  }
+  
+  /* Track */
+  .p-datatable  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px #E2E8F0 !important;
+    border-radius: 9px !important;
+  }
+  
+  /* Handle */
+  .p-datatable ::-webkit-scrollbar-thumb {
+    background: #94A3B8 !important;
+    border-radius: 9px !important;
+  }
+  
+  /* Handle on hover */
+  .p-datatable ::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8 !important;
+  }
+
+  
+  
+  #job-creation-form ::-webkit-scrollbar {
     width: 6px !important;
   }
   
@@ -572,10 +597,6 @@
   }
 
 
-  #login_modal .p-dialog.p-component {
-    position: relative;
-    margin: 40px;
-  }
   #login_modal .p-dialog-header-title {
     z-index: 122222 !important;
   }
