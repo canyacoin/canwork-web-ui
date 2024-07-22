@@ -29,7 +29,7 @@
       </div>
     </div>
   </div>
-  <div class="w-full min-h-[500px]" *ngIf="canSee && bids.length > 0">
+  <div class="w-full" *ngIf="canSee && bids.length > 0">
     <div class="flex max-md:flex-col justify-between pb-[24px]">
       <h4 class="mb-0 text-G900 font-medium text-h6">Submissions</h4>
 
@@ -57,6 +57,7 @@
       [value]="bids"
       [paginator]="bids.length > 10 ? true : false"
       [rows]="10"
+      styleClass="min-h-[400px]"
     >
       <ng-template pTemplate="header" let-columns>
         <tr>
