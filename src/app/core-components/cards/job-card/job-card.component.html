@@ -1,13 +1,18 @@
 <div
-  class="w-full rounded-[12px] overflow-hidden bg-white p-[32px] grid gap-4 border border-G200 hover:bg-G100 active:bg-G200 cursor-pointer"
+  class="w-full rounded-[12px] overflow-hidden bg-white p-[16px] md:p-[32px] grid gap-4 border border-G200 hover:bg-G100 active:bg-G200 cursor-pointer"
   (click)="movetojobdetail()"
 >
-  <div class="flex justify-between gap-5">
+  <div class="flex justify-between gap-4 md:gap-5">
     <div class="w-full flex gap-4 items-start">
-      <img src="{{ getProviderImage(projectType) }}" class="w-[48px] h-[48px]" />
+      <img
+        src="{{ getProviderImage(projectType) }}"
+        class="w-[40px] h-[40px] md:w-[48px] md:h-[48px]"
+      />
       <div class="grid gap-1">
-        <div class="text-G900 text-h6 font-medium">{{ title }}</div>
-        <div class="text-G500 text-b2">Posted {{ timeAgo(createAt) }}</div>
+        <div class="text-G900 text-b1 md:text-h6 font-medium">{{ title }}</div>
+        <div class="text-G500 text-b3 md:text-b2">
+          Posted {{ timeAgo(createAt) }}
+        </div>
       </div>
       <div
         *ngIf="isApplied"
@@ -17,7 +22,7 @@
       </div>
     </div>
     <div
-      class="border rounded-md border-G300 w-[32px] h-[32px] flex items-center justify-center cursor-pointer transition-all duration-150"
+      class="border rounded-md border-G300 w-[32px] h-[32px] hidden sm:flex items-center justify-center cursor-pointer transition-all duration-150"
       [ngClass]="{
         'bg-white hover:bg-G100': !favourite,
         'bg-start-g1 hover:bg-start-g8': favourite
@@ -27,7 +32,7 @@
       <img src="/assets/massimo/svg/bookmark.svg" class="select-none" />
     </div>
   </div>
-  <div class="line-clamp-4">
+  <div class="line-clamp-3 md:line-clamp-4 text-b2 md:text-b1">
     {{ stripHtmlTags(description) }}
   </div>
   <!-- static code for responsive -->
@@ -68,30 +73,37 @@
   </div>
 
   <div
-    class="max-xl:grid max-sm:grid-cols-1 max-xl:grid-cols-2 flex gap-2 items-start text-nowrap"
+    class="max-xl:grid max-xl:grid-cols-2 flex gap-2 items-start text-nowrap"
   >
     <div class="flex gap-2 items-center">
-      <img src="/assets/massimo/svg/jobLocation.svg" class="select-none" />
-      <div class="text-G500 text-b2">Location</div>
+      <img
+        src="/assets/massimo/svg/jobLocation.svg"
+        class="select-none px-[2px]"
+      />
+      <div class="hidden sm:block text-G500 text-b2">Location</div>
       <!-- to do google address -->
-      <div class="text-G700 text-b1 font-medium">{{ location }}</div>
+      <div class="text-G700 text-b2 sm:text-b1 sm:font-medium">
+        {{ location }}
+      </div>
     </div>
     <div class="flex gap-2 items-center">
       <img src="/assets/massimo/svg/jobBudget.svg" class="select-none" />
-      <div class="text-G500 text-b2">Fixed Price:</div>
-      <div class="text-G700 text-b1 font-medium">${{ budget }}</div>
+      <div class="hidden sm:block text-G500 text-b2">Fixed Price:</div>
+      <div class="text-G700 text-b2 sm:text-b1 sm:font-medium">
+        ${{ budget }}
+      </div>
     </div>
     <div class="flex gap-2 items-center">
       <img src="/assets/massimo/svg/jobDeadline.svg" class="select-none" />
-      <div class="text-G500 text-b2">Project Deadline</div>
-      <div class="text-G700 text-b1 font-medium">
+      <div class="hidden sm:block text-G500 text-b2">Project Deadline</div>
+      <div class="text-G700 text-b2 sm:text-b1 sm:font-medium">
         {{ formatDate(deadline) }}
       </div>
     </div>
     <div class="flex gap-2 items-center">
       <img src="/assets/massimo/svg/jobProposals.svg" class="select-none" />
-      <div class="text-G500 text-b2">Proposals:</div>
-      <div class="text-G700 text-b1 font-medium">
+      <div class="hidden sm:block text-G500 text-b2">Proposals:</div>
+      <div class="text-G700 text-b2 sm:text-b1 sm:font-medium">
         {{ getbidslength() }} proposals
       </div>
     </div>
