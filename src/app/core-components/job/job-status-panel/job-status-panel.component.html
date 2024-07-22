@@ -1,5 +1,5 @@
 <div
-  class="sm:rounded-[12px] sm:bg-white border-t sm:border border-t-G200 sm:border-G200 py-[16px] sm:p-[24px] h-max font-sans flex flex-col gap-[16px] sm:gap-[24px] sticky top-[75px]"
+  class="sm:rounded-[12px] sm:bg-white border-t sm:border border-t-G200 sm:border-G200 py-[16px] sm:p-[24px] h-max font-sans flex flex-col gap-[16px] sm:gap-[24px] md:sticky md:top-[75px]"
 >
   <div class="flex justify-between items-center gap-[8px]">
     <status-icon [job]="job" />
@@ -46,9 +46,20 @@
       </div>
     </div>
   </div>
-  <hr class="w-full h-[1px] bg-G300 border-none" />
-  <div class="flex flex-col gap-[16px]">
-    <div class="text-b2 text-G700">About the Client</div>
+  <hr
+    *ngIf="isPostJobPage || (!isPostJobPage && jobPoster)"
+    class="w-full h-[1px] bg-G300 border-none"
+  />
+  <div
+    *ngIf="isPostJobPage || (!isPostJobPage && jobPoster)"
+    class="flex flex-col gap-[16px]"
+  >
+    <div
+      *ngIf="isPostJobPage || (!isPostJobPage && jobPoster)"
+      class="text-b2 text-G700"
+    >
+      About the Client
+    </div>
     <profile-card
       *ngIf="isPostJobPage"
       [avatarUri]="currentUser.avatar['uri']"
@@ -262,9 +273,9 @@
     <div
       *ngIf="!currentUser && !isMyJob && isAcceptingOffers"
       (click)="leftClick($event)"
-      class="flex justify-center items-center"
+      class="w-full"
     >
-      <basic-button [type]="2" title="Login to Apply Now" />
+      <basic-button [type]="2" title="Login to Apply Now" class="w-full" />
     </div>
   </ng-container>
 </div>
