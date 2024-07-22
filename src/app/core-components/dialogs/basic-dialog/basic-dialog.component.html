@@ -9,7 +9,10 @@
     class="flex justify-center px-[16px] pb-[64px] pt-[18px] md:pb-[100px] md:pt-[46px]"
   >
     <div class="max-w-[352px] flex flex-col justify-center items-center">
-      <div [ngSwitch]="type" class="pb-[24px] max-w-[200px] md:max-w-[300px] select-none">
+      <div
+        [ngSwitch]="type"
+        class="pb-[24px] max-w-[150px] sm:max-w-[200px] md:max-w-[300px] select-none"
+      >
         <img
           *ngSwitchCase="'submit'"
           src="/assets/massimo/images/jobSubmit.png"
@@ -59,11 +62,11 @@
         ></div>
       </div>
 
-      <div class="text-h6 text-center font-medium pb-[8px]">
+      <div class="text-G900 text-h6 text-center font-medium pb-[8px]">
         {{ title }}
       </div>
       <div
-        class="text-b2 text-center font-normal pb-[20px] md:pb-[32px] whitespace-pre-line"
+        class="text-G700 text-b2 text-center font-normal pb-[20px] md:pb-[32px] whitespace-pre-line"
       >
         {{ content }}
       </div>
@@ -101,9 +104,7 @@
       </ng-container>
 
       <ng-container *ngIf="type === 'failed'">
-        <div
-          class="flex justify-center items-center"
-        >
+        <div class="flex justify-center items-center">
           <basic-button
             [type]="2"
             (click)="handleCancelClick($event)"
@@ -114,9 +115,7 @@
       </ng-container>
 
       <ng-container *ngIf="type === 'submit'">
-        <div
-          class="flex flex-col-reverse sm:flex-row gap-4 justify-center items-center"
-        >
+        <div class="flex flex-row gap-4 justify-center items-center">
           <basic-button
             [type]="1"
             [routerLink]="['/']"
@@ -133,7 +132,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="type === 'withdraw_success'">
+      <ng-container *ngIf="type === 'withdrawSuccess'">
         <div class="flex gap-4 justify-center items-center">
           <basic-button
             [type]="1"
