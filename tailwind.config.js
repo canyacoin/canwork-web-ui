@@ -23,6 +23,9 @@ module.exports = {
       '2xl': '1536px',
     },
     extend: {
+      width: {
+        'custom-proposals': 'calc(100vw - 512px)', // Custom width utility for large screens
+      },
       fontFamily: {
         sans: "'General Sans', sans-serif",
       },

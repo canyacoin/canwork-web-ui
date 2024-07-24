@@ -1,3 +1,27 @@
+/* Scrollbar */
+/* width */
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #5bccff;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #3ac2ff;
+}
+
+
 /* p-toast */
 .p-toast .p-toast-message-content {
     display: flex !important;
@@ -465,7 +489,7 @@
 
   
   .p-datatable ::-webkit-scrollbar {
-    width: 2px !important;
+    height: 10px !important;
   }
   
   /* Track */
@@ -486,7 +510,27 @@
   }
 
   
+  .angular-editor ::-webkit-scrollbar {
+    width: 6px !important;
+  }
+  /* Track */
+  .angular-editor ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px #E2E8F0 !important;
+    border-radius: 9px !important;
+  }
   
+  /* Handle */
+  .angular-editor::-webkit-scrollbar-thumb {
+    background: #94A3B8 !important;
+    border-radius: 9px !important;
+  }
+  
+  /* Handle on hover */
+  .angular-editor ::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8 !important;
+  }
+
+
   #job-creation-form ::-webkit-scrollbar {
     width: 6px !important;
   }
@@ -517,7 +561,7 @@
   .p-dialog-title {
     font-family: "General Sans", sans-serif !important;
     font-size: 24px !important;
-    font-weight: 400 !important;
+    font-weight: 500 !important;
   }
 
   .p-dialog-header {
@@ -532,9 +576,7 @@
 
   @media (max-width: 640px) {
     #filter_modal .p-dialog-title {
-      font-family: "General Sans", sans-serif !important;
       font-size: 16px !important;
-      font-weight: 500 !important;
     }
 
     #filter_modal .p-dialog .p-dialog-content:last-of-type {

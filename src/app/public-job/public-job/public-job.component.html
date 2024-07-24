@@ -107,8 +107,9 @@
                         <angular-editor
                           formControlName="message"
                           [config]="coverLetterConfig"
+                          class="angular-editor"
                         ></angular-editor>
-                        <div class="flex justify-end">
+                        <div class="flex justify-end mt-[8px]">
                           <div class="text-right text-b2 text-G700">
                             {{
                               stripHtmlTagslength(this.bidForm.value.message)
@@ -155,7 +156,7 @@
                         <div
                           class="flex justify-between border rounded-xl border-G300 py-[10px] px-[16px] bg-G50 w-full md:w-[240px] h-max"
                         >
-                          <div>
+                          <div class="flex items-center w-full">
                             $
                             <input
                               formControlName="price"
@@ -163,7 +164,7 @@
                               id="price"
                               min="1"
                               [(ngModel)]="bidPrice"
-                              class="!outline-none !border-none bg-G50 pl-[2px]"
+                              class="!outline-none !border-none bg-G50 pl-[2px] w-full"
                             />
                           </div>
                           USD
@@ -371,7 +372,10 @@
               </div>
             </div>
           </div>
-          <div *ngIf="selectedJob.code === 'proposals'" class="w-full">
+          <div
+            class="max-lg:min-w-full max-[1440px]:w-custom-proposals"
+            *ngIf="selectedJob.code === 'proposals'"
+          >
             <job-proposals-panel />
           </div>
 
@@ -393,7 +397,7 @@
           </div>
         </div>
 
-        <div class="lg:max-w-[350px] w-full">
+        <div class="lg:min-w-[350px] lg:max-w-[350px] w-full">
           <job-status-panel
             [job]="job"
             [proposals]="bids?.length"
