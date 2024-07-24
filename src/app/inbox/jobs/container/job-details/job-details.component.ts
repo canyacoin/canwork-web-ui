@@ -16,6 +16,7 @@ import { MessageService } from 'primeng/api'
 
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
+import { Tab } from '@class/tabs'
 
 @Component({
   selector: 'app-job-details',
@@ -46,6 +47,9 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
   action: ActionType
   userTypes = UserType
 
+  actionTabs: Tab[]
+  selectedTab: Tab
+
   constructor(
     private authService: AuthService,
     private jobService: JobService,
@@ -62,6 +66,12 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.spinner.show()
+    this.actionTabs = [
+      { label: 'JobDetails', code: 'details' },
+      { label: 'Log', code: 'action' },
+      { label: 'History', code: 'transaction' },
+    ]
+    this.selectedTab = this.actionTabs[0]
     this.authService.currentUser$.pipe(take(1)).subscribe((user: User) => {
       this.currentUser = user
       this.initialiseJob()
@@ -353,5 +363,9 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.executeAction(ActionType.finishedJob) // Mark as complete
       }
     }
+  }
+
+  changeTab(item: Tab) {
+    this.selectedTab = item
   }
 }
