@@ -21,7 +21,7 @@
     </ng-template>
   </p-tabMenu>
   <div
-    class="bg-white py-[32px] px-[20px] md:px-[40px] border rounded-xl max-sm:rounded-tr-none rounded-tl-none border-G200"
+    class="bg-white py-[24px] md:py-[32px] px-[16px] md:px-[40px] border rounded-xl max-sm:rounded-tr-none rounded-tl-none border-G200"
   >
     <job-action-log-panel
       *ngIf="selectedTab.code === actionTabs[0].code"
@@ -32,7 +32,6 @@
     <!-- leftBtnEvent in process -->
     <job-transaction-history-panel
       *ngIf="selectedTab.code === actionTabs[1].code"
-      [isTabMode]="isAwaitingEscrow"
       [transactions]="transactions"
       [currentUserType]="currentUserType"
       (rightBtnEvent)="rightClick($event)"
