@@ -1,7 +1,7 @@
 <section
-  class="w-full rounded-[12px] rounded-tl-none sm:bg-white sm:border sm:border-G200 sm:px-[24px] pt-[24px] sm:py-[32px] flex font-sans"
+  class="w-full rounded-[12px] rounded-tl-none sm:bg-white sm:border sm:border-G200 sm:px-[24px] sm:py-[32px] flex font-sans"
 >
-  <div *ngIf="bids.length === 0" class="flex w-full">
+  <div *ngIf="bids.length === 0" class="py-[24px] flex w-full">
     <div class="flex justify-center items-center flex-col max-w-[380px] m-auto">
       <img
         src="/assets/massimo/images/folder.png"
@@ -30,17 +30,17 @@
     </div>
   </div>
   <div class="w-full" *ngIf="canSee && bids.length > 0">
-    <div class="flex max-md:flex-col justify-between pb-[24px]">
-      <h4 class="mb-0 text-G900 font-medium text-h6">Submissions</h4>
+    <div class="flex justify-between items-center pb-[16px] sm:pb-[24px]">
+      <div class="text-G900 font-medium text-b1 sm:text-h6">Submissions</div>
 
       <div class="flex items-center gap-4 text-G900 text-b1">
-        <div class="font-sans font-[500] text-b2 whitespace-nowrap">
+        <div class="hidden sm:block font-[500] text-b2 whitespace-nowrap">
           Sort by
         </div>
         <p-dropdown
           #orderTypeSelect
           [options]="sortbylist"
-          [(ngModel)]="selectedsortby"
+          [(ngModel)]="selectedSortBy"
           optionLabel="name"
           appendTo="body"
         >

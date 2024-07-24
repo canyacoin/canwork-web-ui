@@ -30,7 +30,7 @@ export class JobProposalsPanelComponent implements OnInit {
   rating = 3
 
   sortbylist: SortingMethod[] | undefined
-  selectedsortby: SortingMethod | undefined
+  selectedSortBy: SortingMethod | undefined
 
   selectedBid: Bid
   visibleProposalDetails: boolean = false
@@ -53,7 +53,7 @@ export class JobProposalsPanelComponent implements OnInit {
       { name: 'Budget', code: 'budget' },
     ]
 
-    this.selectedsortby = this.sortbylist[0]
+    this.selectedSortBy = this.sortbylist[0]
 
     this.authSub = this.authService.currentUser$.subscribe((user: User) => {
       this.currentUser = user
@@ -125,9 +125,9 @@ export class JobProposalsPanelComponent implements OnInit {
   }
   SortbyFilter() {
     this.bids = this.bids.sort((a, b) => {
-      if (this.selectedsortby.code === 'newest') {
+      if (this.selectedSortBy.code === 'newest') {
         return b.timestamp - a.timestamp
-      } else if (this.selectedsortby.code === 'budget') {
+      } else if (this.selectedSortBy.code === 'budget') {
         return b.budget - a.budget
       }
     })
