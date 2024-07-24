@@ -3,8 +3,9 @@ import {
   Input,
   ViewChild,
   ElementRef,
-  Renderer2,
   AfterViewInit,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core'
 import { Bid } from '@class/job'
 
@@ -32,17 +33,25 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
     ]),
   ],
 })
-export class JobFreelancerInformationPanelComponent implements AfterViewInit {
+export class JobFreelancerInformationPanelComponent
+  implements AfterViewInit, OnChanges
+{
   @ViewChild('contentDiv') contentDiv: ElementRef
   @Input() selectedBid!: Bid
 
   isSeeMore: boolean = false
   isHeightMoreThan259px: boolean = false
 
-  constructor(private renderer: Renderer2) {}
+  constructor() {}
 
   ngAfterViewInit() {
     this.checkHeight()
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selectedBid && !changes.selectedBid.firstChange) {
+      this.checkHeight()
+    }
   }
 
   checkHeight() {
