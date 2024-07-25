@@ -574,22 +574,6 @@
     border-bottom-left-radius: 24px !important;
   }
 
-  @media (max-width: 640px) {
-    #filter_modal .p-dialog-title {
-      font-size: 16px !important;
-    }
-
-    #filter_modal .p-dialog .p-dialog-content:last-of-type {
-        border-bottom-right-radius: 0px !important;
-        border-bottom-left-radius: 0px !important;
-    }
-
-    #filter_modal .p-dialog-header {
-        border-bottom: solid 1px #e5e7eb;
-    }
-  }
-
-
   .p-dialog-header button {
     background: rgba(0, 0, 0, 0.40) !important;
     backdrop-filter: blur(4px) !important;
@@ -652,7 +636,7 @@
   #headless_modal .p-dialog-header {
     display: none;
   }
-
+  
   #headless_modal .p-dialog-mask .p-element .p-dialog-content {
     border-radius: 24px;
   }
@@ -697,4 +681,19 @@
   
   .post-button-style .p-overlay.p-component {
     padding-top: 10px !important;
+  }
+
+  @media (max-width: 640px) {
+    #filter_modal .p-dialog-title {
+      font-size: 16px !important;
+    }
+
+    #filter_modal .p-dialog .p-dialog-content:last-of-type {
+        border-bottom-right-radius: 0px !important;
+        border-bottom-left-radius: 0px !important;
+    }
+
+    #filter_modal .p-dialog-header {
+        border-bottom: solid 1px #e5e7eb;
+    }
   }
