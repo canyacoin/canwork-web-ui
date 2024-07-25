@@ -94,7 +94,7 @@
     <ng-container *ngIf="!isPostJobPage">
       <div
         *ngIf="!isMyJob && !isAcceptingOffers && jobPoster"
-        class="flex justify-end gap-[16px] items-center"
+        class="flex pl-[80px] gap-[16px] items-center"
       >
         <chat-button
           [routerLink]="['/inbox/chat']"
@@ -151,7 +151,7 @@
         </div>
       </ng-container>
       <ng-container *ngIf="isAwaitingEscrow">
-        <div class="flex flex-col sm:flex-row gap-4 items-center">
+        <div class="flex gap-4 items-center">
           <div
             class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl transition-all duration-300"
             (click)="leftClick($event)"
@@ -162,6 +162,8 @@
           <div class="w-max">
             <basic-button
               [type]="2"
+              size="small"
+              extraClass="!text-b1"
               title="Pay Escrow"
               (click)="rightClick($event)"
             />
@@ -227,7 +229,9 @@
           />
         </ng-container> -->
       <ng-container *ngIf="isInEscrow">
-        <div class="flex flex-col gap-4 items-center">
+        <div
+          class="flex max-sm:flex-col lg:flex-col gap-4 justify-center items-center"
+        >
           <button
             class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl transition-all duration-300"
             (click)="leftClick($event)"
