@@ -64,7 +64,7 @@
                 <div
                   class="flex flex-col gap-[4px]"
                   [ngClass]="{
-                    'pb-[16px]': txIndex + 1 !== transactions.length
+                    'md:pb-[16px]': txIndex + 1 !== transactions.length
                   }"
                 >
                   <div class="text-b2 text-G700 font-medium">
@@ -75,7 +75,7 @@
                   </div>
                 </div>
                 <a
-                  class="text-b2 text-G900 font-medium text-nowrap underline underline-offset-2 hover:underline"
+                  class="text-b2 text-G900 font-medium text-nowrap underline underline-offset-2 hover:underline max-md:pb-[16px]"
                   href="{{ getTxLink(tx.hash) }}"
                   target="_blank"
                   >View on explorer</a
