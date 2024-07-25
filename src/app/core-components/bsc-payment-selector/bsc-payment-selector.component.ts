@@ -154,6 +154,7 @@ export class BscPaymentSelectorComponent
           parseFloat(this.assets[i].free) * this.quotes[this.assets[i].token]
 
         if (usdtEquivalent > 0) {
+          console.log('usdtEquivalent', usdtEquivalent)
           this.totalBudget += usdtEquivalent
           let usdtValue = parseFloat(usdtEquivalent.toString())
           if (usdtValue < this.jobBudgetUsd)
@@ -206,7 +207,9 @@ export class BscPaymentSelectorComponent
   }
 
   async paymentSelected(asset) {
-    if (!asset.converting && asset.hasEnough) this.bscAsset.emit(asset)
+    if (!asset.converting && asset.hasEnough && !asset.seemsNotEnough) {
+      this.bscAsset.emit(asset)
+    }
   }
 
   goBack() {
