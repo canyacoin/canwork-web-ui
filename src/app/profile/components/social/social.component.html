@@ -1,0 +1,73 @@
+<div class="row" style="margin-bottom:25px">
+  <div class="col-md-12">
+    <p class="lead fw-500">Share profile</p>
+    <div class="mb-10">
+      <a data-toggle="modal" data-target="#shareModal" class="cursor-pointer">
+        <i class="fas fa-share-alt"></i> Share Link
+      </a>
+    </div>
+    <button
+      (click)="onShare()"
+      type="button"
+      class="btn btn-primary btn-sm mr-5"
+      style="background-color: rgb(59, 89, 152); border: none;"
+      border-64
+    >
+      <i class="ti-facebook"></i>&nbsp;Share
+    </button>
+    <button
+      (click)="onTweet()"
+      type="button"
+      class="btn btn-primary btn-sm"
+      style="background-color: rgb(85, 172, 238); border: none;"
+      border-64
+    >
+      <i class="ti-twitter-alt"></i>&nbsp;Tweet
+    </button>
+  </div>
+</div>
+<div id="shareModal" class="modal fade" role="dialog">
+  <div border-none class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div border-none class="modal-header  text-center">
+        <div class="col-12">
+          <h5 class="modal-title">SHARE THIS PROFILE AS A LINK</h5>
+        </div>
+        <button
+          type="button"
+          class="close"
+          style="position: absolute; right: 15px;"
+          data-dismiss="modal"
+        >
+          &times;
+        </button>
+      </div>
+      <div border-none class="modal-body">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <div class="row px-15"></div>
+              <div class="row px-15">
+                <div class="col-12 text-center">
+                  <span>URL:</span>
+                  <p class="link-col p-10">
+                    {{ shareLink }}
+                  </p>
+                  <button (click)="copyLink()" class="btn btn-primary mt-5">
+                    COPY LINK
+                  </button>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 text-center">
+                  <small id="copied">Copied!</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
