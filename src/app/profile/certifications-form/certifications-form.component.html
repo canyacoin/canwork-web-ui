@@ -1,0 +1,210 @@
+<div
+  class="modal"
+  tabindex="-1"
+  role="dialog"
+  id="certificationModal"
+  role="dialog"
+  aria-labelledby="certificationModal"
+>
+  <div class="modal-dialog" role="document" style="border:none">
+    <div class="modal-content">
+      <div class="modal-header" style="border:none">
+        <h5 class="modal-title" *ngIf="!certifications.editCert">
+          ADD CERTIFICATION
+        </h5>
+        <h5 class="modal-title" *ngIf="certifications.editCert">
+          EDIT CERTIFICATION
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          id="certificationModalClose"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form
+        [formGroup]="certificationForm"
+        (ngSubmit)="onSubmitCertification()"
+      >
+        <div class="modal-body">
+          <div class="row" id="warning-msg">
+            <div class="col-11">
+              <span>Something went wrong. Please try again later.</span>
+            </div>
+            <div class="col-1">
+              <button
+                type="button"
+                id="close-warning"
+                (click)="toggleWarning()"
+              >
+                &times;
+              </button>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="university"
+                >School or Certifying Institution<span class="text-danger"
+                  >*</span
+                >:</label
+              >
+              <input
+                required
+                id="university"
+                name="university"
+                (input)="searchUni()"
+                list="uniNameList"
+                formControlName="university"
+                class="form-control"
+                placeholder="Type in your Institution...."
+                [value]="
+                  this.certifications.certToEdit !== null &&
+                  certifications.editCert
+                    ? this.certifications.certToEdit.university
+                    : ''
+                "
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="course"
+                >Certification or Course Name<span class="text-danger">*</span
+                >:</label
+              >
+              <input
+                type="text"
+                id="course"
+                name="course"
+                formControlName="course"
+                required
+                class="form-control"
+                [value]="
+                  this.certifications.certToEdit !== null &&
+                  certifications.editCert
+                    ? this.certifications.certToEdit.course
+                    : ''
+                "
+              />
+            </div>
+          </div>
+          <div class="form-row row">
+            <div class="form-group col-4">
+              <label for="completion"
+                >Start<span class="text-danger">*</span>:</label
+              >
+              <input
+                maxlength="4"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                required
+                class="form-control"
+                id="startDate"
+                list="yearList"
+                name="startDate"
+                formControlName="startDate"
+                [value]="
+                  this.certifications.certToEdit !== null &&
+                  certifications.editCert
+                    ? this.certifications.certToEdit.completion
+                    : ''
+                "
+              />
+              <!--
+              <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                type="number" maxlength="4" required id="startDate" name="startDate" formControlName="startDate" class="form-control"
+                [value]="(this.certifications.certToEdit !== null && certifications.editCert) ? this.certifications.certToEdit.completion : ''">
+                -->
+            </div>
+            <div class="form-group col-4">
+              <label for="completion"
+                >Completion<span class="text-danger">*</span>:</label
+              >
+              <input
+                maxlength="4"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                required
+                class="form-control"
+                id="completion"
+                list="completionYearList"
+                name="completion"
+                formControlName="completion"
+                [value]="
+                  this.certifications.certToEdit !== null &&
+                  certifications.editCert
+                    ? this.certifications.certToEdit.completion
+                    : ''
+                "
+              />
+              <!--
+                <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                type="number" maxlength="4" required id="completion" name="completion" formControlName="completion"
+                class="form-control" [value]="(this.certifications.certToEdit !== null && certifications.editCert) ? this.certifications.certToEdit.completion : ''">
+              -->
+            </div>
+            <div class="form-group col-4">
+              <div class="form-check" class="study-check">
+                <input
+                  type="checkbox"
+                  value="true"
+                  id="study"
+                  formControlName="isStudying"
+                  name="isStudying"
+                />
+                <label for="isStudying">
+                  Still studying<span class="text-danger">*</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="certificate">Certification Link:</label>
+              <input
+                type="text"
+                id="certificate"
+                formControlName="certificate"
+                name="certificate"
+                class="form-control"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer" style="border:none">
+          <a
+            (click)="onDeleteCertification(this.certifications.certToEdit)"
+            *ngIf="
+              this.certifications.certToEdit !== null && certifications.editCert
+            "
+            class="btn btn-danger"
+            style="color: white; position: absolute; left:15px;"
+            data-dismiss="modal"
+            >Delete</a
+          >
+          <button
+            type="submit"
+            [disabled]="!certificationForm.valid"
+            class="btn btn-primary"
+          >
+            Save changes
+          </button>
+          <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<datalist id="uniNameList">
+  <option *ngFor="let uni of uniFilteredList" value="{{ uni }}"> </option>
+</datalist>
+
+<datalist id="yearList">
+  <option *ngFor="let year of yearList" value="{{ year }}"></option>
+</datalist>
+
+<datalist id="completionYearList">
+  <option *ngFor="let year of completionYearList" value="{{ year }}"></option>
+</datalist>
