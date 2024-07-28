@@ -1,0 +1,67 @@
+<main class="main-content" *ngIf="currentUser">
+  <section *ngIf="!isClient && !isProvider" class="section bg-gray py-40">
+    <div class="container">
+      <header class="section-header my-0 py-0 animated fadeIn">
+        <h5>What brings you to CanWork today?</h5>
+        <hr />
+      </header>
+
+      <div class="row pb-200">
+        <div class="col-lg 2"></div>
+        <div class="col-lg-8 card-deck">
+          <div class="card text-center card-hover-shadow bg-white my-5">
+            <div class="card-block">
+              <h4 class="card-title">I want to find talent</h4>
+              <p class="card-text">
+                Are you looking for talented <strong>service providers</strong>?
+                Pay with <strong>BNB</strong> or selected BNB Chain (BEP20)
+                assets.
+              </p>
+              <button
+                (click)="setUserType('User')"
+                class="btn btn-primary btn-canya-chat"
+              >
+                CLIENT
+              </button>
+            </div>
+          </div>
+          <div class="card text-center card-hover-shadow bg-white my-5">
+            <div class="card-block">
+              <h4 class="card-title">I want to find work</h4>
+              <p class="card-text">
+                Do you have a <strong>digital service</strong> to offer to your
+                clients? Get paid with <strong>$CAN</strong> or
+                <strong>BEP20</strong> assets!
+              </p>
+              <button
+                (click)="setUserType('Provider')"
+                class="btn btn-primary btn-canya-chat"
+              >
+                PROVIDER
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-2"></div>
+      </div>
+    </div>
+  </section>
+
+  <section *ngIf="isClient" class="section bg-white py-40">
+    <div class="container">
+      <app-create-client-profile
+        [user]="currentUser"
+      ></app-create-client-profile>
+    </div>
+  </section>
+  <section *ngIf="isProvider" class="section bg-white py-40">
+    <div *ngIf="!whitelistSubmitted" class="container">
+      <app-create-provider-profile
+        [user]="currentUser"
+      ></app-create-provider-profile>
+    </div>
+    <div *ngIf="whitelistSubmitted" class="container">
+      <app-provider-state [currentUser]="currentUser"></app-provider-state>
+    </div>
+  </section>
+</main>
