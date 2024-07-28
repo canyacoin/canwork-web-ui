@@ -1,0 +1,37 @@
+<main class="main-content">
+  <section class="section bg-gray py-20 mh-fullscreen">
+    <div class="container">
+      <h4 class="fw-400">Who viewed me?</h4>
+
+      <div
+        *ngIf="loading"
+        class="container d-flex h-100 flex-column justify-content-center"
+      >
+        <img src="assets/img/loader.svg" style="height: 36px" alt="Loader" />
+      </div>
+
+      <div *ngIf="!loading && users && users.length < 1" class="container">
+        <div class="row">
+          <div class="col-12 d-flex flex-column">
+            <div class="flexbox-container">
+              <br />
+              <h4 class="fw-400">Uh, oh!</h4>
+              <h5 class="fw-300">No data yet.</h5>
+              <div id="hand" class="mt-80"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div
+          class="col-md-4 col-sm-6 col-12 no-padding"
+          *ngFor="let user of users"
+        >
+          <app-provider-card [size]="'sm'" [provider]="user">
+          </app-provider-card>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
