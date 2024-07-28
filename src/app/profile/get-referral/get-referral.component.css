@@ -1,0 +1,21 @@
+#gotcode {
+  display: none;
+}
+
+.btn {
+  color: white;
+  background: linear-gradient(122deg, #33ccff 0%, #4decca 93%);
+  border: none;
+  border-radius: 64px;
+}
+
+.btn-referral:hover {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2) !important;
+}
+
+.btn-referral:active {
+  color: white;
+  background: linear-gradient(122deg, #3392ff 0%, #4decca 93%);
+  border: none;
+  border-radius: 64px;
+}
