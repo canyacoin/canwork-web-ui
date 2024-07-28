@@ -1,0 +1,118 @@
+<main class="font-sans">
+  <section class="bg-G50">
+    <div
+      class="max-w-[1440px] m-auto pt-[100px] px-[20px] md:px-[64px] pb-[24px]"
+    >
+      <app-profile-about
+        *ngIf="userModel"
+        (editProfile)="displayEditComponent = true"
+        [userAddress]="userModel.address"
+        [currentUser]="currentUser"
+        [isMyProfile]="isMyProfile()"
+        [userModel]="userModel"
+      ></app-profile-about>
+      <div class="flex gap-[16px] mt-[16px]">
+        <div
+          class="min-w-[350px] max-w-[350px] rounded-[12px] border !border-G200 bg-white"
+        >
+          <app-profile-skills />
+          <app-certifications
+            *ngIf="userModel && userModel.type === 'Provider'"
+            [userModel]="userModel"
+            [notMyProfile]="notMyProfile()"
+            [isMyProfile]="isMyProfile()"
+          ></app-certifications>
+          <app-profile-education />
+        </div>
+        <div class="w-full flex flex-col gap-[16px]">
+          <app-profile-bio
+            *ngIf="userModel && userModel.description"
+            [isMyProfile]="isMyProfile()"
+            [userModel]="userModel"
+          ></app-profile-bio>
+          <app-reviews *ngIf="userModel" [user]="userModel"></app-reviews>
+          <app-profile-portfolio
+            *ngIf="userModel && userModel.type === 'Provider'"
+            [userModel]="userModel"
+            [notMyProfile]="notMyProfile()"
+            [isMyProfile]="isMyProfile()"
+          ></app-profile-portfolio>
+          <app-profile-workhistory />
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- <main class="main-content">
+  <app-profile-edit
+    *ngIf="displayEditComponent"
+    (close)="closeEditDialog()"
+    [currentUser]="currentUser"
+  ></app-profile-edit>
+
+  <section class="section bg-gray !pt-16 pb-20" id="section-profile">
+    <app-back-button></app-back-button>
+    <div
+      *ngIf="!userModel"
+      class="container d-flex h-100 flex-column justify-content-center"
+      style="min-height: 640px"
+    >
+      <img src="assets/img/loader.svg" style="height: 36px" alt="Loader" />
+    </div>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-4 my-5">
+          <app-profile-about
+            *ngIf="userModel"
+            (editProfile)="displayEditComponent = true"
+            [userAddress]="userModel.address"
+            [currentUser]="currentUser"
+            [isMyProfile]="isMyProfile()"
+            [userModel]="userModel"
+          ></app-profile-about>
+          <div *ngIf="userModel" class="card my-15">
+            <div class="container px-30 py-30">
+              <app-profile-timezone
+                *ngIf="userModel"
+                [userModel]="userModel"
+              ></app-profile-timezone>
+              <app-profile-social [userModel]="userModel"></app-profile-social>
+              <app-profile-get-referral
+                *ngIf="isMyProfile()"
+                [userModel]="userModel"
+              ></app-profile-get-referral>
+
+              <app-profile-visitors
+                *ngIf="isMyProfile()"
+                [userModel]="currentUser"
+              ></app-profile-visitors>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-8 my-5">
+          <app-profile-bio
+            *ngIf="userModel && userModel.description"
+            [isMyProfile]="isMyProfile()"
+            [userModel]="userModel"
+          ></app-profile-bio>
+          <app-certifications
+            *ngIf="userModel && userModel.type === 'Provider'"
+            [userModel]="userModel"
+            [notMyProfile]="notMyProfile()"
+            [isMyProfile]="isMyProfile()"
+          ></app-certifications>
+          <app-profile-portfolio
+            *ngIf="userModel && userModel.type === 'Provider'"
+            [userModel]="userModel"
+            [notMyProfile]="notMyProfile()"
+            [isMyProfile]="isMyProfile()"
+          ></app-profile-portfolio>
+          <app-reviews *ngIf="userModel" [user]="userModel"></app-reviews>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<app-certifications-form *ngIf="isMyProfile()"></app-certifications-form>
+<app-scroll-top></app-scroll-top> -->
