@@ -3,6 +3,11 @@
     <div
       class="max-w-[1440px] m-auto pt-[100px] px-[20px] md:px-[64px] pb-[24px]"
     >
+      <edit-profile-dialog
+        [(visible)]="displayEditComponent"
+        (close)="closeEditDialog()"
+        [currentUser]="currentUser"
+      />
       <app-profile-about
         *ngIf="userModel"
         (editProfile)="displayEditComponent = true"
@@ -13,7 +18,7 @@
       ></app-profile-about>
       <div class="flex gap-[16px] mt-[16px]">
         <div
-          class="min-w-[350px] max-w-[350px] rounded-[12px] border !border-G200 bg-white"
+          class="min-w-[350px] max-w-[350px] rounded-[12px] border !border-G200 bg-white overflow-hidden h-max"
         >
           <app-profile-skills />
           <app-certifications
