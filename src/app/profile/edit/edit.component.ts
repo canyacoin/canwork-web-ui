@@ -26,8 +26,7 @@ import { BscService } from '@service/bsc.service'
 
 @Component({
   selector: 'app-profile-edit',
-  templateUrl: './edit.component.html',
-  styleUrls: ['./edit.component.scss'],
+  templateUrl: './edit.component.html'
 })
 export class EditComponent implements OnInit, OnDestroy {
   @Input() currentUser: User
