@@ -9,19 +9,30 @@
     class="absolute top-[110px] left-[56px] rounded-full bg-white px-[8px] py-[8px]"
   >
     <img
-      src="/assets/massimo/images/randomImage5.png"
+      [src]="userModel.avatar.uri"
       alt="profile"
-      class="w-[140px] h-[140px] rounded-full bg-cover"
+      class="w-[140px] h-[140px] rounded-full bg-cover select-none"
     />
   </div>
   <div class="mt-[94px] mb-[40px] px-[64px] flex flex-col gap-[16px]">
     <div class="flex justify-between">
       <div class="flex items-center gap-[24px]">
-        <div class="text-G800 text-h5 font-medium">Omotayo WarDaddy</div>
-        <div class="flex gap-2">
-          <app-star-rating [stars]="5" />
-          <div class="text-b2 font-medium text-G700">
-            ({{ rating?.count }} Jobs)
+        <div
+          *ngIf="userModel.name"
+          class="text-G800 text-h5 font-medium flex items-center gap-[8px]"
+        >
+          {{ userModel.name }}
+          <img
+            *ngIf="userModel.verified"
+            src="/assets/massimo/svg/verifiedTick.svg"
+            alt="verified"
+            class="w-[24px] h-[24px]"
+          />
+        </div>
+        <div class="flex gap-2 items-center">
+          <app-star-rating [stars]="userModel.rating?.average" />
+          <div class="text-b1 font-medium text-G700">
+            ({{ userModel.rating?.count }} Jobs)
           </div>
         </div>
       </div>
@@ -30,10 +41,8 @@
 
     <div class="flex justify-between items-end">
       <div class="max-w-[675px] w-full flex flex-col gap-[16px]">
-        <div class="max-w-[609px] text-b1 text-G900">
-          I'm a Product & Web Designer, Framer Developer and Illustrator | I
-          design apps and websites that connect business goals to their
-          customers' needs.
+        <div *ngIf="userModel.bio" class="max-w-[609px] text-b1 text-G900">
+          {{ userModel.bio }}
         </div>
         <div class="flex items-center gap-[24px] text-b1 font-medium text-G900">
           <div class="flex items-center gap-[8px]">
@@ -42,7 +51,7 @@
               alt="money"
               class="w-[24px] h-[24px]"
             />
-            <div>$40/hr</div>
+            <div>${{ userModel.hourlyRate }}/hr</div>
           </div>
           <div class="flex items-center gap-[8px]">
             <img
@@ -58,7 +67,7 @@
               alt="location"
               class="w-[24px] h-[24px]"
             />
-            <div>Brisbane, Australia</div>
+            <div>{{ userModel.timezone }}</div>
           </div>
           <div class="flex items-center gap-[12px]">
             <img
@@ -94,8 +103,8 @@
           </div>
         </div>
       </div>
-      <div class="flex gap-[16px] items-center">
-        <div class="text-b1 font-medium">Message</div>
+      <div *ngIf="!isMyProfile" class="flex gap-[16px] items-center">
+        <message-button />
         <basic-button
           [type]="1"
           title="Invite to a job"
@@ -109,6 +118,18 @@
           extraClass="!text-b1"
         />
       </div>
+      <div
+        *ngIf="isMyProfile"
+        class="w-max"
+        (click)="displayProfileEditComponent()"
+      >
+        <basic-button
+          [type]="1"
+          title="Edit Profile"
+          size="small"
+          extraClass="!text-b1"
+        />
+      </div>
     </div>
   </div>
 </div>
@@ -118,20 +139,6 @@
   class="card pricing-3"
   style="box-shadow: 0 2px 9px 0 rgba(0,0,0,0.02); border-radius: 6px;"
 >
-  <span
-    *ngIf="isMyProfile"
-    (click)="displayProfileEditComponent()"
-    data-toggle="tooltip"
-    data-placement="top"
-    title="Edit Profile"
-    class="btn btn-sm btn-circular btn-light icon-edit-work pl-1"
-  >
-    <i
-      class="ti-pencil fw-600"
-      style="columns: #535353;"
-      aria-hidden="true"
-    ></i>
-  </span>
   <div id="sidebar">
     <div class="profile">
       <div class="profile-badge">

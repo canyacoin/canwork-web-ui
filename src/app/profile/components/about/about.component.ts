@@ -62,6 +62,9 @@ export class AboutComponent implements OnInit {
       if (this.route.snapshot.queryParams['nextAction'] === 'chat')
         this.chatUser()
     }
+    console.log('=================><====================================')
+    console.log('this.currentUser', this.currentUser)
+    console.log('this.userModel', this.userModel)
   }
 
   displayProfileEditComponent() {
