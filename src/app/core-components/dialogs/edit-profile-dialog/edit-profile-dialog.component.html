@@ -1,74 +1,66 @@
 <p-dialog
+  header="Edit Profile"
   [(visible)]="visible"
   [draggable]="false"
   [resizable]="false"
   [modal]="true"
-  id="headless_modal"
   styleClass="!rounded-b-[0px] !rounded-t-[24px] sm:!rounded-[24px] md:max-w-[600px] lg:max-w-[906px] w-full !bg-G50 sm:mx-[16px] max-sm:!mt-[127px] max-sm:absolute max-sm:left-0 max-sm:bottom-0"
 >
   <div
-    class="flex justify-between py-[24px] pl-[40px] pr-[24px] border-b border-G200"
+    id="edit-profile-dialog"
+    class="border-t border-G200 py-[24px] px-[40px] space-y-[24px]"
   >
-    <div class="text-h5 text-G900 font-medium">Edit Profile</div>
-    <x-button (click)="onClose()" />
-  </div>
-  <div class="py-[24px] px-[40px] space-y-[24px]">
     <div
-      class="w-max rounded-full overflow-hidden border-[5px] border-white relative"
+      class="w-max rounded-full overflow-hidden border-[5px] border-white relative cursor-pointer"
+      (click)="displayDropzone = true"
     >
-      <div class="bg-G400 w-[120px] h-[120px]"></div>
+      <div
+        *ngIf="!currentUser.avatar?.uri"
+        class="bg-G400 w-[120px] h-[120px]"
+      ></div>
+      <img
+        *ngIf="currentUser.avatar?.uri"
+        [src]="currentUser.avatar.uri"
+        alt="profile"
+        class="w-[120px] h-[120px] bg-cover select-none"
+      />
       <img
         src="/assets/massimo/images/imagePlus.png"
         alt="imagePlus"
         class="absolute top-[40px] left-[40px] w-[40px] h-[40px] select-none"
       />
     </div>
-    <form
-      [ngStyle]="{ display: preview ? 'none' : '' }"
-      [formGroup]="profileForm"
-      class="form validate"
-      novalidate
-    >
-      <div class="row">
-        <div class="col-sm-7">
-          <fieldset class="form-group">
-            <label>Full name</label>
-            <input
-              class="form-control"
-              #name
-              formControlName="name"
-              type="text"
-              name="name"
-              placeholder="Full name or Company name"
-              maxlength="36"
-              [class.invalid]="
-                !profileForm.controls.name.valid &&
-                profileForm.controls.name.dirty
-              "
-            />
-            <small
-              *ngIf="
-                !profileForm.controls.name.valid &&
-                profileForm.controls.name.dirty
-              "
-              >Please enter a valid name or company name.</small
-            >
-          </fieldset>
+    <form [formGroup]="profileForm" class="flex flex-col gap-[24px]" novalidate>
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">
+          Name <span class="text-R900">*</span>
         </div>
-        <div class="col-sm-5 text-center">
-          <div class="profile-pic">
-            <span class="bg-primary" (click)="displayDropzone = true"
-              >Edit</span
-            >
-            <app-avatar [user]="currentUser"></app-avatar>
-          </div>
-        </div>
-      </div>
-
-      <fieldset class="form-group">
-        <label>Headline</label>
         <input
-          class="form-control"
+          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+          #name
+          formControlName="name"
+          type="text"
+          name="name"
+          placeholder="Full name or Company name"
+          maxlength="36"
+          [class.invalid]="
+            !profileForm.controls.name.valid && profileForm.controls.name.dirty
+          "
+        />
+        <div
+          *ngIf="
+            !profileForm.controls.name.valid && profileForm.controls.name.dirty
+          "
+          class="text-R900 text-wrap text-b2"
+        >
+          Please enter a valid name or company name.
+        </div>
+      </fieldset>
+
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">Headline</div>
+        <input
+          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
           #title
           formControlName="title"
           type="text"
@@ -80,16 +72,93 @@
             profileForm.controls.title.dirty
           "
         />
-        <small
+        <div
           *ngIf="
             !profileForm.controls.title.valid &&
             profileForm.controls.title.dirty
           "
-          >Please enter a valid headline for your profile.</small
+          class="text-R900 text-wrap text-b2"
         >
+          Please enter a valid headline for your profile.
+        </div>
       </fieldset>
 
-      <fieldset class="form-group">
+      <div class="flex gap-[40px]">
+        <div class="min-w-[270px] flex flex-col gap-2">
+          <div class="text-b1 text-G900">
+            Freelance Category <span class="text-R900">*</span>
+          </div>
+          <p-dropdown
+            [options]="categories"
+            [(ngModel)]="selectedCategory"
+            appendTo="body"
+          >
+            <ng-template pTemplate="selectedItem">
+              <div class="flex items-center gap-2" *ngIf="selectedCategory">
+                <div class="flex items-center gap-[16px]">
+                  <img
+                    src="{{ '/assets/massimo/images/' + selectedCategory.img }}"
+                    class="w-[20px]"
+                  />
+                  <span class="text-G900 font-medium text-b1">{{
+                    selectedCategory.name
+                  }}</span>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template let-item pTemplate="item">
+              <div
+                class="flex items-center gap-[16px]"
+                (click)="setProviderType(item)"
+              >
+                <img
+                  src="{{ '/assets/massimo/images/' + item.img }}"
+                  class="w-[20px]"
+                />
+                <span class="text-G900 font-medium text-b1">{{
+                  item.name
+                }}</span>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+        <fieldset
+          [hidden]="currentUser.type !== 'Provider'"
+          class="flex flex-col gap-[8px]"
+        >
+          <div class="text-b1 text-G900">
+            Hourly Rate <span class="text-R900">*</span>
+          </div>
+          <div
+            class="w-full rounded-xl border border-G200 text-G500 flex overflow-hidden"
+          >
+            <div class="px-[16px] py-[8px] bg-G200 font-bold">$</div>
+            <input
+              #hourlyRate
+              class="outline-none font-sans text-b1 py-[8px] px-[16px] bg-G50"
+              formControlName="hourlyRate"
+              type="text"
+              name="hourlyRate"
+              placeholder="e.g. 19"
+              [class.invalid]="
+                !profileForm.controls.hourlyRate.valid &&
+                profileForm.controls.hourlyRate.dirty
+              "
+            />
+          </div>
+          <div
+            *ngIf="
+              !profileForm.controls.hourlyRate.valid &&
+              profileForm.controls.hourlyRate.dirty
+            "
+            class="text-R900 text-wrap text-b2"
+          >
+            Please enter a number between 0 - 999
+          </div>
+        </fieldset>
+      </div>
+
+      <!-- <fieldset class="form-group">
         <label>Short Bio (60 chars)</label>
         <input
           class="form-control"
@@ -109,122 +178,250 @@
           "
           >Please enter a valid bio for your profile.</small
         >
+      </fieldset> -->
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">
+          BNB Chain (BEP20) Address <span class="text-R900">*</span>
+        </div>
+        <input
+          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+          #bnbAddress
+          formControlName="bscAddress"
+          type="text"
+          name="bscAddress"
+          placeholder="0x..."
+        />
+        <div
+          *ngIf="
+            profileForm.controls.bscAddress.dirty &&
+            profileForm.controls.bscAddress.errors &&
+            (profileForm.controls.bscAddress.errors.required ||
+              profileForm.controls.bscAddress.errors.isInvalidAddress)
+          "
+          class="text-R900 text-wrap text-b2"
+        >
+          Please enter a valid BNB Chain address.
+        </div>
+        <div
+          *ngIf="
+            profileForm.controls.bscAddress.dirty &&
+            profileForm.controls.bscAddress.errors &&
+            profileForm.controls.bscAddress.errors.addressExists
+          "
+          class="text-R900 text-wrap text-b2"
+        >
+          This address is already being used in CanWork. Please use another one.
+        </div>
       </fieldset>
 
-      <div class="row">
-        <div class="col-sm-12">
-          <fieldset class="form-group">
-            <label>Work email</label>
-            <input
-              class="form-control"
-              #work
-              formControlName="work"
-              type="email"
-              name="work"
-              placeholder="Work email"
-              [class.invalid]="
-                !profileForm.controls.work.valid &&
-                profileForm.controls.work.dirty
-              "
-            />
-            <small
-              *ngIf="
-                !profileForm.controls.work.valid &&
-                profileForm.controls.work.dirty
-              "
-              >Please enter a valid email.</small
-            >
-          </fieldset>
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">
+          Work email <span class="text-R900">*</span>
         </div>
-        <div class="col-sm-6">
-          <fieldset class="form-group">
-            <label>BNB Chain (BEP20) Address</label>
-            <input
-              class="form-control"
-              #bnbAddress
-              formControlName="bscAddress"
-              type="text"
-              name="bscAddress"
-              placeholder="0x..."
-            />
-            <small
-              *ngIf="
-                profileForm.controls.bscAddress.dirty &&
-                profileForm.controls.bscAddress.errors &&
-                (profileForm.controls.bscAddress.errors.required ||
-                  profileForm.controls.bscAddress.errors.isInvalidAddress)
-              "
-              >Please enter a valid BNB Chain address.</small
-            >
-            <small
-              *ngIf="
-                profileForm.controls.bscAddress.dirty &&
-                profileForm.controls.bscAddress.errors &&
-                profileForm.controls.bscAddress.errors.addressExists
-              "
-              >This address is already being used in CanWork. Please use another
-              one.
-            </small>
-          </fieldset>
+        <input
+          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+          #work
+          formControlName="work"
+          type="email"
+          name="work"
+          placeholder="Work email"
+          [class.invalid]="
+            !profileForm.controls.work.valid && profileForm.controls.work.dirty
+          "
+        />
+        <div
+          *ngIf="
+            !profileForm.controls.work.valid && profileForm.controls.work.dirty
+          "
+          class="text-R900 text-wrap text-b2"
+        >
+          Please enter a valid email.
         </div>
-      </div>
+        <div class="text-C600 text-wrap text-b2">Not publicly displayed</div>
+      </fieldset>
 
-      <div class="row">
-        <div class="col-sm-3">
-          <fieldset
-            [hidden]="currentUser.type !== 'Provider'"
-            class="form-group"
-          >
-            <label>Hourly Rate ( $USD )</label>
-            <input
-              class="form-control"
-              #hourlyRate
-              formControlName="hourlyRate"
-              type="text"
-              name="hourlyRate"
-              placeholder="e.g. 19"
-              [class.invalid]="
-                !profileForm.controls.hourlyRate.valid &&
-                profileForm.controls.hourlyRate.dirty
-              "
-            />
-            <small
-              *ngIf="
-                !profileForm.controls.hourlyRate.valid &&
-                profileForm.controls.hourlyRate.dirty
-              "
-              >Please enter a number between 0 - 999</small
-            >
-          </fieldset>
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">Website</div>
+        <input
+          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+          #work
+          formControlName="other"
+          type="email"
+          name="other"
+          placeholder="Enter web address"
+          [class.invalid]="
+            !profileForm.controls.work.valid && profileForm.controls.work.dirty
+          "
+        />
+        <div
+          *ngIf="
+            !profileForm.controls.work.valid && profileForm.controls.work.dirty
+          "
+          class="text-R900 text-wrap text-b2"
+        >
+          Please enter a valid email.
         </div>
-        <div class="col-sm-9">
-          <fieldset
-            [hidden]="currentUser.type !== 'Provider'"
-            class="form-group"
-          >
-            <label
-              >Tag with relevant skills to help clients find you more
-              easily.</label
-            >
-            <skill-tags-selection
-              *ngIf="currentUser"
-              (tagsUpdated)="skillTagsUpdated($event)"
-              [initialTags]="currentUser.skillTags"
-              [minimumTags]="0"
-            ></skill-tags-selection>
-            <input
-              hidden
-              #skillTags
-              class="form-control"
-              formControlName="skillTags"
-              type="text"
-              name="skillTags"
-            />
-          </fieldset>
-        </div>
-      </div>
+      </fieldset>
 
-      <div [hidden]="currentUser.type !== 'Provider'" class="form-group">
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">Instagram</div>
+        <input
+          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+          #work
+          formControlName="other"
+          type="email"
+          name="other"
+          placeholder="Enter profile link"
+          [class.invalid]="
+            !profileForm.controls.work.valid && profileForm.controls.work.dirty
+          "
+        />
+        <div
+          *ngIf="
+            !profileForm.controls.work.valid && profileForm.controls.work.dirty
+          "
+          class="text-R900 text-wrap text-b2"
+        >
+          Please enter a valid email.
+        </div>
+      </fieldset>
+
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">Facebook</div>
+        <input
+          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+          #work
+          formControlName="other"
+          type="email"
+          name="other"
+          placeholder="Enter profile link"
+          [class.invalid]="
+            !profileForm.controls.work.valid && profileForm.controls.work.dirty
+          "
+        />
+        <div
+          *ngIf="
+            !profileForm.controls.work.valid && profileForm.controls.work.dirty
+          "
+          class="text-R900 text-wrap text-b2"
+        >
+          Please enter a valid email.
+        </div>
+      </fieldset>
+
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">Twitter</div>
+        <input
+          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+          #work
+          formControlName="other"
+          type="email"
+          name="other"
+          placeholder="Enter profile link"
+          [class.invalid]="
+            !profileForm.controls.work.valid && profileForm.controls.work.dirty
+          "
+        />
+        <div
+          *ngIf="
+            !profileForm.controls.work.valid && profileForm.controls.work.dirty
+          "
+          class="text-R900 text-wrap text-b2"
+        >
+          Please enter a valid email.
+        </div>
+      </fieldset>
+
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">LinkedIn</div>
+        <input
+          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+          #work
+          formControlName="other"
+          type="email"
+          name="other"
+          placeholder="Enter profile link"
+          [class.invalid]="
+            !profileForm.controls.work.valid && profileForm.controls.work.dirty
+          "
+        />
+        <div
+          *ngIf="
+            !profileForm.controls.work.valid && profileForm.controls.work.dirty
+          "
+          class="text-R900 text-wrap text-b2"
+        >
+          Please enter a valid email.
+        </div>
+      </fieldset>
+
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">Weekly Availability</div>
+        <input
+          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+          #work
+          formControlName="other"
+          type="email"
+          name="other"
+          placeholder="Enter profile link"
+          [class.invalid]="
+            !profileForm.controls.work.valid && profileForm.controls.work.dirty
+          "
+        />
+        <div
+          *ngIf="
+            !profileForm.controls.work.valid && profileForm.controls.work.dirty
+          "
+          class="text-R900 text-wrap text-b2"
+        >
+          Please enter a valid email.
+        </div>
+      </fieldset>
+
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">Location</div>
+        <input
+          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+          #work
+          formControlName="other"
+          type="email"
+          name="other"
+          placeholder="Enter profile link"
+          [class.invalid]="
+            !profileForm.controls.work.valid && profileForm.controls.work.dirty
+          "
+        />
+        <div
+          *ngIf="
+            !profileForm.controls.work.valid && profileForm.controls.work.dirty
+          "
+          class="text-R900 text-wrap text-b2"
+        >
+          Please enter a valid email.
+        </div>
+      </fieldset>
+
+      <!-- <fieldset [hidden]="currentUser.type !== 'Provider'" class="form-group">
+        <label
+          >Tag with relevant skills to help clients find you more easily.</label
+        >
+        <skill-tags-selection
+          *ngIf="currentUser"
+          (tagsUpdated)="skillTagsUpdated($event)"
+          [initialTags]="currentUser.skillTags"
+          [minimumTags]="0"
+        ></skill-tags-selection>
+        <input
+          hidden
+          #skillTags
+          class="form-control"
+          formControlName="skillTags"
+          type="text"
+          name="skillTags"
+        />
+      </fieldset> -->
+
+      <!-- <div [hidden]="currentUser.type !== 'Provider'" class="form-group">
         <label>Category</label>
         <div class="row">
           <div class="col-md-4">
@@ -295,9 +492,9 @@
             </label>
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label>Color scheme (click to choose)</label>
         <p>
           <input
@@ -342,8 +539,8 @@
           <option>#F9A4D8</option>
           <option>#485F64</option>
         </datalist>
-      </div>
-      <div class="form-group">
+      </div> -->
+      <!-- <div class="form-group">
         <label>About me</label>
         <textarea
           class="form-control"
@@ -352,7 +549,7 @@
           name="description"
           placeholder="Think different! Be creative, be innovative."
         ></textarea>
-      </div>
+      </div> -->
     </form>
   </div>
 </p-dialog>
@@ -363,418 +560,4 @@
   [filePath]="filePath"
   (uploaded)="onProfileImageUpload($event)"
   (close)="displayDropzone = false"
-></app-storage-dropzone>
-<div class="overlay">
-  <section class="toggler-div" (click)="onClose()"></section>
-  <section>
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-sm-8" id="profile-edit-component">
-          <header>
-            <h4>My Profile</h4>
-          </header>
-          <div *ngIf="currentUser">
-            <markdown
-              *ngIf="preview"
-              [data]="profileForm.value.description"
-            ></markdown>
-            <form
-              [ngStyle]="{ display: preview ? 'none' : '' }"
-              [formGroup]="profileForm"
-              class="form validate"
-              novalidate
-            >
-              <div class="row">
-                <div class="col-sm-7">
-                  <fieldset class="form-group">
-                    <label>Full name</label>
-                    <input
-                      class="form-control"
-                      #name
-                      formControlName="name"
-                      type="text"
-                      name="name"
-                      placeholder="Full name or Company name"
-                      maxlength="36"
-                      [class.invalid]="
-                        !profileForm.controls.name.valid &&
-                        profileForm.controls.name.dirty
-                      "
-                    />
-                    <small
-                      *ngIf="
-                        !profileForm.controls.name.valid &&
-                        profileForm.controls.name.dirty
-                      "
-                      >Please enter a valid name or company name.</small
-                    >
-                  </fieldset>
-                </div>
-                <div class="col-sm-5 text-center">
-                  <div class="profile-pic">
-                    <span class="bg-primary" (click)="displayDropzone = true"
-                      >Edit</span
-                    >
-                    <app-avatar
-                      [user]="currentUser"
-                      [customClass]="'circle-headshot'"
-                    ></app-avatar>
-                  </div>
-                </div>
-              </div>
-
-              <fieldset class="form-group">
-                <label>Headline</label>
-                <input
-                  class="form-control"
-                  #title
-                  formControlName="title"
-                  type="text"
-                  name="title"
-                  placeholder="Headline of your profile"
-                  maxlength="36"
-                  [class.invalid]="
-                    !profileForm.controls.title.valid &&
-                    profileForm.controls.title.dirty
-                  "
-                />
-                <small
-                  *ngIf="
-                    !profileForm.controls.title.valid &&
-                    profileForm.controls.title.dirty
-                  "
-                  >Please enter a valid headline for your profile.</small
-                >
-              </fieldset>
-
-              <fieldset class="form-group">
-                <label>Short Bio (60 chars)</label>
-                <input
-                  class="form-control"
-                  #bio
-                  formControlName="bio"
-                  type="text"
-                  name="bio"
-                  placeholder="Creative short bio"
-                  maxlength="60"
-                  [class.invalid]="
-                    !profileForm.controls.bio.valid &&
-                    profileForm.controls.bio.dirty
-                  "
-                />
-                <small
-                  *ngIf="
-                    !profileForm.controls.bio.valid &&
-                    profileForm.controls.bio.dirty
-                  "
-                  >Please enter a valid bio for your profile.</small
-                >
-              </fieldset>
-
-              <div class="row">
-                <div class="col-sm-12">
-                  <fieldset class="form-group">
-                    <label>Work email</label>
-                    <input
-                      class="form-control"
-                      #work
-                      formControlName="work"
-                      type="email"
-                      name="work"
-                      placeholder="Work email"
-                      [class.invalid]="
-                        !profileForm.controls.work.valid &&
-                        profileForm.controls.work.dirty
-                      "
-                    />
-                    <small
-                      *ngIf="
-                        !profileForm.controls.work.valid &&
-                        profileForm.controls.work.dirty
-                      "
-                      >Please enter a valid email.</small
-                    >
-                  </fieldset>
-                </div>
-                <div class="col-sm-6">
-                  <fieldset class="form-group">
-                    <label>BNB Chain (BEP20) Address</label>
-                    <input
-                      class="form-control"
-                      #bnbAddress
-                      formControlName="bscAddress"
-                      type="text"
-                      name="bscAddress"
-                      placeholder="0x..."
-                    />
-                    <small
-                      *ngIf="
-                        profileForm.controls.bscAddress.dirty &&
-                        profileForm.controls.bscAddress.errors &&
-                        (profileForm.controls.bscAddress.errors.required ||
-                          profileForm.controls.bscAddress.errors
-                            .isInvalidAddress)
-                      "
-                      >Please enter a valid BNB Chain address.</small
-                    >
-                    <small
-                      *ngIf="
-                        profileForm.controls.bscAddress.dirty &&
-                        profileForm.controls.bscAddress.errors &&
-                        profileForm.controls.bscAddress.errors.addressExists
-                      "
-                      >This address is already being used in CanWork. Please use
-                      another one.
-                    </small>
-                  </fieldset>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-sm-3">
-                  <fieldset
-                    [hidden]="currentUser.type !== 'Provider'"
-                    class="form-group"
-                  >
-                    <label>Hourly Rate ( $USD )</label>
-                    <input
-                      class="form-control"
-                      #hourlyRate
-                      formControlName="hourlyRate"
-                      type="text"
-                      name="hourlyRate"
-                      placeholder="e.g. 19"
-                      [class.invalid]="
-                        !profileForm.controls.hourlyRate.valid &&
-                        profileForm.controls.hourlyRate.dirty
-                      "
-                    />
-                    <small
-                      *ngIf="
-                        !profileForm.controls.hourlyRate.valid &&
-                        profileForm.controls.hourlyRate.dirty
-                      "
-                      >Please enter a number between 0 - 999</small
-                    >
-                  </fieldset>
-                </div>
-                <div class="col-sm-9">
-                  <fieldset
-                    [hidden]="currentUser.type !== 'Provider'"
-                    class="form-group"
-                  >
-                    <label
-                      >Tag with relevant skills to help clients find you more
-                      easily.</label
-                    >
-                    <skill-tags-selection
-                      *ngIf="currentUser"
-                      (tagsUpdated)="skillTagsUpdated($event)"
-                      [initialTags]="currentUser.skillTags"
-                      [minimumTags]="0"
-                    ></skill-tags-selection>
-                    <input
-                      hidden
-                      #skillTags
-                      class="form-control"
-                      formControlName="skillTags"
-                      type="text"
-                      name="skillTags"
-                    />
-                  </fieldset>
-                </div>
-              </div>
-
-              <div
-                [hidden]="currentUser.type !== 'Provider'"
-                class="form-group"
-              >
-                <label>Category</label>
-                <div class="row">
-                  <div class="col-md-4">
-                    <label class="custom-control custom-radio">
-                      <input
-                        class="custom-control-input"
-                        #category1
-                        type="radio"
-                        name="category"
-                        [checked]="
-                          this.currentUser.category === 'CONTENT CREATORS'
-                        "
-                      />
-                      <span class="custom-control-indicator"></span>
-                      <span class="custom-control-description"
-                        >CONTENT CREATORS</span
-                      >
-                    </label>
-                    <label class="custom-control custom-radio">
-                      <input
-                        class="custom-control-input"
-                        #category2
-                        type="radio"
-                        name="category"
-                        [checked]="
-                          this.currentUser.category === 'DESIGNERS & CREATIVES'
-                        "
-                      />
-                      <span class="custom-control-indicator"></span>
-                      <span class="custom-control-description"
-                        >DESIGNERS & CREATIVES</span
-                      >
-                    </label>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="custom-control custom-radio">
-                      <input
-                        class="custom-control-input"
-                        #category4
-                        type="radio"
-                        name="category"
-                        [checked]="
-                          this.currentUser.category === 'MARKETING & SEO'
-                        "
-                      />
-                      <span class="custom-control-indicator"></span>
-                      <span class="custom-control-description"
-                        >MARKETING & SEO</span
-                      >
-                    </label>
-                    <label class="custom-control custom-radio">
-                      <input
-                        class="custom-control-input"
-                        #category5
-                        type="radio"
-                        name="category"
-                        [checked]="
-                          this.currentUser.category === 'SOFTWARE DEVELOPERS'
-                        "
-                      />
-                      <span class="custom-control-indicator"></span>
-                      <span class="custom-control-description"
-                        >SOFTWARE DEVELOPERS</span
-                      >
-                    </label>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="custom-control custom-radio">
-                      <input
-                        class="custom-control-input"
-                        #category6
-                        type="radio"
-                        name="category"
-                        [checked]="
-                          this.currentUser.category === 'VIRTUAL ASSISTANTS'
-                        "
-                      />
-                      <span class="custom-control-indicator"></span>
-                      <span class="custom-control-description"
-                        >VIRTUAL ASSISTANTS</span
-                      >
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label>Color scheme (click to choose)</label>
-                <p>
-                  <input
-                    class="form-control form-color"
-                    #color1
-                    formControlName="color1"
-                    type="color"
-                    name="color1"
-                    size="3"
-                    placeholder="Color scheme"
-                    list="canya"
-                  />
-                  <input
-                    class="form-control form-color"
-                    #color2
-                    formControlName="color2"
-                    type="color"
-                    name="color2"
-                    size="3"
-                    placeholder="Color scheme"
-                    list="canya"
-                  />
-                  <input
-                    class="form-control form-color"
-                    #color3
-                    formControlName="color3"
-                    type="color"
-                    name="color3"
-                    size="3"
-                    placeholder="Color scheme"
-                    list="canya"
-                  />
-                </p>
-                <datalist id="canya">
-                  <option>#00FFCC</option>
-                  <option>#33ccff</option>
-                  <option>#15EDD8</option>
-                  <option>#4EDCCA</option>
-                  <option>#FF6666</option>
-                  <option>#0078BF</option>
-                  <option>#FFC600</option>
-                  <option>#F9A4D8</option>
-                  <option>#485F64</option>
-                </datalist>
-              </div>
-              <div class="form-group">
-                <label>About me</label>
-                <textarea
-                  class="form-control"
-                  #description
-                  formControlName="description"
-                  name="description"
-                  placeholder="Think different! Be creative, be innovative."
-                ></textarea>
-              </div>
-            </form>
-
-            <div class="row">
-              <div class="col-sm-7">
-                <button
-                  (click)="onTogglePreview()"
-                  class="btn"
-                  [disabled]="sending"
-                >
-                  {{ preview ? 'Edit' : 'Preview' }}
-                </button>
-              </div>
-              <div class="col-sm-5 text-right">
-                <button (click)="onClose()" class="btn btn-secondary">
-                  Cancel
-                </button>
-                <button
-                  [disabled]="preview || !profileForm.valid || sending"
-                  type="button"
-                  (click)="
-                    save(
-                      category1,
-                      category2,
-                      category3,
-                      category4,
-                      category5,
-                      category6
-                    )
-                  "
-                  class="btn btn-primary text-white ml-8"
-                >
-                  Save
-                </button>
-                <img
-                  *ngIf="sending"
-                  src="assets/img/loader.svg"
-                  style="height: 36px"
-                  alt="Loader"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-</div> -->
+></app-storage-dropzone> -->

@@ -392,8 +392,8 @@
     margin: 0 !important;
 }
 
-/* p-calendar */
-.create-job-post .p-dropdown {
+/* create-job-post */
+.create-job-post .p-dropdown, #edit-profile-dialog .p-dropdown {
     width: 268px !important;
     height: 40px !important;
 }

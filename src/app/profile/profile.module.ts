@@ -17,8 +17,7 @@ import { ItemComponent } from './components/portfolio/item/item.component'
 import { PortfolioComponent } from './components/portfolio/portfolio.component'
 import { ReviewsComponent } from './components/reviews/reviews.component'
 import { SocialComponent } from './components/social/social.component'
-import { TimezoneComponent } from './components/timezone/timezone.component'
-import { VisitorsComponent } from './components/visitors/visitors.component'
+// import { TimezoneComponent } from './components/timezone/timezone.component'
 import { EditComponent } from './edit/edit.component'
 import { ProfileViewsComponent } from './profile-views/profile-views.component'
 import { ProfileComponent } from './profile.component'
@@ -29,7 +28,7 @@ import { CreateProviderProfileComponent } from './setup/create-provider-profile/
 import { ProviderStateComponent } from './setup/provider-state/provider-state.component'
 import { SetupComponent } from './setup/setup.component'
 import { MarkdownModule, MarkedOptions } from 'ngx-markdown'
-import { GetReferralComponent } from './get-referral/get-referral.component'
+// import { GetReferralComponent } from './get-referral/get-referral.component'
 import { WorkhistoryComponent } from './components/workhistory/workhistory.component'
 import { SkillsComponent } from './components/skills/skills.component'
 import { EducationComponent } from './components/education/education.component'
@@ -71,10 +70,9 @@ import { EducationComponent } from './components/education/education.component'
     ProviderStateComponent,
     SocialComponent,
     SetupComponent,
-    TimezoneComponent,
-    VisitorsComponent,
+    // TimezoneComponent,
     ReviewsComponent,
-    GetReferralComponent,
+    // GetReferralComponent,
     WorkhistoryComponent,
     SkillsComponent,
     EducationComponent,

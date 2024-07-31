@@ -23,6 +23,12 @@ import * as moment from 'moment-timezone'
 import { BscValidator } from '@validator/bsc.validator'
 import { BscService } from '@service/bsc.service'
 
+interface DropdownItem {
+  name: string
+  code: string
+  img: string
+}
+
 @Component({
   selector: 'edit-profile-dialog',
   templateUrl: './edit-profile-dialog.component.html',
@@ -61,6 +67,9 @@ export class EditProfileDialogComponent implements OnInit, OnDestroy {
   bscAddress: string
   preview = false
 
+  categories: DropdownItem[] | undefined
+  selectedCategory: DropdownItem | undefined
+
   constructor(
     private formBuilder: UntypedFormBuilder,
     private userService: UserService,
@@ -73,9 +82,45 @@ export class EditProfileDialogComponent implements OnInit, OnDestroy {
       this.filePath = `uploads/avatars/${this.currentUser.address}`
       this.buildForm()
     }
+    
+    this.categories = [
+      {
+        name: 'Content Creators',
+        img: 'writer.png',
+        code: 'contentCreator',
+      },
+      {
+        name: 'Software Developers',
+        img: 'dev.png',
+        code: 'softwareDev',
+      },
+      {
+        name: 'Designers & Creatives',
+        img: 'creatives.png',
+        code: 'designer',
+      },
+      {
+        name: 'Marketing & SEO',
+        img: 'marketing.png',
+        code: 'marketing',
+      },
+      {
+        name: 'Virtual Assistants',
+        img: 'assistant.png',
+        code: 'virtualAssistant',
+      },
+    ]
+    this.selectedCategory = this.categories[0]
   }
 
   ngOnDestroy() {}
+  
+  setProviderType(item: DropdownItem) {
+    this.selectedCategory = item
+    // this.shareableJobForm.controls.providerType.setValue(
+    //   this.selectedCategory.code
+    // )
+  }
 
   onProfileImageUpload(url) {
     console.log('uploaded url', url)
