@@ -1,28 +1,16 @@
-<p-avatar
-  *ngIf="avatarUrl | async as aUrl; else initial"
-  [image]="aUrl"
-  class="flex items-center"
-  [styleClass]="
-    size === 48
-      ? '!w-[48px] !h-[48px]'
-      : size === 40
-      ? '!w-[40px] !h-[40px]'
-      : '!w-[32px] !h-[32px]'
-  "
-  shape="circle"
-></p-avatar>
-<ng-template #initial>
-  <p-avatar
-    label="{{ getInitials() }}"
-    class="flex items-center"
-    [styleClass]="
-      size === 48
-        ? '!w-[48px] !h-[48px]'
-        : size === 40
-        ? '!w-[40px] !h-[40px]'
-        : '!w-[32px] !h-[32px]'
-    "
-    [style]="{ 'background-color': '#3AC2FF', color: '#ffffff' }"
-    shape="circle"
-  ></p-avatar>
-</ng-template>
+<img
+  *ngIf="avatarUrl"
+  [src]="getAvatarUrl()"
+  class="bg-cover rounded-full overflow-hidden"
+  alt="avatar"
+  [ngClass]="getSizeClass()"
+/>
+<div
+  *ngIf="!avatarUrl"
+  class="flex items-center justify-center bg-cyan-300 rounded-full overflow-hidden"
+  [ngClass]="getSizeClass()"
+>
+  <div class="font-sans text-b1 font-medium text-white">
+    {{ getInitials() }}
+  </div>
+</div>
