@@ -560,7 +560,7 @@
 
   .p-dialog-title {
     font-family: "General Sans", sans-serif !important;
-    font-size: 24px !important;
+    font-size: 20px !important;
     font-weight: 500 !important;
   }
 
@@ -568,6 +568,7 @@
     border-top-left-radius: 24px !important;
     border-top-right-radius: 24px !important;
     padding: 16px !important;
+    border-bottom: 1px solid #E2E8F0 !important;
   }
   .p-dialog .p-dialog-content:last-of-type {
     border-bottom-right-radius: 24px !important;
@@ -575,27 +576,26 @@
   }
 
   .p-dialog-header button {
+    width: 32px !important;
+    height: 32px !important;
     background: rgba(0, 0, 0, 0.40) !important;
     backdrop-filter: blur(4px) !important;
   }
 
   .p-dialog-header button svg {
+    width: 19.2px !important;
+    height: 19.2px !important;
     filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(312deg) brightness(105%) contrast(101%) !important;
   }
 
-@media (min-width: 1024px) {
-    .p-dialog-header {
-        padding: 32px !important;
-    }
-    .p-dialog-header button {
-        width: 40px !important;
-        height: 40px !important;
-    }
-    .p-dialog-header button svg {
-        width: 24px !important;
-        height: 24px !important;
-    }
-}
+  @media (min-width: 1024px) {
+      .p-dialog-title {
+        font-size: 24px !important;
+      }
+      .p-dialog-header {
+          padding: 24px 24px 16px 40px !important;
+      }
+  }
 
   .text-logout span {
     color: #D1242F !important;

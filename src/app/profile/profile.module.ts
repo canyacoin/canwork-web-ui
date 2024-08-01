@@ -18,7 +18,6 @@ import { PortfolioComponent } from './components/portfolio/portfolio.component'
 import { ReviewsComponent } from './components/reviews/reviews.component'
 import { SocialComponent } from './components/social/social.component'
 // import { TimezoneComponent } from './components/timezone/timezone.component'
-import { EditComponent } from './edit/edit.component'
 import { ProfileViewsComponent } from './profile-views/profile-views.component'
 import { ProfileComponent } from './profile.component'
 import { ProfileRoutingModule } from './profile.routing.module'
@@ -60,7 +59,6 @@ import { EducationComponent } from './components/education/education.component'
     CreateClientProfileComponent,
     CreateProviderProfileComponent,
     CertificationsFormComponent,
-    EditComponent,
     ItemComponent,
     PortfolioComponent,
     ProfileComponent,
