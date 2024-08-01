@@ -39,6 +39,15 @@ export class User {
   downvotes = 0
   numberOfReviews = 0
 
+  website: string
+  instagram: string
+  facebook: string
+  twitter: string
+  linkedin: string
+  weeklyAvailability: number
+  location: string
+  languages: string[]
+
   constructor(init?: Partial<User>) {
     Object.assign(this, init)
   }

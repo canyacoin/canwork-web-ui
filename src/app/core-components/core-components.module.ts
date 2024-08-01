@@ -19,7 +19,6 @@ import { BrandComponent } from './brand/brand.component'
 import { FeedbackComponent } from './feedback/feedback.component'
 import { FooterComponent } from './footer/footer.component'
 import { HeaderComponent } from './header/header.component'
-import { StorageDropzoneComponent } from './storage-dropzone/storage-dropzone.component'
 import { ProviderCardComponent } from './provider-card/provider-card.component'
 import { ScrollTopComponent } from './scroll-top/scroll-top.component'
 import { SkillTagComponent } from './skill-tag/skill-tag.component'
@@ -146,7 +145,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     WindowScrollDirective,
     VStepperComponent,
     ProviderCardComponent,
-    StorageDropzoneComponent,
     AvatarComponent,
     VerifiedMarkComponent,
     DynamicCoinComponent,
@@ -232,7 +230,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     VStepperComponent,
     ProviderCardComponent,
     WindowScrollDirective,
-    StorageDropzoneComponent,
     AvatarComponent,
     VerifiedMarkComponent,
     DynamicCoinComponent,
