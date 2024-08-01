@@ -1,43 +1,41 @@
-import { Location } from '@angular/common'
-import { Component, Input, OnDestroy, OnInit, Directive } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
 import { UserService } from '@service/user.service'
 import { ToastrService } from 'ngx-toastr'
-import { PublicJobService } from '@service/public-job.service'
 import { SeoService } from '@service/seo.service'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
+// spinner
+import { NgxSpinnerService } from 'ngx-spinner'
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   currentUser: User
-  currentUserJobs: any
 
   userModel: User
   authSub: Subscription
 
   paramsSub: Subscription
 
-  displayEditComponent = false
-  notifiedBnbOrBscAddress = false
+  visibleEditProfileDialog: boolean = false
+  visibleEditBioDialog: boolean = false
+  notifiedBnbOrBscAddress: boolean = false
 
   navigationAddress = null
 
   constructor(
     private router: Router,
-    private location: Location,
     private activatedRoute: ActivatedRoute,
     private userService: UserService,
     private authService: AuthService,
-    private publicJobService: PublicJobService,
     private toastr: ToastrService,
-    private seoService: SeoService
+    private seoService: SeoService,
+    private spinner: NgxSpinnerService
   ) {
     const navigation = this.router.getCurrentNavigation()
     this.navigationAddress = navigation.extras.state
@@ -46,6 +44,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.spinner.show()
     this.authSub = this.authService.currentUser$.subscribe(
       (user: User) => {
         if (user !== this.currentUser) {
@@ -60,12 +59,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
               this.notifyAddAddressIfNecessary(user)
             }
 
-            this.displayEditComponent = params.editProfile ? true : false
+            this.visibleEditProfileDialog = params.editProfile ? true : false
           })
         }
+        this.spinner.hide()
       },
       (error) => {
         console.error('! unable to retrieve currentUser data:', error)
+        this.spinner.hide()
       }
     )
   }
@@ -150,8 +151,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
       })
   }
 
+  showEditBioDialog() {
+    this.visibleEditBioDialog = true
+  }
+
+  showEditProfileDialog() {
+    this.visibleEditProfileDialog = true
+  }
+
   closeEditDialog() {
-    this.displayEditComponent = false
+    this.visibleEditProfileDialog = false
     this.router.navigate(['.'], {
       relativeTo: this.activatedRoute,
       queryParams: {},
