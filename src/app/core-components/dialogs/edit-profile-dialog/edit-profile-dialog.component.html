@@ -258,27 +258,102 @@
       </fieldset>
 
       <fieldset class="flex flex-col gap-[8px]">
-        <div class="text-b1 text-G900">Website</div>
+        <div class="text-b1 text-G900">Weekly Availability</div>
         <input
           class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
-          #website
-          formControlName="website"
-          type="url"
-          name="website"
-          placeholder="https://"
+          #weeklyAvailability
+          formControlName="weeklyAvailability"
+          type="number"
+          name="weeklyAvailability"
+          placeholder="Enter profile link"
           [class.invalid]="
-            !profileForm.controls.website.valid &&
-            profileForm.controls.website.dirty
+            !profileForm.controls.weeklyAvailability.valid &&
+            profileForm.controls.weeklyAvailability.dirty
           "
         />
         <div
           *ngIf="
-            !profileForm.controls.website.valid &&
-            profileForm.controls.website.dirty
+            !profileForm.controls.weeklyAvailability.valid &&
+            profileForm.controls.weeklyAvailability.dirty
           "
           class="text-R900 text-wrap text-b2"
         >
-          Please enter a valid website link.
+          Please enter a valid number.
+        </div>
+      </fieldset>
+
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">Location</div>
+        <input
+          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+          #location
+          formControlName="location"
+          type="text"
+          name="location"
+          placeholder="Enter location"
+          [class.invalid]="
+            !profileForm.controls.location.valid &&
+            profileForm.controls.location.dirty
+          "
+        />
+        <div
+          *ngIf="
+            !profileForm.controls.location.valid &&
+            profileForm.controls.location.dirty
+          "
+          class="text-R900 text-wrap text-b2"
+        >
+          Please enter a valid location.
+        </div>
+      </fieldset>
+
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">Dribbble</div>
+        <input
+          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+          #dribbble
+          formControlName="dribbble"
+          type="url"
+          name="dribbble"
+          placeholder="https://www.dribbble.com/"
+          [class.invalid]="
+            !profileForm.controls.dribbble.valid &&
+            profileForm.controls.dribbble.dirty
+          "
+        />
+        <div
+          *ngIf="
+            !profileForm.controls.dribbble.valid &&
+            profileForm.controls.dribbble.dirty
+          "
+          class="text-R900 text-wrap text-b2"
+        >
+          Please enter a valid dribbble email.
+        </div>
+      </fieldset>
+
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">Behance</div>
+        <input
+          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+          #behance
+          formControlName="behance"
+          type="url"
+          name="behance"
+          placeholder="https://www.behance.com/"
+          [class.invalid]="
+            !profileForm.controls.behance.valid &&
+            profileForm.controls.behance.dirty
+          "
+        />
+        <div
+          *ngIf="
+            !profileForm.controls.behance.valid &&
+            profileForm.controls.behance.dirty
+          "
+          class="text-R900 text-wrap text-b2"
+        >
+          Please enter a valid behance email.
         </div>
       </fieldset>
 
@@ -365,7 +440,7 @@
           formControlName="linkedin"
           type="url"
           name="linkedin"
-          placeholder="https://www.linkedin.com/"
+          placeholder="https://www.linkedin.com/in/"
           [class.invalid]="
             !profileForm.controls.linkedin.valid &&
             profileForm.controls.linkedin.dirty
@@ -383,52 +458,27 @@
       </fieldset>
 
       <fieldset class="flex flex-col gap-[8px]">
-        <div class="text-b1 text-G900">Weekly Availability</div>
+        <div class="text-b1 text-G900">Website</div>
         <input
           class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
-          #weeklyAvailability
-          formControlName="weeklyAvailability"
-          type="number"
-          name="weeklyAvailability"
-          placeholder="Enter profile link"
+          #website
+          formControlName="website"
+          type="url"
+          name="website"
+          placeholder="https://"
           [class.invalid]="
-            !profileForm.controls.weeklyAvailability.valid &&
-            profileForm.controls.weeklyAvailability.dirty
+            !profileForm.controls.website.valid &&
+            profileForm.controls.website.dirty
           "
         />
         <div
           *ngIf="
-            !profileForm.controls.weeklyAvailability.valid &&
-            profileForm.controls.weeklyAvailability.dirty
+            !profileForm.controls.website.valid &&
+            profileForm.controls.website.dirty
           "
           class="text-R900 text-wrap text-b2"
         >
-          Please enter a valid number.
-        </div>
-      </fieldset>
-
-      <fieldset class="flex flex-col gap-[8px]">
-        <div class="text-b1 text-G900">Location</div>
-        <input
-          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
-          #location
-          formControlName="location"
-          type="text"
-          name="location"
-          placeholder="Enter location"
-          [class.invalid]="
-            !profileForm.controls.location.valid &&
-            profileForm.controls.location.dirty
-          "
-        />
-        <div
-          *ngIf="
-            !profileForm.controls.location.valid &&
-            profileForm.controls.location.dirty
-          "
-          class="text-R900 text-wrap text-b2"
-        >
-          Please enter a valid location.
+          Please enter a valid website link.
         </div>
       </fieldset>
 
@@ -506,11 +556,3 @@
     </div>
   </div>
 </p-dialog>
-
-<!-- <app-storage-dropzone
-  *ngIf="displayDropzone"
-  [dropzoneConfig]="dropzoneConfig"
-  [filePath]="filePath"
-  (uploaded)="onProfileImageUpload($event)"
-  (close)="displayDropzone = false"
-></app-storage-dropzone> -->

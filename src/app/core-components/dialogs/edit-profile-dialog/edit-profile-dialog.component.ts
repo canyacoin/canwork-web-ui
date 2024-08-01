@@ -179,11 +179,19 @@ export class EditProfileDialogComponent implements OnInit, OnDestroy {
         this.currentUser?.work || '',
         Validators.compose([Validators.required, EmailValidator.isValid]),
       ],
-      website: [
-        this.currentUser?.website || '',
+      dribbble: [
+        this.currentUser?.dribbble || '',
         Validators.compose([
           Validators.pattern(
-            /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i
+            /^(?:http(s)?:\/\/)?(?:www\.)?(?:dribbble\.com\/(?:[a-zA-Z0-9_.]{1,32})?)$/
+          ),
+        ]),
+      ],
+      behance: [
+        this.currentUser?.behance || '',
+        Validators.compose([
+          Validators.pattern(
+            /^(?:http(s)?:\/\/)?(?:www\.)?(?:behance\.com\/(?:[a-zA-Z0-9_.]{1,32})?)$/
           ),
         ]),
       ],
@@ -215,7 +223,15 @@ export class EditProfileDialogComponent implements OnInit, OnDestroy {
         this.currentUser?.linkedin || '',
         Validators.compose([
           Validators.pattern(
-            /^(?:http(s)?:\/\/)?(?:www\.)?(?:linkedin\.com\/(?:[a-zA-Z0-9_.]{1,32})?)$/
+            /^(?:http(s)?:\/\/)?(?:www\.)?linkedin\.com\/in\/[a-zA-Z0-9_-]{3,30}$/
+          ),
+        ]),
+      ],
+      website: [
+        this.currentUser?.website || '',
+        Validators.compose([
+          Validators.pattern(
+            /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i
           ),
         ]),
       ],
@@ -225,7 +241,7 @@ export class EditProfileDialogComponent implements OnInit, OnDestroy {
       ],
       location: [this.currentUser?.location || ''],
       // skillTags: [''],
-      description: [this.currentUser?.description || ''],
+      // description: [this.currentUser?.description || ''],
     })
   }
 
@@ -248,7 +264,7 @@ export class EditProfileDialogComponent implements OnInit, OnDestroy {
     // }
 
     const tmpUser = {
-      address: this.currentUser.address,
+      // address: this.currentUser.address,
       name: this.profileForm.value.name,
       work: this.profileForm.value.work,
       bscAddress: this.profileForm.value.bscAddress,
@@ -258,11 +274,13 @@ export class EditProfileDialogComponent implements OnInit, OnDestroy {
       // skillTags: tags,
       hourlyRate: this.profileForm.value.hourlyRate,
       // description: this.profileForm.value.description,
-      website: this.profileForm.value.website,
+      dribbble: this.profileForm.value.dribbble,
+      behance: this.profileForm.value.behance,
       instagram: this.profileForm.value.instagram,
       facebook: this.profileForm.value.facebook,
       twitter: this.profileForm.value.twitter,
       linkedin: this.profileForm.value.linkedin,
+      website: this.profileForm.value.website,
       weeklyAvailability: this.profileForm.value.weeklyAvailability,
       location: this.profileForm.value.location,
       timezone: moment.tz.guess(),
