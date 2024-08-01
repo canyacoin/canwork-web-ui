@@ -1,35 +1,13 @@
-<section
-  class="bg-white px-[40px] py-[24px]"
->
-  <div class="text-h6 text-G900 font-medium">Skills</div>
+<section class="bg-white p-[24px]">
+  <div class="flex justify-between">
+    <div class="text-G900 text-h5 font-medium">Skills</div>
+    <edit-button *ngIf="isMyProfile" (click)="showEditBioDialog()" />
+  </div>
   <div class="mt-[16px] flex flex-wrap gap-[8px]">
     <app-skill-tag
-      [routerLink]="['/search/']"
-      [queryParams]="{ query: 'skill' }"
-      skill="skill"
-    ></app-skill-tag>
-
-    <app-skill-tag
-      [routerLink]="['/search/']"
-      [queryParams]="{ query: 'skill' }"
-      skill="skill"
-    ></app-skill-tag>
-    <app-skill-tag
-      [routerLink]="['/search/']"
-      [queryParams]="{ query: 'skill' }"
-      skill="skill"
-    ></app-skill-tag>
-
-    <app-skill-tag
-      [routerLink]="['/search/']"
-      [queryParams]="{ query: 'skill' }"
-      skill="skill"
-    ></app-skill-tag>
-
-    <app-skill-tag
-      [routerLink]="['/search/']"
-      [queryParams]="{ query: 'skill' }"
-      skill="skill"
+      *ngFor="let skill of userModel.skillTags"
+      [skill]="skill"
+      [isHoverAllowed]="false"
     ></app-skill-tag>
   </div>
 </section>

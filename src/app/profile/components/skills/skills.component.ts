@@ -1,7 +1,21 @@
-import { Component } from '@angular/core'
+import { Component, Input, EventEmitter, Output } from '@angular/core'
 
+import { User } from '@class/user'
 @Component({
-  selector: 'app-profile-skills',
+  selector: 'profile-skills',
   templateUrl: './skills.component.html',
 })
-export class SkillsComponent {}
+export class SkillsComponent {
+  @Input() userModel!: User
+  @Input() isMyProfile: boolean
+
+  @Output() editBio = new EventEmitter()
+
+  constructor() {}
+
+  ngOnInit() {}
+
+  showEditBioDialog() {
+    this.editBio.emit()
+  }
+}
