@@ -7,6 +7,7 @@ import { Component, Input, OnInit, Directive } from '@angular/core'
 export class SkillTagComponent implements OnInit {
   @Input() skill: string
   @Input() cancel?: boolean
+  @Input() isHoverAllowed?: boolean = true
 
   constructor() {}
 
