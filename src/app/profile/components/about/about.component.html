@@ -1,22 +1,26 @@
 <div
   *ngIf="userModel"
-  class="rounded-[12px] border !border-G200 bg-white relative overflow-hidden"
+  class="sm:rounded-[12px] sm:border sm:!border-G200 sm:bg-white relative sm:overflow-hidden"
 >
   <div
-    class="bg-hero-pattern bg-no-repeat bg-center bg-cover w-full h-[184px]"
+    class="bg-hero-pattern bg-no-repeat bg-center bg-cover w-full h-[90px] md:h-[184px]"
   ></div>
   <div
-    class="absolute top-[110px] left-[56px] rounded-full bg-white px-[8px] py-[8px]"
+    class="absolute top-[50px] left-[16px] sm:left-[36px] md:top-[110px] md:left-[56px] rounded-full bg-white px-[8px] py-[8px]"
   >
     <img
       [src]="userModel.avatar.uri"
       alt="profile"
-      class="w-[140px] h-[140px] rounded-full bg-cover select-none"
+      class="w-[80px] h-[80px] md:w-[140px] md:h-[140px] rounded-full bg-cover select-none"
     />
   </div>
-  <div class="mt-[94px] mb-[40px] px-[64px] flex flex-col gap-[16px]">
+  <div
+    class="mt-[64px] md:mt-[94px] mb-[40px] px-[16px] md:px-[40px] lg:px-[64px] flex flex-col gap-[16px]"
+  >
     <div class="flex justify-between">
-      <div class="flex items-center gap-[24px]">
+      <div
+        class="flex flex-col md:flex-row md:items-center gap-[8px] md:gap-[24px]"
+      >
         <div
           *ngIf="userModel.name"
           class="text-G800 text-h5 font-medium flex items-center gap-[8px]"
@@ -39,13 +43,25 @@
       <share-button />
     </div>
 
-    <div class="flex justify-between items-end">
+    <div
+      class="flex flex-col sm:flex-row sm:justify-between items-end gap-[16px]"
+    >
       <div class="max-w-[675px] w-full flex flex-col gap-[16px]">
-        <div *ngIf="userModel.bio" class="max-w-[609px] text-b1 text-G900">
-          {{ userModel.bio }}
+        <div class="max-w-[609px] flex flex-col gap-[8px]">
+          <div *ngIf="userModel.title" class="text-b1 font-medium text-G900">
+            {{ userModel.title }}
+          </div>
+          <div *ngIf="userModel.bio" class="text-b1 text-G900">
+            {{ userModel.bio }}
+          </div>
         </div>
-        <div class="flex items-center gap-[24px] text-b1 font-medium text-G900">
-          <div class="flex items-center gap-[8px]">
+        <div
+          class="flex-wrap sm:flex items-center gap-[24px] text-b1 font-medium text-G900"
+        >
+          <div
+            *ngIf="userModel?.hourlyRate"
+            class="flex items-center gap-[8px]"
+          >
             <img
               src="/assets/massimo/svg/money.svg"
               alt="money"
@@ -53,53 +69,103 @@
             />
             <div>${{ userModel.hourlyRate }}/hr</div>
           </div>
-          <div class="flex items-center gap-[8px]">
+          <div
+            *ngIf="userModel?.weeklyAvailability"
+            class="flex items-center gap-[8px]"
+          >
             <img
               src="/assets/massimo/svg/clock.svg"
               alt="clock"
               class="w-[24px] h-[24px]"
             />
-            <div>80hrs/Week</div>
+            <div>{{ userModel.weeklyAvailability }}hrs/Week</div>
           </div>
-          <div class="flex items-center gap-[8px]">
+          <div *ngIf="userModel?.location" class="flex items-center gap-[8px]">
             <img
               src="/assets/massimo/svg/locationGray.svg"
               alt="location"
               class="w-[24px] h-[24px]"
             />
-            <div>{{ userModel.timezone }}</div>
+            <div>{{ userModel.location }}</div>
           </div>
           <div class="flex items-center gap-[12px]">
-            <img
-              src="/assets/massimo/svg/dribbble.svg"
-              alt="dribbble"
-              class="w-[24px] h-[24px]"
-            />
-            <img
-              src="/assets/massimo/svg/behance.svg"
-              alt="behance"
-              class="w-[24px] h-[24px]"
-            />
-            <img
-              src="/assets/massimo/svg/instagram.svg"
-              alt="instagram"
-              class="w-[24px] h-[24px]"
-            />
-            <img
-              src="/assets/massimo/svg/x.svg"
-              alt="twitter"
-              class="w-[24px] h-[24px]"
-            />
-            <img
-              src="/assets/massimo/svg/linkedIn.svg"
-              alt="linkedIn"
-              class="w-[24px] h-[24px]"
-            />
-            <img
-              src="/assets/massimo/svg/globe.svg"
-              alt="globe"
-              class="w-[24px] h-[24px]"
-            />
+            <a
+              *ngIf="userModel?.dribbble"
+              [href]="userModel.dribbble"
+              target="_blank"
+            >
+              <img
+                src="/assets/massimo/svg/dribbble.svg"
+                alt="dribbble"
+                class="w-[24px] h-[24px] cursor-pointer"
+              />
+            </a>
+            <a
+              *ngIf="userModel?.behance"
+              [href]="userModel.behance"
+              target="_blank"
+            >
+              <img
+                src="/assets/massimo/svg/behance.svg"
+                alt="behance"
+                class="w-[24px] h-[24px] cursor-pointer"
+              />
+            </a>
+            <a
+              *ngIf="userModel?.instagram"
+              [href]="userModel.instagram"
+              target="_blank"
+            >
+              <img
+                src="/assets/massimo/svg/instagram.svg"
+                alt="instagram"
+                class="w-[24px] h-[24px] cursor-pointer"
+              />
+            </a>
+            <a
+              *ngIf="userModel?.facebook"
+              [href]="userModel.facebook"
+              target="_blank"
+            >
+              <img
+                src="/assets/massimo/svg/facebook.svg"
+                alt="facebook"
+                class="w-[24px] h-[24px] cursor-pointer"
+              />
+            </a>
+            <a
+              *ngIf="userModel?.twitter"
+              [href]="userModel.twitter"
+              target="_blank"
+            >
+              <img
+                src="/assets/massimo/svg/x.svg"
+                alt="twitter"
+                class="w-[24px] h-[24px] cursor-pointer"
+              />
+            </a>
+            <a
+              *ngIf="userModel?.linkedIn"
+              [href]="userModel.linkedIn"
+              target="_blank"
+            >
+              <img
+                src="/assets/massimo/svg/linkedIn.svg"
+                alt="linkedIn"
+                class="w-[24px] h-[24px] cursor-pointer"
+              />
+            </a>
+            <a
+              *ngIf="userModel?.website"
+              [href]="userModel.website"
+              target="_blank"
+            >
+              <img
+                src="/assets/massimo/svg/globe.svg"
+                alt="globe"
+                class="w-[24px] h-[24px] cursor-pointer"
+              />
+            </a>
           </div>
         </div>
       </div>
@@ -120,7 +186,7 @@
       </div>
       <div
         *ngIf="isMyProfile"
-        class="w-max"
+        class="w-full sm:w-max"
         (click)="displayProfileEditComponent()"
       >
         <basic-button

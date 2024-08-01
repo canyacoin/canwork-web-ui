@@ -9,7 +9,6 @@ import {
 import { Router, ActivatedRoute } from '@angular/router'
 import { take } from 'rxjs/operators'
 import { User } from '@class/user'
-import { Job } from '@class/job'
 import { AuthService } from '@service/auth.service'
 import { ChatService } from '@service/chat.service'
 import { PublicJobService } from '@service/public-job.service'
