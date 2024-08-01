@@ -1,9 +1,12 @@
 <section
-  *ngIf="userModel"
-  class="rounded-[12px] border !border-G200 bg-white px-[40px] py-[24px]"
+  class="sm:rounded-[12px] sm:border sm:!border-G200 bg-white sm:px-[40px] sm:py-[24px]"
 >
-  <div class="text-G900 text-h5 font-medium">About Me</div>
-  <div class="mt-[16px]">
-    <markdown [data]="userModel.description"></markdown>
+  <div class="flex justify-between">
+    <div class="text-G900 text-h5 font-medium">About Me</div>
+    <edit-button *ngIf="isMyProfile" (click)="showEditBioDialog()" />
   </div>
+  <div
+    class="text-b2 md:text-b1 text-G900 leading-[1.2] mt-[16px]"
+    [innerHTML]="userModel.description | linkify"
+  ></div>
 </section>
