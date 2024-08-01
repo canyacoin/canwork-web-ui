@@ -1,1 +1,88 @@
-<p>edit-bio-dialog works!</p>
+<p-dialog
+  header="Edit Bio"
+  [(visible)]="visible"
+  [draggable]="false"
+  [resizable]="false"
+  [modal]="true"
+  styleClass="!rounded-b-[0px] !rounded-t-[24px] sm:!rounded-[24px] md:max-w-[600px] lg:max-w-[906px] w-full !bg-G50 sm:mx-[16px] max-sm:!mt-[127px] max-sm:absolute max-sm:left-0 max-sm:bottom-0"
+>
+  <div
+    id="edit-bio-dialog"
+    class="py-[24px] px-[40px] flex flex-col gap-[24px]"
+  >
+    <form [formGroup]="profileForm" class="flex flex-col gap-[24px]" novalidate>
+      <!-- <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">Location</div>
+        <input
+          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+          #location
+          formControlName="location"
+          type="text"
+          name="location"
+          placeholder="Enter location"
+          [class.invalid]="
+            !profileForm.controls.location.valid &&
+            profileForm.controls.location.dirty
+          "
+        />
+        <div
+          *ngIf="
+            !profileForm.controls.location.valid &&
+            profileForm.controls.location.dirty
+          "
+          class="text-R900 text-wrap text-b2"
+        >
+          Please enter a valid location.
+        </div>
+      </fieldset> -->
+
+      <div class="w-full">
+        <angular-editor
+          formControlName="description"
+          [config]="editorConfig"
+          class="angular-editor"
+        ></angular-editor>
+        <div class="flex justify-end">
+          <div class="text-right text-b2 text-G700 pt-[8px]">
+            {{ stripHtmlTagslength(this.profileForm.value.description) }}/2500
+          </div>
+        </div>
+      </div>
+      <!-- [hidden]="currentUser?.type !== 'Provider'" -->
+      <fieldset class="form-group">
+        <label
+          >Tag with relevant skills to help clients find you more easily.</label
+        >
+        <skill-tags-selection
+          *ngIf="currentUser"
+          (tagsUpdated)="skillTagsUpdated($event)"
+          [initialTags]="currentUser.skillTags"
+          [minimumTags]="0"
+        ></skill-tags-selection>
+        <input
+          hidden
+          #skillTags
+          class="form-control"
+          formControlName="skillTags"
+          type="text"
+          name="skillTags"
+        />
+      </fieldset>
+    </form>
+    <div class="flex gap-[16px] items-center justify-end">
+      <div
+        class="cursor-pointer text-R900 font-medium text-nowrap text-b1"
+        (click)="onClose()"
+      >
+        Cancel
+      </div>
+      <basic-button
+        [type]="1"
+        title="Save Changes"
+        size="small"
+        [disabled]="!profileForm.valid || sending"
+        (click)="onSave($event)"
+      />
+    </div>
+  </div>
+</p-dialog>
