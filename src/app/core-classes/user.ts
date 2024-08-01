@@ -39,11 +39,13 @@ export class User {
   downvotes = 0
   numberOfReviews = 0
 
-  website: string
+  dribbble: string
+  behance: string
   instagram: string
   facebook: string
   twitter: string
   linkedin: string
+  website: string
   weeklyAvailability: number
   location: string
   languages: string[]

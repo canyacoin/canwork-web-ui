@@ -96,11 +96,13 @@ import { XButtonComponent } from './buttons/x-button/x-button.component'
 import { FilterButtonComponent } from './buttons/filter-button/filter-button.component'
 import { PostJobMoreButtonComponent } from './buttons/post-job-more-button/post-job-more-button.component'
 import { MessageButtonComponent } from './buttons/message-button/message-button.component'
+import { AngularEditorModule } from '@kolkov/angular-editor'
 
 import { StarRatingSelectComponent } from './star-rating-select/star-rating-select.component'
-import { JobReviewPanelComponent } from './job/job-review-panel/job-review-panel.component';
-import { EditProfileDialogComponent } from './dialogs/edit-profile-dialog/edit-profile-dialog.component';
-import { EditBioDialogComponent } from './dialogs/edit-bio-dialog/edit-bio-dialog.component';
+import { JobReviewPanelComponent } from './job/job-review-panel/job-review-panel.component'
+import { EditProfileDialogComponent } from './dialogs/edit-profile-dialog/edit-profile-dialog.component'
+import { EditBioDialogComponent } from './dialogs/edit-bio-dialog/edit-bio-dialog.component'
+import { EditButtonComponent } from './buttons/edit-button/edit-button.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -130,6 +132,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     TabMenuModule,
     DropdownModule,
     TableModule,
+    AngularEditorModule,
   ],
   declarations: [
     AttachmentComponent,
@@ -202,6 +205,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     FilterButtonComponent,
     PostJobMoreButtonComponent,
     MessageButtonComponent,
+    EditButtonComponent,
     // Dialogs
     BasicDialogComponent,
     ProposalDetailsDialogComponent,
@@ -287,6 +291,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     FilterButtonComponent,
     PostJobMoreButtonComponent,
     MessageButtonComponent,
+    EditButtonComponent,
     // Dialogs
     BasicDialogComponent,
     ProposalDetailsDialogComponent,
