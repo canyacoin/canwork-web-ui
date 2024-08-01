@@ -9,11 +9,10 @@
 ></app-popper>
 
 <div
-  class="flex flex-wrap py-[8px] px-[16px] border border-G200 text-G500 font-sans font-b1 bg-G50 rounded-xl"
+  class="flex flex-wrap gap-[8px] py-[8px] px-[16px] border border-G200 text-G500 font-sans font-b1 bg-G50 rounded-xl"
 >
   <app-skill-tag
     *ngFor="let tag of acceptedTags"
-    class="skill-tag mr-5 pointer"
     (click)="removeTag(tag)"
     [skill]="tag"
     [cancel]="true"
