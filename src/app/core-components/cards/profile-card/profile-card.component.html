@@ -4,7 +4,7 @@
 
 <ng-template #gridView>
   <div
-    class="w-full rounded-[12px] overflow-hidden relative bg-white hover:bg-G100 active:bg-G200 border border-G200 transition-all duration-200 cursor-pointer select-none"
+    class="w-full h-full rounded-[12px] overflow-hidden relative bg-white hover:bg-G100 active:bg-G200 border border-G200 transition-all duration-200 cursor-pointer select-none font-sans"
     [routerLink]="['/profile/', slug]"
   >
     <div class="w-full h-[110px] md:h-[85px]" [ngClass]="cssClasses"></div>
@@ -68,7 +68,7 @@
 <ng-template #listView>
   <div
     *ngIf="isSmall !== true"
-    class="w-full rounded-[12px] overflow-hidden bg-G100 p-[32px] grid gap-4"
+    class="w-full rounded-[12px] overflow-hidden bg-G100 p-[32px] grid gap-4 font-sans"
   >
     <div class="flex flex-col lg:flex-row lg:justify-between gap-5">
       <div class="flex gap-6">
@@ -134,7 +134,7 @@
     </div>
   </div>
   <!-- small profile view used i.e. into job details -->
-  <div *ngIf="isSmall === true" class="overflow-hidden p-[4px]">
+  <div *ngIf="isSmall === true" class="overflow-hidden p-[4px] font-sans">
     <div class="flex flex-row gap-4">
       <div>
         <div class="relative">

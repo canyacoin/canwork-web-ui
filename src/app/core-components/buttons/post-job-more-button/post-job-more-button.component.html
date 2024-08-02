@@ -1,0 +1,20 @@
+<p-dropdown
+  [options]="actionLinks"
+  [(ngModel)]="selectedActionLink"
+  appendTo="body"
+  class="post-button-style"
+>
+  <ng-template pTemplate="selectedItem">
+    <div
+      *ngIf="selectedActionLink"
+      class="border border-G300 shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer w-[44px] h-[44px] rounded-[8px] flex justify-center items-center"
+    >
+      <img src="/assets/massimo/svg/moreVertical.svg" alt="" class="w-[20px]" />
+    </div>
+  </ng-template>
+  <ng-template let-item pTemplate="item">
+    <div class="text-G900 font-medium text-b2" (click)="itemClick($event)">
+      {{ item.name }}
+    </div>
+  </ng-template>
+</p-dropdown>

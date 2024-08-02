@@ -17,10 +17,7 @@ import { ItemComponent } from './components/portfolio/item/item.component'
 import { PortfolioComponent } from './components/portfolio/portfolio.component'
 import { ReviewsComponent } from './components/reviews/reviews.component'
 import { SocialComponent } from './components/social/social.component'
-import { SupportMeComponent } from './components/support-me/support-me.component'
-import { TimezoneComponent } from './components/timezone/timezone.component'
-import { VisitorsComponent } from './components/visitors/visitors.component'
-import { EditComponent } from './edit/edit.component'
+// import { TimezoneComponent } from './components/timezone/timezone.component'
 import { ProfileViewsComponent } from './profile-views/profile-views.component'
 import { ProfileComponent } from './profile.component'
 import { ProfileRoutingModule } from './profile.routing.module'
@@ -30,7 +27,10 @@ import { CreateProviderProfileComponent } from './setup/create-provider-profile/
 import { ProviderStateComponent } from './setup/provider-state/provider-state.component'
 import { SetupComponent } from './setup/setup.component'
 import { MarkdownModule, MarkedOptions } from 'ngx-markdown'
-import { GetReferralComponent } from './get-referral/get-referral.component'
+// import { GetReferralComponent } from './get-referral/get-referral.component'
+import { WorkhistoryComponent } from './components/workhistory/workhistory.component'
+import { SkillsComponent } from './components/skills/skills.component'
+import { EducationComponent } from './components/education/education.component'
 
 @NgModule({
   imports: [
@@ -59,7 +59,6 @@ import { GetReferralComponent } from './get-referral/get-referral.component'
     CreateClientProfileComponent,
     CreateProviderProfileComponent,
     CertificationsFormComponent,
-    EditComponent,
     ItemComponent,
     PortfolioComponent,
     ProfileComponent,
@@ -69,11 +68,12 @@ import { GetReferralComponent } from './get-referral/get-referral.component'
     ProviderStateComponent,
     SocialComponent,
     SetupComponent,
-    SupportMeComponent,
-    TimezoneComponent,
-    VisitorsComponent,
+    // TimezoneComponent,
     ReviewsComponent,
-    GetReferralComponent,
+    // GetReferralComponent,
+    WorkhistoryComponent,
+    SkillsComponent,
+    EducationComponent,
   ],
   exports: [ProfileRoutingModule],
   providers: [],

@@ -43,7 +43,7 @@ export class JobStatusPanelComponent {
     console.log('this.job', this.job)
     console.log('this.currentUser', this.currentUser)
     // we don't need to call this function if isPostJobPage is true
-    if (this.job && !this.isPostJobPage) {
+    if (this.job && !this.isPostJobPage && this.currentUser?.address) {
       this.isMyJob = this.job.clientId === this.currentUser.address
       console.log('this.job.clientId', this.job.clientId)
       await this.setClient(this.job.clientId)

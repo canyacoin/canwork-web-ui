@@ -26,15 +26,15 @@ export class FeatureFreelancersComponent {
   algoId = environment.algolia.appId
   algoKey = environment.algolia.apiKey
   tempProviderArray = []
-  skeletonProviderArray = [{}, {}, {}]
+  skeletonProviderArray = [{}, {}, {}, {}]
 
   // carousel
   responsiveOptions = [
-    // {
-    //   breakpoint: '1400px',
-    //   numVisible: 3,
-    //   numScroll: 3,
-    // },
+    {
+      breakpoint: '1400px',
+      numVisible: 3,
+      numScroll: 3,
+    },
     {
       breakpoint: '1128px',
       numVisible: 2,

@@ -32,7 +32,7 @@ export class JobCardComponent implements OnInit, OnDestroy {
   bids: any[]
   bidsSub: Subscription
   authSub: Subscription
-  location: string = ''
+  location: string = '...'
 
   currentUser: User
   isApplied: boolean = false

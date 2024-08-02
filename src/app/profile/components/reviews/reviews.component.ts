@@ -7,7 +7,6 @@ import { ReviewService } from '@service/review.service'
 @Component({
   selector: 'app-reviews',
   templateUrl: './reviews.component.html',
-  styleUrls: ['./reviews.component.scss'],
 })
 export class ReviewsComponent implements OnInit {
   @Input() user: User
@@ -18,6 +17,7 @@ export class ReviewsComponent implements OnInit {
 
   async ngOnInit() {
     this.reviews = await this.reviewService.getUserReviews(this.user.address)
+    console.log('this.reviews', this.reviews)
   }
 
   getReviewLabel(review: Review): string {

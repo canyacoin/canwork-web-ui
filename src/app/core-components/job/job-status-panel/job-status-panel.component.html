@@ -1,5 +1,5 @@
 <div
-  class="rounded-[12px] bg-white border border-G200 p-[24px] h-max font-sans flex flex-col gap-[24px] sticky top-[75px]"
+  class="sm:rounded-[12px] sm:bg-white border-t sm:border border-t-G200 sm:border-G200 py-[16px] sm:p-[24px] h-max font-sans flex flex-col gap-[16px] sm:gap-[24px] md:sticky md:top-[75px]"
 >
   <div class="flex justify-between items-center gap-[8px]">
     <status-icon [job]="job" />
@@ -46,9 +46,20 @@
       </div>
     </div>
   </div>
-  <hr class="w-full h-[1px] bg-G300 border-none" />
-  <div class="flex flex-col gap-[16px]">
-    <div class="text-b2 text-G700">About the Client</div>
+  <hr
+    *ngIf="isPostJobPage || (!isPostJobPage && jobPoster)"
+    class="w-full h-[1px] bg-G300 border-none"
+  />
+  <div
+    *ngIf="isPostJobPage || (!isPostJobPage && jobPoster)"
+    class="flex flex-col gap-[16px]"
+  >
+    <div
+      *ngIf="isPostJobPage || (!isPostJobPage && jobPoster)"
+      class="text-b2 text-G700"
+    >
+      About the Client
+    </div>
     <profile-card
       *ngIf="isPostJobPage"
       [avatarUri]="currentUser.avatar['uri']"
@@ -83,7 +94,7 @@
     <ng-container *ngIf="!isPostJobPage">
       <div
         *ngIf="!isMyJob && !isAcceptingOffers && jobPoster"
-        class="flex justify-end gap-[16px] items-center"
+        class="flex pl-[80px] gap-[16px] items-center"
       >
         <chat-button
           [routerLink]="['/inbox/chat']"
@@ -118,7 +129,7 @@
   <ng-container *ngIf="!isPostJobPage">
     <ng-container *ngIf="currentUser && isMyJob">
       <ng-container *ngIf="isAcceptingOffers">
-        <div class="flex flex-col sm:flex-row gap-4 items-center">
+        <div class="flex flex-row gap-4 items-center">
           <div
             class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center gap-2 font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl transition-all duration-300"
             (click)="leftClick($event)"
@@ -140,7 +151,7 @@
         </div>
       </ng-container>
       <ng-container *ngIf="isAwaitingEscrow">
-        <div class="flex flex-col sm:flex-row gap-4 items-center">
+        <div class="flex gap-4 items-center">
           <div
             class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl transition-all duration-300"
             (click)="leftClick($event)"
@@ -151,6 +162,8 @@
           <div class="w-max">
             <basic-button
               [type]="2"
+              size="small"
+              extraClass="!text-b1"
               title="Pay Escrow"
               (click)="rightClick($event)"
             />
@@ -216,7 +229,9 @@
           />
         </ng-container> -->
       <ng-container *ngIf="isInEscrow">
-        <div class="flex flex-col gap-4 items-center">
+        <div
+          class="flex max-sm:flex-col lg:flex-col gap-4 justify-center items-center"
+        >
           <button
             class="cursor-pointer select-none py-[10px] px-[24px] text-R900 flex justify-center items-center font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl transition-all duration-300"
             (click)="leftClick($event)"
@@ -262,9 +277,9 @@
     <div
       *ngIf="!currentUser && !isMyJob && isAcceptingOffers"
       (click)="leftClick($event)"
-      class="flex justify-center items-center"
+      class="w-full"
     >
-      <basic-button [type]="2" title="Login to Apply Now" />
+      <basic-button [type]="2" title="Login to Apply Now" class="w-full" />
     </div>
   </ng-container>
 </div>

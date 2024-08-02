@@ -1,22 +1,35 @@
 <p-dialog
   [(visible)]="visible"
-  styleClass="md:max-w-[600px] lg:max-w-[906px] w-full !bg-G50 mx-[20px]"
+  styleClass="md:max-w-[600px] lg:max-w-[906px] w-full !bg-G50 mx-[16px]"
   [draggable]="false"
   [resizable]="false"
   [modal]="true"
 >
-  <div class="flex justify-center items-center h-[400px] md:h-[500px]">
+  <div
+    class="flex justify-center px-[16px] pb-[64px] pt-[18px] md:pb-[100px] md:pt-[46px]"
+  >
     <div class="max-w-[352px] flex flex-col justify-center items-center">
-      <div [ngSwitch]="type" class="pb-[24px] select-none">
+      <div
+        [ngSwitch]="type"
+        class="pb-[24px] max-w-[150px] sm:max-w-[200px] md:max-w-[300px] select-none"
+      >
         <img
           *ngSwitchCase="'submit'"
           src="/assets/massimo/images/jobSubmit.png"
           alt="submit"
+          class="w-full"
+        />
+        <img
+          *ngSwitchCase="'failed'"
+          src="/assets/massimo/images/jobFailed.png"
+          alt="failed"
+          class="w-full"
         />
         <img
           *ngSwitchCase="'success'"
           src="/assets/massimo/images/jobSuccess.png"
           alt="success"
+          class="w-full"
         />
         <img
           *ngSwitchCase="'draft'"
@@ -49,11 +62,11 @@
         ></div>
       </div>
 
-      <div class="text-h6 text-center font-medium pb-[8px]">
+      <div class="text-G900 text-h6 text-center font-medium pb-[8px]">
         {{ title }}
       </div>
       <div
-        class="text-b2 text-center font-normal pb-[20px] md:pb-[32px] whitespace-pre-line"
+        class="text-G700 text-b2 text-center font-normal pb-[20px] md:pb-[32px] whitespace-pre-line"
       >
         {{ content }}
       </div>
@@ -90,8 +103,19 @@
         </div>
       </ng-container>
 
+      <ng-container *ngIf="type === 'failed'">
+        <div class="flex justify-center items-center">
+          <basic-button
+            [type]="2"
+            (click)="handleCancelClick($event)"
+            title="Retry"
+            size="small"
+          />
+        </div>
+      </ng-container>
+
       <ng-container *ngIf="type === 'submit'">
-        <div class="flex gap-4 justify-center items-center">
+        <div class="flex flex-row gap-4 justify-center items-center">
           <basic-button
             [type]="1"
             [routerLink]="['/']"
@@ -108,7 +132,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="type === 'withdraw_success'">
+      <ng-container *ngIf="type === 'withdrawSuccess'">
         <div class="flex gap-4 justify-center items-center">
           <basic-button
             [type]="1"
@@ -127,7 +151,9 @@
       </ng-container>
 
       <ng-container *ngIf="type === 'success'">
-        <div class="flex gap-4 justify-center items-center">
+        <div
+          class="flex flex-col-reverse sm:flex-row gap-4 justify-center items-center"
+        >
           <div
             class="cursor-pointer py-[10px] px-[24px] text-G900 flex justify-center items-center gap-2 font-medium text-b1 text-nowrap hover:bg-G200 rounded-xl"
             (click)="LeftClick($event)"

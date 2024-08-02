@@ -20,7 +20,7 @@
         />
       </div>
 
-      <div class="flex items-center gap-[32px]">
+      <div class="flex items-center gap-[16px] md:gap-[32px]">
         <div class="hidden lg:flex items-center gap-[32px]">
           <div
             *ngFor="let item of headerSection.website"
@@ -105,6 +105,36 @@
             />
           </div>
         </div>
+
+        <div
+          class="block md:hidden cursor-pointer"
+          (click)="onHamburguerClick($event)"
+        >
+          <div
+            class="w-[34px] h-[3px] rounded-full m-[5px] bg-black"
+            [ngClass]="{
+              'bg-white': (!isScrolled || !isTransfer) && isHamburguer,
+              '!bg-black': isScrolled || isTransfer
+            }"
+            [@hamburguerX]="isHamburguer ? 'hamburguer' : 'topX'"
+          ></div>
+          <div
+            class="w-[34px] h-[3px] rounded-full m-[5px] bg-black"
+            [ngClass]="{
+              'bg-white': (!isScrolled || !isTransfer) && isHamburguer,
+              '!bg-black': isScrolled || isTransfer
+            }"
+            [@hamburguerX]="isHamburguer ? 'hamburguer' : 'hide'"
+          ></div>
+          <div
+            class="w-[34px] h-[3px] rounded-full m-[5px] bg-black"
+            [ngClass]="{
+              'bg-white': (!isScrolled || !isTransfer) && isHamburguer,
+              '!bg-black': isScrolled || isTransfer
+            }"
+            [@hamburguerX]="isHamburguer ? 'hamburguer' : 'bottomX'"
+          ></div>
+        </div>
         <div *ngIf="currentUser" class="flex justify-center header-avatar">
           <p-dropdown
             [options]="items"
@@ -173,35 +203,6 @@
               </div>
             </ng-template>
           </p-dropdown>
-        </div>
-        <div
-          class="block md:hidden cursor-pointer"
-          (click)="onHamburguerClick($event)"
-        >
-          <div
-            class="w-[34px] h-[3px] rounded-full m-[5px] bg-black"
-            [ngClass]="{
-              'bg-white': (!isScrolled || !isTransfer) && isHamburguer,
-              '!bg-black': isScrolled || isTransfer
-            }"
-            [@hamburguerX]="isHamburguer ? 'hamburguer' : 'topX'"
-          ></div>
-          <div
-            class="w-[34px] h-[3px] rounded-full m-[5px] bg-black"
-            [ngClass]="{
-              'bg-white': (!isScrolled || !isTransfer) && isHamburguer,
-              '!bg-black': isScrolled || isTransfer
-            }"
-            [@hamburguerX]="isHamburguer ? 'hamburguer' : 'hide'"
-          ></div>
-          <div
-            class="w-[34px] h-[3px] rounded-full m-[5px] bg-black"
-            [ngClass]="{
-              'bg-white': (!isScrolled || !isTransfer) && isHamburguer,
-              '!bg-black': isScrolled || isTransfer
-            }"
-            [@hamburguerX]="isHamburguer ? 'hamburguer' : 'bottomX'"
-          ></div>
         </div>
       </div>
     </div>

@@ -20,7 +20,7 @@ interface SoringMethod {
 export class ResultComponent implements OnInit {
   @Input() isLoading: boolean = true
   @Input() stats: any
-  @Input() searchItems: string[]
+  @Input() searchItems: string[] = []
   @Input() searchParam: string
   @Input() jobs: any[]
   @Input() first: number = 0
@@ -29,6 +29,7 @@ export class ResultComponent implements OnInit {
   @Output() pageChange = new EventEmitter<number>() // two way binding to parent
   @Output() onRemoveItem = new EventEmitter<string>()
   @Output() sortby = new EventEmitter<SoringMethod>()
+  @Output() filterVisibleChange = new EventEmitter<Event>()
   sortingMethods: SoringMethod[] | undefined
 
   selectedSorting: SoringMethod | undefined
@@ -58,7 +59,12 @@ export class ResultComponent implements OnInit {
     this.onRemoveItem.emit(item)
   }
 
-  SortbyFilter(item: SoringMethod) {
+  sortbyFilter(item: SoringMethod) {
     this.sortby.emit(item)
+  }
+
+  onFilterClick(event: Event) {
+    event.preventDefault()
+    this.filterVisibleChange.emit(event)
   }
 }

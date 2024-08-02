@@ -1,5 +1,6 @@
 <div
-  class="flex items-center gap-[5px] bg-[#3ac2ff19] hover:bg-[#33ccff] transition-all duration-300 cursor-pointer rounded-full px-[16px] py-[6px]"
+  class="flex items-center gap-[5px] bg-[#3ac2ff19] transition-all duration-300 rounded-full px-[16px] py-[6px]"
+  [ngClass]="{ 'hover:bg-[#33ccff] cursor-pointer': isHoverAllowed }"
 >
   <div class="font-sans text-b2 capitalize text-C800">
     {{ skill }}

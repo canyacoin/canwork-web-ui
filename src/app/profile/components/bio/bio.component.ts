@@ -1,17 +1,22 @@
-import { Component, Input, OnInit, Directive } from '@angular/core'
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core'
 
 import { User } from '@class/user'
 
 @Component({
   selector: 'app-profile-bio',
   templateUrl: './bio.component.html',
-  styleUrls: ['../../profile.component.scss'],
 })
 export class BioComponent implements OnInit {
-  @Input() userModel: User
+  @Input() userModel!: User
   @Input() isMyProfile: boolean
+
+  @Output() editBio = new EventEmitter()
 
   constructor() {}
 
   ngOnInit() {}
+
+  showEditBioDialog() {
+    this.editBio.emit()
+  }
 }

@@ -1,24 +1,26 @@
 <p-dialog
   [(visible)]="visible"
-  styleClass="!rounded-[24px] md:max-w-[600px] lg:max-w-[906px] w-full !bg-G50 mx-[20px]"
   [draggable]="false"
   [resizable]="false"
   [modal]="true"
   id="headless_modal"
+  styleClass="!rounded-b-[0px] !rounded-t-[24px] sm:!rounded-[24px] md:max-w-[600px] lg:max-w-[906px] w-full !bg-G50 sm:mx-[16px] max-sm:!mt-[127px] max-sm:absolute max-sm:left-0 max-sm:bottom-0"
 >
-  <div class="absolute top-[24px] right-[24px]">
+  <div class="absolute top-[16px] md:top-[24px] right-[24px]">
     <x-button (click)="handleCancelClick($event)" />
   </div>
 
   <div *ngIf="actionType === actionTypes.review">
-    <div class="py-[24px] px-[20px] md:px-[40px] text-h5 text-G900 font-medium">
+    <div
+      class="py-[16px] md:py-[24px] px-[24px] md:px-[40px] text-h6 md:text-h5 text-G900 font-medium"
+    >
       Review
     </div>
     <hr class="w-full h-[1px] bg-G200 border-none" />
     <div
-      class="px-[20px] md:px-[40px] flex flex-col gap-[24px] pt-[24px] pb-[32px]"
+      class="px-[16px] md:px-[40px] pt-[16px] md:pt-[24px] pb-[32px] flex flex-col gap-[16px]"
     >
-      <div class="flex justify-between gap-2">
+      <div class="flex max-sm:flex-col sm:justify-between gap-4">
         <div *ngIf="isClient && selectedBid">
           <div class="flex gap-[16px] items-center">
             <app-avatar
@@ -92,32 +94,54 @@
     </div>
   </div>
 
-  <!-- <div *ngIf="form && actionType == actionTypes.review" class="mx-40">
-  <form [formGroup]="form" class="form-group">
-    <fieldset class="form-group">
-      <label>How would you rate {{ otherParty }}?</label><br />
-      <star-rating
-        [starType]="'svg'"
-        [showHalfStars]="true"
-        [staticColor]="10"
-        [hoverEnabled]="true"
-        (ratingChange)="onRatingChange($event)"
-      ></star-rating>
-    </fieldset>
-    <fieldset class="form-group">
-      <label>Add a public review (optional)</label>
-      <textarea
-        class="form-control"
-        formControlName="message"
-        name="message"
-        placeholder="enter your review here"
-      ></textarea>
-    </fieldset>
-  </form>
-</div> -->
+  <div *ngIf="actionType === actionTypes.addMessage">
+    <div
+      class="py-[24px] px-[24px] md:px-[40px] text-h6 md:text-h5 text-G900 font-medium"
+    >
+      Add Note
+    </div>
+    <hr class="w-full h-[1px] bg-G200 border-none" />
+    <div
+      class="flex flex-col gap-[16px] px-[16px] md:px-[40px] pt-[16px] md:pt-[24px] pb-[32px]"
+    >
+      <div class="text-b1 text-G900 font-medium">Add a note to this job</div>
+      <div class="flex flex-col gap-[16px] md:gap-[24px] w-full">
+        <form [formGroup]="form" class="flex flex-col gap-[16px] w-full">
+          <textarea
+            class="w-full outline-none h-[100px] md:h-[240px] border border-G200 rounded-[12px] p-[16px] bg-G50"
+            formControlName="message"
+            name="message"
+            placeholder="Enter your message here"
+          ></textarea>
+
+          <div class="flex justify-end text-right text-b2 text-G700">
+            {{ form.value.message.length || 0 }}/5000
+          </div>
+        </form>
+
+        <div class="flex justify-end gap-4">
+          <basic-button
+            [type]="1"
+            title="Cancel"
+            size="small"
+            (click)="handleCancelClick($event)"
+          />
+          <basic-button
+            [type]="2"
+            title="Submit"
+            size="small"
+            (click)="handleAction($event)"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div
-    *ngIf="actionType !== actionTypes.review"
-    class="flex justify-center px-[20px] pt-[50px] md:pt-[100px] pb-[40px]"
+    *ngIf="
+      actionType !== actionTypes.review && actionType !== actionTypes.addMessage
+    "
+    class="flex justify-center px-[16px] py-[64px] md:pt-[100px] md:pb-[40px]"
   >
     <div
       *ngIf="actionType === actionTypes.dispute"
@@ -220,38 +244,43 @@
 
     <div
       *ngIf="actionType === actionTypes.finishedJob"
-      class="flex flex-col justify-center items-center gap-[24px]"
+      class="flex flex-col justify-center items-center gap-[16px]"
     >
       <img
-        class="w-[300px]"
-        src="/assets/massimo/images/confirmTransaction.png"
+        class="w-[200px] sm:w-[300px]"
+        src="/assets/massimo/images/jobSuccess.png"
         alt="delete"
       />
-      <div class="text-h6 text-center font-medium max-w-[400px]">
-        Are you sure you've finished your job?
+      <div class="flex flex-col gap-[8px]">
+        <div class="text-G900 text-h6 text-center font-medium">
+          Mark Job Complete
+        </div>
+        <div class="text-G700 text-b2 text-center">
+          Are you sure you've finished your job?
+        </div>
       </div>
       <div class="flex gap-4 items-center">
-        <basic-button
-          [type]="1"
-          title="Yes"
-          size="small"
-          (click)="handleAction($event)"
-        />
         <basic-button
           [type]="2"
           title="No"
           size="small"
           (click)="handleCancelClick($event)"
         />
+        <basic-button
+          [type]="1"
+          title="Yes"
+          size="small"
+          (click)="handleAction($event)"
+        />
       </div>
     </div>
 
     <div
       *ngIf="actionType === actionTypes.acceptFinish"
-      class="flex flex-col justify-center items-center gap-[36px]"
+      class="flex flex-col justify-center items-center gap-[24px] md:gap-[36px]"
     >
       <img
-        class="w-[200px]"
+        class="w-[100px] sm:w-[200px]"
         src="/assets/massimo/images/jobRelease.png"
         alt="release"
       />
@@ -278,43 +307,6 @@
             size="small"
             (click)="releaseBtnClick($event)"
             [disabled]="isReleasing"
-          />
-        </div>
-      </div>
-    </div>
-
-    <div
-      *ngIf="actionType === actionTypes.addMessage"
-      class="flex flex-col gap-[24px] justify-center items-center w-full"
-    >
-      <div class="text-h5 text-G900 font-medium">Add a note to this job</div>
-
-      <div class="flex flex-col items-center gap-[24px] w-full">
-        <form
-          [formGroup]="form"
-          class="flex flex-col gap-[16px] max-w-[300px] w-full text-center"
-        >
-          <div class="text-G900 text-b1">Add message</div>
-          <textarea
-            class="w-full outline-none h-[100px] border border-G500 rounded-md p-[16px]"
-            formControlName="message"
-            name="message"
-            placeholder="Enter your message here"
-          ></textarea>
-        </form>
-
-        <div class="flex gap-4">
-          <basic-button
-            [type]="2"
-            [title]="actionType"
-            size="small"
-            (click)="handleAction($event)"
-          />
-          <basic-button
-            [type]="2"
-            title="Cancel"
-            size="small"
-            (click)="handleCancelClick($event)"
           />
         </div>
       </div>

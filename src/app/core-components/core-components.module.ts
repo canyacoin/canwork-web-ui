@@ -19,7 +19,6 @@ import { BrandComponent } from './brand/brand.component'
 import { FeedbackComponent } from './feedback/feedback.component'
 import { FooterComponent } from './footer/footer.component'
 import { HeaderComponent } from './header/header.component'
-import { StorageDropzoneComponent } from './storage-dropzone/storage-dropzone.component'
 import { ProviderCardComponent } from './provider-card/provider-card.component'
 import { ScrollTopComponent } from './scroll-top/scroll-top.component'
 import { SkillTagComponent } from './skill-tag/skill-tag.component'
@@ -94,8 +93,16 @@ import { JobSwitchActionTransactionPanelComponent } from './job/job-switch-actio
 import { ChatButtonComponent } from './buttons/chat-button/chat-button.component'
 import { BackToEditButtonComponent } from './buttons/back-to-edit-button/back-to-edit-button.component'
 import { XButtonComponent } from './buttons/x-button/x-button.component'
+import { FilterButtonComponent } from './buttons/filter-button/filter-button.component'
+import { PostJobMoreButtonComponent } from './buttons/post-job-more-button/post-job-more-button.component'
+import { MessageButtonComponent } from './buttons/message-button/message-button.component'
+import { AngularEditorModule } from '@kolkov/angular-editor'
+
 import { StarRatingSelectComponent } from './star-rating-select/star-rating-select.component'
 import { JobReviewPanelComponent } from './job/job-review-panel/job-review-panel.component'
+import { EditProfileDialogComponent } from './dialogs/edit-profile-dialog/edit-profile-dialog.component'
+import { EditBioDialogComponent } from './dialogs/edit-bio-dialog/edit-bio-dialog.component'
+import { EditButtonComponent } from './buttons/edit-button/edit-button.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -125,6 +132,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     TabMenuModule,
     DropdownModule,
     TableModule,
+    AngularEditorModule,
   ],
   declarations: [
     AttachmentComponent,
@@ -140,7 +148,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     WindowScrollDirective,
     VStepperComponent,
     ProviderCardComponent,
-    StorageDropzoneComponent,
     AvatarComponent,
     VerifiedMarkComponent,
     DynamicCoinComponent,
@@ -195,11 +202,17 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ChatButtonComponent,
     BackToEditButtonComponent,
     XButtonComponent,
+    FilterButtonComponent,
+    PostJobMoreButtonComponent,
+    MessageButtonComponent,
+    EditButtonComponent,
     // Dialogs
     BasicDialogComponent,
     ProposalDetailsDialogComponent,
     ConnectWalletDialogComponent,
     ActionDialogComponent,
+    EditProfileDialogComponent,
+    EditBioDialogComponent,
 
     StatusIconComponent,
     JobActionLogPanelComponent,
@@ -221,7 +234,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     VStepperComponent,
     ProviderCardComponent,
     WindowScrollDirective,
-    StorageDropzoneComponent,
     AvatarComponent,
     VerifiedMarkComponent,
     DynamicCoinComponent,
@@ -276,11 +288,17 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ChatButtonComponent,
     BackToEditButtonComponent,
     XButtonComponent,
+    FilterButtonComponent,
+    PostJobMoreButtonComponent,
+    MessageButtonComponent,
+    EditButtonComponent,
     // Dialogs
     BasicDialogComponent,
     ProposalDetailsDialogComponent,
     ConnectWalletDialogComponent,
     ActionDialogComponent,
+    EditProfileDialogComponent,
+    EditBioDialogComponent,
 
     StatusIconComponent,
     JobActionLogPanelComponent,

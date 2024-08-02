@@ -1,5 +1,5 @@
-<div
-  class="container"
+<section
+  class="bg-white p-[24px]"
   [hidden]="loaded && !isMyProfile && userCertifications.length === 0"
 >
   <div class="row">
@@ -9,12 +9,30 @@
       </div>
     </div>
     <div *ngIf="loaded" class="col-12 card certification-card">
-      <div *ngIf="userModel.type === 'Provider'" class="py-20">
-        <div class="row">
-          <div class="col-11">
-            <h5>CERTIFICATIONS</h5>
+      <div *ngIf="userModel.type === 'Provider'">
+        <div class="text-G900 text-h5 font-medium">Certifications</div>
+
+        <div class="mt-[16px] flex flex-col gap-[16px]">
+          <div class="flex items-start gap-[16px]">
+            <img
+              src="/assets/massimo/svg/certificate.svg"
+              alt="certificate"
+              class="w-[24px] h-[24px]"
+            />
+            <div class="flex flex-col gap-[8px]">
+              <div class="text-b1 text-G800 font-medium">
+                Imagination to Illustration: Advanced illustration rendering
+                techniques
+              </div>
+              <div class="text-b2 text-G500">
+                Skillshare.com | 16th October 2020
+              </div>
+              <div class="text-b2 text-C400 font-medium">Certificate</div>
+            </div>
           </div>
-          <div class="col-1">
+        </div>
+        <!-- <div class="row"> -->
+        <!-- <div class="col-1">
             <a
               data-toggle="modal"
               *ngIf="isMyProfile && userCertifications.length > 0"
@@ -27,9 +45,9 @@
                 aria-hidden="true"
               ></i>
             </a>
-          </div>
-        </div>
-        <div *ngIf="userCertifications.length > 0">
+          </div> -->
+        <!-- </div> -->
+        <!-- <div *ngIf="userCertifications.length > 0">
           <div class="row" *ngFor="let cert of userCertifications">
             <div class="col-6">
               <h6 class="mb-0">{{ cert.course }}</h6>
@@ -89,8 +107,8 @@
               </a>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
-</div>
+</section>

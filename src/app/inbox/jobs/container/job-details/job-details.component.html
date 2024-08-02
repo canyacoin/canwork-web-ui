@@ -8,9 +8,32 @@
       [actionType]="action"
       [selectedBid]="selectedBid"
     />
+    <div class="flex sm:hidden items-center justify-center max-sm:mb-[16px]">
+      <p-tabMenu [model]="actionTabs" [activeItem]="selectedTab">
+        <ng-template pTemplate="item" let-item let-i="index">
+          <div
+            class="bg-G200 p-[4px] block sm:hidden"
+            [ngClass]="{
+              'rounded-tl-xl rounded-bl-xl border-l': i === 0,
+              'rounded-tr-xl rounded-br-xl border-r': i === 2
+            }"
+          >
+            <div
+              class="select-none flex items-center h-full text-b2 text-G500 font-medium cursor-pointer py-[8px] px-[24px] transition-colors duration-200 rounded-[12px]"
+              (click)="changeTab(item)"
+              [ngClass]="{
+                'bg-white': selectedTab.code === item.code
+              }"
+            >
+              {{ item.label }}
+            </div>
+          </div>
+        </ng-template>
+      </p-tabMenu>
+    </div>
     <div
       *ngIf="isAwaitingEscrow && currentUserType === userTypes.client"
-      class="pb-[8px]"
+      class="sm:pb-[8px]"
     >
       <warning-message
         [type]="2"
@@ -18,52 +41,76 @@
         (buttonClick)="executeAction('Pay Escrow')"
       />
     </div>
-    <div
-      class="flex flex-col lg:flex-row md:justify-between gap-6"
-      [ngClass]="{
-        'pt-[16px]': !isAwaitingEscrow || currentUserType === userTypes.provider,
-      }"
-    >
-      <div class="w-full flex flex-col gap-[16px]">
-        <div class="w-full rounded-[12px] bg-white border border-G300 p-[40px]">
-          <job-details-panel [job]="job" />
+    <div class="flex flex-col lg:flex-row md:justify-between sm:gap-6">
+      <div
+        class="sm:!flex flex-col gap-[16px]"
+        [ngClass]="{ hidden: selectedTab.code !== actionTabs[0].code }"
+      >
+        <div class="w-full flex flex-col sm:gap-[16px]">
+          <div
+            class="w-full sm:rounded-[12px] sm:bg-white sm:border sm:border-G200 pt-[16px] pb-[24px] sm:p-[40px]"
+          >
+            <job-details-panel [job]="job" />
+          </div>
+          <!-- which means client -->
+          <div
+            *ngIf="currentUserType === userTypes.client"
+            class="w-full sm:rounded-[12px] bg-white border-t sm:border border-G200 py-[24px] sm:p-[40px]"
+          >
+            <job-freelancer-information-panel [selectedBid]="selectedBid" />
+          </div>
+          <!-- which means freelancer -->
+          <job-application-panel
+            *ngIf="currentUserType === userTypes.provider"
+            [yourApplication]="selectedBid"
+            [isHired]="true"
+          />
         </div>
-        <!-- which means client -->
-        <div
-          *ngIf="currentUserType === userTypes.client"
-          class="w-full rounded-[12px] bg-white border border-G300 p-[40px]"
-        >
-          <job-freelancer-information-panel [selectedBid]="selectedBid" />
-        </div>
-        <!-- which means freelancer -->
-        <job-application-panel
-          *ngIf="currentUserType === userTypes.provider"
-          [yourApplication]="selectedBid"
-          [isHired]="true"
-        />
 
-        <job-switch-action-transaction-panel
-          [isTabMode]="
-            !isAwaitingEscrow || currentUserType === userTypes.provider
-          "
-          [job]="job"
-          [currentUser]="currentUser"
-          [isAwaitingEscrow]="isAwaitingEscrow"
-          [isAwaitingEscrow]="isAwaitingEscrow"
-          [transactions]="transactions"
-          [currentUserType]="currentUserType"
-          (rightBtnEvent)="statusRightClick($event)"
-        />
+        <div class="hidden sm:block">
+          <job-switch-action-transaction-panel
+            [job]="job"
+            [currentUser]="currentUser"
+            [isAwaitingEscrow]="isAwaitingEscrow"
+            [isAwaitingEscrow]="isAwaitingEscrow"
+            [transactions]="transactions"
+            [currentUserType]="currentUserType"
+            (rightBtnEvent)="statusRightClick($event)"
+          />
+        </div>
 
         <job-review-panel
           *ngIf="isJobComplete"
-          [reviews]="[]"
+          [reviews]="reviews"
           [currentUserType]="currentUserType"
           (reviewBtnEvent)="statusLeftClick($event)"
           [userCanReview]="userCanReview"
         />
       </div>
-      <div class="lg:max-w-[350px] w-full">
+
+      <div
+        *ngIf="selectedTab.code === actionTabs[1].code"
+        class="block sm:hidden pt-[16px] pb-[24px]"
+      >
+        <job-action-log-panel
+          *ngIf="selectedTab.code === actionTabs[1].code"
+          [job]="job"
+          [currentUser]="currentUser"
+          [isTabMode]="'true'"
+        />
+      </div>
+      <div
+        *ngIf="selectedTab.code === actionTabs[2].code"
+        class="block sm:hidden pt-[16px] pb-[24px]"
+      >
+        <!-- leftBtnEvent in process -->
+        <job-transaction-history-panel
+          [transactions]="transactions"
+          [currentUserType]="currentUserType"
+          (rightBtnEvent)="rightClick($event)"
+        />
+      </div>
+      <div class="lg:max-w-[350px] lg:min-w-[350px] w-full">
         <job-status-panel
           [job]="job"
           [currentUser]="currentUser"

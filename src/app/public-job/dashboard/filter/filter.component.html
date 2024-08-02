@@ -1,9 +1,9 @@
 <section
-  class="bg-G0 rounded-[12px] grid border border-G200 xl:w-[350px]"
+  class="bg-G0 sm:rounded-[12px] grid sm:border sm:border-G200 xl:w-[350px]"
   id="job-search-filter"
 >
   <div
-    class="flex items-center justify-between font-medium py-[12px] px-[16px] select-none"
+    class="max-sm:hidden flex items-center justify-between font-medium py-[16px] px-[24px] sm:py-[12px] sm:px-[16px] select-none"
   >
     <div class="flex items-center gap-2">
       <div class="text-b1 text-G800">Filters</div>
@@ -412,7 +412,7 @@
             </div>
 
             <error-message
-            *ngIf="tagSelectionInvalid === 3"
+              *ngIf="tagSelectionInvalid === 3"
               message="You already added this location."
             />
 

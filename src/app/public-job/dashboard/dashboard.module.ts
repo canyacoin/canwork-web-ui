@@ -9,12 +9,13 @@ import { FilterComponent } from './filter/filter.component'
 import { ResultComponent } from './result/result.component'
 import { PaginatorModule } from 'primeng/paginator'
 import { AccordionModule } from 'primeng/accordion'
-import { InputTextModule } from 'primeng/inputtext';
-import { CheckboxModule } from 'primeng/checkbox';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { DropdownModule } from 'primeng/dropdown';
-import { FormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext'
+import { CheckboxModule } from 'primeng/checkbox'
+import { RadioButtonModule } from 'primeng/radiobutton'
+import { DropdownModule } from 'primeng/dropdown'
+import { FormsModule } from '@angular/forms'
 import { DashboardRoutingModule } from './dashboard.routing.module'
+import { DialogModule } from 'primeng/dialog'
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { DashboardRoutingModule } from './dashboard.routing.module'
     InputTextModule,
     RadioButtonModule,
     DropdownModule,
-    FormsModule
+    FormsModule,
+    DialogModule,
   ],
   declarations: [
     DashboardComponent,

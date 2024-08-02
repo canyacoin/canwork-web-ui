@@ -30,8 +30,8 @@
         <div *ngIf="tempProviderArray.length === 0">
           <p-carousel
             [value]="skeletonProviderArray"
-            [numVisible]="3"
-            [numScroll]="3"
+            [numVisible]="4"
+            [numScroll]="4"
             [circular]="false"
             [showIndicators]="true"
             [showNavigators]="false"
@@ -48,15 +48,15 @@
         <div *ngIf="tempProviderArray.length !== 0">
           <p-carousel
             [value]="tempProviderArray"
-            [numVisible]="3"
-            [numScroll]="3"
+            [numVisible]="4"
+            [numScroll]="4"
             [circular]="false"
             [showIndicators]="true"
             [showNavigators]="false"
             [responsiveOptions]="responsiveOptions"
           >
             <ng-template let-profile pTemplate="item">
-              <div class="m-auto w-full max-w-[304px]">
+              <div class="m-auto w-full h-full max-w-[304px]">
                 <profile-card
                   [index]="profile.id"
                   [avatarUri]="profile.avatarUri"

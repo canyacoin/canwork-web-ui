@@ -1,4 +1,67 @@
-<main class="main-content">
+<main class="font-sans">
+  <section class="bg-white sm:bg-G50">
+    <div
+      class="max-w-[1440px] m-auto pt-[76px] sm:pt-[100px] px-[0px] sm:px-[16px] md:px-[40px] lg:px-[64px] pb-[24px]"
+    >
+      <edit-profile-dialog
+        [(visible)]="visibleEditProfileDialog"
+        (close)="closeEditDialog()"
+        [currentUser]="currentUser"
+      />
+      <edit-bio-dialog
+        [(visible)]="visibleEditBioDialog"
+        [currentUser]="currentUser"
+      />
+      <app-profile-about
+        *ngIf="userModel"
+        [userAddress]="userModel.address"
+        [currentUser]="currentUser"
+        [isMyProfile]="isMyProfile()"
+        [userModel]="userModel"
+        (editProfile)="showEditProfileDialog()"
+      />
+      <div
+        class="max-sm:px-[16px] flex flex-col-reverse lg:flex-row gap-[16px] mt-[16px]"
+      >
+        <div
+          class="lg:min-w-[350px] lg:max-w-[350px] sm:rounded-[12px] sm:border sm:!border-G200 sm:bg-white overflow-hidden h-max"
+        >
+          <profile-skills
+            *ngIf="userModel"
+            [isMyProfile]="isMyProfile()"
+            [userModel]="userModel"
+            (editBio)="showEditBioDialog()"
+          />
+          <app-certifications
+            *ngIf="userModel && userModel.type === 'Provider'"
+            [userModel]="userModel"
+            [notMyProfile]="notMyProfile()"
+            [isMyProfile]="isMyProfile()"
+          ></app-certifications>
+          <app-profile-education />
+        </div>
+        <div class="w-full flex flex-col gap-[16px]">
+          <app-profile-bio
+            *ngIf="userModel"
+            [isMyProfile]="isMyProfile()"
+            [userModel]="userModel"
+            (editBio)="showEditBioDialog()"
+          />
+          <app-reviews *ngIf="userModel" [user]="userModel"></app-reviews>
+          <app-profile-portfolio
+            *ngIf="userModel && userModel.type === 'Provider'"
+            [userModel]="userModel"
+            [notMyProfile]="notMyProfile()"
+            [isMyProfile]="isMyProfile()"
+          ></app-profile-portfolio>
+          <app-profile-workhistory />
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- <main class="main-content">
   <app-profile-edit
     *ngIf="displayEditComponent"
     (close)="closeEditDialog()"
@@ -36,13 +99,7 @@
                 *ngIf="isMyProfile()"
                 [userModel]="userModel"
               ></app-profile-get-referral>
-              <!--  disables buy me a coffee option until we can implement Binance Chain solution
-                <app-profile-support-me
-                *ngIf="notMyProfile() && "
-                [userModel]="userModel"
-                [currentUser]="currentUser"
-              ></app-profile-support-me>
-              -->
+
               <app-profile-visitors
                 *ngIf="isMyProfile()"
                 [userModel]="currentUser"
@@ -75,4 +132,4 @@
   </section>
 </main>
 <app-certifications-form *ngIf="isMyProfile()"></app-certifications-form>
-<app-scroll-top></app-scroll-top>
+<app-scroll-top></app-scroll-top> -->

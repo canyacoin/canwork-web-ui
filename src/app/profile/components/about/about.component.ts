@@ -9,7 +9,6 @@ import {
 import { Router, ActivatedRoute } from '@angular/router'
 import { take } from 'rxjs/operators'
 import { User } from '@class/user'
-import { Job } from '@class/job'
 import { AuthService } from '@service/auth.service'
 import { ChatService } from '@service/chat.service'
 import { PublicJobService } from '@service/public-job.service'
@@ -17,7 +16,6 @@ import { PublicJobService } from '@service/public-job.service'
 @Component({
   selector: 'app-profile-about',
   templateUrl: './about.component.html',
-  styleUrls: ['../../profile.component.scss'],
 })
 export class AboutComponent implements OnInit {
   @Input() currentUser: User
@@ -63,6 +61,9 @@ export class AboutComponent implements OnInit {
       if (this.route.snapshot.queryParams['nextAction'] === 'chat')
         this.chatUser()
     }
+    console.log('=================><====================================')
+    console.log('this.currentUser', this.currentUser)
+    console.log('this.userModel', this.userModel)
   }
 
   displayProfileEditComponent() {

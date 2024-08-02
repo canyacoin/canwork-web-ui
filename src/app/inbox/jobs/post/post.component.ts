@@ -1008,7 +1008,7 @@ export class PostComponent implements OnInit, OnDestroy {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
-        detail: `Something went wrong when posting this job.`,
+        detail: `Something went wrong`,
       })
       console.log('error with showing', e)
     }
