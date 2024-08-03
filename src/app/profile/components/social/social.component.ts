@@ -7,7 +7,6 @@ declare let escape: any
 @Component({
   selector: 'app-profile-social',
   templateUrl: './social.component.html',
-  styleUrls: ['../../profile.component.scss', './social.component.css'],
 })
 export class SocialComponent implements OnInit {
   @Input() userModel: User
