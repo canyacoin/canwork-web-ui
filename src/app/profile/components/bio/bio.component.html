@@ -1,12 +1,12 @@
 <section
-  class="sm:rounded-[12px] sm:border sm:!border-G200 bg-white sm:px-[40px] sm:py-[24px]"
+  class="sm:rounded-[12px] border-t sm:border !border-G200 bg-white py-[40px] sm:px-[40px] sm:py-[24px]"
 >
   <div class="flex justify-between">
-    <div class="text-G900 text-h5 font-medium">About Me</div>
+    <div class="text-G900 text-h6 md:text-h5 font-medium">About Me</div>
     <edit-button *ngIf="isMyProfile" (click)="showEditBioDialog()" />
   </div>
   <div
-    class="text-b2 md:text-b1 text-G900 leading-[1.2] mt-[16px]"
+    class="text-b2 md:text-b1 text-G900 leading-[1.2] mt-[8px] md:mt-[16px]"
     [innerHTML]="userModel.description | linkify"
   ></div>
 </section>
