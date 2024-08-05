@@ -9,7 +9,6 @@ import { CoreComponentsModule } from '../core-components/core-components.module'
 import { CoreServicesModule } from '../core-services/core-services.module'
 import { CoreUtilsModule } from '../core-utils/core-utils.module'
 import { BuyCoffeeComponent } from './buy-coffee/buy-coffee.component'
-import { CertificationsFormComponent } from './certifications-form/certifications-form.component'
 import { AboutComponent } from './components/about/about.component'
 import { BioComponent } from './components/bio/bio.component'
 import { CertificationsComponent } from './components/certifications/certifications.component'
@@ -58,7 +57,6 @@ import { EducationComponent } from './components/education/education.component'
     BuyCoffeeComponent,
     CreateClientProfileComponent,
     CreateProviderProfileComponent,
-    CertificationsFormComponent,
     ItemComponent,
     PortfolioComponent,
     ProfileComponent,
