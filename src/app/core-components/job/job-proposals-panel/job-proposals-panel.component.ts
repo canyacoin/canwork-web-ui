@@ -36,6 +36,7 @@ export class JobProposalsPanelComponent implements OnInit {
   visibleProposalDetails: boolean = false
 
   visibleAcceptModal: boolean = false
+  visibleDeclineModal: boolean = false
   selectedBidContent: string = ''
 
   constructor(
@@ -133,19 +134,24 @@ export class JobProposalsPanelComponent implements OnInit {
     })
   }
 
-  async declineProvider(selectedBid: any) {
+  async declineProvider(selectedBid: Bid) {
+    this.visibleDeclineModal = false
     const bid = selectedBid
-    const confirmed = confirm(
-      "Are you sure you want to decline this provider's offer?"
-    )
-    if (confirmed) {
-      const chosen = await this.publicJobsService.declineBid(this.job, bid)
-      if (chosen) {
-        const client = await this.userService.getUser(this.job.clientId)
-        this.publicJobsService.notifyLosers(this.job, client, [bid])
-      } else {
-        alert('Something went wrong. please try again later')
-      }
+    const chosen = await this.publicJobsService.declineBid(this.job, bid)
+    if (chosen) {
+      const client = await this.userService.getUser(this.job.clientId)
+      this.publicJobsService.notifyLosers(this.job, client, [bid])
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: "Declined provider's bid",
+      })
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Something went wrong. please try again later',
+      })
     }
   }
 
@@ -211,5 +217,16 @@ export class JobProposalsPanelComponent implements OnInit {
       (this.capitalizeName(this.selectedBid.providerInfo?.name) || '') +
       "'s bid means you have decided to continue and hire him for your work."
     this.visibleAcceptModal = !this.visibleAcceptModal
+  }
+
+  updateDialogDeclineJob(event: Event) {
+    event.stopPropagation()
+    this.visibleProposalDetails = false
+    this.selectedBidContent =
+      'Are you sure you want to decline ' +
+      // @ts-ignore
+      (this.capitalizeName(this.selectedBid.providerInfo?.name) || '') +
+      "'s offer?"
+    this.visibleDeclineModal = !this.visibleDeclineModal
   }
 }

@@ -23,7 +23,7 @@
       >
         <div
           *ngIf="userModel.name"
-          class="text-G800 text-h5 font-medium flex items-center gap-[8px]"
+          class="text-G800 text-h6 md:text-h5 font-medium flex items-center gap-[8px]"
         >
           {{ userModel.name }}
           <img
@@ -35,7 +35,7 @@
         </div>
         <div class="flex gap-2 items-center">
           <app-star-rating [stars]="userModel.rating?.average" />
-          <div class="text-b1 font-medium text-G700">
+          <div class="text-b2 md:text-b1 font-medium text-G500 md:text-G700">
             ({{ userModel.rating?.count }} Jobs)
           </div>
         </div>
@@ -44,19 +44,22 @@
     </div>
 
     <div
-      class="flex flex-col sm:flex-row sm:justify-between items-end gap-[16px]"
+      class="flex flex-col sm:flex-row sm:justify-between items-end gap-[32px] md:gap-[16px]"
     >
-      <div class="max-w-[675px] w-full flex flex-col gap-[16px]">
+      <div class="max-w-[675px] w-full flex flex-col gap-[32px] md:gap-[16px]">
         <div class="max-w-[609px] flex flex-col gap-[8px]">
-          <div *ngIf="userModel.title" class="text-b1 font-medium text-G900">
+          <div
+            *ngIf="userModel.title"
+            class="text-b2 md:text-b1 font-medium text-G900"
+          >
             {{ userModel.title }}
           </div>
-          <div *ngIf="userModel.bio" class="text-b1 text-G900">
+          <div *ngIf="userModel.bio" class="text-b2 md:text-b1 text-G900">
             {{ userModel.bio }}
           </div>
         </div>
         <div
-          class="flex-wrap sm:flex items-center gap-[24px] text-b1 font-medium text-G900"
+          class="flex flex-wrap items-center gap-[8px] md:gap-[24px] text-b2 md:text-b1 font-medium text-G900"
         >
           <div
             *ngIf="userModel?.hourlyRate"

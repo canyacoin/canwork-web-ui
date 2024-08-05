@@ -1,24 +1,46 @@
-import { Component, OnInit, AfterViewInit, Directive } from '@angular/core'
-import { Certification } from '../../core-classes/certification'
-import { CertificationsService } from '../../core-services/certifications.service'
-import { AuthService } from '../../core-services/auth.service'
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  OnInit,
+  AfterViewInit,
+} from '@angular/core'
+import { User } from '@class/user'
+import { Certification } from '@class/certification'
+import { CertificationsService } from '@service/certifications.service'
+import { AuthService } from '@service/auth.service'
 import { Observable } from 'rxjs/Observable'
 import { HttpClient } from '@angular/common/http'
-import {
-  UntypedFormBuilder,
-  FormGroup,
-  Validators,
-  FormControl,
-} from '@angular/forms'
-import { User } from '../../core-classes/user'
+import { UntypedFormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs/Subscription'
 
 @Component({
-  selector: 'app-certifications-form',
-  templateUrl: './certifications-form.component.html',
-  styleUrls: ['./certifications-form.component.css'],
+  selector: 'certification-dialog',
+  templateUrl: './certification-dialog.component.html',
 })
-export class CertificationsFormComponent implements OnInit, AfterViewInit {
+export class CertificationDialogComponent implements OnInit, AfterViewInit {
+  // two way data binding
+  private _visible: boolean
+  @Input()
+  get visible(): boolean {
+    return this._visible
+  }
+  set visible(value: boolean) {
+    this._visible = value
+    this.visibleChange.emit(this._visible)
+  }
+  @Output() visibleChange = new EventEmitter<boolean>()
+
+  onClose() {
+    this.visible = false
+  }
+
+  onSave(event: Event) {
+    event.preventDefault()
+    this.onSubmitCertification()
+  }
+
   uniInput = ''
   uniList: any
   uniFilteredList: any
@@ -124,5 +146,13 @@ export class CertificationsFormComponent implements OnInit, AfterViewInit {
     this.uniFilteredList = this.uniList
       .filter((uni) => uni.toLowerCase().indexOf(input) !== -1)
       .slice(0, 10)
+  }
+
+  getDialogHeader() {
+    if (!this.certifications.editCert) {
+      return 'Add Certification'
+    } else {
+      return 'Edit Certification'
+    }
   }
 }

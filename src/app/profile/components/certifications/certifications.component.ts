@@ -22,6 +22,8 @@ export class CertificationsComponent implements OnInit {
   @Input() notMyProfile: boolean
   @Output() editCertification = new EventEmitter()
 
+  visibleCertificationDialog: boolean = false
+
   userCertifications: any
   loaded = false
   certificationSub: Subscription
@@ -64,5 +66,9 @@ export class CertificationsComponent implements OnInit {
 
   setAddModal() {
     this.certifications.loadAddCert()
+  }
+  showCertificationDialog() {
+    this.visibleCertificationDialog = true
+    this.setAddModal()
   }
 }

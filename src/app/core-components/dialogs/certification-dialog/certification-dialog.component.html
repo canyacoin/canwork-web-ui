@@ -1,0 +1,173 @@
+<p-dialog
+  [header]="getDialogHeader()"
+  [(visible)]="visible"
+  [draggable]="false"
+  [resizable]="false"
+  [modal]="true"
+  styleClass="!rounded-b-[0px] !rounded-t-[24px] sm:!rounded-[24px] md:max-w-[600px] lg:max-w-[906px] w-full !bg-G50 sm:mx-[16px] max-sm:!mt-[127px] max-sm:absolute max-sm:left-0 max-sm:bottom-0"
+>
+  <div
+    id="edit-bio-dialog"
+    class="py-[24px] px-[40px] flex flex-col gap-[24px]"
+  >
+    <form
+      [formGroup]="certificationForm"
+      class="flex flex-col gap-[24px]"
+      novalidate
+    >
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">
+          School or Certifying Institution <span class="text-R900">*</span>
+        </div>
+        <input
+          required
+          #university
+          name="university"
+          (input)="searchUni()"
+          list="uniNameList"
+          formControlName="university"
+          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+          placeholder="Name of school or institution"
+          [value]="
+            this.certifications.certToEdit !== null && certifications.editCert
+              ? this.certifications.certToEdit.university
+              : ''
+          "
+        />
+      </fieldset>
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">
+          Certification or Course Name <span class="text-R900">*</span>
+        </div>
+        <input
+          type="text"
+          #course
+          name="course"
+          formControlName="course"
+          required
+          placeholder="Enter certification or course name"
+          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+          [value]="
+            this.certifications.certToEdit !== null && certifications.editCert
+              ? this.certifications.certToEdit.course
+              : ''
+          "
+        />
+      </fieldset>
+
+      <div class="w-full flex flex-col md:flex-row gap-[16px] md:gap-[24px]">
+        <fieldset class="w-full flex flex-col gap-[8px]">
+          <div class="text-b1 text-G900">
+            Start <span class="text-R900">*</span>
+          </div>
+          <input
+            maxlength="4"
+            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+            required
+            class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+            id="startDate"
+            list="yearList"
+            name="startDate"
+            formControlName="startDate"
+            placeholder="Start Date"
+            [value]="
+              this.certifications.certToEdit !== null && certifications.editCert
+                ? this.certifications.certToEdit.completion
+                : ''
+            "
+          />
+        </fieldset>
+        <fieldset class="w-full flex flex-col gap-[8px]">
+          <div class="text-b1 text-G900">
+            Completion <span class="text-R900">*</span>
+          </div>
+          <input
+            maxlength="4"
+            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+            required
+            class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+            id="completion"
+            list="completionYearList"
+            name="completion"
+            formControlName="completion"
+            placeholder="End Date"
+            [value]="
+              this.certifications.certToEdit !== null && certifications.editCert
+                ? this.certifications.certToEdit.completion
+                : ''
+            "
+          />
+          <!--
+            <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+            type="number" maxlength="4" required id="completion" name="completion" formControlName="completion"
+            class="form-control" [value]="(this.certifications.certToEdit !== null && certifications.editCert) ? this.certifications.certToEdit.completion : ''">
+          -->
+        </fieldset>
+        <!-- <div class="form-group col-4">
+          <div class="form-check" class="study-check">
+            <input
+              type="checkbox"
+              value="true"
+              id="study"
+              formControlName="isStudying"
+              name="isStudying"
+            />
+            <label for="isStudying">
+              Still studying<span class="text-danger">*</span>
+            </label>
+          </div>
+        </div> -->
+      </div>
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">Certification Link</div>
+        <input
+          type="text"
+          id="certificate"
+          formControlName="certificate"
+          name="certificate"
+          placeholder="https://"
+          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+        />
+      </fieldset>
+      <!-- <div class="modal-footer" style="border: none">
+        <a
+          (click)="onDeleteCertification(this.certifications.certToEdit)"
+          *ngIf="
+            this.certifications.certToEdit !== null && certifications.editCert
+          "
+          class="btn btn-danger"
+          style="color: white; position: absolute; left: 15px"
+          data-dismiss="modal"
+          >Delete</a
+        >
+      </div> -->
+    </form>
+    <div class="flex gap-[16px] items-center justify-end">
+      <div
+        class="cursor-pointer text-R900 font-medium text-nowrap text-b1"
+        (click)="onClose()"
+      >
+        Cancel
+      </div>
+      <basic-button
+        [type]="1"
+        title="Save Changes"
+        size="small"
+        [disabled]="!certificationForm.valid"
+        (click)="onSave($event)"
+      />
+    </div>
+  </div>
+</p-dialog>
+
+<datalist id="uniNameList">
+  <option *ngFor="let uni of uniFilteredList" value="{{ uni }}"></option>
+</datalist>
+
+<datalist id="yearList">
+  <option *ngFor="let year of yearList" value="{{ year }}"></option>
+</datalist>
+
+<datalist id="completionYearList">
+  <option *ngFor="let year of completionYearList" value="{{ year }}"></option>
+</datalist>

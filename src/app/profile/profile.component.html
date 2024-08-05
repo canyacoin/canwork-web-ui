@@ -21,7 +21,7 @@
         (editProfile)="showEditProfileDialog()"
       />
       <div
-        class="max-sm:px-[16px] flex flex-col-reverse lg:flex-row gap-[16px] mt-[16px]"
+        class="max-sm:px-[16px] flex flex-col-reverse lg:flex-row sm:gap-[16px] sm:mt-[16px]"
       >
         <div
           class="lg:min-w-[350px] lg:max-w-[350px] sm:rounded-[12px] sm:border sm:!border-G200 sm:bg-white overflow-hidden h-max"
@@ -40,7 +40,7 @@
           ></app-certifications>
           <app-profile-education />
         </div>
-        <div class="w-full flex flex-col gap-[16px]">
+        <div class="w-full flex flex-col sm:gap-[16px]">
           <app-profile-bio
             *ngIf="userModel"
             [isMyProfile]="isMyProfile()"

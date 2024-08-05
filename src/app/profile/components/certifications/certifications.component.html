@@ -1,114 +1,100 @@
-<section
-  class="bg-white p-[24px]"
-  [hidden]="loaded && !isMyProfile && userCertifications.length === 0"
->
-  <div class="row">
-    <div *ngIf="!loaded" class="col-12 card certification-card">
-      <div class="container d-flex h-100 flex-column justify-content-center">
-        <img src="assets/img/loader.svg" style="height: 36px" alt="Loader" />
-      </div>
-    </div>
-    <div *ngIf="loaded" class="col-12 card certification-card">
-      <div *ngIf="userModel.type === 'Provider'">
-        <div class="text-G900 text-h5 font-medium">Certifications</div>
-
-        <div class="mt-[16px] flex flex-col gap-[16px]">
-          <div class="flex items-start gap-[16px]">
-            <img
-              src="/assets/massimo/svg/certificate.svg"
-              alt="certificate"
-              class="w-[24px] h-[24px]"
-            />
-            <div class="flex flex-col gap-[8px]">
-              <div class="text-b1 text-G800 font-medium">
-                Imagination to Illustration: Advanced illustration rendering
-                techniques
-              </div>
-              <div class="text-b2 text-G500">
-                Skillshare.com | 16th October 2020
-              </div>
-              <div class="text-b2 text-C400 font-medium">Certificate</div>
-            </div>
+<section class="border-t border-G200 bg-white py-[40px] sm:p-[24px]">
+  <certification-dialog [(visible)]="visibleCertificationDialog" />
+  <div class="flex justify-between">
+    <div class="text-G900 text-h6 font-medium">Certifications</div>
+    <plus-button *ngIf="isMyProfile" (click)="showCertificationDialog()" />
+  </div>
+  <div class="">
+    <div class="mt-[16px] flex flex-col gap-[16px]">
+      <div class="flex items-start gap-[16px]">
+        <img
+          src="/assets/massimo/svg/certificate.svg"
+          alt="certificate"
+          class="w-[24px] h-[24px]"
+        />
+        <div class="flex flex-col gap-[8px]">
+          <div class="text-b1 text-G800 font-medium">
+            Imagination to Illustration: Advanced illustration rendering
+            techniques
           </div>
+          <div class="text-b2 text-G500">
+            Skillshare.com | 16th October 2020
+          </div>
+          <div class="text-b2 text-C400 font-medium">Certificate</div>
         </div>
-        <!-- <div class="row"> -->
-        <!-- <div class="col-1">
-            <a
-              data-toggle="modal"
-              *ngIf="isMyProfile && userCertifications.length > 0"
-              (click)="setAddModal()"
-              data-target="#certificationModal"
-            >
-              <i
-                class="ti-plus fw-600"
-                style="color: #535353"
-                aria-hidden="true"
-              ></i>
-            </a>
-          </div> -->
-        <!-- </div> -->
-        <!-- <div *ngIf="userCertifications.length > 0">
-          <div class="row" *ngFor="let cert of userCertifications">
-            <div class="col-6">
-              <h6 class="mb-0">{{ cert.course }}</h6>
-              <p class="text-grey">{{ cert.university }}</p>
-            </div>
-            <div class="col-6 text-right">
-              <h6 class="mb-0">
-                {{ cert.startDate }} - {{ cert.completion }}
-                <span *ngIf="isMyProfile"
-                  >&nbsp;&nbsp;&nbsp;
-                  <i
-                    (click)="setEditModal(cert)"
-                    data-toggle="modal"
-                    data-target="#certificationModal"
-                    class="ti-pencil text-grey pr-15 fw-600"
-                    aria-hidden="true"
-                  ></i>
-                </span>
-              </h6>
-              <a
-                class="pr-20"
-                *ngIf="cert.certificate !== ''"
-                href="{{ cert.certificate }}"
-                target="_blank"
-                >Certificate</a
-              >
-            </div>
-          </div>
-        </div>
-        <div
-          *ngIf="
-            isMyProfile &&
-            userModel.type === 'Provider' &&
-            userCertifications.length === 0
-          "
-        >
-          <div class="row">
-            <div class="col-6">
-              <p class="pt-5 no-margin">You do not have any certifications</p>
-            </div>
-            <div class="col-6 text-right">
-              <a
-                (click)="setAddModal()"
-                data-toggle="modal"
-                data-target="#certificationModal"
-                *ngIf="isMyProfile && userModel.type === 'Provider'"
-                class="btn btn-primary btn-add-work text-white"
-                [ngStyle]="{
-                  background:
-                    'linear-gradient(122deg, ' +
-                    userModel.colors[0] +
-                    ' 0%, ' +
-                    userModel.colors[1] +
-                    ' 93%)'
-                }"
-                >ADD
-              </a>
-            </div>
-          </div>
-        </div> -->
       </div>
     </div>
   </div>
 </section>
+
+<!-- <div class="col-1">
+  <a
+    data-toggle="modal"
+    *ngIf="isMyProfile && userCertifications.length > 0"
+    (click)="setAddModal()"
+    data-target="#certificationModal"
+  >
+    <i class="ti-plus fw-600" style="color: #535353" aria-hidden="true"></i>
+  </a>
+</div> -->
+<!-- <div *ngIf="userCertifications.length > 0">
+  <div class="row" *ngFor="let cert of userCertifications">
+    <div class="col-6">
+      <h6 class="mb-0">{{ cert.course }}</h6>
+      <p class="text-grey">{{ cert.university }}</p>
+    </div>
+    <div class="col-6 text-right">
+      <h6 class="mb-0">
+        {{ cert.startDate }} - {{ cert.completion }}
+        <span *ngIf="isMyProfile"
+          >&nbsp;&nbsp;&nbsp;
+          <i
+            (click)="setEditModal(cert)"
+            data-toggle="modal"
+            data-target="#certificationModal"
+            class="ti-pencil text-grey pr-15 fw-600"
+            aria-hidden="true"
+          ></i>
+        </span>
+      </h6>
+      <a
+        class="pr-20"
+        *ngIf="cert.certificate !== ''"
+        href="{{ cert.certificate }}"
+        target="_blank"
+        >Certificate</a
+      >
+    </div>
+  </div>
+</div>
+<div
+  *ngIf="
+    isMyProfile &&
+    userModel.type === 'Provider' &&
+    userCertifications.length === 0
+  "
+>
+  <div class="row">
+    <div class="col-6">
+      <p class="pt-5 no-margin">You do not have any certifications</p>
+    </div>
+    <div class="col-6 text-right">
+      <a
+        (click)="setAddModal()"
+        data-toggle="modal"
+        data-target="#certificationModal"
+        *ngIf="isMyProfile && userModel.type === 'Provider'"
+        class="btn btn-primary btn-add-work text-white"
+        [ngStyle]="{
+          background:
+            'linear-gradient(122deg, ' +
+            userModel.colors[0] +
+            ' 0%, ' +
+            userModel.colors[1] +
+            ' 93%)'
+        }"
+        >ADD
+      </a>
+    </div>
+  </div>
+</div> -->
