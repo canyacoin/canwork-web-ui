@@ -117,7 +117,7 @@
     <proposal-details-dialog
       [(visible)]="visibleProposalDetails"
       [selectedBid]="selectedBid"
-      (declinetBtnEvent)="declineProvider(selectedBid)"
+      (declinetBtnEvent)="updateDialogDeclineJob($event)"
       (accpetBtnEvent)="updateDialogAcceptJob($event)"
     />
 
@@ -129,6 +129,14 @@
       (LeftbtnEvent)="updateDialogAcceptJob($event)"
       (RightbtnEvent)="chooseProvider(selectedBid)"
       type="accept"
+    />
+    <basic-dialog
+      [(visible)]="visibleDeclineModal"
+      title="Do you want to decline this bid?"
+      [content]="selectedBidContent"
+      (LeftbtnEvent)="updateDialogDeclineJob($event)"
+      (RightbtnEvent)="declineProvider(selectedBid)"
+      type="decline"
     />
     <!-- Modals end -->
   </div>
