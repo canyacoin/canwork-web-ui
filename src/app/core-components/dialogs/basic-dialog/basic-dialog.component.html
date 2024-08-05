@@ -1,12 +1,16 @@
 <p-dialog
   [(visible)]="visible"
-  styleClass="md:max-w-[600px] lg:max-w-[906px] w-full !bg-G50 mx-[16px]"
   [draggable]="false"
   [resizable]="false"
   [modal]="true"
+  id="headless_modal"
+  styleClass="md:max-w-[600px] lg:max-w-[906px] w-full !bg-G50 mx-[16px] relative !rounded-[24px]"
 >
+  <div class="absolute top-[16px] md:top-[24px] right-[24px]">
+    <x-button (click)="handleCancelClick($event)" />
+  </div>
   <div
-    class="flex justify-center px-[16px] pb-[64px] pt-[18px] md:pb-[100px] md:pt-[46px]"
+    class="flex justify-center px-[16px] pb-[64px] pt-[88px] md:pb-[100px] md:pt-[116px]"
   >
     <div class="max-w-[352px] flex flex-col justify-center items-center">
       <div
@@ -45,6 +49,12 @@
           *ngSwitchCase="'accept'"
           src="/assets/massimo/images/jobAccept.png"
           alt="accept"
+        />
+        <img
+          *ngSwitchCase="'decline'"
+          src="/assets/massimo/images/jobDecline.png"
+          alt="decline"
+          class="max-w-[150px] md:max-w-[200px]"
         />
         <img
           *ngSwitchCase="'jobListingDeleted'"
@@ -222,6 +232,22 @@
             [type]="2"
             (click)="RightClick($event)"
             title="Accept"
+            size="small"
+          />
+        </div>
+      </ng-container>
+      <ng-container *ngIf="type === 'decline'">
+        <div class="flex gap-4 justify-center items-center">
+          <div
+            class="cursor-pointer py-[10px] px-[24px] hover:bg-G200 rounded-xl transition-all duration-200"
+            (click)="LeftClick($event)"
+          >
+            <div class="text-R900 font-medium text-nowrap text-b1">Cancel</div>
+          </div>
+          <basic-button
+            [type]="2"
+            (click)="RightClick($event)"
+            title="Decline"
             size="small"
           />
         </div>
