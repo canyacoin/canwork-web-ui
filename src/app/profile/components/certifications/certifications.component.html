@@ -1,11 +1,7 @@
-<section
-  class="border-t border-G200 bg-white py-[40px] sm:p-[24px]"
->
-  <certification-dialog
-    [(visible)]="visibleCertificationDialog"
-  />
+<section class="border-t border-G200 bg-white py-[40px] sm:p-[24px]">
+  <certification-dialog [(visible)]="visibleCertificationDialog" />
   <div class="flex justify-between">
-    <div class="text-G900 text-h6 md:text-h5 font-medium">Certifications</div>
+    <div class="text-G900 text-h6 font-medium">Certifications</div>
     <plus-button *ngIf="isMyProfile" (click)="showCertificationDialog()" />
   </div>
   <div class="">
