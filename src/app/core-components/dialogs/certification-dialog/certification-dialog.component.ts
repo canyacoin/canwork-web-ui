@@ -14,6 +14,7 @@ import { Observable } from 'rxjs/Observable'
 import { HttpClient } from '@angular/common/http'
 import { UntypedFormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs/Subscription'
+import { MessageService } from 'primeng/api'
 
 @Component({
   selector: 'certification-dialog',
@@ -32,15 +33,6 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
   }
   @Output() visibleChange = new EventEmitter<boolean>()
 
-  onClose() {
-    this.visible = false
-  }
-
-  onSave(event: Event) {
-    event.preventDefault()
-    this.onSubmitCertification()
-  }
-
   uniInput = ''
   uniList: any
   uniFilteredList: any
@@ -51,7 +43,9 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
   currentCert: Certification
   yearList = new Array()
   completionYearList = new Array()
+
   constructor(
+    private messageService: MessageService,
     private auth: AuthService,
     public certifications: CertificationsService,
     private formBuilder: UntypedFormBuilder,
@@ -114,7 +108,11 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
       }
       document.getElementById('certificationModalClose').click()
     } catch (error) {
-      this.toggleWarning()
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warn',
+        detail: `Something went wrong. Please try again later.`,
+      })
     }
   }
 
@@ -154,5 +152,14 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
     } else {
       return 'Edit Certification'
     }
+  }
+  onClose() {
+    this.visible = false
+  }
+
+  onSave(event: Event) {
+    event.preventDefault()
+    this.onSubmitCertification()
+    this._visible = false
   }
 }

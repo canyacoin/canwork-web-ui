@@ -30,6 +30,7 @@ import { MarkdownModule, MarkedOptions } from 'ngx-markdown'
 import { WorkhistoryComponent } from './components/workhistory/workhistory.component'
 import { SkillsComponent } from './components/skills/skills.component'
 import { EducationComponent } from './components/education/education.component'
+import { DropdownModule } from 'primeng/dropdown'
 
 @NgModule({
   imports: [
@@ -41,6 +42,7 @@ import { EducationComponent } from './components/education/education.component'
     FormsModule,
     ProfileRoutingModule,
     ReactiveFormsModule,
+    DropdownModule,
     StarRatingModule.forChild(),
     MarkdownModule.forRoot({
       markedOptions: {

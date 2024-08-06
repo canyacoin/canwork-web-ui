@@ -106,6 +106,7 @@ import { JobReviewPanelComponent } from './job/job-review-panel/job-review-panel
 import { EditProfileDialogComponent } from './dialogs/edit-profile-dialog/edit-profile-dialog.component'
 import { EditBioDialogComponent } from './dialogs/edit-bio-dialog/edit-bio-dialog.component'
 import { CertificationDialogComponent } from './dialogs/certification-dialog/certification-dialog.component'
+import { ThreeDotsButtonComponent } from './buttons/three-dots-button/three-dots-button.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -224,6 +225,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     StarRatingSelectComponent,
     PlusButtonComponent,
     CertificationDialogComponent,
+    ThreeDotsButtonComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -298,6 +300,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     MessageButtonComponent,
     EditButtonComponent,
     PlusButtonComponent,
+    ThreeDotsButtonComponent,
     // Dialogs
     BasicDialogComponent,
     ProposalDetailsDialogComponent,

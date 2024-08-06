@@ -6,22 +6,56 @@
   </div>
   <div class="">
     <div class="mt-[16px] flex flex-col gap-[16px]">
-      <div class="flex items-start gap-[16px]">
+      <div
+        *ngFor="let cert of userCertifications"
+        class="flex items-start gap-[16px] relative"
+      >
         <img
           src="/assets/massimo/svg/certificate.svg"
           alt="certificate"
           class="w-[24px] h-[24px]"
         />
-        <div class="flex flex-col gap-[8px]">
+        <div
+          class="flex flex-col gap-[8px]"
+          [ngClass]="{ 'pr-[48px]': isMyProfile }"
+        >
           <div class="text-b1 text-G800 font-medium">
-            Imagination to Illustration: Advanced illustration rendering
-            techniques
+            {{ cert.course }}
           </div>
           <div class="text-b2 text-G500">
-            Skillshare.com | 16th October 2020
+            {{ cert.university }} | {{ cert.startDate }} -
+            {{ cert.completion }}
           </div>
-          <div class="text-b2 text-C400 font-medium">Certificate</div>
+          <a
+            *ngIf="cert?.certificate"
+            href="{{ cert?.certificate }}"
+            target="_blank"
+            class="text-b2 text-C400 font-medium select-none"
+          >
+            Certificate
+          </a>
         </div>
+
+        <p-dropdown
+          *ngIf="isMyProfile"
+          [options]="items"
+          [(ngModel)]="selectedItem"
+          appendTo="body"
+          class="share-button-style absolute top-0 right-0"
+        >
+          <ng-template pTemplate="selectedItem">
+            <three-dots-button />
+          </ng-template>
+          <ng-template let-item pTemplate="item">
+            <div class="flex items-center">
+              <img
+                src="{{ '/assets/massimo/svg/' + item.icon }}"
+                class="mr-[16px] w-[20px]"
+              />
+              <span class="font-medium text-G900">{{ item.label }}</span>
+            </div>
+          </ng-template>
+        </p-dropdown>
       </div>
     </div>
   </div>
