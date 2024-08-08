@@ -5,6 +5,7 @@ import {
   Output,
   OnInit,
   AfterViewInit,
+  SimpleChanges,
 } from '@angular/core'
 import { User } from '@class/user'
 import { Certification } from '@class/certification'
@@ -33,6 +34,8 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
   }
   @Output() visibleChange = new EventEmitter<boolean>()
 
+  @Input() selectedCertification: Certification | null = null
+
   uniInput = ''
   uniList: any
   uniFilteredList: any
@@ -53,7 +56,6 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit() {
-    this.certifications.loadAddCert()
     this.authSub = this.auth.currentUser$.subscribe((user: User) => {
       if (user && this.currentUser !== user) {
         this.currentUser = user
@@ -77,6 +79,26 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selectedCertification && this.visible === true) {
+      this.certificationForm.controls.university.setValue(
+        this.selectedCertification.university
+      )
+      this.certificationForm.controls.course.setValue(
+        this.selectedCertification.course
+      )
+      this.certificationForm.controls.startDate.setValue(
+        this.selectedCertification.startDate
+      )
+      this.certificationForm.controls.completion.setValue(
+        this.selectedCertification.completion
+      )
+      this.certificationForm.controls.certificate.setValue(
+        this.selectedCertification.certificate
+      )
+    }
+  }
+
   ngAfterViewInit() {
     this.getJSON().subscribe((data) => {
       this.uniList = data
@@ -96,8 +118,8 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
     tempCert.isStudying = this.certificationForm.value.isStudying
     tempCert.certificate = this.certificationForm.value.certificate
     try {
-      if (this.certifications.editCert) {
-        tempCert.id = this.certifications.certToEdit.id
+      if (this.selectedCertification !== null) {
+        tempCert.id = this.selectedCertification.id
         this.certifications.updateCertification(
           tempCert,
           this.currentUser.address
@@ -106,7 +128,6 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
         tempCert.id = this.idGenerator()
         this.certifications.addCertification(tempCert, this.currentUser.address)
       }
-      document.getElementById('certificationModalClose').click()
     } catch (error) {
       this.messageService.add({
         severity: 'warn',
@@ -125,20 +146,6 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
     return s4() + '-' + s4() + '-' + s4() + '-' + s4()
   }
 
-  onDeleteCertification(cert) {
-    if (
-      confirm(
-        "Are you sure you want to delete this certification? this can't be undone!"
-      )
-    ) {
-      this.certifications.deleteCertification(cert, this.currentUser.address)
-    }
-  }
-
-  toggleWarning() {
-    document.getElementById('warning-msg').classList.toggle('active')
-  }
-
   searchUni() {
     const input = this.certificationForm.value.university.toLowerCase()
     this.uniFilteredList = this.uniList
@@ -147,7 +154,7 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
   }
 
   getDialogHeader() {
-    if (!this.certifications.editCert) {
+    if (this.selectedCertification === null) {
       return 'Add Certification'
     } else {
       return 'Edit Certification'
@@ -160,6 +167,6 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
   onSave(event: Event) {
     event.preventDefault()
     this.onSubmitCertification()
-    this._visible = false
+    this.visible = false
   }
 }

@@ -28,11 +28,6 @@
           formControlName="university"
           class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
           placeholder="Name of school or institution"
-          [value]="
-            this.certifications.certToEdit !== null && certifications.editCert
-              ? this.certifications.certToEdit.university
-              : ''
-          "
         />
       </fieldset>
       <fieldset class="flex flex-col gap-[8px]">
@@ -47,11 +42,6 @@
           required
           placeholder="Enter certification or course name"
           class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
-          [value]="
-            this.certifications.certToEdit !== null && certifications.editCert
-              ? this.certifications.certToEdit.course
-              : ''
-          "
         />
       </fieldset>
 
@@ -62,7 +52,6 @@
           </div>
           <input
             maxlength="4"
-            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
             required
             class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
             id="startDate"
@@ -70,11 +59,6 @@
             name="startDate"
             formControlName="startDate"
             placeholder="Start Date"
-            [value]="
-              this.certifications.certToEdit !== null && certifications.editCert
-                ? this.certifications.certToEdit.completion
-                : ''
-            "
           />
         </fieldset>
         <fieldset class="w-full flex flex-col gap-[8px]">
@@ -83,7 +67,6 @@
           </div>
           <input
             maxlength="4"
-            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
             required
             class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
             id="completion"
@@ -91,32 +74,8 @@
             name="completion"
             formControlName="completion"
             placeholder="End Date"
-            [value]="
-              this.certifications.certToEdit !== null && certifications.editCert
-                ? this.certifications.certToEdit.completion
-                : ''
-            "
           />
-          <!--
-            <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-            type="number" maxlength="4" required id="completion" name="completion" formControlName="completion"
-            class="form-control" [value]="(this.certifications.certToEdit !== null && certifications.editCert) ? this.certifications.certToEdit.completion : ''">
-          -->
         </fieldset>
-        <!-- <div class="form-group col-4">
-          <div class="form-check" class="study-check">
-            <input
-              type="checkbox"
-              value="true"
-              id="study"
-              formControlName="isStudying"
-              name="isStudying"
-            />
-            <label for="isStudying">
-              Still studying<span class="text-danger">*</span>
-            </label>
-          </div>
-        </div> -->
       </div>
       <fieldset class="flex flex-col gap-[8px]">
         <div class="text-b1 text-G900">Certification Link</div>
@@ -129,18 +88,6 @@
           class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
         />
       </fieldset>
-      <!-- <div class="modal-footer" style="border: none">
-        <a
-          (click)="onDeleteCertification(this.certifications.certToEdit)"
-          *ngIf="
-            this.certifications.certToEdit !== null && certifications.editCert
-          "
-          class="btn btn-danger"
-          style="color: white; position: absolute; left: 15px"
-          data-dismiss="modal"
-          >Delete</a
-        >
-      </div> -->
     </form>
     <div class="flex gap-[16px] items-center justify-end">
       <div
