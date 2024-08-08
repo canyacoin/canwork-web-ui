@@ -1,0 +1,30 @@
+<p-dialog
+  [header]="title"
+  [(visible)]="visible"
+  [draggable]="false"
+  [resizable]="false"
+  [modal]="true"
+  styleClass="!rounded-b-[0px] !rounded-t-[24px] sm:!rounded-[24px] md:max-w-[600px] w-full !bg-G50 sm:mx-[16px] max-sm:!mt-[127px] max-sm:absolute max-sm:left-0 max-sm:bottom-0"
+>
+  <div
+    class="p-[20px] md:px-[40px] md:py-[60px] flex flex-col items-center gap-4 md:gap-6"
+  >
+    <div class="text-b1 md:text-h6 text-center font-medium">
+      {{ content }}
+    </div>
+    <div class="flex gap-4 items-center">
+      <basic-button
+        [type]="1"
+        title="Yes"
+        size="small"
+        (click)="LeftClick($event)"
+      />
+      <basic-button
+        [type]="2"
+        title="No"
+        size="small"
+        (click)="RightClick($event)"
+      />
+    </div>
+  </div>
+</p-dialog>
