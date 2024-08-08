@@ -388,7 +388,6 @@ export class PostComponent implements OnInit, OnDestroy {
       // console.log('test create a job posting address')
       // issuse/................................
       this.messageService.add({
-        key: 'tc',
         severity: 'warn',
         summary: 'Warn',
         detail: 'Add BNB Chain (BEP20) wallet to create jobs',

@@ -98,6 +98,7 @@ import { PostJobMoreButtonComponent } from './buttons/post-job-more-button/post-
 import { MessageButtonComponent } from './buttons/message-button/message-button.component'
 import { PlusButtonComponent } from './buttons/plus-button/plus-button.component'
 import { EditButtonComponent } from './buttons/edit-button/edit-button.component'
+import { ThreeDotsButtonComponent } from './buttons/three-dots-button/three-dots-button.component'
 
 import { AngularEditorModule } from '@kolkov/angular-editor'
 
@@ -106,7 +107,8 @@ import { JobReviewPanelComponent } from './job/job-review-panel/job-review-panel
 import { EditProfileDialogComponent } from './dialogs/edit-profile-dialog/edit-profile-dialog.component'
 import { EditBioDialogComponent } from './dialogs/edit-bio-dialog/edit-bio-dialog.component'
 import { CertificationDialogComponent } from './dialogs/certification-dialog/certification-dialog.component'
-import { ThreeDotsButtonComponent } from './buttons/three-dots-button/three-dots-button.component'
+import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component'
+import { SkCertificationComponent } from './skeletons/sk-certification/sk-certification.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -159,13 +161,16 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     LedgerModalComponent,
     PopperComponent,
     SwitchGridListComponent,
-    SkProfileCardComponent,
-    SkJobCardComponent,
     BadgeComponent,
     StarRatingComponent,
     JoinCommunityComponent,
     PostJobComponent,
     BackToJobBoardComponent,
+
+    // Skeletons
+    SkProfileCardComponent,
+    SkJobCardComponent,
+    SkCertificationComponent,
 
     // Messages
     WarningMessageComponent,
@@ -226,6 +231,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     PlusButtonComponent,
     CertificationDialogComponent,
     ThreeDotsButtonComponent,
+    ConfirmDialogComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -248,14 +254,17 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     BasicButtonComponent,
     LinkButtonComponent,
     SwitchGridListComponent,
-    SkProfileCardComponent,
-    SkJobCardComponent,
     BadgeComponent,
     StarRatingComponent,
     JoinCommunityComponent,
     PostJobComponent,
     SearchButtonComponent,
     BackToJobBoardComponent,
+
+    // Skeletons
+    SkProfileCardComponent,
+    SkJobCardComponent,
+    SkCertificationComponent,
 
     // Messages
     WarningMessageComponent,
@@ -309,6 +318,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     EditProfileDialogComponent,
     EditBioDialogComponent,
     CertificationDialogComponent,
+    ConfirmDialogComponent,
 
     StatusIconComponent,
     JobActionLogPanelComponent,
