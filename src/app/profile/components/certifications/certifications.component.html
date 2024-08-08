@@ -1,11 +1,38 @@
-<section class="border-t border-G200 bg-white py-[40px] sm:p-[24px]">
-  <certification-dialog [(visible)]="visibleCertificationDialog" />
+<section
+  [hidden]="loaded && !isMyProfile && userCertifications.length === 0"
+  class="border-t border-G200 bg-white py-[40px] sm:p-[24px]"
+>
+  <certification-dialog
+    [(visible)]="visibleCertificationDialog"
+    [selectedCertification]="selectedCertification"
+  />
+  <confirm-dialog
+    [(visible)]="visibleDeleteCertificationDialog"
+    title="Delete Certification"
+    content="Are you sure you want to delete this certification?"
+    (LeftbtnEvent)="onDeleteCertification()"
+  />
   <div class="flex justify-between">
     <div class="text-G900 text-h6 font-medium">Certifications</div>
-    <plus-button *ngIf="isMyProfile" (click)="showCertificationDialog()" />
+    <plus-button
+      *ngIf="isMyProfile && loaded"
+      (click)="showCertificationDialog()"
+    />
   </div>
-  <div class="">
-    <div class="mt-[16px] flex flex-col gap-[16px]">
+  <div class="mt-[16px]">
+    <div *ngIf="!loaded" class="flex flex-col gap-[16px]">
+      <sk-certification />
+      <sk-certification />
+    </div>
+    <div *ngIf="loaded && userCertifications.length === 0">
+      <div class="text-b1 text-G800 font-medium">
+        You do not have any certifications
+      </div>
+    </div>
+    <div
+      *ngIf="loaded && userCertifications.length > 0"
+      class="flex flex-col gap-[16px]"
+    >
       <div
         *ngFor="let cert of userCertifications"
         class="flex items-start gap-[16px] relative"
@@ -27,7 +54,7 @@
             {{ cert.completion }}
           </div>
           <a
-            *ngIf="cert?.certificate"
+            *ngIf="cert?.certificate && cert?.certificate?.length > 0"
             href="{{ cert?.certificate }}"
             target="_blank"
             class="text-b2 text-C400 font-medium select-none"
@@ -47,7 +74,10 @@
             <three-dots-button />
           </ng-template>
           <ng-template let-item pTemplate="item">
-            <div class="flex items-center">
+            <div
+              class="flex items-center"
+              (click)="showEditCertificationDialog(item, cert)"
+            >
               <img
                 src="{{ '/assets/massimo/svg/' + item.icon }}"
                 class="mr-[16px] w-[20px]"

@@ -7,6 +7,7 @@ import { Certification } from '@class/certification'
 
 interface itemType {
   label: string
+  code: string
   icon: string
 }
 
@@ -17,10 +18,12 @@ interface itemType {
 export class CertificationsComponent implements OnInit {
   @Input() userModel: User
   @Input() isMyProfile: boolean
-  @Input() notMyProfile: boolean
   @Output() editCertification = new EventEmitter()
 
+  selectedCertification: Certification | null = null
+
   visibleCertificationDialog: boolean = false
+  visibleDeleteCertificationDialog: boolean = false
 
   userCertifications: Certification[]
   loaded = false
@@ -31,7 +34,7 @@ export class CertificationsComponent implements OnInit {
 
   constructor(
     private afs: AngularFirestore,
-    private certifications: CertificationsService
+    public certifications: CertificationsService
   ) {}
 
   ngOnInit() {
@@ -39,10 +42,12 @@ export class CertificationsComponent implements OnInit {
     this.items = [
       {
         label: 'Edit',
+        code: 'edit',
         icon: 'fi_edit.svg',
       },
       {
         label: 'Delete',
+        code: 'delete',
         icon: 'delete.svg',
       },
     ]
@@ -52,12 +57,6 @@ export class CertificationsComponent implements OnInit {
 
   OnDestroy() {
     this.certificationSub.unsubscribe()
-  }
-
-  onInputChange() {}
-
-  onDeleteCertification() {
-    console.log('deleting')
   }
 
   async loadCertifications() {
@@ -74,16 +73,22 @@ export class CertificationsComponent implements OnInit {
         }
       })
   }
-
-  setEditModal(cert: Certification) {
-    this.certifications.loadEditCert(cert)
-  }
-
-  setAddModal() {
-    this.certifications.loadAddCert()
-  }
   showCertificationDialog() {
     this.visibleCertificationDialog = true
-    this.setAddModal()
+  }
+
+  showEditCertificationDialog(item: itemType, cert: Certification) {
+    this.selectedCertification = cert
+    this.selectedItem = item
+    if (item.code === 'edit') this.visibleCertificationDialog = true
+    else if (item.code === 'delete')
+      this.visibleDeleteCertificationDialog = true
+  }
+
+  onDeleteCertification() {
+    this.certifications.deleteCertification(
+      this.selectedCertification,
+      this.userModel.address
+    )
   }
 }
