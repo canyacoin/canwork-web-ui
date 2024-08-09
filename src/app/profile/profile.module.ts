@@ -17,7 +17,7 @@ import { PortfolioComponent } from './components/portfolio/portfolio.component'
 import { ReviewsComponent } from './components/reviews/reviews.component'
 // import { SocialComponent } from './components/social/social.component'
 // import { TimezoneComponent } from './components/timezone/timezone.component'
-import { ProfileViewsComponent } from './profile-views/profile-views.component'
+// import { ProfileViewsComponent } from './profile-views/profile-views.component'
 import { ProfileComponent } from './profile.component'
 import { ProfileRoutingModule } from './profile.routing.module'
 import { ProjectComponent } from './project/project.component'
@@ -63,7 +63,7 @@ import { DropdownModule } from 'primeng/dropdown'
     PortfolioComponent,
     ProfileComponent,
     CertificationsComponent,
-    ProfileViewsComponent,
+    // ProfileViewsComponent,
     ProjectComponent,
     ProviderStateComponent,
     // SocialComponent,

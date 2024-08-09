@@ -6,7 +6,7 @@ import { AuthGuard } from '../core-utils/auth.guard'
 import { UserIsNotSetupGuard } from '../core-utils/user-is-not-setup.guard'
 import { UserIsSetupGuard } from '../core-utils/user-is-setup.guard'
 import { BuyCoffeeComponent } from './buy-coffee/buy-coffee.component'
-import { ProfileViewsComponent } from './profile-views/profile-views.component'
+// import { ProfileViewsComponent } from './profile-views/profile-views.component'
 import { ProfileComponent } from './profile.component'
 import { ProjectComponent } from './project/project.component'
 import { SetupComponent } from './setup/setup.component'
@@ -35,12 +35,12 @@ const routes: Routes = [
     canActivate: [AuthGuard, UserIsSetupGuard],
     data: { requiresLoggedIn: true },
   },
-  {
-    path: 'views',
-    component: ProfileViewsComponent,
-    canActivate: [AuthGuard, UserIsSetupGuard],
-    data: { requiresLoggedIn: true },
-  },
+  // {
+  //   path: 'views',
+  //   component: ProfileViewsComponent,
+  //   canActivate: [AuthGuard, UserIsSetupGuard],
+  //   data: { requiresLoggedIn: true },
+  // },
   {
     path: 'alt/:address',
     component: ProfileComponent,
