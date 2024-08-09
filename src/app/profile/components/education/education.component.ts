@@ -76,6 +76,7 @@ export class EducationComponent implements OnInit {
       })
   }
   showEducationDialog() {
+    this.selectedEducation = null
     this.visibleEducationDialog = true
   }
 
