@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
-import { User } from '../../../core-classes/user'
+import { Component, OnInit, Input } from '@angular/core'
+import { User } from '@class/user'
 import { Subscription } from 'rxjs'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
-import { CertificationsService } from '../../../core-services/certifications.service'
+import { CertificationsService } from '@service/certifications.service'
 import { Certification } from '@class/certification'
 
 interface itemType {
@@ -12,13 +12,12 @@ interface itemType {
 }
 
 @Component({
-  selector: 'app-certifications',
+  selector: 'app-profile-certifications',
   templateUrl: './certifications.component.html',
 })
 export class CertificationsComponent implements OnInit {
   @Input() userModel: User
   @Input() isMyProfile: boolean
-  @Output() editCertification = new EventEmitter()
 
   selectedCertification: Certification | null = null
 

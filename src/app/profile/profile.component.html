@@ -26,17 +26,21 @@
         <div
           class="lg:min-w-[350px] lg:max-w-[350px] sm:rounded-[12px] sm:border sm:!border-G200 sm:bg-white overflow-hidden h-max"
         >
-          <profile-skills
+          <app-profile-skills
             [userModel]="userModel"
             [isMyProfile]="isMyProfile()"
             (editBio)="showEditBioDialog()"
           />
-          <app-certifications
+          <app-profile-certifications
             *ngIf="userModel.type === 'Provider'"
             [userModel]="userModel"
             [isMyProfile]="isMyProfile()"
-          ></app-certifications>
-          <app-profile-education *ngIf="userModel.type === 'Provider'" />
+          />
+          <app-profile-educations
+            *ngIf="userModel.type === 'Provider'"
+            [userModel]="userModel"
+            [isMyProfile]="isMyProfile()"
+          />
         </div>
         <div class="w-full flex flex-col sm:gap-[16px]">
           <app-profile-bio
@@ -44,13 +48,13 @@
             [userModel]="userModel"
             (editBio)="showEditBioDialog()"
           />
-          <app-reviews [user]="userModel"></app-reviews>
+          <app-reviews [user]="userModel" />
           <app-profile-portfolio
             *ngIf="userModel.type === 'Provider'"
             [userModel]="userModel"
             [notMyProfile]="notMyProfile()"
             [isMyProfile]="isMyProfile()"
-          ></app-profile-portfolio>
+          />
           <app-profile-workhistory *ngIf="userModel.type === 'Provider'" />
         </div>
       </div>

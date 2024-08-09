@@ -109,6 +109,8 @@ import { EditBioDialogComponent } from './dialogs/edit-bio-dialog/edit-bio-dialo
 import { CertificationDialogComponent } from './dialogs/certification-dialog/certification-dialog.component'
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component'
 import { SkCertificationComponent } from './skeletons/sk-certification/sk-certification.component'
+import { EducationDialogComponent } from './dialogs/education-dialog/education-dialog.component'
+import { SkEducationComponent } from './skeletons/sk-education/sk-education.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -232,6 +234,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     CertificationDialogComponent,
     ThreeDotsButtonComponent,
     ConfirmDialogComponent,
+    EducationDialogComponent,
+    SkEducationComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -325,6 +329,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     JobTransactionHistoryPanelComponent,
     JobSwitchActionTransactionPanelComponent,
     StarRatingSelectComponent,
+    EducationDialogComponent,
+    SkEducationComponent,
   ],
   providers: [
     {

@@ -2,7 +2,7 @@ import { Component, Input, EventEmitter, Output } from '@angular/core'
 
 import { User } from '@class/user'
 @Component({
-  selector: 'profile-skills',
+  selector: 'app-profile-skills',
   templateUrl: './skills.component.html',
 })
 export class SkillsComponent {

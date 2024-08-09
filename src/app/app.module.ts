@@ -33,6 +33,7 @@ import { ToastrModule } from 'ngx-toastr'
 // Service Providers
 import { AuthService } from './core-services/auth.service'
 import { CertificationsService } from './core-services/certifications.service'
+import { EducationsService } from '@service/educations.service'
 import { CoreServicesModule } from './core-services/core-services.module'
 import { JobNotificationService } from './core-services/job-notification.service'
 import { MobileService } from './core-services/mobile.service'
@@ -106,6 +107,7 @@ import { MessageService } from 'primeng/api'
     NavService,
     JobNotificationService,
     CertificationsService,
+    EducationsService,
     PublicJobService,
     LedgerService,
     WindowService,
