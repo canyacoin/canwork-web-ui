@@ -73,6 +73,7 @@ export class CertificationsComponent implements OnInit {
       })
   }
   showCertificationDialog() {
+    this.selectedCertification = null
     this.visibleCertificationDialog = true
   }
 
