@@ -79,6 +79,12 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
     }
   }
 
+  ngOnDestroy() {
+    if (this.authSub) {
+      this.authSub.unsubscribe()
+    }
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selectedCertification && this.visible === true) {
       this.certificationForm.controls.university.setValue(

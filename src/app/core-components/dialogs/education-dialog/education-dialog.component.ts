@@ -92,6 +92,12 @@ export class EducationDialogComponent implements OnInit, AfterViewInit {
     }
   }
 
+  ngOnDestroy() {
+    if (this.authSub) {
+      this.authSub.unsubscribe()
+    }
+  }
+
   ngAfterViewInit() {
     this.getJSON().subscribe((data) => {
       this.uniList = data
