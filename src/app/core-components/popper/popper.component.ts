@@ -16,7 +16,7 @@ export class PopperComponent implements OnInit {
     let tooltipEl = document.querySelector<any>('#' + this.tooltipId)
     setTimeout(() => {
       tooltipEl = document.querySelector<any>('#' + this.tooltipId)
-      tooltipEl.innerText = this.tooltipText
+      if (tooltipEl) tooltipEl.innerText = this.tooltipText
     }, 100)
     const targetEl = document.querySelector('#' + this.targetId)
 
