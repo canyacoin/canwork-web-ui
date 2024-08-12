@@ -25,6 +25,13 @@ service cloud.firestore {
             allow update: if isDocumentOwner(userId);
             allow delete: if isDocumentOwner(userId);
          }
+         // workhistory
+         match /workhistory/{workhistoryId} {
+            allow read;
+            allow create: if isAuthenticated();
+            allow update: if isDocumentOwner(userId);
+            allow delete: if isDocumentOwner(userId);
+         }
       }
 
       // reviews
