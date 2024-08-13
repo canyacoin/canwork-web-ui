@@ -3,15 +3,12 @@ import {
   EventEmitter,
   Input,
   Output,
-  OnInit,
-  AfterViewInit,
   SimpleChanges,
 } from '@angular/core'
 import { User } from '@class/user'
-import { Education } from '@class/education'
-import { EducationsService } from '@service/educations.service'
+import { Workhistory } from '@class/workhistory'
+import { WorkhistoryService } from '@service/workhistory.service'
 import { AuthService } from '@service/auth.service'
-import { Observable } from 'rxjs/Observable'
 import { HttpClient } from '@angular/common/http'
 import { UntypedFormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs/Subscription'
@@ -19,7 +16,7 @@ import { MessageService } from 'primeng/api'
 
 @Component({
   selector: 'workhistory-dialog',
-  templateUrl: './workhistory-dialog.component.html'
+  templateUrl: './workhistory-dialog.component.html',
 })
 export class WorkhistoryDialogComponent {
   // two way data binding
@@ -34,23 +31,23 @@ export class WorkhistoryDialogComponent {
   }
   @Output() visibleChange = new EventEmitter<boolean>()
 
-  @Input() selectedEducation: Education | null = null
+  @Input() selectedWorkhistory: Workhistory | null = null
 
   uniInput = ''
   uniList: any
   uniFilteredList: any
   authSub: Subscription
   uniListSelection = new Array()
-  educationForm: any
+  workhistoryForm: any
   currentUser: User
-  currentEdu: Education
+  currentWorkhistory: Workhistory
   yearList = new Array()
   completionYearList = new Array()
 
   constructor(
     private messageService: MessageService,
     private auth: AuthService,
-    public educations: EducationsService,
+    public workhistorys: WorkhistoryService,
     private formBuilder: UntypedFormBuilder,
     private http: HttpClient
   ) {}
@@ -61,11 +58,14 @@ export class WorkhistoryDialogComponent {
         this.currentUser = user
       }
     })
-    this.educationForm = this.formBuilder.group({
-      university: ['', Validators.required],
-      degree: ['', Validators.required],
+    this.workhistoryForm = this.formBuilder.group({
+      logoUrl: ['', Validators.required],
+      title: ['', Validators.required],
+      employer: ['', Validators.required],
       startDate: ['', Validators.required],
       completion: ['', Validators.required],
+      description: ['', Validators.required],
+      tags: [[], Validators.required],
     })
     const currentYear = new Date().getFullYear()
     const maxCompletionYear = currentYear + 10
@@ -78,17 +78,26 @@ export class WorkhistoryDialogComponent {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.selectedEducation && this.visible === true) {
-      this.educationForm.controls.university.setValue(
-        this.selectedEducation.university
+    if (changes.selectedWorkhistory && this.visible === true) {
+      this.workhistoryForm.controls.logoUrl.setValue(
+        this.selectedWorkhistory.logoUrl
       )
-      this.educationForm.controls.degree.setValue(this.selectedEducation.degree)
-      this.educationForm.controls.startDate.setValue(
-        this.selectedEducation.startDate
+      this.workhistoryForm.controls.title.setValue(
+        this.selectedWorkhistory.title
       )
-      this.educationForm.controls.completion.setValue(
-        this.selectedEducation.completion
+      this.workhistoryForm.controls.employer.setValue(
+        this.selectedWorkhistory.employer
       )
+      this.workhistoryForm.controls.startDate.setValue(
+        this.selectedWorkhistory.startDate
+      )
+      this.workhistoryForm.controls.completion.setValue(
+        this.selectedWorkhistory.completion
+      )
+      this.workhistoryForm.controls.description.setValue(
+        this.selectedWorkhistory.description
+      )
+      this.workhistoryForm.controls.tags.setValue(this.selectedWorkhistory.tags)
     }
   }
 
@@ -98,29 +107,29 @@ export class WorkhistoryDialogComponent {
     }
   }
 
-  ngAfterViewInit() {
-    this.getJSON().subscribe((data) => {
-      this.uniList = data
-      this.uniList.sort()
-    })
-  }
-  public getJSON(): Observable<any> {
-    return this.http.get('../../assets/js/UniversityListNames.json')
-  }
-
   onSubmitEducation() {
-    const tempEdu = new Education()
-    tempEdu.university = this.educationForm.value.university
-    tempEdu.completion = this.educationForm.value.completion
-    tempEdu.degree = this.educationForm.value.degree
-    tempEdu.startDate = this.educationForm.value.startDate
+    const tempWorkhistory = new Workhistory()
+    tempWorkhistory.logoUrl = this.workhistoryForm.value.logoUrl
+    tempWorkhistory.title = this.workhistoryForm.value.title
+    tempWorkhistory.employer = this.workhistoryForm.value.employer
+    tempWorkhistory.startDate = this.workhistoryForm.value.startDate
+    tempWorkhistory.completion = this.workhistoryForm.value.completion
+    tempWorkhistory.description = this.workhistoryForm.value.description
+    tempWorkhistory.tags = this.workhistoryForm.value.tags
+
     try {
-      if (this.selectedEducation !== null) {
-        tempEdu.id = this.selectedEducation.id
-        this.educations.updateEducation(tempEdu, this.currentUser.address)
+      if (this.selectedWorkhistory !== null) {
+        tempWorkhistory.id = this.selectedWorkhistory.id
+        this.workhistorys.updateWorkhistory(
+          tempWorkhistory,
+          this.currentUser.address
+        )
       } else {
-        tempEdu.id = this.idGenerator()
-        this.educations.addEducation(tempEdu, this.currentUser.address)
+        tempWorkhistory.id = this.idGenerator()
+        this.workhistorys.addWorkhistory(
+          tempWorkhistory,
+          this.currentUser.address
+        )
       }
     } catch (error) {
       this.messageService.add({
@@ -140,18 +149,11 @@ export class WorkhistoryDialogComponent {
     return s4() + '-' + s4() + '-' + s4() + '-' + s4()
   }
 
-  searchUni() {
-    const input = this.educationForm.value.university.toLowerCase()
-    this.uniFilteredList = this.uniList
-      .filter((uni) => uni.toLowerCase().indexOf(input) !== -1)
-      .slice(0, 10)
-  }
-
   getDialogHeader() {
-    if (this.selectedEducation === null) {
-      return 'Add Education'
+    if (this.selectedWorkhistory === null) {
+      return 'Add Workhistory'
     } else {
-      return 'Edit Education'
+      return 'Edit Workhistory'
     }
   }
   onClose() {

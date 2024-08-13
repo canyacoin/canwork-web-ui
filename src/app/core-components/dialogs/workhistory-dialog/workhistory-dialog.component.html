@@ -10,11 +10,11 @@
     class="py-[24px] px-[40px] flex flex-col gap-[24px]"
   >
     <form
-      [formGroup]="educationForm"
+      [formGroup]="workhistoryForm"
       class="flex flex-col gap-[24px]"
       novalidate
     >
-      <fieldset class="flex flex-col gap-[8px]">
+      <!-- <fieldset class="flex flex-col gap-[8px]">
         <div class="text-b1 text-G900">
           School <span class="text-R900">*</span>
         </div>
@@ -28,7 +28,7 @@
           class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
           placeholder="Enter School"
         />
-      </fieldset>
+      </fieldset> -->
       <fieldset class="flex flex-col gap-[8px]">
         <div class="text-b1 text-G900">
           Degree <span class="text-R900">*</span>
@@ -88,16 +88,12 @@
         [type]="1"
         title="Save Changes"
         size="small"
-        [disabled]="!educationForm.valid"
+        [disabled]="!workhistoryForm.valid"
         (click)="onSave($event)"
       />
     </div>
   </div>
 </p-dialog>
-
-<datalist id="uniNameList">
-  <option *ngFor="let uni of uniFilteredList" value="{{ uni }}"></option>
-</datalist>
 
 <datalist id="yearList">
   <option *ngFor="let year of yearList" value="{{ year }}"></option>
