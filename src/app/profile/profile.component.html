@@ -55,7 +55,11 @@
             [notMyProfile]="notMyProfile()"
             [isMyProfile]="isMyProfile()"
           />
-          <app-profile-workhistory *ngIf="userModel.type === 'Provider'" />
+          <app-profile-workhistory
+            *ngIf="userModel.type === 'Provider'"
+            [userModel]="userModel"
+            [isMyProfile]="isMyProfile()"
+          />
         </div>
       </div>
     </div>
