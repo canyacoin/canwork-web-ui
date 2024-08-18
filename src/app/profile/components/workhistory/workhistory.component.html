@@ -8,8 +8,8 @@
   />
   <confirm-dialog
     [(visible)]="visibleDeleteWorkhistoryDialog"
-    title="Delete Workhistory"
-    content="Are you sure you want to delete this workhistory?"
+    title="Delete Work Experience"
+    content="Are you sure you want to delete this work experience?"
     (LeftbtnEvent)="onDeleteWorkhistory()"
   />
   <div class="flex justify-between">
@@ -26,29 +26,39 @@
     </div>
     <div *ngIf="loaded && userWorkhistorys.length === 0">
       <div class="text-b1 text-G800 font-medium">
-        You do not have any workhistorys
+        You do not have any Work Experience
       </div>
     </div>
     <div
       *ngIf="loaded && userWorkhistorys.length > 0"
       class="flex flex-col gap-[16px]"
     >
-      <div class="flex flex-col gap-[16px]">
+      <div
+        *ngFor="let workhistory of userWorkhistorys"
+        class="flex flex-col gap-[16px]"
+      >
         <div class="flex items-start gap-[16px] relative">
           <img
-            src="/assets/massimo/test-portfolio.png"
-            alt="test-portfolio"
-            class="w-[40px] h-[40px] bg-cover"
+            *ngIf="workhistory.logoUrl === ''"
+            src="/assets/massimo/images/canworkLogo.png"
+            alt="canwork"
+            class="w-[48px] h-[48px]"
+          />
+          <img
+            *ngIf="workhistory.logoUrl !== ''"
+            [src]="workhistory.logoUrl"
+            class="w-[48px] h-[48px] bg-cover"
           />
           <div
             class="flex flex-col gap-2"
             [ngClass]="{ 'pr-[48px]': isMyProfile }"
           >
             <div class="text-h6 text-G900 font-medium">
-              Product Designer | CanWork
+              {{ workhistory.title }} | {{ workhistory.employer }}
             </div>
             <div class="text-b2 text-G500">
-              January 2020 - January 2023 | Brisbane, Australia
+              {{ workhistory.startDate }} -
+              {{ workhistory.completion }}
             </div>
           </div>
 
@@ -63,7 +73,7 @@
               <three-dots-button />
             </ng-template>
             <ng-template let-item pTemplate="item">
-              <!-- <div
+              <div
                 class="flex items-center"
                 (click)="showEditWorkhistoryDialog(item, workhistory)"
               >
@@ -72,19 +82,12 @@
                   class="mr-[16px] w-[20px]"
                 />
                 <span class="font-medium text-G900">{{ item.label }}</span>
-              </div> -->
+              </div>
             </ng-template>
           </p-dropdown>
         </div>
-        <div class="text-G900 text-b1 line-clamp-4">
-          Lead designer for companies , creating visually appealing and
-          functional web applications, mobile applications, and design systems
-          Lead stakeholder meetings to establish user needs in a way that
-          alights with the business goals and objective as Lead designer for
-          companies , creating visually appealing and functional web
-          applications, mobile applications, and design systems Lead stakeholder
-          meetings to establish user needs in a way that alights with the
-          business goals and objective as
+        <div class="text-G900 text-b1 line-clamp-4 whitespace-pre-line">
+          {{ workhistory.description }}
         </div>
         <!-- <hr class="w-full h-[1px] bg-G200 border-none" /> -->
       </div>
