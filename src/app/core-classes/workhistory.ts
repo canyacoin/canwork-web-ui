@@ -6,5 +6,5 @@ export class Workhistory {
   startDate: number
   completion: number
   description: string
-  tags: string
+  tags: string[] = []
 }

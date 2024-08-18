@@ -61,12 +61,7 @@ export class EducationDialogComponent implements OnInit, AfterViewInit {
         this.currentUser = user
       }
     })
-    this.educationForm = this.formBuilder.group({
-      university: ['', Validators.required],
-      degree: ['', Validators.required],
-      startDate: ['', Validators.required],
-      completion: ['', Validators.required],
-    })
+    this.buildForm()
     const currentYear = new Date().getFullYear()
     const maxCompletionYear = currentYear + 10
     for (let i = 0; i < 60; i++) {
@@ -79,17 +74,32 @@ export class EducationDialogComponent implements OnInit, AfterViewInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selectedEducation && this.visible === true) {
-      this.educationForm.controls.university.setValue(
-        this.selectedEducation.university
-      )
-      this.educationForm.controls.degree.setValue(this.selectedEducation.degree)
-      this.educationForm.controls.startDate.setValue(
-        this.selectedEducation.startDate
-      )
-      this.educationForm.controls.completion.setValue(
-        this.selectedEducation.completion
-      )
+      if (this.selectedEducation !== null) {
+        this.educationForm.controls.university.setValue(
+          this.selectedEducation.university
+        )
+        this.educationForm.controls.degree.setValue(
+          this.selectedEducation.degree
+        )
+        this.educationForm.controls.startDate.setValue(
+          this.selectedEducation.startDate
+        )
+        this.educationForm.controls.completion.setValue(
+          this.selectedEducation.completion
+        )
+      } else {
+        this.buildForm()
+      }
     }
+  }
+
+  buildForm() {
+    this.educationForm = this.formBuilder.group({
+      university: ['', Validators.required],
+      degree: ['', Validators.required],
+      startDate: ['', Validators.required],
+      completion: ['', Validators.required],
+    })
   }
 
   ngOnDestroy() {

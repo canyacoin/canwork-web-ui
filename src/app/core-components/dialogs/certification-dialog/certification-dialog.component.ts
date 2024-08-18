@@ -61,14 +61,7 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
         this.currentUser = user
       }
     })
-    this.certificationForm = this.formBuilder.group({
-      university: ['', Validators.required],
-      course: ['', Validators.required],
-      startDate: ['', Validators.required],
-      completion: ['', Validators.required],
-      isStudying: [false],
-      certificate: [''],
-    })
+    this.buildForm()
     const currentYear = new Date().getFullYear()
     const maxCompletionYear = currentYear + 10
     for (let i = 0; i < 60; i++) {
@@ -87,22 +80,37 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selectedCertification && this.visible === true) {
-      this.certificationForm.controls.university.setValue(
-        this.selectedCertification.university
-      )
-      this.certificationForm.controls.course.setValue(
-        this.selectedCertification.course
-      )
-      this.certificationForm.controls.startDate.setValue(
-        this.selectedCertification.startDate
-      )
-      this.certificationForm.controls.completion.setValue(
-        this.selectedCertification.completion
-      )
-      this.certificationForm.controls.certificate.setValue(
-        this.selectedCertification.certificate
-      )
+      if (this.selectedCertification !== null) {
+        this.certificationForm.controls.university.setValue(
+          this.selectedCertification.university
+        )
+        this.certificationForm.controls.course.setValue(
+          this.selectedCertification.course
+        )
+        this.certificationForm.controls.startDate.setValue(
+          this.selectedCertification.startDate
+        )
+        this.certificationForm.controls.completion.setValue(
+          this.selectedCertification.completion
+        )
+        this.certificationForm.controls.certificate.setValue(
+          this.selectedCertification.certificate
+        )
+      } else {
+        this.buildForm()
+      }
     }
+  }
+
+  buildForm() {
+    this.certificationForm = this.formBuilder.group({
+      university: ['', Validators.required],
+      course: ['', Validators.required],
+      startDate: ['', Validators.required],
+      completion: ['', Validators.required],
+      isStudying: [false],
+      certificate: [''],
+    })
   }
 
   ngAfterViewInit() {

@@ -119,12 +119,7 @@ export class WorkhistoryDialogComponent {
         this.workhistoryForm.controls.tags.setValue(
           this.selectedWorkhistory.tags
         )
-        this.updatedTags =
-          this.selectedWorkhistory.tags === ''
-            ? []
-            : this.selectedWorkhistory.tags
-                .split(',')
-                .map((item) => item.trim())
+        this.updatedTags = this.selectedWorkhistory.tags
       } else {
         this.buildForm()
       }
@@ -194,8 +189,9 @@ export class WorkhistoryDialogComponent {
   }
 
   skillTagsUpdated(value: string) {
-    console.log('value===============================>', value)
-    this.workhistoryForm.controls['tags'].setValue(value)
+    let tags: string[] =
+      value === '' ? [] : value.split(',').map((item) => item.trim())
+    this.workhistoryForm.controls['tags'].setValue(tags)
   }
 
   idGenerator(): string {
