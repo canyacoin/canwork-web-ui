@@ -173,7 +173,7 @@
         </div>
       </div>
       <div *ngIf="!isMyProfile" class="flex gap-[16px] items-center">
-        <message-button />
+        <message-button (click)="chatUser()" />
         <basic-button
           [type]="1"
           title="Invite to a job"
