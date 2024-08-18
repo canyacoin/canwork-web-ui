@@ -22,6 +22,7 @@
   <div class="mt-[16px]">
     <div *ngIf="!loaded" class="flex flex-col gap-[16px]">
       <sk-workhistory />
+      <hr class="w-full h-[1px] bg-G200 border-none" />
       <sk-workhistory />
     </div>
     <div *ngIf="loaded && userWorkhistorys.length === 0">
@@ -34,7 +35,7 @@
       class="flex flex-col gap-[16px]"
     >
       <div
-        *ngFor="let workhistory of userWorkhistorys"
+        *ngFor="let workhistory of userWorkhistorys; let i = index"
         class="flex flex-col gap-[16px]"
       >
         <div class="flex items-start gap-[16px] relative">
@@ -96,7 +97,10 @@
             [isHoverAllowed]="false"
           ></app-skill-tag>
         </div>
-        <!-- <hr class="w-full h-[1px] bg-G200 border-none" /> -->
+        <hr
+          *ngIf="i + 1 !== userWorkhistorys.length"
+          class="w-full h-[1px] bg-G200 border-none"
+        />
       </div>
     </div>
   </div>

@@ -82,6 +82,7 @@ export class WorkhistoryDialogComponent {
   }
 
   buildForm() {
+    this.selectedFile = null
     this.updatedTags = []
     this.workhistoryForm = this.formBuilder.group({
       logoUrl: [''],
