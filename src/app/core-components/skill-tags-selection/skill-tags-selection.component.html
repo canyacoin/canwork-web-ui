@@ -22,13 +22,15 @@
     id="tagInputBox"
     list="tagsList"
     class="border-none outline-none bg-transparent placeholder:text-b1 font-sans"
-    [class]="acceptedTags.length === 0 ? 'w-full' : ''"
+    [ngClass]="{
+      'w-full': acceptedTags.length === 0,
+      invalid: acceptedTags.length === 0
+    }"
     [placeholder]="
       acceptedTags.length === 0 ? 'Search skills e.g html, css, frontend' : ''
     "
     (blur)="onBlurMethod()"
     (focus)="onFocusMethod()"
-    [class.invalid]="acceptedTags.length === 0"
     (keyup.enter)="onTagEnter()"
     (keyup.,)="onTagEnter()"
     (keyup)="onDropDownTT()"
@@ -36,7 +38,7 @@
     [ngModelOptions]="{ standalone: true }"
     (change)="onTagChange()"
     autocapitalize="none"
-    (keyup.shift.enter)="onTagEnter()"
+    (keyup)="onKeyUp($event)"
   />
 </div>
 

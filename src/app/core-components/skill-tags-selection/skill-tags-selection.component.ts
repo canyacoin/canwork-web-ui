@@ -25,15 +25,6 @@ export class SkillTagsSelectionComponent implements OnInit {
   @Output() tagsLoaded: EventEmitter<string[]> = new EventEmitter()
 
   popularSkillTags: string[] = []
-  ngOnChanges(changes: SimpleChanges) {
-    if (!!changes.updatedTags) {
-      this.acceptedTags =
-        changes.updatedTags.currentValue === undefined
-          ? []
-          : changes.updatedTags.currentValue
-      this.tagsUpdated.emit(this.acceptedTags.join(','))
-    }
-  }
 
   skillTagsList: string[] = []
   tagSelectionInvalid: number // 0 = validation, 1 = validation error with length 20, 2 = validation error with input, 3 = when duplicate
@@ -42,6 +33,22 @@ export class SkillTagsSelectionComponent implements OnInit {
   tagInput = ''
 
   constructor(private afs: AngularFirestore) {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (!!changes.updatedTags) {
+      this.acceptedTags =
+        changes.updatedTags.currentValue === undefined
+          ? []
+          : changes.updatedTags.currentValue
+      this.tagsUpdated.emit(this.acceptedTags.join(','))
+    }
+    if (
+      !!changes.initialTags &&
+      changes.initialTags.currentValue !== undefined
+    ) {
+      this.acceptedTags = changes.initialTags.currentValue
+    }
+  }
 
   ngOnInit() {
     this.popularSkillTags = [
@@ -148,5 +155,11 @@ export class SkillTagsSelectionComponent implements OnInit {
     }
     // Can click the tooltip to enter it for better UX on mobile
     // optionally the user can press 'enter' or 'comma' as usual
+  }
+
+  onKeyUp(event: KeyboardEvent) {
+    if (event.key === 'Enter' || event.key === ',') {
+      this.onTagEnter()
+    }
   }
 }
