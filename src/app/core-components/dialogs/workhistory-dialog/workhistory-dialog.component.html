@@ -6,40 +6,71 @@
   [modal]="true"
   styleClass="!rounded-b-[0px] !rounded-t-[24px] sm:!rounded-[24px] md:max-w-[600px] lg:max-w-[906px] w-full !bg-G50 sm:mx-[16px] max-sm:!mt-[127px] max-sm:absolute max-sm:left-0 max-sm:bottom-0"
 >
-  <div
-    class="py-[24px] px-[40px] flex flex-col gap-[24px]"
-  >
+  <div class="py-[24px] px-[40px] flex flex-col gap-[24px]">
     <form
       [formGroup]="workhistoryForm"
       class="flex flex-col gap-[24px]"
       novalidate
     >
-      <!-- <fieldset class="flex flex-col gap-[8px]">
-        <div class="text-b1 text-G900">
-          School <span class="text-R900">*</span>
-        </div>
-        <input
-          required
-          #university
-          name="university"
-          (input)="searchUni()"
-          list="uniNameList"
-          formControlName="university"
-          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
-          placeholder="Enter School"
+      <div
+        class="w-max rounded-full overflow-hidden border-[5px] border-white relative cursor-pointer hover:opacity-80 active:opacity-100 transition-opacity duration-200"
+        (click)="fileInput.click()"
+      >
+        <div
+          *ngIf="this.workhistoryForm.value.logoUrl === '' && !selectedFile"
+          class="bg-G400 w-[120px] h-[120px]"
+        ></div>
+        <img
+          *ngIf="this.workhistoryForm.value.logoUrl !== '' && !selectedFile"
+          [src]="this.workhistoryForm.value.logoUrl"
+          alt="logo"
+          class="w-[120px] h-[120px] bg-cover select-none"
         />
-      </fieldset> -->
+        <img
+          *ngIf="selectedFile"
+          [src]="selectedFileUrl"
+          alt="logo"
+          class="w-[120px] h-[120px] bg-cover select-none"
+        />
+        <img
+          src="/assets/massimo/images/imagePlus.png"
+          alt="imagePlus"
+          class="absolute top-[40px] left-[40px] w-[40px] h-[40px] select-none"
+        />
+        <input
+          #fileInput
+          id="file-upload"
+          type="file"
+          accept="image/jpg,image/png,image/jpeg"
+          hidden
+          (change)="detectFiles($event)"
+        />
+      </div>
       <fieldset class="flex flex-col gap-[8px]">
         <div class="text-b1 text-G900">
-          Degree <span class="text-R900">*</span>
+          Title <span class="text-R900">*</span>
         </div>
         <input
           type="text"
-          #degree
-          name="Degree"
-          formControlName="degree"
+          #title
+          name="title"
+          formControlName="title"
           required
-          placeholder="Enter Degree"
+          placeholder="Enter your title"
+          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+        />
+      </fieldset>
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">
+          Name of employer <span class="text-R900">*</span>
+        </div>
+        <input
+          type="text"
+          #employer
+          name="employer"
+          formControlName="employer"
+          required
+          placeholder="Enter your employer's organization"
           class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
         />
       </fieldset>
@@ -76,6 +107,34 @@
           />
         </fieldset>
       </div>
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">
+          Job Description <span class="text-R900">*</span>
+        </div>
+        <textarea
+          type="text"
+          #description
+          name="description"
+          formControlName="description"
+          required
+          placeholder="Describe your role and responsibilities"
+          class="w-full outline-none h-[200px] border border-G200 bg-G50 rounded-xl p-[16px] text-b1 font-sans placeholder:text-G500"
+        ></textarea>
+        <div class="flex justify-end">
+          {{ this.workhistoryForm.value.description.length }}/2500
+        </div>
+      </fieldset>
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">
+          Skill Tags (20 max) <span class="text-R900">*</span>
+        </div>
+        <skill-tags-selection
+          (tagsUpdated)="skillTagsUpdated($event)"
+          [initialTags]="updatedTags"
+          [minimumTags]="0"
+        ></skill-tags-selection>
+        <input hidden #tags formControlName="tags" type="text" name="tags" />
+      </fieldset>
     </form>
     <div class="flex gap-[16px] items-center justify-end">
       <div
