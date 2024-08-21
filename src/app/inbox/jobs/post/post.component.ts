@@ -338,6 +338,9 @@ export class PostComponent implements OnInit, OnDestroy {
                 this.shareableJobForm.controls['paymentType'].patchValue(
                   this.jobToEdit.paymentType
                 )
+                this.shareableJobForm.controls['visibility'].patchValue(
+                  this.jobToEdit.visibility
+                )
                 // this.shareableJobForm.controls['deadline'].patchValue(
                 //   this.jobToEdit.deadline
                 // )
@@ -1015,7 +1018,7 @@ export class PostComponent implements OnInit, OnDestroy {
     this.sentDRP = isDRP
   }
 
-  BacktoEdit(event: Event) {
+  BackToEdit(event: Event) {
     event.preventDefault()
     this.isPreview = false
   }
