@@ -18,6 +18,7 @@ export class FilterComponent implements OnInit {
   @Input() skillsForm: string[] = []
   @Output() skillsFormChange = new EventEmitter<string[]>() // two way binding to parent
   tempSkillsForm: string[] = []
+  isSeeMore: boolean = true
   skillsLength: number = 9 // how many skills to show at start
 
   @Input() ratingForm: number[] = []
@@ -136,8 +137,10 @@ export class FilterComponent implements OnInit {
   seeMoreClick() {
     if (this.skillsLength < this.filterSection.skills.length) {
       this.skillsLength = this.filterSection.skills.length
+      this.isSeeMore = false
     } else {
       this.skillsLength = 9
+      this.isSeeMore = true
     }
     this.tempSkillsForm = this.filterSection.skills.slice(0, this.skillsLength)
   }
