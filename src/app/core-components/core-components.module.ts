@@ -111,8 +111,9 @@ import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.
 import { SkCertificationComponent } from './skeletons/sk-certification/sk-certification.component'
 import { EducationDialogComponent } from './dialogs/education-dialog/education-dialog.component'
 import { SkEducationComponent } from './skeletons/sk-education/sk-education.component'
-import { WorkhistoryDialogComponent } from './dialogs/workhistory-dialog/workhistory-dialog.component';
+import { WorkhistoryDialogComponent } from './dialogs/workhistory-dialog/workhistory-dialog.component'
 import { SkWorkhistoryComponent } from './skeletons/sk-workhistory/sk-workhistory.component'
+import { InviteJobDialogComponent } from './dialogs/invite-job-dialog/invite-job-dialog.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -228,6 +229,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     EditProfileDialogComponent,
     EditBioDialogComponent,
     WorkhistoryDialogComponent,
+    InviteJobDialogComponent,
 
     StatusIconComponent,
     JobActionLogPanelComponent,
@@ -329,6 +331,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     CertificationDialogComponent,
     ConfirmDialogComponent,
     WorkhistoryDialogComponent,
+    InviteJobDialogComponent,
 
     StatusIconComponent,
     JobActionLogPanelComponent,

@@ -189,12 +189,13 @@
           <basic-button
             [type]="1"
             [routerLink]="['/']"
-            title="Go bome"
+            title="Go home"
             size="small"
           />
           <basic-button
             [type]="2"
-            [routerLink]="['inbox/jobs?tab=3']"
+            [routerLink]="['/inbox/jobs']"
+            [queryParams]="{ tab: 3 }"
             title="See Drafts"
             size="small"
             extraClass="border"
