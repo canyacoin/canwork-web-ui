@@ -13,6 +13,7 @@ import { Location } from '@angular/common'
 
 import { FilterService } from 'app/shared/constants/public-job-dashboard-page'
 import { UserService } from '@service/user.service'
+import { Job, PaymentType } from '@class/job'
 
 const HITS_PER_PAGE = 5
 
@@ -28,7 +29,7 @@ interface SoringMethod {
 export class DashboardComponent implements OnInit, OnDestroy {
   screenWidth: number
 
-  hits = [] // the new hits array, injected into result component
+  hits: Job[] = [] // the new hits array, injected into result component
 
   sortby: SoringMethod
   // jobs
@@ -88,8 +89,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // Search parameters
   searchItems: string[] = []
 
-  allProviders: any[] = []
-  filteredProviders: any[] = []
+  allProviders: Job[] = []
+  filteredProviders: Job[] = []
   constructor(
     private activatedRoute: ActivatedRoute,
     private auth: AuthService,
@@ -177,7 +178,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   async refreshResultsSearch() {
     this.filteredProviders = []
 
-    let searchResultJobs = this.allProviders
+    let searchResultJobs: Job[] = this.allProviders
     // search Category
     if (this.categoryFilter.length > 0) {
       searchResultJobs.map((provider) => {
@@ -258,7 +259,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.hourlyFilter.length > 0) {
       if (this.hourlyFilter[0] == 0 && this.hourlyFilter[1] === 0) {
         searchResultJobs.map((provider) => {
-          if (provider.paymentType == 'Hourly price') {
+          if (provider.paymentType == PaymentType.hourly) {
             this.filteredProviders.push(provider)
           }
         })
@@ -270,12 +271,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
           ? 300
           : this.hourlyFilter[1]
 
-        searchResultJobs.map((provider) => {
+        searchResultJobs.map((provider: Job) => {
           if (
             this.minValue <= provider.budget &&
             this.maxValue >= provider.budget
           ) {
-            if (provider.paymentType == 'Hourly price') {
+            if (provider.paymentType === PaymentType.hourly) {
               this.filteredProviders.push(provider)
             }
           }
@@ -283,7 +284,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
       if (this.fixedFilter.length) {
         if (this.filteredProviders.length > 0)
-          searchResultJobs.push(this.filteredProviders)
+          searchResultJobs.push(...this.filteredProviders)
       } else searchResultJobs = this.filteredProviders
       this.filteredProviders = []
     }
