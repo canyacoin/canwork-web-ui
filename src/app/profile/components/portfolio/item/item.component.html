@@ -6,13 +6,13 @@
           workItem.image ||
           '//canya-tests.firebaseapp.com/assets/img/work-placeholder.svg'
         "
-        class="mt-30"
+        class="h-full"
         data-provide="lightbox"
       >
         <img
-          class="portfolio-item"
+          class="portfolio-item bg-cover"
           [src]="workItem.image"
-          style=" padding:10px; border-radius:30px"
+          style="padding: 10px; border-radius: 30px"
           [src-fallback]="defaultImage"
           alt="{{ workItem.title }}"
           class="card-img-left thumbnail"
@@ -21,11 +21,11 @@
     </div>
     <div class="col-md-6">
       <div class="card">
-        <div class="row" style="padding-top:15px">
+        <div class="row" style="padding-top: 15px">
           <div class="col-md-10">
             <span
               class="card-subtitle"
-              style="padding-top: 1em; text-transform: uppercase;"
+              style="padding-top: 1em; text-transform: uppercase"
             >
               <b>{{ workItem.title }}</b>
             </span>
@@ -37,7 +37,7 @@
               data-toggle="tooltip"
               data-placement="top"
               title="Edit item"
-              style="color: #535353;"
+              style="color: #535353"
             >
               <i class="ti-pencil fw-600" aria-hidden="true"></i>
             </a>
@@ -48,15 +48,15 @@
           <p
             *ngIf="workItem.description"
             class="fw-400"
-            style="font-size: 12px;"
+            style="font-size: 12px"
           >
             {{ workItem.description }}
           </p>
           <div class="row">
             <div class="container">
               <span
-                style="outline:none; margin-right: 5px;"
-                *ngFor="let skill of workItem.tags | slice: 0:8"
+                style="outline: none; margin-right: 5px"
+                *ngFor="let skill of workItem.tags | slice : 0 : 8"
                 [routerLink]="['/home']"
                 [queryParams]="{ query: skill }"
               >
