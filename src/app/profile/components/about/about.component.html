@@ -2,6 +2,13 @@
   *ngIf="userModel"
   class="sm:rounded-[12px] sm:border sm:!border-G200 sm:bg-white relative sm:overflow-hidden"
 >
+  <invite-job-dialog
+    *ngIf="!isMyProfile"
+    [(visible)]="visibleInviteDialog"
+    [currentUser]="currentUser"
+    [userModel]="userModel"
+    [userAddress]="userModel.address"
+  />
   <div
     class="bg-hero-pattern bg-no-repeat bg-center bg-cover w-full h-[90px] md:h-[184px]"
   ></div>
@@ -40,7 +47,7 @@
           </div>
         </div>
       </div>
-      <share-button />
+      <share-button [link]="'https://canwork.io/profile/' + userModel.slug" />
     </div>
 
     <div
@@ -179,13 +186,14 @@
           title="Invite to a job"
           size="small"
           extraClass="!text-b1"
+          (click)="showInviteDialog()"
         />
-        <basic-button
+        <!-- <basic-button
           [type]="2"
           title="Request"
           size="small"
           extraClass="!text-b1"
-        />
+        /> -->
       </div>
       <div
         *ngIf="isMyProfile"

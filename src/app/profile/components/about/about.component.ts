@@ -25,6 +25,8 @@ export class AboutComponent implements OnInit {
 
   @Output() editProfile = new EventEmitter()
 
+  visibleInviteDialog: boolean = false
+
   currentUserJobs = null
   pageLimit = 5
   currentPage = 0
@@ -141,5 +143,9 @@ export class AboutComponent implements OnInit {
       this.userModel.address
     )
     return result
+  }
+
+  showInviteDialog() {
+    this.visibleInviteDialog = true
   }
 }
