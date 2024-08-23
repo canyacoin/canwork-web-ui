@@ -49,10 +49,10 @@
         </div>
       </div>
       <!-- [hidden]="currentUser?.type !== 'Provider'" -->
-      <fieldset class="form-group">
-        <label
-          >Tag with relevant skills to help clients find you more easily.</label
-        >
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">
+          Skill Tags (20 max) <span class="text-R900">*</span>
+        </div>
         <skill-tags-selection
           *ngIf="currentUser"
           (tagsUpdated)="skillTagsUpdated($event)"
@@ -62,7 +62,6 @@
         <input
           hidden
           #skillTags
-          class="form-control"
           formControlName="skillTags"
           type="text"
           name="skillTags"

@@ -67,8 +67,8 @@ export class EditBioDialogComponent {
       this.profileForm.value.skillTags === ''
         ? []
         : this.profileForm.value.skillTags.split(',').map((item) => item.trim())
-    if (tags.length > 6) {
-      tags = tags.slice(0, 6)
+    if (tags.length > 20) {
+      tags = tags.slice(0, 20)
     }
 
     const tmpUser = {

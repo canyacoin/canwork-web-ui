@@ -51,9 +51,14 @@ export class WalletBnbAssetsComponent
   async ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl']
     // console.log('this.returnUrl:', this.returnUrl)
+    let connectWalletParam = this.route.snapshot.queryParams['connectWallet']
+    if (connectWalletParam === '1') {
+      this.visibleConnectWalletModal = true
+    }
     await this.walletRefresh()
   }
   async walletRefresh() {
+    this.loading = true
     this.totalBudget = 0
     this.assets = []
 
@@ -171,7 +176,6 @@ export class WalletBnbAssetsComponent
 
   async refresh(event: Event) {
     event?.preventDefault()
-    this.loading = true
     // await this.sleepRx(1000)
     this.walletRefresh()
   }

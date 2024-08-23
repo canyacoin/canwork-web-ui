@@ -98,6 +98,7 @@ import { PostJobMoreButtonComponent } from './buttons/post-job-more-button/post-
 import { MessageButtonComponent } from './buttons/message-button/message-button.component'
 import { PlusButtonComponent } from './buttons/plus-button/plus-button.component'
 import { EditButtonComponent } from './buttons/edit-button/edit-button.component'
+import { ThreeDotsButtonComponent } from './buttons/three-dots-button/three-dots-button.component'
 
 import { AngularEditorModule } from '@kolkov/angular-editor'
 
@@ -106,6 +107,13 @@ import { JobReviewPanelComponent } from './job/job-review-panel/job-review-panel
 import { EditProfileDialogComponent } from './dialogs/edit-profile-dialog/edit-profile-dialog.component'
 import { EditBioDialogComponent } from './dialogs/edit-bio-dialog/edit-bio-dialog.component'
 import { CertificationDialogComponent } from './dialogs/certification-dialog/certification-dialog.component'
+import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component'
+import { SkCertificationComponent } from './skeletons/sk-certification/sk-certification.component'
+import { EducationDialogComponent } from './dialogs/education-dialog/education-dialog.component'
+import { SkEducationComponent } from './skeletons/sk-education/sk-education.component'
+import { WorkhistoryDialogComponent } from './dialogs/workhistory-dialog/workhistory-dialog.component'
+import { SkWorkhistoryComponent } from './skeletons/sk-workhistory/sk-workhistory.component'
+import { InviteJobDialogComponent } from './dialogs/invite-job-dialog/invite-job-dialog.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -158,13 +166,17 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     LedgerModalComponent,
     PopperComponent,
     SwitchGridListComponent,
-    SkProfileCardComponent,
-    SkJobCardComponent,
     BadgeComponent,
     StarRatingComponent,
     JoinCommunityComponent,
     PostJobComponent,
     BackToJobBoardComponent,
+
+    // Skeletons
+    SkProfileCardComponent,
+    SkJobCardComponent,
+    SkCertificationComponent,
+    SkWorkhistoryComponent,
 
     // Messages
     WarningMessageComponent,
@@ -216,6 +228,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ActionDialogComponent,
     EditProfileDialogComponent,
     EditBioDialogComponent,
+    WorkhistoryDialogComponent,
+    InviteJobDialogComponent,
 
     StatusIconComponent,
     JobActionLogPanelComponent,
@@ -224,6 +238,10 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     StarRatingSelectComponent,
     PlusButtonComponent,
     CertificationDialogComponent,
+    ThreeDotsButtonComponent,
+    ConfirmDialogComponent,
+    EducationDialogComponent,
+    SkEducationComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -246,14 +264,18 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     BasicButtonComponent,
     LinkButtonComponent,
     SwitchGridListComponent,
-    SkProfileCardComponent,
-    SkJobCardComponent,
     BadgeComponent,
     StarRatingComponent,
     JoinCommunityComponent,
     PostJobComponent,
     SearchButtonComponent,
     BackToJobBoardComponent,
+
+    // Skeletons
+    SkProfileCardComponent,
+    SkJobCardComponent,
+    SkCertificationComponent,
+    SkWorkhistoryComponent,
 
     // Messages
     WarningMessageComponent,
@@ -298,6 +320,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     MessageButtonComponent,
     EditButtonComponent,
     PlusButtonComponent,
+    ThreeDotsButtonComponent,
     // Dialogs
     BasicDialogComponent,
     ProposalDetailsDialogComponent,
@@ -306,12 +329,17 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     EditProfileDialogComponent,
     EditBioDialogComponent,
     CertificationDialogComponent,
+    ConfirmDialogComponent,
+    WorkhistoryDialogComponent,
+    InviteJobDialogComponent,
 
     StatusIconComponent,
     JobActionLogPanelComponent,
     JobTransactionHistoryPanelComponent,
     JobSwitchActionTransactionPanelComponent,
     StarRatingSelectComponent,
+    EducationDialogComponent,
+    SkEducationComponent,
   ],
   providers: [
     {

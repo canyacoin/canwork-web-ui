@@ -23,10 +23,7 @@
         </div>
       </div>
       <div class="grid gap-6">
-        <div
-          *ngFor="let card of whyFreelanceSection.cards"
-          class="flex gap-6"
-        >
+        <div *ngFor="let card of whyFreelanceSection.cards" class="flex gap-6">
           <img src="{{ card.iconSrc }}" class="w-[48px] h-[48px] select-none" />
           <div class="grid gap-2">
             <div class="text-G900 text-b1 font-medium">{{ card.title }}</div>
@@ -34,7 +31,7 @@
           </div>
         </div>
       </div>
-      <div [routerLink]="['/']" class="w-max">
+      <div [routerLink]="['/search']" class="w-max">
         <basic-button [type]="1" [title]="whyFreelanceSection.buttonText1" />
       </div>
     </div>

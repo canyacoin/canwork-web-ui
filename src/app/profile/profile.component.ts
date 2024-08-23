@@ -3,12 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
 import { UserService } from '@service/user.service'
-import { ToastrService } from 'ngx-toastr'
 import { SeoService } from '@service/seo.service'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 // spinner
 import { NgxSpinnerService } from 'ngx-spinner'
+import { MessageService } from 'primeng/api'
 
 @Component({
   selector: 'app-profile',
@@ -33,9 +33,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private userService: UserService,
     private authService: AuthService,
-    private toastr: ToastrService,
     private seoService: SeoService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private messageService: MessageService
   ) {
     const navigation = this.router.getCurrentNavigation()
     this.navigationAddress = navigation.extras.state
@@ -62,13 +62,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.visibleEditProfileDialog = params.editProfile ? true : false
           })
         }
-        this.spinner.hide()
       },
       (error) => {
         console.error('! unable to retrieve currentUser data:', error)
-        this.spinner.hide()
       }
     )
+    setTimeout(() => {
+      /** spinner ends after 3000ms */
+      this.spinner.hide()
+    }, 3000)
   }
 
   ngOnDestroy() {
@@ -80,14 +82,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-  async notifyAddAddressIfNecessary(loggedInUser) {
+  async notifyAddAddressIfNecessary(loggedInUser: User) {
     if (!loggedInUser) return
     if (this.notifiedBnbOrBscAddress) {
       return
     }
     const noAddress = !!loggedInUser && !loggedInUser.bscAddress
     if (noAddress && loggedInUser.type == 'Provider') {
-      this.toastr.warning('Add BNB Chain (BEP20) wallet to receive payments')
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warn',
+        detail: 'Add BNB Chain (BEP20) wallet to receive payments',
+      })
       this.notifiedBnbOrBscAddress = true
     }
   }

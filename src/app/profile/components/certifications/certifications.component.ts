@@ -1,49 +1,61 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  Output,
-  EventEmitter,
-  OnDestroy,
-  Directive,
-} from '@angular/core'
-import { User } from '../../../core-classes/user'
+import { Component, OnInit, Input } from '@angular/core'
+import { User } from '@class/user'
 import { Subscription } from 'rxjs'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
-import { CertificationsService } from '../../../core-services/certifications.service'
+import { CertificationsService } from '@service/certifications.service'
+import { Certification } from '@class/certification'
+
+interface itemType {
+  label: string
+  code: string
+  icon: string
+}
 
 @Component({
-  selector: 'app-certifications',
+  selector: 'app-profile-certifications',
   templateUrl: './certifications.component.html',
 })
 export class CertificationsComponent implements OnInit {
   @Input() userModel: User
   @Input() isMyProfile: boolean
-  @Input() notMyProfile: boolean
-  @Output() editCertification = new EventEmitter()
+
+  selectedCertification: Certification | null = null
 
   visibleCertificationDialog: boolean = false
+  visibleDeleteCertificationDialog: boolean = false
 
-  userCertifications: any
+  userCertifications: Certification[]
   loaded = false
   certificationSub: Subscription
+
+  items: itemType[]
+  selectedItem: itemType | undefined
+
   constructor(
     private afs: AngularFirestore,
-    private certifications: CertificationsService
+    public certifications: CertificationsService
   ) {}
 
   ngOnInit() {
     this.loadCertifications()
+    this.items = [
+      {
+        label: 'Edit',
+        code: 'edit',
+        icon: 'fi_edit.svg',
+      },
+      {
+        label: 'Delete',
+        code: 'delete',
+        icon: 'delete.svg',
+      },
+    ]
+
+    this.selectedItem = this.items[0]
   }
 
   OnDestroy() {
     this.certificationSub.unsubscribe()
-  }
-
-  onInputChange() {}
-
-  onDeleteCertification() {
-    console.log('deleting')
   }
 
   async loadCertifications() {
@@ -52,23 +64,31 @@ export class CertificationsComponent implements OnInit {
     )
     this.certificationSub = certifications
       .valueChanges()
-      .subscribe((data: any) => {
+      .subscribe((data: Certification[]) => {
         this.userCertifications = data
+        console.log('certification data:', data)
         if (data.length >= 0) {
           this.loaded = true
         }
       })
   }
-
-  setEditModal(cert) {
-    this.certifications.loadEditCert(cert)
-  }
-
-  setAddModal() {
-    this.certifications.loadAddCert()
-  }
   showCertificationDialog() {
+    this.selectedCertification = null
     this.visibleCertificationDialog = true
-    this.setAddModal()
+  }
+
+  showEditCertificationDialog(item: itemType, cert: Certification) {
+    this.selectedCertification = cert
+    this.selectedItem = item
+    if (item.code === 'edit') this.visibleCertificationDialog = true
+    else if (item.code === 'delete')
+      this.visibleDeleteCertificationDialog = true
+  }
+
+  onDeleteCertification() {
+    this.certifications.deleteCertification(
+      this.selectedCertification,
+      this.userModel.address
+    )
   }
 }

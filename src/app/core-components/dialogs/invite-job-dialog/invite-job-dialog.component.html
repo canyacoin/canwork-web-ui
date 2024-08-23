@@ -1,0 +1,72 @@
+<p-dialog
+  header="Invite To Job"
+  [(visible)]="visible"
+  [draggable]="false"
+  [resizable]="false"
+  [modal]="true"
+  styleClass="!rounded-b-[0px] !rounded-t-[24px] sm:!rounded-[24px] md:max-w-[600px] lg:max-w-[906px] w-full !bg-G50 sm:mx-[16px] max-sm:!mt-[127px] max-sm:absolute max-sm:left-0 max-sm:bottom-0"
+>
+  <div class="py-[24px] px-[16px] sm:px-[40px] flex flex-col gap-[24px]">
+    <!-- <div class="row" *ngIf="loadingJobs">
+      <div class="col-12 mh-150 text-center">
+        <i>Loading...</i>
+      </div>
+    </div> -->
+    <div *ngIf="loadingJobs" class="flex flex-col gap-4">
+      <div class="w-full h-[14px] bg-G300 rounded-full animate-pulse"></div>
+      <hr class="w-full h-[1px] bg-G200 border-none" />
+      <div class="w-full h-[14px] bg-G300 rounded-full animate-pulse"></div>
+      <hr class="w-full h-[1px] bg-G200 border-none" />
+      <div class="w-full h-[14px] bg-G300 rounded-full animate-pulse"></div>
+    </div>
+    <div *ngIf="!loadingJobs">
+      <div
+        *ngIf="currentUserJobs.length === 0"
+        class="text-b1 text-G800 font-medium"
+      >
+        You do not have any job for invitation.
+      </div>
+
+      <div *ngIf="currentUserJobs.length > 0" class="flex flex-col gap-2">
+        <div
+          *ngFor="let job of currentUserJobs; let i = index"
+          class="flex flex-col gap-2"
+        >
+          <div class="flex justify-between items-center gap-4">
+            <div class="text-b1 font-medium">{{ job.information.title }}</div>
+
+            <basic-button
+              [type]="2"
+              *ngIf="job.canInvite"
+              [title]="inviting === true ? 'Inviting...' : 'Invite'"
+              (click)="inviteProvider(job, i)"
+            />
+            <div
+              *ngIf="!job.canInvite"
+              class="px-[16px] py-[6px] rounded-3xl text-G800 select-none bg-B75"
+            >
+              Invited
+            </div>
+          </div>
+          <hr
+            *ngIf="i + 1 !== currentUserJobs.length"
+            class="w-full h-[1px] bg-G200 border-none"
+          />
+        </div>
+      </div>
+    </div>
+    <!-- <div class="row py-10">
+      <div class="col-12 text-center">
+        <span
+          >Want to start a new job?<br />
+          <a
+            data-dismiss="modal"
+            class="pointer text-canya"
+            (click)="proposeJob()"
+            >Post a request.</a
+          ></span
+        >
+      </div>
+    </div> -->
+  </div>
+</p-dialog>

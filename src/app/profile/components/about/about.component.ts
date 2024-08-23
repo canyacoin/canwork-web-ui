@@ -25,6 +25,8 @@ export class AboutComponent implements OnInit {
 
   @Output() editProfile = new EventEmitter()
 
+  visibleInviteDialog: boolean = false
+
   currentUserJobs = null
   pageLimit = 5
   currentPage = 0
@@ -61,9 +63,9 @@ export class AboutComponent implements OnInit {
       if (this.route.snapshot.queryParams['nextAction'] === 'chat')
         this.chatUser()
     }
-    console.log('=================><====================================')
-    console.log('this.currentUser', this.currentUser)
-    console.log('this.userModel', this.userModel)
+    // console.log('=================><====================================')
+    // console.log('this.currentUser', this.currentUser)
+    // console.log('this.userModel', this.userModel)
   }
 
   displayProfileEditComponent() {
@@ -141,5 +143,9 @@ export class AboutComponent implements OnInit {
       this.userModel.address
     )
     return result
+  }
+
+  showInviteDialog() {
+    this.visibleInviteDialog = true
   }
 }

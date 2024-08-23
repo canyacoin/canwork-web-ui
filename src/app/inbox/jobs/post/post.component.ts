@@ -338,6 +338,9 @@ export class PostComponent implements OnInit, OnDestroy {
                 this.shareableJobForm.controls['paymentType'].patchValue(
                   this.jobToEdit.paymentType
                 )
+                this.shareableJobForm.controls['visibility'].patchValue(
+                  this.jobToEdit.visibility
+                )
                 // this.shareableJobForm.controls['deadline'].patchValue(
                 //   this.jobToEdit.deadline
                 // )
@@ -388,7 +391,6 @@ export class PostComponent implements OnInit, OnDestroy {
       // console.log('test create a job posting address')
       // issuse/................................
       this.messageService.add({
-        key: 'tc',
         severity: 'warn',
         summary: 'Warn',
         detail: 'Add BNB Chain (BEP20) wallet to create jobs',
@@ -1016,7 +1018,7 @@ export class PostComponent implements OnInit, OnDestroy {
     this.sentDRP = isDRP
   }
 
-  BacktoEdit(event: Event) {
+  BackToEdit(event: Event) {
     event.preventDefault()
     this.isPreview = false
   }

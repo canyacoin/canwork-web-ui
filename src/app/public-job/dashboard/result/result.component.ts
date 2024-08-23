@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
+import { Job } from '@class/job'
 
 interface PageEvent {
   first: number
@@ -22,7 +23,7 @@ export class ResultComponent implements OnInit {
   @Input() stats: any
   @Input() searchItems: string[] = []
   @Input() searchParam: string
-  @Input() jobs: any[]
+  @Input() jobs: Job[]
   @Input() first: number = 0
   @Input() totalRecords: number = 0
   @Input() rows: number = 5

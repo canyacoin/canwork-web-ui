@@ -149,12 +149,9 @@
                 (onChange)="skillClick($event)"
               ></p-checkbox>
             </div>
-            <div
-              *ngIf="skillsForm.length < 10"
-              class="cursor-pointer font-medium"
-              (click)="seeMoreClick()"
-            >
-              See More
+            <!-- *ngIf="skillsForm.length >== 10" -->
+            <div class="cursor-pointer font-medium" (click)="seeMoreClick()">
+              {{ isSeeMore === true ? 'See More' : 'See Less' }}
             </div>
           </div>
         </div>

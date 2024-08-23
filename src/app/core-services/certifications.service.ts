@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
-import { Certification } from '../core-classes/certification'
+import { Certification } from '@class/certification'
 import { Subscription } from 'rxjs/Subscription'
 
 @Injectable()
 export class CertificationsService {
-  editCert = false
-  certToEdit: Certification
   certificationSub: Subscription
   constructor(private afs: AngularFirestore) {}
 
@@ -29,8 +27,8 @@ export class CertificationsService {
       .doc(`users/${userID}/certifications/${tempCert.id}`)
       .set(tempCert)
       .catch((error) => {
-        alert('Something went wrong. Please try again later.')
-        console.log(error)
+        // alert('Something went wrong. Please try again later.')
+        console.log('error', error);
       })
   }
 
@@ -48,7 +46,8 @@ export class CertificationsService {
       .doc(`users/${userID}/certifications/${tempCert.id}`)
       .update(tempCert)
       .catch((error) => {
-        alert('Something went wrong. Please try again later.')
+        // alert('Something went wrong. Please try again later.')
+        console.log('error', error);
       })
   }
 
@@ -57,7 +56,8 @@ export class CertificationsService {
       .doc(`users/${userID}/certifications/${certification.id}`)
       .delete()
       .catch((error) => {
-        alert('Something went wrong. Please try again later.')
+        // alert('Something went wrong. Please try again later.')
+        console.log('error', error);
       })
   }
 
@@ -70,17 +70,5 @@ export class CertificationsService {
         result = data
         return result
       })
-  }
-
-  public loadAddCert() {
-    console.log('Adding certification...')
-    this.certToEdit = null
-    this.editCert = false
-  }
-
-  public loadEditCert(cert) {
-    console.log('Editing certification...')
-    this.certToEdit = cert
-    this.editCert = true
   }
 }

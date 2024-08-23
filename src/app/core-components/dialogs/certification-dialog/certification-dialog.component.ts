@@ -5,6 +5,7 @@ import {
   Output,
   OnInit,
   AfterViewInit,
+  SimpleChanges,
 } from '@angular/core'
 import { User } from '@class/user'
 import { Certification } from '@class/certification'
@@ -14,6 +15,7 @@ import { Observable } from 'rxjs/Observable'
 import { HttpClient } from '@angular/common/http'
 import { UntypedFormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs/Subscription'
+import { MessageService } from 'primeng/api'
 
 @Component({
   selector: 'certification-dialog',
@@ -32,14 +34,7 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
   }
   @Output() visibleChange = new EventEmitter<boolean>()
 
-  onClose() {
-    this.visible = false
-  }
-
-  onSave(event: Event) {
-    event.preventDefault()
-    this.onSubmitCertification()
-  }
+  @Input() selectedCertification: Certification | null = null
 
   uniInput = ''
   uniList: any
@@ -51,7 +46,9 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
   currentCert: Certification
   yearList = new Array()
   completionYearList = new Array()
+
   constructor(
+    private messageService: MessageService,
     private auth: AuthService,
     public certifications: CertificationsService,
     private formBuilder: UntypedFormBuilder,
@@ -59,20 +56,12 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit() {
-    this.certifications.loadAddCert()
     this.authSub = this.auth.currentUser$.subscribe((user: User) => {
       if (user && this.currentUser !== user) {
         this.currentUser = user
       }
     })
-    this.certificationForm = this.formBuilder.group({
-      university: ['', Validators.required],
-      course: ['', Validators.required],
-      startDate: ['', Validators.required],
-      completion: ['', Validators.required],
-      isStudying: [false],
-      certificate: [''],
-    })
+    this.buildForm()
     const currentYear = new Date().getFullYear()
     const maxCompletionYear = currentYear + 10
     for (let i = 0; i < 60; i++) {
@@ -81,6 +70,47 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
     for (let i = 0; i < 60; i++) {
       this.completionYearList.push(maxCompletionYear - i)
     }
+  }
+
+  ngOnDestroy() {
+    if (this.authSub) {
+      this.authSub.unsubscribe()
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selectedCertification && this.visible === true) {
+      if (this.selectedCertification !== null) {
+        this.certificationForm.controls.university.setValue(
+          this.selectedCertification.university
+        )
+        this.certificationForm.controls.course.setValue(
+          this.selectedCertification.course
+        )
+        this.certificationForm.controls.startDate.setValue(
+          this.selectedCertification.startDate
+        )
+        this.certificationForm.controls.completion.setValue(
+          this.selectedCertification.completion
+        )
+        this.certificationForm.controls.certificate.setValue(
+          this.selectedCertification.certificate
+        )
+      } else {
+        this.buildForm()
+      }
+    }
+  }
+
+  buildForm() {
+    this.certificationForm = this.formBuilder.group({
+      university: ['', Validators.required],
+      course: ['', Validators.required],
+      startDate: ['', Validators.required],
+      completion: ['', Validators.required],
+      isStudying: [false],
+      certificate: [''],
+    })
   }
 
   ngAfterViewInit() {
@@ -102,8 +132,8 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
     tempCert.isStudying = this.certificationForm.value.isStudying
     tempCert.certificate = this.certificationForm.value.certificate
     try {
-      if (this.certifications.editCert) {
-        tempCert.id = this.certifications.certToEdit.id
+      if (this.selectedCertification !== null) {
+        tempCert.id = this.selectedCertification.id
         this.certifications.updateCertification(
           tempCert,
           this.currentUser.address
@@ -112,9 +142,12 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
         tempCert.id = this.idGenerator()
         this.certifications.addCertification(tempCert, this.currentUser.address)
       }
-      document.getElementById('certificationModalClose').click()
     } catch (error) {
-      this.toggleWarning()
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warn',
+        detail: `Something went wrong. Please try again later.`,
+      })
     }
   }
 
@@ -127,20 +160,6 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
     return s4() + '-' + s4() + '-' + s4() + '-' + s4()
   }
 
-  onDeleteCertification(cert) {
-    if (
-      confirm(
-        "Are you sure you want to delete this certification? this can't be undone!"
-      )
-    ) {
-      this.certifications.deleteCertification(cert, this.currentUser.address)
-    }
-  }
-
-  toggleWarning() {
-    document.getElementById('warning-msg').classList.toggle('active')
-  }
-
   searchUni() {
     const input = this.certificationForm.value.university.toLowerCase()
     this.uniFilteredList = this.uniList
@@ -149,10 +168,19 @@ export class CertificationDialogComponent implements OnInit, AfterViewInit {
   }
 
   getDialogHeader() {
-    if (!this.certifications.editCert) {
+    if (this.selectedCertification === null) {
       return 'Add Certification'
     } else {
       return 'Edit Certification'
     }
+  }
+  onClose() {
+    this.visible = false
+  }
+
+  onSave(event: Event) {
+    event.preventDefault()
+    this.onSubmitCertification()
+    this.visible = false
   }
 }

@@ -215,7 +215,7 @@ export class EditProfileDialogComponent implements OnInit, OnDestroy {
         this.currentUser?.twitter || '',
         Validators.compose([
           Validators.pattern(
-            /^(?:http(s)?:\/\/)?(?:www\.)?(?:twitter\.com\/(?:[a-zA-Z0-9_.]{1,32})?)$/
+            /^(?:http(s)?:\/\/)?(?:www\.)?(?:twitter\.com|x\.com)\/(?:[a-zA-Z0-9_.]{1,32})?$/
           ),
         ]),
       ],

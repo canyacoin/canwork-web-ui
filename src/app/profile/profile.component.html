@@ -1,6 +1,7 @@
 <main class="font-sans">
   <section class="bg-white sm:bg-G50">
     <div
+      *ngIf="userModel"
       class="max-w-[1440px] m-auto pt-[76px] sm:pt-[100px] px-[0px] sm:px-[16px] md:px-[40px] lg:px-[64px] pb-[24px]"
     >
       <edit-profile-dialog
@@ -13,7 +14,6 @@
         [currentUser]="currentUser"
       />
       <app-profile-about
-        *ngIf="userModel"
         [userAddress]="userModel.address"
         [currentUser]="currentUser"
         [isMyProfile]="isMyProfile()"
@@ -26,35 +26,40 @@
         <div
           class="lg:min-w-[350px] lg:max-w-[350px] sm:rounded-[12px] sm:border sm:!border-G200 sm:bg-white overflow-hidden h-max"
         >
-          <profile-skills
-            *ngIf="userModel"
-            [isMyProfile]="isMyProfile()"
+          <app-profile-skills
             [userModel]="userModel"
+            [isMyProfile]="isMyProfile()"
             (editBio)="showEditBioDialog()"
           />
-          <app-certifications
-            *ngIf="userModel && userModel.type === 'Provider'"
+          <app-profile-certifications
+            *ngIf="userModel.type === 'Provider'"
             [userModel]="userModel"
-            [notMyProfile]="notMyProfile()"
             [isMyProfile]="isMyProfile()"
-          ></app-certifications>
-          <app-profile-education />
+          />
+          <app-profile-educations
+            *ngIf="userModel.type === 'Provider'"
+            [userModel]="userModel"
+            [isMyProfile]="isMyProfile()"
+          />
         </div>
         <div class="w-full flex flex-col sm:gap-[16px]">
           <app-profile-bio
-            *ngIf="userModel"
             [isMyProfile]="isMyProfile()"
             [userModel]="userModel"
             (editBio)="showEditBioDialog()"
           />
-          <app-reviews *ngIf="userModel" [user]="userModel"></app-reviews>
+          <app-reviews [user]="userModel" />
           <app-profile-portfolio
-            *ngIf="userModel && userModel.type === 'Provider'"
+            *ngIf="userModel.type === 'Provider'"
             [userModel]="userModel"
             [notMyProfile]="notMyProfile()"
             [isMyProfile]="isMyProfile()"
-          ></app-profile-portfolio>
-          <app-profile-workhistory />
+          />
+          <app-profile-workhistory
+            *ngIf="userModel.type === 'Provider'"
+            [userModel]="userModel"
+            [isMyProfile]="isMyProfile()"
+          />
         </div>
       </div>
     </div>
@@ -62,14 +67,7 @@
 </main>
 
 <!-- <main class="main-content">
-  <app-profile-edit
-    *ngIf="displayEditComponent"
-    (close)="closeEditDialog()"
-    [currentUser]="currentUser"
-  ></app-profile-edit>
-
   <section class="section bg-gray !pt-16 pb-20" id="section-profile">
-    <app-back-button></app-back-button>
     <div
       *ngIf="!userModel"
       class="container d-flex h-100 flex-column justify-content-center"

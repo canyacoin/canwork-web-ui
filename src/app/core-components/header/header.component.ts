@@ -64,7 +64,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   // flag be consumed by the template
   isHamburguer = true
   items: itemType[]
-  selectedItem: any | undefined
+  selectedItem: itemType | undefined
 
   onHamburguerClick(event: Event): void {
     event.preventDefault()

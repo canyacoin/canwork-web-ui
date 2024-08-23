@@ -14,7 +14,7 @@
     </div>
   </ng-template>
   <ng-template let-item pTemplate="item">
-    <div class="flex items-center">
+    <div class="flex items-center min-w-[110px]" (click)="itemClick(item.code)">
       <img
         src="{{ '/assets/massimo/svg/' + item.img }}"
         class="w-[20px] mr-[16px]"

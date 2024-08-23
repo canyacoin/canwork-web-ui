@@ -1,18 +1,86 @@
-<section class="border-t border-G200 bg-white py-[40px] sm:p-[24px]">
-  <div class="text-h6 text-G900 font-medium">Education</div>
-  <div class="mt-[16px] flex flex-col gap-[16px]">
-    <div class="flex items-start gap-[16px]">
-      <img
-        src="/assets/massimo/svg/tabler.svg"
-        alt="tabler"
-        class="w-[24px] h-[24px]"
-      />
-      <div class="flex flex-col gap-[8px]">
-        <div class="text-b1 text-G800 font-medium">Osun State University</div>
-        <div class="text-b1 text-G800">
-          Bachelor of Engineering (BEng), Electrical engineering
+<section
+  [hidden]="loaded && !isMyProfile && userEducations.length === 0"
+  class="border-t border-G200 bg-white py-[40px] sm:p-[24px]"
+>
+  <education-dialog
+    [(visible)]="visibleEducationDialog"
+    [selectedEducation]="selectedEducation"
+  />
+  <confirm-dialog
+    [(visible)]="visibleDeleteEducationDialog"
+    title="Delete Education"
+    content="Are you sure you want to delete this education?"
+    (LeftbtnEvent)="onDeleteEducation()"
+  />
+  <div class="flex justify-between">
+    <div class="text-G900 text-h6 font-medium">Educations</div>
+    <plus-button
+      *ngIf="isMyProfile && loaded"
+      (click)="showEducationDialog()"
+    />
+  </div>
+  <div class="mt-[16px]">
+    <div *ngIf="!loaded" class="flex flex-col gap-[16px]">
+      <sk-education />
+      <sk-education />
+    </div>
+    <div *ngIf="loaded && userEducations.length === 0">
+      <div class="text-b1 text-G800 font-medium">
+        You do not have any educations
+      </div>
+    </div>
+    <div
+      *ngIf="loaded && userEducations.length > 0"
+      class="flex flex-col gap-[16px]"
+    >
+      <div
+        *ngFor="let education of userEducations"
+        class="flex items-start gap-[16px] relative"
+      >
+        <img
+          src="/assets/massimo/svg/tabler.svg"
+          alt="education"
+          class="w-[24px] h-[24px]"
+        />
+        <div
+          class="flex flex-col gap-[8px]"
+          [ngClass]="{ 'pr-[48px]': isMyProfile }"
+        >
+          <div class="text-b1 text-G800 font-medium">
+            {{ education.university }}
+          </div>
+          <div class="text-b1 text-G800">
+            {{ education.degree }}
+          </div>
+          <div class="text-b2 text-G500">
+            {{ education.startDate }} -
+            {{ education.completion }}
+          </div>
         </div>
-        <div class="text-b2 text-G500">16th Oct. 2011 - 24th Dec. 2016</div>
+
+        <p-dropdown
+          *ngIf="isMyProfile"
+          [options]="items"
+          [(ngModel)]="selectedItem"
+          appendTo="body"
+          class="share-button-style absolute top-0 right-0"
+        >
+          <ng-template pTemplate="selectedItem">
+            <three-dots-button />
+          </ng-template>
+          <ng-template let-item pTemplate="item">
+            <div
+              class="flex items-center"
+              (click)="showEditEducationDialog(item, education)"
+            >
+              <img
+                src="{{ '/assets/massimo/svg/' + item.icon }}"
+                class="mr-[16px] w-[20px]"
+              />
+              <span class="font-medium text-G900">{{ item.label }}</span>
+            </div>
+          </ng-template>
+        </p-dropdown>
       </div>
     </div>
   </div>

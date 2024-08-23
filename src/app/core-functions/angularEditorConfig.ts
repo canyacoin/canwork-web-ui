@@ -46,6 +46,8 @@ export function customAngularEditorConfig(): AngularEditorConfig {
         'insertHorizontalRule',
         'removeFormat',
         'toggleEditorMode',
+        'insertUnorderedList',
+        'insertOrderedList',
       ],
     ],
   }

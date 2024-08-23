@@ -64,7 +64,8 @@
           <!-- <basic-button [type]="1" title="Log out" size="small" /> -->
           <div
             *ngIf="!bAddress; else showAddress"
-            [routerLink]="['/wallet-bnb']"
+            [routerLink]="['/wallet-bnb/assets']"
+            [queryParams]="{ connectWallet: 1 }"
           >
             <basic-button [type]="2" title="Connect Wallet" size="small" />
           </div>

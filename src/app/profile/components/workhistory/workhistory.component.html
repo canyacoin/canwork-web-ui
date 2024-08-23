@@ -1,35 +1,107 @@
 <section
+  [hidden]="loaded && !isMyProfile && userWorkhistorys.length === 0"
   class="sm:rounded-[12px] border-t sm:border !border-G200 bg-white py-[40px] sm:px-[40px] sm:py-[24px]"
 >
-  <div class="text-h6 text-G900 font-medium">Work History</div>
-  <div class="mt-[16px] flex flex-col gap-[16px]">
-    <div class="flex flex-col gap-[16px]">
-      <div class="flex gap-4 items-start">
-        <img
-          src="/assets/massimo/test-portfolio.png"
-          alt="test-portfolio"
-          class="w-[40px] h-[40px] bg-cover"
-        />
-        <div class="flex flex-col gap-2">
-          <div class="text-h6 text-G900 font-medium">
-            Product Designer | CanWork
+  <workhistory-dialog
+    [(visible)]="visibleWorkhistoryDialog"
+    [selectedWorkhistory]="selectedWorkhistory"
+  />
+  <confirm-dialog
+    [(visible)]="visibleDeleteWorkhistoryDialog"
+    title="Delete Work Experience"
+    content="Are you sure you want to delete this work experience?"
+    (LeftbtnEvent)="onDeleteWorkhistory()"
+  />
+  <div class="flex justify-between">
+    <div class="text-h6 text-G900 font-medium">Work History</div>
+    <plus-button
+      *ngIf="isMyProfile && loaded"
+      (click)="showWorkhistoryDialog()"
+    />
+  </div>
+  <div class="mt-[16px]">
+    <div *ngIf="!loaded" class="flex flex-col gap-[16px]">
+      <sk-workhistory />
+      <hr class="w-full h-[1px] bg-G200 border-none" />
+      <sk-workhistory />
+    </div>
+    <div *ngIf="loaded && userWorkhistorys.length === 0">
+      <div class="text-b1 text-G800 font-medium">
+        You do not have any Work Experience
+      </div>
+    </div>
+    <div
+      *ngIf="loaded && userWorkhistorys.length > 0"
+      class="flex flex-col gap-[16px]"
+    >
+      <div
+        *ngFor="let workhistory of userWorkhistorys; let i = index"
+        class="flex flex-col gap-[16px]"
+      >
+        <div class="flex items-start gap-[16px] relative">
+          <img
+            *ngIf="workhistory.logoUrl === ''"
+            src="/assets/massimo/images/canworkLogo.png"
+            alt="canwork"
+            class="w-[48px] h-[48px]"
+          />
+          <img
+            *ngIf="workhistory.logoUrl !== ''"
+            [src]="workhistory.logoUrl"
+            class="w-[48px] h-[48px] bg-cover"
+          />
+          <div
+            class="flex flex-col gap-2"
+            [ngClass]="{ 'pr-[48px]': isMyProfile }"
+          >
+            <div class="text-h6 text-G900 font-medium">
+              {{ workhistory.title }} | {{ workhistory.employer }}
+            </div>
+            <div class="text-b2 text-G500">
+              {{ workhistory.startDate }} -
+              {{ workhistory.completion }}
+            </div>
           </div>
-          <div class="text-b2 text-G500">
-            January 2020 - January 2023 | Brisbane, Australia
-          </div>
+
+          <p-dropdown
+            *ngIf="isMyProfile"
+            [options]="items"
+            [(ngModel)]="selectedItem"
+            appendTo="body"
+            class="share-button-style absolute top-0 right-0"
+          >
+            <ng-template pTemplate="selectedItem">
+              <three-dots-button />
+            </ng-template>
+            <ng-template let-item pTemplate="item">
+              <div
+                class="flex items-center"
+                (click)="showEditWorkhistoryDialog(item, workhistory)"
+              >
+                <img
+                  src="{{ '/assets/massimo/svg/' + item.icon }}"
+                  class="mr-[16px] w-[20px]"
+                />
+                <span class="font-medium text-G900">{{ item.label }}</span>
+              </div>
+            </ng-template>
+          </p-dropdown>
         </div>
+        <div class="text-G900 text-b1 whitespace-pre-line">
+          {{ workhistory.description }}
+        </div>
+        <div class="flex flex-wrap gap-[8px]">
+          <app-skill-tag
+            *ngFor="let skill of workhistory.tags"
+            [skill]="skill"
+            [isHoverAllowed]="false"
+          ></app-skill-tag>
+        </div>
+        <hr
+          *ngIf="i + 1 !== userWorkhistorys.length"
+          class="w-full h-[1px] bg-G200 border-none"
+        />
       </div>
-      <div class="text-G900 text-b1 line-clamp-4">
-        Lead designer for companies , creating visually appealing and functional
-        web applications, mobile applications, and design systems Lead
-        stakeholder meetings to establish user needs in a way that alights with
-        the business goals and objective as Lead designer for companies ,
-        creating visually appealing and functional web applications, mobile
-        applications, and design systems Lead stakeholder meetings to establish
-        user needs in a way that alights with the business goals and objective
-        as
-      </div>
-      <!-- <hr class="w-full h-[1px] bg-G200 border-none" /> -->
     </div>
   </div>
 </section>

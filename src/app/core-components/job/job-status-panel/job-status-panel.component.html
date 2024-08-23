@@ -5,13 +5,13 @@
     <status-icon [job]="job" />
 
     <ng-container *ngIf="isPostJobPage">
-      <share-button />
+      <share-button [link]="'https://canwork.io/jobs/public/' + job.slug" />
     </ng-container>
 
     <ng-container *ngIf="!isPostJobPage">
       <div class="flex gap-[8px]" *ngIf="isAcceptingOffers">
         <bookmark-button />
-        <share-button />
+        <share-button [link]="'https://canwork.io/jobs/public/' + job.slug" />
       </div>
     </ng-container>
   </div>
