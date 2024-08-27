@@ -66,7 +66,7 @@ export class CertificationsComponent implements OnInit {
       .valueChanges()
       .subscribe((data: Certification[]) => {
         this.userCertifications = data
-        console.log('certification data:', data)
+        // console.log('certification data:', data)
         if (data.length >= 0) {
           this.loaded = true
         }

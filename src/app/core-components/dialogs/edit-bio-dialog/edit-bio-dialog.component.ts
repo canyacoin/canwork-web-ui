@@ -76,14 +76,14 @@ export class EditBioDialogComponent {
       description: this.profileForm.value.description,
     }
 
-    console.log('tmpUser ======>', tmpUser)
+    // console.log('tmpUser ======>', tmpUser)
 
     // tslint:disable-next-line:forin
     for (const k in tmpUser) {
       this.currentUser[k] = tmpUser[k]
     }
 
-    console.log('this.currentUser', this.currentUser)
+    // console.log('this.currentUser', this.currentUser)
 
     this.userService.saveUser(this.currentUser)
     this.authService.setUser(this.currentUser)

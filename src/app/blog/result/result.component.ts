@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { Component, Input, Output, EventEmitter } from '@angular/core'
 import { ResultService } from 'app/shared/constants/faqs-page'
 
 interface PageEvent {
@@ -14,31 +14,14 @@ interface PageEvent {
 export class ResultComponent {
   resultSection = ResultService
   queryString: string = ''
-  queryFaqs = []
+  @Input() hits: any[]
+  @Input() totalRecords: number = 0
+  @Input() rows: number = 9
+  @Input() first: number = 0
+  @Output() pageChange = new EventEmitter<number>() // two way binding to parent
 
-  first: number = 0
-  rows: number = 10
-
-  @Input()
-  set query(value: string) {
-    this.queryString = value
-    this.performSearch(value)
-  }
-
-  onPageChange(event: PageEvent) {
-    this.first = event.first
-    this.rows = event.rows
-  }
-
-  performSearch(query: string) {
-    // const tmpFaq: any = []
-    // this.resultSection.map((section) => {
-    //   section.items.map((item) => {
-    //     if (JSON.stringify(item).toLowerCase().includes(query.toLowerCase())) {
-    //       tmpFaq.push(item)
-    //     }
-    //   })
-    // })
-    // this.queryFaqs = tmpFaq
+  onPageChange(e: PageEvent) {
+    // this.first = e.first
+    this.pageChange.emit(e.page) // notify parent and algolia handler
   }
 }

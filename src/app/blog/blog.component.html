@@ -4,7 +4,13 @@
     <div
       class="max-w-[1440px] w-full py-[40px] px-[24px] md:py-[40px] md:px-[64px]"
     >
-      <blog-result [query]="queryBlog" />
+      <blog-result
+        [hits]="hits"
+        [totalRecords]="numHits"
+        [rows]="hitsPerPage"
+        [first]="currentPage * hitsPerPage"
+        (pageChange)="onPageChange($event)"
+      />
     </div>
   </section>
 </main>

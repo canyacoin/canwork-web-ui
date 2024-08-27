@@ -38,7 +38,7 @@ export class BlogPostsComponent implements OnInit {
             tags: article.tags,
             datePosted: article.datePosted,
             author: article.author,
-            link: `https://canwork.io${articleUrl}`,
+            link: `https://app.canwork.io${articleUrl}`,
           })
         })
       }

@@ -904,10 +904,10 @@ export class PostComponent implements OnInit, OnDestroy {
   async submitShareableJob(isDRP: number) {
     // isDRP , 0 => draft, , 1=> Preview, 2 => Post
     // console.log('isDRP:', isDRP)
-    console.log(
-      '<=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-==-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=>'
-    )
-    console.log('this.shareableJobForm:', this.shareableJobForm)
+    // console.log(
+    //   '<=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-==-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=>'
+    // )
+    // console.log('this.shareableJobForm:', this.shareableJobForm)
     this.spinner.show()
     this.isSending = true
     this.error = false

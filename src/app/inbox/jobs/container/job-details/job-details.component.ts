@@ -119,7 +119,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
             this.currentUser.address === job.clientId
               ? UserType.client
               : UserType.provider
-          console.log('currentUserType================>', this.currentUserType)
+          // console.log('currentUserType================>', this.currentUserType)
           this.jobService.assignOtherPartyAsync(this.job, this.currentUserType)
           this.setAttachmentUrl()
           if (!this.isInitialised) {

@@ -1,18 +1,25 @@
 <section>
   <div class="w-full">
-    <div class="flex flex-col gap-[72px]">
-      <app-blog-posts />
-      <app-blog-posts />
-      <app-blog-posts />
-      <app-blog-posts />
+    <div class="grid md:grid-cols-3 gap-10 md:gap-8">
+      <div *ngFor="let blogData of hits">
+        <blog-card
+          [thumbnail]="blogData.thumbnail"
+          [link]="blogData.link"
+          [title]="blogData.title"
+          [subTitle]="blogData.subTitle"
+          [tags]="blogData.tags"
+          [author]="blogData.author"
+          [datePosted]="blogData.datePosted"
+        />
+      </div>
     </div>
-    <div class="pt-[24px] flex justify-center">
+    <div *ngIf="totalRecords > rows" class="pt-[24px] flex justify-center">
       <p-paginator
         (onPageChange)="onPageChange($event)"
         [first]="first"
         [rows]="rows"
-        [totalRecords]="120"
-        [pageLinkSize]="8"
+        [totalRecords]="totalRecords"
+        [pageLinkSize]="4"
       ></p-paginator>
     </div>
   </div>

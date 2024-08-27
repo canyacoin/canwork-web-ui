@@ -15,7 +15,7 @@ export class ProposalDetailsDialogComponent {
   set visible(value: boolean) {
     this._visible = value
     this.visibleChange.emit(this._visible)
-    console.log('issue: ', this._visible)
+    // console.log('issue: ', this._visible)
   }
   @Output() visibleChange = new EventEmitter<boolean>()
 

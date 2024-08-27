@@ -61,12 +61,12 @@ export class WorkhistoryComponent implements OnInit {
     const workhistorys = this.afs.collection(
       `users/${this.userModel.address}/workhistorys`
     )
-    console.log('workhistorys', workhistorys)
+    // console.log('workhistorys', workhistorys)
     this.workhistorySub = workhistorys
       .valueChanges()
       .subscribe((data: Workhistory[]) => {
         this.userWorkhistorys = data
-        console.log('workhistory data:', data)
+        // console.log('workhistory data:', data)
         if (data.length >= 0) {
           this.loaded = true
         }

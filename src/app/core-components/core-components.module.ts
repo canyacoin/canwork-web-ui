@@ -76,6 +76,7 @@ import { CategoryCardComponent } from './cards/category-card/category-card.compo
 import { JobCardComponent } from './cards/job-card/job-card.component'
 import { JobDashboardCardComponent } from './cards/job-dashboard-card/job-dashboard-card.component'
 import { ProfileCardComponent } from './cards/profile-card/profile-card.component'
+import { BlogCardComponent } from './cards/blog-card/blog-card.component'
 
 import { StatusIconComponent } from './status-icon/status-icon.component'
 import { JobActionLogPanelComponent } from './job/job-action-log-panel/job-action-log-panel.component'
@@ -187,6 +188,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     JobCardComponent,
     JobDashboardCardComponent,
     ProfileCardComponent,
+    BlogCardComponent,
     // Tags
     SkillTagComponent,
     SkillTagsSelectionComponent,
@@ -286,6 +288,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     JobCardComponent,
     JobDashboardCardComponent,
     ProfileCardComponent,
+    BlogCardComponent,
     // Tags
     SkillTagComponent,
     SkillTagsSelectionComponent,

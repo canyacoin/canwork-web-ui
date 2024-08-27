@@ -46,7 +46,7 @@ export class EditProfileDialogComponent implements OnInit, OnDestroy {
     this.selectedFile = null
     if (this.currentUser) {
       this.filePath = `uploads/avatars/${this.currentUser.address}`
-      console.log('this.filePath', this.filePath)
+      // console.log('this.filePath', this.filePath)
       // set selectedCategory
       let categoryIndex = this.categories.findIndex(
         (item) =>
@@ -286,14 +286,14 @@ export class EditProfileDialogComponent implements OnInit, OnDestroy {
       timezone: moment.tz.guess(),
     }
 
-    console.log('tmpUser ======>', tmpUser)
+    // console.log('tmpUser ======>', tmpUser)
 
     // tslint:disable-next-line:forin
     for (const k in tmpUser) {
       this.currentUser[k] = tmpUser[k]
     }
 
-    console.log('this.currentUser', this.currentUser)
+    // console.log('this.currentUser', this.currentUser)
 
     this.userService.saveUser(this.currentUser)
     this.authService.setUser(this.currentUser)
@@ -302,7 +302,7 @@ export class EditProfileDialogComponent implements OnInit, OnDestroy {
     if (this.selectedFile !== null) {
       const task = this.storage.upload(this.filePath, this.selectedFile)
 
-      console.log('task:', task)
+      // console.log('task:', task)
 
       // isUploading
       this.isUploading = true

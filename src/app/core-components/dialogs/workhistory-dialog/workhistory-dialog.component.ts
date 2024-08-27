@@ -77,7 +77,7 @@ export class WorkhistoryDialogComponent {
     }
     if (this.currentUser) {
       this.filePath = `uploads/workhistorys/${this.currentUser.address}`
-      console.log('this.filePath', this.filePath)
+      // console.log('this.filePath', this.filePath)
     }
   }
 
@@ -97,7 +97,7 @@ export class WorkhistoryDialogComponent {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selectedWorkhistory && this.visible === true) {
-      console.log('selectedWorkhistory', this.selectedWorkhistory)
+      // console.log('selectedWorkhistory', this.selectedWorkhistory)
       if (this.selectedWorkhistory !== null) {
         this.workhistoryForm.controls.logoUrl.setValue(
           this.selectedWorkhistory.logoUrl
@@ -154,7 +154,7 @@ export class WorkhistoryDialogComponent {
         this.selectedFile
       )
 
-      console.log('task:', task)
+      // console.log('task:', task)
 
       // isUploading
       this.isUploading = true

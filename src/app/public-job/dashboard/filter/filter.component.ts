@@ -164,12 +164,12 @@ export class FilterComponent implements OnInit, OnChanges {
         this.fixedForm.unshift(-1)
       }
     }
-    console.log('this.fixedForm', this.fixedForm)
+    // console.log('this.fixedForm', this.fixedForm)
     this.fixedFormChange.emit(this.fixedForm)
   }
 
   hourlyTopClick(e) {
-    console.log('hourly top click', this.hourlyFlag)
+    // console.log('hourly top click', this.hourlyFlag)
     if (this.hourlyFlag) {
       this.hourlyInput = [1, 300]
     } else {

@@ -123,12 +123,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.publicJobSubscription = this.publicJobService
       .getAllOpenJobs()
       .subscribe((result) => {
-        console.log('result: ', result)
+        // console.log('result: ', result)
         let activeJobs = result.filter((job) => job.draft === false)
         this.allProviders = activeJobs
         this.filteredProviders = activeJobs
 
-        console.log('activeJobs: ', activeJobs)
+        // console.log('activeJobs: ', activeJobs)
 
         this.hits = this.getHits()
         this.numHits = this.allProviders.length
@@ -311,7 +311,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       searchResultJobs.map(async (provider) => {
         const jobPoster = await this.userService.getUser(provider.clientId)
         this.ratingFilter.map((item) => {
-          console.log('jobPoster.rating.average', jobPoster.rating.average)
+          // console.log('jobPoster.rating.average', jobPoster.rating.average)
 
           if (item === Math.trunc(jobPoster.rating.average)) {
             this.filteredProviders.push(provider)
@@ -582,7 +582,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       })
     }
 
-    console.log('this.searchItems: ', this.searchItems)
+    // console.log('this.searchItems: ', this.searchItems)
   }
 
   onChangeSearchItemHourly(FilterInput: number[]) {

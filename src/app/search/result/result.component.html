@@ -101,7 +101,7 @@
       </ng-template>
     </ng-template>
   </div>
-  <div *ngIf="profileCards.length" class="pt-[24px] flex justify-center">
+  <div *ngIf="totalRecords > rows" class="pt-[24px] flex justify-center">
     <p-paginator
       (onPageChange)="onPageChange($event)"
       [first]="first"

@@ -17,7 +17,7 @@ export class ReviewsComponent implements OnInit {
 
   async ngOnInit() {
     this.reviews = await this.reviewService.getUserReviews(this.user.address)
-    console.log('this.reviews', this.reviews)
+    // console.log('this.reviews', this.reviews)
   }
 
   getReviewLabel(review: Review): string {
