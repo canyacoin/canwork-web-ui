@@ -16,9 +16,9 @@ export class ResultComponent implements OnInit {
   @Input() isLoading: boolean = true
   @Input() noSearchParams: boolean = true
   @Input() totalRecords: number = 0
-  @Input() rows: number = 10
-  @Output() pageChange = new EventEmitter<number>() // two way binding to parent
+  @Input() rows: number = 9
   @Input() first: number = 0
+  @Output() pageChange = new EventEmitter<number>() // two way binding to parent
 
   /*
   https://www.primefaces.org/primeng-v14-lts/paginator
@@ -28,7 +28,7 @@ export class ResultComponent implements OnInit {
 
   onPageChange(e: PageEvent) {
     this.first = e.first
-    //this.rows = event.rows // this is injected from parent
+
     this.pageChange.emit(e.page) // notify parent and algolia handler
   }
 

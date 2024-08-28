@@ -1,41 +1,15 @@
 <div *ngIf="mediumFeed.length > 0">
   <div class="grid md:grid-cols-3 gap-10 md:gap-8">
-    <div *ngFor="let blogData of mediumFeed" class="grid gap-4">
-      <div
-        class="aspect-w-16 aspect-h-9 rounded-[12px] overflow-hidden select-none"
-      >
-        <img
-          src="{{ blogData.thumbnail }}"
-          class="w-full h-full object-cover"
-        />
-      </div>
-      <div class="flex flex-col gap-2">
-        <a
-          class="text-G900 text-h6 md:text-h5 font-medium hover:underline line-clamp-2"
-          href="{{ blogData.link }}"
-          target="_blank"
-        >
-          {{ blogData.title }}
-        </a>
-        <div class="text-G700 text-b1 line-clamp-3 md:line-clamp-2">
-          {{ blogData.subTitle }}
-        </div>
-      </div>
-      <div class="flex flex-wrap gap-2">
-        <div *ngFor="let tag of blogData.tags">
-          <basic-tag [type]="1" [title]="tag" />
-        </div>
-      </div>
-      <div class="flex items-center gap-6">
-        <img
-          src="{{ blogData.thumbnail }}"
-          class="w-[48px] h-[48px] rounded-full object-cover overflow-hidden select-none"
-        />
-        <div class="font-medium">
-          <div class="text-G700">{{ blogData.author }}</div>
-          <div class="text-G500">{{ blogData.datePosted }} • 5 min read</div>
-        </div>
-      </div>
+    <div *ngFor="let blogData of mediumFeed">
+      <blog-card
+        [thumbnail]="blogData.thumbnail"
+        [link]="blogData.link"
+        [title]="blogData.title"
+        [subTitle]="blogData.subTitle"
+        [tags]="blogData.tags"
+        [author]="blogData.author"
+        [datePosted]="blogData.datePosted"
+      />
     </div>
   </div>
 </div>

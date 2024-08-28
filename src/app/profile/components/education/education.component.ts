@@ -61,15 +61,15 @@ export class EducationComponent implements OnInit {
     const educations = this.afs.collection(
       `users/${this.userModel.address}/educations`
     )
-    console.log(
-      '==================================================================================================='
-    )
-    console.log('educations', educations)
+    // console.log(
+    //   '==================================================================================================='
+    // )
+    // console.log('educations', educations)
     this.educationSub = educations
       .valueChanges()
       .subscribe((data: Education[]) => {
         this.userEducations = data
-        console.log('education data:', data)
+        // console.log('education data:', data)
         if (data.length >= 0) {
           this.loaded = true
         }

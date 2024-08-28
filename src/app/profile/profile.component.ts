@@ -110,7 +110,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       (slug && this.currentUser && this.currentUser.slug === slug)
     ) {
       // optimize, use current user data if logged in
-      console.log('initUsers preload current')
+      // console.log('initUsers preload current')
       this.userModel = this.currentUser
       this.setUsersColors(this.userModel)
       return
@@ -144,7 +144,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.userService
       .getUserById(address)
       .then((user: User) => {
-        console.log('user profile===========================>', user)
+        // console.log('user profile===========================>', user)
         this.userModel = user
         this.redirectToUniqueUrlIfNecessary(params)
         this.setUsersColors(this.userModel)

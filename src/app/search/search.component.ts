@@ -17,9 +17,9 @@ const HITS_PER_PAGE = 9
   templateUrl: './search.component.html',
 })
 export class SearchComponent implements OnInit, OnDestroy {
-  allProviders: User[] = []
-  filteredProviders: User[] = []
-  chosenFilters = []
+  // allProviders: User[] = []
+  // filteredProviders: User[] = []
+  // chosenFilters = []
   hits = [] // the new hits array, injected into result component
   /*
   invoke directly algolia search api
@@ -87,7 +87,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   inMyTimezone = true
   //algoliaSearchConfig: any
   authSub: any
-  currentUser: any
+  currentUser: User
   private algoliaSearch // new
   private algoliaSearchClient // new
 

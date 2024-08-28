@@ -15,7 +15,7 @@
       (click)="fileInput.click()"
     >
       <div
-        *ngIf="!currentUser.avatar?.uri && !selectedFile"
+        *ngIf="!currentUser?.avatar?.uri && !selectedFile"
         class="bg-G400 w-[120px] h-[120px]"
       ></div>
       <img

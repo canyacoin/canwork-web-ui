@@ -39,13 +39,13 @@ export class JobStatusPanelComponent {
   constructor(private userService: UserService) {}
 
   async ngOnInit() {
-    console.log('starting ngONInit')
-    console.log('this.job', this.job)
-    console.log('this.currentUser', this.currentUser)
+    // console.log('starting ngONInit')
+    // console.log('this.job', this.job)
+    // console.log('this.currentUser', this.currentUser)
     // we don't need to call this function if isPostJobPage is true
     if (this.job && !this.isPostJobPage && this.currentUser?.address) {
       this.isMyJob = this.job.clientId === this.currentUser.address
-      console.log('this.job.clientId', this.job.clientId)
+      // console.log('this.job.clientId', this.job.clientId)
       await this.setClient(this.job.clientId)
     }
   }
@@ -55,11 +55,11 @@ export class JobStatusPanelComponent {
     new one, retrieve user only once (if not already retrieved)
     and use the new fastest Algolia getUserById service version
     */
-    console.log('this.jobPoster', this.jobPoster)
+    // console.log('this.jobPoster', this.jobPoster)
 
     if (!this.jobPoster) {
       this.jobPoster = await this.userService.getUser(clientId)
-      console.log('this.jobPoster', this.jobPoster)
+      // console.log('this.jobPoster', this.jobPoster)
 
       if (this.jobPoster) {
         let avatar = this.jobPoster.avatar // current, retrocomp

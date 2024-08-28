@@ -70,7 +70,7 @@ export class ActionDialogComponent implements OnInit, OnChanges {
   ) {}
 
   async ngOnInit() {
-    console.log('=================>', this.job)
+    // console.log('=================>', this.job)
     if (this.job)
       this.otherParty = this.job?.otherParty?.name || 'the other party'
     if (this.job) {
@@ -83,11 +83,11 @@ export class ActionDialogComponent implements OnInit, OnChanges {
     new one, retrieve user only once (if not already retrieved)
     and use the new fastest Algolia getUserById service version
     */
-    console.log('this.jobPoster', this.jobPoster)
+    // console.log('this.jobPoster', this.jobPoster)
 
     if (!this.jobPoster) {
       this.jobPoster = await this.userService.getUser(clientId)
-      console.log('this.jobPoster', this.jobPoster)
+      // console.log('this.jobPoster', this.jobPoster)
 
       if (this.jobPoster) {
         let avatar = this.jobPoster.avatar // current, retrocomp
@@ -152,7 +152,7 @@ export class ActionDialogComponent implements OnInit, OnChanges {
           // Add form initialization for this action type
           message: ['', Validators.required],
         })
-        console.log('this.form===================>', this.form)
+        // console.log('this.form===================>', this.form)
         break
       case ActionType.dispute:
         // this.form = this.formBuilder.group({
@@ -181,11 +181,11 @@ export class ActionDialogComponent implements OnInit, OnChanges {
   async handleAction(event: Event) {
     event.preventDefault()
     this.action = new IJobAction(this.actionType, this.userType)
-    console.log(
-      '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-    )
-    console.log('this.action: ', this.action)
-    console.log('this.action.message: ', this.action.message)
+    // console.log(
+    //   '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+    // )
+    // console.log('this.action: ', this.action)
+    // console.log('this.action.message: ', this.action.message)
     this.executing = true
     try {
       switch (this.actionType) {
