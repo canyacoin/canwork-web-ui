@@ -19,8 +19,8 @@
         class="bg-G400 w-[120px] h-[120px]"
       ></div>
       <img
-        *ngIf="currentUser.avatar?.uri && !selectedFile"
-        [src]="currentUser.avatar.uri"
+        *ngIf="currentUser?.avatar?.uri && !selectedFile"
+        [src]="currentUser?.avatar?.uri"
         alt="profile"
         class="w-[120px] h-[120px] bg-cover select-none"
       />
@@ -161,7 +161,7 @@
           </p-dropdown>
         </div>
         <fieldset
-          [hidden]="currentUser.type !== 'Provider'"
+          [hidden]="currentUser?.type !== 'Provider'"
           class="flex flex-col gap-[8px]"
         >
           <div class="text-b1 text-G900">
