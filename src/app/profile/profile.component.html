@@ -5,6 +5,7 @@
       class="max-w-[1440px] m-auto pt-[76px] sm:pt-[100px] px-[0px] sm:px-[16px] md:px-[40px] lg:px-[64px] pb-[24px]"
     >
       <edit-profile-dialog
+        *ngIf="currentUser"
         [(visible)]="visibleEditProfileDialog"
         (close)="closeEditDialog()"
         [currentUser]="currentUser"
