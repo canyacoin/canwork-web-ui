@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core'
 })
 export class BlogCardComponent {
   @Input() thumbnail: string
-  @Input() link: string
+  @Input() slug: string = ''
   @Input() title: string
   @Input() subTitle: string
   @Input() tags: string[]

@@ -118,10 +118,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
           currentRoute.includes('/public') ||
           currentRoute.includes('/auth') ||
           currentRoute.includes('/jobs/') ||
-          currentRoute.includes('/not-found')
+          currentRoute.includes('/not-found') ||
+          currentRoute.includes('/blog/')
         ) {
           this.isTransfer = true
-        } else {
+        } else {  
           this.isTransfer = false
         }
       }

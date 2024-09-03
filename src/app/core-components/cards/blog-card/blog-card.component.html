@@ -5,13 +5,12 @@
     <img src="{{ thumbnail }}" class="w-full h-full object-cover" />
   </div>
   <div class="flex flex-col gap-2">
-    <a
-      class="text-G900 text-h6 md:text-h5 font-medium hover:underline line-clamp-2"
-      href="{{ link }}"
-      target="_blank"
+    <div
+      class="text-G900 text-h6 md:text-h5 font-medium hover:underline line-clamp-2 cursor-pointer hover:text-cyan-300 transition-all duration-300"
+      [routerLink]="['/blog', this.slug]"
     >
       {{ title }}
-    </a>
+    </div>
     <div class="text-G700 text-b1 line-clamp-3 md:line-clamp-2">
       {{ subTitle }}
     </div>

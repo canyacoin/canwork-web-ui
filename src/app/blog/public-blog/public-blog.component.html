@@ -1,0 +1,78 @@
+<main class="font-sans">
+  <section class="bg-white">
+    <div
+      class="max-w-[1440px] m-auto pt-[92px] sm:pt-[104px] px-[20px] md:px-[40px] lg:px-[128px] pb-[24px]"
+    >
+      <div
+        *ngIf="loaded === 0"
+        class="w-full text-G900 text-h5 flex justify-center items-center h-[200px]"
+      >
+        Plase wait while loading the blog data.
+      </div>
+      <div
+        *ngIf="loaded === 1"
+        class="flex flex-col lg:flex-row lg:justify-between gap-[16px] md:gap-[40px]"
+      >
+        <div class="w-full flex flex-col gap-10 lg:max-w-[768px]">
+          <div class="flex flex-col gap-6">
+            <div class="flex flex-col gap-[16px]">
+              <div class="text-G500 text-b2">
+                <a href="/blog">Blog</a>&nbsp;&nbsp;>&nbsp;&nbsp;{{
+                  currentArticle.title
+                }}
+              </div>
+              <div class="text-G800 text-h3 font-medium">
+                {{ currentArticle.title }}
+              </div>
+              <div class="text-G700 text-h5">
+                {{ currentArticle.subTitle }}
+              </div>
+            </div>
+            <div
+              *ngIf="currentArticle.tags?.length > 0"
+              class="flex flex-wrap gap-2"
+            >
+              <div *ngFor="let tag of currentArticle.tags">
+                <basic-tag [type]="1" [title]="tag" />
+              </div>
+            </div>
+            <div class="flex items-center gap-6">
+              <img
+                src="{{ currentArticle.imageUrl }}"
+                class="w-[48px] h-[48px] rounded-full object-cover overflow-hidden select-none"
+              />
+              <div class="font-medium">
+                <div class="text-G700">{{ currentArticle.author }}</div>
+                <div class="text-G500">
+                  {{ currentArticle.datePosted }} • 5 min read
+                </div>
+              </div>
+            </div>
+            <img
+              src="{{ currentArticle.imageUrl }}"
+              class="rounded-3xl object-cover overflow-hidden select-none"
+            />
+          </div>
+          <div [innerHTML]="contentHtml" #contentContainer></div>
+        </div>
+        <div class="hidden lg:block lg:min-w-[306px] lg:max-w-[306px] w-full">
+          <div class="flex flex-col gap-[24px] sticky top-[80px]">
+            <table-contents-card
+              [headingsArray]="headingsArray"
+              [headingsIdArray]="headingsIdArray"
+              (headingClick)="scrollToSection($event)"
+            />
+            <share-post-card />
+            <post-job-card />
+          </div>
+        </div>
+      </div>
+      <div
+        *ngIf="loaded === 2"
+        class="w-full text-G900 text-h5 flex justify-center items-center h-[200px]"
+      >
+        There is no matching blog right now.
+      </div>
+    </div>
+  </section>
+</main>

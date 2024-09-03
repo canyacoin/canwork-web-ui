@@ -115,6 +115,9 @@ import { SkEducationComponent } from './skeletons/sk-education/sk-education.comp
 import { WorkhistoryDialogComponent } from './dialogs/workhistory-dialog/workhistory-dialog.component'
 import { SkWorkhistoryComponent } from './skeletons/sk-workhistory/sk-workhistory.component'
 import { InviteJobDialogComponent } from './dialogs/invite-job-dialog/invite-job-dialog.component'
+import { PostJobCardComponent } from './cards/post-job-card/post-job-card.component'
+import { SharePostCardComponent } from './cards/share-post-card/share-post-card.component'
+import { TableContentsCardComponent } from './cards/table-contents-card/table-contents-card.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -189,6 +192,10 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     JobDashboardCardComponent,
     ProfileCardComponent,
     BlogCardComponent,
+    PostJobCardComponent,
+    SharePostCardComponent,
+    TableContentsCardComponent,
+
     // Tags
     SkillTagComponent,
     SkillTagsSelectionComponent,
@@ -289,6 +296,10 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     JobDashboardCardComponent,
     ProfileCardComponent,
     BlogCardComponent,
+    PostJobCardComponent,
+    SharePostCardComponent,
+    TableContentsCardComponent,
+
     // Tags
     SkillTagComponent,
     SkillTagsSelectionComponent,

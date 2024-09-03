@@ -24,13 +24,15 @@ export class BlogPostsComponent implements OnInit {
     this.articles$.subscribe((articles) => {
       if (articles && articles.length > 0) {
         articles.forEach((article) => {
-          let articleUrl = ''
-          if (article.category) {
-            articleUrl = `/${article.category}/${article.slug}`
-          } else {
-            articleUrl = `/${article.slug}`
-          }
+          // let articleUrl = ''
+          // if (article.category) {
+          //   articleUrl = `/${article.category}/${article.slug}`
+          // } else {
+          //   articleUrl = `/${article.slug}`
+          // }
 
+          // link: `https://app.canwork.io${articleUrl}`,
+          // link: `/blog/${article.slug}`,
           this.mediumFeed.push({
             thumbnail: article.imageUrl,
             title: article.title,
@@ -38,7 +40,7 @@ export class BlogPostsComponent implements OnInit {
             tags: article.tags,
             datePosted: article.datePosted,
             author: article.author,
-            link: `https://app.canwork.io${articleUrl}`,
+            slug: article.slug,
           })
         })
       }
