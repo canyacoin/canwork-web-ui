@@ -22,7 +22,7 @@
     "pretty-quick": "pretty-quick",
     "dev:ssr": "ng run can-work:serve-ssr",
     "serve:ssr": "node dist/can-work/server/main.js",
-    "build:ssr": "ng build && ng run can-work:server",
+    "build:ssr": "node --max_old_space_size=10240 ./node_modules/@angular/cli/bin/ng build && node --max_old_space_size=10240 ./node_modules/@angular/cli/bin/ng run can-work:server",
     "prerender": "ng run can-work:prerender"
   },
   "private": true,
