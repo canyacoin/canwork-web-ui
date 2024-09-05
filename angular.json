@@ -11,7 +11,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist",
+            "outputPath": "dist/can-work/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
@@ -156,6 +156,81 @@
             ],
             "assets": ["src/assets", "src/favicon.ico"]
           }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/can-work/server",
+            "main": "server.ts",
+            "tsConfig": "src/tsconfig.server.json",
+            "buildOptimizer": true,
+            "outputHashing": "media",
+            "optimization": true,
+            "sourceMap": true,
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/assets/sass"]
+            },
+            "extractLicenses": true,
+            "vendorChunk": false
+          },
+          "configurations": {
+            "staging": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.staging.ts"
+                }
+              ]
+            },
+            "prod": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "production": {
+              "buildOptimizer": true,
+              "outputHashing": "media",
+              "optimization": true,
+              "sourceMap": false,
+              "extractLicenses": true,
+              "vendorChunk": false
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "can-work:build:development",
+              "serverTarget": "can-work:server:development"
+            },
+            "production": {
+              "browserTarget": "can-work:build:production",
+              "serverTarget": "can-work:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "routes": ["/"]
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "can-work:build:production",
+              "serverTarget": "can-work:server:production"
+            },
+            "development": {
+              "browserTarget": "can-work:build:development",
+              "serverTarget": "can-work:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     },
