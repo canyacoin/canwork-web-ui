@@ -22,6 +22,7 @@ export class BlogPostsComponent implements OnInit {
 
   ngOnInit() {
     this.articles$.subscribe((articles) => {
+      this.mediumFeed = []
       if (articles && articles.length > 0) {
         articles.forEach((article) => {
           // let articleUrl = ''
@@ -37,6 +38,7 @@ export class BlogPostsComponent implements OnInit {
             thumbnail: article.imageUrl,
             title: article.title,
             subTitle: article.subTitle,
+            body: article.body,
             tags: article.tags,
             datePosted: article.datePosted,
             author: article.author,

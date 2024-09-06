@@ -6,10 +6,19 @@
         [slug]="blogData.slug"
         [title]="blogData.title"
         [subTitle]="blogData.subTitle"
+        [body]="blogData.body"
         [tags]="blogData.tags"
         [author]="blogData.author"
         [datePosted]="blogData.datePosted"
       />
+    </div>
+  </div>
+</div>
+
+<div *ngIf="mediumFeed.length === 0">
+  <div class="grid md:grid-cols-3 gap-10 md:gap-8">
+    <div *ngFor="let blogData of [1, 2, 3]">
+      <sk-blog-card />
     </div>
   </div>
 </div>
