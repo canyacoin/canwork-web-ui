@@ -25,6 +25,7 @@ export class BlogComponent {
   }
   ngOnInit() {
     this.articles$.subscribe((articles) => {
+      this.hits = []
       if (articles && articles.length > 0) {
         articles.forEach((article) => {
           // let articleUrl = ''
@@ -40,6 +41,7 @@ export class BlogComponent {
             thumbnail: article.imageUrl,
             title: article.title,
             subTitle: article.subTitle,
+            body: article.body,
             tags: article.tags,
             datePosted: article.datePosted,
             author: article.author,
