@@ -27,7 +27,9 @@
     />
     <div class="font-medium">
       <div class="text-G700">{{ author }}</div>
-      <div class="text-G500">{{ datePosted }} • 5 min read</div>
+      <div class="text-G500">
+        {{ datePosted }} • {{ readingTime() }} min read
+      </div>
     </div>
   </div>
 </div>
