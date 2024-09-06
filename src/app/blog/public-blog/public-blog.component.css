@@ -1,5 +1,9 @@
-p {
+#contentContainer {
   color: #334155;
+  font-family: 'General Sans', sans-serif !important;
+}
+
+p {
   font-size: 16px;
   margin-bottom: 16px;
   font-weight: 400 !important;
@@ -64,4 +68,8 @@ b {
 
 button {
   font-family: 'General Sans', sans-serif !important;
+}
+
+a {
+  color: #3cf !important;
 }

@@ -4,22 +4,20 @@
       class="max-w-[1440px] m-auto pt-[92px] sm:pt-[104px] px-[20px] md:px-[40px] lg:px-[128px] pb-[24px]"
     >
       <div
-        *ngIf="loaded === 0"
-        class="w-full text-G900 text-h5 flex justify-center items-center h-[200px]"
-      >
-        Plase wait while loading the blog data.
-      </div>
-      <div
-        *ngIf="loaded === 1"
         class="flex flex-col lg:flex-row lg:justify-between gap-[16px] md:gap-[40px]"
       >
-        <div class="w-full flex flex-col gap-10 lg:max-w-[768px]">
+        <div *ngIf="loaded === 0" class="w-full">
+          <sk-public-blog />
+        </div>
+        <div
+          *ngIf="loaded === 1"
+          class="w-full flex flex-col gap-10 lg:max-w-[768px]"
+        >
           <div class="flex flex-col gap-6">
             <div class="flex flex-col gap-[16px]">
               <div class="text-G500 text-b2">
-                <a href="/blog">Blog</a>&nbsp;&nbsp;>&nbsp;&nbsp;{{
-                  currentArticle.title
-                }}
+                <a href="/blog" class="!text-G500">Blog</a
+                >&nbsp;&nbsp;>&nbsp;&nbsp;{{ currentArticle.title }}
               </div>
               <div class="text-G800 text-h3 font-medium">
                 {{ currentArticle.title }}
@@ -44,7 +42,8 @@
               <div class="font-medium">
                 <div class="text-G700">{{ currentArticle.author }}</div>
                 <div class="text-G500">
-                  {{ currentArticle.datePosted }} • 5 min read
+                  {{ currentArticle.datePosted }} •
+                  {{ readingTime(currentArticle.body.length) }} min read
                 </div>
               </div>
             </div>
@@ -74,5 +73,30 @@
         There is no matching blog right now.
       </div>
     </div>
+
+    <section class="flex justify-center bg-G50">
+      <div
+        class="max-w-[1440px] w-full py-[56px] px-[24px] md:py-[80px] md:px-[64px]"
+      >
+        <div class="grid gap-10 md:gap-[64px]">
+          <div
+            class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-10"
+          >
+            <div class="flex flex-col gap-2 font-medium">
+              <div class="text-G800 text-h4 md:text-h3">Latest Posts</div>
+              <div class="text-G700 text-b1">
+                Read up on latest news, updates and tips from the community
+              </div>
+            </div>
+            <div [routerLink]="['/blog']" class="w-max">
+              <basic-button [type]="1" title="See all blog posts" />
+            </div>
+          </div>
+          <app-blog-posts />
+        </div>
+      </div>
+    </section>
+
+    <join-community />
   </section>
 </main>
