@@ -1,16 +1,28 @@
 <section>
   <div class="w-full">
-    <div class="grid md:grid-cols-3 gap-10 md:gap-8 min-h-[200px]">
+    <div
+      *ngIf="hits.length > 0"
+      class="grid md:grid-cols-3 gap-10 md:gap-8 min-h-[200px]"
+    >
       <div *ngFor="let blogData of hits">
         <blog-card
           [thumbnail]="blogData.thumbnail"
           [slug]="blogData.slug"
           [title]="blogData.title"
           [subTitle]="blogData.subTitle"
+          [body]="blogData.body"
           [tags]="blogData.tags"
           [author]="blogData.author"
           [datePosted]="blogData.datePosted"
         />
+      </div>
+    </div>
+    <div
+      *ngIf="hits.length === 0"
+      class="grid md:grid-cols-3 gap-10 md:gap-8 min-h-[200px]"
+    >
+      <div *ngFor="let blogData of [1, 2, 3, 4, 5, 6]">
+        <sk-blog-card />
       </div>
     </div>
     <div *ngIf="totalRecords > rows" class="pt-[24px] flex justify-center">
