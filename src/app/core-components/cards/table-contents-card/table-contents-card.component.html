@@ -1,0 +1,21 @@
+<div class="w-full rounded-2xl overflow-hidden">
+  <div
+    class="bg-G50 px-[24px] py-[16px] text-G800 text-b1 font-semibold border-b border-G200"
+  >
+    Table of Contents
+  </div>
+  <div class="bg-G100 py-[16px] px-[24px]">
+    <div *ngIf="headingsArray.length === 0" class="">
+      No contents available.
+    </div>
+    <div *ngIf="headingsArray.length > 0" class="flex flex-col gap-2">
+      <div
+        *ngFor="let headingItem of headingsArray; let i = index"
+        class="text-G700 text-b2 hover:text-G700 hover:underline hover:font-medium transition-all duration-200 cursor-pointer select-none"
+        (click)="handleHeadingClick(headingsIdArray[i])"
+      >
+        {{ headingItem }}
+      </div>
+    </div>
+  </div>
+</div>
