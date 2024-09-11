@@ -1,0 +1,11 @@
+<div class="w-full bg-G100 rounded-2xl p-[24px] flex flex-col gap-[16px]">
+  <div class="text-G700 text-b2 font-semibold text-center">Share Post</div>
+  <div class="flex gap-[16px] justify-center">
+    <div
+      *ngFor="let item of shareButtons"
+      class="bg-G200 w-[40px] h-[40px] rounded-lg flex justify-center items-center cursor-pointer hover:bg-G300 active:bg-G200 transition-all duration-200"
+    >
+      <img src="{{ item.icon }}" class="w-[24px] h-[24px] select-none" />
+    </div>
+  </div>
+</div>

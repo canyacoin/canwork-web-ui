@@ -9,6 +9,7 @@ import { BlogRoutingModule } from './blog.routing.module'
 import { HeroComponent } from './hero/hero.component'
 import { ResultComponent } from './result/result.component'
 import { PaginatorModule } from 'primeng/paginator'
+import { PublicBlogComponent } from './public-blog/public-blog.component'
 import { FormsModule } from '@angular/forms'
 
 @NgModule({
@@ -21,7 +22,12 @@ import { FormsModule } from '@angular/forms'
     PaginatorModule,
     FormsModule,
   ],
-  declarations: [BlogComponent, HeroComponent, ResultComponent],
+  declarations: [
+    BlogComponent,
+    HeroComponent,
+    ResultComponent,
+    PublicBlogComponent,
+  ],
   exports: [BlogRoutingModule],
 })
 export class BlogModule {}

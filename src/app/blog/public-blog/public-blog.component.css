@@ -1,0 +1,75 @@
+#contentContainer {
+  color: #334155;
+  font-family: 'General Sans', sans-serif !important;
+}
+
+p {
+  font-size: 16px;
+  margin-bottom: 16px;
+  font-weight: 400 !important;
+  font-family: 'General Sans', sans-serif !important;
+}
+
+/* Heading styling */
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: 'General Sans', sans-serif !important;
+  font-weight: 500 !important;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+h1 {
+  color: #0f172a;
+  font-size: 32px;
+}
+
+h2 {
+  color: #0f172a;
+  font-size: 28px;
+}
+
+h3 {
+  color: #0f172a;
+  font-size: 24px;
+}
+
+h4 {
+  color: #0f172a;
+  font-size: 16px;
+}
+
+h5 {
+  color: #0f172a;
+  font-size: 14px;
+}
+
+ul {
+  list-style-type: disc; /* or "circle" for hollow dots */
+  padding-left: 30px; /* Indent the list items */
+  color: #334155; /* Adjust the text color if needed */
+  font-family: 'General Sans', sans-serif !important;
+}
+
+li {
+  margin-bottom: 8px; /* Adds some space between list items */
+  font-family: 'General Sans', sans-serif !important;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+b {
+  font-weight: 600; /* Bolds the text */
+  font-family: 'General Sans', sans-serif !important;
+}
+
+button {
+  font-family: 'General Sans', sans-serif !important;
+}
+
+a {
+  color: #3cf !important;
+}

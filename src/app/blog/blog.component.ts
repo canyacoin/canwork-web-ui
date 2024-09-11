@@ -23,53 +23,66 @@ export class BlogComponent {
       .collection<any>('articles', (ref) => ref.orderBy('datePosted', 'desc'))
       .valueChanges()
   }
-
   ngOnInit() {
     this.articles$.subscribe((articles) => {
+      this.hits = []
       if (articles && articles.length > 0) {
         articles.forEach((article) => {
-          let articleUrl = ''
-          if (article.category) {
-            articleUrl = `/${article.category}/${article.slug}`
-          } else {
-            articleUrl = `/${article.slug}`
-          }
+          // let articleUrl = ''
+          // if (article.category) {
+          //   articleUrl = `/${article.category}/${article.slug}`
+          // } else {
+          //   articleUrl = `/${article.slug}`
+          // }
 
+          // link: `https://app.canwork.io${articleUrl}`,
+          // link: `/blog/${article.slug}`,
           this.mediumFeed.push({
             thumbnail: article.imageUrl,
             title: article.title,
             subTitle: article.subTitle,
+            body: article.body,
             tags: article.tags,
             datePosted: article.datePosted,
             author: article.author,
-            link: `https://app.canwork.io${articleUrl}`,
+            slug: article.slug,
           })
-        })
-        console.log('articles===>', articles)
 
-        this.hits = this.mediumFeed.slice(0, this.hitsPerPage) // update
-        this.numHits = this.mediumFeed.length
+          this.hits = this.mediumFeed.slice(0, this.hitsPerPage) // update
+          this.numHits = this.mediumFeed.length
+        })
       }
     })
-    // test
-    // for (let i = 0; i < 23; i++) {
-    //   this.mediumFeed.push({
-    //     thumbnail:
-    //       'https://firebasestorage.googleapis.com/v0/b/can-work-io.appspot.com/o/uploads%2Farticles%2F7c3d1e960aaa4c149938f3c0a8b8913e.jpg?alt=media',
-    //     title: 'Token Buy-Back Intitiative',
-    //     subTitle: 'Get your share of $50K USDT',
-    //     tags: ['asdf', 'bced', 'qwer', 'ert'],
-    //     datePosted: '2024-08-' + i,
-    //     author: 'Massimo Burlando',
-    //     link: `https://app.canwork.io/blog/buyback`,
-    //   })
-    // }
-    // console.log('this.mediumFeed', this.mediumFeed)
-    // this.hits = this.mediumFeed.slice(0, this.hitsPerPage) // update
-    // this.numHits = this.mediumFeed.length
-    // console.log('this.hits', this.hits)
-    // console.log('this.numHits', this.numHits)
   }
+
+  // ngOnInit() {
+  //   this.articles$.subscribe((articles) => {
+  //     if (articles && articles.length > 0) {
+  //       articles.forEach((article) => {
+  //         let articleUrl = ''
+  //         if (article.category) {
+  //           articleUrl = `/${article.category}/${article.slug}`
+  //         } else {
+  //           articleUrl = `/${article.slug}`
+  //         }
+
+  //         this.mediumFeed.push({
+  //           thumbnail: article.imageUrl,
+  //           title: article.title,
+  //           subTitle: article.subTitle,
+  //           tags: article.tags,
+  //           datePosted: article.datePosted,
+  //           author: article.author,
+  //           link: `https://app.canwork.io${articleUrl}`,
+  //         })
+  //       })
+  //       console.log('articles===>', articles)
+
+  //       this.hits = this.mediumFeed.slice(0, this.hitsPerPage) // update
+  //       this.numHits = this.mediumFeed.length
+  //     }
+  //   })
+  // }
   // two way binding, event from paging component (user input)
   onPageChange(newPage: number) {
     setTimeout(() => {

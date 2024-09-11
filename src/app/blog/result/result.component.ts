@@ -14,7 +14,7 @@ interface PageEvent {
 export class ResultComponent {
   resultSection = ResultService
   queryString: string = ''
-  @Input() hits: any[]
+  @Input() hits: any[] = []
   @Input() totalRecords: number = 0
   @Input() rows: number = 9
   @Input() first: number = 0
