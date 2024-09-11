@@ -14,7 +14,7 @@
             "outputPath": "dist/functions/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "tsConfig": "src/tsconfig.app.json",
+            "tsConfig": "tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
             "allowedCommonJsDependencies": [
               "stream",
@@ -140,7 +140,7 @@
             "main": "src/test.ts",
             "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.spec.json",
+            "tsConfig": "tsconfig.spec.json",
             "scripts": [],
             "styles": [
               "node_modules/firebaseui/dist/firebaseui.css",
@@ -162,7 +162,7 @@
           "options": {
             "outputPath": "dist/functions/server",
             "main": "server.ts",
-            "tsConfig": "src/tsconfig.server.json",
+            "tsConfig": "tsconfig.server.json",
             "buildOptimizer": true,
             "outputHashing": "media",
             "optimization": true,
