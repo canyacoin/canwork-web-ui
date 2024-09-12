@@ -11,7 +11,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/functions/browser",
+            "outputPath": "dist-ssr/functions/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
@@ -160,7 +160,7 @@
         "server": {
           "builder": "@angular-devkit/build-angular:server",
           "options": {
-            "outputPath": "dist/functions/server",
+            "outputPath": "dist-ssr/functions/server",
             "main": "server.ts",
             "tsConfig": "tsconfig.server.json",
             "buildOptimizer": true,

@@ -6,6 +6,10 @@
 /tmp
 /out-tsc
 
+# ssr output artifacts
+/dist-ssr/functions/browser
+/dist-ssr/functions/server
+
 # VS live sharing
 .vs/*
 

@@ -10,7 +10,7 @@ import { AppServerModule } from './src/main.server'
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express()
-  const distFolder = join(process.cwd(), 'dist/can-work/browser')
+  const distFolder = join(process.cwd(), 'dist-ssr/can-work/browser')
   const indexHtml = existsSync(join(distFolder, 'index.original.html'))
     ? 'index.original.html'
     : 'index'
