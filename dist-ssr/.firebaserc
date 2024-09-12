@@ -1,0 +1,27 @@
+{
+  "projects": {
+    "staging": "canwork-staging",
+    "prod": "can-work-io",
+    "default": "canwork-staging"
+  },
+  "targets": {
+    "canwork-staging": {
+      "hosting": {
+        "canwork-webui": [
+          "canwork-staging"
+        ],
+        "canwork-ssr-staging": [
+          "canwork-ssr-staging"
+        ]
+        
+      }
+    },
+    "can-work-io": {
+      "hosting": {
+        "canwork-webui": [
+          "can-work-io"
+        ]
+      }
+    }
+  }
+}
