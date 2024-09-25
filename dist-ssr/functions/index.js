@@ -7,3 +7,6 @@ const functions = require('firebase-functions')
 //   functions.logger.info("Hello logs!", {structuredData: true});
 //   response.send("Hello from Firebase!");
 // });
+
+const universalMain = require(__dirname + '/server/main')
+exports.ssr = functions.https.onRequest(universalMain.app())
