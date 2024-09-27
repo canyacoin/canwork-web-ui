@@ -1,3 +1,21 @@
+;(global as { window: unknown }).window = global
+
+/*
+let's use strategy 3
+https://github.com/angular/universal/blob/main/docs/gotchas.md#strategy-3-shims
+
+but we have to work on it, cause some window properties are needed
+like the window.ethereum
+we'll have also to exclude some routes from server side rendering
+(i.e. private routes or wallet ones)
+
+i.e.
+app.get('/app/**', (req, res) => {
+  console.log('not rendering  app pages');
+});
+
+*/
+
 import 'zone.js/node'
 
 import { APP_BASE_HREF } from '@angular/common'
