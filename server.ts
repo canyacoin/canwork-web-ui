@@ -1,3 +1,5 @@
+import { enableProdMode, ValueProvider, FactoryProvider } from '@angular/core'
+
 import 'zone.js/node'
 
 /*
@@ -14,21 +16,45 @@ npm install -D domino
 const domino = require('domino')
 
 ;(global as any).WebSocket = require('ws')
-;(global as any).XMLHttpRequest = require('xhr2')
+;(global as any).XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
+
+enableProdMode()
 
 const distFolder = join(process.cwd(), 'dist-ssr/functions/browser')
 
 const template = readFileSync(join(distFolder, 'index.html')).toString()
 const win = domino.createWindow(template.toString())
+
+win.process = process // protobufjs fix to confirm node env: https://github.com/protobufjs/protobuf.js/blob/master/src/util/minimal.js#L55
+/*
+Protobufjs: Error not supported at Root.loadSync
+util.isNode = Boolean(
+   util.global.process && 
+   util.global.process.versions &&  
+   util.global.process.versions.node
+);
+this function gives false but it should not. Taking a look into the utility function, we can see what is happening
+
+util.global = typeof window !== "undefined" && window || 
+              typeof global !== "undefined" && global || 
+              typeof self   !== "undefined" && self   || 
+              this;
+If window is defined, then this function returns it and the isNode function relies on it
+to check if the environment is node or not!
+Knowing this, the fix is super easy: we just need to define process in the window object              
+*/
+
 global['window'] = win
-global['document'] = win.document
+/*
 global['self'] = win
 global['IDBIndex'] = win.IDBIndex
+global['getComputedStyle'] = win.getComputedStyle;
+*/
 global['document'] = win.document
+
 global['navigator'] = win.navigator
-global['getComputedStyle'] = win.getComputedStyle
 
 /*
 
