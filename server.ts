@@ -1,8 +1,20 @@
 import 'zone.js/node'
 
+/*
+
+domino strategy
+
+ReferenceError: Window is not defined
+Working with SSR, you probably already encountered this error if you use any window-dependent library.
+
+You can easily fake window using domino. Just install it
+
+npm install -D domino
+*/
+const domino = require('domino')
+
 ;(global as any).WebSocket = require('ws')
 ;(global as any).XMLHttpRequest = require('xhr2')
-const domino = require('domino')
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
@@ -17,6 +29,16 @@ global['IDBIndex'] = win.IDBIndex
 global['document'] = win.document
 global['navigator'] = win.navigator
 global['getComputedStyle'] = win.getComputedStyle
+
+/*
+
+ReferenceError: componentHandler is not defined
+This is also from FirebaseUI but, at this point, the fix is quite straightforward. Simply add this to your server.ts and you will be good to go
+
+*/
+global['componentHandler'] = {
+  register: () => {},
+}
 
 import { APP_BASE_HREF } from '@angular/common'
 import { ngExpressEngine } from '@nguniversal/express-engine'
