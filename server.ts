@@ -1,34 +1,32 @@
-;(global as { window: unknown }).window = global
-
-/*
-let's use strategy 3
-https://github.com/angular/universal/blob/main/docs/gotchas.md#strategy-3-shims
-
-but we have to work on it, cause some window properties are needed
-like the window.ethereum
-we'll have also to exclude some routes from server side rendering
-(i.e. private routes or wallet ones)
-
-i.e.
-app.get('/app/**', (req, res) => {
-  console.log('not rendering  app pages');
-});
-
-*/
-
 import 'zone.js/node'
+
+;(global as any).WebSocket = require('ws')
+;(global as any).XMLHttpRequest = require('xhr2')
+const domino = require('domino')
+import { existsSync, readFileSync } from 'node:fs'
+import { join } from 'node:path'
+
+const distFolder = join(process.cwd(), 'dist-ssr/functions/browser')
+
+const template = readFileSync(join(distFolder, 'index.html')).toString()
+const win = domino.createWindow(template.toString())
+global['window'] = win
+global['document'] = win.document
+global['self'] = win
+global['IDBIndex'] = win.IDBIndex
+global['document'] = win.document
+global['navigator'] = win.navigator
+global['getComputedStyle'] = win.getComputedStyle
 
 import { APP_BASE_HREF } from '@angular/common'
 import { ngExpressEngine } from '@nguniversal/express-engine'
 import * as express from 'express'
-import { existsSync } from 'node:fs'
-import { join } from 'node:path'
 import { AppServerModule } from './src/main.server'
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express()
-  const distFolder = join(process.cwd(), 'dist-ssr/can-work/browser')
+  //const distFolder = join(process.cwd(), 'dist-ssr/can-work/browser')
   const indexHtml = existsSync(join(distFolder, 'index.original.html'))
     ? 'index.original.html'
     : 'index'
