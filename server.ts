@@ -22,7 +22,8 @@ import { join } from 'node:path'
 
 enableProdMode()
 
-const distFolder = join(process.cwd(), 'dist-ssr/functions/browser')
+const distFolder = join(process.cwd(), 'browser')
+//const distFolder = join(process.cwd(), 'dist-ssr/functions/browser')
 
 const template = readFileSync(join(distFolder, 'index.html')).toString()
 const win = domino.createWindow(template.toString())

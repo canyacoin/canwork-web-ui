@@ -34,6 +34,15 @@ https://angular.io/guide/versions
 Angular build optimization configuration:
 https://angular.io/guide/workspace-config#optimization-configuration
 
+## Angular SSR progress
+
+Manual (for now) patches into dist-ssr/functions/server/main.js:
+
+We have to automate this patches and probably do directly on js libs
+
+- "urlParsingNode.pathname.charAt(0)" -> "urlParsingNode.pathname?.charAt(0)" (fix axios issue https://github.com/axios/axios/issues/6069)
+- "(self," -> "(typeof self !== 'undefined' && self," (fix dropzone issue https://github.com/zefoy/ngx-dropzone-wrapper/issues/154)
+
 ## Setting Up
 
 - [NPM](https://nodejs.org/en/)
