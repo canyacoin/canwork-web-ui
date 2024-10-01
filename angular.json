@@ -15,7 +15,7 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
-            "polyfills": ["zone.js"],
+            "polyfills": "src/polyfills.ts",
             "allowedCommonJsDependencies": [
               "stream",
               "assert",
@@ -139,7 +139,7 @@
           "options": {
             "main": "src/test.ts",
             "karmaConfig": "./karma.conf.js",
-            "polyfills": ["zone.js", "zone.js/testing"],
+            "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "scripts": [],
             "styles": [
