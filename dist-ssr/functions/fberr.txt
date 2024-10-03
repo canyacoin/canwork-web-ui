@@ -1,0 +1,26 @@
+  functions: Beginning execution of "us-central1-ssr"
+>  [2024-10-01T17:02:07.234Z]  @firebase/auth: Auth (9.23.0): INTERNAL ASSERTION FAILED: Expected a class definition
+>  ERROR Error: INTERNAL ASSERTION FAILED: Expected a class definition
+>      at debugFail (/home/enrico/dev/web-ui/dist-ssr/functions/server/main.js:1:11011815)
+>      at debugAssert (/home/enrico/dev/web-ui/dist-ssr/functions/server/main.js:1:11011885)
+>      at _getInstance (/home/enrico/dev/web-ui/dist-ssr/functions/server/main.js:1:11038009)
+>      at new CompatPopupRedirectResolver (/home/enrico/dev/web-ui/dist-ssr/functions/server/main.js:1:11163703)
+>      at _getInstance (/home/enrico/dev/web-ui/dist-ssr/functions/server/main.js:1:11038235)
+>      at AuthImpl._initializeWithPersistence (/home/enrico/dev/web-ui/dist-ssr/functions/server/main.js:1:11051668)
+>      at _initializeAuthInstance (/home/enrico/dev/web-ui/dist-ssr/functions/server/main.js:1:11062806)
+>      at Component.instanceFactory (/home/enrico/dev/web-ui/dist-ssr/functions/server/main.js:1:11124576)
+>      at Provider2.getOrInitializeService (/home/enrico/dev/web-ui/dist-ssr/functions/server/main.js:1:10447993)
+>      at Provider2.initialize (/home/enrico/dev/web-ui/dist-ssr/functions/server/main.js:1:10446880)
+i  functions: Finished "us-central1-ssr" in 78.916857ms
+>  Error: INTERNAL ASSERTION FAILED: Expected a class definition
+>      at debugFail (/home/enrico/dev/web-ui/dist-ssr/functions/server/main.js:1:11011815)
+>      at debugAssert (/home/enrico/dev/web-ui/dist-ssr/functions/server/main.js:1:11011885)
+>      at _getInstance (/home/enrico/dev/web-ui/dist-ssr/functions/server/main.js:1:11038009)
+>      at new CompatPopupRedirectResolver (/home/enrico/dev/web-ui/dist-ssr/functions/server/main.js:1:11163703)
+>      at _getInstance (/home/enrico/dev/web-ui/dist-ssr/functions/server/main.js:1:11038235)
+>      at AuthImpl._initializeWithPersistence (/home/enrico/dev/web-ui/dist-ssr/functions/server/main.js:1:11051668)
+>      at _initializeAuthInstance (/home/enrico/dev/web-ui/dist-ssr/functions/server/main.js:1:11062806)
+>      at Component.instanceFactory (/home/enrico/dev/web-ui/dist-ssr/functions/server/main.js:1:11124576)
+>      at Provider2.getOrInitializeService (/home/enrico/dev/web-ui/dist-ssr/functions/server/main.js:1:10447993)
+>      at Provider2.initialize (/home/enrico/dev/web-ui/dist-ssr/functions/server/main.js:1:10446880)
+i  hosting: 5.89.218.132 - - [01/Oct/2024:17:02:07 +0000] "GET /home HTTP/1.1" 500 148 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"

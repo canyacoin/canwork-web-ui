@@ -61,6 +61,7 @@
     "hashbow": "^1.1.1",
     "https-browserify": "^1.0.0",
     "jwt-decode": "^2.2.0",
+    "localstorage-polyfill": "^1.0.1",
     "marked": "9.0.0",
     "moment": "^2.20.1",
     "moment-timezone": "^0.5.14",
