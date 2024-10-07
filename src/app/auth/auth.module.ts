@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 
+import { firebaseUiAuthConfig } from '../core-config/app-auth-config'
 import { FirebaseUIModule } from 'firebaseui-angular'
 
 import { CoreComponentsModule } from '../core-components/core-components.module'
@@ -18,7 +19,8 @@ import { LoginComponent } from './login/login.component'
     CoreComponentsModule,
     CoreServicesModule,
     CoreUtilsModule,
-    FirebaseUIModule,
+    //    FirebaseUIModule,
+    FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     FormsModule,
   ],
   declarations: [LoginComponent],

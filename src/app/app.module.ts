@@ -11,13 +11,13 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore'
 import { AngularFireStorageModule } from '@angular/fire/compat/storage'
 import { NgxSliderModule } from 'ngx-slider-v2'
 import { NgxPaginationModule } from 'ngx-pagination'
-import { FirebaseUIModule } from 'firebaseui-angular'
+// import { FirebaseUIModule } from 'firebaseui-angular'
 import { environment } from '../environments/environment'
 import { AppComponent } from './app.component'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AppRoutingModule } from './app.routing.module'
 import { CoreComponentsModule } from './core-components/core-components.module'
-import { firebaseUiAuthConfig } from './core-config/app-auth-config'
+//import { firebaseUiAuthConfig } from './core-config/app-auth-config'
 import { CoreUtilsModule } from './core-utils/core-utils.module'
 import { PublicJobComponent } from './public-job/public-job/public-job.component'
 //import { FilterPipeModule } from 'ngx-filter-pipe' // obsolete
@@ -68,8 +68,8 @@ import { MessageService } from 'primeng/api'
     AngularFirestoreModule,
     AngularFireStorageModule,
     AngularFireFunctionsModule,
-    FirebaseUIModule,
-    FirebaseUIModule.forRoot(firebaseUiAuthConfig),
+    //    FirebaseUIModule,
+    //    FirebaseUIModule.forRoot(firebaseUiAuthConfig),
     // NgAisModule.forRoot(),
     BrowserModule,
     BrowserAnimationsModule,

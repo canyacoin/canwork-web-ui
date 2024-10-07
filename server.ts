@@ -101,6 +101,12 @@ export function app(): express.Express {
     })
   )
 
+  // lazy load login only on browser
+  server.get('/login', function (req, res) {
+    //res.sendFile(join(distFolder, 'browser', 'index.html'));
+    res.sendFile(join(distFolder, 'index.html'))
+  })
+
   // All regular routes use the Universal engine
   server.get('*', (req, res) => {
     res.render(indexHtml, {
