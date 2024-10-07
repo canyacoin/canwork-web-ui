@@ -57,9 +57,6 @@ global['document'] = win.document
 
 global['navigator'] = win.navigator
 
-import 'localstorage-polyfill'
-global['localStorage'] = localStorage
-
 /*
 
 ReferenceError: componentHandler is not defined
