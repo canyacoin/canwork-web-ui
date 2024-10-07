@@ -24,6 +24,8 @@ export class FooterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    if (!this.auth.currentUser$) return
+
     this.authSub = this.auth.currentUser$.subscribe((user: User) => {
       if (this.currentUser !== user) {
         this.currentUser = user

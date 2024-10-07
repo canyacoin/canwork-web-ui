@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core'
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 import { NavigationEnd, Router } from '@angular/router'
 import { AuthService } from '@service/auth.service'
 // spinner
@@ -14,8 +15,11 @@ export class AppComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private spinner: NgxSpinnerService,
-    private messageService: MessageService
-  ) {}
+    private messageService: MessageService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    console.log('AppComponent platformId: ' + this.platformId)
+  }
 
   ngOnInit() {
     /** spinner starts on init */
@@ -30,7 +34,9 @@ export class AppComponent implements OnInit {
       if (!(evt instanceof NavigationEnd)) {
         return
       }
-      window.scrollTo(0, 0)
+      if (isPlatformBrowser(this.platformId)) {
+        window.scrollTo(0, 0)
+      }
       /** spinner ends after NavigationEnd event */
       this.spinner.hide()
     })
