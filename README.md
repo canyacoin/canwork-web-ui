@@ -42,8 +42,9 @@ We have to automate this patches and probably do directly on js libs
 
 - "urlParsingNode.pathname.charAt(0)" -> "urlParsingNode.pathname?.charAt(0)" (fix axios issue https://github.com/axios/axios/issues/6069)
 - "(self," -> "(typeof self !== 'undefined' && self," (fix dropzone issue https://github.com/zefoy/ngx-dropzone-wrapper/issues/154)
-  initializeAuth(app)
-  initializeAuth(app,{persistence:typeof window==='undefined'?require('firebase/auth').inMemoryPersistence:[require('firebase/auth').indexedDBLocalPersistence, require('firebase/auth').browserLocalPersistence]})
+- /\(self,/ -> "(typeof self !== 'undefined' && self," (self patch)
+- /self\?\.location/ -> "(typeof self !== 'undefined' && self)?.location" (self.location patch)
+- /browserPopupRedirectResolver\=NOT_AVAILABLE_ERROR/ -> "browserPopupRedirectResolver=inMemoryPersistence" (firebase auth server side in memory persistence)
 
 ## Setting Up
 

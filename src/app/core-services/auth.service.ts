@@ -11,18 +11,39 @@ import { User } from '../core-classes/user'
 export class AuthService {
   userSub: Subscription
 
-  private userTypeSubject: BehaviorSubject<UserType> =
-    new BehaviorSubject<UserType>(UserType.client) // default value
+  /*
+  private userTypeSubject: BehaviorSubject<UserType> = new BehaviorSubject<UserType>(UserType.client) // default value
   public userType$: Observable<UserType> = this.userTypeSubject.asObservable()
 
   public currentUser = new BehaviorSubject<User>(null)
   public currentUser$ = this.currentUser.asObservable()
+  */
+
+  private userTypeSubject: BehaviorSubject<UserType>
+  public userType$: Observable<UserType>
+
+  public currentUser
+  public currentUser$
+
+  private isLocalStorageAvailable = typeof localStorage !== 'undefined'
 
   constructor(
     private afs: AngularFirestore,
     private afAuth: AngularFireAuth,
     private router: Router
   ) {
+    console.log(
+      'AuthService this.isLocalStorageAvailable: ' +
+        this.isLocalStorageAvailable
+    )
+    if (!this.isLocalStorageAvailable) return
+
+    this.userTypeSubject = new BehaviorSubject<UserType>(UserType.client) // default value
+    this.userType$ = this.userTypeSubject.asObservable()
+
+    this.currentUser = new BehaviorSubject<User>(null)
+    this.currentUser$ = this.currentUser.asObservable()
+
     const savedUser = JSON.parse(localStorage.getItem('credentials'))
     if (savedUser) {
       this.setUser(savedUser)
@@ -39,7 +60,7 @@ export class AuthService {
   }
 
   getCurrentUser(): Promise<User> {
-    if (this.currentUser.value) {
+    if (this.isLocalStorageAvailable && this.currentUser.value) {
       return Promise.resolve(this.currentUser.value)
     }
     return Promise.reject(null)
@@ -89,7 +110,7 @@ export class AuthService {
 
   emitUser(user: User) {
     // console.trace()
-    if (user) {
+    if (this.isLocalStorageAvailable && user) {
       localStorage.setItem('credentials', JSON.stringify(user))
     }
     this.currentUser.next(user)
@@ -103,7 +124,7 @@ export class AuthService {
     */
     if (this.userSub) this.userSub.unsubscribe()
 
-    localStorage.clear()
+    if (this.isLocalStorageAvailable) localStorage.clear()
 
     this.currentUser.next(null)
 
