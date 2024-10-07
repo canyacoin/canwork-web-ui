@@ -171,6 +171,7 @@ export class BscService {
   events$ = this.events.asObservable()
   private connectedWallet = null
   monitorCollection: AngularFirestoreCollection<any>
+  private isLocalStorageAvailable = typeof localStorage !== 'undefined'
 
   constructor(
     private userService: UserService,
@@ -179,7 +180,13 @@ export class BscService {
     private messageService: MessageService,
     private spinner: NgxSpinnerService
   ) {
+    console.log(
+      'BscService this.isLocalStorageAvailable: ' + this.isLocalStorageAvailable
+    )
+
     this.monitorCollection = this.afs.collection<any>('bep20-txs')
+
+    if (!this.isLocalStorageAvailable) return
 
     // todo move this to a common reusable function and replace everywhere
     const connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
@@ -201,7 +208,7 @@ export class BscService {
     todo: when this is currently called without app, it tries to refresh provider and signer
     we have to handle it also in walletConnect scenario
     */
-    if (!app) {
+    if (this.isLocalStorageAvailable && !app) {
       if (localStorage.getItem('connectedWallet'))
         app = JSON.parse(localStorage.getItem('connectedWallet')).walletApp
       console.log(app)
@@ -303,6 +310,7 @@ export class BscService {
       if (!!window.ethereum)
         window.ethereum.on('accountsChanged', async (accounts) => {
           if (accounts && accounts.length > 0) {
+            if (!this.isLocalStorageAvailable) return
             const connectedWallet = JSON.parse(
               localStorage.getItem('connectedWallet')
             )
@@ -547,7 +555,8 @@ export class BscService {
       address,
     }
     // update local storage
-    localStorage.setItem('connectedWallet', JSON.stringify(connectedWallet))
+    if (this.isLocalStorageAvailable)
+      localStorage.setItem('connectedWallet', JSON.stringify(connectedWallet))
     // update service status
     this.connectedWallet = connectedWallet
 
@@ -555,6 +564,8 @@ export class BscService {
   }
 
   async getBnbBalance() {
+    if (!this.isLocalStorageAvailable) return -1
+
     let connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
     if (!connectedWallet) await this.connect() // no wallet saved
 
@@ -587,6 +598,8 @@ export class BscService {
   }
 
   async getBalances() {
+    if (!this.isLocalStorageAvailable) return []
+
     let connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
     if (!connectedWallet) await this.connect() // no wallet saved
 
@@ -658,12 +671,6 @@ export class BscService {
   }
 
   async getBalance(token) {
-    // get single token balance, for not blocking asset selectors
-    let connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
-    if (!connectedWallet) await this.connect() // no wallet saved
-
-    if (!this.provider) await this.connect() // we need to reconnect
-
     let result = {
       err: 'error retrieving balance',
       address: '',
@@ -672,6 +679,13 @@ export class BscService {
       free: '-1',
       token,
     }
+    if (!this.isLocalStorageAvailable) return result
+
+    // get single token balance, for not blocking asset selectors
+    let connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
+    if (!connectedWallet) await this.connect() // no wallet saved
+
+    if (!this.provider) await this.connect() // we need to reconnect
 
     if (!this.provider) return result // we weren't able to connect
 
@@ -702,6 +716,8 @@ export class BscService {
   }
 
   async getEscrowAllowance(token) {
+    if (!this.isLocalStorageAvailable) return -1
+
     try {
       let connectedWallet = JSON.parse(localStorage.getItem('connectedWallet'))
       if (!connectedWallet) await this.connect() // no wallet saved
@@ -1626,7 +1642,8 @@ export class BscService {
       address,
     }
     // update local storage
-    localStorage.setItem('connectedWallet', JSON.stringify(connectedWallet))
+    if (this.isLocalStorageAvailable)
+      localStorage.setItem('connectedWallet', JSON.stringify(connectedWallet))
 
     // update service status
     this.connectedWallet = connectedWallet
@@ -1634,12 +1651,15 @@ export class BscService {
 
   getCurrentApp() {
     let app = null
+    if (!this.isLocalStorageAvailable) return app
     if (localStorage.getItem('connectedWallet'))
       app = JSON.parse(localStorage.getItem('connectedWallet')).walletApp
     return app
   }
 
   async disconnect() {
+    if (!this.isLocalStorageAvailable) return
+
     let app = null
     if (localStorage.getItem('connectedWallet'))
       app = JSON.parse(localStorage.getItem('connectedWallet')).walletApp
@@ -1688,7 +1708,7 @@ export class BscService {
 
   disconnectState() {
     // forget
-    localStorage.removeItem('connectedWallet')
+    if (this.isLocalStorageAvailable) localStorage.removeItem('connectedWallet')
 
     // update service status
     this.connectedWallet = null
