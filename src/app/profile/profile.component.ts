@@ -44,6 +44,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    if (!this.authService.currentUser$) return // not server side
+
     this.spinner.show()
     this.authSub = this.authService.currentUser$.subscribe(
       (user: User) => {

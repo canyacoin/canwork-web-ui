@@ -12,6 +12,7 @@
 
 # ssr logs
 /dist-ssr/ui-debug.log
+ssr-errs.txt
 
 # VS live sharing
 .vs/*

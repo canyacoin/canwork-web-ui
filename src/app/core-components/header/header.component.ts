@@ -122,7 +122,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           currentRoute.includes('/blog/')
         ) {
           this.isTransfer = true
-        } else {  
+        } else {
           this.isTransfer = false
         }
       }
@@ -174,18 +174,22 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.isScrolled = scrollY > 64
     })
 
-    this.authSub = this.authService.currentUser$.subscribe(
-      async (user: User) => {
-        if (this.currentUser !== user) {
-          this.currentUser = user
-          await this.initUser()
-        }
-      }
-    )
+    if (this.authService.currentUser$) {
+      // not server side
 
-    this.authService.userType$.subscribe((userType) => {
-      this.userType = userType
-    })
+      this.authSub = this.authService.currentUser$.subscribe(
+        async (user: User) => {
+          if (this.currentUser !== user) {
+            this.currentUser = user
+            await this.initUser()
+          }
+        }
+      )
+
+      this.authService.userType$.subscribe((userType) => {
+        this.userType = userType
+      })
+    }
 
     this.bscSub = this.bscService.events$.subscribe((event) => {
       if (!event) {
