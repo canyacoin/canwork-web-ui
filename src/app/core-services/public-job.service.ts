@@ -80,7 +80,7 @@ export class PublicJobService {
       .collection<Job>(`public-jobs`, (ref) =>
         ref
           .where('visibility', '==', 'public')
-          .where('state', '==', JobState.acceptingOffers)
+          .where('state', '==', 'Accepting Offers' /*JobState.acceptingOffers*/)
           .where('deadline', '>', new Date().toISOString().slice(0, 10))
       )
       .valueChanges()
