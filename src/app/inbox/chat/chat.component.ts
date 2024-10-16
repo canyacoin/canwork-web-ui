@@ -390,14 +390,19 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   onMessageBoxInput(e) {
+    const element = e.target
+
+    // Trim the input value to ignore spaces and line breaks
+    const inputValue = element.value.trim()
+    console.log('inputValue', inputValue)
+
     // If it's ENTER without SHIFT send the message
-    if (e.which == 13 && !e.shiftKey) {
+    if (e.which == 13 && !e.shiftKey && inputValue !== '') {
       this.onSend()
       e.preventDefault()
       return false
     }
     // Resize the message box to fit the current number of lines
-    const element = e.target
     element.style.height = 'auto'
     element.style.height = element.scrollHeight + 'px'
   }
