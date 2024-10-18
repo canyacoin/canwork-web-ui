@@ -68,7 +68,7 @@ export const FooterService = {
   legal: [
     {
       title: 'Privacy Policy',
-      url: 'https://canwork.io/assets/docs/canwork-privacy-policy.pdf',
+      url: 'https://canwork.io/assets/docs/Data-Deletion-Request-Instructions.pdf',
     },
     {
       title: 'Terms of Service',
