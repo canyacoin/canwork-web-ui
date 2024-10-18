@@ -12,7 +12,7 @@ export function customAngularEditorConfig(): AngularEditorConfig {
     translate: 'yes',
     enableToolbar: true,
     showToolbar: true,
-    placeholder: 'How do you intend to deliver on this job',
+    placeholder: 'Describe the project details, scope, and deliverables for this job.',
     defaultParagraphSeparator: '',
     defaultFontName: 'General Sans',
     defaultFontSize: '3',

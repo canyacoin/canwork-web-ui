@@ -32,7 +32,7 @@ export class BlogPostsComponent implements OnInit {
           //   articleUrl = `/${article.slug}`
           // }
 
-          // link: `https://app.canwork.io${articleUrl}`,
+          // link: `https://canwork.io${articleUrl}`,
           // link: `/blog/${article.slug}`,
           this.mediumFeed.push({
             thumbnail: article.imageUrl,
