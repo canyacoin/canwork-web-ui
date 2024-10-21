@@ -15,7 +15,7 @@ export const firebaseUiAuthConfig: firebaseui.auth.Config = {
   ],
   tosUrl: 'https://canwork.io/assets/docs/canwork-terms-and-conditions.pdf',
   privacyPolicyUrl:
-    'https://canwork.io/assets/docs/Data-Deletion-Request-Instructions.pdf',
-
+    'https://canwork.io/assets/docs/canwork-privacy-policy.pdf',
+  // dataDeletionUrl: 'https://www.canwork.io/assets/docs/Data-Deletion-Request-Instructions.pdf',
   credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
 }
