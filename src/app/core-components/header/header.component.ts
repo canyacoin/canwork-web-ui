@@ -150,11 +150,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
         routerLink: '/wallet-bnb/assets',
         icon: 'u_wallet.svg',
       },
-      {
-        label: 'Settings',
-        routerLink: '/inbox/jobs',
-        icon: 'fi_settings.svg',
-      },
+      // {
+      //   label: 'Settings',
+      //   routerLink: '/',
+      //   icon: 'fi_settings.svg',
+      // },
       {
         label: 'Acting',
         routerLink: '/inbox/jobs',

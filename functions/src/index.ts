@@ -466,7 +466,7 @@ exports.updateIndexProviderData = functions.firestore
           substitutions: {
             title: `Congratulations, ${user.name}. 🎉🎊🎉`,
             returnLinkText: `Edit my profile`,
-            returnLinkUrl: `https://app.canwork.io/profile/edit`,
+            returnLinkUrl: `https://canwork.io/profile/edit`,
           },
           templateId: '4fc71b33-e493-4e60-bf5f-d94721419db5',
         },
@@ -599,7 +599,7 @@ function notifyAdminOnNewUser(user) {
   )
 
   const text = `
-  Link to profile: https://app.canwork.io/profile/${user.slug}
+  Link to profile: https://canwork.io/profile/${user.slug}
   <br>
   Email address: ${user.email}
   <br>
@@ -927,7 +927,7 @@ function getFirebaseInstance(projectId: string) {
     },
     {
       projectId: 'can-work-io',
-      uri: 'https://app.canwork.io',
+      uri: 'https://canwork.io',
       environment: 'prod',
     },
   ]

@@ -35,7 +35,7 @@ export class BlogComponent {
           //   articleUrl = `/${article.slug}`
           // }
 
-          // link: `https://app.canwork.io${articleUrl}`,
+          // link: `https://canwork.io${articleUrl}`,
           // link: `/blog/${article.slug}`,
           this.mediumFeed.push({
             thumbnail: article.imageUrl,
@@ -73,7 +73,7 @@ export class BlogComponent {
   //           tags: article.tags,
   //           datePosted: article.datePosted,
   //           author: article.author,
-  //           link: `https://app.canwork.io${articleUrl}`,
+  //           link: `https://canwork.io${articleUrl}`,
   //         })
   //       })
   //       console.log('articles===>', articles)

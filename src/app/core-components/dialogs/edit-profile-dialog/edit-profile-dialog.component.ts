@@ -42,18 +42,7 @@ export class EditProfileDialogComponent implements OnInit, OnDestroy {
   }
   set visible(value: boolean) {
     this._visible = value
-    this.buildForm()
-    this.selectedFile = null
-    if (this.currentUser) {
-      this.filePath = `uploads/avatars/${this.currentUser.address}`
-      // console.log('this.filePath', this.filePath)
-      // set selectedCategory
-      let categoryIndex = this.categories.findIndex(
-        (item) =>
-          item.name.toLowerCase() === this.currentUser.category.toLowerCase()
-      )
-      this.selectedCategory = this.categories[categoryIndex]
-    }
+    this.initFunction()
     this.visibleChange.emit(this._visible)
   }
   @Output() visibleChange = new EventEmitter<boolean>()
@@ -116,6 +105,7 @@ export class EditProfileDialogComponent implements OnInit, OnDestroy {
         code: 'virtualAssistant',
       },
     ]
+    this.initFunction()
   }
 
   ngOnDestroy() {}
@@ -126,6 +116,21 @@ export class EditProfileDialogComponent implements OnInit, OnDestroy {
 
   onClose() {
     this.close.emit(true)
+  }
+
+  initFunction() {
+    this.buildForm()
+    this.selectedFile = null
+    if (this.currentUser) {
+      this.filePath = `uploads/avatars/${this.currentUser.address}`
+      // console.log('this.filePath', this.filePath)
+      // set selectedCategory
+      let categoryIndex = this.categories.findIndex(
+        (item) =>
+          item.name.toLowerCase() === this.currentUser.category.toLowerCase()
+      )
+      this.selectedCategory = this.categories[categoryIndex]
+    }
   }
 
   buildForm() {
