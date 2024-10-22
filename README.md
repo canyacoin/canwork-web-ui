@@ -36,15 +36,25 @@ https://angular.io/guide/workspace-config#optimization-configuration
 
 ## Angular SSR progress
 
-Manual (for now) patches into dist-ssr/functions/server/main.js:
-
-We have to automate this patches and probably do directly on js libs
+JS artifact patches into dist-ssr/functions/server/main.js:
 
 - "urlParsingNode.pathname.charAt(0)" -> "urlParsingNode.pathname?.charAt(0)" (fix axios issue https://github.com/axios/axios/issues/6069)
 - "(self," -> "(typeof self !== 'undefined' && self," (fix dropzone issue https://github.com/zefoy/ngx-dropzone-wrapper/issues/154)
-- /\(self,/ -> "(typeof self !== 'undefined' && self," (self patch)
 - /self\?\.location/ -> "(typeof self !== 'undefined' && self)?.location" (self.location patch)
 - /browserPopupRedirectResolver\=NOT_AVAILABLE_ERROR/ -> "browserPopupRedirectResolver=inMemoryPersistence" (firebase auth server side in memory persistence)
+
+Patches are automated using this command from repository home, after building with "yarn run build:ssr":
+
+```
+node ssr-patch.js
+```
+
+To deploy only SSR site ans serve function:
+
+```
+cd dist-ssr
+firebase deploy --only hosting:canwork-ssr,functions:ssr
+```
 
 ## Setting Up
 

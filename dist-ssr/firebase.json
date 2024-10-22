@@ -12,6 +12,7 @@
     }
   ],
   "hosting": {
+    "target": "canwork-ssr",
     "public": "functions/browser",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
