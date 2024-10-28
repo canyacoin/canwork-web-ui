@@ -29,7 +29,7 @@ export class DynamicCoinComponent
   symbol: Observable<string>
 
   @Input()
-  network: BepChain.SmartChain | BepChain.Binance = BepChain.Binance
+  network: BepChain.SmartChain = BepChain.SmartChain
 
   @Input()
   address?: string // bsc
@@ -45,20 +45,20 @@ export class DynamicCoinComponent
     this.symbol
       .pipe(takeUntil(this.destroy$)) // unsubscribe on destroy
       .subscribe((symbol) => {
-        if (this.network === BepChain.Binance) {
-          if (symbol === 'BNB')
-            this.symbolUrl =
-              'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/'
-          else
-            this.symbolUrl =
-              'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/assets/' +
-              symbol
-          this.originalSymbol = symbol.split('-')[0]
-          this.startCol = hashbow(symbol[0])
-          this.stopCol = hashbow(symbol[1])
+        // if (this.network === BepChain.Binance) {
+        //   if (symbol === 'BNB')
+        //     this.symbolUrl =
+        //       'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/'
+        //   else
+        //     this.symbolUrl =
+        //       'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/assets/' +
+        //       symbol
+        //   this.originalSymbol = symbol.split('-')[0]
+        //   this.startCol = hashbow(symbol[0])
+        //   this.stopCol = hashbow(symbol[1])
 
-          return
-        }
+        //   return
+        // }
 
         if (this.network === BepChain.SmartChain) {
           this.originalSymbol = symbol
