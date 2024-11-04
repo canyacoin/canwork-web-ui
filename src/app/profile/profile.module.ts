@@ -8,7 +8,6 @@ import { ImgFallbackModule } from 'ngx-img-fallback'
 import { CoreComponentsModule } from '../core-components/core-components.module'
 import { CoreServicesModule } from '../core-services/core-services.module'
 import { CoreUtilsModule } from '../core-utils/core-utils.module'
-import { BuyCoffeeComponent } from './buy-coffee/buy-coffee.component'
 import { AboutComponent } from './components/about/about.component'
 import { BioComponent } from './components/bio/bio.component'
 import { CertificationsComponent } from './components/certifications/certifications.component'
@@ -56,7 +55,6 @@ import { DropdownModule } from 'primeng/dropdown'
   declarations: [
     AboutComponent,
     BioComponent,
-    BuyCoffeeComponent,
     CreateClientProfileComponent,
     CreateProviderProfileComponent,
     ItemComponent,

@@ -1,12 +1,8 @@
 import { Component, OnInit, Directive } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-//import { CanPay } from '@canpay-lib/lib'
-import { CanPay } from '../../../../canpay-interfaces/interfaces'
 import { Job } from '@class/job'
 import { JobService } from '@service/job.service'
 import 'rxjs/add/operator/take'
-
-import { environment } from '../../../../../environments/environment'
 
 @Component({
   selector: 'app-cancel-job',
@@ -15,8 +11,7 @@ import { environment } from '../../../../../environments/environment'
 })
 export class CancelJobComponent implements OnInit {
   job: Job
-
-  canPayOptions: CanPay
+  canPayOptions
 
   constructor(
     private jobService: JobService,
@@ -39,22 +34,6 @@ export class CancelJobComponent implements OnInit {
   }
 
   async startCanpay() {
-    const initiateCancellation = async () => {
-      console.log('initiating cancellation')
-      // TODO remove
-      // const canWorkContract = new CanWorkJobContract(this.ethService)
-      // console.log(canWorkContract)
-      // canWorkContract
-      //   .connect()
-      //   .cancelJobByProvider(
-      //     this.job,
-      //     this.ethService.getOwnerAccount(),
-      //     onTxHash
-      //   )
-      //   .then(setProcessResult.bind(this.canPayOptions))
-      //   .catch(setProcessResult.bind(this.canPayOptions))
-    }
-
     const onComplete = async () => {
       // call endpoint?
       this.router.navigate(['/inbox/job', this.job.id])
