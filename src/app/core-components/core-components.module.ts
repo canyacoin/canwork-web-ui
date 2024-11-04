@@ -120,6 +120,7 @@ import { SharePostCardComponent } from './cards/share-post-card/share-post-card.
 import { TableContentsCardComponent } from './cards/table-contents-card/table-contents-card.component'
 import { SkBlogCardComponent } from './skeletons/sk-blog-card/sk-blog-card.component'
 import { SkPublicBlogComponent } from './skeletons/sk-public-blog/sk-public-blog.component'
+import { IconTextButtonComponent } from './buttons/icon-text-button/icon-text-button.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -255,6 +256,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ConfirmDialogComponent,
     EducationDialogComponent,
     SkEducationComponent,
+    IconTextButtonComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -341,6 +343,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     EditButtonComponent,
     PlusButtonComponent,
     ThreeDotsButtonComponent,
+    IconTextButtonComponent,
     // Dialogs
     BasicDialogComponent,
     ProposalDetailsDialogComponent,
