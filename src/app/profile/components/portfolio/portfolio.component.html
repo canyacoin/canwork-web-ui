@@ -14,6 +14,10 @@
   </div>
 </section> -->
 
+<portfolio-dialog
+  [(visible)]="isDialogVisible"
+  [selectedPortfolio]="selectedPortfolio"
+/>
 <div
   *ngIf="!loaded"
   class="sm:rounded-[12px] border-t sm:border !border-G200 bg-white py-[40px] sm:px-[40px] sm:py-[24px]"
@@ -27,10 +31,7 @@
     <div class="card">
       <div class="flex justify-between gap-4">
         <div class="text-h6 text-G900 font-medium">Portfolio</div>
-        <plus-button
-          *ngIf="isMyProfile && loaded"
-          [routerLink]="['/profile/project']"
-        />
+        <plus-button *ngIf="isMyProfile && loaded" (click)="openDialog()" />
       </div>
       <div *ngIf="allPortfolioItems.length > 0">
         <div class="row" style="height: 25px"></div>

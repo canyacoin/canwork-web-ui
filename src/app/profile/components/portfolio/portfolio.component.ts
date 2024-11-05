@@ -18,6 +18,8 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
   allPortfolioItems: any[] = []
   loaded = false
+  isDialogVisible = false
+  selectedPortfolio = {}
 
   pageLimit = 2
   currentPage = 0
@@ -41,6 +43,15 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     if (this.portfolioSubscription) {
       this.portfolioSubscription.unsubscribe()
     }
+  }
+
+  openDialog() {
+    console.log('Dialog Opened')
+    this.isDialogVisible = true
+  }
+
+  closeDialog() {
+    this.isDialogVisible = false
   }
 
   setPortfolio(address: string) {
