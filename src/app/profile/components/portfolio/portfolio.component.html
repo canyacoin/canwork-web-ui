@@ -40,6 +40,10 @@
               *ngFor="let item of paginatedPortfolioItems(); let i = index"
               class=""
             >
+              <!-- To do: place these 3 buttons inside portfolio section -->
+              <icon-text-button title="View Portfolio" />
+              <icon-text-button type="edit" title="Edit" />
+              <icon-text-button type="delete" title="Delete" />
               <app-item
                 [workItem]="item"
                 [isMyProfile]="isMyProfile"
