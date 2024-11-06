@@ -698,3 +698,34 @@
         border-bottom: solid 1px #e5e7eb;
     }
   }
+
+/* Circular Progress bar */
+:root {
+  --size: 100px;
+  --width: 15px;
+  --duration: 3s;
+}
+
+.spinner {
+  width: var(--size);
+  height: var(--size);
+  transform: rotate(-90deg);
+}
+
+.circle,
+.progress {
+  fill: none;
+  stroke-width: var(--width);
+  stroke-linecap: round;
+}
+
+.circle {
+  stroke: #cbd5e1;
+}
+
+.progress {
+  stroke: #34db50;
+  stroke-dasharray: 314;
+  stroke-dashoffset: 314;
+  transition: stroke-dashoffset var(--duration) ease-in-out;
+}
