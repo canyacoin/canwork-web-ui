@@ -52,6 +52,7 @@ import { TabMenuModule } from 'primeng/tabmenu'
 import { AngularEditorModule } from '@kolkov/angular-editor'
 import { DialogModule } from 'primeng/dialog'
 import { MessageService } from 'primeng/api'
+import { EditorModule } from 'primeng/editor'
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -98,6 +99,7 @@ import { MessageService } from 'primeng/api'
     DialogModule,
     // NgPipesModule
     NgArrayPipesModule,
+    EditorModule,
   ],
   exports: [
     /*FilterPipeModule*/
