@@ -729,3 +729,9 @@
   stroke-dashoffset: 314;
   transition: stroke-dashoffset var(--duration) ease-in-out;
 }
+
+
+.drag-active {
+  border-color: #3ac2ff; 
+  background-color: #e0f4ff;
+}
