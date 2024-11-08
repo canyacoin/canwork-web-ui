@@ -1,15 +1,46 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
-import { UntypedFormBuilder, Validators } from '@angular/forms'
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
 import { AngularFireStorage } from '@angular/fire/compat/storage'
 import { finalize } from 'rxjs/operators'
 import { AuthService } from '@service/auth.service'
-import { User } from '@class/user' 
+import { User } from '@class/user'
+import { customAngularEditorConfig } from 'app/core-functions/angularEditorConfig'
+import { AngularFirestore } from '@angular/fire/compat/firestore'
 
-@Component({ selector: 'portfolio-dialog', templateUrl: './portfolio-dialog.component.html' })
+type PortfolioItem = {
+  coverImageUrl: string
+  projectName: string
+  projectDescription: string
+  projectUrl: string
+  tags: string[]
+  attachments: string[]
+}
+
+@Component({
+  selector: 'portfolio-dialog',
+  templateUrl: './portfolio-dialog.component.html',
+})
 export class PortfolioDialogComponent {
   private _visible: boolean
+  filePath: string
+  selectedCoverImage: File | null = null
+  selectedCoverImageUrl: string | ArrayBuffer
+  selectedAttachments: File[] = []
+  uploadedFiles: { name: string; progress: number; status: string }[] = []
+  currentUser: User | null = null
+  portfolioForm: UntypedFormGroup
+  updatedTags: string[] = []
+  isDragging = false
+  editorConfig = customAngularEditorConfig()
 
-  @Input() get visible(): boolean {
+  @Output()
+  visibleChange = new EventEmitter<boolean>()
+
+  @Input()
+  selectedPortfolio: any | null = null
+
+  @Input()
+  get visible() {
     return this._visible
   }
 
@@ -18,30 +49,20 @@ export class PortfolioDialogComponent {
     this.visibleChange.emit(this._visible)
   }
 
-  @Output() visibleChange = new EventEmitter<boolean>()
-  @Input() selectedPortfolio: any | null = null
-
-  filePath: string
-  selectedCoverImage: File | null = null
-  selectedCoverImageUrl: string | ArrayBuffer
-  selectedAttachments: File[] = []
-  uploadedFiles: { name: string; progress: number; status: string }[] = []
-
-  currentUser: User | null = null
-  portfolioForm: any
-  updatedTags: string[] = []
-
-  constructor(private formBuilder: UntypedFormBuilder, private storage: AngularFireStorage, private auth: AuthService) {}
+  constructor(
+    private formBuilder: UntypedFormBuilder,
+    private storage: AngularFireStorage,
+    private auth: AuthService,
+    private afs: AngularFirestore
+  ) {}
 
   ngOnInit() {
     this.auth.currentUser$.subscribe((user: User) => {
       if (user) {
         this.currentUser = user
         this.filePath = `uploads/workhistorys/${this.currentUser.address}`
-        console.log('File path set:', this.filePath)
       }
     })
-
     this.buildForm()
   }
 
@@ -49,15 +70,63 @@ export class PortfolioDialogComponent {
     this.selectedCoverImage = null
     this.selectedAttachments = []
     this.updatedTags = []
-
     this.portfolioForm = this.formBuilder.group({
-      coverImageUrl: [''],
+      coverImageUrl: ['', Validators.required],
       projectName: ['', Validators.required],
       projectDescription: ['', Validators.required],
       projectUrl: ['', Validators.required],
       tags: [[], Validators.required],
       attachments: [[], Validators.required],
     })
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault()
+    this.isDragging = true
+  }
+
+  onDragLeave(event: DragEvent) {
+    event.preventDefault()
+    this.isDragging = false
+  }
+
+  onDrop(event: DragEvent) {
+    event.preventDefault()
+    this.isDragging = false
+
+    if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
+      this.selectedAttachments = Array.from(event.dataTransfer.files)
+      this.uploadAttachments(this.selectedAttachments)
+      event.dataTransfer.clearData()
+    }
+  }
+
+  onProgressComplete(fileIndex: number): void {
+    this.uploadedFiles[fileIndex].status = 'success'
+  }
+
+  skillTagsUpdated(value: string) {
+    let tags: string[] = value.split(',').map((item) => item.trim())
+    this.portfolioForm.controls['tags'].setValue(tags)
+  }
+
+  getDialogHeader() {
+    return this.selectedPortfolio ? 'Edit Portfolio' : 'Add Portfolio'
+  }
+
+  onClose() {
+    this.visible = false
+  }
+
+  ngDoCheck() {
+    const strippedTextLength = this.stripHtmlTags(this.portfolioForm.value.projectDescription).length
+    const error = strippedTextLength < 10 || strippedTextLength > 2500 ? { lengthInvalid: true } : null
+    this.portfolioForm.controls['projectDescription'].setErrors(error)
+    this.portfolioForm.controls['projectDescription'].updateValueAndValidity()
+  }
+
+  removeAttachment(index: number): void {
+    this.uploadedFiles.splice(index, 1)
   }
 
   detectFiles(event: Event, type: string) {
@@ -79,6 +148,8 @@ export class PortfolioDialogComponent {
       if (type === 'coverImage') {
         this.selectedCoverImageUrl = reader.result
         this.selectedCoverImage = file
+        this.portfolioForm.controls['coverImageUrl'].setValue(reader.result)
+        this.portfolioForm.controls['coverImageUrl'].updateValueAndValidity()
       }
     }
     reader.readAsDataURL(file)
@@ -92,37 +163,26 @@ export class PortfolioDialogComponent {
 
     for (const file of files) {
       const fileTask = this.storage.upload(`${this.filePath}/${file.name}`, file)
-      this.uploadedFiles.push({
-        name: file.name,
-        progress: 0,
-        status: 'uploading',
-      })
+      this.uploadedFiles.push({ name: file.name, progress: 0, status: 'uploading' })
 
       fileTask.percentageChanges().subscribe((progress) => {
         const fileIndex = this.uploadedFiles.findIndex((uploadedFile) => uploadedFile.name === file.name)
-        if (fileIndex !== -1) {
-          this.uploadedFiles[fileIndex].progress = progress
-        }
+        if (fileIndex !== -1) this.uploadedFiles[fileIndex].progress = progress
       })
 
       fileTask
         .snapshotChanges()
         .pipe(
-          finalize(async () => {
-            const downloadUrl = await (await fileTask).ref.getDownloadURL()
+          finalize(() => {
             const fileIndex = this.uploadedFiles.findIndex((uploadedFile) => uploadedFile.name === file.name)
             if (fileIndex !== -1) {
-              this.uploadedFiles[fileIndex].status = 'success'
+              this.portfolioForm.controls['attachments'].setValue(this.uploadedFiles)
+              this.portfolioForm.controls['attachments'].updateValueAndValidity()
             }
           })
         )
         .subscribe()
     }
-  }
-
-  skillTagsUpdated(value: string) {
-    let tags: string[] = value.split(',').map((item) => item.trim())
-    this.portfolioForm.controls['tags'].setValue(tags)
   }
 
   async onSave(event: Event) {
@@ -134,39 +194,42 @@ export class PortfolioDialogComponent {
       projectDescription: this.portfolioForm.value.projectDescription,
       projectUrl: this.portfolioForm.value.projectUrl,
       tags: this.portfolioForm.value.tags,
-      attachments: this.uploadedFiles.filter((file) => file.status === 'success').map((file) => ({ name: file.name })),
+      attachments: this.uploadedFiles.filter((file) => file.status === 'success').map((file) => file.name),
     }
 
     if (this.selectedCoverImage) {
-      const coverTask = this.storage.upload(`${this.filePath}/portfolio/cover/${tempPortfolio.projectName}`, this.selectedCoverImage)
-
-      coverTask.percentageChanges().subscribe((progress) => {
-        console.log('Cover Image Progress:', progress)
-      })
-
+      const coverTask = this.storage.upload(`${this.filePath}/${crypto.randomUUID()}`, this.selectedCoverImage)
       await coverTask
         .snapshotChanges()
         .pipe(
           finalize(async () => {
             const downloadUrl = await (await coverTask).ref.getDownloadURL()
             tempPortfolio.coverImageUrl = downloadUrl
-            console.log(`Cover Image uploaded: URL: ${downloadUrl}`)
           })
         )
         .toPromise()
     }
+
+    this.addPortfolioItem(tempPortfolio)
     this.visible = false
   }
 
-  getDialogHeader() {
-    return this.selectedPortfolio ? 'Edit Portfolio' : 'Add Portfolio'
+  addPortfolioItem(data: PortfolioItem) {
+    const userAddress = this.currentUser.address
+    this.afs
+      .collection(`portfolio/${userAddress}/work`)
+      .add(data)
+      .then(() => {
+        console.log('Portfolio item added successfully!')
+      })
+      .catch((error) => {
+        console.error('Error adding portfolio item: ', error)
+      })
   }
 
-  onClose() {
-    this.visible = false
-  }
-
-  removeAttachment(index: number): void {
-    this.uploadedFiles.splice(index, 1)
+  stripHtmlTags(html: string) {
+    const div = document.createElement('div')
+    div.innerHTML = html
+    return div.textContent
   }
 }
