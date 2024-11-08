@@ -46,7 +46,6 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   }
 
   openDialog() {
-    console.log('Dialog Opened')
     this.isDialogVisible = true
   }
 
@@ -55,15 +54,11 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   }
 
   setPortfolio(address: string) {
-    const portfolioRecords = this.afs.collection(
-      `portfolio/${address}/work`,
-      (ref) => ref.orderBy('timestamp', 'desc')
-    )
+    const portfolioRecords = this.afs.collection(`portfolio/${address}/work`, (ref) => ref.orderBy('timestamp', 'desc'))
     this.portfolioSubscription = portfolioRecords.valueChanges().subscribe(
       (data: any) => {
         this.allPortfolioItems = data
-        this.lastPage =
-          Math.ceil(this.allPortfolioItems.length / this.pageLimit) - 1
+        this.lastPage = Math.ceil(this.allPortfolioItems.length / this.pageLimit) - 1
         this.loaded = true
       },
       (error) => {
