@@ -16,8 +16,10 @@ export class PortfolioComponent implements OnInit {
   @Input() isMyProfile: boolean
 
   allPortfolioItems: any[] = []
+  portfolioSubscriber: Subscription
   loaded = false
   isDialogVisible = false
+  visibleDeleteModal = false
   selectedPortfolio = null
 
   currentIndex = 0
@@ -25,6 +27,7 @@ export class PortfolioComponent implements OnInit {
   showNextButton = false
   dots: any[] = []
   items = []
+
   constructor(
     private afs: AngularFirestore,
     private authService: AuthService,
@@ -48,17 +51,43 @@ export class PortfolioComponent implements OnInit {
     ]
   }
 
+  OnDestroy() {
+    this.portfolioSubscriber.unsubscribe()
+  }
+
+  async deletePortfolio(event) {
+    event.stopPropagation()
+    try {
+      const userAddress = this.userModel.address
+      await this.afs.doc(`portfolio/${userAddress}/work/${this.selectedPortfolio.id}`).delete()
+      this.visibleDeleteModal = false
+    } catch (error) {
+      console.error('Error updating portfolio item: ', error)
+    }
+  }
+
+  onDialogCancel(event) {
+    event.stopPropagation()
+    this.visibleDeleteModal = false
+  }
+
   openDialog(item: any, portfolio?: any) {
     if (portfolio) {
-      console.log(portfolio)
       this.selectedPortfolio = portfolio
     }
-
+    if (item?.code === 'delete') {
+      this.visibleDeleteModal = true
+      return
+    }
     this.isDialogVisible = true
   }
 
   async setPortfolio(address: string) {
     const portfolioRecords = this.afs.collection(`portfolio/${address}/work`)
+    this.portfolioSubscriber = portfolioRecords.valueChanges().subscribe((data) => {
+      if (data.length > 0) this.allPortfolioItems = data
+      this.updateArrowsAndDots()
+    })
     const data = await portfolioRecords.get().toPromise()
     this.allPortfolioItems = data.docs.map((doc) => doc.data())
     console.log(this.allPortfolioItems)
@@ -105,8 +134,12 @@ export class PortfolioComponent implements OnInit {
   onSliderScroll() {
     const slider = document.getElementById('portfolioSlider')!
     const scrollLeft = slider.scrollLeft
-    const scrollDistance = 270
-    const newIndex = Math.round(scrollLeft / scrollDistance)
+    const scrollWidth = slider.scrollWidth
+    const clientWidth = slider.clientWidth
+    const maxScrollLeft = scrollWidth - clientWidth
+    const scrollPercentage = scrollLeft / maxScrollLeft
+    const totalItems = this.allPortfolioItems.length
+    const newIndex = Math.round(scrollPercentage * (totalItems - 1))
     if (newIndex !== this.currentIndex) {
       this.currentIndex = newIndex
       this.updateArrowsAndDots()

@@ -1,5 +1,12 @@
 <portfolio-dialog [(visible)]="isDialogVisible" [selectedPortfolio]="selectedPortfolio" />
-
+<basic-dialog
+  [(visible)]="visibleDeleteModal"
+  title="Are you sure you want to delete ?"
+  content=""
+  type="delete_portfolio"
+  (LeftbtnEvent)="deletePortfolio($event)"
+  (RightbtnEvent)="onDialogCancel($event)"
+/>
 <div
   *ngIf="!loaded"
   class="sm:rounded-[12px] border-t sm:border !border-G200 bg-white py-[40px] sm:px-[40px] sm:py-[24px]"
@@ -36,16 +43,28 @@
             *ngFor="let portfolio of allPortfolioItems; let i = index"
             class="portfolio-item w-full xs-[320px] sm:w-[320px] lg:w-[320px] xl:w-[320px]"
           >
-            <img [src]="portfolio.coverImageUrl" alt="Project Image" class="w-full h-[180px] object-cover rounded-[8px]" />
+            <img
+              [src]="portfolio.coverImageUrl ?? '/assets/massimo/images/logo.png'"
+              alt="Project Image"
+              class="w-full h-[180px] object-cover rounded-[8px]"
+            />
             <h3 class="project-title mt-[15px] mb-[5px] font-medium">{{ portfolio.projectName }}</h3>
             <div class="portfolio-buttons">
               <button class="hover:bg-G100 transition-all duration-300 portfolio-button icon-btn view">
                 View Portfolio
               </button>
-              <button class="hover:bg-G100 transition-all duration-300 portfolio-button icon-btn edit">
+              <button
+                *ngIf="isMyProfile"
+                class="hover:bg-G100 transition-all duration-300 portfolio-button icon-btn edit"
+                (click)="openDialog({ code: 'edit' }, portfolio)"
+              >
                 <img style="width: 20px; height: 20px" src="/assets/massimo/svg/fi_edit_gray.svg" alt="" /> Edit
               </button>
-              <button class="hover:bg-G100 transition-all duration-300 portfolio-button icon-btn delete">
+              <button
+                *ngIf="isMyProfile"
+                class="hover:bg-G100 transition-all duration-300 portfolio-button icon-btn delete"
+                (click)="openDialog({ code: 'delete' }, portfolio)"
+              >
                 <img style="width: 20px; height: 20px" src="/assets/massimo/svg/delete.svg" alt="" /> Delete
               </button>
             </div>
@@ -62,7 +81,7 @@
                   <three-dots-button />
                 </ng-template>
                 <ng-template let-item pTemplate="item">
-                  <div class="flex items-center" (click)="openDialog(item,portfolio)">
+                  <div class="flex items-center" (click)="openDialog(item, portfolio)">
                     <img src="{{ '/assets/massimo/svg/' + item.icon }}" class="mr-[16px] w-[20px]" />
                     <span class="font-medium text-G900">{{ item.label }}</span>
                   </div>

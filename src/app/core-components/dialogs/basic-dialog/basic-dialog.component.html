@@ -46,6 +46,11 @@
           alt="delete"
         />
         <img
+          *ngSwitchCase="'delete_portfolio'"
+          src="/assets/massimo/images/jobDelete.png"
+          alt="delete"
+        />
+        <img
           *ngSwitchCase="'accept'"
           src="/assets/massimo/images/jobAccept.png"
           alt="accept"
@@ -81,7 +86,7 @@
         {{ content }}
       </div>
 
-      <ng-container *ngIf="type === 'delete' || type === 'withdraw'">
+      <ng-container *ngIf="type === 'delete' || type === 'delete_portfolio' || type === 'withdraw'">
         <div class="flex gap-4 justify-center items-center">
           <div
             class="cursor-pointer py-[10px] px-[24px] flex justify-center items-center gap-2 hover:bg-G200 rounded-xl transition-all duration-200"
@@ -96,6 +101,12 @@
               *ngIf="type === 'delete'"
             >
               Delete Job
+            </div>
+            <div
+              class="text-R900 font-medium text-nowrap text-b1"
+              *ngIf="type === 'delete_portfolio'"
+            >
+              Delete
             </div>
             <div
               class="text-R900 font-medium text-nowrap text-b1"

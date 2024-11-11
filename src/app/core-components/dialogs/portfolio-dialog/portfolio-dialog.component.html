@@ -76,7 +76,7 @@
 
       <!-- Tags -->
       <fieldset class="flex flex-col gap-[8px]">
-        <div class="text-b1 text-G900">Tags (20 max) <span class="text-R900">*</span></div>
+        <div class="text-b1 text-G900">Tags (10 max) <span class="text-R900">*</span></div>
         <skill-tags-selection
           (tagsUpdated)="skillTagsUpdated($event)"
           [initialTags]="updatedTags"
@@ -84,6 +84,9 @@
         ></skill-tags-selection>
         <input hidden #tags formControlName="tags" type="text" name="tags" />
       </fieldset>
+      <div *ngIf="tagsErrorMessage" class="text-R900 text-xs mt-2">
+        {{ tagsErrorMessage }}
+      </div>
 
       <!-- Attachments -->
       <fieldset class="flex flex-col gap-[8px]">
@@ -126,13 +129,13 @@
             </div>
             <div class="flex items-center gap-[8px]">
               <div class="text-[#4698bd] text-b1">{{ file.name }}</div>
-              
-              <div *ngIf="file?.progress === 100">
+
+              <div *ngIf="file?.status === 'success'">
                 <span class="cursor-pointer" (click)="removeAttachment(i)">
                   <img src="/assets/massimo/svg/fi_x.svg" alt="x" class="w-[20px]" />
                 </span>
               </div>
-              <div *ngIf="file?.progress !== 100">
+              <div *ngIf="file?.status === 'uploading'">
                 <div role="status">
                   <img
                     src="/assets/massimo/svg/spinner.svg"

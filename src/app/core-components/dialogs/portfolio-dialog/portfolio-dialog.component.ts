@@ -8,12 +8,13 @@ import { customAngularEditorConfig } from 'app/core-functions/angularEditorConfi
 import { AngularFirestore } from '@angular/fire/compat/firestore'
 
 type PortfolioItem = {
+  id: string
   coverImageUrl: string
   projectName: string
   projectDescription: string
   projectUrl: string
   tags: string[]
-  attachments: string[]
+  attachments: { name: string; url: string }[]
 }
 
 @Component({
@@ -35,6 +36,7 @@ export class PortfolioDialogComponent {
   maxFileSizeMB = 25
   maxAttachments = 10
   attachmentErrorMessage = ''
+  tagsErrorMessage = ''
 
   @Output()
   visibleChange = new EventEmitter<boolean>()
@@ -48,19 +50,10 @@ export class PortfolioDialogComponent {
 
   set visible(value: boolean) {
     this._visible = value
-    if (value) {
+    if (value && !this.selectedPortfolio) {
       this.reset()
     }
     this.visibleChange.emit(this._visible)
-  }
-
-  reset() {
-    this.portfolioForm.reset()
-    this.selectedCoverImage = null
-    this.selectedCoverImageUrl = null
-    this.selectedAttachments = []
-    this.uploadedFiles = []
-    this.updatedTags = []
   }
 
   constructor(
@@ -69,6 +62,16 @@ export class PortfolioDialogComponent {
     private auth: AuthService,
     private afs: AngularFirestore
   ) {}
+
+  reset() {
+    this.selectedCoverImage = null
+    this.selectedCoverImageUrl = null
+    this.selectedAttachments = []
+    this.uploadedFiles = []
+    this.updatedTags = []
+    this.selectedPortfolio = null
+    this.portfolioForm?.reset()
+  }
 
   validateAttachments(newFiles: File[]): string {
     const totalFiles = this.selectedAttachments.length + newFiles.length
@@ -86,15 +89,17 @@ export class PortfolioDialogComponent {
     this.auth.currentUser$.subscribe((user: User) => {
       if (user) {
         this.currentUser = user
-        this.filePath = `uploads/portfolios/${this.currentUser.address}`
+        this.filePath = `uploads/workhistorys/${this.currentUser.address}`
       }
     })
     this.buildForm()
+    // this.deleteAll()
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.selectedPortfolio?.projectName && this.visible === true) {
       if (this.selectedPortfolio !== null) {
+        this.portfolioForm.controls.id = this.selectedPortfolio.id
         this.portfolioForm.controls.coverImageUrl.setValue(this.selectedPortfolio.coverImageUrl)
         this.portfolioForm.controls.projectName.setValue(this.selectedPortfolio.projectName)
         this.portfolioForm.controls.projectDescription.setValue(this.selectedPortfolio.projectDescription)
@@ -102,7 +107,7 @@ export class PortfolioDialogComponent {
         this.portfolioForm.controls.tags.setValue(this.selectedPortfolio.tags)
         this.portfolioForm.controls.attachments.setValue(this.selectedPortfolio.attachments)
         this.updatedTags = this.selectedPortfolio.tags
-        this.selectedAttachments = this.selectedPortfolio.attachments
+        this.uploadedFiles = this.selectedPortfolio.attachments
       } else {
         this.buildForm()
       }
@@ -119,7 +124,7 @@ export class PortfolioDialogComponent {
       projectDescription: ['', Validators.required],
       projectUrl: ['', Validators.required],
       tags: [[], Validators.required],
-      attachments: [[], Validators.required],
+      attachments: [],
     })
   }
 
@@ -153,6 +158,9 @@ export class PortfolioDialogComponent {
 
   skillTagsUpdated(value: string) {
     let tags: string[] = value.split(',').map((item) => item.trim())
+    if(tags.length>10){
+      this.tagsErrorMessage = 'You can choose only 10 tags'
+    }
     this.portfolioForm.controls['tags'].setValue(tags)
   }
 
@@ -160,7 +168,7 @@ export class PortfolioDialogComponent {
     return this.selectedPortfolio ? 'Edit Portfolio' : 'Add Portfolio'
   }
 
-  onClose() {
+  onClose() {    
     this.visible = false
   }
 
@@ -211,7 +219,7 @@ export class PortfolioDialogComponent {
     }
 
     for (const file of files) {
-      const fileTask = this.storage.upload(`${this.filePath}`, file)
+      const fileTask = this.storage.upload(`${this.filePath}/${this.idGenerator()}`, file)
       const data = { name: file.name, progress: 0, status: 'uploading', url: '' }
       this.uploadedFiles.push(data)
 
@@ -236,31 +244,46 @@ export class PortfolioDialogComponent {
   async onSave(event: Event) {
     event.preventDefault()
     const tempPortfolio = {
-      coverImageUrl: '',
+      id: this.selectedPortfolio?.id ?? this.idGenerator(),
+      coverImageUrl: this.selectedPortfolio?.coverImageUrl ?? '',
       projectName: this.portfolioForm.value.projectName,
       projectDescription: this.portfolioForm.value.projectDescription,
       projectUrl: this.portfolioForm.value.projectUrl,
       tags: this.portfolioForm.value.tags,
-      attachments: this.uploadedFiles.filter((file) => file.status === 'success').map((file) => file.url),
+      attachments: this.uploadedFiles
+        .filter((file) => file.status === 'success')
+        .map((file) => ({ url: file.url, name: file.name, status: file.status })),
     }
 
     if (this.selectedCoverImage) {
-      const coverTask = this.storage.upload(`${this.filePath}`, this.selectedCoverImage)
+      const coverTask = this.storage.upload(`${this.filePath}/${tempPortfolio.id}`, this.selectedCoverImage)
       const task = await coverTask.snapshotChanges().toPromise()
       tempPortfolio.coverImageUrl = await task.ref.getDownloadURL()
     }
-    await this.addPortfolioItem(tempPortfolio)
-    this.reset()
+    if (this.selectedPortfolio) {
+      await this.updatePortfolioItem(tempPortfolio)
+    } else {
+      await this.addPortfolioItem(tempPortfolio)
+    }
     this.visible = false
+    this.reset()
   }
 
   async addPortfolioItem(data: PortfolioItem) {
     try {
       const userAddress = this.currentUser.address
-      await this.afs.collection(`portfolio/${userAddress}/work`).doc().set(data)
-      console.log('Portfolio item added successfully!')
+      await this.afs.doc(`portfolio/${userAddress}/work/${data.id}`).set(data)
     } catch (error) {
       console.error('Error adding portfolio item: ', error)
+    }
+  }
+
+  async updatePortfolioItem(data: PortfolioItem) {
+    try {
+      const userAddress = this.currentUser.address
+      await this.afs.doc(`portfolio/${userAddress}/work/${data.id}`).update(data)
+    } catch (error) {
+      console.error('Error updating portfolio item: ', error)
     }
   }
 
@@ -268,5 +291,22 @@ export class PortfolioDialogComponent {
     const div = document.createElement('div')
     div.innerHTML = html
     return div.textContent
+  }
+
+  async deleteAll() {
+    const userAddress = this.currentUser.address
+    const data = await this.afs.collection(`portfolio/${userAddress}/work`).get().toPromise()
+    data.docs.forEach((doc) => {
+      doc.ref.delete()
+    })
+  }
+
+  idGenerator(): string {
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1)
+    }
+    return s4() + '-' + s4() + '-' + s4() + '-' + s4()
   }
 }
