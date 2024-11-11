@@ -14,70 +14,84 @@
   </div>
 </section> -->
 
-<portfolio-dialog
-  [(visible)]="isDialogVisible"
-  [selectedPortfolio]="selectedPortfolio"
-/>
+<portfolio-dialog [(visible)]="isDialogVisible" [selectedPortfolio]="selectedPortfolio" />
+
 <div
   *ngIf="!loaded"
   class="sm:rounded-[12px] border-t sm:border !border-G200 bg-white py-[40px] sm:px-[40px] sm:py-[24px]"
 >
   <img src="assets/img/loader.svg" style="height: 36px" alt="Loader" />
 </div>
+
 <div *ngIf="loaded" [hidden]="!isMyProfile && allPortfolioItems.length < 1">
-  <div
-    class="sm:rounded-[12px] border-t sm:border !border-G200 bg-white py-[40px] sm:px-[40px] sm:py-[24px]"
-  >
-    <div class="card">
+  <div class="sm:rounded-xl border-t sm:border !border-G200 bg-white">
+    <div class="mt-20 sm:px-10">
       <div class="flex justify-between gap-4">
         <div class="text-h6 text-G900 font-medium">Portfolio</div>
         <plus-button *ngIf="isMyProfile && loaded" (click)="openDialog()" />
       </div>
-      <div *ngIf="allPortfolioItems.length > 0">
-        <div class="row" style="height: 25px"></div>
-        <div class="row animated {{ animation }}">
-          <div class="col-sm-12">
-            <div
-              *ngFor="let item of paginatedPortfolioItems(); let i = index"
-              class=""
-            >
-              <!-- To do: place these 3 buttons inside portfolio section -->
-              <icon-text-button title="View Portfolio" />
-              <icon-text-button type="edit" title="Edit" />
-              <icon-text-button type="delete" title="Delete" />
-              <app-item
-                [workItem]="item"
-                [isMyProfile]="isMyProfile"
-              ></app-item>
+
+      <div class="mt-4 text-sm text-gray-700 font-medium" *ngIf="allPortfolioItems.length < 1">
+        <div *ngIf="!isMyProfile">This provider has no portfolio</div>
+        <div *ngIf="isMyProfile && userModel.type === 'Provider'">You have not uploaded any portfolio items</div>
+      </div>
+    </div>
+    <div *ngIf="allPortfolioItems.length > 0">
+      <div class="portfolio-container overflow-hidden sm:pl-10 sm:py-6">
+        <div class="portfolio-slider flex gap-4 overflow-x-auto scroll-smooth">
+          <div
+            *ngFor="let item of allPortfolioItems; let i = index"
+            class="portfolio-item w-full sm:w-[280px] lg:w-[300px] xl:w-[320px]"
+          >
+            <img [src]="item.coverImageUrl" alt="Project Image" class="w-full h-[180px] object-cover rounded-[8px]" />
+            <h3 class="project-title mt-[15px] mb-[5px] font-medium">{{ item.projectName }}</h3>
+            <div class="portfolio-buttons">
+              <button class="portfolio-button icon-btn view">View Portfolio</button>
+              <button class="portfolio-button icon-btn edit"><i class="pi pi-pencil"></i> Edit</button>
+              <button class="portfolio-button icon-btn delete"><i class="pi pi-trash"></i> Delete</button>
             </div>
           </div>
         </div>
-        <div class="row pt-35">
-          <div class="col-12 d-flex justify-content-center">
-            <button
-              class="btn btn-sm"
-              [disabled]="currentPage == 0"
-              (click)="previousPage()"
-            >
-              <i class="fa fa-chevron-left"></i>
-            </button>
-            <button
-              class="btn btn-sm"
-              [disabled]="currentPage == lastPage"
-              (click)="nextPage()"
-            >
-              <i class="fa fa-chevron-right"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-      <div
-        class="mt-[16px] text-b1 text-G800 font-medium"
-        *ngIf="allPortfolioItems.length < 1"
-      >
-        <div *ngIf="!isMyProfile">This provider has no portfolio</div>
-        <div *ngIf="isMyProfile && userModel.type === 'Provider'">
-          You have not uploaded any portfolio items
+
+        <button
+          class="arrow-button left-arrow absolute top-1/2 transform -translate-y-1/2 left-4"
+          id="prevButton"
+          (click)="scrollSlider(-1)"
+          [style.display]="showPrevButton ? 'block' : 'none'"
+        >
+          <svg width="100" height="100" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M26.1772 8.82409C25.5263 8.17322 24.4711 8.17322 23.8202 8.82409L13.8202 18.8241C13.1693 19.475 13.1693 20.5302 13.8202 21.1811L23.8202 31.1811C24.4711 31.832 25.5263 31.832 26.1772 31.1811C26.8281 30.5302 26.8281 29.475 26.1772 28.8241L17.3567 20.0026L26.1772 11.1811C26.8281 10.5302 26.8281 9.47497 26.1772 8.82409Z"
+              fill="#40444A"
+            />
+          </svg>
+        </button>
+
+        <button
+          class="arrow-button right-arrow absolute top-1/2 transform -translate-y-1/2 right-4"
+          id="nextButton"
+          (click)="scrollSlider(1)"
+          [style.display]="showNextButton ? 'block' : 'none'"
+        >
+          <svg width="90" height="90" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M13.8202 8.82409C14.4711 8.17322 15.5263 8.17322 16.1772 8.82409L26.1772 18.8241C26.8281 19.475 26.8281 20.5302 26.1772 21.1811L16.1772 31.1811C15.5263 31.832 14.4711 31.832 13.8202 31.1811C13.1693 30.5302 13.1693 29.475 13.8202 28.8241L22.6417 20.0026L13.8202 11.1811C13.1693 10.5302 13.1693 9.47497 13.8202 8.82409Z"
+              fill="#40444A"
+            />
+          </svg>
+        </button>
+
+        <div class="dots-container flex justify-center gap-2 mt-4 mb-4" id="dotsContainer">
+          <div
+            *ngFor="let dot of dots; let i = index"
+            class="dot w-2.5 h-2.5 rounded-full cursor-pointer transition-all duration-300"
+            [class.active]="currentIndex === i"
+            (click)="onDotClick(i)"
+          ></div>
         </div>
       </div>
     </div>

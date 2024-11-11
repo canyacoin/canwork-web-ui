@@ -14,18 +14,12 @@
         (click)="fileInput.click()"
       >
         <div
-          *ngIf="this.portfolioForm.value.coverImageUrl === '' && !selectedCoverImage"
-          class="bg-G300 w-[240px] h-[160px]"
+          *ngIf="!selectedCoverImageUrl && !portfolioForm.value.coverImageUrl"
+          class="bg-G200 w-[240px] h-[160px]"
         ></div>
         <img
-          *ngIf="this.portfolioForm.value.coverImageUrl !== '' && !selectedCoverImage"
-          [src]="this.portfolioForm.value.coverImageUrl"
-          alt="cover"
-          class="w-[240px] h-[160px] bg-cover select-none"
-        />
-        <img
-          *ngIf="selectedCoverImage"
-          [src]="selectedCoverImageUrl"
+          *ngIf="selectedCoverImageUrl || portfolioForm.value.coverImageUrl"
+          [src]="selectedCoverImageUrl || portfolioForm.value.coverImageUrl"
           alt="cover"
           class="w-[240px] h-[160px] bg-cover select-none"
         />
@@ -107,9 +101,7 @@
           (drop)="onDrop($event)"
           [class.drag-active]="isDragging"
         >
-          <div class="w-[24px] h-[24px] rounded-full border border-G500 flex justify-center items-center">
-            <span class="text-G500">+</span>
-          </div>
+          <img src="/assets/massimo/svg/fi_plus-circle.svg" alt="fi_info" class="pr-[5px] select-none" />
           <div class="text-G500 text-b1">Drag or <span class="text-[#3AC2FF] underline">Upload</span> your files</div>
         </div>
 
@@ -134,20 +126,27 @@
             </div>
             <div class="flex items-center gap-[8px]">
               <div class="text-[#4698bd] text-b1">{{ file.name }}</div>
-              <app-circle-progress
-                [progress]="file.progress"
-                *ngIf="file.status !== 'success'"
-                (progressComplete)="onProgressComplete(i)"
-              ></app-circle-progress>
-              <div
-                *ngIf="file.status === 'success'"
-                class="w-[16px] h-[16px] text-[#2988B3] flex justify-center items-center text-G500 cursor-pointer"
-                (click)="removeAttachment(i)"
-              >
-                X
+              
+              <div *ngIf="file?.progress === 100">
+                <span class="cursor-pointer" (click)="removeAttachment(i)">
+                  <img src="/assets/massimo/svg/fi_x.svg" alt="x" class="w-[20px]" />
+                </span>
+              </div>
+              <div *ngIf="file?.progress !== 100">
+                <div role="status">
+                  <img
+                    src="/assets/massimo/svg/spinner.svg"
+                    alt="spinner"
+                    class="w-[20px] h-[20px]"
+                    class="animate-spin"
+                  />
+                </div>
               </div>
             </div>
           </div>
+        </div>
+        <div *ngIf="attachmentErrorMessage" class="text-R900 text-xs mt-2">
+          {{ attachmentErrorMessage }}
         </div>
       </fieldset>
     </form>

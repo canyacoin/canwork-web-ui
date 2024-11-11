@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, Directive } from '@angular/core'
+import { Component, Input, OnDestroy, OnInit, Directive, ViewChild, ElementRef } from '@angular/core'
 import { Router } from '@angular/router'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { Subscription } from 'rxjs'
@@ -19,14 +19,12 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   allPortfolioItems: any[] = []
   loaded = false
   isDialogVisible = false
-  selectedPortfolio = {}
+  selectedPortfolio = null
 
-  pageLimit = 2
-  currentPage = 0
-  lastPage = 0
-  animation = 'fadeIn'
-
-  portfolioSubscription: Subscription
+  currentIndex = 0
+  showPrevButton = false
+  showNextButton = false
+  dots: any[] = []
 
   constructor(
     private afs: AngularFirestore,
@@ -39,60 +37,26 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     this.setPortfolio(this.userModel.address)
   }
 
-  ngOnDestroy() {
-    if (this.portfolioSubscription) {
-      this.portfolioSubscription.unsubscribe()
-    }
-  }
+  ngOnDestroy() {}
 
-  openDialog() {
+  async openDialog() {
+    const userAddress = this.userModel.address
+    const doc = this.afs.collection(`portfolio/${userAddress}/work`)
+    const data = await doc.get().toPromise()
+    console.log(data.docs.map((doc) => doc.data()))
     this.isDialogVisible = true
   }
 
-  closeDialog() {
-    this.isDialogVisible = false
+  async setPortfolio(address: string) {
+    const portfolioRecords = this.afs.collection(`portfolio/${address}/work`)
+    const data = await portfolioRecords.get().toPromise()
+    this.allPortfolioItems = data.docs.map((doc) => doc.data())
+    console.log(this.allPortfolioItems)
+    this.dots = new Array(this.allPortfolioItems.length).fill('') // Initialize dots array based on the length of allPortfolioItems
+    this.loaded = true
+    this.updateArrowsAndDots()
   }
-
-  setPortfolio(address: string) {
-    const portfolioRecords = this.afs.collection(`portfolio/${address}/work`, (ref) => ref.orderBy('timestamp', 'desc'))
-    this.portfolioSubscription = portfolioRecords.valueChanges().subscribe(
-      (data: any) => {
-        this.allPortfolioItems = data
-        this.lastPage = Math.ceil(this.allPortfolioItems.length / this.pageLimit) - 1
-        this.loaded = true
-      },
-      (error) => {
-        console.error('! unable to retrieve portfolio data:', error)
-      }
-    )
-  }
-
-  paginatedPortfolioItems() {
-    return this.allPortfolioItems.slice(
-      this.currentPage * this.pageLimit,
-      this.currentPage * this.pageLimit + this.pageLimit
-    )
-  }
-
-  nextPage() {
-    this.animation = 'fadeOut'
-    setTimeout(() => {
-      this.currentPage++
-      this.animation = 'fadeIn'
-    }, 300)
-  }
-
-  previousPage() {
-    this.animation = 'fadeOut'
-    setTimeout(() => {
-      this.currentPage--
-      this.animation = 'fadeIn'
-    }, 300)
-  }
-
-  postRequest() {
-    this.router.navigate(['inbox/post', this.userModel.address])
-  }
+  
 
   // Chat the user without proposing a job
   chatUser() {
@@ -103,5 +67,33 @@ export class PortfolioComponent implements OnInit, OnDestroy {
         this.router.navigate(['auth/login'])
       }
     })
+  }
+
+  updateArrowsAndDots() {
+    const totalItems = this.allPortfolioItems.length;
+    const scrollWidth = totalItems * (250 + 20);
+    this.showPrevButton = this.currentIndex > 0;
+    this.showNextButton = this.currentIndex < totalItems - 1;
+  
+    // Update dots array to reflect active/inactive state based on currentIndex
+    this.dots = this.dots.map((_, index) => index === this.currentIndex ? 'active' : '');
+  }
+  
+  
+
+  scrollSlider(direction: number) {
+    this.currentIndex += direction
+    if (this.currentIndex < 0) this.currentIndex = 0
+    if (this.currentIndex >= this.allPortfolioItems.length) this.currentIndex = this.allPortfolioItems.length - 1
+    const scrollDistance = 270 * this.currentIndex
+    document.getElementById('portfolioSlider')?.scrollTo({ left: scrollDistance, behavior: 'smooth' })
+    this.updateArrowsAndDots()
+  }
+
+  onDotClick(index: number) {
+    this.currentIndex = index
+    const scrollDistance = 270 * this.currentIndex
+    document.getElementById('portfolioSlider')?.scrollTo({ left: scrollDistance, behavior: 'smooth' })
+    this.updateArrowsAndDots()
   }
 }

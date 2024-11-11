@@ -26,12 +26,15 @@ export class PortfolioDialogComponent {
   selectedCoverImage: File | null = null
   selectedCoverImageUrl: string | ArrayBuffer
   selectedAttachments: File[] = []
-  uploadedFiles: { name: string; progress: number; status: string }[] = []
+  uploadedFiles: { name: string; progress: number; status: string; url: string }[] = []
   currentUser: User | null = null
   portfolioForm: UntypedFormGroup
   updatedTags: string[] = []
   isDragging = false
   editorConfig = customAngularEditorConfig()
+  maxFileSizeMB = 25
+  maxAttachments = 10
+  attachmentErrorMessage = ''
 
   @Output()
   visibleChange = new EventEmitter<boolean>()
@@ -46,7 +49,19 @@ export class PortfolioDialogComponent {
 
   set visible(value: boolean) {
     this._visible = value
+    if (value) {
+      this.reset()
+    }
     this.visibleChange.emit(this._visible)
+  }
+
+  reset() {
+    this.portfolioForm.reset()
+    this.selectedCoverImage = null
+    this.selectedCoverImageUrl = null
+    this.selectedAttachments = []
+    this.uploadedFiles = []
+    this.updatedTags = []
   }
 
   constructor(
@@ -56,11 +71,23 @@ export class PortfolioDialogComponent {
     private afs: AngularFirestore
   ) {}
 
+  validateAttachments(newFiles: File[]): string {
+    const totalFiles = this.selectedAttachments.length + newFiles.length
+    if (totalFiles > this.maxAttachments) {
+      return `You can only add up to ${this.maxAttachments} files with a maximum size of ${this.maxFileSizeMB}MB each.`
+    }
+    const oversizedFiles = newFiles.filter((file) => file.size / (1024 * 1024) > this.maxFileSizeMB)
+    if (oversizedFiles.length > 0) {
+      return `Each file must be under ${this.maxFileSizeMB}MB. Please remove any large files and try again.`
+    }
+    return ''
+  }
+
   ngOnInit() {
     this.auth.currentUser$.subscribe((user: User) => {
       if (user) {
         this.currentUser = user
-        this.filePath = `uploads/workhistorys/${this.currentUser.address}`
+        this.filePath = `uploads/portfolios/${this.currentUser.address}`
       }
     })
     this.buildForm()
@@ -95,8 +122,11 @@ export class PortfolioDialogComponent {
     this.isDragging = false
 
     if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
-      this.selectedAttachments = Array.from(event.dataTransfer.files)
-      this.uploadAttachments(this.selectedAttachments)
+      const newFiles = Array.from(event.dataTransfer.files)
+      this.attachmentErrorMessage = this.validateAttachments(newFiles)
+      if (this.attachmentErrorMessage) return
+      this.selectedAttachments.push(...newFiles)
+      this.uploadAttachments(newFiles)
       event.dataTransfer.clearData()
     }
   }
@@ -119,10 +149,10 @@ export class PortfolioDialogComponent {
   }
 
   ngDoCheck() {
-    const strippedTextLength = this.stripHtmlTags(this.portfolioForm.value.projectDescription).length
+    const strippedTextLength = this.stripHtmlTags(this.portfolioForm?.value.projectDescription).length
     const error = strippedTextLength < 10 || strippedTextLength > 2500 ? { lengthInvalid: true } : null
-    this.portfolioForm.controls['projectDescription'].setErrors(error)
-    this.portfolioForm.controls['projectDescription'].updateValueAndValidity()
+    this.portfolioForm?.controls['projectDescription'].setErrors(error)
+    this.portfolioForm?.controls['projectDescription'].updateValueAndValidity()
   }
 
   removeAttachment(index: number): void {
@@ -136,8 +166,11 @@ export class PortfolioDialogComponent {
         const file = input.files[0]
         this.readFile(file, 'coverImage')
       } else if (type === 'attachments') {
-        this.selectedAttachments = Array.from(input.files)
-        this.uploadAttachments(this.selectedAttachments)
+        const newFiles = Array.from(input.files)
+        this.attachmentErrorMessage = this.validateAttachments(newFiles)
+        if (this.attachmentErrorMessage) return
+        this.selectedAttachments.push(...newFiles)
+        this.uploadAttachments(newFiles)
       }
     }
   }
@@ -155,30 +188,29 @@ export class PortfolioDialogComponent {
     reader.readAsDataURL(file)
   }
 
-  uploadAttachments(files: File[]) {
+  async uploadAttachments(files: File[]) {
     if (!this.filePath) {
       console.error('File path not set, cannot upload attachments.')
       return
     }
 
     for (const file of files) {
-      const fileTask = this.storage.upload(`${this.filePath}/${file.name}`, file)
-      this.uploadedFiles.push({ name: file.name, progress: 0, status: 'uploading' })
+      const fileTask = this.storage.upload(`${this.filePath}`, file)
+      const data = { name: file.name, progress: 0, status: 'uploading', url: '' }
+      this.uploadedFiles.push(data)
 
-      fileTask.percentageChanges().subscribe((progress) => {
-        const fileIndex = this.uploadedFiles.findIndex((uploadedFile) => uploadedFile.name === file.name)
-        if (fileIndex !== -1) this.uploadedFiles[fileIndex].progress = progress
-      })
+      const fileData = await fileTask.snapshotChanges().toPromise()
+      const url = await fileData.ref.getDownloadURL()
+      data.url = url
+      data.status = 'success'
 
+      fileTask.percentageChanges().subscribe((progress) => (data.progress = progress))
       fileTask
         .snapshotChanges()
         .pipe(
           finalize(() => {
-            const fileIndex = this.uploadedFiles.findIndex((uploadedFile) => uploadedFile.name === file.name)
-            if (fileIndex !== -1) {
-              this.portfolioForm.controls['attachments'].setValue(this.uploadedFiles)
-              this.portfolioForm.controls['attachments'].updateValueAndValidity()
-            }
+            this.portfolioForm.controls['attachments'].setValue(this.uploadedFiles)
+            this.portfolioForm.controls['attachments'].updateValueAndValidity()
           })
         )
         .subscribe()
@@ -187,44 +219,33 @@ export class PortfolioDialogComponent {
 
   async onSave(event: Event) {
     event.preventDefault()
-
     const tempPortfolio = {
       coverImageUrl: '',
       projectName: this.portfolioForm.value.projectName,
       projectDescription: this.portfolioForm.value.projectDescription,
       projectUrl: this.portfolioForm.value.projectUrl,
       tags: this.portfolioForm.value.tags,
-      attachments: this.uploadedFiles.filter((file) => file.status === 'success').map((file) => file.name),
+      attachments: this.uploadedFiles.filter((file) => file.status === 'success').map((file) => file.url),
     }
 
     if (this.selectedCoverImage) {
-      const coverTask = this.storage.upload(`${this.filePath}/${crypto.randomUUID()}`, this.selectedCoverImage)
-      await coverTask
-        .snapshotChanges()
-        .pipe(
-          finalize(async () => {
-            const downloadUrl = await (await coverTask).ref.getDownloadURL()
-            tempPortfolio.coverImageUrl = downloadUrl
-          })
-        )
-        .toPromise()
+      const coverTask = this.storage.upload(`${this.filePath}`, this.selectedCoverImage)
+      const task = await coverTask.snapshotChanges().toPromise()
+      tempPortfolio.coverImageUrl = await task.ref.getDownloadURL()
     }
-
-    this.addPortfolioItem(tempPortfolio)
+    await this.addPortfolioItem(tempPortfolio)
+    this.reset()
     this.visible = false
   }
 
-  addPortfolioItem(data: PortfolioItem) {
-    const userAddress = this.currentUser.address
-    this.afs
-      .collection(`portfolio/${userAddress}/work`)
-      .add(data)
-      .then(() => {
-        console.log('Portfolio item added successfully!')
-      })
-      .catch((error) => {
-        console.error('Error adding portfolio item: ', error)
-      })
+  async addPortfolioItem(data: PortfolioItem) {
+    try {
+      const userAddress = this.currentUser.address
+      await this.afs.collection(`portfolio/${userAddress}/work`).doc().set(data)
+      console.log('Portfolio item added successfully!')
+    } catch (error) {
+      console.error('Error adding portfolio item: ', error)
+    }
   }
 
   stripHtmlTags(html: string) {

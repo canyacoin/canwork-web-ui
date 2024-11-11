@@ -127,7 +127,7 @@ export class EditProfileDialogComponent implements OnInit, OnDestroy {
       // set selectedCategory
       let categoryIndex = this.categories.findIndex(
         (item) =>
-          item.name.toLowerCase() === this.currentUser.category.toLowerCase()
+          item.name.toLowerCase() === this.currentUser.category?.toLowerCase()
       )
       this.selectedCategory = this.categories[categoryIndex]
     }

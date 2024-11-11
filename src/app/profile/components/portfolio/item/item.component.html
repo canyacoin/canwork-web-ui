@@ -1,75 +1,30 @@
-<div *ngIf="workItem" class="left-content">
-  <div class="row">
-    <div class="col-md-6">
-      <a
-        [href]="
-          workItem.image ||
-          '//canya-tests.firebaseapp.com/assets/img/work-placeholder.svg'
-        "
-        class="h-full"
-        data-provide="lightbox"
-      >
-        <img
-          class="portfolio-item bg-cover"
-          [src]="workItem.image"
-          style="padding: 10px; border-radius: 30px"
-          [src-fallback]="defaultImage"
-          alt="{{ workItem.title }}"
-          class="card-img-left thumbnail"
-        />
-      </a>
+<!-- portfolio-item.component.html -->
+<div *ngIf="workItem" class="portfolio-item-card">
+  <div class="portfolio-thumbnail">
+    <a [href]="workItem.coverImageUrl || defaultImage" data-provide="lightbox">
+      <img
+        [src]="workItem.coverImageUrl || defaultImage"
+        class="portfolio-item-image"
+        alt="{{ workItem.projectName }}"
+      />
+    </a>
+  </div>
+  <div class="portfolio-details">
+    <h4>{{ workItem.projectName }}</h4>
+    <p>{{ workItem.description }}</p>
+    <div class="portfolio-tags">
+      <span *ngFor="let skill of workItem.tags">{{ skill }}</span>
     </div>
-    <div class="col-md-6">
-      <div class="card">
-        <div class="row" style="padding-top: 15px">
-          <div class="col-md-10">
-            <span
-              class="card-subtitle"
-              style="padding-top: 1em; text-transform: uppercase"
-            >
-              <b>{{ workItem.title }}</b>
-            </span>
-          </div>
-          <div class="col-md-2">
-            <a
-              *ngIf="isMyProfile"
-              [routerLink]="['/profile/project/' + workItem.id]"
-              data-toggle="tooltip"
-              data-placement="top"
-              title="Edit item"
-              style="color: #535353"
-            >
-              <i class="ti-pencil fw-600" aria-hidden="true"></i>
-            </a>
-          </div>
-        </div>
-        <div class="card-body">
-          <br />
-          <p
-            *ngIf="workItem.description"
-            class="fw-400"
-            style="font-size: 12px"
-          >
-            {{ workItem.description }}
-          </p>
-          <div class="row">
-            <div class="container">
-              <span
-                style="outline: none; margin-right: 5px"
-                *ngFor="let skill of workItem.tags | slice : 0 : 8"
-                [routerLink]="['/home']"
-                [queryParams]="{ query: skill }"
-              >
-                <app-skill-tag [skill]="skill"></app-skill-tag>
-              </span>
-            </div>
-          </div>
-          <br />
-          <a *ngIf="workItem.link" [href]="workItem.link">
-            Check it out! <i class="fas fa-external-link-alt"></i>
-          </a>
-        </div>
-      </div>
+    <div class="portfolio-links">
+      <button class="icon-btn" (click)="view.emit(workItem)">
+        <i class="fa fa-eye"></i> View
+      </button>
+      <button class="icon-btn" *ngIf="isMyProfile" (click)="edit.emit(workItem)">
+        <i class="fa fa-edit"></i> Edit
+      </button>
+      <button class="icon-btn" *ngIf="isMyProfile" (click)="delete.emit(workItem)">
+        <i class="fa fa-trash"></i> Delete
+      </button>
     </div>
   </div>
 </div>
