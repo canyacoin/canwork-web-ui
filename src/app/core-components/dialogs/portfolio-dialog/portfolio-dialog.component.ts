@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core'
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
 import { AngularFireStorage } from '@angular/fire/compat/storage'
 import { finalize } from 'rxjs/operators'
@@ -39,8 +39,7 @@ export class PortfolioDialogComponent {
   @Output()
   visibleChange = new EventEmitter<boolean>()
 
-  @Input()
-  selectedPortfolio: any | null = null
+  @Input() selectedPortfolio: any | null = null
 
   @Input()
   get visible() {
@@ -91,6 +90,23 @@ export class PortfolioDialogComponent {
       }
     })
     this.buildForm()
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.selectedPortfolio?.projectName && this.visible === true) {
+      if (this.selectedPortfolio !== null) {
+        this.portfolioForm.controls.coverImageUrl.setValue(this.selectedPortfolio.coverImageUrl)
+        this.portfolioForm.controls.projectName.setValue(this.selectedPortfolio.projectName)
+        this.portfolioForm.controls.projectDescription.setValue(this.selectedPortfolio.projectDescription)
+        this.portfolioForm.controls.projectUrl.setValue(this.selectedPortfolio.projectUrl)
+        this.portfolioForm.controls.tags.setValue(this.selectedPortfolio.tags)
+        this.portfolioForm.controls.attachments.setValue(this.selectedPortfolio.attachments)
+        this.updatedTags = this.selectedPortfolio.tags
+        this.selectedAttachments = this.selectedPortfolio.attachments
+      } else {
+        this.buildForm()
+      }
+    }
   }
 
   buildForm() {

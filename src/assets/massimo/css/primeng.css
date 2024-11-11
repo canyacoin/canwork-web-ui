@@ -800,9 +800,7 @@
   margin: 0 auto;
   display: flex;
   flex-wrap: nowrap;
-
   overflow-x: hidden;
-
   margin-bottom: 20px;
   margin-top: 10px;
 }
@@ -812,30 +810,31 @@
   display: flex;
   gap: 20px;
   transition: transform 0.5s ease;
-
   overflow-x: scroll;
   width: 100%;
-
-  scrollbar-width: none; 
+  scrollbar-width: none;
   -ms-overflow-style: none;
   mask-image: linear-gradient(90deg, #F8FAFC 70%, rgba(248, 250, 252, 0) 100%);
 }
 
-
-
 .portfolio-slider::-webkit-scrollbar {
-
   display: none;
 }
 
 .portfolio-item {
   flex-shrink: 0;
-
   max-width: 300px;
-
   width: 100%;
-
   border-radius: 8px;
+  position: relative;
+}
+
+.three-dot-btn {
+  position: absolute;
+  top: 10px;  
+  right: 10px;
+  z-index: 10;
+  display: none;
 }
 
 
@@ -850,7 +849,6 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-
   background-color: #fff;
   color: #333;
   padding: 10px;
@@ -861,18 +859,11 @@
   box-shadow: 0px 4px 10px rgba(9, 9, 9, 0.1);
   transition: all 0.3s ease;
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
   width: 70px;
-
   height: 70px;
-
 }
-
-
 
 .left-arrow {
   left: 0px;
@@ -882,29 +873,18 @@
   right: 0px;
 }
 
-
 .dots-container {
-  position: absolute;
-
-  bottom: 10px;
-
-  left: 50%;
-
-  transform: translateX(-50%);
-
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 14px;
   z-index: 10;
-
   margin-bottom: 20px;
 }
 
 .dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   background-color: #e2e8f0;
-
   border-radius: 50%;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -912,21 +892,17 @@
 
 .dot.active {
   background-color: #64748b;
-
   transform: scale(1.2);
-
 }
 
 
 @media screen and (max-width: 768px) {
   .portfolio-container {
     overflow-x: auto;
-
   }
 
   .portfolio-slider {
     width: max-content;
-
   }
 
   .portfolio-item {
@@ -947,33 +923,27 @@
     width: 250px;
   }
 
-
   .arrow-button {
     display: none !important;
   }
-
-
 }
 
 
 @media screen and (max-width: 768px) {
   .portfolio-slider {
     mask-image: none !important;
-
   }
 }
 
 @media (max-width: 768px) {
   .portfolio-item {
     width: 250px;
-
   }
 }
 
 @media (max-width: 480px) {
   .portfolio-item {
     width: 220px;
-
   }
 }
 
@@ -996,46 +966,47 @@
   flex-direction: column;
   gap: 10px;
   opacity: 0;
-
   transition: opacity 0.3s ease;
   z-index: 20;
-
 }
 
 
 .portfolio-button {
-  background-color: rgba(255, 255, 255, 0.8);
-
-  border: none;
-  padding: 10px;
+  background-color: #FFFFFF;
   cursor: pointer;
+  border: 1px solid #E2E8F0;
   font-size: 14px;
-  border-radius: 5px;
+  border-radius: 10px;
   display: flex;
-  align-items: center;
-  gap: 5px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  align-items: center; 
+  justify-content: center; 
+  box-shadow: 0px 4px 10px -2px #0000000D;
+  box-shadow: 0px 2px 2px -1px #0000001A;
+  box-shadow: 0px 1px 1px 0px #0000001A;
   transition: background-color 0.3s ease;
+
+  width: auto;
+  height: 32px; 
+  padding: 6px 16px;
+  gap: 8px;
+
+  font-family: General Sans;
+  font-weight: 500;
+  line-height: 20px;
+  text-align: center;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
 }
 
 .portfolio-button i {
   font-size: 16px;
 }
 
-.portfolio-button.view:hover {
-  background-color: #4caf50;
-  color: #fff;
+.portfolio-button img {
+  width: 20px;
+  height: 20px;
 }
 
-.portfolio-button.edit:hover {
-  background-color: #ff9800;
-  color: #fff;
-}
-
-.portfolio-button.delete:hover {
-  background-color: #f44336;
-  color: #fff;
-}
 
 
 .portfolio-item {
@@ -1043,21 +1014,20 @@
 }
 
 .portfolio-item:hover .portfolio-buttons {
-  opacity: 1;
-
+  opacity: 100;
 }
-
 
 @media screen and (max-width: 768px) {
   .portfolio-buttons {
     display: none;
+  }
 
+  .three-dot-btn {
+    display: block;
   }
 }
 
 .card {
   max-width: 100%;
-
   overflow: hidden;
-
 }

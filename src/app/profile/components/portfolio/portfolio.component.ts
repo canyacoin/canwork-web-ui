@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, Directive, ViewChild, ElementRef } from '@angular/core'
+import { Component, Input, OnDestroy, OnInit, Directive, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core'
 import { Router } from '@angular/router'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { Subscription } from 'rxjs'
@@ -11,10 +11,9 @@ import { ChatService } from '../../../core-services/chat.service'
   selector: 'app-profile-portfolio',
   templateUrl: './portfolio.component.html',
 })
-export class PortfolioComponent implements OnInit, OnDestroy {
+export class PortfolioComponent implements OnInit {
   @Input() userModel: User
   @Input() isMyProfile: boolean
-  @Input() notMyProfile: boolean
 
   allPortfolioItems: any[] = []
   loaded = false
@@ -25,7 +24,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   showPrevButton = false
   showNextButton = false
   dots: any[] = []
-
+  items = []
   constructor(
     private afs: AngularFirestore,
     private authService: AuthService,
@@ -35,15 +34,26 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setPortfolio(this.userModel.address)
+    this.items = [
+      {
+        label: 'Edit',
+        code: 'edit',
+        icon: 'fi_edit_gray.svg',
+      },
+      {
+        label: 'Delete',
+        code: 'delete',
+        icon: 'delete.svg',
+      },
+    ]
   }
 
-  ngOnDestroy() {}
+  openDialog(item: any, portfolio?: any) {
+    if (portfolio) {
+      console.log(portfolio)
+      this.selectedPortfolio = portfolio
+    }
 
-  async openDialog() {
-    const userAddress = this.userModel.address
-    const doc = this.afs.collection(`portfolio/${userAddress}/work`)
-    const data = await doc.get().toPromise()
-    console.log(data.docs.map((doc) => doc.data()))
     this.isDialogVisible = true
   }
 
@@ -52,11 +62,34 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     const data = await portfolioRecords.get().toPromise()
     this.allPortfolioItems = data.docs.map((doc) => doc.data())
     console.log(this.allPortfolioItems)
-    this.dots = new Array(this.allPortfolioItems.length).fill('') // Initialize dots array based on the length of allPortfolioItems
+    this.dots = new Array(this.allPortfolioItems.length).fill('')
     this.loaded = true
     this.updateArrowsAndDots()
   }
-  
+
+  updateArrowsAndDots() {
+    const totalItems = this.allPortfolioItems.length
+    this.showPrevButton = this.currentIndex > 0
+    this.showNextButton = this.currentIndex < totalItems - 1
+    this.dots = this.dots.map((_, index) => (index === this.currentIndex ? 'active' : ''))
+  }
+
+  scrollSlider(direction: number) {
+    this.currentIndex += direction
+    if (this.currentIndex < 0) this.currentIndex = 0
+    if (this.currentIndex >= this.allPortfolioItems.length) this.currentIndex = this.allPortfolioItems.length - 1
+    this.scrollSlide()
+  }
+
+  onDotClick(index: number) {
+    this.currentIndex = index
+    this.scrollSlide()
+  }
+
+  scrollSlide() {
+    const scrollDistance = 270 * this.currentIndex
+    document.getElementById('portfolioSlider')?.scrollTo({ left: scrollDistance, behavior: 'smooth' })
+  }
 
   // Chat the user without proposing a job
   chatUser() {
@@ -69,31 +102,14 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     })
   }
 
-  updateArrowsAndDots() {
-    const totalItems = this.allPortfolioItems.length;
-    const scrollWidth = totalItems * (250 + 20);
-    this.showPrevButton = this.currentIndex > 0;
-    this.showNextButton = this.currentIndex < totalItems - 1;
-  
-    // Update dots array to reflect active/inactive state based on currentIndex
-    this.dots = this.dots.map((_, index) => index === this.currentIndex ? 'active' : '');
-  }
-  
-  
-
-  scrollSlider(direction: number) {
-    this.currentIndex += direction
-    if (this.currentIndex < 0) this.currentIndex = 0
-    if (this.currentIndex >= this.allPortfolioItems.length) this.currentIndex = this.allPortfolioItems.length - 1
-    const scrollDistance = 270 * this.currentIndex
-    document.getElementById('portfolioSlider')?.scrollTo({ left: scrollDistance, behavior: 'smooth' })
-    this.updateArrowsAndDots()
-  }
-
-  onDotClick(index: number) {
-    this.currentIndex = index
-    const scrollDistance = 270 * this.currentIndex
-    document.getElementById('portfolioSlider')?.scrollTo({ left: scrollDistance, behavior: 'smooth' })
-    this.updateArrowsAndDots()
+  onSliderScroll() {
+    const slider = document.getElementById('portfolioSlider')!
+    const scrollLeft = slider.scrollLeft
+    const scrollDistance = 270
+    const newIndex = Math.round(scrollLeft / scrollDistance)
+    if (newIndex !== this.currentIndex) {
+      this.currentIndex = newIndex
+      this.updateArrowsAndDots()
+    }
   }
 }
