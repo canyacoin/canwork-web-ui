@@ -42,7 +42,11 @@
             "extractLicenses": true,
             "vendorChunk": false,
             "buildOptimizer": true,
-            "assets": ["src/assets", "src/favicon.ico"],
+            "assets": [
+              "src/assets",
+              "src/favicon.ico",
+              "src/manifest.webmanifest"
+            ],
             "styles": [
               "node_modules/firebaseui/dist/firebaseui.css",
               "node_modules/animate.css/animate.css",
@@ -55,7 +59,9 @@
               "src/assets/massimo/css/primeng.css",
               "src/assets/sass/global.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "serviceWorker": true,
+            "ngswConfigPath": "ngsw-config.json"
           },
           "configurations": {
             "staging": {
@@ -154,7 +160,11 @@
               "src/assets/massimo/css/primeng.css",
               "src/assets/sass/global.scss"
             ],
-            "assets": ["src/assets", "src/favicon.ico"]
+            "assets": [
+              "src/assets",
+              "src/favicon.ico",
+              "src/manifest.webmanifest"
+            ]
           }
         },
         "server": {

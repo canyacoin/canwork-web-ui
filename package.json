@@ -36,6 +36,7 @@
     "@angular/platform-browser-dynamic": "16.2.12",
     "@angular/platform-server": "16.2.12",
     "@angular/router": "16.2.12",
+    "@angular/service-worker": "16.2.12",
     "@binance-chain/javascript-sdk": "^2.16.0",
     "@kolkov/angular-editor": "^3.0.0-beta.0",
     "@nguniversal/express-engine": "^16.2.0",
