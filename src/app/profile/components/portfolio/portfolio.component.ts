@@ -34,21 +34,25 @@ export class PortfolioComponent implements OnInit {
     private chatService: ChatService,
     private router: Router
   ) {}
+  dropdownOptions = [
+    {
+      label: 'Edit',
+      code: 'edit',
+      icon: 'fi_edit_gray.svg',
+    },
+    {
+      label: 'Delete',
+      code: 'delete',
+      icon: 'delete.svg',
+    },
+  ]
+
+  onOptionSelected(option: string) {
+    console.log('Selected option:', option)
+  }
 
   ngOnInit() {
     this.setPortfolio(this.userModel.address)
-    this.items = [
-      {
-        label: 'Edit',
-        code: 'edit',
-        icon: 'fi_edit_gray.svg',
-      },
-      {
-        label: 'Delete',
-        code: 'delete',
-        icon: 'delete.svg',
-      },
-    ]
   }
 
   OnDestroy() {

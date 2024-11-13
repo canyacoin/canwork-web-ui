@@ -3,11 +3,7 @@ import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { StarRatingModule } from 'angular-star-rating'
-import {
-  DROPZONE_CONFIG,
-  DropzoneConfigInterface,
-  DropzoneModule,
-} from 'ngx-dropzone-wrapper'
+import { DROPZONE_CONFIG, DropzoneConfigInterface, DropzoneModule } from 'ngx-dropzone-wrapper'
 import { ImgFallbackModule } from 'ngx-img-fallback'
 
 import { CoreUtilsModule } from '../core-utils/core-utils.module'
@@ -122,8 +118,9 @@ import { SkBlogCardComponent } from './skeletons/sk-blog-card/sk-blog-card.compo
 import { SkPublicBlogComponent } from './skeletons/sk-public-blog/sk-public-blog.component'
 import { IconTextButtonComponent } from './buttons/icon-text-button/icon-text-button.component'
 import { PortfolioDialogComponent } from './dialogs/portfolio-dialog/portfolio-dialog.component'
-import { EditorModule } from 'primeng/editor';
+import { EditorModule } from 'primeng/editor'
 import { CircleProgressComponent } from './progress-bar/circle-progress/circle-progress.component'
+import { ThreeDotDropdownComponent } from './dropdowns/three-dot-dropdown/three-dot-dropdown.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -263,6 +260,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     SkEducationComponent,
     IconTextButtonComponent,
     CircleProgressComponent,
+    ThreeDotDropdownComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -370,6 +368,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     JobSwitchActionTransactionPanelComponent,
     StarRatingSelectComponent,
     EducationDialogComponent,
+    ThreeDotDropdownComponent,
     SkEducationComponent,
   ],
   providers: [

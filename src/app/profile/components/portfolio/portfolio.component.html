@@ -70,23 +70,7 @@
             </div>
             <!-- Three Dots Dropdown -->
             <div class="three-dot-btn">
-              <p-dropdown
-                *ngIf="isMyProfile"
-                [options]="items"
-                [(ngModel)]="selectedPortfolio"
-                appendTo="body"
-                class="share-button-style absolute top-0 right-0"
-              >
-                <ng-template>
-                  <three-dots-button />
-                </ng-template>
-                <ng-template let-item pTemplate="item">
-                  <div class="flex items-center" (click)="openDialog(item, portfolio)">
-                    <img src="{{ '/assets/massimo/svg/' + item.icon }}" class="mr-[16px] w-[20px]" />
-                    <span class="font-medium text-G900">{{ item.label }}</span>
-                  </div>
-                </ng-template>
-              </p-dropdown>
+              <three-dot-dropdown [options]="dropdownOptions" (optionSelected)="onOptionSelected($event)" />
             </div>
           </div>
         </div>
