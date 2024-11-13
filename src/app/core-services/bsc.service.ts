@@ -64,7 +64,6 @@ import { ethers, providers } from 'ethers'
 declare var window: any // we need to get metamask object from browser window
 
 export enum BepChain {
-  Binance = 'BEP2',
   SmartChain = 'BEP20',
 }
 

@@ -244,11 +244,12 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     switch (action) {
       case ActionType.enterEscrow:
         const chain = await this.checkConnectionAndDetectChain()
-        if (chain === BepChain.Binance) {
-          this.router.navigate(['./enter-escrow'], {
-            relativeTo: this.activatedRoute,
-          })
-        } else if (chain === BepChain.SmartChain) {
+        // if (chain === BepChain.Binance) {
+        //   this.router.navigate(['./enter-escrow'], {
+        //     relativeTo: this.activatedRoute,
+        //   })
+        // } else
+        if (chain === BepChain.SmartChain) {
           this.router.navigate(['./enter-bsc-escrow'], {
             relativeTo: this.activatedRoute,
           })

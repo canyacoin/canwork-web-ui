@@ -212,8 +212,9 @@ Assets for oAuth are:
 
 Product Name: `www.canwork.io`
 Product Logo: `https://www.canwork.io/assets/img/canya-media-square.png`
-Privacy Policy: `https://www.canwork.io/assets/docs/Data-Deletion-Request-Instructions.pdf`
+Privacy Policy: `https://www.canwork.io/assets/docs/canwork-privacy-policy.pdf`
 Terms & Conditions: `https://www.canwork.io/assets/docs/canwork-terms-and-conditions.pdf`
+Data Deletion: `https://www.canwork.io/assets/docs/Data-Deletion-Request-Instructions.pdf`
 
 ## Deploy to Production
 
