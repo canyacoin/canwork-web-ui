@@ -160,7 +160,7 @@
         [type]="1"
         title="Save Project"
         size="small"
-        [disabled]="!portfolioForm.valid"
+        [disabled]="isSaving || !portfolioForm.valid"
         (click)="onSave($event)"
       />
     </div>

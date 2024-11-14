@@ -47,8 +47,8 @@ export class PortfolioComponent implements OnInit {
     },
   ]
 
-  onOptionSelected(option: string) {
-    console.log('Selected option:', option)
+  onOptionSelected(event) {
+    this.openDialog(event.option, event.data)
   }
 
   ngOnInit() {
@@ -83,6 +83,9 @@ export class PortfolioComponent implements OnInit {
       this.visibleDeleteModal = true
       return
     }
+    if (item?.code === 'new') {
+      this.selectedPortfolio = null
+    }
     this.isDialogVisible = true
   }
 
@@ -90,6 +93,7 @@ export class PortfolioComponent implements OnInit {
     const portfolioRecords = this.afs.collection(`portfolio/${address}/work`)
     this.portfolioSubscriber = portfolioRecords.valueChanges().subscribe((data) => {
       if (data.length > 0) this.allPortfolioItems = data
+      this.dots = new Array(this.allPortfolioItems.length).fill('')
       this.updateArrowsAndDots()
     })
     const data = await portfolioRecords.get().toPromise()

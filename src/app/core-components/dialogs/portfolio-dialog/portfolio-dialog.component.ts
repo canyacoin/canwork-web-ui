@@ -37,6 +37,7 @@ export class PortfolioDialogComponent {
   maxAttachments = 10
   attachmentErrorMessage = ''
   tagsErrorMessage = ''
+  isSaving = false
 
   @Output()
   visibleChange = new EventEmitter<boolean>()
@@ -53,6 +54,7 @@ export class PortfolioDialogComponent {
     if (value && !this.selectedPortfolio) {
       this.reset()
     }
+    if (!value) this.selectedPortfolio = null
     this.visibleChange.emit(this._visible)
   }
 
@@ -93,7 +95,6 @@ export class PortfolioDialogComponent {
       }
     })
     this.buildForm()
-    // this.deleteAll()
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -158,7 +159,7 @@ export class PortfolioDialogComponent {
 
   skillTagsUpdated(value: string) {
     let tags: string[] = value.split(',').map((item) => item.trim())
-    if(tags.length>10){
+    if (tags.length > 10) {
       this.tagsErrorMessage = 'You can choose only 10 tags'
     }
     this.portfolioForm.controls['tags'].setValue(tags)
@@ -168,7 +169,7 @@ export class PortfolioDialogComponent {
     return this.selectedPortfolio ? 'Edit Portfolio' : 'Add Portfolio'
   }
 
-  onClose() {    
+  onClose() {
     this.visible = false
   }
 
@@ -243,6 +244,9 @@ export class PortfolioDialogComponent {
 
   async onSave(event: Event) {
     event.preventDefault()
+
+    this.isSaving = true
+
     const tempPortfolio = {
       id: this.selectedPortfolio?.id ?? this.idGenerator(),
       coverImageUrl: this.selectedPortfolio?.coverImageUrl ?? '',
@@ -255,18 +259,26 @@ export class PortfolioDialogComponent {
         .map((file) => ({ url: file.url, name: file.name, status: file.status })),
     }
 
-    if (this.selectedCoverImage) {
-      const coverTask = this.storage.upload(`${this.filePath}/${tempPortfolio.id}`, this.selectedCoverImage)
-      const task = await coverTask.snapshotChanges().toPromise()
-      tempPortfolio.coverImageUrl = await task.ref.getDownloadURL()
+    try {
+      if (this.selectedCoverImage) {
+        const coverTask = this.storage.upload(`${this.filePath}/${tempPortfolio.id}`, this.selectedCoverImage)
+        const task = await coverTask.snapshotChanges().toPromise()
+        tempPortfolio.coverImageUrl = await task.ref.getDownloadURL()
+      }
+
+      if (this.selectedPortfolio) {
+        await this.updatePortfolioItem(tempPortfolio)
+      } else {
+        await this.addPortfolioItem(tempPortfolio)
+      }
+
+      this.visible = false
+    } catch (error) {
+      console.error('Error saving portfolio item: ', error)
+    } finally {
+      this.isSaving = false
+      // this.reset()
     }
-    if (this.selectedPortfolio) {
-      await this.updatePortfolioItem(tempPortfolio)
-    } else {
-      await this.addPortfolioItem(tempPortfolio)
-    }
-    this.visible = false
-    this.reset()
   }
 
   async addPortfolioItem(data: PortfolioItem) {

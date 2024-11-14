@@ -7,16 +7,15 @@ import { Component, Input, Output, EventEmitter, HostListener } from '@angular/c
 })
 export class ThreeDotDropdownComponent {
   @Input() options = []
-  @Output() optionSelected = new EventEmitter<string>()
+  @Input() data: any
+  @Output() optionSelected = new EventEmitter<{ option: string; data: any }>()
 
   isDropdownOpen = false
 
-  // Toggle the dropdown visibility
   toggleDropdown(): void {
     this.isDropdownOpen = !this.isDropdownOpen
   }
 
-  // Close dropdown when clicking outside
   @HostListener('document:click', ['$event'])
   closeDropdown(event: MouseEvent): void {
     const button = event.target as HTMLElement
@@ -25,9 +24,8 @@ export class ThreeDotDropdownComponent {
     }
   }
 
-  // Emit selected option
   selectOption(option: string): void {
-    this.optionSelected.emit(option)
+    this.optionSelected.emit({ option, data: this.data })
     this.isDropdownOpen = false
   }
 }

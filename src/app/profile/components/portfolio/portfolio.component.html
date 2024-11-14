@@ -24,7 +24,7 @@
     <div class="py-[28px] sm:px-10">
       <div class="flex justify-between gap-4">
         <div class="text-h6 text-G900 font-medium">Portfolio</div>
-        <plus-button *ngIf="isMyProfile && loaded" (click)="openDialog(null)" />
+        <plus-button *ngIf="isMyProfile && loaded" (click)="openDialog({ code: 'new' })" />
       </div>
 
       <div class="mt-4 text-sm text-gray-700 font-medium" *ngIf="allPortfolioItems.length < 1">
@@ -69,8 +69,12 @@
               </button>
             </div>
             <!-- Three Dots Dropdown -->
-            <div class="three-dot-btn">
-              <three-dot-dropdown [options]="dropdownOptions" (optionSelected)="onOptionSelected($event)" />
+            <div class="three-dot-btn" *ngIf="isMyProfile">
+              <three-dot-dropdown
+                [options]="dropdownOptions"
+                [data]="portfolio"
+                (optionSelected)="onOptionSelected($event)"
+              />
             </div>
           </div>
         </div>

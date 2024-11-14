@@ -890,8 +890,7 @@
 .dots-container {
   display: flex;
   justify-content: center;
-  gap: 14px;
-  z-index: 10;
+  gap: 12px;
   margin-bottom: 20px;
 }
 
@@ -901,13 +900,14 @@
   background-color: #e2e8f0;
   border-radius: 50%;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .dot.active {
   background-color: #64748b;
   transform: scale(1.2);
 }
+
 
 
 @media screen and (max-width: 768px) {
@@ -945,7 +945,7 @@
 
 @media screen and (max-width: 768px) {
   .portfolio-container::after {
-    background: none !important;
+    display: none !important;
   }
 }
 
