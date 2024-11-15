@@ -78,8 +78,8 @@ const cacheManager = require('cache-manager')
 export function app(): express.Express {
   const memoryCache = cacheManager.caching({
     store: 'memory',
-    max: 10,
-    ttl: 60 * 10 /* seconds */,
+    max: 50,
+    ttl: 60 * 60 /* 1 hour in seconds*/,
   })
 
   const server = express()

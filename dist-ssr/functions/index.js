@@ -1,10 +1,31 @@
 const functions = require('firebase-functions')
 
 const universalMain = require(__dirname + '/server/main')
-exports.ssr = functions//.runWith({
-// Keep 1 instance warm for this latency-critical function
-//minInstances: 1,
-/*
+exports.ssr = functions
+  .runWith({
+    memory: '512MB', // default is 256
+
+    /*
+todo use only live
+
+example_
+// Get Firebase project id from `FIREBASE_CONFIG` environment variable
+const envProjectId = JSON.parse(process.env.FIREBASE_CONFIG).projectId;
+
+exports.ssr = functions
+    .runWith({
+      // Keep 5 instances warm for this latency-critical function
+      // in production only. Default to 0 for test projects.
+      minInstances: envProjectId === "my-production-project" ? '512MB' : '256MB',
+    })
+    .https.onRequest((req, res) => {
+      // render some html
+    });
+
+*/
+
+    //minInstances: 1,
+    /*
     https://firebase.google.com/docs/functions/manage-functions?gen=1st#reduce_the_number_of_cold_starts
     
     If Cloud Functions for Firebase scales your app above your minInstances setting, you'll experience a cold start for each instance above that threshold.
@@ -17,6 +38,5 @@ exports.ssr = functions//.runWith({
     
     todo configure to use only live
     */
-//})
-.https
-  .onRequest(universalMain.app())
+  })
+  .https.onRequest(universalMain.app())
