@@ -5,6 +5,8 @@ import {
   Output,
   EventEmitter,
   Directive,
+  Inject,
+  PLATFORM_ID,
 } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { take } from 'rxjs/operators'
@@ -12,6 +14,8 @@ import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
 import { ChatService } from '@service/chat.service'
 import { PublicJobService } from '@service/public-job.service'
+
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 
 @Component({
   selector: 'app-profile-about',
@@ -39,7 +43,8 @@ export class AboutComponent implements OnInit {
     private authService: AuthService,
     private chatService: ChatService,
     private publicJobService: PublicJobService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   async ngOnInit() {
@@ -92,18 +97,28 @@ export class AboutComponent implements OnInit {
 
   nextPage() {
     this.animation = 'fadeOut'
-    setTimeout(() => {
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        this.currentPage++
+        this.animation = 'fadeIn'
+      }, 300)
+    } else {
       this.currentPage++
       this.animation = 'fadeIn'
-    }, 300)
+    }
   }
 
   previousPage() {
     this.animation = 'fadeOut'
-    setTimeout(() => {
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        this.currentPage--
+        this.animation = 'fadeIn'
+      }, 300)
+    } else {
       this.currentPage--
       this.animation = 'fadeIn'
-    }, 300)
+    }
   }
 
   // Chat the user without proposing a job

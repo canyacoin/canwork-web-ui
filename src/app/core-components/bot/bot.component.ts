@@ -14,12 +14,15 @@ import {
   OnInit,
   Output,
   Directive,
+  Inject,
+  PLATFORM_ID,
 } from '@angular/core'
 import { Router } from '@angular/router'
 import * as randomColor from 'randomcolor'
 
 import { Subject } from 'rxjs'
 import { take } from 'rxjs/operators'
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 
 @Component({
   selector: 'app-bot',
@@ -70,7 +73,10 @@ export class BotComponent implements OnInit {
   @Input() header: String
   @Output() action: EventEmitter<any> = new EventEmitter()
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   ngOnInit() {
     this.init()
@@ -136,7 +142,22 @@ export class BotComponent implements OnInit {
   }
 
   scrollToBottom() {
-    setTimeout(() => {
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        if (
+          (<any>window).$('html, body') &&
+          (<any>window).$('#section-end') &&
+          (<any>window).$('#section-end').offset()
+        ) {
+          ;(<any>window)
+            .$('html, body')
+            .animate(
+              { scrollTop: (<any>window).$('#section-end').offset().top - 60 },
+              1000
+            )
+        }
+      }, 300)
+    } else {
       if (
         (<any>window).$('html, body') &&
         (<any>window).$('#section-end') &&
@@ -149,19 +170,26 @@ export class BotComponent implements OnInit {
             1000
           )
       }
-    }, 300)
+    }
   }
 
   async addBotMessage(message: string) {
     return new Promise((resolve) => {
       const i =
         this.bot.push({ message: message, typing: true, from: 'bot' }) - 1
-      setTimeout(() => {
+      if (isPlatformBrowser(this.platformId)) {
+        setTimeout(() => {
+          this.bot[i].typing = false
+          this.index++
+          this.scrollToBottom()
+          resolve(i)
+        }, 1000)
+      } else {
         this.bot[i].typing = false
         this.index++
         this.scrollToBottom()
         resolve(i)
-      }, 1000)
+      }
     })
   }
 

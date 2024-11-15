@@ -1,4 +1,11 @@
-import { Component, OnDestroy, OnInit, Directive } from '@angular/core'
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  Directive,
+  Inject,
+  PLATFORM_ID,
+} from '@angular/core'
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -34,6 +41,7 @@ import { take } from 'rxjs/operators'
 import { NgxSpinnerService } from 'ngx-spinner'
 import { customAngularEditorConfig } from 'app/core-functions/angularEditorConfig'
 import { MessageService } from 'primeng/api'
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 
 interface DropdownItem {
   name: string
@@ -114,7 +122,8 @@ export class PostComponent implements OnInit, OnDestroy {
     private publicJobService: PublicJobService,
     private uploadService: UploadService,
     private messageService: MessageService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.postForm = formBuilder.group({
       url: [''],
@@ -711,7 +720,7 @@ export class PostComponent implements OnInit, OnDestroy {
   async submitForm() {
     this.error = false
     this.isSending = true
-    this.spinner.show()
+    if (isPlatformBrowser(this.platformId)) this.spinner.show()
 
     let tags: string[]
     if (!this.isShareable) {
@@ -786,7 +795,7 @@ export class PostComponent implements OnInit, OnDestroy {
       })
       this.isSending = false
     }
-    this.spinner.hide()
+    if (isPlatformBrowser(this.platformId)) this.spinner.hide()
   }
 
   handleGitError(msg) {
@@ -908,7 +917,7 @@ export class PostComponent implements OnInit, OnDestroy {
     //   '<=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-==-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=>'
     // )
     // console.log('this.shareableJobForm:', this.shareableJobForm)
-    this.spinner.show()
+    if (isPlatformBrowser(this.platformId)) this.spinner.show()
     this.isSending = true
     this.error = false
     this.shareableJobForm.controls.providerType.setValue(
@@ -1014,7 +1023,7 @@ export class PostComponent implements OnInit, OnDestroy {
       })
       console.log('error with showing', e)
     }
-    this.spinner.hide()
+    if (isPlatformBrowser(this.platformId)) this.spinner.hide()
     this.sentDRP = isDRP
   }
 

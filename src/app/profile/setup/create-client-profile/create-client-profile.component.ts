@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, Directive } from '@angular/core'
+import {
+  Component,
+  Input,
+  OnInit,
+  Directive,
+  Inject,
+  PLATFORM_ID,
+} from '@angular/core'
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -13,6 +20,8 @@ import * as randomColor from 'randomcolor'
 import { Subscription } from 'rxjs'
 
 import * as moment from 'moment-timezone'
+
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 
 @Component({
   selector: 'app-create-client-profile',
@@ -58,7 +67,8 @@ export class CreateClientProfileComponent implements OnInit {
     private route: ActivatedRoute,
     private formBuilder: UntypedFormBuilder,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {
@@ -166,9 +176,13 @@ export class CreateClientProfileComponent implements OnInit {
 
     this.userService.saveUser(this.user)
     this.authService.setUser(this.user)
-    setTimeout(() => {
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        this.nextStep()
+      }, 600)
+    } else {
       this.nextStep()
-    }, 600)
+    }
   }
 
   proceed() {

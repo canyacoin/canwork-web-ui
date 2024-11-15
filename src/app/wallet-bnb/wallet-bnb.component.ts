@@ -1,4 +1,11 @@
-import { Component, OnInit, OnDestroy, Directive } from '@angular/core'
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Directive,
+  Inject,
+  PLATFORM_ID,
+} from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { BscService, EventTypeBsc } from '@service/bsc.service'
 // import WalletConnect from './../core-classes/walletConnect' // obsolete, bep2
@@ -10,6 +17,8 @@ import { environment } from '@env/environment'
 import { AuthService } from '@service/auth.service'
 import { WalletApp } from '@service/bsc.service'
 import { MessageService } from 'primeng/api'
+
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 
 @Component({
   selector: 'app-wallet-bnb',
@@ -47,6 +56,7 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private route: ActivatedRoute,
     private messageService: MessageService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {
@@ -119,45 +129,13 @@ export class WalletBnbComponent implements OnInit, OnDestroy {
       this.walletconnectConnecting = false
 
       if (this.bscError) {
-        await new Promise((f) => setTimeout(f, 2000)) // sleep 2000 ms
+        if (isPlatformBrowser(this.platformId)) {
+          await new Promise((f) => setTimeout(f, 2000)) // sleep 2000 ms
+        }
         this.bscError = '' // clean up
       }
     }
   }
-
-  /*
-  obsolete, unused
-  async walletConnect(connector: WalletConnect) {
-    // Subscribe to connection events
-    connector.on('connect', () => {
-      // Close QR Code Modal
-      WalletConnectQRCodeModal.close()
-      // Get provided accounts and chainId
-    })
-
-    if (connector.connected) {
-      await connector.killSession()
-    }
-    // Reconnect
-    await connector.createSession()
-    // get uri for QR Code modal
-    const uri = connector.uri
-    // display QR Code modal
-    WalletConnectQRCodeModal.open(uri, () => {
-      console.log('QR Code Modal closed')
-    })
-
-    this.attemptedConnection = true
-
-    // hack
-    setTimeout(() => {
-      const qrModal = document.getElementById('walletconnect-qrcode-modal')
-      if (qrModal) {
-        qrModal.style.zIndex = '99999'
-      }
-    }, 100)
-  }
-  */
 
   showKeystoreError(error: string) {
     this.validKeystoreUploaded = false

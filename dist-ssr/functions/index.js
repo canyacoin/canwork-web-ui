@@ -1,11 +1,10 @@
 const functions = require('firebase-functions')
 
 const universalMain = require(__dirname + '/server/main')
-exports.ssr = functions
-  .runWith({
-    // Keep 1 instance warm for this latency-critical function
-    minInstances: 1,
-    /*
+exports.ssr = functions//.runWith({
+// Keep 1 instance warm for this latency-critical function
+//minInstances: 1,
+/*
     https://firebase.google.com/docs/functions/manage-functions?gen=1st#reduce_the_number_of_cold_starts
     
     If Cloud Functions for Firebase scales your app above your minInstances setting, you'll experience a cold start for each instance above that threshold.
@@ -16,7 +15,8 @@ exports.ssr = functions
     The Firebase CLI provides a cost estimate at deployment time for functions with reserved minimum instances.
     Refer to Cloud Functions Pricing to calculate costs.
     
-    todo configure to use only live, for now test on staging
+    todo configure to use only live
     */
-  })
-  .https.onRequest(universalMain.app())
+//})
+.https
+  .onRequest(universalMain.app())

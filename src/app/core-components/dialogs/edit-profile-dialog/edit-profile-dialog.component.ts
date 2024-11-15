@@ -5,6 +5,8 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  Inject,
+  PLATFORM_ID,
 } from '@angular/core'
 import {
   UntypedFormBuilder,
@@ -22,6 +24,8 @@ import * as moment from 'moment-timezone'
 
 import { BscValidator } from '@validator/bsc.validator'
 import { BscService } from '@service/bsc.service'
+
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 
 interface DropdownItem {
   name: string
@@ -74,7 +78,8 @@ export class EditProfileDialogComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private bscService: BscService,
     private authService: AuthService,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {
@@ -331,11 +336,16 @@ export class EditProfileDialogComponent implements OnInit, OnDestroy {
         })
     }
 
-    setTimeout(() => {
-      // DESTROY the edit overlay
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        // DESTROY the edit overlay
+        this.onClose()
+        this.sending = false
+      }, 600)
+    } else {
       this.onClose()
       this.sending = false
-    }, 600)
+    }
   }
 
   detectFiles(event: Event) {

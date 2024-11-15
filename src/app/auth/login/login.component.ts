@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core'
 
 import { HttpHeaders } from '@angular/common/http'
 
@@ -11,6 +11,8 @@ import { AuthService } from '../../core-services/auth.service'
 import { UserService } from '../../core-services/user.service'
 // spinner
 import { NgxSpinnerService } from 'ngx-spinner'
+
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 
 @Component({
   selector: 'app-login',
@@ -30,21 +32,24 @@ export class LoginComponent implements OnInit {
     private afAuth: AngularFireAuth,
     private authService: AuthService,
     private userService: UserService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/'
-    this.spinner.show()
-    setTimeout(() => {
-      /** spinner ends after 2 seconds */
-      this.spinner.hide()
-    }, 2000)
+    if (isPlatformBrowser(this.platformId)) {
+      this.spinner.show()
+      setTimeout(() => {
+        /** spinner ends after 2 seconds */
+        this.spinner.hide()
+      }, 2000)
+    }
   }
 
   onFirebaseLogin(signInSuccessData: FirebaseUISignInSuccessWithAuthResult) {
     this.loading = true
-    this.spinner.hide()
+    if (isPlatformBrowser(this.platformId)) this.spinner.hide()
     const user = signInSuccessData.authResult.user
     const rnd = Math.floor(Math.random() * 109) + 1
     const parsedUser = new User({

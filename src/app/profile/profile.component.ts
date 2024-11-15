@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  Inject,
+  PLATFORM_ID,
+} from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
@@ -9,6 +15,8 @@ import { take } from 'rxjs/operators'
 // spinner
 import { NgxSpinnerService } from 'ngx-spinner'
 import { MessageService } from 'primeng/api'
+
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 
 @Component({
   selector: 'app-profile',
@@ -35,7 +43,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private seoService: SeoService,
     private spinner: NgxSpinnerService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
     const navigation = this.router.getCurrentNavigation()
     this.navigationAddress = navigation.extras.state
@@ -46,7 +55,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (!this.authService.currentUser$) return // not server side
 
-    this.spinner.show()
+    if (isPlatformBrowser(this.platformId)) this.spinner.show()
     this.authSub = this.authService.currentUser$.subscribe(
       (user: User) => {
         if (user !== this.currentUser) {
@@ -69,10 +78,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
         console.error('! unable to retrieve currentUser data:', error)
       }
     )
-    setTimeout(() => {
-      /** spinner ends after 3000ms */
-      this.spinner.hide()
-    }, 3000)
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        /** spinner ends after 3000ms */
+        this.spinner.hide()
+      }, 3000)
+    }
   }
 
   ngOnDestroy() {

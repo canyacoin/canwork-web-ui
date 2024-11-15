@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Inject,
+  PLATFORM_ID,
+} from '@angular/core'
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -27,6 +33,7 @@ import { FirebaseUISignInSuccessWithAuthResult } from 'firebaseui-angular'
 
 import { customAngularEditorConfig } from 'app/core-functions/angularEditorConfig'
 import { Tab } from '@class/tabs'
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 
 @Component({
   selector: 'app-public-job',
@@ -107,7 +114,8 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private afAuth: AngularFireAuth,
-    private messageService: MessageService
+    private messageService: MessageService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.bidForm = this.formBuilder.group({
       price: [
@@ -131,7 +139,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.spinner.show()
+    if (isPlatformBrowser(this.platformId)) this.spinner.show()
     this.activeJobTypes = [
       { label: 'Job Details', code: 'jobsdetail' },
       { label: 'Proposals', code: 'proposals' },
@@ -197,7 +205,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     // check visibility if it is a direct job or not. If the job is direct job, which means invite only, then can't show the tabs
     this.isShownTab =
       this.currentUser && this.isProvider && this.job.visibility !== 'invite'
-    this.spinner.hide()
+    if (isPlatformBrowser(this.platformId)) this.spinner.hide()
   }
 
   async uploadFiles(files: FileList) {
@@ -355,7 +363,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
       return
     }
 
-    this.spinner.show()
+    if (isPlatformBrowser(this.platformId)) this.spinner.show()
 
     const providerInfo = {
       name: this.currentUser.name,
@@ -386,7 +394,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
         detail: `You have not been approved as a provider.`,
       })
     }
-    this.spinner.hide()
+    if (isPlatformBrowser(this.platformId)) this.spinner.hide()
     this.loading = false
   }
 
@@ -414,10 +422,12 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     selBox.focus()
     document.execCommand('copy')
     document.body.removeChild(selBox)
-    document.getElementById('copied').style.display = 'block'
-    setTimeout(function () {
-      document.getElementById('copied').style.display = 'none'
-    }, 2000)
+    if (isPlatformBrowser(this.platformId)) {
+      document.getElementById('copied').style.display = 'block'
+      setTimeout(function () {
+        document.getElementById('copied').style.display = 'none'
+      }, 2000)
+    }
   }
 
   private async setAttachmentUrl() {
@@ -623,7 +633,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
   // Login Part
   onFirebaseLogin(signInSuccessData: FirebaseUISignInSuccessWithAuthResult) {
     this.loading = true
-    this.spinner.hide()
+    if (isPlatformBrowser(this.platformId)) this.spinner.hide()
     const user = signInSuccessData.authResult.user
     const rnd = Math.floor(Math.random() * 109) + 1
     const parsedUser = new User({

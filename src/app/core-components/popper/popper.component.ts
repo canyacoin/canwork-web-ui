@@ -1,5 +1,13 @@
-import { Component, Input, OnInit, Directive } from '@angular/core'
+import {
+  Component,
+  Input,
+  OnInit,
+  Directive,
+  Inject,
+  PLATFORM_ID,
+} from '@angular/core'
 import { createPopper, Placement } from '@popperjs/core'
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 
 @Component({
   selector: 'app-popper',
@@ -12,12 +20,19 @@ export class PopperComponent implements OnInit {
   @Input() tooltipText: string = ''
   @Input() disableShowHide: boolean = false
 
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
   ngOnInit() {
     let tooltipEl = document.querySelector<any>('#' + this.tooltipId)
-    setTimeout(() => {
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        tooltipEl = document.querySelector<any>('#' + this.tooltipId)
+        if (tooltipEl) tooltipEl.innerText = this.tooltipText
+      }, 100)
+    } else {
       tooltipEl = document.querySelector<any>('#' + this.tooltipId)
       if (tooltipEl) tooltipEl.innerText = this.tooltipText
-    }, 100)
+    }
     const targetEl = document.querySelector('#' + this.targetId)
 
     let popperInstance = null

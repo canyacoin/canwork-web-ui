@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  Inject,
+  PLATFORM_ID,
+} from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 
 import { Observable, Subscription } from 'rxjs'
@@ -12,6 +18,8 @@ import { PublicJobService } from '@service/public-job.service'
 import { MobileService } from '@service/mobile.service'
 import { Tab } from '@class/tabs'
 import { Bid } from '@class/job'
+
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 
 interface PageEvent {
   first: number
@@ -75,7 +83,8 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
     private jobService: JobService,
     private publicJobService: PublicJobService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   async ngOnInit() {
@@ -371,9 +380,14 @@ export class JobDashboardComponent implements OnInit, OnDestroy {
   onSearchInputChange(searchValue: string): void {
     this.searchInput = searchValue
     this.loading = true
-    setTimeout(() => {
+
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        this.loading = false
+      }, 500)
+    } else {
       this.loading = false
-    }, 500)
+    }
     this.showFilteredJobs(this.jobs)
   }
 

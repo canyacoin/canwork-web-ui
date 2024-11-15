@@ -1,7 +1,9 @@
-import { Component } from '@angular/core'
+import { Component, Inject, PLATFORM_ID } from '@angular/core'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { Observable } from 'rxjs'
 const HITS_PER_PAGE = 9
+
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 
 @Component({
   selector: 'app-blog-page',
@@ -18,7 +20,10 @@ export class BlogComponent {
   numHits: number = 0 // the number of hits of current search
   hitsPerPage: number = HITS_PER_PAGE // constant
 
-  constructor(private afs: AngularFirestore) {
+  constructor(
+    private afs: AngularFirestore,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
     this.articles$ = this.afs
       .collection<any>('articles', (ref) => ref.orderBy('datePosted', 'desc'))
       .valueChanges()
@@ -85,12 +90,19 @@ export class BlogComponent {
   // }
   // two way binding, event from paging component (user input)
   onPageChange(newPage: number) {
-    setTimeout(() => {
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        this.hits = this.mediumFeed.slice(
+          this.currentPage * this.hitsPerPage,
+          (this.currentPage + 1) * this.hitsPerPage
+        ) // update
+      }, 400) // 500 ms latency
+    } else {
       this.hits = this.mediumFeed.slice(
         this.currentPage * this.hitsPerPage,
         (this.currentPage + 1) * this.hitsPerPage
       ) // update
-    }, 400) // 500 ms latency
+    }
 
     this.currentPage = newPage // set new page position
   }

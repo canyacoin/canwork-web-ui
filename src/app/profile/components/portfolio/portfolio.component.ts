@@ -1,4 +1,12 @@
-import { Component, Input, OnDestroy, OnInit, Directive } from '@angular/core'
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  Directive,
+  Inject,
+  PLATFORM_ID,
+} from '@angular/core'
 import { Router } from '@angular/router'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { Subscription } from 'rxjs'
@@ -6,6 +14,8 @@ import { take } from 'rxjs/operators'
 import { User } from '../../../core-classes/user'
 import { AuthService } from '../../../core-services/auth.service'
 import { ChatService } from '../../../core-services/chat.service'
+
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 
 @Component({
   selector: 'app-profile-portfolio',
@@ -30,7 +40,8 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     private afs: AngularFirestore,
     private authService: AuthService,
     private chatService: ChatService,
-    private router: Router
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {
@@ -70,18 +81,28 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
   nextPage() {
     this.animation = 'fadeOut'
-    setTimeout(() => {
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        this.currentPage++
+        this.animation = 'fadeIn'
+      }, 300)
+    } else {
       this.currentPage++
       this.animation = 'fadeIn'
-    }, 300)
+    }
   }
 
   previousPage() {
     this.animation = 'fadeOut'
-    setTimeout(() => {
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        this.currentPage--
+        this.animation = 'fadeIn'
+      }, 300)
+    } else {
       this.currentPage--
       this.animation = 'fadeIn'
-    }, 300)
+    }
   }
 
   postRequest() {

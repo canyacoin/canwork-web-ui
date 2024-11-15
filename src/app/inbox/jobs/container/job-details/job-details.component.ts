@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  Inject,
+  PLATFORM_ID,
+} from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Bid, Job, JobState } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
@@ -17,6 +23,7 @@ import { MessageService } from 'primeng/api'
 import { Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 import { Tab } from '@class/tabs'
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 
 @Component({
   selector: 'app-job-details',
@@ -61,11 +68,12 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     private router: Router,
     private spinner: NgxSpinnerService,
     private publicJobsService: PublicJobService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {
-    this.spinner.show()
+    if (isPlatformBrowser(this.platformId)) this.spinner.show()
     this.actionTabs = [
       { label: 'JobDetails', code: 'details' },
       { label: 'Log', code: 'action' },
@@ -126,7 +134,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
             this.jobService.updateJobState(this.job)
             this.isInitialised = true
           }
-          this.spinner.hide()
+          if (isPlatformBrowser(this.platformId)) this.spinner.hide()
         } else {
           console.log('We can not find the job.')
           this.router.navigateByUrl('/not-found')
@@ -139,7 +147,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
           this.reviews = result
         })
     } else {
-      this.spinner.hide()
+      if (isPlatformBrowser(this.platformId)) this.spinner.hide()
     }
   }
 

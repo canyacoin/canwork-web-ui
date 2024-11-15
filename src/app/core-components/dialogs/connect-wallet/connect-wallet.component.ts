@@ -140,40 +140,6 @@ export class ConnectWalletDialogComponent implements OnInit, OnDestroy {
     }
   }
 
-  /*
-  obsolete, unused
-  async walletConnect(connector: WalletConnect) {
-    // Subscribe to connection events
-    connector.on('connect', () => {
-      // Close QR Code Modal
-      WalletConnectQRCodeModal.close()
-      // Get provided accounts and chainId
-    })
-
-    if (connector.connected) {
-      await connector.killSession()
-    }
-    // Reconnect
-    await connector.createSession()
-    // get uri for QR Code modal
-    const uri = connector.uri
-    // display QR Code modal
-    WalletConnectQRCodeModal.open(uri, () => {
-      console.log('QR Code Modal closed')
-    })
-
-    this.attemptedConnection = true
-
-    // hack
-    setTimeout(() => {
-      const qrModal = document.getElementById('walletconnect-qrcode-modal')
-      if (qrModal) {
-        qrModal.style.zIndex = '99999'
-      }
-    }, 100)
-  }
-  */
-
   showKeystoreError(error: string) {
     this.validKeystoreUploaded = false
     this.keystoreError = error

@@ -1,4 +1,11 @@
-import { Component, OnInit, Directive, OnDestroy } from '@angular/core'
+import {
+  Component,
+  OnInit,
+  Directive,
+  OnDestroy,
+  Inject,
+  PLATFORM_ID,
+} from '@angular/core'
 import { PublicJobService } from '@service/public-job.service'
 import { StatisticsService } from '@service/statistics.service'
 import { AuthService } from '@service/auth.service'
@@ -14,6 +21,8 @@ import { Location } from '@angular/common'
 import { FilterService } from 'app/shared/constants/public-job-dashboard-page'
 import { UserService } from '@service/user.service'
 import { Job, PaymentType } from '@class/job'
+
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 
 const HITS_PER_PAGE = 5
 
@@ -101,13 +110,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private navService: NavService, //    private order: OrderPipe
     private location: Location,
-    private userService: UserService
+    private userService: UserService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    this.screenWidth = window.innerWidth
+    if (isPlatformBrowser(this.platformId)) this.screenWidth = window.innerWidth
   }
 
   async ngOnInit() {
-    window.addEventListener('resize', this.updateScreenWidth.bind(this))
+    if (isPlatformBrowser(this.platformId))
+      window.addEventListener('resize', this.updateScreenWidth.bind(this))
     /*
     now sync the search with algolia if we have a search query
     if we don't have a search query we have to show a different message,
@@ -166,9 +177,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   getHits() {
     this.loading = true
-    setTimeout(() => {
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        this.loading = false
+      }, 1000)
+    } else {
       this.loading = false
-    }, 1000)
+    }
     return this.filteredProviders.slice(
       this.currentPage * this.hitsPerPage,
       this.currentPage * this.hitsPerPage + this.hitsPerPage
@@ -349,11 +364,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.searchItems.includes('location') ||
       this.searchItems.includes('rating')
     ) {
-      setTimeout(() => {
+      if (isPlatformBrowser(this.platformId)) {
+        setTimeout(() => {
+          this.hits = this.getHits()
+          this.numHits = this.filteredProviders.length
+          this.loading = false
+        }, 3000)
+      } else {
         this.hits = this.getHits()
         this.numHits = this.filteredProviders.length
         this.loading = false
-      }, 3000)
+      }
     } else {
       this.hits = this.getHits()
       this.numHits = this.filteredProviders.length
@@ -505,7 +526,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.routeSub) {
       this.routeSub.unsubscribe()
     }
-    window.removeEventListener('resize', this.updateScreenWidth.bind(this))
+    if (isPlatformBrowser(this.platformId))
+      window.removeEventListener('resize', this.updateScreenWidth.bind(this))
   }
 
   isInArray(value, array: any[]) {

@@ -1,10 +1,19 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core'
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  Inject,
+  PLATFORM_ID,
+} from '@angular/core'
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms'
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
 import { UserService } from '@service/user.service'
 
 import { customAngularEditorConfig } from 'app/core-functions/angularEditorConfig'
+
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 
 @Component({
   selector: 'edit-bio-dialog',
@@ -41,7 +50,8 @@ export class EditBioDialogComponent {
   constructor(
     private formBuilder: UntypedFormBuilder,
     private userService: UserService,
-    private authService: AuthService
+    private authService: AuthService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   onClose() {
@@ -88,11 +98,16 @@ export class EditBioDialogComponent {
     this.userService.saveUser(this.currentUser)
     this.authService.setUser(this.currentUser)
 
-    setTimeout(() => {
-      // DESTROY the edit overlay
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        // DESTROY the edit overlay
+        this.onClose()
+        this.sending = false
+      }, 600)
+    } else {
       this.onClose()
       this.sending = false
-    }, 600)
+    }
   }
 
   stripHtmlTagslength(html: string): number {

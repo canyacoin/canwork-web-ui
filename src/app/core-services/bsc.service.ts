@@ -24,7 +24,7 @@ import { AuthService } from '@service/auth.service'
 import { UserService } from '@service/user.service'
 import { BscValidator } from '@validator/bsc.validator'
 
-import { Injectable } from '@angular/core'
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core'
 import { BehaviorSubject } from 'rxjs'
 import { GenerateGuid } from '@util/generate.uid'
 
@@ -32,6 +32,8 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
 } from '@angular/fire/compat/firestore'
+
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 
 import { environment } from '@env/environment'
 
@@ -177,7 +179,8 @@ export class BscService {
     private authService: AuthService,
     private afs: AngularFirestore,
     private messageService: MessageService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
     console.log(
       'BscService this.isLocalStorageAvailable: ' + this.isLocalStorageAvailable
@@ -216,7 +219,7 @@ export class BscService {
       }
     }
 
-    this.spinner.show()
+    if (isPlatformBrowser(this.platformId)) this.spinner.show()
 
     // we have multiple apps, we have to save app
     let walletApp, address
@@ -225,14 +228,14 @@ export class BscService {
       walletApp = WalletApp.MetaMask // to save in localStorage
 
       if (!window.ethereum) {
-        this.spinner.hide()
+        if (isPlatformBrowser(this.platformId)) this.spinner.hide()
         return 'MetaMask not found'
       }
 
       this.provider = new ethers.providers.Web3Provider(window.ethereum, 'any')
 
       if (!this.provider) {
-        this.spinner.hide()
+        if (isPlatformBrowser(this.platformId)) this.spinner.hide()
         return 'No Provider'
       }
 
@@ -259,19 +262,20 @@ export class BscService {
             summary: 'Warn',
             detail: `Please check and retry`,
           })
-          this.spinner.hide()
+          if (isPlatformBrowser(this.platformId)) this.spinner.hide()
           return 'Check MetaMask'
         }
 
         // update
         network = await this.provider.getNetwork()
         if (network.chainId !== NETWORK_ID) {
-          this.spinner.hide()
+          if (isPlatformBrowser(this.platformId)) this.spinner.hide()
           return 'Wrong network'
         }
       }
 
-      await new Promise((f) => setTimeout(f, 100)) // sleep 100 ms
+      if (isPlatformBrowser(this.platformId))
+        await new Promise((f) => setTimeout(f, 100)) // sleep 100 ms
 
       try {
         let accounts = await window.ethereum.request({
@@ -283,7 +287,7 @@ export class BscService {
           summary: 'Warn',
           detail: `Please check and retry`,
         })
-        this.spinner.hide()
+        if (isPlatformBrowser(this.platformId)) this.spinner.hide()
         return 'Check MetaMask'
       }
       try {
@@ -293,7 +297,8 @@ export class BscService {
 
         return 'Provider error'
       }
-      await new Promise((f) => setTimeout(f, 100)) // sleep 100 ms
+      if (isPlatformBrowser(this.platformId))
+        await new Promise((f) => setTimeout(f, 100)) // sleep 100 ms
 
       address = await this.signer.getAddress()
 
@@ -336,7 +341,7 @@ export class BscService {
             await this.disconnect()
           }
         })
-      this.spinner.hide()
+      if (isPlatformBrowser(this.platformId)) this.spinner.hide()
     } else if (app === WalletApp.WalletConnectBsc) {
       /*
       todo review new walletConnect v2 changes
@@ -372,7 +377,7 @@ export class BscService {
         return 'No WalletConnect Provider'
       }
 
-      this.spinner.hide()
+      if (isPlatformBrowser(this.platformId)) this.spinner.hide()
       /*
         // disconnect (cleanup) before reconnecting
         // this seems not needed
@@ -433,7 +438,8 @@ export class BscService {
         return 'Please connect to BNB Chain network'
       }
 
-      await new Promise((f) => setTimeout(f, 100)) // sleep 100 ms
+      if (isPlatformBrowser(this.platformId))
+        await new Promise((f) => setTimeout(f, 100)) // sleep 100 ms
 
       try {
         this.signer = await this.provider.getSigner()
@@ -445,7 +451,8 @@ export class BscService {
 
         return 'Provider error'
       }
-      await new Promise((f) => setTimeout(f, 100)) // sleep 100 ms
+      if (isPlatformBrowser(this.platformId))
+        await new Promise((f) => setTimeout(f, 100)) // sleep 100 ms
 
       console.log(
         '10101010101010101010101010101010101010================================================================================='

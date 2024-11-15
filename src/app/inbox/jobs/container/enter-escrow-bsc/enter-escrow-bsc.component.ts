@@ -1,4 +1,11 @@
-import { Component, OnInit, AfterViewInit, Directive } from '@angular/core'
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  Directive,
+  Inject,
+  PLATFORM_ID,
+} from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Job, JobState } from '@class/job'
 import { ActionType, IJobAction } from '@class/job-action'
@@ -16,6 +23,7 @@ import { NgxSpinnerService } from 'ngx-spinner'
 import { providerTypeArray } from 'app/shared/constants/providerTypes'
 import { formatDateFromString } from 'app/core-functions/date'
 import { MessageService } from 'primeng/api'
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 
 @Component({
   selector: 'app-enter-escrow-bsc',
@@ -58,11 +66,12 @@ export class EnterEscrowBscComponent implements OnInit {
     private router: Router,
     private http: HttpClient,
     private spinner: NgxSpinnerService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {
-    this.spinner.show()
+    if (isPlatformBrowser(this.platformId)) this.spinner.show()
     const jobId = this.activatedRoute.parent.snapshot.params['id'] || null
     if (jobId) {
       console.log('Job ID: ' + jobId)
@@ -94,7 +103,7 @@ export class EnterEscrowBscComponent implements OnInit {
           if (chain == BepChain.SmartChain) this.startBscAssetSelector()
         })
     }
-    this.spinner.hide()
+    if (isPlatformBrowser(this.platformId)) this.spinner.hide()
   }
 
   startBscAssetSelector() {
@@ -118,7 +127,7 @@ export class EnterEscrowBscComponent implements OnInit {
   }
 
   async startBscPay() {
-    this.spinner.show()
+    if (isPlatformBrowser(this.platformId)) this.spinner.show()
     this.isEscrowLoading = true
 
     const onComplete = async () => {
@@ -209,7 +218,7 @@ export class EnterEscrowBscComponent implements OnInit {
 
     console.log(this.bscPayOptions)
     this.isEscrowLoading = false
-    this.spinner.hide()
+    if (isPlatformBrowser(this.platformId)) this.spinner.hide()
   }
 
   async approveAsset() {

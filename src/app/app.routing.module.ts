@@ -14,96 +14,95 @@ import { NgxSpinnerModule } from 'ngx-spinner'
   imports: [
     BrowserAnimationsModule,
     NgxSpinnerModule,
-    RouterModule.forRoot(
-      [
-        {
-          path: '',
-          redirectTo: '/home',
-          pathMatch: 'full',
-        },
-        {
-          path: 'login',
-          redirectTo: '/auth',
-          pathMatch: 'full',
-        },
-        {
-          path: 'auth',
-          loadChildren: () =>
-            import('./auth/auth.module').then((m) => m.AuthModule),
-          canActivate: [AuthGuard],
-          data: { requiresLoggedOut: true },
-        },
-        {
-          path: 'home',
-          loadChildren: () =>
-            import('./home/home.module').then((m) => m.HomeModule),
-        },
-        {
-          path: 'search',
-          loadChildren: () =>
-            import('./search/search.module').then((m) => m.SearchModule),
-        },
-        {
-          path: 'blog',
-          loadChildren: () =>
-            import('./blog/blog.module').then((m) => m.BlogModule),
-        },
-        {
-          path: 'jobs',
-          loadChildren: () =>
-            import('./public-job/dashboard/dashboard.module').then((m) => m.DashboardModule),
-        },
-        {
-          path: 'jobs/:jobId',
-          component: PublicJobComponent,
-        },
-        {
-          path: 'jobs/public/:slug',
-          component: PublicJobComponent,
-        },
-        {
-          path: 'profile',
-          loadChildren: () =>
-            import('./profile/profile.module').then((m) => m.ProfileModule),
-          runGuardsAndResolvers: 'always',
-        },
-        {
-          path: 'inbox',
-          loadChildren: () =>
-            import('./inbox/inbox.module').then((m) => m.InboxModule),
-          canActivate: [AuthGuard, UserIsSetupGuard],
-          data: { requiresLoggedIn: true },
-          runGuardsAndResolvers: 'always',
-        },
-        {
-          path: 'brand',
-          component: BrandComponent,
-        },
-        {
-          path: 'faqs',
-          loadChildren: () =>
-            import('./faqs/faqs.module').then((m) => m.FaqsModule),
-        },
-        {
-          path: 'wallet-bnb',
-          component: WalletBnbComponent,
-          pathMatch: 'full',
-          runGuardsAndResolvers: 'always',
-        },
-        {
-          path: 'wallet-bnb/assets',
-          component: WalletBnbAssetsComponent,
-          pathMatch: 'full',
-          runGuardsAndResolvers: 'always',
-        },
-        {
-          path: '**',
-          loadChildren: () =>
-            import('./error/error.module').then((m) => m.ErrorModule),
-        },
-      ],
-      {}
-    ),
+    RouterModule.forRoot([
+      {
+        path: '',
+        redirectTo: '/home',
+        pathMatch: 'full',
+      },
+      {
+        path: 'login',
+        redirectTo: '/auth',
+        pathMatch: 'full',
+      },
+      {
+        path: 'auth',
+        loadChildren: () =>
+          import('./auth/auth.module').then((m) => m.AuthModule),
+        canActivate: [AuthGuard],
+        data: { requiresLoggedOut: true },
+      },
+      {
+        path: 'home',
+        loadChildren: () =>
+          import('./home/home.module').then((m) => m.HomeModule),
+      },
+      {
+        path: 'search',
+        loadChildren: () =>
+          import('./search/search.module').then((m) => m.SearchModule),
+      },
+      {
+        path: 'blog',
+        loadChildren: () =>
+          import('./blog/blog.module').then((m) => m.BlogModule),
+      },
+      {
+        path: 'jobs',
+        loadChildren: () =>
+          import('./public-job/dashboard/dashboard.module').then(
+            (m) => m.DashboardModule
+          ),
+      },
+      {
+        path: 'jobs/:jobId',
+        component: PublicJobComponent,
+      },
+      {
+        path: 'jobs/public/:slug',
+        component: PublicJobComponent,
+      },
+      {
+        path: 'profile',
+        loadChildren: () =>
+          import('./profile/profile.module').then((m) => m.ProfileModule),
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'inbox',
+        loadChildren: () =>
+          import('./inbox/inbox.module').then((m) => m.InboxModule),
+        canActivate: [AuthGuard, UserIsSetupGuard],
+        data: { requiresLoggedIn: true },
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'brand',
+        component: BrandComponent,
+      },
+      {
+        path: 'faqs',
+        loadChildren: () =>
+          import('./faqs/faqs.module').then((m) => m.FaqsModule),
+      },
+      {
+        path: 'wallet-bnb',
+        component: WalletBnbComponent,
+        pathMatch: 'full',
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: 'wallet-bnb/assets',
+        component: WalletBnbAssetsComponent,
+        pathMatch: 'full',
+        runGuardsAndResolvers: 'always',
+      },
+      {
+        path: '**',
+        loadChildren: () =>
+          import('./error/error.module').then((m) => m.ErrorModule),
+      },
+    ]),
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [RouterModule, NgxSpinnerModule],

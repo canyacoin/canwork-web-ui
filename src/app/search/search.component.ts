@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  Inject,
+  PLATFORM_ID,
+} from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import * as union from 'lodash/union'
 import { LabelType, Options } from 'ngx-slider-v2'
@@ -11,6 +17,8 @@ import { NavService } from '../core-services/nav.service'
 import { Location } from '@angular/common'
 import * as moment from 'moment-timezone'
 const HITS_PER_PAGE = 9
+
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 
 @Component({
   selector: 'app-search-page',
@@ -96,7 +104,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     private navService: NavService,
     private auth: AuthService,
     private router: Router,
-    private location: Location
+    private location: Location,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.routeSub = this.activatedRoute.queryParams.subscribe((params) => {
       this.searchInput = decodeURIComponent(params['query'] || '')
@@ -413,10 +422,14 @@ export class SearchComponent implements OnInit, OnDestroy {
       and a searchInProgress flag to avoid overalapping multiple calls
       handle also the search on explicit button input for faster click users
       */
-      setTimeout(() => {
+      if (isPlatformBrowser(this.platformId)) {
+        setTimeout(() => {
+          this.algoliaQuery(newQuery)
+          // if another is running this will end immediately
+        }, 400) // 500 ms latency
+      } else {
         this.algoliaQuery(newQuery)
-        // if another is running this will end immediately
-      }, 400) // 500 ms latency
+      }
     } else {
       console.log('up to date') // debug, check this well better later when we add other search facets
     }

@@ -1,4 +1,12 @@
-import { Component, Input, OnDestroy, OnInit, Directive } from '@angular/core'
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  Directive,
+  Inject,
+  PLATFORM_ID,
+} from '@angular/core'
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -16,6 +24,8 @@ import { BscValidator } from '@validator/bsc.validator'
 import { BscService } from '@service/bsc.service'
 
 import * as moment from 'moment-timezone'
+
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 
 @Component({
   selector: 'app-create-provider-profile',
@@ -58,7 +68,8 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private formBuilder: UntypedFormBuilder,
     private authService: AuthService,
-    private bscService: BscService
+    private bscService: BscService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {
@@ -206,10 +217,15 @@ export class CreateProviderProfileComponent implements OnInit, OnDestroy {
 
     this.userService.saveUser(this.user)
     this.authService.setUser(this.user)
-    setTimeout(() => {
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        this.sending = false
+        this.nextStep()
+      }, 600)
+    } else {
       this.sending = false
       this.nextStep()
-    }, 600)
+    }
   }
 
   proceed() {

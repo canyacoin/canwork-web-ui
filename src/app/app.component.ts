@@ -23,12 +23,14 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     /** spinner starts on init */
-    this.spinner.show()
+    if (isPlatformBrowser(this.platformId)) this.spinner.show()
 
-    setTimeout(() => {
-      /** spinner ends after 500ms */
-      this.spinner.hide()
-    }, 500)
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        /** spinner ends after 500ms */
+        this.spinner.hide()
+      }, 500)
+    }
 
     this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
@@ -38,7 +40,7 @@ export class AppComponent implements OnInit {
         window.scrollTo(0, 0)
       }
       /** spinner ends after NavigationEnd event */
-      this.spinner.hide()
+      if (isPlatformBrowser(this.platformId)) this.spinner.hide()
     })
     this.notifyAddAddressIfNecessary()
   }
