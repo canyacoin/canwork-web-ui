@@ -6,7 +6,7 @@
     [attr.aria-expanded]="isDropdownOpen.toString()"
     aria-controls="dropdownMenu"
   >
-    <img src="/assets/massimo/svg/fi_more-vertical.svg" style="height: 20px; width: 20px" alt="" />
+    <img src="/assets/massimo/svg/fi_more-vertical.svg" style="max-width: none !important; height: 20px; width: 20px" alt="" />
   </button>
 
   <div class="dropdown-menu" [ngClass]="{ show: isDropdownOpen }" role="menu" id="dropdownMenu">

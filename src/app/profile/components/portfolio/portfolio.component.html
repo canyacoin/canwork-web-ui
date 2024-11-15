@@ -7,6 +7,8 @@
   (LeftbtnEvent)="deletePortfolio($event)"
   (RightbtnEvent)="onDialogCancel($event)"
 />
+
+<app-view-portfolio [data]="selectedPortfolio" #viewPortfolioDialog (optionSelected)="onOptionSelected($event)" />
 <div
   *ngIf="!loaded"
   class="sm:rounded-[12px] border-t sm:border !border-G200 bg-white py-[40px] sm:px-[40px] sm:py-[24px]"
@@ -48,9 +50,12 @@
               alt="Project Image"
               class="w-full h-[180px] object-cover rounded-[8px]"
             />
-            <h3 class="project-title mt-[15px] mb-[5px] font-medium">{{ portfolio.projectName }}</h3>
+            <h3 (click)="viewPortfolio(portfolio)" class="project-title mt-[15px] mb-[5px] font-medium">{{ portfolio.projectName }}</h3>
             <div class="portfolio-buttons">
-              <button class="hover:bg-G100 transition-all duration-300 portfolio-button icon-btn view">
+              <button
+                (click)="viewPortfolio(portfolio)"
+                class="hover:bg-G100 transition-all duration-300 portfolio-button icon-btn view"
+              >
                 View Portfolio
               </button>
               <button

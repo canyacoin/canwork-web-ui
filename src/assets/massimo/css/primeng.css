@@ -830,6 +830,10 @@
 
 }
 
+.hide-after::after {
+  display: none !important;
+}
+
 .portfolio-slider::-webkit-scrollbar {
   display: none;
 }

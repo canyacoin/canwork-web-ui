@@ -120,7 +120,8 @@ import { IconTextButtonComponent } from './buttons/icon-text-button/icon-text-bu
 import { PortfolioDialogComponent } from './dialogs/portfolio-dialog/portfolio-dialog.component'
 import { EditorModule } from 'primeng/editor'
 import { CircleProgressComponent } from './progress-bar/circle-progress/circle-progress.component'
-import { ThreeDotDropdownComponent } from './dropdowns/three-dot-dropdown/three-dot-dropdown.component'
+import { ThreeDotDropdownComponent } from './dropdowns/three-dot-dropdown/three-dot-dropdown.component';
+import { ViewPortfolioComponent } from './dialogs/view-portfolio/view-portfolio.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -261,6 +262,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     IconTextButtonComponent,
     CircleProgressComponent,
     ThreeDotDropdownComponent,
+    ViewPortfolioComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -369,6 +371,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     StarRatingSelectComponent,
     EducationDialogComponent,
     ThreeDotDropdownComponent,
+    ViewPortfolioComponent,
     SkEducationComponent,
   ],
   providers: [

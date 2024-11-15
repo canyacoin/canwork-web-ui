@@ -6,6 +6,7 @@ import { take } from 'rxjs/operators'
 import { User } from '../../../core-classes/user'
 import { AuthService } from '../../../core-services/auth.service'
 import { ChatService } from '../../../core-services/chat.service'
+import { ViewPortfolioComponent } from '@component/dialogs/view-portfolio/view-portfolio.component'
 
 @Component({
   selector: 'app-profile-portfolio',
@@ -14,6 +15,7 @@ import { ChatService } from '../../../core-services/chat.service'
 export class PortfolioComponent implements OnInit {
   @Input() userModel: User
   @Input() isMyProfile: boolean
+  @ViewChild('viewPortfolioDialog') viewPortfolioDialog: ViewPortfolioComponent
 
   allPortfolioItems: any[] = []
   portfolioSubscriber: Subscription
@@ -46,6 +48,11 @@ export class PortfolioComponent implements OnInit {
       icon: 'delete.svg',
     },
   ]
+
+  viewPortfolio(portfolio) {
+    this.viewPortfolioDialog.data = portfolio
+    this.viewPortfolioDialog.open()
+  }
 
   onOptionSelected(event) {
     this.openDialog(event.option, event.data)
@@ -108,6 +115,9 @@ export class PortfolioComponent implements OnInit {
     const totalItems = this.allPortfolioItems.length
     this.showPrevButton = this.currentIndex > 0
     this.showNextButton = this.currentIndex < totalItems - 1
+    console.log(this.showNextButton)
+    const container = document.getElementsByClassName('portfolio-container').item(0).classList
+    !this.showNextButton ? container.add('hide-after') : container.remove('hide-after')
     this.dots = this.dots.map((_, index) => (index === this.currentIndex ? 'active' : ''))
   }
 

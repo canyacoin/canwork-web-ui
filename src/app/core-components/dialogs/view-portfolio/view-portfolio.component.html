@@ -1,0 +1,59 @@
+<p-dialog
+  [(visible)]="isOpen"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '90vw', maxWidth: '80rem', height: '100%' }"
+  [baseZIndex]="1000"
+  (onHide)="close()"
+  showHeader="false"
+  class="tempclass custom-dialog"
+>
+  <!-- Close Button -->
+  <button
+    class="close-btn"
+    (click)="isOpen = false"
+    aria-label="Close"
+  >
+    <i class="pi pi-times"></i> <!-- PrimeIcons close icon -->
+  </button>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Column 1: Description and Tags -->
+    <div class="md:col-span-1 pl-40 pt-20 pl-10 pr-10">
+      <div class="flex justify-between items-center">
+        <h2 class="text-[24px] text-black">{{ data?.projectName }}</h2>
+        <three-dot-dropdown
+          [options]="dropdownOptions"
+          [data]="data"
+          (optionSelected)="onOptionSelected($event)"
+        ></three-dot-dropdown>
+      </div>
+      <br />
+      <p class="mb-4" [innerHTML]="data?.projectDescription"></p>
+      <br />
+      <div class="flex flex-wrap gap-2">
+        <span
+          *ngFor="let tag of data?.tags"
+          class="bg-[#3AC2FF1A] font-normal text-[#005E89] text-[14px] px-3 py-1 rounded-full text-sm"
+        >
+          {{ tag }}
+        </span>
+      </div>
+      <br />
+      <div class="w-fit">
+        <basic-button [type]="1" title="Check it out" size="small"></basic-button>
+      </div>
+    </div>
+
+    <!-- Column 2: List of Images -->
+    <div class="md:col-span-2  max-h-[90vh] pt-10 md:px-10">
+      <div class="grid grid-cols-1 gap-4">
+        <div *ngFor="let image of data?.attachments" class="w-full">
+          <img [src]="image.url" alt="Image" class="w-full h-auto rounded-lg" />
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>
