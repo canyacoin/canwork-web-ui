@@ -27,9 +27,11 @@ export class ViewPortfolioComponent {
     this.optionSelected.emit(event)
   }
 
-  open() {
-    console.log(this.data)
+  checkItOut(url): void {
+    window.open(url, '_blank')
+  }
 
+  open() {
     this.isOpen = true
   }
 

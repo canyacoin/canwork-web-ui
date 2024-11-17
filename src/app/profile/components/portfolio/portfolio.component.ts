@@ -22,7 +22,7 @@ export class PortfolioComponent implements OnInit {
   loaded = false
   isDialogVisible = false
   visibleDeleteModal = false
-  selectedPortfolio = null
+  selectedPortfolio = undefined
 
   currentIndex = 0
   showPrevButton = false
@@ -91,7 +91,7 @@ export class PortfolioComponent implements OnInit {
       return
     }
     if (item?.code === 'new') {
-      this.selectedPortfolio = null
+      this.selectedPortfolio = undefined
     }
     this.isDialogVisible = true
   }
@@ -105,7 +105,6 @@ export class PortfolioComponent implements OnInit {
     })
     const data = await portfolioRecords.get().toPromise()
     this.allPortfolioItems = data.docs.map((doc) => doc.data())
-    console.log(this.allPortfolioItems)
     this.dots = new Array(this.allPortfolioItems.length).fill('')
     this.loaded = true
     this.updateArrowsAndDots()
@@ -115,9 +114,8 @@ export class PortfolioComponent implements OnInit {
     const totalItems = this.allPortfolioItems.length
     this.showPrevButton = this.currentIndex > 0
     this.showNextButton = this.currentIndex < totalItems - 1
-    console.log(this.showNextButton)
-    const container = document.getElementsByClassName('portfolio-container').item(0).classList
-    !this.showNextButton ? container.add('hide-after') : container.remove('hide-after')
+    const container = document.getElementsByClassName('portfolio-container').item(0)
+    !this.showNextButton ? container?.classList.add('hide-after') : container?.classList.remove('hide-after')
     this.dots = this.dots.map((_, index) => (index === this.currentIndex ? 'active' : ''))
   }
 

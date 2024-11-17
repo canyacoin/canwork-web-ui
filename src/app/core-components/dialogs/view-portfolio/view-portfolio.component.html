@@ -4,55 +4,67 @@
   [closable]="true"
   [draggable]="false"
   [resizable]="false"
-  [style]="{ width: '90vw', maxWidth: '80rem', height: '100%' }"
   [baseZIndex]="1000"
   (onHide)="close()"
-  showHeader="false"
-  class="tempclass custom-dialog"
+  showHeader="true"
+  aria-labelledby="dialog-title"
+  aria-describedby="dialog-content"
+  class="h-auto max-h-[90vh] overflow-x-hidden flex flex-col"
 >
-  <!-- Close Button -->
-  <button
-    class="close-btn"
-    (click)="isOpen = false"
-    aria-label="Close"
-  >
-    <i class="pi pi-times"></i> <!-- PrimeIcons close icon -->
-  </button>
-
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <!-- Column 1: Description and Tags -->
-    <div class="md:col-span-1 pl-40 pt-20 pl-10 pr-10">
-      <div class="flex justify-between items-center">
-        <h2 class="text-[24px] text-black">{{ data?.projectName }}</h2>
+  <div class="grid grid-cols-1 md:grid-cols-3 px-3 md:w-full md:max-w-[75vw] h-full">
+    <div class="md:col-span-1 md:px-6 pt-8 h-full">
+      <header id="dialog-title" class="flex justify-between items-center gap-4">
+        <h1 class="font-sans text-[22px] text-black">
+          {{ data?.projectName || 'Untitled Project' }}
+        </h1>
         <three-dot-dropdown
+          *ngIf="data"
           [options]="dropdownOptions"
           [data]="data"
           (optionSelected)="onOptionSelected($event)"
         ></three-dot-dropdown>
-      </div>
-      <br />
-      <p class="mb-4" [innerHTML]="data?.projectDescription"></p>
+      </header>
+      <p
+        id="dialog-content"
+        class="my-1 text-gray-700 break-words text-justify"
+        [innerHTML]="data?.projectDescription || 'No description available.'"
+      ></p>
       <br />
       <div class="flex flex-wrap gap-2">
         <span
-          *ngFor="let tag of data?.tags"
+          *ngFor="let tag of data?.tags || ['No tags available']"
           class="bg-[#3AC2FF1A] font-normal text-[#005E89] text-[14px] px-3 py-1 rounded-full text-sm"
         >
           {{ tag }}
         </span>
       </div>
       <br />
-      <div class="w-fit">
-        <basic-button [type]="1" title="Check it out" size="small"></basic-button>
+      <div class="w-[150px] mb-4">
+        <basic-button
+          *ngIf="data?.projectUrl"
+          [type]="1"
+          title="Check it out"
+          size="small"
+          (click)="checkItOut(data?.projectUrl)"
+        ></basic-button>
       </div>
     </div>
 
-    <!-- Column 2: List of Images -->
-    <div class="md:col-span-2  max-h-[90vh] pt-10 md:px-10">
+    <div class="md:col-span-2 overflow-y-auto pt-4 flex flex-col h-full">
       <div class="grid grid-cols-1 gap-4">
-        <div *ngFor="let image of data?.attachments" class="w-full">
-          <img [src]="image.url" alt="Image" class="w-full h-auto rounded-lg" />
+        <div *ngIf="data?.attachments?.length; else noAttachments" class="w-full">
+          <div *ngFor="let image of data.attachments" class="w-full">
+            <img
+              [src]="image.url"
+              [alt]="image.description || 'Project Image'"
+              class="w-full h-auto rounded-lg"
+              loading="lazy"
+            />
+          </div>
         </div>
+        <ng-template #noAttachments>
+          <div class="text-center text-gray-500">No attachments available.</div>
+        </ng-template>
       </div>
     </div>
   </div>

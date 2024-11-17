@@ -42,7 +42,7 @@ export class PortfolioDialogComponent {
   @Output()
   visibleChange = new EventEmitter<boolean>()
 
-  @Input() selectedPortfolio: any | null = null
+  @Input() selectedPortfolio: any | null = undefined
 
   @Input()
   get visible() {
@@ -51,10 +51,6 @@ export class PortfolioDialogComponent {
 
   set visible(value: boolean) {
     this._visible = value
-    if (value && !this.selectedPortfolio) {
-      this.reset()
-    }
-    if (!value) this.selectedPortfolio = null
     this.visibleChange.emit(this._visible)
   }
 
@@ -71,7 +67,7 @@ export class PortfolioDialogComponent {
     this.selectedAttachments = []
     this.uploadedFiles = []
     this.updatedTags = []
-    this.selectedPortfolio = null
+    this.selectedPortfolio = undefined
     this.portfolioForm?.reset()
   }
 
@@ -98,8 +94,8 @@ export class PortfolioDialogComponent {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.selectedPortfolio?.projectName && this.visible === true) {
-      if (this.selectedPortfolio !== null) {
+    if (changes.selectedPortfolio && this.visible === true) {
+      if (changes.selectedPortfolio?.currentValue) {
         this.portfolioForm.controls.id = this.selectedPortfolio.id
         this.portfolioForm.controls.coverImageUrl.setValue(this.selectedPortfolio.coverImageUrl)
         this.portfolioForm.controls.projectName.setValue(this.selectedPortfolio.projectName)
@@ -119,6 +115,8 @@ export class PortfolioDialogComponent {
     this.selectedCoverImage = null
     this.selectedAttachments = []
     this.updatedTags = []
+    this.selectedCoverImageUrl = null
+    this.uploadedFiles = []
     this.portfolioForm = this.formBuilder.group({
       coverImageUrl: ['', Validators.required],
       projectName: ['', Validators.required],
