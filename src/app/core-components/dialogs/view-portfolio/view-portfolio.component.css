@@ -1,3 +1,15 @@
-.custom-dialog .p-dialog-header {
+::ng-deep .custom-dialog .p-dialog-header {
   border-bottom: none !important;
+  padding: 10px !important;
+}
+
+::ng-deep .p-dialog .p-dialog-content::-webkit-scrollbar-track {
+  background-color: #efefef !important;
+  border-radius: 10px !important;
+  margin-bottom: 14px !important;
+}
+
+::ng-deep .p-dialog .p-dialog-content::-webkit-scrollbar-thumb {
+  background-color: #3ac2ff !important;
+  border-radius: 50px !important; /* Round corners */
 }

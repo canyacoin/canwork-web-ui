@@ -4,13 +4,24 @@
 >
   <div class="flex justify-between items-center">
     <div class="text-G900 text-h6 md:text-h5 font-medium">Testimonials</div>
-    <div class="flex gap-2 items-center">
+    <div *ngIf="user.rating.count" class="flex gap-2 items-center">
       <app-star-rating [stars]="user.rating.average" />
-      <div class="text-b2 font-medium text-G500 md:text-G700">
-        ({{ user.rating.count }})
-      </div>
+      <div class="text-b2 font-medium text-G500 md:text-G700">({{ user.rating.count }})</div>
     </div>
   </div>
+  <div class="flex justify-center items-center mb-5">
+    <div class="flex flex-col items-center mt-5 w-[50%] text-center">
+      <img src="/assets/massimo/svg/no-stars.svg" alt="" class="mb-4" />
+      <h1 class="text-[2vh] font-semibold my-5">No Testimonials</h1>
+      <p class="my-10">
+        You have no testimonials yet. Bid for jobs and complete them successfully to get client testimonials on your
+        profile.
+      </p>
+      <br />
+      <basic-button [type]="2" title="Go to Job Board" size="small" [routerLink]="['/jobs']" />
+    </div>
+  </div>
+
   <article
     *ngFor="let review of reviews; let i = index"
     class="py-[16px] w-full flex flex-col gap-2"

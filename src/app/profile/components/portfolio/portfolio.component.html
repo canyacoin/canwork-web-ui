@@ -29,9 +29,17 @@
         <plus-button *ngIf="isMyProfile && loaded" (click)="openDialog({ code: 'new' })" />
       </div>
 
-      <div class="mt-4 text-sm text-gray-700 font-medium" *ngIf="allPortfolioItems.length < 1">
+      <div class="mt-4" *ngIf="allPortfolioItems.length < 1">
         <div *ngIf="!isMyProfile">This provider has no portfolio</div>
-        <div *ngIf="isMyProfile && userModel.type === 'Provider'">You have not uploaded any portfolio items</div>
+        <div *ngIf="isMyProfile && userModel.type === 'Provider'" class="flex justify-center items-center mb-5">
+          <div class="flex flex-col items-center mt-5 w-[50%] text-center">
+            <img src="/assets/massimo/svg/no-portfolio.svg" alt="" class="mb-4" />
+            <h1 class="text-[20px] font-semibold mb-2 my-5">No Portfolio</h1>
+            <p class="my-10">Add your recent work to portfolio to attract clients.</p>
+            <br />
+            <basic-button [type]="1" title="Add Portfolio" size="small" (click)="openDialog({ code: 'new' })" />
+          </div>
+        </div>
       </div>
     </div>
     <div *ngIf="allPortfolioItems.length > 0">
@@ -50,7 +58,9 @@
               alt="Project Image"
               class="w-full h-[180px] object-cover rounded-[8px]"
             />
-            <h3 (click)="viewPortfolio(portfolio)" class="cursor-pointer project-title mt-[15px] mb-[5px] font-medium">{{ portfolio.projectName }}</h3>
+            <h3 (click)="viewPortfolio(portfolio)" class="cursor-pointer project-title mt-[15px] mb-[5px] font-medium">
+              {{ portfolio.projectName }}
+            </h3>
             <div class="portfolio-buttons">
               <button
                 (click)="viewPortfolio(portfolio)"
