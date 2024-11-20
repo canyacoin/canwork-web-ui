@@ -1,4 +1,5 @@
 import { Component, OnInit, Directive } from '@angular/core'
+import { NotFoundService } from 'app/shared/services/not-found.service'
 
 @Component({
   selector: 'app-page-not-found',
@@ -6,7 +7,9 @@ import { Component, OnInit, Directive } from '@angular/core'
   styleUrls: ['./page-not-found.component.css'],
 })
 export class PageNotFoundComponent implements OnInit {
-  constructor() {}
+  constructor(private notFoundService: NotFoundService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.notFoundService.setIsShowBoarder(false)
+  }
 }

@@ -10,6 +10,7 @@ import { WindowService } from 'app/shared/services/window.service'
 import { HeaderService } from 'app/shared/constants/header'
 import { MessageService } from 'primeng/api'
 import { UserType } from '@class/user'
+import { NotFoundService } from 'app/shared/services/not-found.service'
 
 interface itemType {
   label: string
@@ -96,13 +97,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
   // for scroll effect only
   isScrolled: boolean = false
   isTransfer: boolean
+  isShowBorder: boolean = true
   constructor(
     private afs: AngularFirestore,
     private authService: AuthService,
     private bscService: BscService,
     private windowService: WindowService,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private notFoundService: NotFoundService
   ) {}
 
   async ngOnInit() {
@@ -122,10 +125,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
           currentRoute.includes('/blog/')
         ) {
           this.isTransfer = true
-        } else {  
+        } else {
           this.isTransfer = false
         }
       }
+    })
+
+    this.notFoundService.isShowBoarder$.subscribe((value) => {
+      this.isShowBorder = value
     })
 
     this.items = [
@@ -174,14 +181,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.isScrolled = scrollY > 64
     })
 
-    this.authSub = this.authService.currentUser$.subscribe(
-      async (user: User) => {
-        if (this.currentUser !== user) {
-          this.currentUser = user
-          await this.initUser()
-        }
+    this.authSub = this.authService.currentUser$.subscribe(async (user: User) => {
+      if (this.currentUser !== user) {
+        this.currentUser = user
+        await this.initUser()
       }
-    )
+    })
 
     this.authService.userType$.subscribe((userType) => {
       this.userType = userType
@@ -219,9 +224,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       const unreadConversations = this.afs
         .collection('chats')
         .doc(this.currentUser.address)
-        .collection('channels', (ref) =>
-          ref.where('unreadMessages', '==', true)
-        )
+        .collection('channels', (ref) => ref.where('unreadMessages', '==', true))
 
       if (this.messagesSubscription) {
         this.messagesSubscription.unsubscribe()
@@ -270,8 +273,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onActingUserType(event: Event): void {
     event.preventDefault()
-    if (this.userType === UserType.client)
-      this.authService.setUserType(UserType.provider)
+    if (this.userType === UserType.client) this.authService.setUserType(UserType.provider)
     else this.authService.setUserType(UserType.client)
   }
 

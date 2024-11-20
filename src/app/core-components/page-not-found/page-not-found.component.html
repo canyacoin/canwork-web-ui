@@ -1,0 +1,32 @@
+<div class="container flex flex-col items-center">
+  <div class="flex flex-col items-center text-center">
+    <img
+      src="/assets/massimo/svg/404-not-found.svg"
+      alt="404 Not Found"
+      class="mb-4 mt-10 lg:mt-20 max-w-[200px] lg:max-w-[600px] h-auto"
+    />
+    <br />
+    <div class="max-w-[350px]">
+      <h1
+        class="font-sans font-medium text-9xl mb-10 mt-5"
+        style="font-size: 1.3rem !important"
+      >
+        Page Not Found!
+      </h1>
+      <p
+        class="font-sans font-normal text-lg md:text-xl lg:text-2xl text-black mb-8"
+      >
+        Seems you're looking for something that doesn't exist.
+      </p>
+    </div>
+  </div>
+  <br />
+  <div class="w-max flex justify-center">
+    <basic-button
+      [type]="2"
+      title="Return home"
+      size="small"
+      [routerLink]="['/']"
+    ></basic-button>
+  </div>
+</div>

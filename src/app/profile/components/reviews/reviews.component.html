@@ -9,7 +9,7 @@
       <div class="text-b2 font-medium text-G500 md:text-G700">({{ user.rating.count }})</div>
     </div>
   </div>
-  <div class="flex justify-center items-center mb-5">
+  <div *ngIf="!user.rating.count" class="flex justify-center items-center mb-5">
     <div class="flex flex-col items-center mt-5 w-[50%] text-center">
       <img src="/assets/massimo/svg/no-stars.svg" alt="" class="mb-4" />
       <h1 class="text-[2vh] font-semibold my-5">No Testimonials</h1>
