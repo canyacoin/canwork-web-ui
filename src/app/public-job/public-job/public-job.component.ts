@@ -34,7 +34,7 @@ import { Tab } from '@class/tabs'
 })
 export class PublicJobComponent implements OnInit, OnDestroy {
   bidForm: UntypedFormGroup = null
-  bids: any[]
+  bids: Bid[]
   authSub: Subscription
   bidsSub: Subscription
   jobSub: Subscription
@@ -130,6 +130,10 @@ export class PublicJobComponent implements OnInit, OnDestroy {
     })
   }
 
+  redirectToErrorPage() {
+    this.router.navigate(['/404'], { queryParams: { page: 1 } })
+  }
+
   async ngOnInit() {
     this.spinner.show()
     this.activeJobTypes = [
@@ -152,6 +156,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
             if (publicJob === undefined) {
               this.canSee = false
               this.loading = false
+              this.redirectToErrorPage()
             } else {
               this.job = publicJob
               console.log('this.Job', this.job)
@@ -170,6 +175,7 @@ export class PublicJobComponent implements OnInit, OnDestroy {
           .getPublicJobBySlug(params['slug'])
           .subscribe((publicJob) => {
             if (publicJob === null) {
+              this.redirectToErrorPage()
               this.canSee = false
               this.loading = false
             } else {

@@ -1,23 +1,39 @@
 <main class="main-content px-10">
-  <section class="flex flex-col items-center justify-center text-center mt-[120px]">
-    <div class="container flex flex-col items-center pb-40">
-      <header class="flex flex-col items-center text-center">
+  <section
+    class="flex flex-col items-center justify-center text-center mt-[120px] pb-40"
+  >
+    <div class="container flex flex-col items-center">
+      <div class="flex flex-col items-center text-center">
         <img
-          src="/assets/massimo/svg/404-not-found.svg"
+          [src]="
+            page === 0
+              ? '/assets/massimo/images/404-page.png'
+              : '/assets/massimo/images/404-job.png'
+          "
           alt="404 Not Found"
           class="mb-4 mt-10 lg:mt-20 max-w-[200px] lg:max-w-[600px] h-auto"
         />
-        <br>
-       <div class="max-w-[350px]">
-        <h1 class="font-sans font-medium text-9xl mb-10 mt-5" style="font-size: 1.3rem !important;">Page Not Found!</h1>
-        <p class="font-sans font-normal	 text-lg md:text-xl lg:text-2xl text-black mb-8">
-          Seems you’re looking for something that doesn’t exist.
-        </p>
-       </div>
-      </header>
-      <br>
+        <div class="max-w-[350px]">
+          <div
+            class="text-h6 font-sans font-medium text-9xl mb-10 mt-5"
+            style="font-size: 1.3rem !important"
+          >
+            {{ page === 0 ? 'Page' : 'Job' }} Not Found!
+          </div>
+          <div
+            class="font-sans font-normal text-lg md:text-xl lg:text-2xl text-black mb-8"
+          >
+            Seems you're looking for something that doesn't exist.
+          </div>
+        </div>
+      </div>
       <div class="w-max flex justify-center">
-        <basic-button [type]="2" title="Return home" size="small"></basic-button>
+        <basic-button
+          [type]="2"
+          [title]="page === 0 ? 'Return Home' : 'See Job Board'"
+          size="small"
+          [routerLink]="page === 0 ? ['/'] : ['/jobs']"
+        ></basic-button>
       </div>
     </div>
   </section>

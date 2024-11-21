@@ -4,23 +4,9 @@
     <div
       class="max-w-[1440px] w-full pt-[56px] sm:pt-[56px] sm:pb-[8px] px-[24px] md:px-[64px]"
     >
-      <div
-        *ngIf="!job && !loading"
-        class="flex flex-col md:flex-row md:justify-between gap-2 md:gap-6 pt-[56px]"
-      >
-        <div class="w-full rounded-[12px] bg-white border border-G300 p-11">
-          <div class="text-h6 md:text-h5 text-G800 font-medium">
-            We can't find the job you were looking for<br />
-            Please check the link you provided<br />
-            <button
-              class="btn btn-primary mt-10 mr-10 text-[15px] py-[7px]"
-              [routerLink]="['/home']"
-            >
-              RETURN TO HOMEPAGE
-            </button>
-          </div>
-        </div>
-      </div>
+      <!-- <div *ngIf="!job && !loading" class="pt-[56px]">
+        <page-not-found />
+      </div> -->
 
       <div
         *ngIf="job"

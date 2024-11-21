@@ -10,7 +10,6 @@ import { WindowService } from 'app/shared/services/window.service'
 import { HeaderService } from 'app/shared/constants/header'
 import { MessageService } from 'primeng/api'
 import { UserType } from '@class/user'
-import { NotFoundService } from 'app/shared/services/not-found.service'
 
 interface itemType {
   label: string
@@ -96,44 +95,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   // for scroll effect only
   isScrolled: boolean = false
-  isTransfer: boolean
-  isShowBorder: boolean = true
+  isTransfer: boolean = true
+  isShowBorder: boolean = false
+
   constructor(
     private afs: AngularFirestore,
     private authService: AuthService,
     private bscService: BscService,
     private windowService: WindowService,
     private router: Router,
-    private messageService: MessageService,
-    private notFoundService: NotFoundService
+    private messageService: MessageService
   ) {}
 
   async ngOnInit() {
     // Check router
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        const currentRoute = event.url
-
-        if (
-          currentRoute.includes('/inbox') ||
-          currentRoute.includes('/profile') ||
-          currentRoute.includes('/wallet-bnb') ||
-          currentRoute.includes('/public') ||
-          currentRoute.includes('/auth') ||
-          currentRoute.includes('/jobs/') ||
-          currentRoute.includes('/not-found') ||
-          currentRoute.includes('/blog/')
-        ) {
-          this.isTransfer = true
-        } else {
-          this.isTransfer = false
-        }
-      }
-    })
-
-    this.notFoundService.isShowBoarder$.subscribe((value) => {
-      this.isShowBorder = value
-    })
+    this.routerCheck()
 
     this.items = [
       {
@@ -181,12 +157,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.isScrolled = scrollY > 64
     })
 
-    this.authSub = this.authService.currentUser$.subscribe(async (user: User) => {
-      if (this.currentUser !== user) {
-        this.currentUser = user
-        await this.initUser()
+    this.authSub = this.authService.currentUser$.subscribe(
+      async (user: User) => {
+        if (this.currentUser !== user) {
+          this.currentUser = user
+          await this.initUser()
+        }
       }
-    })
+    )
 
     this.authService.userType$.subscribe((userType) => {
       this.userType = userType
@@ -211,6 +189,27 @@ export class HeaderComponent implements OnInit, OnDestroy {
     })
   }
 
+  routerCheck() {
+    // Check router
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        const currentRoute = event.url
+
+        this.isTransfer = true
+        if (
+          currentRoute.includes('/home') ||
+          currentRoute.includes('/jobs') ||
+          currentRoute.includes('/blog') ||
+          currentRoute.includes('/faqs')
+        ) {
+          this.isTransfer = false
+        }
+        // Edge case for public jobs route
+        if (currentRoute.includes('/jobs/public')) this.isTransfer = true
+      }
+    })
+  }
+
   ToastshowInfo() {
     this.messageService.add({
       severity: 'info',
@@ -224,7 +223,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
       const unreadConversations = this.afs
         .collection('chats')
         .doc(this.currentUser.address)
-        .collection('channels', (ref) => ref.where('unreadMessages', '==', true))
+        .collection('channels', (ref) =>
+          ref.where('unreadMessages', '==', true)
+        )
 
       if (this.messagesSubscription) {
         this.messagesSubscription.unsubscribe()
@@ -273,7 +274,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onActingUserType(event: Event): void {
     event.preventDefault()
-    if (this.userType === UserType.client) this.authService.setUserType(UserType.provider)
+    if (this.userType === UserType.client)
+      this.authService.setUserType(UserType.provider)
     else this.authService.setUserType(UserType.client)
   }
 
