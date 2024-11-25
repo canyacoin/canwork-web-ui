@@ -3,11 +3,7 @@ import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { StarRatingModule } from 'angular-star-rating'
-import {
-  DROPZONE_CONFIG,
-  DropzoneConfigInterface,
-  DropzoneModule,
-} from 'ngx-dropzone-wrapper'
+import { DROPZONE_CONFIG, DropzoneConfigInterface, DropzoneModule } from 'ngx-dropzone-wrapper'
 import { ImgFallbackModule } from 'ngx-img-fallback'
 
 import { CoreUtilsModule } from '../core-utils/core-utils.module'
@@ -126,6 +122,7 @@ import { EditorModule } from 'primeng/editor'
 import { CircleProgressComponent } from './progress-bar/circle-progress/circle-progress.component'
 import { ThreeDotDropdownComponent } from './dropdowns/three-dot-dropdown/three-dot-dropdown.component'
 import { ViewPortfolioComponent } from './dialogs/view-portfolio/view-portfolio.component'
+import { InviteFreelancersDialogComponent } from './dialogs/invite-freelancers-dialog/invite-freelancers-dialog.component'
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   url: '/upload',
@@ -251,6 +248,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     WorkhistoryDialogComponent,
     InviteJobDialogComponent,
     PortfolioDialogComponent,
+    InviteFreelancersDialogComponent,
 
     StatusIconComponent,
     JobActionLogPanelComponent,
@@ -267,6 +265,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     CircleProgressComponent,
     ThreeDotDropdownComponent,
     ViewPortfolioComponent,
+    InviteFreelancersDialogComponent,
   ],
   exports: [
     AttachmentComponent,
@@ -367,6 +366,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     WorkhistoryDialogComponent,
     InviteJobDialogComponent,
     PortfolioDialogComponent,
+    InviteFreelancersDialogComponent,
 
     StatusIconComponent,
     JobActionLogPanelComponent,
