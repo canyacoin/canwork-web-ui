@@ -1,8 +1,9 @@
 <p-dialog
   header="Invite Freelancers to Job"
-  [(visible)]="displayDialog"
+  [(visible)]="visible"
   [draggable]="false"
   [resizable]="false"
+  [closable]="true"
   [modal]="true"
   styleClass="!rounded-b-[0px] !rounded-t-[24px] sm:!rounded-[24px] md:max-w-[600px] lg:max-w-[906px] w-full !bg-G50 sm:mx-[16px] max-sm:!mt-[127px] max-sm:absolute max-sm:left-0 max-sm:bottom-0"
 >
@@ -63,7 +64,7 @@
   </div>
 
   <div
-    *ngFor="let item of freelancers; let i = index"
+    *ngFor="let freelancer of freelancers; let i = index"
     class="p-20 px-25 w-full rounded-[12px] overflow-hidden relative bg-white border border-G200 select-none font-sans"
   >
     <div class="flex flex-col lg:flex-row lg:justify-between gap-5 items-start">
@@ -72,56 +73,72 @@
           <div class="relative">
             <div
               class="bg-gray-200 rounded-full border-4 border-gray-100 overflow-hidden"
-              [routerLink]="['/profile/', item.slug]"
+              [routerLink]="['/profile/', freelancer.slug]"
             >
               <img
-                src="{{ item.avatarUri }}"
+                src="{{ freelancer.avatarUri }}"
                 class="w-[80px] h-[80px] object-cover cursor-pointer hover:brightness-50 transition-all duration-200"
               />
             </div>
             <img
               src="/assets/massimo/svg/verifiedTick.svg"
-              *ngIf="item.verified"
+              *ngIf="freelancer.verified"
               class="absolute bottom-0 right-0 w-[24px]"
             />
           </div>
         </div>
         <div class="">
-          <div class="font-sans font-light">
-            {{ item.name }} <p-badge class="ml-3 " [value]="'Invited'" title="Invited" />
+          <div class="font-sans font-medium">
+            {{ freelancer.name }} <p-badge class="ml-3" [value]="'Invited'" title="Invited" />
           </div>
-          <div class="text-sm font-sans mt-1">{{ item.title }}</div>
+          <div class="text-sm font-sans mt-1">{{ freelancer.title }}</div>
           <div class="flex gap-2">
             <div class="flex gap-2 items-center">
               <img src="/assets/massimo/svg/location.svg" class="select-none w-[24px]" />
               <div class="text-sm font-sans line-clamp-1">
-                {{ item.timezone?.replace('/', ' | ') }}
+                {{ freelancer.timezone?.replace('/', ' | ') }}
               </div>
             </div>
             <div class="flex gap-2 items-center ml-3">
               <img src="/assets/massimo/svg/u_bitcoin.svg" class="select-none w-[24px]" />
-              <div class="text-sm font-medium">${{ item.hourlyRate }}/hr</div>
+              <div class="text-sm font-medium">${{ freelancer.hourlyRate }}/hr</div>
             </div>
           </div>
           <div class="flex gap-2 mt-2">
-            <app-star-rating [stars]="item.ratingAverage"></app-star-rating>
-            <div class="text-sm font-medium">({{ item.ratingCount }} Jobs)</div>
+            <app-star-rating [stars]="freelancer.ratingAverage"></app-star-rating>
+            <div class="text-sm font-medium">({{ freelancer.ratingCount }} Jobs)</div>
           </div>
         </div>
       </div>
 
       <div class="flex gap-6 items-center">
-        <chat-button />
-        <basic-button *ngIf="!item.invited" title="Invite to Job" size="small" [type]="2" />
+        <chat-button (click)="chatUser(freelancer.address)" />
+        <basic-button
+          *ngIf="!job.invites.includes(freelancer.address)"
+          title="Invite to Job"
+          size="small"
+          [type]="2"
+          (click)="inviteProvider(freelancer)"
+          [disabled]="inviting"
+        />
+        <basic-button
+          *ngIf="job.invites.includes(freelancer.address)"
+          title="Cancel Invite"
+          [extraClass]="'text-[red]'"
+          size="small"
+          [type]="1"
+          (click)="cancelInvite(freelancer)"
+          [disabled]="inviting"
+        />
       </div>
     </div>
 
-    <div class="mt-20  mb-10">
-      <div class="font-sans" [innerHTML]="item.description"></div>
+    <div class="mt-20 mb-10">
+      <div class="font-sans" [innerHTML]="freelancer.description"></div>
     </div>
 
     <div class="flex gap-2 items-center mb-10">
-      <basic-tag *ngFor="let tag of item.skillTags" [type]="2" [title]="tag"></basic-tag>
+      <basic-tag *ngFor="let tag of freelancer.skillTags" [type]="2" [title]="tag"></basic-tag>
     </div>
   </div>
 </p-dialog>

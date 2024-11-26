@@ -1,6 +1,14 @@
-import { ChangeDetectorRef, Component } from '@angular/core'
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core'
+import { Router } from '@angular/router'
+import { Job } from '@class/job'
+import { User } from '@class/user'
 import { environment } from '@env/environment'
+import { AuthService } from '@service/auth.service'
+import { ChatService } from '@service/chat.service'
+import { PublicJobService } from '@service/public-job.service'
+import { UserService } from '@service/user.service'
 import algoliasearch from 'algoliasearch'
+import { take } from 'rxjs/operators'
 
 @Component({
   selector: 'app-invite-freelancers-dialog',
@@ -8,18 +16,25 @@ import algoliasearch from 'algoliasearch'
   styleUrls: ['./invite-freelancers-dialog.component.css'],
 })
 export class InviteFreelancersDialogComponent {
-  displayDialog: boolean = true
+  private displayDialog: boolean = false
   private algoliaSearch
   private algoliaIndex
+  @Input() currentUser: User
+  @Input() userModel: User
+  @Input() job: Job
+  @Output() visibleChange = new EventEmitter<boolean>()
+  inviting = false
   freelancers = []
-
   algoIndex = environment.algolia.indexName
   algoId = environment.algolia.appId
   algoKey = environment.algolia.apiKey
+
   sortByList = [
     { name: 'Top Rated', code: 'Top Rated' },
     { name: 'Top Earner', code: 'Top Earner' },
   ]
+
+  selectedSortBy = null
 
   filterByList = [
     { name: 'Design & Creative', code: 'Design & Creative' },
@@ -29,65 +44,97 @@ export class InviteFreelancersDialogComponent {
     { name: 'Financial Expert', code: 'Financial Expert' },
     { name: 'Marketing & SEO', code: 'Marketing & SEO' },
   ]
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+    private authService: AuthService,
+    private chatService: ChatService,
+    private userService: UserService,
+    private publicJobService: PublicJobService
+  ) {}
+
+  @Input()
+  get visible() {
+    return this.displayDialog
+  }
+
+  set visible(value) {
+    this.displayDialog = value
+    this.visibleChange.emit(this.displayDialog)
+  }
 
   ngOnInit() {
     this.algoliaSearch = algoliasearch(this.algoId, this.algoKey)
     this.algoliaIndex = this.algoliaSearch.initIndex(this.algoIndex)
     this.getProviders('')
+    this.authService.currentUser$.subscribe((user) => {
+      this.currentUser = user
+    })
   }
 
-  selectedSortBy = null
   showDialog() {
     this.displayDialog = true
   }
 
-  hideDialog() {
-    this.displayDialog = false
+  async getProviders(searchQuery) {
+    try {
+      const res = await this.algoliaIndex.search(searchQuery)
+      const providers = (res.hits as any[]) || []
+      this.freelancers = providers
+        .map((provider, index) => ({
+          id: index,
+          address: provider.address,
+          avatarUri:
+            provider.compressedAvatarUrl && provider.compressedAvatarUrl !== 'new'
+              ? provider.compressedAvatarUrl
+              : provider.avatar,
+          skillTags: provider.skillTags,
+          title: provider.title,
+          name: provider.name,
+          description: provider.description,
+          category: provider.category,
+          timezone: provider.timezone,
+          hourlyRate: provider.hourlyRate,
+          ratingAverage: provider.rating?.average || 0,
+          ratingCount: provider.rating?.count || 0,
+          slug: provider.slug,
+          verified: provider.verified,
+        }))
+        .sort((a, b) => b.ratingCount - a.ratingCount)
+      this.cdr.detectChanges()
+    } catch (error) {
+      console.error('Error fetching providers:', error)
+    }
   }
 
-  async getProviders(searchQuery) {
-    let newArray = []
-    const res = await this.algoliaIndex.search(searchQuery)
-    const result = res.hits
-    console.log({ result })
-
-    for (let i = 0; i < result.length; i++) {
-      // TODO: Add a dummy/placeholder if < 3 profiles found?
-      if (result[i]) {
-        let avatar = result[i].avatar // current, retrocomp
-        //console.log(result[i])
-        if (result[i].compressedAvatarUrl && result[i].compressedAvatarUrl != 'new') {
-          // keep same object structure
-          // use compress thumbed if exist and not a massive update (new)
-          avatar = {
-            uri: result[i].compressedAvatarUrl,
-          }
-        }
-
-        const provider = {
-          id: i,
-          address: result[i].address,
-          avatarUri: avatar.uri, // new
-          skillTags: result[i].skillTags || [],
-          title: result[i].title,
-          name: result[i].name,
-          description: result[i].description,
-          category: result[i].category,
-          timezone: result[i].timezone,
-          hourlyRate: result[i].hourlyRate || 0,
-          ratingAverage: result[i].rating?.average | 0,
-          ratingCount: result[i].rating?.count | 0,
-          slug: result[i].slug,
-          verified: result[i].verified,
-        }
-        newArray.push(provider)
+  chatUser(receiverAddress: string) {
+    this.authService.currentUser$.pipe(take(1)).subscribe(async (user: User) => {
+      if (user) {
+        const receiver = await this.userService.getUser(receiverAddress)
+        this.chatService.createNewChannel(this.currentUser, receiver)
+      } else {
+        this.router.navigate(['auth/login'], {
+          queryParams: { returnUrl: this.router.url, nextAction: 'chat' },
+        })
       }
-    }
-    newArray.sort((a, b) => b.ratingCount - a.ratingCount)
-    this.freelancers = newArray
-    console.log({ newArray })
+    })
+  }
 
-    this.cdr.detectChanges()
+  async inviteProvider(freelancer) {
+    this.inviting = true
+    const invited = await this.publicJobService.inviteProvider(this.job, this.currentUser, freelancer)
+    this.inviting = false
+    if (invited) return true
+    alert('something went wrong')
+    return false
+  }
+
+  async cancelInvite(freelancer) {
+    this.inviting = true
+    const invited = await this.publicJobService.cancelInvite(this.job, this.currentUser, freelancer)
+    this.inviting = false
+    if (invited) return true
+    alert('something went wrong')
+    return false
   }
 }

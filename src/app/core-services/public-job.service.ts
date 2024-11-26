@@ -509,6 +509,38 @@ export class PublicJobService {
     }
   }
 
+  async cancelInvite(job: Job, client: User, provider: User) {
+    const ref = this.afs.firestore.doc(`public-jobs/${job.id}`)
+    try {
+      const invited = await this.afs.firestore.runTransaction(async (tx) => {
+        const snap = await tx.get(ref)
+        const invites = (snap.get('invites') as string[]) || []
+        const userId = provider.address
+        const isExists = invites.indexOf(userId)
+        console.log({ invites })
+
+        console.log({ isExists })
+
+        if (isExists > -1) {
+          invites.splice(isExists, 1)
+          console.log({ invites })
+
+          tx.update(ref, { invites })
+        }
+        return true
+      })
+
+      if (invited) {
+        const invite = new IJobAction(ActionType.invite, UserType.client)
+        await this.sendPublicJobMessage(job, invite, client, provider)
+        return true
+      }
+    } catch (err) {
+      console.log(err)
+      return false
+    }
+  }
+
   async canInvite(jobId: string, providerId: string) {
     const snap = await this.afs.firestore.doc(`public-jobs/${jobId}`).get()
     const invites = (snap.get('invites') as string[]) || []

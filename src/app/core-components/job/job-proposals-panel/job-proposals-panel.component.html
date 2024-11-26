@@ -1,21 +1,16 @@
+<app-invite-freelancers-dialog [(visible)]="showInviteFreelancerDialog" [job]="job" />
+
 <section
   class="w-full rounded-[12px] rounded-tl-none sm:bg-white sm:border sm:border-G200 sm:px-[24px] sm:py-[32px] flex font-sans"
 >
   <div *ngIf="bids.length === 0" class="py-[24px] flex w-full">
     <div class="flex justify-center items-center flex-col max-w-[380px] m-auto">
-      <img
-        src="/assets/massimo/images/folder.png"
-        class="select-none w-[160px] sm:w-[240px] pb-[24px]"
-      />
+      <img src="/assets/massimo/images/folder.png" class="select-none w-[160px] sm:w-[240px] pb-[24px]" />
 
-      <div class="text-G900 text-h6 font-medium">
-        No proposal submitted yet.
-      </div>
-      <div
-        class="text-G700 text-b2 font-normal text-center pb-[10px] md:pb-[32px]"
-      >
-        You have no proposal submitted yet, consider inviting freelancers to
-        your job listing and sharing on your social media.
+      <div class="text-G900 text-h6 font-medium">No proposal submitted yet.</div>
+      <div class="text-G700 text-b2 font-normal text-center pb-[10px] md:pb-[32px]">
+        You have no proposal submitted yet, consider inviting freelancers to your job listing and sharing on your social
+        media.
       </div>
 
       <div class="flex gap-[16px] sm:gap-6 items-center max-md:flex-col">
@@ -25,12 +20,7 @@
           <img src="/assets/massimo/svg/fi_share-2.svg" class="select-none" />
           Share Job Listing
         </div>
-        <basic-button
-          title="Invite Freelancers"
-          [type]="2"
-          size="small"
-          [routerLink]="['/search']"
-        />
+        <basic-button title="Invite Freelancers" [type]="2" size="small" (click)="openInviteFreelancerDialog()" />
       </div>
     </div>
   </div>
@@ -39,9 +29,7 @@
       <div class="text-G900 font-medium text-b1 sm:text-h6">Submissions</div>
 
       <div class="flex items-center gap-4 text-G900 text-b1">
-        <div class="hidden sm:block font-[500] text-b2 whitespace-nowrap">
-          Sort by
-        </div>
+        <div class="hidden sm:block font-[500] text-b2 whitespace-nowrap">Sort by</div>
         <p-dropdown
           #orderTypeSelect
           [options]="sortbylist"
@@ -58,12 +46,7 @@
       </div>
     </div>
 
-    <p-table
-      [value]="bids"
-      [paginator]="bids.length > 10 ? true : false"
-      [rows]="10"
-      styleClass="min-h-[400px]"
-    >
+    <p-table [value]="bids" [paginator]="bids.length > 10 ? true : false" [rows]="10" styleClass="min-h-[400px]">
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th class="rounded-tl-xl">Name</th>
@@ -76,10 +59,7 @@
         <tr class="hover:bg-G50 cursor-pointer" (click)="ShowDialogDetail(bid)">
           <td>
             <div class="flex gap-4">
-              <div
-                class="cursor-pointer"
-                [routerLink]="['/profile/alt/', bid.providerId]"
-              >
+              <div class="cursor-pointer" [routerLink]="['/profile/alt/', bid.providerId]">
                 <app-avatar [size]="48" [user]="bid.providerInfo"></app-avatar>
               </div>
               <div>
@@ -95,18 +75,11 @@
                 </p>
               </div>
               <div class="flex items-center justify-center">
-                <div
-                  class="bg-B600 text-white rounded-[45px] px-[10px] py-[2px]"
-                >
-                  New
-                </div>
+                <div class="bg-B600 text-white rounded-[45px] px-[10px] py-[2px]">New</div>
               </div>
             </div>
           </td>
-          <td class="text-nowrap">
-            ${{ bid.budget }}
-            <span *ngIf="job.paymentType !== 'Fixed price'">/hr</span> USD
-          </td>
+          <td class="text-nowrap">${{ bid.budget }} <span *ngIf="job.paymentType !== 'Fixed price'">/hr</span> USD</td>
           <td>
             <div class="line-clamp-2 max-w-[300px]">
               {{ stripHtmlTags(bid.message) }}
