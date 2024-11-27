@@ -17,27 +17,26 @@
             class="rounded-2xl w-full h-[35px] py-2 pl-20 pr-35 placeholder:text-gray-500 outline-none bg-[#F8FAFC] border border-[#E2E8F0]"
             placeholder="Search"
             aria-label="Search"
+            [(ngModel)]="searchQuery"
           />
           <span class="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-500">
             <img src="/assets/massimo/svg/fi_search.svg" alt="Search Icon" loading="lazy" />
           </span>
         </div>
-        <basic-button size="small" [type]="2" [extraClass]="'py-2'" title="Search" />
+        <basic-button size="small" [type]="2" [extraClass]="'py-2'" title="Search" (click)="onSearch()" />
       </div>
 
       <div class="flex gap-6 w-full sm:w-1/4 md:w-1/4 lg:w-1/5 gap-3">
         <!-- Filter by Dropdown -->
         <p-dropdown
-          #orderTypeSelect
           [options]="filterByList"
-          [(ngModel)]="selectedSortBy"
           optionLabel="name"
           appendTo="body"
           placeholder="Filter by"
           class="sm:w-auto h-[10px]"
         >
           <ng-template let-item pTemplate="item">
-            <div class="flex items-center" (click)="sortbyFilter(item.code)">
+            <div class="flex items-center" (click)="filterByCategory(item.code)">
               <span>{{ item.name }}</span>
             </div>
           </ng-template>
@@ -45,9 +44,7 @@
 
         <!-- Sort by Dropdown -->
         <p-dropdown
-          #orderTypeSelect
           [options]="sortByList"
-          [(ngModel)]="selectedSortBy"
           optionLabel="name"
           appendTo="body"
           placeholder="Sort by"
@@ -119,7 +116,7 @@
           size="small"
           [type]="2"
           (click)="inviteProvider(freelancer)"
-          [disabled]="inviting"
+          [disabled]="freelancer.loading"
         />
         <basic-button
           *ngIf="job.invites.includes(freelancer.address)"
@@ -128,7 +125,7 @@
           size="small"
           [type]="1"
           (click)="cancelInvite(freelancer)"
-          [disabled]="inviting"
+          [disabled]="freelancer.loading"
         />
       </div>
     </div>
