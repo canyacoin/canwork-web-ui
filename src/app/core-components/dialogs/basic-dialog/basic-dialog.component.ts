@@ -17,6 +17,7 @@ export class BasicDialogComponent {
   }
   @Output() visibleChange = new EventEmitter<boolean>()
 
+  @Input() jobId: string
   @Input() title: string
   @Input() content: string
   @Input() type: string

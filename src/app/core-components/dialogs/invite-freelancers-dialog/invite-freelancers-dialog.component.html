@@ -43,13 +43,7 @@
         </p-dropdown>
 
         <!-- Sort by Dropdown -->
-        <p-dropdown
-          [options]="sortByList"
-          optionLabel="name"
-          appendTo="body"
-          placeholder="Sort by"
-          class="sm:w-auto"
-        >
+        <p-dropdown [options]="sortByList" optionLabel="name" appendTo="body" placeholder="Sort by" class="sm:w-auto">
           <ng-template let-item pTemplate="item">
             <div class="flex items-center" (click)="sortbyFilter(item.code)">
               <span>{{ item.name }}</span>
@@ -86,7 +80,13 @@
         </div>
         <div class="">
           <div class="font-sans font-medium">
-            {{ freelancer.name }} <p-badge class="ml-3" [value]="'Invited'" title="Invited" />
+            {{ freelancer.name }}
+            <p-badge
+              *ngIf="job.invites.includes(freelancer.address)"
+              class="ml-3"
+              [value]="'Invited'"
+              title="Invited"
+            />
           </div>
           <div class="text-sm font-sans mt-1">{{ freelancer.title }}</div>
           <div class="flex gap-2">
@@ -131,7 +131,7 @@
     </div>
 
     <div class="mt-20 mb-10">
-      <div class="font-sans" [innerHTML]="freelancer.description"></div>
+      <div class="font-sans line-clamp-1" [innerHTML]="freelancer.description"></div>
     </div>
 
     <div class="flex gap-2 items-center mb-10">

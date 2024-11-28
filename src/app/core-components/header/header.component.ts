@@ -97,6 +97,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isScrolled: boolean = false
   isTransfer: boolean = true
   isShowBorder: boolean = false
+  pattern = /^\/jobs\/[a-f0-9\-]{36}$/i // regex to check if url start with /jobs/{uuid}
 
   constructor(
     private afs: AngularFirestore,
@@ -157,14 +158,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.isScrolled = scrollY > 64
     })
 
-    this.authSub = this.authService.currentUser$.subscribe(
-      async (user: User) => {
-        if (this.currentUser !== user) {
-          this.currentUser = user
-          await this.initUser()
-        }
+    this.authSub = this.authService.currentUser$.subscribe(async (user: User) => {
+      if (this.currentUser !== user) {
+        this.currentUser = user
+        await this.initUser()
       }
-    )
+    })
 
     this.authService.userType$.subscribe((userType) => {
       this.userType = userType
@@ -206,6 +205,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         }
         // Edge case for public jobs route
         if (currentRoute.includes('/jobs/public')) this.isTransfer = true
+        if (this.pattern.test(currentRoute)) this.isTransfer = true
       }
     })
   }
@@ -223,9 +223,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       const unreadConversations = this.afs
         .collection('chats')
         .doc(this.currentUser.address)
-        .collection('channels', (ref) =>
-          ref.where('unreadMessages', '==', true)
-        )
+        .collection('channels', (ref) => ref.where('unreadMessages', '==', true))
 
       if (this.messagesSubscription) {
         this.messagesSubscription.unsubscribe()
@@ -274,8 +272,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onActingUserType(event: Event): void {
     event.preventDefault()
-    if (this.userType === UserType.client)
-      this.authService.setUserType(UserType.provider)
+    if (this.userType === UserType.client) this.authService.setUserType(UserType.provider)
     else this.authService.setUserType(UserType.client)
   }
 
