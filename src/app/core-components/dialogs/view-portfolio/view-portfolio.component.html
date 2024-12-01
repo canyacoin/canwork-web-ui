@@ -19,7 +19,7 @@
           {{ data?.projectName || 'Untitled Project' }}
         </h1>
         <three-dot-dropdown
-          *ngIf="data"
+          *ngIf="isMyProfile"
           [options]="dropdownOptions"
           [data]="data"
           (optionSelected)="onOptionSelected($event)"

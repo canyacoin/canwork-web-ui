@@ -7,6 +7,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core'
 })
 export class ViewPortfolioComponent {
   @Input() data: any
+  @Input() isMyProfile: boolean
   @Output() optionSelected = new EventEmitter<{ option: string; data: any }>()
   isOpen: boolean = false
 
