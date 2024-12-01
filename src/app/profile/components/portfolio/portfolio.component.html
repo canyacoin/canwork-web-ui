@@ -8,7 +8,7 @@
   (RightbtnEvent)="onDialogCancel($event)"
 />
 
-<app-view-portfolio [data]="selectedPortfolio" #viewPortfolioDialog (optionSelected)="onOptionSelected($event)" />
+<app-view-portfolio [isMyProfile]="isMyProfile" [data]="selectedPortfolio" #viewPortfolioDialog (optionSelected)="onOptionSelected($event)" />
 <div
   *ngIf="!loaded"
   class="sm:rounded-[12px] border-t sm:border !border-G200 bg-white py-[40px] sm:px-[40px] sm:py-[24px]"
