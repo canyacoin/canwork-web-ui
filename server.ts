@@ -74,14 +74,6 @@ import { AppServerModule } from './src/main.server'
 const compression = require('compression')
 const cacheManager = require('cache-manager')
 
-// firestore
-const functions = require('firebase-functions')
-
-const firebaseAdmin = require('firebase-admin')
-const firebaseRef = firebaseAdmin.initializeApp()
-const expressSession = require('express-session')
-const FirebaseStore = require('connect-session-firebase')(expressSession)
-
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const memoryCache = cacheManager.caching({

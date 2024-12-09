@@ -12,6 +12,7 @@ import { NgxSpinnerModule } from 'ngx-spinner'
 
 // blog admin
 import { AdminComponent } from './admin/admin.component'
+import { AdminAuthGuard } from './guards/admin-auth.guard'
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { AdminComponent } from './admin/admin.component'
       {
         path: 'admin',
         component: AdminComponent,
+        canActivate: [AdminAuthGuard],
       },
       {
         path: '',
