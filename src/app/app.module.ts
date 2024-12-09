@@ -53,6 +53,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor'
 import { DialogModule } from 'primeng/dialog'
 import { MessageService } from 'primeng/api'
 import { ServiceWorkerModule } from '@angular/service-worker'
+import { AdminComponent } from './admin/admin.component'
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -61,6 +62,7 @@ import { ServiceWorkerModule } from '@angular/service-worker'
     PublicJobComponent,
     WalletBnbComponent,
     WalletBnbAssetsComponent,
+    AdminComponent,
   ],
   imports: [
     AppRoutingModule,

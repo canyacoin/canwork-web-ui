@@ -10,11 +10,18 @@ import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.
 // Import library module for spinner
 import { NgxSpinnerModule } from 'ngx-spinner'
 
+// blog admin
+import { AdminComponent } from './admin/admin.component'
+
 @NgModule({
   imports: [
     BrowserAnimationsModule,
     NgxSpinnerModule,
     RouterModule.forRoot([
+      {
+        path: 'admin',
+        component: AdminComponent,
+      },
       {
         path: '',
         redirectTo: '/home',
