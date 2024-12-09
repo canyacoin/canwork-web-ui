@@ -92,18 +92,6 @@ export function app(): express.Express {
 
   const server = express()
 
-  server.use(
-    expressSession({
-      store: new FirebaseStore({
-        database: firebaseRef.database(),
-      }),
-      name: '__session',
-      secret: functions.config().fbase.session,
-      resave: true,
-      saveUninitialized: true,
-    })
-  )
-
   server.use(compression({ level: 8 })) // gzip compression
 
   //const distFolder = join(process.cwd(), 'dist-ssr/can-work/browser')
