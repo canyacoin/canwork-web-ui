@@ -15,6 +15,5 @@ export class AdminComponent {
     try {
       this.currentUser = await this.authService.getCurrentUser()
     } catch (e) {}
-    console.log('AdminComponent current User:', this.currentUser)
   }
 }

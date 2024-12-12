@@ -7,18 +7,25 @@ import {
   Route,
   UrlTree,
 } from '@angular/router'
+import { AuthService } from '@service/auth.service'
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminAuthService {
-  constructor(private router: Router) {}
+  currentUser: any
 
-  canActivate(
+  constructor(private router: Router, private authService: AuthService) {}
+
+  async canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): boolean | UrlTree {
-    const isAdmin = false // debug, todo
+  ): Promise<boolean | UrlTree> {
+    try {
+      this.currentUser = await this.authService.getCurrentUser()
+    } catch (e) {}
+
+    const isAdmin = this.currentUser?.isAdmin // configured into backend
 
     // provides the route configuration options.
     const { routeConfig } = route
