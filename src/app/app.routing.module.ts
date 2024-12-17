@@ -10,8 +10,7 @@ import { WalletBnbAssetsComponent } from './wallet-bnb-assets/wallet-bnb-assets.
 // Import library module for spinner
 import { NgxSpinnerModule } from 'ngx-spinner'
 
-// blog admin
-import { AdminComponent } from './admin/admin.component'
+// blog admin guard
 import { AdminAuthService } from '@service/admin-auth.service'
 
 @NgModule({
@@ -21,7 +20,8 @@ import { AdminAuthService } from '@service/admin-auth.service'
     RouterModule.forRoot([
       {
         path: 'admin',
-        component: AdminComponent,
+        loadChildren: () =>
+          import('./admin/admin.module').then((m) => m.AdminModule),
         canActivate: [AdminAuthService],
       },
       {
