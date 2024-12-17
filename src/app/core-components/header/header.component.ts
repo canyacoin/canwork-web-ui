@@ -83,6 +83,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   currentUser: User
   userType: UserType
   bAddress: string
+  isAdmin = false
 
   hasUnreadMessages = true
   unreadMsgCount = 0
@@ -181,6 +182,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
         async (user: User) => {
           if (this.currentUser !== user) {
             this.currentUser = user
+            this.isAdmin = this.currentUser?.isAdmin // configured into backend
+            this.updateMenu()
             await this.initUser()
           }
         }
@@ -216,6 +219,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
       summary: 'Info',
       detail: 'You have unread chat messages.',
     })
+  }
+
+  updateMenu() {
+    if (this.isAdmin) {
+      // insert admin menu item at the correct position
+      this.items = this.items.filter((item) => item.routerLink != '/admin') // remove no dups
+      this.items.splice(this.items.length - 1, 0, {
+        label: 'Blog Admin',
+        routerLink: '/admin',
+        icon: 'fi_settings.svg',
+      })
+    } else {
+      // remove menu item if not admin
+      this.items = this.items.filter((item) => item.routerLink != '/admin')
+    }
   }
 
   async initUser() {
