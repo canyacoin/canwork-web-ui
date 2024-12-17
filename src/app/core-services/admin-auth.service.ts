@@ -8,12 +8,13 @@ import {
   UrlTree,
 } from '@angular/router'
 import { AuthService } from '@service/auth.service'
+import { User } from '@class/user'
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminAuthService {
-  currentUser: any
+  currentUser: User
 
   constructor(private router: Router, private authService: AuthService) {}
 

@@ -11,6 +11,7 @@ export class User {
   description: string
   email: string
   bscAddress: string
+  isAdmin: false
   slug: string
   hourlyRate: string
   name: string
