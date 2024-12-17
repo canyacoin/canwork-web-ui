@@ -15,7 +15,7 @@
       {{ subTitle }}
     </div>
   </div>
-  <div class="flex flex-wrap gap-2">
+  <div *ngIf="isAdmin === false" class="flex flex-wrap gap-2">
     <div *ngFor="let tag of tags">
       <basic-tag [type]="1" [title]="tag" />
     </div>
@@ -31,5 +31,20 @@
         {{ datePosted }} • {{ readingTime() }} min read
       </div>
     </div>
+  </div>
+  <div *ngIf="isAdmin === true" class="flex items-center gap-6">
+    <button
+      [routerLink]="['/admin/edit', this.slug]"
+      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-[6px] px-[12px] rounded"
+    >
+      Edit
+    </button>
+    <button
+      [routerLink]="['/admin/delete', this.slug]"
+      class="bg-red-500 hover:bg-red-700 text-white font-bold py-[6px] px-[12px] rounded"
+    >
+      Delete
+    </button>
+    <div></div>
   </div>
 </div>

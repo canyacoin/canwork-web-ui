@@ -13,6 +13,7 @@ export class BlogCardComponent {
   @Input() tags: string[]
   @Input() author: string
   @Input() datePosted: string
+  @Input() isAdmin: boolean = false
 
   readingTime() {
     return Math.ceil(this.body.length / 1000)
