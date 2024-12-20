@@ -34,6 +34,7 @@ export class JobProposalsPanelComponent implements OnInit {
 
   selectedBid: Bid
   visibleProposalDetails: boolean = false
+  showInviteFreelancerDialog = false
 
   visibleAcceptModal: boolean = false
   visibleDeclineModal: boolean = false
@@ -61,54 +62,47 @@ export class JobProposalsPanelComponent implements OnInit {
     })
     this.activatedRoute.params.pipe(take(1)).subscribe((params) => {
       if (params['jobId']) {
-        this.jobSub = this.publicJobsService
-          .getPublicJob(params['jobId'])
-          .subscribe((publicJob) => {
-            if (
-              this.currentUser &&
-              this.currentUser.address === publicJob.clientId
-            ) {
+        this.jobSub = this.publicJobsService.getPublicJob(params['jobId']).subscribe((publicJob) => {
+          if (this.currentUser && this.currentUser.address === publicJob.clientId) {
+            this.job = publicJob
+            this.jobId = params['jobId']
+            this.canSee = true
+            this.bidsSub = this.publicJobsService.getPublicJobBids(publicJob.id).subscribe((result) => {
+              this.bids = result
+              // console.log('this.bid', this.bids)
+            })
+          } else {
+            this.canSee = false
+            this.bids = []
+          }
+        })
+      } else if (params['slug']) {
+        this.jobSub = this.publicJobsService.getPublicJobBySlug(params['slug']).subscribe((publicJob) => {
+          // console.log(publicJob === null)
+          if (publicJob === null) {
+            this.canSee = false
+            this.bids = []
+          } else {
+            if (this.currentUser.address === publicJob.clientId) {
               this.job = publicJob
               this.jobId = params['jobId']
               this.canSee = true
-              this.bidsSub = this.publicJobsService
-                .getPublicJobBids(publicJob.id)
-                .subscribe((result) => {
-                  this.bids = result
-                  // console.log('this.bid', this.bids)
-                })
+              this.bidsSub = this.publicJobsService.getPublicJobBids(publicJob.id).subscribe((result) => {
+                this.bids = result
+                // console.log('this.bid', this.bids)
+              })
             } else {
               this.canSee = false
               this.bids = []
             }
-          })
-      } else if (params['slug']) {
-        this.jobSub = this.publicJobsService
-          .getPublicJobBySlug(params['slug'])
-          .subscribe((publicJob) => {
-            // console.log(publicJob === null)
-            if (publicJob === null) {
-              this.canSee = false
-              this.bids = []
-            } else {
-              if (this.currentUser.address === publicJob.clientId) {
-                this.job = publicJob
-                this.jobId = params['jobId']
-                this.canSee = true
-                this.bidsSub = this.publicJobsService
-                  .getPublicJobBids(publicJob.id)
-                  .subscribe((result) => {
-                    this.bids = result
-                    // console.log('this.bid', this.bids)
-                  })
-              } else {
-                this.canSee = false
-                this.bids = []
-              }
-            }
-          })
+          }
+        })
       }
     })
+  }
+
+  openInviteFreelancerDialog() {
+    this.showInviteFreelancerDialog = true
   }
 
   /*
@@ -185,9 +179,7 @@ export class JobProposalsPanelComponent implements OnInit {
         detail: 'Bid successfully accepted.',
       })
 
-      const losingBids = this.bids.find(
-        (item) => item.providerId !== selectedBid.providerId
-      )
+      const losingBids = this.bids.find((item) => item.providerId !== selectedBid.providerId)
 
       const client = await this.userService.getUser(this.job.clientId)
       this.publicJobsService.notifyLosers(this.job, client, losingBids)

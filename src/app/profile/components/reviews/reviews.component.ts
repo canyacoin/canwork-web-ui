@@ -16,6 +16,8 @@ export class ReviewsComponent implements OnInit {
   constructor(private reviewService: ReviewService) {}
 
   async ngOnInit() {
+    console.log({ user: this.user })
+
     this.reviews = await this.reviewService.getUserReviews(this.user.address)
     console.log('this.reviews', this.reviews)
   }

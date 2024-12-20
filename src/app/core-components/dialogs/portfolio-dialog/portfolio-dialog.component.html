@@ -1,0 +1,168 @@
+<p-dialog
+  [header]="getDialogHeader()"
+  [(visible)]="visible"
+  [draggable]="false"
+  [resizable]="false"
+  [modal]="true"
+  styleClass="!rounded-b-[0px] !rounded-t-[24px] sm:!rounded-[24px] md:max-w-[600px] lg:max-w-[906px] w-full !bg-G50 sm:mx-[16px] max-sm:!mt-[127px] max-sm:absolute max-sm:left-0 max-sm:bottom-0"
+>
+  <div class="py-[24px] px-[16px] sm:px-[40px] flex flex-col gap-[24px]">
+    <form [formGroup]="portfolioForm" class="flex flex-col gap-[24px]" novalidate>
+      <!-- Cover Image Upload -->
+      <div
+        class="w-max rounded-xl overflow-hidden border-[5px] border-white relative cursor-pointer hover:opacity-80 active:opacity-100 transition-opacity duration-200"
+        (click)="fileInput.click()"
+      >
+        <div
+          *ngIf="!selectedCoverImageUrl && !portfolioForm.value.coverImageUrl"
+          class="bg-G200 w-[240px] h-[160px]"
+        ></div>
+        <img
+          *ngIf="selectedCoverImageUrl || portfolioForm.value.coverImageUrl"
+          [src]="selectedCoverImageUrl || portfolioForm.value.coverImageUrl"
+          alt="cover"
+          class="w-[240px] h-[160px] bg-cover select-none"
+        />
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+          <img src="/assets/massimo/images/imagePlus.png" alt="imagePlus" class="w-[40px] h-[40px] select-none" />
+          <p class="text-black text-xs mt-2">Cover Image</p>
+        </div>
+        <input
+          #fileInput
+          id="file-upload"
+          type="file"
+          accept="image/jpg,image/png,image/jpeg"
+          hidden
+          (change)="detectFiles($event, 'coverImage')"
+        />
+      </div>
+
+      <!-- Project Name -->
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">Project Name <span class="text-R900">*</span></div>
+        <input
+          type="text"
+          name="projectName"
+          formControlName="projectName"
+          required
+          placeholder="Enter the project name"
+          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+        />
+      </fieldset>
+
+      <!-- Project Description -->
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">Project Description <span class="text-R900">*</span></div>
+        <angular-editor
+          formControlName="projectDescription"
+          [config]="editorConfig"
+          class="angular-editor"
+        ></angular-editor>
+        <div class="flex justify-end">{{ stripHtmlTags(this.portfolioForm.value.projectDescription).length }}/2500</div>
+      </fieldset>
+
+      <!-- Project URL -->
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">Project URL <span class="text-R900">*</span></div>
+        <input
+          type="url"
+          name="projectUrl"
+          formControlName="projectUrl"
+          required
+          placeholder="Enter the project URL"
+          class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+        />
+      </fieldset>
+
+      <!-- Tags -->
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">Tags (10 max) <span class="text-R900">*</span></div>
+        <skill-tags-selection
+          (tagsUpdated)="skillTagsUpdated($event)"
+          [initialTags]="updatedTags"
+          [minimumTags]="0"
+        ></skill-tags-selection>
+        <input hidden #tags formControlName="tags" type="text" name="tags" />
+      </fieldset>
+      <div *ngIf="tagsErrorMessage" class="text-R900 text-xs mt-2">
+        {{ tagsErrorMessage }}
+      </div>
+
+      <!-- Attachments -->
+      <fieldset class="flex flex-col gap-[8px]">
+        <div class="text-b1 text-G900">Attachments</div>
+        <div class="text-b2 text-G500 text-wrap font-sans">
+          You may attach up to 10 files under the size of 25 MB each. Include work samples or other documents to support
+          your application.
+        </div>
+        <!-- Drag and Drop Area -->
+        <div
+          class="w-full h-[48px] border border-G200 bg-G50 rounded-xl flex items-center justify-center gap-[8px] cursor-pointer hover:bg-G100 transition-all duration-200 px-[16px]"
+          (click)="fileInputAttachment.click()"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+          (drop)="onDrop($event)"
+          [class.drag-active]="isDragging"
+        >
+          <img src="/assets/massimo/svg/fi_plus-circle.svg" alt="fi_info" class="pr-[5px] select-none" />
+          <div class="text-G500 text-b1">Drag or <span class="text-[#3AC2FF] underline">Upload</span> your files</div>
+        </div>
+
+        <input
+          #fileInputAttachment
+          type="file"
+          multiple
+          accept="image/png, image/jpeg, image/jpg, image/gif, image/webp"
+          hidden
+          (change)="detectFiles($event, 'attachments')"
+        />
+
+        <!-- List of Uploaded Files -->
+        <div *ngIf="uploadedFiles.length > 0" class="mt-[16px]">
+          <div *ngFor="let file of uploadedFiles; let i = index" class="flex items-center gap-[8px] mb-[8px]">
+            <div class="w-[24px] h-[24px] flex justify-center items-center">
+              <img
+                src="assets/massimo/svg/ion_attach-outline.svg"
+                alt="attachment icon"
+                class="w-[26px] h-[26px] text-G500"
+              />
+            </div>
+            <div class="flex items-center gap-[8px]">
+              <div class="text-[#4698bd] text-b1">{{ file.name }}</div>
+
+              <div *ngIf="file?.status === 'success'">
+                <span class="cursor-pointer" (click)="removeAttachment(i)">
+                  <img src="/assets/massimo/svg/fi_x.svg" alt="x" class="w-[20px]" />
+                </span>
+              </div>
+              <div *ngIf="file?.status === 'uploading'">
+                <div role="status">
+                  <img
+                    src="/assets/massimo/svg/spinner.svg"
+                    alt="spinner"
+                    class="w-[20px] h-[20px]"
+                    class="animate-spin"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="attachmentErrorMessage" class="text-R900 text-xs mt-2">
+          {{ attachmentErrorMessage }}
+        </div>
+      </fieldset>
+    </form>
+
+    <div class="flex gap-[16px] items-center justify-end">
+      <div class="cursor-pointer text-R900 font-medium text-nowrap text-b1" (click)="onClose()">Cancel</div>
+      <basic-button
+        [type]="1"
+        title="Save Project"
+        size="small"
+        [disabled]="isSaving || !portfolioForm.valid"
+        (click)="onSave($event)"
+      />
+    </div>
+  </div>
+</p-dialog>

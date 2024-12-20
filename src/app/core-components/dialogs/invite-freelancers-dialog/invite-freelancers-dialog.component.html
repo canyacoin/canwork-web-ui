@@ -1,0 +1,141 @@
+<p-dialog
+  header="Invite Freelancers to Job"
+  [(visible)]="visible"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true"
+  [modal]="true"
+  styleClass="!rounded-b-[0px] !rounded-t-[24px] sm:!rounded-[24px] md:max-w-[600px] lg:max-w-[906px] w-full !bg-G50 sm:mx-[16px] max-sm:!mt-[127px] max-sm:absolute max-sm:left-0 max-sm:bottom-0"
+>
+  <div class="container-6 gap-6 mb-2">
+    <div class="flex flex-wrap items-center gap-6 px-6 py-[0.5rem]">
+      <!-- First Div: Search Input and Button -->
+      <div class="flex gap-2 w-full sm:w-3/4 md:w-3/4 lg:w-3/5 items-center">
+        <div class="relative w-full">
+          <input
+            type="text"
+            class="rounded-2xl w-full h-[35px] py-2 pl-20 pr-35 placeholder:text-gray-500 outline-none bg-[#F8FAFC] border border-[#E2E8F0]"
+            placeholder="Search"
+            aria-label="Search"
+            [(ngModel)]="searchQuery"
+          />
+          <span class="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-500">
+            <img src="/assets/massimo/svg/fi_search.svg" alt="Search Icon" loading="lazy" />
+          </span>
+        </div>
+        <basic-button size="small" [type]="2" [extraClass]="'py-2'" title="Search" (click)="onSearch()" />
+      </div>
+
+      <div class="flex gap-6 w-full sm:w-1/4 md:w-1/4 lg:w-1/5 gap-3">
+        <!-- Filter by Dropdown -->
+        <p-dropdown
+          [options]="filterByList"
+          optionLabel="name"
+          appendTo="body"
+          placeholder="Filter by"
+          class="sm:w-auto h-[10px]"
+        >
+          <ng-template let-item pTemplate="item">
+            <div class="flex items-center" (click)="filterByCategory(item.code)">
+              <span>{{ item.name }}</span>
+            </div>
+          </ng-template>
+        </p-dropdown>
+
+        <!-- Sort by Dropdown -->
+        <p-dropdown [options]="sortByList" optionLabel="name" appendTo="body" placeholder="Sort by" class="sm:w-auto">
+          <ng-template let-item pTemplate="item">
+            <div class="flex items-center" (click)="sortbyFilter(item.code)">
+              <span>{{ item.name }}</span>
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </div>
+    </div>
+  </div>
+
+  <div
+    *ngFor="let freelancer of freelancers; let i = index"
+    class="p-20 px-25 w-full rounded-[12px] overflow-hidden relative bg-white border border-G200 select-none font-sans"
+  >
+    <div class="flex flex-col lg:flex-row lg:justify-between gap-5 items-start">
+      <div class="flex gap-6">
+        <div>
+          <div class="relative">
+            <div
+              class="bg-gray-200 rounded-full border-4 border-gray-100 overflow-hidden"
+              [routerLink]="['/profile/', freelancer.slug]"
+            >
+              <img
+                src="{{ freelancer.avatarUri }}"
+                class="w-[80px] h-[80px] object-cover cursor-pointer hover:brightness-50 transition-all duration-200"
+              />
+            </div>
+            <img
+              src="/assets/massimo/svg/verifiedTick.svg"
+              *ngIf="freelancer.verified"
+              class="absolute bottom-0 right-0 w-[24px]"
+            />
+          </div>
+        </div>
+        <div class="">
+          <div class="font-sans font-medium">
+            {{ freelancer.name }}
+            <p-badge
+              *ngIf="job.invites.includes(freelancer.address)"
+              class="ml-3"
+              [value]="'Invited'"
+              title="Invited"
+            />
+          </div>
+          <div class="text-sm font-sans mt-1">{{ freelancer.title }}</div>
+          <div class="flex gap-2">
+            <div class="flex gap-2 items-center">
+              <img src="/assets/massimo/svg/location.svg" class="select-none w-[24px]" />
+              <div class="text-sm font-sans line-clamp-1">
+                {{ freelancer.timezone?.replace('/', ' | ') }}
+              </div>
+            </div>
+            <div class="flex gap-2 items-center ml-3">
+              <img src="/assets/massimo/svg/u_bitcoin.svg" class="select-none w-[24px]" />
+              <div class="text-sm font-medium">${{ freelancer.hourlyRate }}/hr</div>
+            </div>
+          </div>
+          <div class="flex gap-2 mt-2">
+            <app-star-rating [stars]="freelancer.ratingAverage"></app-star-rating>
+            <div class="text-sm font-medium">({{ freelancer.ratingCount }} Jobs)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-6 items-center">
+        <chat-button (click)="chatUser(freelancer.address)" />
+        <basic-button
+          *ngIf="!job.invites.includes(freelancer.address)"
+          title="Invite to Job"
+          size="small"
+          [type]="2"
+          (click)="inviteProvider(freelancer)"
+          [disabled]="freelancer.loading"
+        />
+        <basic-button
+          *ngIf="job.invites.includes(freelancer.address)"
+          title="Cancel Invite"
+          [extraClass]="'text-[red]'"
+          size="small"
+          [type]="1"
+          (click)="cancelInvite(freelancer)"
+          [disabled]="freelancer.loading"
+        />
+      </div>
+    </div>
+
+    <div class="mt-20 mb-10">
+      <div class="font-sans line-clamp-1" [innerHTML]="freelancer.description"></div>
+    </div>
+
+    <div class="flex gap-2 items-center mb-10">
+      <basic-tag *ngFor="let tag of freelancer.skillTags" [type]="2" [title]="tag"></basic-tag>
+    </div>
+  </div>
+</p-dialog>

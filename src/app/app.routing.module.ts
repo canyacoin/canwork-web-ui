@@ -51,7 +51,9 @@ import { NgxSpinnerModule } from 'ngx-spinner'
         {
           path: 'jobs',
           loadChildren: () =>
-            import('./public-job/dashboard/dashboard.module').then((m) => m.DashboardModule),
+            import('./public-job/dashboard/dashboard.module').then(
+              (m) => m.DashboardModule
+            ),
         },
         {
           path: 'jobs/:jobId',
@@ -97,9 +99,13 @@ import { NgxSpinnerModule } from 'ngx-spinner'
           runGuardsAndResolvers: 'always',
         },
         {
-          path: '**',
+          path: '404',
           loadChildren: () =>
             import('./error/error.module').then((m) => m.ErrorModule),
+        },
+        {
+          path: '**',
+          redirectTo: '404', // Fallback for unmatched routes
         },
       ],
       {}

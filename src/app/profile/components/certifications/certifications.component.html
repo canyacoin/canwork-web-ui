@@ -2,10 +2,7 @@
   [hidden]="loaded && !isMyProfile && userCertifications.length === 0"
   class="border-t border-G200 bg-white py-[40px] sm:p-[24px]"
 >
-  <certification-dialog
-    [(visible)]="visibleCertificationDialog"
-    [selectedCertification]="selectedCertification"
-  />
+  <certification-dialog [(visible)]="visibleCertificationDialog" [selectedCertification]="selectedCertification" />
   <confirm-dialog
     [(visible)]="visibleDeleteCertificationDialog"
     title="Delete Certification"
@@ -14,10 +11,7 @@
   />
   <div class="flex justify-between">
     <div class="text-G900 text-h6 font-medium">Certifications</div>
-    <plus-button
-      *ngIf="isMyProfile && loaded"
-      (click)="showCertificationDialog()"
-    />
+    <plus-button *ngIf="isMyProfile && loaded" (click)="showCertificationDialog()" />
   </div>
   <div class="mt-[16px]">
     <div *ngIf="!loaded" class="flex flex-col gap-[16px]">
@@ -25,27 +19,16 @@
       <sk-certification />
     </div>
     <div *ngIf="loaded && userCertifications.length === 0">
-      <div class="text-b1 text-G800 font-medium">
-        You do not have any certifications
+      <div class="justify-items-center">
+        <img src="/assets/massimo/svg/no-certifications.svg" alt="" />
+        <br>
+        <basic-button [type]="1" title="Add Certification" size="small" extraClass="p-1 px-3" (click)="showCertificationDialog()" />
       </div>
     </div>
-    <div
-      *ngIf="loaded && userCertifications.length > 0"
-      class="flex flex-col gap-[16px]"
-    >
-      <div
-        *ngFor="let cert of userCertifications"
-        class="flex items-start gap-[16px] relative"
-      >
-        <img
-          src="/assets/massimo/svg/certificate.svg"
-          alt="certificate"
-          class="w-[24px] h-[24px]"
-        />
-        <div
-          class="flex flex-col gap-[8px]"
-          [ngClass]="{ 'pr-[48px]': isMyProfile }"
-        >
+    <div *ngIf="loaded && userCertifications.length > 0" class="flex flex-col gap-[16px]">
+      <div *ngFor="let cert of userCertifications" class="flex items-start gap-[16px] relative">
+        <img src="/assets/massimo/svg/certificate.svg" alt="certificate" class="w-[24px] h-[24px]" />
+        <div class="flex flex-col gap-[8px]" [ngClass]="{ 'pr-[48px]': isMyProfile }">
           <div class="text-b1 text-G800 font-medium">
             {{ cert.course }}
           </div>
@@ -74,14 +57,8 @@
             <three-dots-button />
           </ng-template>
           <ng-template let-item pTemplate="item">
-            <div
-              class="flex items-center"
-              (click)="showEditCertificationDialog(item, cert)"
-            >
-              <img
-                src="{{ '/assets/massimo/svg/' + item.icon }}"
-                class="mr-[16px] w-[20px]"
-              />
+            <div class="flex items-center" (click)="showEditCertificationDialog(item, cert)">
+              <img src="{{ '/assets/massimo/svg/' + item.icon }}" class="mr-[16px] w-[20px]" />
               <span class="font-medium text-G900">{{ item.label }}</span>
             </div>
           </ng-template>

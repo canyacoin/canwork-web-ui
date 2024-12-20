@@ -1,79 +1,126 @@
-<!-- <section
-  class="sm:rounded-[12px] border-t sm:border !border-G200 bg-white py-[40px] sm:px-[40px] sm:py-[24px]"
->
-  <div class="text-h6 text-G900 font-medium">Portfolio</div>
-  <div class="mt-[16px] flex gap-[16px]">
-    <div class="flex flex-col gap-[16px]">
-      <img
-        src="/assets/massimo/test-portfolio.png"
-        alt="test-portfolio"
-        class="w-[240px] h-[160px] bg-cover"
-      />
-      <div class="text-b1 text-G900 font-medium">Roboshard</div>
-    </div>
-  </div>
-</section> -->
+<portfolio-dialog [(visible)]="isDialogVisible" [selectedPortfolio]="selectedPortfolio" />
+<basic-dialog
+  [(visible)]="visibleDeleteModal"
+  title="Are you sure you want to delete ?"
+  content=""
+  type="delete_portfolio"
+  (LeftbtnEvent)="deletePortfolio($event)"
+  (RightbtnEvent)="onDialogCancel($event)"
+/>
 
+<app-view-portfolio [isMyProfile]="isMyProfile" [data]="selectedPortfolio" #viewPortfolioDialog (optionSelected)="onOptionSelected($event)" />
 <div
   *ngIf="!loaded"
   class="sm:rounded-[12px] border-t sm:border !border-G200 bg-white py-[40px] sm:px-[40px] sm:py-[24px]"
 >
-  <img src="assets/img/loader.svg" style="height: 36px" alt="Loader" />
+  <div class="animate-pulse flex flex-col gap-4">
+    <div class="h-6 bg-gray-300 rounded-md w-1/3"></div>
+    <div class="h-40 bg-gray-300 rounded-md w-full"></div>
+    <div class="h-4 bg-gray-300 rounded-md w-1/4"></div>
+    <div class="h-4 bg-gray-300 rounded-md w-1/6"></div>
+  </div>
 </div>
+
 <div *ngIf="loaded" [hidden]="!isMyProfile && allPortfolioItems.length < 1">
-  <div
-    class="sm:rounded-[12px] border-t sm:border !border-G200 bg-white py-[40px] sm:px-[40px] sm:py-[24px]"
-  >
-    <div class="card">
+  <div class="sm:rounded-xl border-t sm:border !border-G200 bg-white">
+    <div class="py-[28px] sm:px-10">
       <div class="flex justify-between gap-4">
         <div class="text-h6 text-G900 font-medium">Portfolio</div>
-        <plus-button
-          *ngIf="isMyProfile && loaded"
-          [routerLink]="['/profile/project']"
-        />
+        <plus-button *ngIf="isMyProfile && loaded" (click)="openDialog({ code: 'new' })" />
       </div>
-      <div *ngIf="allPortfolioItems.length > 0">
-        <div class="row" style="height: 25px"></div>
-        <div class="row animated {{ animation }}">
-          <div class="col-sm-12">
-            <div
-              *ngFor="let item of paginatedPortfolioItems(); let i = index"
-              class=""
-            >
-              <app-item
-                [workItem]="item"
-                [isMyProfile]="isMyProfile"
-              ></app-item>
+
+      <div class="mt-4" *ngIf="allPortfolioItems.length < 1">
+        <div *ngIf="!isMyProfile">This provider has no portfolio</div>
+        <div *ngIf="isMyProfile && userModel.type === 'Provider'" class="flex justify-center items-center mb-5">
+          <div class="flex flex-col items-center mt-5 w-[50%] text-center">
+            <img src="/assets/massimo/svg/no-portfolio.svg" alt="" class="mb-4" />
+            <h1 class="text-[20px] font-semibold mb-2 my-5">No Portfolio</h1>
+            <p class="my-10">Add your recent work to portfolio to attract clients.</p>
+            <br />
+            <basic-button [type]="1" title="Add Portfolio" size="small" (click)="openDialog({ code: 'new' })" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="allPortfolioItems.length > 0">
+      <div class="portfolio-container overflow-hidden sm:pl-10">
+        <div
+          class="portfolio-slider flex gap-4 overflow-x-auto scroll-smooth"
+          id="portfolioSlider"
+          (scroll)="onSliderScroll()"
+        >
+          <div
+            *ngFor="let portfolio of allPortfolioItems; let i = index"
+            class="portfolio-item w-full xs-[320px] sm:w-[320px] lg:w-[320px] xl:w-[320px]"
+          >
+            <img
+              [src]="portfolio.coverImageUrl ?? '/assets/massimo/images/logo.png'"
+              alt="Project Image"
+              class="w-full h-[180px] object-cover rounded-[8px]"
+            />
+            <h3 (click)="viewPortfolio(portfolio)" class="cursor-pointer project-title mt-[15px] mb-[5px] font-medium">
+              {{ portfolio.projectName }}
+            </h3>
+            <div class="portfolio-buttons">
+              <button
+                (click)="viewPortfolio(portfolio)"
+                class="hover:bg-G100 transition-all duration-300 portfolio-button icon-btn view"
+              >
+                View Portfolio
+              </button>
+              <button
+                *ngIf="isMyProfile"
+                class="hover:bg-G100 transition-all duration-300 portfolio-button icon-btn edit"
+                (click)="openDialog({ code: 'edit' }, portfolio)"
+              >
+                <img style="width: 20px; height: 20px" src="/assets/massimo/svg/fi_edit_gray.svg" alt="" /> Edit
+              </button>
+              <button
+                *ngIf="isMyProfile"
+                class="hover:bg-G100 transition-all duration-300 portfolio-button icon-btn delete"
+                (click)="openDialog({ code: 'delete' }, portfolio)"
+              >
+                <img style="width: 20px; height: 20px" src="/assets/massimo/svg/delete.svg" alt="" /> Delete
+              </button>
+            </div>
+            <!-- Three Dots Dropdown -->
+            <div class="three-dot-btn" *ngIf="isMyProfile">
+              <three-dot-dropdown
+                [options]="dropdownOptions"
+                [data]="portfolio"
+                (optionSelected)="onOptionSelected($event)"
+              />
             </div>
           </div>
         </div>
-        <div class="row pt-35">
-          <div class="col-12 d-flex justify-content-center">
-            <button
-              class="btn btn-sm"
-              [disabled]="currentPage == 0"
-              (click)="previousPage()"
-            >
-              <i class="fa fa-chevron-left"></i>
-            </button>
-            <button
-              class="btn btn-sm"
-              [disabled]="currentPage == lastPage"
-              (click)="nextPage()"
-            >
-              <i class="fa fa-chevron-right"></i>
-            </button>
+
+        <button
+          class="arrow-button left-arrow absolute top-1/2 transform -translate-y-1/2 left-4"
+          id="prevButton"
+          (click)="scrollSlider(-1)"
+          [style.display]="showPrevButton ? 'block' : 'none'"
+        >
+          <img src="/assets/massimo/svg/slide-arrow-left.svg" class="w-[40px] h-[40px] mx-auto" />
+        </button>
+
+        <button
+          class="arrow-button right-arrow absolute top-1/2 transform -translate-y-1/2 right-4"
+          id="nextButton"
+          (click)="scrollSlider(1)"
+          [style.display]="showNextButton ? 'block' : 'none'"
+        >
+          <div class="flex justify-center">
+            <img src="/assets/massimo/svg/slide-arrow-right.svg" class="w-[40px] h-[40px] mx-auto" />
           </div>
-        </div>
+        </button>
       </div>
-      <div
-        class="mt-[16px] text-b1 text-G800 font-medium"
-        *ngIf="allPortfolioItems.length < 1"
-      >
-        <div *ngIf="!isMyProfile">This provider has no portfolio</div>
-        <div *ngIf="isMyProfile && userModel.type === 'Provider'">
-          You have not uploaded any portfolio items
-        </div>
+      <div class="flex justify-center gap-4 mb-20" id="dotsContainer">
+        <div
+          *ngFor="let dot of dots; let i = index"
+          class="dot rounded-full cursor-pointer transition-all duration-300"
+          [class.active]="currentIndex === i"
+          (click)="onDotClick(i)"
+        ></div>
       </div>
     </div>
   </div>

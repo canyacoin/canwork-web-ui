@@ -26,8 +26,14 @@
       <sk-workhistory />
     </div>
     <div *ngIf="loaded && userWorkhistorys.length === 0">
-      <div class="text-b1 text-G800 font-medium">
-        You do not have any Work Experience
+      <div class="flex justify-center items-center mb-5">
+        <div class="flex flex-col items-center mt-5 w-[50%] text-center">
+          <img src="/assets/massimo/svg/no-work-history.svg" alt="" class="mb-4" />
+          <h1 class="text-[20px] font-semibold mb-2 my-5">No Work History</h1>
+          <p class="my-10">Fill your work history in the profile section to have them show up here.</p>
+          <br />
+          <basic-button [type]="1" title="Go to Job Board" size="small" [routerLink]="['/jobs']"/>
+        </div>
       </div>
     </div>
     <div

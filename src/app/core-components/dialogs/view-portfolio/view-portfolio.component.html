@@ -1,0 +1,75 @@
+<p-dialog
+  [(visible)]="isOpen"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [baseZIndex]="1000"
+  (onHide)="close()"
+  showHeader="true"
+  aria-labelledby="dialog-title"
+  aria-describedby="dialog-content"
+  class="custom-dialog"
+  styleClass="custom-dialog !rounded-b-[0px] !rounded-t-[24px] sm:!rounded-[24px] md:max-w-[900px] lg:max-w-[1506px] w-full !bg-G50 sm:mx-[16px] max-sm:!mt-[127px] max-sm:absolute max-sm:left-0 max-sm:bottom-0"
+>
+  <div class="grid grid-cols-1 md:grid-cols-3 px-3 md:w-full h-full">
+    <div class="md:col-span-1 md:px-6 pt-8 h-full mb-20">
+      <header id="dialog-title" class="flex justify-between items-center gap-4">
+        <h1 class="font-sans text-[22px] text-black">
+          {{ data?.projectName || 'Untitled Project' }}
+        </h1>
+        <three-dot-dropdown
+          *ngIf="isMyProfile"
+          [options]="dropdownOptions"
+          [data]="data"
+          (optionSelected)="onOptionSelected($event)"
+        ></three-dot-dropdown>
+      </header>
+      <p
+        id="dialog-content"
+        class="my-1 text-gray-700 break-words text-justify"
+        [innerHTML]="data?.projectDescription || 'No description available.'"
+      ></p>
+      <br />
+      <div class="flex flex-wrap gap-2">
+        <span
+          *ngFor="let tag of data?.tags || ['No tags available']"
+          class="bg-[#3AC2FF1A] font-normal text-[#005E89] text-[14px] px-3 py-1 rounded-full text-sm"
+        >
+          {{ tag }}
+        </span>
+      </div>
+      <br />
+      <div class="w-[150px] mb-4">
+        <basic-button
+          class="mb-10"
+          *ngIf="data?.projectUrl"
+          [type]="1"
+          title="Check it out"
+          size="small"
+          (click)="checkItOut(data?.projectUrl)"
+        ></basic-button>
+      </div>
+    </div>
+
+    <div class="md:col-span-2 overflow-y-auto pt-4 flex flex-col h-full">
+      <div class="grid grid-cols-1 gap-4">
+        <div *ngIf="data?.attachments?.length; else noAttachments" class="w-full">
+          <div *ngFor="let image of data.attachments" class="w-full">
+            <img
+              [src]="image.url"
+              [alt]="image.description || 'Project Image'"
+              class="w-full h-auto rounded-lg"
+              loading="lazy"
+            />
+          </div>
+        </div>
+        <ng-template #noAttachments>
+          <div class="flex justify-center items-center min-h-[200px] text-center text-gray-500">
+            No attachments available.
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</p-dialog>

@@ -1,0 +1,17 @@
+<button
+  class="w-[120px] p-[6px] text-G900 bg-white hover:bg-G200 active:bg-white text-b2 shadow-basicButton font-medium duration-300 transition-all rounded-[12px] select-none whitespace-nowrap flex gap-2 items-center justify-center {{
+    extraClass
+  }}"
+>
+  <img
+    *ngIf="type === 'edit'"
+    src="/assets/massimo/svg/fi_edit.svg"
+    class="w-[20px] h-[20px] select-none"
+  />
+  <img
+    *ngIf="type === 'delete'"
+    src="/assets/massimo/svg/delete.svg"
+    class="w-[20px] h-[20px] select-none"
+  />
+  {{ title }}
+</button>

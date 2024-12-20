@@ -1,0 +1,26 @@
+<div class="custom-dropdown-container">
+  <button
+    class="dots-button"
+    (click)="toggleDropdown()"
+    aria-haspopup="true"
+    [attr.aria-expanded]="isDropdownOpen.toString()"
+    aria-controls="dropdownMenu"
+  >
+    <img src="/assets/massimo/svg/fi_more-vertical.svg" style="max-width: none !important; height: 20px; width: 20px" alt="" />
+  </button>
+
+  <div class="dropdown-menu" [ngClass]="{ show: isDropdownOpen }" role="menu" id="dropdownMenu">
+    <div
+      class="dropdown-item"
+      role="menuitem"
+      tabindex="0"
+      *ngFor="let option of options"
+      (click)="selectOption(option)"
+    >
+      <div class="flex items-center ng-star-inserted">
+        <img style="height: 20px; width: 20px" src="{{ '/assets/massimo/svg/' + option.icon }}" />
+        <span class="ml-2 font-medium text-G900">{{ option.label }}</span>
+      </div>
+    </div>
+  </div>
+</div>

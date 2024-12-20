@@ -1,12 +1,18 @@
 import { Component, OnInit, Directive } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
 
 @Component({
-  selector: 'app-page-not-found',
+  selector: 'app-page-not-found-page',
   templateUrl: './page-not-found.component.html',
-  styleUrls: ['./page-not-found.component.css'],
 })
 export class PageNotFoundComponent implements OnInit {
-  constructor() {}
+  page: number = 0
 
-  ngOnInit() {}
+  constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
+  ngOnInit() {
+    this.activatedRoute.queryParams.subscribe((params) => {
+      if (params.page !== undefined) this.page = params.page
+      console.log('page:', this.page)
+    })
+  }
 }
