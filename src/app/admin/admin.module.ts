@@ -4,9 +4,10 @@ import { CommonModule } from '@angular/common'
 import { AdminRoutingModule } from './admin-routing.module'
 import { DashboardComponent } from './dashboard/dashboard.component'
 import { CoreComponentsModule } from '../core-components/core-components.module'
+import { EditArticleComponent } from './edit-article/edit-article.component'
 
 @NgModule({
-  declarations: [DashboardComponent],
+  declarations: [DashboardComponent, EditArticleComponent],
   imports: [CommonModule, AdminRoutingModule, CoreComponentsModule],
 })
 export class AdminModule {}
