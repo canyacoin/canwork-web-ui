@@ -9,9 +9,13 @@ const routes: Routes = [
     component: DashboardComponent,
   },
   {
+    path: 'edit',
+    component: EditArticleComponent,
+  }, // create
+  {
     path: 'edit/:slug',
     component: EditArticleComponent,
-  },
+  }, // edit
 ]
 
 @NgModule({
