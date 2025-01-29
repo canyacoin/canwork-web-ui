@@ -1,3 +1,7 @@
+/*
+create or edit article
+*/
+
 import { Component } from '@angular/core'
 import { AuthService } from '@service/auth.service'
 import { User } from '@class/user'
@@ -13,18 +17,15 @@ import { NgForm } from '@angular/forms'
 export class EditArticleComponent {
   currentUser: User
   editing = false
-  article: any
+  article: any = {}
+  articledId = ''
 
   constructor(
     private router: Router,
     private authService: AuthService,
     private afs: AngularFirestore,
     private activatedRoute: ActivatedRoute
-  ) {
-    this.article = {
-      slug: 'test-slug',
-    }
-  }
+  ) {}
 
   async ngOnInit() {
     // check auth
@@ -35,9 +36,35 @@ export class EditArticleComponent {
 
     if (!isAdmin) this.router.navigate(['/home'])
 
-    this.editing =
+    if (
       this.activatedRoute.snapshot.params['slug'] &&
       this.activatedRoute.snapshot.params['slug'] !== ''
+    ) {
+      this.editing = true // tentative
+
+      const slug = this.activatedRoute.snapshot.params['slug']
+      this.afs
+        .collection('articles', (ref) => ref.where('slug', '==', slug))
+        .get()
+        .toPromise()
+        .then((snapResult) => {
+          // retrieve article to edit from firestore db
+          if (!snapResult.empty && snapResult.docs && snapResult.docs.length) {
+            const articleSnap = snapResult.docs[0]
+
+            this.articleId = articleSnap.id // used later to save it
+
+            // save in local data model
+            this.article = articleSnap.data()
+
+            console.log(this.article) // debug
+
+            this.editing = true
+          } else {
+            this.editing = false // failed
+          }
+        })
+    }
   }
 
   save() {
@@ -46,7 +73,7 @@ export class EditArticleComponent {
 
   isValid(field) {
     if (field == 'slug') {
-      if (this.article.slug.length > 0) return true
+      if (this.article.slug?.length > 0) return true
       return false
     }
 
