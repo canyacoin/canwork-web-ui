@@ -2,6 +2,17 @@
   <section class="section bg-gray px-10 py-30" id="section-profile">
     <div class="max-w-[1440px] w-full py-[56px] md:px-[64px]">
       <div class="container">
+        <h2 class="text-left text-G900 text-h5 font-[500] font-sans pb-[12px]">
+          Blog Admin
+        </h2>
+        <button
+          [routerLink]="['/admin/edit']"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-[6px] px-[12px] mb-[36px] rounded"
+        >
+          Create New Article
+        </button>
+      </div>
+      <div class="container">
         <div class="row flex-row" style="border-radius: 5px">
           <div
             *ngIf="hits.length > 0"

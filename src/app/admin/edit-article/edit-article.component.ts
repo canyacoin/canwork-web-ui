@@ -18,7 +18,7 @@ export class EditArticleComponent {
   currentUser: User
   editing = false
   article: any = {}
-  articledId = ''
+  articleId = ''
 
   constructor(
     private router: Router,
@@ -73,7 +73,7 @@ export class EditArticleComponent {
 
   isValid(field) {
     if (field == 'slug') {
-      if (this.article.slug?.length > 0) return true
+      if (this.article.slug?.length >= 5) return true
       return false
     }
 
