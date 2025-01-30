@@ -9,6 +9,8 @@ import { Router, ActivatedRoute } from '@angular/router'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { NgForm } from '@angular/forms'
 
+const datePostedRegex = /^\d{4}-\d{2}-\d{2}$/
+
 @Component({
   selector: 'app-edit-article',
   templateUrl: './edit-article.component.html',
@@ -54,8 +56,19 @@ export class EditArticleComponent {
 
             this.articleId = articleSnap.id // used later to save it
 
+            let articleDb: any = articleSnap.data()
+
+            // update local only fields and remove db only ones
+
+            articleDb.tagsString = ''
+            articleDb.tags.forEach((el) => {
+              if (articleDb.tagsString) articleDb.tagsString += ', '
+              articleDb.tagsString += el.trim()
+            })
+            delete articleDb.tags
+
             // save in local data model
-            this.article = articleSnap.data()
+            this.article = articleDb
 
             console.log(this.article) // debug
 
@@ -71,7 +84,28 @@ export class EditArticleComponent {
   }
 
   save() {
-    console.log(this.article)
+    /*
+    auto populate datePosted if needed
+    */
+    if (!this.article.datePosted) {
+      this.article.datePosted = new Date().toISOString().substring(0, 10)
+    }
+
+    // add backend only fields, remove frontend only ones
+    let articleDb: any = {}
+    Object.assign(articleDb, this.article)
+
+    // tags array
+    articleDb.tags = []
+    if (articleDb.tagsString.trim())
+      articleDb.tags = articleDb.tagsString.trim().split(',')
+    // cleanup
+    for (let i = 0; i < articleDb.tags.length; i++) {
+      articleDb.tags[i] = articleDb.tags[i].trim()
+    }
+    delete articleDb.tagsString
+
+    console.log(articleDb)
   }
 
   isValid(field) {
@@ -89,6 +123,18 @@ export class EditArticleComponent {
       if (this.article[field]?.length >= 4) return true
       return false
     }
+
+    if (field == 'datePosted') {
+      if (!this.article[field]) return true
+
+      let dateString = this.article[field]
+      if (!dateString.match(datePostedRegex)) return false // Invalid format
+      let d = new Date(dateString)
+      let dNum = d.getTime()
+      if (!dNum && dNum !== 0) return false // NaN value, Invalid date
+      return d.toISOString().slice(0, 10) === dateString
+    }
+
     return true
   }
 

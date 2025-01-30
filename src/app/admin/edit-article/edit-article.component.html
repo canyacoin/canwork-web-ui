@@ -94,6 +94,56 @@
               </div>
             </div>
 
+            <div class="w-full">
+              <div class="text-b1 text-G900 mb-[8px]">Author</div>
+              <input
+                class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                type="text"
+                id="author"
+                name="author"
+                #author="ngModel"
+                placeholder="Enter article author here"
+                [(ngModel)]="article.author"
+              />
+            </div>
+
+            <div class="w-full">
+              <div class="text-b1 text-G900 mb-[8px]">
+                Date posted (yyyy-mm-dd or leave empty to autofill)
+              </div>
+              <input
+                class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                type="text"
+                id="datePosted"
+                name="datePosted"
+                #datePosted="ngModel"
+                placeholder="Enter article date here"
+                [(ngModel)]="article.datePosted"
+                [class.invalid]="!isValid('datePosted')"
+              />
+              <div
+                *ngIf="!isValid('datePosted')"
+                class="text-R900 text-wrap text-b2"
+              >
+                Date posted format should be yyyy-mm-dd or empty
+              </div>
+            </div>
+
+            <div class="w-full">
+              <div class="text-b1 text-G900 mb-[8px]">
+                Tags (comma separated list)
+              </div>
+              <input
+                class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                type="text"
+                id="tagsString"
+                name="tagsString"
+                #tagsString="ngModel"
+                placeholder="Enter article tags here"
+                [(ngModel)]="article.tagsString"
+              />
+            </div>
+
             <div class="flex items-center gap-[16px]">
               <button
                 class="btn btn-primary"
