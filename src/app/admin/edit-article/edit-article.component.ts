@@ -64,6 +64,9 @@ export class EditArticleComponent {
             this.editing = false // failed
           }
         })
+    } else {
+      // new article, default category value
+      this.article.category = 'blog'
     }
   }
 
@@ -73,10 +76,19 @@ export class EditArticleComponent {
 
   isValid(field) {
     if (field == 'slug') {
-      if (this.article.slug?.length >= 5) return true
+      if (this.article[field]?.length >= 3) return true
       return false
     }
 
+    if (field == 'title') {
+      if (this.article[field]?.length >= 5) return true
+      return false
+    }
+
+    if (field == 'category') {
+      if (this.article[field]?.length >= 4) return true
+      return false
+    }
     return true
   }
 

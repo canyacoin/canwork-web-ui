@@ -30,11 +30,67 @@
                 #slug="ngModel"
                 placeholder="Enter article slug here"
                 [(ngModel)]="article.slug"
-                maxlength="64"
                 [class.invalid]="!isValid('slug')"
               />
               <div *ngIf="!isValid('slug')" class="text-R900 text-wrap text-b2">
-                Slug must be at least 5 characters
+                Slug must be at least 3 characters
+              </div>
+            </div>
+
+            <div class="w-full">
+              <div class="text-b1 text-G900 mb-[8px]">
+                Title <span class="text-R900">*</span>
+              </div>
+              <input
+                class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                type="text"
+                id="title"
+                name="title"
+                #title="ngModel"
+                placeholder="Enter article title here"
+                [(ngModel)]="article.title"
+                [class.invalid]="!isValid('title')"
+              />
+              <div
+                *ngIf="!isValid('title')"
+                class="text-R900 text-wrap text-b2"
+              >
+                Title must be at least 5 characters
+              </div>
+            </div>
+
+            <div class="w-full">
+              <div class="text-b1 text-G900 mb-[8px]">Subtitle</div>
+              <input
+                class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                type="text"
+                id="subTitle"
+                name="subTitle"
+                #subTitle="ngModel"
+                placeholder="Enter article subtitle here"
+                [(ngModel)]="article.subTitle"
+              />
+            </div>
+
+            <div class="w-full">
+              <div class="text-b1 text-G900 mb-[8px]">
+                Category <span class="text-R900">*</span>
+              </div>
+              <input
+                class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans"
+                type="text"
+                id="category"
+                name="category"
+                #category="ngModel"
+                placeholder="Enter article category here"
+                [(ngModel)]="article.category"
+                [class.invalid]="!isValid('category')"
+              />
+              <div
+                *ngIf="!isValid('category')"
+                class="text-R900 text-wrap text-b2"
+              >
+                Category must be at least 4 characters
               </div>
             </div>
 
