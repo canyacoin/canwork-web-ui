@@ -82,7 +82,7 @@ export class EditArticleComponent {
     }
   }
 
-  save() {
+  async save() {
     if (this.editing && !this.articleId) {
       this.showSaveStatus('', 'No article id')
       return
@@ -111,7 +111,37 @@ export class EditArticleComponent {
     }
     delete articleDb.tagsString
 
-    console.log(articleDb)
+    // console.log(articleDb)
+
+    try {
+      if (this.editing) {
+        await this.afs
+          .collection('articles')
+          .doc(this.articleId)
+          .update(articleDb)
+      } else {
+      }
+      this.showSaveStatus(
+        `Success ${this.editing ? 'editing' : 'creating'} article!`,
+        ''
+      )
+    } catch (err) {
+      let errorMsg = `Error ${
+        this.editing ? 'editing' : 'creating'
+      } article: ${err.toString()}`
+      console.log(err)
+      this.showSaveStatus('', errorMsg)
+    }
+
+    this.savingToDb = false
+    /*
+    todo when creating success
+    form will become edit mode and we have to get it and save into local model
+    
+    todo add link near save button to preview
+    
+    todo add back button
+    */
   }
 
   isValid(field) {
@@ -160,7 +190,7 @@ export class EditArticleComponent {
     if (success) {
       this.saveSuccess = success
       setTimeout(() => {
-        this.saveError = '' // reset after 2 seconds
+        this.saveSuccess = '' // reset after 2 seconds
       }, 2000)
     }
 
