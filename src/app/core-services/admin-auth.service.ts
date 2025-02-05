@@ -22,11 +22,7 @@ export class AdminAuthService {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Promise<boolean | UrlTree> {
-    try {
-      this.currentUser = await this.authService.getCurrentUser()
-    } catch (e) {}
-
-    const isAdmin = this.currentUser?.isAdmin // configured into backend
+    const isAdmin = await this.isFrontendAdmin()
 
     // provides the route configuration options.
     const { routeConfig } = route
