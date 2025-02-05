@@ -20,6 +20,9 @@ export class EditArticleComponent {
   editing = false
   article: any = {}
   articleId = ''
+  saveError = ''
+  saveSuccess = ''
+  savingToDb = false
 
   constructor(
     private router: Router,
@@ -80,6 +83,13 @@ export class EditArticleComponent {
   }
 
   save() {
+    if (this.editing && !this.articleId) {
+      this.showSaveStatus('', 'No article id')
+      return
+    }
+
+    this.savingToDb = true
+
     /*
     auto populate datePosted if needed
     */
@@ -144,5 +154,21 @@ export class EditArticleComponent {
     })
 
     return isValid
+  }
+
+  showSaveStatus(success, fail) {
+    if (success) {
+      this.saveSuccess = success
+      setTimeout(() => {
+        this.saveError = '' // reset after 2 seconds
+      }, 2000)
+    }
+
+    if (fail) {
+      this.saveError = fail
+      setTimeout(() => {
+        this.saveError = '' // reset after 2 seconds
+      }, 2000)
+    }
   }
 }

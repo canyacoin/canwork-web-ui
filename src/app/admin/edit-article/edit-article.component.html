@@ -148,10 +148,17 @@
               <button
                 class="btn btn-primary"
                 type="submit"
-                [disabled]="!isFormValid()"
+                [disabled]="!isFormValid() || savingToDb"
               >
                 Save
               </button>
+              <div *ngIf="saveError" class="text-R900 text-wrap text-b2">
+                {{ saveError }}
+              </div>
+
+              <div *ngIf="saveSuccess" class="text-G900 text-wrap text-b2">
+                {{ saveSuccess }}
+              </div>
             </div>
           </div>
         </form>
