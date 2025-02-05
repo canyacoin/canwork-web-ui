@@ -3,13 +3,13 @@ create or edit article
 */
 
 import { Component } from '@angular/core'
-import { AuthService } from '@service/auth.service'
-import { User } from '@class/user'
 import { Router, ActivatedRoute } from '@angular/router'
+import { AdminAuthService } from '@service/admin-auth.service'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { NgForm } from '@angular/forms'
 
 const datePostedRegex = /^\d{4}-\d{2}-\d{2}$/
+const fieldsToCheck = ['slug', 'title', 'category', 'datePosted']
 
 @Component({
   selector: 'app-edit-article',
@@ -17,24 +17,20 @@ const datePostedRegex = /^\d{4}-\d{2}-\d{2}$/
   styleUrls: ['./edit-article.component.css'],
 })
 export class EditArticleComponent {
-  currentUser: User
   editing = false
   article: any = {}
   articleId = ''
 
   constructor(
     private router: Router,
-    private authService: AuthService,
     private afs: AngularFirestore,
+    private adminAuthService: AdminAuthService,
     private activatedRoute: ActivatedRoute
   ) {}
 
   async ngOnInit() {
     // check auth
-    try {
-      this.currentUser = await this.authService.getCurrentUser()
-    } catch (e) {}
-    const isAdmin = this.currentUser?.isAdmin // configured into backend
+    const isAdmin = await this.adminAuthService.isFrontendAdmin()
 
     if (!isAdmin) this.router.navigate(['/home'])
 
@@ -120,7 +116,7 @@ export class EditArticleComponent {
     }
 
     if (field == 'category') {
-      if (this.article[field]?.length >= 4) return true
+      if (this.article[field]?.length >= 3) return true
       return false
     }
 
@@ -140,10 +136,13 @@ export class EditArticleComponent {
 
   isFormValid() {
     let isValid = true
-    ;['slug'].every((field) => {
+
+    fieldsToCheck.every((field) => {
+      // all should be valid, first false breaks
       isValid = this.isValid(field)
       return isValid
     })
+
     return isValid
   }
 }

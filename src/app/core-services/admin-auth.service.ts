@@ -46,4 +46,22 @@ export class AdminAuthService {
 
     return true // default allow
   }
+
+  async isFrontendAdmin() {
+    try {
+      this.currentUser = await this.authService.getCurrentUser()
+    } catch (e) {}
+
+    const isAdmin = this.currentUser?.isAdmin || this.currentUser?.isUiAdmin
+
+    /* 
+      properties configured into backend 
+      isUiAdmin: user has admin features enabled on frontend, but
+        can't modify records on firestore collection
+        this is useful to check safety of admin features
+    
+    */
+
+    return isAdmin
+  }
 }

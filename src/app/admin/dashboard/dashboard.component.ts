@@ -1,9 +1,8 @@
 import { Component, Inject, PLATFORM_ID } from '@angular/core'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { Observable } from 'rxjs'
-import { AuthService } from '@service/auth.service'
-import { User } from '@class/user'
 import { Router } from '@angular/router'
+import { AdminAuthService } from '@service/admin-auth.service'
 
 const HITS_PER_PAGE = 20
 
@@ -15,8 +14,6 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common'
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent {
-  currentUser: User
-
   articles$: Observable<any[]>
   mediumFeed = []
   hits = [] // the new hits array, injected into result component
@@ -27,7 +24,8 @@ export class DashboardComponent {
 
   constructor(
     private router: Router,
-    private authService: AuthService,
+    private adminAuthService: AdminAuthService,
+
     private afs: AngularFirestore,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
@@ -38,10 +36,8 @@ export class DashboardComponent {
 
   async ngOnInit() {
     // check also here
-    try {
-      this.currentUser = await this.authService.getCurrentUser()
-    } catch (e) {}
-    const isAdmin = this.currentUser?.isAdmin // configured into backend
+
+    const isAdmin = await this.adminAuthService.isFrontendAdmin()
 
     if (!isAdmin) this.router.navigate(['/home'])
 

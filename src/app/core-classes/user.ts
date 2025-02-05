@@ -11,7 +11,8 @@ export class User {
   description: string
   email: string
   bscAddress: string
-  isAdmin: false
+  isAdmin: false // can update firestore blog articles
+  isUiAdmin: false // only blog admin frontend
   slug: string
   hourlyRate: string
   name: string

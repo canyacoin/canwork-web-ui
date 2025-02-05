@@ -3,6 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { Router, NavigationEnd } from '@angular/router'
 import { User } from '@class/user'
 import { AuthService } from '@service/auth.service'
+import { AdminAuthService } from '@service/admin-auth.service'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { Subscription } from 'rxjs'
 import { BscService, EventTypeBsc } from '@service/bsc.service'
@@ -100,6 +101,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
     private afs: AngularFirestore,
     private authService: AuthService,
+    private adminAuthService: AdminAuthService,
     private bscService: BscService,
     private windowService: WindowService,
     private router: Router,
@@ -183,7 +185,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         async (user: User) => {
           if (this.currentUser !== user) {
             this.currentUser = user
-            this.isAdmin = this.currentUser?.isAdmin // configured into backend
+            this.isAdmin = await this.adminAuthService.isFrontendAdmin()
             this.updateMenu()
             await this.initUser()
           }
