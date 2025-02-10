@@ -2,14 +2,15 @@
 create or edit article
 */
 
-import { Component } from '@angular/core'
+import { Component, Inject, PLATFORM_ID } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 import { AdminAuthService } from '@service/admin-auth.service'
 import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { NgForm } from '@angular/forms'
+import { isPlatformBrowser } from '@angular/common'
 
 const datePostedRegex = /^\d{4}-\d{2}-\d{2}$/
-const fieldsToCheck = ['slug', 'title', 'category', 'datePosted']
+const fieldsToCheck = ['slug', 'title', 'category', 'datePosted', 'body']
 
 @Component({
   selector: 'app-edit-article',
@@ -28,7 +29,8 @@ export class EditArticleComponent {
     private router: Router,
     private afs: AngularFirestore,
     private adminAuthService: AdminAuthService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   async ngOnInit() {
@@ -119,11 +121,15 @@ export class EditArticleComponent {
       } article!`
 
       if (this.editing) {
+        // edit
+
         await this.afs
           .collection('articles')
           .doc(this.articleId)
           .update(articleDb)
       } else {
+        // create
+
         // check for duplicates
         const dupSnap = await this.afs
           .collection('articles', (ref) =>
@@ -151,6 +157,8 @@ export class EditArticleComponent {
         // switch to editing mode
         this.editing = true
       }
+
+      // common
       this.showSaveStatus(saveMsg, '')
     } catch (err) {
       let errorMsg = `Error ${
@@ -164,6 +172,8 @@ export class EditArticleComponent {
     /*
     
     todo add link near save button to preview
+    
+    todo implement delete
     
     todo add back button
     
@@ -198,6 +208,11 @@ export class EditArticleComponent {
       return d.toISOString().slice(0, 10) === dateString
     }
 
+    if (field == 'body') {
+      if (this.article[field]?.length >= 10) return true
+      return false
+    }
+
     return true
   }
 
@@ -227,5 +242,14 @@ export class EditArticleComponent {
         this.saveError = '' // reset after 2 seconds
       }, 2000)
     }
+  }
+
+  autogrow() {
+    if (!isPlatformBrowser(this.platformId)) return // not on ssr
+
+    let textArea = document.getElementById('body')
+    textArea.style.overflow = 'hidden'
+    textArea.style.height = '0px'
+    textArea.style.height = textArea.scrollHeight + 'px'
   }
 }

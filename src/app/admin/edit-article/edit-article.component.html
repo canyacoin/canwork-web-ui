@@ -144,6 +144,26 @@
               />
             </div>
 
+            <div class="w-full">
+              <div class="text-b1 text-G900 mb-[8px]">
+                Body <span class="text-R900">*</span>
+              </div>
+              <textarea
+                class="w-full rounded-xl outline-none py-[8px] px-[16px] border border-G200 text-G500 text-b1 bg-G50 font-sans min-h-[200px]"
+                type="text"
+                id="body"
+                name="body"
+                #body="ngModel"
+                placeholder="Enter article body here"
+                [(ngModel)]="article.body"
+                [class.invalid]="!isValid('body')"
+                (keyup)="autogrow()"
+              ></textarea>
+              <div *ngIf="!isValid('body')" class="text-R900 text-wrap text-b2">
+                Body must be at least 10 characters
+              </div>
+            </div>
+
             <div class="flex items-center gap-[16px]">
               <button
                 class="btn btn-primary"
