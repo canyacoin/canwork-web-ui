@@ -103,7 +103,7 @@ export class EditArticleComponent {
 
     // tags array
     articleDb.tags = []
-    if (articleDb.tagsString.trim())
+    if (articleDb.tagsString && articleDb.tagsString.trim())
       articleDb.tags = articleDb.tagsString.trim().split(',')
     // cleanup
     for (let i = 0; i < articleDb.tags.length; i++) {
@@ -114,17 +114,44 @@ export class EditArticleComponent {
     // console.log(articleDb)
 
     try {
+      const saveMsg = `Success ${
+        this.editing ? 'editing' : 'creating'
+      } article!`
+
       if (this.editing) {
         await this.afs
           .collection('articles')
           .doc(this.articleId)
           .update(articleDb)
       } else {
+        // check for duplicates
+        const dupSnap = await this.afs
+          .collection('articles', (ref) =>
+            ref.where('slug', '==', articleDb.slug)
+          )
+          .get()
+          .toPromise()
+
+        if (!dupSnap.empty) {
+          this.showSaveStatus('', 'Duplicate slug')
+
+          this.savingToDb = false
+          return
+        }
+
+        // create new doc
+
+        const newArticleRef = await this.afs
+          .collection('articles')
+          .add(articleDb)
+
+        // save new id
+        this.articleId = newArticleRef.id
+
+        // switch to editing mode
+        this.editing = true
       }
-      this.showSaveStatus(
-        `Success ${this.editing ? 'editing' : 'creating'} article!`,
-        ''
-      )
+      this.showSaveStatus(saveMsg, '')
     } catch (err) {
       let errorMsg = `Error ${
         this.editing ? 'editing' : 'creating'
@@ -135,12 +162,12 @@ export class EditArticleComponent {
 
     this.savingToDb = false
     /*
-    todo when creating success
-    form will become edit mode and we have to get it and save into local model
     
     todo add link near save button to preview
     
     todo add back button
+    
+    todo attachments and main image
     */
   }
 
