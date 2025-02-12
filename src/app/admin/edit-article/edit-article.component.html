@@ -166,6 +166,14 @@
 
             <div class="flex items-center gap-[16px]">
               <button
+                *ngIf="editing"
+                class="btn btn-secondary"
+                (click)="view(article.slug)"
+              >
+                View article
+              </button>
+
+              <button
                 class="btn btn-primary"
                 type="submit"
                 [disabled]="!isFormValid() || savingToDb"
@@ -179,6 +187,13 @@
               <div *ngIf="saveSuccess" class="text-green-600 text-wrap text-b2">
                 {{ saveSuccess }}
               </div>
+
+              <button
+                class="btn btn-danger-outline ml-auto"
+                [routerLink]="['/admin']"
+              >
+                Back
+              </button>
             </div>
           </div>
         </form>

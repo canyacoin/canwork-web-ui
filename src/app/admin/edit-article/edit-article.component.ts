@@ -171,11 +171,9 @@ export class EditArticleComponent {
     this.savingToDb = false
     /*
     
-    todo add link near save button to preview
     
     todo implement delete
     
-    todo add back button
     
     todo attachments and main image
     */
@@ -251,5 +249,14 @@ export class EditArticleComponent {
     textArea.style.overflow = 'hidden'
     textArea.style.height = '0px'
     textArea.style.height = textArea.scrollHeight + 'px'
+  }
+
+  view(slug) {
+    // preview article into a new window
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([`/blog/${slug}`])
+    )
+
+    window.open(url, '_blank')
   }
 }
