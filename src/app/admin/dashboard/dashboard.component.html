@@ -29,6 +29,7 @@
                 [author]="blogData.author"
                 [datePosted]="blogData.datePosted"
                 [isAdmin]="true"
+                (adminDeleteEvent)="handleDeleteRequest($event)"
               />
             </div>
           </div>
@@ -37,3 +38,12 @@
     </div>
   </section>
 </main>
+
+<basic-dialog
+  [(visible)]="visibleDeleteModal"
+  [(title)]="deleteDialogTitle"
+  content="If you delete this article, you won't be able to undo"
+  (LeftbtnEvent)="cancelArticle($event)"
+  (RightbtnEvent)="discardDeleteDialog($event)"
+  type="deletearticle"
+/>

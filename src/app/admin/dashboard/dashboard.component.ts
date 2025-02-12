@@ -22,6 +22,10 @@ export class DashboardComponent {
   numHits: number = 0 // the number of hits of current blog query
   hitsPerPage: number = HITS_PER_PAGE // constant
 
+  visibleDeleteModal = false
+  deleteDialogTitle = ''
+  currentCancelDialogSlug = ''
+
   constructor(
     private router: Router,
     private adminAuthService: AdminAuthService,
@@ -88,5 +92,55 @@ export class DashboardComponent {
     }
 
     this.currentPage = newPage // set new page position
+  }
+
+  discardDeleteDialog(event: Event) {
+    event.stopPropagation()
+    this.visibleDeleteModal = false
+    this.currentCancelDialogSlug = ''
+    this.deleteDialogTitle = ''
+  }
+
+  async cancelArticle(event: Event) {
+    event.stopPropagation()
+    this.visibleDeleteModal = false
+    const slugToDelete = this.currentCancelDialogSlug
+    this.currentCancelDialogSlug = ''
+    this.deleteDialogTitle = ''
+
+    console.log('Deleting ' + slugToDelete)
+
+    // find article id
+    const snapResult = await this.afs
+      .collection('articles', (ref) => ref.where('slug', '==', slugToDelete))
+      .get()
+      .toPromise()
+
+    if (!snapResult.empty && snapResult.docs && snapResult.docs.length) {
+      const articleSnap = snapResult.docs[0]
+
+      const articleId = articleSnap.id
+
+      await this.afs.collection('articles').doc(articleId).delete()
+
+      console.log('Deleted ' + slugToDelete)
+    } else {
+      console.log('article not found')
+      return
+    }
+
+    // reload current page
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        window.location.reload()
+      }, 500)
+    }
+  }
+
+  handleDeleteRequest(slugToDelete) {
+    console.log(`Confirm delete of ${slugToDelete}?`)
+    this.currentCancelDialogSlug = slugToDelete
+    this.deleteDialogTitle = `Are you sure you want to delete article "${slugToDelete}"?`
+    this.visibleDeleteModal = true
   }
 }

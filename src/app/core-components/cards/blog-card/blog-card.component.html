@@ -40,7 +40,7 @@
       Edit
     </button>
     <button
-      [routerLink]="['/admin/delete', this.slug]"
+      (click)="adminDeleteEvent.emit(this.slug)"
       class="bg-red-500 hover:bg-red-700 text-white font-bold py-[6px] px-[12px] rounded"
     >
       Delete

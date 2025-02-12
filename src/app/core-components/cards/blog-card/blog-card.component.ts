@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core'
+import { Component, Input, Output } from '@angular/core'
+import { EventEmitter } from '@angular/core'
 
 @Component({
   selector: 'blog-card',
@@ -14,6 +15,7 @@ export class BlogCardComponent {
   @Input() author: string
   @Input() datePosted: string
   @Input() isAdmin: boolean = false
+  @Output() adminDeleteEvent = new EventEmitter()
 
   readingTime() {
     return Math.ceil(this.body.length / 1000)
