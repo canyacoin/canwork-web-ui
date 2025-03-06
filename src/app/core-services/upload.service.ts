@@ -18,14 +18,14 @@ export enum UploadCategory {
 }
 @Injectable()
 export class UploadService {
-  uploadsCollection: AngularFirestoreCollection<Upload>
+  // uploadsCollection: AngularFirestoreCollection<Upload> // not used
   uploads: Observable<Upload[]>
 
   constructor(
     private afs: AngularFirestore,
     private storage: AngularFireStorage
   ) {
-    this.uploadsCollection = this.afs.collection<Upload>('uploads')
+    // this.uploadsCollection = this.afs.collection<Upload>('uploads') // not used
   }
 
   async uploadJobAttachmentToStorage(
@@ -96,6 +96,57 @@ export class UploadService {
         const storageRef = this.storage.ref(
           `uploads/${UploadCategory.jobs}/${jobId}/${upload.createdBy}/${upload.id}/${upload.name}`
         )
+        storageRef.delete()
+        resolve(true)
+      } catch (e) {
+        resolve(false)
+      }
+    })
+  }
+
+  async uploadArticleAttachmentToStorage(
+    articleId: string,
+    upload: Upload,
+    file: File
+  ): Promise<Upload> {
+    return new Promise<Upload>((resolve, reject) => {
+      try {
+        const storagePath = `uploads/articles/${articleId}/${upload.id}/${upload.name}`
+
+        const storageRef = this.storage.ref(storagePath)
+
+        const uploadTask = storageRef.put(file)
+        uploadTask
+          .snapshotChanges()
+          .pipe(
+            finalize(() => {
+              storageRef.getDownloadURL().subscribe((downloadURL) => {
+                upload.url = downloadURL
+                upload.filePath = storagePath
+                resolve(upload)
+              })
+            })
+          )
+          .subscribe()
+
+        uploadTask.percentageChanges().subscribe((percentage) => {
+          upload.progress = Math.floor(percentage ? percentage : 0)
+        })
+      } catch (e) {
+        reject(null)
+      }
+    })
+  }
+
+  cancelArticleAttachmentFromStorage(
+    articledId: string,
+    upload: Upload
+  ): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      try {
+        const storagePath = `uploads/articles/${articleId}/${upload.id}/${upload.name}`
+
+        const storageRef = this.storage.ref(storagePath)
         storageRef.delete()
         resolve(true)
       } catch (e) {
