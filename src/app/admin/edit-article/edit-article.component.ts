@@ -9,6 +9,8 @@ import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { NgForm } from '@angular/forms'
 import { isPlatformBrowser } from '@angular/common'
 
+import { Upload } from '@class/upload'
+
 const datePostedRegex = /^\d{4}-\d{2}-\d{2}$/
 const fieldsToCheck = ['slug', 'title', 'category', 'datePosted', 'body']
 
@@ -24,6 +26,10 @@ export class EditArticleComponent {
   saveError = ''
   saveSuccess = ''
   savingToDb = false
+
+  hoveredFiles = false // main image
+  isCurrentUpload: boolean = false // main image
+  uploadedFiles: Upload[] = [] // main image
 
   constructor(
     private router: Router,
@@ -258,5 +264,41 @@ export class EditArticleComponent {
     )
 
     window.open(url, '_blank')
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault()
+    event.stopPropagation()
+    this.hoveredFiles = true
+    // Optionally add a CSS class to indicate the drag state
+  }
+
+  onDragLeave(event: DragEvent) {
+    event.preventDefault()
+    event.stopPropagation()
+    this.hoveredFiles = false
+  }
+
+  onUploadDrop(event: DragEvent) {
+    // todo
+    // from drag and drop, pay attention to file count
+    console.log('onUploadDrop')
+    event.preventDefault()
+    event.stopPropagation()
+    this.hoveredFiles = false
+    if (this.isCurrentUpload) return // already uploading
+    if (event.dataTransfer && event.dataTransfer.files) {
+      let files = event.dataTransfer.files
+      console.log(files)
+    }
+  }
+
+  onUploadClick(event: any) {
+    // todo
+    // from click on upload link
+    console.log('onUploadClick')
+    if (this.isCurrentUpload) return // already uploading
+    let files = event.target.files
+    console.log(files)
   }
 }

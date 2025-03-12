@@ -164,6 +164,55 @@
               </div>
             </div>
 
+            <div class="w-full">
+              <div class="text-b1 text-G900 mb-[8px]">Main image</div>
+              <div
+                (dragover)="onDragOver($event)"
+                (dragleave)="onDragLeave($event)"
+                (drop)="onUploadDrop($event)"
+                [class]="
+                  hoveredFiles && !isCurrentUpload
+                    ? 'w-full rounded-xl bg-G500 text-white border border-G200 flex justify-center items-center py-[10px] px-[16px]'
+                    : 'w-full rounded-xl bg-G50 text-G90 border border-G200 flex justify-center items-center py-[10px] px-[16px]'
+                "
+              >
+                <div class="w-full">
+                  <div
+                    class="flex justify-center items-center select-none"
+                    [ngClass]="{
+                      'cursor-not-allowed': isCurrentUpload
+                    }"
+                  >
+                    <img
+                      src="/assets/massimo/svg/fi_plus-circle.svg"
+                      alt="fi_info"
+                      class="pr-[8px] select-none"
+                    />
+                    Drag or
+                    <label
+                      class="text-b1 text-G900"
+                      for="file-upload"
+                      class="!text-C500 !text-b1 !font-sans !m-0 underline px-[3px] cursor-pointer"
+                      [ngClass]="{
+                        '!text-G500 cursor-not-allowed': isCurrentUpload,
+                        '!text-white': hoveredFiles
+                      }"
+                    >
+                      Upload
+                    </label>
+                    your file
+                  </div>
+                  <input
+                    id="file-upload"
+                    [disabled]="isCurrentUpload"
+                    type="file"
+                    hidden
+                    (change)="onUploadClick($event)"
+                  />
+                </div>
+              </div>
+            </div>
+
             <div class="flex items-center gap-[16px]">
               <button
                 *ngIf="editing"

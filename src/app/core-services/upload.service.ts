@@ -8,6 +8,9 @@ import {
   AngularFireStorage,
   AngularFireUploadTask,
 } from '@angular/fire/compat/storage'
+
+import { AdminAuthService } from '@service/admin-auth.service'
+
 import { Observable } from 'rxjs'
 import { finalize } from 'rxjs/operators'
 
@@ -23,7 +26,8 @@ export class UploadService {
 
   constructor(
     private afs: AngularFirestore,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    private adminAuthService: AdminAuthService
   ) {
     // this.uploadsCollection = this.afs.collection<Upload>('uploads') // not used
   }
@@ -109,8 +113,12 @@ export class UploadService {
     upload: Upload,
     file: File
   ): Promise<Upload> {
-    return new Promise<Upload>((resolve, reject) => {
+    return new Promise<Upload>(async (resolve, reject) => {
       try {
+        // only adming is authorized
+        const isAdmin = await this.adminAuthService.isFrontendAdmin()
+        if (!isAdmin) return reject(null)
+
         const storagePath = `uploads/articles/${articleId}/${upload.id}/${upload.name}`
 
         const storageRef = this.storage.ref(storagePath)
@@ -139,11 +147,15 @@ export class UploadService {
   }
 
   cancelArticleAttachmentFromStorage(
-    articledId: string,
+    articleId: string,
     upload: Upload
   ): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<boolean>(async (resolve, reject) => {
       try {
+        // only adming is authorized
+        const isAdmin = await this.adminAuthService.isFrontendAdmin()
+        if (!isAdmin) return resolve(false)
+
         const storagePath = `uploads/articles/${articleId}/${upload.id}/${upload.name}`
 
         const storageRef = this.storage.ref(storagePath)
