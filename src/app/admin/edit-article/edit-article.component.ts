@@ -10,6 +10,7 @@ import { NgForm } from '@angular/forms'
 import { isPlatformBrowser } from '@angular/common'
 
 import { Upload } from '@class/upload'
+import { UploadService } from '@service/upload.service'
 
 const datePostedRegex = /^\d{4}-\d{2}-\d{2}$/
 const fieldsToCheck = ['slug', 'title', 'category', 'datePosted', 'body']
@@ -37,7 +38,8 @@ export class EditArticleComponent {
     private afs: AngularFirestore,
     private adminAuthService: AdminAuthService,
     private activatedRoute: ActivatedRoute,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private uploadService: UploadService
   ) {}
 
   async ngOnInit() {
@@ -301,6 +303,7 @@ export class EditArticleComponent {
 
       if (files.length == 0) return this.showUploadError('No files upload')
       if (files.length > 1) return this.showUploadError('Max 1 file')
+      this.uploadFiles(files, true)
     }
   }
 
@@ -313,5 +316,36 @@ export class EditArticleComponent {
     console.log(files)
 
     if (files.length == 0) return this.showUploadError('No files upload')
+    this.uploadFiles(files, true)
+  }
+
+  async uploadFiles(files: FileList, mainImage) {
+    if (mainImage) {
+      this.isCurrentUpload = true // already uploading
+      const file = files[0]
+
+      try {
+        const currentUpload = new Upload('admin', file.name, file.size)
+
+        const upload: Upload =
+          await this.uploadService.uploadArticleAttachmentToStorage(
+            this.articleId, // todo check we have an article id
+            currentUpload,
+            file
+          )
+
+        if (upload) {
+          // success
+          // todo save to db
+          console.log(upload)
+          this.uploadedFiles.unshift(upload)
+        } else {
+          this.showUploadError('Upload failed')
+        }
+      } catch (e) {
+        this.showUploadError('Error uploading: ' + e.toString())
+      }
+      this.isCurrentUpload = false
+    }
   }
 }
