@@ -30,7 +30,6 @@
                 #slug="ngModel"
                 placeholder="Enter article slug here"
                 [(ngModel)]="article.slug"
-                [class.invalid]="!isValid('slug')"
               />
               <div *ngIf="!isValid('slug')" class="text-R900 text-wrap text-b2">
                 Slug must be at least 3 characters
@@ -49,7 +48,6 @@
                 #title="ngModel"
                 placeholder="Enter article title here"
                 [(ngModel)]="article.title"
-                [class.invalid]="!isValid('title')"
               />
               <div
                 *ngIf="!isValid('title')"
@@ -84,7 +82,6 @@
                 #category="ngModel"
                 placeholder="Enter article category here"
                 [(ngModel)]="article.category"
-                [class.invalid]="!isValid('category')"
               />
               <div
                 *ngIf="!isValid('category')"
@@ -119,7 +116,6 @@
                 #datePosted="ngModel"
                 placeholder="Enter article date here"
                 [(ngModel)]="article.datePosted"
-                [class.invalid]="!isValid('datePosted')"
               />
               <div
                 *ngIf="!isValid('datePosted')"
@@ -156,7 +152,6 @@
                 #body="ngModel"
                 placeholder="Enter article body here"
                 [(ngModel)]="article.body"
-                [class.invalid]="!isValid('body')"
                 (keyup)="autogrow()"
               ></textarea>
               <div *ngIf="!isValid('body')" class="text-R900 text-wrap text-b2">
@@ -210,6 +205,9 @@
                     (change)="onUploadClick($event)"
                   />
                 </div>
+              </div>
+              <div *ngIf="mainUploadError" class="text-R900 text-wrap text-b2">
+                {{ mainUploadError }}
               </div>
             </div>
 

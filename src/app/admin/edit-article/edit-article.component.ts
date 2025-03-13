@@ -30,6 +30,7 @@ export class EditArticleComponent {
   hoveredFiles = false // main image
   isCurrentUpload: boolean = false // main image
   uploadedFiles: Upload[] = [] // main image
+  mainUploadError = ''
 
   constructor(
     private router: Router,
@@ -266,6 +267,13 @@ export class EditArticleComponent {
     window.open(url, '_blank')
   }
 
+  showUploadError(msg) {
+    this.mainUploadError = msg
+    setTimeout(() => {
+      this.mainUploadError = ''
+    }, 2000)
+  }
+
   onDragOver(event: DragEvent) {
     event.preventDefault()
     event.stopPropagation()
@@ -290,6 +298,9 @@ export class EditArticleComponent {
     if (event.dataTransfer && event.dataTransfer.files) {
       let files = event.dataTransfer.files
       console.log(files)
+
+      if (files.length == 0) return this.showUploadError('No files upload')
+      if (files.length > 1) return this.showUploadError('Max 1 file')
     }
   }
 
@@ -300,5 +311,7 @@ export class EditArticleComponent {
     if (this.isCurrentUpload) return // already uploading
     let files = event.target.files
     console.log(files)
+
+    if (files.length == 0) return this.showUploadError('No files upload')
   }
 }
