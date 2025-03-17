@@ -273,7 +273,7 @@ export class EditArticleComponent {
     this.mainUploadError = msg
     setTimeout(() => {
       this.mainUploadError = ''
-    }, 2000)
+    }, 5000)
   }
 
   onDragOver(event: DragEvent) {
@@ -302,7 +302,8 @@ export class EditArticleComponent {
       console.log(files)
 
       if (files.length == 0) return this.showUploadError('No files upload')
-      if (files.length > 1) return this.showUploadError('Max 1 file')
+      if (files.length > 1)
+        return this.showUploadError('Plese upload max one file for main image')
       this.uploadFiles(files, true)
     }
   }
@@ -315,11 +316,21 @@ export class EditArticleComponent {
     let files = event.target.files
     console.log(files)
 
-    if (files.length == 0) return this.showUploadError('No files upload')
+    if (files.length == 0) return this.showUploadError('No files uploaded')
     this.uploadFiles(files, true)
   }
 
   async uploadFiles(files: FileList, mainImage) {
+    if (!this.articleId) {
+      /*
+      we need article id to save correct path into storage
+      */
+      this.showUploadError(
+        'Please save this new article for the first time before attaching images'
+      )
+      this.isCurrentUpload = false
+      return
+    }
     if (mainImage) {
       this.isCurrentUpload = true // already uploading
       const file = files[0]
@@ -329,7 +340,7 @@ export class EditArticleComponent {
 
         const upload: Upload =
           await this.uploadService.uploadArticleAttachmentToStorage(
-            this.articleId, // todo check we have an article id
+            this.articleId,
             currentUpload,
             file
           )
@@ -338,7 +349,7 @@ export class EditArticleComponent {
           // success
           // todo save to db
           console.log(upload)
-          this.uploadedFiles.unshift(upload)
+          //this.uploadedFiles.unshift(upload)
         } else {
           this.showUploadError('Upload failed')
         }

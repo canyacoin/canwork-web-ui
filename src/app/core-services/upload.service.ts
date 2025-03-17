@@ -12,7 +12,7 @@ import {
 import { AdminAuthService } from '@service/admin-auth.service'
 
 import { Observable } from 'rxjs'
-import { finalize } from 'rxjs/operators'
+import { finalize, filter, switchMap } from 'rxjs/operators'
 
 import { Upload } from '../core-classes/upload'
 
@@ -123,6 +123,33 @@ export class UploadService {
 
         const storageRef = this.storage.ref(storagePath)
 
+        const uploadTask = this.storage.upload(storagePath, file)
+
+        /*
+        new version to detect errors 
+        and success url
+        */
+        uploadTask
+          .snapshotChanges()
+          .pipe(
+            filter((snapshot) => snapshot.state === 'success'),
+            switchMap(() => storageRef.getDownloadURL())
+          )
+          .subscribe({
+            next: (url) => {
+              upload.url = url
+              upload.filePath = storagePath
+              resolve(upload)
+            },
+            error: (err) => {
+              console.log(err)
+              reject(err.message)
+            },
+          })
+
+        /*
+        
+        // original one
         const uploadTask = storageRef.put(file)
         uploadTask
           .snapshotChanges()
@@ -140,6 +167,8 @@ export class UploadService {
         uploadTask.percentageChanges().subscribe((percentage) => {
           upload.progress = Math.floor(percentage ? percentage : 0)
         })
+        
+        */
       } catch (e) {
         reject(null)
       }
