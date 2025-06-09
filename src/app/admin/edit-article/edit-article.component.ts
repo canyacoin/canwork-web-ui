@@ -30,7 +30,6 @@ export class EditArticleComponent {
 
   hoveredFiles = false // main image
   isCurrentUpload: boolean = false // main image
-  uploadedFiles: Upload[] = [] // main image
   mainUploadError = ''
 
   constructor(
@@ -91,6 +90,41 @@ export class EditArticleComponent {
       // new article, default category value
       this.article.category = 'blog'
     }
+  }
+
+  async saveAttachments(mainImage, urls, filePaths) {
+    if (this.editing && !this.articleId) {
+      this.showSaveStatus('', 'No article id')
+      return
+    }
+    this.savingToDb = true
+    let articleDb: any = {}
+
+    try {
+      if (mainImage) {
+        articleDb.imageUrl = urls[0]
+        articleDb.imagePath = filePaths[0]
+
+        await this.afs
+          .collection('articles')
+          .doc(this.articleId)
+          .update(articleDb)
+      } else {
+      }
+      let errorMsg = `Success saving ${
+        mainImage ? 'main image' : 'attachments'
+      } to db`
+      this.showSaveStatus(saveMsg, '')
+    } catch (err) {
+      let errorMsg = `Error saving ${
+        mainImage ? 'main image' : 'attachments'
+      } to db`
+      console.log(errorMsg)
+      console.log(err)
+      this.showSaveStatus('', errorMsg)
+    }
+
+    this.savingToDb = false
   }
 
   async save() {
@@ -173,6 +207,7 @@ export class EditArticleComponent {
       let errorMsg = `Error ${
         this.editing ? 'editing' : 'creating'
       } article: ${err.toString()}`
+      console.log(errorMsg)
       console.log(err)
       this.showSaveStatus('', errorMsg)
     }
@@ -345,11 +380,35 @@ export class EditArticleComponent {
             file
           )
 
-        if (upload) {
+        if (upload && upload.url) {
           // success
           // todo save to db
-          console.log(upload)
-          //this.uploadedFiles.unshift(upload)
+          console.log(upload) // debug
+
+          /*
+          example:
+          {
+              "createdAt": "2025-06-09T10:56:42.453Z",
+              "id": "86d44c68-22a4-88c7-....-523b29ab60e7",
+              "createdBy": "admin",
+              "name": "519-800x300.jpg",
+              "size": 28736,
+              "url": "https://firebasestorage.googleapis.com/v0/b/canwork-staging.appspot.com/o/uploads%2Farticles%2FEewhvLBNG3edzuccRGpw%2F86d44c68-22a4-88c7-....-523b29ab60e7%2F519-800x300.jpg?alt=media&token=067c057a-....-....-806e-fbfc0fd22f9d",
+              "filePath": "uploads/articles/EewhvLBNG3edzuccRGpw/86d44c68-22a4-88c7-....-523b29ab60e7/519-800x300.jpg"
+          }          
+          
+          
+          
+          */
+
+          // let's save it as main article image
+          // let's save also storage path to make possible to delete it
+
+          await this.saveAttachments(
+            true, // main Image
+            [upload.url],
+            [upload.filePath]
+          )
         } else {
           this.showUploadError('Upload failed')
         }
