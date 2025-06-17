@@ -227,6 +227,12 @@
               >
                 Save
               </button>
+              <div
+                *ngIf="uploadingMainImage"
+                class="text-black-700 text-wrap text-b2"
+              >
+                Uploading ..
+              </div>
               <div *ngIf="saveError" class="text-R900 text-wrap text-b2">
                 {{ saveError }}
               </div>

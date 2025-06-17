@@ -27,6 +27,7 @@ export class EditArticleComponent {
   saveError = ''
   saveSuccess = ''
   savingToDb = false
+  uploadingMainImage = false
 
   hoveredFiles = false // main image
   isCurrentUpload: boolean = false // main image
@@ -101,6 +102,8 @@ export class EditArticleComponent {
 
     try {
       if (mainImage) {
+        this.uploadingMainImage = true
+
         let articleDb: any = {}
 
         articleDb.imageUrl = urls[0]
@@ -116,6 +119,7 @@ export class EditArticleComponent {
           .collection('articles')
           .doc(this.articleId)
           .update(articleDb)
+        this.uploadingMainImage = false
       } else {
       }
       let saveMsg = `Success saving ${
