@@ -102,8 +102,13 @@ export class EditArticleComponent {
 
     try {
       if (mainImage) {
+        console.log(urls[0]) // debug
+        console.log(filePaths[0]) // debug
+
         articleDb.imageUrl = urls[0]
         articleDb.imagePath = filePaths[0]
+
+        console.log(articleDb)
 
         await this.afs
           .collection('articles')
@@ -111,7 +116,7 @@ export class EditArticleComponent {
           .update(articleDb)
       } else {
       }
-      let errorMsg = `Success saving ${
+      let saveMsg = `Success saving ${
         mainImage ? 'main image' : 'attachments'
       } to db`
       this.showSaveStatus(saveMsg, '')
