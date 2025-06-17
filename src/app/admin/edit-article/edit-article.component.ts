@@ -102,8 +102,6 @@ export class EditArticleComponent {
 
     try {
       if (mainImage) {
-        this.uploadingMainImage = true
-
         let articleDb: any = {}
 
         articleDb.imageUrl = urls[0]
@@ -382,6 +380,8 @@ export class EditArticleComponent {
       const file = files[0]
 
       try {
+        this.uploadingMainImage = true
+
         const currentUpload = new Upload('admin', file.name, file.size)
 
         const upload: Upload =
@@ -421,9 +421,13 @@ export class EditArticleComponent {
             [upload.filePath]
           )
         } else {
+          this.uploadingMainImage = false
+
           this.showUploadError('Upload failed')
         }
       } catch (e) {
+        this.uploadingMainImage = false
+
         this.showUploadError('Error uploading: ' + e.toString())
       }
       this.isCurrentUpload = false

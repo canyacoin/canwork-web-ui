@@ -209,6 +209,12 @@
               <div *ngIf="mainUploadError" class="text-R900 text-wrap text-b2">
                 {{ mainUploadError }}
               </div>
+              <div
+                *ngIf="uploadingMainImage"
+                class="text-black-700 text-wrap text-b2"
+              >
+                Uploading ..
+              </div>
             </div>
 
             <div class="flex items-center gap-[16px]">
@@ -227,12 +233,7 @@
               >
                 Save
               </button>
-              <div
-                *ngIf="uploadingMainImage"
-                class="text-black-700 text-wrap text-b2"
-              >
-                Uploading ..
-              </div>
+
               <div *ngIf="saveError" class="text-R900 text-wrap text-b2">
                 {{ saveError }}
               </div>
