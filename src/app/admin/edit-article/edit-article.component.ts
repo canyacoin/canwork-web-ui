@@ -98,17 +98,19 @@ export class EditArticleComponent {
       return
     }
     this.savingToDb = true
-    let articleDb: any = {}
 
     try {
       if (mainImage) {
-        console.log(urls[0]) // debug
-        console.log(filePaths[0]) // debug
+        let articleDb: any = {}
 
         articleDb.imageUrl = urls[0]
         articleDb.imagePath = filePaths[0]
 
-        console.log(articleDb)
+        // update only these 2 fields in firestore
+
+        // update local model
+        this.article.imageUrl = articleDb.imageUrl
+        this.article.imagePath = articleDb.imagePath
 
         await this.afs
           .collection('articles')
