@@ -206,6 +206,19 @@
                   />
                 </div>
               </div>
+
+              <div
+                *ngIf="article.imageUrl"
+                class="flex justify-center items-center mt-[20px]"
+              >
+                <img class="max-w-[200px]" [src]="article.imageUrl" />
+                <img
+                  src="/assets/massimo/svg/fi_x.svg"
+                  title="Remove"
+                  class="pl-[8px] cursor-pointer"
+                />
+              </div>
+
               <div *ngIf="mainUploadError" class="text-R900 text-wrap text-b2">
                 {{ mainUploadError }}
               </div>
