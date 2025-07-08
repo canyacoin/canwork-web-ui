@@ -170,27 +170,24 @@ export class UploadService {
         
         */
       } catch (e) {
+        console.log(e)
         reject(null)
       }
     })
   }
 
-  cancelArticleAttachmentFromStorage(
-    articleId: string,
-    upload: Upload
-  ): Promise<boolean> {
+  cancelArticleAttachmentFromStorage(storagePath: string): Promise<boolean> {
     return new Promise<boolean>(async (resolve, reject) => {
       try {
-        // only adming is authorized
+        // only admin is authorized
         const isAdmin = await this.adminAuthService.isFrontendAdmin()
         if (!isAdmin) return resolve(false)
-
-        const storagePath = `uploads/articles/${articleId}/${upload.id}/${upload.name}`
 
         const storageRef = this.storage.ref(storagePath)
         storageRef.delete()
         resolve(true)
       } catch (e) {
+        console.log(e)
         resolve(false)
       }
     })

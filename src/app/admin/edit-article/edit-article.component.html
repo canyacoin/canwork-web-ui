@@ -216,6 +216,7 @@
                   src="/assets/massimo/svg/fi_x.svg"
                   title="Remove"
                   class="pl-[8px] cursor-pointer"
+                  (click)="handleDeleteRequest(true, -1)"
                 />
               </div>
 
@@ -268,3 +269,12 @@
     </div>
   </section>
 </main>
+
+<basic-dialog
+  [(visible)]="visibleDeleteImageModal"
+  [(title)]="deleteImageDialogTitle"
+  content="If you delete this image, you won't be able to undo"
+  (LeftbtnEvent)="cancelImage($event)"
+  (RightbtnEvent)="discardDeleteImageDialog($event)"
+  type="deleteimage"
+/>

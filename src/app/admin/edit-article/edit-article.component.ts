@@ -33,6 +33,11 @@ export class EditArticleComponent {
   isCurrentUpload: boolean = false // main image
   mainUploadError = ''
 
+  visibleDeleteImageModal = false
+  deleteImageDialogTitle = ''
+  currentCancelDialogMainImage = true
+  currentCancelDialogImageIndex = -1
+
   constructor(
     private router: Router,
     private afs: AngularFirestore,
@@ -431,6 +436,64 @@ export class EditArticleComponent {
         this.showUploadError('Error uploading: ' + e.toString())
       }
       this.isCurrentUpload = false
+    }
+  }
+
+  discardDeleteImageDialog(event: Event) {
+    event.stopPropagation()
+    this.visibleDeleteImageModal = false
+    this.deleteImageDialogTitle = ''
+  }
+
+  handleDeleteRequest(mainImage, imageIndex) {
+    let message = 'image'
+    if (mainImage) message = 'main article image'
+    console.log(`Confirm delete of ${message}?`)
+
+    this.currentCancelDialogMainImage = mainImage
+    this.currentCancelDialogImageIndex = imageIndex
+
+    this.deleteImageDialogTitle = `Are you sure you want to delete article "${message}"?`
+    this.visibleDeleteImageModal = true
+  }
+
+  async cancelImage(event: Event) {
+    event.stopPropagation()
+    this.visibleDeleteImageModal = false
+    const mainImage = this.currentCancelDialogMainImage
+    const imageIndex = this.currentCancelDialogImageIndex
+    this.currentCancelDialogMainImage = true // reset
+    this.currentCancelDialogImageIndex = -1 // reset
+    this.deleteImageDialogTitle = '' // reset
+
+    if (mainImage) {
+      console.log('Deleting main image' + mainImage + ' - ' + imageIndex)
+
+      const imageStoragePath = this.article.imagePath
+
+      // update article persistence, remove values
+      await this.saveAttachments(
+        true, // main Image
+        [''],
+        ['']
+      )
+
+      if (imageStoragePath) {
+        // it's an image uploaded with new angular admin ui
+        // we can try to delete it
+        const cancelResult =
+          await this.uploadService.cancelArticleAttachmentFromStorage(
+            imageStoragePath
+          )
+        console.log(
+          'main image actual file deleted from firebase storage: ' +
+            cancelResult
+        )
+      } else {
+        console.log(
+          'actual file for main image not deleted from firebase storage'
+        )
+      }
     }
   }
 }

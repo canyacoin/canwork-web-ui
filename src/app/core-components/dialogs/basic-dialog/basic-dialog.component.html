@@ -14,14 +14,14 @@
   >
     <div class="max-w-[352px] flex flex-col justify-center items-center">
       <div
-        *ngIf="type === 'deletearticle'"
+        *ngIf="type === 'deletearticle' || type === 'deleteimage'"
         class="mt-[-40px] pb-[24px] max-w-[150px] sm:max-w-[200px] md:max-w-[300px] select-none"
       >
         <img src="/assets/massimo/images/jobDelete.png" alt="delete" />
       </div>
 
       <div
-        *ngIf="type !== 'deletearticle'"
+        *ngIf="type !== 'deletearticle' && type !== 'deleteimage'"
         [ngSwitch]="type"
         class="pb-[24px] max-w-[150px] sm:max-w-[200px] md:max-w-[300px] select-none"
       >
@@ -101,6 +101,29 @@
             />
             <div class="text-R900 font-medium text-nowrap text-b1">
               Delete Blog Article
+            </div>
+          </div>
+          <basic-button
+            [type]="1"
+            (click)="RightClick($event)"
+            title="Cancel"
+            size="small"
+          />
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="type === 'deleteimage'">
+        <div class="flex gap-4 justify-center items-center">
+          <div
+            class="cursor-pointer py-[10px] px-[24px] flex justify-center items-center gap-2 hover:bg-G200 rounded-xl transition-all duration-200"
+            (click)="LeftClick($event)"
+          >
+            <img
+              src="/assets/massimo/svg/delete.svg"
+              class="select-none w-[16px] h-[16px]"
+            />
+            <div class="text-R900 font-medium text-nowrap text-b1">
+              Delete Article Image
             </div>
           </div>
           <basic-button
